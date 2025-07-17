@@ -491,14 +491,14 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
             rLightButton.switchLightOn(bOn);
             bUpdate = true;
         }
-        if (rLightButton.get_state() == TRISTATE_INDET)
+        if (rLightButton.is_indeterminate())
             rLightButton.set_active(rLightButton.get_active());
     }
     else
     {
-        if (rLightButton.get_state() != TRISTATE_INDET)
+        if (!rLightButton.is_indeterminate())
         {
-            rLightButton.set_state(TRISTATE_INDET);
+            rLightButton.set_indeterminate();
             bUpdate = true;
         }
     }
@@ -522,14 +522,14 @@ void Svx3DWin::UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBool
             rButton.set_active(bValue);
             bUpdate = true;
         }
-        else if (rButton.get_state() == TRISTATE_INDET)
+        else if (rButton.is_indeterminate())
             rButton.set_active(bValue);
     }
     else
     {
-        if (rButton.get_state() != TRISTATE_INDET)
+        if (!rButton.is_indeterminate())
         {
-            rButton.set_state(TRISTATE_INDET);
+            rButton.set_indeterminate();
             bUpdate = true;
         }
     }
@@ -872,14 +872,14 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xMtrSlant->set_sensitive( bValue );
             bUpdate = true;
         }
-        else if( m_xBtnShadow3d->get_state() == TRISTATE_INDET )
+        else if (m_xBtnShadow3d->is_indeterminate())
             m_xBtnShadow3d->set_active( bValue );
     }
     else
     {
-        if( m_xBtnShadow3d->get_state() != TRISTATE_INDET )
+        if (!m_xBtnShadow3d->is_indeterminate())
         {
-            m_xBtnShadow3d->set_state( TRISTATE_INDET );
+            m_xBtnShadow3d->set_indeterminate();
             bUpdate = true;
         }
     }
@@ -1214,14 +1214,14 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
             m_xBtnPerspective->set_active( ePT == ProjectionType::Perspective );
             bUpdate = true;
         }
-        if( m_xBtnPerspective->get_state() == TRISTATE_INDET )
+        if (m_xBtnPerspective->is_indeterminate())
             m_xBtnPerspective->set_active( ePT == ProjectionType::Perspective );
     }
     else
     {
-        if( m_xBtnPerspective->get_state() != TRISTATE_INDET )
+        if (!m_xBtnPerspective->is_indeterminate())
         {
-            m_xBtnPerspective->set_state( TRISTATE_INDET );
+            m_xBtnPerspective->set_indeterminate();
             bUpdate = true;
         }
     }
@@ -1302,7 +1302,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 //Others must stand as the front on all sides
     // Perspective
-    if( m_xBtnPerspective->get_state() != TRISTATE_INDET )
+    if (!m_xBtnPerspective->is_indeterminate())
     {
         ProjectionType nValue;
         if( m_xBtnPerspective->get_active() )
@@ -1354,12 +1354,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_DEPTH);
 
     // Double-sided
-    TriState eState = m_xBtnDoubleSided->get_state();
-    if( eState != TRISTATE_INDET )
-    {
-        bool bValue = TRISTATE_TRUE == eState;
-        rAttrs.Put(makeSvx3DDoubleSidedItem(bValue));
-    }
+    if (!m_xBtnDoubleSided->is_indeterminate())
+        rAttrs.Put(makeSvx3DDoubleSidedItem(m_xBtnDoubleSided->get_active()));
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_DOUBLE_SIDED);
 
@@ -1405,22 +1401,14 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_NORMALS_KIND);
 
     // Normal inverted
-    eState = m_xBtnNormalsInvert->get_state();
-    if( eState != TRISTATE_INDET )
-    {
-        bool bValue = TRISTATE_TRUE == eState;
-        rAttrs.Put(makeSvx3DNormalsInvertItem(bValue));
-    }
+    if (!m_xBtnNormalsInvert->is_indeterminate())
+        rAttrs.Put(makeSvx3DNormalsInvertItem(m_xBtnNormalsInvert->get_active()));
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_NORMALS_INVERT);
 
     // 2-sided lighting
-    eState = m_xBtnTwoSidedLighting->get_state();
-    if( eState != TRISTATE_INDET )
-    {
-        bool bValue = TRISTATE_TRUE == eState;
-        rAttrs.Put(makeSvx3DTwoSidedLightingItem(bValue));
-    }
+    if (!m_xBtnTwoSidedLighting->is_indeterminate())
+        rAttrs.Put(makeSvx3DTwoSidedLightingItem(m_xBtnTwoSidedLighting->get_active()));
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
 
@@ -1435,10 +1423,9 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_SHADE_MODE);
 
     // 3D-Shadow
-    eState = m_xBtnShadow3d->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnShadow3d->is_indeterminate())
     {
-        bool bValue = TRISTATE_TRUE == eState;
+        bool bValue = m_xBtnShadow3d->get_active();
         rAttrs.Put(makeSvx3DShadow3DItem(bValue));
         rAttrs.Put(makeSdrShadowItem(bValue));
     }
@@ -1488,8 +1475,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     // Light 1 (on/off)
-    eState = m_xBtnLight1->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight1->is_indeterminate())
     {
         bool bValue = m_xBtnLight1->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff1Item(bValue));
@@ -1513,8 +1499,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_2);
     // Light 2 (on/off)
-    eState = m_xBtnLight2->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight2->is_indeterminate())
     {
         bool bValue = m_xBtnLight2->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff2Item(bValue));
@@ -1537,8 +1522,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_3);
     // Light 3 (on/off)
-    eState = m_xBtnLight3->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight3->is_indeterminate())
     {
         bool bValue = m_xBtnLight3->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff3Item(bValue));
@@ -1561,8 +1545,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_4);
     // Light 4 (on/off)
-    eState = m_xBtnLight4->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight4->is_indeterminate())
     {
         bool bValue = m_xBtnLight4->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff4Item(bValue));
@@ -1585,8 +1568,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_5);
     // Light 5 (on/off)
-    eState = m_xBtnLight5->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight5->is_indeterminate())
     {
         bool bValue = m_xBtnLight5->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff5Item(bValue));
@@ -1609,8 +1591,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_6);
     // Light 6 (on/off)
-    eState = m_xBtnLight6->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight6->is_indeterminate())
     {
         bool bValue = m_xBtnLight6->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff6Item(bValue));
@@ -1633,8 +1614,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_7);
     // Light 7 (on/off)
-    eState = m_xBtnLight7->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight7->is_indeterminate())
     {
         bool bValue = m_xBtnLight7->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff7Item(bValue));
@@ -1657,8 +1637,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_LIGHTCOLOR_8);
     // Light 8 (on/off)
-    eState = m_xBtnLight8->get_state();
-    if( eState != TRISTATE_INDET )
+    if (!m_xBtnLight8->is_indeterminate())
     {
         bool bValue = m_xBtnLight8->isLightOn();
         rAttrs.Put(makeSvx3DLightOnOff8Item(bValue));
@@ -1744,12 +1723,8 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 
     // Filter
-    eState = m_xBtnTexFilter->get_state();
-    if( eState != TRISTATE_INDET )
-    {
-        bool bValue = TRISTATE_TRUE == eState;
-        rAttrs.Put(makeSvx3DTextureFilterItem(bValue));
-    }
+    if (!m_xBtnTexFilter->is_indeterminate())
+        rAttrs.Put(makeSvx3DTextureFilterItem(m_xBtnTexFilter->get_active()));
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_TEXTURE_FILTER);
 

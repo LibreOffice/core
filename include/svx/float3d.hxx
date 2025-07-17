@@ -52,11 +52,15 @@ class UNLESS_MERGELIBS(SVX_DLLPUBLIC) TriStateToggleButton
 {
 public:
     explicit TriStateToggleButton(std::unique_ptr<weld::ToggleButton> xButton);
-    bool get_active() const { return m_xButton->get_active(); }
-    void set_active(bool bActive) { m_xButton->set_active(bActive); }
+    bool get_active() const { return m_xButton->get_active(); };
+    void set_active(bool bActive)
+    {
+        m_bIndeterminate = false;
+        m_xButton->set_active(bActive);
+    }
 
-    TriState get_state() const { return m_xButton->get_state(); }
-    void set_state(TriState eState) { m_xButton->set_state(eState); }
+    bool is_indeterminate() { return m_bIndeterminate; };
+    void set_indeterminate() { m_bIndeterminate = true; };
 
     weld::ToggleButton* get_widget() const { return m_xButton.get(); }
 
@@ -67,6 +71,7 @@ public:
 
 private:
     std::unique_ptr<weld::ToggleButton> m_xButton;
+    bool m_bIndeterminate = false;
 };
 
 class UNLESS_MERGELIBS(SVX_DLLPUBLIC) LightButton final : public TriStateToggleButton
