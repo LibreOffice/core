@@ -1848,6 +1848,92 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167526)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167540)
+{
+    // Given a document with a paragraph with a hard line break followed by nothing (tdf#167538);
+    // and two floating tables with an empty paragraph between them (tdf#167540). The strings in
+    // paragraphs all have different lengths, to allow XPath matching:
+    createSwDoc("tdf167540.docx");
+
+    // check line numbering
+    auto verify_me = [this]() {
+        // Dump the rendering of the first page as an XML file.
+        SwDocShell* pShell = getSwDocShell();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump dumper;
+        xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+
+        // line 1
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=1][1]/text", u"1");
+        auto ln1_y = getXPath(pXmlDoc, "//textarray[@length=1][1]", "y");
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=4]/text", u"Text\n");
+        auto text1_y = getXPath(pXmlDoc, "//textarray[@length=4]", "y");
+
+        // line numbering Y coordinate is the same as its line
+        CPPUNIT_ASSERT_EQUAL(text1_y, ln1_y);
+
+        // line 2 (empty)
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=1][2]/text", u"2");
+        auto ln2_y = getXPath(pXmlDoc, "//textarray[@length=1][2]", "y");
+
+        // line numbering for line 2 is indeed lower than for line 1
+        CPPUNIT_ASSERT_GREATER(ln1_y.toInt32(), ln2_y.toInt32());
+
+        // first floating table
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=20]/text", u"First floating table");
+        auto table1_y = getXPath(pXmlDoc, "//textarray[@length=20]", "y");
+
+        // the first floating table is indeed lower than line numbering for line 2
+        CPPUNIT_ASSERT_GREATER(ln2_y.toInt32(), table1_y.toInt32());
+
+        // line 3 (empty)
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=1][3]/text", u"3");
+        auto ln3_y = getXPath(pXmlDoc, "//textarray[@length=1][3]", "y");
+
+        // line numbering for line 3 is indeed lower than the first floating table
+        CPPUNIT_ASSERT_GREATER(table1_y.toInt32(), ln3_y.toInt32());
+
+        // second floating table
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=21]/text", u"Second floating table");
+        auto table2_y = getXPath(pXmlDoc, "//textarray[@length=21]", "y");
+
+        // the second floating table is indeed lower than line numbering for line 3
+        CPPUNIT_ASSERT_GREATER(ln3_y.toInt32(), table2_y.toInt32());
+
+        // Inline table
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=14]/text", u"A normal table");
+        auto table3_y = getXPath(pXmlDoc, "//textarray[@length=14]", "y");
+
+        // the inline table is indeed lower than second floating table
+        CPPUNIT_ASSERT_GREATER(table2_y.toInt32(), table3_y.toInt32());
+
+        // line 4
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=1][4]/text", u"4");
+        auto ln4_y = getXPath(pXmlDoc, "//textarray[@length=1][4]", "y");
+
+        assertXPathContent(pXmlDoc, "//textarray[@length=9]/text", u"More text");
+        auto text4_y = getXPath(pXmlDoc, "//textarray[@length=9]", "y");
+
+        // line numbering Y coordinate is the same as its line
+        CPPUNIT_ASSERT_EQUAL(text4_y, ln4_y);
+    };
+
+    verify_me();
+
+    // DOCX roundtrip:
+    saveAndReload(u"Office Open XML Text"_ustr);
+
+    verify_me();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
