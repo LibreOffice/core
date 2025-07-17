@@ -469,7 +469,7 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
         Color aColor = rAttrs.Get(nWhichLightColor).GetValue();
         if (aColor != rColorListBox.GetSelectEntryColor())
         {
-            LBSelectColor(&rColorListBox, aColor);
+            LBSelectColor(rColorListBox, aColor);
             bUpdate = true;
         }
     }
@@ -1017,10 +1017,9 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         aColor = rAttrs.Get(SDRATTR_3DSCENE_AMBIENTCOLOR).GetValue();
-        ColorListBox* pLb = m_xLbAmbientlight.get();
-        if( aColor != pLb->GetSelectEntryColor() )
+        if (aColor != m_xLbAmbientlight->GetSelectEntryColor())
         {
-            LBSelectColor( pLb, aColor );
+            LBSelectColor(*m_xLbAmbientlight, aColor);
             bUpdate = true;
         }
     }
@@ -1178,10 +1177,9 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         aColor = rAttrs.Get(XATTR_FILLCOLOR).GetColorValue();
-        ColorListBox* pLb = m_xLbMatColor.get();
-        if( aColor != pLb->GetSelectEntryColor() )
+        if (aColor != m_xLbMatColor->GetSelectEntryColor())
         {
-            LBSelectColor( pLb, aColor );
+            LBSelectColor(*m_xLbMatColor, aColor);
             bUpdate = true;
         }
     }
@@ -1199,10 +1197,9 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         aColor = rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION).GetValue();
-        ColorListBox* pLb = m_xLbMatEmission.get();
-        if( aColor != pLb->GetSelectEntryColor() )
+        if (aColor != m_xLbMatEmission->GetSelectEntryColor())
         {
-            LBSelectColor( pLb, aColor );
+            LBSelectColor(*m_xLbMatEmission, aColor);
             bUpdate = true;
         }
     }
@@ -1220,10 +1217,9 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::INVALID )
     {
         aColor = rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR).GetValue();
-        ColorListBox* pLb = m_xLbMatSpecular.get();
-        if( aColor != pLb->GetSelectEntryColor() )
+        if (aColor != m_xLbMatSpecular->GetSelectEntryColor())
         {
-            LBSelectColor( pLb, aColor );
+            LBSelectColor(*m_xLbMatSpecular, aColor);
             bUpdate = true;
         }
     }
@@ -2204,7 +2200,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, weld::Button&, rBtn, void)
     if (aColorDlg.Execute() == RET_OK)
     {
         aColor = aColorDlg.GetColor();
-        LBSelectColor(pLb, aColor);
+        LBSelectColor(*pLb, aColor);
         SelectColorHdl(*pLb);
     }
 }
@@ -2268,9 +2264,9 @@ IMPL_LINK( Svx3DWin, SelectHdl, weld::ComboBox&, rListBox, void )
             }
             break;
         }
-        LBSelectColor( m_xLbMatColor.get(), aColObj );
-        LBSelectColor( m_xLbMatEmission.get(), aColEmis );
-        LBSelectColor( m_xLbMatSpecular.get(), aColSpec );
+        LBSelectColor(*m_xLbMatColor, aColObj);
+        LBSelectColor(*m_xLbMatEmission, aColEmis);
+        LBSelectColor(*m_xLbMatSpecular, aColSpec);
         m_xMtrMatSpecularIntensity->set_value(nSpecIntens, FieldUnit::PERCENT);
 
         bUpdatePreview = true;
@@ -2434,10 +2430,10 @@ namespace
 }
 
 // Method to ensure that the LB is also associated with a color
-void Svx3DWin::LBSelectColor( ColorListBox* pLb, const Color& rColor )
+void Svx3DWin::LBSelectColor(ColorListBox& rLb, const Color& rColor)
 {
-    pLb->SetNoSelection();
-    pLb->SelectEntry({rColor, lcl_makeColorName(rColor)});
+    rLb.SetNoSelection();
+    rLb.SelectEntry({ rColor, lcl_makeColorName(rColor) });
 }
 
 void Svx3DWin::UpdatePreview()

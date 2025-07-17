@@ -230,7 +230,7 @@ private:
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE static void  LBSelectColor( ColorListBox* pLb, const Color& rColor );
+    SVX_DLLPRIVATE static void LBSelectColor(ColorListBox& rLb, const Color& rColor);
     SVX_DLLPRIVATE sal_uInt16   GetLightSource( const LightButton* pBtn ) const;
     SVX_DLLPRIVATE ColorListBox* GetCLbByButton( const LightButton* pBtn = nullptr );
     SVX_DLLPRIVATE LightButton* GetLbByButton( const weld::Button* pBtn );
