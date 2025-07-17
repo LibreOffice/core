@@ -3206,28 +3206,15 @@ SalInstanceCheckButton::SalInstanceCheckButton(CheckBox* pButton, SalInstanceBui
     m_xCheckButton->SetToggleHdl(LINK(this, SalInstanceCheckButton, ToggleHdl));
 }
 
-void SalInstanceCheckButton::set_active(bool active)
+void SalInstanceCheckButton::set_state(TriState eState)
 {
     disable_notify_events();
-    m_xCheckButton->EnableTriState(false);
-    m_xCheckButton->Check(active);
+    m_xCheckButton->EnableTriState(eState == TRISTATE_INDET);
+    m_xCheckButton->SetState(eState);
     enable_notify_events();
 }
 
-bool SalInstanceCheckButton::get_active() const { return m_xCheckButton->IsChecked(); }
-
-void SalInstanceCheckButton::set_inconsistent()
-{
-    disable_notify_events();
-    m_xCheckButton->EnableTriState(true);
-    m_xCheckButton->SetState(TRISTATE_INDET);
-    enable_notify_events();
-}
-
-bool SalInstanceCheckButton::get_inconsistent() const
-{
-    return m_xCheckButton->GetState() == TRISTATE_INDET;
-}
+TriState SalInstanceCheckButton::get_state() const { return m_xCheckButton->GetState(); }
 
 void SalInstanceCheckButton::set_label_wrap(bool bWrap)
 {

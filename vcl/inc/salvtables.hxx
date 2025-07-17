@@ -1241,13 +1241,9 @@ private:
 public:
     SalInstanceCheckButton(CheckBox* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
-    virtual void set_active(bool active) override;
+    virtual void set_state(TriState eState) override;
 
-    virtual bool get_active() const override;
-
-    virtual void set_inconsistent() override;
-
-    virtual bool get_inconsistent() const override;
+    virtual TriState get_state() const override;
 
     virtual void set_label(const OUString& rText) override { SalInstanceButton::set_label(rText); }
 

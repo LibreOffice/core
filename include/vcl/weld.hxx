@@ -1683,36 +1683,20 @@ class VCL_DLLPUBLIC MenuToggleButton : virtual public MenuButton
 class VCL_DLLPUBLIC CheckButton : virtual public Toggleable
 {
 public:
-    virtual TriState get_state() const override
+    // must override Toggleable::get_state to support TRISTATE_INDET
+    virtual TriState get_state() const override = 0;
+    virtual void set_state(TriState eState) = 0;
+
+    virtual void set_active(bool bActive) override final
     {
-        if (get_inconsistent())
-            return TRISTATE_INDET;
-        return weld::Toggleable::get_state();
+        set_state(bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
 
-    void set_state(TriState eState)
-    {
-        switch (eState)
-        {
-            case TRISTATE_INDET:
-                set_inconsistent();
-                break;
-            case TRISTATE_TRUE:
-                set_active(true);
-                break;
-            case TRISTATE_FALSE:
-                set_active(false);
-                break;
-        }
-    }
+    virtual bool get_active() const override final { return get_state() == TRISTATE_TRUE; }
 
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
     virtual void set_label_wrap(bool wrap) = 0;
-
-protected:
-    virtual void set_inconsistent() = 0;
-    virtual bool get_inconsistent() const = 0;
 };
 
 struct VCL_DLLPUBLIC TriStateEnabled

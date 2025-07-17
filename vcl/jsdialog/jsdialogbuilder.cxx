@@ -1554,11 +1554,11 @@ JSCheckButton::JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox,
 {
 }
 
-void JSCheckButton::set_active(bool active)
+void JSCheckButton::set_state(TriState eState)
 {
-    bool bWasActive = get_active();
-    SalInstanceCheckButton::set_active(active);
-    if (bWasActive != active)
+    TriState eOldState = get_state();
+    SalInstanceCheckButton::set_state(eState);
+    if (eOldState != eState)
         sendUpdate();
 }
 

@@ -20,39 +20,21 @@ QtInstanceCheckButton::QtInstanceCheckButton(QCheckBox* pCheckBox)
     connect(m_pCheckBox, &QCheckBox::toggled, this, &QtInstanceCheckButton::handleToggled);
 }
 
-void QtInstanceCheckButton::set_active(bool bActive)
+void QtInstanceCheckButton::set_state(TriState eState)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        m_pCheckBox->setTristate(false);
-        m_pCheckBox->setChecked(bActive);
+        m_pCheckBox->setTristate(eState == TRISTATE_INDET);
+        m_pCheckBox->setCheckState(toQtCheckState(eState));
     });
 }
 
-bool QtInstanceCheckButton::get_active() const
+TriState QtInstanceCheckButton::get_state() const
 {
     SolarMutexGuard g;
-    bool bActive;
-    GetQtInstance().RunInMainThread([&] { bActive = m_pCheckBox->isChecked(); });
-    return bActive;
-}
-
-void QtInstanceCheckButton::set_inconsistent()
-{
-    SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] {
-        m_pCheckBox->setTristate(true);
-        m_pCheckBox->setCheckState(Qt::PartiallyChecked);
-    });
-}
-
-bool QtInstanceCheckButton::get_inconsistent() const
-{
-    SolarMutexGuard g;
-    bool bInconsistent;
-    GetQtInstance().RunInMainThread(
-        [&] { bInconsistent = m_pCheckBox->checkState() == Qt::PartiallyChecked; });
-    return bInconsistent;
+    TriState eState = TRISTATE_INDET;
+    GetQtInstance().RunInMainThread([&] { eState = toVclTriState(m_pCheckBox->checkState()); });
+    return eState;
 }
 
 void QtInstanceCheckButton::set_label(const OUString& rText)

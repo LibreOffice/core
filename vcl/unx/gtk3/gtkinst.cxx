@@ -12782,38 +12782,37 @@ public:
     {
     }
 
-    virtual void set_active(bool active) override
+    virtual void set_state(TriState eState) override
     {
         disable_notify_events();
+        const bool bInconsistent = eState == TRISTATE_INDET;
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_check_button_set_inconsistent(m_pCheckButton, false);
-        gtk_check_button_set_active(m_pCheckButton, active);
+        gtk_check_button_set_inconsistent(m_pCheckButton, bInconsistent);
+        if (!bInconsistent)
+            gtk_check_button_set_active(m_pCheckButton, eState == TRISTATE_TRUE);
 #else
-        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), false);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pCheckButton), active);
+        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), bInconsistent);
+        if (!bInconsistent)
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pCheckButton),
+                                         eState == TRISTATE_TRUE);
 #endif
         enable_notify_events();
     }
 
-    virtual bool get_active() const override
+    virtual TriState get_state() const override
     {
+        if (get_inconsistent())
+            return TRISTATE_INDET;
 #if GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_check_button_get_active(m_pCheckButton);
+        if (gtk_check_button_get_active(m_pCheckButton))
 #else
-        return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pCheckButton));
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pCheckButton)))
 #endif
+            return TRISTATE_TRUE;
+        return TRISTATE_FALSE;
     }
 
-    virtual void set_inconsistent() override
-    {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_check_button_set_inconsistent(m_pCheckButton, true);
-#else
-        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), true);
-#endif
-    }
-
-    virtual bool get_inconsistent() const override
+    bool get_inconsistent() const
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         return gtk_check_button_get_inconsistent(m_pCheckButton);

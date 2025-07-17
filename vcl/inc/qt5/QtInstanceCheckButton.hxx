@@ -23,13 +23,9 @@ class QtInstanceCheckButton : public QtInstanceWidget, public virtual weld::Chec
 public:
     QtInstanceCheckButton(QCheckBox* pCheckBox);
 
-    // weld::Toggleable methods
-    virtual void set_active(bool bActive) override;
-    virtual bool get_active() const override;
-    virtual void set_inconsistent() override;
-    virtual bool get_inconsistent() const override;
+    virtual void set_state(TriState eState) override;
+    virtual TriState get_state() const override;
 
-    // weld::CheckButton methods
     virtual void set_label(const OUString& rText) override;
     virtual OUString get_label() const override;
     virtual void set_label_wrap(bool bWrap) override;

@@ -634,7 +634,7 @@ public:
     JSCheckButton(JSDialogSender* pSender, ::CheckBox* pCheckBox, SalInstanceBuilder* pBuilder,
                   bool bTakeOwnership);
 
-    virtual void set_active(bool active) override;
+    virtual void set_state(TriState eState) override;
 };
 
 class JSDrawingArea final : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
