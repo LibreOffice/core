@@ -1166,17 +1166,19 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 
         for (const auto & rSortCriteria : maSortCustomList)
         {
+            OString aCustomList = OUStringToOString(std::get<1>(rSortCriteria), RTL_TEXTENCODING_UTF8);
+            const char* pCustomList = aCustomList.isEmpty() ? nullptr : aCustomList.getStr();
             if (std::get<2>(rSortCriteria))
                 rWorksheet->singleElement(XML_sortCondition,
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
                                           XML_descending, "1",
-                                          XML_customList, std::get<1>(rSortCriteria));
+                                          XML_customList, pCustomList);
             else
                 rWorksheet->singleElement(XML_sortCondition,
                                           XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(),
                                                                           std::get<0>(rSortCriteria)),
-                                          XML_customList, std::get<1>(rSortCriteria));
+                                          XML_customList, pCustomList);
         }
 
         rWorksheet->endElement(XML_sortState);
