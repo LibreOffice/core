@@ -211,7 +211,8 @@ ContextHandlerRef AutoFilterContext::onCreateRecordContext( sal_Int32 nRecId, Se
 
 void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
 {
-    mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
+    if( getCurrentElement() == BIFF12_ID_AUTOFILTER )
+        mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }
 
 } // namespace oox::xls

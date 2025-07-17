@@ -271,11 +271,21 @@ bool DefinedName::isValid(
 std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
         const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
+    ScAddress aReferenceAddr(0, 0, (mnCalcSheet < 0 ? 0 : mnCalcSheet));
+    ScDocument& rDoc = getScDocument();
+    if (mxFormula) {
+        SequenceInputStream aInputStrm(*mxFormula);
+        ApiTokenSequence aTokens = getFormulaParser().importFormula(aReferenceAddr, FormulaType::Cell, aInputStrm);
+        std::unique_ptr<ScTokenArray> pArray(new ScTokenArray(rDoc));
+        (void)ScTokenConversion::ConvertToTokenArray( rDoc, *pArray, aTokens );
+        return pArray;
+    }
+
     // mnCalcSheet < 0 means global name and results in tab deleted when
     // compiling a reference without sheet reference. For a global name it
     // doesn't really matter which sheet is the position's default sheet if the
     // reference doesn't specify any. tdf#164895
-    ScCompiler aCompiler(getScDocument(), ScAddress(0, 0, (mnCalcSheet < 0 ? 0 : mnCalcSheet)),
+    ScCompiler aCompiler(getScDocument(), aReferenceAddr,
             formula::FormulaGrammar::GRAM_OOXML);
     aCompiler.SetExternalLinks( rExternalLinks);
     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(maModel.maFormula));
