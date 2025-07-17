@@ -1867,6 +1867,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167526)
         // Without a fix, this would fail, because the third element was the wrongly emitted <w:p>
         assertXPathNodeName(pXmlDoc, "/w:document/w:body/*[3]", "tbl");
     }
+
+    // tdf#167535: check line numbering; the dummy node must not interfere with it
+    {
+        // Dump the rendering of the first page as an XML file.
+        SwDocShell* pShell = getSwDocShell();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump dumper;
+        xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+        // Without a fix, this was 3
+        assertXPathContent(
+            pXmlDoc, "/metafile/push/push/push/textarray[@index=0 and @length=1][2]/text", u"2");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

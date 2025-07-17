@@ -893,6 +893,9 @@ public:
             { TriggerNodeUpdate(sw::LegacyModifyHint(&rDrop, &rDrop)); };
 
     void SetInSwUndo(bool bInUndo);
+
+    // For nodes created to provide anchor points for floating tables
+    bool IsDummyAnchorNode() const;
 };
 
 inline SwpHints & SwTextNode::GetSwpHints()

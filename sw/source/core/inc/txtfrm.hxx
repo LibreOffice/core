@@ -345,6 +345,9 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     /// Like GetDrawObjs(), but limit to fly frames which are allowed to split.
     std::vector<SwFlyAtContentFrame*> GetSplitFlyDrawObjs() const;
 
+    // For zero-height frames created to provide anchor points for floating tables
+    bool IsDummyAnchorFrame() const;
+
 public:
 
     virtual const SvxFormatBreakItem& GetBreakItem() const override;

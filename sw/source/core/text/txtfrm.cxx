@@ -4038,6 +4038,12 @@ SwTwips SwTextFrame::FirstLineHeight() const
     return nHeight;
 }
 
+bool SwTextFrame::IsDummyAnchorFrame() const
+{
+    // I *think* that when there is m_pMergedPara, it can't be a dummy frame.
+    return !GetMergedPara() && GetTextNodeForParaProps()->IsDummyAnchorNode();
+}
+
 sal_Int32 SwTextFrame::GetLineCount(TextFrameIndex const nPos)
 {
     sal_Int32 nRet = 0;
@@ -4082,7 +4088,7 @@ void SwTextFrame::ChgThisLines()
             } while ( aLine.NextLine() );
         }
     }
-    else if ( rInf.IsCountBlankLines() )
+    else if (!IsDummyAnchorFrame() && rInf.IsCountBlankLines())
         nNew = 1;
 
     if ( nNew == mnThisLines )

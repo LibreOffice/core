@@ -4950,6 +4950,19 @@ bool SwTextNode::IsHidden() const
     return pSectNd && pSectNd->GetSection().IsHiddenFlag();
 }
 
+bool SwTextNode::IsDummyAnchorNode() const
+{
+    // See OOXMLFastContextHandlerTextTable::lcl_startFastElement
+
+    if (!HasSwAttrSet())
+        return false;
+
+    const SwAttrSet& rAttrSet = GetSwAttrSet();
+    const SvxLineSpacingItem& rLineSpacing = rAttrSet.GetLineSpacing();
+    return rLineSpacing.GetLineSpaceRule() == SvxLineSpaceRule::Fix
+           && rLineSpacing.GetLineHeight() == 0;
+}
+
 namespace {
     // Helper class for special handling of setting attributes at text node:
     // In constructor an instance of the helper class recognize whose attributes
