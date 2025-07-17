@@ -794,7 +794,34 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
                                SwRect* pRect, SwRect* pIntersect,
                                const bool bInsideBox ) const
 {
-    Size aSize( rPor.Width(), rPor.Height() );
+    const SwAttrSet& rAttrSet = GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet();
+    const SvxLineSpacingItem& rSpace = rAttrSet.GetLineSpacing();
+    tools::Long nPropLineSpace = rSpace.GetPropLineSpace();
+
+    SwTwips nHeight = rPor.Height();
+
+    // we should take line spacing into account.
+    // otherwise, bottom of some letters will be cut because of the "field shading" background layer.
+    switch (rSpace.GetInterLineSpaceRule())
+    {
+        case SvxInterLineSpaceRule::Prop: // proportional
+        {
+            if (nPropLineSpace < 100)
+                nHeight = rPor.Height() * nPropLineSpace / 100;
+        }
+        break;
+        case SvxInterLineSpaceRule::Fix: // fixed
+        {
+            if (rSpace.GetInterLineSpace() > 0)
+                nHeight = std::min<SwTwips>(rSpace.GetInterLineSpace(), rPor.Height());
+        }
+        break;
+        default:
+            break;
+    }
+
+    Size aSize( rPor.Width(), nHeight);
+
     if( rPor.IsHangingPortion() )
         aSize.setWidth( static_cast<const SwHangingPortion&>(rPor).GetInnerWidth() );
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
@@ -829,7 +856,29 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
         if (GetTextFrame()->IsVertLR() && !GetTextFrame()->IsVertLRBT())
             aPoint.setY( Y() - rPor.Height() + rPor.GetAscent() );
         else
-            aPoint.setY( Y() - rPor.GetAscent() );
+        {
+            SwTwips nAscent = rPor.GetAscent();
+
+            switch (rSpace.GetInterLineSpaceRule())
+            {
+                case SvxInterLineSpaceRule::Prop: // proportional
+                {
+                    if (nPropLineSpace < 100)
+                        nAscent = (rPor.GetAscent() * nPropLineSpace / 100);
+                }
+                break;
+                case SvxInterLineSpaceRule::Fix: // fixed
+                {
+                    if (rSpace.GetInterLineSpace() > 0)
+                        nAscent = std::min<SwTwips>(rSpace.GetInterLineSpace(), rPor.GetAscent());
+                }
+                break;
+                default:
+                    break;
+            }
+
+            aPoint.setY( Y() - nAscent);
+        }
     }
 
     // Adjust x coordinate if we are inside a bidi portion

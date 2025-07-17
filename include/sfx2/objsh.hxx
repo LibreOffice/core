@@ -463,7 +463,7 @@ public:
 
     Size                        GetFirstPageSize() const;
     bool                        DoClose();
-    std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
+    std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false, bool bOutputForScreen = false ) const;
     BitmapEx                    GetPreviewBitmap() const;
     virtual void                CancelTransfers();
 
@@ -713,7 +713,7 @@ public:
     // Destruction of storages and streams
     void InternalCloseAndRemoveFiles();
 
-    SAL_DLLPRIVATE bool CreatePreview_Impl(bool bFullContent, VirtualDevice* pDevice, GDIMetaFile* pFile) const;
+    SAL_DLLPRIVATE bool CreatePreview_Impl(bool bFullContent, bool bOutputForScreen, VirtualDevice* pDevice, GDIMetaFile* pFile) const;
 
     SAL_DLLPRIVATE static bool IsPackageStorageFormat_Impl(const SfxMedium &);
 
