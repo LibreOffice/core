@@ -3200,7 +3200,7 @@ SfxVoidItem InsertFile FID_INSERT_FILE
 
 
 SfxVoidItem InsertFunction SID_INS_FUNCTION
-()
+(SfxStringItem FunctionName FN_PARAM_1,SfxInt16Item FunctionCategory FN_PARAM_2,SfxStringItem FunctionId FN_PARAM_3)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

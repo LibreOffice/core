@@ -21,6 +21,7 @@
 #include <comphelper/configurationlistener.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <unordered_map>
+#include <sfx2/bindings.hxx>
 
 class ScFuncDesc;
 namespace formula { class IFunctionDescription; }
@@ -52,6 +53,7 @@ private:
     std::unique_ptr<weld::CheckButton> xSimilaritySearch;
     std::unique_ptr<weld::TextView> xFiFuncDesc;
     std::unique_ptr<weld::Entry> m_xSearchString;
+    SfxBindings* m_pBindings;
 
     rtl::Reference<comphelper::ConfigurationListener> xConfigListener;
     std::unique_ptr<EnglishFunctionNameChange> xConfigChange;
@@ -68,6 +70,7 @@ private:
     void            UpdateLRUList();
     void            DoEnter(bool bDouble_or_Enter = false);
     void            SetDescription();
+    SfxBindings&    GetBindings() const { return *m_pBindings; }
     weld::TreeIter* FillCategoriesMap(const OUString&, bool);
 
                     DECL_LINK( SetRowActivatedHdl, weld::TreeView&, bool );
@@ -80,7 +83,7 @@ private:
                     DECL_LINK( KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    ScFunctionWin(weld::Widget* pParent);
+    ScFunctionWin(weld::Widget* pParent, SfxBindings* pBindings);
 
     virtual ~ScFunctionWin() override;
 
