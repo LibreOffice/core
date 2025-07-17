@@ -427,9 +427,9 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
     }
 }
 
-//          output to Device (static)
+//      output to Device (static)
 //
-//      us used for:
+//      is used for:
 //      -   Clipboard/Bitmap
 //      -   Ole-Object (DocShell::Draw)
 //      -   Preview of templates
@@ -649,7 +649,6 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 {
     //  nDistance must be initialized differently before
-
     if ( pHFSet == nullptr )
     {
         rParam.bEnable  = false;
@@ -694,7 +693,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
 {
     SCCOL nOldEndCol = nEndCol; // only important for !bNew
     SCROW nOldEndRow = nEndRow;
-    bool bChangeCol = true;         // at bNew both are being adjusted
+    bool bChangeCol = true;     // at bNew both are being adjusted
     bool bChangeRow = true;
 
     bool bNotes = aTableParam.bNotes;
@@ -753,12 +752,12 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
 
     if ( bChangeCol )
     {
-        OutputDevice* pRefDev = rDoc.GetPrinter();     // use the printer also for Preview
+        OutputDevice* pRefDev = rDoc.GetPrinter();       // use the printer also for Preview
         pRefDev->SetMapMode(MapMode(MapUnit::MapPixel)); // important for GetNeededSize
 
         rDoc.ExtendPrintArea( pRefDev,
                             nPrintTab, nStartCol, nStartRow, nEndCol, nEndRow );
-        //  changing nEndCol
+        // changing nEndCol
     }
 
     if ( nEndCol < rDoc.MaxCol() && rDoc.HasAttrib(
@@ -786,7 +785,6 @@ tools::Long ScPrintFunc::TextHeight( const EditTextObject* pObject )
 
 //  nZoom must be set !!!
 //  and the respective Twip-MapMode configured
-
 void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
 {
     OSL_ENSURE( aPageSize.Width(), "UpdateHFHeight without aPageSize");
@@ -795,7 +793,6 @@ void ScPrintFunc::UpdateHFHeight( ScPrintHFParam& rParam )
         return;
 
     //  calculate nHeight from content
-
     MakeEditEngine();
     tools::Long nPaperWidth = ( aPageSize.Width() - nLeftMargin - nRightMargin -
                             rParam.nLeft - rParam.nRight ) * 100 / nZoom;
@@ -856,7 +853,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if (!pParamSet)
         return;
 
-                                // TabPage "Page"
+    // TabPage "Page"
     const SvxLRSpaceItem* pLRItem = &pParamSet->Get( ATTR_LRSPACE );
     tools::Long nTmp;
     nTmp = pLRItem->ResolveLeft({});
@@ -1008,7 +1005,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if (!bPrintEntireSheet && !nPrintRangeCount)
         mbHasPrintRange = false;
 
-    if ( pUserArea )                // UserArea (selection) has priority
+    if ( pUserArea )                                    // UserArea (selection) has priority
     {
         bPrintCurrentTable    =
         aAreaParam.bPrintArea = true;                   // Selection
@@ -1286,7 +1283,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
             pBorderData = nullptr;
 
     if (!pBorderData && !pBackground && !pShadow)
-        return;                                     // nothing to do
+        return;                                 // nothing to do
 
     tools::Long nLeft   = 0;
     tools::Long nRight  = 0;
@@ -1315,7 +1312,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
     tools::Long nEffHeight = nScrH - nTop - nBottom;
     tools::Long nEffWidth = nScrW - nLeft - nRight;
     if (nEffHeight<=0 || nEffWidth<=0)
-        return;                                         // empty
+        return;                                 // empty
 
     if ( pBackground )
     {
@@ -1325,7 +1322,7 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
             if ( bIsRender )
                 pRefDev = pDev;                 // don't use printer for PDF
             else
-                pRefDev = rDoc.GetPrinter();   // use printer also for preview
+                pRefDev = rDoc.GetPrinter();    // use printer also for preview
             OUString referer;
             if (rDocShell.HasName()) {
                 referer = rDocShell.GetMedium()->GetName();
@@ -1663,7 +1660,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     if ( !pPrinter )
     {
-        OutputDevice* pRefDev = rDoc.GetPrinter();     // use the printer also for Preview
+        OutputDevice* pRefDev = rDoc.GetPrinter();      // use the printer also for Preview
         Fraction aPrintFrac( nZoom, 100 );              // without nManualZoom
         //  MapMode, as it would arrive at the printer:
         pRefDev->SetMapMode( MapMode( MapUnit::Map100thMM, Point(), aPrintFrac, aPrintFrac ) );
@@ -2485,7 +2482,7 @@ bool ScPrintFunc::UpdatePages()
     return true;
 }
 
-tools::Long ScPrintFunc::CountPages()                          // sets also nPagesX, nPagesY
+tools::Long ScPrintFunc::CountPages()                       // sets also nPagesX, nPagesY
 {
     bool bAreaOk = false;
 
@@ -2562,7 +2559,7 @@ tools::Long ScPrintFunc::CountNotePages()
     if (!aAreaParam.bPrintArea)
         bError = !AdjustPrintArea(true);            // completely search in Doc
 
-    sal_uInt16 nRepeats = 1;                            // how often go through it ?
+    sal_uInt16 nRepeats = 1;                        // how often go through it ?
     if (bMultiArea)
         nRepeats = rDoc.GetPrintRangeCount(nPrintTab);
     if (bError)
