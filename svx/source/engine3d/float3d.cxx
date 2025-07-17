@@ -510,6 +510,31 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
     }
 }
 
+void Svx3DWin::UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBoolItem> nWhich,
+                                  weld::ToggleButton& rButton)
+{
+    SfxItemState eState = rAttrs.GetItemState(nWhich);
+    if (eState != SfxItemState::INVALID)
+    {
+        bool bValue = rAttrs.Get(nWhich).GetValue();
+        if (bValue != rButton.get_active())
+        {
+            rButton.set_active(bValue);
+            bUpdate = true;
+        }
+        else if (rButton.get_state() == TRISTATE_INDET)
+            rButton.set_active(bValue);
+    }
+    else
+    {
+        if (rButton.get_state() != TRISTATE_INDET)
+        {
+            rButton.set_state(TRISTATE_INDET);
+            bUpdate = true;
+        }
+    }
+}
+
 void Svx3DWin::Update( SfxItemSet const & rAttrs )
 {
     // remember 2d attributes
@@ -704,26 +729,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     }
 
     // Double walled / Double sided
-    eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DOUBLE_SIDED);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bValue = rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED).GetValue();
-        if( bValue != m_xBtnDoubleSided->get_active() )
-        {
-            m_xBtnDoubleSided->set_active( bValue );
-            bUpdate = true;
-        }
-        else if( m_xBtnDoubleSided->get_state() == TRISTATE_INDET )
-            m_xBtnDoubleSided->set_active( bValue );
-    }
-    else
-    {
-        if( m_xBtnDoubleSided->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnDoubleSided->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
+    UpdateToggleButton(rAttrs, SDRATTR_3DOBJ_DOUBLE_SIDED, *m_xBtnDoubleSided);
 
     // Edge rounding
     if( m_xMtrPercentDiagonal->get_sensitive() )
@@ -828,48 +834,10 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     }
 
     // Normal inverted
-    eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_INVERT);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bValue = rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT).GetValue();
-        if( bValue != m_xBtnNormalsInvert->get_active() )
-        {
-            m_xBtnNormalsInvert->set_active( bValue );
-            bUpdate = true;
-        }
-        else if( m_xBtnNormalsInvert->get_state() == TRISTATE_INDET )
-            m_xBtnNormalsInvert->set_active( bValue );
-    }
-    else
-    {
-        if( m_xBtnNormalsInvert->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnNormalsInvert->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
+    UpdateToggleButton(rAttrs, SDRATTR_3DOBJ_NORMALS_INVERT, *m_xBtnNormalsInvert);
 
     // 2-sided lighting
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bValue = rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING).GetValue();
-        if( bValue != m_xBtnTwoSidedLighting->get_active() )
-        {
-            m_xBtnTwoSidedLighting->set_active( bValue );
-            bUpdate = true;
-        }
-        else if( m_xBtnTwoSidedLighting->get_state() == TRISTATE_INDET )
-            m_xBtnTwoSidedLighting->set_active( bValue );
-    }
-    else
-    {
-        if( m_xBtnTwoSidedLighting->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnTwoSidedLighting->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
+    UpdateToggleButton(rAttrs, SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, *m_xBtnTwoSidedLighting);
 
     // Representation
     // Shademode
@@ -1146,26 +1114,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
         }
 
         // Filter
-        eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_FILTER);
-        if( eState != SfxItemState::INVALID )
-        {
-            bool bValue = rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER).GetValue();
-            if( bValue != m_xBtnTexFilter->get_active() )
-            {
-                m_xBtnTexFilter->set_active( bValue );
-                bUpdate = true;
-            }
-            if( m_xBtnTexFilter->get_state() == TRISTATE_INDET )
-                m_xBtnTexFilter->set_active( bValue );
-        }
-        else
-        {
-            if( m_xBtnTexFilter->get_state() != TRISTATE_INDET )
-            {
-                m_xBtnTexFilter->set_state( TRISTATE_INDET );
-                bUpdate = true;
-            }
-        }
+        UpdateToggleButton(rAttrs, SDRATTR_3DOBJ_TEXTURE_FILTER, *m_xBtnTexFilter);
     }
 
 

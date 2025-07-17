@@ -257,6 +257,8 @@ private:
                      ColorListBox& rColorListBox, TypedWhichId<SfxBoolItem> nWhichLightOn,
                      LightButton& rLightButton,
                      TypedWhichId<SvxB3DVectorItem> nWhichLightDirection);
+    void UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBoolItem> nWhich,
+                            weld::ToggleButton& rButton);
 };
 
 /*************************************************************************
