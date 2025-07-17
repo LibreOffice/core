@@ -82,6 +82,29 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableHeadingSplit)
     SwTextFrame* pPage2Para1 = pBody2->ContainsContent()->DynCastTextFrame();
     CPPUNIT_ASSERT_EQUAL(u"page 2"_ustr, pPage2Para1->GetText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableHeadingSplitFooter)
+{
+    // Given a document which ends with a floating table and a heading paragraph:
+    // When loading that document & laying it out:
+    createSwDoc("floattable-heading-split-footer.docx");
+
+    // Then make sure that the floating table is on page 2 and the last heading is on page 3:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    // Without the accompanying fix in place, this test would have failed, the floating table went
+    // to page 3, not to page 2.
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    // Make sure that page 3 has no floating table and has the heading on the correct page.
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(!pPage3->GetSortedObjs());
+    SwLayoutFrame* pBody3 = pPage3->FindBodyCont();
+    SwTextFrame* pPage3Para1 = pBody3->ContainsContent()->DynCastTextFrame();
+    CPPUNIT_ASSERT_EQUAL(u"page 3"_ustr, pPage3Para1->GetText());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

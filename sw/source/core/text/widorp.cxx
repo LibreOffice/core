@@ -260,7 +260,13 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
         if( ( bFirstLine && m_pFrame->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )
         {
-            m_bKeep = true;
+            bool bSplitFly = !m_bKeep && m_pFrame->HasSplitFlyDrawObjs();
+            // The SwTextFrameBreak ctor already turns off m_bKeep for split fly anchors, don't
+            // change that decision here.
+            if (!bSplitFly)
+            {
+                m_bKeep = true;
+            }
             m_bBreak = false;
         }
         else if(bFirstLine && m_pFrame->IsInFootnote() && !m_pFrame->FindFootnoteFrame()->GetPrev())
