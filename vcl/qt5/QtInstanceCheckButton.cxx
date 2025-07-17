@@ -37,12 +37,12 @@ bool QtInstanceCheckButton::get_active() const
     return bActive;
 }
 
-void QtInstanceCheckButton::set_inconsistent(bool bInconsistent)
+void QtInstanceCheckButton::set_inconsistent()
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
         m_pCheckBox->setTristate(true);
-        m_pCheckBox->setCheckState(bInconsistent ? Qt::PartiallyChecked : Qt::Unchecked);
+        m_pCheckBox->setCheckState(Qt::PartiallyChecked);
     });
 }
 

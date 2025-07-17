@@ -12804,12 +12804,12 @@ public:
 #endif
     }
 
-    virtual void set_inconsistent(bool inconsistent) override
+    virtual void set_inconsistent() override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_check_button_set_inconsistent(m_pCheckButton, inconsistent);
+        gtk_check_button_set_inconsistent(m_pCheckButton, true);
 #else
-        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), inconsistent);
+        gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_pCheckButton), true);
 #endif
     }
 
@@ -12878,10 +12878,7 @@ public:
     {
     }
 
-    void set_inconsistent(bool bInconsistent) override
-    {
-        weld::RadioButton::set_inconsistent(bInconsistent);
-    }
+    void set_inconsistent() override { weld::RadioButton::set_inconsistent(); }
 
     bool get_inconsistent() const override { return weld::RadioButton::get_inconsistent(); }
 };

@@ -26,7 +26,7 @@ public:
     // weld::Toggleable methods
     virtual void set_active(bool bActive) override;
     virtual bool get_active() const override;
-    virtual void set_inconsistent(bool bInconsistent) override;
+    virtual void set_inconsistent() override;
     virtual bool get_inconsistent() const override;
 
     // weld::CheckButton methods

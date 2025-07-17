@@ -3216,11 +3216,11 @@ void SalInstanceCheckButton::set_active(bool active)
 
 bool SalInstanceCheckButton::get_active() const { return m_xCheckButton->IsChecked(); }
 
-void SalInstanceCheckButton::set_inconsistent(bool inconsistent)
+void SalInstanceCheckButton::set_inconsistent()
 {
     disable_notify_events();
     m_xCheckButton->EnableTriState(true);
-    m_xCheckButton->SetState(inconsistent ? TRISTATE_INDET : TRISTATE_FALSE);
+    m_xCheckButton->SetState(TRISTATE_INDET);
     enable_notify_events();
 }
 

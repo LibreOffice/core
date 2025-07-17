@@ -1245,7 +1245,7 @@ public:
 
     virtual bool get_active() const override;
 
-    virtual void set_inconsistent(bool inconsistent) override;
+    virtual void set_inconsistent() override;
 
     virtual bool get_inconsistent() const override;
 

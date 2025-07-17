@@ -1695,14 +1695,12 @@ public:
         switch (eState)
         {
             case TRISTATE_INDET:
-                set_inconsistent(true);
+                set_inconsistent();
                 break;
             case TRISTATE_TRUE:
-                set_inconsistent(false);
                 set_active(true);
                 break;
             case TRISTATE_FALSE:
-                set_inconsistent(false);
                 set_active(false);
                 break;
         }
@@ -1713,7 +1711,7 @@ public:
     virtual void set_label_wrap(bool wrap) = 0;
 
 protected:
-    virtual void set_inconsistent(bool inconsistent) = 0;
+    virtual void set_inconsistent() = 0;
     virtual bool get_inconsistent() const = 0;
 };
 
@@ -1733,10 +1731,9 @@ class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
 {
 public:
     // radio button doesn't support inconsistent state
-    void set_inconsistent(bool bInconsistent) override
+    void set_inconsistent() override
     {
-        assert(!bInconsistent && "Radio button doesn't support inconsistent state");
-        (void)bInconsistent;
+        assert(false && "Radio button doesn't support inconsistent state");
     }
 
     bool get_inconsistent() const override { return false; }
