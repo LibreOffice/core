@@ -740,7 +740,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 if (sAction == "change")
                 {
                     bool bChecked = rData.at(u"data"_ustr) == "true";
-                    pRadioButton->set_state(bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    pRadioButton->set_active(bChecked);
                     LOKTrigger::trigger_toggled(*static_cast<weld::Toggleable*>(pRadioButton));
                     return true;
                 }

@@ -1727,16 +1727,12 @@ struct VCL_DLLPUBLIC TriStateEnabled
     void CheckButtonToggled(CheckButton& rToggle);
 };
 
-class VCL_DLLPUBLIC RadioButton : virtual public CheckButton
+class VCL_DLLPUBLIC RadioButton : virtual public Toggleable
 {
 public:
-    // radio button doesn't support inconsistent state
-    void set_inconsistent() override
-    {
-        assert(false && "Radio button doesn't support inconsistent state");
-    }
-
-    bool get_inconsistent() const override { return false; }
+    virtual void set_label(const OUString& rText) = 0;
+    virtual OUString get_label() const = 0;
+    virtual void set_label_wrap(bool wrap) = 0;
 };
 
 class VCL_DLLPUBLIC LinkButton : virtual public Widget

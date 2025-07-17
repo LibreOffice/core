@@ -12878,9 +12878,17 @@ public:
     {
     }
 
-    void set_inconsistent() override { weld::RadioButton::set_inconsistent(); }
+    virtual void set_label(const OUString& rText) override
+    {
+        GtkInstanceCheckButton::set_label(rText);
+    }
 
-    bool get_inconsistent() const override { return weld::RadioButton::get_inconsistent(); }
+    virtual OUString get_label() const override { return GtkInstanceCheckButton::get_label(); }
+
+    virtual void set_label_wrap(bool wrap) override
+    {
+        GtkInstanceCheckButton::set_label_wrap(wrap);
+    }
 };
 
 }

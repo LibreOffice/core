@@ -427,9 +427,9 @@ IMPL_LINK_NOARG(SwAsciiFilterDlg, CharSetSelHdl, weld::ComboBox&, void)
     else
     {
         // restore old user choice (not the automatic!)
-        m_xCRLF_RB->set_state(m_xCRLF_RB->get_saved_state());
-        m_xCR_RB->set_state(m_xCR_RB->get_saved_state());
-        m_xLF_RB->set_state(m_xLF_RB->get_saved_state());
+        m_xCRLF_RB->set_active(m_xCRLF_RB->get_saved_state() == TRISTATE_TRUE);
+        m_xCR_RB->set_active(m_xCR_RB->get_saved_state() == TRISTATE_TRUE);
+        m_xLF_RB->set_active(m_xLF_RB->get_saved_state() == TRISTATE_TRUE);
     }
     m_bSaveLineStatus = true;
 
