@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <ReportDefinition.hxx>
+
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -40,7 +42,7 @@ namespace reportdesign
                     public ReportEnginePropertySet
     {
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-        css::uno::Reference< css::report::XReportDefinition >     m_xReport;
+        rtl::Reference<reportdesign::OReportDefinition>           m_pReport;
         css::uno::Reference< css::task::XStatusIndicator>         m_StatusIndicator;
         css::uno::Reference< css::sdbc::XConnection >             m_xActiveConnection;
         ::sal_Int32                                               m_nMaxRows;

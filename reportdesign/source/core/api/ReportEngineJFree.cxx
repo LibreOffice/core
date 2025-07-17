@@ -111,20 +111,27 @@ sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceNam
 uno::Reference< report::XReportDefinition > SAL_CALL OReportEngineJFree::getReportDefinition()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return m_xReport;
+    return m_pReport;
 }
 
 void SAL_CALL OReportEngineJFree::setReportDefinition( const uno::Reference< report::XReportDefinition >& _report )
 {
     if ( !_report.is() )
         throw lang::IllegalArgumentException();
+
+    rtl::Reference<reportdesign::OReportDefinition> pReport
+        = dynamic_cast<reportdesign::OReportDefinition*>(_report.get());
+    assert(pReport.is() && "Report is not an OReportDefinition instance");
+
     BoundListeners l;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if ( m_xReport != _report )
+        if (m_pReport != pReport)
         {
-            prepareSet(PROPERTY_REPORTDEFINITION, uno::Any(m_xReport), uno::Any(_report), &l);
-            m_xReport = _report;
+            prepareSet(PROPERTY_REPORTDEFINITION,
+                       uno::Any(uno::Reference<report::XReportDefinition>(m_pReport)),
+                       uno::Any(_report), &l);
+            m_pReport = pReport;
         }
     }
     l.notify();
@@ -145,13 +152,13 @@ OUString OReportEngineJFree::getNewOutputName()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
-    if ( !m_xReport.is() || !m_xActiveConnection.is() )
+    if (!m_pReport.is() || !m_xActiveConnection.is())
         throw lang::IllegalArgumentException();
 
     static constexpr OUString s_sMediaType = u"MediaType"_ustr;
 
     MimeConfigurationHelper aConfighelper(m_xContext);
-    const OUString sMimeType = m_xReport->getMimeType();
+    const OUString sMimeType = m_pReport->getMimeType();
     std::shared_ptr<const SfxFilter> pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
     OUString sExt(u".rpt"_ustr);
     if ( pFilter )
@@ -165,11 +172,11 @@ OUString OReportEngineJFree::getNewOutputName()
     {
         xStorageProp->setPropertyValue( s_sMediaType, uno::Any(sMimeType));
     }
-    m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which isn't in the database yet.
+    m_pReport->storeToStorage(xTemp, aEmpty); // store to temp file because it may contain information which isn't in the database yet.
 
-    OUString sName = m_xReport->getCaption();
+    OUString sName = m_pReport->getCaption();
     if ( sName.isEmpty() )
-        sName = m_xReport->getName();
+        sName = m_pReport->getName();
     OUString sFileURL = ::utl::CreateTempURL(sName, false, sExt);
     if ( sFileURL.isEmpty() )
     {
@@ -201,11 +208,11 @@ OUString OReportEngineJFree::getNewOutputName()
     uno::Sequence< beans::NamedValue > aConvertedProperties{
         {u"InputStorage"_ustr, uno::Any(xTemp) },
         {u"OutputStorage"_ustr, uno::Any(xOut) },
-        {PROPERTY_REPORTDEFINITION, uno::Any(m_xReport) },
+        {PROPERTY_REPORTDEFINITION, uno::Any(uno::Reference<report::XReportDefinition>(m_pReport)) },
         {PROPERTY_ACTIVECONNECTION, uno::Any(m_xActiveConnection) },
         {PROPERTY_MAXROWS, uno::Any(m_nMaxRows) },
         {u"Author"_ustr, uno::Any(sAuthor) },
-        {u"Title"_ustr, uno::Any(m_xReport->getCaption()) }
+        {u"Title"_ustr, uno::Any(m_pReport->getCaption()) }
     };
 
     OUString sOutputName;
@@ -213,7 +220,7 @@ OUString OReportEngineJFree::getNewOutputName()
     // create job factory and initialize
     const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
     uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
-    if ( !m_xReport->getCommand().isEmpty() )
+    if (!m_pReport->getCommand().isEmpty())
     {
         xJob->execute(aConvertedProperties);
         if ( xStorageProp.is() )
