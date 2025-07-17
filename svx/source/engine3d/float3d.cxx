@@ -111,15 +111,15 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtnNormalsObj(m_xBuilder->weld_toggle_button(u"objspecific"_ustr))
     , m_xBtnNormalsFlat(m_xBuilder->weld_toggle_button(u"flat"_ustr))
     , m_xBtnNormalsSphere(m_xBuilder->weld_toggle_button(u"spherical"_ustr))
-    , m_xBtnNormalsInvert(m_xBuilder->weld_toggle_button(u"invertnormals"_ustr))
-    , m_xBtnTwoSidedLighting(m_xBuilder->weld_toggle_button(u"doublesidedillum"_ustr))
-    , m_xBtnDoubleSided(m_xBuilder->weld_toggle_button(u"doublesided"_ustr))
+    , m_xBtnNormalsInvert(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"invertnormals"_ustr)))
+    , m_xBtnTwoSidedLighting(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"doublesidedillum"_ustr)))
+    , m_xBtnDoubleSided(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"doublesided"_ustr)))
 
     , m_xFLRepresentation(m_xBuilder->weld_container(u"shadingframe"_ustr))
     , m_xLbShademode(m_xBuilder->weld_combo_box(u"mode"_ustr))
 
     , m_xFLShadow(m_xBuilder->weld_container(u"shadowframe"_ustr))
-    , m_xBtnShadow3d(m_xBuilder->weld_toggle_button(u"shadow"_ustr))
+    , m_xBtnShadow3d(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"shadow"_ustr)))
     , m_xFtSlant(m_xBuilder->weld_label(u"slantft"_ustr))
     , m_xMtrSlant(m_xBuilder->weld_metric_spin_button(u"slant"_ustr, FieldUnit::DEGREE))
 
@@ -159,7 +159,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , m_xBtnTexObjectY(m_xBuilder->weld_toggle_button(u"texobjy"_ustr))
     , m_xBtnTexParallelY(m_xBuilder->weld_toggle_button(u"texparallely"_ustr))
     , m_xBtnTexCircleY(m_xBuilder->weld_toggle_button(u"texcircley"_ustr))
-    , m_xBtnTexFilter(m_xBuilder->weld_toggle_button(u"texfilter"_ustr))
+    , m_xBtnTexFilter(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"texfilter"_ustr)))
 
     , m_xFLMaterial(m_xBuilder->weld_container(u"materialframe"_ustr))
     , m_xLbMatFavorites(m_xBuilder->weld_combo_box(u"favorites"_ustr))
@@ -186,7 +186,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
 
     , m_xBtnConvertTo3D(m_xBuilder->weld_button(u"to3d"_ustr))
     , m_xBtnLatheObject(m_xBuilder->weld_button(u"tolathe"_ustr))
-    , m_xBtnPerspective(m_xBuilder->weld_toggle_button(u"perspective"_ustr))
+    , m_xBtnPerspective(new TriStateToggleButton(m_xBuilder->weld_toggle_button(u"perspective"_ustr)))
 
     , bUpdate(false)
     , eViewType(ViewType3D::Geo)
@@ -511,7 +511,7 @@ void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> 
 }
 
 void Svx3DWin::UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBoolItem> nWhich,
-                                  weld::ToggleButton& rButton)
+                                  TriStateToggleButton& rButton)
 {
     SfxItemState eState = rAttrs.GetItemState(nWhich);
     if (eState != SfxItemState::INVALID)
@@ -1807,7 +1807,7 @@ void Svx3DWin::Resize()
 
         m_xBtnConvertTo3D->hide();
         m_xBtnLatheObject->hide();
-        m_xBtnPerspective->hide();
+        m_xBtnPerspective->get_widget()->hide();
 
         m_xCtlPreview->Hide();
         m_xLightPreviewGrid->hide();
@@ -1824,7 +1824,7 @@ void Svx3DWin::Resize()
 
         m_xBtnConvertTo3D->show();
         m_xBtnLatheObject->show();
-        m_xBtnPerspective->show();
+        m_xBtnPerspective->get_widget()->show();
 
         if( m_xBtnGeo->get_active() )
             ClickViewTypeHdl(*m_xBtnGeo);
@@ -2101,7 +2101,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, weld::Button&, rBtn, void )
         m_xBtnTexObjectY->set_active( &rBtn == m_xBtnTexObjectY.get() );
         bUpdatePreview = true;
     }
-    else if (&rBtn == m_xBtnShadow3d.get())
+    else if (&rBtn == m_xBtnShadow3d->get_widget())
     {
         m_xFtSlant->set_sensitive( m_xBtnShadow3d->get_active() );
         m_xMtrSlant->set_sensitive( m_xBtnShadow3d->get_active() );

@@ -118,16 +118,16 @@ private:
     std::unique_ptr<weld::ToggleButton> m_xBtnNormalsObj;
     std::unique_ptr<weld::ToggleButton> m_xBtnNormalsFlat;
     std::unique_ptr<weld::ToggleButton> m_xBtnNormalsSphere;
-    std::unique_ptr<weld::ToggleButton> m_xBtnNormalsInvert;
-    std::unique_ptr<weld::ToggleButton> m_xBtnTwoSidedLighting;
-    std::unique_ptr<weld::ToggleButton> m_xBtnDoubleSided;
+    std::unique_ptr<TriStateToggleButton> m_xBtnNormalsInvert;
+    std::unique_ptr<TriStateToggleButton> m_xBtnTwoSidedLighting;
+    std::unique_ptr<TriStateToggleButton> m_xBtnDoubleSided;
 
 // presentation
     std::unique_ptr<weld::Container> m_xFLRepresentation;
     std::unique_ptr<weld::ComboBox> m_xLbShademode;
 
     std::unique_ptr<weld::Container> m_xFLShadow;
-    std::unique_ptr<weld::ToggleButton> m_xBtnShadow3d;
+    std::unique_ptr<TriStateToggleButton> m_xBtnShadow3d;
     std::unique_ptr<weld::Label> m_xFtSlant;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrSlant;
 
@@ -169,7 +169,7 @@ private:
     std::unique_ptr<weld::ToggleButton> m_xBtnTexObjectY;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexParallelY;
     std::unique_ptr<weld::ToggleButton> m_xBtnTexCircleY;
-    std::unique_ptr<weld::ToggleButton> m_xBtnTexFilter;
+    std::unique_ptr<TriStateToggleButton> m_xBtnTexFilter;
 
 // material
 // material editor
@@ -199,7 +199,7 @@ private:
 // bottom part
     std::unique_ptr<weld::Button> m_xBtnConvertTo3D;
     std::unique_ptr<weld::Button> m_xBtnLatheObject;
-    std::unique_ptr<weld::ToggleButton> m_xBtnPerspective;
+    std::unique_ptr<TriStateToggleButton> m_xBtnPerspective;
 
 // the rest ...
     bool                bUpdate;
@@ -265,7 +265,7 @@ private:
                      LightButton& rLightButton,
                      TypedWhichId<SvxB3DVectorItem> nWhichLightDirection);
     void UpdateToggleButton(const SfxItemSet& rAttrs, TypedWhichId<SfxBoolItem> nWhich,
-                            weld::ToggleButton& rButton);
+                            TriStateToggleButton& rButton);
 };
 
 /*************************************************************************
