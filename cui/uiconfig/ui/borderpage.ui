@@ -35,6 +35,22 @@
     <property name="step-increment">0.10</property>
     <property name="page-increment">1</property>
   </object>
+  <object class="GtkTreeStore" id="presets_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="shadows_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <!-- n-columns=2 n-rows=3 -->
   <object class="GtkGrid" id="BorderPage">
     <property name="visible">True</property>
@@ -106,7 +122,7 @@
                 <property name="valign">center</property>
                 <property name="label" translatable="yes" context="borderpage|label14">Pr_esets:</property>
                 <property name="use-underline">True</property>
-                <property name="mnemonic-widget">presets</property>
+                <property name="mnemonic-widget">presets_scrolled_window</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -115,10 +131,22 @@
               </packing>
             </child>
             <child>
-              <object class="GtkDrawingArea" id="presets">
+              <object class="GtkScrolledWindow" id="presets_scrolled_window">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkIconView" id="presets">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="model">presets_liststore</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="columns">5</property>
+                    <property name="activate-on-single-click">True</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -520,10 +548,22 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkDrawingArea" id="shadows">
+              <object class="GtkScrolledWindow" id="shadows_scrolled_window">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkIconView" id="shadows">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="model">shadows_liststore</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="columns">5</property>
+                    <property name="activate-on-single-click">True</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -536,7 +576,7 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="borderpage|label22">_Position:</property>
                 <property name="use-underline">True</property>
-                <property name="mnemonic-widget">shadows</property>
+                <property name="mnemonic-widget">shadows_scrolled_window</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -724,13 +764,11 @@
       <widget name="label15"/>
       <widget name="linestylelb"/>
       <widget name="label22"/>
-      <widget name="shadows"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroupWidgets">
     <property name="ignore-hidden">True</property>
     <widgets>
-      <widget name="presets"/>
       <widget name="frameselwin"/>
       <widget name="linestylelb"/>
       <widget name="linecolorlb"/>

@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>
+#include <vcl/virdev.hxx>
 
 using namespace ::editeng;
 using ::com::sun::star::uno::Reference;
@@ -141,8 +142,8 @@ const sal_uInt16 BORDER_PRESET_COUNT = 5;
 // number of shadow images to show
 const sal_uInt16 BORDER_SHADOW_COUNT = 5;
 
-ShadowControlsWrapper::ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor)
-    : mrVsPos(rVsPos)
+ShadowControlsWrapper::ShadowControlsWrapper(weld::IconView& rIvPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor)
+    : mrIvPos(rIvPos)
     , mrMfSize(rMfSize)
     , mrLbColor(rLbColor)
 {
@@ -151,9 +152,11 @@ ShadowControlsWrapper::ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinB
 SvxShadowItem ShadowControlsWrapper::GetControlValue(const SvxShadowItem& rItem) const
 {
     SvxShadowItem aItem(rItem);
-    if (!mrVsPos.IsNoSelection())
+    OUString sSelectedId = mrIvPos.get_selected_id();
+    if (!sSelectedId.isEmpty())
     {
-        switch (mrVsPos.GetSelectedItemId())
+        sal_Int32 nSelectedId = sSelectedId.toInt32();
+        switch (nSelectedId)
         {
             case 1:
                 aItem.SetLocation(SvxShadowLocation::NONE);
@@ -190,25 +193,25 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
     switch (rItem.GetLocation())
     {
         case SvxShadowLocation::NONE:
-            mrVsPos.SelectItem(1);
+            mrIvPos.select(0);
             break;
         case SvxShadowLocation::BottomRight:
-            mrVsPos.SelectItem(2);
+            mrIvPos.select(1);
             break;
         case SvxShadowLocation::TopRight:
-            mrVsPos.SelectItem(3);
+            mrIvPos.select(2);
             break;
         case SvxShadowLocation::BottomLeft:
-            mrVsPos.SelectItem(4);
+            mrIvPos.select(3);
             break;
         case SvxShadowLocation::TopLeft:
-            mrVsPos.SelectItem(5);
+            mrIvPos.select(4);
             break;
         default:
-            mrVsPos.SetNoSelection();
+            mrIvPos.unselect_all();
             break;
     }
-    mrVsPos.SaveValue();
+    msSavedShadowItemId = mrIvPos.get_selected_id();
     mrMfSize.set_value(mrMfSize.normalize(rItem.GetWidth()), FieldUnit::TWIP);
     mrMfSize.save_value();
     mrLbColor.SelectEntry(rItem.GetColor());
@@ -217,14 +220,14 @@ void ShadowControlsWrapper::SetControlValue(const SvxShadowItem& rItem)
 
 bool ShadowControlsWrapper::get_value_changed_from_saved() const
 {
-    return mrVsPos.IsValueChangedFromSaved() ||
+    return (mrIvPos.get_selected_id() != msSavedShadowItemId) ||
            mrMfSize.get_value_changed_from_saved() ||
            mrLbColor.IsValueChangedFromSaved();
 }
 
 void ShadowControlsWrapper::SetControlDontKnow()
 {
-    mrVsPos.SetNoSelection();
+    mrIvPos.unselect_all();
     mrMfSize.set_text(u""_ustr);
     mrLbColor.SetNoSelection();
 }
@@ -299,8 +302,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , mbSync(true)
     , mbRemoveAdjacentCellBorders(false)
     , bIsCalcDoc(false)
-    , m_xWndPresets(new ValueSet(nullptr))
-    , m_xWndPresetsWin(new weld::CustomWeld(*m_xBuilder, u"presets"_ustr, *m_xWndPresets))
+    , m_xWndPresets(m_xBuilder->weld_icon_view(u"presets"_ustr))
     , m_xUserDefFT(m_xBuilder->weld_label(u"userdefft"_ustr))
     , m_xFrameSelWin(new weld::CustomWeld(*m_xBuilder, u"framesel"_ustr, m_aFrameSel))
     , m_xLbLineStyle(new SvtLineListBox(m_xBuilder->weld_menu_button(u"linestylelb"_ustr)))
@@ -319,8 +321,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xBottomMF(m_xBuilder->weld_metric_spin_button(u"bottommf"_ustr, FieldUnit::MM))
     , m_xSynchronizeCB(m_xBuilder->weld_check_button(u"sync"_ustr))
     , m_xShadowFrame(m_xBuilder->weld_container(u"shadow"_ustr))
-    , m_xWndShadows(new ValueSet(nullptr))
-    , m_xWndShadowsWin(new weld::CustomWeld(*m_xBuilder, u"shadows"_ustr, *m_xWndShadows))
+    , m_xWndShadows(m_xBuilder->weld_icon_view(u"shadows"_ustr))
     , m_xFtShadowSize(m_xBuilder->weld_label(u"distanceft"_ustr))
     , m_xEdShadowSize(m_xBuilder->weld_metric_spin_button(u"distancemf"_ustr, FieldUnit::MM))
     , m_xFtShadowColor(m_xBuilder->weld_label(u"shadowcolorft"_ustr))
@@ -530,10 +531,12 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     m_xLbLineColor->SetSelectHdl( LINK( this, SvxBorderTabPage, SelColHdl_Impl ) );
     m_xLineWidthLB->connect_changed(LINK(this, SvxBorderTabPage, ModifyWidthLBHdl_Impl));
     m_xLineWidthMF->connect_value_changed(LINK(this, SvxBorderTabPage, ModifyWidthMFHdl_Impl));
-    m_xWndPresets->SetSelectHdl( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
-    m_xWndShadows->SetSelectHdl( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
+    m_xWndPresets->connect_selection_changed( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
+    m_xWndShadows->connect_selection_changed( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
+    m_xWndPresets->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipPreHdl ) );
+    m_xWndShadows->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipSdwHdl ) );
 
-    FillValueSets();
+    FillIconViews();
     FillLineListBox_Impl();
 
     // Reapply line width: probably one of predefined values should be selected
@@ -593,13 +596,9 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
 SvxBorderTabPage::~SvxBorderTabPage()
 {
     m_xLbShadowColor.reset();
-    m_xWndShadowsWin.reset();
-    m_xWndShadows.reset();
     m_xLbLineColor.reset();
     m_xLbLineStyle.reset();
     m_xFrameSelWin.reset();
-    m_xWndPresetsWin.reset();
-    m_xWndPresets.reset();
 }
 
 std::unique_ptr<SfxTabPage> SvxBorderTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -823,13 +822,14 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         SelColHdl_Impl(*m_xLbLineColor);
     }
 
-    bool bEnable = m_xWndShadows->GetSelectedItemId() > 1 ;
+    OUString sShadowSelectedId = m_xWndShadows->get_selected_id();
+    bool bEnable = !sShadowSelectedId.isEmpty() && sShadowSelectedId.toInt32() > 1 ;
     m_xFtShadowSize->set_sensitive(bEnable);
     m_xEdShadowSize->set_sensitive(bEnable);
     m_xFtShadowColor->set_sensitive(bEnable);
     m_xLbShadowColor->set_sensitive(bEnable);
 
-    m_xWndPresets->SetNoSelection();
+    m_xWndPresets->unselect_all();
 
     // - no line - should not be selected
 
@@ -857,9 +857,13 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_xUserDefFT->set_sensitive(false);
                 m_xFrameSelWin->set_sensitive(false);
-                m_xWndPresets->RemoveItem(3);
-                m_xWndPresets->RemoveItem(4);
-                m_xWndPresets->RemoveItem(5);
+
+                if( m_xWndPresets->n_children() > 4 )
+                {
+                    m_xWndPresets->remove(4);
+                    m_xWndPresets->remove(3);
+                    m_xWndPresets->remove(2);
+                }
             }
         }
     }
@@ -1150,7 +1154,7 @@ void SvxBorderTabPage::HideShadowControls()
 #define IID_PRE_TABLE_ALL       20
 #define IID_PRE_TABLE_OUTER2    21
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, weld::IconView&, void)
 {
     const svx::FrameBorderState SHOW = svx::FrameBorderState::Show;
     const svx::FrameBorderState HIDE = svx::FrameBorderState::Hide;
@@ -1187,7 +1191,8 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
     m_aFrameSel.DeselectAllBorders();
 
     // Using image ID to find correct line in table above.
-    sal_uInt16 nLine = GetPresetImageId( m_xWndPresets->GetSelectedItemId() ) - 1;
+    sal_uInt16 nSelectedId = m_xWndPresets->get_selected_id().toUInt32();
+    sal_uInt16 nLine = GetPresetImageId(nSelectedId) - 1;
 
     // Apply all styles from the table
     for( int nBorder = 0; nBorder < svx::FRAMEBORDERTYPE_COUNT; ++nBorder )
@@ -1213,20 +1218,39 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
         SelColHdl_Impl(*m_xLbLineColor);
     }
 
-    // Presets ValueSet does not show a selection (used as push buttons).
-    m_xWndPresets->SetNoSelection();
+    // Presets IconView does not show a selection (used as push buttons).
+    m_xWndPresets->unselect_all();
 
     LinesChanged_Impl( nullptr );
     UpdateRemoveAdjCellBorderCB( nLine + 1 );
 }
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, weld::IconView&, void)
 {
-    bool bEnable = m_xWndShadows->GetSelectedItemId() > 1;
+    OUString sSelectedId = m_xWndShadows->get_selected_id();
+    bool bEnable = !sSelectedId.isEmpty() && sSelectedId.toInt32() > 1;
     m_xFtShadowSize->set_sensitive(bEnable);
     m_xEdShadowSize->set_sensitive(bEnable);
     m_xFtShadowColor->set_sensitive(bEnable);
     m_xLbShadowColor->set_sensitive(bEnable);
+}
+
+IMPL_LINK(SvxBorderTabPage, QueryTooltipPreHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = m_xWndPresets->get_id(iter);
+    if (!sId.isEmpty())
+        return SvxResId( GetPresetStringId( sId.toInt32() ) );
+
+    return OUString();
+}
+
+IMPL_LINK(SvxBorderTabPage, QueryTooltipSdwHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = m_xWndShadows->get_id(iter);
+    if (!sId.isEmpty())
+        return CuiResId( GetShadowStringId( sId.toInt32() ) );
+
+    return OUString();
 }
 
 IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
@@ -1336,8 +1360,8 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelStyleHdl_Impl, SvtLineListBox&, void)
 }
 
 
-// ValueSet handling
-sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
+// IconView handling
+sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nIconViewIdx ) const
 {
     // table with all sets of predefined border styles
     static const sal_uInt16 ppnImgIds[][ BORDER_PRESET_COUNT ] =
@@ -1365,12 +1389,26 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
     else
         nLine = 4;
 
-    DBG_ASSERT( (1 <= nValueSetIdx) && (nValueSetIdx <= BORDER_PRESET_COUNT),
+    DBG_ASSERT( (1 <= nIconViewIdx) && (nIconViewIdx <= BORDER_PRESET_COUNT),
         "SvxBorderTabPage::GetPresetImageId - wrong index" );
-    return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
+    return ppnImgIds[ nLine ][ nIconViewIdx - 1 ];
 }
 
-TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
+TranslateId SvxBorderTabPage::GetShadowStringId( sal_uInt16 nIconViewIdx )
+{
+    static const TranslateId pnStrIds[ BORDER_SHADOW_COUNT ] =
+    {
+        RID_CUISTR_SHADOW_STYLE_NONE,
+        RID_CUISTR_SHADOW_STYLE_BOTTOMRIGHT,
+        RID_CUISTR_SHADOW_STYLE_TOPRIGHT,
+        RID_CUISTR_SHADOW_STYLE_BOTTOMLEFT,
+        RID_CUISTR_SHADOW_STYLE_TOPLEFT
+    };
+
+    return pnStrIds[ nIconViewIdx - 1 ];
+}
+
+TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nIconViewIdx ) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
     static const TranslateId pnStrIds[] =
@@ -1400,58 +1438,55 @@ TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
         RID_SVXSTR_TABLE_PRESET_OUTERALL,
         RID_SVXSTR_TABLE_PRESET_OUTERINNER
     };
-    return pnStrIds[ GetPresetImageId( nValueSetIdx ) - 1 ];
+    return pnStrIds[ GetPresetImageId( nIconViewIdx ) - 1 ];
 }
 
-void SvxBorderTabPage::FillPresetVS()
+void SvxBorderTabPage::FillPresetIV()
 {
-    // basic initialization of the ValueSet
-    m_xWndPresets->SetStyle( m_xWndPresets->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    m_xWndPresets->SetColCount( BORDER_PRESET_COUNT );
+    m_xWndPresets->clear();
 
-    // insert images and help texts
-    for( sal_uInt16 nVSIdx = 1; nVSIdx <= BORDER_PRESET_COUNT; ++nVSIdx )
+    for( sal_uInt16 nIdx = 1; nIdx <= BORDER_PRESET_COUNT; ++nIdx )
     {
-        m_xWndPresets->InsertItem( nVSIdx );
-        m_xWndPresets->SetItemImage(nVSIdx, m_aBorderImgVec[GetPresetImageId(nVSIdx) - 1]);
-        m_xWndPresets->SetItemText( nVSIdx, SvxResId( GetPresetStringId( nVSIdx ) ) );
+        OUString sId = OUString::number(nIdx);
+        BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
+        m_xWndPresets->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
     }
 
     // show the control
-    m_xWndPresets->SetNoSelection();
-    m_xWndPresets->SetOptimalSize();
-    m_xWndPresets->Show();
+    m_xWndPresets->unselect_all();
 }
 
-void SvxBorderTabPage::FillShadowVS()
+void SvxBorderTabPage::FillShadowIV()
 {
-    // basic initialization of the ValueSet
-    m_xWndShadows->SetStyle( m_xWndShadows->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    m_xWndShadows->SetColCount( BORDER_SHADOW_COUNT );
-
-    // string resource IDs for each image
-    static const TranslateId pnStrIds[ BORDER_SHADOW_COUNT ] =
-        { RID_CUISTR_SHADOW_STYLE_NONE, RID_CUISTR_SHADOW_STYLE_BOTTOMRIGHT, RID_CUISTR_SHADOW_STYLE_TOPRIGHT, RID_CUISTR_SHADOW_STYLE_BOTTOMLEFT, RID_CUISTR_SHADOW_STYLE_TOPLEFT };
+    // Clear any existing items
+    m_xWndShadows->clear();
 
     // insert images and help texts
-    for( sal_uInt16 nVSIdx = 1; nVSIdx <= BORDER_SHADOW_COUNT; ++nVSIdx )
+    for( sal_uInt16 nIdx = 1; nIdx <= BORDER_SHADOW_COUNT; ++nIdx )
     {
-        m_xWndShadows->InsertItem( nVSIdx );
-        m_xWndShadows->SetItemImage(nVSIdx, m_aShadowImgVec[nVSIdx-1]);
-        m_xWndShadows->SetItemText( nVSIdx, CuiResId( pnStrIds[ nVSIdx - 1 ] ) );
+        OUString sId = OUString::number(nIdx);
+        BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aShadowImgVec[nIdx-1]);
+        m_xWndShadows->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
     }
 
     // show the control
-    m_xWndShadows->SelectItem( 1 );
-    m_xWndShadows->SetOptimalSize();
-    m_xWndShadows->Show();
+    m_xWndShadows->select(0);
 }
 
-
-void SvxBorderTabPage::FillValueSets()
+BitmapEx SvxBorderTabPage::GetPreviewAsBitmap(const Image& rImage)
 {
-    FillPresetVS();
-    FillShadowVS();
+    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
+    ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+
+    return aPreviewBitmap;
+}
+
+void SvxBorderTabPage::FillIconViews()
+{
+    FillPresetIV();
+    FillShadowIV();
 }
 
 void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth, sal_Int32 nRemovedType )

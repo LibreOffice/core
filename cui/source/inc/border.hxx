@@ -21,7 +21,6 @@
 #include <editeng/shaditem.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/valueset.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/algitem.hxx>
 #include <svx/colorbox.hxx>
@@ -41,7 +40,7 @@ namespace editeng
 class ShadowControlsWrapper
 {
 public:
-    explicit ShadowControlsWrapper(ValueSet& rVsPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor);
+    explicit ShadowControlsWrapper(weld::IconView& rIvPos, weld::MetricSpinButton& rMfSize, ColorListBox& rLbColor);
 
     SvxShadowItem GetControlValue(const SvxShadowItem& rItem) const;
     void SetControlValue(const SvxShadowItem& rItem);
@@ -50,9 +49,10 @@ public:
     bool get_value_changed_from_saved() const;
 
 private:
-    ValueSet&                        mrVsPos;
+    weld::IconView&                     mrIvPos;
     weld::MetricSpinButton&             mrMfSize;
     ColorListBox&                       mrLbColor;
+    OUString                            msSavedShadowItemId;
 };
 
 class MarginControlsWrapper
@@ -121,8 +121,7 @@ private:
 
     // Controls
     svx::FrameSelector m_aFrameSel;
-    std::unique_ptr<ValueSet> m_xWndPresets;
-    std::unique_ptr<weld::CustomWeld> m_xWndPresetsWin;
+    std::unique_ptr<weld::IconView> m_xWndPresets;
     std::unique_ptr<weld::Label> m_xUserDefFT;
     std::unique_ptr<weld::CustomWeld> m_xFrameSelWin;
 
@@ -143,8 +142,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xSynchronizeCB;
 
     std::unique_ptr<weld::Container> m_xShadowFrame;
-    std::unique_ptr<ValueSet> m_xWndShadows;
-    std::unique_ptr<weld::CustomWeld> m_xWndShadowsWin;
+    std::unique_ptr<weld::IconView> m_xWndShadows;
     std::unique_ptr<weld::Label> m_xFtShadowSize;
     std::unique_ptr<weld::MetricSpinButton> m_xEdShadowSize;
     std::unique_ptr<weld::Label> m_xFtShadowColor;
@@ -162,21 +160,23 @@ private:
     // Handler
     DECL_LINK(SelStyleHdl_Impl, SvtLineListBox&, void);
     DECL_LINK(SelColHdl_Impl, ColorListBox&, void);
-    DECL_LINK(SelPreHdl_Impl, ValueSet*, void);
-    DECL_LINK(SelSdwHdl_Impl, ValueSet*, void);
+    DECL_LINK(SelPreHdl_Impl, weld::IconView&, void);
+    DECL_LINK(SelSdwHdl_Impl, weld::IconView&, void);
     DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
     DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ModifyWidthLBHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(ModifyWidthMFHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(SyncHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(QueryTooltipPreHdl, const weld::TreeIter&, OUString);
+    DECL_LINK(QueryTooltipSdwHdl, const weld::TreeIter&, OUString);
 
-    sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
-    TranslateId         GetPresetStringId(sal_uInt16 nValueSetIdx) const;
+    sal_uInt16          GetPresetImageId(sal_uInt16 nIconViewIdx) const;
+    TranslateId         GetPresetStringId(sal_uInt16 nIconViewIdx) const;
 
-    void                FillPresetVS();
-    void                FillShadowVS();
-    void                FillValueSets();
+    void                FillPresetIV();
+    void                FillShadowIV();
+    void                FillIconViews();
     void                SetLineWidth(sal_Int64 nWidth, sal_Int32 nRemovedType = 0);
 
     // Filler
@@ -189,6 +189,9 @@ private:
 
     bool IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
+
+    static TranslateId GetShadowStringId(sal_uInt16 nIconViewIdx);
+    static BitmapEx GetPreviewAsBitmap(const Image& rImage);
 };
 
 

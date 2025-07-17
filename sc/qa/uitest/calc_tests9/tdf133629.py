@@ -30,7 +30,8 @@ class tdf133629(UITestCase):
                 select_pos(xTabs, "5")
 
                 xPresets = xDialog.getChild("presets")
-                xPresets.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
+                element4 = xPresets.getChild("3")
+                element4.executeAction("SELECT", mkPropertyValues({}))
 
                 # Change width
                 xLineWidth = xDialog.getChild("linewidthmf")
