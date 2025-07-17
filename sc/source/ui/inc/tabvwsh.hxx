@@ -430,6 +430,8 @@ public:
     void    FinishProtectTable();
     void    ExecProtectTable( SfxRequest& rReq );
 
+    void    ExecGoToTab( SfxRequest& rReq, SfxBindings& rBindings );
+
     using ScTabView::ShowCursor;
 
     bool IsActive() const { return bIsActive; }

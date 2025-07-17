@@ -157,6 +157,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/formatcellsdialog.ui" },
         { u"modules/scalc/ui/fourieranalysisdialog.ui" },
         { u"modules/scalc/ui/goalseekdlg.ui" },
+        { u"modules/scalc/ui/gotosheetdialog.ui" },
         { u"modules/scalc/ui/groupdialog.ui" },
         { u"modules/scalc/ui/headerfootercontent.ui" },
         { u"modules/scalc/ui/headerfooterdialog.ui" },
