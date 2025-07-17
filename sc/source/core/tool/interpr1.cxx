@@ -11737,11 +11737,11 @@ bool ScInterpreter::SearchMatrixForValue( VectorSearchArguments& vsa, ScQueryPar
                     case wildcard :
                         // simple serial search for equality mode (source data doesn't
                         // need to be sorted).
-                        for ( SCSIZE i = nMatCount - 1; i > 0; i-- )
+                        for ( SCSIZE i = nMatCount; i > 0; i-- )
                         {
-                            if (lcl_CompareMatrix2Query(i, aMatAcc, rParam, rEntry, bMatchWholeCell) == 0)
+                            if (lcl_CompareMatrix2Query(i - 1, aMatAcc, rParam, rEntry, bMatchWholeCell) == 0)
                             {
-                                vsa.nHitIndex = i + 1; // found !
+                                vsa.nHitIndex = i; // found !
                                 break;
                             }
                         }
