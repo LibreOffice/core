@@ -15156,7 +15156,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([for alternative branding images directory])
 # initialize mapped arrays
 BRAND_INTRO_IMAGES="intro.png intro-highres.png"
-brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg logo-sc.svg logo-sc_inverted.svg about.svg animatedbrand.gif"
+brand_files="$BRAND_INTRO_IMAGES logo.svg logo_inverted.svg logo-sc.svg logo-sc_inverted.svg about.svg"
 
 if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
