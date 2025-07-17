@@ -552,7 +552,24 @@ void DocxExport::CollectFloatingTables()
 
         SwNode& rNode = pContentAnchor->GetNode();
         SwTextNode* pTextNode = rNode.GetTextNode();
-        if (!pTextNode || !pTextNode->IsDummyAnchorNode())
+        if (!pTextNode)
+        {
+            continue;
+        }
+
+        if (!pTextNode->HasSwAttrSet())
+        {
+            continue;
+        }
+
+        const SwAttrSet& rAttrSet = pTextNode->GetSwAttrSet();
+        const SvxLineSpacingItem& rLineSpacing = rAttrSet.GetLineSpacing();
+        if (rLineSpacing.GetLineSpaceRule() != SvxLineSpaceRule::Fix)
+        {
+            continue;
+        }
+
+        if (rLineSpacing.GetLineHeight() != 0)
         {
             continue;
         }
