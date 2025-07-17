@@ -91,7 +91,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         }
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
-            xPanel = std::make_unique<ScFunctionWin>(pParent);
+            xPanel = std::make_unique<ScFunctionWin>(pParent, pBindings);
             nMinimumSize = 0;
         }
 

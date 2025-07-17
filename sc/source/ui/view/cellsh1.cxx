@@ -29,6 +29,8 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
+#include <formula/funcvarargs.h>
 #include <svl/stritem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -53,6 +55,7 @@
 
 #include <cellsh.hxx>
 #include <ftools.hxx>
+#include <funcdesc.hxx>
 #include <sc.hrc>
 #include <document.hxx>
 #include <patattr.hxx>
@@ -2094,6 +2097,123 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_INS_FUNCTION:
             {
+                const SfxPoolItem* pFunction;
+                const SfxPoolItem* pCategory;
+                const SfxPoolItem* pFunctionId;
+                OUString aFunction;
+                sal_Int16 nCategory = -1;
+                OUString aFunctionId;
+
+                bool bFuncHasCategoryOrId = false;
+                if (pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pFunction)
+                    && pReqArgs->HasItem(FN_PARAM_2, &pCategory)) // -1 when aFunctionId not empty
+                {
+                    aFunction = static_cast<const SfxStringItem*>(pFunction)->GetValue();
+                    nCategory = static_cast<const SfxInt16Item*>(pCategory)->GetValue();
+
+                    if (nCategory == -1 && pReqArgs->HasItem(FN_PARAM_3, &pFunctionId))
+                        aFunctionId = static_cast<const SfxStringItem*>(pFunctionId)->GetValue();
+
+                    bFuncHasCategoryOrId = nCategory != -1 || !aFunctionId.isEmpty();
+                }
+
+                if (bFuncHasCategoryOrId)
+                {
+                    ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
+                    OUString aString = aFunction;
+                    if (!pScMod->IsEditMode())
+                    {
+                        pScMod->SetInputMode(SC_INPUT_TABLE);
+                        aString = "=" + aFunction;
+                        if (pHdl)
+                            pHdl->ClearText();
+                    }
+
+                    const ScFuncDesc* pDesc;
+                    if (nCategory == -1)
+                        pDesc = weld::fromId<const ScFuncDesc*>(aFunctionId);
+                    else
+                    {
+                        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+                        const CharClass* pCharClass
+                            = (ScGlobal::GetStarCalcFunctionList()->IsEnglishFunctionNames()
+                                   ? ScCompiler::GetCharClassEnglish()
+                                   : ScCompiler::GetCharClassLocalized());
+
+                        pDesc = pFuncMgr->First(nCategory);
+                        while (
+                            pDesc
+                            && !pCharClass->uppercase(pDesc->getFunctionName()).equals(aFunction))
+                        {
+                            pDesc = pFuncMgr->Next();
+                        }
+                    }
+                    if (!pDesc)
+                    {
+                        rReq.Ignore();
+                        break;
+                    }
+
+                    OUStringBuffer aArgStr;
+                    OUString aFirstArgStr;
+                    sal_uInt16 nArgs = pDesc->nArgCount;
+                    if (nArgs > 0)
+                    {
+                        // NOTE: Theoretically the first parameter could have the
+                        // suppress flag as well, but practically it doesn't.
+                        aFirstArgStr = pDesc->maDefArgNames[0];
+                        aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
+                        aFirstArgStr = aFirstArgStr.replaceAll(" ", "_");
+                        aArgStr = aFirstArgStr;
+                        if (nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS)
+                        { // no VarArgs or Fix plus VarArgs, but not VarArgs only
+                            sal_uInt16 nFix;
+                            if (nArgs >= PAIRED_VAR_ARGS)
+                                nFix = nArgs - PAIRED_VAR_ARGS + 2;
+                            else if (nArgs >= VAR_ARGS)
+                                nFix = nArgs - VAR_ARGS + 1;
+                            else
+                                nFix = nArgs;
+                            for (sal_uInt16 nArg = 1;
+                                 nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++)
+                            {
+                                aArgStr.append("; ");
+                                OUString sTmp = pDesc->maDefArgNames[nArg];
+                                sTmp = comphelper::string::strip(sTmp, ' ');
+                                sTmp = sTmp.replaceAll(" ", "_");
+                                aArgStr.append(sTmp);
+                            }
+                        }
+                    }
+
+                    if (pHdl)
+                    {
+                        if (pHdl->GetEditString().isEmpty())
+                            aString = "=" + aFunction;
+                        EditView* pEdView = pHdl->GetActiveView();
+                        if (pEdView != nullptr)
+                        {
+                            if (nArgs > 0)
+                            {
+                                pHdl->InsertFunction(aString);
+                                pEdView->InsertText(aArgStr.makeStringAndClear(), true);
+                                ESelection aESel = pEdView->GetSelection();
+                                aESel.end.nIndex = aESel.start.nIndex + aFirstArgStr.getLength();
+                                pEdView->SetSelection(aESel);
+                                pHdl->DataChanged();
+                            }
+                            else
+                            {
+                                aString += "()";
+                                pEdView->InsertText(aString);
+                                pHdl->DataChanged();
+                            }
+                        }
+                    }
+                    rReq.Ignore();
+                    break;
+                }
+
                 const SfxBoolItem* pOkItem = static_cast<const SfxBoolItem*>(&pReqArgs->Get( SID_DLG_RETOK ));
 
                 if ( pOkItem->GetValue() )      // OK

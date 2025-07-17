@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <basctl/basctldllpublic.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editview.hxx>
 #include <sfx2/viewsh.hxx>
@@ -28,6 +29,8 @@
 
 #include <global.hxx>
 #include <scmod.hxx>
+#include <sc.hrc>
+#include <svl/stritem.hxx>
 #include <inputhdl.hxx>
 #include <tabvwsh.hxx>
 #include <funcdesc.hxx>
@@ -49,7 +52,7 @@
 #*
 #************************************************************************/
 
-ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
+ScFunctionWin::ScFunctionWin(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"FunctionPanel"_ustr, u"modules/scalc/ui/functionpanel.ui"_ustr)
     , xCatBox(m_xBuilder->weld_combo_box(u"category"_ustr))
     , xFuncList(m_xBuilder->weld_tree_view(u"funclist"_ustr))
@@ -59,6 +62,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , xSimilaritySearch(m_xBuilder->weld_check_button(u"similaritysearch"_ustr))
     , xFiFuncDesc(m_xBuilder->weld_text_view(u"funcdesc"_ustr))
     , m_xSearchString(m_xBuilder->weld_entry(u"search"_ustr))
+    , m_pBindings(pBindings)
     , xConfigListener(new comphelper::ConfigurationListener(u"/org.openoffice.Office.Calc/Formula/Syntax"_ustr))
     , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
@@ -405,27 +409,11 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
         return;
     }
 
-    OUStringBuffer aArgStr;
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
 
     if(!aString.isEmpty())
     {
-        OUString aFirstArgStr;
-        ScModule* pScMod = ScModule::get();
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pCurSh );
-        ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
-        if(!pScMod->IsEditMode())
-        {
-            rtl::Reference<comphelper::ConfigurationListener> xDetectDisposed(xConfigListener);
-            pScMod->SetInputMode(SC_INPUT_TABLE);
-            // the above call can result in us being disposed
-            if (xDetectDisposed->isDisposed())
-                return;
-            aString = "=" + xFuncList->get_selected_text();
-            if (pHdl)
-                pHdl->ClearText();
-        }
         const ScFuncDesc* pDesc =
              weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id());
         if (pDesc)
@@ -433,63 +421,17 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
             pFuncDesc=pDesc;
             UpdateLRUList();
             nArgs = pDesc->nArgCount;
-            if(nArgs>0)
-            {
-                // NOTE: Theoretically the first parameter could have the
-                // suppress flag as well, but practically it doesn't.
-                aFirstArgStr = pDesc->maDefArgNames[0];
-                aFirstArgStr = comphelper::string::strip(aFirstArgStr, ' ');
-                aFirstArgStr = aFirstArgStr.replaceAll(" ", "_");
-                aArgStr = aFirstArgStr;
-                if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
-                {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
-                    sal_uInt16 nFix;
-                    if (nArgs >= PAIRED_VAR_ARGS)
-                        nFix = nArgs - PAIRED_VAR_ARGS + 2;
-                    else if (nArgs >= VAR_ARGS)
-                        nFix = nArgs - VAR_ARGS + 1;
-                    else
-                        nFix = nArgs;
-                    for ( sal_uInt16 nArg = 1;
-                            nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
-                    {
-                        aArgStr.append("; ");
-                        OUString sTmp = pDesc->maDefArgNames[nArg];
-                        sTmp = comphelper::string::strip(sTmp, ' ');
-                        sTmp = sTmp.replaceAll(" ", "_");
-                        aArgStr.append(sTmp);
-                    }
-                }
-            }
-        }
-        if (pHdl)
-        {
-            if (pHdl->GetEditString().isEmpty())
-            {
-                aString = "=" + xFuncList->get_selected_text();
-            }
-            EditView *pEdView=pHdl->GetActiveView();
-            if(pEdView!=nullptr) // @ needed because of crash during setting a name
-            {
-                if(nArgs>0)
-                {
-                    pHdl->InsertFunction(aString);
-                    pEdView->InsertText(aArgStr.makeStringAndClear(),true);
-                    ESelection  aESel=pEdView->GetSelection();
-                    aESel.end.nIndex = aESel.start.nIndex + aFirstArgStr.getLength();
-                    pEdView->SetSelection(aESel);
-                    pHdl->DataChanged();
-                }
-                else
-                {
-                    aString += "()";
-                    pEdView->InsertText(aString);
-                    pHdl->DataChanged();
-                }
-            }
         }
         InitLRUList();
     }
+
+    const SfxStringItem aFunction(FN_PARAM_1, aString);
+    // -1 when function-id is available, category index otherwise
+    const SfxInt16Item nCategory(FN_PARAM_2, -1);
+    const SfxStringItem aFunctionId(FN_PARAM_3, xFuncList->get_selected_id());
+    GetBindings().GetDispatcher()->ExecuteList(SID_INS_FUNCTION, SfxCallMode::SYNCHRON,
+                                               { &aFunction, &nCategory, &aFunctionId });
+
     if ( pCurSh )
     {
         vcl::Window* pShellWnd = pCurSh->GetWindow();
