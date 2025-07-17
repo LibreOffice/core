@@ -252,6 +252,14 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(&aEvent);
             return;
         }
+        case AccessibleEventId::ROLE_CHANGED:
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+            QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::RoleChanged);
+            QAccessible::updateAccessibility(&aEvent);
+#endif
+            return;
+        }
         case AccessibleEventId::SELECTION_CHANGED:
         {
             QAccessibleEvent aEvent(pQAccessibleInterface, QAccessible::Selection);
@@ -451,7 +459,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             }
             return;
         }
-        case AccessibleEventId::ROLE_CHANGED:
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
         case AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED:
         case AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED:
