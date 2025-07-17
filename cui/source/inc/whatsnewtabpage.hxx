@@ -13,7 +13,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/graph.hxx>
 
-class AnimatedBrand : public weld::CustomWidgetController
+class BrandGraphic : public weld::CustomWidgetController
 {
 private:
     bool m_bIsFirstStart;
@@ -22,7 +22,7 @@ private:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
 public:
-    AnimatedBrand();
+    BrandGraphic();
     const Size& GetGraphicSize() const { return m_aGraphicSize; };
     void SetIsFirstStart(const bool bIsFirstStart) { m_bIsFirstStart = bIsFirstStart; };
 };
@@ -30,7 +30,7 @@ public:
 class WhatsNewTabPage : public SfxTabPage
 {
 private:
-    AnimatedBrand m_aBrand;
+    BrandGraphic m_aBrand;
     std::unique_ptr<weld::CustomWeld> m_pBrand;
 
     virtual void ActivatePage(const SfxItemSet&) override;

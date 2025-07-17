@@ -47,16 +47,16 @@ void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
         m_aBrand.SetIsFirstStart(aIterator->second.get<sal_Bool>());
 }
 
-AnimatedBrand::AnimatedBrand()
+BrandGraphic::BrandGraphic()
     : m_bIsFirstStart(false)
 {
-    OUString aURL(u"$BRAND_BASE_DIR/" LIBO_SHARE_SHELL_FOLDER "/animatedbrand.gif"_ustr);
-    rtl::Bootstrap::expandMacros(aURL);
-    GraphicFilter::LoadGraphic(aURL, OUString(), m_aGraphic);
+    BitmapEx aBackgroundBitmap;
+    SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, 250);
+    m_aGraphic = aBackgroundBitmap;
     m_aGraphicSize = m_aGraphic.GetSizePixel();
 }
 
-void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void BrandGraphic::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
     //clear
     rRenderContext.SetBackground(COL_WHITE);
@@ -64,12 +64,7 @@ void AnimatedBrand::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     const Point aGraphicPosition((rRect.GetWidth() - m_aGraphicSize.Width()),
                                  (rRect.GetHeight() - m_aGraphicSize.Height()) >> 1);
-#ifndef MACOSX
-    if (m_aGraphic.IsAnimated() && MiscSettings::IsAnimatedOthersAllowed())
-        m_aGraphic.StartAnimation(rRenderContext, aGraphicPosition, m_aGraphicSize);
-    else
-#endif
-        m_aGraphic.Draw(rRenderContext, aGraphicPosition, m_aGraphicSize);
+    m_aGraphic.Draw(rRenderContext, aGraphicPosition, m_aGraphicSize);
 
     tools::Rectangle aTextRect;
     if (m_aGraphic.isAvailable())
