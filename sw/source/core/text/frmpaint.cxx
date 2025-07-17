@@ -361,7 +361,6 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         aLayoutModeModifier.Modify( false );
 
         SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
-        bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
         while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
         {
@@ -381,7 +380,13 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         const bool bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
         do
         {
-            if( bNoDummy || !aLine.GetCurr()->IsDummy() )
+            // A comment from SwTextFormatter::CalcRealHeight:
+            // The dummy flag is set on lines that only contain flyportions. Unfortunately an empty
+            // line can be at the end of a paragraph (empty paragraphs or behind a Shift-Return).
+            if (!aLine.GetCurr()->IsDummy()
+                || (!aLine.GetCurr()->GetNext()
+                    && aLine.GetStart()
+                           >= TextFrameIndex(aLine.GetTextFrame()->GetText().getLength())))
             {
                 bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
                 if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
