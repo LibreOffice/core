@@ -48,14 +48,10 @@ class ColorListBox;
 
 struct Svx3DWinImpl;
 
-class UNLESS_MERGELIBS(SVX_DLLPUBLIC) LightButton final
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) TriStateToggleButton
 {
 public:
-    explicit LightButton(std::unique_ptr<weld::ToggleButton> xButton);
-
-    void switchLightOn(bool bOn);
-    bool isLightOn() const { return m_bLightOn;}
-
+    explicit TriStateToggleButton(std::unique_ptr<weld::ToggleButton> xButton);
     bool get_active() const { return m_xButton->get_active(); }
     void set_active(bool bActive) { m_xButton->set_active(bActive); }
 
@@ -69,11 +65,22 @@ public:
         m_xButton->connect_clicked(rLink);
     }
 
+private:
+    std::unique_ptr<weld::ToggleButton> m_xButton;
+};
+
+class UNLESS_MERGELIBS(SVX_DLLPUBLIC) LightButton final : public TriStateToggleButton
+{
+public:
+    explicit LightButton(std::unique_ptr<weld::ToggleButton> xButton);
+
+    void switchLightOn(bool bOn);
+    bool isLightOn() const { return m_bLightOn;}
+
     bool get_prev_active() const { return m_bButtonPrevActive; }
     void set_prev_active(bool bPrevActive) { m_bButtonPrevActive = bPrevActive; }
 
 private:
-    std::unique_ptr<weld::ToggleButton> m_xButton;
     bool m_bLightOn;
     bool m_bButtonPrevActive;
 };

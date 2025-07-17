@@ -2569,12 +2569,17 @@ void SvxConvertTo3DItem::StateChangedAtToolBoxControl(sal_uInt16 /*_nId*/, SfxIt
     }
 }
 
-LightButton::LightButton(std::unique_ptr<weld::ToggleButton> xButton)
+TriStateToggleButton::TriStateToggleButton(std::unique_ptr<weld::ToggleButton> xButton)
     : m_xButton(std::move(xButton))
+{
+}
+
+LightButton::LightButton(std::unique_ptr<weld::ToggleButton> xButton)
+    : TriStateToggleButton(std::move(xButton))
     , m_bLightOn(false)
     , m_bButtonPrevActive(false)
 {
-    m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
+    get_widget()->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
 }
 
 void LightButton::switchLightOn(bool bOn)
@@ -2583,9 +2588,9 @@ void LightButton::switchLightOn(bool bOn)
         return;
     m_bLightOn = bOn;
     if (m_bLightOn)
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_ON);
+        get_widget()->set_from_icon_name(RID_SVXBMP_LAMP_ON);
     else
-        m_xButton->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
+        get_widget()->set_from_icon_name(RID_SVXBMP_LAMP_OFF);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
