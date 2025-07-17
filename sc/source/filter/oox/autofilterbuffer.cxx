@@ -641,7 +641,7 @@ void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
     mnColId = rStrm.readInt32();
     nFlags = rStrm.readuInt16();
     mbHiddenButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_HIDDENBUTTON );
-    mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
+    mbShowButton = !getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }
 
 ApiFilterSettings FilterColumn::finalizeImport()
