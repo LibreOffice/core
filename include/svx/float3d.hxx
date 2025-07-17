@@ -21,9 +21,12 @@
 #define INCLUDED_SVX_FLOAT3D_HXX
 
 #include <memory>
+#include <editeng/colritem.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/weld.hxx>
+#include <svl/eitem.hxx>
+#include <svx/e3ditem.hxx>
 #include <svx/svxdllapi.h>
 
 #include <svx/dlgctl3d.hxx>
@@ -248,6 +251,12 @@ public:
 
     void UpdatePreview(); // upward (private)
     void DocumentReload();
+
+private:
+    void UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> nWhichLightColor,
+                     ColorListBox& rColorListBox, TypedWhichId<SfxBoolItem> nWhichLightOn,
+                     LightButton& rLightButton,
+                     TypedWhichId<SvxB3DVectorItem> nWhichLightDirection);
 };
 
 /*************************************************************************

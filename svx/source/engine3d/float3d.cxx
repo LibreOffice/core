@@ -22,7 +22,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svx/colorbox.hxx>
@@ -42,9 +41,7 @@
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
 
-#include <editeng/colritem.hxx>
 #include <osl/diagnose.h>
-#include <svx/e3ditem.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/unitconv.hxx>
 
@@ -458,6 +455,59 @@ void Svx3DWin::Reset()
     // Select nothing, to avoid errors when selecting the first
     m_xCtlLightPreview->GetSvx3DLightControl().SelectLight(0);
     m_xCtlLightPreview->CheckSelection();
+}
+
+void Svx3DWin::UpdateLight(const SfxItemSet& rAttrs, TypedWhichId<SvxColorItem> nWhichLightColor,
+                           ColorListBox& rColorListBox, TypedWhichId<SfxBoolItem> nWhichLightOn,
+                           LightButton& rLightButton,
+                           TypedWhichId<SvxB3DVectorItem> nWhichLightDirection)
+{
+    // Color
+    SfxItemState eState = rAttrs.GetItemState(nWhichLightColor);
+    if (eState != SfxItemState::INVALID)
+    {
+        Color aColor = rAttrs.Get(nWhichLightColor).GetValue();
+        if (aColor != rColorListBox.GetSelectEntryColor())
+        {
+            LBSelectColor(&rColorListBox, aColor);
+            bUpdate = true;
+        }
+    }
+    else
+    {
+        if (!rColorListBox.IsNoSelection())
+        {
+            rColorListBox.SetNoSelection();
+            bUpdate = true;
+        }
+    }
+    // on/off
+    eState = rAttrs.GetItemState(nWhichLightOn);
+    if (eState != SfxItemState::INVALID)
+    {
+        bool bOn = rAttrs.Get(nWhichLightOn).GetValue();
+        if (bOn != rLightButton.isLightOn())
+        {
+            rLightButton.switchLightOn(bOn);
+            bUpdate = true;
+        }
+        if (rLightButton.get_state() == TRISTATE_INDET)
+            rLightButton.set_active(rLightButton.get_active());
+    }
+    else
+    {
+        if (rLightButton.get_state() != TRISTATE_INDET)
+        {
+            rLightButton.set_state(TRISTATE_INDET);
+            bUpdate = true;
+        }
+    }
+    // direction
+    eState = rAttrs.GetItemState(nWhichLightDirection);
+    if (eState != SfxItemState::INVALID)
+    {
+        bUpdate = true;
+    }
 }
 
 void Svx3DWin::Update( SfxItemSet const & rAttrs )
@@ -936,389 +986,31 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
 
 // Lighting
     Color aColor;
-    // Light 1 (Color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_1);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1).GetValue();
-        ColorListBox* pLb = m_xLbLight1.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight1->IsNoSelection())
-        {
-            m_xLbLight1->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 1 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_1);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue();
-        if (bOn != m_xBtnLight1->isLightOn())
-        {
-            m_xBtnLight1->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight1->get_state() == TRISTATE_INDET )
-            m_xBtnLight1->set_active( m_xBtnLight1->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight1->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight1->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 1 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_1);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
 
-    //Light 2 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_2);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2).GetValue();
-        ColorListBox* pLb = m_xLbLight2.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight2->IsNoSelection())
-        {
-            m_xLbLight2->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 2 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_2);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue();
-        if (bOn != m_xBtnLight2->isLightOn())
-        {
-            m_xBtnLight2->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight2->get_state() == TRISTATE_INDET )
-            m_xBtnLight2->set_active( m_xBtnLight2->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight2->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight2->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    //Light 2 (Direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_2);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    //Light 3 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_3);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3).GetValue();
-        ColorListBox* pLb = m_xLbLight3.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight3->IsNoSelection())
-        {
-            m_xLbLight3->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 3 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_3);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue();
-        if (bOn != m_xBtnLight3->isLightOn())
-        {
-            m_xBtnLight3->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight3->get_state() == TRISTATE_INDET )
-            m_xBtnLight3->set_active( m_xBtnLight3->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight3->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight3->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 3 (Direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_3);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    // Light 4 (Color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_4);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4).GetValue();
-        ColorListBox* pLb = m_xLbLight4.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight4->IsNoSelection())
-        {
-            m_xLbLight4->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 4 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_4);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue();
-        if (bOn != m_xBtnLight4->isLightOn())
-        {
-            m_xBtnLight4->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight4->get_state() == TRISTATE_INDET )
-            m_xBtnLight4->set_active( m_xBtnLight4->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight4->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight4->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 4 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_4);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    // Light 5 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_5);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5).GetValue();
-        ColorListBox* pLb = m_xLbLight5.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight5->IsNoSelection())
-        {
-            m_xLbLight5->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 5 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_5);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue();
-        if (bOn != m_xBtnLight5->isLightOn())
-        {
-            m_xBtnLight5->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight5->get_state() == TRISTATE_INDET )
-            m_xBtnLight5->set_active( m_xBtnLight5->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight5->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight5->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 5 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_5);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    // Light 6 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_6);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6).GetValue();
-        ColorListBox* pLb = m_xLbLight6.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight6->IsNoSelection())
-        {
-            m_xLbLight6->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 6 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_6);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue();
-        if (bOn != m_xBtnLight6->isLightOn())
-        {
-            m_xBtnLight6->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight6->get_state() == TRISTATE_INDET )
-            m_xBtnLight6->set_active( m_xBtnLight6->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight6->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight6->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 6 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_6);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    // Light 7 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_7);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7).GetValue();
-        ColorListBox* pLb = m_xLbLight7.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight7->IsNoSelection())
-        {
-            m_xLbLight7->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 7 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_7);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue();
-        if (bOn != m_xBtnLight7->isLightOn())
-        {
-            m_xBtnLight7->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight7->get_state() == TRISTATE_INDET )
-            m_xBtnLight7->set_active( m_xBtnLight7->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight7->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight7->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 7 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_7);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
-
-    // Light 8 (color)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_8);
-    if( eState != SfxItemState::INVALID )
-    {
-        aColor = rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8).GetValue();
-        ColorListBox* pLb = m_xLbLight8.get();
-        if( aColor != pLb->GetSelectEntryColor() )
-        {
-            LBSelectColor( pLb, aColor );
-            bUpdate = true;
-        }
-    }
-    else
-    {
-        if (!m_xLbLight8->IsNoSelection())
-        {
-            m_xLbLight8->SetNoSelection();
-            bUpdate = true;
-        }
-    }
-    // Light 8 (on/off)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_8);
-    if( eState != SfxItemState::INVALID )
-    {
-        bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue();
-        if (bOn != m_xBtnLight8->isLightOn())
-        {
-            m_xBtnLight8->switchLightOn(bOn);
-            bUpdate = true;
-        }
-        if( m_xBtnLight8->get_state() == TRISTATE_INDET )
-            m_xBtnLight8->set_active( m_xBtnLight8->get_active() );
-    }
-    else
-    {
-        if( m_xBtnLight8->get_state() != TRISTATE_INDET )
-        {
-            m_xBtnLight8->set_state( TRISTATE_INDET );
-            bUpdate = true;
-        }
-    }
-    // Light 8 (direction)
-    eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTDIRECTION_8);
-    if( eState != SfxItemState::INVALID )
-    {
-        bUpdate = true;
-    }
+    // Light 1
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_1, *m_xLbLight1, SDRATTR_3DSCENE_LIGHTON_1,
+                *m_xBtnLight1, SDRATTR_3DSCENE_LIGHTDIRECTION_1);
+    // Light 2
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_2, *m_xLbLight2, SDRATTR_3DSCENE_LIGHTON_2,
+                *m_xBtnLight2, SDRATTR_3DSCENE_LIGHTDIRECTION_2);
+    // Light 3
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_3, *m_xLbLight3, SDRATTR_3DSCENE_LIGHTON_3,
+                *m_xBtnLight3, SDRATTR_3DSCENE_LIGHTDIRECTION_3);
+    // Light 4
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_4, *m_xLbLight4, SDRATTR_3DSCENE_LIGHTON_4,
+                *m_xBtnLight4, SDRATTR_3DSCENE_LIGHTDIRECTION_4);
+    // Light 5
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_5, *m_xLbLight5, SDRATTR_3DSCENE_LIGHTON_5,
+                *m_xBtnLight5, SDRATTR_3DSCENE_LIGHTDIRECTION_5);
+    // Light 6
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_6, *m_xLbLight6, SDRATTR_3DSCENE_LIGHTON_6,
+                *m_xBtnLight6, SDRATTR_3DSCENE_LIGHTDIRECTION_6);
+    // Light 7
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_7, *m_xLbLight7, SDRATTR_3DSCENE_LIGHTON_7,
+                *m_xBtnLight7, SDRATTR_3DSCENE_LIGHTDIRECTION_7);
+    // Light 8
+    UpdateLight(rAttrs, SDRATTR_3DSCENE_LIGHTCOLOR_8, *m_xLbLight8, SDRATTR_3DSCENE_LIGHTON_8,
+                *m_xBtnLight8, SDRATTR_3DSCENE_LIGHTDIRECTION_8);
 
     // Ambient light
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_AMBIENTCOLOR);
