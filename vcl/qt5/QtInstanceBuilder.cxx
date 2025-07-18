@@ -79,6 +79,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/optnewdictionarydialog.ui"_ustr,
         u"cui/ui/password.ui"_ustr,
         u"cui/ui/pastespecial.ui"_ustr,
+        u"cui/ui/positionsizedialog.ui"_ustr,
         u"cui/ui/querydeletedictionarydialog.ui"_ustr,
         u"cui/ui/qrcodegen.ui"_ustr,
         u"cui/ui/querydialog.ui"_ustr,
@@ -170,9 +171,10 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
 
     // These UI files are only supported inside native Qt dialogs/widgets
     static std::unordered_set<OUString> aSupportedWithQtParent = {
-        u"cui/ui/appearance.ui"_ustr,      u"cui/ui/textattrtabpage.ui"_ustr,
-        u"cui/ui/textanimtabpage.ui"_ustr, u"cui/ui/textcolumnstabpage.ui"_ustr,
-        u"svt/ui/datewindow.ui"_ustr,
+        u"cui/ui/appearance.ui"_ustr,         u"cui/ui/possizetabpage.ui"_ustr,
+        u"cui/ui/rotationtabpage.ui"_ustr,    u"cui/ui/slantcornertabpage.ui"_ustr,
+        u"cui/ui/textattrtabpage.ui"_ustr,    u"cui/ui/textanimtabpage.ui"_ustr,
+        u"cui/ui/textcolumnstabpage.ui"_ustr, u"svt/ui/datewindow.ui"_ustr,
     };
 
     if (aSupportedUIFiles.contains(rUIFile))
