@@ -188,7 +188,7 @@ public:
     void OutDateTime(std::string_view pStr, const css::util::DateTime& rDT);
     void OutPageDescription(const SwPageDesc& rPgDsc);
 
-    sal_uInt16 GetColor(const Color& rColor) const;
+    sal_Int32 GetColor(const Color& rColor) const;
     void InsColor(const Color& rCol);
     void InsColorLine(const SvxBoxItem& rBox);
     void OutColorTable();
