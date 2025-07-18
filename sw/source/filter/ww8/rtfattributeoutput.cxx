@@ -1864,9 +1864,8 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteOString(aProperties);
     }
 
-    m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_FI);
-    m_rExport.Strm().WriteNumberAsString(nFirstLineIndex).WriteOString(OOO_STRING_SVTOOLS_RTF_LI);
-    m_rExport.Strm().WriteNumberAsString(nIndentAt);
+    m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_FI).WriteNumberAsString(nFirstLineIndex);
+    m_rExport.Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_LI).WriteNumberAsString(nIndentAt);
 
     m_rExport.Strm().WriteChar('}');
     if (nLevel > 8)
