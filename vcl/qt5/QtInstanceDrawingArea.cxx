@@ -10,6 +10,7 @@
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceDrawingArea.moc>
 
+#include <QtAccessibleWidget.hxx>
 #include <QtData.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
@@ -17,15 +18,26 @@
 #include <QtGui/QHelpEvent>
 #include <QtWidgets/QToolTip>
 
-QtInstanceDrawingArea::QtInstanceDrawingArea(QLabel* pLabel)
+QtInstanceDrawingArea::QtInstanceDrawingArea(
+    QLabel* pLabel, const rtl::Reference<comphelper::OAccessible>& rpAccessible)
     : QtInstanceWidget(pLabel)
     , m_pLabel(pLabel)
     , m_xDevice(DeviceFormat::WITHOUT_ALPHA)
+    , m_pAccessible(rpAccessible)
 {
     assert(m_pLabel);
 
+    if (m_pAccessible.is())
+        QtAccessibleWidget::setCustomAccessible(*m_pLabel, m_pAccessible);
+
     // install event filter, so eventFilter() can handle widget events
     m_pLabel->installEventFilter(this);
+}
+
+QtInstanceDrawingArea::~QtInstanceDrawingArea()
+{
+    if (m_pAccessible)
+        m_pAccessible->dispose();
 }
 
 void QtInstanceDrawingArea::queue_draw()

@@ -11,6 +11,8 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <comphelper/OAccessible.hxx>
+
 #include <QtWidgets/QLabel>
 
 class QtInstanceDrawingArea : public QtInstanceWidget, public virtual weld::DrawingArea
@@ -19,9 +21,12 @@ class QtInstanceDrawingArea : public QtInstanceWidget, public virtual weld::Draw
 
     QLabel* m_pLabel;
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
+    const rtl::Reference<comphelper::OAccessible> m_pAccessible;
 
 public:
-    QtInstanceDrawingArea(QLabel* pLabel);
+    QtInstanceDrawingArea(QLabel* pLabel,
+                          const rtl::Reference<comphelper::OAccessible>& rpAccessible);
+    virtual ~QtInstanceDrawingArea();
 
     virtual void queue_draw() override;
     virtual void queue_draw_area(int x, int y, int width, int height) override;
