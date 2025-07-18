@@ -586,12 +586,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_TRANSPARENCE:
         {
-            if( pItem )
-            {
+            const SfxInt16Item* pTransparency = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if ( pTransparency )
+                aSet.Put( SdrGrafTransparenceItem( pTransparency->GetValue() ));
+            else if( pItem )
                 aSet.Put( SdrGrafTransparenceItem( static_cast<const SfxUInt16Item*>(pItem)->GetValue() ));
-                if( bUndo )
-                    aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFTRANSPARENCY );
-            }
+            if( bUndo && ( pTransparency || pItem ) )
+                aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFTRANSPARENCY );
         }
         break;
 

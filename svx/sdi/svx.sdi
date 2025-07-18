@@ -3941,7 +3941,7 @@ SfxInt16Item GrafRed SID_ATTR_GRAF_RED
 
 
 SfxUInt16Item GrafTransparence SID_ATTR_GRAF_TRANSPARENCE
-
+(SfxInt16Item Transparency FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
