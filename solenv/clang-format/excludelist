@@ -2976,6 +2976,7 @@ desktop/source/app/crashreport.cxx
 desktop/source/app/desktopcontext.hxx
 desktop/source/app/dispatchwatcher.cxx
 desktop/source/app/dispatchwatcher.hxx
+desktop/source/app/initjsunoscripting.cxx
 desktop/source/app/langselect.cxx
 desktop/source/app/lockfile2.cxx
 desktop/source/app/officeipcthread.cxx

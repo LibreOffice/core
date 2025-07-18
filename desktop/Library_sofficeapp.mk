@@ -122,6 +122,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/cmdlinehelp \
     desktop/source/app/desktopcontext \
     desktop/source/app/dispatchwatcher \
+    desktop/source/app/initjsunoscripting \
     desktop/source/app/langselect \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
