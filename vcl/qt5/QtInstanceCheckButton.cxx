@@ -40,13 +40,15 @@ TriState QtInstanceCheckButton::get_state() const
 void QtInstanceCheckButton::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pCheckBox->setText(toQString(rText)); });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pCheckBox->setText(vclToQtStringWithAccelerator(rText)); });
 }
 OUString QtInstanceCheckButton::get_label() const
 {
     SolarMutexGuard g;
     OUString sLabel;
-    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(m_pCheckBox->text()); });
+    GetQtInstance().RunInMainThread(
+        [&] { sLabel = qtToVclStringWithAccelerator(m_pCheckBox->text()); });
     return sLabel;
 }
 

@@ -37,13 +37,15 @@ bool QtInstanceRadioButton::get_active() const
 void QtInstanceRadioButton::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pRadioButton->setText(toQString(rText)); });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pRadioButton->setText(vclToQtStringWithAccelerator(rText)); });
 }
 OUString QtInstanceRadioButton::get_label() const
 {
     SolarMutexGuard g;
     OUString sLabel;
-    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(m_pRadioButton->text()); });
+    GetQtInstance().RunInMainThread(
+        [&] { sLabel = qtToVclStringWithAccelerator(m_pRadioButton->text()); });
     return sLabel;
 }
 
