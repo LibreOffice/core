@@ -213,6 +213,7 @@
 #include <svx/pageitem.hxx>
 
 #include <app.hxx>
+#include <initjsunoscripting.hxx>
 
 #include "../app/cmdlineargs.hxx"
 // We also need to hackily be able to start the main libreoffice thread:
@@ -7787,6 +7788,10 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
     comphelper::setProcessServiceFactory(xSFactory);
+
+#if defined EMSCRIPTEN
+    initJsUnoScripting();
+#endif
 
     SAL_INFO("lok", "Uno initialized  - " <<  xContext.is());
 
