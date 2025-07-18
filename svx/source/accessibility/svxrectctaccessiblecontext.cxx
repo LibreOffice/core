@@ -190,9 +190,6 @@ OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName()
     return msName;
 }
 
-/** Return empty reference to indicate that the relation set is not
-    supported.
-*/
 Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRelationSet()
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -472,9 +469,6 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName()
     return msName;
 }
 
-/** Return empty reference to indicate that the relation set is not
-    supported.
-*/
 Reference<XAccessibleRelationSet> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRelationSet()
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
