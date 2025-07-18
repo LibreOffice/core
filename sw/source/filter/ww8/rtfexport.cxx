@@ -1243,7 +1243,7 @@ void RtfExport::OutDateTime(std::string_view pStr, const util::DateTime& rDT)
     Strm().WriteNumberAsString(rDT.Minutes).WriteChar('}');
 }
 
-sal_uInt16 RtfExport::GetColor(const Color& rColor) const
+sal_Int32 RtfExport::GetColor(const Color& rColor) const
 {
     for (const auto& rEntry : m_aColTable)
         if (rEntry.second == rColor)

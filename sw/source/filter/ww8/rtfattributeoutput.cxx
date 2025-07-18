@@ -192,7 +192,7 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
         }
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF
-                    + OString::number(static_cast<sal_Int32>(rExport.GetColor(pLine->GetColor()))));
+                    + OString::number(rExport.GetColor(pLine->GetColor())));
     }
     else // tdf#129758 "no border" may be needed to override style
     {
@@ -963,8 +963,8 @@ void RtfAttributeOutput::TableBackgrounds(
 
     if (!aColor.IsTransparent())
     {
-        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
-        m_aRowDefs.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
+        m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT
+                          + OString::number(m_rExport.GetColor(aColor)));
     }
 }
 
@@ -2606,8 +2606,7 @@ void RtfAttributeOutput::CharColor(const SvxColorItem& rColor)
 {
     const Color aColor(rColor.GetValue());
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CF);
-    m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CF + OString::number(m_rExport.GetColor(aColor)));
 }
 
 void RtfAttributeOutput::CharContour(const SvxContourItem& rContour)
@@ -2852,7 +2851,7 @@ void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
         // NEEDSWORK looks like here rUnderline.GetColor() is always black,
         // even if the color in the odt is for example green...
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ULC);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rUnderline.GetColor())));
+        m_aStyles.append(m_rExport.GetColor(rUnderline.GetColor()));
     }
 }
 
@@ -2880,7 +2879,7 @@ void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
     if (!rBrush.GetColor().IsTransparent())
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
+        m_aStyles.append(m_rExport.GetColor(rBrush.GetColor()));
     }
 }
 
@@ -3772,7 +3771,7 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
     else if (!rBrush.GetColor().IsTransparent())
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
+        m_aStyles.append(m_rExport.GetColor(rBrush.GetColor()));
     }
 }
 
