@@ -21,7 +21,8 @@ QtInstanceFrame::QtInstanceFrame(QGroupBox* pGroupBox)
 void QtInstanceFrame::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pGroupBox->setTitle(toQString(rText)); });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pGroupBox->setTitle(vclToQtStringWithAccelerator(rText)); });
 }
 
 OUString QtInstanceFrame::get_label() const
@@ -29,7 +30,8 @@ OUString QtInstanceFrame::get_label() const
     SolarMutexGuard g;
 
     OUString sLabel;
-    GetQtInstance().RunInMainThread([&] { sLabel = toOUString(m_pGroupBox->title()); });
+    GetQtInstance().RunInMainThread(
+        [&] { sLabel = qtToVclStringWithAccelerator(m_pGroupBox->title()); });
 
     return sLabel;
 }
