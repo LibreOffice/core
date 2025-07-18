@@ -22,7 +22,7 @@
 #include "lotfilter.hxx"
 
 // edit function char *X( char * )
-OPCODE_FKT LotusContext::pOpFkt[ FKT_LIMIT ] =
+const OPCODE_FKT LotusContext::pOpFkt[ FKT_LIMIT ] =
 {                       //  Code
     OP_BOF,             //    0
     OP_EOF,             //    1
@@ -127,7 +127,7 @@ OPCODE_FKT LotusContext::pOpFkt[ FKT_LIMIT ] =
     OP_HiddenCols,      //  100
 };
 
-OPCODE_FKT LotusContext::pOpFkt123[ FKT_LIMIT123 ] =
+const OPCODE_FKT LotusContext::pOpFkt123[ FKT_LIMIT123 ] =
 {                       //  Code
     OP_BOF123,              //    0
     OP_EOF123,              //    1

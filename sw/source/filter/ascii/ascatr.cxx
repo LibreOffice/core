@@ -386,7 +386,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
  * There are local structures that only need to be known to the ASCII DLL.
  */
 
-SwNodeFnTab aASCNodeFnTab = {
+const SwNodeFnTab aASCNodeFnTab = {
 /* RES_TXTNODE  */                   OutASC_SwTextNode,
 /* RES_GRFNODE  */                   nullptr,
 /* RES_OLENODE  */                   nullptr

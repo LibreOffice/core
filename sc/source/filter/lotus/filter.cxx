@@ -38,7 +38,7 @@ static ErrCode
 generate_Opcodes(LotusContext &rContext, SvStream& aStream,
                   ScfStreamProgressBar& aPrgrsBar)
 {
-    OPCODE_FKT *pOps = nullptr;
+    const OPCODE_FKT *pOps = nullptr;
     int         nOps = 0;
 
     ErrCode nErr = ERRCODE_NONE;

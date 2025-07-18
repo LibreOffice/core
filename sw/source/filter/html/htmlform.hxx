@@ -22,8 +22,8 @@
 
 extern const OUString aEventListenerTable[];
 extern const OUString aEventMethodTable[];
-extern const char* aEventSDOptionTable[];
-extern const char* aEventOptionTable[];
+extern const char* const aEventSDOptionTable[];
+extern const char* const aEventOptionTable[];
 
 #endif
 

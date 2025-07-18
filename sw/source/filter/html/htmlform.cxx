@@ -161,7 +161,7 @@ const OUString aEventMethodTable[] =
     u""_ustr
 };
 
-const char * aEventSDOptionTable[] =
+const char * const aEventSDOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_SDonsubmit,
     OOO_STRING_SVTOOLS_HTML_O_SDonreset,
@@ -173,7 +173,7 @@ const char * aEventSDOptionTable[] =
     nullptr
 };
 
-const char * aEventOptionTable[] =
+const char * const aEventOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_onsubmit,
     OOO_STRING_SVTOOLS_HTML_O_onreset,

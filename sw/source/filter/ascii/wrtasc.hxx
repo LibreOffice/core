@@ -22,7 +22,7 @@
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
 
-extern SwNodeFnTab aASCNodeFnTab;
+extern const SwNodeFnTab aASCNodeFnTab;
 
 // The ASC writer
 

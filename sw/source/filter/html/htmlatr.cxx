@@ -3277,7 +3277,7 @@ static SwHTMLWriter& OutHTML_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& r
  * functions.
  */
 
-SwAttrFnTab aHTMLAttrFnTab = {
+const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_CASEMAP   */          OutHTML_CSS1Attr,
 /* RES_CHRATR_CHARSETCOLOR  */      nullptr,
 /* RES_CHRATR_COLOR */              OutHTML_SvxColor,

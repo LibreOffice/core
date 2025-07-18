@@ -35,8 +35,8 @@ class FormCache;
 struct LotusContext
 {
     static const sal_uInt16 nBOF = 0x0000;
-    static OPCODE_FKT pOpFkt[ FKT_LIMIT ];
-    static OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ]; // -> optab.cxx; table of possible Opcodes
+    static const OPCODE_FKT pOpFkt[ FKT_LIMIT ];
+    static const OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ]; // -> optab.cxx; table of possible Opcodes
 
     WKTYP            eTyp;          // type of file being processed
     bool             bEOF;          // shows end of file

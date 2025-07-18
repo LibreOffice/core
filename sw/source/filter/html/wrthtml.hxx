@@ -60,7 +60,7 @@ class SwTextFootnote;
 enum class HtmlTokenId : sal_Int16;
 namespace utl { class TempFileNamed; }
 
-extern SwAttrFnTab aHTMLAttrFnTab;
+extern const SwAttrFnTab aHTMLAttrFnTab;
 
 #define HTML_PARSPACE (o3tl::toTwips(5, o3tl::Length::mm))
 
