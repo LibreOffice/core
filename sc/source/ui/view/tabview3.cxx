@@ -2308,7 +2308,10 @@ drawinglayer::primitive2d::Primitive2DContainer ScTextEditOverlayObject::createO
     // use no transformations. The result will be in logic coordinates
     // based on aEditRectangle and the EditEngine setup, see
     // ScViewData::SetEditEngine
-    TextHierarchyBreakup aBreakup;
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    // TextEditOverlay is only possible in EditView, activate it
+    aViewInformation2D.setEditViewActive(true);
+    TextHierarchyBreakup aBreakup(aViewInformation2D);
     pEditView->getEditEngine().StripPortions(aBreakup);
     aRetval = aBreakup.getTextPortionPrimitives();
 

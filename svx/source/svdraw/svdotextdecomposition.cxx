@@ -152,6 +152,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
     // ScaledUnitPolyPolygon. Thus aPolyPolygon might be smaller than aScale from aObjectMatrix. We
     // use this smaller size for the text area, otherwise the text will reach into the stroke.
     TextHierarchyBreakupContourText aBreakup(
+        aViewInformation,
         rOutliner,
         aNewTransformA,
         aNewTransformB,
@@ -303,6 +304,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
     // now break up text primitives.
     TextHierarchyBreakupBlockText aBreakup(
+        aViewInformation,
         rOutliner,
         aNewTransformA,
         aNewTransformB,
@@ -620,6 +622,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // now break up text primitives.
     TextHierarchyBreakupBlockText aBreakup(
+        aViewInformation,
         rOutliner,
         aNewTransformA,
         aNewTransformB,
@@ -704,6 +707,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // now break up text primitives.
     TextHierarchyBreakupOutliner aBreakup(
+        aViewInformation,
         rOutliner,
         aNewTransformA,
         aNewTransformB);
@@ -1133,6 +1137,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // now break up text primitives.
     TextHierarchyBreakupBlockText aBreakup(
+        aViewInformation,
         rOutliner,
         aNewTransformA,
         aNewTransformB,

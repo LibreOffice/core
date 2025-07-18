@@ -783,8 +783,11 @@ void TextEditOverlayObject::checkDataChange(const basegfx::B2DRange& rMinTextEdi
         // of this mechanism, it *may* be possible to buffer layouted
         // primitives per ParaPortion with/in/dependent on the EditEngine
         // content if needed. For now, get and compare
-        TextHierarchyBreakupBlockText aBreakup(*pSdrOutliner, aNewTransformA, aNewTransformB,
-                                               aClipRange);
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        // TextEditOverlay is only possible in EditView, activate it
+        aViewInformation2D.setEditViewActive(true);
+        TextHierarchyBreakupBlockText aBreakup(aViewInformation2D, *pSdrOutliner, aNewTransformA,
+                                               aNewTransformB, aClipRange);
         pSdrOutliner->StripPortions(aBreakup);
         aNewTextPrimitives.append(aBreakup.getTextPortionPrimitives());
 

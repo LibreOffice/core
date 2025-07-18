@@ -3382,17 +3382,17 @@ void ImpEditEngine::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rSt
     if (bUsePrimitives)
     {
         // extract Primitives.
+        // create ViewInformation2D based on target OutputDevice
+        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
+
         // Do not use Orientation, that will be added below as transformation
-        TextHierarchyBreakup aHelper;
+        TextHierarchyBreakup aHelper(aViewInformation2D);
         PaintOrStrip(rOutDev, aBigRect, aStartPos, 0_deg10, &aHelper);
 
         if (aHelper.getTextPortionPrimitives().empty())
             // no Primitives, done
             return;
-
-        // create ViewInformation2D based on target OutputDevice
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
 
         // get content
         drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
@@ -3450,19 +3450,19 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
 
     if (bUsePrimitives)
     {
-        // extract Primitives
-        TextHierarchyBreakup aHelper;
-        PaintOrStrip(rOutDev, aOutRect, aStartPos, 0_deg10, &aHelper);
-
-        if (aHelper.getTextPortionPrimitives().empty())
-            // no Primitives, done
-            return;
-
         // create ViewInformation2D based on target OutputDevice
         drawinglayer::geometry::ViewInformation2D aViewInformation2D;
         aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
         const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aOutRect));
         aViewInformation2D.setViewport(aClipRange);
+
+        // extract Primitives
+        TextHierarchyBreakup aHelper(aViewInformation2D);
+        PaintOrStrip(rOutDev, aOutRect, aStartPos, 0_deg10, &aHelper);
+
+        if (aHelper.getTextPortionPrimitives().empty())
+            // no Primitives, done
+            return;
 
         // get content and it's range
         drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());

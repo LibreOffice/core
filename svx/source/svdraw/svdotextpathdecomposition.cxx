@@ -154,6 +154,12 @@ namespace
         ::std::vector< impPathTextPortion >         maPathTextPortions;
 
     public:
+        TextHierarchyBreakupPathTextPortions(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
+        : StripPortionsHelper(rViewInformation2D)
+        , maPathTextPortions()
+        {
+        }
+
         virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override
         {
             // extract and add data for TextOnPath further processing
@@ -640,7 +646,7 @@ void SdrTextObj::impDecomposePathTextPrimitive(
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
     // now break up to text portions
-    TextHierarchyBreakupPathTextPortions aBreakup;
+    TextHierarchyBreakupPathTextPortions aBreakup(aViewInformation);
     rOutliner.StripPortions(aBreakup);
     const ::std::vector< impPathTextPortion > rPathTextPortions(aBreakup.sortAndGetPathTextPortions());
 

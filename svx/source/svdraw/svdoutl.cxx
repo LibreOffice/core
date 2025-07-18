@@ -166,11 +166,13 @@ void TextHierarchyBreakupBlockText::processDrawPortionInfo(const DrawPortionInfo
 }
 
 TextHierarchyBreakupBlockText::TextHierarchyBreakupBlockText(
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
     SdrOutliner& rOutliner,
     const basegfx::B2DHomMatrix& rNewTransformA,
     const basegfx::B2DHomMatrix& rNewTransformB,
     const basegfx::B2DRange& rClipRange)
 : TextHierarchyBreakupOutliner(
+    rViewInformation2D,
     rOutliner,
     rNewTransformA,
     rNewTransformB)
@@ -189,11 +191,13 @@ void TextHierarchyBreakupContourText::processDrawPortionInfo(const DrawPortionIn
     }
 
 TextHierarchyBreakupContourText::TextHierarchyBreakupContourText(
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
     SdrOutliner& rOutliner,
     const basegfx::B2DHomMatrix& rNewTransformA,
     const basegfx::B2DHomMatrix& rNewTransformB,
     const basegfx::B2DVector& rScale)
 : TextHierarchyBreakupOutliner(
+    rViewInformation2D,
     rOutliner,
     rNewTransformA,
     rNewTransformB)
