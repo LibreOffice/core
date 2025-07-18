@@ -65,8 +65,15 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 
 SlideFragmentHandler::~SlideFragmentHandler()
 {
-    // convert and insert all VML shapes (mostly form controls)
-    mpSlidePersistPtr->getDrawing()->convertAndInsert();
+    try
+    {
+        // convert and insert all VML shapes (mostly form controls)
+        mpSlidePersistPtr->getDrawing()->convertAndInsert();
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("oox", "SlideFragmentHandler dtor: VML shape insertion failed");
+    }
 }
 
 ::oox::core::ContextHandlerRef SlideFragmentHandler::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
