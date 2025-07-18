@@ -89,6 +89,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/similaritysearchdialog.ui"_ustr,
         u"cui/ui/spelloptionsdialog.ui"_ustr,
         u"cui/ui/splitcellsdialog.ui"_ustr,
+        u"cui/ui/textdialog.ui"_ustr,
         u"cui/ui/tipofthedaydialog.ui"_ustr,
         u"cui/ui/toolbartabpage.ui"_ustr,
         u"cui/ui/uipickerdialog.ui"_ustr,
@@ -168,10 +169,10 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
 
-    // These UI files are used in multiple places and only supported within
-    // native Qt dialogs/widgets
+    // These UI files are only supported inside native Qt dialogs/widgets
     static std::unordered_set<OUString> aSupportedWithQtParent = {
-        u"cui/ui/appearance.ui"_ustr,
+        u"cui/ui/appearance.ui"_ustr,      u"cui/ui/textattrtabpage.ui"_ustr,
+        u"cui/ui/textanimtabpage.ui"_ustr, u"cui/ui/textcolumnstabpage.ui"_ustr,
         u"svt/ui/datewindow.ui"_ustr,
     };
 
