@@ -19,16 +19,10 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XBufferController.hpp>
+#include <vcl_canvas/windowlistener.hxx>
+#include <vcl_canvas/updatable.hxx>
+#include <vcl_canvas/spritecanvas.hxx>
+#include <vcl_canvas/graphicdevice.hxx>
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -45,7 +39,15 @@
 
 namespace vcl_cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
+    class SpriteCanvasBase_Base : public ::vcl_canvas::SpriteCanvas,
+                                  public ::vcl_canvas::GraphicDevice,
+                                  public ::vcl_canvas::WindowListener,
+                                  public ::vcl_canvas::Updatable,
+                                  public ::vcl_canvas::SpriteSurface,
+                                  public SurfaceProvider
+    {
+    };
+    /* typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
                                              css::rendering::XIntegerBitmap,
                                              css::rendering::XGraphicDevice,
                                              css::lang::XMultiServiceFactory,
@@ -54,11 +56,11 @@ namespace vcl_cairocanvas
                                              css::util::XUpdatable,
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
-                                             css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base;
-    typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
+                                             css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base; */
+    typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< SpriteCanvasBase_Base >,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
-                                                 ::cppu::OWeakObject > SpriteCanvasBase_Base;
+                                                 ::cppu::OWeakObject > SpriteCanvasBase_Base2;
     /** Mixin SpriteSurface
 
         Have to mixin the SpriteSurface before deriving from
@@ -76,13 +78,8 @@ namespace vcl_cairocanvas
         remain a base class that provides implementation, not to
         enforce any specific interface on its derivees.
      */
-    class SpriteCanvasBaseSpriteSurface_Base : public SpriteCanvasBase_Base,
-                                               public ::vcl_canvas::SpriteSurface,
-                                               public SurfaceProvider
-    {
-    };
 
-    typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
+    typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBase_Base,
                                         SpriteCanvasHelper,
                                         ::osl::MutexGuard,
                                         ::cppu::OWeakObject >           SpriteCanvasBaseT;
