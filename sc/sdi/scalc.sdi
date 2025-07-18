@@ -6412,6 +6412,26 @@ SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
     GroupId = SfxGroupId::Format;
 ]
 
+SvxSizeItem CalcPageMargin SID_SC_ATTR_PAGE_MARGIN
+(
+    SvxLRSpaceItem Page SID_ATTR_LRSPACE,
+    SvxULSpaceItem Page SID_ATTR_ULSPACE,
+)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
 
 SfxVoidItem MarkPrecedents SID_DETECTIVE_MARK_PRED
 ()

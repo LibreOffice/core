@@ -84,6 +84,7 @@ interface TableDocument
     SID_REFRESH_VIEW        [ ExecMethod = Execute; StateMethod = GetState; ]
 
     SID_ATTR_PAGE_ORIENTATION [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_SC_ATTR_PAGE_MARGIN [ ExecMethod = Execute; StateMethod = GetState; ]
 }
 
 

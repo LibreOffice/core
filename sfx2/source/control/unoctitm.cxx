@@ -1412,6 +1412,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"LayoutStatus", { PayloadType::StringPayload, true } },
         { u"Scale", { PayloadType::StringPayload, true } },
         { u"Context", { PayloadType::StringPayload, true } },
+        { u"CalcPageMargin", { PayloadType::StringPayload, true } },
 
         { u"RowColSelCount", { PayloadType::RowColSelCountPayload, true } },
 
