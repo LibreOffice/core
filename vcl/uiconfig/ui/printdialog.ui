@@ -615,6 +615,7 @@
                                             <property name="halign">start</property>
                                             <property name="label" translatable="yes" context="printdialog|labelcopies">_Number of copies:</property>
                                             <property name="use-underline">True</property>
+                                            <property name="mnemonic-widget">copycount</property>
                                             <property name="xalign">1</property>
                                           </object>
                                           <packing>
@@ -829,6 +830,7 @@
                                                 <property name="halign">start</property>
                                                 <property name="label" translatable="yes" context="printdialog|includeevenodd">Include:</property>
                                                 <property name="use-underline">True</property>
+                                                <property name="mnemonic-widget">evenoddbox</property>
                                                 <property name="xalign">0</property>
                                               </object>
                                               <packing>
