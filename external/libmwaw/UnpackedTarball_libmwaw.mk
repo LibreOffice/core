@@ -23,6 +23,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 endif
 endif
 
+# external/libmwaw/0001-const-up-some-arrays.patch.1
+# upstreaming effort as:
+# https://sourceforge.net/p/libmwaw/libmwaw/merge-requests/4/
+
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+    external/libmwaw/0001-const-up-some-arrays.patch.1 \
+))
+
 ifeq ($(SYSTEM_REVENGE),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/rpath.patch \
