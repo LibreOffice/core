@@ -15,11 +15,15 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwpd,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpd))
 
+# external/libwpd/0001-const-up-tibetanMap1-to-move-out-of-data-section.patch.1
+# upstream effort as: https://sourceforge.net/p/libwpd/code/merge-requests/1/
+
 $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
 	external/libwpd/libwpd-vs2013.patch.1 \
 	external/libwpd/tdf153034_3_WrongGreekCharactersWP5Import.patch \
 	$(if $(SYSTEM_REVENGE),,external/libwpd/rpath.patch) \
 	external/libwpd/include.patch \
+	external/libwpd/0001-const-up-tibetanMap1-to-move-out-of-data-section.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)

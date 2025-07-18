@@ -1,0 +1,25 @@
+From 25b5652b66fb7db429e5a5b4c6d484c96b37c532 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Fri, 18 Jul 2025 20:37:15 +0100
+Subject: [PATCH] const up tibetanMap1 to move out of data section
+
+---
+ src/lib/WP6TibetanMap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/WP6TibetanMap.h b/src/lib/WP6TibetanMap.h
+index 6d4545de..39038cfc 100644
+--- a/src/lib/WP6TibetanMap.h
++++ b/src/lib/WP6TibetanMap.h
+@@ -228,7 +228,7 @@ const unsigned tibetan_1_250[] = { 0x0F7C, 0x0F7E, 0 };
+ const unsigned tibetan_1_251[] = { 0x0F7D, 0x0F7E, 0 };
+ const unsigned tibetan_1_252[] = { 0x0F84, 0 };
+ 
+-const unsigned *tibetanMap1[] =
++const unsigned* const tibetanMap1[] =
+ {
+ 	nullptr,
+ 	nullptr,
+-- 
+2.49.0
+
