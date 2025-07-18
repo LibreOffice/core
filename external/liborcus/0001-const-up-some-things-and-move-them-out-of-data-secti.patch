@@ -1,0 +1,606 @@
+From 5641adad370edf85df712fcd6c553273f515a868 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Fri, 18 Jul 2025 21:08:49 +0100
+Subject: [PATCH] const up some things and move them out of data section
+
+---
+ include/orcus/tokens.hpp                  |  4 +-
+ misc/xml-tokens/gen-odf-tokens.py         |  4 +-
+ misc/xml-tokens/token_util.py             |  4 +-
+ src/liborcus/gnumeric_namespace_types.cpp |  4 +-
+ src/liborcus/gnumeric_namespace_types.hpp |  2 +-
+ src/liborcus/gnumeric_tokens.inl          |  4 +-
+ src/liborcus/odf_namespace_types_cpp.inl  |  2 +-
+ src/liborcus/odf_namespace_types_hpp.inl  |  2 +-
+ src/liborcus/odf_tokens.inl               |  4 +-
+ src/liborcus/ods_content_xml_context.cpp  |  2 +-
+ src/liborcus/ooxml_content_types.cpp      |  4 +-
+ src/liborcus/ooxml_content_types.hpp      |  2 +-
+ src/liborcus/ooxml_namespace_types.cpp    | 12 +++---
+ src/liborcus/ooxml_namespace_types.hpp    |  6 +--
+ src/liborcus/ooxml_schemas.cpp            | 50 +++++++++++------------
+ src/liborcus/ooxml_schemas.hpp            | 48 +++++++++++-----------
+ src/liborcus/ooxml_tokens.inl             |  4 +-
+ src/liborcus/opc_context.cpp              |  2 +-
+ src/liborcus/opc_tokens.inl               |  4 +-
+ src/liborcus/xls_xml_namespace_types.cpp  |  4 +-
+ src/liborcus/xls_xml_namespace_types.hpp  |  2 +-
+ src/liborcus/xls_xml_tokens.inl           |  4 +-
+ src/liborcus/yaml_document_tree.cpp       | 12 +++---
+ src/parser/tokens.cpp                     |  2 +-
+ src/parser/types.cpp                      |  2 +-
+ 25 files changed, 95 insertions(+), 95 deletions(-)
+
+diff --git a/include/orcus/tokens.hpp b/include/orcus/tokens.hpp
+index 9edc8771..fde4b924 100644
+--- a/include/orcus/tokens.hpp
++++ b/include/orcus/tokens.hpp
+@@ -31,7 +31,7 @@ class ORCUS_PSR_DLLPUBLIC tokens
+ public:
+     tokens() = delete;
+     tokens(const tokens&) = delete;
+-    tokens(const char** token_names, size_t token_name_count);
++    tokens(const char* const* token_names, size_t token_name_count);
+     ~tokens();
+ 
+     /**
+@@ -64,7 +64,7 @@ private:
+     using token_map_type = std::unordered_map<std::string_view, xml_token_t>;
+ 
+     token_map_type m_tokens;
+-    const char** m_token_names;
++    const char* const* m_token_names;
+     size_t m_token_name_count;
+ };
+ 
+diff --git a/misc/xml-tokens/gen-odf-tokens.py b/misc/xml-tokens/gen-odf-tokens.py
+index 2838604b..af83ed80 100755
+--- a/misc/xml-tokens/gen-odf-tokens.py
++++ b/misc/xml-tokens/gen-odf-tokens.py
+@@ -98,7 +98,7 @@ def gen_namespace_tokens(filepath, ns_values):
+         outfile.write("extern const xmlns_id_t NS_odf_")
+         outfile.write(key)
+         outfile.write(";\n")
+-    outfile.write("\nextern const xmlns_id_t* NS_odf_all;\n")
++    outfile.write("\nextern const xmlns_id_t* const NS_odf_all;\n")
+     outfile.write("\n}\n\n")
+     outfile.close()
+ 
+@@ -125,7 +125,7 @@ def gen_namespace_tokens(filepath, ns_values):
+     outfile.write("};\n\n")
+     outfile.write("} // anonymous\n\n")
+ 
+-    outfile.write("const xmlns_id_t* NS_odf_all = odf_ns;\n\n")
++    outfile.write("const xmlns_id_t* const NS_odf_all = odf_ns;\n\n")
+ 
+     outfile.write("}\n\n")
+     outfile.close()
+diff --git a/misc/xml-tokens/token_util.py b/misc/xml-tokens/token_util.py
+index 19ba4369..ddf637ac 100644
+--- a/misc/xml-tokens/token_util.py
++++ b/misc/xml-tokens/token_util.py
+@@ -57,7 +57,7 @@ def gen_token_names(outfile, tokens):
+         print(get_auto_gen_warning(), file=f)
+         print(file=f)
+ 
+-        print("const char* token_names[] = {", file=f)
++        print("const char* const token_names[] = {", file=f)
+         print(f"    \"{unknown_token_name}\", // 0", file=f)
+ 
+         for i, token in enumerate(tokens):
+@@ -67,4 +67,4 @@ def gen_token_names(outfile, tokens):
+             print(f"    \"{token}\"{s} // {i+1}", file=f)
+         print("};", file=f)
+         print(file=f)
+-        print(f"size_t token_name_count = {len(tokens)+1};", file=f)
++        print(f"const size_t token_name_count = {len(tokens)+1};", file=f)
+diff --git a/src/liborcus/gnumeric_namespace_types.cpp b/src/liborcus/gnumeric_namespace_types.cpp
+index 1ff0ec97..91c97c8f 100644
+--- a/src/liborcus/gnumeric_namespace_types.cpp
++++ b/src/liborcus/gnumeric_namespace_types.cpp
+@@ -18,7 +18,7 @@ const xmlns_id_t NS_gnumeric_xsi = "http://www.w3.org/2001/XMLSchema-instance";
+ 
+ namespace {
+ 
+-xmlns_id_t gnumeric_ns[] = {
++const xmlns_id_t gnumeric_ns[] = {
+     NS_gnumeric_dc,
+     NS_gnumeric_gnm,
+     NS_gnumeric_ooo,
+@@ -32,7 +32,7 @@ xmlns_id_t gnumeric_ns[] = {
+ 
+ }
+ 
+-const xmlns_id_t* NS_gnumeric_all = gnumeric_ns;
++const xmlns_id_t* const NS_gnumeric_all = gnumeric_ns;
+ 
+ }
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/gnumeric_namespace_types.hpp b/src/liborcus/gnumeric_namespace_types.hpp
+index 2d6b7ab2..4fa89fc8 100644
+--- a/src/liborcus/gnumeric_namespace_types.hpp
++++ b/src/liborcus/gnumeric_namespace_types.hpp
+@@ -18,7 +18,7 @@ extern const xmlns_id_t NS_gnumeric_ooo;
+ extern const xmlns_id_t NS_gnumeric_xlink;
+ extern const xmlns_id_t NS_gnumeric_xsi;
+ 
+-extern const xmlns_id_t* NS_gnumeric_all;
++extern const xmlns_id_t* const NS_gnumeric_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/gnumeric_tokens.inl b/src/liborcus/gnumeric_tokens.inl
+index c20fb69b..ecd8e74d 100644
+--- a/src/liborcus/gnumeric_tokens.inl
++++ b/src/liborcus/gnumeric_tokens.inl
+@@ -1,6 +1,6 @@
+ // This file has been auto-generated.  Do not hand-edit this.
+ 
+-const char* token_names[] = {
++const char* const token_names[] = {
+     "??", // 0
+     "Active", // 1
+     "AllowBlank", // 2
+@@ -279,4 +279,4 @@ const char* token_names[] = {
+     "width"  // 275
+ };
+ 
+-size_t token_name_count = 276;
++const size_t token_name_count = 276;
+diff --git a/src/liborcus/odf_namespace_types_cpp.inl b/src/liborcus/odf_namespace_types_cpp.inl
+index 8b0dc1ff..a91959a3 100644
+--- a/src/liborcus/odf_namespace_types_cpp.inl
++++ b/src/liborcus/odf_namespace_types_cpp.inl
+@@ -57,7 +57,7 @@ const xmlns_id_t odf_ns[] = {
+ 
+ } // anonymous
+ 
+-const xmlns_id_t* NS_odf_all = odf_ns;
++const xmlns_id_t* const NS_odf_all = odf_ns;
+ 
+ }
+ 
+diff --git a/src/liborcus/odf_namespace_types_hpp.inl b/src/liborcus/odf_namespace_types_hpp.inl
+index a80c9173..75941235 100644
+--- a/src/liborcus/odf_namespace_types_hpp.inl
++++ b/src/liborcus/odf_namespace_types_hpp.inl
+@@ -25,7 +25,7 @@ extern const xmlns_id_t NS_odf_xforms;
+ extern const xmlns_id_t NS_odf_xhtml;
+ extern const xmlns_id_t NS_odf_xlink;
+ 
+-extern const xmlns_id_t* NS_odf_all;
++extern const xmlns_id_t* const NS_odf_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/odf_tokens.inl b/src/liborcus/odf_tokens.inl
+index 623c7216..21c85618 100644
+--- a/src/liborcus/odf_tokens.inl
++++ b/src/liborcus/odf_tokens.inl
+@@ -1,6 +1,6 @@
+ // This file has been auto-generated.  Do not hand-edit this.
+ 
+-const char* token_names[] = {
++const char* const token_names[] = {
+     "??", // 0
+     "0", // 1
+     "0deg", // 2
+@@ -2282,4 +2282,4 @@ const char* token_names[] = {
+     "zero-values"  // 2278
+ };
+ 
+-size_t token_name_count = 2279;
+\ No newline at end of file
++const size_t token_name_count = 2279;
+diff --git a/src/liborcus/ods_content_xml_context.cpp b/src/liborcus/ods_content_xml_context.cpp
+index bd84b2f8..18c56276 100644
+--- a/src/liborcus/ods_content_xml_context.cpp
++++ b/src/liborcus/ods_content_xml_context.cpp
+@@ -34,7 +34,7 @@ namespace cell_value {
+ using map_type = mdds::sorted_string_map<ods_content_xml_context::cell_value_type>;
+ 
+ // Keys must be sorted.
+-map_type::entry_type entries[] = {
++constexpr map_type::entry_type entries[] = {
+     { "date",   ods_content_xml_context::vt_date },
+     { "float",  ods_content_xml_context::vt_float },
+     { "string", ods_content_xml_context::vt_string }
+diff --git a/src/liborcus/ooxml_content_types.cpp b/src/liborcus/ooxml_content_types.cpp
+index eb614c7b..13e78d15 100644
+--- a/src/liborcus/ooxml_content_types.cpp
++++ b/src/liborcus/ooxml_content_types.cpp
+@@ -37,7 +37,7 @@ const content_type_t CT_image_png                   = "image/png";
+ 
+ namespace {
+ 
+-content_type_t cts[] = {
++const content_type_t cts[] = {
+     CT_ooxml_extended_properties,
+     CT_ooxml_drawing,
+     CT_ooxml_vml_drawing,
+@@ -68,7 +68,7 @@ content_type_t cts[] = {
+ 
+ }
+ 
+-const content_type_t* CT_all = cts;
++const content_type_t* const CT_all = cts;
+ 
+ }
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/ooxml_content_types.hpp b/src/liborcus/ooxml_content_types.hpp
+index d82dd53f..af8ab7c7 100644
+--- a/src/liborcus/ooxml_content_types.hpp
++++ b/src/liborcus/ooxml_content_types.hpp
+@@ -41,7 +41,7 @@ extern const content_type_t CT_image_png;
+ /**
+  * Null-terminated array of all content types.
+  */
+-extern const content_type_t* CT_all;
++extern const content_type_t* const CT_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/ooxml_namespace_types.cpp b/src/liborcus/ooxml_namespace_types.cpp
+index 8c1224b2..31b26d2d 100644
+--- a/src/liborcus/ooxml_namespace_types.cpp
++++ b/src/liborcus/ooxml_namespace_types.cpp
+@@ -22,7 +22,7 @@ const xmlns_id_t NS_mso_x14 = "http://schemas.microsoft.com/office/spreadsheetml
+ 
+ namespace {
+ 
+-xmlns_id_t ooxml_ns[] = {
++const xmlns_id_t ooxml_ns[] = {
+     NS_ooxml_a,
+     NS_ooxml_r,
+     NS_ooxml_xdr,
+@@ -30,13 +30,13 @@ xmlns_id_t ooxml_ns[] = {
+     nullptr
+ };
+ 
+-xmlns_id_t opc_ns[] = {
++const xmlns_id_t opc_ns[] = {
+     NS_opc_ct,
+     NS_opc_rel,
+     nullptr
+ };
+ 
+-xmlns_id_t misc_ns[] = {
++const xmlns_id_t misc_ns[] = {
+     NS_mc,
+     NS_mso_x14,
+     nullptr
+@@ -44,9 +44,9 @@ xmlns_id_t misc_ns[] = {
+ 
+ }
+ 
+-const xmlns_id_t* NS_ooxml_all = ooxml_ns;
+-const xmlns_id_t* NS_opc_all = opc_ns;
+-const xmlns_id_t* NS_misc_all = misc_ns;
++const xmlns_id_t* const NS_ooxml_all = ooxml_ns;
++const xmlns_id_t* const NS_opc_all = opc_ns;
++const xmlns_id_t* const NS_misc_all = misc_ns;
+ 
+ }
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/ooxml_namespace_types.hpp b/src/liborcus/ooxml_namespace_types.hpp
+index 8183bf89..5cd5f519 100644
+--- a/src/liborcus/ooxml_namespace_types.hpp
++++ b/src/liborcus/ooxml_namespace_types.hpp
+@@ -26,17 +26,17 @@ extern const xmlns_id_t NS_mso_x14;
+ /**
+  * Null-terminated array of all ooxml namespaces.
+  */
+-extern const xmlns_id_t* NS_ooxml_all;
++extern const xmlns_id_t* const NS_ooxml_all;
+ 
+ /**
+  * Null-terminated array of all opc namespaces.
+  */
+-extern const xmlns_id_t* NS_opc_all;
++extern const xmlns_id_t* const NS_opc_all;
+ 
+ /**
+  * Null-terminated array of all the other namespaces.
+  */
+-extern const xmlns_id_t* NS_misc_all;
++extern const xmlns_id_t* const NS_misc_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/ooxml_schemas.cpp b/src/liborcus/ooxml_schemas.cpp
+index b0e86e49..22364ced 100644
+--- a/src/liborcus/ooxml_schemas.cpp
++++ b/src/liborcus/ooxml_schemas.cpp
+@@ -9,33 +9,33 @@
+ 
+ namespace orcus {
+ 
+-schema_t SCH_mc                           = "http://schemas.openxmlformats.org/markup-compatibility/2006";
+-schema_t SCH_opc_content_types            = "http://schemas.openxmlformats.org/package/2006/content-types";
+-schema_t SCH_opc_rels                     = "http://schemas.openxmlformats.org/package/2006/relationships";
+-schema_t SCH_opc_rels_metadata_core_props = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
+-schema_t SCH_od_rels_calc_chain           = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain";
+-schema_t SCH_od_rels_connections          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections";
+-schema_t SCH_od_rels_printer_settings     = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings";
+-schema_t SCH_od_rels_rev_headers          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders";
+-schema_t SCH_od_rels_rev_log              = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog";
+-schema_t SCH_od_rels_shared_strings       = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings";
+-schema_t SCH_od_rels_styles               = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
+-schema_t SCH_od_rels_theme                = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
+-schema_t SCH_od_rels_usernames            = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames";
+-schema_t SCH_od_rels_worksheet            = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet";
+-schema_t SCH_od_rels_extended_props       = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
+-schema_t SCH_od_rels_office_doc           = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
+-schema_t SCH_od_rels_table                = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table";
+-schema_t SCH_od_rels_pivot_cache_def      = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheDefinition";
+-schema_t SCH_od_rels_pivot_cache_rec      = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheRecords";
+-schema_t SCH_od_rels_pivot_table          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable";
+-schema_t SCH_od_rels_drawing              = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing";
+-schema_t SCH_xlsx_main                    = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
+-schema_t SCH_mso_x14ac                    = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac";
++const schema_t SCH_mc                           = "http://schemas.openxmlformats.org/markup-compatibility/2006";
++const schema_t SCH_opc_content_types            = "http://schemas.openxmlformats.org/package/2006/content-types";
++const schema_t SCH_opc_rels                     = "http://schemas.openxmlformats.org/package/2006/relationships";
++const schema_t SCH_opc_rels_metadata_core_props = "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties";
++const schema_t SCH_od_rels_calc_chain           = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain";
++const schema_t SCH_od_rels_connections          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/connections";
++const schema_t SCH_od_rels_printer_settings     = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/printerSettings";
++const schema_t SCH_od_rels_rev_headers          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders";
++const schema_t SCH_od_rels_rev_log              = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionLog";
++const schema_t SCH_od_rels_shared_strings       = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings";
++const schema_t SCH_od_rels_styles               = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
++const schema_t SCH_od_rels_theme                = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
++const schema_t SCH_od_rels_usernames            = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames";
++const schema_t SCH_od_rels_worksheet            = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet";
++const schema_t SCH_od_rels_extended_props       = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties";
++const schema_t SCH_od_rels_office_doc           = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
++const schema_t SCH_od_rels_table                = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/table";
++const schema_t SCH_od_rels_pivot_cache_def      = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheDefinition";
++const schema_t SCH_od_rels_pivot_cache_rec      = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotCacheRecords";
++const schema_t SCH_od_rels_pivot_table          = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/pivotTable";
++const schema_t SCH_od_rels_drawing              = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing";
++const schema_t SCH_xlsx_main                    = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
++const schema_t SCH_mso_x14ac                    = "http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac";
+ 
+ namespace {
+ 
+-schema_t schs[] = {
++const schema_t schs[] = {
+     SCH_mc,
+     SCH_opc_content_types,
+     SCH_opc_rels,
+@@ -64,7 +64,7 @@ schema_t schs[] = {
+ 
+ }
+ 
+-schema_t* SCH_all = schs;
++const schema_t* const SCH_all = schs;
+ 
+ }
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/ooxml_schemas.hpp b/src/liborcus/ooxml_schemas.hpp
+index 85adb6f2..bb0c0a06 100644
+--- a/src/liborcus/ooxml_schemas.hpp
++++ b/src/liborcus/ooxml_schemas.hpp
+@@ -12,34 +12,34 @@
+ 
+ namespace orcus {
+ 
+-extern schema_t SCH_mc;
+-extern schema_t SCH_opc_content_types;
+-extern schema_t SCH_opc_rels;
+-extern schema_t SCH_opc_rels_metadata_core_props;
+-extern schema_t SCH_od_rels_calc_chain;
+-extern schema_t SCH_od_rels_connections;
+-extern schema_t SCH_od_rels_printer_settings;
+-extern schema_t SCH_od_rels_rev_headers;
+-extern schema_t SCH_od_rels_rev_log;
+-extern schema_t SCH_od_rels_shared_strings;
+-extern schema_t SCH_od_rels_styles;
+-extern schema_t SCH_od_rels_theme;
+-extern schema_t SCH_od_rels_usernames;
+-extern schema_t SCH_od_rels_worksheet;
+-extern schema_t SCH_od_rels_extended_props;
+-extern schema_t SCH_od_rels_office_doc;
+-extern schema_t SCH_od_rels_table;
+-extern schema_t SCH_od_rels_pivot_cache_def;
+-extern schema_t SCH_od_rels_pivot_cache_rec;
+-extern schema_t SCH_od_rels_pivot_table;
+-extern schema_t SCH_od_rels_drawing;
+-extern schema_t SCH_xlsx_main;
+-extern schema_t SCH_mso_x14ac;
++const extern schema_t SCH_mc;
++const extern schema_t SCH_opc_content_types;
++const extern schema_t SCH_opc_rels;
++const extern schema_t SCH_opc_rels_metadata_core_props;
++const extern schema_t SCH_od_rels_calc_chain;
++const extern schema_t SCH_od_rels_connections;
++const extern schema_t SCH_od_rels_printer_settings;
++const extern schema_t SCH_od_rels_rev_headers;
++const extern schema_t SCH_od_rels_rev_log;
++const extern schema_t SCH_od_rels_shared_strings;
++const extern schema_t SCH_od_rels_styles;
++const extern schema_t SCH_od_rels_theme;
++const extern schema_t SCH_od_rels_usernames;
++const extern schema_t SCH_od_rels_worksheet;
++const extern schema_t SCH_od_rels_extended_props;
++const extern schema_t SCH_od_rels_office_doc;
++const extern schema_t SCH_od_rels_table;
++const extern schema_t SCH_od_rels_pivot_cache_def;
++const extern schema_t SCH_od_rels_pivot_cache_rec;
++const extern schema_t SCH_od_rels_pivot_table;
++const extern schema_t SCH_od_rels_drawing;
++const extern schema_t SCH_xlsx_main;
++const extern schema_t SCH_mso_x14ac;
+ 
+ /**
+  * Null-terminated array of all schema types.
+  */
+-extern schema_t* SCH_all;
++const extern schema_t* const SCH_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/ooxml_tokens.inl b/src/liborcus/ooxml_tokens.inl
+index 5fa2ad05..e9a74419 100644
+--- a/src/liborcus/ooxml_tokens.inl
++++ b/src/liborcus/ooxml_tokens.inl
+@@ -1,6 +1,6 @@
+ // This file has been auto-generated.  Do not hand-edit this.
+ 
+-const char* token_names[] = {
++const char* const token_names[] = {
+     "??", // 0
+     "AbbreviatedCaseNumber", // 1
+     "Accel", // 2
+@@ -3521,4 +3521,4 @@ const char* token_names[] = {
+     "zoomToFit"  // 3517
+ };
+ 
+-size_t token_name_count = 3518;
+\ No newline at end of file
++const size_t token_name_count = 3518;
+diff --git a/src/liborcus/opc_context.cpp b/src/liborcus/opc_context.cpp
+index e3b1bb57..a9936a2c 100644
+--- a/src/liborcus/opc_context.cpp
++++ b/src/liborcus/opc_context.cpp
+@@ -240,7 +240,7 @@ opc_relations_context::opc_relations_context(session_context& session_cxt, const
+     xml_context_base(session_cxt, _tokens)
+ {
+     // build content type cache.
+-    for (schema_t* p = SCH_all; *p; ++p)
++    for (const schema_t* p = SCH_all; *p; ++p)
+         m_schema_cache.insert(std::string_view(*p));
+ }
+ 
+diff --git a/src/liborcus/opc_tokens.inl b/src/liborcus/opc_tokens.inl
+index 5f72a6a1..e8cc7c6d 100644
+--- a/src/liborcus/opc_tokens.inl
++++ b/src/liborcus/opc_tokens.inl
+@@ -1,6 +1,6 @@
+ // This file has been auto-generated.  Do not hand-edit this.
+ 
+-const char* token_names[] = {
++const char* const token_names[] = {
+     "??", // 0
+     "ContentType", // 1
+     "Default", // 2
+@@ -32,5 +32,5 @@ const char* token_names[] = {
+     "version"  // 28
+ };
+ 
+-size_t token_name_count = 29;
++const size_t token_name_count = 29;
+ 
+diff --git a/src/liborcus/xls_xml_namespace_types.cpp b/src/liborcus/xls_xml_namespace_types.cpp
+index 96ccf6de..a93758f9 100644
+--- a/src/liborcus/xls_xml_namespace_types.cpp
++++ b/src/liborcus/xls_xml_namespace_types.cpp
+@@ -16,7 +16,7 @@ const xmlns_id_t NS_xls_xml_html ="http://www.w3.org/TR/REC-html40";
+ 
+ namespace {
+ 
+-xmlns_id_t xls_xml_ns[] = {
++const xmlns_id_t xls_xml_ns[] = {
+     NS_xls_xml_ss,
+     NS_xls_xml_o,
+     NS_xls_xml_x,
+@@ -26,7 +26,7 @@ xmlns_id_t xls_xml_ns[] = {
+ 
+ }
+ 
+-const xmlns_id_t* NS_xls_xml_all = xls_xml_ns;
++const xmlns_id_t* const NS_xls_xml_all = xls_xml_ns;
+ 
+ }
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+diff --git a/src/liborcus/xls_xml_namespace_types.hpp b/src/liborcus/xls_xml_namespace_types.hpp
+index 37de5b0a..de7bf4a1 100644
+--- a/src/liborcus/xls_xml_namespace_types.hpp
++++ b/src/liborcus/xls_xml_namespace_types.hpp
+@@ -20,7 +20,7 @@ extern const xmlns_id_t NS_xls_xml_html;
+ /**
+  * Null-terminated array of all xls xml namespaces.
+  */
+-extern const xmlns_id_t* NS_xls_xml_all;
++extern const xmlns_id_t* const NS_xls_xml_all;
+ 
+ }
+ 
+diff --git a/src/liborcus/xls_xml_tokens.inl b/src/liborcus/xls_xml_tokens.inl
+index 73cd1fc5..ca961b97 100644
+--- a/src/liborcus/xls_xml_tokens.inl
++++ b/src/liborcus/xls_xml_tokens.inl
+@@ -1,6 +1,6 @@
+ // This file has been auto-generated.  Do not hand-edit this.
+ 
+-const char* token_names[] = {
++const char* const token_names[] = {
+     "??", // 0
+     "AcceptLabelsInFormulas", // 1
+     "Action", // 2
+@@ -994,4 +994,4 @@ const char* token_names[] = {
+     "yrange"  // 990
+ };
+ 
+-size_t token_name_count = 991;
++const size_t token_name_count = 991;
+diff --git a/src/liborcus/yaml_document_tree.cpp b/src/liborcus/yaml_document_tree.cpp
+index 1bd37a8b..c65793f4 100644
+--- a/src/liborcus/yaml_document_tree.cpp
++++ b/src/liborcus/yaml_document_tree.cpp
+@@ -558,11 +558,11 @@ const_node document_tree::get_document_root(size_t index) const
+ 
+ namespace {
+ 
+-const char* indent = "    ";
+-const char* kw_true = "true";
+-const char* kw_false = "false";
+-const char* kw_tilde = "~";
+-const char* kw_null = "null";
++const char* const indent = "    ";
++const char* const kw_true = "true";
++const char* const kw_false = "false";
++const char* const kw_tilde = "~";
++const char* const kw_null = "null";
+ 
+ const char quote = '"';
+ 
+@@ -812,7 +812,7 @@ void dump_json_node(std::ostringstream& os, const yaml_value& node, size_t scope
+     }
+ }
+ 
+-const char* warning_multiple_documents =
++const char* const warning_multiple_documents =
+ "warning: this YAML file contains multiple documents.  Only the first document\n"
+ "will be written.";
+ 
+diff --git a/src/parser/tokens.cpp b/src/parser/tokens.cpp
+index 5d3c5333..e28219f7 100644
+--- a/src/parser/tokens.cpp
++++ b/src/parser/tokens.cpp
+@@ -9,7 +9,7 @@
+ 
+ namespace orcus {
+ 
+-tokens::tokens(const char** token_names, size_t token_name_count) :
++tokens::tokens(const char* const* token_names, size_t token_name_count) :
+     m_token_names(token_names), 
+     m_token_name_count(token_name_count)
+ {
+diff --git a/src/parser/types.cpp b/src/parser/types.cpp
+index ae8843e2..fdf39cb0 100644
+--- a/src/parser/types.cpp
++++ b/src/parser/types.cpp
+@@ -1427,7 +1427,7 @@ std::ostream& operator<< (std::ostream& os, const date_time_t& v)
+ 
+ std::ostream& operator<< (std::ostream& os, format_t v)
+ {
+-    static const char* values[] = {
++    static const char* const values[] = {
+         "unknown",
+         "ods",
+         "xlsx",
+-- 
+2.49.0
+

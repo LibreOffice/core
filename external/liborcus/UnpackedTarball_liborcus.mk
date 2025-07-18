@@ -13,9 +13,13 @@ $(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
+# external/liborcus/0001-const-up-some-things-and-move-them-out-of-data-secti.patch 
+# upstream effort as: https://gitlab.com/orcus/orcus/-/merge_requests/225
+
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/libtool.patch.0 \
+	external/liborcus/0001-const-up-some-things-and-move-them-out-of-data-secti.patch \
 ))
 
 ifeq ($(OS),WNT)
