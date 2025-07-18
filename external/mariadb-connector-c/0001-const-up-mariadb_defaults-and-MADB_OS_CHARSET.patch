@@ -1,0 +1,39 @@
+From 35a6ae021579d43b9f18c6f4918618042539967c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 26 Jul 2025 16:38:15 +0100
+Subject: [PATCH] const up mariadb_defaults and MADB_OS_CHARSET
+
+---
+ libmariadb/ma_charset.c  | 2 +-
+ libmariadb/mariadb_lib.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libmariadb/ma_charset.c b/libmariadb/ma_charset.c
+index c277e6a..7d8311a 100644
+--- a/libmariadb/ma_charset.c
++++ b/libmariadb/ma_charset.c
+@@ -1242,7 +1242,7 @@ struct st_madb_os_charset {
+ #define MADB_CS_EXACT 2
+ 
+ /* Please add new character sets at the end. */
+-struct st_madb_os_charset MADB_OS_CHARSET[]=
++const struct st_madb_os_charset MADB_OS_CHARSET[]=
+ {
+ #ifdef _WIN32
+   /* Windows code pages */
+diff --git a/libmariadb/mariadb_lib.c b/libmariadb/mariadb_lib.c
+index c5dfedd..15ee455 100644
+--- a/libmariadb/mariadb_lib.c
++++ b/libmariadb/mariadb_lib.c
+@@ -660,7 +660,7 @@ struct st_default_options {
+   const char *conf_key;
+ };
+ 
+-struct st_default_options mariadb_defaults[] =
++const struct st_default_options mariadb_defaults[] =
+ {
+   {{MARIADB_OPT_PORT}, MARIADB_OPTION_INT,"port"},
+   {{MARIADB_OPT_UNIXSOCKET}, MARIADB_OPTION_STR, "socket"},
+-- 
+2.49.0
+
