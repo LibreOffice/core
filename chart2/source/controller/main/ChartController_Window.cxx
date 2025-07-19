@@ -1294,16 +1294,14 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     if( bReturn )
         return bReturn;
 
+    if( pDrawViewWrapper->IsTextEdit() )
     {
-        if( pDrawViewWrapper->IsTextEdit() )
+        if( pDrawViewWrapper->KeyInput(rKEvt, pChartWindow) )
         {
-            if( pDrawViewWrapper->KeyInput(rKEvt, pChartWindow) )
+            bReturn = true;
+            if( nCode == KEY_ESCAPE )
             {
-                bReturn = true;
-                if( nCode == KEY_ESCAPE )
-                {
-                    EndTextEdit();
-                }
+                EndTextEdit();
             }
         }
     }

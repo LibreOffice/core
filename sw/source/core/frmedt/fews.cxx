@@ -1113,12 +1113,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
             }
             // only use 90% of height for character bound
-            {
-                if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
-                    _orRect.Width( (_orRect.Width()*9)/10 );
-                else
-                    _orRect.Height( (_orRect.Height()*9)/10 );
-            }
+            if( aRectFnSet.IsVert() || aRectFnSet.IsVertL2R() )
+                _orRect.Width( (_orRect.Width()*9)/10 );
+            else
+                _orRect.Height( (_orRect.Height()*9)/10 );
         }
 
         const SwTwips nBaseOfstForFly = ( pFrame->IsTextFrame() && pFly ) ?

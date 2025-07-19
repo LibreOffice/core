@@ -126,20 +126,18 @@ rtl::Reference< HyphenatedWord >  HyphenatorDispatcher::buildHyphWord(
         return nullptr;
 
 #if OSL_DEBUG_LEVEL > 0
+    if (std::u16string_view(aTmp) != rOrigWord)
     {
-        if (std::u16string_view(aTmp) != rOrigWord)
+        // both words should only differ by a having a trailing '.'
+        // character or not...
+        std::u16string_view aShorter(aTmp), aLonger(rOrigWord);
+        if (aTmp.getLength() > rOrigWord.getLength())
+            std::swap(aShorter, aLonger);
+        sal_Int32 nS = aShorter.size();
+        sal_Int32 nL = aLonger.size();
+        if (nS > 0 && nL > 0)
         {
-            // both words should only differ by a having a trailing '.'
-            // character or not...
-            std::u16string_view aShorter(aTmp), aLonger(rOrigWord);
-            if (aTmp.getLength() > rOrigWord.getLength())
-                std::swap(aShorter, aLonger);
-            sal_Int32 nS = aShorter.size();
-            sal_Int32 nL = aLonger.size();
-            if (nS > 0 && nL > 0)
-            {
-                assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
-            }
+            assert( ((nS + 1 == nL) && aLonger[nL-1] == '.') && "HyphenatorDispatcher::buildHyphWord: unexpected difference between words!" );
         }
     }
 #endif

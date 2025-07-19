@@ -1717,19 +1717,17 @@ EEAnchorMode SdrTableObj::GetOutlinerViewAnchorMode() const
     {
         SdrTextVertAdjust eV=xCell->GetTextVerticalAdjust();
 
+        if (eV==SDRTEXTVERTADJUST_TOP)
         {
-            if (eV==SDRTEXTVERTADJUST_TOP)
-            {
-                eRet=EEAnchorMode::TopLeft;
-            }
-            else if (eV==SDRTEXTVERTADJUST_BOTTOM)
-            {
-                eRet=EEAnchorMode::BottomLeft;
-            }
-            else
-            {
-                eRet=EEAnchorMode::VCenterLeft;
-            }
+            eRet=EEAnchorMode::TopLeft;
+        }
+        else if (eV==SDRTEXTVERTADJUST_BOTTOM)
+        {
+            eRet=EEAnchorMode::BottomLeft;
+        }
+        else
+        {
+            eRet=EEAnchorMode::VCenterLeft;
         }
     }
     return eRet;

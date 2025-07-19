@@ -1691,20 +1691,17 @@ namespace xmloff
         if ( FormCellBindingHelper::livesInSpreadsheetDocument( m_xProps ) )
         {
             FormCellBindingHelper aHelper( m_xProps, nullptr );
+
+            if ( FormCellBindingHelper::isCellBinding( aHelper.getCurrentBinding( ) ) )
             {
-                if ( FormCellBindingHelper::isCellBinding( aHelper.getCurrentBinding( ) ) )
-                {
-                    m_nIncludeBindings |= BAFlags::LinkedCell;
-                    if ( m_nClassId == FormComponentType::LISTBOX )
-                        m_nIncludeBindings |= BAFlags::ListLinkingType;
-                }
+                m_nIncludeBindings |= BAFlags::LinkedCell;
+                if ( m_nClassId == FormComponentType::LISTBOX )
+                    m_nIncludeBindings |= BAFlags::ListLinkingType;
             }
 
             // is it a list-like control which uses a calc cell range as list source?
-            {
-                if ( FormCellBindingHelper::isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
-                    m_nIncludeBindings |= BAFlags::ListCellRange;
-            }
+            if ( FormCellBindingHelper::isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
+                m_nIncludeBindings |= BAFlags::ListCellRange;
         }
 
         // is control bound to XForms?

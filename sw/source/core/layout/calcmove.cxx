@@ -1754,16 +1754,14 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
 
         // - loop prevention
+        if ( (aOldFrame_StopFormat == getFrameArea() || aOldFrame_StopFormat2 == getFrameArea() ) &&
+             (aOldPrt_StopFormat == getFramePrintArea() || aOldPrt_StopFormat2 == getFramePrintArea()))
         {
-            if ( (aOldFrame_StopFormat == getFrameArea() || aOldFrame_StopFormat2 == getFrameArea() ) &&
-                 (aOldPrt_StopFormat == getFramePrintArea() || aOldPrt_StopFormat2 == getFramePrintArea()))
-            {
-                ++nConsecutiveFormatsWithoutChange;
-            }
-            else
-            {
-                nConsecutiveFormatsWithoutChange = 0;
-            }
+            ++nConsecutiveFormatsWithoutChange;
+        }
+        else
+        {
+            nConsecutiveFormatsWithoutChange = 0;
         }
 
         // Yet again an invalid value? Repeat from the start...

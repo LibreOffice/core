@@ -472,12 +472,10 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
         return;
 
     impl_init_xPropertySetOrigin(aGuard);
+    if( !m_xPropertySetOrigin.is() )
     {
-        if( !m_xPropertySetOrigin.is() )
-        {
-            OSL_FAIL( "broadcaster was disposed already" );
-            return;
-        }
+        OSL_FAIL( "broadcaster was disposed already" );
+        return;
     }
     try
     {

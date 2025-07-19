@@ -678,22 +678,20 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
        Note: Writer documents in OpenOffice.org file format doesn't contain
              any names for shapes, except for group shapes.
     */
+    if ( ( GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITER &&
+           GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERWEB &&
+           GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERGLOBAL ) ||
+         ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
+         aShapeInfo.meShapeType == XmlShapeType::DrawGroupShape ||
+         ( aShapeInfo.meShapeType == XmlShapeType::DrawCustomShape &&
+           aShapeInfo.xCustomShapeReplacement.is() ) )
     {
-        if ( ( GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITER &&
-               GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERWEB &&
-               GetExport().GetModelType() != SvtModuleOptions::EFactory::WRITERGLOBAL ) ||
-             ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
-             aShapeInfo.meShapeType == XmlShapeType::DrawGroupShape ||
-             ( aShapeInfo.meShapeType == XmlShapeType::DrawCustomShape &&
-               aShapeInfo.xCustomShapeReplacement.is() ) )
+        uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+        if( xNamed.is() )
         {
-            uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
-            if( xNamed.is() )
-            {
-                const OUString aName( xNamed->getName() );
-                if( !aName.isEmpty() )
-                    mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
-            }
+            const OUString aName( xNamed->getName() );
+            if( !aName.isEmpty() )
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
         }
     }
 

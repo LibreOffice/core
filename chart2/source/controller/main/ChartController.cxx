@@ -479,10 +479,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                 GetDrawModelWrapper();
                 if(m_pDrawModelWrapper)
                 {
-                    {
-                        if( m_pDrawViewWrapper )
-                            m_pDrawViewWrapper->ReInit();
-                    }
+                    if( m_pDrawViewWrapper )
+                        m_pDrawViewWrapper->ReInit();
 
                     //reselect object
                     if( m_aSelection.hasSelection() )

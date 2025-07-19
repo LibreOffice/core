@@ -114,13 +114,11 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
         {
             double nGrfDPIx = 0.0;
             double nGrfDPIy = 0.0;
+            if ( !bPixelGrf && m_bPixelContour )
             {
-                if ( !bPixelGrf && m_bPixelContour )
-                {
-                    basegfx::B2DSize aDPI = GetGraphic().GetPPI();
-                    nGrfDPIx = aDPI.getWidth();
-                    nGrfDPIy = aDPI.getHeight();
-                }
+                basegfx::B2DSize aDPI = GetGraphic().GetPPI();
+                nGrfDPIx = aDPI.getWidth();
+                nGrfDPIy = aDPI.getHeight();
             }
             OSL_ENSURE( !bPixelGrf || aGrfMap == aContourMap,
                         "scale factor for pixel unsupported" );

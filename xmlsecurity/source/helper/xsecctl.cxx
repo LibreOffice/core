@@ -723,89 +723,87 @@ void XSecController::exportSignature(
         xDocumentHandler->startElement(
             u"KeyInfo"_ustr,
             css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
+        // GPG or X509 key?
+        if (!signatureInfo.ouGpgCertificate.isEmpty())
         {
-            // GPG or X509 key?
-            if (!signatureInfo.ouGpgCertificate.isEmpty())
+            pAttributeList = new comphelper::AttributeList();
+            pAttributeList->AddAttribute(u"xmlns:loext"_ustr, NS_LOEXT);
+            /* Write PGPData element */
+            xDocumentHandler->startElement(
+                u"PGPData"_ustr,
+                pAttributeList);
             {
-                pAttributeList = new comphelper::AttributeList();
-                pAttributeList->AddAttribute(u"xmlns:loext"_ustr, NS_LOEXT);
-                /* Write PGPData element */
+                /* Write keyid element */
                 xDocumentHandler->startElement(
-                    u"PGPData"_ustr,
-                    pAttributeList);
+                    u"PGPKeyID"_ustr,
+                    css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
+                xDocumentHandler->characters(signatureInfo.ouGpgKeyID);
+                xDocumentHandler->endElement( u"PGPKeyID"_ustr );
+
+                /* Write PGPKeyPacket element */
+                if (!signatureInfo.ouGpgCertificate.isEmpty())
                 {
-                    /* Write keyid element */
                     xDocumentHandler->startElement(
-                        u"PGPKeyID"_ustr,
+                        u"PGPKeyPacket"_ustr,
                         css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                    xDocumentHandler->characters(signatureInfo.ouGpgKeyID);
-                    xDocumentHandler->endElement( u"PGPKeyID"_ustr );
-
-                    /* Write PGPKeyPacket element */
-                    if (!signatureInfo.ouGpgCertificate.isEmpty())
-                    {
-                        xDocumentHandler->startElement(
-                            u"PGPKeyPacket"_ustr,
-                            css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                        xDocumentHandler->characters( signatureInfo.ouGpgCertificate );
-                        xDocumentHandler->endElement( u"PGPKeyPacket"_ustr );
-                    }
-
-                    /* Write PGPOwner element */
-                    xDocumentHandler->startElement(
-                        u"loext:PGPOwner"_ustr,
-                        css::uno::Reference< css::xml::sax::XAttributeList >(new comphelper::AttributeList()));
-                    xDocumentHandler->characters( signatureInfo.ouGpgOwner );
-                    xDocumentHandler->endElement( u"loext:PGPOwner"_ustr );
+                    xDocumentHandler->characters( signatureInfo.ouGpgCertificate );
+                    xDocumentHandler->endElement( u"PGPKeyPacket"_ustr );
                 }
-                xDocumentHandler->endElement( u"PGPData"_ustr );
+
+                /* Write PGPOwner element */
+                xDocumentHandler->startElement(
+                    u"loext:PGPOwner"_ustr,
+                    css::uno::Reference< css::xml::sax::XAttributeList >(new comphelper::AttributeList()));
+                xDocumentHandler->characters( signatureInfo.ouGpgOwner );
+                xDocumentHandler->endElement( u"loext:PGPOwner"_ustr );
             }
-            else
+            xDocumentHandler->endElement( u"PGPData"_ustr );
+        }
+        else
+        {
+            assert(signatureInfo.GetSigningCertificate());
+            for (auto const& rData : signatureInfo.X509Datas)
             {
-                assert(signatureInfo.GetSigningCertificate());
-                for (auto const& rData : signatureInfo.X509Datas)
+                /* Write X509Data element */
+                xDocumentHandler->startElement(
+                    u"X509Data"_ustr,
+                    css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                 {
-                    /* Write X509Data element */
-                    xDocumentHandler->startElement(
-                        u"X509Data"_ustr,
-                        css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
+                    for (auto const& it : rData)
                     {
-                        for (auto const& it : rData)
+                        /* Write X509IssuerSerial element */
+                        xDocumentHandler->startElement(
+                            u"X509IssuerSerial"_ustr,
+                            css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
                         {
-                            /* Write X509IssuerSerial element */
+                            /* Write X509IssuerName element */
                             xDocumentHandler->startElement(
-                                u"X509IssuerSerial"_ustr,
+                                u"X509IssuerName"_ustr,
                                 css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                            {
-                                /* Write X509IssuerName element */
-                                xDocumentHandler->startElement(
-                                    u"X509IssuerName"_ustr,
-                                    css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                                xDocumentHandler->characters(it.X509IssuerName);
-                                xDocumentHandler->endElement( u"X509IssuerName"_ustr );
+                            xDocumentHandler->characters(it.X509IssuerName);
+                            xDocumentHandler->endElement( u"X509IssuerName"_ustr );
 
-                                /* Write X509SerialNumber element */
-                                xDocumentHandler->startElement(
-                                    u"X509SerialNumber"_ustr,
-                                    css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                                xDocumentHandler->characters(it.X509SerialNumber);
-                                xDocumentHandler->endElement( u"X509SerialNumber"_ustr );
-                            }
-                            xDocumentHandler->endElement( u"X509IssuerSerial"_ustr );
+                            /* Write X509SerialNumber element */
+                            xDocumentHandler->startElement(
+                                u"X509SerialNumber"_ustr,
+                                css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
+                            xDocumentHandler->characters(it.X509SerialNumber);
+                            xDocumentHandler->endElement( u"X509SerialNumber"_ustr );
+                        }
+                        xDocumentHandler->endElement( u"X509IssuerSerial"_ustr );
 
-                            /* Write X509Certificate element */
-                            if (!it.X509Certificate.isEmpty())
-                            {
-                                xDocumentHandler->startElement(
-                                    u"X509Certificate"_ustr,
-                                    css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
-                                xDocumentHandler->characters(it.X509Certificate);
-                                xDocumentHandler->endElement( u"X509Certificate"_ustr );
-                            }
+                        /* Write X509Certificate element */
+                        if (!it.X509Certificate.isEmpty())
+                        {
+                            xDocumentHandler->startElement(
+                                u"X509Certificate"_ustr,
+                                css::uno::Reference< css::xml::sax::XAttributeList > (new comphelper::AttributeList()));
+                            xDocumentHandler->characters(it.X509Certificate);
+                            xDocumentHandler->endElement( u"X509Certificate"_ustr );
                         }
                     }
-                    xDocumentHandler->endElement( u"X509Data"_ustr );
                 }
+                xDocumentHandler->endElement( u"X509Data"_ustr );
             }
         }
         xDocumentHandler->endElement( u"KeyInfo"_ustr );

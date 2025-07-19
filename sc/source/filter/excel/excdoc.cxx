@@ -1223,35 +1223,34 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                 }
             }
 
-            { // export <extLst>
-                if (rModel.mxExtensionList)
+            // export <extLst>
+            if (rModel.mxExtensionList)
+            {
+                // put <extLst>, it has no attributes
+                rStrm.GetCurrentStream()->startElement(XML_extLst);
+
+                // export uri attribute of <ext> element
+                for (auto& uriValue : rModel.mxExtensionList->vExtension)
                 {
-                    // put <extLst>, it has no attributes
-                    rStrm.GetCurrentStream()->startElement(XML_extLst);
+                    // export <ext> with uri attribute.
+                    rStrm.GetCurrentStream()->startElement(XML_ext, XML_uri, uriValue);
 
-                    // export uri attribute of <ext> element
-                    for (auto& uriValue : rModel.mxExtensionList->vExtension)
-                    {
-                        // export <ext> with uri attribute.
-                        rStrm.GetCurrentStream()->startElement(XML_ext, XML_uri, uriValue);
+                /*
+                    TODO: export child elements of <ext>. We should export "any element in any namespace", which seems challenging.
 
-                    /*
-                        TODO: export child elements of <ext>. We should export "any element in any namespace", which seems challenging.
+                    <extLst>
+                        <ext>
+                            (Any element in any namespace)
+                        </ext>
+                    </extLst>
+                */
 
-                        <extLst>
-                            <ext>
-                                (Any element in any namespace)
-                            </ext>
-                        </extLst>
-                    */
-
-                        // put </ext>
-                        rStrm.GetCurrentStream()->endElement(XML_ext);
-                    }
-
-                    // put </extLst>
-                    rStrm.GetCurrentStream()->endElement(XML_extLst);
+                    // put </ext>
+                    rStrm.GetCurrentStream()->endElement(XML_ext);
                 }
+
+                // put </extLst>
+                rStrm.GetCurrentStream()->endElement(XML_extLst);
             }
 
             // put </connection>

@@ -836,12 +836,11 @@ bool ToolbarLayoutManager::dockToolbar( std::u16string_view rResourceURL, ui::Do
                     ::Size aSize;
 
                     SolarMutexGuard aGuard;
-                    {
-                        if (pToolBox)
-                            aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
-                        else if (pWindow)
-                            aSize = pWindow->GetSizePixel();
-                    }
+
+                    if (pToolBox)
+                        aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
+                    else if (pWindow)
+                        aSize = pWindow->GetSizePixel();
 
                     ::Point aPixelPos;
                     awt::Point aDockPos;

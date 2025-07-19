@@ -417,27 +417,25 @@ namespace basegfx
                 }
 
                 // create upper edge.
+                if(bCutA)
                 {
-                    if(bCutA)
-                    {
-                        // calculate cut point and add
-                        aCutPoint = rEdge.getStartPoint() + (aPerpendStartA * fCutA);
-                        aBezierPolygon.append(aCutPoint);
-                    }
-                    else
-                    {
-                        // create scaled bezier segment
-                        const B2DPoint aStart(rEdge.getStartPoint() + aPerpendStartA);
-                        const B2DPoint aEnd(rEdge.getEndPoint() + aPerpendEndA);
-                        const B2DVector aEdge(aEnd - aStart);
-                        const double fLength(aEdge.getLength());
-                        const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
-                        const B2DVector fRelNext(rEdge.getControlPointA() - rEdge.getStartPoint());
-                        const B2DVector fRelPrev(rEdge.getControlPointB() - rEdge.getEndPoint());
+                    // calculate cut point and add
+                    aCutPoint = rEdge.getStartPoint() + (aPerpendStartA * fCutA);
+                    aBezierPolygon.append(aCutPoint);
+                }
+                else
+                {
+                    // create scaled bezier segment
+                    const B2DPoint aStart(rEdge.getStartPoint() + aPerpendStartA);
+                    const B2DPoint aEnd(rEdge.getEndPoint() + aPerpendEndA);
+                    const B2DVector aEdge(aEnd - aStart);
+                    const double fLength(aEdge.getLength());
+                    const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
+                    const B2DVector fRelNext(rEdge.getControlPointA() - rEdge.getStartPoint());
+                    const B2DVector fRelPrev(rEdge.getControlPointB() - rEdge.getEndPoint());
 
-                        aBezierPolygon.append(aStart);
-                        aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
-                    }
+                    aBezierPolygon.append(aStart);
+                    aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
                 }
 
                 // create right edge
@@ -480,27 +478,25 @@ namespace basegfx
                 }
 
                 // create lower edge.
+                if(bCutB)
                 {
-                    if(bCutB)
-                    {
-                        // calculate cut point and add
-                        aCutPoint = rEdge.getEndPoint() + (aPerpendEndB * fCutB);
-                        aBezierPolygon.append(aCutPoint);
-                    }
-                    else
-                    {
-                        // create scaled bezier segment
-                        const B2DPoint aStart(rEdge.getEndPoint() + aPerpendEndB);
-                        const B2DPoint aEnd(rEdge.getStartPoint() + aPerpendStartB);
-                        const B2DVector aEdge(aEnd - aStart);
-                        const double fLength(aEdge.getLength());
-                        const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
-                        const B2DVector fRelNext(rEdge.getControlPointB() - rEdge.getEndPoint());
-                        const B2DVector fRelPrev(rEdge.getControlPointA() - rEdge.getStartPoint());
+                    // calculate cut point and add
+                    aCutPoint = rEdge.getEndPoint() + (aPerpendEndB * fCutB);
+                    aBezierPolygon.append(aCutPoint);
+                }
+                else
+                {
+                    // create scaled bezier segment
+                    const B2DPoint aStart(rEdge.getEndPoint() + aPerpendEndB);
+                    const B2DPoint aEnd(rEdge.getStartPoint() + aPerpendStartB);
+                    const B2DVector aEdge(aEnd - aStart);
+                    const double fLength(aEdge.getLength());
+                    const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
+                    const B2DVector fRelNext(rEdge.getControlPointB() - rEdge.getEndPoint());
+                    const B2DVector fRelPrev(rEdge.getControlPointA() - rEdge.getStartPoint());
 
-                        aBezierPolygon.append(aStart);
-                        aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
-                    }
+                    aBezierPolygon.append(aStart);
+                    aBezierPolygon.appendBezierSegment(aStart + (fRelNext * fScale), aEnd + (fRelPrev * fScale), aEnd);
                 }
 
                 // close

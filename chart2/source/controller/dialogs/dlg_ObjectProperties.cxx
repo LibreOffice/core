@@ -273,41 +273,39 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
     }
 
      //create gui name for this object
+    if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_AXIS )
     {
-        if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_AXIS )
+        m_aLocalizedName = ObjectNameProvider::getAxisName( m_aObjectCID, xChartModel );
+    }
+    else if( !m_bAffectsMultipleObjects && ( m_eObjectType == OBJECTTYPE_GRID || m_eObjectType == OBJECTTYPE_SUBGRID ) )
+    {
+        m_aLocalizedName = ObjectNameProvider::getGridName( m_aObjectCID, xChartModel );
+    }
+    else if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_TITLE )
+    {
+        m_aLocalizedName = ObjectNameProvider::getTitleName( m_aObjectCID, xChartModel );
+    }
+    else
+    {
+        switch( m_eObjectType )
         {
-            m_aLocalizedName = ObjectNameProvider::getAxisName( m_aObjectCID, xChartModel );
-        }
-        else if( !m_bAffectsMultipleObjects && ( m_eObjectType == OBJECTTYPE_GRID || m_eObjectType == OBJECTTYPE_SUBGRID ) )
-        {
-            m_aLocalizedName = ObjectNameProvider::getGridName( m_aObjectCID, xChartModel );
-        }
-        else if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_TITLE )
-        {
-            m_aLocalizedName = ObjectNameProvider::getTitleName( m_aObjectCID, xChartModel );
-        }
-        else
-        {
-            switch( m_eObjectType )
-            {
-                case OBJECTTYPE_DATA_POINT:
-                case OBJECTTYPE_DATA_LABEL:
-                case OBJECTTYPE_DATA_LABELS:
-                case OBJECTTYPE_DATA_ERRORS_X:
-                case OBJECTTYPE_DATA_ERRORS_Y:
-                case OBJECTTYPE_DATA_ERRORS_Z:
-                case OBJECTTYPE_DATA_AVERAGE_LINE:
-                case OBJECTTYPE_DATA_CURVE:
-                case OBJECTTYPE_DATA_CURVE_EQUATION:
-                    if( m_bAffectsMultipleObjects )
-                        m_aLocalizedName = ObjectNameProvider::getName_ObjectForAllSeries( m_eObjectType );
-                    else
-                        m_aLocalizedName = ObjectNameProvider::getName_ObjectForSeries( m_eObjectType, m_aObjectCID, m_xChartDocument );
-                    break;
-                default:
-                    m_aLocalizedName = ObjectNameProvider::getName(m_eObjectType,m_bAffectsMultipleObjects);
-                    break;
-            }
+            case OBJECTTYPE_DATA_POINT:
+            case OBJECTTYPE_DATA_LABEL:
+            case OBJECTTYPE_DATA_LABELS:
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
+            case OBJECTTYPE_DATA_AVERAGE_LINE:
+            case OBJECTTYPE_DATA_CURVE:
+            case OBJECTTYPE_DATA_CURVE_EQUATION:
+                if( m_bAffectsMultipleObjects )
+                    m_aLocalizedName = ObjectNameProvider::getName_ObjectForAllSeries( m_eObjectType );
+                else
+                    m_aLocalizedName = ObjectNameProvider::getName_ObjectForSeries( m_eObjectType, m_aObjectCID, m_xChartDocument );
+                break;
+            default:
+                m_aLocalizedName = ObjectNameProvider::getName(m_eObjectType,m_bAffectsMultipleObjects);
+                break;
         }
     }
 }

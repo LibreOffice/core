@@ -95,36 +95,34 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     const SvxLRSpaceItem& rLRSpace = rFrameFormat.GetLRSpace();
     const SvxULSpaceItem& rULSpace = rFrameFormat.GetULSpace();
     SwTwips nLRSpaceLeft, nLRSpaceRight, nULSpaceUpper, nULSpaceLower;
+    if ( rAnchorFrame.IsVertical() )
     {
-        if ( rAnchorFrame.IsVertical() )
-        {
-            // Seems to be easier to do it all the horizontal way
-            // So, from now on think horizontal.
-            rAnchorFrame.SwitchVerticalToHorizontal( aObjBoundRect );
-            rAnchorFrame.SwitchVerticalToHorizontal( aAnchorPos );
+        // Seems to be easier to do it all the horizontal way
+        // So, from now on think horizontal.
+        rAnchorFrame.SwitchVerticalToHorizontal( aObjBoundRect );
+        rAnchorFrame.SwitchVerticalToHorizontal( aAnchorPos );
 
-            // convert the spacing values
-            nLRSpaceLeft = rULSpace.GetUpper();
-            nLRSpaceRight = rULSpace.GetLower();
-            nULSpaceUpper = rLRSpace.ResolveRight({});
-            nULSpaceLower = rLRSpace.ResolveLeft({});
+        // convert the spacing values
+        nLRSpaceLeft = rULSpace.GetUpper();
+        nLRSpaceRight = rULSpace.GetLower();
+        nULSpaceUpper = rLRSpace.ResolveRight({});
+        nULSpaceLower = rLRSpace.ResolveLeft({});
+    }
+    else
+    {
+        if ( rAnchorFrame.IsRightToLeft() )
+        {
+            nLRSpaceLeft = rLRSpace.ResolveRight({});
+            nLRSpaceRight = rLRSpace.ResolveLeft({});
         }
         else
         {
-            if ( rAnchorFrame.IsRightToLeft() )
-            {
-                nLRSpaceLeft = rLRSpace.ResolveRight({});
-                nLRSpaceRight = rLRSpace.ResolveLeft({});
-            }
-            else
-            {
-                nLRSpaceLeft = rLRSpace.ResolveLeft({});
-                nLRSpaceRight = rLRSpace.ResolveRight({});
-            }
-
-            nULSpaceUpper = rULSpace.GetUpper();
-            nULSpaceLower = rULSpace.GetLower();
+            nLRSpaceLeft = rLRSpace.ResolveLeft({});
+            nLRSpaceRight = rLRSpace.ResolveRight({});
         }
+
+        nULSpaceUpper = rULSpace.GetUpper();
+        nULSpaceLower = rULSpace.GetLower();
     }
 
     // consider left and upper spacing by adjusting anchor position.

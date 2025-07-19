@@ -1491,23 +1491,21 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     bool bDisableEditHyperlink = ShouldDisableEditHyperlink();
 
     //highlight selected custom shape
+    if(HasCurrentFunction())
     {
-        if(HasCurrentFunction())
+        rtl::Reference< FuPoor > xFunc( GetCurrentFunction() );
+        FuConstructCustomShape* pShapeFunc = dynamic_cast< FuConstructCustomShape* >( xFunc.get() );
+
+        static const sal_uInt16 nCSTbArray[] = { SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_SYMBOL,
+                                                 SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_FLOWCHART,
+                                                 SID_DRAWTBX_CS_CALLOUT, SID_DRAWTBX_CS_STAR };
+
+        const sal_uInt16 nCurrentSId = GetCurrentFunction()->GetSlotID();
+        for (sal_uInt16 i : nCSTbArray)
         {
-            rtl::Reference< FuPoor > xFunc( GetCurrentFunction() );
-            FuConstructCustomShape* pShapeFunc = dynamic_cast< FuConstructCustomShape* >( xFunc.get() );
-
-            static const sal_uInt16 nCSTbArray[] = { SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_SYMBOL,
-                                                     SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_FLOWCHART,
-                                                     SID_DRAWTBX_CS_CALLOUT, SID_DRAWTBX_CS_STAR };
-
-            const sal_uInt16 nCurrentSId = GetCurrentFunction()->GetSlotID();
-            for (sal_uInt16 i : nCSTbArray)
-            {
-                rSet.ClearItem( i ); // Why is this necessary?
-                rSet.Put( SfxStringItem( i, nCurrentSId == i && pShapeFunc
-                                         ? pShapeFunc->GetShapeType() : OUString() ) );
-            }
+            rSet.ClearItem( i ); // Why is this necessary?
+            rSet.Put( SfxStringItem( i, nCurrentSId == i && pShapeFunc
+                                     ? pShapeFunc->GetShapeType() : OUString() ) );
         }
     }
 

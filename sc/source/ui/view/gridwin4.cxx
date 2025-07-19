@@ -819,32 +819,30 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = nullptr; // #i74769# work with SdrPaintWindow directly
 
+    // init redraw
+    if (pCurTabViewShell)
     {
-        // init redraw
-        if (pCurTabViewShell)
+        MapMode aCurrentMapMode(pContentDev->GetMapMode());
+        pContentDev->SetMapMode(aDrawMode);
+        SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
+
+        if(pDrawView)
         {
-            MapMode aCurrentMapMode(pContentDev->GetMapMode());
-            pContentDev->SetMapMode(aDrawMode);
-            SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
+            // #i74769# Use new BeginDrawLayers() interface
+            vcl::Region aDrawingRegion(aDrawingRectLogic);
+            pTargetPaintWindow = pDrawView->BeginDrawLayers(pContentDev, aDrawingRegion);
+            OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
-            if(pDrawView)
+            if (!bIsTiledRendering)
             {
-                // #i74769# Use new BeginDrawLayers() interface
-                vcl::Region aDrawingRegion(aDrawingRectLogic);
-                pTargetPaintWindow = pDrawView->BeginDrawLayers(pContentDev, aDrawingRegion);
-                OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
-
-                if (!bIsTiledRendering)
-                {
-                    // #i74769# get target device from SdrPaintWindow, this may be the prerender
-                    // device now, too.
-                    pContentDev = &(pTargetPaintWindow->GetTargetOutputDevice());
-                    aOutputData.SetContentDevice(pContentDev);
-                }
+                // #i74769# get target device from SdrPaintWindow, this may be the prerender
+                // device now, too.
+                pContentDev = &(pTargetPaintWindow->GetTargetOutputDevice());
+                aOutputData.SetContentDevice(pContentDev);
             }
-
-            pContentDev->SetMapMode(aCurrentMapMode);
         }
+
+        pContentDev->SetMapMode(aCurrentMapMode);
     }
 
     // app-background / document edge (area) (Pixel)
@@ -1059,44 +1057,42 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
+    // end redraw
+    if (pCurTabViewShell)
     {
-        // end redraw
-        if (pCurTabViewShell)
+        MapMode aCurrentMapMode(pContentDev->GetMapMode());
+        pContentDev->SetMapMode(aDrawMode);
+
+        if (bIsTiledRendering)
         {
-            MapMode aCurrentMapMode(pContentDev->GetMapMode());
-            pContentDev->SetMapMode(aDrawMode);
+            Point aOrigin = aOriginalMode.GetOrigin();
+            if (bLayoutRTL)
+                aOrigin.setX(-aOrigin.getX()
+                             + o3tl::toTwips(aOutputData.nScrX + aOutputData.GetScrW(), o3tl::Length::px));
+            else
+                aOrigin.AdjustX(o3tl::toTwips(aOutputData.nScrX, o3tl::Length::px));
 
-            if (bIsTiledRendering)
-            {
-                Point aOrigin = aOriginalMode.GetOrigin();
-                if (bLayoutRTL)
-                    aOrigin.setX(-aOrigin.getX()
-                                 + o3tl::toTwips(aOutputData.nScrX + aOutputData.GetScrW(), o3tl::Length::px));
-                else
-                    aOrigin.AdjustX(o3tl::toTwips(aOutputData.nScrX, o3tl::Length::px));
+            aOrigin.AdjustY(o3tl::toTwips(aOutputData.nScrY, o3tl::Length::px));
+            aOrigin = o3tl::convert(aOrigin, o3tl::Length::twip, o3tl::Length::mm100);
+            // keep into account the zoom factor
+            aOrigin = aOrigin.scale(
+                aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
+                aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
 
-                aOrigin.AdjustY(o3tl::toTwips(aOutputData.nScrY, o3tl::Length::px));
-                aOrigin = o3tl::convert(aOrigin, o3tl::Length::twip, o3tl::Length::mm100);
-                // keep into account the zoom factor
-                aOrigin = aOrigin.scale(
-                    aDrawMode.GetScaleX().GetDenominator(), aDrawMode.GetScaleX().GetNumerator(),
-                    aDrawMode.GetScaleY().GetDenominator(), aDrawMode.GetScaleY().GetNumerator());
-
-                MapMode aNew = rDevice.GetMapMode();
-                aNew.SetOrigin(aOrigin);
-                rDevice.SetMapMode(aNew);
-            }
-
-            SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
-
-            if(pDrawView)
-            {
-                // #i74769# work with SdrPaintWindow directly
-                pDrawView->EndDrawLayers(*pTargetPaintWindow, true);
-            }
-
-            pContentDev->SetMapMode(aCurrentMapMode);
+            MapMode aNew = rDevice.GetMapMode();
+            aNew.SetOrigin(aOrigin);
+            rDevice.SetMapMode(aNew);
         }
+
+        SdrView* pDrawView = pCurTabViewShell->GetScDrawView();
+
+        if(pDrawView)
+        {
+            // #i74769# work with SdrPaintWindow directly
+            pDrawView->EndDrawLayers(*pTargetPaintWindow, true);
+        }
+
+        pContentDev->SetMapMode(aCurrentMapMode);
     }
 
     // in place editing - lok case

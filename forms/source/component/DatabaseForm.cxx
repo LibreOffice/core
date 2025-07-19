@@ -2923,16 +2923,14 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
         // reloading...
 
     EventObject aEvent(static_cast<XWeak*>(this));
+    // only if there is no approve listener we can post the event at this time
+    // otherwise see approveRowsetChange
+    // the approval is done by the aggregate
+    if (!m_aRowSetApproveListeners.getLength())
     {
-        // only if there is no approve listener we can post the event at this time
-        // otherwise see approveRowsetChange
-        // the approval is done by the aggregate
-        if (!m_aRowSetApproveListeners.getLength())
-        {
-            aGuard.clear();
-            m_aLoadListeners.notifyEach( &XLoadListener::reloading, aEvent);
-            aGuard.reset();
-        }
+        aGuard.clear();
+        m_aLoadListeners.notifyEach( &XLoadListener::reloading, aEvent);
+        aGuard.reset();
     }
 
     bool bSuccess = true;

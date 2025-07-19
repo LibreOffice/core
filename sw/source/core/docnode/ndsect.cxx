@@ -637,19 +637,17 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
     // Test if the whole Content Section (Document/TableBox/Fly) should be hidden,
     // which we're currently not able to do.
     const SwNodeIndex* pIdx = nullptr;
+    if (rNewData.IsHidden())
     {
-        if (rNewData.IsHidden())
+        pIdx = pFormat->GetContent().GetContentIdx();
+        if (pIdx)
         {
-            pIdx = pFormat->GetContent().GetContentIdx();
-            if (pIdx)
+            const SwSectionNode* pSectNd =
+                pIdx->GetNode().GetSectionNode();
+            if (pSectNd)
             {
-                const SwSectionNode* pSectNd =
-                    pIdx->GetNode().GetSectionNode();
-                if (pSectNd)
-                {
-                    ::lcl_CheckEmptyLayFrame( rNewData,
-                                *pSectNd, *pSectNd->EndOfSectionNode() );
-                }
+                ::lcl_CheckEmptyLayFrame( rNewData,
+                            *pSectNd, *pSectNd->EndOfSectionNode() );
             }
         }
     }

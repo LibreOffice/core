@@ -255,65 +255,63 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     {
         css::drawing::MeasureTextVertPos eVPos =
                     rAttrs->Get( SDRATTR_MEASURETEXTVPOS ).GetValue();
+        if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::INVALID )
         {
-            if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::INVALID )
+            css::drawing::MeasureTextHorzPos eHPos =
+                        rAttrs->Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
+            RectPoint eRP = RectPoint::MM;
+            switch( eVPos )
             {
-                css::drawing::MeasureTextHorzPos eHPos =
-                            rAttrs->Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
-                RectPoint eRP = RectPoint::MM;
-                switch( eVPos )
+            case css::drawing::MeasureTextVertPos_EAST:
+                switch( eHPos )
                 {
-                case css::drawing::MeasureTextVertPos_EAST:
-                    switch( eHPos )
-                    {
-                    case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LT; break;
-                    case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MT; break;
-                    case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RT; break;
-                    case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MT; break;
-                    default: break;
-                    }
-                    break;
-                case css::drawing::MeasureTextVertPos_CENTERED:
-                case css::drawing::MeasureTextVertPos_AUTO:
-                    switch( eHPos )
-                    {
-                    case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
-                    case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MM; break;
-                    case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RM; break;
-                    case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MM; break;
-                    default: break;
-                    }
-                    break;
-                case css::drawing::MeasureTextVertPos_WEST:
-                    switch( eHPos )
-                    {
-                    case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LB; break;
-                    case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MB; break;
-                    case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RB; break;
-                    case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MB; break;
-                    default: break;
-                    }
-                    break;
-                 default: ;//prevent warning
+                case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LT; break;
+                case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MT; break;
+                case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RT; break;
+                case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MT; break;
+                default: break;
                 }
-
-                CTL_STATE nState = CTL_STATE::NONE;
-
-                if (eHPos == css::drawing::MeasureTextHorzPos_AUTO)
+                break;
+            case css::drawing::MeasureTextVertPos_CENTERED:
+            case css::drawing::MeasureTextVertPos_AUTO:
+                switch( eHPos )
                 {
-                    m_xTsbAutoPosH->set_state( TRISTATE_TRUE );
-                    nState = CTL_STATE::NOHORZ;
+                case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
+                case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MM; break;
+                case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RM; break;
+                case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MM; break;
+                default: break;
                 }
-
-                if (eVPos == css::drawing::MeasureTextVertPos_AUTO)
+                break;
+            case css::drawing::MeasureTextVertPos_WEST:
+                switch( eHPos )
                 {
-                    m_xTsbAutoPosV->set_state( TRISTATE_TRUE );
-                    nState |= CTL_STATE::NOVERT;
+                case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LB; break;
+                case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MB; break;
+                case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RB; break;
+                case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MB; break;
+                default: break;
                 }
-
-                m_aCtlPosition.SetState(nState);
-                m_aCtlPosition.SetActualRP(eRP);
+                break;
+             default: ;//prevent warning
             }
+
+            CTL_STATE nState = CTL_STATE::NONE;
+
+            if (eHPos == css::drawing::MeasureTextHorzPos_AUTO)
+            {
+                m_xTsbAutoPosH->set_state( TRISTATE_TRUE );
+                nState = CTL_STATE::NOHORZ;
+            }
+
+            if (eVPos == css::drawing::MeasureTextVertPos_AUTO)
+            {
+                m_xTsbAutoPosV->set_state( TRISTATE_TRUE );
+                nState |= CTL_STATE::NOVERT;
+            }
+
+            m_aCtlPosition.SetState(nState);
+            m_aCtlPosition.SetActualRP(eRP);
         }
     }
     else

@@ -4245,57 +4245,55 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
                 throw uno::RuntimeException();
         }
 
+        if (xMetaInf.is())
         {
-            if (xMetaInf.is())
+            // ODF.
+            uno::Reference< io::XStream > xStream;
+            if (GetFilter() && GetFilter()->IsOwnFormat())
+                xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
+
+            bool bSuccess = xModelSigner->SignModelWithCertificate(
+                xModel, rSigningContext, GetZipStorageToSign_Impl(), xStream);
+
+            if (bSuccess)
             {
-                // ODF.
-                uno::Reference< io::XStream > xStream;
-                if (GetFilter() && GetFilter()->IsOwnFormat())
-                    xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
+                uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
+                xTransact->commit();
+                xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
+                xTransact->commit();
 
-                bool bSuccess = xModelSigner->SignModelWithCertificate(
-                    xModel, rSigningContext, GetZipStorageToSign_Impl(), xStream);
-
-                if (bSuccess)
-                {
-                    uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
-                    xTransact->commit();
-                    xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
-                    xTransact->commit();
-
-                    // the temporary file has been written, commit it to the original file
-                    Commit();
-                    bChanges = true;
-                }
+                // the temporary file has been written, commit it to the original file
+                Commit();
+                bChanges = true;
             }
-            else if (xWriteableZipStor.is())
+        }
+        else if (xWriteableZipStor.is())
+        {
+            // OOXML.
+            uno::Reference<io::XStream> xStream;
+
+                // We need read-write to be able to add the signature relation.
+            bool bSuccess = xModelSigner->SignModelWithCertificate(
+                xModel, rSigningContext, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+
+            if (bSuccess)
             {
-                // OOXML.
-                uno::Reference<io::XStream> xStream;
+                uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
+                xTransact->commit();
 
-                    // We need read-write to be able to add the signature relation.
-                bool bSuccess = xModelSigner->SignModelWithCertificate(
-                    xModel, rSigningContext, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
-
-                if (bSuccess)
-                {
-                    uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
-                    xTransact->commit();
-
-                    // the temporary file has been written, commit it to the original file
-                    Commit();
-                    bChanges = true;
-                }
+                // the temporary file has been written, commit it to the original file
+                Commit();
+                bChanges = true;
             }
-            else
-            {
-                // Something not ZIP based: e.g. PDF.
-                std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
-                uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-                if (xModelSigner->SignModelWithCertificate(
-                        xModel, rSigningContext, uno::Reference<embed::XStorage>(), xStream))
-                    bChanges = true;
-            }
+        }
+        else
+        {
+            // Something not ZIP based: e.g. PDF.
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
+            uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+            if (xModelSigner->SignModelWithCertificate(
+                    xModel, rSigningContext, uno::Reference<embed::XStorage>(), xStream))
+                bChanges = true;
         }
     }
     catch ( const uno::Exception& )

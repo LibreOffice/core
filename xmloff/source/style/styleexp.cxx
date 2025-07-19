@@ -317,25 +317,24 @@ bool XMLStyleExport::exportStyle(
                 {
                     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
                     bool bSuppressListStyle( false );
+
+                    if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
                     {
-                        if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
+                        Reference< XChapterNumberingSupplier > xCNSupplier
+                            (GetExport().GetModel(), UNO_QUERY);
+
+                        if (xCNSupplier.is())
                         {
-                            Reference< XChapterNumberingSupplier > xCNSupplier
-                                (GetExport().GetModel(), UNO_QUERY);
+                            Reference< XIndexReplace > xNumRule
+                                ( xCNSupplier->getChapterNumberingRules() );
+                            assert(xNumRule.is());
 
-                            if (xCNSupplier.is())
-                            {
-                                Reference< XIndexReplace > xNumRule
-                                    ( xCNSupplier->getChapterNumberingRules() );
-                                assert(xNumRule.is());
-
-                                Reference< XPropertySet > xNumRulePropSet
-                                    (xNumRule, UNO_QUERY);
-                                OUString sOutlineName;
-                                xNumRulePropSet->getPropertyValue(u"Name"_ustr)
-                                    >>= sOutlineName;
-                                bSuppressListStyle = sListName == sOutlineName;
-                            }
+                            Reference< XPropertySet > xNumRulePropSet
+                                (xNumRule, UNO_QUERY);
+                            OUString sOutlineName;
+                            xNumRulePropSet->getPropertyValue(u"Name"_ustr)
+                                >>= sOutlineName;
+                            bSuppressListStyle = sListName == sOutlineName;
                         }
                     }
 

@@ -1381,106 +1381,104 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
     }
 
     // read graphic
+    if (aFilterName.equalsIgnoreAsciiCase(IMP_GIF))
     {
-        if (aFilterName.equalsIgnoreAsciiCase(IMP_GIF))
-        {
-            nStatus = readGIF(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
-        {
-            nStatus = readPNG(rIStream, rGraphic, eLinkType, aGraphicContent);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
-        {
-            nStatus = readJPEG(rIStream, rGraphic, eLinkType, nImportFlags);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG) || aFilterName.equalsIgnoreAsciiCase(IMP_SVGZ))
-        {
-            nStatus = readSVG(rIStream, rGraphic, eLinkType, aGraphicContent);
-        }
-        else if( aFilterName.equalsIgnoreAsciiCase( IMP_XBM ) )
-        {
-            nStatus = readXBM(rIStream, rGraphic);
-        }
-        else if( aFilterName.equalsIgnoreAsciiCase( IMP_XPM ) )
-        {
-            nStatus = readXPM(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
-        {
-            nStatus = readBMP(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVMETAFILE))
-        {
-            nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
-        }
-        else if( aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
-        {
-            nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF) || aFilterName.equalsIgnoreAsciiCase(IMP_WMZ))
-        {
-            nStatus = readWMF(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_EMF) || aFilterName.equalsIgnoreAsciiCase(IMP_EMZ))
-        {
-            nStatus = readEMF(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
-        {
-            nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex, xInteractionHandler, aGraphicContent);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
-        {
-            nStatus = readTIFF(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_TGA) )
-        {
-            nStatus = readTGA(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PICT))
-        {
-            nStatus = readPICT(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_MET))
-        {
-            nStatus = readMET(rIStream, rGraphic, eLinkType);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_RAS))
-        {
-            nStatus = readRAS(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCX))
-        {
-            nStatus = readPCX(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_EPS))
-        {
-            nStatus = readEPS(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PSD))
-        {
-            nStatus = readPSD(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCD))
-        {
-            nStatus = readPCD(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_PBM))
-        {
-            nStatus = readPBM(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_DXF))
-        {
-            nStatus = readDXF(rIStream, rGraphic);
-        }
-        else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
-        {
-            nStatus = readWEBP(rIStream, rGraphic, eLinkType);
-        }
-        else
-            nStatus = ERRCODE_GRFILTER_FILTERERROR;
+        nStatus = readGIF(rIStream, rGraphic, eLinkType);
     }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
+    {
+        nStatus = readPNG(rIStream, rGraphic, eLinkType, aGraphicContent);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
+    {
+        nStatus = readJPEG(rIStream, rGraphic, eLinkType, nImportFlags);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVG) || aFilterName.equalsIgnoreAsciiCase(IMP_SVGZ))
+    {
+        nStatus = readSVG(rIStream, rGraphic, eLinkType, aGraphicContent);
+    }
+    else if( aFilterName.equalsIgnoreAsciiCase( IMP_XBM ) )
+    {
+        nStatus = readXBM(rIStream, rGraphic);
+    }
+    else if( aFilterName.equalsIgnoreAsciiCase( IMP_XPM ) )
+    {
+        nStatus = readXPM(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
+    {
+        nStatus = readBMP(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_SVMETAFILE))
+    {
+        nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
+    }
+    else if( aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
+    {
+        nStatus = readWithTypeSerializer(rIStream, rGraphic, eLinkType, aFilterName);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_WMF) || aFilterName.equalsIgnoreAsciiCase(IMP_WMZ))
+    {
+        nStatus = readWMF(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_EMF) || aFilterName.equalsIgnoreAsciiCase(IMP_EMZ))
+    {
+        nStatus = readEMF(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PDF))
+    {
+        nStatus = readPDF(rIStream, rGraphic, eLinkType, nPageIndex, xInteractionHandler, aGraphicContent);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_TIFF) )
+    {
+        nStatus = readTIFF(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_TGA) )
+    {
+        nStatus = readTGA(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PICT))
+    {
+        nStatus = readPICT(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_MET))
+    {
+        nStatus = readMET(rIStream, rGraphic, eLinkType);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_RAS))
+    {
+        nStatus = readRAS(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCX))
+    {
+        nStatus = readPCX(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_EPS))
+    {
+        nStatus = readEPS(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PSD))
+    {
+        nStatus = readPSD(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PCD))
+    {
+        nStatus = readPCD(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_PBM))
+    {
+        nStatus = readPBM(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_DXF))
+    {
+        nStatus = readDXF(rIStream, rGraphic);
+    }
+    else if (aFilterName.equalsIgnoreAsciiCase(IMP_WEBP))
+    {
+        nStatus = readWEBP(rIStream, rGraphic, eLinkType);
+    }
+    else
+        nStatus = ERRCODE_GRFILTER_FILTERERROR;
 
     if (nStatus == ERRCODE_NONE && eLinkType != GfxLinkType::NONE && !bLinkSet)
     {

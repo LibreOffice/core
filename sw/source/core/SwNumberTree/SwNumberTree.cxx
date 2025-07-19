@@ -996,27 +996,25 @@ void SwNumberTreeNode::SetLastValid
         }
     }
 
+    if (IsContinuous())
     {
-        if (IsContinuous())
+        tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
+
+        if (aIt != mChildren.end())
+            ++aIt;
+        else
+            aIt = mChildren.begin();
+
+        while (aIt != mChildren.end())
         {
-            tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
+            (*aIt)->InvalidateTree();
 
-            if (aIt != mChildren.end())
-                ++aIt;
-            else
-                aIt = mChildren.begin();
+            ++aIt;
+        }
 
-            while (aIt != mChildren.end())
-            {
-                (*aIt)->InvalidateTree();
-
-                ++aIt;
-            }
-
-            if (mpParent)
-            {
-                mpParent->SetLastValid(mpParent->GetIterator(this), bValidating);
-            }
+        if (mpParent)
+        {
+            mpParent->SetLastValid(mpParent->GetIterator(this), bValidating);
         }
     }
 }

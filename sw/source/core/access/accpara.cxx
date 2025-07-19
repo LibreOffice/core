@@ -1485,13 +1485,11 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // as run attributes.
     //    SwXTextCursor::GetCursorAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
+    if ( pTextNode->HasSwAttrSet() )
     {
-        if ( pTextNode->HasSwAttrSet() )
-        {
-            SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END -1> aAutomaticParaStyleCharAttrs( pPaM->GetDoc().GetAttrPool());
-            aAutomaticParaStyleCharAttrs.Put( *(pTextNode->GetpSwAttrSet()), false );
-            aSet.Put( aAutomaticParaStyleCharAttrs );
-        }
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END -1> aAutomaticParaStyleCharAttrs( pPaM->GetDoc().GetAttrPool());
+        aAutomaticParaStyleCharAttrs.Put( *(pTextNode->GetpSwAttrSet()), false );
+        aSet.Put( aAutomaticParaStyleCharAttrs );
     }
     // get character attributes at <pPaM> and merge these into <aSet>
     {

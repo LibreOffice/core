@@ -1535,21 +1535,20 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
         return;
 
     bool bChooseLastOne( false );
+
+    if ( GetXMLImport().IsTextDocInOOoFileFormat() )
     {
-        if ( GetXMLImport().IsTextDocInOOoFileFormat() )
+        bChooseLastOne = true;
+    }
+    else
+    {
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
         {
-            bChooseLastOne = true;
-        }
-        else
-        {
-            sal_Int32 nUPD( 0 );
-            sal_Int32 nBuild( 0 );
-            if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
-            {
-                // check explicitly on certain versions
-                bChooseLastOne = ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
-                                 ( nUPD == 680 && nBuild <= 9073 ); // OOo 2.0 - OOo 2.0.4
-            }
+            // check explicitly on certain versions
+            bChooseLastOne = ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
+                             ( nUPD == 680 && nBuild <= 9073 ); // OOo 2.0 - OOo 2.0.4
         }
     }
 

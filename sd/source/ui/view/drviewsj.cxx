@@ -211,10 +211,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                     ::tools::Long nVal1 = aAttrSet.Get( SDRATTR_EDGELINE1DELTA ).GetValue();
                     ::tools::Long nVal2 = aAttrSet.Get( SDRATTR_EDGELINE2DELTA ).GetValue();
                     ::tools::Long nVal3 = aAttrSet.Get( SDRATTR_EDGELINE3DELTA ).GetValue();
-                    {
-                        if( nVal1 != 0 || nVal2 != 0 || nVal3 != 0 )
-                            bDisable = false;
-                    }
+                    if( nVal1 != 0 || nVal2 != 0 || nVal3 != 0 )
+                        bDisable = false;
                 }
                 if( bDisable )
                     rSet.DisableItem( SID_CONNECTION_NEW_ROUTING );

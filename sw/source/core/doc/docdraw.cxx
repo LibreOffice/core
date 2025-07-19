@@ -674,13 +674,11 @@ namespace docfunc
                             dynamic_cast<SwAnchoredDrawObject*>(pDrawContact->GetAnchoredObj( pObj ));
 
                         // error handling
+                        if ( !pAnchoredDrawObj )
                         {
-                            if ( !pAnchoredDrawObj )
-                            {
-                                OSL_FAIL( "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
-                                bAllDrawObjsOnPage = false;
-                                break;
-                            }
+                            OSL_FAIL( "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
+                            bAllDrawObjsOnPage = false;
+                            break;
                         }
 
                         if ( pAnchoredDrawObj->NotYetPositioned() )

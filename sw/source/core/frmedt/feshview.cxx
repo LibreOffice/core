@@ -1382,18 +1382,16 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt, bool *pSelectFrameInste
             // Do not select object in background which is overlapping this text
             // at the given position.
             bool bObjInBackground( false );
+            if ( pObj->GetLayer() == rIDDMA.GetHellId() )
             {
-                if ( pObj->GetLayer() == rIDDMA.GetHellId() )
+                if (const SwContact* pContact = ::GetUserCall( pObj ))
                 {
-                    if (const SwContact* pContact = ::GetUserCall( pObj ))
+                    const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
+                    const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
+                    const SwFormatSurround& rSurround = pFormat->GetSurround();
+                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
                     {
-                        const SwAnchoredObject* pAnchoredObj = pContact->GetAnchoredObj( pObj );
-                        const SwFrameFormat* pFormat = pAnchoredObj->GetFrameFormat();
-                        const SwFormatSurround& rSurround = pFormat->GetSurround();
-                        if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGH )
-                        {
-                            bObjInBackground = true;
-                        }
+                        bObjInBackground = true;
                     }
                 }
             }

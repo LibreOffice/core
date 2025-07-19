@@ -957,13 +957,11 @@ void BarChart::doXSlot(
 
                 double fLowerBarDepth = fLogicBarDepth;
                 double fUpperBarDepth = fLogicBarDepth;
+                if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
                 {
-                    if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
-                    {
-                        double fOuterBarDepth = fLogicBarDepth * fTopHeight/(fabs(fCompleteHeight));
-                        fLowerBarDepth = (fBaseValue < fUpperYValue) ? fabs(fLogicBarDepth) : fabs(fOuterBarDepth);
-                        fUpperBarDepth = (fBaseValue < fUpperYValue) ? fabs(fOuterBarDepth) : fabs(fLogicBarDepth);
-                    }
+                    double fOuterBarDepth = fLogicBarDepth * fTopHeight/(fabs(fCompleteHeight));
+                    fLowerBarDepth = (fBaseValue < fUpperYValue) ? fabs(fLogicBarDepth) : fabs(fOuterBarDepth);
+                    fUpperBarDepth = (fBaseValue < fUpperYValue) ? fabs(fOuterBarDepth) : fabs(fLogicBarDepth);
                 }
 
                 awt::Point aScreenPosition2D = getLabelScreenPositionAndAlignment(

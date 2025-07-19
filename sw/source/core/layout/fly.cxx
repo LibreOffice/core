@@ -2622,22 +2622,20 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
     // object, assure that the new size fits into the current clipping area
     // of the fly frame
     Size aAdjustedNewSize( aNewSize );
+    if (dynamic_cast<SwFlyAtContentFrame*>(this))
     {
-        if (dynamic_cast<SwFlyAtContentFrame*>(this))
+        auto pLower = dynamic_cast<SwNoTextFrame*>(Lower());
+        if ( pLower && pLower->GetNode()->GetOLENode() )
         {
-            auto pLower = dynamic_cast<SwNoTextFrame*>(Lower());
-            if ( pLower && pLower->GetNode()->GetOLENode() )
+            SwRect aClipRect;
+            ::CalcClipRect( GetVirtDrawObj(), aClipRect, false );
+            if ( aAdjustedNewSize.Width() > aClipRect.Width() )
             {
-                SwRect aClipRect;
-                ::CalcClipRect( GetVirtDrawObj(), aClipRect, false );
-                if ( aAdjustedNewSize.Width() > aClipRect.Width() )
-                {
-                    aAdjustedNewSize.setWidth( aClipRect.Width() );
-                }
-                if ( aAdjustedNewSize.Height() > aClipRect.Height() )
-                {
-                    aAdjustedNewSize.setWidth( aClipRect.Height() );
-                }
+                aAdjustedNewSize.setWidth( aClipRect.Width() );
+            }
+            if ( aAdjustedNewSize.Height() > aClipRect.Height() )
+            {
+                aAdjustedNewSize.setWidth( aClipRect.Height() );
             }
         }
     }

@@ -495,27 +495,25 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
         // This frame is used in the following instead of the 'real' anchor
         // frame <rAnchorTextFrame> for the 'vertical' position in all cases.
         const SwLayoutFrame* pUpperOfOrientFrame = nullptr;
+        // #i28701# - As long as the anchor frame is on the
+        // same page as <pOrientFrame> and the vertical position isn't aligned
+        // automatic at the anchor character or the top of the line of the
+        // anchor character, the anchor frame determines the vertical position.
+        // Split fly follows: always let the anchor char frame determine the vertical position.
+        // This gives us a vertical cut position between the master and the follow.
+        if ( &rAnchorTextFrame == pOrientFrame ||
+             ( rAnchorTextFrame.FindPageFrame() == pOrientFrame->FindPageFrame() &&
+               aVert.GetVertOrient() == text::VertOrientation::NONE &&
+               aVert.GetRelationOrient() != text::RelOrientation::CHAR &&
+               aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE && !bFollowSplitFly ) )
         {
-            // #i28701# - As long as the anchor frame is on the
-            // same page as <pOrientFrame> and the vertical position isn't aligned
-            // automatic at the anchor character or the top of the line of the
-            // anchor character, the anchor frame determines the vertical position.
-            // Split fly follows: always let the anchor char frame determine the vertical position.
-            // This gives us a vertical cut position between the master and the follow.
-            if ( &rAnchorTextFrame == pOrientFrame ||
-                 ( rAnchorTextFrame.FindPageFrame() == pOrientFrame->FindPageFrame() &&
-                   aVert.GetVertOrient() == text::VertOrientation::NONE &&
-                   aVert.GetRelationOrient() != text::RelOrientation::CHAR &&
-                   aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE && !bFollowSplitFly ) )
-            {
-                pUpperOfOrientFrame = rAnchorTextFrame.GetUpper();
-                pAnchorFrameForVertPos = &rAnchorTextFrame;
-            }
-            else
-            {
-                pUpperOfOrientFrame = pOrientFrame->GetUpper();
-                pAnchorFrameForVertPos = pOrientFrame;
-            }
+            pUpperOfOrientFrame = rAnchorTextFrame.GetUpper();
+            pAnchorFrameForVertPos = &rAnchorTextFrame;
+        }
+        else
+        {
+            pUpperOfOrientFrame = pOrientFrame->GetUpper();
+            pAnchorFrameForVertPos = pOrientFrame;
         }
 
         // ignore one-column sections.

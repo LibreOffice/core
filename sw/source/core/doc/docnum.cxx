@@ -1517,14 +1517,12 @@ static bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUppe
             "<lcl_IsNumOk(..)> - misusage of method" );
 
     bool bRet = false;
-    {
-        if( bOverUpper ? nSrchNum == nNumber : nSrchNum >= nNumber )
-            bRet = true;
-        else if( nNumber > rLower )
-            rLower = nNumber;
-        else if( nNumber < rUpper )
-            rUpper = nNumber;
-    }
+    if( bOverUpper ? nSrchNum == nNumber : nSrchNum >= nNumber )
+        bRet = true;
+    else if( nNumber > rLower )
+        rLower = nNumber;
+    else if( nNumber < rUpper )
+        rUpper = nNumber;
     return bRet;
 }
 

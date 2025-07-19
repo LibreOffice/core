@@ -246,11 +246,9 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     // In which array are we? Nodes? UndoNodes?
     SwNodes& rNds = const_cast<SwNodes&>(GetNodes());
 
-    {
-        if( rIdx < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
-            rIdx >= rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() )
-            return nullptr;
-    }
+    if( rIdx < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+        rIdx >= rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() )
+        return nullptr;
 
     // Copy the TableFrameFormat
     UIName sTableName( GetTable().GetFrameFormat()->GetName() );
