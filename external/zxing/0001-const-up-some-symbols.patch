@@ -1,0 +1,54 @@
+From 62417799d3c46ea52a2e2feba4f97566c50de96c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 20 Jul 2025 20:56:39 +0100
+Subject: [PATCH] const up some symbols
+
+and move them out of the .data section
+---
+ core/src/BarcodeFormat.cpp           | 2 +-
+ core/src/datamatrix/DMSymbolInfo.cpp | 2 +-
+ core/src/pdf417/PDFEncoder.cpp       | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/core/src/BarcodeFormat.cpp b/core/src/BarcodeFormat.cpp
+index ba9a2937..9be60850 100644
+--- a/core/src/BarcodeFormat.cpp
++++ b/core/src/BarcodeFormat.cpp
+@@ -22,7 +22,7 @@ struct BarcodeFormatName
+ 	std::string_view name;
+ };
+ 
+-static BarcodeFormatName NAMES[] = {
++static const BarcodeFormatName NAMES[] = {
+ 	{BarcodeFormat::None, "None"},
+ 	{BarcodeFormat::Aztec, "Aztec"},
+ 	{BarcodeFormat::Codabar, "Codabar"},
+diff --git a/core/src/datamatrix/DMSymbolInfo.cpp b/core/src/datamatrix/DMSymbolInfo.cpp
+index 9247dd26..fee1b235 100644
+--- a/core/src/datamatrix/DMSymbolInfo.cpp
++++ b/core/src/datamatrix/DMSymbolInfo.cpp
+@@ -50,7 +50,7 @@ static constexpr const SymbolInfo PROD_SYMBOLS[] = {
+ 	{ false, 1558, 620, 22, 22, 36, -1, 62 },
+ };
+ 
+-static const SymbolInfo* s_symbols = PROD_SYMBOLS;
++static const SymbolInfo* const s_symbols = PROD_SYMBOLS;
+ static ZXING_IF_NOT_TEST(const) size_t s_symbolCount = Size(PROD_SYMBOLS);
+ 
+ #ifdef ZXING_BUILD_FOR_TEST
+diff --git a/core/src/pdf417/PDFEncoder.cpp b/core/src/pdf417/PDFEncoder.cpp
+index a5b884e4..a5dd3ab4 100644
+--- a/core/src/pdf417/PDFEncoder.cpp
++++ b/core/src/pdf417/PDFEncoder.cpp
+@@ -286,7 +286,7 @@ static const short EC_COEFFICIENTS_L8[] = { 352,  77, 373, 504,  35, 599, 428, 2
+ 											407, 164, 332, 899, 165, 726, 600, 325, 498, 655, 357, 752, 768, 223, 849, 647,
+ 											 63, 310, 863, 251, 366, 304, 282, 738, 675, 410, 389, 244,  31, 121, 303, 263, };
+ 
+-static const short* EC_COEFFICIENTS[] = {EC_COEFFICIENTS_L0, EC_COEFFICIENTS_L1, EC_COEFFICIENTS_L2,
++static const short* const EC_COEFFICIENTS[] = {EC_COEFFICIENTS_L0, EC_COEFFICIENTS_L1, EC_COEFFICIENTS_L2,
+ 										 EC_COEFFICIENTS_L3, EC_COEFFICIENTS_L4, EC_COEFFICIENTS_L5,
+ 										 EC_COEFFICIENTS_L6, EC_COEFFICIENTS_L7, EC_COEFFICIENTS_L8};
+ 
+-- 
+2.49.0
+
