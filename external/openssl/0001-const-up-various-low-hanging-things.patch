@@ -1,0 +1,249 @@
+From 481021a41816a599dc029bfb4011c5252a8feb80 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@gmail.com>
+Date: Wed, 17 Sep 2025 19:17:53 +0100
+Subject: [PATCH] const up various low hanging things
+
+to move these symbols out of the .data section
+
+remaining list approx-sorted by size with:
+objdump -t libcrypto.so libssl.so | grep -v \\.data.rel.ro | grep \\.data | sort -r -k 4
+---
+ apps/ca.c                                                   | 2 +-
+ crypto/asn1/standard_methods.h                              | 2 +-
+ crypto/cmp/cmp_msg.c                                        | 2 +-
+ crypto/dsa/dsa_ossl.c                                       | 2 +-
+ crypto/err/err.c                                            | 2 +-
+ crypto/evp/e_chacha20_poly1305.c                            | 2 +-
+ crypto/evp/e_rc4_hmac_md5.c                                 | 2 +-
+ crypto/rsa/rsa_ossl.c                                       | 4 ++--
+ crypto/sm4/sm4.c                                            | 6 +++---
+ crypto/ts/ts_rsp_print.c                                    | 2 +-
+ crypto/x509/standard_exts.h                                 | 2 +-
+ providers/implementations/encode_decode/decode_pem2der.c    | 2 +-
+ providers/implementations/keymgmt/ec_kmgmt.c                | 2 +-
+ providers/implementations/keymgmt/ec_kmgmt_imexport.inc     | 2 +-
+ providers/implementations/keymgmt/rsa_kmgmt.c               | 4 ++--
+ test/asn1_internal_test.c                                   | 2 +-
+ test/x509_internal_test.c                                   | 2 +-
+ 18 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/apps/ca.c b/apps/ca.c
+index a356b53b72..3a5689ce5b 100644
+--- a/apps/ca.c
++++ b/apps/ca.c
+@@ -2315,7 +2315,7 @@ int do_updatedb(CA_DB *db, time_t *now)
+     return cnt;
+ }
+ 
+-static const char *crl_reasons[] = {
++static const char *const crl_reasons[] = {
+     /* CRL reason strings */
+     "unspecified",
+     "keyCompromise",
+diff --git a/crypto/asn1/standard_methods.h b/crypto/asn1/standard_methods.h
+index 639cb75b7d..8b3d068de7 100644
+--- a/crypto/asn1/standard_methods.h
++++ b/crypto/asn1/standard_methods.h
+@@ -13,7 +13,7 @@
+  * represents (corresponding to the pkey_id field) as OBJ_bsearch
+  * is used to search it.
+  */
+-static const EVP_PKEY_ASN1_METHOD *standard_methods[] = {
++static const EVP_PKEY_ASN1_METHOD *const standard_methods[] = {
+     &ossl_rsa_asn1_meths[0],
+     &ossl_rsa_asn1_meths[1],
+ #ifndef OPENSSL_NO_DH
+diff --git a/crypto/cmp/cmp_msg.c b/crypto/cmp/cmp_msg.c
+index a3b6258f52..223ac28663 100644
+--- a/crypto/cmp/cmp_msg.c
++++ b/crypto/cmp/cmp_msg.c
+@@ -65,7 +65,7 @@ OSSL_CMP_PKIHEADER *OSSL_CMP_MSG_get0_header(const OSSL_CMP_MSG *msg)
+ 
+ const char *ossl_cmp_bodytype_to_string(int type)
+ {
+-    static const char *type_names[] = {
++    static const char *const type_names[] = {
+         "IR", "IP", "CR", "CP", "P10CR",
+         "POPDECC", "POPDECR", "KUR", "KUP",
+         "KRR", "KRP", "RR", "RP", "CCR", "CCP",
+diff --git a/crypto/dsa/dsa_ossl.c b/crypto/dsa/dsa_ossl.c
+index 59b26d7369..a7c6930162 100644
+--- a/crypto/dsa/dsa_ossl.c
++++ b/crypto/dsa/dsa_ossl.c
+@@ -39,7 +39,7 @@ static int dsa_finish(DSA *dsa);
+ static BIGNUM *dsa_mod_inverse_fermat(const BIGNUM *k, const BIGNUM *q,
+                                       BN_CTX *ctx);
+ 
+-static DSA_METHOD openssl_dsa_meth = {
++static const DSA_METHOD openssl_dsa_meth = {
+     "OpenSSL DSA method",
+     dsa_do_sign,
+     dsa_sign_setup_no_digest,
+diff --git a/crypto/err/err.c b/crypto/err/err.c
+index 63a1bf192a..a127988a0d 100644
+--- a/crypto/err/err.c
++++ b/crypto/err/err.c
+@@ -86,7 +86,7 @@ static const ERR_STRING_DATA ERR_str_libraries[] = {
+  * Should make sure that all ERR_R_ reasons defined in include/openssl/err.h.in
+  * are listed.  For maintainability, please keep all reasons in the same order.
+  */
+-static ERR_STRING_DATA ERR_str_reasons[] = {
++static const ERR_STRING_DATA ERR_str_reasons[] = {
+     {ERR_R_SYS_LIB, "system lib"},
+     {ERR_R_BN_LIB, "BN lib"},
+     {ERR_R_RSA_LIB, "RSA lib"},
+diff --git a/crypto/evp/e_chacha20_poly1305.c b/crypto/evp/e_chacha20_poly1305.c
+index a06e9a6682..03bf63b502 100644
+--- a/crypto/evp/e_chacha20_poly1305.c
++++ b/crypto/evp/e_chacha20_poly1305.c
+@@ -609,7 +609,7 @@ static int chacha20_poly1305_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg,
+     }
+ }
+ 
+-static EVP_CIPHER chacha20_poly1305 = {
++static const EVP_CIPHER chacha20_poly1305 = {
+     NID_chacha20_poly1305,
+     1,                  /* block_size */
+     CHACHA_KEY_SIZE,    /* key_len */
+diff --git a/crypto/evp/e_rc4_hmac_md5.c b/crypto/evp/e_rc4_hmac_md5.c
+index 4ea382815c..ec7dd02ce5 100644
+--- a/crypto/evp/e_rc4_hmac_md5.c
++++ b/crypto/evp/e_rc4_hmac_md5.c
+@@ -246,7 +246,7 @@ static int rc4_hmac_md5_ctrl(EVP_CIPHER_CTX *ctx, int type, int arg,
+     }
+ }
+ 
+-static EVP_CIPHER r4_hmac_md5_cipher = {
++static const EVP_CIPHER r4_hmac_md5_cipher = {
+ # ifdef NID_rc4_hmac_md5
+     NID_rc4_hmac_md5,
+ # else
+diff --git a/crypto/rsa/rsa_ossl.c b/crypto/rsa/rsa_ossl.c
+index 1e56c6d38c..4f2af3167c 100644
+--- a/crypto/rsa/rsa_ossl.c
++++ b/crypto/rsa/rsa_ossl.c
+@@ -30,7 +30,7 @@
+                            BN_CTX *ctx);
+ static int rsa_ossl_init(RSA *rsa);
+ static int rsa_ossl_finish(RSA *rsa);
+-static RSA_METHOD rsa_pkcs1_ossl_meth = {
++static const RSA_METHOD rsa_pkcs1_ossl_meth = {
+     "OpenSSL PKCS#1 RSA",
+     rsa_ossl_public_encrypt,
+     rsa_ossl_public_decrypt,     /* signature verification */
+diff --git a/crypto/ts/ts_rsp_print.c b/crypto/ts/ts_rsp_print.c
+index ca2d8a6dc1..c002239905 100644
+--- a/crypto/ts/ts_rsp_print.c
++++ b/crypto/ts/ts_rsp_print.c
+@@ -41,7 +41,7 @@ int TS_RESP_print_bio(BIO *bio, TS_RESP *a)
+ 
+ int TS_STATUS_INFO_print_bio(BIO *bio, TS_STATUS_INFO *a)
+ {
+-    static const char *status_map[] = {
++    static const char *const status_map[] = {
+         "Granted.",
+         "Granted with modifications.",
+         "Rejected.",
+diff --git a/crypto/x509/standard_exts.h b/crypto/x509/standard_exts.h
+index 7449fb0ff6..aef70c2598 100644
+--- a/crypto/x509/standard_exts.h
++++ b/crypto/x509/standard_exts.h
+@@ -12,7 +12,7 @@
+  * of the ext_nid values.
+  */
+ 
+-static const X509V3_EXT_METHOD *standard_exts[] = {
++static const X509V3_EXT_METHOD *const standard_exts[] = {
+     &ossl_v3_nscert,
+     &ossl_v3_ns_ia5_list[0],
+     &ossl_v3_ns_ia5_list[1],
+diff --git a/providers/implementations/encode_decode/decode_pem2der.c b/providers/implementations/encode_decode/decode_pem2der.c
+index 7512da1309..067882c097 100644
+--- a/providers/implementations/encode_decode/decode_pem2der.c
++++ b/providers/implementations/encode_decode/decode_pem2der.c
+@@ -136,7 +136,7 @@ static int pem2der_decode(void *vctx, OSSL_CORE_BIO *cin, int selection,
+      * PEM names we recognise.  Other PEM names should be recognised by
+      * other decoder implementations.
+      */
+-    static struct pem_name_map_st {
++    static const struct pem_name_map_st {
+         const char *pem_name;
+         int object_type;
+         const char *data_type;
+diff --git a/providers/implementations/keymgmt/ec_kmgmt.c b/providers/implementations/keymgmt/ec_kmgmt.c
+index 5b7cca59c5..2633c0f794 100644
+--- a/providers/implementations/keymgmt/ec_kmgmt.c
++++ b/providers/implementations/keymgmt/ec_kmgmt.c
+@@ -1224,7 +1224,7 @@ err:
+ static const OSSL_PARAM *ec_gen_settable_params(ossl_unused void *genctx,
+                                                 ossl_unused void *provctx)
+ {
+-    static OSSL_PARAM settable[] = {
++    static const OSSL_PARAM settable[] = {
+         OSSL_PARAM_utf8_string(OSSL_PKEY_PARAM_GROUP_NAME, NULL, 0),
+         OSSL_PARAM_int(OSSL_PKEY_PARAM_USE_COFACTOR_ECDH, NULL),
+         OSSL_PARAM_utf8_string(OSSL_PKEY_PARAM_EC_ENCODING, NULL, 0),
+diff --git a/providers/implementations/keymgmt/ec_kmgmt_imexport.inc b/providers/implementations/keymgmt/ec_kmgmt_imexport.inc
+index b142e0df0c..b242fd17ee 100644
+--- a/providers/implementations/keymgmt/ec_kmgmt_imexport.inc
++++ b/providers/implementations/keymgmt/ec_kmgmt_imexport.inc
+@@ -89,7 +89,7 @@ static const OSSL_PARAM ec_all_types[] = {
+     OSSL_PARAM_END
+ };
+ 
+-static const OSSL_PARAM *ec_types[] = {
++static const OSSL_PARAM *const ec_types[] = {
+     NULL,
+     ec_private_key_types,
+     ec_public_key_types,
+diff --git a/providers/implementations/keymgmt/rsa_kmgmt.c b/providers/implementations/keymgmt/rsa_kmgmt.c
+index 68691280cd..811688398c 100644
+--- a/providers/implementations/keymgmt/rsa_kmgmt.c
++++ b/providers/implementations/keymgmt/rsa_kmgmt.c
+@@ -558,7 +558,7 @@ static int rsa_gen_set_params(void *genctx, const OSSL_PARAM params[])
+ static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
+                                                  ossl_unused void *provctx)
+ {
+-    static OSSL_PARAM settable[] = {
++    static const OSSL_PARAM settable[] = {
+         rsa_gen_basic,
+         OSSL_PARAM_END
+     };
+@@ -569,7 +569,7 @@ static const OSSL_PARAM *rsa_gen_settable_params(ossl_unused void *genctx,
+ static const OSSL_PARAM *rsapss_gen_settable_params(ossl_unused void *genctx,
+                                                     ossl_unused void *provctx)
+ {
+-    static OSSL_PARAM settable[] = {
++    static const OSSL_PARAM settable[] = {
+         rsa_gen_basic,
+         rsa_gen_pss,
+         OSSL_PARAM_END
+diff --git a/test/asn1_internal_test.c b/test/asn1_internal_test.c
+index 3c2222d988..533d780f2d 100644
+--- a/test/asn1_internal_test.c
++++ b/test/asn1_internal_test.c
+@@ -70,7 +70,7 @@ static int test_tbl_standard(void)
+ 
+ static int test_standard_methods(void)
+ {
+-    const EVP_PKEY_ASN1_METHOD **tmp;
++    const EVP_PKEY_ASN1_METHOD * const *tmp;
+     int last_pkey_id = -1;
+     size_t i;
+     int ok = 1;
+diff --git a/test/x509_internal_test.c b/test/x509_internal_test.c
+index 7cd04d84f6..242ebceda6 100644
+--- a/test/x509_internal_test.c
++++ b/test/x509_internal_test.c
+@@ -30,7 +30,7 @@ static int test_standard_exts(void)
+ {
+     size_t i;
+     int prev = -1, good = 1;
+-    const X509V3_EXT_METHOD **tmp;
++    const X509V3_EXT_METHOD * const *tmp;
+ 
+     tmp = standard_exts;
+     for (i = 0; i < OSSL_NELEM(standard_exts); i++, tmp++) {
+-- 
+2.51.0
+

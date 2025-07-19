@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,openssl,$(OPENSSL_TARBALL),,openssl
 
 # 0001-const-up-ERR_str_libraries.patch upstream as:
 #   https://github.com/openssl/openssl/pull/28029
+# 0001-const-up-various-low-hanging-things.patch as:
+#   https://github.com/openssl/openssl/pull/28588
 
 $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssl-no-multilib.patch.0 \
@@ -20,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/openssl-no-ipc-cmd.patch.0 \
 	external/openssl/system-cannot-find-path-for-move.patch.0 \
 	external/openssl/0001-const-up-ERR_str_libraries.patch \
+	external/openssl/0001-const-up-various-low-hanging-things.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
