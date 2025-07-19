@@ -1,0 +1,44 @@
+diff -ru coinmp.orig/Clp/src/CbcOrClpParam.cpp coinmp/Clp/src/CbcOrClpParam.cpp
+--- coinmp.orig/Clp/src/CbcOrClpParam.cpp	2025-07-19 12:25:58.571664720 +0100
++++ coinmp/Clp/src/CbcOrClpParam.cpp	2025-07-19 12:31:48.302362167 +0100
+@@ -29,9 +29,9 @@
+ #endif
+ #ifdef COIN_HAS_CBC
+ // from CoinSolve
+-static char coin_prompt[] = "Coin:";
++static const char coin_prompt[] = "Coin:";
+ #else
+-static char coin_prompt[] = "Clp:";
++static const char coin_prompt[] = "Clp:";
+ #endif
+ #ifdef CLP_CILK
+ #ifndef CBC_THREAD
+diff -ru coinmp.orig/Clp/src/ClpLsqr.cpp coinmp/Clp/src/ClpLsqr.cpp
+--- coinmp.orig/Clp/src/ClpLsqr.cpp	2025-07-19 12:25:58.565664691 +0100
++++ coinmp/Clp/src/ClpLsqr.cpp	2025-07-19 12:26:11.300280454 +0100
+@@ -20,7 +20,7 @@
+      */
+ 
+ //     Initialize.
+-     static char term_msg[8][80] = {
++     static const char term_msg[8][80] = {
+           "The exact solution is x = 0",
+           "The residual Ax - b is small enough, given ATOL and BTOL",
+           "The least squares error is small enough, given ATOL",
+diff -ru coinmp.orig/CoinMP/src/CoinMP.cpp coinmp/CoinMP/src/CoinMP.cpp
+--- coinmp.orig/CoinMP/src/CoinMP.cpp	2025-07-19 12:25:58.538664560 +0100
++++ coinmp/CoinMP/src/CoinMP.cpp	2025-07-19 12:29:50.486149026 +0100
+@@ -35,11 +35,11 @@
+ #include "CoinMP.h"
+ 
+ 
+-const char*  COINMP_VERSIONSTR = "1.8.4";
++const char* const COINMP_VERSIONSTR = "1.8.4";
+ const int    COINMP_VERSIONINT = 184;
+ const double COINMP_VERSIONDBL = 1.84;
+ 
+-const char* COINMP_NAME = "CoinMP";
++const char* const COINMP_NAME = "CoinMP";
+ 
+ 
+ /************************************************************************/
