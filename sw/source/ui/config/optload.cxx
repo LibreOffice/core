@@ -486,25 +486,6 @@ static bool lcl_isPropertyReadOnly(const SwCapObjType eType, const CapConfigProp
     return bReadOnly;
 }
 
-sal_uInt32 SwFieldUnitTable::Count()
-{
-    return std::size(STR_ARR_METRIC);
-}
-
-OUString SwFieldUnitTable::GetString(sal_uInt32 nPos)
-{
-    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
-        return SwResId(STR_ARR_METRIC[nPos].first);
-    return OUString();
-}
-
-FieldUnit SwFieldUnitTable::GetValue(sal_uInt32 nPos)
-{
-    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
-        return STR_ARR_METRIC[nPos].second;
-    return FieldUnit::NONE;
-}
-
 SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/optgeneralpage.ui"_ustr, u"OptGeneralPage"_ustr, &rSet)
     , m_pWrtShell(nullptr)

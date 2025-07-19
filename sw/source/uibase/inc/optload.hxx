@@ -35,14 +35,6 @@
 class SwFieldMgr;
 class SwWrtShell;
 
-class SwFieldUnitTable
-{
-public:
-    static OUString GetString(sal_uInt32 i);
-    static sal_uInt32 Count();
-    static FieldUnit GetValue(sal_uInt32 i);
-};
-
 class TextFilterAutoConvert final : public TextFilter
 {
 private:

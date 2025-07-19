@@ -44,6 +44,7 @@
 #include <viewopt.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
+#include <optload.hrc>
 #include <swwrtshitem.hxx>
 
 #include <editeng/fhgtitem.hxx>
@@ -171,11 +172,8 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
         m_xVRulerRightCBox->hide();
     m_xVRulerCBox->connect_toggled(LINK(this, SwContentOptPage, VertRulerHdl ));
 
-    for (size_t i = 0; i < SwFieldUnitTable::Count(); ++i)
+    for (const auto& [pId, eFUnit] : STR_ARR_METRIC)
     {
-        const OUString sMetric = SwFieldUnitTable::GetString(i);
-        FieldUnit eFUnit = SwFieldUnitTable::GetValue(i);
-
         switch ( eFUnit )
         {
             case FieldUnit::MM:
@@ -191,13 +189,13 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
                 // there isn't 'line' unit in HTML format
                 if (eFUnit != FieldUnit::LINE)
                 {
-                   m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
-                   m_xHMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
+                   m_xMetricLB->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), SwResId(pId));
+                   m_xHMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), SwResId(pId));
                 }
                 // a vertical ruler has not the 'character' unit
                 if (eFUnit != FieldUnit::CHAR)
                 {
-                   m_xVMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), sMetric);
+                   m_xVMetric->append(OUString::number(static_cast<sal_uInt32>(eFUnit)), SwResId(pId));
                 }
                 break;
             }
