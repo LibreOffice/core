@@ -54,6 +54,7 @@ class ScPageBreakData;
 class FmFormView;
 class ScFieldEditEngine;
 class SdrPaintWindow;
+class ScDrawStringsVars;
 
 #define SC_SCENARIO_HSPACE      60
 #define SC_SCENARIO_VSPACE      50
@@ -312,6 +313,20 @@ private:
     // in the svx tooling to render the borders. Moved to private section
     // and the single call to end of constructor to be sure this always happens
     void    SetCellRotations();
+
+    /// inner loop of LayoutStrings
+    void LayoutStringsImpl(bool bPixelToLogic, RowInfo* pThisRowInfo, SCCOL nX, SCROW nY, SCSIZE nArrY,
+                           std::optional<SCCOL>& oLastEmptyCellX,
+                           SCCOL nLastContentCol,
+                           std::vector<std::unique_ptr<ScPatternAttr> >& aAltPatterns,
+                           const ScPatternAttr*& pOldPattern,
+                           const SfxItemSet*& pOldCondSet,
+                           SvtScriptType& nOldScript,
+                           ScDrawStringsVars& aVars,
+                           bool& bProgress, tools::Long nPosX, tools::Long nPosY, bool bTaggedPDF,
+                           vcl::PDFExtOutDevData* pPDF,
+                           tools::Long nLayoutSign,
+                           KernArray& aDX);
 
 public:
 
