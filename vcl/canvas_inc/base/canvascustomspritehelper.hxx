@@ -59,7 +59,7 @@ namespace vcl_canvas
             The XSpriteCanvas this sprite is displayed on
          */
         void init( const css::geometry::RealSize2D&                 rSpriteSize,
-                   const SpriteSurface::Reference&                  rOwningSpriteCanvas );
+                   const SpriteSurface::SharedPtr&                  rOwningSpriteCanvas );
 
         /** Object is being disposed, release all internal references
 
@@ -170,7 +170,7 @@ namespace vcl_canvas
 
 
         /// Owning sprite canvas
-        SpriteSurface::Reference                            mpSpriteCanvas;
+        SpriteSurface::SharedPtr                            mpSpriteCanvas;
 
         /** Currently active clip area.
 

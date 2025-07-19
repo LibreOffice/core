@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/uno/XInterface.hdl"
 #include "toolkit/awt/vclxwindow.hxx"
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -110,7 +112,7 @@ namespace vcl_cairocanvas
         SpriteCanvasBaseT::disposeThis();
     } */
 
-    sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
+    /* sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
     {
         return updateScreen( bUpdateAll );
     }
@@ -118,7 +120,7 @@ namespace vcl_cairocanvas
     sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll )
     {
         return updateScreen( bUpdateAll );
-    }
+    } */
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll )
     {
@@ -133,7 +135,7 @@ namespace vcl_cairocanvas
             mbSurfaceDirty);
     }
 
-    OUString SAL_CALL SpriteCanvas::getServiceName(  )
+    /* OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
         return u"com.sun.star.rendering.SpriteCanvas.Cairo"_ustr;
     }
@@ -151,7 +153,7 @@ namespace vcl_cairocanvas
     css::uno::Sequence< OUString > SpriteCanvas::getSupportedServiceNames()
     {
         return { getServiceName() };
-    }
+    } */
 
     SurfaceSharedPtr SpriteCanvas::getSurface()
     {
@@ -226,9 +228,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
-    rtl::Reference<vcl_cairocanvas::SpriteCanvas> p = new vcl_cairocanvas::SpriteCanvas(args, context);
+    /* rtl::Reference<vcl_cairocanvas::SpriteCanvas> p = new vcl_cairocanvas::SpriteCanvas(args, context);
     p->initialize();
-    return cppu::acquire(p.get());
+    return cppu::acquire(p.get()); */
+    return css::uno::Reference<css::uno::XInterface>().get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

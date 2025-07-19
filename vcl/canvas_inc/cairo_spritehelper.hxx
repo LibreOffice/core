@@ -63,7 +63,7 @@ namespace vcl_cairocanvas
             When true, little debug bound rects for sprites are shown
          */
         void init( const css::geometry::RealSize2D& rSpriteSize,
-                   const SpriteCanvasRef&           rSpriteCanvas );
+                   const SpriteCanvasSharedPtr      rSpriteCanvas );
 
         void disposing();
 
@@ -93,7 +93,7 @@ namespace vcl_cairocanvas
             css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const override;
 
 
-        SpriteCanvasRef           mpSpriteCanvas;
+        SpriteCanvasSharedPtr     mpSpriteCanvas;
         ::cairo::SurfaceSharedPtr mpBufferSurface;
         mutable bool              mbTextureDirty;  // when true, texture needs update
     };

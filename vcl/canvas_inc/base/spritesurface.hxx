@@ -20,6 +20,7 @@
 #pragma once
 
 #include <base/sprite.hxx>
+#include <memory>
 
 namespace vcl_canvas
 {
@@ -32,10 +33,10 @@ namespace vcl_canvas
         methods provided here are used from the individual sprites to
         notify the canvas about necessary screen updates.
      */
-    class SpriteSurface : public css::uno::XInterface
+    class SpriteSurface
     {
     public:
-        typedef ::rtl::Reference< SpriteSurface > Reference;
+        typedef std::shared_ptr< SpriteSurface > SharedPtr;
 
         /// Sprites should call this from XSprite::show()
         virtual void showSprite( const Sprite::Reference& rSprite ) = 0;

@@ -31,6 +31,7 @@
 #include <pixman.h>
 
 #include "cairo_spritehelper.hxx"
+#include "cairo_surfaceprovider.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
@@ -42,7 +43,7 @@ namespace vcl_cairocanvas
     {}
 
     void SpriteHelper::init( const geometry::RealSize2D& rSpriteSize,
-                             const SpriteCanvasRef&      rSpriteCanvas )
+                             const SpriteCanvasSharedPtr rSpriteCanvas )
     {
         ENSURE_OR_THROW( rSpriteCanvas,
                           "SpriteHelper::init(): Invalid device, sprite canvas or surface" );
@@ -62,7 +63,7 @@ namespace vcl_cairocanvas
     void SpriteHelper::disposing()
     {
         mpBufferSurface.reset();
-        mpSpriteCanvas.clear();
+        // mpSpriteCanvas.clear();
 
         // forward to parent
         CanvasCustomSpriteHelper::disposing();
@@ -129,7 +130,7 @@ namespace vcl_cairocanvas
                     rClip ));
 
             doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
-                                         nullptr, SurfaceProviderRef(mpSpriteCanvas),
+                                         nullptr, SurfaceProviderSharedPtr(mpSpriteCanvas),
                                          rClip->getFillRule() );
         }
 

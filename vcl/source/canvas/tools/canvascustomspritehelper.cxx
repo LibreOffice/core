@@ -155,7 +155,7 @@ namespace vcl_canvas
     }
 
     void CanvasCustomSpriteHelper::init( const geometry::RealSize2D&        rSpriteSize,
-                                         const SpriteSurface::Reference&    rOwningSpriteCanvas )
+                                            const SpriteSurface::SharedPtr&    rOwningSpriteCanvas )
     {
         ENSURE_OR_THROW( rOwningSpriteCanvas,
                           "CanvasCustomSpriteHelper::init(): Invalid owning sprite canvas" );
@@ -171,7 +171,7 @@ namespace vcl_canvas
 
     void CanvasCustomSpriteHelper::disposing()
     {
-        mpSpriteCanvas.clear();
+        // mpSpriteCanvas.clear();
     }
 
     void CanvasCustomSpriteHelper::clearingContent( const Sprite::Reference& /*rSprite*/ )

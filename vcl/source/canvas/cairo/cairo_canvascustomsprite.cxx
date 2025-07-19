@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 namespace vcl_cairocanvas
 {
     CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                                            const SpriteCanvasRef&                          rRefDevice ) :
+                                            const SpriteCanvasSharedPtr&                    rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
         maSize( ::vcl_canvas::tools::roundUp( rSpriteSize.Width ),
                 ::vcl_canvas::tools::roundUp( rSpriteSize.Height ) )
@@ -51,7 +51,7 @@ namespace vcl_cairocanvas
 
         maCanvasHelper.init( maSize,
                              *rRefDevice,
-                             rRefDevice.get() );
+                             rRefDevice );
         maCanvasHelper.setSurface( mpBufferSurface, true );
 
         maSpriteHelper.init( rSpriteSize,
@@ -66,7 +66,7 @@ namespace vcl_cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        mpSpriteCanvas.clear();
+        // mpSpriteCanvas.clear();
         mpBufferSurface.reset();
 
         // forward to parent

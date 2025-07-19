@@ -33,6 +33,8 @@
 
 #include "cairo_canvashelper.hxx"
 #include "cairo_repainttarget.hxx"
+#include "cairo_surfaceprovider.hxx"
+#include "vcl_canvas/graphicdevice.hxx"
 
 
 /* Definition of CanvasBitmap class */
@@ -69,8 +71,8 @@ namespace vcl_cairocanvas
             Reference device, with which bitmap should be compatible
         */
         CanvasBitmap( const ::basegfx::B2ISize& rSize,
-                      SurfaceProviderRef  rDevice,
-                      css::rendering::XGraphicDevice* pDevice,
+                      SurfaceProviderSharedPtr  rDevice,
+                      vcl_canvas::GraphicDeviceSharedPtr pDevice,
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
@@ -113,7 +115,7 @@ namespace vcl_cairocanvas
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
 
     private:
-        SurfaceProviderRef        mpSurfaceProvider;
+        SurfaceProviderSharedPtr  mpSurfaceProvider;
         ::cairo::SurfaceSharedPtr mpBufferSurface;
         ::cairo::CairoSharedPtr   mpBufferCairo;
 

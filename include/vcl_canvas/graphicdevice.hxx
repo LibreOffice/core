@@ -6,6 +6,7 @@
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XVolatileBitmap.hpp>
+#include <memory>
 namespace vcl_canvas
 {
 class GraphicDevice
@@ -23,4 +24,6 @@ public:
     virtual ::sal_Bool hasFullScreenMode() = 0;
     virtual ::sal_Bool enterFullScreenMode( ::sal_Bool bEnter ) = 0;
 };
+
+typedef std::shared_ptr< GraphicDevice > GraphicDeviceSharedPtr;
 }

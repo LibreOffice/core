@@ -142,10 +142,10 @@ namespace vcl_canvas
         }
 
         // XGraphicDevice
-        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
+        /* virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
         {
             return css::uno::Reference< css::rendering::XBufferController >();
-        }
+        } */
 
         virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getDeviceColorSpace(  ) override
         {
@@ -226,10 +226,10 @@ namespace vcl_canvas
             return maDeviceHelper.createVolatileAlphaBitmap( this, size );
         }
 
-        virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) override
+        /* virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) override
         {
             return this;
-        }
+        } */
 
         virtual sal_Bool SAL_CALL hasFullScreenMode(  ) override
         {
@@ -242,26 +242,26 @@ namespace vcl_canvas
         }
 
         // XMultiServiceFactory
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override
+        /* virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
                                               css::uno::Sequence< css::uno::Any >()));
-        }
+        } */
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override
+        /* virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
                                               Arguments));
-        }
+        } */
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override
+        /* virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override
         {
             return ParametricPolyPolygon::getAvailableServiceNames();
-        }
+        } */
 
 
         // XUpdatable
@@ -275,7 +275,7 @@ namespace vcl_canvas
 
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override
+        /* virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override
         {
             MutexType aGuard( BaseType::m_aMutex );
             return maPropHelper.getPropertySetInfo();
@@ -318,7 +318,7 @@ namespace vcl_canvas
         virtual void SAL_CALL removeVetoableChangeListener( const OUString& ,
                                                             const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override
         {
-        }
+        } */
 
     protected:
         ~GraphicDeviceBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.

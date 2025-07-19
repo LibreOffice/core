@@ -29,6 +29,8 @@
 #include <cairo.h>
 
 #include "cairo_canvasbitmap.hxx"
+#include "cairo_surfaceprovider.hxx"
+#include "vcl_canvas/graphicdevice.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
@@ -36,14 +38,14 @@ using namespace ::com::sun::star;
 namespace vcl_cairocanvas
 {
     CanvasBitmap::CanvasBitmap( const ::basegfx::B2ISize&  rSize,
-                                SurfaceProviderRef         rSurfaceProvider,
-                                rendering::XGraphicDevice* pDevice,
+                                SurfaceProviderSharedPtr   rSurfaceProvider,
+                                ::vcl_canvas::GraphicDeviceSharedPtr pDevice,
                                 bool                       bHasAlpha ) :
         mpSurfaceProvider(std::move( rSurfaceProvider )),
         maSize(rSize),
         mbHasAlpha(bHasAlpha)
     {
-        ENSURE_OR_THROW( mpSurfaceProvider.is(),
+        ENSURE_OR_THROW( mpSurfaceProvider,
                           "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
         SAL_INFO(
@@ -62,7 +64,7 @@ namespace vcl_cairocanvas
 
     void CanvasBitmap::disposeThis()
     {
-        mpSurfaceProvider.clear();
+        // mpSurfaceProvider.clear();
 
         mpBufferCairo.reset();
         mpBufferSurface.reset();

@@ -97,7 +97,7 @@ namespace vcl_cairocanvas
             Target DX device
          */
         CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                            const SpriteCanvasRef&                          rRefDevice );
+                            const SpriteCanvasSharedPtr&                    rRefDevice );
 
         virtual void disposeThis() override;
 
@@ -136,7 +136,7 @@ namespace vcl_cairocanvas
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        SpriteCanvasRef           mpSpriteCanvas;
+        SpriteCanvasSharedPtr     mpSpriteCanvas;
         ::cairo::SurfaceSharedPtr mpBufferSurface;
         ::basegfx::B2ISize        maSize;
     };

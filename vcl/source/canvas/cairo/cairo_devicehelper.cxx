@@ -157,11 +157,12 @@ namespace vcl_cairocanvas
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap(
+            // DONT_FORGET_TO_REMOVE_THIS_COMMENT
+            /* new CanvasBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
                 SurfaceProviderRef(mpSurfaceProvider),
                 rDevice.get(),
-                false ));
+                false ) */);
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
@@ -180,11 +181,12 @@ namespace vcl_cairocanvas
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         return uno::Reference< rendering::XBitmap >(
-            new CanvasBitmap(
+            // DONT_FORGET_TO_REMOVE_THIS_COMMENT
+            /* new CanvasBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D( size ),
                 SurfaceProviderRef(mpSurfaceProvider),
                 rDevice.get(),
-                true ));
+                true ) */);
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(

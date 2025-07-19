@@ -29,6 +29,7 @@
 
 #include <vcl/cairo.hxx>
 #include "cairo_surfaceprovider.hxx"
+#include "vcl_canvas/graphicdevice.hxx"
 
 class VirtualDevice;
 
@@ -76,7 +77,7 @@ namespace vcl_cairocanvas
          */
         void init( const ::basegfx::B2ISize& rSizePixel,
                    SurfaceProvider&          rSurfaceProvider,
-                   css::rendering::XGraphicDevice* pDevice );
+                   ::vcl_canvas::GraphicDeviceSharedPtr pDevice );
 
         void setSize( const ::basegfx::B2ISize& rSize );
         void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );
@@ -184,8 +185,8 @@ namespace vcl_cairocanvas
                                  const css::uno::Reference< css::rendering::XBitmap >&    xBitmap,
                                  const css::rendering::ViewState&      viewState,
                                  const css::rendering::RenderState&    renderState );
-        css::uno::Reference< css::rendering::XGraphicDevice >
-            getDevice() { return css::uno::Reference< css::rendering::XGraphicDevice >(mpDevice); }
+        vcl_canvas::GraphicDevice*
+            getDevice() { return mpDevice; }
 
         // BitmapCanvasHelper functionality
         // ================================
@@ -238,7 +239,7 @@ namespace vcl_cairocanvas
             Deliberately not a refcounted reference, because of
             potential circular references for spritecanvas.
          */
-        css::rendering::XGraphicDevice* mpDevice;
+        vcl_canvas::GraphicDevice* mpDevice;
 
     private:
 
@@ -263,7 +264,7 @@ namespace vcl_cairocanvas
                                       Operation aOperation,
                                       cairo_t* pCairo,
                                       const css::uno::Sequence< css::rendering::Texture >* pTextures,
-                                      const SurfaceProviderRef& pDevice,
+                                      const SurfaceProviderSharedPtr& pDevice,
                                       css::rendering::FillRule eFillrule );
 }
 

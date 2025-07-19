@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <memory>
 #include <vcl_canvas/windowlistener.hxx>
 #include <vcl_canvas/updatable.hxx>
 #include <vcl_canvas/spritecanvas.hxx>
@@ -59,17 +60,25 @@ namespace vcl_cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base; */
-
     typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< SpriteCanvasBase_Base >,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > SpriteCanvasBase_Base2;
 
-    typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBase_Base,
+    typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBase_Base2,
                                         SpriteCanvasHelper,
                                         ::osl::MutexGuard,
                                         ::cppu::OWeakObject >           SpriteCanvasBaseT;
 
+    /** Product of this component's factory.
+
+        The SpriteCanvas object combines the actual Window canvas with
+        the XGraphicDevice interface. This is because there's a
+        one-to-one relation between them, anyway, since each window
+        can have exactly one canvas and one associated
+        XGraphicDevice. And to avoid messing around with circular
+        references, this is implemented as one single object.
+     */
     class SpriteCanvas : public SpriteCanvasBaseT,
                          public RepaintTarget
     {
@@ -127,6 +136,7 @@ namespace vcl_cairocanvas
         css::uno::Sequence< css::uno::Any >                maArguments;
     };
 
+    typedef std::shared_ptr< SpriteCanvas > SpriteCanvasSharedPtr;
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;
 }
 

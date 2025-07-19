@@ -89,13 +89,13 @@ namespace vcl_canvas
         }
 
         // XGraphicDevice
-        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
+        /* virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
         {
             return this;
-        }
+        } */
 
         // XBufferController
-        virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) override
+        /* virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) override
         {
             tools::verifyRange( nBuffers, sal_Int32(1) );
 
@@ -118,7 +118,7 @@ namespace vcl_canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maDeviceHelper.switchBuffer( mbIsVisible, bUpdateAll );
-        }
+        } */
 
 
         /** Set corresponding canvas window

@@ -16,4 +16,6 @@ public:
     virtual sal_Bool updateScreen( sal_Bool bUpdateAll ) = 0;
 };
 
+typedef std::shared_ptr< SpriteCanvas > SpriteCanvasSharedPtr;
+
 }

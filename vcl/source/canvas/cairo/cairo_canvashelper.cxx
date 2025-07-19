@@ -54,6 +54,8 @@
 
 #include "cairo_cachedbitmap.hxx"
 #include "cairo_canvasbitmap.hxx"
+#include "cairo_surfaceprovider.hxx"
+#include "vcl_canvas/graphicdevice.hxx"
 #include "cairo_canvashelper.hxx"
 
 using namespace ::cairo;
@@ -79,11 +81,11 @@ namespace vcl_cairocanvas
 
     void CanvasHelper::init( const ::basegfx::B2ISize&  rSizePixel,
                              SurfaceProvider&           rSurfaceProvider,
-                             rendering::XGraphicDevice* pDevice )
+                             vcl_canvas::GraphicDeviceSharedPtr pDevice )
     {
         maSize = rSizePixel;
         mpSurfaceProvider = &rSurfaceProvider;
-        mpDevice = pDevice;
+        mpDevice = pDevice.get();
     }
 
     void CanvasHelper::setSize( const ::basegfx::B2ISize& rSize )
@@ -330,7 +332,10 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
      *
      * @return created surface or NULL
      **/
-    static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const SurfaceProviderRef& rSurfaceProvider, unsigned char*& data, bool& bHasAlpha )
+    static SurfaceSharedPtr surfaceFromXBitmap(const uno::Reference<rendering::XBitmap>& xBitmap,
+                                               // const SurfaceProviderRef& rSurfaceProvider,
+                                               SurfaceProvider* rSurfaceProvider,
+                                               unsigned char*& data, bool& bHasAlpha)
     {
         bHasAlpha = xBitmap->hasAlpha();
         SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap );
@@ -454,7 +459,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
     static void doOperation( Operation aOperation,
                              cairo_t* pCairo,
                              const uno::Sequence< rendering::Texture >* pTextures,
-                             const SurfaceProviderRef& pDevice,
+                             // const SurfaceProviderRef& pDevice,
+                             SurfaceProvider* pDevice,
                              const basegfx::B2DRange& rBounds )
     {
         switch( aOperation )
@@ -663,7 +669,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                                       Operation aOperation,
                                       cairo_t* pCairo,
                                       const uno::Sequence< rendering::Texture >* pTextures,
-                                      const SurfaceProviderRef& pDevice,
+                                      // const SurfaceProviderRef& pDevice,
+                                      SurfaceProvider* pDevice,
                                       rendering::FillRule eFillrule )
     {
         if( pTextures )
@@ -1288,9 +1295,10 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         if( mpCairo )
         {
-            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::vcl_canvas::tools::roundUp( newSize.Width ),
+            // DONT_FORGET_TO_REMOVE_THIS_COMMENT
+            return uno::Reference< rendering::XBitmap >( /* new CanvasBitmap( ::basegfx::B2ISize( ::vcl_canvas::tools::roundUp( newSize.Width ),
                                                                                                ::vcl_canvas::tools::roundUp( newSize.Height ) ),
-                                                                           mpSurfaceProvider, mpDevice, false ) );
+                                                                           mpSurfaceProvider, mpDevice, false ) */ );
         }
         else
             SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");

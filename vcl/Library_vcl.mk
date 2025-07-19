@@ -113,7 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/source/canvas/cairo/cairo_cachedbitmap \
-	vcl/source/canvas/cairo/cairo_canvas \
 	vcl/source/canvas/cairo/cairo_canvasbitmap \
 	vcl/source/canvas/cairo/cairo_canvascustomsprite \
 	vcl/source/canvas/cairo/cairo_canvasfont \

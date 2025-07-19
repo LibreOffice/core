@@ -67,11 +67,11 @@ namespace vcl_canvas
         mutable ::osl::Mutex m_aMutex;
 
     private:
-        virtual void SAL_CALL disposing() override
+        /* virtual void SAL_CALL disposing() override
         { disposeThis(); }
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override
-        { disposeEventSource(Source); }
+        { disposeEventSource(Source); } */
 
     };
 }

@@ -37,7 +37,7 @@ namespace vcl_cairocanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class SAL_LOPLUGIN_ANNOTATE("crosscast") SurfaceProvider : public css::uno::XInterface
+    class SAL_LOPLUGIN_ANNOTATE("crosscast") SurfaceProvider
     {
     public:
         virtual ~SurfaceProvider() {}
@@ -64,7 +64,8 @@ namespace vcl_cairocanvas
         virtual OutputDevice* getOutputDevice() = 0;
     };
 
-    typedef ::rtl::Reference< SurfaceProvider > SurfaceProviderRef;
+    // typedef ::rtl::Reference< SurfaceProvider > SurfaceProviderRef;
+    typedef std::shared_ptr< SurfaceProvider > SurfaceProviderSharedPtr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
