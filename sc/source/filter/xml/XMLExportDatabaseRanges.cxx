@@ -474,7 +474,7 @@ private:
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, OUString::number(rItem.mfVal));
             }
 
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
