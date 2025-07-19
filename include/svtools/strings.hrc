@@ -68,6 +68,7 @@
 #define STR_FORMAT_ID_STAROBJECT_PAINTDOC       NC_("STR_FORMAT_ID_STAROBJECT_PAINTDOC", "StarObject Paint object")
 #define STR_FORMAT_ID_HTML                      NC_("STR_FORMAT_ID_HTML", "HyperText Markup Language (HTML)")
 #define STR_FORMAT_ID_HTML_SIMPLE               NC_("STR_FORMAT_ID_HTML_SIMPLE", "Stripped HyperText Markup Language (Simple HTML)")
+#define STR_FORMAT_ID_MARKDOWN                  NC_("STR_FORMAT_ID_MARKDOWN", "Markdown")
 #define STR_FORMAT_ID_BIFF_5                    NC_("STR_FORMAT_ID_BIFF_5", "Microsoft Excel Binary Interchange Format 5.0/95 (Biff5)")
 #define STR_FORMAT_ID_BIFF_8                    NC_("STR_FORMAT_ID_BIFF_8", "Microsoft Excel Binary Interchange Format 97/2000/XP/2003 (Biff8)")
 #define STR_FORMAT_ID_SYLK                      NC_("STR_FORMAT_ID_SYLK", "Sylk")

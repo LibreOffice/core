@@ -202,6 +202,7 @@ const DataFlavorRepresentation* FormatArray_Impl()
         /*146 SotClipboardFormatId::STRING_TSVC*/            { u"application/x-libreoffice-tsvc"_ustr, "Text TSV-Calc", &cppu::UnoType<OUString>::get() },
         /*147 SotClipboardFormatId::PDF*/            { u"application/pdf"_ustr, "PDF Document", &cppu::UnoType<Sequence<sal_Int8>>::get() },
         /*148 SotClipboardFormatId::SVG*/            { u"image/svg+xml;windows_formatname=\"image/svg+xml\""_ustr, "SVG", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+        /*149 SotClipboardFormatId::MARKDOWN*/            { u"text/markdown"_ustr, "Markdown", &cppu::UnoType<Sequence<sal_Int8>>::get() },
     };
     return &aInstance[0];
 };
