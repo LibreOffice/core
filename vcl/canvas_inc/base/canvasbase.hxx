@@ -120,7 +120,7 @@ namespace vcl_canvas
         {
         }
 
-        virtual void disposeThis() override
+        /* virtual void disposeThis() override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -128,10 +128,10 @@ namespace vcl_canvas
 
             // pass on to base class
             BaseType::disposeThis();
-        }
+        } */
 
         // XCanvas
-        virtual void SAL_CALL clear() override
+        /* virtual void SAL_CALL clear() override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -433,7 +433,7 @@ namespace vcl_canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maCanvasHelper.getDevice();
-        }
+        } */
 
     protected:
         ~CanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.

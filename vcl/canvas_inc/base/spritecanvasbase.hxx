@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "vcl_canvas/customsprite.hxx"
 #include <rtl/ref.hxx>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
 #include <base/integerbitmapbase.hxx>
@@ -81,7 +82,7 @@ namespace vcl_canvas
         {
         }
 
-        virtual void disposeThis() override
+        /* virtual void disposeThis() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -89,10 +90,10 @@ namespace vcl_canvas
 
             // pass on to base class
             BaseType::disposeThis();
-        }
+        } */
 
         // XSpriteCanvas
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
+        /* virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
             tools::verifyArgs(animation,
                               __func__,
@@ -101,9 +102,9 @@ namespace vcl_canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.createSpriteFromAnimation(animation);
-        }
+        } */
 
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
+        /* virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
             tools::verifyArgs(animationBitmaps,
@@ -116,9 +117,9 @@ namespace vcl_canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
-        }
+        } */
 
-        virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
+        virtual CustomSpriteSharedPtr SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             tools::verifySpriteSize(spriteSize,
                                     __func__,
@@ -129,7 +130,7 @@ namespace vcl_canvas
             return BaseType::maCanvasHelper.createCustomSprite(spriteSize);
         }
 
-        virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
+        /* virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
             tools::verifyArgs(original,
                               __func__,
@@ -138,7 +139,7 @@ namespace vcl_canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.createClonedSprite(original);
-        }
+        } */
 
         // SpriteSurface
         virtual void showSprite( const Sprite::Reference& rSprite ) override

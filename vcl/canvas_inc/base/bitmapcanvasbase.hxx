@@ -69,7 +69,7 @@ namespace vcl_canvas
         typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
 
         // XBitmap
-        virtual css::geometry::IntegerSize2D SAL_CALL getSize(  ) override
+        /* virtual css::geometry::IntegerSize2D SAL_CALL getSize(  ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -87,7 +87,7 @@ namespace vcl_canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.getScaledBitmap( newSize, beFast );
-        }
+        } */
 
     };
 

@@ -102,13 +102,13 @@ namespace vcl_cairocanvas
         maArguments.realloc(0);
     }
 
-    void SpriteCanvas::disposeThis()
+    /* void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // forward to parent
         SpriteCanvasBaseT::disposeThis();
-    }
+    } */
 
     sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
     {

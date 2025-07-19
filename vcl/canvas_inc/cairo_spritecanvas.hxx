@@ -27,6 +27,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <base/spritecanvasbase.hxx>
 #include <base/spritesurface.hxx>
 #include <base/disambiguationhelper.hxx>
@@ -57,42 +59,17 @@ namespace vcl_cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base; */
+
     typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< SpriteCanvasBase_Base >,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > SpriteCanvasBase_Base2;
-    /** Mixin SpriteSurface
-
-        Have to mixin the SpriteSurface before deriving from
-        ::canvas::SpriteCanvasBase, as this template should already
-        implement some of those interface methods.
-
-        The reason why this appears kinda convoluted is the fact that
-        we cannot specify non-IDL types as WeakComponentImplHelper
-        template args, and furthermore, don't want to derive
-        ::canvas::SpriteCanvasBase directly from
-        ::canvas::SpriteSurface (because derivees of
-        ::canvas::SpriteCanvasBase have to explicitly forward the
-        XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
-        anyway). Basically, ::canvas::CanvasCustomSpriteBase should
-        remain a base class that provides implementation, not to
-        enforce any specific interface on its derivees.
-     */
 
     typedef ::vcl_canvas::SpriteCanvasBase< SpriteCanvasBase_Base,
                                         SpriteCanvasHelper,
                                         ::osl::MutexGuard,
                                         ::cppu::OWeakObject >           SpriteCanvasBaseT;
 
-    /** Product of this component's factory.
-
-        The SpriteCanvas object combines the actual Window canvas with
-        the XGraphicDevice interface. This is because there's a
-        one-to-one relation between them, anyway, since each window
-        can have exactly one canvas and one associated
-        XGraphicDevice. And to avoid messing around with circular
-        references, this is implemented as one single object.
-     */
     class SpriteCanvas : public SpriteCanvasBaseT,
                          public RepaintTarget
     {
@@ -103,29 +80,29 @@ namespace vcl_cairocanvas
         void initialize();
 
         /// Dispose all internal references
-        virtual void disposeThis() override;
+        // virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
         //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
         //                                       |                 |                            |
         //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
+        // DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override;
+        /* virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) override; */
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) override;
+        virtual sal_Bool updateScreen( sal_Bool bUpdateAll ) override;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) override;
+        // virtual OUString SAL_CALL getServiceName(  ) override;
 
         //  XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
+        /* virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override; */
 
         // SurfaceProvider
         virtual ::cairo::SurfaceSharedPtr getSurface() override;

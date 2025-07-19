@@ -40,7 +40,7 @@ namespace vcl_canvas
     {
     public:
         // XIntegerBitmap
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
+        /* virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
                                                                               const css::geometry::IntegerRectangle2D& rect ) override
         {
             tools::verifyArgs(rect,
@@ -101,7 +101,7 @@ namespace vcl_canvas
             typename Base::MutexType aGuard( Base::m_aMutex );
 
             return Base::maCanvasHelper.getMemoryLayout();
-        }
+        } */
     };
 }
 
