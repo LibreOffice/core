@@ -236,6 +236,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::RICHTEXT,            STR_FORMAT_ID_RICHTEXT },
         { SotClipboardFormatId::STRING_TSVC,         STR_FORMAT_ID_STRING_TSVC },
         { SotClipboardFormatId::PNG,                 STR_FORMAT_ID_PNG_BITMAP },
+        { SotClipboardFormatId::MARKDOWN,            STR_FORMAT_ID_MARKDOWN},
     };
 
     TranslateId pResId;

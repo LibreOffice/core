@@ -158,6 +158,7 @@ text/html			html htm
 text/plain			asc txt c cc h hh cpp hpp
 text/richtext			rtx
 text/rtf			rtf
+text/markdown md markdown
 text/sgml			sgml sgm
 text/tab-separated-values	tsv
 text/x-setext			etx

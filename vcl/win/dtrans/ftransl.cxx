@@ -348,6 +348,8 @@ const std::vector< FormatEntry > g_TranslTable {
         FormatEntry("application/x-openoffice-dummy4;windows_formatname=\"SO_DUMMYFORMAT_4\"", "SO_DUMMYFORMAT_4", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::RICHTEXT
         FormatEntry("text/richtext", "Richtext Format", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    // SotClipboardFormatId::MARKDOWN
+        FormatEntry("text/markdown", "Markdown", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     };
 
 namespace {

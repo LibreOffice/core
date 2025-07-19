@@ -1292,6 +1292,10 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::HTML;
             }
+            else if(xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/markdown "))
+            {
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::MARKDOWN;
+            }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/uri-list" ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::FILE_LIST;

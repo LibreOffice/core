@@ -57,6 +57,7 @@
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/mieclip.hxx>
 #include <svl/urlbmk.hxx>
+#include <unicode/regex.h>
 #include <vcl/inetimg.hxx>
 #include <svx/fmview.hxx>
 #include <sfx2/docfilt.hxx>
@@ -155,6 +156,7 @@ constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_STRING    = 0x00000008;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_SWOLE     = 0x00000010;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DDE       = 0x00000020;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_RICHTEXT  = 0x00000040;
+constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_MARKDOWN  = 0x00000080;
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -632,6 +634,13 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         break;
 
+        case SotClipboardFormatId::MARKDOWN:
+        {
+            SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject(&rDoc, SWTRANSFER_OBJECTTYPE_MARKDOWN, rFlavor);
+            break;
+        }
+
         case SotClipboardFormatId::HTML:
         {
             SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
@@ -800,6 +809,12 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
         GetRTFWriter(std::u16string_view(), OUString(), xWrt);
         break;
 
+    case SWTRANSFER_OBJECTTYPE_MARKDOWN:
+    {
+        GetMDWriter(std::u16string_view(), OUString(), xWrt);
+        break;
+    }
+
     case SWTRANSFER_OBJECTTYPE_STRING:
         GetASCWriter(std::u16string_view(), OUString(), xWrt);
         if( xWrt.is() )
@@ -955,6 +970,7 @@ void SwTransferable::PrepareForCopyTextRange(SwPaM & rPaM)
 #if HAVE_FEATURE_DESKTOP
     AddFormat( SotClipboardFormatId::RICHTEXT );
     AddFormat( SotClipboardFormatId::HTML );
+    AddFormat( SotClipboardFormatId::MARKDOWN );
 #endif
     AddFormat( SotClipboardFormatId::STRING );
 }
@@ -1108,6 +1124,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut, bool bDeleteRedlines )
 #if HAVE_FEATURE_DESKTOP
             AddFormat( SotClipboardFormatId::RICHTEXT );
             AddFormat( SotClipboardFormatId::HTML );
+            AddFormat( SotClipboardFormatId::MARKDOWN );
 #endif
         }
         if( m_pWrtShell->IsSelection() )
@@ -1264,6 +1281,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
     AddFormat( SotClipboardFormatId::RICHTEXT );
     AddFormat( SotClipboardFormatId::HTML );
     AddFormat( SotClipboardFormatId::STRING );
+    AddFormat( SotClipboardFormatId::MARKDOWN );
 
     //ObjectDescriptor was already filled from the old DocShell.
     //Now adjust it. Thus in GetData the first query can still
@@ -1870,6 +1888,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::RTF:
             case SotClipboardFormatId::RICHTEXT:
             case SotClipboardFormatId::STRING:
+            case SotClipboardFormatId::MARKDOWN:
                 bRet = SwTransferable::PasteFileContent( rData, rSh,
                                                             nFormat, bMsg, bIgnoreComments );
                 break;
@@ -2235,6 +2254,10 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                 pStream = xStrm.get();
                 if( SotClipboardFormatId::RTF == nFormat || SotClipboardFormatId::RICHTEXT == nFormat)
                     pRead = SwReaderWriter::GetRtfReader();
+                else if( SotClipboardFormatId::MARKDOWN == nFormat )
+                {
+                    pRead = ReadMarkdown;
+                }
                 else if( !pRead )
                 {
                     pRead = ReadHTML;
@@ -2665,6 +2688,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
         !rData.HasFormat( SotClipboardFormatId::RICHTEXT ) &&
         !rData.HasFormat( SotClipboardFormatId::HTML ) &&
         !rData.HasFormat( SotClipboardFormatId::STRING ) &&
+        !rData.HasFormat( SotClipboardFormatId::MARKDOWN ) &&
         (rData.HasFormat( nFormat = SotClipboardFormatId::GDIMETAFILE ) ||
          rData.HasFormat( nFormat = SotClipboardFormatId::BITMAP )) )
     {
@@ -3499,6 +3523,7 @@ const SotClipboardFormatId aPasteSpecialIds[] =
     SotClipboardFormatId::BITMAP,
     SotClipboardFormatId::SVIM,
     SotClipboardFormatId::FILEGRPDESCRIPTOR,
+    SotClipboardFormatId::MARKDOWN,
     SotClipboardFormatId::NONE
 };
 
@@ -3669,6 +3694,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             AddFormat( SotClipboardFormatId::RTF );
             AddFormat( SotClipboardFormatId::RICHTEXT );
             AddFormat( SotClipboardFormatId::HTML );
+            AddFormat( SotClipboardFormatId::MARKDOWN );
         }
         if( m_pWrtShell->IsSelection() )
             AddFormat( SotClipboardFormatId::STRING );
