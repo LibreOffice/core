@@ -194,6 +194,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="AdjustTableLineHeightsToGridHeight" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Fix line heights for text inside tables to the text grid line height</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </templates>
   <component>

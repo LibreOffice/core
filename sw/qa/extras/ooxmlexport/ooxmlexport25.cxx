@@ -213,6 +213,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167297)
     fnVerify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
+{
+    createSwDoc();
+
+    auto fnVerify = [&](bool bExpected) {
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        auto xSettings = xFactory->createInstance(u"com.sun.star.document.Settings"_ustr);
+        CPPUNIT_ASSERT_EQUAL(
+            bExpected, getProperty<bool>(xSettings, u"AdjustTableLineHeightsToGridHeight"_ustr));
+    };
+
+    // By default, a Writer doc has the compat option set
+    fnVerify(true);
+
+    // Check that the value is persisted across save-reload
+    saveAndReload(mpFilter);
+    fnVerify(true);
+
+    // Unset the compat flag
+    {
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        uno::Reference<beans::XPropertySet> xSettings(
+            xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
+        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr, uno::Any(false));
+    }
+
+    fnVerify(false);
+    saveAndReload(mpFilter);
+    fnVerify(false);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

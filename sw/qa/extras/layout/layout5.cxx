@@ -1674,6 +1674,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf88752)
     CPPUNIT_ASSERT_LESS(sal_Int32(1690), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167583)
+{
+    createSwDoc("tdf167583.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    // Verifies that the ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT compat flag defaults to true
+    // Otherwise, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    assertXPath(pXmlDoc, "/root/page", 2);
+
+    auto nHeight = getXPath(pXmlDoc, "/root/page[1]//row[3]//txt/infos/bounds", "height").toInt32();
+
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3400), nHeight);
+    CPPUNIT_ASSERT_LESS(sal_Int32(3500), nHeight);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf166652)
 {
     createSwDoc("line-spacing-80percent.fodt");

@@ -1093,6 +1093,11 @@ WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> voi
     }
     if (rIDSA.get(DocumentSettingId::MS_WORD_UL_TRAIL_SPACE))
         rpFS->singleElementNS(XML_w, XML_ulTrailSpace);
+
+    if (rIDSA.get(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT))
+    {
+        rpFS->singleElementNS(XML_w, XML_adjustLineHeightInTable);
+    }
 }
 
 void DocxExport::WriteSettings()

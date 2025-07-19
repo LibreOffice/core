@@ -10003,6 +10003,8 @@ void DomainMapper_Impl::ApplySettingsTable()
             xSettings->setPropertyValue(u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr,
                                         uno::Any(true));
 
+        xSettings->setPropertyValue(u"AdjustTableLineHeightsToGridHeight"_ustr,
+                                    uno::Any(m_pSettingsTable->GetAdjustLineHeightInTable()));
     }
     catch(const uno::Exception&)
     {

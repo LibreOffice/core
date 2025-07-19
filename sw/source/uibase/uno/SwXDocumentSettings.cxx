@@ -170,6 +170,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_MS_WORD_UL_TRAIL_SPACE,
     HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
     HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
+    HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
 };
 
 }
@@ -286,6 +287,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"MsWordUlTrailSpace"_ustr, HANDLE_MS_WORD_UL_TRAIL_SPACE, cppu::UnoType<bool>::get(), 0 },
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, HANDLE_BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, cppu::UnoType<bool>::get(), 0 },
         { u"ForceTopAlignmentInCellWithFloatingAnchor"_ustr, HANDLE_FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, cppu::UnoType<bool>::get(), 0 },
+        { u"AdjustTableLineHeightsToGridHeight"_ustr, HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1240,6 +1242,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR, bTmp);
             }
             break;
+        case HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
+            if (bool bTmp; rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, bTmp);
+            }
+            break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1867,6 +1876,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR);
+        }
+        break;
+        case HANDLE_ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT);
         }
         break;
         default:

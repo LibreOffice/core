@@ -147,6 +147,8 @@ enum class DocumentSettingId
     BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES,
     // tdf#37153 Word-compatibility: force top-alignment for cells containing a floating shape
     FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR,
+    // tdf#167583 optionally apply text grid line height to table contents
+    ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
 };
 
 /** Provides access to settings of a document

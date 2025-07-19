@@ -193,6 +193,7 @@ class DocumentSettingManager final :
     bool mbMsWordUlTrailSpace : 1 = false;
     bool mbBalanceSpacesAndIdeographicSpaces : 1 = false; // tdf#88908
     bool mbForceTopAlignmentInCellWithFloatingAnchor : 1 = false; // tdf#37153
+    bool mbAdjustTableLineHeightsToGridHeight : 1 = true; // tdf#167583
 
 public:
 

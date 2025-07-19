@@ -1185,6 +1185,19 @@ void SwViewShell::SetBalanceSpacesAndIdeographicSpaces(bool bValue)
     }
 }
 
+void SwViewShell::SetAdjustTableLineHeightsToGridHeight(bool bValue)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT) != bValue)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, bValue);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Pos
+                                       | SwInvalidateFlags::Size | SwInvalidateFlags::Table;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

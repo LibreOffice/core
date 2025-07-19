@@ -68,6 +68,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, STR_COMPAT_OPT_IGNORETABSANDBLANKSFORLINECALCULATION },
     { u"MsWordUlTrailSpace"_ustr, STR_COMPAT_OPT_UNDERLINETRAILINGSPACE },
     { u"BalanceSpacesAndIdeographicSpaces"_ustr, STR_COMPAT_OPT_BALANCESPACESANDIDEOGRAPHICSPACES },
+    { u"AdjustTableLineHeightsToGridHeight"_ustr, STR_COMPAT_OPT_ADJUSTTABLELINEHEIGHTSTOGRIDHEIGHT },
 };
 
 // DocumentSettingId, negate?
@@ -99,6 +100,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"IgnoreTabsAndBlanksForLineCalculation"_ustr, { DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, false } },
         { u"MsWordUlTrailSpace"_ustr, { DocumentSettingId::MS_WORD_UL_TRAIL_SPACE, false } },
         { u"BalanceSpacesAndIdeographicSpaces"_ustr, { DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES, false } },
+        { u"AdjustTableLineHeightsToGridHeight"_ustr, { DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT, false } },
     };
     return map.at(option);
 }
@@ -352,6 +354,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES:
                         m_pWrtShell->SetBalanceSpacesAndIdeographicSpaces(bChecked);
+                        break;
+
+                    case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
+                        m_pWrtShell->SetAdjustTableLineHeightsToGridHeight(bChecked);
                         break;
 
                     default:

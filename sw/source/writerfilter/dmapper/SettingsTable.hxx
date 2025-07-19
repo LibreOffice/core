@@ -109,6 +109,8 @@ public:
 
     bool GetDoNotVertAlignCellWithSp() const;
 
+    bool GetAdjustLineHeightInTable() const;
+
 private:
     // Properties
     virtual void lcl_attribute(Id Name, const Value& val) override;
@@ -171,6 +173,7 @@ private:
     bool m_bEndnoteIsCollectAtSectionEnd = false;
     /// Don't vertically align table cells containing shapes
     bool m_bDoNotVertAlignCellWithSp = false; // tdf#37153
+    bool m_bAdjustLineHeightInTable = false; // tdf#167583
 };
 typedef tools::SvRef<SettingsTable> SettingsTablePtr;
 }

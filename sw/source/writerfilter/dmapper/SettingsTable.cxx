@@ -415,6 +415,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_doNotVertAlignCellWithSp:
         m_bDoNotVertAlignCellWithSp = nIntValue != 0;
         break;
+    case NS_ooxml::LN_CT_Compat_adjustLineHeightInTable:
+        m_bAdjustLineHeightInTable = nIntValue != 0;
+        break;
     default:
     {
 #ifdef DBG_UTIL
@@ -818,6 +821,11 @@ bool SettingsTable::GetEndnoteIsCollectAtSectionEnd() const
 bool SettingsTable::GetDoNotVertAlignCellWithSp() const
 {
     return m_bDoNotVertAlignCellWithSp;
+}
+
+bool SettingsTable::GetAdjustLineHeightInTable() const
+{
+    return m_bAdjustLineHeightInTable;
 }
 
 }//namespace dmapper

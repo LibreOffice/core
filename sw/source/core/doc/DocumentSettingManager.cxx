@@ -112,7 +112,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbMinRowHeightInclBorder(false),
     mbMsWordCompGridMetrics(false), // tdf#129808
     mbNoClippingWithWrapPolygon(false),
-    mbBalanceSpacesAndIdeographicSpaces(false)
+    mbBalanceSpacesAndIdeographicSpaces(false),
+    mbAdjustTableLineHeightsToGridHeight(true) // tdf#167583
 
     // COMPATIBILITY FLAGS END
 {
@@ -149,6 +150,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbMsWordCompGridMetrics             = aOptions.get(u"MsWordCompGridMetrics"_ustr);
         mbIgnoreTabsAndBlanksForLineCalculation = aOptions.get(u"IgnoreTabsAndBlanksForLineCalculation"_ustr);
         mbBalanceSpacesAndIdeographicSpaces = aOptions.get(u"BalanceSpacesAndIdeographicSpaces"_ustr);
+        mbAdjustTableLineHeightsToGridHeight = aOptions.get(u"AdjustTableLineHeightsToGridHeight"_ustr);
     }
     else
     {
@@ -169,6 +171,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbSubtractFlys                      = false;
         mbEmptyDbFieldHidesPara             = true;
         mbUseVariableWidthNBSP              = false;
+        mbAdjustTableLineHeightsToGridHeight = true;
     }
 
     // COMPATIBILITY FLAGS END
@@ -286,6 +289,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbBalanceSpacesAndIdeographicSpaces;
         case DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
             return mbForceTopAlignmentInCellWithFloatingAnchor;
+        case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
+            return mbAdjustTableLineHeightsToGridHeight;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -626,6 +631,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR:
             mbForceTopAlignmentInCellWithFloatingAnchor = value;
             break;
+        case DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT:
+            mbAdjustTableLineHeightsToGridHeight = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -810,6 +818,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbMsWordUlTrailSpace = rSource.mbMsWordUlTrailSpace;
     mbBalanceSpacesAndIdeographicSpaces = rSource.mbBalanceSpacesAndIdeographicSpaces;
     mbForceTopAlignmentInCellWithFloatingAnchor = rSource.mbForceTopAlignmentInCellWithFloatingAnchor;
+    mbAdjustTableLineHeightsToGridHeight = rSource.mbAdjustTableLineHeightsToGridHeight;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1222,6 +1231,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbForceTopAlignmentInCellWithFloatingAnchor).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbAdjustTableLineHeightsToGridHeight"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbAdjustTableLineHeightsToGridHeight).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

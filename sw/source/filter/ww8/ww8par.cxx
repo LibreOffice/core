@@ -1887,6 +1887,10 @@ void SwWW8ImplReader::ImportDop()
         DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, true);
     // use Word-compatible CJK text grid metrics
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_COMP_GRID_METRICS, true);
+    // tdf#167583
+    m_rDoc.getIDocumentSettingAccess().set(
+        DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT,
+        !m_xWDop->fDontAdjustLineHeightInTable);
 
     // Import Default Tabs
     tools::Long nDefTabSiz = m_xWDop->dxaTab;
