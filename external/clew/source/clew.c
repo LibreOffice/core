@@ -242,7 +242,7 @@ int clewInit(const char* path)
 //! \return a string representation of the error code
 const char* clewErrorString(cl_int error)
 {
-    static const char* strings[] =
+    static const char* const strings[] =
     {
         // Error Codes
           "CL_SUCCESS"                                  //   0
