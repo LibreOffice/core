@@ -1,0 +1,63 @@
+From 3dc9924f0494f9da84e8618607a7dc6084401afa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 19 Jul 2025 21:11:34 +0100
+Subject: [PATCH] const up some things
+
+and so move them out of the data section
+---
+ src/lib/LotusStyleManager.cpp | 2 +-
+ src/lib/Multiplan.cpp         | 4 ++--
+ src/lib/WPSOLEParser.cpp      | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/LotusStyleManager.cpp b/src/lib/LotusStyleManager.cpp
+index 2030c12..eab74ee 100644
+--- a/src/lib/LotusStyleManager.cpp
++++ b/src/lib/LotusStyleManager.cpp
+@@ -472,7 +472,7 @@ bool State::getColor256(int id, WPSColor &color)
+ 		return false;
+ 	}
+ 	// in one file, find 0xEF as current...
+-	static uint32_t colorMap[]=
++	static const uint32_t colorMap[]=
+ 	{
+ 		0xffffff, 0xffcc99, 0xffffcc, 0xccff99, 0x99ff33, 0x99ff66, 0x99ff99, 0xccffcc, // 0
+ 		0xccffff, 0x99ccff, 0x6699ff, 0xccccff, 0xcc99ff, 0xffccff, 0xff99cc, 0xffffff,
+diff --git a/src/lib/Multiplan.cpp b/src/lib/Multiplan.cpp
+index 2a0fecc..650ccea 100644
+--- a/src/lib/Multiplan.cpp
++++ b/src/lib/Multiplan.cpp
+@@ -1017,7 +1017,7 @@ static Functions const s_listOperators[] =
+ 	{ "", -2}, { "", -2}, { "", -2}, { "", -2},
+ };
+ 
+-static char const *s_listFunctions[]=
++static char const* const s_listFunctions[]=
+ {
+ 	// 0
+ 	"Count", "If", "IsNA", "IsError",
+@@ -1371,7 +1371,7 @@ static Functions const s_listOperatorsV2[] =
+ 	{ "", -2}, { "", -2}, { "", -2}, { "", -2},
+ };
+ 
+-static char const *s_listFunctionsV2[]=
++static char const* const s_listFunctionsV2[]=
+ {
+ 	// 0
+ 	nullptr /* special Row */, nullptr/* special Column*/, nullptr/* checkme: unknown*/, nullptr/* checkme: unknown*/,
+diff --git a/src/lib/WPSOLEParser.cpp b/src/lib/WPSOLEParser.cpp
+index 0c67bec..310766a 100644
+--- a/src/lib/WPSOLEParser.cpp
++++ b/src/lib/WPSOLEParser.cpp
+@@ -1280,7 +1280,7 @@ bool WPSOLEParser::readSummaryInformation(RVNGInputStreamPtr input, std::string
+ 				librevenge::RVNGString text;
+ 				if (readSummaryPropertyString(input, endPos, type, text, f) && !text.empty())
+ 				{
+-					static char const *attribNames[] =
++					static char const* const attribNames[] =
+ 					{
+ 						"", "", "dc:title", "dc:subject", "meta:initial-creator",
+ 						"meta:keywords", "dc:description"/*comment*/, "", "dc:creator"
+-- 
+2.49.0
+

@@ -15,10 +15,14 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwps,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwps))
 
+# external/libwps/0001-const-up-some-things.patch.1
+# upstream effort as: https://sourceforge.net/p/libwps/code/merge-requests/1/
+
 $(eval $(call gb_UnpackedTarball_add_patches,libwps,\
 	$(if $(SYSTEM_REVENGE),,external/libwps/rpath.patch.0) \
 	external/libwps/libtool.patch.0 \
 	external/libwps/enumarith.patch \
+	external/libwps/0001-const-up-some-things.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
