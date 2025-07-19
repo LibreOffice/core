@@ -772,6 +772,57 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167512)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167569)
+{
+    // Given an RTF having default text size of 12 pt, with a list, which elements' markers get
+    // their size of 6 pt from paragraph marker formatting:
+    createSwDoc("tdf167569.rtf");
+
+    {
+        comphelper::SequenceAsHashMap markerProperties;
+        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(1),
+                                                                          u"ListAutoFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
+
+        markerProperties.clear();
+        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(2),
+                                                                          u"ListAutoFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
+
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        auto lineHeight = getXPath(pLayout, "//txt[1]['pass 1']/infos/prtBounds", "height");
+        CPPUNIT_ASSERT_LESS(sal_Int32(150), lineHeight.toInt32()); // expected value is around 140
+        lineHeight = getXPath(pLayout, "//txt[2]['pass 1']/infos/prtBounds", "height");
+        CPPUNIT_ASSERT_LESS(sal_Int32(150), lineHeight.toInt32());
+    }
+
+    // After round-tripping the RTF, the marker properties must not get lost; previously, the
+    // bullets became large, which additionally increased overall line height.
+    saveAndReload(mpFilter);
+
+    {
+        comphelper::SequenceAsHashMap markerProperties;
+        // Before the export was implemented, this failed with
+        // - the property is of unexpected type or void: ListAutoFormat
+        // meaning that the paragraph marker property was lost
+        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(1),
+                                                                          u"ListAutoFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
+
+        markerProperties.clear();
+        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(2),
+                                                                          u"ListAutoFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
+
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        auto lineHeight = getXPath(pLayout, "//txt[1]['pass 2']/infos/prtBounds", "height");
+        // Before the export was implemented, these were 280
+        CPPUNIT_ASSERT_LESS(sal_Int32(150), lineHeight.toInt32()); // expected value is around 140
+        lineHeight = getXPath(pLayout, "//txt[2]['pass 2']/infos/prtBounds", "height");
+        CPPUNIT_ASSERT_LESS(sal_Int32(150), lineHeight.toInt32());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

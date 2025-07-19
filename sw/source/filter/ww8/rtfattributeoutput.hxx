@@ -666,6 +666,8 @@ private:
 
     editeng::WordPageMargins m_aPageMargins;
 
+    OString m_aParagraphMarkerProperties;
+
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
 

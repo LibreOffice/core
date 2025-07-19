@@ -91,6 +91,7 @@
 #include <oox/mathml/imexport.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svl/grabbagitem.hxx>
+#include <svl/itemiter.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <formatflysplit.hxx>
@@ -309,10 +310,13 @@ void RtfAttributeOutput::EndParagraph(
         // RTF_PAR at the end of the footnote or clipboard, would cause an additional empty paragraph.
         if (!bLastPara)
         {
+            if (!m_aParagraphMarkerProperties.isEmpty())
+                aParagraph->append("{" + m_aParagraphMarkerProperties);
             aParagraph->append(OOO_STRING_SVTOOLS_RTF_PAR);
-            aParagraph->append(' ');
+            aParagraph->append(m_aParagraphMarkerProperties.isEmpty() ? ' ' : '}');
         }
     }
+    m_aParagraphMarkerProperties.clear();
     if (m_nColBreakNeeded)
     {
         aParagraph->append(OOO_STRING_SVTOOLS_RTF_COLUMN);
@@ -391,8 +395,29 @@ void RtfAttributeOutput::StartParagraphProperties()
         m_aSectionHeaders.append(aPar);
 }
 
+/// Outputs an item set, that contains the formatting of the paragraph marker.
+/// Similar to respective function in sw/source/filter/ww8/docxattributeoutput.cxx.
+static void lcl_writeParagraphMarkerProperties(RtfAttributeOutput& rAttributeOutput,
+                                               const SfxItemSet& rParagraphMarkerProperties)
+{
+    for (SfxItemIter it(rParagraphMarkerProperties); !it.IsAtEnd(); it.NextItem())
+    {
+        const auto nWhichId = it.GetCurWhich();
+        if (isCHRATR(nWhichId) || nWhichId == RES_TXTATR_CHARFMT)
+        {
+            rAttributeOutput.OutputItem(*it.GetCurItem());
+        }
+        else if (nWhichId == RES_TXTATR_AUTOFMT)
+        {
+            const SwFormatAutoFormat& rAutoFormat
+                = it.GetCurItem()->StaticWhichCast(RES_TXTATR_AUTOFMT);
+            lcl_writeParagraphMarkerProperties(rAttributeOutput, *rAutoFormat.GetStyleHandle());
+        }
+    }
+}
+
 void RtfAttributeOutput::EndParagraphProperties(
-    const SfxItemSet& /*rParagraphMarkerProperties*/, const SwRedlineData* /*pRedlineData*/,
+    const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* /*pRedlineData*/,
     const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/,
     const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
 {
@@ -400,6 +425,21 @@ void RtfAttributeOutput::EndParagraphProperties(
     // Otherwise associate properties in the paragraph style are ruined.
     const OString aProperties = m_aStyles.makeStringAndClear();
     m_rExport.Strm().WriteOString(aProperties);
+
+    // Backup other styles strings, to avoid modification by marker properties
+    OString aStylesAssocHich(m_aStylesAssocHich.makeStringAndClear());
+    OString aStylesAssocDbch(m_aStylesAssocDbch.makeStringAndClear());
+    OString aStylesAssocRtlch(m_aStylesAssocRtlch.makeStringAndClear());
+    OString aStylesAssocLtrch(m_aStylesAssocLtrch.makeStringAndClear());
+
+    lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
+    m_aParagraphMarkerProperties = m_aStyles.makeStringAndClear();
+
+    // Restore these
+    m_aStylesAssocHich = aStylesAssocHich;
+    m_aStylesAssocDbch = aStylesAssocDbch;
+    m_aStylesAssocRtlch = aStylesAssocRtlch;
+    m_aStylesAssocLtrch = aStylesAssocLtrch;
 }
 
 void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /*nPos*/,
