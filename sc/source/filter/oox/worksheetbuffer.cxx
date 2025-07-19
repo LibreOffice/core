@@ -243,7 +243,7 @@ void WorksheetBuffer::finalizeImport( sal_Int16 nActiveSheet )
         if ( aSheetInfo->mnCalcSheet == nActiveSheet)
             rDoc.SetVisible( aSheetInfo->mnCalcSheet, true );
         else
-            rDoc.SetVisible( aSheetInfo->mnCalcSheet, aSheetInfo->mnState == XML_visible );
+            rDoc.SetVisible( aSheetInfo->mnCalcSheet, aSheetInfo->mnState != XML_hidden && aSheetInfo->mnState != XML_veryHidden);
     }
 }
 
