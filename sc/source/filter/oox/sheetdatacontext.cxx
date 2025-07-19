@@ -322,21 +322,23 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 
 bool SheetDataContext::importCell( const AttributeList& rAttribs )
 {
-    bool bValid = true;
+    bool bValid = false;
     std::string_view p = rAttribs.getView(XML_r);
 
-    if (p.empty())
+    if (!p.empty())
+    {
+        bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, OUString::fromUtf8(p),
+                                                    mnSheet, true);
+        if (bValid)
+            mnCol = maCellData.maCellAddr.Col();
+    }
+
+    if (!bValid)
     {
         ++mnCol;
         ScAddress aAddress( mnCol, mnRow, mnSheet );
         bValid = mrAddressConv.checkCellAddress( aAddress, true );
         maCellData.maCellAddr = aAddress;
-    }
-    else
-    {
-        bValid = mrAddressConv.convertToCellAddress(maCellData.maCellAddr, OUString::fromUtf8(p),
-                                                    mnSheet, true);
-        mnCol = maCellData.maCellAddr.Col();
     }
 
     if( bValid )
