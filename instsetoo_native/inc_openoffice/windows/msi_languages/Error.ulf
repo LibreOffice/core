@@ -383,7 +383,7 @@ en-US = "You do not have sufficient privileges to complete this installation for
 en-US = "Could not set file security for file [3]. Error: [2].  Verify that you have sufficient privileges to modify the security permissions for this file."
 
 [OOO_ERROR_123]
-en-US = "Component Services (COM+ 1.0) are not installed on this computer.  This installation requires Component Services in order to complete successfully.  Component Services are available on Windows 2000."
+en-US = "Component Services (COM+ 1.0) are not installed on this computer.  This installation requires Component Services in order to complete successfully."
 
 [OOO_ERROR_124]
 en-US = "Error registering COM+ application.  Contact your support personnel for more information."
