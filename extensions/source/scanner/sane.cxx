@@ -33,6 +33,7 @@
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <memory>
+#include <iterator>
 
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
 #include <stdarg.h>
@@ -980,7 +981,7 @@ OUString Sane::GetOptionUnitName( int n )
     OUString aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = static_cast<size_t>(nUnit);
-    if (nUnitAsSize >= SAL_N_ELEMENTS( ppUnits ))
+    if (nUnitAsSize >= std::size( ppUnits ))
         aText = "[unknown units]";
     else
         aText = OUString( ppUnits[ nUnit ], strlen(ppUnits[ nUnit ]), osl_getThreadTextEncoding() );
