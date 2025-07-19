@@ -1034,29 +1034,33 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pAttList->add( XML_outline, ToPsz10(false));
         pPivotStrm->startElement(XML_pivotField, pAttList);
 
-        pPivotStrm->startElement(XML_items,
-            XML_count, OString::number(static_cast<tools::Long>(aMemberSequence.size() + aSubtotalSequence.size())));
-
-        for (const auto & nMember : aMemberSequence)
+        sal_uInt32 nItems = aMemberSequence.size() + aSubtotalSequence.size();
+        if (nItems > 0)
         {
-            auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
-            if (nMember.second)
-                pItemAttList->add(XML_h, ToPsz10(true));
-            pItemAttList->add(XML_x, OString::number(static_cast<tools::Long>(nMember.first)));
-            pPivotStrm->singleElement(XML_item, pItemAttList);
+            pPivotStrm->startElement(XML_items,
+                XML_count, OString::number(nItems));
+
+            for (const auto & nMember : aMemberSequence)
+            {
+                auto pItemAttList = sax_fastparser::FastSerializerHelper::createAttrList();
+                if (nMember.second)
+                    pItemAttList->add(XML_h, ToPsz10(true));
+                pItemAttList->add(XML_x, OString::number(static_cast<tools::Long>(nMember.first)));
+                pPivotStrm->singleElement(XML_item, pItemAttList);
+            }
+
+            if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
+                nColItemsCount = pivotTableColCount - nFirstDataCol;
+            else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
+                nRowItemsCount = pivotTableRowCount - nFirstDataRow;
+
+            for (const OString& sSubtotal : aSubtotalSequence)
+            {
+                pPivotStrm->singleElement(XML_item, XML_t, sSubtotal);
+            }
+
+            pPivotStrm->endElement(XML_items);
         }
-
-        if (strcmp(toOOXMLAxisType(eOrient), "axisCol") == 0)
-            nColItemsCount = pivotTableColCount - nFirstDataCol;
-        else if (strcmp(toOOXMLAxisType(eOrient), "axisRow") == 0)
-            nRowItemsCount = pivotTableRowCount - nFirstDataRow;
-
-        for (const OString& sSubtotal : aSubtotalSequence)
-        {
-            pPivotStrm->singleElement(XML_item, XML_t, sSubtotal);
-        }
-
-        pPivotStrm->endElement(XML_items);
         pPivotStrm->endElement(XML_pivotField);
     }
 
