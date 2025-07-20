@@ -1322,7 +1322,17 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                 if(     (nNumberFormat & css::util::NumberFormat::DATE)    == css::util::NumberFormat::DATE
                     || (nNumberFormat & css::util::NumberFormat::DATETIME) == css::util::NumberFormat::DATETIME )
                 {
-                    nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
+                    bool bDoCorrect = true;
+                    if (!sDefault.isEmpty())
+                    {
+                        // nValue was converted from that string. If that string was a date, nValue
+                        // is already in the required epoch, and we should not try to correct it
+                        sal_Int32 nFormatKeyOf_sDefault = xNumberFormatter->detectNumberFormat(nFormatKey, sDefault);
+                        sal_Int16 nNumberFormatType = comphelper::getNumberFormatType(xNumberFormatter, nFormatKeyOf_sDefault);
+                        bDoCorrect = (nNumberFormatType & css::util::NumberFormat::DATE) == 0;
+                    }
+                    if (bDoCorrect)
+                        nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
                 Reference< css::util::XNumberFormatPreviewer> xPreviewer(xNumberFormatter,UNO_QUERY);
