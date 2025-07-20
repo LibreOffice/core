@@ -69,7 +69,7 @@ static int HWPDOArc2Func(int, HWPDrawingObject *, int, void *, int);
 static int HWPDOContainerFunc(int, HWPDrawingObject *, int, void *, int);
 static HWPPara *LoadParaList();
 
-HWPDOFuncType HWPDOFuncTbl[] =
+const HWPDOFuncType HWPDOFuncTbl[] =
 {
     HWPDOContainerFunc,
     HWPDOLineFunc,
