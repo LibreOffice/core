@@ -68,7 +68,7 @@ namespace dbtools
 
     css::util::Date const & DBTypeConversion::getStandardDate()
     {
-        static css::util::Date STANDARD_DB_DATE(1,1,1900);
+        static css::util::Date STANDARD_DB_DATE(30,12,1899);
         return STANDARD_DB_DATE;
     }
 
