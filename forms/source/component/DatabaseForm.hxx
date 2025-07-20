@@ -54,6 +54,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 
 
 #include <tools/link.hxx>
@@ -518,6 +519,9 @@ private:
     void    impl_construct();
 
     DECL_LINK( OnTimeout, Timer*, void );
+
+    css::uno::Reference<css::util::XNumberFormatter> getFormatter();
+
 protected:
     using OPropertySetHelper::getPropertyValues;
 };

@@ -53,11 +53,13 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 
 #include <comphelper/basicio.hxx>
+#include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -68,6 +70,7 @@
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/inettype.hxx>
+#include <svl/numformat.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1923,6 +1926,70 @@ void SAL_CALL ODatabaseForm::reset()
     }
 }
 
+Reference<XNumberFormatter> ODatabaseForm::getFormatter()
+{
+    if (auto xSupplier = dbtools::getNumberFormats(getConnection(), true, m_xContext))
+    {
+        auto result = NumberFormatter::create(m_xContext);
+        result->attachNumberFormatsSupplier(xSupplier);
+        return result;
+    }
+    return {};
+}
+
+static void maybeConvertDefaultStringToDate(Any& def, const auto& getFieldPropOrDefault,
+                                            const auto& getFormatter)
+{
+    OUString sDefault;
+    if (!(def >>= sDefault))
+        return;
+
+    sal_Int32 dataType = getFieldPropOrDefault(PROPERTY_FIELDTYPE, sal_Int32());
+    if (dataType != css::sdbc::DataType::DATE && dataType != css::sdbc::DataType::TIMESTAMP)
+        return;
+
+    Reference<XNumberFormatter> xFormatter = getFormatter();
+    if (!xFormatter)
+        return;
+
+    // Convert to a date
+    sal_uInt32 nFormatKey = xFormatter->detectNumberFormat(
+        getFieldPropOrDefault(PROPERTY_FORMATKEY, sal_uInt32()), sDefault);
+    sal_Int16 nType = comphelper::getNumberFormatType(xFormatter, nFormatKey);
+    if ((nType & css::util::NumberFormat::DATE) == 0)
+        return;
+
+    Reference<XNumberFormatsSupplier> xSupplier = xFormatter->getNumberFormatsSupplier();
+    css::util::Date aNull;
+    try
+    {
+        if (!(xSupplier->getNumberFormatSettings()->getPropertyValue(u"NullDate"_ustr) >>= aNull))
+            return;
+    }
+    catch (const Exception&)
+    {
+        return;
+    }
+    ::Date d(aNull);
+
+    double value = xFormatter->convertStringToNumber(nFormatKey, sDefault);
+    switch (dataType)
+    {
+        case css::sdbc::DataType::DATE:
+        {
+            d.AddDays(value);
+            def <<= d.GetUNODate();
+            break;
+        }
+        case css::sdbc::DataType::TIMESTAMP:
+        {
+            ::DateTime dt(d);
+            dt.AddTime(value);
+            def <<= dt.GetUNODateTime();
+            break;
+        }
+    }
+}
 
 void ODatabaseForm::reset_impl(bool _bApproveByListeners)
 {
@@ -1956,23 +2023,26 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
                 if ( !xColUpdate.is() )
                     continue;
 
-                Reference< XPropertySetInfo > xPSI;
-                if ( xColProps.is() )
-                    xPSI = xColProps->getPropertySetInfo( );
+                auto getPropValOrDefault = [&xColProps, xPSI = xColProps->getPropertySetInfo()](
+                                               const OUString& propname, auto default_value)
+                {
+                    if (xPSI && xPSI->hasPropertyByName(propname))
+                        fromAny(xColProps->getPropertyValue(propname), &default_value);
+                    return default_value;
+                };
 
-                static constexpr OUString PROPERTY_CONTROLDEFAULT = u"ControlDefault"_ustr;
-                if (!xPSI || !xPSI->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
-                    continue;
-
-                Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
+                Any aDefault = getPropValOrDefault(u"ControlDefault"_ustr, Any());
                 if (!aDefault.hasValue())
                     continue;
 
-                bool bReadOnly = false;
-                if ( xPSI->hasPropertyByName( PROPERTY_ISREADONLY ) )
-                    xColProps->getPropertyValue( PROPERTY_ISREADONLY ) >>= bReadOnly;
-                if (bReadOnly)
+                if (getPropValOrDefault(PROPERTY_ISREADONLY, false))
                     continue;
+
+                // If the column is a date, and the default is a string, it may be
+                // impossible to convert the string to date at a later stage (namely, in
+                // DBTypeConversion::getValue, where the column formatting is unknown).
+                maybeConvertDefaultStringToDate(aDefault, getPropValOrDefault,
+                                                [this]() { return getFormatter(); });
 
                 try
                 {
