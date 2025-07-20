@@ -11,6 +11,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+
 namespace
 {
 /**
@@ -124,6 +126,56 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
     // 2nd paragraph
     CPPUNIT_ASSERT(fileStream.ReadUniOrByteStringLine(aParagraph, RTL_TEXTENCODING_UTF8));
     CPPUNIT_ASSERT(aParagraph.indexOf("</ins>") >= 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTables)
+{
+    setImportFilterName("Markdown");
+    createSwDoc("tables.md");
+
+    uno::Reference<text::XTextContent> const xtable(getParagraphOrTable(1));
+
+    // cell A1
+
+    uno::Reference<text::XText> xCellText(getCell(xtable, u"A1"_ustr), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(u"Left-aligned"_ustr, xCellText->getString());
+
+    uno::Reference<text::XTextCursor> xCursor = xCellText->createTextCursor();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(xCursor, u"ParaAdjust"_ustr));
+
+    // cell B1
+    xCellText.set(getCell(xtable, u"B1"_ustr), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(u"Center-aligned"_ustr, xCellText->getString());
+
+    xCursor = xCellText->createTextCursor();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_CENTER),
+                         getProperty<sal_Int16>(xCursor, u"ParaAdjust"_ustr));
+
+    // cell C1
+    xCellText.set(getCell(xtable, u"C1"_ustr), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(u"Right-aligned"_ustr, xCellText->getString());
+
+    xCursor = xCellText->createTextCursor();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_RIGHT),
+                         getProperty<sal_Int16>(xCursor, u"ParaAdjust"_ustr));
+
+    // cell A2
+    CPPUNIT_ASSERT(getCell(xtable, u"A2"_ustr, u"data1"_ustr).is());
+
+    // cell B2
+    xCellText.set(getCell(xtable, u"B2"_ustr), uno::UNO_QUERY_THROW);
+
+    uno::Reference<text::XTextContent> xContent(getShape(1), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(u"data2 "_ustr, xCellText->getString());
+    CPPUNIT_ASSERT_EQUAL(xCellText, xContent->getAnchor()->getText());
+
+    // cell C2
+    CPPUNIT_ASSERT(getCell(xtable, u"C2"_ustr, u"data3"_ustr).is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
