@@ -38,7 +38,11 @@ namespace sc {
     class SpellCheckContext;
 }
 
-namespace sdr::overlay { class OverlayManager; }
+namespace sdr::overlay {
+    class OverlayManager;
+    class OverlayObject;
+    enum class OverlayType;
+}
 
 class FmFormView;
 struct ScTableInfo;
@@ -326,6 +330,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     DECL_DLLPRIVATE_LINK(InitiatePageBreaksTimer, Timer*, void);
 
     void            UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2);
+
+    std::unique_ptr<sdr::overlay::OverlayObject> DrawOverlay(const std::vector<tools::Rectangle>& rRects, const Color& rColor, bool bBorder, bool bContrastOutline, sdr::overlay::OverlayType eOverlayType);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;

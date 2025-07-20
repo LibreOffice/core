@@ -6818,6 +6818,45 @@ void ScGridWindow::DeleteSelectionOverlay()
     mpOOSelection.reset();
 }
 
+std::unique_ptr<sdr::overlay::OverlayObject> ScGridWindow::DrawOverlay(const std::vector<tools::Rectangle>& rRects, const Color& rColor, bool bBorder, bool bContrastOutline, sdr::overlay::OverlayType eOverlayType)
+{
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+    if (!xOverlayManager.is())
+        return std::unique_ptr<sdr::overlay::OverlayObject>();
+
+    std::vector< basegfx::B2DRange > aRanges;
+    const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.CurrentTabForData();
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+
+    for(const tools::Rectangle & rRA : rRects)
+    {
+        if (bLayoutRTL)
+        {
+            basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+        }
+        else
+        {
+            basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
+            aRB.transform(aTransform);
+            aRanges.push_back(aRB);
+        }
+    }
+
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+        eOverlayType,
+        rColor,
+        std::move(aRanges),
+        bBorder, bContrastOutline));
+
+    xOverlayManager->add(*pOverlay);
+
+    return pOverlay;
+}
+
 void ScGridWindow::UpdateSelectionOverlay()
 {
     const MapMode aDrawMode = GetDrawMapMode();
@@ -6849,42 +6888,14 @@ void ScGridWindow::UpdateSelectionOverlay()
             // notify the LibreOfficeKit too
             UpdateKitSelection(aRects);
         }
-        else if (xOverlayManager.is())
+        else
         {
-            std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
-            ScDocument& rDoc = mrViewData.GetDocument();
-            SCTAB nTab = mrViewData.CurrentTabForData();
-            bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-
-            for(const tools::Rectangle & rRA : aRects)
-            {
-                if (bLayoutRTL)
-                {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
-                    aRB.transform(aTransform);
-                    aRanges.push_back(aRB);
-                }
-                else
-                {
-                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
-                    aRB.transform(aTransform);
-                    aRanges.push_back(aRB);
-                }
-            }
-
-            // get the system's highlight color
             const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
-
-            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
-                sdr::overlay::OverlayType::Transparent,
-                aHighlight,
-                std::move(aRanges),
-                true, true));
-
-            xOverlayManager->add(*pOverlay);
-            mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
-            mpOOSelection->append(std::move(pOverlay));
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay = DrawOverlay(aRects, aHighlight, true, true, sdr::overlay::OverlayType::Transparent);
+            if (pOverlay) {
+                mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
+                mpOOSelection->append(std::move(pOverlay));
+            }
         }
     }
     else
@@ -6916,43 +6927,15 @@ void ScGridWindow::UpdateHighlightOverlay()
 
     if (!aRects.empty() && mrViewData.IsActive())
     {
+        ScModule* mod = ScModule::get();
+        const Color aBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+        Color aHighlightColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+        aHighlightColor.Merge(aBackgroundColor, 100);
+
         // #i70788# get the OverlayManager safely
-        if (rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager())
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlay = DrawOverlay(aRects, aHighlightColor, false, false, sdr::overlay::OverlayType::Transparent);
+        if (pOverlay)
         {
-            std::vector< basegfx::B2DRange > aRanges;
-            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
-            ScDocument& rDoc = mrViewData.GetDocument();
-            SCTAB nTab = mrViewData.CurrentTabForData();
-            bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-
-            for(const tools::Rectangle & rRA : aRects)
-            {
-                if (bLayoutRTL)
-                {
-                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
-                    aRB.transform(aTransform);
-                    aRanges.push_back(aRB);
-                }
-                else
-                {
-                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
-                    aRB.transform(aTransform);
-                    aRanges.push_back(aRB);
-                }
-            }
-
-            ScModule* mod = ScModule::get();
-            const Color aBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            Color aHighlightColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
-            aHighlightColor.Merge(aBackgroundColor, 100);
-
-            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
-                sdr::overlay::OverlayType::Transparent,
-                aHighlightColor,
-                std::move(aRanges),
-                false, false));
-
-            xOverlayManager->add(*pOverlay);
             mpOOHighlight.reset(new sdr::overlay::OverlayObjectList);
             mpOOHighlight->append(std::move(pOverlay));
         }
