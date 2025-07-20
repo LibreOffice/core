@@ -19,6 +19,7 @@ $(eval $(call gb_Module_add_targets,codemaker,\
     Executable_cppumaker \
     Executable_netmaker \
     Executable_pythonmaker \
+    $(if $(ENABLE_RUST_UNO),Executable_rustmaker) \
 ))
 endif
 

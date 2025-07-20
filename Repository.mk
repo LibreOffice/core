@@ -97,6 +97,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	javamaker \
 	netmaker \
 	pythonmaker \
+	$(if $(ENABLE_RUST_UNO),rustmaker) \
     $(call gb_CondExeSp2bv,sp2bv) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	unoidl-read \
@@ -458,6 +459,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	passwordcontainer \
 	pcr \
 	pdffilter \
+	$(if $(ENABLE_RUST_UNO),rust_uno-cpp) \
 	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	sax \
 	sb \
