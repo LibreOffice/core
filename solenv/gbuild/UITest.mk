@@ -62,7 +62,7 @@ else
 	$(call gb_Trace_StartRange,$*,UIT)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
-		mkdir -p $(dir $(call gb_UITest_get_target,$*))/user/user && \
+		mkdir -p $(dir $(call gb_UITest_get_target,$*))user/user && \
 		cp $(if $(filter-out MACOSX,$(OS)),-T) $(if $(gb_UITest_use_config),$(gb_UITest_use_config),$(SRCDIR)/qadevOOo/qa/registrymodifications.xcu) $(dir $(call gb_UITest_get_target,$*))/user/user/registrymodifications.xcu && \
 		$(if $(gb_UITest__interactive),, \
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
@@ -71,7 +71,7 @@ else
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
-		$(if $(filter WNT,$(OS)),SAL_LOG_FILE="$(dir $(call gb_UITest_get_target,$*))/soffice.out.log") \
+		$(if $(filter WNT,$(OS)),SAL_LOG_FILE="$(dir $(call gb_UITest_get_target,$*))soffice.out.log") \
 		TEST_LIB=$(call gb_Library_get_target,test) \
 		UNOTEST_LIB=$(call gb_Library_get_target,unotest) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(INSTROOT)/$(LIBO_ETC_FOLDER)/fundamental) \
@@ -94,8 +94,8 @@ else
 				    RET=$$?; \
 				    $(call gb_CppunitTest_postprocess,$(gb_UITest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
                 $(if $(filter WNT,$(OS)), \
-                    printf '%s: <<<\n' $(dir $(call gb_UITest_get_target,$*))/soffice.out.log; \
-                    cat $(dir $(call gb_UITest_get_target,$*))/soffice.out.log; \
+                    printf '%s: <<<\n' $(dir $(call gb_UITest_get_target,$*))soffice.out.log; \
+                    cat $(dir $(call gb_UITest_get_target,$*))soffice.out.log; \
                     printf ' >>>\n\n';) \
 			    cat $@.log; $(gb_UITest_UNITTESTFAILED) UI $*))))
 	$(call gb_Trace_EndRange,$*,UIT)
