@@ -1275,6 +1275,9 @@ void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> 
         return;
 
     auto xServiceInfo = uno::Reference<lang::XServiceInfo>(xInterface, uno::UNO_QUERY);
+    if (!xServiceInfo)
+        return;
+
     const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
     for (auto const& aServiceName : aServiceNames)
     {
