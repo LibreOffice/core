@@ -1961,26 +1961,26 @@ void ODatabaseForm::reset_impl(bool _bApproveByListeners)
                     xPSI = xColProps->getPropertySetInfo( );
 
                 static constexpr OUString PROPERTY_CONTROLDEFAULT = u"ControlDefault"_ustr;
-                if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
+                if (!xPSI || !xPSI->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
+                    continue;
+
+                Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
+                if (!aDefault.hasValue())
+                    continue;
+
+                bool bReadOnly = false;
+                if ( xPSI->hasPropertyByName( PROPERTY_ISREADONLY ) )
+                    xColProps->getPropertyValue( PROPERTY_ISREADONLY ) >>= bReadOnly;
+                if (bReadOnly)
+                    continue;
+
+                try
                 {
-                    Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
-
-                    bool bReadOnly = false;
-                    if ( xPSI->hasPropertyByName( PROPERTY_ISREADONLY ) )
-                        xColProps->getPropertyValue( PROPERTY_ISREADONLY ) >>= bReadOnly;
-
-                    if ( !bReadOnly )
-                    {
-                        try
-                        {
-                            if ( aDefault.hasValue() )
-                                xColUpdate->updateObject( aDefault );
-                        }
-                        catch(const Exception&)
-                        {
-                            DBG_UNHANDLED_EXCEPTION("forms.component");
-                        }
-                    }
+                    xColUpdate->updateObject( aDefault );
+                }
+                catch(const Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("forms.component");
                 }
             }
         }
