@@ -79,6 +79,8 @@ public:
                     ~ScViewFunc();
 
     SC_DLLPUBLIC const ScPatternAttr*    GetSelectionPattern ();
+    SC_DLLPUBLIC OUString GetCurrentString(SCCOL nCol, SCROW nRow);
+
     void GetSelectionFrame(
         std::shared_ptr<SvxBoxItem>& rLineOuter,
         std::shared_ptr<SvxBoxInfoItem>& rLineInner );
