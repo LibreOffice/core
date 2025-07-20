@@ -18,6 +18,7 @@
 #include <test/lokcallback.hxx>
 
 #include "scqahelperdllapi.h"
+#include <tabvwsh.hxx>
 
 class SfxViewShell;
 
@@ -89,6 +90,10 @@ public:
     void callbackImpl(int nType, const char* pPayload);
 
     void ClearAllInvalids();
+
+    SfxViewShell* getViewShell() { return mpViewShell; }
+    ScTabViewShell* getTabViewShell() { return dynamic_cast<ScTabViewShell*>(mpViewShell); }
+    int getViewID() { return mnView; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1062,6 +1062,13 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
     }
 }
 
+OUString ScViewFunc::GetCurrentString(SCCOL nCol, SCROW nRow)
+{
+    SCTAB  nTab = GetViewData().GetTabNo();
+    ScDocument& rDoc = GetViewData().GetDocument();
+    return rDoc.GetString({nCol, nRow, nTab});
+}
+
 void ScViewFunc::GetSelectionFrame(
     std::shared_ptr<SvxBoxItem>& rLineOuter,
     std::shared_ptr<SvxBoxInfoItem>& rLineInner )
