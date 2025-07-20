@@ -16,7 +16,18 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 # Bug 125051 - EDITING: CRASH when start SpellCheck
 class tdf125051(UITestCase):
+    def hasExtension(self, identifier):
+        m = self.xContext.getByName("/singletons/com.sun.star.deployment.ExtensionManager")
+        # Only check bundled extensions for now; it doesn't seem useful to check user and shared ones in UITests
+        p = (i for i in m.getDeployedExtensions("bundled", None, None) if i.getIdentifier().Value == identifier)
+        return any(r.IsPresent and not r.Value.IsAmbiguous and r.Value.Value for r in (i.isRegistered(None, None) for i in p))
+
     def test_tdf125051_crash_spelling_dialog(self):
+        # Check if English spellchecker is installed and active
+        if not self.hasExtension("org.openoffice.en.hunspell.dictionaries"):
+            print("Skipping test_tdf125051_crash_spelling_dialog: English spellckecker is unavailable")
+            return # can't test without English spell checker
+
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
