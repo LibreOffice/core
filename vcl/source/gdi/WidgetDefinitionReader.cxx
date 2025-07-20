@@ -8,6 +8,10 @@
  *
  */
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 #include <utility>
 #include <widgetdraw/WidgetDefinitionReader.hxx>
 
@@ -16,7 +20,6 @@
 #include <tools/stream.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/numeric.hxx>
-#include <unordered_map>
 
 namespace vcl
 {
@@ -120,7 +123,7 @@ ControlPart xmlStringToControlPart(std::string_view sPart)
 
 bool getControlTypeForXmlString(std::string_view rString, ControlType& reType)
 {
-    static std::unordered_map<std::string_view, ControlType> aPartMap = {
+    static constexpr auto aPartMap = frozen::make_unordered_map<std::string_view, ControlType>({
         { "pushbutton", ControlType::Pushbutton },
         { "radiobutton", ControlType::Radiobutton },
         { "checkbox", ControlType::Checkbox },
@@ -146,7 +149,7 @@ bool getControlTypeForXmlString(std::string_view rString, ControlType& reType)
         { "menubar", ControlType::Menubar },
         { "menupopup", ControlType::MenuPopup },
         { "tooltip", ControlType::Tooltip },
-    };
+    });
 
     auto const aIterator = aPartMap.find(rString);
     if (aIterator != aPartMap.end())
@@ -338,7 +341,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
 
     rWidgetDefinition.mpStyle = std::make_shared<WidgetDefinitionStyle>();
 
-    std::unordered_map<std::string_view, Color*> aStyleColorMap = {
+    auto aStyleColorMap = frozen::make_unordered_map<std::string_view, Color*>({
         { "faceColor", &rWidgetDefinition.mpStyle->maFaceColor },
         { "checkedColor", &rWidgetDefinition.mpStyle->maCheckedColor },
         { "lightColor", &rWidgetDefinition.mpStyle->maLightColor },
@@ -393,11 +396,11 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
         { "linkColor", &rWidgetDefinition.mpStyle->maLinkColor },
         { "visitedLinkColor", &rWidgetDefinition.mpStyle->maVisitedLinkColor },
         { "toolTextColor", &rWidgetDefinition.mpStyle->maToolTextColor },
-    };
+    });
 
     rWidgetDefinition.mpSettings = std::make_shared<WidgetDefinitionSettings>();
 
-    std::unordered_map<std::string_view, OString*> aSettingMap = {
+    auto aSettingMap = frozen::make_unordered_map<std::string_view, OString*>({
         { "noActiveTabTextRaise", &rWidgetDefinition.mpSettings->msNoActiveTabTextRaise },
         { "centeredTabs", &rWidgetDefinition.mpSettings->msCenteredTabs },
         { "listBoxEntryMargin", &rWidgetDefinition.mpSettings->msListBoxEntryMargin },
@@ -408,7 +411,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
           &rWidgetDefinition.mpSettings->msListBoxPreviewDefaultLogicWidth },
         { "listBoxPreviewDefaultLogicHeight",
           &rWidgetDefinition.mpSettings->msListBoxPreviewDefaultLogicHeight },
-    };
+    });
 
     SvFileStream aFileStream(m_rDefinitionFile, StreamMode::READ);
 
