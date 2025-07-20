@@ -1319,8 +1319,7 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
                 ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,u"Locale"_ustr) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
-                if(     (nNumberFormat & css::util::NumberFormat::DATE)    == css::util::NumberFormat::DATE
-                    || (nNumberFormat & css::util::NumberFormat::DATETIME) == css::util::NumberFormat::DATETIME )
+                if (nNumberFormat & css::util::NumberFormat::DATE)
                 {
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
