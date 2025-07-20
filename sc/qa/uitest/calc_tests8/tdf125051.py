@@ -25,7 +25,7 @@ class tdf125051(UITestCase):
     def test_tdf125051_crash_spelling_dialog(self):
         # Check if English spellchecker is installed and active
         if not self.hasExtension("org.openoffice.en.hunspell.dictionaries"):
-            print("Skipping test_tdf125051_crash_spelling_dialog: English spellckecker is unavailable")
+            print("Skipping test_tdf125051_crash_spelling_dialog: English spellchecker is unavailable")
             return # can't test without English spell checker
 
         with self.ui_test.create_doc_in_start_center("calc") as document:
