@@ -18,8 +18,11 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libodfgen))
 # * external/libodfgen/ellipticalarc.patch reported upstream as
 #   <https://sourceforge.net/p/libwpd/mailman/message/37329517/> "[Libwpd-devel] [PATCH] Avoid
 #   division by zero for empty elliptical arc":
+# * external/libodfgen/0001-const-up-libodfgen.patch.1
+#   <https://sourceforge.net/p/libwpd/libodfgen/merge-requests/1/> upstreaming attempt
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
     external/libodfgen/ellipticalarc.patch \
+    external/libodfgen/0001-const-up-libodfgen.patch.1 \
 ))
 
 ifeq ($(SYSTEM_REVENGE),)

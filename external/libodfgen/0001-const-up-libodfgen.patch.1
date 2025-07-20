@@ -1,0 +1,438 @@
+From b4fa3c6803463b8b56ae6c0f0f5ab7778207c5e9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 22 Jul 2025 20:09:11 +0100
+Subject: [PATCH] const up libodfgen
+
+---
+ src/FillManager.cxx  |  8 ++++----
+ src/OdcGenerator.cxx | 20 ++++++++++----------
+ src/OdfGenerator.cxx | 38 +++++++++++++++++++-------------------
+ src/OdgGenerator.cxx |  2 +-
+ src/OdpGenerator.cxx |  2 +-
+ src/OdsGenerator.cxx |  6 +++---
+ src/OdtGenerator.cxx |  6 +++---
+ src/PageSpan.cxx     |  4 ++--
+ 8 files changed, 43 insertions(+), 43 deletions(-)
+
+diff --git a/src/FillManager.cxx b/src/FillManager.cxx
+index bee3da6..e83e64d 100644
+--- a/src/FillManager.cxx
++++ b/src/FillManager.cxx
+@@ -115,7 +115,7 @@ librevenge::RVNGString FillManager::getStyleNameForGradient(librevenge::RVNGProp
+ 	if (!gradient)
+ 		gradient = style.child("svg:radialGradient");
+ 	if (gradient) pList.insert("svg:linearGradient", *gradient);
+-	char const *wh[] =
++	static char const* const wh[] =
+ 	{
+ 		"draw:border", "draw:cx", "draw:cy", "draw:end-color", "draw:end-intensity",
+ 		"draw:start-color", "draw:start-intensity", "draw:style"
+@@ -163,7 +163,7 @@ librevenge::RVNGString FillManager::getStyleNameForGradient(librevenge::RVNGProp
+ 
+ 	if (!gradient || !gradient->count())
+ 	{
+-		char const *attrib[] =
++		static char const* const attrib[] =
+ 		{
+ 			"draw:start-color", "draw:end-color", "draw:border", "draw:start-intensity", "draw:end-intensity"
+ 		};
+@@ -205,7 +205,7 @@ librevenge::RVNGString FillManager::getStyleNameForHatch(librevenge::RVNGPropert
+ 	bool isStyle=style["style:display-name"]!=nullptr;
+ 	bool hasParent=style["librevenge:parent-display-name"]!=nullptr;
+ 	// basic data
+-	char const *wh[] = { "draw:color", "draw:distance", "draw:rotation", "draw:style" };
++	static char const* const wh[] = { "draw:color", "draw:distance", "draw:rotation", "draw:style" };
+ 	for (auto &i : wh)
+ 	{
+ 		if (style[i])
+@@ -306,7 +306,7 @@ librevenge::RVNGString FillManager::getStyleNameForOpacity(librevenge::RVNGPrope
+ 		pList.insert("draw:angle", angleValue);
+ 	}
+ 	// basic data
+-	char const *wh[] = { "draw:border", "draw:cx", "draw:cy"	};
++	static char const* const wh[] = { "draw:border", "draw:cx", "draw:cy" };
+ 	for (auto &i : wh)
+ 	{
+ 		if (style[i])
+diff --git a/src/OdcGenerator.cxx b/src/OdcGenerator.cxx
+index 1384bd4..73b8e04 100644
+--- a/src/OdcGenerator.cxx
++++ b/src/OdcGenerator.cxx
+@@ -316,7 +316,7 @@ void OdcGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 	standardStyleOpenElement.write(pHandler);
+ 	pHandler->endElement("style:style");
+ 
+-	static char const *s_paraStyle[4*4] =
++	static char const* const s_paraStyle[4*4] =
+ 	{
+ 		"Text_Body", "Text Body", "Standard", "text",
+ 		"Table_Contents", "Table Contents", "Text_Body", "extra",
+@@ -576,7 +576,7 @@ void OdcGenerator::openChart(const librevenge::RVNGPropertyList &propList)
+ 	auto openElement = std::make_shared<TagOpenElement>("chart:chart");
+ 	for (int i=0; i<8; ++i)
+ 	{
+-		static char const *wh[8] =
++		static char const* const wh[8] =
+ 		{
+ 			"chart:class", "chart:column-mapping", "chart:row-mapping",
+ 			"svg:height", "svg:width", "xlink:href", "xlink:type", "xml:id"
+@@ -629,7 +629,7 @@ void OdcGenerator::openChartTextObject(const librevenge::RVNGPropertyList &propL
+ 	auto openElement = std::make_shared<TagOpenElement>(what.c_str());
+ 	for (int i=0; i<4; ++i)
+ 	{
+-		static char const *wh[4] =
++		static char const* const wh[4] =
+ 		{
+ 			"svg:x", "svg:y", "svg:width", "svg:height"
+ 		};
+@@ -643,7 +643,7 @@ void OdcGenerator::openChartTextObject(const librevenge::RVNGPropertyList &propL
+ 	{
+ 		for (int i=0; i<4; ++i)
+ 		{
+-			static char const *wh[4] =
++			static char const* const wh[4] =
+ 			{
+ 				"chart:legend-align", "chart:legend-position",
+ 				"style:legend-expansion",  "style:legend-expansion-aspect-ratio"
+@@ -688,7 +688,7 @@ void OdcGenerator::openChartPlotArea(const librevenge::RVNGPropertyList &propLis
+ 	auto openElement = std::make_shared<TagOpenElement>("chart:plot-area");
+ 	for (int i=0; i<17; ++i)
+ 	{
+-		static char const *wh[17] =
++		static char const* const wh[17] =
+ 		{
+ 			"chart:data-source-has-labels",
+ 			"dr3d:ambient-color", "dr3d:distance", "dr3d:focal-length", "dr3d:lighting-mode",
+@@ -763,7 +763,7 @@ void OdcGenerator::insertChartAxis(const librevenge::RVNGPropertyList &propList)
+ 	auto openElement = std::make_shared<TagOpenElement>("chart:axis");
+ 	for (int i=0; i<2; ++i)
+ 	{
+-		static char const *wh[2] =
++		static char const* const wh[2] =
+ 		{
+ 			"chart:dimension", "chart:name"
+ 		};
+@@ -808,7 +808,7 @@ void OdcGenerator::insertChartAxis(const librevenge::RVNGPropertyList &propList)
+ 			auto childElement = std::make_shared<TagOpenElement>("chart:title");
+ 			for (int i=0; i<2; ++i)
+ 			{
+-				static char const *wh[2] =
++				static char const* const wh[2] =
+ 				{
+ 					"svg:x", "svg:y"
+ 				};
+@@ -854,7 +854,7 @@ void OdcGenerator::openChartSerie(const librevenge::RVNGPropertyList &propList)
+ 	auto openElement = std::make_shared<TagOpenElement>("chart:series");
+ 	for (int i=0; i<4; ++i)
+ 	{
+-		static char const *wh[4] =
++		static char const* const wh[4] =
+ 		{
+ 			"chart:attached-axis", "chart:class", "xml:id", "chart:label-string"
+ 		};
+@@ -868,7 +868,7 @@ void OdcGenerator::openChartSerie(const librevenge::RVNGPropertyList &propList)
+ 		openElement->addAttribute("chart:style-name",mpImpl->getChartStyleName(propList["librevenge:chart-id"]->getInt()));
+ 	for (int i=0; i<2; ++i)
+ 	{
+-		static char const *wh[2] =
++		static char const* const wh[2] =
+ 		{
+ 			"chart:label-cell-address", "chart:values-cell-range-address"
+ 		};
+@@ -893,7 +893,7 @@ void OdcGenerator::openChartSerie(const librevenge::RVNGPropertyList &propList)
+ 			auto childElement = std::make_shared<TagOpenElement>("chart:data-point");
+ 			for (int i=0; i<2; ++i)
+ 			{
+-				static char const *wh[2] =
++				static char const* const wh[2] =
+ 				{
+ 					"chart:repeated", "xml:id"
+ 				};
+diff --git a/src/OdfGenerator.cxx b/src/OdfGenerator.cxx
+index 07fd0bc..d04a91d 100644
+--- a/src/OdfGenerator.cxx
++++ b/src/OdfGenerator.cxx
+@@ -394,7 +394,7 @@ void OdfGenerator::appendBodySettings(const librevenge::RVNGPropertyList &propLi
+ 		if (child["librevenge:type"]->getStr()=="table:calculation-settings")
+ 		{
+ 			auto calcSetting=std::make_shared<TagOpenElement>("table:calculation-settings");
+-			char const *wh[]= { "table:automatic-find-labels", "table:case-sensitive", "table:null-year",
++			char const* const wh[]= { "table:automatic-find-labels", "table:case-sensitive", "table:null-year",
+ 			                    "table:precision-as-shown", "table:search-criteria-must-apply-to-whole-cell",
+ 			                    "table:use-regular-expressions", "table:use-wildcards"
+ 			                  };
+@@ -663,7 +663,7 @@ void OdfGenerator::closeFrame()
+ 
+ void OdfGenerator::addFrameProperties(const librevenge::RVNGPropertyList &propList, TagOpenElement &element) const
+ {
+-	static char const *frameAttrib[] =
++	static char const* const frameAttrib[] =
+ 	{
+ 		"draw:z-index",
+ 		"fo:max-width", "fo:max-height",
+@@ -802,7 +802,7 @@ void OdfGenerator::appendLayersMasterStyles(OdfDocumentHandler *pHandler)
+ 	// add the default layers
+ 	for (int i=0; i<5; ++i)
+ 	{
+-		static char const *defaults[] = {"layout", "background", "backgroundobjects", "controls", "measurelines"};
++		static char const* const defaults[] = {"layout", "background", "backgroundobjects", "controls", "measurelines"};
+ 		if (mLayerNameSet.find(defaults[i])!=mLayerNameSet.end())
+ 			continue;
+ 		layer.addAttribute("draw:name", defaults[i]);
+@@ -871,7 +871,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<2; ++i)
+ 		{
+-			char const *wh[]= {"text:display", "text:outline-level"};
++			char const* const wh[]= {"text:display", "text:outline-level"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], propList[wh[i]]->getStr());
+ 		}
+@@ -880,7 +880,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<4; ++i)
+ 		{
+-			char const *wh[]= {"text:condition", "text:current-value", "text:string-value-if-false", "text:string-value-if-true"};
++			char const* const wh[]= {"text:condition", "text:current-value", "text:string-value-if-false", "text:string-value-if-true"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -931,7 +931,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<2; ++i)
+ 		{
+-			char const *wh[]= {"text:condition", "text:is-hidden"};
++			char const* const wh[]= {"text:condition", "text:is-hidden"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -940,7 +940,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<2; ++i)
+ 		{
+-			char const *wh[]= {"text:description", "text:placeholder-type"};
++			char const* const wh[]= {"text:description", "text:placeholder-type"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -950,7 +950,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<1; ++i)
+ 		{
+-			char const *wh[]= {"text:name"};
++			char const* const wh[]= {"text:name"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -959,7 +959,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<2; ++i)
+ 		{
+-			char const *wh[]= {"text:reference-format", "text:ref-name"};
++			char const* const wh[]= {"text:reference-format", "text:ref-name"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -968,7 +968,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<3; ++i)
+ 		{
+-			char const *wh[]= {"text:formula", "text:name", "text:ref-name"};
++			char const* const wh[]= {"text:formula", "text:name", "text:ref-name"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -977,7 +977,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<1; ++i)
+ 		{
+-			char const *wh[]= {"text:description"};
++			char const* const wh[]= {"text:description"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -986,7 +986,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<3; ++i)
+ 		{
+-			char const *wh[]= {"office:string-value", "office:value", "text:name"};
++			char const* const wh[]= {"office:string-value", "office:value", "text:name"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -995,7 +995,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<2; ++i)
+ 		{
+-			char const *wh[]= {"text:display", "text:name"};
++			char const* const wh[]= {"text:display", "text:name"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -1004,7 +1004,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<5; ++i)
+ 		{
+-			char const *wh[]= {"text:formula", "text:name", "office:string-value", "office:value", "office:value-type"};
++			char const* const wh[]= {"text:formula", "text:name", "office:string-value", "office:value", "office:value-type"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -1014,7 +1014,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<4; ++i)
+ 		{
+-			char const *wh[]= {"text:column-name", "text:database-name", "text:table-name", "text:table-type"};
++			char const* const wh[]= {"text:column-name", "text:database-name", "text:table-name", "text:table-type"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -1023,7 +1023,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<3; ++i)
+ 		{
+-			char const *wh[]= {"text:database-name", "text:table-name", "text:table-type"};
++			char const* const wh[]= {"text:database-name", "text:table-name", "text:table-type"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -1032,7 +1032,7 @@ void OdfGenerator::insertField(const librevenge::RVNGPropertyList &propList)
+ 	{
+ 		for (int i=0; i<5; ++i)
+ 		{
+-			char const *wh[]= {"text:condition", "text:database-name", "text:row-number", "text:table-name", "text:table-type"};
++			char const* const wh[]= {"text:condition", "text:database-name", "text:row-number", "text:table-name", "text:table-type"};
+ 			if (propList[wh[i]])
+ 				openElement->addAttribute(wh[i], librevenge::RVNGString::escapeXML(propList[wh[i]]->getStr()));
+ 		}
+@@ -1617,7 +1617,7 @@ librevenge::RVNGString OdfGenerator::getCurrentGraphicStyleName(const librevenge
+ 	// check that no default are set, there will can be set with mGraphicStyle, if needed
+ 	for (int i=0; i<3; ++i)
+ 	{
+-		char const *wh[]= {"draw:fill","draw:shadow","draw:stroke"};
++		char const* const wh[]= {"draw:fill","draw:shadow","draw:stroke"};
+ 		if (!shapeList[wh[i]] && styleList[wh[i]])
+ 			styleList.remove(wh[i]);
+ 	}
+@@ -1651,7 +1651,7 @@ void OdfGenerator::drawEllipse(const librevenge::RVNGPropertyList &propList)
+ 	pDrawEllipseElement->addAttribute("svg:height", sValue);
+ 	for (int i=0; i<4; ++i)
+ 	{
+-		char const *wh[]= {"draw:kind", "draw:start-angle", "draw:end-angle", "draw:transform"};
++		char const* const wh[]= {"draw:kind", "draw:start-angle", "draw:end-angle", "draw:transform"};
+ 		if (propList[wh[i]])
+ 			pDrawEllipseElement->addAttribute(wh[i], propList[wh[i]]->getStr());
+ 	}
+diff --git a/src/OdgGenerator.cxx b/src/OdgGenerator.cxx
+index ce1889e..36436c1 100644
+--- a/src/OdgGenerator.cxx
++++ b/src/OdgGenerator.cxx
+@@ -709,7 +709,7 @@ void OdgGenerator::startTextObject(const librevenge::RVNGPropertyList &propList)
+ 		if (propList["svg:height"])
+ 			pDrawFrameOpenElement->addAttribute("svg:height", propList["svg:height"]->getStr());
+ 	}
+-	static char const *attrib[]=
++	static char const* const attrib[]=
+ 	{
+ 		"draw:z-index",
+ 		"fo:min-width", "fo:min-height", "fo:max-width", "fo:max-height", "fo:padding-top", "fo:padding-bottom",
+diff --git a/src/OdpGenerator.cxx b/src/OdpGenerator.cxx
+index 70aebb3..2247191 100644
+--- a/src/OdpGenerator.cxx
++++ b/src/OdpGenerator.cxx
+@@ -211,7 +211,7 @@ void OdpGeneratorPrivate::openTextBoxFrame(const librevenge::RVNGPropertyList &p
+ 		if (propList["svg:height"])
+ 			pDrawFrameOpenElement->addAttribute("svg:height", propList["svg:height"]->getStr());
+ 	}
+-	static char const *attrib[]=
++	static char const* const attrib[]=
+ 	{
+ 		"fo:min-width", "fo:min-height", "fo:max-width", "fo:max-height", "fo:padding-top", "fo:padding-bottom",
+ 		"fo:padding-left", "fo:padding-right", "draw:textarea-vertical-align", "draw:fill", "draw:fill-color"
+diff --git a/src/OdsGenerator.cxx b/src/OdsGenerator.cxx
+index f026b4a..a610ed2 100644
+--- a/src/OdsGenerator.cxx
++++ b/src/OdsGenerator.cxx
+@@ -412,7 +412,7 @@ bool OdsGeneratorPrivate::close(Command command)
+ 	if (mCommandStack.empty() || mCommandStack.top()!=command)
+ 	{
+ #ifdef DEBUG
+-		static char const *wh[] =
++		static char const* const wh[] =
+ 		{
+ 			"Document", "PageSpan", "Header", "Footer", "Sheet", "SheetRow", "SheetCell",
+ 			"Chart", "ChartDataLabel", "ChartPlotArea", "ChartSerie", "ChartTextObject",
+@@ -593,7 +593,7 @@ void OdsGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 	standardStyleOpenElement.write(pHandler);
+ 	pHandler->endElement("style:style");
+ 
+-	static char const *s_paraStyle[4*10] =
++	static char const* const s_paraStyle[4*10] =
+ 	{
+ 		"Text_Body", "Text Body", "Standard", "text",
+ 		"Table_Contents", "Table Contents", "Text_Body", "extra",
+@@ -618,7 +618,7 @@ void OdsGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 		pHandler->endElement("style:style");
+ 	}
+ 
+-	static char const *s_textStyle[2*4] =
++	static char const* const s_textStyle[2*4] =
+ 	{
+ 		"Footnote_Symbol", "Footnote Symbol", "Endnote_Symbol", "Endnote Symbol",
+ 		"Footnote_anchor", "Footnote anchor", "Endnote_anchor", "Endnote anchor"
+diff --git a/src/OdtGenerator.cxx b/src/OdtGenerator.cxx
+index 290f649..f472285 100644
+--- a/src/OdtGenerator.cxx
++++ b/src/OdtGenerator.cxx
+@@ -231,7 +231,7 @@ void OdtGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 	standardStyleOpenElement.write(pHandler);
+ 	pHandler->endElement("style:style");
+ 
+-	static char const *s_paraStyle[4*10] =
++	static char const* const s_paraStyle[4*10] =
+ 	{
+ 		"Text_Body", "Text Body", "Standard", "text",
+ 		"Table_Contents", "Table Contents", "Text_Body", "extra",
+@@ -256,7 +256,7 @@ void OdtGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 		pHandler->endElement("style:style");
+ 	}
+ 
+-	static char const *s_textStyle[2*4] =
++	static char const* const s_textStyle[2*4] =
+ 	{
+ 		"Footnote_Symbol", "Footnote Symbol", "Endnote_Symbol", "Endnote Symbol",
+ 		"Footnote_anchor", "Footnote anchor", "Endnote_anchor", "Endnote anchor"
+@@ -287,7 +287,7 @@ void OdtGeneratorPrivate::_writeStyles(OdfDocumentHandler *pHandler)
+ 	lineOpenElement.write(pHandler);
+ 	pHandler->endElement("text:linenumbering-configuration");
+ 
+-	static char const *s_noteConfig[4*2] =
++	static char const* const s_noteConfig[4*2] =
+ 	{
+ 		"footnote", "Footnote_Symbol", "Footnote_anchor", "1",
+ 		"endnote", "Endnote_Symbol", "Endnote_anchor", "i"
+diff --git a/src/PageSpan.cxx b/src/PageSpan.cxx
+index e9833e9..634c301 100644
+--- a/src/PageSpan.cxx
++++ b/src/PageSpan.cxx
+@@ -145,7 +145,7 @@ void PageLayoutStyle::write(OdfDocumentHandler *pHandler) const
+ 
+ 	for (int j=0; j<2; ++j)
+ 	{
+-		char const *wh[]= {"librevenge:header", "librevenge:footer"};
++		static char const* const wh[]= {"librevenge:header", "librevenge:footer"};
+ 		if (!mpPropList.child(wh[j]) || mpPropList.child(wh[j])->count()!=1)
+ 			continue;
+ 		pHandler->startElement(j==0 ? "style:header-style" : "style:footer-style", librevenge::RVNGPropertyList());
+@@ -407,7 +407,7 @@ librevenge::RVNGString PageSpanManager::findOrAddLayout(const librevenge::RVNGPr
+ 	}
+ 	for (int j=0; j<3; ++j)
+ 	{
+-		char const *wh[]= {"librevenge:footnote", "librevenge:header", "librevenge:footer"};
++		static char const* const wh[]= {"librevenge:footnote", "librevenge:header", "librevenge:footer"};
+ 		if (propList.child(wh[j]))
+ 			layoutList.insert(wh[j], *propList.child(wh[j]));
+ 	}
+-- 
+2.49.0
+
