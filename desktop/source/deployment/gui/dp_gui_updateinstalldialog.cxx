@@ -48,6 +48,7 @@
 #include <dp_misc.h>
 #include "dp_gui_extensioncmdqueue.hxx"
 #include <ucbhelper/content.hxx>
+#include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
@@ -559,7 +560,20 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     ::ucbhelper::Content sourceContent;
     (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv);
 
-    const OUString sTitle( StrTitle::getTitle( sourceContent ) );
+    OUString sTitle(StrTitle::getTitle(sourceContent));
+    if (sTitle.indexOf('.') < 0)
+    {
+        // The title could be changed due to redirection (seen with github URLs, which arrive
+        // something like 'eff2c80e-138d-4b06-8139-e433f4672379'). This will create problems in
+        // PackageRegistryImpl::bindPackage, where extension will be required to get mediatype.
+        // Try to restore the filename with extension from the URL.
+        // TODO: could also use Content-Disposition (RFC 6266), where the filename is provided.
+        INetURLObject aUrl(sDownloadURL);
+        aUrl.removeFinalSlash();
+        OUString newTitle = aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+        if (newTitle.indexOf('.') >= 0)
+            sTitle = newTitle;
+    }
 
     destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation::Copy,
