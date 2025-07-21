@@ -39,15 +39,31 @@ bool QtInstanceToolbar::get_item_sensitive(const OUString&) const
     assert(false && "Not implemented yet");
     return false;
 }
-void QtInstanceToolbar::set_item_active(const OUString&, bool)
+void QtInstanceToolbar::set_item_active(const OUString& rIdent, bool bActive)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QToolButton* pToolButton = m_pToolBar->findChild<QToolButton*>(toQString(rIdent));
+        assert(pToolButton && "No tool button with the given ID found");
+        assert(pToolButton->isCheckable() && "Tool button is not checkable");
+        pToolButton->setChecked(bActive);
+    });
 }
 
-bool QtInstanceToolbar::get_item_active(const OUString&) const
+bool QtInstanceToolbar::get_item_active(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bActive = false;
+    GetQtInstance().RunInMainThread([&] {
+        QToolButton* pToolButton = m_pToolBar->findChild<QToolButton*>(toQString(rIdent));
+        assert(pToolButton && "No tool button with the given ID found");
+        assert(pToolButton->isCheckable() && "Tool button is not checkable");
+        bActive = pToolButton->isChecked();
+    });
+
+    return bActive;
 }
 
 void QtInstanceToolbar::set_menu_item_active(const OUString&, bool)
