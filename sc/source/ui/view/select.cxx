@@ -625,6 +625,44 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
 
         pView->UpdateRef( nPosX, nPosY, nTab );
     }
+    else if (m_pViewData->IsDBExpandMode())
+    {
+        SCCOL nFillColStart;
+        SCROW nFillRowStart;
+        SCCOL nFillColEnd;
+        SCROW nFillRowEnd;
+        m_pViewData->GetFillData(nFillColStart, nFillRowStart, nFillColEnd, nFillRowEnd);
+
+        bool bNegX = ( nPosX < nFillColStart );
+        bool bNegY = ( nPosY < nFillRowStart );
+
+        if ( bNegX )
+        {
+            //  in SetCursorAtPoint hidden columns are skipped.
+            //  They must be skipped here too, or the result will always be the first hidden column.
+            while ( nPosX<nFillColStart && rDoc.ColHidden(nPosX, nTab) ) ++nPosX;
+        }
+
+        if ( bNegY )
+        {
+            //  in SetCursorAtPoint hidden rows are skipped.
+            //  They must be skipped here too, or the result will always be the first hidden row.
+            if (nPosY < nFillRowStart)
+            {
+                nPosY = rDoc.FirstVisibleRow(nPosY, nFillRowStart-1, nTab);
+                if (!rDoc.ValidRow(nPosY))
+                    nPosY = nFillRowStart;
+            }
+        }
+
+        if ( nFillColStart != m_pViewData->GetRefStartX() || nFillRowStart != m_pViewData->GetRefStartY() )
+        {
+            m_pViewData->GetView()->DoneRefMode();
+            m_pViewData->GetView()->InitRefMode( nFillColStart, nFillRowStart, nTab, SC_REFTYPE_FILL );
+        }
+
+        pView->UpdateRef( nPosX, nPosY, nTab );
+    }
     else if (m_pViewData->IsAnyFillMode())
     {
         ScFillMode nMode = m_pViewData->GetFillMode();
