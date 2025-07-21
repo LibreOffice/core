@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
     loadAndSave("test_segfault_while_save.docx");
     // fdo#74499
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6137), getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6138), getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo69656)

@@ -1379,22 +1379,24 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
 {
     // rhbz#820283, fdo#55462: set default box widths so table width is covered
     SwTableLines & rLines = rTable.GetTabLines();
+    assert(nMaxBoxes != 0); // no valid table without boxes
+    auto const nTableWidth{USHRT_MAX}; // default
+    auto const nWidth{nTableWidth / nMaxBoxes};
+    auto const nRest{nTableWidth % nMaxBoxes};
     for (size_t nTmpLine = 0; nTmpLine < rLines.size(); ++nTmpLine)
     {
         SwTableBoxes & rBoxes = rLines[nTmpLine]->GetTabBoxes();
         assert(!rBoxes.empty()); // ensured by convertToTable
         size_t const nMissing = nMaxBoxes - rBoxes.size();
-        if (nMissing)
+        if (nMissing || nRest != 0)
         {
             // default width for box at the end of an incomplete line
             SwTableBoxFormat *const pNewFormat = rDoc.MakeTableBoxFormat();
-            size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
-                        nWidth * (nMissing + 1)) );
+                        nWidth * (nMissing + 1) + nRest) );
             pNewFormat->Add(*rBoxes.back());
         }
     }
-    size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
     // default width for all boxes not at the end of an incomplete line
     rBoxFormat.SetFormatAttr(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
 }

@@ -468,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf59274)
     // This was 1224: too narrow first cell in first row
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcW", "w", u"4291");
     // This was 3674: too wide last cell in first row
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", u"1695");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcW", "w", u"1696");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupshapeSdt, "dml-groupshape-sdt.docx")
