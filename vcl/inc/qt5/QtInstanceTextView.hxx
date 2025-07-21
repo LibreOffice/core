@@ -49,6 +49,10 @@ public:
     virtual int vadjustment_get_lower() const override;
     virtual int vadjustment_get_page_size() const override;
     virtual void vadjustment_set_value(int nValue) override;
+
+private Q_SLOTS:
+    void handleCursorPositionChanged();
+    void handleTextChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -19,6 +19,11 @@ QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)
     , m_pTextEdit(pTextEdit)
 {
     assert(m_pTextEdit);
+
+    connect(m_pTextEdit, &QPlainTextEdit::cursorPositionChanged, this,
+            &QtInstanceTextView::handleCursorPositionChanged);
+    connect(m_pTextEdit, &QPlainTextEdit::textChanged, this,
+            &QtInstanceTextView::handleTextChanged);
 }
 
 void QtInstanceTextView::set_text(const OUString& rText)
@@ -139,5 +144,17 @@ int QtInstanceTextView::vadjustment_get_page_size() const
 }
 
 void QtInstanceTextView::vadjustment_set_value(int) { assert(false && "Not implemented yet"); }
+
+void QtInstanceTextView::handleCursorPositionChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_cursor_position();
+}
+
+void QtInstanceTextView::handleTextChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_changed();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
