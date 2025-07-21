@@ -172,7 +172,7 @@ private:
     DECL_LINK(QueryTooltipSdwHdl, const weld::TreeIter&, OUString);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nIconViewIdx) const;
-    TranslateId         GetPresetStringId(sal_uInt16 nIconViewIdx) const;
+    OUString            GetPresetName(sal_uInt16 nIconViewIdx) const;
 
     void                FillPresetIV();
     void                FillShadowIV();
@@ -190,7 +190,7 @@ private:
     bool IsBorderLineStyleAllowed( SvxBorderLineStyle nStyle ) const;
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
 
-    static TranslateId GetShadowStringId(sal_uInt16 nIconViewIdx);
+    static OUString GetShadowTypeName(sal_uInt16 nIconViewIdx);
     static BitmapEx GetPreviewAsBitmap(const Image& rImage);
 };
 

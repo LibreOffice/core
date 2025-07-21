@@ -1239,7 +1239,7 @@ IMPL_LINK(SvxBorderTabPage, QueryTooltipPreHdl, const weld::TreeIter&, iter, OUS
 {
     const OUString sId = m_xWndPresets->get_id(iter);
     if (!sId.isEmpty())
-        return SvxResId( GetPresetStringId( sId.toInt32() ) );
+        return GetPresetName(sId.toInt32());
 
     return OUString();
 }
@@ -1248,7 +1248,7 @@ IMPL_LINK(SvxBorderTabPage, QueryTooltipSdwHdl, const weld::TreeIter&, iter, OUS
 {
     const OUString sId = m_xWndShadows->get_id(iter);
     if (!sId.isEmpty())
-        return CuiResId( GetShadowStringId( sId.toInt32() ) );
+        return GetShadowTypeName(sId.toInt32());
 
     return OUString();
 }
@@ -1394,7 +1394,7 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nIconViewIdx ) const
     return ppnImgIds[ nLine ][ nIconViewIdx - 1 ];
 }
 
-TranslateId SvxBorderTabPage::GetShadowStringId( sal_uInt16 nIconViewIdx )
+OUString SvxBorderTabPage::GetShadowTypeName(sal_uInt16 nIconViewIdx)
 {
     static const TranslateId pnStrIds[ BORDER_SHADOW_COUNT ] =
     {
@@ -1405,10 +1405,10 @@ TranslateId SvxBorderTabPage::GetShadowStringId( sal_uInt16 nIconViewIdx )
         RID_CUISTR_SHADOW_STYLE_TOPLEFT
     };
 
-    return pnStrIds[ nIconViewIdx - 1 ];
+    return CuiResId(pnStrIds[nIconViewIdx - 1]);
 }
 
-TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nIconViewIdx ) const
+OUString SvxBorderTabPage::GetPresetName(sal_uInt16 nIconViewIdx) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
     static const TranslateId pnStrIds[] =
@@ -1438,7 +1438,7 @@ TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nIconViewIdx ) const
         RID_SVXSTR_TABLE_PRESET_OUTERALL,
         RID_SVXSTR_TABLE_PRESET_OUTERINNER
     };
-    return pnStrIds[ GetPresetImageId( nIconViewIdx ) - 1 ];
+    return SvxResId(pnStrIds[GetPresetImageId(nIconViewIdx) - 1]);
 }
 
 void SvxBorderTabPage::FillPresetIV()
@@ -1450,6 +1450,8 @@ void SvxBorderTabPage::FillPresetIV()
         OUString sId = OUString::number(nIdx);
         BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
         m_xWndPresets->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
+        m_xWndPresets->set_item_accessible_name(m_xWndPresets->n_children() - 1,
+                                                GetPresetName(nIdx));
     }
 
     // show the control
@@ -1467,6 +1469,8 @@ void SvxBorderTabPage::FillShadowIV()
         OUString sId = OUString::number(nIdx);
         BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aShadowImgVec[nIdx-1]);
         m_xWndShadows->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
+        m_xWndShadows->set_item_accessible_name(m_xWndShadows->n_children() - 1,
+                                                GetShadowTypeName(nIdx));
     }
 
     // show the control
