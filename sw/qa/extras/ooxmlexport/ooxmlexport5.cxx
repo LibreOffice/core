@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO76586)
 
     // there is only one table in the test file
     assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", u"1601");
-    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", u"7843");
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", u"7844");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76587 )
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131819)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // These were 4030 and 4249.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[1]", "w", u"3841");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[2]", "w", u"4049");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblGrid/w:gridCol[2]", "w", u"4050");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131959)
