@@ -347,6 +347,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         setScaleProperties(*pSlider, rMap);
         pObject = pSlider;
     }
+    else if (sName == u"GtkSeparatorToolItem")
+    {
+        QToolBar* pToolBar = qobject_cast<QToolBar*>(pParentWidget);
+        assert(pToolBar && "GtkSeparatorToolItem doesn't have a toolbar parent");
+        pToolBar->addSeparator();
+    }
     else if (sName == u"GtkSpinButton")
     {
         QtDoubleSpinBox* pSpinBox = new QtDoubleSpinBox(pParentWidget);
