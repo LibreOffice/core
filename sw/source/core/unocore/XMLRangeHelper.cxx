@@ -304,9 +304,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
     CellRange aResult;
 
     // iterate over different ranges
-    for( sal_Int32 i = 0;
-         nEndPos < nLength;
-         nStartPos = ++nEndPos, i++ )
+    for( ; nEndPos < nLength; )
     {
         // find start point of next range
 
