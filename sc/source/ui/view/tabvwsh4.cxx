@@ -1723,20 +1723,23 @@ void SAL_CALL ScViewOptiChangesListener::changesOccurred(const util::ChangesEven
 {
     for (const auto& change : rEvent.Changes)
     {
-        if (OUString sChangedEntry;
-            (change.Accessor >>= sChangedEntry) && sChangedEntry == "ColumnRowHighlighting")
+        OUString sChangedEntry;
+        if (change.Accessor >>= sChangedEntry)
         {
-            mrViewShell.HighlightOverlay();
-            break;
-        }
-
-        if (OUString sChangedEntry; (change.Accessor >>= sChangedEntry) && sChangedEntry ==
-            "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcCellFocus/Color")
-        {
-            mrViewShell.GetActiveWin()->UpdateCursorOverlay();
-            mrViewShell.GetActiveWin()->UpdateAutoFillOverlay();
-            mrViewShell.GetActiveWin()->UpdateHighlightOverlay();
-            break;
+            if (sChangedEntry == "ColumnRowHighlighting")
+            {
+                mrViewShell.HighlightOverlay();
+            }
+            else if (sChangedEntry == "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcCellFocus/Color")
+            {
+                mrViewShell.GetActiveWin()->UpdateCursorOverlay();
+                mrViewShell.GetActiveWin()->UpdateAutoFillOverlay();
+                mrViewShell.GetActiveWin()->UpdateHighlightOverlay();
+            }
+            else if (sChangedEntry == "ColorSchemes/org.openoffice.Office.UI:ColorScheme['COLOR_SCHEME_LIBREOFFICE_AUTOMATIC']/CalcDBFocus/Color")
+            {
+                mrViewShell.GetActiveWin()->UpdateDatabaseOverlay();
+            }
         }
     }
 }
