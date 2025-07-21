@@ -79,7 +79,11 @@ OUString QtInstanceNotebook::get_current_page_ident() const
     SolarMutexGuard g;
 
     OUString sIdent;
-    GetQtInstance().RunInMainThread([&] { sIdent = get_page_ident(m_pTabWidget->currentIndex()); });
+    GetQtInstance().RunInMainThread([&] {
+        const int nIndex = m_pTabWidget->currentIndex();
+        if (nIndex >= 0)
+            sIdent = get_page_ident(nIndex);
+    });
     return sIdent;
 }
 
