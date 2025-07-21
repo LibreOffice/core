@@ -1598,6 +1598,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
     ]
+    SID_INSERT_HYPERLINK // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
     SID_RULER_PAGE_POS // ole : no, status : ?
     [
         ExecMethod = ExecRuler ;

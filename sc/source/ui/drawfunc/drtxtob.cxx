@@ -299,6 +299,10 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_INSERT_HYPERLINK:
+            mrViewData.GetViewShell()->GetViewFrame().GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+            break;
+
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
@@ -403,6 +407,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 
     if (rSet.GetItemState(SID_OPEN_HYPERLINK) != SfxItemState::UNKNOWN
+        || rSet.GetItemState(SID_INSERT_HYPERLINK) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_EDIT_HYPERLINK) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
@@ -414,6 +419,10 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.DisableItem( SID_EDIT_HYPERLINK );
             rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
             rSet.DisableItem( SID_REMOVE_HYPERLINK );
+        }
+        else
+        {
+            rSet.DisableItem( SID_INSERT_HYPERLINK );
         }
     }
 

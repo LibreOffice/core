@@ -283,6 +283,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteTextAttrDlg( rReq );
             break;
 
+        case SID_INSERT_HYPERLINK:
         case SID_EDIT_HYPERLINK:
             if ( pSingleSelectedObj )
                 rViewData.GetDispatcher().Execute( SID_HYPERLINK_DIALOG );

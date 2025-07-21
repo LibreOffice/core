@@ -402,6 +402,12 @@ interface BaseText
         ExecMethod = Execute ;
         StateMethod = GetState;
     ]
+    SID_INSERT_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_RUBY_DIALOG
     [
         ExecMethod = Execute ;

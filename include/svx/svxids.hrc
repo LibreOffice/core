@@ -548,6 +548,7 @@ class XFillGradientItem;
 
 // CAUTION! Range <457 .. 457> used by EditEngine (!)
 
+#define SID_INSERT_HYPERLINK                            ( SID_SVX_START + 458 )
 #define SID_REMOVE_HYPERLINK                            ( SID_SVX_START + 459 )
 #define SID_ATTR_ALIGN_INDENT                           ( SID_SVX_START + 460 )
 #define SID_DEC_INDENT                                  ( SID_SVX_START + 461 )

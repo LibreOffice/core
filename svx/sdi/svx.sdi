@@ -9712,6 +9712,23 @@ SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
         GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem InsertHyperlink SID_INSERT_HYPERLINK
+()
+[
+        AutoUpdate = FALSE,
+        FastCall = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+
+        AccelConfig = TRUE,
+        MenuConfig = TRUE,
+        ToolBoxConfig = TRUE,
+        GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem EditHyperlink SID_EDIT_HYPERLINK
 (SfxInt32Item PositionX FN_PARAM_1, SfxInt32Item PositionY FN_PARAM_2)
 [

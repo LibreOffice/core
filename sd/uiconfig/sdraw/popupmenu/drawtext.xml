@@ -18,6 +18,7 @@
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuitem menu:id=".uno:OutlineBullet"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>

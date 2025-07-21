@@ -2858,6 +2858,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_INSERT_HYPERLINK :
+        {
+            GetViewFrame()->GetDispatcher()->Execute( SID_HYPERLINK_DIALOG );
+
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
         case SID_OPEN_HYPERLINK:
         {
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();

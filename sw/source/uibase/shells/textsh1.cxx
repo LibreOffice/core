@@ -2032,6 +2032,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.MoveParagraph(SwNodeOffset(-1));
             rReq.Done();
             break;
+        case SID_INSERT_HYPERLINK:
+        {
+            SfxRequest aReq(SID_HYPERLINK_DIALOG, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
+            GetView().GetViewFrame().ExecuteSlot( aReq);
+            rReq.Ignore();
+        }
+        break;
         case SID_RUBY_DIALOG:
         case SID_HYPERLINK_DIALOG:
         {
@@ -3970,6 +3977,38 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     }
                     rSet.DisableItem(nWhich);
                 }
+            break;
+            case SID_INSERT_HYPERLINK:
+            {
+                if (!rSh.HasSelection())
+                {
+                    rSet.DisableItem(nWhich);
+                    break;
+                }
+                if (!rSh.HasReadonlySel())
+                {
+                    SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
+                    rSh.GetCurAttr(aSet);
+
+                    // If a hyperlink is selected, either alone or along with other text...
+                    if (SfxItemState::SET <= aSet.GetItemState(RES_TXTATR_INETFMT)
+                        || aSet.GetItemState(RES_TXTATR_INETFMT) == SfxItemState::INVALID)
+                    {
+                        rSet.DisableItem(nWhich);
+                    }
+
+                    // is the cursor at the beginning of a hyperlink?
+                    const SwTextNode* pTextNd = rSh.GetCursor()->GetPointNode().GetTextNode();
+                    if (pTextNd && !rSh.HasSelection())
+                    {
+                        const sal_Int32 nIndex = rSh.GetCursor()->Start()->GetContentIndex();
+                        const SwTextAttr* pINetFmt
+                            = pTextNd->GetTextAttrAt(nIndex, RES_TXTATR_INETFMT);
+                        if (pINetFmt && !pINetFmt->GetINetFormat().GetValue().isEmpty())
+                            rSet.DisableItem(nWhich);
+                    }
+                }
+            }
             break;
             case SID_REMOVE_HYPERLINK:
             {

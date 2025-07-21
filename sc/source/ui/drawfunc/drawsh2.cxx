@@ -220,6 +220,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     {
         // no hyperlink options for a selected group
         rSet.DisableItem( SID_EDIT_HYPERLINK );
+        rSet.DisableItem( SID_INSERT_HYPERLINK );
         rSet.DisableItem( SID_REMOVE_HYPERLINK );
         rSet.DisableItem( SID_OPEN_HYPERLINK );
         rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
@@ -235,6 +236,10 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_REMOVE_HYPERLINK );
             rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
+        }
+        else
+        {
+            rSet.DisableItem( SID_INSERT_HYPERLINK );
         }
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
@@ -301,6 +306,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_ORIGINALSIZE );
         rSet.DisableItem( SID_FITCELLSIZE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
+        rSet.DisableItem( SID_INSERT_HYPERLINK );
     }
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
