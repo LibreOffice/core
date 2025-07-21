@@ -18,6 +18,9 @@ $(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,external/redland/r
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,rasqal,0))
 
+# 0001-const-up-rasqal_algebra_node_operator_labels.patch.1
+# upstream effort as: https://github.com/dajobe/rasqal/pull/20
+
 $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rasqal-pkgconfig.patch.1 \
 	external/redland/rasqal/rasqal-freebsd.patch.1 \
@@ -28,6 +31,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rpath.patch \
 	external/redland/rasqal/clang-cl.patch \
 	external/redland/rasqal/libtool.patch \
+	external/redland/rasqal/0001-const-up-rasqal_algebra_node_operator_labels.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

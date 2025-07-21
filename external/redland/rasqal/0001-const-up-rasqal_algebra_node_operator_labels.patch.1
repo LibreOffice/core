@@ -1,0 +1,26 @@
+From 7765e00e7a41c4f706bf62418e1f3355eb5bd9fd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Mon, 21 Jul 2025 08:50:15 +0100
+Subject: [PATCH] const up rasqal_algebra_node_operator_labels
+
+and move the symbol out of the .data section
+---
+ src/rasqal_algebra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/rasqal_algebra.c b/src/rasqal_algebra.c
+index e7e8be97..9131d0de 100644
+--- a/src/rasqal_algebra.c
++++ b/src/rasqal_algebra.c
+@@ -773,7 +773,7 @@ rasqal_algebra_node_get_operator(rasqal_algebra_node* node)
+ }
+ 
+ 
+-static struct {
++static const struct {
+   const char* const label;
+   size_t length;
+ } rasqal_algebra_node_operator_labels[RASQAL_ALGEBRA_OPERATOR_LAST + 1] = {
+-- 
+2.49.0
+
