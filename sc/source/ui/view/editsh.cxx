@@ -639,6 +639,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
+        case SID_INSERT_HYPERLINK:
+            {
+                rViewData.GetViewShell()->GetViewFrame().GetDispatcher()->Execute(
+                    SID_HYPERLINK_DIALOG);
+            }
+        break;
         case SID_EDIT_HYPERLINK:
             {
                 // Ensure the field is selected first
@@ -820,6 +826,16 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
                     }
                     rSet.Put(aHLinkItem);
+                }
+                break;
+
+            case SID_INSERT_HYPERLINK:
+                {
+                    // Disable insert hyperlink if no text is selected or cursor is at a URL field
+                    ESelection aSel( pActiveView->GetSelection() );
+                    if (!aSel.HasRange() || URLFieldHelper::IsCursorAtURLField(*pEditView,
+                                                            /*AlsoCheckBeforeCursor=*/true))
+                        rSet.DisableItem (nWhich);
                 }
                 break;
 

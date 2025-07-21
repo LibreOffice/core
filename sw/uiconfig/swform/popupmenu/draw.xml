@@ -72,6 +72,7 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>

@@ -538,6 +538,18 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_INSERT_HYPERLINK:
+            {
+                // Disable when no text selected or when cursor is at URL field
+                if (!HasSelection(true)
+                    || URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView(),
+                                                          /*AlsoCheckBeforeCursor=*/true))
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+
             case SID_STYLE_WATERCAN:
             {
                 std::unique_ptr<SfxUInt16Item> pFamilyItem;

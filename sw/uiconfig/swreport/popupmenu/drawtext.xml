@@ -25,6 +25,7 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
