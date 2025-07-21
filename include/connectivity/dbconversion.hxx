@@ -111,7 +111,7 @@ namespace dbtools::DBTypeConversion
         */
         inline double toNullDate(const css::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
 
-        // return the date from the numberformatsupplier or the STANDARD_DATE (1900,1,1)
+        // return the date from the numberformatsupplier or the STANDARD_DATE (1899,12,30)
         OOO_DLLPUBLIC_DBTOOLS css::util::Date getNULLDate(const css::uno::Reference< css::util::XNumberFormatsSupplier > &xSupplier);
 
         // return the date in the format %04d-%02d-%02d
