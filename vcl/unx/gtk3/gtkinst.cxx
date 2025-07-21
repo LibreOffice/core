@@ -12109,12 +12109,8 @@ private:
         if (GTK_IS_BUTTON(pItem))
             gtk_button_set_child(GTK_BUTTON(pItem), pImage);
         else if (GTK_IS_MENU_BUTTON(pItem))
-        {
-            // TODO after gtk 4.6 is released require that version and drop this
-            static auto menu_button_set_child = reinterpret_cast<void (*) (GtkMenuButton*, GtkWidget*)>(dlsym(nullptr, "gtk_menu_button_set_child"));
-            if (menu_button_set_child)
-                menu_button_set_child(GTK_MENU_BUTTON(pItem), pImage);
-        }
+            gtk_menu_button_set_child(GTK_MENU_BUTTON(pItem), pImage);
+
         // versions of gtk4 > 4.2.1 might do this on their own
         gtk_widget_remove_css_class(pItem, "text-button");
     }
