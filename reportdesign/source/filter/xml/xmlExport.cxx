@@ -683,7 +683,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 
     bool bShapeHandled = false;
     ::std::map<sal_Int32,sal_Int32> aRowSpan;
-    for (sal_Int32 j = 0; aRowIter != aRowEnd; ++aRowIter,++j,++aHeightIter)
+    for (; aRowIter != aRowEnd; ++aRowIter,++aHeightIter)
     {
         AddAttribute( m_sTableStyle,*aHeightIter );
         SvXMLElementExport aRow(*this,XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
