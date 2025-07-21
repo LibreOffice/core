@@ -56,7 +56,7 @@
               <object class="GtkTreeSelection" id="treeview-selection1"/>
             </child>
             <child>
-              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
@@ -64,6 +64,11 @@
                     <attribute name="pixbuf">0</attribute>
                   </attributes>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                   <attributes>

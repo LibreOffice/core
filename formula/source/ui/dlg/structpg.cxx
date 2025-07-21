@@ -71,19 +71,19 @@ bool StructPage::InsertEntry(const OUString& rText, const weld::TreeIter* pParen
         case StructType::Folder:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
-            m_xTlbStruct->set_image(rRet, BMP_STR_OPEN);
+            m_xTlbStruct->set_image(rRet, BMP_STR_OPEN, 0);
             bEntry = true;
             break;
         case StructType::End:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
-            m_xTlbStruct->set_image(rRet, maImgEnd);
+            m_xTlbStruct->set_image(rRet, maImgEnd, 0);
             bEntry = true;
             break;
         case StructType::Error:
             m_xTlbStruct->insert(pParent, nPos, &rText, &sId, nullptr, nullptr,
                                  false, &rRet);
-            m_xTlbStruct->set_image(rRet, maImgError);
+            m_xTlbStruct->set_image(rRet, maImgError, 0);
             bEntry = true;
             break;
     }
