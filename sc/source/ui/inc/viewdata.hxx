@@ -39,6 +39,7 @@ enum class ScFillMode
     EMBED_LT    = 2,
     EMBED_RB    = 3,
     MATRIX      = 4,
+    DBEXPAND    = 5, // using a fill mode is a bit of a hack but the DB expansion behaves like a auto fill
 };
 
 enum ScSplitMode { SC_SPLIT_NONE = 0, SC_SPLIT_NORMAL, SC_SPLIT_FIX, SC_SPLIT_MODE_MAX_ENUM = SC_SPLIT_FIX };
@@ -549,6 +550,7 @@ public:
     void            ResetFillMode();
     bool            IsAnyFillMode() const       { return nFillMode != ScFillMode::NONE; }
     bool            IsFillMode() const          { return nFillMode == ScFillMode::FILL; }
+    bool            IsDBExpandMode() const      { return nFillMode == ScFillMode::DBEXPAND; }
     ScFillMode      GetFillMode() const         { return nFillMode; }
 
     SvxAdjust       GetEditAdjust() const {return eEditAdjust; }
