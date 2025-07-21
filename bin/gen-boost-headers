@@ -58,6 +58,7 @@ cat <(cd ${SRCDIR} && git grep -h '^# *include') \
 #pragma GCC diagnostic ignored "-Wtautological-constant-out-of-range-compare"
 #pragma GCC diagnostic ignored "-Wtype-limits"
 #pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-macros"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
