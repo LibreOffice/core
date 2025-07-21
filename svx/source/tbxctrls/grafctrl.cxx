@@ -598,12 +598,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_ATTR_GRAF_MODE:
         {
-            if( pItem )
-            {
+            const SfxInt16Item* pMode = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if ( pMode )
+                aSet.Put( SdrGrafModeItem( static_cast<GraphicDrawMode>( pMode->GetValue() ) ) );
+            else if( pItem )
                 aSet.Put( SdrGrafModeItem( static_cast<GraphicDrawMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) ));
-                if( bUndo )
-                    aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFMODE );
-            }
+            if( bUndo && ( pMode || pItem ) )
+                aUndoStr += SvxResId( RID_SVXSTR_UNDO_GRAFMODE );
         }
         break;
 
