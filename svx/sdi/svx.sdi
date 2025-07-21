@@ -3903,7 +3903,7 @@ SfxInt16Item GrafLuminance SID_ATTR_GRAF_LUMINANCE
 
 
 SfxUInt16Item GrafMode SID_ATTR_GRAF_MODE
-
+(SfxInt16Item ColorMode FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
