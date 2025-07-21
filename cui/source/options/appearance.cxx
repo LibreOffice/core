@@ -752,6 +752,7 @@ void SvxAppearanceTabPage::FillItemsList()
             { HTMLUNKNOWN, CuiResId(REG_HTMLUNKNOWN) },
             { CALCGRID, CuiResId(REG_CALCGRID) },
             { CALCCELLFOCUS, CuiResId(REG_CALCCELLFOCUS) },
+            { CALCDBFOCUS, CuiResId(REG_CALCDBFOCUS) },
             { CALCPAGEBREAK, CuiResId(REG_CALCPAGEBREAK) },
             { CALCPAGEBREAKMANUAL, CuiResId(REG_CALCPAGEBREAKMANUAL) },
             { CALCPAGEBREAKAUTOMATIC, CuiResId(REG_CALCPAGEBREAKAUTOMATIC) },

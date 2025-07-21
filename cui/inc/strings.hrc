@@ -485,6 +485,7 @@
 #define REG_HTMLUNKNOWN                     NC_("REG_HTMLUNKNOWN", "Text Highlighting")
 #define REG_CALCGRID                        NC_("REG_CALCGRID", "Calc Grid")
 #define REG_CALCCELLFOCUS                   NC_("REG_CALCCELLFOCUS", "Cell focus")
+#define REG_CALCDBFOCUS                     NC_("REG_CALCDBFOCUS", "Table Style focus")
 #define REG_CALCPAGEBREAK                   NC_("REG_CALCPAGEBREAK", "Page break")
 #define REG_CALCPAGEBREAKMANUAL             NC_("REG_CALCPAGEBREAKMANUAL", "Manual page breaks")
 #define REG_CALCPAGEBREAKAUTOMATIC          NC_("REG_CALCPAGEBREAKAUTOMATIC", "Automatic page breaks")

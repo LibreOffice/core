@@ -332,6 +332,16 @@
           </info>
         </prop>
       </group>
+      <group oor:name="CalcDBFocus">
+        <info>
+        <desc>Specifies the setting to change the database range highlight in Calc</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color for the database range highlight in Calc.</desc>
+          </info>
+        </prop>
+      </group>
       <group oor:name="CalcPageBreak">
         <info>
           <desc>Specifies the settings used for page breaks in the page break preview in Calc.</desc>

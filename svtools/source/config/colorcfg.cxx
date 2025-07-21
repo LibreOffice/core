@@ -37,6 +37,7 @@
 #include <vcl/window.hxx>
 
 #include "itemholder2.hxx"
+#include <tools/color.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -550,6 +551,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_GRAY,         COL_GRAY        }, // HTMLUNKNOWN
         { COL_GRAY3,        COL_GRAY7       }, // CALCGRID
         { COL_LIGHTBLUE,    COL_LIGHTBLUE   }, // CALCCELLFOCUS
+        { COL_LIGHTGRAYBLUE, COL_LIGHTGRAYBLUE }, // CALCDBFOCUS
         { COL_BLUE,         COL_BLUE        }, // CALCPAGEBREAK
         { Color(0x2300dc),  Color(0x2300DC) }, // CALCPAGEBREAKMANUAL
         { COL_GRAY7,        COL_GRAY7       }, // CALCPAGEBREAKAUTOMATIC
@@ -606,6 +608,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
             break;
 
         case CALCCELLFOCUS:
+            aRet = Application::GetSettings().GetStyleSettings().GetAccentColor();
+            break;
+
+        case CALCDBFOCUS:
             aRet = Application::GetSettings().GetStyleSettings().GetAccentColor();
             break;
 
