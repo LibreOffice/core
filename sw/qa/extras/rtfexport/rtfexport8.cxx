@@ -175,6 +175,45 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf166953)
+{
+    auto verify = [this]() {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[1]/infos/bounds", "width", u"14149");
+        // the problem was that this width was 544
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[1]/cell[1]/infos/bounds", "width",
+                    u"14146");
+        // there is another cell in this row that was added by writerfilter
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[2]/infos/bounds", "width", u"14149");
+        // the problem was that this width was 544
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[2]/cell[1]/infos/bounds", "width",
+                    u"2408");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[2]/cell[2]/infos/bounds", "width",
+                    u"11738");
+        // there is another cell in this row that was added by writerfilter
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/infos/bounds", "width", u"14149");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[1]/infos/bounds", "width",
+                    u"3309");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[2]/infos/bounds", "width",
+                    u"1759");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[3]/infos/bounds", "width",
+                    u"1729");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[4]/infos/bounds", "width",
+                    u"1831");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[5]/infos/bounds", "width",
+                    u"1863");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[6]/infos/bounds", "width",
+                    u"1865");
+        assertXPath(pLayout, "/root/page[1]/body/tab/row[3]/cell[7]/infos/bounds", "width",
+                    u"1791");
+        // there is another cell in this row that was already in the RTF
+    };
+    createSwDoc("Tpl-2min3_s1.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEndRTF)
 {
     // Given a document, endnotes at collected at section end:
