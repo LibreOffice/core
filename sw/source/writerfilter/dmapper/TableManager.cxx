@@ -25,6 +25,7 @@
 #include "util.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 
 using namespace com::sun::star;
 
@@ -428,6 +429,29 @@ void TableManager::HandleSmallerRows()
                 pRowData->addCell(xNewCellTextCursor, pCellPropMap);
                 pRowData->endCell(xNewCellTextCursor);
                 pRowData->getProperties()->setValue(TablePropertyMap::TABLE_WIDTH, nMaxRowWidth);
+                // tdf#166953 the TableColumnSeparators property needs another
+                // separator for the extra cell added to it
+                auto const oSep{ pRowData->getProperties()->getProperty(
+                    PROP_TABLE_COLUMN_SEPARATORS) };
+                if (oSep)
+                {
+                    auto const oldSeps{
+                        oSep->second.get<uno::Sequence<text::TableColumnSeparator>>()
+                    };
+                    ::std::remove_const_t<decltype(oldSeps)> newSeps{ oldSeps.getLength() + 1 };
+                    auto const it{ ::std::transform(
+                        oldSeps.begin(), oldSeps.end(), newSeps.getArray(), [&](auto const sep) {
+                            double const pos{ sep.Position * double(nRowWidth) / nMaxRowWidth };
+                            return text::TableColumnSeparator{
+                                static_cast<sal_Int16>(::rtl::math::round(pos)), sep.IsVisible
+                            };
+                        }) };
+                    // TODO replace magic number
+                    it->Position = ::rtl::math::round(10000 * double(nRowWidth) / nMaxRowWidth);
+                    it->IsVisible = true;
+                    pRowData->getProperties()->Insert(PROP_TABLE_COLUMN_SEPARATORS,
+                                                      uno::Any(newSeps));
+                }
             }
         }
     }
