@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,libxml2,libxml2))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.2.dylib,.libs/libxml2.2.dylib))
+$(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.16.dylib,.libs/libxml2.16.dylib))
 else ifeq ($(OS),WNT)
 ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,libxml2,$(LIBO_URE_LIB_FOLDER)/libxml2.dll,.libs/libxml2.dll))
