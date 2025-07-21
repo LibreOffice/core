@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <config_global.h>
 #include <rtl/ref.hxx>
 
 #include <utility>
@@ -43,6 +44,24 @@ constexpr bool isIncompleteOrDerivedFromVclReferenceBase(...) { return true; }
 template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
     int (*)[sizeof(T)])
 { return std::is_base_of<VclReferenceBase, T>::value; }
+
+// The above isIncompleteOrDerivedFromVclReferenceBase will cause will cause -Wsfinae-incomplete
+// warnings when e.g. OutputDevice (include/vcl/outdev.hxx) contains members of type
+// VclPtr<OutputDevice>, so OutputDevice is not yet complete when
+// sIncompleteOrDerivedFromVclReferenceBase is instantiated, but will become complete later on
+// ("warning: error: defining ‘OutputDevice’, which previously failed to be complete in a SFINAE
+// context [-Werror=sfinae-incomplete=]").  A real solution would presumably be using C++26
+// reflection and rewriting the above isIncompleteOrDerivedFromVclReferenceBase as something like
+//
+//  consteval bool isIncompleteOrDerivedFromVclReferenceBase(std::meta::info type) {
+//      return !std::meta::is_complete_type(type)
+//          || std::meta::is_base_of_type(^^VclReferenceBase, type);
+//  }
+//
+// But until then, use a HACK of (globally) ignoring that warning:
+#if defined __GNUC__ && !defined __clang__ && HAVE_GCC_WSFINAE_INCOMPLETE
+#pragma GCC diagnostic ignored "-Wsfinae-incomplete"
+#endif
 
 } // namespace vcl::detail
 
