@@ -8013,6 +8013,21 @@ AC_SUBST(HARDENING_LDFLAGS)
 AC_SUBST(HARDENING_CFLAGS)
 AC_SUBST(HARDENING_OPT_CFLAGS)
 
+if test "$GCC" = yes && test "$COM_IS_CLANG" != TRUE; then
+    AC_MSG_CHECKING([whether $CXX_BASE supports -Wsfinae-incomplete])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CFLAGS
+    CXXFLAGS="$CXXFLAGS -Werror"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #pragma GCC diagnostic warning "-Wsfinae-incomplete"
+        ])], [
+            AC_DEFINE([HAVE_GCC_WSFINAE_INCOMPLETE])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+fi
+
 dnl ===================================================================
 dnl Identify the C++ library
 dnl ===================================================================
