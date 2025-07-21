@@ -213,6 +213,8 @@ private:
     QModelIndex firstTextColumnModelIndex(const weld::TreeIter& rIter) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
+    void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
+
 private Q_SLOTS:
     void handleActivated();
     void handleDataChanged(const QModelIndex& rTopLeft, const QModelIndex& rBottomRight,

@@ -636,45 +636,22 @@ OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, const OUString& rImage, int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
+    if (rImage.isEmpty())
+        return;
 
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        if (rImage.isEmpty())
-            return;
-        QModelIndex aIndex = modelIndex(rIter, nCol);
-        QIcon aIcon = loadQPixmapIcon(rImage);
-        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
-    });
+    setImage(rIter, loadQPixmapIcon(rImage), nCol);
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter, VirtualDevice& rImage, int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
-
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(rIter, nCol);
-        QIcon aIcon = toQPixmap(rImage);
-        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
-    });
+    setImage(rIter, toQPixmap(rImage), nCol);
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter& rIter,
                                    const css::uno::Reference<css::graphic::XGraphic>& rImage,
                                    int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
-
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        QModelIndex aIndex = modelIndex(rIter, nCol);
-        QIcon aIcon = toQPixmap(rImage);
-        m_pModel->setData(aIndex, aIcon, Qt::DecorationRole);
-    });
+    setImage(rIter, toQPixmap(rImage), nCol);
 }
 
 void QtInstanceTreeView::set_font_color(const weld::TreeIter&, const Color&)
@@ -1064,6 +1041,18 @@ QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(const weld::TreeIter& 
 
     assert(false && "No text column found");
     return QModelIndex();
+}
+
+void QtInstanceTreeView::setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol)
+{
+    assert(nCol != -1 && "Special column -1 not handled yet");
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndex aIndex = modelIndex(rIter, nCol);
+        m_pModel->setData(aIndex, rPixmap, Qt::DecorationRole);
+    });
 }
 
 void QtInstanceTreeView::handleActivated()
