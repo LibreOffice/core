@@ -36,6 +36,29 @@
           </packing>
         </child>
         <child>
+          <object class="sfxlo-NotebookbarToolBox" id="slide_transitions_pane">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="margin_start">5</property>
+            <child>
+              <object class="GtkToolButton" id="Transitions-SlideTransitionsPane">
+                <property name="visible">True</property>
+                <property name="action_name">.uno:SlideTransitionsPane</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="sfxlo-NotebookbarToolBox" id="fontheight">
             <property name="visible">True</property>
             <property name="can_focus">True</property>

@@ -363,7 +363,7 @@ sd::TransitionPresetPtr getPreset(const sd::impl::TransitionEffect &rEffect)
 SlideTransitionPane::SlideTransitionPane(
     weld::Widget* pParent,
     ViewShellBase & rBase) :
-        PanelLayout( pParent, u"SlideTransitionsPanel"_ustr, u"modules/simpress/ui/slidetransitionspanel.ui"_ustr ),
+        PanelLayout( pParent, u"SlideTransitionsPanel"_ustr, u"modules/simpress/ui/slidetransitionspanel.ui"_ustr, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())),
         mrBase( rBase ),
         mpDrawDoc( rBase.GetDocShell() ? rBase.GetDocShell()->GetDoc() : nullptr ),
         mxTransitionsIconView(m_xBuilder->weld_icon_view("transitions_icons")),

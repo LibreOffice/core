@@ -57,6 +57,10 @@
       constructor="com_sun_star_comp_sd_InsertSlideController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.sd.SlideTransitionsToolBoxControl"
+    constructor="com_sun_star_comp_sd_SlideTransitionsToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.sd.SlideLayoutController"
       constructor="com_sun_star_comp_sd_SlideLayoutController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

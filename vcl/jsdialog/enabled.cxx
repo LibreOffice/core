@@ -418,7 +418,6 @@ constexpr auto SidebarList
         { u"modules/simpress/ui/masterpagepanelall.ui" },
         { u"modules/simpress/ui/masterpagepanelrecent.ui" },
         { u"modules/simpress/ui/sidebarslidebackground.ui" },
-        { u"modules/simpress/ui/slidetransitionspanel.ui" },
         { u"modules/simpress/ui/tabledesignpanel.ui" },
         // smath
         { u"modules/smath/ui/sidebarelements_math.ui" },
@@ -480,7 +479,9 @@ constexpr auto NotebookbarList
         { u"modules/scalc/ui/numberbox.ui" },
         { u"svx/ui/fontnamebox.ui" },
         { u"svx/ui/fontsizebox.ui" },
-        { u"svx/ui/stylespreview.ui" }
+        { u"svx/ui/stylespreview.ui" },
+        // not interim builder, but regular builder:
+        { u"modules/simpress/ui/slidetransitionspanel.ui" }
     });
 
 // ========== ADDRESSINPUT ================================================ //

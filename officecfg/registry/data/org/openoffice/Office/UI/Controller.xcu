@@ -1083,6 +1083,17 @@
           <value>com.sun.star.comp.sd.InsertSlideController</value>
         </prop>
       </node>
+       <node oor:name="SlideTransitionsPane" oor:op="replace">
+          <prop oor:name="Command">
+            <value>.uno:SlideTransitionsPane</value>
+          </prop>
+          <prop oor:name="Module">
+            <value>com.sun.star.presentation.PresentationDocument</value>
+          </prop>
+          <prop oor:name="Controller">
+            <value>com.sun.star.comp.sd.SlideTransitionsToolBoxControl</value>
+          </prop>
+      </node>
       <node oor:name="NumberingToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:DefaultNumbering</value>

@@ -199,6 +199,9 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "quickfind", nLOKWindowId);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+        // this is notebookbar widget but converted from sidebar panel
+        else if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
+            return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, "notebookbar", nLOKWindowId);
         else
             SAL_WARN("vcl", "UI file not enabled for JSDialogs: " << rUIFile);
     }
