@@ -167,6 +167,7 @@
 #include <vcl/GestureEventPan.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
+#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
 #include <svtools/ctrltool.hxx>
@@ -3363,6 +3364,7 @@ static int joinThreads(JoinThreads eCategory);
 
 static void flushBufferedVOCs()
 {
+    SolarMutexGuard aGuard;
     // Flush all buffered VOC primitives from the pages.
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
@@ -3387,8 +3389,6 @@ static void flushBufferedVOCs()
 
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
-    SolarMutexGuard aGuard;
-
     vcl::lok::trimMemory(nTarget);
 
     if (nTarget > 2000)
@@ -3397,6 +3397,8 @@ static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 
         // When more aggressively reclaiming memory then shutdown threads which
         // will restart on demand.
+        // The SolarMutex should not be held when calling joinThreads to avoid
+        // deadlock.
         joinThreads(JoinThreads::RESTARTS_ON_DEMAND);
     }
 
@@ -3577,6 +3579,8 @@ static void lo_stopURP(LibreOfficeKit* /* pThis */,
 
 static int joinThreads(JoinThreads eCategory)
 {
+    DBG_TESTNOTSOLARMUTEX();
+
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
     if (!pool.joinThreadsIfIdle())
         return 0;

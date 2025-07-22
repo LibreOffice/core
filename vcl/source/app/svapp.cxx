@@ -1789,6 +1789,7 @@ void trimMemory(int nTarget)
 {
     if (nTarget >= 1000)
     {
+        SolarMutexGuard aGuard;
         ImplSVData* pSVData = ImplGetSVData();
         if (!pSVData) // shutting down
             return;
