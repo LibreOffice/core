@@ -691,7 +691,7 @@ OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
 VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const
 {
     VclPtr<VirtualDevice> xRet = VclPtr<VirtualDevice>::Create();
-    xRet->SetBackground(COL_TRANSPARENT);
+    xRet->SetBackground();
     return xRet;
 }
 
