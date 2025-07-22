@@ -161,6 +161,7 @@ private:
     DECL_LINK(SelStyleHdl_Impl, SvtLineListBox&, void);
     DECL_LINK(SelColHdl_Impl, ColorListBox&, void);
     DECL_LINK(SelPreHdl_Impl, weld::IconView&, void);
+    DECL_LINK(FocusOutPresets_Impl, weld::Widget&, void);
     DECL_LINK(SelSdwHdl_Impl, weld::IconView&, void);
     DECL_LINK(LinesChanged_Impl, LinkParamNone*, void);
     DECL_LINK(ModifyDistanceHdl_Impl, weld::MetricSpinButton&, void);

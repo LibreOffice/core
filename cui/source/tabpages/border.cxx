@@ -532,6 +532,7 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     m_xLineWidthLB->connect_changed(LINK(this, SvxBorderTabPage, ModifyWidthLBHdl_Impl));
     m_xLineWidthMF->connect_value_changed(LINK(this, SvxBorderTabPage, ModifyWidthMFHdl_Impl));
     m_xWndPresets->connect_selection_changed( LINK( this, SvxBorderTabPage, SelPreHdl_Impl ) );
+    m_xWndPresets->connect_focus_out(LINK(this, SvxBorderTabPage, FocusOutPresets_Impl));
     m_xWndShadows->connect_selection_changed( LINK( this, SvxBorderTabPage, SelSdwHdl_Impl ) );
     m_xWndPresets->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipPreHdl ) );
     m_xWndShadows->connect_query_tooltip( LINK( this, SvxBorderTabPage, QueryTooltipSdwHdl ) );
@@ -1218,11 +1219,15 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, weld::IconView&, void)
         SelColHdl_Impl(*m_xLbLineColor);
     }
 
-    // Presets IconView does not show a selection (used as push buttons).
-    m_xWndPresets->unselect_all();
-
     LinesChanged_Impl( nullptr );
     UpdateRemoveAdjCellBorderCB( nLine + 1 );
+}
+
+IMPL_LINK_NOARG(SvxBorderTabPage, FocusOutPresets_Impl, weld::Widget&, void)
+{
+    // no longer show preset as selected, as it would become out of sync
+    // if borders are changed manually
+    m_xWndPresets->unselect_all();
 }
 
 IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, weld::IconView&, void)
