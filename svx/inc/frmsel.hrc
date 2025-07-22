@@ -26,7 +26,7 @@
 
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
-std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
+inline constexpr std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
 {
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Border setting") , 0 },
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Left border line") , 1 },
