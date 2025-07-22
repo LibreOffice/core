@@ -276,9 +276,6 @@ Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int
     if ( !pEntry )
         throw IndexOutOfBoundsException();
 
-    // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
-    //return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-    //return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
     return implGetAccessible(*pEntry);
 }
 
