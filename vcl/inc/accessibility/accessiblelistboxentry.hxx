@@ -57,13 +57,10 @@ private:
     unotools::WeakReference<AccessibleListBox> m_wListBox;
 
     tools::Rectangle               GetBoundingBox_Impl() const;
-    bool                IsAlive_Impl() const;
     bool                IsShowing_Impl() const;
 
     /// @throws css::lang::IndexOutOfBoundsException
     void CheckActionIndex(sal_Int32 nIndex);
-    /// @throws css::lang::DisposedException
-    void                    EnsureIsAlive() const;
 
     /** this function is called upon disposing the component
     */

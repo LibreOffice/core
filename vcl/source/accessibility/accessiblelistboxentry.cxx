@@ -111,11 +111,6 @@ tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
     return aRect;
 }
 
-bool AccessibleListBoxEntry::IsAlive_Impl() const
-{
-    return isAlive() && m_pTreeListBox;
-}
-
 bool AccessibleListBoxEntry::IsShowing_Impl() const
 {
     Reference< XAccessible > xParent = implGetParentAccessible( );
@@ -138,12 +133,6 @@ void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
 {
     if (nIndex < 0 || nIndex >= getAccessibleActionCount())
         throw css::lang::IndexOutOfBoundsException();
-}
-
-void AccessibleListBoxEntry::EnsureIsAlive() const
-{
-    if ( !IsAlive_Impl() )
-        throw lang::DisposedException();
 }
 
 OUString AccessibleListBoxEntry::implGetText()
@@ -215,7 +204,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleChildCount(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
     SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
     sal_Int32 nCount = 0;
     if ( pEntry )
@@ -228,7 +217,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sa
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     SvTreeListEntry* pEntry = GetRealChild(i);
     if ( !pEntry )
@@ -278,7 +267,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleParent(  
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     return implGetParentAccessible( );
 }
@@ -363,7 +352,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if (SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath))
     {
@@ -396,7 +385,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getAccessibleStateSet(  )
 
     sal_Int64 nStateSet = 0;
 
-    if ( IsAlive_Impl() )
+    if (isAlive())
     {
         switch(getAccessibleRole())
         {
@@ -442,7 +431,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
     SvTreeListEntry* pEntry
         = m_pTreeListBox->GetEntry(vcl::unohelper::ConvertToVCLPoint(_aPoint));
     if ( !pEntry )
@@ -505,7 +494,7 @@ awt::Rectangle SAL_CALL AccessibleListBoxEntry::getCharacterBounds( sal_Int32 nI
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
@@ -529,7 +518,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getIndexAtPoint( const awt::Point& aP
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     if(aPoint.X==0 && aPoint.Y==0) return 0;
 
     sal_Int32 nIndex = -1;
@@ -551,7 +540,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_I
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     OUString sText = implGetText();
     if  ( ( 0 > nStartIndex ) || ( sText.getLength() <= nStartIndex )
@@ -602,7 +591,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::doAccessibleAction( sal_Int32 nIndex )
 
     bool bRet = false;
     CheckActionIndex(nIndex);
-    EnsureIsAlive();
+    ensureAlive();
 
     SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
     if( nIndex == 0 && (treeFlag & SvTreeFlags::CHKBTN) )
@@ -639,7 +628,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleActionDescription( sal_In
     ::osl::MutexGuard aGuard( m_aMutex );
 
     CheckActionIndex(nIndex);
-    EnsureIsAlive();
+    ensureAlive();
 
     SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
     SvButtonState state = m_pTreeListBox->GetCheckButtonState( pEntry );
@@ -686,7 +675,7 @@ void SAL_CALL AccessibleListBoxEntry::selectAccessibleChild( sal_Int64 nChildInd
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -703,7 +692,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int64 n
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -721,7 +710,7 @@ void SAL_CALL AccessibleListBoxEntry::clearAccessibleSelection(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
     if ( !pParent )
@@ -740,7 +729,7 @@ void SAL_CALL AccessibleListBoxEntry::selectAllAccessibleChildren(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
     if ( !pParent )
@@ -759,7 +748,7 @@ sal_Int64 SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleChildCount(  )
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     sal_Int64 nSelCount = 0;
 
@@ -782,7 +771,7 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getSelectedAccessibleC
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
         throw IndexOutOfBoundsException();
@@ -817,7 +806,7 @@ void SAL_CALL AccessibleListBoxEntry::deselectAccessibleChild( sal_Int64 nSelect
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    EnsureIsAlive();
+    ensureAlive();
 
     if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -837,7 +826,7 @@ sal_Bool SAL_CALL AccessibleListBoxEntry::setCaretPosition ( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
@@ -848,14 +837,14 @@ sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     OUString sText( implGetText() );
 
@@ -868,7 +857,7 @@ sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return implGetText().getLength();
 }
 
@@ -876,28 +865,28 @@ OUString SAL_CALL AccessibleListBoxEntry::getSelectedText(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return OUString();
 }
 sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionStart(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return 0;
 }
 sal_Int32 SAL_CALL AccessibleListBoxEntry::getSelectionEnd(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return 0;
 }
 sal_Bool SAL_CALL AccessibleListBoxEntry::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
@@ -908,35 +897,35 @@ OUString SAL_CALL AccessibleListBoxEntry::getText(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return implGetText(  );
 }
 OUString SAL_CALL AccessibleListBoxEntry::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return OCommonAccessibleText::implGetTextRange( implGetText(), nStartIndex, nEndIndex );
 }
 css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return OCommonAccessibleText::getTextAtIndex( nIndex ,aTextType);
 }
 css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
     return OCommonAccessibleText::getTextBeforeIndex( nIndex ,aTextType);
 }
 css::accessibility::TextSegment SAL_CALL AccessibleListBoxEntry::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-    EnsureIsAlive();
+    ensureAlive();
 
     return OCommonAccessibleText::getTextBehindIndex( nIndex ,aTextType);
 }
