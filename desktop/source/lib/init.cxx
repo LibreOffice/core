@@ -3366,6 +3366,30 @@ enum class JoinThreads
 
 static int joinThreads(JoinThreads eCategory);
 
+static void flushBufferedVOCs()
+{
+    // Flush all buffered VOC primitives from the pages.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+        return;
+    const SdrView* pView = pViewShell->GetDrawView();
+    if (!pView)
+        return;
+    SdrPageView* pPageView = pView->GetSdrPageView();
+    if (!pPageView)
+        return;
+    SdrPage* pCurPage = pPageView->GetPage();
+    if (!pCurPage)
+        return;
+    SdrModel& sdrModel = pCurPage->getSdrModelFromSdrPage();
+    for (sal_uInt16 i = 0; i < sdrModel.GetPageCount(); ++i)
+    {
+        SdrPage* pPage = sdrModel.GetPage(i);
+        if (pPage)
+            pPage->GetViewContact().flushViewObjectContacts();
+    }
+}
+
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
     SolarMutexGuard aGuard;
@@ -3374,30 +3398,7 @@ static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 
     if (nTarget > 2000)
     {
-        // Flush all buffered VOC primitives from the pages.
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell)
-        {
-            const SdrView* pView = pViewShell->GetDrawView();
-            if (pView)
-            {
-                SdrPageView* pPageView = pView->GetSdrPageView();
-                if (pPageView)
-                {
-                    SdrPage* pCurPage = pPageView->GetPage();
-                    if (pCurPage)
-                    {
-                        SdrModel& sdrModel = pCurPage->getSdrModelFromSdrPage();
-                        for (sal_uInt16 i = 0; i < sdrModel.GetPageCount(); ++i)
-                        {
-                            SdrPage* pPage = sdrModel.GetPage(i);
-                            if (pPage)
-                                pPage->GetViewContact().flushViewObjectContacts();
-                        }
-                    }
-                }
-            }
-        }
+        flushBufferedVOCs();
 
         // When more agressively reclaiming memory then shutdown threads which
         // will restart on demand.
