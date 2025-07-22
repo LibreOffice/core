@@ -454,7 +454,8 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( 
     assert(xListBox.is());
     rtl::Reference<AccessibleListBoxEntry> pAccEntry = xListBox->implGetAccessible(*pEntry);
     tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
-    if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint)))
+    if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint))
+        && pAccEntry->implGetParentAccessible().get() == this)
         return pAccEntry;
 
     return {};
