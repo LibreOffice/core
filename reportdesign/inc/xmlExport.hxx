@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
@@ -125,6 +126,12 @@ private:
     bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     static OUString  convertFormula(const OUString& _sFormula);
+    void                    handleTextElement(const Reference<XServiceInfo>& xElement, bool bShapeHandled,
+                                              const Reference< XSection>& _xSection);
+    void                    handleNumberFormat(const Reference<XFormattedField>& xFormattedField);
+    void                    handleEToken(const Reference<XReportControlModel>& xReportElement,
+                                         const Reference<XReportDefinition>& xReportDefinition, const Reference<XSection>& xSection,
+                                         const XMLTokenEnum& eToken);
 
     virtual void                    SetBodyAttributes() override;
 

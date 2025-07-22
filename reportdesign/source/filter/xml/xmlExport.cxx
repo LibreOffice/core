@@ -735,109 +735,19 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     if ( aColIter->xElement.is() )
                         exportStyleName(aColIter->xElement.get(),GetAttrList(),m_sTableStyle);
 
-                    // start <table:table-cell>
                     Reference<XFormattedField> xFormattedField(aColIter->xElement,uno::UNO_QUERY);
                     if ( xFormattedField.is() )
-                    {
-                        sal_Int32 nFormatKey = xFormattedField->getFormatKey();
-                        XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
-                        bool bIsStandard = false;
-                        sal_Int16 nCellType = aHelper.GetCellType(nFormatKey,bIsStandard);
-                        // "Standard" means "no format set, value could be anything",
-                        // so don't set a format attribute in this case.
-                        // P.S.: "Standard" is called "General" in some languages
-                        if (!bIsStandard)
-                        {
-                            if ( nCellType == util::NumberFormat::TEXT )
-                                aHelper.SetNumberFormatAttributes(u""_ustr, u"");
-                            else
-                                aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
-                        }
-                    }
+                        handleNumberFormat(xFormattedField);
+
+                    // write <table:table-cell>
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, false);
 
                     if ( aColIter->xElement.is() )
                     {
-                        // start <text:p>
-                        SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, true, false);
                         Reference<XServiceInfo> xElement(aColIter->xElement,uno::UNO_QUERY);
-
-                        if ( !bShapeHandled )
-                        {
-                            bShapeHandled = true;
-                            exportShapes(_xSection,false);
-                        }
-                        uno::Reference< XShape > xShape(xElement,uno::UNO_QUERY);
-                        uno::Reference< XFixedLine > xFixedLine(xElement,uno::UNO_QUERY);
-                        if ( !xShape.is() && !xFixedLine.is() )
-                        {
-                            Reference<XReportControlModel> xReportElement(xElement,uno::UNO_QUERY);
-                            Reference<XReportDefinition> xReportDefinition(xElement,uno::UNO_QUERY);
-                            Reference< XImageControl > xImage(xElement,uno::UNO_QUERY);
-                            Reference<XSection> xSection(xElement,uno::UNO_QUERY);
-
-                            XMLTokenEnum eToken = XML_SECTION;
-                            bool bExportData = false;
-                            if ( xElement->supportsService(SERVICE_FIXEDTEXT) )
-                            {
-                                eToken = XML_FIXED_CONTENT;
-                            }
-                            else if ( xElement->supportsService(SERVICE_FORMATTEDFIELD) )
-                            {
-                                eToken = XML_FORMATTED_TEXT;
-                                bExportData = true;
-                            }
-                            else if ( xElement->supportsService(SERVICE_IMAGECONTROL) )
-                            {
-                                eToken = XML_IMAGE;
-                                OUString sTargetLocation = xImage->getImageURL();
-                                if ( !sTargetLocation.isEmpty() )
-                                {
-                                    sTargetLocation = GetRelativeReference(sTargetLocation);
-                                    AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
-                                }
-                                bExportData = true;
-                                OUStringBuffer sValue;
-                                const SvXMLEnumMapEntry<sal_Int16>* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
-                                if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
-                                    AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
-                            }
-                            else if ( xReportDefinition.is() )
-                            {
-                                eToken = XML_SUB_DOCUMENT;
-                            }
-
-                            if ( bExportData )
-                            {
-                                const bool bPageSet = exportFormula(XML_FORMULA,xReportElement->getDataField());
-                                if ( bPageSet )
-                                    eToken = XML_FIXED_CONTENT;
-                                else if ( eToken == XML_IMAGE )
-                                    AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, xImage->getPreserveIRI() ? XML_TRUE : XML_FALSE );
-                            }
-
-                            {
-                                // start <report:eToken>
-                                SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
-                                if ( eToken == XML_FIXED_CONTENT )
-                                    exportParagraph(xReportElement);
-                                if ( xReportElement.is() )
-                                    exportReportElement(xReportElement);
-
-                                if (eToken == XML_SUB_DOCUMENT && xReportDefinition.is())
-                                {
-                                    SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY, true, true );
-                                    SvXMLElementExport aElem( *this, true,
-                                                            XML_NAMESPACE_OFFICE, XML_REPORT,
-                                                              true, true );
-
-                                    exportReportAttributes(xReportDefinition);
-                                    exportReport(xReportDefinition);
-                                }
-                                else if ( xSection.is() )
-                                    exportSection(xSection);
-                            }
-                        }
+                        // write <text:p> in handleTextElement
+                        handleTextElement(xElement, bShapeHandled, _xSection);
+                        bShapeHandled = true;
                     }
                     else if ( !bShapeHandled )
                     {
@@ -895,6 +805,109 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             }
         }
     }
+}
+
+void ORptExport::handleNumberFormat(const Reference<XFormattedField>& xFormattedField)
+{
+    sal_Int32 nFormatKey = xFormattedField->getFormatKey();
+    XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
+    bool bIsStandard = false;
+    sal_Int16 nCellType = aHelper.GetCellType(nFormatKey,bIsStandard);
+    // "Standard" means "no format set, value could be anything",
+    // so don't set a format attribute in this case.
+    // P.S.: "Standard" is called "General" in some languages
+    if (!bIsStandard)
+    {
+        if ( nCellType == util::NumberFormat::TEXT )
+            aHelper.SetNumberFormatAttributes(u""_ustr, u"");
+        else
+            aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
+    }
+}
+
+void ORptExport::handleTextElement(const Reference<XServiceInfo>& xElement, bool bShapeHandled, const Reference<XSection>& _xSection)
+{
+    // write <text:p>
+    SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, true, false);
+
+    if ( !bShapeHandled )
+        exportShapes(_xSection,false);
+
+    uno::Reference< XShape > xShape(xElement,uno::UNO_QUERY);
+    uno::Reference< XFixedLine > xFixedLine(xElement,uno::UNO_QUERY);
+    if ( !xShape.is() && !xFixedLine.is() )
+    {
+        Reference<XReportControlModel> xReportElement(xElement,uno::UNO_QUERY);
+        Reference<XReportDefinition> xReportDefinition(xElement,uno::UNO_QUERY);
+        Reference< XImageControl > xImage(xElement,uno::UNO_QUERY);
+        Reference<XSection> xSection(xElement,uno::UNO_QUERY);
+
+        XMLTokenEnum eToken = XML_SECTION;
+        bool bExportData = false;
+        if ( xElement->supportsService(SERVICE_FIXEDTEXT) )
+        {
+            eToken = XML_FIXED_CONTENT;
+        }
+        else if ( xElement->supportsService(SERVICE_FORMATTEDFIELD) )
+        {
+            eToken = XML_FORMATTED_TEXT;
+            bExportData = true;
+        }
+        else if ( xElement->supportsService(SERVICE_IMAGECONTROL) )
+        {
+            eToken = XML_IMAGE;
+            OUString sTargetLocation = xImage->getImageURL();
+            if ( !sTargetLocation.isEmpty() )
+            {
+                sTargetLocation = GetRelativeReference(sTargetLocation);
+                AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
+            }
+            bExportData = true;
+            OUStringBuffer sValue;
+            const SvXMLEnumMapEntry<sal_Int16>* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
+            if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
+        }
+        else if ( xReportDefinition.is() )
+        {
+            eToken = XML_SUB_DOCUMENT;
+        }
+        if ( bExportData )
+        {
+            const bool bPageSet = exportFormula(XML_FORMULA,xReportElement->getDataField());
+            if ( bPageSet )
+                eToken = XML_FIXED_CONTENT;
+            else if ( eToken == XML_IMAGE )
+                AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, xImage->getPreserveIRI() ? XML_TRUE : XML_FALSE );
+        }
+
+        // write <report:eToken> in handleEToken
+        handleEToken(xReportElement, xReportDefinition, xSection, eToken);
+    }
+}
+
+void ORptExport::handleEToken(const Reference<XReportControlModel>& xReportElement, const Reference<XReportDefinition>& xReportDefinition,
+                                const Reference<XSection>& xSection, const XMLTokenEnum& eToken)
+{
+    // write <report:eToken>
+    SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, false, false);
+    if ( eToken == XML_FIXED_CONTENT )
+        exportParagraph(xReportElement);
+    if ( xReportElement.is() )
+        exportReportElement(xReportElement);
+
+    if (eToken == XML_SUB_DOCUMENT && xReportDefinition.is())
+    {
+        SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY, true, true );
+        SvXMLElementExport aElem( *this, true,
+                                XML_NAMESPACE_OFFICE, XML_REPORT,
+                                  true, true );
+
+        exportReportAttributes(xReportDefinition);
+        exportReport(xReportDefinition);
+    }
+    else if ( xSection.is() )
+        exportSection(xSection);
 }
 
 OUString ORptExport::convertFormula(const OUString& _sFormula)
