@@ -294,7 +294,7 @@ sal_Int64 OAccessibleMenuBaseComponent::GetChildCount() const
 }
 
 
-Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
+rtl::Reference<comphelper::OAccessible> OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
 {
     rtl::Reference< OAccessibleMenuItemComponent > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
