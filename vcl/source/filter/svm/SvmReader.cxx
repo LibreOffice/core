@@ -718,12 +718,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
             // aKashidaArray, if not empty, must be the same size as aArray
             std::vector<sal_Bool> aKashidaArray(pAction->GetDXArray().size(), 0);
 
-            // [-loplugin:fakebool] false positive:
-            sal_Bool val(sal_False);
             for (sal_uInt32 i = 0; i < nTmpLen; i++)
             {
-                mrStream.ReadUChar(val);
-                aKashidaArray[i] = val;
+                mrStream.ReadUChar(aKashidaArray[i]);
             }
             pAction->SetKashidaArray(std::move(aKashidaArray));
         }
