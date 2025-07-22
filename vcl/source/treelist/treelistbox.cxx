@@ -3334,7 +3334,7 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         const Point pos(ScreenToOutputPixel(rHEvt.GetMousePosPixel()));
         if (SvTreeListEntry* entry = GetEntry(pos))
         {
-            const OUString tooltip = aTooltipHdl.Call(entry);
+            const OUString tooltip = GetEntryTooltip(entry);
             if (!tooltip.isEmpty())
             {
                 const Size size(GetOutputSizePixel().Width(), GetEntryHeight());
