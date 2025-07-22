@@ -278,35 +278,31 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         rBindings.Invalidate(SID_DOC_MODIFIED);
                     }
 
-                    OUString aStr( pReqArgs->Get( SID_ENTER_STRING ).GetValue() );
+                    OUString aInputString = pReqArgs->Get(SID_ENTER_STRING).GetValue();
                     const SfxPoolItem* pDontCommitItem;
                     bool bCommit = true;
                     if (pReqArgs->HasItem(FN_PARAM_1, &pDontCommitItem))
                         bCommit = !(static_cast<const SfxBoolItem*>(pDontCommitItem)->GetValue());
 
-                    ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
+                    ScInputHandler* pInputHandler = pScMod->GetInputHdl(pTabViewShell);
                     if (bCommit)
                     {
-                        pTabViewShell->EnterData( GetViewData().GetCurX(),
-                                                  GetViewData().GetCurY(),
-                                                  GetViewData().GetTabNo(),
-                                                  aStr, nullptr,
-                                                  true /*bMatrixExpand*/);
+                        pTabViewShell->EnterDataToCurrentCell(aInputString, nullptr, true /*bMatrixExpand*/);
                     }
-                    else if (pHdl)
+                    else if (pInputHandler)
                     {
                         pScMod->SetInputMode(SC_INPUT_TABLE);
 
-                        EditView* pTableView = pHdl->GetActiveView();
-                        pHdl->DataChanging();
+                        EditView* pTableView = pInputHandler->GetActiveView();
+                        pInputHandler->DataChanging();
                         if (pTableView)
-                            pTableView->getEditEngine().SetText(aStr);
-                        pHdl->DataChanged();
+                            pTableView->getEditEngine().SetText(aInputString);
+                        pInputHandler->DataChanged();
 
                         pScMod->SetInputMode(SC_INPUT_NONE);
                     }
 
-                    if ( !pHdl || !pHdl->IsInEnterHandler() )
+                    if (!pInputHandler || !pInputHandler->IsInEnterHandler())
                     {
                         //  UpdateInputHandler is needed after the cell content
                         //  has changed, but if called from EnterHandler, UpdateInputHandler
