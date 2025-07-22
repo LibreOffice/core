@@ -178,6 +178,21 @@ void SAL_CALL AccessibleListBoxEntry::disposing()
     m_pTreeListBox = nullptr;
 }
 
+uno::Any SAL_CALL AccessibleListBoxEntry::queryInterface(const uno::Type& rType)
+{
+    if (rType == cppu::UnoType<XAccessibleText>::get())
+    {
+        // don't support XAccessibleText interface if there's no text item
+        // (e.g. for IconView items), as screen readers may give text a higher
+        // priority than accessible name and just say something like "blank" otherwise
+        SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath(m_aEntryPath);
+        if (pEntry && !pEntry->GetFirstItem(SvLBoxItemType::String))
+            return uno::Any();
+    }
+
+    return AccessibleListBoxEntry_BASE::queryInterface(rType);
+}
+
 // XServiceInfo
 
 OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()

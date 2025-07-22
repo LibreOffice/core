@@ -92,6 +92,8 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
 private:
+    css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
