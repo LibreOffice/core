@@ -627,7 +627,7 @@ void UpdateHandler::loadStrings()
     msResumeBtn     = loadString( loc, RID_UPDATE_BTN_RESUME );
     msCancelBtn     = loadString( loc, RID_UPDATE_BTN_CANCEL );
 
-    std::pair<TranslateId, TranslateId> RID_UPDATE_BUBBLE[] =
+    static constexpr std::pair<TranslateId, TranslateId> RID_UPDATE_BUBBLE[] =
     {
         { RID_UPDATE_BUBBLE_UPDATE_AVAIL, RID_UPDATE_BUBBLE_T_UPDATE_AVAIL },
         { RID_UPDATE_BUBBLE_UPDATE_NO_DOWN, RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN },
