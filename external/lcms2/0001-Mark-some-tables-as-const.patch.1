@@ -1,0 +1,40 @@
+From 58affbcc90f060b6b34bad2ed508a2d159fd9320 Mon Sep 17 00:00:00 2001
+From: Marti Maria <marti.maria@littlecms.com>
+Date: Mon, 21 Jul 2025 20:12:09 +0200
+Subject: [PATCH] Mark some tables as const
+
+per PR  #501
+---
+ src/cmsalpha.c | 2 +-
+ src/cmscgats.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/cmsalpha.c b/src/cmsalpha.c
+index a5f1a16..b8e1a26 100644
+--- a/src/cmsalpha.c
++++ b/src/cmsalpha.c
+@@ -377,7 +377,7 @@ int FormatterPos(cmsUInt32Number frm)
+ static
+ cmsFormatterAlphaFn _cmsGetFormatterAlpha(cmsContext id, cmsUInt32Number in, cmsUInt32Number out)
+ {
+-static cmsFormatterAlphaFn FormattersAlpha[6][6] = {
++static const cmsFormatterAlphaFn FormattersAlpha[6][6] = {
+ 
+        /* from 8 */  { copy8,       from8to16,   from8to16SE,   from8toHLF,   from8toFLT,    from8toDBL    },
+        /* from 16*/  { from16to8,   copy16,      from16to16,    from16toHLF,  from16toFLT,   from16toDBL   },
+diff --git a/src/cmscgats.c b/src/cmscgats.c
+index 53e3442..7df8a16 100644
+--- a/src/cmscgats.c
++++ b/src/cmscgats.c
+@@ -266,7 +266,7 @@ typedef struct {
+         WRITEMODE as;      // How is supposed to be written
+     } PROPERTY;
+ 
+-static PROPERTY PredefinedProperties[] = {
++static const PROPERTY PredefinedProperties[] = {
+ 
+         {"NUMBER_OF_FIELDS", WRITE_UNCOOKED},    // Required - NUMBER OF FIELDS
+         {"NUMBER_OF_SETS",   WRITE_UNCOOKED},    // Required - NUMBER OF SETS
+-- 
+2.49.0
+
