@@ -1,0 +1,26 @@
+From 982c77da697b967ffed07fb01206698e7fd679d4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Thu, 24 Jul 2025 08:52:09 +0100
+Subject: [PATCH] const up mimeTypesMap
+
+and move it out of the .data section
+---
+ src/lib/WPG2Parser.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/WPG2Parser.cpp b/src/lib/WPG2Parser.cpp
+index 2adef02..96c1911 100644
+--- a/src/lib/WPG2Parser.cpp
++++ b/src/lib/WPG2Parser.cpp
+@@ -2218,7 +2218,7 @@ void WPG2Parser::handleObjectCapsule()
+ 	m_binaryData.mimeTypes.clear();
+ 	m_binaryData.mimeTypes.reserve(numDescriptions);
+ 
+-	static const char *mimeTypesMap[] =
++	static const char* const mimeTypesMap[] =
+ 	{
+ 		"", // 0
+ 		"", // "image/x-wpg",
+-- 
+2.49.0
+

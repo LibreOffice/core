@@ -15,8 +15,13 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libwpg,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpg))
 
+# 0001-const-up-mimeTypesMap.patch.1
+# upstream attempt at:
+# https://sourceforge.net/p/libwpg/code/merge-requests/1/
+
 $(eval $(call gb_UnpackedTarball_add_patches,libwpg, \
     external/libwpg/rpath.patch \
+    external/libwpg/0001-const-up-mimeTypesMap.patch.1 \
 ))
 
 ifneq ($(OS),MACOSX)
