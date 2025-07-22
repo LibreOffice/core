@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/intitem.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -609,16 +611,26 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
             break;
 
         case SID_ATTR_GRAF_LUMINANCE:
-            if( pItem )
+        {
+            const SfxInt16Item* pBrightness = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pBrightness)
+                aGrfSet.Put( SwLuminanceGrf( pBrightness->GetValue() ) );
+            else if( pItem )
                 aGrfSet.Put( SwLuminanceGrf(
                             static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
+        }
 
         case SID_ATTR_GRAF_CONTRAST:
-            if( pItem )
+        {
+            const SfxInt16Item* pContrast = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pContrast)
+                aGrfSet.Put( SwContrastGrf( pContrast->GetValue() ) );
+            else if( pItem )
                 aGrfSet.Put( SwContrastGrf(
                             static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
+        }
 
         case SID_ATTR_GRAF_RED:
             if( pItem )
@@ -647,10 +659,15 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
             break;
 
         case SID_ATTR_GRAF_TRANSPARENCE:
-            if( pItem )
+        {
+            const SfxInt16Item* pTransparence = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pTransparence)
+                aGrfSet.Put( SwTransparencyGrf( pTransparence->GetValue() ) );
+            else if( pItem )
                 aGrfSet.Put( SwTransparencyGrf(
                     static_cast< sal_Int8 >( static_cast<const SfxUInt16Item*>(pItem )->GetValue() ) ) );
             break;
+        }
 
         case SID_ATTR_GRAF_INVERT:
             if( pItem )
@@ -659,10 +676,16 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
             break;
 
         case SID_ATTR_GRAF_MODE:
-            if( pItem )
+        {
+            const SfxInt16Item* pMode = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+            if (pMode)
+                aGrfSet.Put( SwDrawModeGrf(
+                            static_cast<GraphicDrawMode>( pMode->GetValue() ) ));
+            else if( pItem )
                 aGrfSet.Put( SwDrawModeGrf(
                             static_cast<GraphicDrawMode>(static_cast<const SfxUInt16Item*>(pItem)->GetValue()) ));
             break;
+        }
 
         case SID_COLOR_SETTINGS:
         {
