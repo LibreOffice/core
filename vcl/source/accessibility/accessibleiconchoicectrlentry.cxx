@@ -98,17 +98,6 @@ tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     return aRect;
 }
 
-AbsoluteScreenPixelRectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScreen_Impl() const
-{
-    SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( m_nIndex );
-    if ( !pEntry )
-        return AbsoluteScreenPixelRectangle();
-    tools::Rectangle aRect = m_pIconCtrl->GetBoundingBox( pEntry );
-    AbsoluteScreenPixelPoint aTopLeft = m_pIconCtrl->GetWindowExtentsAbsolute().TopLeft();
-    aTopLeft += AbsoluteScreenPixelPoint(aRect.TopLeft());
-    return AbsoluteScreenPixelRectangle( aTopLeft, aRect.GetSize() );
-}
-
 bool AccessibleIconChoiceCtrlEntry::IsAlive_Impl() const
 {
     return ( !rBHelper.bDisposed && !rBHelper.bInDispose && m_pIconCtrl );
@@ -136,7 +125,14 @@ AbsoluteScreenPixelRectangle AccessibleIconChoiceCtrlEntry::GetBoundingBoxOnScre
     ::osl::MutexGuard aGuard( m_aMutex );
 
     EnsureIsAlive();
-    return GetBoundingBoxOnScreen_Impl();
+
+    SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry(m_nIndex);
+    if (!pEntry)
+        return AbsoluteScreenPixelRectangle();
+    tools::Rectangle aRect = m_pIconCtrl->GetBoundingBox(pEntry);
+    AbsoluteScreenPixelPoint aTopLeft = m_pIconCtrl->GetWindowExtentsAbsolute().TopLeft();
+    aTopLeft += AbsoluteScreenPixelPoint(aRect.TopLeft());
+    return AbsoluteScreenPixelRectangle(aTopLeft, aRect.GetSize());
 }
 
 void AccessibleIconChoiceCtrlEntry::EnsureIsAlive() const

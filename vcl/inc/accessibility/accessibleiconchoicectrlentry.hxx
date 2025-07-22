@@ -48,7 +48,6 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
     tools::Rectangle               GetBoundingBox_Impl() const;
-    AbsoluteScreenPixelRectangle   GetBoundingBoxOnScreen_Impl() const;
     bool                IsAlive_Impl() const;
     bool                IsShowing_Impl() const;
 
