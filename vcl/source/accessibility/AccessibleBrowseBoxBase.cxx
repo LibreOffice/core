@@ -252,7 +252,7 @@ sal_Int64 AccessibleBrowseBoxBase::implCreateStateSet()
 
 bool AccessibleBrowseBoxBase::isAlive() const
 {
-    return !rBHelper.bDisposed && !rBHelper.bInDispose && mpBrowseBox;
+    return OAccessible::isAlive() && mpBrowseBox;
 }
 
 void AccessibleBrowseBoxBase::ensureIsAlive() const

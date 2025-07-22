@@ -373,7 +373,7 @@ sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleStateSet(  )
 
     sal_Int64 nStateSet = 0;
 
-    if ( m_pToolBox && !rBHelper.bDisposed && !rBHelper.bInDispose )
+    if (m_pToolBox && isAlive())
     {
         nStateSet |= AccessibleStateType::FOCUSABLE;
         if (m_pToolBox->GetItemBits(m_nItemId) & ToolBoxItemBits::CHECKABLE)

@@ -641,14 +641,10 @@ sal_Int64 OAccessibleMenuBaseComponent::getAccessibleStateSet(  )
 
     sal_Int64 nStateSet = 0;
 
-    if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
-    {
+    if (isAlive())
         FillAccessibleStateSet( nStateSet );
-    }
     else
-    {
         nStateSet |= AccessibleStateType::DEFUNC;
-    }
 
     return nStateSet;
 }

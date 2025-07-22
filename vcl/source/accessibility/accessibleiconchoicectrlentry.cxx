@@ -100,7 +100,7 @@ tools::Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
 
 bool AccessibleIconChoiceCtrlEntry::IsAlive_Impl() const
 {
-    return ( !rBHelper.bDisposed && !rBHelper.bInDispose && m_pIconCtrl );
+    return isAlive() && m_pIconCtrl;
 }
 
 bool AccessibleIconChoiceCtrlEntry::IsShowing_Impl() const

@@ -176,14 +176,10 @@ sal_Int64 VCLXAccessibleHeaderBarItem::getAccessibleStateSet(  )
 
     sal_Int64 nStateSet = 0;
 
-    if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
-    {
+    if (isAlive())
         FillAccessibleStateSet( nStateSet );
-    }
     else
-    {
         nStateSet |= AccessibleStateType::DEFUNC;
-    }
 
     return nStateSet;
 }

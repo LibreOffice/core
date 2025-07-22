@@ -116,7 +116,7 @@ tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
 
 bool AccessibleListBoxEntry::IsAlive_Impl() const
 {
-    return !rBHelper.bDisposed && !rBHelper.bInDispose && (m_pTreeListBox != nullptr);
+    return isAlive() && m_pTreeListBox;
 }
 
 bool AccessibleListBoxEntry::IsShowing_Impl() const
