@@ -109,7 +109,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/accessiblebrowseboxcell \
     vcl/source/accessibility/accessibleiconchoicectrl \
     vcl/source/accessibility/accessibleiconchoicectrlentry \
-    vcl/source/accessibility/AccessibleIconView \
     vcl/source/accessibility/accessiblelistbox \
     vcl/source/accessibility/accessiblelistboxentry \
     vcl/source/accessibility/accessiblemenubasecomponent \

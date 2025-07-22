@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/AccessibleIconView.hxx>
-
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
@@ -230,14 +228,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     }
 
     rRenderContext.Pop();
-}
-
-css::uno::Reference<css::accessibility::XAccessible> IconView::CreateAccessible()
-{
-    if (auto xAccParent = GetAccessibleParent())
-        return new AccessibleIconView(*this, xAccParent);
-
-    return {};
 }
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }
