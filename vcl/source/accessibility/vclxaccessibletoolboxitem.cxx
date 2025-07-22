@@ -268,7 +268,6 @@ sal_Bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceNam
 Sequence< OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-            u"com.sun.star.accessibility.AccessibleComponent"_ustr,
             u"com.sun.star.accessibility.AccessibleExtendedComponent"_ustr,
             u"com.sun.star.accessibility.AccessibleToolBoxItem"_ustr};
 }

@@ -190,7 +190,6 @@ OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getImplementationName()
 Sequence< OUString > SAL_CALL AccessibleIconChoiceCtrlEntry::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-            u"com.sun.star.accessibility.AccessibleComponent"_ustr,
             u"com.sun.star.awt.AccessibleIconChoiceControlEntry"_ustr};
 }
 
