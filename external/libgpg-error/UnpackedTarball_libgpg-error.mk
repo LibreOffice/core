@@ -13,6 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libgpg-error,$(LIBGPGERROR_TARBALL)
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libgpg-error,0))
 
+# 0001-const-up-handle_metacmd.cmds-array.patch
+# upstream attempt made by git-email to gnupg-devel@gnupg.org
+
 $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes.patch) \
 	$(if $(filter MSC,$(COM)),external/libgpg-error/w32-build-fixes-2.patch.1) \
@@ -23,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
 	$(if $(filter LINUX,$(OS)),external/libgpg-error/libgpgerror-bundled-soname.patch.1) \
 	external/libgpg-error/clang-cl.patch \
 	external/libgpg-error/undeclared-environ-macOS.patch \
+	external/libgpg-error/0001-const-up-handle_metacmd.cmds-array.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

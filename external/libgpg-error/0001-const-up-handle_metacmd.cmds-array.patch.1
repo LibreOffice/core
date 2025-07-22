@@ -1,0 +1,26 @@
+From 419478c33f9ac8b0bc9648c63e1ad4fd17ec410f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Wed, 23 Jul 2025 09:27:31 +0100
+Subject: [PATCH Libgpg-error] const up handle_metacmd.cmds array
+
+and move it out of the .data section
+---
+ src/argparse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/argparse.c b/src/argparse.c
+index 5fb03b3..4fdd93b 100644
+--- a/src/argparse.c
++++ b/src/argparse.c
+@@ -1480,7 +1480,7 @@ handle_meta_expand (gpgrt_argparse_t *arg, unsigned int alternate, char *args)
+ static int
+ handle_metacmd (gpgrt_argparse_t *arg, char *keyword)
+ {
+-  static struct {
++  static const struct {
+     const char *name;          /* Name of the command.                   */
+     unsigned short alternate;  /* Use alternate version of the command.  */
+     unsigned short needarg:1;  /* Command requires an argument.          */
+-- 
+2.49.0
+
