@@ -284,10 +284,10 @@ const SwRectFnCollection aVerticalLeftToRightBottomToTop = {
     /*.fnSetTopAndHeight =*/&SwRect::SetLeftAndWidth
 };
 
-SwRectFn fnRectHori = &aHorizontal;
-SwRectFn fnRectVert = &aVertical;
-SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-SwRectFn fnRectVertL2RB2T = &aVerticalLeftToRightBottomToTop;
+const SwRectFn fnRectHori = &aHorizontal;
+const SwRectFn fnRectVert = &aVertical;
+const SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
+const SwRectFn fnRectVertL2RB2T = &aVerticalLeftToRightBottomToTop;
 
 // #i65250#
 sal_uInt32 SwFrameAreaDefinition::snLastFrameId=0;

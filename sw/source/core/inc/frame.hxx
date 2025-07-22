@@ -1401,7 +1401,7 @@ struct SwRectFnCollection
 typedef const SwRectFnCollection* SwRectFn;
 
 // This class allows to use proper methods regardless of orientation (LTR/RTL, horizontal or vertical)
-extern SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
+extern const SwRectFn fnRectHori, fnRectVert, fnRectVertL2R, fnRectVertL2RB2T;
 class SwRectFnSet {
 public:
     explicit SwRectFnSet(const SwFrame* pFrame) { Refresh(pFrame); }
