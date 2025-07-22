@@ -75,10 +75,10 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
     */
     if ( !mpWindowImpl )
         return css::uno::Reference< css::accessibility::XAccessible >();
-    if (!mpWindowImpl->mxAccessible.is() && !mpWindowImpl->mbInDispose && bCreate)
-        mpWindowImpl->mxAccessible = CreateAccessible();
+    if (!mpWindowImpl->mpAccessible.is() && !mpWindowImpl->mbInDispose && bCreate)
+        mpWindowImpl->mpAccessible = CreateAccessible();
 
-    return mpWindowImpl->mxAccessible;
+    return mpWindowImpl->mpAccessible;
 }
 
 namespace {
@@ -120,7 +120,7 @@ void Window::SetAccessible(const rtl::Reference<comphelper::OAccessible>& rpAcce
     if (!mpWindowImpl)
         return;
 
-    mpWindowImpl->mxAccessible = rpAccessible;
+    mpWindowImpl->mpAccessible = rpAccessible;
 }
 
 // skip all border windows that are not top level frames

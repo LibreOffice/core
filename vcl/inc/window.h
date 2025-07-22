@@ -285,7 +285,7 @@ public:
     OUString            maID;
     InputContext        maInputContext;
     css::uno::Reference< css::awt::XVclWindowPeer > mxWindowPeer;
-    css::uno::Reference< css::accessibility::XAccessible > mxAccessible;
+    rtl::Reference<comphelper::OAccessible> mpAccessible;
     std::shared_ptr< VclSizeGroup > m_xSizeGroup;
     std::vector<VclPtr<FixedText>> m_aMnemonicLabels;
     std::unique_ptr<ImplAccessibleInfos> mpAccessibleInfos;

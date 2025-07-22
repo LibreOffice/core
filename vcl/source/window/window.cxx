@@ -214,12 +214,10 @@ void Window::dispose()
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 
-    if ( mpWindowImpl->mxAccessible.is() )
+    if (mpWindowImpl->mpAccessible.is())
     {
-        Reference< XComponent> xC( mpWindowImpl->mxAccessible, UNO_QUERY );
-        if ( xC.is() )
-            xC->dispose();
-        mpWindowImpl->mxAccessible.clear();
+        mpWindowImpl->mpAccessible->dispose();
+        mpWindowImpl->mpAccessible.clear();
     }
 
     if (mpWindowImpl->mpAccessibleInfos)
