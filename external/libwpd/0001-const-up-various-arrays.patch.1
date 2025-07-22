@@ -1,0 +1,91 @@
+From 91de0fb5350ec0760b144c1d36f07947152d5cd9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Thu, 24 Jul 2025 09:41:51 +0100
+Subject: [PATCH] const up various arrays
+
+which moves them out of the .data section
+---
+ src/lib/WP1FileStructure.cpp        | 2 +-
+ src/lib/WP1FileStructure.h          | 2 +-
+ src/lib/WP42FileStructure.cpp       | 2 +-
+ src/lib/WP42FileStructure.h         | 2 +-
+ src/lib/WP6FontDescriptorPacket.cpp | 4 ++--
+ 5 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/lib/WP1FileStructure.cpp b/src/lib/WP1FileStructure.cpp
+index 66512355..74b0129f 100644
+--- a/src/lib/WP1FileStructure.cpp
++++ b/src/lib/WP1FileStructure.cpp
+@@ -29,7 +29,7 @@
+ 
+ // size of the function groups 0xC0 to 0xFE
+ // -1 means the size is variable
+-int WP1_FUNCTION_GROUP_SIZE[63] =
++const int WP1_FUNCTION_GROUP_SIZE[63] =
+ {
+ 	10,	//0xC0
+ 	4,
+diff --git a/src/lib/WP1FileStructure.h b/src/lib/WP1FileStructure.h
+index 51045559..6a4c64b9 100644
+--- a/src/lib/WP1FileStructure.h
++++ b/src/lib/WP1FileStructure.h
+@@ -29,7 +29,7 @@
+ #define WP1FILESTRUCTURE_H
+ 
+ // size of the functiongroups 0xC0 to 0xF8
+-extern int WP1_FUNCTION_GROUP_SIZE[63];
++extern const int WP1_FUNCTION_GROUP_SIZE[63];
+ 
+ #define WP1_ATTRIBUTE_BOLD 0
+ #define WP1_ATTRIBUTE_ITALICS 1
+diff --git a/src/lib/WP42FileStructure.cpp b/src/lib/WP42FileStructure.cpp
+index d90bfb28..162bedd0 100644
+--- a/src/lib/WP42FileStructure.cpp
++++ b/src/lib/WP42FileStructure.cpp
+@@ -29,7 +29,7 @@
+ 
+ // size of the function groups 0xC0 to 0xFE
+ // -1 means the size is variable
+-int WP42_FUNCTION_GROUP_SIZE[63] =
++const int WP42_FUNCTION_GROUP_SIZE[63] =
+ {
+ 	6,	// 0xC0
+ 	4,
+diff --git a/src/lib/WP42FileStructure.h b/src/lib/WP42FileStructure.h
+index 7a38f821..9f4fd82b 100644
+--- a/src/lib/WP42FileStructure.h
++++ b/src/lib/WP42FileStructure.h
+@@ -29,7 +29,7 @@
+ #define WP42FILESTRUCTURE_H
+ 
+ // size of the functiongroups 0xC0 to 0xF8
+-extern int WP42_FUNCTION_GROUP_SIZE[63];
++extern const int WP42_FUNCTION_GROUP_SIZE[63];
+ 
+ #define WP42_ATTRIBUTE_BOLD 0
+ #define WP42_ATTRIBUTE_ITALICS 1
+diff --git a/src/lib/WP6FontDescriptorPacket.cpp b/src/lib/WP6FontDescriptorPacket.cpp
+index 3d22de15..4db818ff 100644
+--- a/src/lib/WP6FontDescriptorPacket.cpp
++++ b/src/lib/WP6FontDescriptorPacket.cpp
+@@ -29,7 +29,7 @@
+ #include "libwpd_internal.h"
+ #include <string>
+ 
+-const char *FONT_WEIGHT_STRINGS [] = {	"Bold", "bold", "Demi", "demi", "Extended", "extended",
++const char* const FONT_WEIGHT_STRINGS [] = { "Bold", "bold", "Demi", "demi", "Extended", "extended",
+                                         "Extra", "extra", "Headline", "headline", "Light", "light",
+                                         "Medium", "medium", "Normal", "normal", "Regular", "regular",
+                                         "Standaard", "standaard", "Standard", "standard"
+@@ -118,7 +118,7 @@ void WP6FontDescriptorPacket::_readFontName(librevenge::RVNGInputStream *input,
+ 		WPD_DEBUG_MSG(("WordPerfect: stripping font name (original: %s)\n", m_fontName.cstr()));
+ 		std::string stringValue(m_fontName.cstr());
+ 		std::string::size_type pos;
+-		for (auto &k : FONT_WEIGHT_STRINGS)
++		for (const auto &k : FONT_WEIGHT_STRINGS)
+ 		{
+ 			if (!stringValue.empty())
+ 				while ((pos = stringValue.find(k)) != std::string::npos)
+-- 
+2.49.0
+
