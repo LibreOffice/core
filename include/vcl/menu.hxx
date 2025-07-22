@@ -56,7 +56,6 @@ struct SystemMenuData;
 enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
-namespace com::sun::star::accessibility { class XAccessible;  }
 
 namespace vcl
 {
@@ -368,7 +367,7 @@ public:
     // returns the bounding rectangle for an item at pos nItemPos
     tools::Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
 
-    css::uno::Reference<css::accessibility::XAccessible> GetAccessible();
+    rtl::Reference<comphelper::OAccessible> GetAccessible();
     void SetAccessible(const rtl::Reference<comphelper::OAccessible>& rAccessible);
 
     // gets the activation key of the specified item

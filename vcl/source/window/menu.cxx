@@ -1310,7 +1310,7 @@ rtl::Reference<comphelper::OAccessible> Menu::CreateAccessible()
     return xAccessible;
 }
 
-css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
+rtl::Reference<comphelper::OAccessible> Menu::GetAccessible()
 {
     // Since PopupMenu are sometimes shared by different instances of MenuBar, the mpAccessible member gets
     // overwritten and may contain a disposed object when the initial menubar gets set again. So use the
@@ -1322,12 +1322,16 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
             sal_uInt16 nItemId = pStartedFrom->GetItemId( i );
             if ( static_cast< Menu* >( pStartedFrom->GetPopupMenu( nItemId ) ) == this )
             {
-                css::uno::Reference<css::accessibility::XAccessible> xParent = pStartedFrom->GetAccessible();
-                if ( xParent.is() )
+                rtl::Reference<comphelper::OAccessible> pParent = pStartedFrom->GetAccessible();
+                if (pParent.is())
                 {
-                    css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext( xParent->getAccessibleContext() );
-                    if (xParentContext.is())
-                        return xParentContext->getAccessibleChild( i );
+                    css::uno::Reference<css::accessibility::XAccessible> xAcc = pParent->getAccessibleChild(i);
+                    if (!xAcc)
+                        return {};
+
+                    rtl::Reference<comphelper::OAccessible> pAccessible = dynamic_cast<comphelper::OAccessible*>(xAcc.get());
+                    assert(pAccessible.is() && "Accessible is not an OAccessible");
+                    return pAccessible;
                 }
             }
         }
