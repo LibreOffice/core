@@ -431,9 +431,6 @@ Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild(
 
         if ( nSelCount == ( nSelectedChildIndex + 1 ) )
         {
-            // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
-            //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
-            //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
             xChild = implGetAccessible(*pEntry).get();
             break;
         }
