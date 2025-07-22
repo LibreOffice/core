@@ -86,6 +86,93 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Setup 2 views
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+    CPPUNIT_ASSERT(pTabView1 != pTabView2);
+    CPPUNIT_ASSERT(aView1.getViewID() != aView2.getViewID());
+
+    // Setup data
+    // String in A1, and a formula in A2
+    ScAddress aA1(0, 0, 0);
+    ScAddress aA1SheetView(0, 0, 1);
+
+    ScAddress aA2(0, 1, 0);
+    ScAddress aA2SheetView(0, 1, 1);
+
+    typeCharsInCell(std::string("ABCD"), aA1.Col(), aA1.Row(), pTabView1, pModelObj);
+    typeCharsInCell(std::string("=UPPER(\"A\"&\"b\"&\"C\"&\"d\")"), aA2.Col(), aA2.Row(), pTabView1,
+                    pModelObj);
+
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pDocument->GetString(aA1));
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pDocument->GetString(aA2));
+
+    // Check what the View1 and View2 sees
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pTabView1->GetCurrentString(aA1.Col(), aA1.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pTabView2->GetCurrentString(aA1.Col(), aA1.Row()));
+
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pTabView1->GetCurrentString(aA2.Col(), aA2.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"ABCD"_ustr, pTabView2->GetCurrentString(aA2.Col(), aA2.Row()));
+
+    // Create a sheet view in View2
+    SfxLokHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+    // Change content in View1 with default view -> default view ro sheet view sync
+    SfxLokHelper::setView(aView1.getViewID());
+    typeCharsInCell(std::string("XYZ"), aA1.Col(), aA1.Row(), pTabView1, pModelObj);
+    typeCharsInCell(std::string("=UPPER(\"x\"&\"Y\"&\"z\""), aA2.Col(), aA2.Row(), pTabView1,
+                    pModelObj);
+
+    // Check the content is synced
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pTabView1->GetCurrentString(aA1.Col(), aA1.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pTabView2->GetCurrentString(aA1.Col(), aA1.Row()));
+
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pTabView1->GetCurrentString(aA2.Col(), aA2.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pTabView2->GetCurrentString(aA2.Col(), aA2.Row()));
+
+    // Check the content directly in sheets
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(aA1));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(aA1SheetView));
+
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(aA2));
+    CPPUNIT_ASSERT_EQUAL(u"XYZ"_ustr, pDocument->GetString(aA2SheetView));
+
+    // Change content in the View2 with the sheet view -> sheet view to default view sync
+    SfxLokHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+
+    typeCharsInCell(std::string("ABC123"), aA1.Col(), aA1.Row(), pTabView2, pModelObj);
+    typeCharsInCell(std::string("=UPPER(\"aBc\"&\"123\""), aA2.Col(), aA2.Row(), pTabView2,
+                    pModelObj);
+
+    // Check the content is synced
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pTabView1->GetCurrentString(aA1.Col(), aA1.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pTabView2->GetCurrentString(aA1.Col(), aA1.Row()));
+
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pTabView1->GetCurrentString(aA2.Col(), aA2.Row()));
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pTabView2->GetCurrentString(aA2.Col(), aA2.Row()));
+
+    // Check the content directly in sheets
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pDocument->GetString(aA1));
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pDocument->GetString(aA1SheetView));
+
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pDocument->GetString(aA2));
+    CPPUNIT_ASSERT_EQUAL(u"ABC123"_ustr, pDocument->GetString(aA2SheetView));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

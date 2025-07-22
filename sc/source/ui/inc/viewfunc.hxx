@@ -78,7 +78,7 @@ public:
                     ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScViewFunc();
 
-    SC_DLLPUBLIC const ScPatternAttr*    GetSelectionPattern ();
+    SC_DLLPUBLIC const ScPatternAttr* GetSelectionPattern();
     SC_DLLPUBLIC OUString GetCurrentString(SCCOL nCol, SCROW nRow);
 
     void GetSelectionFrame(

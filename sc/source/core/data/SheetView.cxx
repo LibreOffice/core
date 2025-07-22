@@ -8,6 +8,7 @@
  */
 
 #include <SheetView.hxx>
+#include <table.hxx>
 
 namespace sc
 {
@@ -18,6 +19,11 @@ SheetView::SheetView(ScTable* pTable)
 
 ScTable* SheetView::getTablePointer() const { return mpTable; }
 bool SheetView::isValid() const { return mpTable; }
+SCTAB SheetView::getTableNumber() const
+{
+    assert(mpTable);
+    return mpTable->GetTab();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
