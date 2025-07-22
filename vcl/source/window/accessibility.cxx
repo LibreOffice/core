@@ -61,7 +61,7 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
 
 namespace vcl {
 
-css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bool bCreate )
+rtl::Reference<comphelper::OAccessible> Window::GetAccessible(bool bCreate)
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
     /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
@@ -74,7 +74,7 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
     }
     */
     if ( !mpWindowImpl )
-        return css::uno::Reference< css::accessibility::XAccessible >();
+        return {};
     if (!mpWindowImpl->mpAccessible.is() && !mpWindowImpl->mbInDispose && bCreate)
         mpWindowImpl->mpAccessible = CreateAccessible();
 

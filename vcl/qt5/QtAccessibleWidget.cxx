@@ -821,11 +821,11 @@ QAccessibleInterface* QtAccessibleWidget::customFactory(const QString& classname
 
         if (pWindow)
         {
-            css::uno::Reference<XAccessible> xAcc = pWindow->GetAccessible();
+            rtl::Reference<comphelper::OAccessible> pAcc = pWindow->GetAccessible();
             // insert into registry so the association between the XAccessible and the QtWidget
             // is remembered rather than creating a different QtXAccessible when a QObject is needed later
-            QtAccessibleRegistry::insert(xAcc, pObject);
-            return new QtAccessibleWidget(xAcc, *pObject);
+            QtAccessibleRegistry::insert(pAcc, pObject);
+            return new QtAccessibleWidget(pAcc, *pObject);
         }
     }
     if (classname == QLatin1String("QtXAccessible"))

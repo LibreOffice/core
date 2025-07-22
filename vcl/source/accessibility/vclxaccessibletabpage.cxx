@@ -279,15 +279,15 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleChild( sal_Int64 i 
     if ( i < 0 || i >= implGetAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
+    rtl::Reference<comphelper::OAccessible> pChild;
     if ( m_pTabControl )
     {
         TabPage* pTabPage = m_pTabControl->GetTabPage( m_nPageId );
         if ( pTabPage && pTabPage->IsVisible() )
-            xChild = pTabPage->GetAccessible();
+            pChild = pTabPage->GetAccessible();
     }
 
-    return xChild;
+    return pChild;
 }
 
 

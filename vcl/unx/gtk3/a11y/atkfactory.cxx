@@ -18,6 +18,8 @@
  */
 
 #include <unx/gtk/gtkframe.hxx>
+
+#include <comphelper/OAccessible.hxx>
 #include <vcl/window.hxx>
 #include "atkwrapper.hxx"
 #include "atkfactory.hxx"
@@ -72,15 +74,16 @@ wrapper_factory_create_accessible( GObject *obj )
 
         if( pWindow )
         {
-            uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible();
-            if( xAccessible.is() )
+            rtl::Reference<comphelper::OAccessible> pAccessible = pWindow->GetAccessible();
+            if (pAccessible.is())
             {
-                AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );
+                AtkObject* accessible = ooo_wrapper_registry_get(pAccessible);
 
                 if( accessible )
                     g_object_ref( G_OBJECT(accessible) );
                 else
-                    accessible = atk_object_wrapper_new(xAccessible, gtk_widget_get_accessible(pEventBox));
+                    accessible
+                        = atk_object_wrapper_new(pAccessible, gtk_widget_get_accessible(pEventBox));
 
                 return accessible;
             }

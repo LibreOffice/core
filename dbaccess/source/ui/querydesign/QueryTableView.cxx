@@ -428,10 +428,9 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     {
         modified();
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    Any(),
-                                                    Any(pNewTabWin->GetAccessible())
-                                                    );
+            m_pAccessible->notifyAccessibleEvent(
+                AccessibleEventId::CHILD, Any(),
+                Any(css::uno::Reference<XAccessible>(pNewTabWin->GetAccessible())));
 
         do {
 
@@ -688,10 +687,9 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                Any(pTabWin->GetAccessible()),
-                                                Any()
-                                                );
+        m_pAccessible->notifyAccessibleEvent(
+            AccessibleEventId::CHILD,
+            Any(css::uno::Reference<XAccessible>(pTabWin->GetAccessible())), Any());
 }
 
 void OQueryTableView::EnsureVisible(const OTableWindow* pWin)

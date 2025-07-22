@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-
+#include <comphelper/OAccessible.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/idle.hxx>

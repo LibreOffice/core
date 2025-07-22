@@ -805,9 +805,8 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     if ( ! pWindow)
         return;
 
-    css::uno::Reference< css::accessibility::XAccessible >
-        xAccessible (pWindow->GetAccessible(false));
-    if ( ! xAccessible.is())
+    rtl::Reference<comphelper::OAccessible> pAccessible = pWindow->GetAccessible(false);
+    if (!pAccessible.is())
         return;
 
     // Now comes a small hack.  We assume that the accessible object is
@@ -821,7 +820,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const OUString& 
     // However, the dynamic cast together with the check of the result
     // being NULL should be safe enough.
     ::accessibility::AccessibleSlideSorterView* pAccessibleView
-            = dynamic_cast< ::accessibility::AccessibleSlideSorterView*>(xAccessible.get());
+        = dynamic_cast<::accessibility::AccessibleSlideSorterView*>(pAccessible.get());
     if (pAccessibleView == nullptr)
         return;
 

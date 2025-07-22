@@ -47,6 +47,7 @@
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

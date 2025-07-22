@@ -32,6 +32,7 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <comphelper/OAccessible.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -1936,7 +1937,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
         // This is a special "property" needed by the Java a11y tests to get the underlying
         // vcl::Window's XAccessible, see AccessibilityTools.getAccessibleObject.
         // Once those tests have been ported to C++, this can be dropped.
-        return uno::Any(GetWindow()->GetAccessible());
+        return uno::Any(uno::Reference<accessibility::XAccessible>(GetWindow()->GetAccessible()));
     }
 
     WindowType eWinType = GetWindow()->GetType();

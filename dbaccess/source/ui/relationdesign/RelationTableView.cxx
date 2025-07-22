@@ -309,9 +309,9 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
         modified();
 
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    Any(),
-                                                    Any(pNewTabWin->GetAccessible()));
+            m_pAccessible->notifyAccessibleEvent(
+                AccessibleEventId::CHILD, Any(),
+                Any(css::uno::Reference<XAccessible>(pNewTabWin->GetAccessible())));
     }
     else
     {

@@ -1617,11 +1617,11 @@ void ChartController::impl_invalidateAccessible()
     auto pChartWindow(GetChartWindow());
     if( pChartWindow )
     {
-        Reference<XAccessible> xAccessible = pChartWindow->GetAccessible(false);
-        if (xAccessible.is())
+        rtl::Reference<comphelper::OAccessible> pAccessible = pChartWindow->GetAccessible(false);
+        if (pAccessible.is())
         {
             //empty arguments -> invalid accessible
-            dynamic_cast<AccessibleChartView&>(*xAccessible).initialize();
+            dynamic_cast<AccessibleChartView&>(*pAccessible).initialize();
         }
     }
 #endif
@@ -1633,9 +1633,9 @@ void ChartController::impl_initializeAccessible()
     auto pChartWindow(GetChartWindow());
     if( !pChartWindow )
         return;
-    Reference<XAccessible> xInit = pChartWindow->GetAccessible(false);
-    if(xInit.is())
-        impl_initializeAccessible( dynamic_cast<AccessibleChartView&>(*xInit) );
+    rtl::Reference<comphelper::OAccessible> pInit = pChartWindow->GetAccessible(false);
+    if (pInit.is())
+        impl_initializeAccessible(dynamic_cast<AccessibleChartView&>(*pInit));
 #endif
 }
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY

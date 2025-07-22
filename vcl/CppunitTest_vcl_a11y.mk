@@ -15,7 +15,9 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_a11y, \
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_a11y, \
 	sal \
+	comphelper \
 	cppu \
+	cppuhelper \
 	subsequenttest \
 	test \
 	vcl \

@@ -58,7 +58,7 @@ namespace dbaui
     }
     Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int64 i )
     {
-        Reference< XAccessible > aRet;
+        rtl::Reference<comphelper::OAccessible> pRet;
         ::osl::MutexGuard aGuard( m_aMutex  );
         if(i < 0 || i >= getAccessibleChildCount() || !m_pTableView)
             throw IndexOutOfBoundsException();
@@ -67,11 +67,11 @@ namespace dbaui
         if( i < nTableWindowCount )
         {
             OJoinTableView::OTableWindowMap::const_iterator aIter = std::next(m_pTableView->GetTabWinMap().begin(), i);
-            aRet = aIter->second->GetAccessible();
+            pRet = aIter->second->GetAccessible();
         }
         else if( o3tl::make_unsigned(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
-            aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
-        return aRet;
+            pRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
+        return pRet;
     }
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  )
     {

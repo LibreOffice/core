@@ -68,6 +68,7 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 
+#include <comphelper/OAccessible.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <editeng/unoprnms.hxx>
 #include <tools/urlobj.hxx>

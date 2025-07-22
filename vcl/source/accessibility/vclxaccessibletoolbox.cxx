@@ -258,14 +258,14 @@ void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, b
         // Moreover, calling GetItemPos with 0 will find a separator if there is any.
         return;
 
-    Reference< XAccessible > xChild( pWindow->GetAccessible() );
-    if( xChild.is() )
+    rtl::Reference<comphelper::OAccessible> pChild = pWindow->GetAccessible();
+    if (pChild.is())
     {
         Reference< XAccessible > xChildItem( getAccessibleChild(pToolBox->GetItemPos(nDownItem)));
         VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
 
-        pItem->SetChild( xChild );
-        pItem->NotifyChildEvent( xChild, bOpen );
+        pItem->SetChild(pChild);
+        pItem->NotifyChildEvent(pChild, bOpen);
     }
 }
 
@@ -303,11 +303,11 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
     Reference< XAccessible > xItem = getAccessibleChild( nIndex );
     if ( xItem.is() )
     {
-        Reference< XAccessible > xChild = pChildWindow->GetAccessible();
+        rtl::Reference<comphelper::OAccessible> pChild = pChildWindow->GetAccessible();
         VCLXAccessibleToolBoxItem* pItem =
             static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
-        pItem->SetChild( xChild );
-        pItem->NotifyChildEvent( xChild, true/*_bShow*/ );
+        pItem->SetChild(pChild);
+        pItem->NotifyChildEvent(pChild, true /*_bShow*/);
     }
 }
 
@@ -554,11 +554,11 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         xChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
         if ( pItemWindow )
         {
-            auto const xInnerAcc(pItemWindow->GetAccessible());
-            if (xInnerAcc) // else child is being disposed - avoid crashing
+            rtl::Reference<comphelper::OAccessible> pInnerAcc = pItemWindow->GetAccessible();
+            if (pInnerAcc.is()) // else child is being disposed - avoid crashing
             {
                 pItemWindow->SetAccessibleParent(xChild);
-                xChild->SetChild(xInnerAcc);
+                xChild->SetChild(pInnerAcc);
             }
         }
         if ( nHighlightItemId > ToolBoxItemId(0) && nItemId == nHighlightItemId )

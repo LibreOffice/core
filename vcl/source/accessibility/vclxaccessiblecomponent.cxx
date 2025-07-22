@@ -211,7 +211,8 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             DBG_ASSERT( pWindow, "VclEventId::WindowChildDestroyed - Window=?" );
             if ( pWindow->GetAccessible( false ).is() )
             {
-                aOldValue <<= pWindow->GetAccessible( false );
+                aOldValue <<= css::uno::Reference<accessibility::XAccessible>(
+                    pWindow->GetAccessible(false));
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
         }

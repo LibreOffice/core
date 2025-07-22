@@ -1123,9 +1123,7 @@ public:
      */
     ///@{
 public:
-
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        GetAccessible( bool bCreate = true );
+    rtl::Reference<comphelper::OAccessible> GetAccessible(bool bCreate = true);
     void SetAccessible(const rtl::Reference<comphelper::OAccessible>& rpAccessible);
 
     vcl::Window*                        GetAccessibleParentWindow() const;

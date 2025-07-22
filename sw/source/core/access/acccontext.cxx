@@ -1098,7 +1098,8 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             else if ( rChildFrameOrObj.GetWindow() )
             {
                 FireAccessibleEvent(AccessibleEventId::CHILD, uno::Any(),
-                                    uno::Any(rChildFrameOrObj.GetWindow()->GetAccessible()));
+                                    uno::Any(uno::Reference<XAccessible>(
+                                        rChildFrameOrObj.GetWindow()->GetAccessible())));
             }
         }
     }

@@ -255,9 +255,9 @@ bool OJoinTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool _bDe
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                Any(xConn->GetAccessible()),
-                                                Any());
+        m_pAccessible->notifyAccessibleEvent(
+            AccessibleEventId::CHILD, Any(css::uno::Reference<XAccessible>(xConn->GetAccessible())),
+            Any());
     if (_bDelete)
         xConn->disposeOnce();
 
@@ -334,9 +334,9 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
 
         modified();
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    Any(),
-                                                    Any(pNewTabWin->GetAccessible()));
+            m_pAccessible->notifyAccessibleEvent(
+                AccessibleEventId::CHILD, Any(),
+                Any(css::uno::Reference<XAccessible>(pNewTabWin->GetAccessible())));
     }
     else
     {
@@ -371,9 +371,9 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     if ( bRemove )
     {
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    Any(pTabWin->GetAccessible()),Any()
-                                                    );
+            m_pAccessible->notifyAccessibleEvent(
+                AccessibleEventId::CHILD,
+                Any(css::uno::Reference<XAccessible>(pTabWin->GetAccessible())), Any());
 
         pTabWin->Hide();
         OJoinController& rController = m_pView->getController();
@@ -1542,9 +1542,9 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,bool _bAddData
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                Any(),
-                                                Any(_pConnection->GetAccessible()));
+        m_pAccessible->notifyAccessibleEvent(
+            AccessibleEventId::CHILD, Any(),
+            Any(css::uno::Reference<XAccessible>(_pConnection->GetAccessible())));
 }
 
 bool OJoinTableView::allowQueries() const

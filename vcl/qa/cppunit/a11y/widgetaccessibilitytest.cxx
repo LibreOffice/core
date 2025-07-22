@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
+#include <comphelper/OAccessible.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 #include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/XAccessibleActionTester.hxx>

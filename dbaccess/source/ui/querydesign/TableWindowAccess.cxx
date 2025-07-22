@@ -77,7 +77,7 @@ namespace dbaui
     Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int64 i )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        Reference< XAccessible > aRet;
+        rtl::Reference<comphelper::OAccessible> pRet;
         if (m_pTable && !m_pTable->isDisposed())
         {
             switch(i)
@@ -86,21 +86,21 @@ namespace dbaui
                 {
                     VclPtr<OTableWindowTitle> xCtrl(m_pTable->GetTitleCtrl());
                     if (xCtrl)
-                        aRet = xCtrl->GetAccessible();
+                        pRet = xCtrl->GetAccessible();
                     break;
                 }
                 case 1:
                 {
                     VclPtr<OTableWindowListBox> xCtrl(m_pTable->GetListBox());
                     if (xCtrl)
-                        aRet = xCtrl->GetAccessible();
+                        pRet = xCtrl->GetAccessible();
                     break;
                 }
                 default:
                     throw IndexOutOfBoundsException();
             }
         }
-        return aRet;
+        return pRet;
     }
     sal_Int64 SAL_CALL OTableWindowAccess::getAccessibleIndexInParent(  )
     {
@@ -136,17 +136,17 @@ namespace dbaui
     Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAtPoint( const awt::Point& _aPoint )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        Reference< XAccessible > aRet;
+        rtl::Reference<comphelper::OAccessible> pRet;
         if(m_pTable && !m_pTable->isDisposed())
         {
             AbsoluteScreenPixelPoint aPoint(_aPoint.X,_aPoint.Y);
             AbsoluteScreenPixelRectangle aRect(m_pTable->GetDesktopRectPixel());
             if( aRect.Contains(aPoint) )
-                aRet = this;
+                pRet = this;
             else if( m_pTable->GetListBox()->GetDesktopRectPixel().Contains(aPoint))
-                aRet = m_pTable->GetListBox()->GetAccessible();
+                pRet = m_pTable->GetListBox()->GetAccessible();
         }
-        return aRet;
+        return pRet;
     }
     Reference< XAccessible > OTableWindowAccess::getParentChild(sal_Int64 _nIndex)
     {

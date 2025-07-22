@@ -150,11 +150,9 @@ SlideSorterViewShell::~SlideSorterViewShell()
         ::sd::Window* pWindow = GetActiveWindow();
         if (pWindow!=nullptr)
         {
-            css::uno::Reference<css::lang::XComponent> xComponent (
-                    pWindow->GetAccessible(false),
-                    css::uno::UNO_QUERY);
-            if (xComponent.is())
-                xComponent->dispose();
+            rtl::Reference<comphelper::OAccessible> pAccessible = pWindow->GetAccessible(false);
+            if (pAccessible.is())
+                pAccessible->dispose();
         }
     }
     catch( css::uno::Exception& )

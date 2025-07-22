@@ -15,6 +15,7 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <comphelper/OAccessible.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
 #include <o3tl/string_view.hxx>
