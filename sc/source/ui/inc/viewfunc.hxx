@@ -90,6 +90,8 @@ public:
     bool            AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor, bool bContinue, const OpCode eCode );
     OUString        GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr, const OpCode eCode );
 
+    SC_DLLPUBLIC void EnterDataToCurrentCell(const OUString& rString, const EditTextObject* pData = nullptr, bool bMatrixExpand = false);
+
     SC_DLLPUBLIC void EnterData(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                                 const EditTextObject* pData = nullptr, bool bMatrixExpand = false);
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,

@@ -656,6 +656,15 @@ namespace
 
 //      actual functions
 
+void ScViewFunc::EnterDataToCurrentCell(const OUString& rString, const EditTextObject* pData, bool bMatrixExpand)
+{
+    SCCOL nCol = GetViewData().GetCurX();
+    SCROW nRow = GetViewData().GetCurY();
+    SCTAB nTab = GetViewData().GetTabNo();
+
+    EnterData(nCol, nRow, nTab, rString, pData, bMatrixExpand);
+}
+
 //  input - undo OK
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             const OUString& rString,
