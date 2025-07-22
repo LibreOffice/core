@@ -188,8 +188,7 @@ OUString SAL_CALL AccessibleListBoxEntry::getImplementationName()
 Sequence< OUString > SAL_CALL AccessibleListBoxEntry::getSupportedServiceNames()
 {
     return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
-            u"com.sun.star.accessibility.AccessibleComponent"_ustr,
-            u"com.sun.star.awt.AccessibleTreeListBoxEntry"_ustr};
+            u"com.sun.star.accessibility.AccessibleComponent"_ustr};
 }
 
 sal_Bool SAL_CALL AccessibleListBoxEntry::supportsService( const OUString& _rServiceName )
