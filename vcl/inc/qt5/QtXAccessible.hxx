@@ -9,16 +9,9 @@
 
 #pragma once
 
-#include <vclpluginapi.h>
-
 #include <QtCore/QObject>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-
-#include <vcl/window.hxx>
-
-class QtFrame;
-class QtWidget;
 
 // Wrapper class to hold a css::accessibility::XAccessible object
 // while being able to pass it as a QObject
