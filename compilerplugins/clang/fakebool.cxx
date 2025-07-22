@@ -623,7 +623,7 @@ bool FakeBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (isFakeBool(expr->getType()) != FBK_No) {
+    if (isFakeBool(expr->getType()) != FBK_No && !suppressWarningAt(expr->getBeginLoc())) {
         report(
             DiagnosticsEngine::Warning,
             "CXXFunctionalCastExpr, suspicious cast from %0 to %1",

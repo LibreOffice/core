@@ -124,9 +124,7 @@ inline Any & Any::operator = ( const Any & rAny )
 {
     if (this != &rAny)
     {
-        ::uno_type_any_assign(
-            this, rAny.pData, rAny.pType,
-            cpp_acquire, cpp_release );
+        setValue(rAny.pData, rAny.pType);
     }
     return *this;
 }
@@ -171,9 +169,7 @@ inline ::rtl::OUString Any::getValueTypeName() const
 
 inline void Any::setValue( const void * pData_, const Type & rType )
 {
-    ::uno_type_any_assign(
-        this, const_cast< void * >( pData_ ), rType.getTypeLibType(),
-        cpp_acquire, cpp_release );
+    setValue(pData_, rType.getTypeLibType());
 }
 
 inline void Any::setValue( const void * pData_, typelib_TypeDescriptionReference * pType_ )
@@ -207,11 +203,7 @@ inline bool Any::isExtractableTo( const Type & rType ) const
 template <typename T>
 inline bool Any::has() const
 {
-    Type const & rType = ::cppu::getTypeFavourUnsigned(static_cast< T * >(NULL));
-    return ::uno_type_isAssignableFromData(
-        rType.getTypeLibType(), pData, pType,
-        cpp_queryInterface,
-        cpp_release );
+    return isExtractableTo(::cppu::getTypeFavourUnsigned(static_cast< T * >(NULL)));
 }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -227,9 +219,7 @@ inline bool Any::operator == ( const Any & rAny ) const
 
 inline bool Any::operator != ( const Any & rAny ) const
 {
-    return (! ::uno_type_equalData(
-        pData, pType, rAny.pData, rAny.pType,
-        cpp_queryInterface, cpp_release ));
+    return (! operator==(rAny));
 }
 
 
@@ -279,9 +269,7 @@ template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned(&value);
-    ::uno_type_any_assign(
-        &rAny, const_cast< C * >( &value ), rType.getTypeLibType(),
-        cpp_acquire, cpp_release );
+    rAny.setValue(static_cast< const void * >( &value ), rType);
 }
 
 // additionally for C++ bool:
@@ -289,10 +277,8 @@ inline void SAL_CALL operator <<= ( Any & rAny, const C & value )
 template<>
 inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 {
-    sal_Bool b = value;
-    ::uno_type_any_assign(
-        &rAny, &b, cppu::UnoType<bool>::get().getTypeLibType(),
-        cpp_acquire, cpp_release );
+    // [-loplugin:fakebool] false positive:
+    rAny <<= sal_Bool(value);
 }
 
 
@@ -300,22 +286,14 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 template< class C1, class C2 >
 inline void operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 {
-    const rtl::OUString str( std::move(value) );
-    const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
-    ::uno_type_any_assign(
-        &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
-        cpp_acquire, cpp_release );
+    rAny <<= rtl::OUString( std::move(value) );
 }
 template<typename T1, typename T2>
 void operator <<=(Any &, rtl::OUStringConcat<T1, T2> const &) = delete;
 template< std::size_t nBufSize >
 inline void operator <<= ( Any & rAny, rtl::StringNumber< sal_Unicode, nBufSize >&& value )
 {
-    const rtl::OUString str( std::move(value) );
-    const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
-    ::uno_type_any_assign(
-        &rAny, const_cast< rtl::OUString * >( &str ), rType.getTypeLibType(),
-        cpp_acquire, cpp_release );
+    rAny <<= rtl::OUString( std::move(value) );
 }
 template<std::size_t nBufSize>
 void operator <<=(Any &, rtl::StringNumber<sal_Unicode, nBufSize> const &) = delete;
@@ -352,8 +330,7 @@ inline bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal
 template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value )
 {
-    return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
-            bool(value) == bool(* static_cast< const sal_Bool * >( rAny.pData )));
+    return rAny == bool(value);
 }
 
 
