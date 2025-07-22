@@ -84,9 +84,6 @@ IMPL_LINK( AccessibleListBoxEntry, WindowEventListener, VclWindowEvent&, rEvent,
         }
         case  VclEventId::ObjectDying :
         {
-            if ( m_pTreeListBox )
-                m_pTreeListBox->RemoveEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
-            m_pTreeListBox = nullptr;
             dispose();
             break;
         }
