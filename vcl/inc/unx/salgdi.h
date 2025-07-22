@@ -70,7 +70,7 @@ public:
 
     void                            Init(X11SalFrame& rFrame, Drawable aDrawable, SalX11Screen nXScreen);
     void                            Init(X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr,
-                                         bool bDeleteColormap = false);
+                                         bool bDeleteColormap = false, bool bAlphaMaskTransparent = false);
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
 
     virtual SalGraphicsImpl*        GetImpl() const override;

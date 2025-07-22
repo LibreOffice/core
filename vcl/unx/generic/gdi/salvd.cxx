@@ -73,7 +73,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphic
     return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, rData, std::make_unique<X11SalGraphics>());
 }
 
-void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap)
+void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, bool bDeleteColormap, bool bAlphaMaskTransparent)
 {
     SalDisplay *pDisplay  = pDevice->GetDisplay();
     m_nXScreen = pDevice->GetXScreenNumber();
@@ -100,6 +100,12 @@ void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, 
 
     SetDrawable(pDevice->GetDrawable(), pDevice->GetSurface(), m_nXScreen);
     mxImpl->UpdateX11GeometryProvider();
+
+    if (bAlphaMaskTransparent)
+    {
+        mxImpl->SetFillColor(COL_TRANSPARENT);
+        mxImpl->drawRect(0, 0, pDevice->GetWidth(), pDevice->GetHeight());
+    }
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
@@ -232,7 +238,6 @@ void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent )
 {
-    assert(!bAlphaMaskTransparent && "TODO"); (void)bAlphaMaskTransparent;
     if( bExternPixmap_ )
         return false;
 
@@ -282,7 +287,7 @@ bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool bAlpha
     }
 
     if( pGraphics_ )
-        pGraphics_->Init( this );
+        pGraphics_->Init( this, nullptr, false, bAlphaMaskTransparent );
 
     return true;
 }
