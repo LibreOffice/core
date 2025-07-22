@@ -17,12 +17,17 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,curl,\
 	winbuild/MakefileBuild.vc \
 ))
 
+# 0001-const-up-readonly-H2_NON_FIELD.patch
+# upstream effort as:
+# https://github.com/curl/curl/pull/17996
+
 $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc.patch.1 \
 	external/curl/curl-msvc-zlib.patch.1 \
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/zlib.patch.0 \
 	external/curl/configurable-z-option.patch.0 \
+	external/curl/0001-const-up-readonly-H2_NON_FIELD.patch.1 \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)

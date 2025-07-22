@@ -1,0 +1,25 @@
+From df1f9619ac00091b309a479a166fe861f935779c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 22 Jul 2025 14:48:26 +0100
+Subject: [PATCH] const up readonly H2_NON_FIELD
+
+---
+ lib/http.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/http.c b/lib/http.c
+index e5a069627..9a844301f 100644
+--- a/lib/http.c
++++ b/lib/http.c
+@@ -4569,7 +4569,7 @@ struct name_const {
+ };
+ 
+ /* keep them sorted by length! */
+-static struct name_const H2_NON_FIELD[] = {
++static const struct name_const H2_NON_FIELD[] = {
+   { STRCONST("Host") },
+   { STRCONST("Upgrade") },
+   { STRCONST("Connection") },
+-- 
+2.49.0
+
