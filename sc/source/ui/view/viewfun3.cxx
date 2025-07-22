@@ -2067,10 +2067,15 @@ void ScViewFunc::MakeNewSheetView()
     SCTAB nSheetViewTab = nTab + 1;
     if (rDoc.CopyTab(nTab, nSheetViewTab))
     {
-        SetTabNo(nSheetViewTab);
+        // Add and register the created sheet view
         rDoc.SetSheetView(nSheetViewTab, true);
         sc::SheetViewID nSheetViewID = rDoc.CreateNewSheetView(nTab, nSheetViewTab);
         GetViewData().SetSheetViewID(nSheetViewID);
+
+        // Update
+        GetViewData().SetTabNo(nSheetViewTab); // force add the sheet view tab
+        GetViewData().SetTabNo(nTab); // then change back to the current tab
+        PaintExtras(); // update Tab Control
     }
 }
 

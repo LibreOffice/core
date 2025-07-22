@@ -114,7 +114,7 @@ class ExternalDataMapper;
 class Sparkline;
 class SparklineGroup;
 class SparklineList;
-
+class SheetViewManager;
 }
 
 class Fraction;
@@ -2401,6 +2401,7 @@ public:
 
     /** Return the sheet view table for the ID */
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
+    std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
     bool IsSheetView(SCTAB nTab) const;
     void SetSheetView(SCTAB nTab, bool bSheetView);
 

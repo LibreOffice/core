@@ -10,6 +10,7 @@
 #pragma once
 #include <vector>
 #include "SheetViewTypes.hxx"
+#include "types.hxx"
 
 class ScTable;
 
@@ -30,6 +31,7 @@ public:
     SheetView(ScTable* pTable);
 
     ScTable* getTablePointer() const;
+    SCTAB getTableNumber() const;
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
@@ -49,6 +51,7 @@ public:
 
     /** Returns a sheet view for the ID. */
     SheetView get(SheetViewID nID);
+    std::vector<SheetView> const& getSheetViews() { return maViews; }
 };
 }
 

@@ -77,6 +77,7 @@
 #include <columnspanset.hxx>
 #include <stringutil.hxx>
 #include <SparklineList.hxx>
+#include <SheetView.hxx>
 
 #include <memory>
 
@@ -664,36 +665,12 @@ void ScViewFunc::EnterDataToCurrentCell(const OUString& rString, const EditTextO
     EnterData(nCol, nRow, nTab, rString, pData, bMatrixExpand);
 }
 
-//  input - undo OK
-void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                            const OUString& rString,
-                            const EditTextObject* pData,
-                            bool bMatrixExpand )
+namespace
 {
-    ScDocument& rDoc = GetViewData().GetDocument();
-    ScMarkData aMark(GetViewData().GetMarkData());
-    bool bRecord = rDoc.IsUndoEnabled();
-    SCTAB i;
-
-    ScDocShell& rDocSh = GetViewData().GetDocShell();
-    ScDocFunc &rFunc = GetViewData().GetDocFunc();
-    std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(rDocSh);
-
-    ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, aMark );
-    if (!aTester.IsEditable())
-    {
-        ErrorMessage(aTester.GetMessageId());
-        PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
-        return;
-    }
-
-    if ( bRecord )
-        rFunc.EnterListAction( STR_UNDO_ENTERDATA );
-
-    bool bFormula = false;
-
+bool checkFormula(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString)
+{
     // do not check formula if it is a text cell
-    sal_uInt32 format = rDoc.GetNumberFormat( nCol, nRow, nTab );
+    sal_uInt32 format = rDoc.GetNumberFormat(nCol, nRow, nTab );
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     // a single '=' character is handled as string (needed for special filters)
     if ( pFormatter->GetType(format) != SvNumFormatType::TEXT && rString.getLength() > 1 )
@@ -701,7 +678,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if ( rString[0] == '=' )
         {
             // handle as formula
-            bFormula = true;
+            return true;
         }
         else if ( rString[0] == '+' || rString[0] == '-' )
         {
@@ -721,65 +698,150 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 double fNumber = 0;
                 if ( !pFormatter->IsNumberFormat( aString, format, fNumber ) )
                 {
-                    bFormula = true;
+                    return true;
                 }
             }
         }
     }
+    return false;
+}
 
-    bool bNumFmtChanged = false;
-    if ( bFormula )
-    {   // formula, compile with autoCorrection
-        i = aMark.GetFirstSelected();
-        auto xPosPtr = std::make_shared<ScAddress>(nCol, nRow, i);
-        auto xCompPtr = std::make_shared<ScCompiler>(rDoc, *xPosPtr, rDoc.GetGrammar(), true, false);
-        std::unique_ptr<EditTextObject> xTextObject(pData ? pData->Clone() : nullptr);
+void applyFormulaToCell(ScViewFunc& rViewFunc, SCCOL nCol, SCROW nRow, SCTAB nTab, OUString const& rString,
+                        const EditTextObject* pData, std::shared_ptr<ScDocShellModificator> xModificator,
+                        ScMarkData const& rMark, bool bMatrixExpand, bool bRecord, bool& rbNumFmtChanged)
+{
+    ScDocument& rDoc = rViewFunc.GetViewData().GetDocument();
 
-        //2do: enable/disable autoCorrection via calcoptions
-        xCompPtr->SetAutoCorrection( true );
-        if ( rString[0] == '+' || rString[0] == '-' )
-        {
-            xCompPtr->SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
-        }
+    // formula, compile with autoCorrection
+    auto xPosPtr = std::make_shared<ScAddress>(nCol, nRow, nTab);
+    auto xCompPtr = std::make_shared<ScCompiler>(rDoc, *xPosPtr, rDoc.GetGrammar(), true, false);
+    std::unique_ptr<EditTextObject> xTextObject(pData ? pData->Clone() : nullptr);
 
-        OUString aFormula( rString );
+    //2do: enable/disable autoCorrection via calcoptions
+    xCompPtr->SetAutoCorrection( true );
+    if (rString[0] == '+' || rString[0] == '-')
+    {
+        xCompPtr->SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_BREAK );
+    }
 
-        FormulaProcessingContext context_instance{
-            std::move(xPosPtr), std::move(xCompPtr),    std::move(xModificator), nullptr,
-            nullptr,            std::move(xTextObject), std::move(aMark),        *this,
-            OUString(),         aFormula,               rString,                 nCol,
-            nRow,               nTab,                   bMatrixExpand,           bNumFmtChanged,
-            bRecord
-        };
+    OUString aFormula(rString);
 
-        parseAndCorrectFormula(std::make_shared<FormulaProcessingContext>(context_instance));
+    FormulaProcessingContext context_instance{
+        std::move(xPosPtr), std::move(xCompPtr),    xModificator, nullptr,
+        nullptr,            std::move(xTextObject), rMark,        rViewFunc,
+        OUString(),         aFormula,               rString,                 nCol,
+        nRow,               nTab,                   bMatrixExpand,           rbNumFmtChanged,
+        bRecord
+    };
+
+    parseAndCorrectFormula(std::make_shared<FormulaProcessingContext>(context_instance));
+}
+
+void applyText(ScViewFunc& rViewFunc, SCCOL nCol, SCROW nRow, SCTAB nTab, OUString const& rString, bool& rbNumFmtChanged)
+{
+    ScViewData& rViewData = rViewFunc.GetViewData();
+    ScDocument& rDoc = rViewData.GetDocument();
+    ScDocShell& rDocSh = rViewData.GetDocShell();
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+    ScDocFunc& rFunc = rViewData.GetDocFunc();
+
+    bool bNumFmtSet = false;
+    const ScAddress aAddress(nCol, nRow, nTab);
+
+    // tdf#104902 - handle embedded newline
+    if (ScStringUtil::isMultiline(rString))
+    {
+        rEngine.SetTextCurrentDefaults(rString);
+        rDoc.SetEditText(aAddress, rEngine.CreateTextObject());
+        rDocSh.AdjustRowHeight(nRow, nRow, nTab);
     }
     else
     {
-        ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
+        rFunc.SetNormalString(bNumFmtSet, aAddress, rString, false);
+    }
+
+    if (bNumFmtSet)
+    {
+        /* FIXME: if set on any sheet results in changed only on
+         * sheet nTab for TestFormatArea() and DoAutoAttributes() */
+        rbNumFmtChanged = true;
+    }
+}
+
+} // end anonymous namespace
+
+//  input - undo OK
+void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                            const OUString& rString,
+                            const EditTextObject* pData,
+                            bool bMatrixExpand )
+{
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScMarkData aMark(GetViewData().GetMarkData());
+    bool bRecord = rDoc.IsUndoEnabled();
+
+    ScDocFunc &rFunc = GetViewData().GetDocFunc();
+    std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(GetViewData().GetDocShell());
+
+    ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, aMark );
+    if (!aTester.IsEditable())
+    {
+        ErrorMessage(aTester.GetMessageId());
+        PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
+        return;
+    }
+
+    if ( bRecord )
+        rFunc.EnterListAction( STR_UNDO_ENTERDATA );
+
+    bool bFormula = checkFormula(rDoc, nCol, nRow, nTab, rString);
+    bool bNumFmtChanged = false;
+
+    if (bFormula)
+    {
+        SCTAB nSelectedTab = aMark.GetFirstSelected();
+
+        applyFormulaToCell(*this, nCol, nRow, nTab, rString, pData, xModificator, aMark, bMatrixExpand, bRecord, bNumFmtChanged);
+
+        if (!rDoc.IsSheetView(nSelectedTab))
+        {
+            auto pManager = rDoc.GetSheetViewManager(nSelectedTab);
+
+            for (auto const& rSheetView : pManager->getSheetViews())
+            {
+                if (!rSheetView.isValid())
+                    continue;
+
+                SCTAB nSheetViewTab = rSheetView.getTableNumber();
+
+                ScMarkData aSheetViewMark(rDoc.GetSheetLimits());
+                aSheetViewMark.SelectTable(nSheetViewTab, false);
+                ScRange aSheetViewRange(aMark.GetMarkArea());
+                aSheetViewRange.aStart.SetTab(nSheetViewTab);
+                aSheetViewRange.aEnd.SetTab(nSheetViewTab);
+                aSheetViewMark.SetMarkArea(aSheetViewRange);
+
+                applyFormulaToCell(*this, nCol, nRow, nSheetViewTab, rString, pData, xModificator, aSheetViewMark, bMatrixExpand, bRecord, bNumFmtChanged);
+            }
+        }
+    }
+    else
+    {
         for (const auto& rTab : aMark)
         {
-            bool bNumFmtSet = false;
-            const ScAddress aScAddress(nCol, nRow, rTab);
+            if (!rDoc.IsSheetView(rTab))
+            {
+                auto pManager = rDoc.GetSheetViewManager(rTab);
+                for (auto const& rSheetView : pManager->getSheetViews())
+                {
+                    if (!rSheetView.isValid())
+                        continue;
 
-            // tdf#104902 - handle embedded newline
-            if (ScStringUtil::isMultiline(rString))
-            {
-                rEngine.SetTextCurrentDefaults(rString);
-                rDoc.SetEditText(aScAddress, rEngine.CreateTextObject());
-                rDocSh.AdjustRowHeight(nRow, nRow, rTab);
+                    SCTAB nSheetViewTab = rSheetView.getTableNumber();
+                    applyText(*this, nCol, nRow, nSheetViewTab, rString, bNumFmtChanged);
+                }
             }
-            else
-            {
-                rFunc.SetNormalString(bNumFmtSet, aScAddress, rString, false);
-            }
-
-            if (bNumFmtSet)
-            {
-                /* FIXME: if set on any sheet results in changed only on
-                 * sheet nTab for TestFormatArea() and DoAutoAttributes() */
-                bNumFmtChanged = true;
-            }
+            applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
         }
         performAutoFormatAndUpdate(rString, aMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);
     }
