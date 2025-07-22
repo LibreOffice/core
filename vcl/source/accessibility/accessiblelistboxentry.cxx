@@ -37,16 +37,11 @@
 #include <svdata.hxx>
 #include <strings.hrc>
 
-// class AccessibleListBoxEntry -----------------------------------------------------
-
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 using namespace ::comphelper;
-
-
-// Ctor() and Dtor()
 
 AccessibleListBoxEntry::AccessibleListBoxEntry( SvTreeListBox& _rListBox,
                                                 SvTreeListEntry& rEntry,
@@ -999,7 +994,6 @@ Any AccessibleListBoxEntry::getMaximumValue(  )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Any aValue;
-    // SvTreeListBox* pBox = m_pTreeListBox;
     switch(getAccessibleRole())
     {
         case AccessibleRole::CHECK_BOX:
@@ -1019,7 +1013,6 @@ Any AccessibleListBoxEntry::getMinimumValue(  )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Any aValue;
-    // SvTreeListBox* pBox = m_pTreeListBox;
     switch(getAccessibleRole())
     {
         case AccessibleRole::CHECK_BOX:
