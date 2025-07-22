@@ -110,7 +110,7 @@ protected:
     virtual void   GetFocus() override;
     virtual void   LoseFocus() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
 public:
             ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );

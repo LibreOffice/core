@@ -614,8 +614,7 @@ void ShowWindow::AddWindowToPaintView()
 }
 
 // Override the sd::Window's CreateAccessible to create a different accessible object
-css::uno::Reference<css::accessibility::XAccessible>
-    ShowWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ShowWindow::CreateAccessible()
 {
     if (mpViewShell != nullptr)
     {

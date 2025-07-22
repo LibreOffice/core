@@ -90,7 +90,7 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-css::uno::Reference< css::accessibility::XAccessible > Window::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> Window::CreateAccessible()
 {
     const WindowType eType = GetType();
 

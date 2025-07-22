@@ -1323,14 +1323,12 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> MenuFloatingWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> MenuFloatingWindow::CreateAccessible()
 {
-    css::uno::Reference<css::accessibility::XAccessible> xAcc;
-
     if (pMenu && !pMenu->pStartedFrom)
-        xAcc = pMenu->GetAccessible();
+        return pMenu->GetAccessible();
 
-    return xAcc;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -454,7 +454,7 @@ public:
     // ACCESSIBILITY ==========================================================
 
     /** Creates and returns the accessible object of the Box. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     /** Fills the StateSet of one entry. */
     void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_Int64& rStateSet ) const;

@@ -130,7 +130,7 @@ public:
 
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
@@ -330,7 +330,7 @@ public:
 public:
     explicit        CheckBox( vcl::Window* pParent, WinBits nStyle = 0 );
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
@@ -436,7 +436,7 @@ public:
     virtual         ~RadioButton() override;
     virtual void    dispose() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;

@@ -1160,7 +1160,7 @@ public:
     KeyEvent                            GetActivationKey() const;
 
 protected:
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible();
 
     // These eventually are supposed to go when everything is converted to .ui
     SAL_DLLPRIVATE vcl::Window*         getLegacyNonLayoutAccessibleRelationMemberOf() const;

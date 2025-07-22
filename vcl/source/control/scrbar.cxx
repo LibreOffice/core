@@ -927,7 +927,7 @@ tools::Rectangle ScrollBar::GetScrollbarRegion() const
     return tools::Rectangle(Point(0, 0), GetOutputSizePixel());
 }
 
-css::uno::Reference<css::accessibility::XAccessible> ScrollBar::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScrollBar::CreateAccessible()
 {
     return new VCLXAccessibleScrollBar(this);
 }

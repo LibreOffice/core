@@ -117,7 +117,7 @@ namespace svt::table
         virtual void        StateChanged( StateChangedType i_nStateChange ) override;
 
         /** Creates and returns the accessible object of the whole GridControl. */
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+        virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
         OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType,
                                          sal_Int32 _nRow, sal_Int32 _nCol) const;
         void GoToCell(sal_Int32 _nColumnPos, sal_Int32 _nRow);

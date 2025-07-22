@@ -439,7 +439,7 @@ public:
         disposeOnce();
     }
 
-    virtual Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void StateChanged(StateChangedType nStateChange) override
     {
@@ -4122,7 +4122,7 @@ com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation(
     return cppu::acquire( new SvxCurrencyToolBoxControl( rContext ) );
 }
 
-Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvxFontNameBox_Impl::CreateAccessible()
 {
     FillList();
     return InterimItemWindow::CreateAccessible();

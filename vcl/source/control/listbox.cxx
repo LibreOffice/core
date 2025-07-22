@@ -317,7 +317,7 @@ void ListBox::ToggleDropDown()
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> ListBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ListBox::CreateAccessible()
 {
     const bool bIsDropDownBox = (GetStyle() & WB_DROPDOWN) == WB_DROPDOWN;
     if (bIsDropDownBox)

@@ -180,7 +180,7 @@ void ChartWindow::KeyInput( const KeyEvent& rKEvt )
         Window::KeyInput( rKEvt );
 }
 
-uno::Reference< css::accessibility::XAccessible > ChartWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ChartWindow::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if( m_pWindowController )
@@ -188,7 +188,7 @@ uno::Reference< css::accessibility::XAccessible > ChartWindow::CreateAccessible(
     else
         return Window::CreateAccessible();
 #else
-    return uno::Reference< css::accessibility::XAccessible >();
+    return {};
 #endif
 }
 

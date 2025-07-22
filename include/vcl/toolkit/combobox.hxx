@@ -86,7 +86,7 @@ public:
     virtual         ~ComboBox() override;
     virtual void    dispose() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos,SystemTextColorFlags nFlags ) override;
     virtual void    Resize() override;

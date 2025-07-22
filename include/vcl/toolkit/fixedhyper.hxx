@@ -71,7 +71,7 @@ public:
     */
     FixedHyperlink( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     /** overwrites Window::GetFocus().
 

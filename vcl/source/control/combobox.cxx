@@ -1135,7 +1135,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> ComboBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ComboBox::CreateAccessible()
 {
     const bool bIsDropDownBox = (GetStyle() & WB_DROPDOWN) == WB_DROPDOWN;
     if (bIsDropDownBox)

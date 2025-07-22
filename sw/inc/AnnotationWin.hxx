@@ -167,7 +167,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void ChangeSidebarItem( SwAnnotationItem & rSidebarItem );
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+        virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
 

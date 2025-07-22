@@ -1269,7 +1269,7 @@ PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-css::uno::Reference<css::accessibility::XAccessible> PushButton::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> PushButton::CreateAccessible()
 {
     return new VCLXAccessibleButton(this);
 }
@@ -2434,7 +2434,7 @@ void RadioButton::dispose()
     Button::dispose();
 }
 
-css::uno::Reference<css::accessibility::XAccessible> RadioButton::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> RadioButton::CreateAccessible()
 {
     return new VCLXAccessibleRadioButton(this);
 }
@@ -3265,7 +3265,7 @@ CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-css::uno::Reference<css::accessibility::XAccessible> CheckBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> CheckBox::CreateAccessible()
 {
     return new VCLXAccessibleCheckBox(this);
 }

@@ -146,7 +146,7 @@ public:
     */
     bool SetBookPreviewMode( const bool _bBookPreview );
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     void ReInit();
 };

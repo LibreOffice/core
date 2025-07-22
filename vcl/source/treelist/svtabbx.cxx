@@ -1095,7 +1095,7 @@ vcl::Window* SvHeaderTabListBox::GetWindowInstance()
     return this;
 }
 
-Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvHeaderTabListBox::CreateAccessible()
 {
     if (m_xAccessible.is())
         return m_xAccessible;

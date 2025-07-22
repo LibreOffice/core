@@ -1512,7 +1512,7 @@ void OJoinTableView::GetFocus()
         GrabTabWinFocus();
 }
 
-Reference< XAccessible > OJoinTableView::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> OJoinTableView::CreateAccessible()
 {
     m_pAccessible = new OJoinDesignViewAccess(this);
     return m_pAccessible;

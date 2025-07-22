@@ -124,7 +124,7 @@ public:
     void    KillActivePopup();
     void    PopupClosed(Menu const * pMenu);
     sal_uInt16 GetHighlightedItem() const { return m_nHighlightedItem; }
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     void    SetAutoPopup(bool bAuto) { mbAutoPopup = bAuto; }
     void    LayoutChanged();

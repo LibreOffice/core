@@ -100,7 +100,7 @@ public:
     virtual void        Activating () override;
     virtual void        Deactivating () override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual OUString GetHid () const override;
     virtual SbxItemType GetSbxType () const override;

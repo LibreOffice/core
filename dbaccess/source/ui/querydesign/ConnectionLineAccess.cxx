@@ -135,7 +135,7 @@ namespace dbaui
             return getRelation(0);
         return AccessibleRelation();
     }
-    Reference< XAccessible > OTableConnection::CreateAccessible()
+    rtl::Reference<comphelper::OAccessible> OTableConnection::CreateAccessible()
     {
         return new OConnectionLineAccess(this);
     }

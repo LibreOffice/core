@@ -1819,8 +1819,7 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
     return bOk;
 }
 
-uno::Reference< css::accessibility::XAccessible >
-    SwPagePreviewWin::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SwPagePreviewWin::CreateAccessible()
 {
     SolarMutexGuard aGuard; // this should have happened already!!!
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY

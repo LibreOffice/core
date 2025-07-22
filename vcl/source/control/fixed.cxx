@@ -164,7 +164,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
         bFillLayout ? &mxLayoutData->m_aDisplayText : nullptr);
 }
 
-css::uno::Reference<css::accessibility::XAccessible> FixedText::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> FixedText::CreateAccessible()
 {
     return new VCLXAccessibleFixedText(this);
 }

@@ -954,8 +954,7 @@ void Window::DropScroll(const Point& rMousePos)
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible>
-    Window::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> Window::CreateAccessible()
 {
     // If current viewshell is PresentationViewShell, just return empty because the correct ShowWin will be created later.
     if (dynamic_cast< PresentationViewShell *>( mpViewShell ))

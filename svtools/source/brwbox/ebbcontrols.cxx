@@ -381,7 +381,7 @@ namespace svt
         return static_cast<BrowserDataWin*>(GetParent())->GetParent()->ProcessKey(rKEvt);
     }
 
-    css::uno::Reference<css::accessibility::XAccessible> ControlBase::CreateAccessible()
+    rtl::Reference<comphelper::OAccessible> ControlBase::CreateAccessible()
     {
         return new EditBrowseBoxTableCell(this);
     }

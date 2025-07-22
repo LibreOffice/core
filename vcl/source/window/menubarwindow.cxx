@@ -1113,14 +1113,12 @@ void MenuBarWindow::GetFocus()
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> MenuBarWindow::CreateAccessible()
 {
-    css::uno::Reference<css::accessibility::XAccessible> xAcc;
-
     if (m_pMenu)
-        xAcc = m_pMenu->GetAccessible();
+        return m_pMenu->GetAccessible();
 
-    return xAcc;
+    return {};
 }
 
 sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )

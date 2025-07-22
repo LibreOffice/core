@@ -92,7 +92,7 @@ public:
     virtual         ~ScrollBar() override;
     virtual void    dispose() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void Tracking(const TrackingEvent& rTEvt) override;

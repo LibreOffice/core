@@ -3489,14 +3489,13 @@ void SvTreeListBox::InitSettings()
         pCheckButtonData->SetDefaultImages(*this);
 }
 
-css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SvTreeListBox::CreateAccessible()
 {
-    css::uno::Reference< XAccessible > xAccessible;
     css::uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
     if ( xAccParent.is() )
-        xAccessible = new AccessibleListBox(*this, xAccParent);
+        return new AccessibleListBox(*this, xAccParent);
 
-    return xAccessible;
+    return {};
 }
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, sal_Int64& rStateSet ) const

@@ -2755,7 +2755,7 @@ void Ruler::DrawTicks()
     Invalidate(InvalidateFlags::NoErase);
 }
 
-uno::Reference< XAccessible > Ruler::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> Ruler::CreateAccessible()
 {
     uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
     if( xAccParent.is() )
@@ -2772,7 +2772,7 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
         return new SvtRulerAccessible(xAccParent, *this, aStr);
     }
     else
-        return uno::Reference< XAccessible >();
+        return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

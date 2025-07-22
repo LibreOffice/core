@@ -1180,7 +1180,7 @@ void DialogWindow::InitSettings()
     SetBackground(rStyleSettings.GetFaceColor());
 }
 
-css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> DialogWindow::CreateAccessible()
 {
     return new AccessibleDialogWindow(this);
 }

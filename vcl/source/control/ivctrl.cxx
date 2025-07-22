@@ -340,7 +340,8 @@ void SvtIconChoiceCtrl::CallImplEventListeners(VclEventId nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
 }
-css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
+
+rtl::Reference<comphelper::OAccessible> SvtIconChoiceCtrl::CreateAccessible()
 {
     return new AccessibleIconChoiceCtrl(*this);
 }

@@ -499,7 +499,7 @@ public:
     void            SetAddButtonEnabled(bool bAddButtonEnabled);
 
     // accessibility
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -310,7 +310,7 @@ public:
     bool         IsDragable() const                          { return mbDragable; }
 
     /** Creates and returns the accessible object of the header bar. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >  CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     void SetAccessible(rtl::Reference<comphelper::OAccessible>& rAccessible);
 };
 

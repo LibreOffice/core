@@ -72,8 +72,7 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     /// Override the sd::Window's CreateAccessible to create a different accessible object
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        CreateAccessible() override;
+    rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     void            TerminateShow();
     void            RestartShow();

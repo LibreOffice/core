@@ -83,7 +83,7 @@ bool FixedHyperlink::ImplIsOverText(Point aPosition) const
     return bIsOver;
 }
 
-css::uno::Reference<css::accessibility::XAccessible> FixedHyperlink::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> FixedHyperlink::CreateAccessible()
 {
     return new VCLXAccessibleFixedHyperlink(this);
 }

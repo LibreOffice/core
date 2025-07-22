@@ -330,7 +330,7 @@ void ToolBox::ImplUpdateItem( ImplToolItems::size_type nIndex )
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> ToolBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ToolBox::CreateAccessible()
 {
     return new VCLXAccessibleToolBox(this);
 }

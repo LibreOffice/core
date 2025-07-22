@@ -247,7 +247,7 @@ public:
     const SwView &GetView() const { return m_rView; }
           SwView &GetView()       { return m_rView; }
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     static tools::Long GetDDStartPosX() { return s_nDDStartPosX; }
     static tools::Long GetDDStartPosY() { return s_nDDStartPosY; }

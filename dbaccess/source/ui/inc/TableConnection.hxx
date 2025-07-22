@@ -90,7 +90,7 @@ namespace dbaui
         OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void Draw(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
         using Window::Draw;
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+        virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     };
 }
 

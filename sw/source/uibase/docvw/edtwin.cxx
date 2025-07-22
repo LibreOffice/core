@@ -6483,7 +6483,7 @@ void SwEditWin::SetChainMode( bool bOn )
     m_rView.GetViewFrame().GetBindings().Invalidate(aInva);
 }
 
-uno::Reference< css::accessibility::XAccessible > SwEditWin::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SwEditWin::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     SolarMutexGuard aGuard;   // this should have happened already!!!

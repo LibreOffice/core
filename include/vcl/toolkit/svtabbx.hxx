@@ -192,7 +192,7 @@ public:
     virtual void                    GrabFocus() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
     /** Creates and returns the accessible object of the whole BrowseBox. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     virtual vcl::Window*            GetAccessibleParentWindow() const override;
 
     virtual tools::Rectangle        GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;

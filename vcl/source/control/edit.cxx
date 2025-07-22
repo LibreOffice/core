@@ -1276,7 +1276,7 @@ void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboar
     }
 }
 
-css::uno::Reference<css::accessibility::XAccessible> Edit::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> Edit::CreateAccessible()
 {
     return new VCLXAccessibleEdit(this);
 }

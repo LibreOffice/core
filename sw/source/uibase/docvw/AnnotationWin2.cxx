@@ -1473,7 +1473,7 @@ void SwAnnotationWin::ChangeSidebarItem( SwAnnotationItem & rSidebarItem )
 #endif
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> SwAnnotationWin::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (!mxSidebarWinAccessible)

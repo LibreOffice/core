@@ -371,8 +371,7 @@ void ScGridWindow::HideNoteOverlay()
     mpNoteOverlay.reset();
 }
 
-css::uno::Reference< css::accessibility::XAccessible >
-    ScGridWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScGridWindow::CreateAccessible()
 {
     rtl::Reference<ScAccessibleDocument> pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParent(),

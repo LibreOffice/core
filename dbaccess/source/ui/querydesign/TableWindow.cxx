@@ -510,7 +510,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
     Invalidate();
 }
 
-Reference< XAccessible > OTableWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> OTableWindow::CreateAccessible()
 {
     return new OTableWindowAccess(this);
 }

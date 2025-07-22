@@ -1515,7 +1515,7 @@ void ScPreview::LoseFocus()
     Window::LoseFocus();
 }
 
-css::uno::Reference<css::accessibility::XAccessible> ScPreview::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> ScPreview::CreateAccessible()
 {
     rtl::Reference<ScAccessibleDocumentPagePreview> pAccessible =
         new ScAccessibleDocumentPagePreview(GetAccessibleParent(), pViewShell );

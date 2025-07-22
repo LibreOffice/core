@@ -704,8 +704,7 @@ public:
 
 public:
     /** Creates and returns the accessible object of the whole BrowseBox. */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     // Children ---------------------------------------------------------------
 

@@ -1276,7 +1276,7 @@ Size HeaderBar::CalcWindowSizePixel() const
     return aSize;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > HeaderBar::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> HeaderBar::CreateAccessible()
 {
     if (!mpAccessible.is())
     {

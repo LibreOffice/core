@@ -51,7 +51,7 @@ void FormattedField::dispose()
     SpinField::dispose();
 }
 
-css::uno::Reference<css::accessibility::XAccessible> FormattedField::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> FormattedField::CreateAccessible()
 {
     return new SVTXAccessibleNumericField(this);
 }

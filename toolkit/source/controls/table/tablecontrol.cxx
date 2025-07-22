@@ -311,7 +311,7 @@ namespace svt::table
     }
 
 
-    Reference< XAccessible > TableControl::CreateAccessible()
+    rtl::Reference<comphelper::OAccessible> TableControl::CreateAccessible()
     {
         css::uno::Reference<css::accessibility::XAccessible> xParent = GetAccessibleParent();
         return m_pImpl->getAccessible(xParent);

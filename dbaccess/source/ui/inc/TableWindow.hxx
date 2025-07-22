@@ -165,8 +165,7 @@ namespace dbaui
         virtual bool                PreNotify( NotifyEvent& rNEvt ) override;
         virtual void                Command(const CommandEvent& rEvt) override;
 
-        // Accessibility
-        virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+        virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
         // do I have connections to the outside?
         bool ExistsAConn() const;

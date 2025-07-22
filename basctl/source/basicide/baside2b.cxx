@@ -2151,7 +2151,7 @@ void ComplexEditorWindow::SetLineNumberDisplay(bool b)
     Resize();
 }
 
-css::uno::Reference<css::accessibility::XAccessible> EditorWindow::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> EditorWindow::CreateAccessible()
 {
     // Make sure edit engine and view are available:
     if (!pEditEngine)

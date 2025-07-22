@@ -65,7 +65,7 @@ Reference<XAccessible> BrowseBox::getAccessibleTable()
     return nullptr;
 }
 
-Reference< XAccessible > BrowseBox::CreateAccessible()
+rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessible()
 {
     if (!m_xAccessible)
     {

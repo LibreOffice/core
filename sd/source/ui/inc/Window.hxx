@@ -190,7 +190,7 @@ protected:
             The returned reference is empty if an accessible object could
             not be created.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     OUString GetSurroundingText() const override;
     Selection GetSurroundingTextSelection() const override;

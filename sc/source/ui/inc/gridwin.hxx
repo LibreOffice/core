@@ -395,7 +395,7 @@ public:
     bool GetEditUrl(const Point& rPos, OUString* pName = nullptr, OUString* pUrl = nullptr,
                     OUString* pTarget = nullptr, SCCOL* pnCol= nullptr);
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     void            FakeButtonUp();
 

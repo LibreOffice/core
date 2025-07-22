@@ -58,7 +58,7 @@ public:
     /// Notify the LOK client about an invalidated area.
     virtual void LogicInvalidate( const tools::Rectangle* pRectangle ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 
