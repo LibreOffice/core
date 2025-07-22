@@ -173,9 +173,6 @@ namespace
     }
 }
 
-#define UNO_TABLE_COLUMN_SUM 10000
-
-
 static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(Color(ColorTransparency, rLine.Color));

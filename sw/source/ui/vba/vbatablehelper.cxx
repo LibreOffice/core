@@ -27,7 +27,6 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-#define UNO_TABLE_COLUMN_SUM    10000
 
 SwVbaTableHelper::SwVbaTableHelper( uno::Reference< text::XTextTable > xTextTable ) : mxTextTable(std::move( xTextTable ))
 {
