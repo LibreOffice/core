@@ -1,0 +1,24 @@
+diff -ru liblangtag.orig/liblangtag/buildaliastbl.sh liblangtag/liblangtag/buildaliastbl.sh
+--- liblangtag.orig/liblangtag/buildaliastbl.sh	2025-07-22 12:19:49.716993437 +0100
++++ liblangtag/liblangtag/buildaliastbl.sh	2025-07-22 12:22:16.548661384 +0100
+@@ -48,7 +48,7 @@
+ 	const char *locale;
+ };
+ 
+-static lt_localealias_t __lt_localealias_tables[] = {
++static const lt_localealias_t __lt_localealias_tables[] = {
+ EOF
+ 
+ iconv -f iso8859-1 -t utf-8 $1 | awk '{ if ($0 !~ /^(#.*)?$/) printf("\t{\"%s\", \"%s\"},\n", $1, $2); }'
+diff -ru liblangtag.orig/liblangtag/lt-localealias.h liblangtag/liblangtag/lt-localealias.h
+--- liblangtag.orig/liblangtag/lt-localealias.h	2025-07-22 12:19:49.715993433 +0100
++++ liblangtag/liblangtag/lt-localealias.h	2025-07-22 12:22:10.627634449 +0100
+@@ -27,7 +27,7 @@
+ 	const char *locale;
+ };
+ 
+-static lt_localealias_t __lt_localealias_tables[] = {
++static const lt_localealias_t __lt_localealias_tables[] = {
+ 	{"bokmal", "nb_NO.ISO-8859-1"},
+ 	{"catalan", "ca_ES.ISO-8859-1"},
+ 	{"croatian", "hr_HR.ISO-8859-2"},
