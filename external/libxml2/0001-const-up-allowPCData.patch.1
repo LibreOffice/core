@@ -1,0 +1,26 @@
+From 408bd0e18e6ddba5d18e51d52da0f7b3ca1b4421 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Thu, 24 Jul 2025 11:09:29 +0100
+Subject: [PATCH] const up allowPCData
+
+similar to htmlScriptAttributes
+---
+ HTMLparser.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/HTMLparser.c b/HTMLparser.c
+index 5386cfa7..afd085b5 100644
+--- a/HTMLparser.c
++++ b/HTMLparser.c
+@@ -2143,7 +2143,7 @@ htmlEncodeEntities(unsigned char* out, int *outlen,
+  * into the html40ElementTable array but I don't want to risk any
+  * binary incompatibility
+  */
+-static const char *allowPCData[] = {
++static const char *const allowPCData[] = {
+     "a", "abbr", "acronym", "address", "applet", "b", "bdo", "big",
+     "blockquote", "body", "button", "caption", "center", "cite", "code",
+     "dd", "del", "dfn", "div", "dt", "em", "font", "form", "h1", "h2",
+-- 
+2.49.0
+
