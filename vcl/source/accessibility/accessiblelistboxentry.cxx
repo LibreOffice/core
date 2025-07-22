@@ -450,14 +450,14 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleAtPoint( 
     if ( !pEntry )
         throw RuntimeException(u"AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!"_ustr);
 
-    Reference< XAccessible > xAcc;
     rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
     assert(xListBox.is());
-    auto pAccEntry = xListBox->implGetAccessible(*pEntry);
+    rtl::Reference<AccessibleListBoxEntry> pAccEntry = xListBox->implGetAccessible(*pEntry);
     tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
     if (aRect.Contains(vcl::unohelper::ConvertToVCLPoint(_aPoint)))
-        xAcc = pAccEntry.get();
-    return xAcc;
+        return pAccEntry;
+
+    return {};
 }
 
 void SAL_CALL AccessibleListBoxEntry::grabFocus(  )
