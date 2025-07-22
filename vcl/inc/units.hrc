@@ -24,7 +24,7 @@
 
 #define NC_(Context, String) TranslateId(Context, u8##String)
 
-std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =
+inline constexpr std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =
 {
     // To translators: This is the first entry of a sequence of measurement unit names
     { NC_("SV_FUNIT_STRINGS", "mm"), FieldUnit::MM },
