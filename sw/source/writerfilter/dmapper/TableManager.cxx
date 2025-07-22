@@ -23,6 +23,9 @@
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"
+
+#include <swtypes.hxx>
+
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -446,8 +449,8 @@ void TableManager::HandleSmallerRows()
                                 static_cast<sal_Int16>(::rtl::math::round(pos)), sep.IsVisible
                             };
                         }) };
-                    // TODO replace magic number
-                    it->Position = ::rtl::math::round(10000 * double(nRowWidth) / nMaxRowWidth);
+                    it->Position = ::rtl::math::round(UNO_TABLE_COLUMN_SUM * double(nRowWidth)
+                                                      / nMaxRowWidth);
                     it->IsVisible = true;
                     pRowData->getProperties()->Insert(PROP_TABLE_COLUMN_SEPARATORS,
                                                       uno::Any(newSeps));

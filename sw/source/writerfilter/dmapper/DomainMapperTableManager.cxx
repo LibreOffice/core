@@ -21,6 +21,7 @@
 #include "ConversionHelper.hxx"
 #include "MeasureHandler.hxx"
 #include "TagLogger.hxx"
+#include <swtypes.hxx>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -322,7 +323,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     // Contains unit and value, but unit is not interesting for
                     // us, later we'll just distribute these values in a
-                    // 0..10000 scale.
+                    // 0..UNO_TABLE_COLUMN_SUM scale.
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if( pProperties )
                     {
@@ -725,7 +726,7 @@ void DomainMapperTableManager::endOfRowAction()
                     if (nFullWidthRelative == 0)
                         throw o3tl::divide_by_zero();
 
-                    nRelPos = (fGridWidth * 10000) / nFullWidthRelative;
+                    nRelPos = (fGridWidth * UNO_TABLE_COLUMN_SUM) / nFullWidthRelative;
                 }
 
                 pSeparators[nBorder].Position = rtl::math::round(nRelPos + nLastRelPos);
@@ -818,7 +819,7 @@ void DomainMapperTableManager::endOfRowAction()
                 for (size_t i = 0; i < nWidthsBound; ++i)
                 {
                     nSum += (*pCellWidths)[i];
-                    pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
+                    pSeparators[nPos].Position = (nSum * UNO_TABLE_COLUMN_SUM) / nFullWidthRelative; // Relative position
                     pSeparators[nPos].IsVisible = true;
                     nPos++;
                 }

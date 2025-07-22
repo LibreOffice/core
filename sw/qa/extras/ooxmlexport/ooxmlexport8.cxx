@@ -612,8 +612,8 @@ DECLARE_OOXMLEXPORT_TEST(testN785767, "n785767.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Check the A1 and B1 cells, the width of both of them was the default value (10000 / 9, as there were 9 cells in the row).
-    CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0].Position);
-    CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(10000 / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFineTableDash, "tableborder-finedash.docx")
