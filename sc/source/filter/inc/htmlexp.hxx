@@ -102,7 +102,7 @@ class ScHTMLExport : public ScExportBase
     static const sal_uInt16 nDefaultFontSize[SC_HTML_FONTSIZES];
     // HtmlFontSz[1-7] in s*3.ini [user]
     static sal_uInt16       nFontSize[SC_HTML_FONTSIZES];
-    static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
+    static const char* const pFontSizeCss[SC_HTML_FONTSIZES];
     static const sal_uInt16 nCellSpacing;
     static const char sIndentSource[];
 

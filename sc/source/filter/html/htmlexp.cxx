@@ -109,7 +109,7 @@ const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 
 sal_uInt16 ScHTMLExport::nFontSize[SC_HTML_FONTSIZES] = { 0 };
 
-const char* ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
+const char* const ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
 {
     "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"
 };
