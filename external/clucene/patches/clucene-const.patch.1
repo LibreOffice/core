@@ -1,6 +1,27 @@
+diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/libstemmer/modules.h clucene/src/contribs-lib/CLucene/snowball/libstemmer/modules.h
+--- clucene.orig/src/contribs-lib/CLucene/snowball/libstemmer/modules.h	2025-07-22 11:53:24.795091157 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/libstemmer/modules.h	2025-07-22 11:53:59.994967168 +0100
+@@ -62,7 +62,7 @@
+   void (*close)(struct SN_env *);
+   int (*stem)(struct SN_env *);
+ };
+-static struct stemmer_modules modules[] = {
++static const struct stemmer_modules modules[] = {
+   {"da", ENC_ISO_8859_1, danish_ISO_8859_1_create_env, danish_ISO_8859_1_close_env, danish_ISO_8859_1_stem},
+   {"da", ENC_UTF_8, danish_UTF_8_create_env, danish_UTF_8_close_env, danish_UTF_8_stem},
+   {"dan", ENC_ISO_8859_1, danish_ISO_8859_1_create_env, danish_ISO_8859_1_close_env, danish_ISO_8859_1_stem},
+@@ -147,7 +147,7 @@
+   {"swedish", ENC_UTF_8, swedish_UTF_8_create_env, swedish_UTF_8_close_env, swedish_UTF_8_stem},
+   {0,0,0,0,0}
+ };
+-static const char * algorithm_names[] = {
++static const char* const algorithm_names[] = {
+   "danish", 
+   "dutch", 
+   "english", 
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c	2025-07-14 10:02:16.697229310 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_danish.c	2025-07-22 11:53:28.916972707 +0100
 @@ -13,40 +13,40 @@
  extern struct SN_env * danish_ISO_8859_1_create_env(void);
  extern void danish_ISO_8859_1_close_env(struct SN_env * z);
@@ -133,8 +154,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_da
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c	2025-07-14 10:02:16.698405000 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_dutch.c	2025-07-22 11:53:28.917771880 +0100
 @@ -17,18 +17,18 @@
  extern struct SN_env * dutch_ISO_8859_1_create_env(void);
  extern void dutch_ISO_8859_1_close_env(struct SN_env * z);
@@ -314,8 +335,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_du
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c	2025-07-14 10:02:16.699761448 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_english.c	2025-07-22 11:53:28.918547052 +0100
 @@ -23,34 +23,34 @@
  extern struct SN_env * english_ISO_8859_1_create_env(void);
  extern void english_ISO_8859_1_close_env(struct SN_env * z);
@@ -754,8 +775,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_en
  static int r_prelude(struct SN_env * z) {
      z->B[0] = 0; /* unset Y_found, line 26 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c	2025-07-14 10:02:16.700733919 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_finnish.c	2025-07-22 11:53:28.920862479 +0100
 @@ -19,18 +19,18 @@
  extern struct SN_env * finnish_ISO_8859_1_create_env(void);
  extern void finnish_ISO_8859_1_close_env(struct SN_env * z);
@@ -1086,8 +1107,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_fi
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c	2025-07-14 10:02:16.701126506 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_french.c	2025-07-22 11:53:28.922723934 +0100
 @@ -20,11 +20,11 @@
  extern struct SN_env * french_ISO_8859_1_create_env(void);
  extern void french_ISO_8859_1_close_env(struct SN_env * z);
@@ -1551,8 +1572,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_fr
  static int r_prelude(struct SN_env * z) {
      while(1) { /* repeat, line 38 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c	2025-07-14 10:02:16.701563342 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c	2025-07-22 11:53:24.797765105 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_german.c	2025-07-22 11:53:28.923596831 +0100
 @@ -14,13 +14,13 @@
  extern struct SN_env * german_ISO_8859_1_create_env(void);
  extern void german_ISO_8859_1_close_env(struct SN_env * z);
@@ -1702,8 +1723,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_ge
  static int r_prelude(struct SN_env * z) {
      {   int c_test = z->c; /* test, line 30 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c	2025-07-14 10:02:16.701759821 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_italian.c	2025-07-22 11:53:28.924466109 +0100
 @@ -18,14 +18,14 @@
  extern struct SN_env * italian_ISO_8859_1_create_env(void);
  extern void italian_ISO_8859_1_close_env(struct SN_env * z);
@@ -2233,8 +2254,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_it
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c	2025-07-14 10:02:16.702126767 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_norwegian.c	2025-07-22 11:53:28.925135716 +0100
 @@ -12,37 +12,37 @@
  extern struct SN_env * norwegian_ISO_8859_1_create_env(void);
  extern void norwegian_ISO_8859_1_close_env(struct SN_env * z);
@@ -2365,8 +2386,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_no
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c	2025-07-14 10:02:16.702304373 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_porter.c	2025-07-22 11:53:28.925961067 +0100
 @@ -19,12 +19,12 @@
  extern struct SN_env * porter_ISO_8859_1_create_env(void);
  extern void porter_ISO_8859_1_close_env(struct SN_env * z);
@@ -2640,8 +2661,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_po
  static int r_shortv(struct SN_env * z) {
      if (!(out_grouping_b(z, g_v_WXY, 89, 121))) return 0;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c	2025-07-14 10:02:16.702502440 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_portuguese.c	2025-07-22 11:53:28.927017684 +0100
 @@ -18,32 +18,32 @@
  extern struct SN_env * portuguese_ISO_8859_1_create_env(void);
  extern void portuguese_ISO_8859_1_close_env(struct SN_env * z);
@@ -3155,8 +3176,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_po
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c	2025-07-14 10:02:16.702922549 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_spanish.c	2025-07-22 11:53:28.927805367 +0100
 @@ -18,13 +18,13 @@
  extern struct SN_env * spanish_ISO_8859_1_create_env(void);
  extern void spanish_ISO_8859_1_close_env(struct SN_env * z);
@@ -3712,8 +3733,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_sp
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c	2025-07-14 10:02:16.703178426 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_swedish.c	2025-07-22 11:53:28.928736275 +0100
 @@ -12,45 +12,45 @@
  extern struct SN_env * swedish_ISO_8859_1_create_env(void);
  extern void swedish_ISO_8859_1_close_env(struct SN_env * z);
@@ -3860,8 +3881,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_ISO_8859_1_sw
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c	2025-07-14 10:02:16.703365277 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russian.c	2025-07-22 11:53:28.929337955 +0100
 @@ -18,17 +18,17 @@
  extern struct SN_env * russian_KOI8_R_create_env(void);
  extern void russian_KOI8_R_close_env(struct SN_env * z);
@@ -4235,8 +4256,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_KOI8_R_russia
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c	2025-07-14 10:02:16.703551795 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.c	2025-07-22 11:53:28.929986527 +0100
 @@ -13,40 +13,40 @@
  extern struct SN_env * danish_UTF_8_create_env(void);
  extern void danish_UTF_8_close_env(struct SN_env * z);
@@ -4369,8 +4390,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_danish.
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c	2025-07-14 10:02:16.703730673 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c	2025-07-22 11:53:28.930525646 +0100
 @@ -17,18 +17,18 @@
  extern struct SN_env * dutch_UTF_8_create_env(void);
  extern void dutch_UTF_8_close_env(struct SN_env * z);
@@ -4550,8 +4571,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_dutch.c
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c	2025-07-14 10:02:16.703914434 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english.c	2025-07-22 11:53:28.931155500 +0100
 @@ -23,34 +23,34 @@
  extern struct SN_env * english_UTF_8_create_env(void);
  extern void english_UTF_8_close_env(struct SN_env * z);
@@ -4990,8 +5011,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_english
  static int r_prelude(struct SN_env * z) {
      z->B[0] = 0; /* unset Y_found, line 26 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c	2025-07-14 10:02:16.704290745 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish.c	2025-07-22 11:53:28.931976470 +0100
 @@ -19,18 +19,18 @@
  extern struct SN_env * finnish_UTF_8_create_env(void);
  extern void finnish_UTF_8_close_env(struct SN_env * z);
@@ -5322,8 +5343,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_finnish
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c	2025-07-14 10:02:13.791063032 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c	2025-07-14 10:02:16.704570638 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c	2025-07-22 11:53:24.797844184 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.c	2025-07-22 11:53:28.932564428 +0100
 @@ -20,11 +20,11 @@
  extern struct SN_env * french_UTF_8_create_env(void);
  extern void french_UTF_8_close_env(struct SN_env * z);
@@ -5787,8 +5808,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_french.
  static int r_prelude(struct SN_env * z) {
      while(1) { /* repeat, line 38 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c	2025-07-14 10:02:16.704959841 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c	2025-07-22 11:53:24.798844189 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.c	2025-07-22 11:53:28.933184872 +0100
 @@ -14,13 +14,13 @@
  extern struct SN_env * german_UTF_8_create_env(void);
  extern void german_UTF_8_close_env(struct SN_env * z);
@@ -5938,8 +5959,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_german.
  static int r_prelude(struct SN_env * z) {
      {   int c_test = z->c; /* test, line 30 */
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c	2025-07-14 10:02:16.705154803 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c	2025-07-22 11:53:24.798844189 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian.c	2025-07-22 11:53:28.933611915 +0100
 @@ -18,14 +18,14 @@
  extern struct SN_env * italian_UTF_8_create_env(void);
  extern void italian_UTF_8_close_env(struct SN_env * z);
@@ -6469,8 +6490,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_italian
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c	2025-07-14 10:02:16.705480225 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegian.c	2025-07-22 11:53:28.934151901 +0100
 @@ -12,37 +12,37 @@
  extern struct SN_env * norwegian_UTF_8_create_env(void);
  extern void norwegian_UTF_8_close_env(struct SN_env * z);
@@ -6601,8 +6622,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_norwegi
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c	2025-07-14 10:02:16.705646813 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.c	2025-07-22 11:53:28.934517711 +0100
 @@ -19,12 +19,12 @@
  extern struct SN_env * porter_UTF_8_create_env(void);
  extern void porter_UTF_8_close_env(struct SN_env * z);
@@ -6876,8 +6897,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_porter.
  static int r_shortv(struct SN_env * z) {
      if (!(out_grouping_b_U(z, g_v_WXY, 89, 121))) return 0;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c	2025-07-14 10:02:16.705938785 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portuguese.c	2025-07-22 11:53:28.934982071 +0100
 @@ -18,32 +18,32 @@
  extern struct SN_env * portuguese_UTF_8_create_env(void);
  extern void portuguese_UTF_8_close_env(struct SN_env * z);
@@ -7391,8 +7412,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_portugu
  static int r_prelude(struct SN_env * z) {
      int among_var;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c	2025-07-14 10:02:16.706356248 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian.c	2025-07-22 11:53:28.935552428 +0100
 @@ -18,17 +18,17 @@
  extern struct SN_env * russian_UTF_8_create_env(void);
  extern void russian_UTF_8_close_env(struct SN_env * z);
@@ -7766,8 +7787,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_russian
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c	2025-07-14 10:02:16.706577456 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish.c	2025-07-22 11:53:28.936016852 +0100
 @@ -18,13 +18,13 @@
  extern struct SN_env * spanish_UTF_8_create_env(void);
  extern void spanish_UTF_8_close_env(struct SN_env * z);
@@ -8323,8 +8344,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_spanish
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c
---- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c	2025-07-14 10:02:13.792063038 +0100
-+++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c	2025-07-14 10:02:16.706862622 +0100
+--- clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c	2025-07-22 11:53:24.799844193 +0100
++++ clucene/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish.c	2025-07-22 11:53:28.936522584 +0100
 @@ -12,45 +12,45 @@
  extern struct SN_env * swedish_UTF_8_create_env(void);
  extern void swedish_UTF_8_close_env(struct SN_env * z);
@@ -8471,8 +8492,8 @@ diff -ru clucene.orig/src/contribs-lib/CLucene/snowball/src_c/stem_UTF_8_swedish
  static int r_mark_regions(struct SN_env * z) {
      z->I[0] = z->l;
 diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.cpp clucene/src/core/CLucene/analysis/Analyzers.cpp
---- clucene.orig/src/core/CLucene/analysis/Analyzers.cpp	2025-07-14 21:22:25.560506427 +0100
-+++ clucene/src/core/CLucene/analysis/Analyzers.cpp	2025-07-14 21:22:35.955552591 +0100
+--- clucene.orig/src/core/CLucene/analysis/Analyzers.cpp	2025-07-22 11:53:24.804844215 +0100
++++ clucene/src/core/CLucene/analysis/Analyzers.cpp	2025-07-22 11:53:28.937049573 +0100
 @@ -195,7 +195,7 @@
  bool StopFilter::getEnablePositionIncrements() const { return enablePositionIncrements; }
  void StopFilter::setEnablePositionIncrements(const bool enable) { this->enablePositionIncrements = enable; }
@@ -8492,8 +8513,8 @@ diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.cpp clucene/src/core/C
  	_T("a"), _T("an"), _T("and"), _T("are"), _T("as"), _T("at"), _T("be"), _T("but"), _T("by"),
  	_T("for"), _T("if"), _T("in"), _T("into"), _T("is"), _T("it"),
 diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.h clucene/src/core/CLucene/analysis/Analyzers.h
---- clucene.orig/src/core/CLucene/analysis/Analyzers.h	2025-07-14 21:22:25.560506427 +0100
-+++ clucene/src/core/CLucene/analysis/Analyzers.h	2025-07-14 21:22:35.957413701 +0100
+--- clucene.orig/src/core/CLucene/analysis/Analyzers.h	2025-07-22 11:53:24.804844215 +0100
++++ clucene/src/core/CLucene/analysis/Analyzers.h	2025-07-22 11:53:28.937453346 +0100
 @@ -160,7 +160,7 @@
  	* Note: the stopWords list must be a static list because the strings are not copied
  	*/
@@ -8513,8 +8534,8 @@ diff -ru clucene.orig/src/core/CLucene/analysis/Analyzers.h clucene/src/core/CLu
  
  
 diff -ru clucene.orig/src/core/CLucene/index/IndexFileNames.cpp clucene/src/core/CLucene/index/IndexFileNames.cpp
---- clucene.orig/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 21:22:25.582506524 +0100
-+++ clucene/src/core/CLucene/index/IndexFileNames.cpp	2025-07-14 21:22:30.824736167 +0100
+--- clucene.orig/src/core/CLucene/index/IndexFileNames.cpp	2025-07-22 11:53:24.808844233 +0100
++++ clucene/src/core/CLucene/index/IndexFileNames.cpp	2025-07-22 11:53:28.937911664 +0100
 @@ -13,26 +13,26 @@
  
  CL_NS_DEF(index)
@@ -8563,8 +8584,8 @@ diff -ru clucene.orig/src/core/CLucene/index/IndexFileNames.cpp clucene/src/core
  	const char* IndexFileNames_INDEX_EXTENSIONS_s[] =
  		{
 diff -ru clucene.orig/src/core/CLucene/index/_IndexFileNames.h clucene/src/core/CLucene/index/_IndexFileNames.h
---- clucene.orig/src/core/CLucene/index/_IndexFileNames.h	2025-07-14 10:02:13.797063065 +0100
-+++ clucene/src/core/CLucene/index/_IndexFileNames.h	2025-07-14 10:05:34.796157976 +0100
+--- clucene.orig/src/core/CLucene/index/_IndexFileNames.h	2025-07-22 11:53:24.808844233 +0100
++++ clucene/src/core/CLucene/index/_IndexFileNames.h	2025-07-22 11:53:28.938818701 +0100
 @@ -14,26 +14,26 @@
  	static CL_NS(util)::ConstValueArray<const char*> _COMPOUND_EXTENSIONS;
  	static CL_NS(util)::ConstValueArray<const char*> _VECTOR_EXTENSIONS;
@@ -8613,8 +8634,8 @@ diff -ru clucene.orig/src/core/CLucene/index/_IndexFileNames.h clucene/src/core/
  	LUCENE_STATIC_CONSTANT(int32_t,COMPOUND_EXTENSIONS_LENGTH=7);
  	LUCENE_STATIC_CONSTANT(int32_t,VECTOR_EXTENSIONS_LENGTH=3);
 diff -ru clucene.orig/src/core/CLucene/index/IndexWriter.cpp clucene/src/core/CLucene/index/IndexWriter.cpp
---- clucene.orig/src/core/CLucene/index/IndexWriter.cpp	2025-07-14 10:02:13.797063065 +0100
-+++ clucene/src/core/CLucene/index/IndexWriter.cpp	2025-07-14 10:04:47.076055233 +0100
+--- clucene.orig/src/core/CLucene/index/IndexWriter.cpp	2025-07-22 11:53:24.808844233 +0100
++++ clucene/src/core/CLucene/index/IndexWriter.cpp	2025-07-22 11:53:28.939104136 +0100
 @@ -40,7 +40,7 @@
  CL_NS_DEF(index)
  
@@ -8625,8 +8646,8 @@ diff -ru clucene.orig/src/core/CLucene/index/IndexWriter.cpp clucene/src/core/CL
  
  const int32_t IndexWriter::MERGE_READ_BUFFER_SIZE = 4096;
 diff -ru clucene.orig/src/core/CLucene/index/IndexWriter.h clucene/src/core/CLucene/index/IndexWriter.h
---- clucene.orig/src/core/CLucene/index/IndexWriter.h	2025-07-14 10:02:13.797063065 +0100
-+++ clucene/src/core/CLucene/index/IndexWriter.h	2025-07-14 10:04:43.787880123 +0100
+--- clucene.orig/src/core/CLucene/index/IndexWriter.h	2025-07-22 11:53:24.808844233 +0100
++++ clucene/src/core/CLucene/index/IndexWriter.h	2025-07-22 11:53:28.940003758 +0100
 @@ -353,7 +353,7 @@
    /**
     * Name of the write lock in the index.
@@ -8637,8 +8658,8 @@ diff -ru clucene.orig/src/core/CLucene/index/IndexWriter.h clucene/src/core/CLuc
    /**
     * @deprecated
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h clucene/src/core/CLucene/queryParser/QueryParserConstants.h
---- clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-14 21:22:25.584506533 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-14 21:22:35.958548353 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-22 11:53:24.810408214 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParserConstants.h	2025-07-22 11:53:28.940666729 +0100
 @@ -53,7 +53,7 @@
  		DEFAULT = 3
  	};
@@ -8649,8 +8670,8 @@ diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserConstants.h clucen
  protected:
  	/**
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp clucene/src/core/CLucene/queryParser/QueryParser.cpp
---- clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-14 21:22:25.587506546 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-14 21:22:35.959114783 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-22 11:53:24.810408214 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParser.cpp	2025-07-22 11:53:28.940905259 +0100
 @@ -43,7 +43,7 @@
  
  CL_NS_DEF(queryParser)
@@ -8670,8 +8691,8 @@ diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.cpp clucene/src/c
    // TODO: Check to see what's a realistic initial value for the buffers here
    // TODO: Make eol configurable (will be useful for PrintStream implementation as well later)?
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.h clucene/src/core/CLucene/queryParser/QueryParser.h
---- clucene.orig/src/core/CLucene/queryParser/QueryParser.h	2025-07-14 21:22:25.584506533 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParser.h	2025-07-14 21:22:35.960694453 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParser.h	2025-07-22 11:53:24.810408214 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParser.h	2025-07-22 11:53:28.941764082 +0100
 @@ -524,7 +524,7 @@
    TCHAR* getParseExceptionMessage(QueryToken* currentToken,
      CL_NS(util)::CLVector<  CL_NS(util)::ValueArray<int32_t>*,
@@ -8682,8 +8703,8 @@ diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParser.h clucene/src/cor
  CL_NS_END
  #endif
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp
---- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 21:22:25.587506546 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-14 21:22:30.826276026 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-22 11:53:24.810408214 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.cpp	2025-07-22 11:53:28.942300758 +0100
 @@ -23,12 +23,12 @@
  		15, 17, 18, 29, 32, 23, 33, 30, 20, 21, 32, 23, 33, 31, 34, 27,
  		2, 4, 5, 0, 1
@@ -8700,8 +8721,8 @@ diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.cpp c
  		_T("RangeEx"),
  		_T("RangeIn"),
 diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.h clucene/src/core/CLucene/queryParser/QueryParserTokenManager.h
---- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.h	2025-07-14 10:02:13.798859548 +0100
-+++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.h	2025-07-14 10:04:16.156729609 +0100
+--- clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.h	2025-07-22 11:53:24.810408214 +0100
++++ clucene/src/core/CLucene/queryParser/QueryParserTokenManager.h	2025-07-22 11:53:28.942700800 +0100
 @@ -68,8 +68,8 @@
  		const int64_t l2);
  
@@ -8714,8 +8735,8 @@ diff -ru clucene.orig/src/core/CLucene/queryParser/QueryParserTokenManager.h clu
  	static const int64_t jjtoToken [];
  	static const int64_t jjtoSkip [];
 diff -ru clucene.orig/src/core/CLucene/util/MD5Digester.cpp clucene/src/core/CLucene/util/MD5Digester.cpp
---- clucene.orig/src/core/CLucene/util/MD5Digester.cpp	2025-07-14 10:02:13.802928930 +0100
-+++ clucene/src/core/CLucene/util/MD5Digester.cpp	2025-07-14 10:02:16.707048030 +0100
+--- clucene.orig/src/core/CLucene/util/MD5Digester.cpp	2025-07-22 11:53:24.815276214 +0100
++++ clucene/src/core/CLucene/util/MD5Digester.cpp	2025-07-22 11:53:28.942865174 +0100
 @@ -44,7 +44,7 @@
  #include "_MD5Digester.h"
  CL_NS_DEF(util)
@@ -8762,8 +8783,8 @@ diff -ru clucene.orig/src/core/CLucene/util/MD5Digester.cpp clucene/src/core/CLu
  	uint32_t i, j;
  
 diff -ru clucene.orig/src/core/CLucene/util/_MD5Digester.h clucene/src/core/CLucene/util/_MD5Digester.h
---- clucene.orig/src/core/CLucene/util/_MD5Digester.h	2025-07-14 10:02:13.802928930 +0100
-+++ clucene/src/core/CLucene/util/_MD5Digester.h	2025-07-14 10:02:16.707185796 +0100
+--- clucene.orig/src/core/CLucene/util/_MD5Digester.h	2025-07-22 11:53:24.815276214 +0100
++++ clucene/src/core/CLucene/util/_MD5Digester.h	2025-07-22 11:53:28.943363542 +0100
 @@ -58,15 +58,15 @@
  public:
  	md5() { Init(); }
@@ -8785,8 +8806,8 @@ diff -ru clucene.orig/src/core/CLucene/util/_MD5Digester.h clucene/src/core/CLuc
  
  	inline	uint32_t	rotate_left(uint32_t x, uint32_t n)
 diff -ru clucene.orig/src/shared/CLucene/SharedHeader.cpp clucene/src/shared/CLucene/SharedHeader.cpp
---- clucene.orig/src/shared/CLucene/SharedHeader.cpp	2025-07-14 10:02:13.807381245 +0100
-+++ clucene/src/shared/CLucene/SharedHeader.cpp	2025-07-14 10:03:56.173760153 +0100
+--- clucene.orig/src/shared/CLucene/SharedHeader.cpp	2025-07-22 11:53:24.826861980 +0100
++++ clucene/src/shared/CLucene/SharedHeader.cpp	2025-07-22 11:53:28.943715967 +0100
 @@ -13,8 +13,8 @@
  #endif
  
@@ -8799,8 +8820,8 @@ diff -ru clucene.orig/src/shared/CLucene/SharedHeader.cpp clucene/src/shared/CLu
  
  #if defined(_ASCII)
 diff -ru clucene.orig/src/shared/CLucene/_SharedHeader.h clucene/src/shared/CLucene/_SharedHeader.h
---- clucene.orig/src/shared/CLucene/_SharedHeader.h	2025-07-14 10:02:13.807381245 +0100
-+++ clucene/src/shared/CLucene/_SharedHeader.h	2025-07-14 10:03:51.636596029 +0100
+--- clucene.orig/src/shared/CLucene/_SharedHeader.h	2025-07-22 11:53:24.826861980 +0100
++++ clucene/src/shared/CLucene/_SharedHeader.h	2025-07-22 11:53:28.943864199 +0100
 @@ -47,9 +47,9 @@
  
  
@@ -8814,8 +8835,8 @@ diff -ru clucene.orig/src/shared/CLucene/_SharedHeader.h clucene/src/shared/CLuc
  
  #if defined(_WIN32) || defined(_WIN64)
 diff -ru clucene.orig/src/shared/CLucene/util/Misc.cpp clucene/src/shared/CLucene/util/Misc.cpp
---- clucene.orig/src/shared/CLucene/util/Misc.cpp	2025-07-14 10:02:13.807762156 +0100
-+++ clucene/src/shared/CLucene/util/Misc.cpp	2025-07-14 10:02:16.707295208 +0100
+--- clucene.orig/src/shared/CLucene/util/Misc.cpp	2025-07-22 11:53:24.826861980 +0100
++++ clucene/src/shared/CLucene/util/Misc.cpp	2025-07-22 11:53:28.944014973 +0100
 @@ -407,7 +407,7 @@
  }
  
