@@ -1028,17 +1028,17 @@ void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
 
 void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rThisView, int nType)
 {
-    notifyUpdatePerViewId(rThisView, &rThisView, &rThisView, nType);
+    notifyUpdatePerViewId(rThisView, &rThisView, rThisView, nType);
 }
 
 void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
-    SfxViewShell const* pSourceShell, int nType)
+    SfxViewShell const& rSourceShell, int nType)
 {
     if (DisableCallbacks::disabled())
         return;
 
     int viewId = SfxLokHelper::getView(pViewShell);
-    int sourceViewId = SfxLokHelper::getView(pSourceShell);
+    int sourceViewId = SfxLokHelper::getView(rSourceShell);
     rTargetShell.libreOfficeKitViewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
 }
 

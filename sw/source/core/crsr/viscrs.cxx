@@ -251,14 +251,14 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
             }
             else
             {
-                SfxLokHelper::notifyUpdatePerViewId(*pViewShell, pNotifyViewShell, pViewShell,
+                SfxLokHelper::notifyUpdatePerViewId(*pViewShell, pNotifyViewShell, *pViewShell,
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
         else if ( bIsCursorPosChanged || m_pCursorShell->IsTableMode())
         {
             SfxLokHelper::notifyUpdatePerViewId(*pNotifyViewShell, SfxViewShell::Current(),
-                pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
+                *pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
             SfxLokHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
         }
     }
