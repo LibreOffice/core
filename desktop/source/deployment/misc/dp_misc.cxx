@@ -77,42 +77,6 @@ std::shared_ptr<rtl::Bootstrap> & UnoRc()
 
 #if !defined EMSCRIPTEN
 
-OUString generateOfficePipeId()
-{
-    OUString userPath;
-    ::utl::Bootstrap::PathStatus aLocateResult =
-    ::utl::Bootstrap::locateUserInstallation( userPath );
-    if (aLocateResult != ::utl::Bootstrap::PATH_EXISTS &&
-        aLocateResult != ::utl::Bootstrap::PATH_VALID)
-    {
-        throw Exception(u"Extension Manager: Could not obtain path for UserInstallation."_ustr, nullptr);
-    }
-
-    rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if (!digest) {
-        throw RuntimeException(u"cannot get digest rtl_Digest_AlgorithmMD5!"_ustr, nullptr );
-    }
-
-    sal_uInt8 const * data =
-        reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
-    std::size_t size = userPath.getLength() * sizeof (sal_Unicode);
-    sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-    std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
-
-    rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
-    rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
-    rtl_digest_get( digest, md5_buf.get(), md5_key_len );
-    rtl_digest_destroy( digest );
-
-    // create hex-value string from the MD5 value to keep
-    // the string size minimal
-    OUStringBuffer buf( "SingleOfficeIPC_" );
-    for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
-        buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
-    }
-    return buf.makeStringAndClear();
-}
-
 bool existsOfficePipe()
 {
     static const OUString OfficePipeId = generateOfficePipeId();
@@ -327,6 +291,44 @@ OUString expandUnoRcUrl( OUString const & url )
     }
 }
 
+OUString generateOfficePipeId()
+{
+    // The name of the named pipe is created with the hashcode of the user installation directory
+    // (without /user). We have to retrieve this information from a unotools implementation.
+
+    OUString userPath;
+    ::utl::Bootstrap::PathStatus aLocateResult =
+    ::utl::Bootstrap::locateUserInstallation( userPath );
+    if (aLocateResult != ::utl::Bootstrap::PATH_EXISTS &&
+        aLocateResult != ::utl::Bootstrap::PATH_VALID)
+    {
+        throw Exception(u"Extension Manager: Could not obtain path for UserInstallation."_ustr, nullptr);
+    }
+
+    rtlDigest digest = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
+    if (!digest) {
+        throw RuntimeException(u"cannot get digest rtl_Digest_AlgorithmMD5!"_ustr, nullptr );
+    }
+
+    sal_uInt8 const * data =
+        reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
+    std::size_t size = userPath.getLength() * sizeof (sal_Unicode);
+    sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
+    std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
+
+    rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
+    rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );
+    rtl_digest_get( digest, md5_buf.get(), md5_key_len );
+    rtl_digest_destroy( digest );
+
+    // create hex-value string from the MD5 value to keep
+    // the string size minimal
+    OUStringBuffer buf( "SingleOfficeIPC_" );
+    for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
+        buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
+    }
+    return buf.makeStringAndClear();
+}
 
 bool office_is_running()
 {

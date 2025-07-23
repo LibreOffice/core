@@ -24,6 +24,7 @@
 #include <config_feature_desktop.h>
 
 #include <app.hxx>
+#include <dp_misc.h>
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include <com/sun/star/frame/TerminationVetoException.hpp>
@@ -43,6 +44,7 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <o3tl/string_view.hxx>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <cassert>
 #include <cstdlib>
@@ -232,36 +234,6 @@ bool addArgument(OStringBuffer &rArguments, char prefix,
 }
 
 rtl::Reference< RequestHandler > RequestHandler::pGlobal;
-
-// Turns a string in aMsg such as file:///home/foo/.libreoffice/3
-// Into a hex string of well known length ff132a86...
-static OUString CreateMD5FromString( const OUString& aMsg )
-{
-    SAL_INFO("desktop.app", "create md5 from '" << aMsg << "'");
-
-    rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
-    if ( handle )
-    {
-        const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aMsg.getStr());
-        sal_uInt32       nSize = aMsg.getLength() * sizeof( sal_Unicode );
-        sal_uInt32       nMD5KeyLen = rtl_digest_queryLength( handle );
-        std::unique_ptr<sal_uInt8[]> pMD5KeyBuffer(new sal_uInt8[ nMD5KeyLen ]);
-
-        rtl_digest_init( handle, pData, nSize );
-        rtl_digest_update( handle, pData, nSize );
-        rtl_digest_get( handle, pMD5KeyBuffer.get(), nMD5KeyLen );
-        rtl_digest_destroy( handle );
-
-        // Create hex-value string from the MD5 value to keep the string size minimal
-        OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
-        for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
-            aBuffer.append( static_cast<sal_Int32>(pMD5KeyBuffer[i]), 16 );
-
-        return aBuffer.makeStringAndClear();
-    }
-
-    return OUString();
-}
 
 namespace {
 
@@ -739,26 +711,21 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
 {
     assert(thread != nullptr);
 
-    // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
-    // this information from a unotools implementation.
-    OUString aUserInstallPath;
-    ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if (aLocateResult != utl::Bootstrap::PATH_EXISTS
-        && aLocateResult != utl::Bootstrap::PATH_VALID)
-    {
-        return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
-    }
-
     // Try to  determine if we are the first office or not! This should prevent multiple
     // access to the user directory !
     // First we try to create our pipe if this fails we try to connect. We have to do this
     // in a loop because the other office can crash or shutdown between createPipe
     // and connectPipe!!
-    auto aUserInstallPathHashCode = CreateMD5FromString(aUserInstallPath);
-
-    // Check result to create a hash code from the user install path
-    if ( aUserInstallPathHashCode.isEmpty() )
+    OUString aPipeIdent;
+    try
+    {
+        aPipeIdent = dp_misc::generateOfficePipeId();
+    }
+    catch (const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("desktop.app");
         return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
+    }
 
     osl::Pipe pipe;
     enum PipeMode
@@ -769,7 +736,6 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
     };
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
 
-    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
     do
     {
         osl::Security security;
@@ -825,10 +791,11 @@ RequestHandler::Status PipeIpcThread::enable(rtl::Reference<IpcThread> * thread)
             aArguments.append('0');
         }
         sal_uInt32 nCount = rtl_getAppCommandArgCount();
+        OUString arg;
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
-            rtl_getAppCommandArg( i, &aUserInstallPath.pData );
-            if (!addArgument(aArguments, ',', aUserInstallPath)) {
+            rtl_getAppCommandArg(i, &arg.pData);
+            if (!addArgument(aArguments, ',', arg)) {
                 return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }

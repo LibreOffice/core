@@ -77,6 +77,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateOfficePipeId();
 
 class AbortChannel;
 
