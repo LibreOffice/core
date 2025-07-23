@@ -31,7 +31,7 @@ class ScShapeChildren;
 class ScAccessiblePreviewTable;
 class ScAccessiblePageHeader;
 
-class ScAccessibleDocumentPagePreview
+class ScAccessibleDocumentPagePreview final
     :   public ScAccessibleDocumentBase
 {
 public:

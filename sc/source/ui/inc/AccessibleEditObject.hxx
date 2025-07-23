@@ -198,7 +198,7 @@ public:
     virtual void SAL_CALL disposing() override;
 };
 
-class ScAccessibleEditLineObject : public ScAccessibleEditControlObject
+class ScAccessibleEditLineObject final : public ScAccessibleEditControlObject
 {
 public:
     ScAccessibleEditLineObject(ScTextWnd* pTextWnd);

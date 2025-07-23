@@ -43,7 +43,7 @@ using css::accessibility::AccessibleRelationType;
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
 */
-class ScAccessibleCell
+class ScAccessibleCell final
     :   public  ScAccessibleCellBase,
         public  accessibility::AccessibleStaticTextBase,
         public  ScAccessibleCellAttributeImpl

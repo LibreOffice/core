@@ -38,7 +38,7 @@ namespace utl
     class AccessibleRelationSetHelper;
 }
 
-class ScAccessibleDocument
+class ScAccessibleDocument final
     : public cppu::ImplInheritanceHelper<
           ScAccessibleDocumentBase, css::accessibility::XAccessibleSelection,
           css::accessibility::XAccessibleExtendedAttributes, css::view::XSelectionChangeListener>,

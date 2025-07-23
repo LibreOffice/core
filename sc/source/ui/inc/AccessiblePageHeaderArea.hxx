@@ -29,7 +29,7 @@ namespace accessibility
 }
 class ScPreviewShell;
 
-class ScAccessiblePageHeaderArea
+class ScAccessiblePageHeaderArea final
     :   public ScAccessibleContextBase
 {
 public:

@@ -27,7 +27,7 @@ class ScPreviewShell;
 class EditTextObject;
 class ScAccessiblePageHeaderArea;
 
-class ScAccessiblePageHeader : public ScAccessibleContextBase
+class ScAccessiblePageHeader final : public ScAccessibleContextBase
 {
 public:
     ScAccessiblePageHeader( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,

@@ -82,7 +82,7 @@ protected:
 class ScCsvRuler;
 
 /** Accessible class representing the CSV ruler control. */
-class ScAccessibleCsvRuler : public cppu::ImplInheritanceHelper<ScAccessibleCsvControl,
+class ScAccessibleCsvRuler final : public cppu::ImplInheritanceHelper<ScAccessibleCsvControl,
                                                                 css::accessibility::XAccessibleText>
 {
 private:
@@ -208,7 +208,7 @@ class ScCsvGrid;
 class ScAccessibleCsvCell;
 
 /** Accessible class representing the CSV grid control. */
-class ScAccessibleCsvGrid
+class ScAccessibleCsvGrid final
     : public cppu::ImplInheritanceHelper<ScAccessibleCsvControl,
                                          css::accessibility::XAccessibleTable,
                                          css::accessibility::XAccessibleSelection>
@@ -390,7 +390,7 @@ private:
 };
 
 /** Accessible class representing a cell of the CSV grid control. */
-class ScAccessibleCsvCell : public ScAccessibleCsvControl,
+class ScAccessibleCsvCell final : public ScAccessibleCsvControl,
                             public ::accessibility::AccessibleStaticTextBase
 {
 protected:

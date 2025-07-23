@@ -30,7 +30,7 @@ namespace accessibility {
     class AccessibleTextHelper;
 }
 
-class ScAccessiblePreviewHeaderCell
+class ScAccessiblePreviewHeaderCell final
     : public cppu::ImplInheritanceHelper<ScAccessibleContextBase,
                                          css::accessibility::XAccessibleValue>
 {

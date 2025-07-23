@@ -29,7 +29,7 @@ namespace accessibility
     class AccessibleTextHelper;
 }
 
-class ScAccessiblePreviewCell : public ScAccessibleCellBase
+class ScAccessiblePreviewCell final : public ScAccessibleCellBase
 {
 public:
     ScAccessiblePreviewCell(const rtl::Reference<ScAccessiblePreviewTable>& rParent,
