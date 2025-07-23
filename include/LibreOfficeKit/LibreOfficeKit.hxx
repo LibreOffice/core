@@ -1297,6 +1297,14 @@ public:
     {
         return mpThis->pClass->registerAnyInputCallback(mpThis, pCallback, pData);
     }
+
+    /**
+     * Get number of documents of this LibreOfficeKit.
+     */
+    int getDocsCount()
+    {
+        return mpThis->pClass->getDocsCount(mpThis);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

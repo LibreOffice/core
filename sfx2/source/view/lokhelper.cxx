@@ -281,6 +281,24 @@ int SfxLokHelper::getViewId(int nDocId)
     return -1;
 }
 
+std::size_t SfxLokHelper::getDocsCount()
+{
+    SfxApplication* pApp = SfxApplication::Get();
+    if (!pApp)
+        return 0;
+
+    std::set<ViewShellDocId> aDocs;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        aDocs.insert(pViewShell->GetDocId());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+
+    return aDocs.size();
+}
+
 bool SfxLokHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
 {
     assert(nDocId != -1 && "Cannot getViewsIds for invalid DocId -1");
