@@ -294,6 +294,8 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ParaLastLineAdjust", RID_PARA_LAST_LINE_ADJUST },
         { "ParaLeftMargin", RID_PARA_LEFT_MARGIN },
         { "ParaLeftMarginRelative", RID_PARA_LEFT_MARGIN_RELATIVE },
+        { "ParaLetterSpacingMinimum", RID_PARA_LETTER_SPACING_MIN },
+        { "ParaLetterSpacingMaximum", RID_PARA_LETTER_SPACING_MAX },
         { "ParaLineNumberCount", RID_PARA_LINE_NUMBER_COUNT },
         { "ParaLineNumberStartValue", RID_PARA_LINE_NUMBER_START_VALUE },
         { "ParaLineSpacing", RID_PARA_LINE_SPACING },

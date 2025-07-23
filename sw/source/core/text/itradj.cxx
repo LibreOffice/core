@@ -369,7 +369,12 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                             ? -nSpaceAdd + LONG_MAX/2
                             : 0;
 
-                    pCurrent->SetLLSpaceAdd( nSpaceSub ? nSpaceSub : nSpaceAdd, nSpaceIdx );
+                    SwLinePortion *pPortion = pCurrent->GetFirstPortion();
+                    tools::Long nSpaceKern = pPortion->GetLetterSpacing() > 0 && pPortion->GetSpaceCount()
+                        ? tools::Long(pPortion->GetLetterSpacing()) / sal_Int32(pPortion->GetSpaceCount()) * 100
+                        : 0;
+                    // set expansion in 1/100 twips/space
+                    pCurrent->SetLLSpaceAdd( nSpaceSub ? nSpaceSub : (nSpaceAdd > nSpaceKern ? nSpaceAdd - nSpaceKern : 0), nSpaceIdx );
                     pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
                 }
                 else if (IsOneBlock() && nCharCnt > TextFrameIndex(1))

@@ -543,6 +543,28 @@ published service ParagraphProperties
             @since LibreOffice 25.8
          */
         [optional, property] long ParaWordSpacingMaximum;
+
+        /** specifies the minimum letter spacing as percentage value relative
+            to the width of the space character.
+
+            @see CharKerning
+
+            @see ParaLetterSpacingMaximum
+
+            @since LibreOffice 26.3
+         */
+        [optional, property] long ParaLetterSpacingMinimum;
+
+        /** specifies the maximum letter spacing as percentage value relative
+            to the width of the space character.
+
+            @see CharKerning
+
+            @see ParaLetterSpacingMininum
+
+            @since LibreOffice 26.3
+         */
+        [optional, property] long ParaLetterSpacingMaximum;
 };
 
 

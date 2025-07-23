@@ -50,6 +50,11 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxPoolItem
     sal_uInt16 nPropWordSpacingMinimum;
     sal_uInt16 nPropWordSpacingMaximum;
 
+    // minimum and maximum letter spacing values in percent of
+    // the width of space character in justified text
+    sal_Int16 nPropLetterSpacingMinimum;
+    sal_Int16 nPropLetterSpacingMaximum;
+
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
@@ -182,6 +187,26 @@ public:
         nPropWordSpacingMaximum = nVal;
     }
 
+    sal_Int16 GetPropLetterSpacingMinimum() const
+    {
+        return nPropLetterSpacingMinimum;
+    }
+
+    void SetPropLetterSpacingMinimum( sal_Int16 nVal )
+    {
+        nPropLetterSpacingMinimum = nVal;
+    }
+
+
+    sal_Int16 GetPropLetterSpacingMaximum() const
+    {
+        return nPropLetterSpacingMaximum;
+    }
+
+    void SetPropLetterSpacingMaximum( sal_Int16 nVal )
+    {
+        nPropLetterSpacingMaximum = nVal;
+    }
 };
 
 #endif

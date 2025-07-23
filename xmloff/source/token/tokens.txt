@@ -1112,6 +1112,8 @@ let-text
 keep-text
 letter-kerning
 letter-spacing
+letter-spacing-maximum
+letter-spacing-minimum
 letters
 level
 library

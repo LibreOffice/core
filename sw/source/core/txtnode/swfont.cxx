@@ -1150,7 +1150,11 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         CalcEsc( rInf, aPos );
 
     rInf.SetPos( aPos );
-    rInf.SetKern( CheckKerning() + rInf.GetCharacterSpacing() / SPACING_PRECISION_FACTOR );
+    rInf.SetKern( CheckKerning() + rInf.GetCharacterSpacing() / SPACING_PRECISION_FACTOR +
+                    // modify letter spacing for the actual line
+                    // according to the available extra word spacing
+                    // to get the desired word spacing
+                    rInf.GetLetterSpacing() );
 
     if( IsCapital() )
         DrawCapital( rInf );

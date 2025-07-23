@@ -74,6 +74,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     tools::Long m_nCharacterSpacing = 0;
     tools::Long m_nSpace = 0;
     tools::Long m_nKern = 0;
+    tools::Long m_nLetterSpacing = 0;
     TextFrameIndex m_nNumberOfBlanks = TextFrameIndex{ 0 };
     sal_uInt8 m_nCursorBidiLevel = 0;
     bool m_bBullet : 1;
@@ -537,6 +538,16 @@ public:
     void SetKern( tools::Long nNew )
     {
         m_nKern = nNew;
+    }
+
+    void SetLetterSpacing( tools::Long nNew )
+    {
+        m_nLetterSpacing = nNew;
+    }
+
+    tools::Long GetLetterSpacing() const
+    {
+        return m_nLetterSpacing;
     }
 
     void SetSpace( tools::Long nNew )

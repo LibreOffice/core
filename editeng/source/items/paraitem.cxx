@@ -332,7 +332,9 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     bOneBlock( false ), bLastCenter( false ), bLastBlock( false ),
     nPropWordSpacing(100),
     nPropWordSpacingMinimum(100),
-    nPropWordSpacingMaximum(100)
+    nPropWordSpacingMaximum(100),
+    nPropLetterSpacingMinimum(0),
+    nPropLetterSpacingMaximum(0)
 {
     SetAdjust( eAdjst );
 }
@@ -348,7 +350,9 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
            bLastBlock == rItem.bLastBlock &&
            nPropWordSpacingMinimum == rItem.nPropWordSpacingMinimum &&
            nPropWordSpacingMaximum == rItem.nPropWordSpacingMaximum &&
-           nPropWordSpacing == rItem.nPropWordSpacing;
+           nPropWordSpacing == rItem.nPropWordSpacing &&
+           nPropLetterSpacingMinimum == rItem.nPropLetterSpacingMinimum &&
+           nPropLetterSpacingMaximum == rItem.nPropLetterSpacingMaximum;
 }
 
 size_t SvxAdjustItem::hashCode() const
@@ -361,6 +365,8 @@ size_t SvxAdjustItem::hashCode() const
     o3tl::hash_combine(seed, nPropWordSpacing);
     o3tl::hash_combine(seed, nPropWordSpacingMinimum);
     o3tl::hash_combine(seed, nPropWordSpacingMaximum);
+    o3tl::hash_combine(seed, nPropLetterSpacingMinimum);
+    o3tl::hash_combine(seed, nPropLetterSpacingMaximum);
     return seed;
 }
 
@@ -374,6 +380,8 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_WORD_SPACING     : rVal <<= static_cast<sal_Int16>(GetPropWordSpacing()); break;
         case MID_WORD_SPACING_MIN : rVal <<= static_cast<sal_Int16>(GetPropWordSpacingMinimum()); break;
         case MID_WORD_SPACING_MAX : rVal <<= static_cast<sal_Int16>(GetPropWordSpacingMaximum()); break;
+        case MID_LETTER_SPACING_MIN : rVal <<= GetPropLetterSpacingMinimum(); break;
+        case MID_LETTER_SPACING_MAX : rVal <<= GetPropLetterSpacingMaximum(); break;
         case MID_EXPAND_SINGLE    :
         {
             rVal <<= bOneBlock;
@@ -426,6 +434,20 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = -1;
             rVal >>= nVal;
             SetPropWordSpacingMaximum(nVal);
+        }
+        break;
+        case MID_LETTER_SPACING_MIN :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropLetterSpacingMinimum(nVal);
+        }
+        break;
+        case MID_LETTER_SPACING_MAX :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropLetterSpacingMaximum(nVal);
         }
         break;
         case MID_EXPAND_SINGLE :

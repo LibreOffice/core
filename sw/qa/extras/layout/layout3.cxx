@@ -551,6 +551,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648)
+{
+    createSwDoc("tdf167648.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 27 chars on the first line
+            // (tdf#164499 no space shrinking in lines with tabulation)
+            CPPUNIT_ASSERT_EQUAL(size_t(27), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 320, according to the 25% maximum letter spacing
+            CPPUNIT_ASSERT_GREATER(sal_Int32(315), sal_Int32(pDXArray[1]));
+            CPPUNIT_ASSERT_LESS(sal_Int32(325), sal_Int32(pDXArray[1]));
+
+            // first character of the second word nearer to the left side
+            // because of the narrower spaces
+            // This was 977, now 965, according to the 25% maximum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(970), sal_Int32(pDXArray[5]));
+            CPPUNIT_ASSERT_GREATER(sal_Int32(960), sal_Int32(pDXArray[5]));
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164499)
 {
     createSwDoc("tdf164499.docx");

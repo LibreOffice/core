@@ -1212,6 +1212,8 @@ namespace xmloff::token {
         TOKEN( "keep-text",                       XML_KEEP_TEXT ),
         TOKEN( "letter-kerning",                  XML_LETTER_KERNING ),
         TOKEN( "letter-spacing",                  XML_LETTER_SPACING ),
+        TOKEN( "letter-spacing-maximum",          XML_LETTER_SPACING_MAXIMUM ),
+        TOKEN( "letter-spacing-minimum",          XML_LETTER_SPACING_MINIMUM ),
         TOKEN( "letters",                         XML_LETTERS ),
         TOKEN( "level",                           XML_LEVEL ),
         TOKEN( "library",                         XML_LIBRARY ),

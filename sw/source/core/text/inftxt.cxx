@@ -30,6 +30,7 @@
 #include <sfx2/StylePreviewRenderer.hxx>
 #include <sal/log.hxx>
 #include <editeng/hyphenzoneitem.hxx>
+#include <editeng/adjustitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/splwrap.hxx>
@@ -785,6 +786,11 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             aDrawInf.SetWrong( bTmpWrong ? m_pWrongList : nullptr );
             aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? m_pGrammarCheckList : nullptr );
             aDrawInf.SetSmartTags( bTmpSmart ? m_pSmartTags : nullptr );
+
+            // set custom letter spacing (hyphenation hasn't been supported yet)
+            if ( rPor.GetLetterSpacing() > 0 )
+                aDrawInf.SetLetterSpacing( rPor.GetLetterSpacing() / sal_Int32(nLength) );
+
             m_pFnt->DrawText_( aDrawInf );
         }
     }

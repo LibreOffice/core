@@ -167,6 +167,8 @@ struct SfxItemPropertyMapEntry;
     {u"ParaWordSpacing"_ustr,          EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_WORD_SPACING }, \
     {u"ParaWordSpacingMinimum"_ustr,   EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_WORD_SPACING_MIN }, \
     {u"ParaWordSpacingMaximum"_ustr,   EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_WORD_SPACING_MAX }, \
+    {u"ParaLetterSpacingMinimum"_ustr, EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LETTER_SPACING_MIN }, \
+    {u"ParaLetterSpacingMaximum"_ustr, EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LETTER_SPACING_MAX }, \
     {u"WritingMode"_ustr,              EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
 class SvxFieldData;

@@ -1199,6 +1199,8 @@ namespace xmloff::token {
         XML_KEEP_TEXT,
         XML_LETTER_KERNING,
         XML_LETTER_SPACING,
+        XML_LETTER_SPACING_MAXIMUM,
+        XML_LETTER_SPACING_MINIMUM,
         XML_LETTERS,
         XML_LEVEL,
         XML_LIBRARY,

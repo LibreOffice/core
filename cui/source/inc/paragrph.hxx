@@ -159,12 +159,21 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xWordSpacingMinimum;
     std::unique_ptr<weld::MetricSpinButton> m_xWordSpacingMaximum;
 
+    /// letter spacing
+    std::unique_ptr<weld::Label> m_xLabelLetterSpacing;
+    std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacing;
+    std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMinimum;
+    std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMaximum;
+
     DECL_LINK(AlignHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(TextDirectionHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(WordSpacingHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(WordSpacingMinimumHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(WordSpacingMaximumHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(LetterSpacingHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(LetterSpacingMinimumHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(LetterSpacingMaximumHdl_Impl, weld::MetricSpinButton&, void);
 
     void                    UpdateExample_Impl();
 

@@ -60,6 +60,8 @@ struct SvxAdjustStruct
     INT16       WordSpacing         MID_WORD_SPACING;
     INT16       WordSpacingMinimum  MID_WORD_SPACING_MIN;
     INT16       WordSpacingMaximum  MID_WORD_SPACING_MAX;
+    INT16       LetterSpacingMinimum  MID_LETTER_SPACING_MIN;
+    INT16       LetterSpacingMaximum  MID_LETTER_SPACING_MAX;
 };
 item SvxAdjustStruct SvxAdjustItem;
 

@@ -232,6 +232,8 @@
 #define RID_PARA_LEFT_MARGIN_RELATIVE                       NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Left Margin Relative")
 #define RID_PARA_LINE_NUMBER_COUNT                          NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Line Number Count")
 #define RID_PARA_LINE_NUMBER_START_VALUE                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Line Number Start Value")
+#define RID_PARA_LETTER_SPACING_MIN                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Letter Spacing Minimum")
+#define RID_PARA_LETTER_SPACING_MAX                         NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Letter Spacing Maximum")
 #define RID_PARA_LINE_SPACING                               NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Line Spacing")
 #define RID_PARA_ORPHANS                                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Orphans")
 #define RID_PARA_REGISTER_MODE_ACTIVE                       NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Register Mode Active")
