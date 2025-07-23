@@ -4671,10 +4671,11 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     SetLastExceptionMsg();
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-    const int nView = SfxLokHelper::getCurrentView();
-    if (nView < 0)
+    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
+    if (!pViewShell)
         return;
+    assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
 
     const size_t nId = nView;
     if (pCallback != nullptr)
@@ -4711,11 +4712,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             pDocument->mpCallbackFlushHandlers[nView]->addViewStates(pair.first);
         }
 
-        if (SfxViewShell* pViewShell = SfxViewShell::Current())
-        {
-            pDocument->mpCallbackFlushHandlers[nView]->setViewId(pViewShell->GetViewShellId().get());
-            pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
-        }
+        pDocument->mpCallbackFlushHandlers[nView]->setViewId(nView);
+        pViewShell->setLibreOfficeKitViewCallback(pDocument->mpCallbackFlushHandlers[nView].get());
 
         if (!pDocument->maFontsMissing.empty())
         {
@@ -4748,11 +4746,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        if (SfxViewShell* pViewShell = SfxViewShell::Current())
-        {
-            pViewShell->setLibreOfficeKitViewCallback(nullptr);
-            pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
-        }
+        pViewShell->setLibreOfficeKitViewCallback(nullptr);
+        pDocument->mpCallbackFlushHandlers[nView]->setViewId(-1);
     }
 }
 
