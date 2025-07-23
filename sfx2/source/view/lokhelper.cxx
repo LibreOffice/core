@@ -225,15 +225,25 @@ SfxViewShell* SfxLokHelper::getViewOfId(int nId)
     return nullptr;
 }
 
-int SfxLokHelper::getView(const SfxViewShell* pViewShell)
+int SfxLokHelper::getView(const SfxViewShell& rViewShell)
 {
-    if (!pViewShell)
-        pViewShell = SfxViewShell::Current();
-    // Still no valid view shell? Then no idea.
+    return static_cast<sal_Int32>(rViewShell.GetViewShellId());
+}
+
+int SfxLokHelper::getCurrentView()
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    // No valid view shell? Then no idea.
     if (!pViewShell)
         return -1;
+    return SfxLokHelper::getView(*pViewShell);
+}
 
-    return static_cast<sal_Int32>(pViewShell->GetViewShellId());
+int SfxLokHelper::getView(const SfxViewShell* pViewShell)
+{
+    if (pViewShell)
+        return SfxLokHelper::getView(*pViewShell);
+    return SfxLokHelper::getCurrentView();
 }
 
 std::size_t SfxLokHelper::getViewsCount(int nDocId)

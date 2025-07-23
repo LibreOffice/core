@@ -103,7 +103,10 @@ public:
     static void setEditMode(int nMode, vcl::ITiledRenderable* pDoc);
     /// Get view shell with id
     static SfxViewShell* getViewOfId(int nId);
+    /// Get view id of view shell
+    static int getView(const SfxViewShell& rViewShell);
     /// Get the currently active view.
+    static int getCurrentView();
     static int getView(const SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current DocId.
     static std::size_t getViewsCount(int nDocId);
