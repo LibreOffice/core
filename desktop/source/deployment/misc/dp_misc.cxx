@@ -256,32 +256,29 @@ OUString encodeForRcFile( std::u16string_view str )
 
 OUString makeURL( std::u16string_view baseURL, OUString const & relPath_ )
 {
-    OUStringBuffer buf(128);
-    if (baseURL.size() > 1 && baseURL[ baseURL.size() - 1 ] == '/')
-        buf.append( baseURL.substr(0, baseURL.size() - 1) );
-    else
-        buf.append( baseURL );
+    if (baseURL.ends_with('/'))
+        baseURL.remove_suffix(1);
+
     OUString relPath(relPath_);
     if( relPath.startsWith("/") )
         relPath = relPath.copy( 1 );
-    if (!relPath.isEmpty())
-    {
-        buf.append( '/' );
-        if (o3tl::starts_with(baseURL, u"vnd.sun.star.expand:" )) {
-            // encode for macro expansion: relPath is supposed to have no
-            // macros, so encode $, {} \ (bootstrap mimic)
-            relPath = encodeForRcFile(relPath);
 
-            // encode once more for vnd.sun.star.expand schema:
-            // vnd.sun.star.expand:$UNO_...
-            // will expand to file-url
-            relPath = ::rtl::Uri::encode( relPath, rtl_UriCharClassUric,
-                                          rtl_UriEncodeIgnoreEscapes,
-                                          RTL_TEXTENCODING_UTF8 );
-        }
-        buf.append( relPath );
+    if (relPath.isEmpty())
+        return OUString(baseURL);
+
+    if (baseURL.starts_with(u"vnd.sun.star.expand:"))
+    {
+        // encode for macro expansion: relPath is supposed to have no
+        // macros, so encode $, {} \ (bootstrap mimic)
+        relPath = encodeForRcFile(relPath);
+
+        // encode once more for vnd.sun.star.expand schema:
+        // vnd.sun.star.expand:$UNO_...
+        // will expand to file-url
+        relPath = ::rtl::Uri::encode(relPath, rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes,
+                                     RTL_TEXTENCODING_UTF8);
     }
-    return buf.makeStringAndClear();
+    return OUString::Concat(baseURL) + "/" + relPath;
 }
 
 OUString makeURLAppendSysPathSegment( std::u16string_view baseURL, OUString const & segment )
