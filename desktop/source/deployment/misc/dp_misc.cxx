@@ -337,31 +337,26 @@ bool office_is_running()
     //this could cause a deadlock. This is actually a workaround for i82778
     OUString sFile;
     oslProcessError err = osl_getExecutableFile(& sFile.pData);
-    bool ret = false;
     if (osl_Process_E_None == err)
     {
-        sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
         if (
 #if defined MACOSX
-            sFile == "soffice"
+            sFile.endsWith("/soffice")
 #elif defined UNIX |  defined _WIN32
-            sFile == "soffice.bin"
+            sFile.endsWith("/soffice.bin")
 #else
 #error "Unsupported platform"
 #endif
 
             )
-            ret = true;
-        else
-            ret = existsOfficePipe();
+            return true;
     }
     else
     {
         OSL_FAIL("NOT osl_Process_E_None ");
-        //if osl_getExecutable file then we take the risk of creating a pipe
-        ret =  existsOfficePipe();
+        //if osl_getExecutableFile failed then we take the risk of creating a pipe
     }
-    return ret;
+    return existsOfficePipe();
 #endif
 }
 
