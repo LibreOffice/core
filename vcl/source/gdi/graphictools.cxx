@@ -124,9 +124,8 @@ SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass
     rOStm.WriteDouble( rClass.mfMiterLimit );
 
     rOStm.WriteUInt32( rClass.maDashArray.size() );
-    size_t i;
-    for(i=0; i<rClass.maDashArray.size(); ++i)
-        rOStm.WriteDouble( rClass.maDashArray[i] );
+    for (double dash : rClass.maDashArray)
+        rOStm.WriteDouble(dash);
 
     return rOStm;
 }
@@ -150,9 +149,8 @@ SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
     sal_uInt32 nSize;
     rIStm.ReadUInt32( nSize );
     rClass.maDashArray.resize(nSize);
-    size_t i;
-    for(i=0; i<rClass.maDashArray.size(); ++i)
-        rIStm.ReadDouble( rClass.maDashArray[i] );
+    for (double dash : rClass.maDashArray)
+        rIStm.ReadDouble(dash);
 
     return rIStm;
 }
