@@ -167,6 +167,7 @@
 #include <vcl/GestureEventPan.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
+#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
 #include <svtools/ctrltool.hxx>
@@ -3583,6 +3584,8 @@ static void lo_stopURP(LibreOfficeKit* /* pThis */,
 
 static int joinThreads(JoinThreads eCategory)
 {
+    DBG_TESTNOTSOLARMUTEX();
+
     comphelper::ThreadPool &pool = comphelper::ThreadPool::getSharedOptimalPool();
     if (!pool.joinThreadsIfIdle())
         return 0;
