@@ -92,6 +92,13 @@ public:
 
     sal_Int8 proposedDropAction() const { return m_nDropAction; }
     bool dropSuccessful() const { return m_bDropSuccessful; }
+
+private:
+    css::datatransfer::dnd::DropTargetDragEnterEvent
+    createDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, bool bSetDataFlavors,
+                                   qreal fScaleFactor);
+    css::datatransfer::dnd::DropTargetDropEvent createDropTargetDropEvent(const QDropEvent& rEvent,
+                                                                          qreal fScaleFactor);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

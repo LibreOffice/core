@@ -21,8 +21,6 @@
 
 #include <config_vclplug.h>
 
-#include "QtDragAndDrop.hxx"
-
 #include <QtCore/QDate>
 #include <QtCore/QPoint>
 #include <QtCore/QRect>
@@ -42,7 +40,6 @@
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/vclenum.hxx>
 
-#include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -103,12 +100,6 @@ TriState toVclTriState(Qt::CheckState eTristate);
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
 sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
-css::datatransfer::dnd::DropTargetDragEnterEvent
-toVclDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, QtDropTarget* pDropTarget,
-                              bool bSetDataFlavors, qreal fScaleFactor);
-css::datatransfer::dnd::DropTargetDropEvent
-toVclDropTargetDropEvent(const QDropEvent& rEvent, QtDropTarget* pDropTarget, qreal fScaleFactor);
-Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
 {
