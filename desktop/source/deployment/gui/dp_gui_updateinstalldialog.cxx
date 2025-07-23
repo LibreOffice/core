@@ -58,7 +58,6 @@
 #include <string_view>
 #include <vector>
 
-using dp_misc::StrTitle;
 namespace dp_gui {
 
 class UpdateCommandEnv
@@ -551,7 +550,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     ::ucbhelper::Content sourceContent;
     (void)dp_misc::create_ucb_content(&sourceContent, sDownloadURL, m_updateCmdEnv);
 
-    OUString sTitle(StrTitle::getTitle(sourceContent));
+    OUString sTitle(dp_misc::StrTitle::getTitle(sourceContent));
     if (sTitle.indexOf('.') < 0)
     {
         // The title could be changed due to redirection (seen with github URLs, which arrive
