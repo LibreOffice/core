@@ -81,7 +81,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 void SwTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell)
 {
     pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(pViewShell));
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pViewShell));
 }
 
 void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)

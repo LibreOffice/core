@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     ViewCallback aCallback;
     TestLokCallbackWrapper aCallbackWrapper(&ViewCallback::callback, &aCallback);
     pWrtShell->GetSfxViewShell()->setLibreOfficeKitViewCallback(&aCallbackWrapper);
-    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(pWrtShell->GetSfxViewShell()));
+    aCallbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
     Scheduler::ProcessEventsToIdle();
     aCallback.m_nInvalidations = 0;
 
