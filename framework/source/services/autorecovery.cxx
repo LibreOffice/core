@@ -3971,29 +3971,22 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
     // create content for the parent folder and call transfer on that content with the source content
     // and the destination file name as parameters
 
-    css::uno::Reference< css::ucb::XCommandEnvironment > xEnvironment;
-
-    ::ucbhelper::Content aSourceContent;
     ::ucbhelper::Content aTargetContent;
 
     try
     {
-        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment, m_xContext);
+        aTargetContent = ::ucbhelper::Content(sTargetPath, {}, m_xContext);
     }
     catch(const css::uno::Exception&)
     {
         return AutoRecovery::E_WRONG_TARGET_PATH;
     }
 
-    sal_Int32 nNameClash;
-    nNameClash = css::ucb::NameClash::RENAME;
-
     try
     {
-        bool bSuccess = ::ucbhelper::Content::create(sSource, xEnvironment, m_xContext, aSourceContent);
-        if (!bSuccess)
-            return AutoRecovery::E_ORIGINAL_FILE_MISSING;
-        aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation::Copy, sTargetName, nNameClash);
+        ::ucbhelper::Content aSourceContent(sSource, {}, m_xContext);
+        aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation::Copy,
+                                       sTargetName, css::ucb::NameClash::RENAME);
     }
     catch(const css::uno::Exception&)
     {
