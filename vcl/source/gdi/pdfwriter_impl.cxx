@@ -5368,7 +5368,7 @@ bool PDFWriterImpl::emitCatalog()
     {
     case PDFWriter::ActionDefault :     //do nothing, this is the Acrobat default
     default:
-        if( aInitPageRef.getLength() > 1 )
+        if ( aInitPageRef.getLength() > 1 && m_aContext.InitialPage > 0 )
         {
             aLine.append( "/OpenAction[" );
             aLine.append( aInitPageRef );
@@ -5383,12 +5383,12 @@ bool PDFWriterImpl::emitCatalog()
     case PDFWriter::FitWidth :
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef );
-        aLine.append( " /FitH 842]\n" ); //Open fit width, default A4 height in pt, OK to use hardcoded value here?
+        aLine.append( " /FitH null]\n" ); //Open fit width
         break;
     case PDFWriter::FitVisible :
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef );
-        aLine.append( " /FitBH 842]\n" ); //Open fit visible, , default A4 height in pt, OK to use hardcoded value here?
+        aLine.append( " /FitBH null]\n" ); //Open fit visible
         break;
     case PDFWriter::ActionZoom :
         aLine.append( "/OpenAction[" );
