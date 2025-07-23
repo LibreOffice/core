@@ -486,15 +486,14 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
     pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
 }
 
-void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
+void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                    int nType, const boost::property_tree::ptree& rTree)
 {
-    assert(pThisView != nullptr && "pThisView must be valid");
     if (DisableCallbacks::disabled() || !pOtherView)
         return;
 
-    const int viewId = SfxLokHelper::getView(pThisView);
-    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(*pThisView, rTree), viewId);
+    const int viewId = SfxLokHelper::getView(rThisView);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(rThisView, rTree), viewId);
 }
 
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
