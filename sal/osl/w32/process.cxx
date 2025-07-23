@@ -325,7 +325,6 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         assert( nArgs == argc );
         for (i = 0; i < nArgs; i++)
         {
-            /* Convert to unicode */
             rtl_uString_newFromStr( &(ppArgs[i]), o3tl::toU(wargv[i]) );
         }
         LocalFree(wargv);
