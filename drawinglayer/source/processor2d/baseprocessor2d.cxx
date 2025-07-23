@@ -68,6 +68,11 @@ namespace drawinglayer::processor2d
             }
         }
 
+        void BaseProcessor2D::setViewInformation2D(const geometry::ViewInformation2D& rNew)
+        {
+            if (rNew != maViewInformation2D)
+                updateViewInformation(rNew);
+        }
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -950,6 +950,20 @@ bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
 
 namespace drawinglayer::processor2d
 {
+void CairoPixelProcessor2D::updateViewInformation(
+    const geometry::ViewInformation2D& rViewInformation2D)
+{
+    if (rViewInformation2D == getViewInformation2D())
+        return;
+
+    // call parent to actually set
+    BaseProcessor2D::updateViewInformation(rViewInformation2D);
+
+    // apply AntiAlias information to target device
+    cairo_set_antialias(mpRT, getViewInformation2D().getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
+                                                                          : CAIRO_ANTIALIAS_NONE);
+}
+
 CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                              cairo_surface_t* pTarget)
     : BaseProcessor2D(rViewInformation)

@@ -22,6 +22,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;
@@ -72,6 +73,9 @@ protected:
     // PolygonStrokePrimitive2D's decompositions (normally only one)
     sal_uInt32 mnPolygonStrokePrimitive2D;
 
+    // AntialiasingFlags, saved at construction time
+    const AntialiasingFlags mnOriginalAA;
+
     // common VCL rendering support
     void RenderTextSimpleOrDecoratedPortionPrimitive2D(
         const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
@@ -104,6 +108,10 @@ protected:
     // DrawMode adaptation support
     void adaptLineToFillDrawMode() const;
     void adaptTextToFillDrawMode() const;
+
+    // allow to react on changes
+    virtual void
+    updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D) override;
 
 public:
     // constructor/destructor

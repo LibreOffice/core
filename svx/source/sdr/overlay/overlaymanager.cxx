@@ -44,8 +44,6 @@ namespace sdr::overlay
             if(!nSize)
                 return;
 
-            const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
-            const bool bIsAntiAliasing(getCurrentViewInformation2D().getUseAntiAliasing());
             // tdf#150622 for High Contrast we typically force colors to a single pair Fore/Back,
             // but it seems reasonable to allow overlays to use the selection color
             // taken from the system High Contrast settings
@@ -69,13 +67,15 @@ namespace sdr::overlay
                     {
                         if(rRange.overlaps(rCandidate.getBaseRange()))
                         {
-                            if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
+                            const bool bCurrentAA(pProcessor->getViewInformation2D().getUseAntiAliasing());
+                            const bool bWantedAA(rCandidate.allowsAntiAliase());
+
+                            if (bCurrentAA != bWantedAA)
                             {
-                                rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
-                            }
-                            else
-                            {
-                                rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::Enable);
+                                // set AntiAliasing at Processor2D
+                                drawinglayer::geometry::ViewInformation2D aViewInformation2D(pProcessor->getViewInformation2D());
+                                aViewInformation2D.setUseAntiAliasing(bWantedAA);
+                                pProcessor->setViewInformation2D(aViewInformation2D);
                             }
 
                             const bool bIsHighContrastSelection = rCandidate.isHighContrastSelection();
@@ -97,10 +97,8 @@ namespace sdr::overlay
                 }
             }
 
+            // destroy Processor2D and restore AA settings
             pProcessor.reset();
-
-            // restore AA settings
-            rDestinationDevice.SetAntialiasing(nOriginalAA);
         }
 
         void OverlayManager::ImpStripeDefinitionChanged()

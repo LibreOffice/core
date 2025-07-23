@@ -162,7 +162,7 @@ namespace drawinglayer::processor2d
                 ViewInformation2D if needed. This allows isolating these accesses
                 later if needed
              */
-            void updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D)
+            virtual void updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D)
             {
                 maViewInformation2D = rViewInformation2D;
             }
@@ -188,8 +188,9 @@ namespace drawinglayer::processor2d
             /// the central processing method
             void process(const primitive2d::Primitive2DContainer& rSource);
 
-            /// data read access
+            /// data read/write access to ViewInformation2D
             const geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
+            void setViewInformation2D(const geometry::ViewInformation2D& rNew);
         };
 
 } // end of namespace drawinglayer::processor2d

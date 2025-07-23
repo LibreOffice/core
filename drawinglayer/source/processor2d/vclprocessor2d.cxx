@@ -1596,21 +1596,42 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
     mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
 }
 
-// process support
+void VclProcessor2D::updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D)
+{
+    if (rViewInformation2D == getViewInformation2D())
+        return;
 
+    // call parent to actually set
+    BaseProcessor2D::updateViewInformation(rViewInformation2D);
+
+    // apply AntiAlias information to target device
+    if (getViewInformation2D().getUseAntiAliasing())
+        mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing()
+                                        | AntialiasingFlags::Enable);
+    else
+        mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing()
+                                        & ~AntialiasingFlags::Enable);
+}
+
+// process support
 VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                OutputDevice& rOutDev)
     : BaseProcessor2D(rViewInformation)
     , mpOutputDevice(&rOutDev)
     , maBColorModifierStack()
     , mnPolygonStrokePrimitive2D(0)
+    , mnOriginalAA(rOutDev.GetAntialiasing())
 {
     // set digit language, derived from SvtCTLOptions to have the correct
     // number display for arabic/hindi numerals
     rOutDev.SetDigitLanguage(drawinglayer::detail::getDigitLanguage());
+
+    // NOTE: to save/restore oringinal AntiAliasing mode we need
+    // to use mnOriginalAA here - OutputDevice::Push/Pop does not
+    // offer that
 }
 
-VclProcessor2D::~VclProcessor2D() {}
+VclProcessor2D::~VclProcessor2D() { mpOutputDevice->SetAntialiasing(mnOriginalAA); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
