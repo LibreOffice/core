@@ -29,11 +29,6 @@ namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 {
-    static css::uno::Sequence< OUString > getTitleSequence()
-    {
-        css::uno::Sequence<OUString> aSeq { u"Title"_ustr };
-        return aSeq;
-    }
     static OUString getTitle( ::ucbhelper::Content &rContent )
     {
         return rContent.getPropertyValue(u"Title"_ustr).get<OUString>();
@@ -43,7 +38,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
         createCursor( ::ucbhelper::Content &rContent,
                       ucbhelper::ResultSetInclude eInclude )
     {
-        return rContent.createCursor( StrTitle::getTitleSequence(), eInclude );
+        return rContent.createCursor({ u"Title"_ustr }, eInclude);
     }
 };
 

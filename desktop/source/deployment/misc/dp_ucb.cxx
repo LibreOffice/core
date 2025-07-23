@@ -130,8 +130,8 @@ bool create_folder(
             try {
                 if (parentContent.insertNewContent(
                         info.Type,
-                        StrTitle::getTitleSequence(),
-                        Sequence<Any>( &title, 1 ),
+                        { u"Title"_ustr },
+                        { title },
                         ucb_content )) {
                     if (ret_ucb_content != nullptr)
                         *ret_ucb_content = ucb_content;
