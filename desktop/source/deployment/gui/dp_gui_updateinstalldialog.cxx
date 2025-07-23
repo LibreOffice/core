@@ -576,7 +576,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
             return m_stop;
         }
         //all errors should be handled by the command environment.
-        aUpdateData.sLocalURL = destFolder + "/" + sTitle;
+        aUpdateData.sLocalURL = dp_misc::makeURLAppendSysPathSegment(destFolder, sTitle);
     }
 
     return m_stop;
