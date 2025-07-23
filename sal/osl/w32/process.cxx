@@ -328,6 +328,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
             /* Convert to unicode */
             rtl_uString_newFromStr( &(ppArgs[i]), o3tl::toU(wargv[i]) );
         }
+        LocalFree(wargv);
         if (ppArgs[0] != nullptr)
         {
             /* Ensure absolute path */
