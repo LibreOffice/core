@@ -59,12 +59,35 @@
 #include <vector>
 
 using dp_misc::StrTitle;
-namespace dp_gui { class UpdateCommandEnv; };
-
 namespace dp_gui {
 
+class UpdateCommandEnv
+    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
+                                      css::task::XInteractionHandler,
+                                      css::ucb::XProgressHandler >
+{
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+
+public:
+    UpdateCommandEnv(css::uno::Reference<css::uno::XComponentContext> xCtx);
+
+    // XCommandEnvironment
+    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
+    getInteractionHandler() override;
+    virtual css::uno::Reference<css::ucb::XProgressHandler >
+    SAL_CALL getProgressHandler() override;
+
+    // XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+
+    // XProgressHandler
+    virtual void SAL_CALL push( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL update( css::uno::Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
+};
+
 class UpdateInstallDialog::Thread: public salhelper::Thread {
-    friend class UpdateCommandEnv;
 public:
     Thread(css::uno::Reference< css::uno::XComponentContext > const & ctx,
         UpdateInstallDialog & dialog, std::vector< dp_gui::UpdateData > & aVecUpdateData);
@@ -95,36 +118,6 @@ private:
 
 };
 
-class UpdateCommandEnv
-    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
-                                      css::task::XInteractionHandler,
-                                      css::ucb::XProgressHandler >
-{
-    friend class UpdateInstallDialog::Thread;
-
-    ::rtl::Reference<UpdateInstallDialog::Thread> m_installThread;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
-public:
-    UpdateCommandEnv( css::uno::Reference< css::uno::XComponentContext > xCtx,
-        ::rtl::Reference<UpdateInstallDialog::Thread> thread);
-
-    // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() override;
-    virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() override;
-
-    // XInteractionHandler
-    virtual void SAL_CALL handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
-
-    // XProgressHandler
-    virtual void SAL_CALL push( css::uno::Any const & Status ) override;
-    virtual void SAL_CALL update( css::uno::Any const & Status ) override;
-    virtual void SAL_CALL pop() override;
-};
-
 
 UpdateInstallDialog::Thread::Thread(
     css::uno::Reference< css::uno::XComponentContext> const & xCtx,
@@ -134,7 +127,7 @@ UpdateInstallDialog::Thread::Thread(
     m_dialog(dialog),
     m_xComponentContext(xCtx),
     m_aVecUpdateData(aVecUpdateData),
-    m_updateCmdEnv(new UpdateCommandEnv(xCtx, this)),
+    m_updateCmdEnv(new UpdateCommandEnv(xCtx)),
     m_stop(false)
 {}
 
@@ -174,8 +167,6 @@ void UpdateInstallDialog::Thread::execute()
         if (! m_stop)
              m_dialog.updateDone();
     }
-    //UpdateCommandEnv keeps a reference to Thread and prevents destruction. Therefore remove it.
-    m_updateCmdEnv->m_installThread.clear();
 }
 
 UpdateInstallDialog::UpdateInstallDialog(
@@ -592,10 +583,8 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     return m_stop;
 }
 
-UpdateCommandEnv::UpdateCommandEnv( css::uno::Reference< css::uno::XComponentContext > xCtx,
-    ::rtl::Reference<UpdateInstallDialog::Thread> thread)
-    : m_installThread(std::move(thread)),
-    m_xContext(std::move(xCtx))
+UpdateCommandEnv::UpdateCommandEnv(css::uno::Reference<css::uno::XComponentContext> xCtx)
+    : m_xContext(std::move(xCtx))
 {
 }
 
