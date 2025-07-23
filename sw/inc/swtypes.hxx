@@ -62,7 +62,7 @@ constexpr SwTwips cMinHdFtHeight = 56; // ~1mm
 #define MINLAY 23   // Minimal size for other Frames.
 
 /// hard-coded value of read-only TableColumnRelativeSum property
-constexpr SwTwips UNO_TABLE_COLUMN_SUM{10000};
+constexpr int UNO_TABLE_COLUMN_SUM{10000};
 
 // Default column distance of two text columns corresponds to 0.3 cm.
 constexpr SwTwips DEF_GUTTER_WIDTH = o3tl::toTwips(3, o3tl::Length::mm);
