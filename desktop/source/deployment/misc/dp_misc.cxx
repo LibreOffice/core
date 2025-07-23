@@ -115,13 +115,12 @@ OUString generateOfficePipeId()
 
 bool existsOfficePipe()
 {
-    static OUString OfficePipeId = generateOfficePipeId();
+    static const OUString OfficePipeId = generateOfficePipeId();
 
-    OUString const & pipeId = OfficePipeId;
-    if (pipeId.isEmpty())
+    if (OfficePipeId.isEmpty())
         return false;
     ::osl::Security sec;
-    ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
+    ::osl::Pipe pipe( OfficePipeId, osl_Pipe_OPEN, sec );
     return pipe.is();
 }
 
