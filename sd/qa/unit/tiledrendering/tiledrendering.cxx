@@ -3030,8 +3030,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     const Color aTransparentColor(ColorAlpha, 0x00000000);
     const tools::Long nLeft = 20;
@@ -3148,8 +3148,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     const Color aTransparentColor(ColorAlpha, 0x00000000);
     const tools::Long nLeft = 20;
@@ -3528,8 +3528,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
@@ -3700,8 +3700,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     sal_Int32 nViewHeight = 2000;
     std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
@@ -3962,8 +3962,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
     std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
@@ -4129,8 +4129,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
     std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1125), nViewHeight);
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
@@ -4234,8 +4234,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
     std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
-    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
-    CPPUNIT_ASSERT_EQUAL(1500, nViewHeight);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1500), nViewHeight);
 
     std::vector<std::string> aBufferHashes;
 
