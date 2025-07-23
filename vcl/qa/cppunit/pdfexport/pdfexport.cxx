@@ -3615,6 +3615,30 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
     CPPUNIT_ASSERT_EQUAL(u"m=750abc"_ustr, sText);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf167659)
+{
+    // Don't export showing tracked changes to PDF
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportTrackedChanges", uno::Any(false) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    saveAsPDF(u"tdf167659.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pPdfTextPage);
+
+    const int nChars = pPdfTextPage->countChars();
+    std::vector<sal_uInt32> aChars(nChars);
+    for (int i = 0; i < nChars; i++)
+        aChars[i] = pPdfTextPage->getUnicode(i);
+    OUString aActualText(aChars.data(), aChars.size());
+    // Without the change, this also includes tracked deleted text from the document
+    CPPUNIT_ASSERT_EQUAL(u"normal text"_ustr, aActualText);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

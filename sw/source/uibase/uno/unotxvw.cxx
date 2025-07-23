@@ -670,6 +670,20 @@ void SAL_CALL SwXTextView::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue )
 {
     SolarMutexGuard aGuard;
+
+    if (rPropertyName == "PDFExport_ShowChanges")
+    {
+        // hack used in PDF export code to turn off (or on) exporting showing tracked changes
+        // logic is simplified from FN_REDLINE_SHOW path in SwView
+        bool bShow = false;
+        rValue >>= bShow;
+        SwWrtShell& rSh = m_pView->GetWrtShell();
+        rSh.StartAllAction();
+        rSh.GetLayout()->SetHideRedlines(!bShow);
+        rSh.EndAllAction();
+        return;
+    }
+
     const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException(rPropertyName);
@@ -706,6 +720,13 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
     SolarMutexGuard aGuard;
 
     Any aRet;
+
+    if (rPropertyName == "PDFExport_ShowChanges")
+    {
+        const bool bShow = !m_pView->GetWrtShell().GetLayout()->IsHideRedlines();
+        aRet <<= bShow;
+        return aRet;
+    }
 
     const SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
