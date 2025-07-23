@@ -135,11 +135,54 @@ css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 
 QtDropTarget::~QtDropTarget() {}
 
-void QtDropTarget::drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept
+void QtDropTarget::handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor)
+{
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
+        = toVclDropTargetDragEnterEvent(rEvent, this, true, fScaleFactor);
+    dragEnter(aEvent);
+
+    if (qobject_cast<const QtMimeData*>(rEvent.mimeData()))
+        rEvent.accept();
+    else
+        rEvent.acceptProposedAction();
+}
+
+void QtDropTarget::handleDragMoveEvent(QDragMoveEvent& rEvent, qreal fScaleFactor)
+{
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
+        = toVclDropTargetDragEnterEvent(rEvent, this, false, fScaleFactor);
+    dragOver(aEvent);
+
+    // the drop target accepted our drop action => inform Qt
+    if (proposedDropAction() != 0)
+    {
+        rEvent.setDropAction(getPreferredDropAction(proposedDropAction()));
+        rEvent.accept();
+    }
+    else // or maybe someone else likes it?
+        rEvent.ignore();
+}
+
+void QtDropTarget::handleDropEvent(QDropEvent& rEvent, qreal fScaleFactor)
 {
     m_bDropSuccessful = true;
 
-    DropTarget::drop(dtde);
+    // ask the drop target to accept our drop action
+    css::datatransfer::dnd::DropTargetDropEvent aEvent
+        = toVclDropTargetDropEvent(rEvent, this, fScaleFactor);
+    drop(aEvent);
+
+    const bool bDropSuccessful = dropSuccessful();
+    const sal_Int8 nDropAction = proposedDropAction();
+
+    // the drop target accepted our drop action => inform Qt
+    if (bDropSuccessful)
+    {
+        rEvent.setDropAction(getPreferredDropAction(nDropAction));
+        rEvent.accept();
+    }
+    else // or maybe someone else likes it?
+        rEvent.ignore();
 }
 
 void QtDropTarget::acceptDrag(sal_Int8 dragOperation) { m_nDropAction = dragOperation; }

@@ -1350,15 +1350,7 @@ void QtFrame::handleDragEnter(QDragEnterEvent* pEvent)
     assert(pEvent);
     assert(m_pDropTarget);
 
-    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
-        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, true, devicePixelRatioF());
-
-    m_pDropTarget->dragEnter(aEvent);
-
-    if (qobject_cast<const QtMimeData*>(pEvent->mimeData()))
-        pEvent->accept();
-    else
-        pEvent->acceptProposedAction();
+    m_pDropTarget->handleDragEnterEvent(*pEvent, devicePixelRatioF());
 }
 
 void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
@@ -1366,19 +1358,7 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
     assert(pEvent);
     assert(m_pDropTarget);
 
-    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
-        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, false, devicePixelRatioF());
-
-    m_pDropTarget->dragOver(aEvent);
-
-    // the drop target accepted our drop action => inform Qt
-    if (m_pDropTarget->proposedDropAction() != 0)
-    {
-        pEvent->setDropAction(getPreferredDropAction(m_pDropTarget->proposedDropAction()));
-        pEvent->accept();
-    }
-    else // or maybe someone else likes it?
-        pEvent->ignore();
+    m_pDropTarget->handleDragMoveEvent(*pEvent, devicePixelRatioF());
 }
 
 void QtFrame::handleDrop(QDropEvent* pEvent)
@@ -1386,14 +1366,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
     assert(pEvent);
     assert(m_pDropTarget);
 
-    css::datatransfer::dnd::DropTargetDropEvent aEvent
-        = toVclDropTargetDropEvent(*pEvent, m_pDropTarget, devicePixelRatioF());
-
-    // ask the drop target to accept our drop action
-    m_pDropTarget->drop(aEvent);
-
-    const bool bDropSuccessful = m_pDropTarget->dropSuccessful();
-    const sal_Int8 nDropAction = m_pDropTarget->proposedDropAction();
+    m_pDropTarget->handleDropEvent(*pEvent, devicePixelRatioF());
 
     // inform the drag source of the drag-origin frame of the drop result
     if (pEvent->source())
@@ -1401,17 +1374,9 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
         QtWidget* pWidget = qobject_cast<QtWidget*>(pEvent->source());
         assert(pWidget); // AFAIK there shouldn't be any non-Qt5Widget as source in LO itself
         if (pWidget)
-            pWidget->frame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);
+            pWidget->frame().m_pDragSource->fire_dragEnd(m_pDropTarget->proposedDropAction(),
+                                                         m_pDropTarget->dropSuccessful());
     }
-
-    // the drop target accepted our drop action => inform Qt
-    if (bDropSuccessful)
-    {
-        pEvent->setDropAction(getPreferredDropAction(nDropAction));
-        pEvent->accept();
-    }
-    else // or maybe someone else likes it?
-        pEvent->ignore();
 }
 
 void QtFrame::handleDragLeave() { m_pDropTarget->dragExit(); }

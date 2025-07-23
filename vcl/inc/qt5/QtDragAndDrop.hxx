@@ -18,6 +18,9 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <QtCore/QObject>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDragMoveEvent>
+#include <QtGui/QDropEvent>
 
 class QtFrame;
 
@@ -83,7 +86,9 @@ public:
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) noexcept override;
+    void handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor);
+    void handleDragMoveEvent(QDragMoveEvent& rEvent, qreal fScaleFactor);
+    void handleDropEvent(QDropEvent& rEvent, qreal fScaleFactor);
 
     sal_Int8 proposedDropAction() const { return m_nDropAction; }
     bool dropSuccessful() const { return m_bDropSuccessful; }
