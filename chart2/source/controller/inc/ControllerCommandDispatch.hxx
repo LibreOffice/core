@@ -53,7 +53,7 @@ typedef ::cppu::ImplInheritanceHelper<
     state) and if an available command is called forwards it to the
     ChartController.
  */
-class ControllerCommandDispatch : public impl::ControllerCommandDispatch_Base
+class ControllerCommandDispatch final : public impl::ControllerCommandDispatch_Base
 {
 public:
     explicit ControllerCommandDispatch(

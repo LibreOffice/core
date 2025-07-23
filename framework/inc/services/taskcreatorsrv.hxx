@@ -30,7 +30,7 @@ typedef comphelper::WeakComponentImplHelper<css::lang::XServiceInfo,
                                             css::lang::XSingleServiceFactory>
     TaskCreatorService_BASE;
 
-class TaskCreatorService : public TaskCreatorService_BASE
+class TaskCreatorService final : public TaskCreatorService_BASE
 {
 private:
     /** @short  the global uno service manager.

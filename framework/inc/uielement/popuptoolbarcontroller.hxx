@@ -60,7 +60,7 @@ private:
     css::uno::Reference<css::frame::XPopupMenuController> m_xPopupMenuController;
 };
 
-class GenericPopupToolbarController : public PopupMenuToolbarController
+class GenericPopupToolbarController final : public PopupMenuToolbarController
 {
 public:
     GenericPopupToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
