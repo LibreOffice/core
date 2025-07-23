@@ -519,7 +519,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, st
             if (aPayload.isEmpty())
             {
                 aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
-                viewId = SfxLokHelper::getView(pThisView);
+                viewId = SfxLokHelper::getView(*pThisView);
             }
 
             pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
@@ -550,7 +550,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
             if (aPayload.isEmpty())
             {
                 aPayload = lcl_generateJSON(pThisView, rTree);
-                viewId = SfxLokHelper::getView(pThisView);
+                viewId = SfxLokHelper::getView(*pThisView);
             }
 
             pViewShell->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
@@ -1051,7 +1051,7 @@ void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView
     if (DisableCallbacks::disabled() || !pThisView)
         return;
 
-    int viewId = SfxLokHelper::getView(pThisView);
+    int viewId = SfxLokHelper::getView(*pThisView);
     const ViewShellDocId nCurrentDocId = pThisView->GetDocId();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
