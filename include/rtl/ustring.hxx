@@ -178,12 +178,18 @@ public:
     /**
       New string containing no characters.
     */
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+    constexpr
+#endif
     OUString()
     {
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+        pData = const_cast<rtl_uString *>(&empty.str);
+#else
         pData = NULL;
         rtl_uString_new( &pData );
+#endif
     }
-
     /**
       New string from OUString.
 
@@ -3751,6 +3757,9 @@ private:
         return *this;
     }
 
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+    static constexpr auto empty = OUStringLiteral(u""); // [-loplugin:ostr]
+#endif
 };
 
 #if defined LIBO_INTERNAL_ONLY

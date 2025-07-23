@@ -199,10 +199,17 @@ public:
     /**
       New string containing no characters.
     */
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+    constexpr
+#endif
     OString()
     {
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+        pData = const_cast<rtl_String *>(&empty.str);
+#else
         pData = NULL;
         rtl_string_new( &pData );
+#endif
     }
 
     /**
@@ -2606,6 +2613,11 @@ public:
     template<typename T, std::size_t N> [[nodiscard]] static
     OStringConcat<OStringConcatMarker, T[N]>
     Concat(T (& value)[N]) { return OStringConcat<OStringConcatMarker, T[N]>(value); }
+#endif
+
+private:
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+        static constexpr auto empty = OStringLiteral(""); // [-loplugin:ostr]
 #endif
 };
 
