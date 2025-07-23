@@ -730,7 +730,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     if (pEvent->state & GDK_CONTROL_MASK)
         nKeyCode |= KEY_MOD1;
 
-    if (priv->m_nKeyModifier & KEY_MOD2)
+    if (pEvent->state & GDK_MOD1_MASK)
         nKeyCode |= KEY_MOD2;
 
     if (nKeyCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)) {
