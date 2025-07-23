@@ -1031,7 +1031,7 @@ void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxVi
         return;
 
     // This getCurrentView() is dubious
-    SAL_WARN_IF(!pViewShell, "kit", "no explicit viewshell set");
+    SAL_WARN_IF(!pViewShell, "lok", "no explicit viewshell set");
     int viewId = pViewShell ? SfxLokHelper::getView(*pViewShell) : SfxLokHelper::getCurrentView();
     int sourceViewId = SfxLokHelper::getView(rSourceShell);
     rTargetShell.libreOfficeKitViewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);

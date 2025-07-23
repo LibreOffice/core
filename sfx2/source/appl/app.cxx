@@ -215,6 +215,15 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         if( pFrame )
         {
+            // Keep SfxViewFrame::Current() consistent with SfxViewFrame::First
+            pImpl->MoveFrameToFirstFrame(*pFrame);
+            SfxViewShell* pViewShell = pFrame->GetViewShell();
+            if (pViewShell)
+            {
+                // Keep SfxViewShell::Current() consistent with SfxViewShell::First
+                pImpl->MoveShellToFirstShell(*pViewShell);
+            }
+
             pFrame->DoActivate( bTaskActivate );
             if ( bTaskActivate && pFrame->GetObjectShell() )
             {
@@ -231,7 +240,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
                     pProgress->SetState( pProgress->GetState() );
             }
 
-            if ( pImpl->pViewFrame->GetViewShell() )
+            if (pViewShell)
             {
                 SfxDispatcher* pDisp = pImpl->pViewFrame->GetDispatcher();
                 pDisp->Flush();

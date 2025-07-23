@@ -552,8 +552,9 @@ void DesktopLOKTest::testCreateView()
     // Test getViewIds().
     std::vector<int> aViewIds(2);
     CPPUNIT_ASSERT(pDocument->m_pDocumentClass->getViewIds(pDocument, aViewIds.data(), aViewIds.size()));
-    CPPUNIT_ASSERT_EQUAL(nId0, aViewIds[0]);
-    CPPUNIT_ASSERT_EQUAL(nId1, aViewIds[1]);
+    // The expectation is that the most recently used shell is at the start
+    CPPUNIT_ASSERT_EQUAL(nId1, aViewIds[0]);
+    CPPUNIT_ASSERT_EQUAL(nId0, aViewIds[1]);
 
     // Make sure the created view is the active one, then switch to the old
     // one.
@@ -3640,8 +3641,9 @@ void DesktopLOKTest::testMultiDocuments()
         // Validate the views of document 1.
         std::vector<int> aViewIdsDoc1(2);
         CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
-        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
+        // The expectation is that the most recently used shell is at the start
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
 
         CPPUNIT_ASSERT_EQUAL(nDoc1View1, pDocument1->m_pDocumentClass->getView(pDocument1));
         CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View1));
@@ -3669,8 +3671,9 @@ void DesktopLOKTest::testMultiDocuments()
         // Validate the views of document 2.
         std::vector<int> aViewIdsDoc2(2);
         CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
-        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
+        // The expectation is that the most recently used shell is at the start
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
 
         CPPUNIT_ASSERT_EQUAL(nDoc2View1, pDocument2->m_pDocumentClass->getView(pDocument2));
         CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View1));
@@ -3684,8 +3687,9 @@ void DesktopLOKTest::testMultiDocuments()
 
         // The views of document1 should be unchanged.
         CPPUNIT_ASSERT(pDocument1->m_pDocumentClass->getViewIds(pDocument1, aViewIdsDoc1.data(), aViewIdsDoc1.size()));
-        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[0]);
-        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[1]);
+        // The expectation is that the most recently used shell is at the start
+        CPPUNIT_ASSERT_EQUAL(nDoc1View1, aViewIdsDoc1[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc1View0, aViewIdsDoc1[1]);
         // Switch views in the first doc.
         CPPUNIT_ASSERT_EQUAL(nDocId1, SfxLokHelper::getDocumentIdOfView(nDoc1View0));
         pDocument1->m_pDocumentClass->setView(pDocument1, nDoc1View0);
@@ -3696,8 +3700,9 @@ void DesktopLOKTest::testMultiDocuments()
 
         // The views of document2 should be unchanged.
         CPPUNIT_ASSERT(pDocument2->m_pDocumentClass->getViewIds(pDocument2, aViewIdsDoc2.data(), aViewIdsDoc2.size()));
-        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[0]);
-        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[1]);
+        // The expectation is that the most recently used shell is at the start
+        CPPUNIT_ASSERT_EQUAL(nDoc2View1, aViewIdsDoc2[0]);
+        CPPUNIT_ASSERT_EQUAL(nDoc2View0, aViewIdsDoc2[1]);
         // Switch views in the second doc.
         CPPUNIT_ASSERT_EQUAL(nDocId2, SfxLokHelper::getDocumentIdOfView(nDoc2View0));
         pDocument2->m_pDocumentClass->setView(pDocument2, nDoc2View0);
