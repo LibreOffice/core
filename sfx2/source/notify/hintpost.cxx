@@ -44,7 +44,7 @@ void SfxHintPoster::Post(std::unique_ptr<SfxRequest> pHintToPost)
             SAL_WARN("sfx.notify", "SfxHintPoster::Post: posting new hint during setting a view");
         }
 
-        pHintToPost->SetLokViewId(SfxLokHelper::getView());
+        pHintToPost->SetLokViewId(SfxLokHelper::getCurrentView());
     }
 
     Application::PostUserEvent((LINK(this, SfxHintPoster, DoEvent_Impl)), pHintToPost.release());
@@ -61,7 +61,7 @@ IMPL_LINK(SfxHintPoster, DoEvent_Impl, void*, pPostedHint, void)
         if (comphelper::LibreOfficeKit::isActive())
         {
             int nNewId = pRequest->GetLokViewId();
-            nOldId = SfxLokHelper::getView();
+            nOldId = SfxLokHelper::getCurrentView();
             if (nNewId != -1 && nNewId != nOldId)
             {
                 // The current view ID is not the one that was active when posting the hint, switch

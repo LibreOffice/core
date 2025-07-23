@@ -213,7 +213,7 @@ SdTestViewCallback::SdTestViewCallback()
 {
     mpViewShell = SfxViewShell::Current();
     mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
-    mnView = SfxLokHelper::getView();
+    mnView = SfxLokHelper::getCurrentView();
     m_callbackWrapper.setLOKViewId(mnView);
 }
 

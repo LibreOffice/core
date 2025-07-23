@@ -513,10 +513,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMissingInvalidation)
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     SwTestViewCallback aView2;
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     // First view: put the cursor into the first word.
     SfxLokHelper::setView(nView1);
@@ -724,7 +724,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoInvalidations)
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
@@ -755,7 +755,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoLimiting)
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
@@ -781,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReordering)
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -867,7 +867,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo2)
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc();
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -909,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -952,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoShapeLimiting)
     // Load a document and create a view.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -986,10 +986,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)
 {
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     // Insert a character in the first view.
     SfxLokHelper::setView(nView1);
@@ -1023,10 +1023,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
 {
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     // Insert a character in the first view.
     SfxLokHelper::setView(nView1);
@@ -1063,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoShells)
 {
     // Load a document and create a view.
     createDoc("shape.fodt");
-    sal_Int32 nView1 = SfxLokHelper::getView();
+    sal_Int32 nView1 = SfxLokHelper::getCurrentView();
 
     // Begin text edit.
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1089,7 +1089,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoGroupShells)
     // Load a document and create a view.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
-    sal_Int32 nView1 = SfxLokHelper::getView();
+    sal_Int32 nView1 = SfxLokHelper::getCurrentView();
 
     // Begin text edit.
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -1264,7 +1264,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
 {
     addDarkLightThemes(COL_BLACK, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
-    int nFirstViewId = SfxLokHelper::getView();
+    int nFirstViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView1;
     {
         SwViewOption aViewOptions;
@@ -1276,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
 
     // Create a second view
     SfxLokHelper::createView();
-    int nSecondViewId = SfxLokHelper::getView();
+    int nSecondViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView2;
     {
         // Give the second view different options
@@ -1335,7 +1335,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     Color aDarkColor(0x1c, 0x1c, 0x1c);
     addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
-    int nFirstViewId = SfxLokHelper::getView();
+    int nFirstViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView1;
     // Set first view to light scheme
     {
@@ -1352,7 +1352,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getTilePixelColor(pXTextDocument, 255, 255));
     // Create second view
     SfxLokHelper::createView();
-    int nSecondViewId = SfxLokHelper::getView();
+    int nSecondViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView2;
     // Set second view to dark scheme
     {
@@ -1395,7 +1395,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
         aDarkColor = COL_WHITE;
     addDarkLightThemes(aDarkColor, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
-    int nFirstViewId = SfxLokHelper::getView();
+    int nFirstViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView1;
     // Set view to dark scheme
     {
@@ -1412,7 +1412,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
     // Create second view
     SfxLokHelper::createView();
-    int nSecondViewId = SfxLokHelper::getView();
+    int nSecondViewId = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView2;
     // Set second view to dark scheme
     {
@@ -1520,7 +1520,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
 {
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("frame.odt");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView1;
     // Create a second view, and switch back to the first view.
     SfxLokHelper::createView();
@@ -1749,11 +1749,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairResult)
 {
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     // Insert a character in the second view.
     SfxLokHelper::setView(nView2);
@@ -1779,11 +1779,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedoRepairResult)
 {
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     // Insert a character in the second view.
     SfxLokHelper::setView(nView2);
@@ -1836,12 +1836,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDisableUndoRepair)
     SwTestViewCallback aView1;
     SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView1);
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     SwTestViewCallback aView2;
     SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView2);
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
 
     {
         SfxItemSet aItemSet1(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
@@ -1896,7 +1896,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAllTrackedChanges)
     SwWrtShell* pWrtShell1 = pView1->GetWrtShellPtr();
 
     // view #2
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     int nView2 = SfxLokHelper::createView();
     SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView2);
@@ -1964,10 +1964,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentRepair)
     SfxViewShell* pView1 = SfxViewShell::Current();
 
     // view #2
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     SfxLokHelper::createView();
     SfxViewShell* pView2 = SfxViewShell::Current();
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
         std::unique_ptr<SfxBoolItem> pItem1;
@@ -2461,10 +2461,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwTestViewCallback aView1;
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
 
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
     SwTestViewCallback aView2;
     Scheduler::ProcessEventsToIdle();
 
@@ -3787,10 +3787,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testToggleFormattingMarks)
 {
     SwXTextDocument* pXTextDocument = createDoc();
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
 
     SfxLokHelper::createView();
-    int nView2 = SfxLokHelper::getView();
+    int nView2 = SfxLokHelper::getCurrentView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     SfxLokHelper::setView(nView1);

@@ -288,7 +288,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
     const SvNumFormatType nCurNumFormatType = (pCurNumFormatEntry ?
             pCurNumFormatEntry->GetMaskedType() : SvNumFormatType::UNDEFINED);
 
-    const int nView(comphelper::LibreOfficeKit::isActive() ? SfxLokHelper::getView() : -1);
+    const int nView(comphelper::LibreOfficeKit::isActive() ? SfxLokHelper::getCurrentView() : -1);
     if (nView >= 0)
     {
         const auto [isTimezoneSet, aTimezone] = SfxLokHelper::getViewTimezone(nView);
