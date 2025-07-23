@@ -278,6 +278,41 @@ bool QtInstanceWidget::eventFilter(QObject* pObject, QEvent* pEvent)
 
     switch (pEvent->type())
     {
+        case QEvent::DragEnter:
+        {
+            if (!m_pDropTarget)
+                return false;
+
+            QDragEnterEvent* pDragEnterEvent = static_cast<QDragEnterEvent*>(pEvent);
+            m_pDropTarget->handleDragEnterEvent(*pDragEnterEvent);
+            return true;
+        }
+        case QEvent::DragLeave:
+        {
+            if (!m_pDropTarget)
+                return false;
+
+            m_pDropTarget->dragExit();
+            return true;
+        }
+        case QEvent::DragMove:
+        {
+            if (!m_pDropTarget)
+                return false;
+
+            QDragMoveEvent* pDragMoveEvent = static_cast<QDragMoveEvent*>(pEvent);
+            m_pDropTarget->handleDragMoveEvent(*pDragMoveEvent);
+            return true;
+        }
+        case QEvent::Drop:
+        {
+            if (!m_pDropTarget)
+                return false;
+
+            QDropEvent* pDropEvent = static_cast<QDropEvent*>(pEvent);
+            m_pDropTarget->handleDropEvent(*pDropEvent);
+            return true;
+        }
         case QEvent::KeyPress:
         {
             QKeyEvent* pKeyEvent = static_cast<QKeyEvent*>(pEvent);
@@ -697,8 +732,15 @@ VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> QtInstanceWidget::get_drop_target()
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([this] {
+        getQWidget()->setAcceptDrops(true);
+        if (!m_pDropTarget)
+            m_pDropTarget.set(new QtDropTarget);
+    });
+
+    return m_pDropTarget;
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>

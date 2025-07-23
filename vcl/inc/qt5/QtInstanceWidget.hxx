@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "QtDragAndDrop.hxx"
 #include "QtInstance.hxx"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
@@ -25,6 +26,7 @@ class QtInstanceWidget : public QObject, public virtual weld::Widget
 
     QWidget* m_pWidget;
 
+    rtl::Reference<QtDropTarget> m_pDropTarget;
     int m_nBusyCount = 0;
 
 public:

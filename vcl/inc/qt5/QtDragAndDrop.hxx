@@ -86,9 +86,9 @@ public:
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    void handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor);
-    void handleDragMoveEvent(QDragMoveEvent& rEvent, qreal fScaleFactor);
-    void handleDropEvent(QDropEvent& rEvent, qreal fScaleFactor);
+    void handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor = 1.0);
+    void handleDragMoveEvent(QDragMoveEvent& rEvent, qreal fScaleFactor = 1.0);
+    void handleDropEvent(QDropEvent& rEvent, qreal fScaleFactor = 1.0);
 
     sal_Int8 proposedDropAction() const { return m_nDropAction; }
     bool dropSuccessful() const { return m_bDropSuccessful; }
