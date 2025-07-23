@@ -2706,7 +2706,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
         tools::Long nX;
         if( pTab->nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
-            // avoid cutting the right edge off the tab separation
+            // avoid cutting the right edge of the tab separation
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos - SV_TAB_BORDER - 1) - nTabPos);
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos - nTabPos);
