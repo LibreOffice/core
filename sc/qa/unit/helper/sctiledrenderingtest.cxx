@@ -65,7 +65,7 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 void ScTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell)
 {
     pViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(pViewShell));
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pViewShell));
 }
 
 void ScTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)

@@ -2896,7 +2896,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)
     SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
-    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(pWrtShell->GetSfxViewShell()));
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(*pWrtShell->GetSfxViewShell()));
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     Point aStart = pShellCursor->GetSttPos();

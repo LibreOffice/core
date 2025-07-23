@@ -70,10 +70,10 @@ SdTiledRenderingTest::createDoc(const char* pName,
     return pImpressDocument;
 }
 
-void SdTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell& pViewShell)
+void SdTiledRenderingTest::setupLibreOfficeKitViewCallback(SfxViewShell& rViewShell)
 {
-    pViewShell.setLibreOfficeKitViewCallback(&m_callbackWrapper);
-    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(&pViewShell));
+    rViewShell.setLibreOfficeKitViewCallback(&m_callbackWrapper);
+    m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(rViewShell));
 }
 
 void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
