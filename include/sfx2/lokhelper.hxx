@@ -168,7 +168,7 @@ public:
     static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
                                 int nType, std::string_view rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), the property-tree version, but works on a selected "other" view, not on all of them.
-    static void notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
+    static void notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                 int nType, const boost::property_tree::ptree& rTree);
 
     /// Emits a LOK_CALLBACK_STATE_CHANGED
