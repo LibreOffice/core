@@ -122,8 +122,6 @@ private:
     Reference<rendering::XCanvas> mxCanvas;
     css::rendering::ViewState maViewState;
     Reference<rendering::XPolyPolygon2D> mxViewStateClip;
-    bool mbHasCallout;
-    awt::Point maCalloutAnchor;
 
     void PaintBitmap(
         const awt::Rectangle& rBox,
@@ -300,8 +298,7 @@ void PresenterPaneBorderPainter::ThrowIfDisposed() const
 
 PresenterPaneBorderPainter::Renderer::Renderer(std::shared_ptr<PresenterTheme> xTheme)
     : mpTheme(std::move(xTheme)),
-      maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr),
-      mbHasCallout(false)
+      maViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), nullptr)
 {
 }
 
@@ -350,29 +347,9 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
         pTopLeft->mnYOffset, pBottomLeft->mnYOffset, true, pLeft);
     PaintBitmap(aCenterBox, rUpdateBox, +1,0,
         pTopRight->mnYOffset, pBottomRight->mnYOffset, true, pRight);
-    if (mbHasCallout && pStyle->mpBottomCallout->GetNormalBitmap().is())
-    {
-        const sal_Int32 nCalloutWidth (pStyle->mpBottomCallout->mnWidth);
-        sal_Int32 nCalloutX (maCalloutAnchor.X - pStyle->mpBottomCallout->mnXHotSpot
-            - (aCenterBox.X - aOuterBox.X));
-        if (nCalloutX < pBottomLeft->mnXOffset + aCenterBox.X)
-            nCalloutX = pBottomLeft->mnXOffset + aCenterBox.X;
-        if (nCalloutX > pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width)
-            nCalloutX = pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width;
-        // Paint bottom callout.
-        PaintBitmap(aCenterBox, rUpdateBox, 0,+1, nCalloutX,0, false, pStyle->mpBottomCallout);
-        // Paint regular bottom bitmap left and right.
-        PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            pBottomLeft->mnXOffset, nCalloutX-aCenterBox.Width, true, pBottom);
-        PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            nCalloutX+nCalloutWidth, pBottomRight->mnXOffset, true, pBottom);
-    }
-    else
-    {
-        // Stretch the bottom bitmap over the full width.
-        PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
-            pBottomLeft->mnXOffset, pBottomRight->mnXOffset, true, pBottom);
-    }
+    // Stretch the bottom bitmap over the full width.
+    PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
+        pBottomLeft->mnXOffset, pBottomRight->mnXOffset, true, pBottom);
 
     // Paint the corners.
     PaintBitmap(aCenterBox, rUpdateBox, -1,-1, 0,0, false, pTopLeft);
