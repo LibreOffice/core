@@ -81,10 +81,10 @@ void QtInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangl
 
 OutputDevice& QtInstanceDrawingArea::get_ref_device() { return *m_xDevice; }
 
-a11yref QtInstanceDrawingArea::get_accessible_parent()
+rtl::Reference<comphelper::OAccessible> QtInstanceDrawingArea::get_accessible_parent()
 {
     // parent is handled via native QWidget hierarchy
-    return nullptr;
+    return {};
 }
 
 a11yrelationset QtInstanceDrawingArea::get_accessible_relation_set()

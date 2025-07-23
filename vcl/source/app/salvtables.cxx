@@ -6363,12 +6363,12 @@ void SalInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
         &aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
 }
 
-a11yref SalInstanceDrawingArea::get_accessible_parent()
+rtl::Reference<comphelper::OAccessible> SalInstanceDrawingArea::get_accessible_parent()
 {
     vcl::Window* pParent = m_xDrawingArea->GetParent();
     if (pParent)
         return pParent->GetAccessible();
-    return css::uno::Reference<css::accessibility::XAccessible>();
+    return {};
 }
 
 a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()

@@ -44,7 +44,7 @@ public:
 
     virtual OutputDevice& get_ref_device() override;
 
-    virtual a11yref get_accessible_parent() override;
+    virtual rtl::Reference<comphelper::OAccessible> get_accessible_parent() override;
     virtual a11yrelationset get_accessible_relation_set() override;
     virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() override;
 

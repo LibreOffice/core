@@ -52,7 +52,6 @@ namespace comphelper
 {
 class OAccessible;
 }
-typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 enum class PointerStyle;
 class CommandEvent;
@@ -2577,7 +2576,7 @@ public:
     // use return here just to generate matching VirtualDevices
     virtual OutputDevice& get_ref_device() = 0;
 
-    virtual a11yref get_accessible_parent() = 0;
+    virtual rtl::Reference<comphelper::OAccessible> get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
     virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() = 0;
 

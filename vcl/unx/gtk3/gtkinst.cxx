@@ -18995,14 +18995,14 @@ public:
 #endif
     }
 
-    virtual a11yref get_accessible_parent() override
+    virtual rtl::Reference<comphelper::OAccessible> get_accessible_parent() override
     {
         //get_accessible_parent should only be needed for the vcl implementation,
         //in the gtk impl the native AtkObject parent set via
         //atk_object_wrapper_new(m_xAccessible, gtk_widget_get_accessible(pParent));
         //should negate the need.
         assert(false && "get_accessible_parent should only be called on a vcl impl");
-        return uno::Reference<css::accessibility::XAccessible>();
+        return {};
     }
 
     virtual a11yrelationset get_accessible_relation_set() override
