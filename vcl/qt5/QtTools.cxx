@@ -318,7 +318,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent& rEvent, const sal_Int8 n
 
 css::datatransfer::dnd::DropTargetDragEnterEvent
 toVclDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, QtDropTarget* pDropTarget,
-                              bool bSetDataFlavors)
+                              bool bSetDataFlavors, qreal fScaleFactor)
 {
     // prepare our suggested drop action for the drop target
     const sal_Int8 nSourceActions = toVclDropActions(rEvent.possibleActions());
@@ -334,8 +334,8 @@ toVclDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, QtDropTarget* pDropT
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pDropTarget);
     aEvent.Context = pDropTarget;
-    aEvent.LocationX = aPos.x();
-    aEvent.LocationY = aPos.y();
+    aEvent.LocationX = aPos.x() * fScaleFactor;
+    aEvent.LocationY = aPos.y() * fScaleFactor;
     aEvent.DropAction = nUserDropAction;
     aEvent.SourceActions = nSourceActions;
 
@@ -345,8 +345,8 @@ toVclDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, QtDropTarget* pDropT
     return aEvent;
 }
 
-css::datatransfer::dnd::DropTargetDropEvent toVclDropTargetDropEvent(const QDropEvent& rEvent,
-                                                                     QtDropTarget* pDropTarget)
+css::datatransfer::dnd::DropTargetDropEvent
+toVclDropTargetDropEvent(const QDropEvent& rEvent, QtDropTarget* pDropTarget, qreal fScaleFactor)
 {
     // prepare our suggested drop action for the drop target
     const sal_Int8 nSourceActions = toVclDropActions(rEvent.possibleActions());
@@ -362,8 +362,8 @@ css::datatransfer::dnd::DropTargetDropEvent toVclDropTargetDropEvent(const QDrop
     css::datatransfer::dnd::DropTargetDropEvent aEvent;
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(pDropTarget);
     aEvent.Context = pDropTarget;
-    aEvent.LocationX = aPos.x();
-    aEvent.LocationY = aPos.y();
+    aEvent.LocationX = aPos.x() * fScaleFactor;
+    aEvent.LocationY = aPos.y() * fScaleFactor;
     aEvent.SourceActions = nSourceActions;
     aEvent.DropAction = nUserDropAction;
     aEvent.Transferable = lcl_getXTransferable(rEvent.mimeData());

@@ -1351,11 +1351,7 @@ void QtFrame::handleDragEnter(QDragEnterEvent* pEvent)
     assert(m_pDropTarget);
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
-        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, true);
-
-    const qreal fDevicePixelRatio = devicePixelRatioF();
-    aEvent.LocationX *= fDevicePixelRatio;
-    aEvent.LocationY *= fDevicePixelRatio;
+        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, true, devicePixelRatioF());
 
     m_pDropTarget->dragEnter(aEvent);
 
@@ -1371,11 +1367,7 @@ void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
     assert(m_pDropTarget);
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
-        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, false);
-
-    const qreal fDevicePixelRatio = devicePixelRatioF();
-    aEvent.LocationX *= fDevicePixelRatio;
-    aEvent.LocationY *= fDevicePixelRatio;
+        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, false, devicePixelRatioF());
 
     m_pDropTarget->dragOver(aEvent);
 
@@ -1395,11 +1387,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
     assert(m_pDropTarget);
 
     css::datatransfer::dnd::DropTargetDropEvent aEvent
-        = toVclDropTargetDropEvent(*pEvent, m_pDropTarget);
-
-    const qreal fDevicePixelRatio = devicePixelRatioF();
-    aEvent.LocationX *= fDevicePixelRatio;
-    aEvent.LocationY *= fDevicePixelRatio;
+        = toVclDropTargetDropEvent(*pEvent, m_pDropTarget, devicePixelRatioF());
 
     // ask the drop target to accept our drop action
     m_pDropTarget->drop(aEvent);

@@ -105,9 +105,9 @@ sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
 sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
 css::datatransfer::dnd::DropTargetDragEnterEvent
 toVclDropTargetDragEnterEvent(const QDragMoveEvent& rEvent, QtDropTarget* pDropTarget,
-                              bool bSetDataFlavors);
-css::datatransfer::dnd::DropTargetDropEvent toVclDropTargetDropEvent(const QDropEvent& rEvent,
-                                                                     QtDropTarget* pDropTarget);
+                              bool bSetDataFlavors, qreal fScaleFactor);
+css::datatransfer::dnd::DropTargetDropEvent
+toVclDropTargetDropEvent(const QDropEvent& rEvent, QtDropTarget* pDropTarget, qreal fScaleFactor);
 Qt::DropAction getPreferredDropAction(sal_Int8 dragOperation);
 
 inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
