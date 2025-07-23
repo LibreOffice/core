@@ -129,6 +129,9 @@ public:
         BasicManager is created before the application's BasicManager exists.
     */
     void                        OnApplicationBasicManagerCreated( BasicManager& _rManager );
+
+    void MoveFrameToFirstFrame(SfxViewFrame& rFrame);
+    void MoveShellToFirstShell(SfxViewShell& rShell);
 };
 
 class SfxDdeTriggerTopic_Impl final : public DdeTopic
