@@ -533,20 +533,19 @@ static OString lcl_generateJSON(const SfxViewShell& rView, const boost::property
     return OString(o3tl::trim(aStream.str()));
 }
 
-static inline OString lcl_generateJSON(const SfxViewShell* pView, int nViewId, std::string_view rKey,
+static inline OString lcl_generateJSON(const SfxViewShell& rView, int nViewId, std::string_view rKey,
                                        const OString& rPayload)
 {
-    assert(pView != nullptr && "pView must be valid");
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId)
-           + "\", \"part\": \"" + OString::number(pView->getPart()) + "\", \"mode\": \""
-           + OString::number(pView->getEditMode()) + "\", \"" + rKey + "\": \""
+           + "\", \"part\": \"" + OString::number(rView.getPart()) + "\", \"mode\": \""
+           + OString::number(rView.getEditMode()) + "\", \"" + rKey + "\": \""
            + lcl_sanitizeJSONAsValue(rPayload) + "\" }";
 }
 
-static inline OString lcl_generateJSON(const SfxViewShell* pView, std::string_view rKey,
+static inline OString lcl_generateJSON(const SfxViewShell& rView, std::string_view rKey,
                                        const OString& rPayload)
 {
-    return lcl_generateJSON(pView, SfxLokHelper::getView(pView), rKey, rPayload);
+    return lcl_generateJSON(rView, SfxLokHelper::getView(rView), rKey, rPayload);
 }
 
 void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
@@ -556,7 +555,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
     if (DisableCallbacks::disabled())
         return;
 
-    const OString aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
+    const OString aPayload = lcl_generateJSON(*pThisView, rKey, rPayload);
     const int viewId = SfxLokHelper::getView(pThisView);
     pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
 }
@@ -591,7 +590,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, st
             // Payload is only dependent on pThisView.
             if (aPayload.isEmpty())
             {
-                aPayload = lcl_generateJSON(pThisView, rKey, rPayload);
+                aPayload = lcl_generateJSON(*pThisView, rKey, rPayload);
                 viewId = SfxLokHelper::getView(*pThisView);
             }
 
@@ -635,7 +634,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
 
 OString SfxLokHelper::makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload)
 {
-    return lcl_generateJSON(pThisView, nViewId, rKey, rPayload);
+    return lcl_generateJSON(*pThisView, nViewId, rKey, rPayload);
 }
 
 namespace {
