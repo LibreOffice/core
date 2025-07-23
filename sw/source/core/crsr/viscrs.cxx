@@ -1010,7 +1010,7 @@ void SwShellCursor::Show(SfxViewShell const * pViewShell)
     {
         // Just notify pViewShell about our existing selection.
         if (pViewShell != GetShell()->GetSfxViewShell())
-            SfxLokHelper::notifyOtherView(GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+            SfxLokHelper::notifyOtherView(*GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
     else
     {

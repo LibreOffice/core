@@ -473,15 +473,14 @@ static inline OString lcl_generateJSON(const SfxViewShell& rView, std::string_vi
     return lcl_generateJSON(rView, SfxLokHelper::getView(rView), rKey, rPayload);
 }
 
-void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell const* pOtherView,
+void SfxLokHelper::notifyOtherView(const SfxViewShell& rThisView, SfxViewShell const* pOtherView,
                                    int nType, std::string_view rKey, const OString& rPayload)
 {
-    assert(pThisView != nullptr && "pThisView must be valid");
     if (DisableCallbacks::disabled())
         return;
 
-    const OString aPayload = lcl_generateJSON(*pThisView, rKey, rPayload);
-    const int viewId = SfxLokHelper::getView(pThisView);
+    const OString aPayload = lcl_generateJSON(rThisView, rKey, rPayload);
+    const int viewId = SfxLokHelper::getView(rThisView);
     pOtherView->libreOfficeKitViewCallbackWithViewId(nType, aPayload, viewId);
 }
 

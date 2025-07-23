@@ -353,7 +353,7 @@ void ScGridWindow::InvalidateLOKViewCursor(const tools::Rectangle& rCursorRect,
                 Fraction aZoomY = rOtherViewData.GetZoomY();
                 if (aZoomX == aScaleX && aZoomY == aScaleY)
                 {
-                    SfxLokHelper::notifyOtherView(pThisViewShell, pOtherViewShell,
+                    SfxLokHelper::notifyOtherView(*pThisViewShell, pOtherViewShell,
                             LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", rCursorRect.toString());
                 }
             }
