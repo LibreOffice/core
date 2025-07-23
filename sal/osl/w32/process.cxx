@@ -329,7 +329,9 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         }
         LocalFree(wargv);
         {
-            /* Ensure absolute path */
+            /* Ensure absolute path. Additionally, this may replace possible s*.exe (from original
+               command line, passed from launcher down to this process) with soffice.bin - that
+               fixes osl_getExecutableFile */
             osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
             DWORD dwResult
                 = GetModuleFileNameW(nullptr, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols());

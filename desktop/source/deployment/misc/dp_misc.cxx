@@ -342,18 +342,9 @@ bool office_is_running()
     {
         sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
         if (
-#if defined _WIN32
-            //osl_getExecutableFile should deliver "soffice.bin" on windows
-            //even if swriter.exe, scalc.exe etc. was started. This is a bug
-            //in osl_getExecutableFile
-            sFile == "soffice.bin" || sFile == "soffice.exe" || sFile == "soffice.com"
-            || sFile == "soffice" || sFile == "swriter.exe" || sFile == "swriter"
-            || sFile == "scalc.exe" || sFile == "scalc" || sFile == "simpress.exe"
-            || sFile == "simpress" || sFile == "sdraw.exe" || sFile == "sdraw"
-            || sFile == "sbase.exe" || sFile == "sbase"
-#elif defined MACOSX
+#if defined MACOSX
             sFile == "soffice"
-#elif defined UNIX
+#elif defined UNIX |  defined _WIN32
             sFile == "soffice.bin"
 #else
 #error "Unsupported platform"
