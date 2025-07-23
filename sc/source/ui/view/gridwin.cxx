@@ -6203,7 +6203,7 @@ void ScGridWindow::notifyKitCellViewCursor(const SfxViewShell* pForShell) const
             aCursor = pForTabView->GetViewData().describeCellCursorAt(
                 mrViewData.GetCurX(), mrViewData.GetCurY()); // our position.
     }
-    SfxLokHelper::notifyOtherView(pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
+    SfxLokHelper::notifyOtherView(*pViewShell, pForShell, LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
 }
 
 // Send our cursor details to a view described by @pForShell, or all views
@@ -6225,7 +6225,7 @@ void ScGridWindow::updateKitCellCursor(const SfxViewShell* pForShell) const
 
         if (pForShell)
         {
-            SfxLokHelper::notifyOtherView(pViewShell, pForShell,
+            SfxLokHelper::notifyOtherView(*pViewShell, pForShell,
                     LOK_CALLBACK_CELL_VIEW_CURSOR, "rectangle", aCursor);
         }
         else
@@ -6497,7 +6497,7 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         std::vector<tools::Rectangle> aPixelRects;
         pGrid->GetPixelRectsFor(mrViewData.GetMarkData() /* ours */, aPixelRects);
         auto aOtherLogicRects = convertPixelToLogical(pOther->GetViewData(), aPixelRects, aDummyBBox);
-        SfxLokHelper::notifyOtherView(pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+        SfxLokHelper::notifyOtherView(*pViewShell, pOther, LOK_CALLBACK_TEXT_VIEW_SELECTION,
                                       "selection", rectanglesToString(aOtherLogicRects));
     }
 }
@@ -6544,7 +6544,7 @@ void ScGridWindow::updateOtherKitSelections() const
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString);
         }
         else
-            SfxLokHelper::notifyOtherView(it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
+            SfxLokHelper::notifyOtherView(*it, pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION,
                                           "selection", aRectsString);
     }
 }

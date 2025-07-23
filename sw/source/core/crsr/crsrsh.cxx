@@ -1687,7 +1687,7 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
         if (OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView())
         {
             OString sRect = pOutlinerView->GetOutputArea().toString();
-            SfxLokHelper::notifyOtherView(GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
+            SfxLokHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
         }
     }
     else
@@ -1698,7 +1698,7 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
         if (GetSfxViewShell() != pOtherShell)
         {
             OString aPayload = OString::boolean(m_bSVCursorVis);
-            SfxLokHelper::notifyOtherView(GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+            SfxLokHelper::notifyOtherView(*GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
         }
         // Text selection.
         m_pCurrentCursor->Show(pOtherShell);

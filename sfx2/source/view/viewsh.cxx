@@ -3571,7 +3571,7 @@ void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const O
     if (!pOtherShell)
         return;
 
-    SfxLokHelper::notifyOtherView(this, pOtherShell, nType, rKey, rPayload);
+    SfxLokHelper::notifyOtherView(*this, pOtherShell, nType, rKey, rPayload);
 }
 
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
