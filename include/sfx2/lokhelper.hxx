@@ -109,7 +109,9 @@ public:
     static int getCurrentView();
     /// Get the number of views of the current DocId.
     static std::size_t getViewsCount(int nDocId);
-    /// Get viewIds of views of the current DocId.
+    /// Get the most recently active viewId of the DocId.
+    static int getViewId(int nDocId);
+    /// Get viewIds of views of the DocId.
     static bool getViewIds(int nDocId, int* pArray, size_t nSize);
     /// Set View Blocked for some uno commands
     static void setBlockedCommandList(int nViewId, const char* blockedCommandList);

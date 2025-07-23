@@ -260,6 +260,27 @@ std::size_t SfxLokHelper::getViewsCount(int nDocId)
     return n;
 }
 
+// SfxApplication::SetViewFrame_Impl ensures that ViewShells
+// are kept in MRU order
+int SfxLokHelper::getViewId(int nDocId)
+{
+    assert(nDocId != -1 && "Cannot getViewId for invalid DocId -1");
+
+    SfxApplication* pApp = SfxApplication::Get();
+    if (!pApp)
+        return -1;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if (pViewShell->GetDocId().get() == nDocId)
+            return pViewShell->GetViewShellId().get();
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+
+    return -1;
+}
+
 bool SfxLokHelper::getViewIds(int nDocId, int* pArray, size_t nSize)
 {
     assert(nDocId != -1 && "Cannot getViewsIds for invalid DocId -1");
