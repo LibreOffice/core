@@ -7041,14 +7041,15 @@ static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, 
     SfxLokHelper::setView(nId);
 }
 
-static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
+static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
 {
     comphelper::ProfileZone aZone("doc_getView");
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    return SfxLokHelper::getCurrentView();
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return SfxLokHelper::getViewId(pDocument->mnDocumentId);
 }
 
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)
