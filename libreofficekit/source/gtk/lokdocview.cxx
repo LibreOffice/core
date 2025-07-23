@@ -2804,7 +2804,7 @@ static void lok_doc_view_destroy (GtkWidget* widget)
             // Last view(s) gone
             priv->m_pDocument->pClass->destroy (priv->m_pDocument);
             priv->m_pDocument = nullptr;
-            if (priv->m_pOffice)
+            if (priv->m_pOffice && priv->m_pOffice->pClass->getDocsCount(priv->m_pOffice) == 0)
             {
                 priv->m_pOffice->pClass->destroy (priv->m_pOffice);
                 priv->m_pOffice = nullptr;

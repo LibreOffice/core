@@ -162,6 +162,9 @@ struct _LibreOfficeKitClass
     /// @see lok::Office::registerAnyInputCallback()
     void (*registerAnyInputCallback)(LibreOfficeKit* pThis,
                                      LibreOfficeKitAnyInputCallback pCallback, void* pData);
+
+    /// @see lok::Office::getDocsCount().
+    int (*getDocsCount) (LibreOfficeKit* pThis);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)

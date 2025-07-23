@@ -109,6 +109,8 @@ public:
     static int getCurrentView();
     /// Get the number of views of the current DocId.
     static std::size_t getViewsCount(int nDocId);
+    /// Get the number of docs
+    static std::size_t getDocsCount();
     /// Get the most recently active viewId of the DocId.
     static int getViewId(int nDocId);
     /// Get viewIds of views of the DocId.

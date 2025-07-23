@@ -2752,6 +2752,8 @@ static void lo_dumpState(LibreOfficeKit* pThis, const char* pOptions, char** pSt
 static char* lo_extractDocumentStructureRequest(LibreOfficeKit* pThis, const char* pFilePath,
                                                 const char* pFilter);
 
+static int lo_getDocsCount(LibreOfficeKit* pThis);
+
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
     , maThread(nullptr)
@@ -2788,6 +2790,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setForkedChild = lo_setForkedChild;
         m_pOfficeClass->extractDocumentStructureRequest = lo_extractDocumentStructureRequest;
         m_pOfficeClass->registerAnyInputCallback = lo_registerAnyInputCallback;
+        m_pOfficeClass->getDocsCount = lo_getDocsCount;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -7841,6 +7844,13 @@ static void lo_registerAnyInputCallback(LibreOfficeKit* /*pThis*/,
     comphelper::LibreOfficeKit::setAnyInputCallback(pAnyInputCallback, pData, []() -> int {
         return Scheduler::GetMostUrgentTaskPriority();
     });
+}
+
+static int lo_getDocsCount(LibreOfficeKit* /*pThis*/)
+{
+    SolarMutexGuard aGuard;
+    return SfxLokHelper::getDocsCount();
+
 }
 
 static bool bInitialized = false;
