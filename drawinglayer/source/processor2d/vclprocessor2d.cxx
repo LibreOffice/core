@@ -1626,7 +1626,7 @@ VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformati
     // number display for arabic/hindi numerals
     rOutDev.SetDigitLanguage(drawinglayer::detail::getDigitLanguage());
 
-    // NOTE: to save/restore oringinal AntiAliasing mode we need
+    // NOTE: to save/restore original AntiAliasing mode we need
     // to use mnOriginalAA here - OutputDevice::Push/Pop does not
     // offer that
 }
