@@ -89,7 +89,14 @@ void SvTokenStream::FillTokenList()
         {
             if (!aTokList.empty())
             {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 12 && __GNUC__ <= 15
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
                 *pToken = SvToken();
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 12 && __GNUC__ <= 15
+#pragma GCC diagnostic pop
+#endif
                 std::vector<std::unique_ptr<SvToken> >::const_iterator it = aTokList.begin();
 
                 pToken->SetLine((*it)->GetLine());
@@ -98,7 +105,16 @@ void SvTokenStream::FillTokenList()
             break;
         }
         else if( pToken->IsComment() )
+        {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 12 && __GNUC__ <= 15
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
             *pToken = SvToken();
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 12 && __GNUC__ <= 15
+#pragma GCC diagnostic pop
+#endif
+        }
         else if( pToken->IsEof() )
             break;
         else
