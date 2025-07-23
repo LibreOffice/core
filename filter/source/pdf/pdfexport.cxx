@@ -68,6 +68,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <memory>
+#include <optional>
 
 #include <rtl/bootstrap.hxx>
 #include <config_features.h>
@@ -406,6 +407,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             bool bUseTaggedPDF = false;
             sal_Int32 nPDFTypeSelection = 0;
             bool bPDFUACompliance = false;
+            std::optional<bool> bExportTrackedChanges;
             bool bExportNotes = true;
             bool bExportNotesInMargin = false;
             bool bExportNotesPages = false;
@@ -561,6 +563,12 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= nPDFTypeSelection;
                 else if ( rProp.Name == "PDFUACompliance" )
                     rProp.Value >>= bPDFUACompliance;
+                else if (rProp.Name == "ExportTrackedChanges")
+                {
+                    bool bExportTrackedChangesProp = false;
+                    if (rProp.Value >>= bExportTrackedChangesProp)
+                        bExportTrackedChanges = bExportTrackedChangesProp;
+                }
                 else if ( rProp.Name == "ExportNotes" )
                     rProp.Value >>= bExportNotes;
                 else if ( rProp.Name == "ExportNotesInMargin" )
@@ -1094,6 +1102,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 bool bReHideWhitespace = false;
                 static constexpr OUString sHideWhitespace(u"HideWhitespace"_ustr);
                 uno::Reference< beans::XPropertySet > xViewProperties;
+                uno::Reference<beans::XPropertySet> xPropSet;
+                // property only exists and handled in SwXTextView for the purpose of
+                // exporting showing tracked changes to PDF from command line
+                static constexpr OUString sShowChangesPDF(u"PDFExport_ShowChanges"_ustr);
+                bool bToggleChangesPDF = false;
 
                 if ( aCreator == "Writer" )
                 {
@@ -1113,6 +1126,20 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         if (bReHideWhitespace)
                         {
                             xViewProperties->setPropertyValue(sHideWhitespace, uno::Any(false));
+                        }
+
+                        if (bExportTrackedChanges.has_value())
+                        {
+                            xPropSet = uno::Reference<XPropertySet>(xModel->getCurrentController(),
+                                                                    uno::UNO_QUERY_THROW);
+                            bool bShowChangesPDF = false;
+                            xPropSet->getPropertyValue(sShowChangesPDF) >>= bShowChangesPDF;
+                            if (bShowChangesPDF != bExportTrackedChanges)
+                            {
+                                xPropSet->setPropertyValue(sShowChangesPDF,
+                                                           Any(bExportTrackedChanges.value()));
+                                bToggleChangesPDF = true;
+                            }
                         }
                     }
                     catch( const uno::Exception& )
@@ -1189,6 +1216,16 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         xViewProperties->setPropertyValue( sHideWhitespace, uno::Any( true ) );
                     }
                     catch( const uno::Exception& )
+                    {
+                    }
+                }
+                if (bToggleChangesPDF)
+                {
+                    try
+                    {
+                        xPropSet->setPropertyValue(sShowChangesPDF, Any(!bExportTrackedChanges.value()));
+                    }
+                    catch (const uno::Exception&)
                     {
                     }
                 }
