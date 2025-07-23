@@ -29,7 +29,7 @@ static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard
 
 rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {
-    int nViewId = SfxLokHelper::getView(); // currently active.
+    int nViewId = SfxLokHelper::getCurrentView(); // currently active.
 
     osl::MutexGuard aGuard(gMutex);
 

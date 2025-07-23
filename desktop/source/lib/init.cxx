@@ -4679,7 +4679,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    const int nView = SfxLokHelper::getView();
+    const int nView = SfxLokHelper::getCurrentView();
     if (nView < 0)
         return;
 
@@ -5424,7 +5424,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         aPropertyValuesVector.push_back(aSynchronMode);
     }
 
-    int nView = SfxLokHelper::getView();
+    int nView = SfxLokHelper::getCurrentView();
     if (nView < 0)
         return;
 
@@ -7053,7 +7053,7 @@ static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    return SfxLokHelper::getView();
+    return SfxLokHelper::getCurrentView();
 }
 
 static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* pThis)

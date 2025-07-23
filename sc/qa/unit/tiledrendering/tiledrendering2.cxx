@@ -27,7 +27,7 @@ using namespace com::sun::star;
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
 {
     ScModelObj* pModelObj = createDoc("chart.ods");
-    int nView1 = SfxLokHelper::getView();
+    int nView1 = SfxLokHelper::getCurrentView();
     ScTestViewCallback aView1;
     SfxViewShell* pView1 = SfxViewShell::Current();
     pView1->SetLOKLocale(u"en-US"_ustr);

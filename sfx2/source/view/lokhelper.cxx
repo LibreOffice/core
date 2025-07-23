@@ -1144,7 +1144,7 @@ void SfxLokHelper::registerViewCallbacks()
         SfxLokHelper::setView(nView);
     });
     comphelper::LibreOfficeKit::setViewGetter([]() -> int {
-        return SfxLokHelper::getView();
+        return SfxLokHelper::getCurrentView();
     });
 }
 
@@ -1166,7 +1166,7 @@ namespace
         if (pLOKEv->mpWindow->isDisposed())
             return;
 
-        int nView = SfxLokHelper::getView(nullptr);
+        int nView = SfxLokHelper::getCurrentView();
         if (nView != pLOKEv->mnView)
         {
             SAL_INFO("sfx.view", "LOK - view mismatch " << nView << " vs. " << pLOKEv->mnView);
@@ -1256,7 +1256,7 @@ namespace
             return;
         }
 
-        pEvent->mnView = SfxLokHelper::getView(nullptr);
+        pEvent->mnView = SfxLokHelper::getCurrentView();
         if (vcl::lok::isUnipoll())
         {
             if (!Application::IsMainThread())
