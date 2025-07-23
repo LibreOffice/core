@@ -182,16 +182,6 @@ public:
 
     virtual void invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
 
-    virtual bool blendBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rBitmap ) override;
-
-    virtual bool blendAlphaBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rSrcBitmap,
-                const SalBitmap& rMaskBitmap,
-                const SalBitmap& rAlphaBitmap ) override;
-
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap

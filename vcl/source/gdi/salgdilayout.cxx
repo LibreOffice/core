@@ -822,36 +822,6 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         return forWidget()->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
 }
 
-bool SalGraphics::BlendBitmap( const SalTwoRect& rPosAry,
-                               const SalBitmap& rBitmap,
-                               const OutputDevice& rOutDev )
-{
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
-    {
-        SalTwoRect aPosAry2 = rPosAry;
-        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        return blendBitmap( aPosAry2, rBitmap );
-    }
-    else
-        return blendBitmap( rPosAry, rBitmap );
-}
-
-bool SalGraphics::BlendAlphaBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSrcBitmap,
-                                    const SalBitmap& rMaskBitmap,
-                                    const SalBitmap& rAlphaBitmap,
-                                    const OutputDevice& rOutDev )
-{
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
-    {
-        SalTwoRect aPosAry2 = rPosAry;
-        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        return blendAlphaBitmap( aPosAry2, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
-    }
-    else
-        return blendAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
-}
-
 bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
                                    const SalBitmap& rSourceBitmap,
                                    const SalBitmap& rAlphaBitmap,

@@ -102,11 +102,6 @@ public:
 
     void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override;
 
-    bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
-
-    bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,
-                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override;
-
     bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap,
                          const SalBitmap& rAlphaBitmap) override;
 

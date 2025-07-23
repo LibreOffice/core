@@ -570,18 +570,6 @@ void QtGraphicsBackend::invert(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,
 {
 }
 
-bool QtGraphicsBackend::blendBitmap(const SalTwoRect&, const SalBitmap& /*rBitmap*/)
-{
-    return false;
-}
-
-bool QtGraphicsBackend::blendAlphaBitmap(const SalTwoRect&, const SalBitmap& /*rSrcBitmap*/,
-                                         const SalBitmap& /*rMaskBitmap*/,
-                                         const SalBitmap& /*rAlphaBitmap*/)
-{
-    return false;
-}
-
 static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap)
 {
     assert(rSourceBitmap.GetSize() == rAlphaBitmap.GetSize());

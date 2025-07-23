@@ -39,10 +39,6 @@ bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, const BitmapBuffe
 bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline,
     ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize);
 
-bool ImplFastBitmapBlending( BitmapWriteAccess const & rDst,
-    const BitmapReadAccess& rSrc, const BitmapReadAccess& rMask,
-    const SalTwoRect& rTwoRect );
-
 bool ImplFastEraseBitmap( BitmapBuffer&, const BitmapColor& );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

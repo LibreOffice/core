@@ -181,16 +181,6 @@ public:
                 void* /*pPtr*/,
                 sal_uInt32 /*nSize*/ ) { return false; }
 
-    virtual bool blendBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rBitmap ) = 0;
-
-    virtual bool blendAlphaBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rSrcBitmap,
-                const SalBitmap& rMaskBitmap,
-                const SalBitmap& rAlphaBitmap ) = 0;
-
     virtual bool drawAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap,

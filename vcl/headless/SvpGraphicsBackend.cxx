@@ -212,19 +212,6 @@ void SvpGraphicsBackend::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInve
     m_rCairoCommon.invert(nPoints, pPtAry, nFlags, getAntiAlias());
 }
 
-bool SvpGraphicsBackend::blendBitmap(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rBitmap*/)
-{
-    return false;
-}
-
-bool SvpGraphicsBackend::blendAlphaBitmap(const SalTwoRect& /*rPosAry*/,
-                                          const SalBitmap& /*rSrcBitmap*/,
-                                          const SalBitmap& /*rMaskBitmap*/,
-                                          const SalBitmap& /*rAlphaBitmap*/)
-{
-    return false;
-}
-
 bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap,
                                          const SalBitmap& rAlphaBitmap)
 {

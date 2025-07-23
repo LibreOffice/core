@@ -349,18 +349,6 @@ public:
      */
     inline bool UpdateSettings(AllSettings&);
 
-    SAL_DLLPRIVATE bool                        BlendBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const OutputDevice& rOutDev );
-
-    SAL_DLLPRIVATE bool                        BlendAlphaBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalSrcBitmap,
-                                    const SalBitmap& rSalMaskBitmap,
-                                    const SalBitmap& rSalAlphaBitmap,
-                                    const OutputDevice& rOutDev );
-
     SAL_DLLPRIVATE bool                        DrawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
@@ -516,18 +504,6 @@ protected:
                                     tools::Long /*nWidth*/, tools::Long /*nHeight*/,
                                     void* /*pPtr*/,
                                     sal_uInt32 /*nSize*/ ) { return false; }
-
-    /** Blend the bitmap with the current buffer */
-    virtual bool                blendBitmap(
-                                    const SalTwoRect&,
-                                    const SalBitmap& rBitmap ) = 0;
-
-    /** Draw the bitmap by blending using the mask and alpha channel */
-    virtual bool                blendAlphaBitmap(
-                                    const SalTwoRect&,
-                                    const SalBitmap& rSrcBitmap,
-                                    const SalBitmap& rMaskBitmap,
-                                    const SalBitmap& rAlphaBitmap ) = 0;
 
     /** Render bitmap with alpha channel
 
@@ -821,17 +797,6 @@ public:
     Color getPixel(tools::Long nX, tools::Long nY) override
     {
         return GetImpl()->getPixel(nX, nY);
-    }
-
-    bool blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap) override
-    {
-        return GetImpl()->blendBitmap(rPosAry, rBitmap);
-    }
-
-    bool blendAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override
-    {
-        return GetImpl()->blendAlphaBitmap(rPosAry, rSourceBitmap, rMaskBitmap, rAlphaBitmap);
     }
 
     bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,

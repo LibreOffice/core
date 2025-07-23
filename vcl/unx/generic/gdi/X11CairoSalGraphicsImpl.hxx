@@ -166,13 +166,6 @@ public:
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
                                const SalBitmap* pAlphaBitmap, double fAlpha) override;
 
-    /** Blend bitmap with color channels */
-    bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
-
-    /** Render bitmap by blending using the mask and alpha channel */
-    bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,
-                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override;
-
     bool supportsOperation(OutDevSupportType eType) const override;
 };
 

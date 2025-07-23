@@ -60,22 +60,6 @@ bool WinSalGraphics::drawPolyLine(
         bPixelSnapHairline);
 }
 
-bool WinSalGraphics::blendBitmap(
-    const SalTwoRect& rTR,
-    const SalBitmap& rBmp)
-{
-    return mpImpl->blendBitmap(rTR, rBmp);
-}
-
-bool WinSalGraphics::blendAlphaBitmap(
-    const SalTwoRect& rTR,
-    const SalBitmap& rSrcBmp,
-    const SalBitmap& rMaskBmp,
-    const SalBitmap& rAlphaBmp)
-{
-    return mpImpl->blendAlphaBitmap(rTR, rSrcBmp, rMaskBmp, rAlphaBmp);
-}
-
 bool WinSalGraphics::drawAlphaBitmap(
     const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap,

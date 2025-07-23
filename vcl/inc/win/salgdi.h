@@ -120,14 +120,6 @@ public:
     void setHWND(HWND hWnd);
     void Flush();
 
-    virtual bool        blendBitmap( const SalTwoRect&,
-                                     const SalBitmap& rBitmap ) override;
-
-    virtual bool        blendAlphaBitmap( const SalTwoRect&,
-                                          const SalBitmap& rSrcBitmap,
-                                          const SalBitmap& rMaskBitmap,
-                                          const SalBitmap& rAlphaBitmap ) override;
-
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap,
                                          const SalBitmap& rAlphaBitmap ) override;

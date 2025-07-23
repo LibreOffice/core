@@ -1209,19 +1209,6 @@ bool AquaGraphicsBackend::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools:
 }
 #endif
 
-bool AquaGraphicsBackend::blendBitmap(const SalTwoRect& /*rPosAry*/, const SalBitmap& /*rBitmap*/)
-{
-    return false;
-}
-
-bool AquaGraphicsBackend::blendAlphaBitmap(const SalTwoRect& /*rPosAry*/,
-                                           const SalBitmap& /*rSrcBitmap*/,
-                                           const SalBitmap& /*rMaskBitmap*/,
-                                           const SalBitmap& /*rAlphaBitmap*/)
-{
-    return false;
-}
-
 bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap,
                                           const SalBitmap& rAlphaBmp)
 {

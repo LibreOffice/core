@@ -208,14 +208,6 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32
     return false;
 }
 
-bool X11CairoSalGraphicsImpl::blendBitmap(const SalTwoRect&, const SalBitmap&) { return false; }
-
-bool X11CairoSalGraphicsImpl::blendAlphaBitmap(const SalTwoRect&, const SalBitmap&,
-                                               const SalBitmap&, const SalBitmap&)
-{
-    return false;
-}
-
 bool X11CairoSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                     const basegfx::B2DPoint& rX,
                                                     const basegfx::B2DPoint& rY,

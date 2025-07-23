@@ -337,20 +337,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     return bRet;
 }
 
-// #i32109#: Fill opaque areas correctly (without relying on
-// fill/linecolor state)
-void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
-{
-    // Set line and fill color to opaque,
-    // fill rect with that (linecolor, too, because of
-    // those pesky missing pixel problems)
-    Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-    SetLineColor( COL_ALPHA_OPAQUE );
-    SetFillColor( COL_ALPHA_OPAQUE );
-    DrawRect( rRect );
-    Pop();
-}
-
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
 {
     return InnerImplSetOutputSizePixel(rNewSize, bErase, bAlphaMaskTransparent);

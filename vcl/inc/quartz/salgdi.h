@@ -343,11 +343,6 @@ public:
     bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                  void* pPtr, sal_uInt32 nSize) override;
 
-    bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
-
-    bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,
-                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override;
-
     bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap,
                          const SalBitmap& rAlphaBitmap) override;
 

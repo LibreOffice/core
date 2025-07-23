@@ -60,12 +60,6 @@ private:
     VirtualDevice (const VirtualDevice &) = delete;
     VirtualDevice & operator= (const VirtualDevice &) = delete;
 
-    /** Used for alpha VDev, to set areas to opaque
-
-        @since \#i32109#
-     */
-    SAL_DLLPRIVATE void ImplFillOpaqueRectangle( const tools::Rectangle& rRect );
-
 protected:
     virtual bool AcquireGraphics() const override;
     virtual void ReleaseGraphics( bool bRelease = true ) override;
