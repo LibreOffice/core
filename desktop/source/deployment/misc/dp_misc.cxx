@@ -44,17 +44,13 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
+#include <atomic>
 #include <memory>
 #include <string_view>
 #include <thread>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
-
-#ifdef _WIN32
-#include <prewin.h>
-#include <postwin.h>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -189,11 +185,10 @@ bool needToSyncRepository(std::u16string_view name)
         folder, file);
 }
 
+// True when IPC thread is running in this process. Set in PipeIpcThread::execute. Used to avoid
+// attempts to open the pipe from office_is_running, which could deadlock.
+std::atomic<bool> s_bOfficeIpcThreadRunning = false;
 
-} // anon namespace
-
-
-namespace {
 OUString encodeForRcFile( std::u16string_view str )
 {
     // escape $\{} (=> rtl bootstrap files)
@@ -214,7 +209,7 @@ OUString encodeForRcFile( std::u16string_view str )
     }
     return buf.makeStringAndClear();
 }
-}
+} // anon namespace
 
 
 OUString makeURL( std::u16string_view baseURL, OUString const & relPath_ )
@@ -335,33 +330,13 @@ bool office_is_running()
 #if defined EMSCRIPTEN
     return true;
 #else
-    //We need to check if we run within the office process. Then we must not use the pipe, because
-    //this could cause a deadlock. This is actually a workaround for i82778
-    OUString sFile;
-    oslProcessError err = osl_getExecutableFile(& sFile.pData);
-    if (osl_Process_E_None == err)
-    {
-        if (
-#if defined MACOSX
-            sFile.endsWith("/soffice")
-#elif defined UNIX |  defined _WIN32
-            sFile.endsWith("/soffice.bin")
-#else
-#error "Unsupported platform"
-#endif
-
-            )
-            return true;
-    }
-    else
-    {
-        OSL_FAIL("NOT osl_Process_E_None ");
-        //if osl_getExecutableFile failed then we take the risk of creating a pipe
-    }
-    return existsOfficePipe();
+    // i#82778: We need to check if we run within the office process. Then we must not use the pipe,
+    // because this could cause a deadlock (if called from IPC thread).
+    return s_bOfficeIpcThreadRunning || existsOfficePipe();
 #endif
 }
 
+void setOfficeIpcThreadRunning(bool bRunning) { s_bOfficeIpcThreadRunning = bRunning; }
 
 oslProcess raiseProcess(
     OUString const & appURL, Sequence<OUString> const & args )

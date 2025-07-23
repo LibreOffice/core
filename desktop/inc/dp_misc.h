@@ -79,6 +79,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateOfficePipeId();
 
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC void setOfficeIpcThreadRunning(bool bRunning);
+
 class AbortChannel;
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
@@ -87,7 +89,7 @@ css::uno::Reference< css::uno::XInterface> resolveUnoURL(
     css::uno::Reference< css::uno::XComponentContext> const & xLocalContext,
     AbortChannel const * abortChannel = nullptr );
 
-
+// Check if office is running on this system (not necessarily in this process!)
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
 

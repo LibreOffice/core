@@ -45,6 +45,7 @@
 #include <rtl/process.h>
 #include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <cassert>
 #include <cstdlib>
@@ -1087,6 +1088,8 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
 void PipeIpcThread::execute()
 {
     assert(m_handler != nullptr);
+    dp_misc::setOfficeIpcThreadRunning(true);
+    comphelper::ScopeGuard resetThreadRunning([]() { dp_misc::setOfficeIpcThreadRunning(false); });
     do
     {
         osl::StreamPipe aStreamPipe;
