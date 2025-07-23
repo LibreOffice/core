@@ -572,8 +572,6 @@ static void WriteDop( WW8Export& rWrt )
     rDop.fDontUseHTMLAutoSpacing = rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX);
 
     rDop.fExpShRtn = !rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
-    rDop.fDntBlnSbDbWid = !rWrt.m_rDoc.getIDocumentSettingAccess().get(
-        DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES); // tdf#88908
     rDop.fDontAdjustLineHeightInTable = !rWrt.m_rDoc.getIDocumentSettingAccess().get(
         DocumentSettingId::ADJUST_TABLE_LINE_HEIGHTS_TO_GRID_HEIGHT);
 

@@ -693,6 +693,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80596Hanging)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
 {
+    // tdf#167552: There is some as-yet unknown mechanism Word uses to control whether or
+    // not the fDntBlnSbDbWid compat flag should be effective. Until this mechanism is
+    // understood, handling the flag as-written in DOC files is destructive to layout in
+    // many documents. Ignore it for now and default to unbalanced spaces.
+
     createSwDoc();
 
     {
@@ -716,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf88908)
     {
         SwDoc* pDoc = getSwDoc();
         IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
-        CPPUNIT_ASSERT(rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
+        CPPUNIT_ASSERT(!rIDSA.get(DocumentSettingId::BALANCE_SPACES_AND_IDEOGRAPHIC_SPACES));
     }
 }
 
