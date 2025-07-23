@@ -13,6 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libassuan,$(LIBASSUAN_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libassuan,0))
 
+# 0001-const-up-std_cmd_table.patch.1
+# upstream attempt made by git-email to gnupg-devel@gnupg.org
+
 $(eval $(call gb_UnpackedTarball_add_patches,libassuan, \
     external/libassuan/find-libgpg-error.patch \
     external/libassuan/fix-autoconf-macros.patch \
@@ -20,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libassuan, \
     external/libassuan/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/libassuan/rpath.patch) \
     external/libassuan/w32-stdc.patch \
+    external/libassuan/0001-const-up-std_cmd_table.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:

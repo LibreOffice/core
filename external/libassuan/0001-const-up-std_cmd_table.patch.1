@@ -1,0 +1,25 @@
+From afe702126204f7f017d907435b9ae48975cbf243 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Wed, 23 Jul 2025 21:19:30 +0100
+Subject: [PATCH libassuan] const up std_cmd_table
+
+---
+ src/assuan-handler.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/assuan-handler.c b/src/assuan-handler.c
+index a04ab4e..5f155d4 100644
+--- a/src/assuan-handler.c
++++ b/src/assuan-handler.c
+@@ -394,7 +394,7 @@ w32_handler_sendfd (assuan_context_t ctx, char *line)
+ /* This is a table with the standard commands and handler for them.
+    The table is used to initialize a new context and associate strings
+    with default handlers */
+-static struct {
++static const struct {
+   const char *name;
+   gpg_error_t (*handler)(assuan_context_t, char *line);
+   const char *help;
+-- 
+2.49.0
+
