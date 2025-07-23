@@ -105,9 +105,8 @@ public:
     static SfxViewShell* getViewOfId(int nId);
     /// Get view id of view shell
     static int getView(const SfxViewShell& rViewShell);
-    /// Get the currently active view.
+    /// Get the currently active view shell id
     static int getCurrentView();
-    static int getView(const SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current DocId.
     static std::size_t getViewsCount(int nDocId);
     /// Get viewIds of views of the current DocId.

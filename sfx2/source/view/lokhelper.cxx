@@ -259,13 +259,6 @@ int SfxLokHelper::getCurrentView()
     return SfxLokHelper::getView(*pViewShell);
 }
 
-int SfxLokHelper::getView(const SfxViewShell* pViewShell)
-{
-    if (pViewShell)
-        return SfxLokHelper::getView(*pViewShell);
-    return SfxLokHelper::getCurrentView();
-}
-
 std::size_t SfxLokHelper::getViewsCount(int nDocId)
 {
     assert(nDocId != -1 && "Cannot getViewsCount for invalid DocId -1");
@@ -1112,7 +1105,9 @@ void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxVi
     if (DisableCallbacks::disabled())
         return;
 
-    int viewId = SfxLokHelper::getView(pViewShell);
+    // This getCurrentView() is dubious
+    SAL_WARN_IF(!pViewShell, "lok", "no explicit viewshell set");
+    int viewId = pViewShell ? SfxLokHelper::getView(*pViewShell) : SfxLokHelper::getCurrentView();
     int sourceViewId = SfxLokHelper::getView(rSourceShell);
     rTargetShell.libreOfficeKitViewUpdatedCallbackPerViewId(nType, viewId, sourceViewId);
 }
