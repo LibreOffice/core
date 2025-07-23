@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -22,6 +23,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -54,6 +56,9 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <fmtanchr.hxx>
+#include <fmtfsize.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 #include <svx/svxids.hrc>
@@ -123,6 +128,106 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
     aContentAtPos = IsAttrAtPos::InetAttr;
     pWrtShell->GetContentAtPos(aLogicR, aContentAtPos);
     CPPUNIT_ASSERT_EQUAL(IsAttrAtPos::NONE, aContentAtPos.eContentAtPos);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionShape)
+{
+    createSwDoc("section-shape.fodt");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    CPPUNIT_ASSERT(xSections->getByName(u"Section1"_ustr)
+                       .queryThrow<css::beans::XPropertySet>()
+                       ->getPropertyValue(u"IsVisible"_ustr)
+                       .get<bool>());
+    CPPUNIT_ASSERT(!xSections->getByName(u"Section2"_ustr)
+                        .queryThrow<css::beans::XPropertySet>()
+                        ->getPropertyValue(u"IsVisible"_ustr)
+                        .get<bool>());
+
+    // shape is anchored in hidden section
+    auto xShape = getShape(1).queryThrow<text::XTextContent>();
+    CPPUNIT_ASSERT_EQUAL(u"Section2"_ustr, getProperty<uno::Reference<container::XNamed>>(
+                                               xShape->getAnchor(), u"TextSection"_ustr)
+                                               ->getName());
+
+    // prevent the warning dialog which is automatically cancelled
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(false, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard _([&] {
+        officecfg::Office::Writer::Content::Display::ShowWarningHiddenSection::set(true, pBatch);
+        pBatch->commit();
+    });
+
+    // backspace should delete the hidden section
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+    pWrtShell->DelLeft();
+
+    CPPUNIT_ASSERT_THROW(xSections->getByName(u"Section2"_ustr), container::NoSuchElementException);
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    // this would assert/crash because the shape was anchored to SwEndNode
+    save(mpFilter);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSetStringDeletesShape)
+{
+    createSwDoc();
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+
+    IDocumentUndoRedo& rUndoManager = pDoc->GetIDocumentUndoRedo();
+
+    sw::UnoCursorPointer pCursor(
+        pDoc->CreateUnoCursor(SwPosition(pDoc->GetNodes().GetEndOfContent(), SwNodeOffset(-1))));
+
+    pDoc->getIDocumentContentOperations().InsertString(*pCursor, u"foo"_ustr);
+    pDoc->getIDocumentContentOperations().SplitNode(*pCursor->GetPoint(), false);
+    pDoc->getIDocumentContentOperations().SplitNode(*pCursor->GetPoint(), false);
+    pDoc->getIDocumentContentOperations().InsertString(*pCursor, u"end"_ustr);
+
+    {
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>);
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+        pWrtShell->StartOfSection(false);
+        pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+
+    auto xCursor = mxComponent.queryThrow<text::XTextDocument>()->getText()->createTextCursor();
+    xCursor->gotoStart(false);
+    xCursor->goRight(3, false);
+    xCursor->gotoEnd(true);
+    xCursor->setString("bar"); // replace multi-paragraph selection
+
+    // the problem was that the fly on the middle node was not deleted
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+
+    rUndoManager.Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159377)
