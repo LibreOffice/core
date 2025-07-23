@@ -201,10 +201,10 @@ public:
     // Notify about the given type needing an update.
     static void notifyUpdate(SfxViewShell const* pViewShell, int nType);
     // Notify about the given type needing a per-viewid update.
-    static void notifyUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
+    static void notifyUpdatePerViewId(SfxViewShell const& rViewShell, int nType);
     /// Same as notifyUpdatePerViewId(), pTargetShell will be notified, relevant viewId in pViewShell,
     /// pSourceView->getLOKPayload() will be called to get the data.
-    static void notifyUpdatePerViewId(SfxViewShell const* pTargetShell, SfxViewShell const* pViewShell,
+    static void notifyUpdatePerViewId(SfxViewShell const& rTargetShell, SfxViewShell const* pViewShell,
         SfxViewShell const* pSourceShell, int nType);
     // Notify other views about the given type needing a per-viewid update.
     static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, int nType);
