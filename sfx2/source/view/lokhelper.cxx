@@ -447,13 +447,12 @@ static OString lcl_sanitizeJSONAsValue(const OString &rStr)
     return aBuf.makeStringAndClear();
 }
 
-static OString lcl_generateJSON(const SfxViewShell* pView, const boost::property_tree::ptree& rTree)
+static OString lcl_generateJSON(const SfxViewShell& rView, const boost::property_tree::ptree& rTree)
 {
-    assert(pView != nullptr && "pView must be valid");
     boost::property_tree::ptree aMessageProps = rTree;
-    aMessageProps.put("viewId", SfxLokHelper::getView(pView));
-    aMessageProps.put("part", pView->getPart());
-    aMessageProps.put("mode", pView->getEditMode());
+    aMessageProps.put("viewId", SfxLokHelper::getView(rView));
+    aMessageProps.put("part", rView.getPart());
+    aMessageProps.put("mode", rView.getEditMode());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aMessageProps, false /* pretty */);
     return OString(o3tl::trim(aStream.str()));
@@ -495,7 +494,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
         return;
 
     const int viewId = SfxLokHelper::getView(pThisView);
-    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(pThisView, rTree), viewId);
+    pOtherView->libreOfficeKitViewCallbackWithViewId(nType, lcl_generateJSON(*pThisView, rTree), viewId);
 }
 
 void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType, std::string_view rKey,
@@ -549,7 +548,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
             // Payload is only dependent on pThisView.
             if (aPayload.isEmpty())
             {
-                aPayload = lcl_generateJSON(pThisView, rTree);
+                aPayload = lcl_generateJSON(*pThisView, rTree);
                 viewId = SfxLokHelper::getView(*pThisView);
             }
 
