@@ -542,17 +542,17 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     }
 
     OSL_ASSERT(m_sDownloadFolder.getLength());
-    OUString destFolder, tempEntry;
+    OUString tempEntry;
     if (::osl::File::createTempFile(
         &m_sDownloadFolder,
         nullptr, &tempEntry ) != ::osl::File::E_None)
     {
         //ToDo feedback in window that download of this component failed
-        throw css::uno::Exception("Could not create temporary file in folder " + destFolder + ".", nullptr);
+        throw css::uno::Exception("Could not create temporary file in folder " + m_sDownloadFolder + ".", nullptr);
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
-    destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry ) + "_";
+    OUString destFolder = dp_misc::makeURL(m_sDownloadFolder, tempEntry) + "_";
 
     ::ucbhelper::Content destFolderContent;
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv );
