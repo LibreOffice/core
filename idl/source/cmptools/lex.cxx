@@ -57,19 +57,6 @@ OString SvToken::GetTokenAsString() const
     return aStr;
 }
 
-SvToken & SvToken::operator = ( const SvToken & rObj )
-{
-    if( this != &rObj )
-    {
-        nLine = rObj.nLine;
-        nColumn = rObj.nColumn;
-        nType = rObj.nType;
-        aString = rObj.aString;
-        nLong = rObj.nLong;
-    }
-    return *this;
-}
-
 void SvTokenStream::InitCtor()
 {
     aStrTrue = "TRUE"_ostr;

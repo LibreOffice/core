@@ -49,7 +49,7 @@ public:
             SvToken();
             SvToken( const SvToken & rObj ) = delete;
 
-    SvToken & operator = ( const SvToken & rObj );
+    SvToken & operator = ( const SvToken & rObj ) = default;
 
     OString     GetTokenAsString() const;
 
