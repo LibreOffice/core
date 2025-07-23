@@ -201,13 +201,7 @@ void QtWidget::wheelEvent(QWheelEvent* pEvent)
     pEvent->accept();
 }
 
-void QtWidget::dragEnterEvent(QDragEnterEvent* event)
-{
-    if (qobject_cast<const QtMimeData*>(event->mimeData()))
-        event->accept();
-    else
-        event->acceptProposedAction();
-}
+void QtWidget::dragEnterEvent(QDragEnterEvent* pEvent) { m_rFrame.handleDragEnter(pEvent); }
 
 // also called when a drop is rejected
 void QtWidget::dragLeaveEvent(QDragLeaveEvent*) { m_rFrame.handleDragLeave(); }

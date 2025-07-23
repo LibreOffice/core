@@ -77,7 +77,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
-    , m_bInDrag(false)
     , m_bDefaultSize(true)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
@@ -1346,26 +1345,39 @@ void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
     GetQtInstance().RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
 }
 
+void QtFrame::handleDragEnter(QDragEnterEvent* pEvent)
+{
+    assert(pEvent);
+    assert(m_pDropTarget);
+
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
+        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, true);
+
+    const qreal fDevicePixelRatio = devicePixelRatioF();
+    aEvent.LocationX *= fDevicePixelRatio;
+    aEvent.LocationY *= fDevicePixelRatio;
+
+    m_pDropTarget->dragEnter(aEvent);
+
+    if (qobject_cast<const QtMimeData*>(pEvent->mimeData()))
+        pEvent->accept();
+    else
+        pEvent->acceptProposedAction();
+}
+
 void QtFrame::handleDragMove(QDragMoveEvent* pEvent)
 {
     assert(pEvent);
     assert(m_pDropTarget);
 
     css::datatransfer::dnd::DropTargetDragEnterEvent aEvent
-        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, !m_bInDrag);
+        = toVclDropTargetDragEnterEvent(*pEvent, m_pDropTarget, false);
 
     const qreal fDevicePixelRatio = devicePixelRatioF();
     aEvent.LocationX *= fDevicePixelRatio;
     aEvent.LocationY *= fDevicePixelRatio;
 
-    // ask the drop target to accept our drop action
-    if (!m_bInDrag)
-    {
-        m_pDropTarget->dragEnter(aEvent);
-        m_bInDrag = true;
-    }
-    else
-        m_pDropTarget->dragOver(aEvent);
+    m_pDropTarget->dragOver(aEvent);
 
     // the drop target accepted our drop action => inform Qt
     if (m_pDropTarget->proposedDropAction() != 0)
@@ -1391,7 +1403,6 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
 
     // ask the drop target to accept our drop action
     m_pDropTarget->drop(aEvent);
-    m_bInDrag = false;
 
     const bool bDropSuccessful = m_pDropTarget->dropSuccessful();
     const sal_Int8 nDropAction = m_pDropTarget->proposedDropAction();
@@ -1415,11 +1426,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
         pEvent->ignore();
 }
 
-void QtFrame::handleDragLeave()
-{
-    m_pDropTarget->dragExit();
-    m_bInDrag = false;
-}
+void QtFrame::handleDragLeave() { m_pDropTarget->dragExit(); }
 
 void QtFrame::handleMoveEvent(QMoveEvent*) { CallCallback(SalEvent::Move, nullptr); }
 

@@ -95,7 +95,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     QPointer<QtDragSource> m_pDragSource;
     QPointer<QtDropTarget> m_pDropTarget;
-    bool m_bInDrag;
 
     bool m_bDefaultSize;
     bool m_bDefaultPos;
@@ -165,6 +164,7 @@ public:
     void registerDragSource(QtDragSource* pDragSource);
     void registerDropTarget(QtDropTarget* pDropTarget);
 
+    void handleDragEnter(QDragEnterEvent* pEvent);
     void handleDragLeave();
     void handleDragMove(QDragMoveEvent* pEvent);
     void handleDrop(QDropEvent* pEvent);
