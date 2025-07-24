@@ -1042,14 +1042,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167660)
     save(mpFilter);
 
     // Test that the character is exported as a negative integer
-
-    SvFileStream stream(maTempFile.GetFileName(), StreamMode::READ);
-    auto size = stream.remainingSize();
-    std::vector<char> buffer(size);
-    CPPUNIT_ASSERT_EQUAL(size_t(size), stream.ReadBytes(buffer.data(), buffer.size()));
-    std::string_view buffer_view(buffer.data(), buffer.size());
-    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, buffer_view.find("\\u64258"));
-    CPPUNIT_ASSERT(buffer_view.find("\\u-1278") != std::string_view::npos);
+    OString rtf = read_uInt8s_ToOString(*maTempFile.GetStream(StreamMode::READ), SAL_MAX_INT32);
+    CPPUNIT_ASSERT(rtf.indexOf("\\u64258") < 0);
+    CPPUNIT_ASSERT(rtf.indexOf("\\u-1278") >= 0);
 }
 
 } // end of anonymous namespace
