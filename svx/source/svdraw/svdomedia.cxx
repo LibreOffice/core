@@ -35,7 +35,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

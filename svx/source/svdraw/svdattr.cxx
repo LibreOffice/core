@@ -144,7 +144,7 @@
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
 #include <svx/xcolit.hxx>
-#include <svx/RectangleAlignmentItem.hxx>
+#include <RectangleAlignmentItem.hxx>
 #include <sxoneitm.hxx>
 #include <sxopitm.hxx>
 #include <sxreaitm.hxx>

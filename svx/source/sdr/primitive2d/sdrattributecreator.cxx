@@ -53,7 +53,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xtextit0.hxx>
-#include <svx/RectangleAlignmentItem.hxx>
+#include <RectangleAlignmentItem.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <svx/svdotext.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>

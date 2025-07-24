@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/RectangleAlignmentItem.hxx>
+#include <RectangleAlignmentItem.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 
 SvxRectangleAlignmentItem::SvxRectangleAlignmentItem(sal_uInt16 nWhich,

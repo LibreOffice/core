@@ -23,7 +23,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/whiter.hxx>
-#include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svdmrkv.hxx>
 
 namespace svx::MediaShellHelpers

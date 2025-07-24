@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SVX_DEF3D_HXX
-#define INCLUDED_SVX_DEF3D_HXX
+#pragma once
 
 #include <o3tl/typed_flags_set.hxx>
 
@@ -37,7 +35,5 @@ template <> struct typed_flags<E3dDragConstraint> : is_typed_flags<E3dDragConstr
 {
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

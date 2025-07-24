@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
-#include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>

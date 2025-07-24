@@ -18,7 +18,7 @@
  */
 
 
-#include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svdomedia.hxx>
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
