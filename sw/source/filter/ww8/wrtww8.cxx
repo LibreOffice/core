@@ -3463,7 +3463,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     // fix the SwPositions in m_aFrames after SetRedlineFlags
     UpdateFramePositions(m_aFrames);
 
-    m_aFontHelper.InitFontTable(m_rDoc);
+    m_aFontHelper.InitFontTable(*this);
     GatherChapterFields();
 
     CollectOutlineBookmarks(m_rDoc);

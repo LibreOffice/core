@@ -117,7 +117,7 @@ void MSWordExportBase::AddListLevelOverride(sal_uInt16 nListId,
     m_ListLevelOverrides[nListId][nLevelNum] = nStartAt;
 }
 
-sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
+void MSWordExportBase::EnsureUsedNumberingTable()
 {
     if ( !m_pUsedNumTable )
     {
@@ -146,6 +146,11 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
             m_pUsedNumTable->push_back( pR );
         }
     }
+}
+
+sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
+{
+    EnsureUsedNumberingTable();
     SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
     sal_uInt16 nRet = o3tl::narrowing<sal_uInt16>(m_pUsedNumTable->GetPos(p));
 
@@ -413,6 +418,35 @@ void MSWordExportBase::AbstractNumberingDefinitions()
     }
 }
 
+std::pair<OUString, std::unique_ptr<wwFont>>
+MSWordExportBase::GetNumberingLevelBulletStringAndFont(const SwNumFormat& rLevelFormat)
+{
+    assert(rLevelFormat.GetNumberingType() == SVX_NUM_CHAR_SPECIAL
+           || rLevelFormat.GetNumberingType() == SVX_NUM_BITMAP);
+
+    sal_UCS4 cBullet = rLevelFormat.GetBulletChar();
+    OUString sNumStr(&cBullet, 1);
+
+    std::optional<vcl::Font> pBulletFont = rLevelFormat.GetBulletFont();
+    if (!pBulletFont)
+    {
+        pBulletFont = numfunc::GetDefBulletFont();
+    }
+
+    rtl_TextEncoding eChrSet = pBulletFont->GetCharSet();
+    OUString sFontName = pBulletFont->GetFamilyName();
+    FontFamily eFamily = pBulletFont->GetFamilyType();
+
+    if (IsOpenSymbol(sFontName))
+        SubstituteBullet(sNumStr, eChrSet, sFontName);
+
+    if (sFontName.isEmpty())
+        sFontName = pBulletFont->GetFamilyName();
+
+    return { sNumStr, std::make_unique<wwFont>(sFontName, pBulletFont->GetPitch(),
+                                               eFamily, eChrSet) };
+}
+
 void MSWordExportBase::NumberingLevel(
         SwNumRule const& rRule, sal_uInt8 const nLvl)
 {
@@ -462,17 +496,25 @@ void MSWordExportBase::NumberingLevel(
 
     // Build the NumString for this Level
     OUString sNumStr;
-    OUString sFontName;
-    bool bWriteBullet = false;
-    std::optional<vcl::Font> pBulletFont;
-    rtl_TextEncoding eChrSet=0;
-    FontFamily eFamily=FAMILY_DECORATIVE;
+
+    // Attributes of the numbering
+    std::unique_ptr<wwFont> pPseudoFont;
+    const SfxItemSet* pOutSet = nullptr;
+
+    // cbGrpprlChpx
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet( m_rDoc.GetAttrPool() );
+
     if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
         SVX_NUM_BITMAP == rFormat.GetNumberingType())
     {
         // Use bullet
-        sal_UCS4 cBullet = rFormat.GetBulletChar();
-        sNumStr = OUString(&cBullet, 1);
+        std::tie(sNumStr, pPseudoFont) = GetNumberingLevelBulletStringAndFont(rFormat);
+
+        pOutSet = &aSet;
+        if (rFormat.GetCharFormat())
+            aSet.Put( rFormat.GetCharFormat()->GetAttrSet() );
+        aSet.ClearItem( RES_CHRATR_CJK_FONT );
+        aSet.ClearItem( RES_CHRATR_FONT );
     }
     else
     {
@@ -551,51 +593,8 @@ void MSWordExportBase::NumberingLevel(
             assert(false && "deprecated format still exists and is unhandled. Inform Vasily or Justin");
     }
 
-    if (SVX_NUM_CHAR_SPECIAL == rFormat.GetNumberingType() ||
-        SVX_NUM_BITMAP == rFormat.GetNumberingType())
-    {
-        bWriteBullet = true;
-
-        pBulletFont = rFormat.GetBulletFont();
-        if (!pBulletFont)
-        {
-            pBulletFont = numfunc::GetDefBulletFont();
-        }
-
-        eChrSet = pBulletFont->GetCharSet();
-        sFontName = pBulletFont->GetFamilyName();
-        eFamily = pBulletFont->GetFamilyType();
-
-        if (IsOpenSymbol(sFontName))
-            SubstituteBullet(sNumStr, eChrSet, sFontName);
-    }
-
-    // Attributes of the numbering
-    std::unique_ptr<wwFont> pPseudoFont;
-    const SfxItemSet* pOutSet = nullptr;
-
-    // cbGrpprlChpx
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet( m_rDoc.GetAttrPool() );
-    if (rFormat.GetCharFormat() || bWriteBullet)
-    {
-        if (bWriteBullet)
-        {
-            pOutSet = &aSet;
-
-            if (rFormat.GetCharFormat())
-                aSet.Put( rFormat.GetCharFormat()->GetAttrSet() );
-            aSet.ClearItem( RES_CHRATR_CJK_FONT );
-            aSet.ClearItem( RES_CHRATR_FONT );
-
-            if (sFontName.isEmpty())
-                sFontName = pBulletFont->GetFamilyName();
-
-            pPseudoFont.reset(new wwFont( sFontName, pBulletFont->GetPitch(),
-                eFamily, eChrSet));
-        }
-        else
-            pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
-    }
+    if (!pOutSet && rFormat.GetCharFormat())
+        pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
 
     sal_Int16 nIndentAt = 0;
     sal_Int16 nFirstLineIndex = 0;

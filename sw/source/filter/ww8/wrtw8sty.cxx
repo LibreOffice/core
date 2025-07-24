@@ -919,7 +919,7 @@ sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
     return nRet;
 }
 
-void wwFontHelper::InitFontTable(const SwDoc& rDoc)
+void wwFontHelper::InitFontTable(MSWordExportBase& rExport)
 {
     GetId(wwFont(u"Times New Roman", PITCH_VARIABLE,
         FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252));
@@ -930,18 +930,10 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
     GetId(wwFont(u"Arial", PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252));
 
-    const SvxFontItem* pFont = GetDfltAttr(RES_CHRATR_FONT);
+    GetId(*GetDfltAttr(RES_CHRATR_FONT));
 
-    GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-        pFont->GetFamily(), pFont->GetCharSet()));
-
-    const SfxItemPool& rPool = rDoc.GetAttrPool();
-    pFont = rPool.GetUserDefaultItem(RES_CHRATR_FONT);
-    if (nullptr != pFont)
-    {
-        GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-            pFont->GetFamily(), pFont->GetCharSet()));
-    }
+    if (const SvxFontItem* pFont = rExport.m_rDoc.GetAttrPool().GetUserDefaultItem(RES_CHRATR_FONT))
+        GetId(*pFont);
 
     if (!m_bLoadAllFonts)
         return;
@@ -949,13 +941,34 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
     const TypedWhichId<SvxFontItem> aTypes[] { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT };
     for (const TypedWhichId<SvxFontItem> & pId : aTypes)
     {
-        const_cast<SwDoc&>(rDoc).ForEachCharacterFontItem(pId, /*bIgnoreAutoStyles*/false,
+        rExport.m_rDoc.ForEachCharacterFontItem(pId, /*bIgnoreAutoStyles*/false,
             [this] (const SvxFontItem& rFontItem) -> bool
             {
-                GetId(wwFont(rFontItem.GetFamilyName(), rFontItem.GetPitch(),
-                             rFontItem.GetFamily(), rFontItem.GetCharSet()));
+                GetId(rFontItem);
                 return true;
             });
+    }
+
+    // Bullets in lists may need own fonts; and may even want to substitute fonts (see
+    // MSWordExportBase::SubstituteBullet). We need to collect these here, too.
+    rExport.EnsureUsedNumberingTable();
+    for (const SwNumRule* pRule : *rExport.m_pUsedNumTable)
+    {
+        assert(pRule);
+        int n = pRule->IsContinusNum() ? WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel;
+        for (int nLvl = 0; nLvl < n; ++nLvl)
+        {
+            const SwNumFormat& rFormat = pRule->Get(nLvl);
+
+            if (rFormat.GetNumberingType() == SVX_NUM_CHAR_SPECIAL
+                || rFormat.GetNumberingType() == SVX_NUM_BITMAP)
+            {
+                const auto [s, pFont] = rExport.GetNumberingLevelBulletStringAndFont(rFormat);
+                (void)s;
+                assert(pFont);
+                GetId(*pFont);
+            }
+        }
     }
 }
 
