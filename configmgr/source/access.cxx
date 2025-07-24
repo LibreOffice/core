@@ -129,7 +129,14 @@ oslInterlockedCount Access::acquireCounting() {
 }
 
 void Access::releaseNondeleting() {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 15
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
     osl_atomic_decrement(&m_refCount);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 15
+#pragma GCC diagnostic pop
+#endif
 }
 
 bool Access::isValue() {
