@@ -6915,11 +6915,8 @@ void ScInterpreter::ScLookup()
                     PushIllegalParameter();
                     return;
                 }
-                if (eResArrayType == svMatrix) // inline-array
-                {
-                    nResCol2 = nC - 1;
-                    nResRow2 = nR - 1;
-                }
+                nResCol2 = nC - 1;
+                nResRow2 = nR - 1;
             }
             break;
             case svDouble:
@@ -6974,11 +6971,8 @@ void ScInterpreter::ScLookup()
             pDataMat->GetDimensions(nC, nR);
             bVertical = (nR >= nC);
             nLenMajor = bVertical ? nR : nC;
-            if (eDataArrayType == svMatrix) // inline array
-            {
-                nCol2 = nC - 1;
-                nRow2 = nR - 1;
-            }
+            nCol2 = nC - 1;
+            nRow2 = nR - 1;
         }
         break;
         case svDouble:
