@@ -3047,11 +3047,10 @@ void VclDrawingArea::StartDrag(sal_Int8, const Point&)
     if (m_aStartDragHdl.Call(this))
         return;
 
-    rtl::Reference<TransferDataContainer> xContainer = m_xTransferHelper;
     if (!m_xTransferHelper.is())
         return;
 
-    xContainer->StartDrag(this, m_nDragAction);
+    m_xTransferHelper->StartDrag(this, m_nDragAction);
 }
 
 OUString VclDrawingArea::GetSurroundingText() const
