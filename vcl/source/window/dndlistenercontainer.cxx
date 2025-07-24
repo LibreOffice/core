@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dndlistenercontainer.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

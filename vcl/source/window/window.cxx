@@ -24,6 +24,7 @@
 
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
@@ -58,7 +59,6 @@
 #include <toolbox.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
-#include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>

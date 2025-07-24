@@ -19,6 +19,7 @@
 
 #include <tools/time.hxx>
 #include <sal/log.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/layout.hxx>
@@ -33,7 +34,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
-#include <dndlistenercontainer.hxx>
 
 #include "impldockingwrapper.hxx"
 

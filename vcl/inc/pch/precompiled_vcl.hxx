@@ -283,7 +283,6 @@
 #include <ImplOutDevData.hxx>
 #include <accel.hxx>
 #include <brdwin.hxx>
-#include <dndlistenercontainer.hxx>
 #include <drawmode.hxx>
 #include <fontattributes.hxx>
 #include <impfontcache.hxx>
@@ -327,6 +326,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageReader.hxx>

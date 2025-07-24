@@ -26,6 +26,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/cursor.hxx>
@@ -41,7 +42,6 @@
 #include <salframe.hxx>
 #include <salinst.hxx>
 
-#include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>

@@ -18,10 +18,10 @@
  */
 
 #include <dndeventdispatcher.hxx>
-#include <dndlistenercontainer.hxx>
 #include <sal/log.hxx>
 
 #include <osl/mutex.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

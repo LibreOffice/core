@@ -29,6 +29,7 @@
 #include <dndeventdispatcher.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/QueueInfo.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/GestureEventPan.hxx>
@@ -56,7 +57,6 @@
 #include <window.h>
 #include <helpwin.hxx>
 #include <brdwin.hxx>
-#include <dndlistenercontainer.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
