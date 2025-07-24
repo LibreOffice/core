@@ -11,7 +11,7 @@
 
 #include <comphelper/string.hxx>
 #include <sfx2/doctempl.hxx>
-#include <sfx2/inputdlg.hxx>
+#include <inputdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <templatecontaineritem.hxx>
 #include <templateviewitem.hxx>

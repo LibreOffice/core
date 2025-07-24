@@ -10,10 +10,9 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 #define INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX
 
-#include <sfx2/dllapi.h>
 #include <vcl/weld.hxx>
 
-class SFX2_DLLPUBLIC InputDialog final : public weld::GenericDialogController
+class InputDialog final : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::Entry> m_xEntry;
@@ -21,7 +20,7 @@ private:
     std::unique_ptr<weld::Button> m_xHelp;
     std::unique_ptr<weld::Button> m_xOk;
     std::function<bool(OUString)> mCheckEntry;
-    DECL_DLLPRIVATE_LINK(EntryChangedHdl, weld::Entry&, void);
+    DECL_LINK(EntryChangedHdl, weld::Entry&, void);
 
 public:
     InputDialog(weld::Widget* pParent, const OUString& rLabelText);

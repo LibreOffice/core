@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/inputdlg.hxx>
+#include <inputdlg.hxx>
 
 InputDialog::InputDialog(weld::Widget* pParent, const OUString& rLabelText)
     : GenericDialogController(pParent, u"sfx/ui/inputdialog.ui"_ustr, u"InputDialog"_ustr)
