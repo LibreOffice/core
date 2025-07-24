@@ -691,6 +691,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
         }
 
         case SID_EDIT_HYPERLINK:
+        case SID_INSERT_HYPERLINK:
         case SID_HYPERLINK_DIALOG:
         {
             GetView().GetViewFrame().SetChildWindow(SID_HYPERLINK_DIALOG, true);
@@ -930,6 +931,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 break;
 
             case SID_OPEN_HYPERLINK:
+            case SID_INSERT_HYPERLINK:
             case SID_EDIT_HYPERLINK:
             case SID_HYPERLINK_DIALOG:
             case SID_REMOVE_HYPERLINK:
@@ -971,6 +973,10 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 {
                     if (pObj->getHyperlink().isEmpty())
                         rSet.DisableItem(nWhich);
+                }
+                if (nWhich == SID_INSERT_HYPERLINK && !pObj->getHyperlink().isEmpty())
+                {
+                    rSet.DisableItem(nWhich);
                 }
             }
             break;
