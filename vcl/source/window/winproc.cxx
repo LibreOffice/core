@@ -64,6 +64,33 @@
 
 #define IMPL_MIN_NEEDSYSWIN         49
 
+namespace
+{
+
+class GenericDropTargetDropContext
+    : public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
+{
+public:
+    GenericDropTargetDropContext() {}
+
+    // XDropTargetDropContext
+    virtual void SAL_CALL acceptDrop(sal_Int8 /*dragOperation*/) override {}
+    virtual void SAL_CALL rejectDrop() override {}
+    virtual void SAL_CALL dropComplete(sal_Bool /*success*/) override {}
+};
+
+class GenericDropTargetDragContext
+    : public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
+{
+public:
+    GenericDropTargetDragContext() {}
+
+    // XDropTargetDragContext
+    virtual void SAL_CALL acceptDrag(sal_Int8 /*dragOperation*/) override {}
+    virtual void SAL_CALL rejectDrag() override {}
+};
+}
+
 bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
     return rEvt.GetWindow()->CompatPreNotify( rEvt );
