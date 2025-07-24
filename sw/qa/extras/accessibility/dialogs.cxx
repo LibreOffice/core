@@ -102,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestHyperlinkDialog)
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
 
         // Focus the URL box (should be default, but make sure we're on it)
-        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::COMBO_BOX, u"URL:"));
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::COMBO_BOX, u"Link:"));
         // Fill in an address
         dialog.postExtTextEventAsync(u"https://libreoffice.org/"_ustr);
         // Validate the whole dialog
