@@ -45,7 +45,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharacterIteratorMode
-            A constant from CharacterIteratorMode
+            A constant from CharacterIteratorMode.
 
         @param nCount
             Number of characters to traverse, it should not be less than 0.
@@ -76,7 +76,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharacterIteratorMode
-            A constant from CharacterIteratorMode
+            A constant from CharacterIteratorMode.
 
         @param nCount
             Number of characters to traverse, it should not be less than 0.
@@ -125,9 +125,10 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The start index in aText.
 
         @param aLocale
+            @parblock
             The locale of the character preceding <em>nStartPos</em>.
 
-            <p> If the previous character is a space character and
+            If the previous character is a space character and
             <em>nWordType</em> indicates spaces should be skipped, and
             if the first non-space character is an Asian character,
             then, since Asian word break needs language specific
@@ -138,12 +139,13 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             call this method again with a correct <em>aLocale</em>
             referring to the Asian character, which is then the previous
             character of the space character where <em>nStartPos</em>
-            points to. </p>
+            points to.
 
-            <p> <b>Note</b> that the OpenOffice.org 1.0 / StarOffice 6.0
+            <b>Note</b> that the OpenOffice.org 1.0 / StarOffice 6.0
             / StarSuite 6.0 i18n framework doesn't behave like this and
             mixed Western/CJK text may lead to wrong word iteration.
-            This is fixed in later versions. </p>
+            This is fixed in later versions.
+            @endparblock
 
         @param nWordType
             One of WordType, specifies the type of
@@ -290,7 +292,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
         @returns
             The LineBreakResults contain the break
             position of the line, BreakType and
-            com::sun::star::linguistic2::XHyphenatedWord
+            com::sun::star::linguistic2::XHyphenatedWord.
      */
     LineBreakResults getLineBreak( [in] string aText, [in] long nStartPos,
                     [in] ::com::sun::star::lang::Locale aLocale,
@@ -396,10 +398,10 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
-            One of CharType
+            One of CharType.
 
         @returns
-            The position where the character type starts
+            The position where the character type starts.
      */
     long beginOfCharBlock( [in] string aText, [in] long nStartPos,
                        [in] ::com::sun::star::lang::Locale aLocale,
@@ -418,7 +420,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
-            One of CharType
+            One of CharType.
 
         @returns
             The position where the character type ends.
@@ -440,7 +442,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
-            One of CharType
+            One of CharType.
 
         @returns
             The position where the next character type starts.
@@ -462,7 +464,7 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             The locale of the character preceding <em>nStartPos</em>.
 
         @param nCharType
-            One of CharType
+            One of CharType.
 
         @returns
             The position where the previous character type starts.
