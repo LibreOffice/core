@@ -10,6 +10,8 @@
 
 // core, please keep it alphabetically ordered
 #include <comphelper/configuration.hxx>
+#include <formula/errorcodes.hxx>
+#include <formulacell.hxx>
 #include "helper/qahelper.hxx"
 #include <test/unoapi_test.hxx>
 #include <unotools/saveopt.hxx>
@@ -178,6 +180,28 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf151505)
     CPPUNIT_ASSERT(nFlag & ScMF::Auto);
     nFlag = pDoc->GetAttr(1, 0, 0, ATTR_MERGE_FLAG)->GetValue();
     CPPUNIT_ASSERT(nFlag & ScMF::Auto);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf167134_LOOKUP_extRef)
+{
+    // testing the correct handling of external references in LOOKUP parameters
+    // The file lookup_target.fods uses external links to file lookup_source.fods
+    // The test requires that both are located in directory sc/qa/unit/data/fods;
+    createScDoc("fods/lookup_target.fods");
+
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->ReloadAllLinks();
+    pDocSh->DoHardRecalc();
+
+    // compare the data loaded from external links (column 0)
+    // with the expected result stored in the test file (column 1)
+    for (SCROW nRow = 3; nRow <= 26; nRow++)
+    {
+        OUString aResult = pDoc->GetString(ScAddress(0, nRow, 0));
+        OUString aExpected = pDoc->GetString(ScAddress(1, nRow, 0));
+        CPPUNIT_ASSERT_EQUAL(aExpected, aResult);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
