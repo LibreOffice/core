@@ -251,7 +251,7 @@ namespace svx
             return;
 
         ScopedVclPtr<VirtualDevice> pVirDev(CreateVirtualDevice());
-        pVirDev->SetOutputSizePixel(aItemSize, /*bErase*/true, /*bAlphaMaskTransparent*/false);
+        pVirDev->SetOutputSizePixel(aItemSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
         maBmpSize = aItemSize;
 
         std::unique_ptr<GDIMetaFile> xMetaFile;
