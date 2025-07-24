@@ -21,7 +21,16 @@ SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
     return SheetViewID(nID);
 }
 
-SheetView SheetViewManager::get(SheetViewID nID)
+bool SheetViewManager::remove(SheetViewID nID)
+{
+    if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
+    {
+        maViews.erase(maViews.begin() + nID);
+    }
+    return false;
+}
+
+SheetView SheetViewManager::get(SheetViewID nID) const
 {
     if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
     {

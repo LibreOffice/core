@@ -2401,6 +2401,8 @@ public:
 
     /** Return the sheet view table for the ID */
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
+
+    bool HasSheetViews(SCTAB nTab) const;
     std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
     bool IsSheetView(SCTAB nTab) const;
     void SetSheetView(SCTAB nTab, bool bSheetView);
