@@ -682,7 +682,15 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr, const OUString& aUIName)
     std::erase_if(rArr, [](std::unique_ptr<StyleTree_Impl> const& pEntry) { return !pEntry; });
 
     // tdf#91106 sort top level styles
-    std::sort(rArr.begin(), rArr.end());
+    // Paradoxically, with a list and non-Latin style names,
+    // sorting twice is faster than sorting once.
+    // The first sort has a cheap comparator, and gets the list into mostly-sorted order.
+    // Then the second sort needs to call its (much more expensive) comparator less often.
+    std::sort(rArr.begin(), rArr.end(),
+              [](std::unique_ptr<StyleTree_Impl> const& pEntry1,
+                 std::unique_ptr<StyleTree_Impl> const& pEntry2) {
+                  return pEntry1->getName() < pEntry2->getName();
+              });
     std::sort(rArr.begin(), rArr.end(),
               [&aSorter, &aUIName](std::unique_ptr<StyleTree_Impl> const& pEntry1,
                                    std::unique_ptr<StyleTree_Impl> const& pEntry2) {
