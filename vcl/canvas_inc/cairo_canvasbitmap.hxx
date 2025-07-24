@@ -72,7 +72,7 @@ namespace vcl_cairocanvas
         */
         CanvasBitmap( const ::basegfx::B2ISize& rSize,
                       SurfaceProviderSharedPtr  rDevice,
-                      vcl_canvas::GraphicDeviceSharedPtr pDevice,
+                      vcl_canvas::GraphicDevice* pDevice,
                       bool                      bHasAlpha );
 
         /// Dispose all internal references

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <memory>
-#include <vcl_canvas/windowlistener.hxx>
 #include <vcl_canvas/updatable.hxx>
 #include <vcl_canvas/spritecanvas.hxx>
 #include <vcl_canvas/graphicdevice.hxx>
@@ -39,16 +38,19 @@
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
 #include "cairo_spritecanvashelper.hxx"
+#include "com/sun/star/awt/XWindowListener.hdl"
 
 namespace vcl_cairocanvas
 {
     class SpriteCanvasBase_Base : public ::vcl_canvas::SpriteCanvas,
                                   public ::vcl_canvas::GraphicDevice,
-                                  public ::vcl_canvas::WindowListener,
                                   public ::vcl_canvas::Updatable,
                                   public ::vcl_canvas::SpriteSurface,
-                                  public SurfaceProvider
+                                  public SurfaceProvider,
+                                  public css::awt::XWindowListener
     {
+    protected:
+        mutable ::osl::Mutex m_aMutex;
     };
     /* typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
                                              css::rendering::XIntegerBitmap,
@@ -60,7 +62,7 @@ namespace vcl_cairocanvas
                                              css::beans::XPropertySet,
                                              css::lang::XServiceName,
                                              css::lang::XServiceInfo >  WindowGraphicDeviceBase_Base; */
-    typedef ::vcl_canvas::BufferedGraphicDeviceBase< ::vcl_canvas::DisambiguationHelper< SpriteCanvasBase_Base >,
+    typedef ::vcl_canvas::BufferedGraphicDeviceBase< SpriteCanvasBase_Base ,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > SpriteCanvasBase_Base2;

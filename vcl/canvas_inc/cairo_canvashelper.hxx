@@ -77,7 +77,7 @@ namespace vcl_cairocanvas
          */
         void init( const ::basegfx::B2ISize& rSizePixel,
                    SurfaceProvider&          rSurfaceProvider,
-                   ::vcl_canvas::GraphicDeviceSharedPtr pDevice );
+                   ::vcl_canvas::GraphicDevice* pDevice );
 
         void setSize( const ::basegfx::B2ISize& rSize );
         void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );

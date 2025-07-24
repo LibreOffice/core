@@ -9,7 +9,7 @@ namespace vcl_canvas
 class CustomSprite : public SpriteBase
 {
 public:
-    virtual Canvas getContentCanvas() = 0;
+    virtual Canvas* getContentCanvas() = 0;
 };
 
 typedef std::shared_ptr<CustomSprite> CustomSpriteSharedPtr;

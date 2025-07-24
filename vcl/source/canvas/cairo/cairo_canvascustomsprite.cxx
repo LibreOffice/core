@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 namespace vcl_cairocanvas
 {
     CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                                            const SpriteCanvasSharedPtr&                    rRefDevice ) :
+                                            const SpriteCanvasSharedPtr&       rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
         maSize( ::vcl_canvas::tools::roundUp( rSpriteSize.Width ),
                 ::vcl_canvas::tools::roundUp( rSpriteSize.Height ) )
@@ -51,7 +51,7 @@ namespace vcl_cairocanvas
 
         maCanvasHelper.init( maSize,
                              *rRefDevice,
-                             rRefDevice );
+                             rRefDevice.get() );
         maCanvasHelper.setSurface( mpBufferSurface, true );
 
         maSpriteHelper.init( rSpriteSize,
@@ -62,7 +62,7 @@ namespace vcl_cairocanvas
         maCanvasHelper.clear();
     }
 
-    void CanvasCustomSprite::disposeThis()
+    /* void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -71,7 +71,7 @@ namespace vcl_cairocanvas
 
         // forward to parent
         CanvasCustomSpriteBaseT::disposeThis();
-    }
+    } */
 
     void CanvasCustomSprite::redraw( const CairoSharedPtr& pCairo,
                                      bool                  bBufferedUpdate ) const
@@ -132,7 +132,7 @@ namespace vcl_cairocanvas
         return mpSpriteCanvas->getOutputDevice();
     }
 
-    OUString SAL_CALL CanvasCustomSprite::getImplementationName()
+    /* OUString SAL_CALL CanvasCustomSprite::getImplementationName()
     {
         return u"CairoCanvas.CanvasCustomSprite"_ustr;
     }
@@ -145,7 +145,7 @@ namespace vcl_cairocanvas
     uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.CanvasCustomSprite"_ustr };
-    }
+    } */
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

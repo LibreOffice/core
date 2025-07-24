@@ -119,11 +119,11 @@ namespace vcl_canvas
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
         } */
 
-        virtual CustomSpriteSharedPtr SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
+        virtual CustomSprite* SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
-            tools::verifySpriteSize(spriteSize,
+            /* tools::verifySpriteSize(spriteSize,
                                     __func__,
-                                    static_cast< typename BaseType::UnambiguousBaseType* >(this));
+                                    static_cast< typename BaseType::UnambiguousBaseType* >(this)); */
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

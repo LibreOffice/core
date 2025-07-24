@@ -47,7 +47,7 @@ namespace vcl_canvas
         functionality (which, of course, is impossible here in a
         generic way)
     */
-    class Sprite : public css::lang::XComponent
+    class Sprite
     {
     public:
         typedef ::rtl::Reference< Sprite > Reference;

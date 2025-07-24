@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "vcl_canvas/canvas.hxx"
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
@@ -90,7 +91,7 @@ namespace vcl_canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        virtual void disposeThis() override
+        /* virtual void disposeThis() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -98,10 +99,10 @@ namespace vcl_canvas
 
             // pass on to base class
             BaseType::disposeThis();
-        }
+        } */
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() override
+        /* virtual void SAL_CALL clear() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -109,9 +110,9 @@ namespace vcl_canvas
 
             // and forward to base class, which handles the actual rendering
             return BaseType::clear();
-        }
+        } */
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        /* virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
@@ -128,7 +129,7 @@ namespace vcl_canvas
             return BaseType::drawBitmap( xBitmap,
                                          viewState,
                                          renderState );
-        }
+        } */
 
         // TODO(F3): If somebody uses the XIntegerBitmap methods to
         // clear pixel (setting alpha != 1.0 there), or a compositing
@@ -151,9 +152,9 @@ namespace vcl_canvas
                                     const css::rendering::ViewState&   viewState,
                                     const css::rendering::RenderState& renderState ) override
         {
-            tools::verifyArgs(aNewPos, viewState, renderState,
+            /* tools::verifyArgs(aNewPos, viewState, renderState,
                               __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+                              static_cast< typename BaseType::UnambiguousBaseType* >(this)); */
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -162,9 +163,9 @@ namespace vcl_canvas
 
         virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
         {
-            tools::verifyArgs(aTransformation,
+            /* tools::verifyArgs(aTransformation,
                               __func__,
-                              static_cast< typename BaseType::UnambiguousBaseType* >(this));
+                              static_cast< typename BaseType::UnambiguousBaseType* >(this)); */
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -202,7 +203,7 @@ namespace vcl_canvas
         }
 
         // XCustomSprite
-        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL
+        Canvas* SAL_CALL
             getContentCanvas() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );

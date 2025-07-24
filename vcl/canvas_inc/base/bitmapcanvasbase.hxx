@@ -102,7 +102,7 @@ namespace vcl_canvas
 
     public:
         // XBitmapCanvas
-        virtual void SAL_CALL copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
+        /* virtual void SAL_CALL copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
                                         const css::geometry::RealRectangle2D&                                      sourceRect,
                                         const css::rendering::ViewState&                                           sourceViewState,
                                         const css::rendering::RenderState&                                         sourceRenderState,
@@ -118,7 +118,7 @@ namespace vcl_canvas
             typename BaseType::BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             BaseType::BaseType::mbSurfaceDirty = true;
-        }
+        } */
     };
 }
 

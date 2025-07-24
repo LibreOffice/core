@@ -81,11 +81,11 @@ namespace vcl_cairocanvas
 
     void CanvasHelper::init( const ::basegfx::B2ISize&  rSizePixel,
                              SurfaceProvider&           rSurfaceProvider,
-                             vcl_canvas::GraphicDeviceSharedPtr pDevice )
+                             vcl_canvas::GraphicDevice* pDevice )
     {
         maSize = rSizePixel;
         mpSurfaceProvider = &rSurfaceProvider;
-        mpDevice = pDevice.get();
+        mpDevice = pDevice;
     }
 
     void CanvasHelper::setSize( const ::basegfx::B2ISize& rSize )

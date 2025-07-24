@@ -131,7 +131,7 @@ namespace vcl_canvas
                           [this] (css::uno::Any const& rAny) { this->setDumpScreenContent(rAny); } } } } );
         }
 
-        virtual void disposeThis() override
+        /* virtual void disposeThis() override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -139,7 +139,7 @@ namespace vcl_canvas
 
             // pass on to base class
             BaseType::disposeThis();
-        }
+        } */
 
         // XGraphicDevice
         /* virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
@@ -168,7 +168,7 @@ namespace vcl_canvas
             return maDeviceHelper.getPhysicalSize();
         }
 
-        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
+        /* virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -224,7 +224,7 @@ namespace vcl_canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createVolatileAlphaBitmap( this, size );
-        }
+        } */
 
         /* virtual css::uno::Reference< css::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) override
         {

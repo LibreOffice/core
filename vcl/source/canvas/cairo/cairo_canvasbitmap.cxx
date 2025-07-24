@@ -39,7 +39,7 @@ namespace vcl_cairocanvas
 {
     CanvasBitmap::CanvasBitmap( const ::basegfx::B2ISize&  rSize,
                                 SurfaceProviderSharedPtr   rSurfaceProvider,
-                                ::vcl_canvas::GraphicDeviceSharedPtr pDevice,
+                                ::vcl_canvas::GraphicDevice* pDevice,
                                 bool                       bHasAlpha ) :
         mpSurfaceProvider(std::move( rSurfaceProvider )),
         maSize(rSize),

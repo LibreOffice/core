@@ -30,6 +30,7 @@
 #include <cairo.h>
 
 #include "cairo_canvascustomsprite.hxx"
+#include "vcl_canvas/customsprite.hxx"
 #include "cairo_spritecanvashelper.hxx"
 
 using namespace ::cairo;
@@ -128,14 +129,13 @@ namespace vcl_cairocanvas
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
+    ::vcl_canvas::CustomSprite* SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
         if( !mpRedrawManager )
-            return uno::Reference< rendering::XCustomSprite >(); // we're disposed
+            return nullptr; // we're disposed
 
-        return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
-                                    mpOwningSpriteCanvas ) );
+        return new CanvasCustomSprite( spriteSize,
+                                    mpOwningSpriteCanvas );
     }
 
     uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite(

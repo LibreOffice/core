@@ -32,6 +32,7 @@
 #include <base/basemutexhelper.hxx>
 #include <base/canvascustomspritebase.hxx>
 
+#include <memory>
 #include <vcl/cairo.hxx>
 
 #include "cairo_sprite.hxx"
@@ -39,35 +40,24 @@
 #include "cairo_repainttarget.hxx"
 #include "cairo_spritehelper.hxx"
 #include "cairo_spritecanvas.hxx"
+#include "vcl_canvas/canvas.hxx"
+#include "vcl_canvas/customsprite.hxx"
 
 
 namespace vcl_cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
+    /* typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
                                              css::rendering::XBitmapCanvas,
                                              css::rendering::XIntegerBitmap,
-                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
-    /** Mixin Sprite
+                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base; */
 
-        Have to mixin the Sprite interface before deriving from
-        ::canvas::CanvasCustomSpriteBase, as this template should
-        already implement some of those interface methods.
-
-        The reason why this appears kinda convoluted is the fact that
-        we cannot specify non-IDL types as WeakComponentImplHelper
-        template args, and furthermore, don't want to derive
-        ::canvas::CanvasCustomSpriteBase directly from
-        ::canvas::Sprite (because derivees of
-        ::canvas::CanvasCustomSpriteBase have to explicitly forward
-        the XInterface methods (e.g. via DECLARE_UNO3_AGG_DEFAULTS)
-        anyway). Basically, ::canvas::CanvasCustomSpriteBase should
-        remain a base class that provides implementation, not to
-        enforce any specific interface on its derivees.
-     */
-    class CanvasCustomSpriteSpriteBase_Base : public ::vcl_canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
-                                                 public Sprite,
+    class CanvasCustomSpriteSpriteBase_Base : public ::vcl_canvas::CustomSprite,
+                                              public ::vcl_canvas::Canvas,
+                                              public Sprite,
                                               public SurfaceProvider
     {
+    protected:
+        mutable osl::Mutex m_aMutex;
     };
 
     typedef ::vcl_canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
@@ -79,7 +69,8 @@ namespace vcl_cairocanvas
     /* Definition of CanvasCustomSprite class */
 
     class CanvasCustomSprite : public CanvasCustomSpriteBaseT,
-                               public RepaintTarget
+                               public RepaintTarget,
+                               public std::enable_shared_from_this<CanvasCustomSprite>
     {
     public:
         /** Create a custom sprite
@@ -97,21 +88,21 @@ namespace vcl_cairocanvas
             Target DX device
          */
         CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                            const SpriteCanvasSharedPtr&                    rRefDevice );
+                            const SpriteCanvasSharedPtr&       rRefDevice );
 
-        virtual void disposeThis() override;
+        // virtual void disposeThis() override;
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
         //                                    Classname           Base doing refcount          Base implementing the XComponent interface
         //                                          |                    |                         |
         //                                          V                    V                         V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
+        // DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
+        /* virtual OUString SAL_CALL getImplementationName() override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override; */
 
         // Sprite
         virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,

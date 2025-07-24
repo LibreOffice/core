@@ -131,7 +131,7 @@ namespace vcl_canvas
         } */
 
         // XCanvas
-        /* virtual void SAL_CALL clear() override
+        virtual void SAL_CALL clear() override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -140,7 +140,7 @@ namespace vcl_canvas
             maCanvasHelper.clear();
         }
 
-        virtual void SAL_CALL drawPoint(const css::geometry::RealPoint2D&     aPoint,
+        /* virtual void SAL_CALL drawPoint(const css::geometry::RealPoint2D&     aPoint,
                                         const css::rendering::ViewState&      viewState,
                                         const css::rendering::RenderState&    renderState) override
         {

@@ -157,7 +157,7 @@ namespace vcl_canvas
             return css::uno::Any(mxWindow);
         }
 
-        virtual void disposeThis() override
+        /* virtual void disposeThis() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -169,7 +169,7 @@ namespace vcl_canvas
 
             // pass on to base class
             BaseType::disposeThis();
-        }
+        } */
 
         css::awt::Rectangle transformBounds( const css::awt::Rectangle& rBounds )
         {
@@ -204,7 +204,7 @@ namespace vcl_canvas
         }
 
         // XWindowListener
-        virtual void disposeEventSource( const css::lang::EventObject& Source ) override
+        /* virtual void disposeEventSource( const css::lang::EventObject& Source ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -212,7 +212,7 @@ namespace vcl_canvas
                 mxWindow.clear();
 
             BaseType::disposeEventSource(Source);
-        }
+        } */
 
         virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override
         {

@@ -27,6 +27,7 @@
 
 #include <vcl/cairo.hxx>
 #include "cairo_canvashelper.hxx"
+#include "vcl_canvas/customsprite.hxx"
 
 namespace basegfx
 {
@@ -59,7 +60,7 @@ namespace vcl_cairocanvas
                             css::rendering::XBitmap > >& animationBitmaps,
                 sal_Int8                                              interpolationMode );
 
-        css::uno::Reference< css::rendering::XCustomSprite >      createCustomSprite(
+        ::vcl_canvas::CustomSprite* createCustomSprite(
                 const css::geometry::RealSize2D& spriteSize );
 
         css::uno::Reference< css::rendering::XSprite >                createClonedSprite(
