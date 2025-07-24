@@ -1031,6 +1031,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167660)
+{
+    // Create a document, add there a character in a range U+8000-U+FFFF, export to RTF
+    createSwDoc();
+    CPPUNIT_ASSERT(getSwDocShell());
+    CPPUNIT_ASSERT(getSwDocShell()->GetWrtShell());
+    getSwDocShell()->GetWrtShell()->Insert(u"\uFB02"_ustr);
+
+    save(mpFilter);
+
+    // Test that the character is exported as a negative integer
+
+    SvFileStream stream(maTempFile.GetFileName(), StreamMode::READ);
+    auto size = stream.remainingSize();
+    std::vector<char> buffer(size);
+    CPPUNIT_ASSERT_EQUAL(size_t(size), stream.ReadBytes(buffer.data(), buffer.size()));
+    std::string_view buffer_view(buffer.data(), buffer.size());
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, buffer_view.find("\\u64258"));
+    CPPUNIT_ASSERT(buffer_view.find("\\u-1278") != std::string_view::npos);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

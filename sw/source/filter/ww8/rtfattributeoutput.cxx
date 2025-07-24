@@ -1868,7 +1868,8 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         m_rExport.Strm().WriteOString("\\'01");
         sal_Unicode cChar = rNumberingString[0];
         m_rExport.Strm().WriteOString("\\u");
-        m_rExport.Strm().WriteNumberAsString(cChar);
+        // Rich Text Format (RTF) Specification, Version 1.9.1, "Unicode RTF"
+        m_rExport.Strm().WriteNumberAsString(static_cast<sal_Int16>(cChar)); // signed!
         m_rExport.Strm().WriteOString(" ?");
     }
     else

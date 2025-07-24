@@ -154,8 +154,9 @@ SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
                                .WriteNumberAsString( nLen ).WriteOString( " " );
                             *pUCMode = nLen;
                         }
+                        // Rich Text Format (RTF) Specification, Version 1.9.1, "Unicode RTF"
                         rStream.WriteOString( "\\u" )
-                           .WriteNumberAsString(c);
+                           .WriteNumberAsString(static_cast<sal_Int16>(c)); // signed!
                     }
 
                     for (sal_Int32 nI = 0; nI < nLen; ++nI)

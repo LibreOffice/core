@@ -186,7 +186,8 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
                         aBuf.append(' ');
                         *pUCMode = nLen;
                     }
-                    aBuf.append("\\u" + OString::number(static_cast<sal_Int32>(c)));
+                    // Rich Text Format (RTF) Specification, Version 1.9.1, "Unicode RTF"
+                    aBuf.append("\\u" + OString::number(static_cast<sal_Int16>(c))); // signed!
                 }
 
                 for (sal_Int32 nI = 0; nI < nLen; ++nI)
