@@ -1047,6 +1047,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167660)
     CPPUNIT_ASSERT(rtf.indexOf("\\u-1278") >= 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167661)
+{
+    // Given a document with a bulleted list using Wingdings
+    createSwDoc("tdf167661.rtf");
+
+    {
+        // Check font of the bullet
+        auto xNumberingRules = getProperty<uno::Reference<container::XIndexAccess>>(
+            getParagraph(1), u"NumberingRules"_ustr);
+
+        comphelper::SequenceAsHashMap level1(
+            xNumberingRules->getByIndex(0).get<uno::Sequence<beans::PropertyValue>>());
+
+        CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, level1[u"BulletFontName"_ustr].get<OUString>());
+    }
+
+    saveAndReload(mpFilter);
+
+    {
+        // Check that the font of the bullet is not lost
+        auto xNumberingRules = getProperty<uno::Reference<container::XIndexAccess>>(
+            getParagraph(1), u"NumberingRules"_ustr);
+
+        comphelper::SequenceAsHashMap level1(
+            xNumberingRules->getByIndex(0).get<uno::Sequence<beans::PropertyValue>>());
+
+        // Without a fix, this failed with
+        // - Expected: Wingdings
+        // - Actual  : 0
+        CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, level1[u"BulletFontName"_ustr].get<OUString>());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
