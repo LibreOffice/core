@@ -100,6 +100,8 @@ public:
         else if (meStringType == StringType::PureString)
         {
             OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+            if (aCSVString.endsWith("\n"))
+                aCSVString = aCSVString.copy(0, aCSVString.getLength()-1);
             OUString aString = mpDoc->GetString(mnCol, mnRow, mnTab);
 
 #if DEBUG_CSV_HANDLER
