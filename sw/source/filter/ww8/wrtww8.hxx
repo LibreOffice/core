@@ -319,7 +319,7 @@ private:
 public:
     wwFontHelper() : m_bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
-    void InitFontTable(const SwDoc& rDoc);
+    void InitFontTable(MSWordExportBase& rExport);
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
@@ -603,6 +603,7 @@ public:
 
     /// Return the numeric id of the numbering rule
     sal_uInt16 GetNumberingId( const SwNumRule& rNumRule );
+    void EnsureUsedNumberingTable();
 
     /// Return the numeric id of the style.
     sal_uInt16 GetId( const SwTextFormatColl& rColl ) const;
@@ -769,6 +770,9 @@ public:
 
     /// Write one numbering level
     void NumberingLevel(SwNumRule const& rRule, sal_uInt8 nLvl);
+
+    std::pair<OUString, std::unique_ptr<wwFont>>
+    GetNumberingLevelBulletStringAndFont(const SwNumFormat& rLevelFormat);
 
     // Convert the bullet according to the font.
     void SubstituteBullet( OUString& rNumStr, rtl_TextEncoding& rChrSet,
