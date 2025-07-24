@@ -55,6 +55,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf166510_sectPr_bottomSpacing, "tdf166510_sectPr_b
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4253), nHeight);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf167657_sectPr_bottomSpacing, "tdf167657_sectPr_bottomSpacing.docx")
+{
+    // given with a continuous break sectPr with no belowSpacing
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    auto pXmlDoc = parseLayoutDump();
+
+    // Since there is no page break, the prior paragraph's belowSpacing should not be zero'd out.
+    // NOTE: apparently layout assigns the belowSpacing to the following section, not body/txt[1],
+    sal_Int32 nHeight = getXPath(pXmlDoc, "//section/infos/bounds", "height").toInt32();
+    // Without the fix, the section's height (showing no bottom margin for the 1st para) was 309
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1409), nHeight);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf165478_bottomAligned, "tdf165478_bottomAligned.docx")
 {
     // given a layoutInCell, wrap-through image, paragraph-anchored to a bottom-aligned cell
