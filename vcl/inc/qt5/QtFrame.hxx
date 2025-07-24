@@ -68,7 +68,7 @@ class QPaintDevice;
 class QScreen;
 class QWidget;
 
-class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
+class VCLPLUG_QT_PUBLIC QtFrame final : public QObject, public SalFrame
 {
     Q_OBJECT
 
