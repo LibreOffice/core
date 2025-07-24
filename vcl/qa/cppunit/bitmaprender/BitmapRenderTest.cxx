@@ -186,7 +186,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
                          pAlphaVirtualDevice->GetPixel(Point(1, 1)));
     pAlphaVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pAlphaVirtualDevice->Erase();
-    // the backends use pre-multipled alpha, so pure transparency does not round-trip properly
+    // the backends use pre-multiplied alpha, so pure transparency does not round-trip properly
     CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
                          pAlphaVirtualDevice->GetPixel(Point(1, 1)));
 
@@ -195,7 +195,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     Color aColor = aBitmap.GetPixelColor(1, 1);
-    // the backends use pre-multipled alpha, so pure transparency does not round-trip properly
+    // the backends use pre-multiplied alpha, so pure transparency does not round-trip properly
     CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aColor);
 
     // Draw an opaque pixel to the VirDev
