@@ -176,6 +176,7 @@ fuzzer_writer_libraries = \
     sw_writerfilter \
     wpftwriter \
     textfd \
+    md4c \
     guesslang \
 
 fuzzer_draw_libraries = \
