@@ -256,6 +256,7 @@ private:
 
     bool                                            m_bIsFirstSection;
     css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
+    css::uno::Reference< css::text::XTextRange >    m_xPreStartingRange;
 
     OUString m_sPageStyleName;
     rtl::Reference<SwXPageStyle>                    m_aPageStyle;
@@ -302,6 +303,10 @@ private:
 
     sal_Int32                                       m_nPaperSourceFirst;
     sal_Int32                                       m_nPaperSourceOther;
+
+    // Although an empty sectPr's spacing doesn't directly affect layout,
+    // below spacing is needed to consolidate/collapse the top spacing of the following paragraph.
+    std::optional<sal_Int32> m_oBelowSpacing;
 
     bool                                            m_bDynamicHeightTop;
     bool                                            m_bDynamicHeightBottom;
@@ -355,7 +360,7 @@ public:
 
     bool IsFirstSection() const { return m_bIsFirstSection; }
 
-    void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange ) { m_xStartingRange = xRange; }
+    void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange );
 
     const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
@@ -413,6 +418,9 @@ public:
     void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
 
     void SetPaperSource(sal_Int32 first, sal_Int32 other) { m_nPaperSourceFirst = first; m_nPaperSourceOther = other;}
+
+    const std::optional<sal_Int32>& GetBelowSpacing() const { return m_oBelowSpacing; }
+    void SetBelowSpacing(sal_Int32 nSet) { m_oBelowSpacing = nSet; }
 
     void addRelativeWidthShape( const css::uno::Reference<css::drawing::XShape>& xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 

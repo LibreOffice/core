@@ -10186,21 +10186,15 @@ void DomainMapper_Impl::handleSectPrBeforeRemoval()
     if (!pSectPrContext)
         return;
 
-    // transfer below-spacing to previous paragraph - needed to layout above-spacing after pageBreak
-    if (!m_StreamStateStack.top().xPreviousParagraph.is())
+    SectionPropertyMap* pSectionContext = GetSectionContext();
+    if (!pSectionContext)
         return;
 
-    uno::Any aBelowSpacing = GetAnyProperty(PROP_PARA_BOTTOM_MARGIN, pSectPrContext);
-    if (!aBelowSpacing.hasValue())
-        aBelowSpacing <<= sal_Int32(0);
+    sal_Int32 nBelowSpacing = 0;
+    GetAnyProperty(PROP_PARA_BOTTOM_MARGIN, pSectPrContext) >>= nBelowSpacing;
 
-    std::optional<uno::Any> oPrevBelowSpacing;
-    OUString sProp(getPropertyName(PROP_PARA_BOTTOM_MARGIN));
-    if (m_StreamStateStack.top().xPreviousParagraph->getPropertySetInfo()->hasPropertyByName(sProp))
-        oPrevBelowSpacing = m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(sProp);
-
-    if (!oPrevBelowSpacing.has_value() || aBelowSpacing != *oPrevBelowSpacing)
-        m_StreamStateStack.top().xPreviousParagraph->setPropertyValue(sProp, aBelowSpacing);
+    // store this section's unused belowSpacing so that emulation can use it later
+    pSectionContext->SetBelowSpacing(nBelowSpacing);
 }
 
 OUString DomainMapper_Impl::getFontNameForTheme(const Id id)
