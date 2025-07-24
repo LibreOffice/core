@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/lok.hxx>
 #include <rtl/math.hxx>
 #include <utility>
 #include <vcl/event.hxx>
@@ -241,7 +242,7 @@ void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
         tools::Long nVal = nPoint;
 
         // changed => set new value
-        if (m_xWidget->get_value() != nVal)
+        if (m_xWidget->get_value() != nVal || comphelper::LibreOfficeKit::isActive())
             m_xWidget->set_value(nVal);
     }
     else
