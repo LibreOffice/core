@@ -230,14 +230,31 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     pData->GetArea(aOldRange);
     rNewData.GetArea(aNewRange);
     bool bAreaChanged = ( aOldRange != aNewRange );     // then a recompilation is needed
+    bool bOldAutoFilter = pData->HasAutoFilter();
+    bool bNewAutoFilter = rNewData.HasAutoFilter();
 
     std::unique_ptr<ScDBCollection> pUndoColl;
     if (bUndo)
         pUndoColl.reset( new ScDBCollection( *pDocColl ) );
 
     *pData = rNewData;
-    if (bAreaChanged)
+    if (bAreaChanged) {
         rDoc.CompileDBFormula();
+        if (bOldAutoFilter && !bNewAutoFilter)
+        {
+            rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aEnd.Col(), aOldRange.aEnd.Row(), aOldRange.aStart.Tab(), ScMF::Auto);
+        }
+        else if (bOldAutoFilter && bNewAutoFilter)
+        {
+            rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aEnd.Col(), aOldRange.aEnd.Row(), aOldRange.aStart.Tab(), ScMF::Auto);
+            rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aStart.Row(), aNewRange.aStart.Tab(), ScMF::Auto);
+        }
+        else if (!bOldAutoFilter && bNewAutoFilter)
+        {
+            rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aStart.Row(), aNewRange.aStart.Tab(), ScMF::Auto);
+        }
+        rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid);
+    }
 
     if (bUndo)
     {
