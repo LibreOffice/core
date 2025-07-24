@@ -35,9 +35,8 @@ void QtSvpGraphics::updateQWidget() const
 {
     if (!m_pFrame)
         return;
-    QWidget* pQWidget = m_pFrame->GetQWidget();
-    if (pQWidget)
-        pQWidget->update(pQWidget->rect());
+    QWidget& rQWidget = m_pFrame->GetQWidget();
+    rQWidget.update(rQWidget.rect());
 }
 
 #if ENABLE_CAIRO_CANVAS

@@ -32,7 +32,7 @@ QtPainter::QtPainter(QtGraphicsBackend& rGraphics, bool bPrepareBrush, sal_uInt8
     else
     {
         assert(rGraphics.m_pFrame);
-        if (!begin(rGraphics.m_pFrame->GetQWidget()))
+        if (!begin(&rGraphics.m_pFrame->GetQWidget()))
             std::abort();
     }
     if (!rGraphics.m_aClipPath.isEmpty())

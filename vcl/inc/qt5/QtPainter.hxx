@@ -37,7 +37,7 @@ public:
     ~QtPainter()
     {
         if (m_rGraphics.m_pFrame && !m_aRegion.isEmpty())
-            m_rGraphics.m_pFrame->GetQWidget()->update(m_aRegion);
+            m_rGraphics.m_pFrame->GetQWidget().update(m_aRegion);
     }
 
     void update(int nx, int ny, int nw, int nh)
@@ -61,7 +61,7 @@ public:
     void update()
     {
         if (m_rGraphics.m_pFrame)
-            m_aRegion += m_rGraphics.m_pFrame->GetQWidget()->rect();
+            m_aRegion += m_rGraphics.m_pFrame->GetQWidget().rect();
     }
 };
 

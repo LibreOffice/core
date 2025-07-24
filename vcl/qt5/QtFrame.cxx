@@ -849,11 +849,7 @@ void QtFrame::SetInputContext(SalInputContext* pContext)
     m_pQWidget->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-void QtFrame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
-{
-    if (m_pQWidget)
-        m_pQWidget->endExtTextInput();
-}
+void QtFrame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/) { m_pQWidget->endExtTextInput(); }
 
 OUString QtFrame::GetKeyName(sal_uInt16 nKeyCode)
 {

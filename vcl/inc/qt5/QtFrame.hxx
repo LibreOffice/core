@@ -144,7 +144,7 @@ public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~QtFrame() override;
 
-    QWidget* GetQWidget() const { return m_pQWidget; }
+    QWidget& GetQWidget() const { return *m_pQWidget; }
     QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;

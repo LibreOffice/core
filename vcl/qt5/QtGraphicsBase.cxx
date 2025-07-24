@@ -26,7 +26,7 @@ void QtGraphicsBase::ImplGetResolution(const QtFrame* pFrame, sal_Int32& rDPIX, 
     if (!pFrame)
         return;
 
-    QScreen* pScreen = pFrame->GetQWidget()->screen();
+    QScreen* pScreen = pFrame->GetQWidget().screen();
     qreal devicePixelRatio = GetQtInstance().EmscriptenLightweightRunInMainThread(
         [pScreen] { return pScreen->devicePixelRatio(); });
     rDPIX = pScreen->logicalDotsPerInchX() * devicePixelRatio + 0.5;

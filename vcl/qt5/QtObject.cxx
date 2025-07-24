@@ -33,13 +33,13 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     , m_pQWidget(nullptr)
     , m_bForwardKey(false)
 {
-    if (!m_pParent || !pParent->GetQWidget())
+    if (!m_pParent)
         return;
 
     if (QLibraryInfo::version().majorVersion() > 5)
     {
         m_pQWindow = new QWindow;
-        m_pQWidget = QWidget::createWindowContainer(m_pQWindow, pParent->GetQWidget());
+        m_pQWidget = QWidget::createWindowContainer(m_pQWindow, &pParent->GetQWidget());
     }
     else
     {
@@ -122,14 +122,14 @@ void QtObject::Reparent(SalFrame* pFrame)
     if (m_pParent == pNewParent)
         return;
     m_pParent = pNewParent;
-    m_pQWidget->setParent(m_pParent->GetQWidget());
+    m_pQWidget->setParent(&m_pParent->GetQWidget());
 }
 
 QtObjectWidget::QtObjectWidget(QtObject& rParent)
-    : QWidget(rParent.frame()->GetQWidget())
+    : QWidget(&rParent.frame()->GetQWidget())
     , m_rParent(rParent)
 {
-    assert(m_rParent.frame() && m_rParent.frame()->GetQWidget());
+    assert(m_rParent.frame());
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_OpaquePaintEvent);
 }

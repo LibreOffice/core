@@ -135,7 +135,7 @@ void QtDragSource::startDrag(
 
     if (m_pFrame)
     {
-        QDrag* drag = new QDrag(m_pFrame->GetQWidget());
+        QDrag* drag = new QDrag(&m_pFrame->GetQWidget());
         drag->setMimeData(new QtDragMimeData(rTrans));
         // just a reminder that exec starts a nested event loop, so everything after
         // this call is just executed, after D'n'D has finished!

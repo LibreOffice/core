@@ -899,7 +899,7 @@ QWidget* QtInstance::GetNativeParentFromWeldParent(weld::Widget* pParent)
         if (vcl::Window* pWindow = pSalWidget->getWidget())
         {
             if (QtFrame* pFrame = static_cast<QtFrame*>(pWindow->ImplGetFrame()))
-                return pFrame->GetQWidget();
+                return &pFrame->GetQWidget();
         }
     }
 
