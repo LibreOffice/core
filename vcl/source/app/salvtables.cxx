@@ -50,6 +50,7 @@
 #include <tools/helpers.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>

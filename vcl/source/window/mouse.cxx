@@ -652,10 +652,10 @@ void Window::ImplStartDnd()
     GetDropTarget();
 }
 
-Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
+rtl::Reference<DNDListenerContainer> Window::GetDropTarget()
 {
     if( !mpWindowImpl )
-        return Reference< css::datatransfer::dnd::XDropTarget >();
+        return {};
 
     if( ! mpWindowImpl->mxDNDListenerContainer.is() )
     {
@@ -735,11 +735,6 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
 #else
     return Reference< css::datatransfer::dnd::XDragSource > ();
 #endif
-}
-
-Reference< css::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestureRecognizer()
-{
-    return Reference< css::datatransfer::dnd::XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
 }
 
 } /* namespace vcl */

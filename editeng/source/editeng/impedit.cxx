@@ -32,6 +32,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <comphelper/lok.hxx>
 #include <editeng/flditem.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/transfer.hxx>

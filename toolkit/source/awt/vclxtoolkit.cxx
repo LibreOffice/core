@@ -61,6 +61,7 @@
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/idletask.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/wintypes.hxx>
@@ -2067,7 +2068,7 @@ css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL V
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
-        return pWindow->GetDragGestureRecognizer();
+        return pWindow->GetDropTarget();
 
     return css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer >();
 }

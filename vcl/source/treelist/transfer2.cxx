@@ -33,6 +33,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <svl/urlbmk.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/transfer.hxx>
 
 #include <svdata.hxx>
@@ -69,9 +70,8 @@ void SAL_CALL DragSourceHelper::DragGestureListener::dragGestureRecognized( cons
     mrParent.StartDrag( rDGE.DragAction, aPtPixel );
 }
 
-
-DragSourceHelper::DragSourceHelper( vcl::Window* pWindow ) :
-    mxDragGestureRecognizer( pWindow->GetDragGestureRecognizer() )
+DragSourceHelper::DragSourceHelper(vcl::Window* pWindow)
+    : mxDragGestureRecognizer(pWindow->GetDropTarget())
 {
     if( mxDragGestureRecognizer.is() )
     {

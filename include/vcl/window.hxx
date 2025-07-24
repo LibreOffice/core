@@ -41,6 +41,7 @@ struct SystemEnvData;
 struct SystemParentData;
 class ImplBorderWindow;
 class Timer;
+class DNDListenerContainer;
 class DockingManager;
 class Scrollable;
 class FixedText;
@@ -1219,9 +1220,8 @@ public:
     void                                SetCreatedWithToolkit( bool b );
 
     // Drag and Drop interfaces
-    css::uno::Reference< css::datatransfer::dnd::XDropTarget > GetDropTarget();
+    rtl::Reference<DNDListenerContainer> GetDropTarget();
     css::uno::Reference< css::datatransfer::dnd::XDragSource > GetDragSource();
-    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > GetDragGestureRecognizer();
 
     // Clipboard/Selection interfaces
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > GetClipboard();

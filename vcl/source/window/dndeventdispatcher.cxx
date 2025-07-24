@@ -258,16 +258,16 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( vcl::Window *pWindow,
         SolarMutexClearableGuard aSolarGuard;
 
         // query DropTarget from window
-        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
-        if( xDropTarget.is() )
+        if (pDropTarget.is())
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aSolarGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragEnterEvent(
-                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, aFlavorList );
+            n = pDropTarget->fireDragEnterEvent(xContext, nDropAction, relLoc.X(), relLoc.Y(),
+                                                nSourceActions, aFlavorList);
         }
     }
 
@@ -286,16 +286,16 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( vcl::Window *pWindow,
         SolarMutexClearableGuard aSolarGuard;
 
         // query DropTarget from window
-        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
-        if( xDropTarget.is() )
+        if (pDropTarget.is())
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aSolarGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragOverEvent(
-                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions );
+            n = pDropTarget->fireDragOverEvent(xContext, nDropAction, relLoc.X(), relLoc.Y(),
+                                               nSourceActions);
         }
     }
 
@@ -311,12 +311,12 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( vcl::Window *pWindow )
         SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
-        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
         aGuard.clear();
 
-        if( xDropTarget.is() )
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDragExitEvent();
+        if (pDropTarget.is())
+            n = pDropTarget->fireDragExitEvent();
     }
 
     return n;
@@ -334,16 +334,16 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( vcl::Window *pWindow,
         SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
-        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
-        if( xDropTarget.is() )
+        if (pDropTarget.is())
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropActionChangedEvent(
-                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions );
+            n = pDropTarget->fireDropActionChangedEvent(xContext, nDropAction, relLoc.X(),
+                                                        relLoc.Y(), nSourceActions);
         }
     }
 
@@ -362,19 +362,19 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
         SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
-        Reference< XDropTarget > xDropTarget = pWindow->GetDropTarget();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
         // window may be destroyed in drop event handler
         VclPtr<vcl::Window> xPreventDelete = pWindow;
 
-        if( xDropTarget.is() )
+        if (pDropTarget.is())
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ScreenToOutputPixel( rLocation );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDropTarget.get() )->fireDropEvent(
-                xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
+            n = pDropTarget->fireDropEvent(xContext, nDropAction, relLoc.X(), relLoc.Y(),
+                                           nSourceActions, xTransferable);
         }
     }
 
@@ -393,16 +393,16 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
         SolarMutexClearableGuard aGuard;
 
         // query DropTarget from window
-        Reference< XDragGestureRecognizer > xDragGestureRecognizer = pWindow->GetDragGestureRecognizer();
+        rtl::Reference<DNDListenerContainer> pDropTarget = pWindow->GetDropTarget();
 
-        if( xDragGestureRecognizer.is() )
+        if (pDropTarget.is())
         {
             // retrieve relative mouse position
             Point relLoc = pWindow->ScreenToOutputPixel( rOrigin );
             aGuard.clear();
 
-            n = static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent(
-                nDragAction, relLoc.X(), relLoc.Y(), xSource, event );
+            n = pDropTarget->fireDragGestureEvent(nDragAction, relLoc.X(), relLoc.Y(), xSource,
+                                                  event);
         }
     }
 

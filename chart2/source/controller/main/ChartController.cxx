@@ -67,6 +67,7 @@
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>

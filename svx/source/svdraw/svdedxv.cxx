@@ -42,6 +42,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>

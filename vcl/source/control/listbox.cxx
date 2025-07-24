@@ -19,6 +19,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/settings.hxx>
@@ -32,7 +33,6 @@
 #include <dndeventdispatcher.hxx>
 #include <comphelper/lok.hxx>
 
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>
 

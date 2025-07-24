@@ -21,6 +21,7 @@
 #include <i18nutil/searchopt.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/settings.hxx>
@@ -149,11 +150,11 @@ TextView::TextView(ExtTextEngine* pEng, vcl::Window* pWindow)
 
     pWindow->GetOutDev()->SetLineColor();
 
-    if ( pWindow->GetDragGestureRecognizer().is() )
+    if (pWindow->GetDropTarget().is())
     {
         mxDnDListener = new vcl::unohelper::DragAndDropWrapper(this);
 
-        pWindow->GetDragGestureRecognizer()->addDragGestureListener(mxDnDListener);
+        pWindow->GetDropTarget()->addDragGestureListener(mxDnDListener);
         pWindow->GetDropTarget()->addDropTargetListener(mxDnDListener);
         pWindow->GetDropTarget()->setActive( true );
         pWindow->GetDropTarget()->setDefaultActions( css::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>

@@ -24,6 +24,7 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/specialchars.hxx>
@@ -211,12 +212,9 @@ void Edit::dispose()
 
     if ( mxDnDListener.is() )
     {
-        if ( GetDragGestureRecognizer().is() )
-        {
-            GetDragGestureRecognizer()->removeDragGestureListener( mxDnDListener );
-        }
         if ( GetDropTarget().is() )
         {
+            GetDropTarget()->removeDragGestureListener(mxDnDListener);
             GetDropTarget()->removeDropTargetListener( mxDnDListener );
         }
 
@@ -301,7 +299,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetPointer( PointerStyle::Text );
     ApplySettings(*GetOutDev());
 
-    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDGR = GetDragGestureRecognizer();
+    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDGR = GetDropTarget();
     if ( xDGR.is() )
     {
         xDGR->addDragGestureListener( mxDnDListener );
