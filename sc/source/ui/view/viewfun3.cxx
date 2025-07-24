@@ -63,6 +63,7 @@
 #include <cliputil.hxx>
 #include <clipoptions.hxx>
 #include <gridwin.hxx>
+#include <SheetView.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 
 using namespace com::sun::star;
@@ -2064,14 +2065,14 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 void ScViewFunc::MakeNewSheetView()
 {
     SCTAB nTab = GetViewData().GetTabNumber();
-    ScDocument& rDoc = GetViewData().GetDocument();
+    ScDocument& rDocument = GetViewData().GetDocument();
 
     SCTAB nSheetViewTab = nTab + 1;
-    if (rDoc.CopyTab(nTab, nSheetViewTab))
+    if (rDocument.CopyTab(nTab, nSheetViewTab))
     {
         // Add and register the created sheet view
-        rDoc.SetSheetView(nSheetViewTab, true);
-        sc::SheetViewID nSheetViewID = rDoc.CreateNewSheetView(nTab, nSheetViewTab);
+        rDocument.SetSheetView(nSheetViewTab, true);
+        sc::SheetViewID nSheetViewID = rDocument.CreateNewSheetView(nTab, nSheetViewTab);
         GetViewData().SetSheetViewID(nSheetViewID);
 
         // Update
@@ -2079,6 +2080,25 @@ void ScViewFunc::MakeNewSheetView()
         GetViewData().SetTabNo(nTab); // then change back to the current tab
         PaintExtras(); // update Tab Control
     }
+}
+
+void ScViewFunc::RemoveCurrentSheetView()
+{
+    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
+    if (nSheetViewID == sc::DefaultSheetViewID)
+        return;
+
+    SCTAB nTab = GetViewData().GetTabNumber();
+    ScDocument& rDocument = GetViewData().GetDocument();
+    SCTAB nSheetViewTab = rDocument.GetSheetViewNumber(nTab, nSheetViewID);
+
+    auto pSheetManager = rDocument.GetSheetViewManager(nTab);
+    pSheetManager->remove(nSheetViewID);
+    GetViewData().SetSheetViewID(sc::DefaultSheetViewID);
+    GetViewData().SetTabNo(nTab);
+    GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
+
+    PaintExtras();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

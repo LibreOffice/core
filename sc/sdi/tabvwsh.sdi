@@ -178,6 +178,7 @@ interface TableEditView
     FID_TOGGLEHEADERS   [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TOGGLEFORMULA   [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_NEW_SHEET_VIEW  [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_REMOVE_SHEET_VIEW [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_NORMALVIEWMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_PAGEBREAKMODE   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -247,5 +248,3 @@ shell ScTabViewShell
     SID_TBXCTL_INSCELLS     []
 
 }
-
-

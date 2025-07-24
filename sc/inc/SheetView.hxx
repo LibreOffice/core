@@ -50,8 +50,10 @@ public:
     SheetViewID create(ScTable* pSheetViewTable);
 
     /** Returns a sheet view for the ID. */
-    SheetView get(SheetViewID nID);
-    std::vector<SheetView> const& getSheetViews() { return maViews; }
+    SheetView get(SheetViewID nID) const;
+    bool isEmpty() const { return maViews.empty(); }
+    bool remove(SheetViewID nID);
+    std::vector<SheetView> const& getSheetViews() const { return maViews; }
 };
 }
 

@@ -6050,6 +6050,23 @@ SfxBoolItem NewSheetView FID_NEW_SHEET_VIEW
     GroupId = SfxGroupId::View
 ]
 
+SfxBoolItem RemoveSheetView FID_REMOVE_SHEET_VIEW
+[
+    /* flags */
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View
+]
 
 SfxBoolItem ViewValueHighlighting FID_TOGGLESYNTAX
 

@@ -1148,6 +1148,15 @@ sc::SheetViewID ScDocument::CreateNewSheetView(SCTAB nMainTable, SCTAB nSheetVie
     return -1;
 }
 
+bool ScDocument::HasSheetViews(SCTAB nTab) const
+{
+    if (ScTable const* pTable = FetchTable(nTab))
+    {
+        return !pTable->GetSheetViewManager()->isEmpty();
+    }
+    return false;
+}
+
 std::shared_ptr<sc::SheetViewManager> ScDocument::GetSheetViewManager(SCTAB nTable)
 {
     if (ScTable* pTable = FetchTable(nTable))

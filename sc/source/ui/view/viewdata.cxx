@@ -4484,7 +4484,7 @@ SCTAB ScViewData::CurrentTabForData() const
 {
     if (!pThisTab)
         return GetTabNumber();
-    auto nSheetViewID = pThisTab->mnSheetViewID;
+    auto nSheetViewID = GetSheetViewID();
     if (nSheetViewID != sc::DefaultSheetViewID)
     {
         SCTAB nTab = mrDoc.GetSheetViewNumber(GetTabNumber(), nSheetViewID);

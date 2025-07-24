@@ -397,8 +397,15 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case FID_NEW_SHEET_VIEW:
+            case FID_REMOVE_SHEET_VIEW:
                 {
-                    // TODO
+                    if (GetViewData().GetDocShell()->IsReadOnly() || IsCurrentLokViewReadOnly())
+                    {
+                        rSet.DisableItem(FID_NEW_SHEET_VIEW);
+                        rSet.DisableItem(FID_REMOVE_SHEET_VIEW);
+                    }
+                    if (nWhich == FID_REMOVE_SHEET_VIEW && GetViewData().GetSheetViewID() == sc::DefaultSheetViewID)
+                        rSet.DisableItem(FID_REMOVE_SHEET_VIEW);
                 }
                 break;
 

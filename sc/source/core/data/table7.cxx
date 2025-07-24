@@ -666,7 +666,7 @@ const std::shared_ptr<sc::SolverSettings> & ScTable::GetSolverSettings()
     return m_pSolverSettings;
 }
 
-std::shared_ptr<sc::SheetViewManager> const& ScTable::GetSheetViewManager()
+std::shared_ptr<sc::SheetViewManager> const& ScTable::GetSheetViewManager() const
 {
     return mpSheetViewManager;
 }

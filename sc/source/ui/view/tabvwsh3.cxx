@@ -1050,6 +1050,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             MakeNewSheetView();
         break;
 
+        case FID_REMOVE_SHEET_VIEW:
+            RemoveCurrentSheetView();
+        break;
+
         case SID_ATTR_ZOOM: // status row
         case FID_SCALE:
             {
