@@ -1941,6 +1941,26 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         ApplyBorderToPageStyles( rDM_Impl, m_eBorderApply, m_eBorderOffsetFrom );
         ApplyPaperSource(rDM_Impl);
 
+        // Emulation: now apply the previous section's unused belowSpacing
+        // to the last paragraph before the section page break
+        // so that the consolidation/collapse of this section's 1st paragraph's aboveSpacing
+        // works correctly (since below spacing before a page break otherwise has no relevance).
+        if (pPrevSection && pPrevSection->GetBelowSpacing().has_value() && m_xPreStartingRange.is())
+        {
+            try
+            {
+                const uno::Any aBelowSpacingOfPrevSection(*pPrevSection->GetBelowSpacing());
+                const OUString sProp(getPropertyName(PROP_PARA_BOTTOM_MARGIN));
+                uno::Reference<beans::XPropertySet> xLastParaInPrevSection(m_xPreStartingRange,
+                                                                           uno::UNO_QUERY_THROW);
+                xLastParaInPrevSection->setPropertyValue(sProp, aBelowSpacingOfPrevSection);
+            }
+            catch (uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("writerfilter", "Transfer below spacing to last para.");
+            }
+        }
+
         try
         {
             //now apply this break at the first paragraph of this section

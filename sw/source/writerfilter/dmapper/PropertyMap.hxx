@@ -304,6 +304,10 @@ private:
     sal_Int32                                       m_nPaperSourceFirst;
     sal_Int32                                       m_nPaperSourceOther;
 
+    // Although an empty sectPr's spacing doesn't directly affect layout,
+    // below spacing is needed to consolidate/collapse the top spacing of the following paragraph.
+    std::optional<sal_Int32> m_oBelowSpacing;
+
     bool                                            m_bDynamicHeightTop;
     bool                                            m_bDynamicHeightBottom;
 
@@ -414,6 +418,9 @@ public:
     void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
 
     void SetPaperSource(sal_Int32 first, sal_Int32 other) { m_nPaperSourceFirst = first; m_nPaperSourceOther = other;}
+
+    const std::optional<sal_Int32>& GetBelowSpacing() const { return m_oBelowSpacing; }
+    void SetBelowSpacing(sal_Int32 nSet) { m_oBelowSpacing = nSet; }
 
     void addRelativeWidthShape( const css::uno::Reference<css::drawing::XShape>& xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
