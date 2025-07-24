@@ -1688,6 +1688,10 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                     bool bIsQuoted = false;
                     p = ScImportExport::ScanNextFieldFromString( p, aCell,
                             cStr, pSeps, bMerge, bIsQuoted, bOverflowCell, bRemoveSpace );
+                    // some dodgy CSVs have a trailing linefeed in each token, which will
+                    // make the code think that we have a multi-line field, which will slow things down a lot.
+                    if (aCell.endsWith("\n"))
+                        aCell = aCell.copy(0, aCell.getLength()-1);
 
                     sal_uInt8 nFmt = SC_COL_STANDARD;
                     for ( i=nInfoStart; i<nInfoCount; i++ )
