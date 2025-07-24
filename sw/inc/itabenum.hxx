@@ -39,9 +39,10 @@ struct SwInsertTableOptions
 {
     SwInsertTableFlags mnInsMode;
     sal_uInt16 mnRowsToRepeat;
+    sal_uInt16 mnColumns;
 
     SwInsertTableOptions( SwInsertTableFlags nInsMode, sal_uInt16 nRowsToRepeat ) :
-        mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ) {};
+        mnInsMode( nInsMode ), mnRowsToRepeat( nRowsToRepeat ), mnColumns( 0 ) {};
 };
 
 #endif

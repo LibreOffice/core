@@ -23,6 +23,7 @@ sw/uiconfig/swriter/ui/columnpage.ui://GtkSpinButton[@id='width2mf'] labelled-by
 sw/uiconfig/swriter/ui/columnpage.ui://GtkSpinButton[@id='width1mf'] labelled-by-and-mnemonic
 sw/uiconfig/swriter/ui/conditionpage.ui://GtkComboBoxText[@id='filter'] no-labelled-by
 sw/uiconfig/swriter/ui/converttexttable.ui://GtkLabel[@id='label4'] orphan-label
+sw/uiconfig/swriter/ui/converttexttable.ui://GtkLabel[@id='label16'] orphan-label
 sw/uiconfig/swriter/ui/customizeaddrlistdialog.ui://GtkButton[@id='down'] button-no-label
 sw/uiconfig/swriter/ui/customizeaddrlistdialog.ui://GtkButton[@id='up'] button-no-label
 sw/uiconfig/swriter/ui/editbox.ui://GtkEntry[@id='entry'] no-labelled-by

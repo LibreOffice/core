@@ -749,7 +749,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
 
     SwTableNode* pTableNd = GetNodes().TextToTable(
             aRg, cCh, pTableFormat, pLineFormat, pBoxFormat,
-            getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ), pUndo );
+            getIDocumentStylePoolAccess().GetTextCollFromPool( SwPoolFormatId::COLL_STANDARD ), pUndo,
+            rInsTableOpts.mnColumns );
 
     SwTable& rNdTable = pTableNd->GetTable();
 
@@ -1049,7 +1050,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                     SwTableLineFormat* pLineFormat,
                                     SwTableBoxFormat* pBoxFormat,
                                     SwTextFormatColl* pTextColl,
-                                    SwUndoTextToTable* pUndo )
+                                    SwUndoTextToTable* pUndo,
+                                    sal_uInt16 nCols )
 {
     if( rRange.aStart >= rRange.aEnd )
         return nullptr;
@@ -1173,6 +1175,13 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         if( nMaxBoxes < nBoxes )
             nMaxBoxes = nBoxes;
     }
+
+    // tdf#167632: append the additional empty columns requested in the dialog.
+    // Raising nMaxBoxes lets lcl_BalanceTable() create the empty boxes via
+    // InsBoxen() - without inserting any separator text into the document - and
+    // register them with the undo object, so they vanish again when the
+    // conversion is reverted.
+    nMaxBoxes += nCols;
 
     lcl_BalanceTable(rTable, nMaxBoxes, *pTableNd, *pBoxFormat, *pTextColl,
             pUndo, &aPosArr);

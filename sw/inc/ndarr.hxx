@@ -270,12 +270,14 @@ public:
                         const SwAttrSet * pAttrSet);
 
     /// Create balanced table from selected range.
+    /// @param nCols  number of additional empty columns to append (tdf#167632)
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                 SwTableFormat* pTableFormat,
                                 SwTableLineFormat* pLineFormat,
                                 SwTableBoxFormat* pBoxFormat,
                                 SwTextFormatColl* pTextColl,
-                                SwUndoTextToTable* pUndo );
+                                SwUndoTextToTable* pUndo,
+                                sal_uInt16 nCols = 0 );
 
     void ExpandRangeForTableBox(const SwNodeRange & rRange,
                                 std::optional<SwNodeRange>& rExpandedRange);
