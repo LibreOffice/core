@@ -365,13 +365,13 @@ OString WhitespaceToSpace(std::string_view rLine)
     // there might be a space at beginning or end
     assert(pLeap > pBuffer);
     pLeap--;
-#if defined(__GNUC__) && (__GNUC__ == 12 || __GNUC__ == 13 || __GNUC__ == 14)
+#if defined(__GNUC__) && __GNUC__ >= 12 && __GNUC__ <= 15
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
     if( *pLeap == ' ' )
         *pLeap = 0;
-#if defined(__GNUC__) && (__GNUC__ == 12 || __GNUC__ == 13 || __GNUC__ == 14)
+#if defined(__GNUC__) && __GNUC__ >= 12 && __GNUC__ <= 15
 #pragma GCC diagnostic pop
 #endif
     return *pBuffer == ' ' ? pBuffer+1 : pBuffer;
