@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <iconview.hxx>
 #include <svimpbox.hxx>
 
 class SvTreeListBox;
@@ -26,7 +27,7 @@ class SvTreeListBox;
 class IconViewImpl : public SvImpLBox
 {
 public:
-    IconViewImpl(SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, WinBits nWinStyle);
+    IconViewImpl(IconView* pIconView, SvTreeList* pTreeList, WinBits nWinStyle);
 
     void KeyDown(bool bPageDown) override;
 

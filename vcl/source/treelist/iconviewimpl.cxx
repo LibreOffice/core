@@ -20,11 +20,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <tools/debug.hxx>
-#include <iconview.hxx>
 #include "iconviewimpl.hxx"
 
-IconViewImpl::IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, WinBits nWinStyle )
-: SvImpLBox( pTreeListBox, pTreeList, nWinStyle )
+IconViewImpl::IconViewImpl(IconView* pIconView, SvTreeList* pTreeList, WinBits nWinStyle)
+    : SvImpLBox(pIconView, pTreeList, nWinStyle)
 {
 }
 
