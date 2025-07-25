@@ -150,6 +150,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"sfx/ui/safemodequerydialog.ui"_ustr,
         u"sfx/ui/templatecategorydlg.ui"_ustr,
         u"sfx/ui/versioncommentdialog.ui"_ustr,
+        u"sfx/ui/versionsofdialog.ui"_ustr,
         u"svt/ui/addresstemplatedialog.ui"_ustr,
         u"svt/ui/printersetupdialog.ui"_ustr,
         u"svt/ui/restartdialog.ui"_ustr,
