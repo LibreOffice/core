@@ -29,6 +29,7 @@ ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
     std::unique_ptr<weld::ColorChooserDialog> pDialog
         = GetSalInstance()->CreateColorChooserDialog(pParent, eMode);
     assert(pDialog);
+    pDialog->set_modal(true);
     m_pColorChooserDialogController
         = std::make_shared<ColorChooserDialogController>(std::move(pDialog));
 }

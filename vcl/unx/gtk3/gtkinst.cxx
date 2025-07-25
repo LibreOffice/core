@@ -4489,6 +4489,11 @@ namespace
         return aColor;
     }
 
+    Color toVclColor(const GdkRGBA& rColor)
+    {
+        return Color(rColor.red * 255, rColor.green * 255, rColor.blue * 255);
+    }
+
     OUString get_label(GtkLabel* pLabel)
     {
         const gchar* pStr = gtk_label_get_label(pLabel);
@@ -7957,23 +7962,32 @@ public:
 class GtkInstanceColorChooserDialog : public GtkInstanceDialog,
                                       public virtual weld::ColorChooserDialog
 {
-    ScopedVclPtr<AbstractColorPickerDialog> m_pAbstractColorPickerDialog;
+    GtkColorChooserDialog* m_pColorChooserDialog;
 
 public:
-    GtkInstanceColorChooserDialog(AbstractColorPickerDialog* pColorDialog)
-        : GtkInstanceDialog(
-              dynamic_cast<GtkInstanceDialog*>(pColorDialog->GetDialog())->getWindow(), nullptr,
-              false)
-        , m_pAbstractColorPickerDialog(pColorDialog)
+    GtkInstanceColorChooserDialog(GtkColorChooserDialog* pColorChooserDialog)
+        : GtkInstanceDialog(GTK_WINDOW(pColorChooserDialog), nullptr, true)
+        , m_pColorChooserDialog(pColorChooserDialog)
     {
+        assert(m_pColorChooserDialog);
+        gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(m_pColorChooserDialog), false);
+
+        // directly show the advanced color editor
+        g_object_set(G_OBJECT(m_pColorChooserDialog), "show-editor", true, nullptr);
     }
 
     virtual void set_color(const Color& rColor) override
     {
-        m_pAbstractColorPickerDialog->SetColor(rColor);
+        GdkRGBA aColor = toGdkColor(rColor);
+        gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(m_pColorChooserDialog), &aColor);
     }
 
-    virtual Color get_color() const override { return m_pAbstractColorPickerDialog->GetColor(); }
+    virtual Color get_color() const override
+    {
+        GdkRGBA aColor;
+        gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(m_pColorChooserDialog), &aColor);
+        return toVclColor(aColor);
+    }
 };
 }
 
@@ -25160,13 +25174,12 @@ weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, Vcl
 }
 
 std::unique_ptr<weld::ColorChooserDialog>
-GtkInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
+GtkInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode)
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    assert(pFact);
-    VclPtr<AbstractColorPickerDialog> pDialog
-        = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
-    assert(pDialog);
+    GtkInstanceWindow* pWindow = dynamic_cast<GtkInstanceWindow*>(pParent);
+    GtkWindow* pGtkParent = pWindow ? pWindow->getWindow() : nullptr;
+    GtkColorChooserDialog* pDialog = GTK_COLOR_CHOOSER_DIALOG(
+        gtk_color_chooser_dialog_new(VclResId(RID_STR_PICK_COLOR).toUtf8().getStr(), pGtkParent));
     return std::make_unique<GtkInstanceColorChooserDialog>(pDialog);
 }
 
