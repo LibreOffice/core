@@ -301,6 +301,17 @@ namespace pdfi
                                        int x0, int y0, int x1, int y1,
                                        double xStep, double yStep) override;
 #endif
+
+#if POPPLER_CHECK_VERSION(0, 70, 0)
+        void beginTransparencyGroup(GfxState *state, const double *bbox,
+#else
+        void beginTransparencyGroup(GfxState *state, double *bbox,
+#endif
+                                    GfxColorSpace *blendingColorSpace,
+                                    poppler_bool isolated,
+                                    poppler_bool knockout,
+                                    poppler_bool forSoftMask) override;
+        void endTransparencyGroup(GfxState *state) override;
     };
 }
 

@@ -5,16 +5,18 @@ struct hash_entry { int name; enum parseKey eKey; };
 #endif
 
 %%
+beginTransparencyGroup,BEGINTRANSPARENCYGROUP
 clipPath,CLIPPATH
 clipToStrokePath,CLIPTOSTROKEPATH
 drawChar,DRAWCHAR
 drawImage,DRAWIMAGE
-drawLink,DRAWLINK	
+drawLink,DRAWLINK
 drawMask,DRAWMASK
 drawMaskedImage,DRAWMASKEDIMAGE
 drawSoftMaskedImage,DRAWSOFTMASKEDIMAGE
 endPage,ENDPAGE
 endTextObject,ENDTEXTOBJECT
+endTransparencyGroup,ENDTRANSPARENCYGROUP
 eoClipPath,EOCLIPPATH
 eoFillPath,EOFILLPATH
 fillPath,FILLPATH

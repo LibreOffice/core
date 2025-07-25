@@ -74,6 +74,7 @@ namespace
 // identifier of the strings coming from the out-of-process xpdf
 // converter
 enum parseKey {
+    BEGINTRANSPARENCYGROUP,
     CLIPPATH,
     CLIPTOSTROKEPATH,
     DRAWCHAR,
@@ -84,6 +85,7 @@ enum parseKey {
     DRAWSOFTMASKEDIMAGE,
     ENDPAGE,
     ENDTEXTOBJECT,
+    ENDTRANSPARENCYGROUP,
     EOCLIPPATH,
     EOFILLPATH,
     FILLPATH,
@@ -198,6 +200,8 @@ public:
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
     void                 readTilingPatternFill();
+    void                 beginTransparencyGroup();
+    void                 endTransparencyGroup();
 };
 
 /** Unescapes line-ending characters in input string. These
@@ -848,6 +852,19 @@ void LineParser::readTilingPatternFill()
          aTile );
 }
 
+void LineParser::beginTransparencyGroup()
+{
+    // TODO
+    sal_Int32 nForSoftMask;
+    readInt32( nForSoftMask );
+}
+
+void LineParser::endTransparencyGroup()
+{
+    // TODO - dummy to avoid static warning until next patch
+    m_nCharIndex = std::string_view::npos;
+}
+
 void Parser::parseLine( std::string_view aLine )
 {
     OSL_PRECOND( m_pSink,         "Invalid sink" );
@@ -861,6 +878,8 @@ void Parser::parseLine( std::string_view aLine )
     assert(pEntry);
     switch( pEntry->eKey )
     {
+        case BEGINTRANSPARENCYGROUP:
+            lp.beginTransparencyGroup(); break;
         case CLIPPATH:
             m_pSink->intersectClip(lp.readPath()); break;
         case CLIPTOSTROKEPATH:
@@ -881,6 +900,8 @@ void Parser::parseLine( std::string_view aLine )
             m_pSink->endPage(); break;
         case ENDTEXTOBJECT:
             m_pSink->endText(); break;
+        case ENDTRANSPARENCYGROUP:
+            lp.endTransparencyGroup(); break;
         case EOCLIPPATH:
             m_pSink->intersectEoClip(lp.readPath()); break;
         case EOFILLPATH:

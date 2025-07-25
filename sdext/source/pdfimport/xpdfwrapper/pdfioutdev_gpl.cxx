@@ -1137,6 +1137,28 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
     writeBinaryBuffer(aBuf);
 }
 
+#if POPPLER_CHECK_VERSION(0, 70, 0)
+void PDFOutDev::beginTransparencyGroup(GfxState * /*state*/, const double * /*bbox*/,
+#else
+void PDFOutDev::beginTransparencyGroup(GfxState * /*state*/, double * /*bbox*/,
+#endif
+                                    GfxColorSpace * /*blendingColorSpace*/,
+                                    poppler_bool /*isolated*/,
+                                    poppler_bool /*knockout*/,
+                                    poppler_bool forSoftMask)
+{
+    // We're not doing full transparency group yet, just trying to hide the
+    // soft mask temporaries.
+    printf( "beginTransparencyGroup %d", !!forSoftMask);
+    printf("\n");
+}
+
+void PDFOutDev::endTransparencyGroup(GfxState * /* state */)
+{
+    printf( "endTransparencyGroup");
+    printf("\n");
+}
+
 #if POPPLER_CHECK_VERSION(0, 82, 0)
 void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
                           int width, int height, GfxImageColorMap* colorMap,
