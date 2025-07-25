@@ -5401,7 +5401,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
     OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
 
     if (!isCommandAllowed(aCommand))
@@ -5422,9 +5421,12 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         aPropertyValuesVector.push_back(aSynchronMode);
     }
 
-    int nView = SfxLokHelper::getCurrentView();
-    if (nView < 0)
+    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
+    if (!pViewShell)
         return;
+    assert(nView == pViewShell->GetViewShellId().get() && "otherwise we couldn't have found it");
+    SfxObjectShell* pDocSh = pViewShell->GetObjectShell();
 
     if (gImpl && aCommand == ".uno:ToggleOrientation")
     {
@@ -5495,7 +5497,6 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     else if (gImpl && aCommand == ".uno:TransformDialog")
     {
         bool bNeedConversion = false;
-        SfxViewShell* pViewShell = SfxViewShell::Current();
         LokChartHelper aChartHelper(pViewShell);
 
         if (aChartHelper.GetWindow() )
