@@ -111,7 +111,7 @@ BitmapEx SfxObjectShell::GetPreviewBitmap() const
     if(!CreatePreview_Impl(/*bFullContent*/false, false, pDevice, nullptr))
         return BitmapEx();
     Size size = pDevice->GetOutputSizePixel();
-    BitmapEx aBitmap = pDevice->GetBitmapEx( Point(), size);
+    BitmapEx aBitmap( pDevice->GetBitmap( Point(), size) );
     // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
     size = Size( size.Width() / 4, size.Height() / 4 );
     aBitmap.Scale(size, BmpScaleFlag::BestQuality);

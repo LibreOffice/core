@@ -172,7 +172,7 @@ BitmapEx XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickne
     pProcessor2D.reset();
 
     // get result bitmap and scale
-    BitmapEx aRetval(pVirtualDevice->GetBitmapEx(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
+    BitmapEx aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
 
     if(1 != nFactor)
     {

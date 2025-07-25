@@ -56,7 +56,7 @@ void ThemeDialog::initColorSets()
     {
         auto const& rColorSet = maColorSets[i];
         VclPtr<VirtualDevice> pVirDev = CreateColorSetPreview(rColorSet);
-        BitmapEx aBitmapEx = pVirDev->GetBitmapEx(Point(0, 0), pVirDev->GetOutputSizePixel());
+        BitmapEx aBitmapEx(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
 
         OUString sId = OUString::number(i);
         OUString sName = rColorSet.getName();

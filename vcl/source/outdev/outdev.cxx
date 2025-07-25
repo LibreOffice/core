@@ -463,7 +463,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( mpMetaFile )
     {
-        const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
+        const BitmapEx aBmpEx(rOutDev.GetBitmap(rSrcPt, rSrcSize));
         mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
     }
 

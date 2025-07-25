@@ -53,7 +53,7 @@ void DialControlBmp::CopyBackground( const DialControlBmp& rSrc )
     SetSize(rSrc.maRect.GetSize());
     mbEnabled = rSrc.mbEnabled;
     Point aPos;
-    DrawBitmapEx( aPos, rSrc.GetBitmapEx( aPos, maRect.GetSize() ) );
+    DrawBitmapEx( aPos, rSrc.GetBitmap( aPos, maRect.GetSize() ) );
 }
 
 void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
@@ -276,7 +276,7 @@ void DialControl::Resize()
 void DialControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Point aPos;
-    rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmapEx(aPos, mpImpl->maWinSize));
+    rRenderContext.DrawBitmapEx(aPos, mpImpl->mxBmpBuffered->GetBitmap(aPos, mpImpl->maWinSize));
 }
 
 void DialControl::StyleUpdated()

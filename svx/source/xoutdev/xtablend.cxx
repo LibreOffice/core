@@ -154,7 +154,7 @@ BitmapEx XLineEndList::CreateBitmapForUI( tools::Long nIndex )
         pProcessor2D.reset();
 
         // get result bitmap and scale
-        aRetval = pVirtualDevice->GetBitmapEx(Point(0, 0), pVirtualDevice->GetOutputSizePixel());
+        aRetval = pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel());
     }
 
     return aRetval;

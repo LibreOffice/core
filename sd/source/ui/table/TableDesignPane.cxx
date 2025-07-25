@@ -1018,7 +1018,7 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
         }
     }
 
-    return pVirDev->GetBitmapEx(Point(0,0), aBmpSize);
+    return BitmapEx(pVirDev->GetBitmap(Point(0,0), aBmpSize));
 }
 
 void TableDesignWidget::FillDesignPreviewControl()

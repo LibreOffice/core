@@ -93,7 +93,7 @@ namespace svt::table
                                  i_sortAscending ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN,
                                  i_style.GetActiveColor());
 
-            rBitmap = aDevice->GetBitmapEx(aBitmapPos, aBitmapSize);
+            rBitmap = aDevice->GetBitmap(aBitmapPos, aBitmapSize);
             m_lastHeaderHeight = i_headerHeight;
             m_lastArrowColor = i_style.GetActiveColor();
         }

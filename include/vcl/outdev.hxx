@@ -1311,12 +1311,21 @@ public:
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const BitmapEx& rBitmapEx );
+    // draw bitmap (potentially with alpha)
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Bitmap& rBitmap );
 
 
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const BitmapEx& rBitmapEx );
+    // draw bitmap (potentially with alpha)
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Bitmap& rBitmapEx );
 
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1331,6 +1340,14 @@ public:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
                                     const BitmapEx& rBitmapEx,
+                                    MetaActionType nAction );
+    // draw bitmap, potentially with alpha information
+    SAL_DLLPRIVATE void         DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap,
                                     MetaActionType nAction );
 
     /** @overload
@@ -1352,17 +1369,14 @@ public:
                                     DrawImageFlags nStyle = DrawImageFlags::NONE );
 
 
+    /** Query bitmap (with alpha channel, if available).
+     */
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
 
     /**
      * Does this device support alpha?
      */
     virtual bool HasAlpha() const = 0;
-
-    /** Query extended bitmap (with alpha channel, if available).
-     */
-    BitmapEx                    GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const;
-
 
     /** Draw BitmapEx transformed
 

@@ -122,7 +122,7 @@ void XOBitmap::Array2Bitmap()
         }
     }
 
-    xGraphicObject.reset(new GraphicObject(pVDev->GetBitmapEx(Point(), Size(nLines, nLines))));
+    xGraphicObject.reset(new GraphicObject(pVDev->GetBitmap(Point(), Size(nLines, nLines))));
     bGraphicDirty = false;
 }
 

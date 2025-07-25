@@ -206,7 +206,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
 {
     VclPtr<VirtualDevice> xParentDialogSurface(rParentDialog.screenshot());
     maParentDialogSize = xParentDialogSurface->GetOutputSizePixel();
-    maParentDialogBitmap = xParentDialogSurface->GetBitmapEx(Point(), maParentDialogSize);
+    maParentDialogBitmap = xParentDialogSurface->GetBitmap(Point(), maParentDialogSize);
     maDimmedDialogBitmap = maParentDialogBitmap;
 
     // image ain't empty
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 
     // extract Bitmap
     const BitmapEx aTargetBitmap(
-        mxVirtualBufferDevice->GetBitmapEx(
+        mxVirtualBufferDevice->GetBitmap(
         Point(0, 0),
         mxVirtualBufferDevice->GetOutputSizePixel()));
 

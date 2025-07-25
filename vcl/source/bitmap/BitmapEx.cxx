@@ -106,7 +106,7 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :
         maBitmapSize ( rBmp.GetSizePixel() )
 {
-    if (rBmp.getPixelFormat() == vcl::PixelFormat::N32_BPP)
+    if (rBmp.HasAlpha())
     {
         std::pair<Bitmap, AlphaMask> aPair = rBmp.SplitIntoColorAndAlpha();
         maBitmap = std::move(aPair.first);
@@ -533,7 +533,7 @@ BitmapEx BitmapEx::AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long a
     aVirDevice->DrawRect( aRect );
     Point aPointPixel( static_cast<tools::Long>(imgposX), static_cast<tools::Long>(imgposY) );
     aVirDevice->DrawBitmapEx( aPointPixel, aRet );
-    aRet = aVirDevice->GetBitmapEx( aEmptyPoint, aStdSize );
+    aRet = aVirDevice->GetBitmap( aEmptyPoint, aStdSize );
 
     return aRet;
 }

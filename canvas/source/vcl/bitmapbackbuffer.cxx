@@ -78,7 +78,7 @@ namespace vclcanvas
             mpVDev->EnableMapMode( false );
             mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             const Point aEmptyPoint;
-            *maBitmap = mpVDev->GetBitmapEx( aEmptyPoint,
+            *maBitmap = mpVDev->GetBitmap( aEmptyPoint,
                                              mpVDev->GetOutputSizePixel() );
         }
 

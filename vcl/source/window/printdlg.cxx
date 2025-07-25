@@ -425,7 +425,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     aMtf.Play(*pPrerenderVDev, Point(0, 0), aLogicSize);
 
     pPrerenderVDev->SetMapMode(MapMode(MapUnit::MapPixel));
-    maPreviewBitmap = pPrerenderVDev->GetBitmapEx(Point(0, 0), pPrerenderVDev->GetOutputSizePixel());
+    maPreviewBitmap = pPrerenderVDev->GetBitmap(Point(0, 0), pPrerenderVDev->GetOutputSizePixel());
 
     if(0.0 != fFactor)
     {

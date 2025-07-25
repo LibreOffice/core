@@ -274,11 +274,11 @@ static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
 
 void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where)
 {
-    BitmapEx aSourceBitmapEx = pVirtualDev->GetBitmapEx(Point(), Size(10, 10));
+    BitmapEx aSourceBitmapEx( pVirtualDev->GetBitmap(Point(), Size(10, 10)) );
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
     pVirtualDevResult->SetOutputSizePixel(Size(10, 10));
     const_cast<GDIMetaFile&>(rMetaFile).Play(*pVirtualDevResult);
-    BitmapEx aResultBitmapEx = pVirtualDevResult->GetBitmapEx(Point(), Size(10, 10));
+    BitmapEx aResultBitmapEx( pVirtualDevResult->GetBitmap(Point(), Size(10, 10)) );
 
     const bool bWriteCompareBitmap = false;
 

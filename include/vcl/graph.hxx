@@ -93,6 +93,7 @@ public:
                     Graphic( Graphic&& rGraphic ) noexcept;
                     Graphic( const Image& rImage );
                     Graphic( const BitmapEx& rBmpEx );
+                    Graphic( const Bitmap& rBmp );
                     Graphic( const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );

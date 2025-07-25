@@ -1603,7 +1603,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
             Graphic aGraphic2=aGraphic;
             aGraphic2.Draw(*aVirDev, Point(0, 0), aSizePixel); // this changes the MapMode
             aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
-            aGraphic=Graphic(aVirDev->GetBitmapEx(Point(0,0),aSizePixel));
+            aGraphic=Graphic(aVirDev->GetBitmap(Point(0,0),aSizePixel));
         }
     }
     if( rOStm.GetError() )

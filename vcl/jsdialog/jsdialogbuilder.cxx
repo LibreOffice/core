@@ -1329,7 +1329,7 @@ void JSComboBox::render_entry(int pos, int dpix, int dpiy)
 
     signal_custom_render(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), false, get_id(pos));
 
-    BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
+    Bitmap aImage = pDevice->GetBitmap(Point(0, 0), aRenderSize);
 
     SvMemoryStream aOStm(65535, 65535);
     if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)

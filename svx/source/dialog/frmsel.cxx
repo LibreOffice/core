@@ -719,7 +719,7 @@ void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
 {
     if (mbFullRepaint)
         DrawVirtualDevice();
-    rRenderContext.DrawBitmapEx(maVirDevPos, mpVirDev->GetBitmapEx(Point(0, 0), mpVirDev->GetOutputSizePixel()));
+    rRenderContext.DrawBitmapEx(maVirDevPos, mpVirDev->GetBitmap(Point(0, 0), mpVirDev->GetOutputSizePixel()));
 }
 
 void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)

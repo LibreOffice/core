@@ -173,7 +173,7 @@ BitmapEx PageObjectPainter::CreateMarkedPreview (
             for (::tools::Long nY=0; nY<rSize.Height(); nY+=nIconHeight)
                 pDevice->DrawBitmapEx(Point(nX,nY), rOverlay);
     }
-    return pDevice->GetBitmapEx(Point(0,0), rSize);
+    return BitmapEx(pDevice->GetBitmap(Point(0,0), rSize));
 }
 
 BitmapEx PageObjectPainter::GetPreviewBitmap (

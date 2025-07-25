@@ -4430,7 +4430,7 @@ public:
                 break;
             case OUTDEV_PRINTER:
             case OUTDEV_PDF:
-                rOutput.DrawBitmapEx(rPos, xOutput->GetBitmapEx(Point(), aSize));
+                rOutput.DrawBitmapEx(rPos, xOutput->GetBitmap(Point(), aSize));
                 break;
         }
 

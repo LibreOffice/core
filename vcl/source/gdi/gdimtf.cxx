@@ -2324,7 +2324,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         const_cast<GDIMetaFile *>(this)->Play(*aVDev, Point(), aAntialias);
 
         // get paint bitmap
-        BitmapEx aBitmap( aVDev->GetBitmapEx( aNullPt, aVDev->GetOutputSizePixel() ) );
+        BitmapEx aBitmap( aVDev->GetBitmap( aNullPt, aVDev->GetOutputSizePixel() ) );
 
         // scale down the image to the desired size - use the input scaler for the scaling operation
         aBitmap.Scale(aDrawSize, nScaleFlag);

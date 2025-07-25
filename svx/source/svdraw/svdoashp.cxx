@@ -355,7 +355,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
                 pVirDev->SetOutputSizePixel(aBitmapEx.GetSizePixel());
                 BitmapFilter::Filter(aBitmapEx, BitmapShadowFilter(aShadowColor));
                 pVirDev->DrawBitmapEx(Point(), aBitmapEx);
-                aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmapEx(Point(0,0), aBitmapEx.GetSizePixel())));
+                aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmap(Point(0,0), aBitmapEx.GetSizePixel())));
             }
 
             aTempSet.Put(XFillBitmapItem(aGraphicObject));

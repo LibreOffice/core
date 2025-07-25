@@ -188,7 +188,7 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
                 aVDev->SetOutputSizePixel(aTarget, true, bAlphaMaskTransparent);
                 mxMetaFile->WindStart();
                 mxMetaFile->Play(*aVDev, Point(), aTarget);
-                maBitmapEx = aVDev->GetBitmapEx(Point(), aTarget);
+                maBitmapEx = aVDev->GetBitmap(Point(), aTarget);
             }
         }
     }

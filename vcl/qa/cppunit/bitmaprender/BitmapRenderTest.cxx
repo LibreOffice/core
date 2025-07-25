@@ -191,7 +191,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
                          pAlphaVirtualDevice->GetPixel(Point(1, 1)));
 
     // Get a BitmapEx from the VirDev -> Colors should have alpha
-    BitmapEx aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(4, 4));
+    BitmapEx aBitmap(pAlphaVirtualDevice->GetBitmap(Point(), Size(4, 4)));
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     Color aColor = aBitmap.GetPixelColor(1, 1);
@@ -210,7 +210,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 #endif
 
     // Read back the BitmapEx and check the opaque pixel
-    aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(4, 4));
+    aBitmap = pAlphaVirtualDevice->GetBitmap(Point(), Size(4, 4));
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
 
@@ -233,7 +233,7 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 #endif
 
     // Read back the BitmapEx and check the semi-transparent pixel
-    aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(4, 4));
+    aBitmap = pAlphaVirtualDevice->GetBitmap(Point(), Size(4, 4));
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
 

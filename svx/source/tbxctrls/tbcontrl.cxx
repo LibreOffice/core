@@ -672,7 +672,7 @@ private:
             aVirDev->SetFillColor( aColor2 );
             svtools::DrawLine( *aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, SvxBorderLineStyle::SOLID );
         }
-        rBmp = aVirDev->GetBitmapEx( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
+        rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
 
     LineListBox::LineListBox()

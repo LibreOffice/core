@@ -38,6 +38,11 @@ Image::Image(const BitmapEx& rBitmapEx)
     ImplInit(rBitmapEx);
 }
 
+Image::Image(const Bitmap& rBitmap)
+{
+    ImplInit(BitmapEx(rBitmap));
+}
+
 Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
     if (rxGraphic.is())

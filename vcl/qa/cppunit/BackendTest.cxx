@@ -55,7 +55,7 @@ class BackendTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }
@@ -658,7 +658,7 @@ public:
         // Draw with no transformation, only alpha change.
         aMatrix.scale(16, 16);
         device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
-        BitmapEx result = device->GetBitmapEx(Point(0, 0), Size(16, 16));
+        BitmapEx result(device->GetBitmap(Point(0, 0), Size(16, 16)));
         CPPUNIT_ASSERT_EQUAL(COL_GRAY, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(15, 15));
         // Draw rotated and move to the bottom-left corner.

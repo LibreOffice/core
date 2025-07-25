@@ -165,7 +165,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                 aVDev->SetBackground( rWallpaper.GetColor() );
                 aVDev->SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
                 aVDev->DrawBitmapEx( Point(), aBmpEx );
-                aBmpEx = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() );
+                aBmpEx = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
 
             bDrawColorBackground = true;

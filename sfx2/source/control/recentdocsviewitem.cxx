@@ -228,7 +228,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
             pVirDev->DrawBitmapEx(Point(aSize.Width() - aOverlaySize.Width() - 5,
                                         aSize.Height() - aOverlaySize.Height() - 5),
                                   aModule);
-            aThumbnail = pVirDev->GetBitmapEx(Point(), aSize);
+            aThumbnail = pVirDev->GetBitmap(Point(), aSize);
         }
     }
 

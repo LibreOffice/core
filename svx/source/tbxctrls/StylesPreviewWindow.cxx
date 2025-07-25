@@ -595,7 +595,7 @@ BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OU
 
         StyleItemController aStyleController(rStyle);
         aStyleController.Paint(*pImg, pStyleHint);
-        BitmapEx aBitmap = pImg->GetBitmapEx(Point(0, 0), aSize);
+        BitmapEx aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
         StylePreviewCache::Get()[rStyle.second] = aBitmap;
 
         return aBitmap;

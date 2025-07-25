@@ -1076,7 +1076,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             pVirtDev->Erase();
             pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
             pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
-            BitmapEx aBitmapEx(pVirtDev->GetBitmapEx(Point(0, 0), pVirtDev->GetOutputSize()));
+            BitmapEx aBitmapEx(pVirtDev->GetBitmap(Point(0, 0), pVirtDev->GetOutputSize()));
 
             // Ideally we don't need this block, but in the split rgb surface + separate alpha surface
             // with Antialiasing enabled and the svp/cairo backend we get both surfaces antialiased

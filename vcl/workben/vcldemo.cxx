@@ -1082,7 +1082,7 @@ public:
             }
             else if (eType == RENDER_AS_BITMAPEX)
             {
-                BitmapEx aBitmapEx(pNested->GetBitmapEx(Point(0,0),aWhole.GetSize()));
+                BitmapEx aBitmapEx(pNested->GetBitmap(Point(0,0),aWhole.GetSize()));
                 rDev.DrawBitmapEx(r.TopLeft(), aBitmapEx);
             }
             else if (eType == RENDER_AS_OUTDEV ||

@@ -123,9 +123,9 @@ css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX,
     if( !mpOutputDevice )
         return nullptr;
 
-    BitmapEx aBmp = mpOutputDevice->GetBitmapEx( Point( nX, nY ), Size( nWidth, nHeight ) );
+    Bitmap aBmp = mpOutputDevice->GetBitmap( Point( nX, nY ), Size( nWidth, nHeight ) );
     rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
-    pBmp->SetBitmap( aBmp );
+    pBmp->SetBitmap( BitmapEx(aBmp) );
     return pBmp;
 }
 

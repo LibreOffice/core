@@ -137,7 +137,7 @@ void InsertionIndicatorOverlay::Create (
 
     PaintPageCount(*pContent, nSelectionCount, aPreviewSize, aOffset);
 
-    maIcon = pContent->GetBitmapEx(Point(0,0), aIconSize);
+    maIcon = pContent->GetBitmap(Point(0,0), aIconSize);
     maIcon.Scale(aIconSize);
 }
 

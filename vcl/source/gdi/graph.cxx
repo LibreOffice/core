@@ -194,6 +194,11 @@ Graphic::Graphic(const BitmapEx& rBitmapEx)
 {
 }
 
+Graphic::Graphic(const Bitmap& rBitmap)
+    : mxImpGraphic(new ImpGraphic(BitmapEx(rBitmap)))
+{
+}
+
 // We use XGraphic for passing toolbar images across app UNO aps
 // and we need to be able to see and preserve 'stock' images too.
 Graphic::Graphic(const Image& rImage)

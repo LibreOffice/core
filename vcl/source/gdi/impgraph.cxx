@@ -643,7 +643,7 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
                 draw(*aVDev, Point(), aDrawSize);
 
                 // use maBitmapEx as local buffer for rendered metafile
-                const_cast<ImpGraphic*>(this)->maCachedBitmap = aVDev->GetBitmapEx( Point(), aVDev->GetOutputSizePixel() );
+                const_cast<ImpGraphic*>(this)->maCachedBitmap = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
         }
 

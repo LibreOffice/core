@@ -121,7 +121,7 @@ Image PreviewRenderer::RenderPage (
                 PaintFrame();
 
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());
-                aPreview = Image(mpPreviewDevice->GetBitmapEx(
+                aPreview = Image(mpPreviewDevice->GetBitmap(
                     mpPreviewDevice->PixelToLogic(Point(0,0)),
                     mpPreviewDevice->PixelToLogic(aSize)));
 
@@ -183,7 +183,7 @@ Image PreviewRenderer::RenderSubstitution (
         PaintFrame();
 
         const Size aSize (mpPreviewDevice->GetOutputSizePixel());
-        aPreview = Image(mpPreviewDevice->GetBitmapEx(
+        aPreview = Image(mpPreviewDevice->GetBitmap(
             mpPreviewDevice->PixelToLogic(Point(0,0)),
             mpPreviewDevice->PixelToLogic(aSize)));
     }
@@ -452,7 +452,7 @@ Image PreviewRenderer::ScaleBitmap (
             aScaledBitmap);
 
         // Get the resulting bitmap.
-        aPreview = Image(mpPreviewDevice->GetBitmapEx(Point(0,0), aFrameSize));
+        aPreview = Image(mpPreviewDevice->GetBitmap(Point(0,0), aFrameSize));
     }
     while (false);
 

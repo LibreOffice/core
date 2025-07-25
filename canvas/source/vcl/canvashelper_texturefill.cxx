@@ -1003,7 +1003,7 @@ namespace vclcanvas
                             // target position.
                             const ::Point aEmptyPoint;
                             BitmapEx aContentBmp(
-                                pVDev->GetBitmapEx( aEmptyPoint,
+                                pVDev->GetBitmap( aEmptyPoint,
                                                  pVDev->GetOutputSizePixel() ) );
 
                             sal_uInt8 nCol( static_cast< sal_uInt8 >(

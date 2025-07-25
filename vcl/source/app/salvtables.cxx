@@ -858,7 +858,7 @@ Image createImage(const OUString& rImage)
 
 Image createImage(const VirtualDevice& rDevice)
 {
-    return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
+    return Image(rDevice.GetBitmap(Point(), rDevice.GetOutputSizePixel()));
 }
 
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId,
@@ -1456,7 +1456,7 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
         case OUTDEV_PRINTER:
         case OUTDEV_PDF:
             rOutput.DrawBitmapEx(rRenderLogicPos, aRenderLogicSize,
-                                 xOutput->GetBitmapEx(Point(), aTempLogicSize));
+                                 xOutput->GetBitmap(Point(), aTempLogicSize));
             break;
     }
 

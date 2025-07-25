@@ -375,8 +375,8 @@ void SvxLineEndWindow::FillValueSet()
     Point aPt1( maBmpSize.Width(), 0 );
 
     pVD->DrawBitmapEx( Point(), aBmp );
-    mxLineEndSet->InsertItem(1, Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
-    mxLineEndSet->InsertItem(2, Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
+    mxLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
+    mxLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
 
     mpLineEndList->Remove(nCount);
 
@@ -389,9 +389,9 @@ void SvxLineEndWindow::FillValueSet()
 
         pVD->DrawBitmapEx( aPt0, aBmp );
         mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
-                Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
+                Image(pVD->GetBitmap(aPt0, maBmpSize)), pEntry->GetName());
         mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
-                Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
+                Image(pVD->GetBitmap(aPt1, maBmpSize)), pEntry->GetName());
     }
     mnLines = std::min( static_cast<sal_uInt16>(nCount + 1), sal_uInt16(MAX_LINES) );
     mxLineEndSet->SetLineCount( mnLines );

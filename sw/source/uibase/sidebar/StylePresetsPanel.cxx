@@ -113,7 +113,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
         renderPreview(pStyleManager, *pVirtualDev, u"Body Text", nTextBodyHeight, aRenderRect);
     }
 
-    return pVirtualDev->GetBitmapEx(Point(), aSize);
+    return BitmapEx(pVirtualDev->GetBitmap(Point(), aSize));
 }
 
 BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)

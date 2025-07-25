@@ -92,7 +92,7 @@ BitmapEx XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) cons
                 }
             }
         }
-        rBitmapEx = pVirtualDevice->GetBitmapEx(Point(0, 0), rSize);
+        rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
         return rBitmapEx;
     }
     else

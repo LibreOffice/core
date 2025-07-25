@@ -41,7 +41,7 @@ class CanvasTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
+            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }

@@ -115,7 +115,7 @@ void ChartColorPaletteControl::updateStatus(bool bForce)
 
         auto pDev = VclPtr<VirtualDevice>::Create();
         renderSelectedColorPalette(pDev);
-        auto aSelItemImg(pDev->GetBitmapEx(Point(), pDev->GetOutputSizePixel()));
+        auto aSelItemImg(pDev->GetBitmap(Point(), pDev->GetOutputSizePixel()));
         if (m_pToolbar)
         {
             m_pToolbar->set_item_image(m_aCommandURL, Graphic(aSelItemImg).GetXGraphic());

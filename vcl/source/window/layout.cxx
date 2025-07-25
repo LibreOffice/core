@@ -3113,7 +3113,7 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     Paint(*pDevice, aRect);
 
-    BitmapEx aImage = pDevice->GetBitmapEx(Point(0,0), aRenderSize);
+    Bitmap aImage = pDevice->GetBitmap(Point(0,0), aRenderSize);
     aImage.Scale(aOutputSize);
     rJsonWriter.put("imagewidth", aRenderSize.Width());
     rJsonWriter.put("imageheight", aRenderSize.Height());

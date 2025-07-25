@@ -49,6 +49,24 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                  MetaActionType::BMPEX);
 }
 
+void OutputDevice::DrawBitmapEx( const Point& rDestPt,
+                                 const Bitmap& rBitmap )
+{
+    assert(!is_double_buffered_window());
+
+    if( ImplIsRecordLayout() )
+        return;
+
+    if( !rBitmap.HasAlpha() )
+    {
+        DrawBitmap(rDestPt, rBitmap);
+    }
+
+    const Size aSizePx = rBitmap.GetSizePixel();
+    DrawBitmapEx(rDestPt, PixelToLogic(aSizePx), Point(), aSizePx, rBitmap,
+                 MetaActionType::BMPEX);
+}
+
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const BitmapEx& rBitmapEx )
 {
@@ -65,6 +83,24 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
     DrawBitmapEx(rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(),
                  rBitmapEx, MetaActionType::BMPEXSCALE);
+}
+
+void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+                                 const Bitmap& rBitmap )
+{
+    assert(!is_double_buffered_window());
+
+    if( ImplIsRecordLayout() )
+        return;
+
+    if ( !rBitmap.HasAlpha() )
+    {
+        DrawBitmap(rDestPt, rDestSize, rBitmap);
+        return;
+    }
+
+    DrawBitmapEx(rDestPt, rDestSize, Point(), rBitmap.GetSizePixel(),
+                 rBitmap, MetaActionType::BMPEXSCALE);
 }
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
@@ -148,9 +184,64 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     DrawDeviceBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx);
 }
 
-BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const
+void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
+                                 const Bitmap& rBitmap, const MetaActionType nAction )
 {
-    return BitmapEx(GetBitmap( rSrcPt, rSize ));
+    assert(!is_double_buffered_window());
+
+    if( ImplIsRecordLayout() )
+        return;
+
+    if( !rBitmap.HasAlpha() )
+    {
+        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap);
+        return;
+    }
+
+    if (RasterOp::Invert == meRasterOp)
+    {
+        DrawRect(tools::Rectangle(rDestPt, rDestSize));
+        return;
+    }
+
+    BitmapEx aBmpEx(vcl::drawmode::GetBitmapEx(BitmapEx(rBitmap), GetDrawMode()));
+
+    if (mpMetaFile)
+    {
+        switch(nAction)
+        {
+            case MetaActionType::BMPEX:
+                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmpEx));
+                break;
+
+            case MetaActionType::BMPEXSCALE:
+                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+                break;
+
+            case MetaActionType::BMPEXSCALEPART:
+                mpMetaFile->AddAction(new MetaBmpExScalePartAction(rDestPt, rDestSize,
+                                                                   rSrcPtPixel, rSrcSizePixel, aBmpEx));
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    if (!IsDeviceOutputNecessary())
+        return;
+
+    if (!mpGraphics && !AcquireGraphics())
+        return;
+
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    if (mbOutputClipped)
+        return;
+
+    DrawDeviceBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmpEx);
 }
 
 void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,

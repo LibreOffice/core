@@ -488,7 +488,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.Play(*xVDev, aPoint, aDstSize);
                                 aTmpMtf.WindStart();
                                 xVDev->EnableMapMode( false );
-                                BitmapEx aPaint = xVDev->GetBitmapEx(aPoint, xVDev->GetOutputSizePixel());
+                                BitmapEx aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
                                 xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                                 // create alpha mask from gradient

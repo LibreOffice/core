@@ -118,7 +118,7 @@ namespace vclcanvas
         if( bNeedBitmapUpdate )
         {
             const Point aEmptyPoint;
-            BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmapEx( aEmptyPoint,
+            BitmapEx aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint,
                                                               aOutputSize ) );
 
             if( isContentFullyOpaque() )
@@ -133,7 +133,7 @@ namespace vclcanvas
             {
                 // sprite content might contain alpha, create
                 // BmpEx, then.
-                BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
+                BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint,
                                                                            aOutputSize ) );
                 AlphaMask aAlpha( aMask.GetBitmap() );
                 aAlpha.Invert();

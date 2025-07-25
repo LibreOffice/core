@@ -133,6 +133,9 @@ public:
     inline sal_Int64        GetSizeBytes() const;
     bool                    HasGreyPalette8Bit() const;
     bool                    HasGreyPaletteAny() const;
+    // does this bitmap have alpha information?
+    inline bool             HasAlpha() const { return getPixelFormat() == vcl::PixelFormat::N32_BPP; }
+
     /** get system dependent bitmap data
 
         @param rData

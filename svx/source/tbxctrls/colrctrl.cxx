@@ -277,7 +277,7 @@ void SvxColorDockingWindow::FillValueSet()
     pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
     pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
 
-    BitmapEx aBmp( pVD->GetBitmapEx( Point(), aColorSize ) );
+    Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
     xColorSet->InsertItem( sal_uInt16(1), Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
 }

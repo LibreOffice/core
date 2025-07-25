@@ -1206,7 +1206,7 @@ BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
     pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
     pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
 
-    return pWrite->GetBitmapEx(Point(0,0), m_aMarkerSize);
+    return BitmapEx(pWrite->GetBitmap(Point(0,0), m_aMarkerSize));
 }
 
 Color SdrHdlColor::GetLuminance(const Color& rCol)
