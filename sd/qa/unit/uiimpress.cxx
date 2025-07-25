@@ -1998,6 +1998,25 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4), nFillColor);
 }*/
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166647_userpaint)
+{
+    // The document contains two shapes on layer DrawnInSlideshow and is empty besides that. The
+    // running slideshow is displayed in window mode, otherwise its additional window would be
+    // suppressed by the test environment.
+    createSdImpressDoc("odp/tdf166647_userpaint.odp");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    // Go in slideshow mode and back to edit mode
+    dispatchCommand(mxComponent, u".uno:Presentation"_ustr, {});
+    typeKey(pXImpressDocument, KEY_ESCAPE);
+
+    // Count shapes. Error was, that the shapes were duplicated and thus count was 4.
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pViewShell->GetActualPage()->GetObjCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

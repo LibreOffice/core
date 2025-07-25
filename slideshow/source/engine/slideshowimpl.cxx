@@ -1524,6 +1524,8 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         cppcanvas::PolyPolygonSharedPtr pFirstPolyPoly = aPolygons.front(); // for style properties
         for (const auto& pPolyPoly : aPolygons)
         {
+            if (pPolyPoly->getIsFromPreviousSlideshow())
+                continue;
             // Actually, each item in aPolygons has two points, but wrapped in a cppcanvas::PopyPolygon.
             ::basegfx::B2DPolyPolygon b2DPolyPoly
                 = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(

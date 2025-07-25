@@ -444,6 +444,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
                 pPolyPoly->setRGBALineColor( unoColor2RGBColor( nLineColor ).getIntegerColor() );
                 pPolyPoly->setStrokeWidth(fLineWidth);
                 pPolyPoly->draw();
+                pPolyPoly->setIsFromPreviousSlideshow(true);
                 maPolygons.push_back(pPolyPoly);
         }
     }

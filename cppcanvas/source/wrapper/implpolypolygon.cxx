@@ -47,7 +47,8 @@ namespace cppcanvas::internal
                                rendering::PathCapType::ROUND,
                                rendering::PathJoinType::ROUND ),
             mbFillColorSet( false ),
-            mbStrokeColorSet( false )
+            mbStrokeColorSet( false ),
+            mbIsFromPreviousSlideshow(false)
         {
             OSL_ENSURE( mxPolyPoly.is(), "PolyPolygonImpl::PolyPolygonImpl: no valid polygon" );
         }
@@ -128,6 +129,15 @@ namespace cppcanvas::internal
             return mxPolyPoly;
         }
 
+        void ImplPolyPolygon::setIsFromPreviousSlideshow(const bool& rFlag)
+        {
+            mbIsFromPreviousSlideshow = rFlag;
+        }
+
+        bool ImplPolyPolygon::getIsFromPreviousSlideshow() const
+        {
+            return mbIsFromPreviousSlideshow;
+        }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
