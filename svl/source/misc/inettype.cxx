@@ -275,8 +275,9 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 }
 
 //static
-OUString INetContentTypes::GetContentType(INetContentType eTypeID)
+const OUString & INetContentTypes::GetContentType(INetContentType eTypeID)
 {
+    assert(eTypeID <= CONTENT_TYPE_LAST);
     static std::array<OUString, CONTENT_TYPE_LAST + 1> aMap = []()
     {
         std::array<OUString, CONTENT_TYPE_LAST + 1> tmp;
@@ -288,14 +289,13 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
         return tmp;
     }();
 
-    OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ? aMap[eTypeID]
-                                                      : OUString();
-    if (aTypeName.isEmpty())
+    const OUString & rTypeName = aMap[eTypeID];
+    if (rTypeName.isEmpty())
     {
         OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
         return CONTENT_TYPE_STR_APP_OCTSTREAM;
     }
-    return aTypeName;
+    return rTypeName;
 }
 
 //static

@@ -237,7 +237,7 @@ class SVL_DLLPUBLIC INetContentTypes
 public:
     static INetContentType GetContentType(OUString const& rTypeName);
 
-    static OUString GetContentType(INetContentType eTypeID);
+    static const OUString& GetContentType(INetContentType eTypeID);
 
     static INetContentType GetContentType4Extension(OUString const& rExtension);
 
