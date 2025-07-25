@@ -4482,6 +4482,13 @@ namespace
         return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
     }
 
+    GdkRGBA toGdkColor(const Color& rColor)
+    {
+        GdkRGBA aColor{ rColor.GetRed() / 255.0f, rColor.GetGreen() / 255.0f,
+                        rColor.GetBlue() / 255.0f, 0 };
+        return aColor;
+    }
+
     OUString get_label(GtkLabel* pLabel)
     {
         const gchar* pStr = gtk_label_get_label(pLabel);
@@ -14891,7 +14898,7 @@ private:
             m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, nullptr, -1);
         else
         {
-            GdkRGBA aColor{rColor.GetRed()/255.0f, rColor.GetGreen()/255.0f, rColor.GetBlue()/255.0f, 0};
+            GdkRGBA aColor = toGdkColor(rColor);
             m_Setter(m_pTreeModel, const_cast<GtkTreeIter*>(&iter), m_nIdCol + 1, &aColor, -1);
         }
     }
