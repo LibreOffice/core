@@ -161,6 +161,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"svx/ui/deleteheaderdialog.ui"_ustr,
         u"svx/ui/gotopagedialog.ui"_ustr,
         u"svx/ui/safemodedialog.ui"_ustr,
+        u"svx/ui/themecoloreditdialog.ui"_ustr,
         u"uui/ui/password.ui"_ustr,
         u"vcl/ui/openlockedquerybox.ui"_ustr,
         u"vcl/ui/printerdevicepage.ui"_ustr,
@@ -179,6 +180,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/rotationtabpage.ui"_ustr,    u"cui/ui/slantcornertabpage.ui"_ustr,
         u"cui/ui/textattrtabpage.ui"_ustr,    u"cui/ui/textanimtabpage.ui"_ustr,
         u"cui/ui/textcolumnstabpage.ui"_ustr, u"svt/ui/datewindow.ui"_ustr,
+        u"svx/ui/colorwindow.ui"_ustr,
     };
 
     if (aSupportedUIFiles.contains(rUIFile))
