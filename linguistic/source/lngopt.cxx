@@ -89,7 +89,7 @@ struct WID_Name
 
 //! order of entries is import (see LinguOptions::GetName)
 //! since the WID is used as index in this table!
-WID_Name const aWID_Name[] =
+constexpr WID_Name aWID_Name[] =
 {
     { 0,                                  u""_ustr },
     { UPH_IS_USE_DICTIONARY_LIST,         UPN_IS_USE_DICTIONARY_LIST },

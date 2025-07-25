@@ -249,7 +249,7 @@ struct ProvNamesId_Type
     ScServiceProvider::Type nType;
 };
 
-const ProvNamesId_Type aProvNamesId[] =
+constexpr ProvNamesId_Type aProvNamesId[] =
 {
     { u"com.sun.star.sheet.Spreadsheet"_ustr,                 Type::SHEET },
     { u"com.sun.star.text.TextField.URL"_ustr,                Type::URLFIELD },
@@ -322,7 +322,7 @@ const ProvNamesId_Type aProvNamesId[] =
 
 //  old service names that were in 567 still work in createInstance,
 //  in case some macro is still using them
-const ProvNamesId_Type aOldNames[] =
+constexpr ProvNamesId_Type aOldNames[] =
 {
     { u"stardiv.one.text.TextField.URL"_ustr,           Type::URLFIELD },
     { u"stardiv.one.text.TextField.PageNumber"_ustr,    Type::PAGEFIELD },

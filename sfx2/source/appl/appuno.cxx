@@ -59,7 +59,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
 // needs to be converted to a better data structure
-SfxFormalArgument const aFormalArgs[] = {
+constexpr SfxFormalArgument aFormalArgs[] = {
     { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"SuggestedSaveAsName"_ustr, SID_DEFAULTFILENAME },
     { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"SuggestedSaveAsDir"_ustr, SID_DEFAULTFILEPATH },
     { static_cast<const SfxType*>(&aSfxStringItem_Impl), u"VersionAuthor"_ustr, SID_DOCINFO_AUTHOR },

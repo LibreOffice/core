@@ -135,7 +135,7 @@ constexpr MediaTypeEntry aStaticTypeNameMap[]
 
 /** A mapping from extensions to type IDs.  Sorted by extension.
  */
-MediaTypeEntry const aStaticExtensionMap[]
+constexpr MediaTypeEntry aStaticExtensionMap[]
     = { { u"aif"_ustr, CONTENT_TYPE_AUDIO_AIFF },
         { u"aiff"_ustr, CONTENT_TYPE_AUDIO_AIFF },
         { u"appt"_ustr, CONTENT_TYPE_APP_CDE_CALENDAR_APP },

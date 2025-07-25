@@ -282,7 +282,7 @@ struct  ProvNamesId_Type
 }
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
-const ProvNamesId_Type aProvNamesId[] =
+constexpr ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.text.TextTable",                          SwServiceType::TypeTextTable },
     { "com.sun.star.text.TextFrame",                          SwServiceType::TypeTextFrame },
