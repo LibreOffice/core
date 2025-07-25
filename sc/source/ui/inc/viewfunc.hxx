@@ -230,7 +230,7 @@ public:
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips );
 
-    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr );
+    bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = nullptr, bool bRangeWidthChanged = false );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi );
 
     void            ModifyCellSize( ScDirection eDir, bool bOptimal );
