@@ -1916,6 +1916,9 @@ private:
     DECL_LINK(TooltipHdl, SvTreeListEntry*, OUString);
     DECL_LINK(DumpImageHdl, const ::IconView::encoded_image_query&, bool);
 
+    void insert(int pos, const OUString* pStr, const OUString* pId, const Image& rImage,
+                weld::TreeIter* pRet);
+
 public:
     SalInstanceIconView(::IconView* pIconView, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 

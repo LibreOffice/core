@@ -5436,7 +5436,7 @@ void SalInstanceIconView::thaw()
 }
 
 void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const OUString* pIconName, weld::TreeIter* pRet)
+                                 const Image& rImage, weld::TreeIter* pRet)
 {
     disable_notify_events();
     auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
@@ -5450,10 +5450,7 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    Image aImage;
-    if (pIconName)
-        aImage = createImage(*pIconName);
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rImage, rImage, false));
 
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
@@ -5470,37 +5467,17 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
 }
 
 void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
+                                 const OUString* pIconName, weld::TreeIter* pRet)
+{
+    const Image aImage = pIconName ? createImage(*pIconName) : Image();
+    insert(pos, pStr, pId, aImage, pRet);
+}
+
+void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
                                  const BitmapEx* pIcon, weld::TreeIter* pRet)
 {
-    disable_notify_events();
-    auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
-    void* pUserData;
-    if (pId)
-    {
-        m_aUserData.emplace_back(std::make_unique<OUString>(*pId));
-        pUserData = m_aUserData.back().get();
-    }
-    else
-        pUserData = nullptr;
-
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-
-    Image aImage;
-    if (pIcon)
-        aImage = Image(*pIcon);
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-    if (pStr)
-        pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
-    pEntry->SetUserData(pUserData);
-    m_xIconView->Insert(pEntry, nullptr, nInsertPos);
-
-    if (pRet)
-    {
-        SalInstanceTreeIter* pVclRetIter = static_cast<SalInstanceTreeIter*>(pRet);
-        pVclRetIter->iter = pEntry;
-    }
-
-    enable_notify_events();
+    const Image aImage = pIcon ? Image(*pIcon) : Image();
+    insert(pos, pStr, pId, aImage, pRet);
 }
 
 void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
