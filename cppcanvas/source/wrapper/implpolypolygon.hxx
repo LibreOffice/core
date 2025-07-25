@@ -51,6 +51,9 @@ namespace cppcanvas::internal
             virtual css::uno::Reference<
                 css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const override;
 
+            virtual void            setIsFromPreviousSlideshow(const bool& rFlag) override;
+            virtual bool            getIsFromPreviousSlideshow() const override;
+
         private:
             ImplPolyPolygon(const ImplPolyPolygon&) = delete;
             ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) = delete;
@@ -63,6 +66,7 @@ namespace cppcanvas::internal
             css::uno::Sequence< double >                                maStrokeColor;
             bool                                                        mbFillColorSet;
             bool                                                        mbStrokeColorSet;
+            bool                                                        mbIsFromPreviousSlideshow;
         };
 
 }

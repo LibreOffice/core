@@ -65,6 +65,10 @@ namespace cppcanvas
 
         virtual css::uno::Reference<
             css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
+
+        virtual void                        setIsFromPreviousSlideshow(const bool& rFlag) = 0;
+        virtual bool                        getIsFromPreviousSlideshow() const = 0;
+
     };
 
     typedef std::shared_ptr< ::cppcanvas::PolyPolygon > PolyPolygonSharedPtr;
