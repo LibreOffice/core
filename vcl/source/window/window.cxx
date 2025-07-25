@@ -578,7 +578,7 @@ Window::~Window()
 
 std::shared_ptr<vcl_cairocanvas::SpriteCanvas> Window::GetSpriteCanvas()
 {
-    Sequence< Any > aArg{
+    const Sequence< Any > aArg{
         Any(reinterpret_cast<sal_Int64>(GetOutDev())),
         Any(css::awt::Rectangle( 0, 0, 0, 0 )),
         Any(false),
@@ -586,7 +586,10 @@ std::shared_ptr<vcl_cairocanvas::SpriteCanvas> Window::GetSpriteCanvas()
         GetOutDev()->GetSystemGfxDataAny()
     };
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    auto pSpriteCanvas = std::make_shared<vcl_cairocanvas::SpriteCanvas>(aArg, xContext);
+    // auto pSpriteCanvas = std::make_shared<vcl_cairocanvas::SpriteCanvas>(aArg, xContext);
+    auto pSpriteCanvas = std::shared_ptr<vcl_cairocanvas::SpriteCanvas>(
+        new vcl_cairocanvas::SpriteCanvas(aArg, xContext)
+    );
     return pSpriteCanvas;
 }
 

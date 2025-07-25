@@ -327,7 +327,7 @@ namespace vcl_canvas
                     for (auto const& elem : rUpdateArea.maComponentList)
                     {
                         const Sprite::Reference& rSprite( elem.second.getSprite() );
-                        if( rSprite.is() )
+                        if( rSprite )
                             aSortedUpdateSprites.push_back( rSprite );
                     }
 

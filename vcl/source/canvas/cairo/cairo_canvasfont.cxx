@@ -40,7 +40,7 @@ namespace vcl_cairocanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            SurfaceProviderRef                              rDevice ) :
+                            SurfaceProviderSharedPtr                        rDevice ) :
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
@@ -95,7 +95,7 @@ namespace vcl_cairocanvas
         rGuard.unlock();
         {
             SolarMutexGuard aGuard;
-            mpRefDevice.clear();
+            mpRefDevice.reset();
         }
         rGuard.lock();
     }
@@ -104,7 +104,7 @@ namespace vcl_cairocanvas
     {
         SolarMutexGuard aGuard;
 
-        if( !mpRefDevice.is() )
+        if( !mpRefDevice )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
 
         return new TextLayout( aText,

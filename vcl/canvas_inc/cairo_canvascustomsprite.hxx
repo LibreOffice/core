@@ -90,7 +90,12 @@ namespace vcl_cairocanvas
         CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasSharedPtr&       rRefDevice );
 
-        // virtual void disposeThis() override;
+        virtual void disposeThis() override;
+        virtual void dispose() override;
+        std::shared_ptr<CanvasCustomSpriteBaseT> getShared() override
+        {
+            return shared_from_this();
+        }
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base

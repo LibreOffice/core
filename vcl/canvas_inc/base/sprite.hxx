@@ -50,8 +50,10 @@ namespace vcl_canvas
     class Sprite
     {
     public:
-        typedef ::rtl::Reference< Sprite > Reference;
+        // typedef ::rtl::Reference< Sprite > Reference;
+        typedef std::shared_ptr< Sprite > Reference;
 
+        virtual void dispose() = 0;
         /** Query whether sprite update will fully cover the given area.
 
             Use this method to determine whether any background

@@ -27,6 +27,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <base/integerbitmapbase.hxx>
 #include <base/bitmapcanvasbase.hxx>
+#include <base/sprite.hxx>
 
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
 
@@ -77,6 +78,7 @@ namespace vcl_canvas
     {
     public:
         typedef IntegerBitmapBase< BitmapCanvasBase2<Base, CanvasHelper, Mutex, UnambiguousBase> > BaseType;
+        typedef CanvasCustomSpriteBase< Base, SpriteHelper, CanvasHelper, Mutex, UnambiguousBase > SelfType;
 
         CanvasCustomSpriteBase() :
             maSpriteHelper()
@@ -91,15 +93,15 @@ namespace vcl_canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        /* virtual void disposeThis() override
+        virtual void disposeThis() /* override */
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.disposing();
 
             // pass on to base class
-            BaseType::disposeThis();
-        } */
+            // BaseType::disposeThis();
+        }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
         /* virtual void SAL_CALL clear() override
@@ -131,6 +133,8 @@ namespace vcl_canvas
                                          renderState );
         } */
 
+        virtual std::shared_ptr<SelfType> getShared() = 0;
+
         // TODO(F3): If somebody uses the XIntegerBitmap methods to
         // clear pixel (setting alpha != 1.0 there), or a compositing
         // mode results in similar alpha, maSpriteHelper might
@@ -145,7 +149,7 @@ namespace vcl_canvas
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.setAlpha( this, alpha );
+            maSpriteHelper.setAlpha( getShared(), alpha );
         }
 
         virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos,
@@ -158,7 +162,7 @@ namespace vcl_canvas
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.move( this, aNewPos, viewState, renderState );
+            maSpriteHelper.move( getShared(), aNewPos, viewState, renderState );
         }
 
         virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
@@ -169,7 +173,7 @@ namespace vcl_canvas
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.transform( this, aTransformation );
+            maSpriteHelper.transform( getShared(), aTransformation );
         }
 
         virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) override
@@ -178,37 +182,37 @@ namespace vcl_canvas
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.clip( this, aClip );
+            maSpriteHelper.clip( getShared(), aClip );
         }
 
         virtual void SAL_CALL setPriority( double nPriority ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.setPriority( this, nPriority );
+            maSpriteHelper.setPriority( getShared(), nPriority );
         }
 
         virtual void SAL_CALL show() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.show( this );
+            maSpriteHelper.show( getShared() );
         }
 
         virtual void SAL_CALL hide() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.hide( this );
+            maSpriteHelper.hide( getShared() );
         }
 
         // XCustomSprite
-        Canvas* SAL_CALL
+        CanvasSharedPtr SAL_CALL
             getContentCanvas() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            return this;
+            return getShared();
         }
 
         // Sprite

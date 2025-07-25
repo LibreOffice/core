@@ -119,7 +119,7 @@ namespace vcl_canvas
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
         } */
 
-        virtual CustomSprite* SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
+        virtual CustomSpriteSharedPtr SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             /* tools::verifySpriteSize(spriteSize,
                                     __func__,
@@ -144,7 +144,7 @@ namespace vcl_canvas
         // SpriteSurface
         virtual void showSprite( const Sprite::Reference& rSprite ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            OSL_ASSERT( rSprite );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -153,7 +153,7 @@ namespace vcl_canvas
 
         virtual void hideSprite( const Sprite::Reference& rSprite ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            OSL_ASSERT( rSprite );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -165,7 +165,7 @@ namespace vcl_canvas
                                  const ::basegfx::B2DPoint&     rNewPos,
                                  const ::basegfx::B2DVector&    rSpriteSize ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            OSL_ASSERT( rSprite );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -176,7 +176,7 @@ namespace vcl_canvas
                                    const ::basegfx::B2DPoint&   rPos,
                                    const ::basegfx::B2DRange&   rUpdateArea ) override
         {
-            OSL_ASSERT( rSprite.is() );
+            OSL_ASSERT( rSprite );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

@@ -130,7 +130,7 @@ namespace vcl_cairocanvas
                     rClip ));
 
             doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
-                                         nullptr, SurfaceProviderSharedPtr(mpSpriteCanvas),
+                                         nullptr, mpSpriteCanvas.get(),
                                          rClip->getFillRule() );
         }
 

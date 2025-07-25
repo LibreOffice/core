@@ -50,7 +50,7 @@ namespace vcl_cairocanvas
         mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR_ALPHA );
 
         maCanvasHelper.init( maSize,
-                             *rRefDevice,
+                             rRefDevice,
                              rRefDevice.get() );
         maCanvasHelper.setSurface( mpBufferSurface, true );
 
@@ -62,7 +62,7 @@ namespace vcl_cairocanvas
         maCanvasHelper.clear();
     }
 
-    /* void CanvasCustomSprite::disposeThis()
+    void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -71,7 +71,12 @@ namespace vcl_cairocanvas
 
         // forward to parent
         CanvasCustomSpriteBaseT::disposeThis();
-    } */
+    }
+
+    void CanvasCustomSprite::dispose()
+    {
+        disposeThis();
+    }
 
     void CanvasCustomSprite::redraw( const CairoSharedPtr& pCairo,
                                      bool                  bBufferedUpdate ) const

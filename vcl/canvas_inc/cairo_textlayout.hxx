@@ -49,7 +49,7 @@ namespace vcl_cairocanvas
                     sal_Int8                                    nDirection,
                     sal_Int64                                   nRandomSeed,
                     CanvasFont::Reference                       rFont,
-                    SurfaceProviderRef                          rRefDevice );
+                    SurfaceProviderSharedPtr                    rRefDevice );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -98,7 +98,7 @@ namespace vcl_cairocanvas
         css::uno::Sequence< double >               maLogicalAdvancements;
         css::uno::Sequence< sal_Bool >             maKashidaPositions;
         CanvasFont::Reference                      mpFont;
-        SurfaceProviderRef                         mpRefDevice;
+        SurfaceProviderSharedPtr                   mpRefDevice;
         sal_Int8                                   mnTextDirection;
     };
 

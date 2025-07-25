@@ -82,14 +82,21 @@ namespace vcl_cairocanvas
         references, this is implemented as one single object.
      */
     class SpriteCanvas : public SpriteCanvasBaseT,
-                         public RepaintTarget
+                         public RepaintTarget,
+                         public std::enable_shared_from_this<SpriteCanvas>
     {
     public:
         SpriteCanvas( const css::uno::Sequence< css::uno::Any >&                aArguments,
                       const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void initialize();
-
+        virtual void SAL_CALL acquire() override{}
+        virtual void SAL_CALL release() override{}
+        virtual ::css::uno::Any SAL_CALL queryInterface( const ::css::uno::Type& aType ) override
+        {
+            return ::css::uno::Any();
+        }
+        virtual void SAL_CALL disposing( const ::css::lang::EventObject& Source ) override{}
         /// Dispose all internal references
         // virtual void disposeThis() override;
 

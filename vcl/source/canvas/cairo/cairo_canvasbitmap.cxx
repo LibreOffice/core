@@ -55,7 +55,7 @@ namespace vcl_cairocanvas
         mpBufferSurface = mpSurfaceProvider->createSurface( rSize, bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
         mpBufferCairo = mpBufferSurface->getCairo();
 
-        maCanvasHelper.init( rSize, *mpSurfaceProvider, pDevice );
+        maCanvasHelper.init( rSize, mpSurfaceProvider, pDevice );
         maCanvasHelper.setSurface( mpBufferSurface, bHasAlpha );
 
         // clear bitmap to 100% transparent

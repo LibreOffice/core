@@ -51,7 +51,7 @@ namespace vcl_cairocanvas
         CanvasFont( const css::rendering::FontRequest&                                  fontRequest,
                     const css::uno::Sequence< css::beans::PropertyValue >&              extraFontProperties,
                     const css::geometry::Matrix2D&                                      rFontMatrix,
-                    SurfaceProviderRef                                                  rDevice );
+                    SurfaceProviderSharedPtr                                                  rDevice );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
@@ -75,7 +75,7 @@ namespace vcl_cairocanvas
     private:
         ::vcl_canvas::vcltools::VCLObject<vcl::Font> maFont;
         css::rendering::FontRequest              maFontRequest;
-        SurfaceProviderRef                       mpRefDevice;
+        SurfaceProviderSharedPtr                 mpRefDevice;
         sal_uInt32                               mnEmphasisMark;
     };
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -91,7 +92,6 @@ namespace vcl_cairocanvas
 
     SpriteCanvasHelper::SpriteCanvasHelper() :
         mpRedrawManager( nullptr ),
-        mpOwningSpriteCanvas( nullptr ),
         mbCompositingSurfaceDirty(true)
     {
     }
@@ -101,15 +101,15 @@ namespace vcl_cairocanvas
                                    const ::basegfx::B2ISize&      rSize )
     {
         mpRedrawManager = &rManager;
-        mpOwningSpriteCanvas = &rDevice;
+        mpOwningSpriteCanvas = rDevice.shared_from_this();
 
-        CanvasHelper::init( rSize, rDevice, &rDevice );
+        CanvasHelper::init( rSize, rDevice.shared_from_this(), &rDevice );
     }
 
     void SpriteCanvasHelper::disposing()
     {
         mpCompositingSurface.reset();
-        mpOwningSpriteCanvas = nullptr;
+        mpOwningSpriteCanvas.reset();
         mpRedrawManager = nullptr;
 
         // forward to base
@@ -129,13 +129,13 @@ namespace vcl_cairocanvas
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
-    ::vcl_canvas::CustomSprite* SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
+    ::vcl_canvas::CustomSpriteSharedPtr SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
-        if( !mpRedrawManager )
+        if( !mpRedrawManager || mpOwningSpriteCanvas.lock())
             return nullptr; // we're disposed
 
-        return new CanvasCustomSprite( spriteSize,
-                                    mpOwningSpriteCanvas );
+        return std::make_shared<CanvasCustomSprite>( spriteSize,
+                                    mpOwningSpriteCanvas.lock() );
     }
 
     uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite(
@@ -148,22 +148,23 @@ namespace vcl_cairocanvas
                                                  bool                   bUpdateAll,
                                                  bool&                  io_bSurfaceDirty )
     {
+        auto pOwningSpriteCanvas = mpOwningSpriteCanvas.lock();
         if( !mpRedrawManager ||
-            !mpOwningSpriteCanvas ||
-            !mpOwningSpriteCanvas->getWindowSurface() ||
-            !mpOwningSpriteCanvas->getBufferSurface() )
+            !pOwningSpriteCanvas ||
+            !pOwningSpriteCanvas->getWindowSurface() ||
+            !pOwningSpriteCanvas->getBufferSurface() )
         {
             return false; // disposed, or otherwise dysfunctional
         }
 
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::updateScreen called");
 
-        const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
+        const ::basegfx::B2ISize& rSize = pOwningSpriteCanvas->getSizePixel();
 
         // force compositing surface to be available before using it
         // inside forEachSpriteArea
         SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        SurfaceSharedPtr pWindowSurface = pOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -189,7 +190,7 @@ namespace vcl_cairocanvas
             cairo_clip( pCompositingCairo.get() );
             cairo_save( pCompositingCairo.get() );
             cairo_set_source_surface( pCompositingCairo.get(),
-                                      mpOwningSpriteCanvas->getBufferSurface()->getCairoSurface().get(),
+                                      pOwningSpriteCanvas->getBufferSurface()->getCairoSurface().get(),
                                       0, 0 );
             cairo_set_operator( pCompositingCairo.get(), CAIRO_OPERATOR_SOURCE );
             cairo_paint( pCompositingCairo.get() );
@@ -220,16 +221,17 @@ namespace vcl_cairocanvas
         io_bSurfaceDirty = false;
 
         // commit to screen
-        mpOwningSpriteCanvas->flush();
+        pOwningSpriteCanvas->flush();
 
         return true;
     }
 
     void SpriteCanvasHelper::backgroundPaint( const ::basegfx::B2DRange& rUpdateRect )
     {
-        if( mpOwningSpriteCanvas && mpCompositingSurface )
+        auto pOwningSpriteCanvas = mpOwningSpriteCanvas.lock();
+        if( pOwningSpriteCanvas && mpCompositingSurface )
             repaintBackground( mpCompositingSurface->getCairo(),
-                               mpOwningSpriteCanvas->getBufferSurface(),
+                               pOwningSpriteCanvas->getBufferSurface(),
                                rUpdateRect );
     }
 
@@ -237,19 +239,20 @@ namespace vcl_cairocanvas
                                            const ::basegfx::B2DRange&                       rMoveEnd,
                                            const ::vcl_canvas::SpriteRedrawManager::UpdateArea& rUpdateArea )
     {
-        ENSURE_OR_THROW( mpOwningSpriteCanvas &&
-                          mpOwningSpriteCanvas->getBufferSurface(),
+        auto pOwningSpriteCanvas = mpOwningSpriteCanvas.lock();
+        ENSURE_OR_THROW( pOwningSpriteCanvas &&
+                          pOwningSpriteCanvas->getBufferSurface(),
                           "SpriteCanvasHelper::scrollUpdate(): NULL device pointer " );
 
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::scrollUpdate called");
 
-        const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
+        const ::basegfx::B2ISize& rSize = pOwningSpriteCanvas->getSizePixel();
         const ::basegfx::B2IRange  aOutputBounds( 0,0,
                                                   rSize.getWidth(),
                                                   rSize.getHeight() );
 
         SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        SurfaceSharedPtr pWindowSurface = pOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -286,7 +289,7 @@ namespace vcl_cairocanvas
             for( const auto& rComponent : rUpdateArea.maComponentList )
             {
                 const ::vcl_canvas::Sprite::Reference& rSprite( rComponent.second.getSprite() );
-                if( rSprite.is() )
+                if( rSprite )
                     ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw(
                         pCompositingCairo, true );
             }
@@ -337,7 +340,7 @@ namespace vcl_cairocanvas
                   aSecond( aFirst );
             ++aSecond;
 
-            ENSURE_OR_THROW( aFirst->second.getSprite().is(),
+            ENSURE_OR_THROW( aFirst->second.getSprite(),
                              "VCLCanvas::scrollUpdate(): no sprite" );
 
             // repaint uncovered areas from sprite. Need to actually
@@ -357,7 +360,7 @@ namespace vcl_cairocanvas
                                          ::basegfx::B2DRange( aDestRect ) );
         for( const auto& rArea : aUncoveredAreas )
             repaintBackground( pCompositingCairo,
-                               mpOwningSpriteCanvas->getBufferSurface(), rArea );
+                               pOwningSpriteCanvas->getBufferSurface(), rArea );
 
         cairo_rectangle( pWindowCairo.get(), 0, 0, rSize.getWidth(), rSize.getHeight() );
         cairo_clip( pWindowCairo.get() );
@@ -371,16 +374,17 @@ namespace vcl_cairocanvas
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
                                            const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
-        ENSURE_OR_THROW( mpOwningSpriteCanvas &&
-                          mpOwningSpriteCanvas->getBufferSurface(),
+        auto pOwningSpriteCanvas = mpOwningSpriteCanvas.lock();
+        ENSURE_OR_THROW( pOwningSpriteCanvas &&
+                          pOwningSpriteCanvas->getBufferSurface(),
                           "SpriteCanvasHelper::opaqueUpdate(): NULL device pointer " );
 
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::opaqueUpdate called");
 
-        const ::basegfx::B2ISize& rDeviceSize = mpOwningSpriteCanvas->getSizePixel();
+        const ::basegfx::B2ISize& rDeviceSize = pOwningSpriteCanvas->getSizePixel();
 
         SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rDeviceSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        SurfaceSharedPtr pWindowSurface = pOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -396,7 +400,7 @@ namespace vcl_cairocanvas
         // repaint all affected sprites directly to output device
         for( const auto& rSprite : rSortedUpdateSprites )
         {
-            if( rSprite.is() )
+            if( rSprite )
                 ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw(
                     pCompositingCairo, false );
         }
@@ -416,18 +420,19 @@ namespace vcl_cairocanvas
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rRequestedArea,
                                             const std::vector< ::vcl_canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
+        auto pOwningSpriteCanvas = mpOwningSpriteCanvas.lock();
         // TODO
         SAL_INFO("canvas.cairo", "SpriteCanvasHelper::genericUpdate called");
 
-        ENSURE_OR_THROW( mpOwningSpriteCanvas &&
-                         mpOwningSpriteCanvas->getBufferSurface(),
+        ENSURE_OR_THROW( pOwningSpriteCanvas &&
+                         pOwningSpriteCanvas->getBufferSurface(),
                          "SpriteCanvasHelper::genericUpdate(): NULL device pointer " );
 
         // limit size of update VDev to target outdev's size
-        const ::basegfx::B2ISize& rSize = mpOwningSpriteCanvas->getSizePixel();
+        const ::basegfx::B2ISize& rSize = pOwningSpriteCanvas->getSizePixel();
 
         SurfaceSharedPtr pCompositingSurface = getCompositingSurface(rSize);
-        SurfaceSharedPtr pWindowSurface = mpOwningSpriteCanvas->getWindowSurface();
+        SurfaceSharedPtr pWindowSurface = pOwningSpriteCanvas->getWindowSurface();
         CairoSharedPtr pCompositingCairo = pCompositingSurface->getCairo();
         CairoSharedPtr pWindowCairo = pWindowSurface->getCairo();
 
@@ -455,7 +460,7 @@ namespace vcl_cairocanvas
         // paint background
         cairo_save( pCompositingCairo.get() );
         cairo_set_source_surface( pCompositingCairo.get(),
-                                  mpOwningSpriteCanvas->getBufferSurface()->getCairoSurface().get(),
+                                  pOwningSpriteCanvas->getBufferSurface()->getCairoSurface().get(),
                                   0, 0 );
         cairo_set_operator( pCompositingCairo.get(), CAIRO_OPERATOR_SOURCE );
         cairo_paint( pCompositingCairo.get() );
@@ -465,7 +470,7 @@ namespace vcl_cairocanvas
         // VDev.
         for( const auto& rSprite : rSortedUpdateSprites )
         {
-            if( rSprite.is() )
+            if( rSprite )
                 ::boost::polymorphic_downcast< Sprite* >( rSprite.get() )->redraw(
                     pCompositingCairo, true );
         }
@@ -509,7 +514,7 @@ namespace vcl_cairocanvas
 
     ::cairo::SurfaceSharedPtr SpriteCanvasHelper::createSurface( const ::basegfx::B2ISize& rNeededSize ) const
     {
-        return mpOwningSpriteCanvas->getWindowSurface()->getSimilar(
+        return mpOwningSpriteCanvas.lock()->getWindowSurface()->getSimilar(
                     CAIRO_CONTENT_COLOR,
                     rNeededSize.getWidth(), rNeededSize.getHeight() );
     }

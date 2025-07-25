@@ -11,7 +11,7 @@ namespace vcl_canvas
 class SpriteCanvas : public Canvas
 {
 public:
-    virtual CustomSprite* createCustomSprite( const ::css::geometry::RealSize2D& spriteSize ) = 0;
+    virtual CustomSpriteSharedPtr createCustomSprite( const ::css::geometry::RealSize2D& spriteSize ) = 0;
     // virtual SpriteSharedPtr createClonedSprite( const SpriteBase& original ) = 0;
     virtual sal_Bool updateScreen( sal_Bool bUpdateAll ) = 0;
 };

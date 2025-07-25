@@ -24,6 +24,7 @@
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
+#include <memory>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
@@ -76,7 +77,7 @@ namespace vcl_cairocanvas
 
          */
         void init( const ::basegfx::B2ISize& rSizePixel,
-                   SurfaceProvider&          rSurfaceProvider,
+                   SurfaceProviderSharedPtr  rSurfaceProvider,
                    ::vcl_canvas::GraphicDevice* pDevice );
 
         void setSize( const ::basegfx::B2ISize& rSize );
@@ -232,7 +233,7 @@ namespace vcl_cairocanvas
             potential circular references for canvas. Provides us with
             our output surface and associated functionality.
          */
-        SurfaceProvider* mpSurfaceProvider;
+        std::weak_ptr< SurfaceProvider > mpSurfaceProvider;
 
         /** Phyical output device
 
@@ -264,7 +265,7 @@ namespace vcl_cairocanvas
                                       Operation aOperation,
                                       cairo_t* pCairo,
                                       const css::uno::Sequence< css::rendering::Texture >* pTextures,
-                                      const SurfaceProviderSharedPtr& pDevice,
+                                      SurfaceProvider* pDevice,
                                       css::rendering::FillRule eFillrule );
 }
 

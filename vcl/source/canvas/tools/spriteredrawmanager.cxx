@@ -246,7 +246,7 @@ namespace vcl_canvas
         for( const auto& rChangeRecord : maChangeRecords )
         {
             const Sprite::Reference& rSprite( rChangeRecord.getSprite() );
-            if( rSprite.is() )
+            if( rSprite )
                 aUpdatableSprites.push_back( rSprite );
         }
 
@@ -335,10 +335,10 @@ namespace vcl_canvas
 
         if( !aFirst->second.isPureMove() ||
             !aSecond->second.isPureMove() ||
-            !aFirst->second.getSprite().is() ||
+            !aFirst->second.getSprite() ||
             // use _true_ update area, not the rounded version
             !aFirst->second.getSprite()->isAreaUpdateOpaque( aFirst->second.getUpdateArea() ) ||
-            aSecond->second.getSprite().is() )
+            aSecond->second.getSprite() )
         {
             // either no move update, or incorrect sprite, or sprite
             // content not fully opaque over update region.
@@ -368,7 +368,7 @@ namespace vcl_canvas
     {
         const Sprite::Reference& pAffectedSprite( rComponent.second.getSprite() );
 
-        if( !pAffectedSprite.is() )
+        if( !pAffectedSprite )
             return true; // no sprite, no opaque update!
 
         return !pAffectedSprite->isAreaUpdateOpaque( rUpdateRect );

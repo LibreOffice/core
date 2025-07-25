@@ -74,7 +74,7 @@ namespace vcl_cairocanvas
                             sal_Int8                      nDirection,
                             sal_Int64                     /*nRandomSeed*/,
                             CanvasFont::Reference         rFont,
-                            SurfaceProviderRef            rRefDevice ) :
+                            SurfaceProviderSharedPtr      rRefDevice ) :
         maText(std::move( aText )),
         mpFont(std::move( rFont )),
         mpRefDevice(std::move( rRefDevice )),
@@ -89,7 +89,7 @@ namespace vcl_cairocanvas
     void TextLayout::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {
         mpFont.clear();
-        mpRefDevice.clear();
+        mpRefDevice.reset();
     }
 
     // XTextLayout

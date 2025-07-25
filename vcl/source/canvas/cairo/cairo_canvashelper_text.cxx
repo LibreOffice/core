@@ -45,7 +45,8 @@ namespace vcl_cairocanvas
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
                                                                        const geometry::Matrix2D&                    fontMatrix )
     {
-        return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpSurfaceProvider ));
+        // DONT_FORGET_TO_REMOVE_THIS_COMMENT
+        return uno::Reference< rendering::XCanvasFont >( /* new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpSurfaceProvider ) */);
     }
 
     uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
@@ -250,7 +251,7 @@ namespace vcl_cairocanvas
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
-            rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
+            rtl::Reference pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider.lock()) );
             pTextLayout->draw(*mpVirtualDevice, aOutpos, viewState, renderState);
         }
 

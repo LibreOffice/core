@@ -60,7 +60,7 @@ namespace vcl_cairocanvas
                             css::rendering::XBitmap > >& animationBitmaps,
                 sal_Int8                                              interpolationMode );
 
-        ::vcl_canvas::CustomSprite* createCustomSprite(
+        ::vcl_canvas::CustomSpriteSharedPtr createCustomSprite(
                 const css::geometry::RealSize2D& spriteSize );
 
         css::uno::Reference< css::rendering::XSprite >                createClonedSprite(
@@ -126,7 +126,7 @@ namespace vcl_cairocanvas
         ::vcl_canvas::SpriteRedrawManager*  mpRedrawManager;
 
         /// Set from the init method. used to generate sprites
-        SpriteCanvas*                   mpOwningSpriteCanvas;
+        std::weak_ptr<SpriteCanvas>     mpOwningSpriteCanvas;
 
         /// a surface used to composite the frontbuffer image
         ::cairo::SurfaceSharedPtr       mpCompositingSurface;

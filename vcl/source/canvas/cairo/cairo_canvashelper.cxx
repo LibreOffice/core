@@ -64,7 +64,6 @@ using namespace ::com::sun::star;
 namespace vcl_cairocanvas
 {
     CanvasHelper::CanvasHelper() :
-        mpSurfaceProvider(nullptr),
         mpDevice(nullptr),
         mbHaveAlpha()
     {
@@ -76,15 +75,15 @@ namespace vcl_cairocanvas
         mpCairo.reset();
         mpVirtualDevice.disposeAndClear();
         mpDevice = nullptr;
-        mpSurfaceProvider = nullptr;
+        mpSurfaceProvider.reset() ;
     }
 
     void CanvasHelper::init( const ::basegfx::B2ISize&  rSizePixel,
-                             SurfaceProvider&           rSurfaceProvider,
+                             SurfaceProviderSharedPtr   rSurfaceProvider,
                              vcl_canvas::GraphicDevice* pDevice )
     {
         maSize = rSizePixel;
-        mpSurfaceProvider = &rSurfaceProvider;
+        mpSurfaceProvider = rSurfaceProvider;
         mpDevice = pDevice;
     }
 
@@ -848,7 +847,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                         doPolyPolygonImplementation( basegfx::B2DPolyPolygon(aEdge),
                                                      aOperation,
                                                      pCairo, pTextures,
-                                                     mpSurfaceProvider,
+                                                     mpSurfaceProvider.lock().get(),
                                                      xPolyPolygon->getFillRule() );
 
                         // prepare next step
@@ -861,7 +860,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         {
             doPolyPolygonImplementation( aPolyPoly, aOperation,
                                          pCairo, pTextures,
-                                         mpSurfaceProvider,
+                                         mpSurfaceProvider.lock().get(),
                                          xPolyPolygon->getFillRule() );
         }
     }
@@ -1114,7 +1113,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
                 aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
 
-                SurfaceSharedPtr pScaledSurface = mpSurfaceProvider->createSurface(
+                SurfaceSharedPtr pScaledSurface = mpSurfaceProvider.lock()->createSurface(
                     ::basegfx::B2ISize( aBitmapSize.Width, aBitmapSize.Height ),
                     bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
                 CairoSharedPtr pCairo = pScaledSurface->getCairo();
@@ -1155,8 +1154,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 if( x <= 0 && y <= 0 && x + width >= maSize.getWidth() && y + height >= maSize.getHeight() )
                 {
                     SAL_INFO( "canvas.cairo","trying to change surface to rgb");
-                    if( mpSurfaceProvider ) {
-                        SurfaceSharedPtr pNewSurface = mpSurfaceProvider->changeSurface();
+                    if( auto pSurfaceProvider = mpSurfaceProvider.lock() ) {
+                        SurfaceSharedPtr pNewSurface = pSurfaceProvider->changeSurface();
 
                         if( pNewSurface )
                             setSurface( pNewSurface, false );
@@ -1223,7 +1222,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         uno::Reference< rendering::XCachedPrimitive > rv;
         unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider.lock().get(), data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
@@ -1256,7 +1255,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         uno::Reference< rendering::XCachedPrimitive > rv;
         unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider.lock().get(), data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
@@ -1279,7 +1278,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
     geometry::IntegerSize2D CanvasHelper::getSize() const
     {
-        if( !mpSurfaceProvider )
+        if( !mpSurfaceProvider.lock() )
             return geometry::IntegerSize2D(1, 1); // we're disposed
 
         return ::basegfx::unotools::integerSize2DFromB2ISize( maSize );
