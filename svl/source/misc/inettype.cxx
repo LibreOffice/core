@@ -44,7 +44,7 @@ MediaTypeEntry const * seekEntry(OUString const & rTypeName,
 /** A mapping from type names to type ids and extensions.  Sorted by type
     name.
  */
-MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
+constexpr MediaTypeEntry aStaticTypeNameMap[]
     = { { u" "_ustr, CONTENT_TYPE_UNKNOWN },
         { CONTENT_TYPE_STR_X_CNT_FSYSBOX, CONTENT_TYPE_X_CNT_FSYSBOX },
         { CONTENT_TYPE_STR_X_CNT_FSYSFOLDER, CONTENT_TYPE_X_CNT_FSYSFOLDER },
@@ -265,7 +265,7 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
     {
         aType += "/" + aSubType;
         MediaTypeEntry const * pEntry = seekEntry(aType, aStaticTypeNameMap,
-                                                  CONTENT_TYPE_LAST + 1);
+                                                  SAL_N_ELEMENTS(aStaticTypeNameMap) + 1);
         return pEntry ? pEntry->m_eTypeID : CONTENT_TYPE_UNKNOWN;
     }
     else
@@ -280,8 +280,8 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
     static std::array<OUString, CONTENT_TYPE_LAST + 1> aMap = []()
     {
         std::array<OUString, CONTENT_TYPE_LAST + 1> tmp;
-        for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
-            tmp[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
+        for (const auto & rEntry : aStaticTypeNameMap)
+            tmp[rEntry.m_eTypeID] = rEntry.m_pTypeName;
         tmp[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;
         tmp[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN +
                                         "; charset=iso-8859-1";
