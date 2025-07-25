@@ -845,11 +845,20 @@ TriState QtInstanceTreeView::get_sort_indicator(int) const
 
 int QtInstanceTreeView::get_sort_column() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nSortColumn = 0;
+    GetQtInstance().RunInMainThread([&] { nSortColumn = m_pModel->sortColumn(); });
+
+    return nSortColumn;
 }
 
-void QtInstanceTreeView::set_sort_column(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::set_sort_column(int nColumn)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pModel->sort(nColumn); });
+}
 
 void QtInstanceTreeView::clear()
 {
