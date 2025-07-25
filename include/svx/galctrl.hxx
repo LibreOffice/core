@@ -28,7 +28,7 @@
 
 class GalleryDragDrop;
 class GalleryTheme;
-class GalleryBrowser1;
+class GalleryBrowser;
 class INetURLObject;
 
 class GalleryPreview final : public weld::CustomWidgetController
@@ -39,7 +39,7 @@ private:
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     GraphicObject m_aGraphicObj;
     tools::Rectangle m_aPreviewRect;
-    GalleryBrowser1* mpParent;
+    GalleryBrowser* mpParent;
     GalleryTheme* mpTheme;
 
     bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
@@ -53,7 +53,7 @@ private:
 
 public:
 
-    GalleryPreview(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    GalleryPreview(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     void SetTheme(GalleryTheme* pTheme) { mpTheme = pTheme; }
     virtual ~GalleryPreview() override;
 
@@ -90,7 +90,7 @@ class GalleryIconView final : public ValueSet
 private:
     std::unique_ptr<GalleryDragDrop> mxDragDropTargetHelper;
 
-    GalleryBrowser1*    mpParent;
+    GalleryBrowser*     mpParent;
     GalleryTheme*       mpTheme;
 
     // ValueSet
@@ -105,7 +105,7 @@ private:
 
 public:
 
-    GalleryIconView(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    GalleryIconView(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     void SetTheme(GalleryTheme* pTheme) { mpTheme = pTheme; }
     virtual ~GalleryIconView() override;
 

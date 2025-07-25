@@ -35,7 +35,7 @@
 #include <bitmaps.hlst>
 #include <svl/itemset.hxx>
 
-GalleryPreview::GalleryPreview(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryPreview::GalleryPreview(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mxScrolledWindow(std::move(xScrolledWindow))
     , mpParent(pParent)
     , mpTheme(nullptr)
@@ -147,7 +147,7 @@ bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 {
     if(mpTheme)
     {
-        GalleryBrowser1* pBrowser = mpParent;
+        GalleryBrowser* pBrowser = mpParent;
 
         switch( rKEvt.GetKeyCode().GetCode() )
         {
@@ -280,7 +280,7 @@ void GalleryIconView::drawTransparenceBackground(vcl::RenderContext& rOut, const
     rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
 
-GalleryIconView::GalleryIconView(GalleryBrowser1* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryIconView::GalleryIconView(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : ValueSet(std::move(xScrolledWindow))
     , mpParent(pParent)
     , mpTheme(nullptr)
@@ -340,7 +340,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
         if(pObj)
         {
             aBitmapEx = pObj->createPreviewBitmapEx(aSize);
-            aItemTextTitle = GalleryBrowser1::GetItemText(*pObj, GalleryItemFlags::Title);
+            aItemTextTitle = GalleryBrowser::GetItemText(*pObj, GalleryItemFlags::Title);
 
             mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
         }

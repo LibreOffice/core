@@ -92,7 +92,7 @@ private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Menu> mxPopupMenu;
     std::unique_ptr<weld::Menu> mxBackgroundPopup;
-    GalleryBrowser1*  mpBrowser;
+    GalleryBrowser*  mpBrowser;
 
     typedef std::map< int, CommandInfo > CommandInfoMap;
     CommandInfoMap   m_aCommandInfo;
@@ -107,7 +107,7 @@ public:
                       const GalleryTheme* pTheme,
                       sal_uInt32 nObjectPos,
                       bool bPreview,
-                      GalleryBrowser1* pBrowser);
+                      GalleryBrowser* pBrowser);
 
     void ExecutePopup(weld::Widget* pParent, const ::Point &rPos);
 
@@ -117,7 +117,7 @@ public:
 
 }
 
-GalleryBrowser1::GalleryBrowser1(
+GalleryBrowser::GalleryBrowser(
     weld::Builder& rBuilder,
     Gallery* pGallery)//,
     //std::function<void ()> aThemeSelectionHandler)
@@ -147,15 +147,15 @@ GalleryBrowser1::GalleryBrowser1(
     , meLastMode          ( GALLERYBROWSERMODE_NONE )
     , m_aCharacterClassficator( ::comphelper::getProcessComponentContext(), SvtSysLocale().GetLanguageTag() )
 {
-    mxNewTheme->connect_clicked( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
+    mxNewTheme->connect_clicked( LINK( this, GalleryBrowser, ClickNewThemeHdl ) );
 
     mxThemes->make_sorted();
-    mxThemes->connect_selection_changed(LINK(this, GalleryBrowser1, SelectThemeHdl));
-    mxThemes->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl1));
-    mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl1));
+    mxThemes->connect_selection_changed(LINK(this, GalleryBrowser, SelectThemeHdl));
+    mxThemes->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl1));
+    mxThemes->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl1));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
 
-    mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser1, OnMoreGalleriesClick));
+    mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser, OnMoreGalleriesClick));
 
     // disable creation of new themes if a writable directory is not available
     if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NotValid )
@@ -177,26 +177,26 @@ GalleryBrowser1::GalleryBrowser1(
             u"com.sun.star.util.URLTransformer"_ustr, m_xContext ),
         css::uno::UNO_QUERY );
 
-    mxIconButton->connect_toggled( LINK( this, GalleryBrowser1, SelectTbxHdl ) );
-    mxListButton->connect_toggled( LINK( this, GalleryBrowser1, SelectTbxHdl ) );
+    mxIconButton->connect_toggled( LINK( this, GalleryBrowser, SelectTbxHdl ) );
+    mxListButton->connect_toggled( LINK( this, GalleryBrowser, SelectTbxHdl ) );
 
-    mxIconView->SetSelectHdl( LINK( this, GalleryBrowser1, SelectObjectValueSetHdl ) );
-    mxListView->connect_visible_range_changed(LINK(this, GalleryBrowser1, VisRowsScrolledHdl));
-    mxListView->connect_size_allocate(LINK(this, GalleryBrowser1, SizeAllocHdl));
-    mxListView->connect_selection_changed(LINK(this, GalleryBrowser1, SelectObjectHdl));
-    mxListView->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl2));
-    mxListView->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl2));
-    mxListView->connect_row_activated(LINK(this, GalleryBrowser1, RowActivatedHdl));
+    mxIconView->SetSelectHdl( LINK( this, GalleryBrowser, SelectObjectValueSetHdl ) );
+    mxListView->connect_visible_range_changed(LINK(this, GalleryBrowser, VisRowsScrolledHdl));
+    mxListView->connect_size_allocate(LINK(this, GalleryBrowser, SizeAllocHdl));
+    mxListView->connect_selection_changed(LINK(this, GalleryBrowser, SelectObjectHdl));
+    mxListView->connect_popup_menu(LINK(this, GalleryBrowser, PopupMenuHdl2));
+    mxListView->connect_key_press(LINK(this, GalleryBrowser, KeyInputHdl2));
+    mxListView->connect_row_activated(LINK(this, GalleryBrowser, RowActivatedHdl));
     mxDragDropTargetHelper.reset(new GalleryDragDrop(this, mxListView->get_drop_target()));
-    mxListView->connect_drag_begin(LINK(this, GalleryBrowser1, DragBeginHdl));
-    mxSearchField->connect_changed( LINK( this, GalleryBrowser1, SearchHdl));
+    mxListView->connect_drag_begin(LINK(this, GalleryBrowser, DragBeginHdl));
+    mxSearchField->connect_changed( LINK( this, GalleryBrowser, SearchHdl));
 
-    SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser1::meInitMode ) ? GalleryBrowser1::meInitMode : GALLERYBROWSERMODE_ICON );
+    SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser::meInitMode ) ? GalleryBrowser::meInitMode : GALLERYBROWSERMODE_ICON );
 
     FillThemeEntries();
 }
 
-GalleryBrowser1::~GalleryBrowser1()
+GalleryBrowser::~GalleryBrowser()
 {
     EndListening( *mpGallery );
     mpExchangeData.reset();
@@ -204,7 +204,7 @@ GalleryBrowser1::~GalleryBrowser1()
         mpGallery->ReleaseTheme( mpCurTheme, *this );
 }
 
-void GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
+void GalleryBrowser::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
     static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != nullptr );
 
@@ -223,7 +223,7 @@ void GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
     mxThemes->append(u""_ustr, pEntry->GetThemeName(), *pImage);
 }
 
-void GalleryBrowser1::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData& rData)
+void GalleryBrowser::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData& rData)
 {
     rData.pTheme = const_cast<GalleryTheme*>(&rThm);
     rData.aEditedTitle = rThm.GetName();
@@ -246,7 +246,7 @@ void GalleryBrowser1::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeDat
     }
 }
 
-void GalleryBrowser1::ImplGetExecuteVector(std::vector<OUString>& o_aExec)
+void GalleryBrowser::ImplGetExecuteVector(std::vector<OUString>& o_aExec)
 {
     GalleryTheme*           pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener );
 
@@ -283,7 +283,7 @@ void GalleryBrowser1::ImplGetExecuteVector(std::vector<OUString>& o_aExec)
     mpGallery->ReleaseTheme( pTheme, maLocalListener );
 }
 
-void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName, bool bCreateNew )
+void GalleryBrowser::ImplGalleryThemeProperties( std::u16string_view rThemeName, bool bCreateNew )
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet.reset(new SfxItemSet( SfxGetpApp()->GetPool() ));
@@ -315,7 +315,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName
     }
 }
 
-void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 nRet)
+void GalleryBrowser::ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 nRet)
 {
     if( nRet == RET_OK )
     {
@@ -350,17 +350,17 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(bool bCreateNew, sal_Int32 n
     }
 }
 
-void GalleryBrowser1::EndNewThemePropertiesDlgHdl(sal_Int32 nResult)
+void GalleryBrowser::EndNewThemePropertiesDlgHdl(sal_Int32 nResult)
 {
     ImplEndGalleryThemeProperties(true, nResult);
 }
 
-void GalleryBrowser1::EndThemePropertiesDlgHdl(sal_Int32 nResult)
+void GalleryBrowser::EndThemePropertiesDlgHdl(sal_Int32 nResult)
 {
     ImplEndGalleryThemeProperties(false, nResult);
 }
 
-void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
+void GalleryBrowser::ImplExecute(std::u16string_view rIdent)
 {
     if (rIdent == u"update")
     {
@@ -431,7 +431,7 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
 }
 
 //TODO Duplicate method
-void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void GalleryBrowser::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const GalleryHint& rGalleryHint = static_cast<const GalleryHint&>(rHint);
 
@@ -504,7 +504,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 }
 
-IMPL_STATIC_LINK_NOARG( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void)
+IMPL_STATIC_LINK_NOARG( GalleryBrowser, OnMoreGalleriesClick, weld::Button&, void)
 {
     css::uno::Sequence<css::beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"AdditionsTag"_ustr, u"Gallery"_ustr)
@@ -512,7 +512,7 @@ IMPL_STATIC_LINK_NOARG( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, vo
     comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
 }
 
-IMPL_LINK(GalleryBrowser1, KeyInputHdl1, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(GalleryBrowser, KeyInputHdl1, const KeyEvent&, rKEvt, bool)
 {
     bool bRet = false;
 
@@ -576,7 +576,7 @@ IMPL_LINK(GalleryBrowser1, KeyInputHdl1, const KeyEvent&, rKEvt, bool)
     return bRet;
 }
 
-IMPL_LINK(GalleryBrowser1, PopupMenuHdl1, const CommandEvent&, rCEvt, bool)
+IMPL_LINK(GalleryBrowser, PopupMenuHdl1, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
@@ -602,12 +602,12 @@ IMPL_LINK(GalleryBrowser1, PopupMenuHdl1, const CommandEvent&, rCEvt, bool)
     return true;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(GalleryBrowser, SelectThemeHdl, weld::TreeView&, void)
 {
     SelectTheme(GetSelectedTheme());
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, weld::Button&, void)
+IMPL_LINK_NOARG(GalleryBrowser, ClickNewThemeHdl, weld::Button&, void)
 {
     OUString  aNewTheme( SvxResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
@@ -624,9 +624,9 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, weld::Button&, void)
     }
 }
 
-GalleryBrowserMode GalleryBrowser1::meInitMode = GALLERYBROWSERMODE_ICON;
+GalleryBrowserMode GalleryBrowser::meInitMode = GALLERYBROWSERMODE_ICON;
 
-IMPL_STATIC_LINK( GalleryBrowser1, AsyncDispatch_Impl, void*, p, void )
+IMPL_STATIC_LINK( GalleryBrowser, AsyncDispatch_Impl, void*, p, void )
 {
     DispatchInfo* pDispatchInfo = static_cast<DispatchInfo*>(p);
     if ( pDispatchInfo && pDispatchInfo->Dispatch.is() )
@@ -644,7 +644,7 @@ IMPL_STATIC_LINK( GalleryBrowser1, AsyncDispatch_Impl, void*, p, void )
     delete pDispatchInfo;
 }
 
-IMPL_LINK(GalleryBrowser1, PopupMenuHdl2, const CommandEvent&, rCEvt, bool)
+IMPL_LINK(GalleryBrowser, PopupMenuHdl2, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
@@ -652,18 +652,18 @@ IMPL_LINK(GalleryBrowser1, PopupMenuHdl2, const CommandEvent&, rCEvt, bool)
     return true;
 }
 
-IMPL_LINK(GalleryBrowser1, KeyInputHdl2, const KeyEvent&, rKEvt, bool)
+IMPL_LINK(GalleryBrowser, KeyInputHdl2, const KeyEvent&, rKEvt, bool)
 {
     return KeyInput(rKEvt);
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, RowActivatedHdl, weld::TreeView&, bool)
+IMPL_LINK_NOARG(GalleryBrowser, RowActivatedHdl, weld::TreeView&, bool)
 {
     TogglePreview();
     return true;
 }
 
-sal_Int8 GalleryBrowser1::AcceptDrop( const DropTargetHelper& rTarget )
+sal_Int8 GalleryBrowser::AcceptDrop( const DropTargetHelper& rTarget )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -688,7 +688,7 @@ sal_Int8 GalleryBrowser1::AcceptDrop( const DropTargetHelper& rTarget )
     return nRet;
 }
 
-sal_Int8 GalleryBrowser1::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 GalleryBrowser::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -707,26 +707,26 @@ sal_Int8 GalleryBrowser1::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-bool GalleryBrowser1::StartDrag()
+bool GalleryBrowser::StartDrag()
 {
     if (!mpCurTheme)
         return true;
     return m_xHelper->StartDrag();
 }
 
-IMPL_LINK(GalleryBrowser1, DragBeginHdl, bool&, rUnsetDragIcon, bool)
+IMPL_LINK(GalleryBrowser, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
     rUnsetDragIcon = false;
     return StartDrag();
 }
 
-void GalleryBrowser1::TogglePreview()
+void GalleryBrowser::TogglePreview()
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
     GetViewWindow()->grab_focus();
 }
 
-bool GalleryBrowser1::ShowContextMenu(const CommandEvent& rCEvt)
+bool GalleryBrowser::ShowContextMenu(const CommandEvent& rCEvt)
 {
     Point aMousePos = rCEvt.GetMousePosPixel();
     Point aSelPos;
@@ -754,12 +754,12 @@ bool GalleryBrowser1::ShowContextMenu(const CommandEvent& rCEvt)
     return true;
 }
 
-bool GalleryBrowser1::ViewBoxHasFocus() const
+bool GalleryBrowser::ViewBoxHasFocus() const
 {
     return mxIconButton->has_focus() || mxListButton->has_focus();
 }
 
-bool GalleryBrowser1::KeyInput(const KeyEvent& rKEvt)
+bool GalleryBrowser::KeyInput(const KeyEvent& rKEvt)
 {
     Point       aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
@@ -838,7 +838,7 @@ bool GalleryBrowser1::KeyInput(const KeyEvent& rKEvt)
     return bRet;
 }
 
-void GalleryBrowser1::SelectTheme( std::u16string_view rThemeName )
+void GalleryBrowser::SelectTheme( std::u16string_view rThemeName )
 {
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
@@ -877,7 +877,7 @@ void GalleryBrowser1::SelectTheme( std::u16string_view rThemeName )
     }
 }
 
-void GalleryBrowser1::SetMode( GalleryBrowserMode eMode )
+void GalleryBrowser::SetMode( GalleryBrowserMode eMode )
 {
     if( GetMode() == eMode )
         return;
@@ -955,10 +955,10 @@ void GalleryBrowser1::SetMode( GalleryBrowserMode eMode )
             break;
     }
 
-    GalleryBrowser1::meInitMode = meMode = eMode;
+    GalleryBrowser::meInitMode = meMode = eMode;
 }
 
-weld::Widget* GalleryBrowser1::GetViewWindow() const
+weld::Widget* GalleryBrowser::GetViewWindow() const
 {
     weld::Widget* pRet;
 
@@ -975,7 +975,7 @@ weld::Widget* GalleryBrowser1::GetViewWindow() const
     return pRet;
 }
 
-void GalleryBrowser1::Travel( GalleryBrowserTravel eTravel )
+void GalleryBrowser::Travel( GalleryBrowserTravel eTravel )
 {
     if( !mpCurTheme )
         return;
@@ -1024,7 +1024,7 @@ void GalleryBrowser1::Travel( GalleryBrowserTravel eTravel )
     mxPreview->Invalidate();
 }
 
-void GalleryBrowser1::ImplUpdateViews( sal_uInt16 nSelectionId )
+void GalleryBrowser::ImplUpdateViews( sal_uInt16 nSelectionId )
 {
     mxIconView->Hide();
     mxListView->hide();
@@ -1087,7 +1087,7 @@ void GalleryBrowser1::ImplUpdateViews( sal_uInt16 nSelectionId )
     ImplUpdateInfoBar();
 }
 
-void GalleryBrowser1::UpdateRows(bool bVisibleOnly)
+void GalleryBrowser::UpdateRows(bool bVisibleOnly)
 {
     auto lambda = [this](weld::TreeIter& rEntry){
         // id is non-null if the preview is pending creation
@@ -1115,8 +1115,8 @@ void GalleryBrowser1::UpdateRows(bool bVisibleOnly)
             if (xObj)
             {
                 aBitmapEx = xObj->createPreviewBitmapEx(maPreviewSize);
-                sItemTextTitle = GalleryBrowser1::GetItemText(*xObj, GalleryItemFlags::Title);
-                sItemTextPath = GalleryBrowser1::GetItemText(*xObj, GalleryItemFlags::Path);
+                sItemTextTitle = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Title);
+                sItemTextPath = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Path);
 
                 mpCurTheme->SetPreviewBitmapExAndStrings(i, aBitmapEx, maPreviewSize, sItemTextTitle, sItemTextPath);
             }
@@ -1160,24 +1160,24 @@ void GalleryBrowser1::UpdateRows(bool bVisibleOnly)
     mxListView->all_foreach(lambda);
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, VisRowsScrolledHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(GalleryBrowser, VisRowsScrolledHdl, weld::TreeView&, void)
 {
     UpdateRows(true);
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, SizeAllocHdl, const Size&, void)
+IMPL_LINK_NOARG(GalleryBrowser, SizeAllocHdl, const Size&, void)
 {
     UpdateRows(true);
 }
 
-void GalleryBrowser1::ImplUpdateInfoBar()
+void GalleryBrowser::ImplUpdateInfoBar()
 {
     if (!mpCurTheme)
         return;
     mxInfoBar->set_label( mpCurTheme->GetName() );
 }
 
-void GalleryBrowser1::ImplUpdateSelection()
+void GalleryBrowser::ImplUpdateSelection()
 {
     if (!mpCurTheme)
         return;
@@ -1185,7 +1185,7 @@ void GalleryBrowser1::ImplUpdateSelection()
     m_xHelper->SelectObject(nSelectedObject);
 }
 
-sal_uInt32 GalleryBrowser1::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
+sal_uInt32 GalleryBrowser::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
 {
     sal_uInt32 nRet = 0;
 
@@ -1241,7 +1241,7 @@ sal_uInt32 GalleryBrowser1::ImplGetSelectedItemId( const Point* pSelPos, Point& 
     return nRet;
 }
 
-void GalleryBrowser1::ImplSelectItemId(sal_uInt32 nItemId)
+void GalleryBrowser::ImplSelectItemId(sal_uInt32 nItemId)
 {
     if( nItemId )
     {
@@ -1252,7 +1252,7 @@ void GalleryBrowser1::ImplSelectItemId(sal_uInt32 nItemId)
 }
 
 css::uno::Reference< css::frame::XFrame >
-GalleryBrowser1::GetFrame()
+GalleryBrowser::GetFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
     SfxViewFrame* pCurrentViewFrame = SfxViewFrame::Current();
@@ -1265,7 +1265,7 @@ GalleryBrowser1::GetFrame()
     return xFrame;
 }
 
-void GalleryBrowser1::DispatchAdd(
+void GalleryBrowser::DispatchAdd(
     const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
     const css::util::URL &rURL)
 {
@@ -1348,11 +1348,11 @@ void GalleryBrowser1::DispatchAdd(
     pInfo->Dispatch = std::move(xDispatch);
 
     if ( Application::PostUserEvent(
-            LINK( nullptr, GalleryBrowser1, AsyncDispatch_Impl), pInfo.get() ) )
+            LINK( nullptr, GalleryBrowser, AsyncDispatch_Impl), pInfo.get() ) )
         pInfo.release();
 }
 
-void GalleryBrowser1::Execute(std::u16string_view rIdent)
+void GalleryBrowser::Execute(std::u16string_view rIdent)
 {
     Point       aSelPos;
     const sal_uInt32 nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
@@ -1416,7 +1416,7 @@ void GalleryBrowser1::Execute(std::u16string_view rIdent)
     }
 }
 
-OUString GalleryBrowser1::GetItemText( const SgaObject& rObj, GalleryItemFlags nItemTextFlags )
+OUString GalleryBrowser::GetItemText( const SgaObject& rObj, GalleryItemFlags nItemTextFlags )
 {
     OUString          aRet;
 
@@ -1454,7 +1454,7 @@ OUString GalleryBrowser1::GetItemText( const SgaObject& rObj, GalleryItemFlags n
     return aRet;
 }
 
-INetURLObject GalleryBrowser1::GetURL() const
+INetURLObject GalleryBrowser::GetURL() const
 {
     INetURLObject aURL;
 
@@ -1464,7 +1464,7 @@ INetURLObject GalleryBrowser1::GetURL() const
     return aURL;
 }
 
-OUString GalleryBrowser1::GetFilterName() const
+OUString GalleryBrowser::GetFilterName() const
 {
     OUString aFilterName;
 
@@ -1487,17 +1487,17 @@ OUString GalleryBrowser1::GetFilterName() const
     return aFilterName;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, SelectObjectValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(GalleryBrowser, SelectObjectValueSetHdl, ValueSet*, void)
 {
     ImplUpdateSelection();
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, SelectObjectHdl, weld::TreeView&, void)
+IMPL_LINK_NOARG(GalleryBrowser, SelectObjectHdl, weld::TreeView&, void)
 {
     ImplUpdateSelection();
 }
 
-IMPL_LINK(GalleryBrowser1, SelectTbxHdl, weld::Toggleable&, rBox, void)
+IMPL_LINK(GalleryBrowser, SelectTbxHdl, weld::Toggleable&, rBox, void)
 {
     if (&rBox == mxIconButton.get())
         SetMode(rBox.get_active() ? GALLERYBROWSERMODE_ICON : GALLERYBROWSERMODE_LIST);
@@ -1505,7 +1505,7 @@ IMPL_LINK(GalleryBrowser1, SelectTbxHdl, weld::Toggleable&, rBox, void)
         SetMode(rBox.get_active() ? GALLERYBROWSERMODE_LIST : GALLERYBROWSERMODE_ICON);
 }
 
-void GalleryBrowser1::FillThemeEntries()
+void GalleryBrowser::FillThemeEntries()
 {
     maFoundThemeEntries.clear();
     maAllThemeEntries.clear();
@@ -1530,7 +1530,7 @@ void GalleryBrowser1::FillThemeEntries()
     }
     maFoundThemeEntries.assign(maAllThemeEntries.begin(), maAllThemeEntries.end());
 }
-IMPL_LINK(GalleryBrowser1, SearchHdl, weld::Entry&, searchEdit, void)
+IMPL_LINK(GalleryBrowser, SearchHdl, weld::Entry&, searchEdit, void)
 {
     OUString search =   searchEdit.get_text().trim();
     OUString curThemeName;
@@ -1592,7 +1592,7 @@ GalleryThemePopup::GalleryThemePopup(
     const GalleryTheme* pTheme,
     sal_uInt32 nObjectPos,
     bool bPreview,
-    GalleryBrowser1* pBrowser )
+    GalleryBrowser* pBrowser )
     : mpTheme( pTheme )
     , mnObjectPos( nObjectPos )
     , mbPreview( bPreview )
@@ -1668,7 +1668,7 @@ void GalleryThemePopup::Execute(
         pInfo->Dispatch = rCmdInfo.Dispatch;
 
         if ( Application::PostUserEvent(
-                LINK( nullptr, GalleryBrowser1, AsyncDispatch_Impl), pInfo.get() ) )
+                LINK( nullptr, GalleryBrowser, AsyncDispatch_Impl), pInfo.get() ) )
             pInfo.release();
     }
 }
@@ -1708,7 +1708,7 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
 
     // update status
     css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
-        GalleryBrowser1::GetFrame(), css::uno::UNO_QUERY );
+        GalleryBrowser::GetFrame(), css::uno::UNO_QUERY );
     css::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
     for ( auto& rInfo : m_aCommandInfo )

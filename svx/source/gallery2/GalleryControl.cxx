@@ -27,11 +27,11 @@ namespace svx::sidebar {
 GalleryControl::GalleryControl(weld::Widget* pParent)
     : PanelLayout(pParent, u"GalleryPanel"_ustr, u"svx/ui/sidebargallery.ui"_ustr)
     , mpGallery(Gallery::GetGalleryInstance())
-    , mxBrowser1(new GalleryBrowser1(
+    , mpBrowser(new GalleryBrowser(
               *m_xBuilder,
               mpGallery))
 {
-    mxBrowser1->SelectTheme(0);
+    mpBrowser->SelectTheme(0);
 }
 
 GalleryControl::~GalleryControl()

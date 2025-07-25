@@ -90,7 +90,7 @@ struct ThemeEntry
 };
 typedef ::std::vector<ThemeEntry> GalleryThemeEntries;
 
-class GalleryBrowser1 final : public SfxListener
+class GalleryBrowser final : public SfxListener
 {
     friend class svx::sidebar::GalleryControl;
 
@@ -156,7 +156,7 @@ private:
     DECL_LINK(SelectThemeHdl, weld::TreeView&, void);
     DECL_LINK(PopupMenuHdl1, const CommandEvent&, bool);
     DECL_LINK(KeyInputHdl1, const KeyEvent&, bool);
-    DECL_STATIC_LINK(GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void);
+    DECL_STATIC_LINK(GalleryBrowser, OnMoreGalleriesClick, weld::Button&, void);
 
     DECL_LINK(SelectObjectHdl, weld::TreeView&, void);
     DECL_LINK(SelectObjectValueSetHdl, ValueSet*, void);
@@ -172,9 +172,9 @@ private:
     static GalleryBrowserMode meInitMode;
 
 public:
-    GalleryBrowser1(weld::Builder& rBuilder, Gallery* pGallery);
+    GalleryBrowser(weld::Builder& rBuilder, Gallery* pGallery);
 
-    ~GalleryBrowser1();
+    ~GalleryBrowser();
 
     void SelectTheme(sal_uInt16 nThemePos)
     {
@@ -216,13 +216,13 @@ public:
     void DispatchAdd(const css::uno::Reference<css::frame::XDispatch>& rxDispatch,
                      const css::util::URL& rURL);
 
-    DECL_STATIC_LINK(GalleryBrowser1, AsyncDispatch_Impl, void*, void);
+    DECL_STATIC_LINK(GalleryBrowser, AsyncDispatch_Impl, void*, void);
 };
 
 class GalleryDragDrop final : public DropTargetHelper
 {
 private:
-    GalleryBrowser1* m_pParent;
+    GalleryBrowser* m_pParent;
 
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& /*rEvt*/) override
     {
@@ -235,7 +235,7 @@ private:
     }
 
 public:
-    GalleryDragDrop(GalleryBrowser1* pParent,
+    GalleryDragDrop(GalleryBrowser* pParent,
                     const css::uno::Reference<css::datatransfer::dnd::XDropTarget>& rDropTarget)
         : DropTargetHelper(rDropTarget)
         , m_pParent(pParent)

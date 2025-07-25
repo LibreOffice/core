@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 class Gallery;
-class GalleryBrowser1;
+class GalleryBrowser;
 
 namespace svx::sidebar
 {
@@ -36,7 +36,7 @@ public:
 
 private:
     Gallery* mpGallery;
-    std::unique_ptr<GalleryBrowser1> mxBrowser1;
+    std::unique_ptr<GalleryBrowser> mpBrowser;
 };
 
 } // end of namespace svx::sidebar
