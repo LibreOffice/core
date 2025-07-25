@@ -905,15 +905,26 @@ int QtInstanceTreeView::get_column_width(int nCol) const
 
 void QtInstanceTreeView::set_centered_column(int) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceTreeView::get_column_title(int) const
+OUString QtInstanceTreeView::get_column_title(int nColumn) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sTitle;
+    GetQtInstance().RunInMainThread([&] {
+        const QVariant aVariant = m_pModel->headerData(nColumn, Qt::Horizontal);
+        assert(aVariant.isValid() && aVariant.canConvert<QString>());
+        sTitle = toOUString(aVariant.toString());
+    });
+
+    return sTitle;
 }
 
-void QtInstanceTreeView::set_column_title(int, const OUString&)
+void QtInstanceTreeView::set_column_title(int nColumn, const OUString& rTitle)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { m_pModel->setHeaderData(nColumn, Qt::Horizontal, toQString(rTitle)); });
 }
 
 void QtInstanceTreeView::set_selection_mode(SelectionMode eMode)
