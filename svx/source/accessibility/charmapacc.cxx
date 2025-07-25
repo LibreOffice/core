@@ -51,6 +51,7 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
     if ( m_xItem.is() )
     {
         m_xItem->ParentDestroyed();
+        m_xItem->dispose();
         m_xItem.clear();
     }
 }
