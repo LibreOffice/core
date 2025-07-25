@@ -62,6 +62,9 @@ public:
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
+    virtual void change_default_widget(weld::Widget*, weld::Widget*) override;
+    virtual bool is_default_widget(const weld::Widget*) const override;
+
     static QDialogButtonBox* findButtonBox(const QDialog* pDialog);
     static void handleButtonClick(QDialog& rDialog, QAbstractButton& rButton);
 

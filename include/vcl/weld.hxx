@@ -582,11 +582,6 @@ public:
     virtual bool has_toplevel_focus() const = 0;
     virtual void present() = 0;
 
-    // with pOld of null, automatically find the old default widget and unset
-    // it, otherwise use as hint to the old default
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) = 0;
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const = 0;
-
     virtual void set_window_state(const OUString& rStr) = 0;
     virtual OUString get_window_state(vcl::WindowDataMask nMask) const = 0;
 
@@ -663,6 +658,11 @@ public:
     virtual void set_default_response(int response) = 0;
     virtual std::unique_ptr<Button> weld_button_for_response(int response) = 0;
     virtual std::unique_ptr<weld::Container> weld_content_area() = 0;
+
+    // with pOld of null, automatically find the old default widget and unset
+    // it, otherwise use as hint to the old default
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) = 0;
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const = 0;
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;

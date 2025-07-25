@@ -452,10 +452,6 @@ private:
 
     void clear_child_help(vcl::Window* pParent);
 
-    void recursively_unset_default_buttons();
-
-    void implResetDefault(const vcl::Window* _pWindow);
-
 public:
     SalInstanceWindow(vcl::Window* pWindow, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -482,10 +478,6 @@ public:
     virtual bool has_toplevel_focus() const override;
 
     virtual void present() override;
-
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override;
-
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const override;
 
     virtual void set_window_state(const OUString& rStr) override;
 
@@ -515,6 +507,10 @@ private:
     sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
 
     DECL_LINK(PopupScreenShotMenuHdl, const CommandEvent&, bool);
+
+    void recursively_unset_default_buttons();
+
+    void implResetDefault(const vcl::Window* _pWindow);
 
 public:
     SalInstanceDialog(::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -550,6 +546,10 @@ public:
     virtual void set_default_response(int nResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
+
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override;
+
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const override;
 
     ::Dialog* getDialog() { return m_xDialog; }
 };

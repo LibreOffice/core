@@ -33,9 +33,6 @@ public:
     virtual bool has_toplevel_focus() const override;
     virtual void present() override;
 
-    virtual void change_default_widget(weld::Widget*, weld::Widget*) override;
-    virtual bool is_default_widget(const weld::Widget*) const override;
-
     virtual void set_window_state(const OUString& rStr) override;
     virtual OUString get_window_state(vcl::WindowDataMask eMask) const override;
 

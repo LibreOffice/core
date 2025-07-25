@@ -1667,53 +1667,6 @@ void SalInstanceWindow::present()
     m_xWindow->ToTop(ToTopFlags::RestoreWhenMin | ToTopFlags::ForegroundTask);
 }
 
-void SalInstanceWindow::implResetDefault(const vcl::Window* _pWindow)
-{
-    vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
-    while (pChildLoop)
-    {
-        // does the window participate in the tabbing order?
-        if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
-            implResetDefault(pChildLoop);
-
-        // is it a button?
-        WindowType eType = pChildLoop->GetType();
-        if ((WindowType::PUSHBUTTON == eType) || (WindowType::OKBUTTON == eType)
-            || (WindowType::CANCELBUTTON == eType) || (WindowType::HELPBUTTON == eType)
-            || (WindowType::IMAGEBUTTON == eType) || (WindowType::MENUBUTTON == eType)
-            || (WindowType::MOREBUTTON == eType))
-        {
-            pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
-        }
-
-        // the next one ...
-        pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
-    }
-}
-
-void SalInstanceWindow::recursively_unset_default_buttons() { implResetDefault(m_xWindow.get()); }
-
-void SalInstanceWindow::change_default_widget(weld::Widget* pOld, weld::Widget* pNew)
-{
-    SalInstanceWidget* pVclNew = dynamic_cast<SalInstanceWidget*>(pNew);
-    vcl::Window* pWidgetNew = pVclNew ? pVclNew->getWidget() : nullptr;
-    SalInstanceWidget* pVclOld = dynamic_cast<SalInstanceWidget*>(pOld);
-    vcl::Window* pWidgetOld = pVclOld ? pVclOld->getWidget() : nullptr;
-    if (pWidgetOld)
-        pWidgetOld->set_property(u"has-default"_ustr, OUString::boolean(false));
-    else
-        recursively_unset_default_buttons();
-    if (pWidgetNew)
-        pWidgetNew->set_property(u"has-default"_ustr, OUString::boolean(true));
-}
-
-bool SalInstanceWindow::is_default_widget(const weld::Widget* pCandidate) const
-{
-    const SalInstanceWidget* pVclCandidate = dynamic_cast<const SalInstanceWidget*>(pCandidate);
-    vcl::Window* pWidget = pVclCandidate ? pVclCandidate->getWidget() : nullptr;
-    return pWidget && pWidget->GetStyle() & WB_DEFBUTTON;
-}
-
 void SalInstanceWindow::set_window_state(const OUString& rStr)
 {
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(m_xWindow.get());
@@ -1975,6 +1928,53 @@ void SalInstanceDialog::set_default_response(int nResponse)
 std::unique_ptr<weld::Container> SalInstanceDialog::weld_content_area()
 {
     return std::make_unique<SalInstanceContainer>(m_xDialog->get_content_area(), m_pBuilder, false);
+}
+
+void SalInstanceDialog::implResetDefault(const vcl::Window* _pWindow)
+{
+    vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
+    while (pChildLoop)
+    {
+        // does the window participate in the tabbing order?
+        if (pChildLoop->GetStyle() & WB_DIALOGCONTROL)
+            implResetDefault(pChildLoop);
+
+        // is it a button?
+        WindowType eType = pChildLoop->GetType();
+        if ((WindowType::PUSHBUTTON == eType) || (WindowType::OKBUTTON == eType)
+            || (WindowType::CANCELBUTTON == eType) || (WindowType::HELPBUTTON == eType)
+            || (WindowType::IMAGEBUTTON == eType) || (WindowType::MENUBUTTON == eType)
+            || (WindowType::MOREBUTTON == eType))
+        {
+            pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);
+        }
+
+        // the next one ...
+        pChildLoop = pChildLoop->GetWindow(GetWindowType::Next);
+    }
+}
+
+void SalInstanceDialog::recursively_unset_default_buttons() { implResetDefault(m_xDialog.get()); }
+
+void SalInstanceDialog::change_default_widget(weld::Widget* pOld, weld::Widget* pNew)
+{
+    SalInstanceWidget* pVclNew = dynamic_cast<SalInstanceWidget*>(pNew);
+    vcl::Window* pWidgetNew = pVclNew ? pVclNew->getWidget() : nullptr;
+    SalInstanceWidget* pVclOld = dynamic_cast<SalInstanceWidget*>(pOld);
+    vcl::Window* pWidgetOld = pVclOld ? pVclOld->getWidget() : nullptr;
+    if (pWidgetOld)
+        pWidgetOld->set_property(u"has-default"_ustr, OUString::boolean(false));
+    else
+        recursively_unset_default_buttons();
+    if (pWidgetNew)
+        pWidgetNew->set_property(u"has-default"_ustr, OUString::boolean(true));
+}
+
+bool SalInstanceDialog::is_default_widget(const weld::Widget* pCandidate) const
+{
+    const SalInstanceWidget* pVclCandidate = dynamic_cast<const SalInstanceWidget*>(pCandidate);
+    vcl::Window* pWidget = pVclCandidate ? pVclCandidate->getWidget() : nullptr;
+    return pWidget && pWidget->GetStyle() & WB_DEFBUTTON;
 }
 
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)

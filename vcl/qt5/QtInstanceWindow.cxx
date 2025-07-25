@@ -110,17 +110,6 @@ void QtInstanceWindow::present()
     });
 }
 
-void QtInstanceWindow::change_default_widget(weld::Widget*, weld::Widget*)
-{
-    assert(false && "Not implemented yet");
-}
-
-bool QtInstanceWindow::is_default_widget(const weld::Widget*) const
-{
-    assert(false && "Not implemented yet");
-    return true;
-}
-
 void QtInstanceWindow::set_window_state(const OUString& rStr)
 {
     SolarMutexGuard g;

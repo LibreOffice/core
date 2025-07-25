@@ -190,6 +190,17 @@ std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
     return std::make_unique<QtInstanceContainer>(m_pContentArea);
 }
 
+void QtInstanceDialog::change_default_widget(weld::Widget*, weld::Widget*)
+{
+    assert(false && "Not implemented yet");
+}
+
+bool QtInstanceDialog::is_default_widget(const weld::Widget*) const
+{
+    assert(false && "Not implemented yet");
+    return true;
+}
+
 void QtInstanceDialog::dialogFinished(int nResult)
 {
     SolarMutexGuard g;

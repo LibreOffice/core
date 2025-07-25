@@ -6518,39 +6518,6 @@ public:
         gtk_window_present(m_pWindow);
     }
 
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override
-    {
-        GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
-        GtkWidget* pWidgetNew = pGtkNew ? pGtkNew->getWidget() : nullptr;
-#if GTK_CHECK_VERSION(4, 0, 0)
-        gtk_window_set_default_widget(m_pWindow, pWidgetNew);
-        (void)pOld;
-#else
-        GtkInstanceWidget* pGtkOld = dynamic_cast<GtkInstanceWidget*>(pOld);
-        GtkWidget* pWidgetOld = pGtkOld ? pGtkOld->getWidget() : nullptr;
-        if (pWidgetOld)
-            g_object_set(G_OBJECT(pWidgetOld), "has-default", false, nullptr);
-        else
-            recursively_unset_default_buttons();
-        if (pWidgetNew)
-            g_object_set(G_OBJECT(pWidgetNew), "has-default", true, nullptr);
-#endif
-    }
-
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const override
-    {
-        const GtkInstanceWidget* pGtkCandidate = dynamic_cast<const GtkInstanceWidget*>(pCandidate);
-        GtkWidget* pWidget = pGtkCandidate ? pGtkCandidate->getWidget() : nullptr;
-#if GTK_CHECK_VERSION(4, 0, 0)
-        return pWidget && gtk_window_get_default_widget(m_pWindow) == pWidget;
-#else
-        gboolean has_default(false);
-        if (pWidget)
-            g_object_get(G_OBJECT(pWidget), "has-default", &has_default, nullptr);
-        return has_default;
-#endif
-    }
-
     virtual void set_window_state(const OUString& rStr) override
     {
         const vcl::WindowData aData(rStr);
@@ -7268,6 +7235,39 @@ public:
         return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog))), m_pBuilder, false);
 #else
         return std::make_unique<GtkInstanceContainer>(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog)), m_pBuilder, false);
+#endif
+    }
+
+    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override
+    {
+        GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
+        GtkWidget* pWidgetNew = pGtkNew ? pGtkNew->getWidget() : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_window_set_default_widget(m_pDialog, pWidgetNew);
+        (void)pOld;
+#else
+        GtkInstanceWidget* pGtkOld = dynamic_cast<GtkInstanceWidget*>(pOld);
+        GtkWidget* pWidgetOld = pGtkOld ? pGtkOld->getWidget() : nullptr;
+        if (pWidgetOld)
+            g_object_set(G_OBJECT(pWidgetOld), "has-default", false, nullptr);
+        else
+            recursively_unset_default_buttons();
+        if (pWidgetNew)
+            g_object_set(G_OBJECT(pWidgetNew), "has-default", true, nullptr);
+#endif
+    }
+
+    virtual bool is_default_widget(const weld::Widget* pCandidate) const override
+    {
+        const GtkInstanceWidget* pGtkCandidate = dynamic_cast<const GtkInstanceWidget*>(pCandidate);
+        GtkWidget* pWidget = pGtkCandidate ? pGtkCandidate->getWidget() : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return pWidget && gtk_window_get_default_widget(m_pDialog) == pWidget;
+#else
+        gboolean has_default(false);
+        if (pWidget)
+            g_object_get(G_OBJECT(pWidget), "has-default", &has_default, nullptr);
+        return has_default;
 #endif
     }
 
