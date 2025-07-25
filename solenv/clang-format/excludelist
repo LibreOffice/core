@@ -11327,7 +11327,6 @@ svx/source/inc/DefaultShapesPanel.hxx
 svx/source/inc/GraphCtlAccessibleContext.hxx
 svx/source/inc/ShapesUtil.hxx
 svx/source/inc/cell.hxx
-svx/source/inc/charmapacc.hxx
 svx/source/inc/datalistener.hxx
 svx/source/inc/datanavi.hxx
 svx/source/inc/delayedevent.hxx
