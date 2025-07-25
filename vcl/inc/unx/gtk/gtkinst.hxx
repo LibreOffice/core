@@ -282,6 +282,8 @@ public:
     virtual std::unique_ptr<weld::Builder> CreateInterimBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                                                 bool bAllowCycleFocusOut, sal_uInt64 nLOKWindowId = 0) override;
     virtual weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
+    std::unique_ptr<weld::ColorChooserDialog>
+    CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
     virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow) override;
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;

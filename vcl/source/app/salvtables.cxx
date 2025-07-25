@@ -7091,6 +7091,26 @@ void SalInstancePopover::resize_to_request()
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
+SalInstanceColorChooserDialog::SalInstanceColorChooserDialog(
+    AbstractColorPickerDialog* pColorDialog)
+    : SalInstanceDialog(dynamic_cast<SalInstanceDialog*>(pColorDialog->GetDialog())->getDialog(),
+                        nullptr, false)
+    , m_pAbstractColorPickerDialog(pColorDialog)
+{
+}
+
+SalInstanceColorChooserDialog::~SalInstanceColorChooserDialog() {}
+
+void SalInstanceColorChooserDialog::set_color(const Color& rColor)
+{
+    m_pAbstractColorPickerDialog->SetColor(rColor);
+}
+
+Color SalInstanceColorChooserDialog::get_color() const
+{
+    return m_pAbstractColorPickerDialog->GetColor();
+}
+
 SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                        const OUString& rUIFile,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -7571,6 +7591,17 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent,
     VclPtrInstance<MessageDialog> xMessageDialog(pParentWidget, rPrimaryMessage, eMessageType,
                                                  eButtonsType);
     return new SalInstanceMessageDialog(xMessageDialog, nullptr, true);
+}
+
+std::unique_ptr<weld::ColorChooserDialog>
+SalInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
+{
+    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+    assert(pFact);
+    VclPtr<AbstractColorPickerDialog> pDialog
+        = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
+    assert(pDialog);
+    return std::make_unique<SalInstanceColorChooserDialog>(pDialog);
 }
 
 weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)

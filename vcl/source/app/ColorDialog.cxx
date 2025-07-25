@@ -17,30 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <salinst.hxx>
+#include <svdata.hxx>
+
 #include <vcl/ColorDialog.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/weld.hxx>
 
 ColorDialog::ColorDialog(weld::Window* pParent, vcl::ColorPickerMode eMode)
 {
-    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    assert(pFact);
-    m_pDialog = pFact->CreateColorPickerDialog(pParent, COL_BLACK, eMode);
-    assert(m_pDialog);
+    std::unique_ptr<weld::ColorChooserDialog> pDialog
+        = GetSalInstance()->CreateColorChooserDialog(pParent, eMode);
+    assert(pDialog);
+    m_pColorChooserDialogController
+        = std::make_shared<ColorChooserDialogController>(std::move(pDialog));
 }
 
 ColorDialog::~ColorDialog() {}
 
-void ColorDialog::SetColor(const Color& rColor) { m_pDialog->SetColor(rColor); }
+void ColorDialog::SetColor(const Color& rColor)
+{
+    m_pColorChooserDialogController->getDialog()->set_color(rColor);
+}
 
-Color ColorDialog::GetColor() const { return m_pDialog->GetColor(); }
+Color ColorDialog::GetColor() const
+{
+    return m_pColorChooserDialogController->getDialog()->get_color();
+}
 
-short ColorDialog::Execute() { return m_pDialog->Execute(); }
+short ColorDialog::Execute() { return m_pColorChooserDialogController->run(); }
 
 void ColorDialog::ExecuteAsync(const std::function<void(sal_Int32)>& func)
 {
-    m_aResultFunc = func;
-    m_pDialog->StartExecuteAsync(m_aResultFunc);
+    weld::DialogController::runAsync(m_pColorChooserDialogController, func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

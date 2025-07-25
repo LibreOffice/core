@@ -550,6 +550,8 @@ public:
     virtual void set_default_response(int nResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
+
+    ::Dialog* getDialog() { return m_xDialog; }
 };
 
 class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant
@@ -2326,6 +2328,19 @@ public:
     virtual void set_show_tabs(bool /*bShow*/) override;
 
     virtual ~SalInstanceVerticalNotebook() override;
+};
+
+class SalInstanceColorChooserDialog : public SalInstanceDialog,
+                                      public virtual weld::ColorChooserDialog
+{
+    ScopedVclPtr<AbstractColorPickerDialog> m_pAbstractColorPickerDialog;
+
+public:
+    SalInstanceColorChooserDialog(AbstractColorPickerDialog* pColorDialog);
+    virtual ~SalInstanceColorChooserDialog() override;
+
+    virtual void set_color(const Color& rColor) override;
+    virtual Color get_color() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

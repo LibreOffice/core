@@ -1433,6 +1433,8 @@ public:
     virtual void SetColor(const Color& rColor) override { m_pDlg->SetColor(rColor); }
 
     virtual Color GetColor() const override { return m_pDlg->GetColor(); }
+
+    virtual weld::Dialog* GetDialog() const override { return m_pDlg->getDialog(); }
 };
 }
 

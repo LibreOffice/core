@@ -2790,6 +2790,13 @@ public:
     }
 };
 
+class VCL_DLLPUBLIC ColorChooserDialog : virtual public Dialog
+{
+public:
+    virtual void set_color(const Color& rColor) = 0;
+    virtual Color get_color() const = 0;
+};
+
 class VCL_DLLPUBLIC SizeGroup
 {
 public:

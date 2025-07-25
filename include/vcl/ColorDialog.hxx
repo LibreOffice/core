@@ -20,21 +20,29 @@
 #pragma once
 
 #include <tools/color.hxx>
-#include <tools/link.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/vclptr.hxx>
+#include <vcl/weld.hxx>
 
 #include <functional>
-
-class AbstractColorPickerDialog;
-
-namespace weld { class Window; }
 
 namespace vcl
 {
     // Select is the default.
     enum class ColorPickerMode { Select, Modify };
 }
+
+class ColorChooserDialogController : public weld::DialogController
+{
+    std::unique_ptr<weld::ColorChooserDialog> m_pColorChooserDialog;
+
+public:
+    ColorChooserDialogController(std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog)
+        : m_pColorChooserDialog(std::move(pColorChooserDialog))
+    {
+    }
+
+    virtual weld::ColorChooserDialog* getDialog() override { return m_pColorChooserDialog.get(); }
+};
 
 class VCL_DLLPUBLIC ColorDialog final
 {
@@ -49,8 +57,7 @@ public:
     void            ExecuteAsync(const std::function<void(sal_Int32)>& func);
 
 private:
-    ScopedVclPtr<AbstractColorPickerDialog> m_pDialog;
-    std::function<void(sal_Int32)> m_aResultFunc;
+    std::shared_ptr<ColorChooserDialogController> m_pColorChooserDialogController;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
