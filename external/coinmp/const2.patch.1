@@ -1,0 +1,30 @@
+diff -ur coinmp.org/Clp/src/ClpMessage.cpp coinmp/Clp/src/ClpMessage.cpp
+--- coinmp.org/Clp/src/ClpMessage.cpp	2025-07-25 11:26:58.104048978 +0200
++++ coinmp/Clp/src/ClpMessage.cpp	2025-07-25 11:29:02.781194570 +0200
+@@ -12,7 +12,7 @@
+      char detail;
+      const char * message;
+ } Clp_message;
+-static Clp_message clp_us_english[] = {
++static const Clp_message clp_us_english[] = {
+      {CLP_SIMPLEX_FINISHED, 0, 1, "Optimal - objective value %g"},
+      {CLP_SIMPLEX_INFEASIBLE, 1, 1, "Primal infeasible - objective value %g"},
+      {CLP_SIMPLEX_UNBOUNDED, 2, 1, "Dual infeasible - objective value %g"},
+@@ -116,7 +116,7 @@
+      {CLP_GENERAL_WARNING, 3006, 1, "%s"},
+      {CLP_DUMMY_END, 999999, 0, ""}
+ };
+-static Clp_message uk_english[] = {
++static const Clp_message uk_english[] = {
+      {
+           CLP_SIMPLEX_FINISHED, 0, 1, "Optimal - objective value %g,\
+  okay CLP can solve some LPs but you really need Xpress from Dash Associates :-)"
+@@ -130,7 +130,7 @@
+      language_ = language;
+      strcpy(source_, "Clp");
+      class_ = 1; //solver
+-     Clp_message * message = clp_us_english;
++     const Clp_message * message = clp_us_english;
+ 
+      while (message->internalNumber != CLP_DUMMY_END) {
+           CoinOneMessage oneMessage(message->externalNumber, message->detail,
