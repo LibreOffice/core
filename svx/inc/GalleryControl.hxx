@@ -37,7 +37,6 @@ public:
 private:
     Gallery* mpGallery;
     std::unique_ptr<GalleryBrowser1> mxBrowser1;
-    //std::unique_ptr<GalleryBrowser2> mxBrowser2;
 };
 
 } // end of namespace svx::sidebar
