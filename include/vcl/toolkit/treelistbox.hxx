@@ -240,7 +240,6 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
 
 protected:
     std::unique_ptr<SvImpLBox>              pImpl;
-    short                   nColumns;
     short                   nEntryHeight;
     short                   nEntryWidth;
     bool                    mbCenterAndClipText;
@@ -604,7 +603,6 @@ public:
 
     void            ScrollOutputArea( short nDeltaEntries );
 
-    short           GetColumnsCount() const { return nColumns; }
     short           GetEntryHeight() const  { return nEntryHeight; }
     void            SetEntryHeight( short nHeight );
     short           GetEntryWidth() const { return nEntryWidth; }

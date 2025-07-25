@@ -39,7 +39,7 @@ const int nSpacing = 5; // 5 pixels from top, from bottom, between icon and labe
 IconView::IconView(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
 {
-    nColumns = 1;
+    m_nColumnCount = 1;
     mbCenterAndClipText = true;
     SetEntryWidth(100);
 
@@ -49,7 +49,7 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
 {
     if (entry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
-        return { GetEntryWidth() * GetColumnsCount(), separatorHeight };
+        return { GetEntryWidth() * GetColumnCount(), separatorHeight };
     return { GetEntryWidth(), GetEntryHeight() };
 }
 
@@ -92,7 +92,7 @@ void IconView::Resize()
     if (!aBoxSize.Width())
         return;
 
-    nColumns = nEntryWidth ? aBoxSize.Width() / nEntryWidth : 1;
+    m_nColumnCount = nEntryWidth ? aBoxSize.Width() / nEntryWidth : 1;
 
     SvTreeListBox::Resize();
 }

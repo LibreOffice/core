@@ -47,7 +47,7 @@ void IconViewImpl::IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fr
 {
     tools::Long x = 0, y = 0;
     short column = 0;
-    const tools::Long rowWidth = m_pView->GetEntryWidth() * m_pView->GetColumnsCount();
+    const tools::Long rowWidth = m_pView->GetEntryWidth() * GetIconView().GetColumnCount();
     tools::Long nPrevHeight = 0;
     for (auto entry = fromStartEntry ? m_pStartEntry : m_pView->FirstVisible(); entry;
          entry = m_pView->NextVisible(entry))
@@ -374,7 +374,7 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
 
     // number of entries visible within the view
     const tools::Long nVisibleRows = aOSize.Height() / nEntryHeight;
-    m_nVisibleCount = nVisibleRows * m_pView->GetColumnsCount();
+    m_nVisibleCount = nVisibleRows * GetIconView().GetColumnCount();
 
     tools::Long nTotalRows = 0;
     tools::Long totalHeight = 0;

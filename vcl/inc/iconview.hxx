@@ -25,10 +25,14 @@
 
 class IconView final : public SvTreeListBox
 {
+private:
+    short m_nColumnCount;
+
 public:
     IconView(vcl::Window* pParent, WinBits nBits);
 
     Size GetEntrySize(const SvTreeListEntry&) const;
+    short GetColumnCount() const { return m_nColumnCount; }
 
     virtual void Resize() override;
 
