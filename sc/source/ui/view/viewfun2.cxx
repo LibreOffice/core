@@ -113,7 +113,7 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
 using ::std::vector;
 using ::std::unique_ptr;
 
-bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
+bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRangeWidthChanged )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     if (!pMarkData)
@@ -182,7 +182,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         SCTAB nTab = GetViewData().GetTabNo();
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(),
-                false /* bColumns */, true /* bRows */,
+                bRangeWidthChanged /* bColumns */, true /* bRows */,
                 true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
                 false /* bGroups */, nTab);
         ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, nTab);

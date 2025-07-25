@@ -1144,6 +1144,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     //  target-range, as displayed:
     ScRange aUserRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
+    tools::Long nRangeWidth = GetViewData().GetDocShell()->GetDocument().GetColWidth(nStartCol,nEndCol,nStartTab);
 
     //  should lines be inserted?
     //  ( too large nEndCol/nEndRow are detected below)
@@ -1359,7 +1360,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
     pMixDoc.reset();
 
-    AdjustBlockHeight();            // update row heights before pasting objects
+    bool IsRangeWidthChanged = nRangeWidth != GetViewData().GetDocShell()->GetDocument().GetColWidth(nStartCol,nEndCol,nStartTab);
+    AdjustBlockHeight(true, nullptr, IsRangeWidthChanged );            // update row heights before pasting objects
 
     ::std::vector< OUString > aExcludedChartNames;
     SdrPage* pPage = nullptr;
