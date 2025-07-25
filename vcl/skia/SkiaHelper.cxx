@@ -438,18 +438,17 @@ static bool initVCLSkiaEnabled()
     {
         const bool bForceSkia = getenv("SAL_FORCESKIA") != nullptr
                                 || officecfg::Office::Common::VCL::ForceSkia::get();
-
+#if defined(MACOSX) || defined(_WIN32)
+        bRet = true; // macOS/win can __only__ render via skia
+#else
         bRet = bForceSkia;
         // If not forced, don't enable in safe mode
         if (!bRet && !Application::IsSafeModeEnabled())
         {
-#if defined(MACOSX) || defined(_WIN32)
-            bRet = true; // macOS/win can __only__ render via skia
-#else
             bRet = getenv("SAL_ENABLESKIA") != nullptr
                    || officecfg::Office::Common::VCL::UseSkia::get();
-#endif
         }
+#endif
 
         if (bRet)
         {
