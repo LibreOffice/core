@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceButton \
     vcl/qt5/QtInstanceCalendar \
     vcl/qt5/QtInstanceCheckButton \
+    vcl/qt5/QtInstanceColorChooserDialog \
     vcl/qt5/QtInstanceContainer \
     vcl/qt5/QtInstanceComboBox \
     vcl/qt5/QtInstanceDialog \

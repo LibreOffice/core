@@ -29,6 +29,7 @@
 #include <QtFilePicker.hxx>
 #include <QtFrame.hxx>
 #include <QtInstanceBuilder.hxx>
+#include <QtInstanceColorChooserDialog.hxx>
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
@@ -955,6 +956,20 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
         return pDialog;
     }
 }
+
+std::unique_ptr<weld::ColorChooserDialog>
+QtInstance::CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode)
+{
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::ColorChooserDialog> pColorChooserDialog;
+    RunInMainThread([&] {
+        QColorDialog* pDialog = new QColorDialog(GetNativeParentFromWeldParent(pParent));
+        pColorChooserDialog = std::make_unique<QtInstanceColorChooserDialog>(pDialog);
+    });
+
+    return pColorChooserDialog;
+};
 
 static void initResources()
 {

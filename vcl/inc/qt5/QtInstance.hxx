@@ -192,6 +192,8 @@ public:
                                                      VclMessageType eMessageType,
                                                      VclButtonsType eButtonType,
                                                      const OUString& rPrimaryMessage) override;
+    virtual std::unique_ptr<weld::ColorChooserDialog>
+    CreateColorChooserDialog(weld::Window* pParent, vcl::ColorPickerMode eMode) override;
 
 // so we fall back to the default abort, instead of duplicating it...
 #ifndef EMSCRIPTEN

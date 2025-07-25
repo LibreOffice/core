@@ -23,6 +23,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceBox.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceCalendar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceCheckButton.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceColorChooserDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceComboBox.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceContainer.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDialog.moc \
