@@ -122,14 +122,14 @@ void BreakPointDialog::CheckButtons()
         m_xNewButton->set_sensitive(true);
         m_xOKButton->set_sensitive(false);
         m_xDelButton->set_sensitive(false);
-        m_xDialog->change_default_widget(m_xDelButton.get(), m_xNewButton.get());
+        m_xDialog->change_default_button(m_xDelButton.get(), m_xNewButton.get());
     }
     else
     {
         m_xNewButton->set_sensitive(false);
         m_xOKButton->set_sensitive(true);
         m_xDelButton->set_sensitive(true);
-        m_xDialog->change_default_widget(m_xNewButton.get(), m_xDelButton.get());
+        m_xDialog->change_default_button(m_xNewButton.get(), m_xDelButton.get());
     }
 }
 

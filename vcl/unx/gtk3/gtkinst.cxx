@@ -7238,7 +7238,7 @@ public:
 #endif
     }
 
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override
+    virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) override
     {
         GtkInstanceWidget* pGtkNew = dynamic_cast<GtkInstanceWidget*>(pNew);
         GtkWidget* pWidgetNew = pGtkNew ? pGtkNew->getWidget() : nullptr;
@@ -7257,7 +7257,7 @@ public:
 #endif
     }
 
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const override
+    virtual bool is_default_button(const weld::Button* pCandidate) const override
     {
         const GtkInstanceWidget* pGtkCandidate = dynamic_cast<const GtkInstanceWidget*>(pCandidate);
         GtkWidget* pWidget = pGtkCandidate ? pGtkCandidate->getWidget() : nullptr;

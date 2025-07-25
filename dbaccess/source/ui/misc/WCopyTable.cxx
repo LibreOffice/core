@@ -646,9 +646,9 @@ void OCopyTableWizard::construct()
 
     if (!m_vDestColumns.empty())
         // source is a html or rtf table
-        m_xAssistant->change_default_widget(nullptr, m_xNextPage.get());
+        m_xAssistant->change_default_button(nullptr, m_xNextPage.get());
     else
-        m_xAssistant->change_default_widget(nullptr, m_xFinish.get());
+        m_xAssistant->change_default_button(nullptr, m_xFinish.get());
 
     m_pTypeInfo = std::make_shared<OTypeInfo>();
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');

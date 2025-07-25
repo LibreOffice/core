@@ -661,8 +661,8 @@ public:
 
     // with pOld of null, automatically find the old default widget and unset
     // it, otherwise use as hint to the old default
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) = 0;
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const = 0;
+    virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) = 0;
+    virtual bool is_default_button(const weld::Button* pCandidate) const = 0;
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;

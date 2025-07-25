@@ -288,12 +288,12 @@ namespace dbp
 
         if (bUnfinishedInput)
         {
-            if (!pDialog->is_default_widget(m_xMoveRight.get()))
+            if (!pDialog->is_default_button(m_xMoveRight.get()))
                 pDialogController->defaultButton(m_xMoveRight.get());
         }
         else
         {
-            if (pDialog->is_default_widget(m_xMoveRight.get()))
+            if (pDialog->is_default_button(m_xMoveRight.get()))
                 pDialogController->defaultButton(WizardButtonFlags::NEXT);
         }
     }

@@ -126,7 +126,7 @@ namespace dbaui
                 m_xTravelNext->set_sensitive(false);
 
             if (m_xAllParams->n_children() > 1)
-                m_xDialog->change_default_widget(m_xOKBtn.get(), m_xTravelNext.get());
+                m_xDialog->change_default_button(m_xOKBtn.get(), m_xTravelNext.get());
         }
 
         m_xParam->grab_focus();
@@ -316,7 +316,7 @@ namespace dbaui
         if (!bVisited)
         {
             // yes, there isn't another one -> change the "default button"
-            m_xDialog->change_default_widget(m_xTravelNext.get(), m_xOKBtn.get());
+            m_xDialog->change_default_button(m_xTravelNext.get(), m_xOKBtn.get());
         }
     }
 

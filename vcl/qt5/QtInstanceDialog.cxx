@@ -190,12 +190,12 @@ std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
     return std::make_unique<QtInstanceContainer>(m_pContentArea);
 }
 
-void QtInstanceDialog::change_default_widget(weld::Widget*, weld::Widget*)
+void QtInstanceDialog::change_default_button(weld::Button*, weld::Button*)
 {
     assert(false && "Not implemented yet");
 }
 
-bool QtInstanceDialog::is_default_widget(const weld::Widget*) const
+bool QtInstanceDialog::is_default_button(const weld::Button*) const
 {
     assert(false && "Not implemented yet");
     return true;

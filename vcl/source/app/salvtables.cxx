@@ -1956,11 +1956,11 @@ void SalInstanceDialog::implResetDefault(const vcl::Window* _pWindow)
 
 void SalInstanceDialog::recursively_unset_default_buttons() { implResetDefault(m_xDialog.get()); }
 
-void SalInstanceDialog::change_default_widget(weld::Widget* pOld, weld::Widget* pNew)
+void SalInstanceDialog::change_default_button(weld::Button* pOld, weld::Button* pNew)
 {
-    SalInstanceWidget* pVclNew = dynamic_cast<SalInstanceWidget*>(pNew);
+    SalInstanceButton* pVclNew = dynamic_cast<SalInstanceButton*>(pNew);
     vcl::Window* pWidgetNew = pVclNew ? pVclNew->getWidget() : nullptr;
-    SalInstanceWidget* pVclOld = dynamic_cast<SalInstanceWidget*>(pOld);
+    SalInstanceButton* pVclOld = dynamic_cast<SalInstanceButton*>(pOld);
     vcl::Window* pWidgetOld = pVclOld ? pVclOld->getWidget() : nullptr;
     if (pWidgetOld)
         pWidgetOld->set_property(u"has-default"_ustr, OUString::boolean(false));
@@ -1970,7 +1970,7 @@ void SalInstanceDialog::change_default_widget(weld::Widget* pOld, weld::Widget* 
         pWidgetNew->set_property(u"has-default"_ustr, OUString::boolean(true));
 }
 
-bool SalInstanceDialog::is_default_widget(const weld::Widget* pCandidate) const
+bool SalInstanceDialog::is_default_button(const weld::Button* pCandidate) const
 {
     const SalInstanceWidget* pVclCandidate = dynamic_cast<const SalInstanceWidget*>(pCandidate);
     vcl::Window* pWidget = pVclCandidate ? pVclCandidate->getWidget() : nullptr;

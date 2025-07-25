@@ -240,7 +240,7 @@ namespace vcl
         // loop through all (direct and indirect) descendants which participate in our tabbing order, and
         // reset the WB_DEFBUTTON for every window which is a button and set _pNewDefButton as the new
         // WB_DEFBUTTON
-        m_xAssistant->change_default_widget(nullptr, _pNewDefButton);
+        m_xAssistant->change_default_button(nullptr, _pNewDefButton);
     }
 
     void WizardMachine::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)

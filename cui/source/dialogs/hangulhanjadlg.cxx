@@ -610,8 +610,8 @@ namespace svx
         if (bOldDocumentMode == m_bDocumentMode)
             return;
 
-        weld::Widget* pOldDefButton = nullptr;
-        weld::Widget* pNewDefButton = nullptr;
+        weld::Button* pOldDefButton = nullptr;
+        weld::Button* pNewDefButton = nullptr;
         if (m_bDocumentMode)
         {
             pOldDefButton = m_xFind.get();
@@ -623,7 +623,7 @@ namespace svx
             pNewDefButton = m_xFind.get();
         }
 
-        m_xDialog->change_default_widget(pOldDefButton, pNewDefButton);
+        m_xDialog->change_default_button(pOldDefButton, pNewDefButton);
     }
 
     OUString HangulHanjaConversionDialog::GetCurrentSuggestion( ) const

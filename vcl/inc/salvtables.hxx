@@ -547,9 +547,9 @@ public:
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
-    virtual void change_default_widget(weld::Widget* pOld, weld::Widget* pNew) override;
+    virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) override;
 
-    virtual bool is_default_widget(const weld::Widget* pCandidate) const override;
+    virtual bool is_default_button(const weld::Button* pCandidate) const override;
 
     ::Dialog* getDialog() { return m_xDialog; }
 };
