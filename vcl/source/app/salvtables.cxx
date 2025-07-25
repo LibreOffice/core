@@ -5450,16 +5450,11 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
+    Image aImage;
     if (pIconName)
-    {
-        Image aImage(createImage(*pIconName));
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-    }
-    else
-    {
-        Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-    }
+        aImage = createImage(*pIconName);
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
@@ -5489,16 +5484,11 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
+
+    Image aImage;
     if (pIcon)
-    {
-        Image aImage(*pIcon);
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
-    }
-    else
-    {
-        Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
-    }
+        aImage = Image(*pIcon);
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
