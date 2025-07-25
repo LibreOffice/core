@@ -80,7 +80,7 @@ struct snew_slide_value_info
 
 }
 
-const snew_slide_value_info editmodes[] =
+constexpr snew_slide_value_info editmodes[] =
 {
     {1,
         BMP_DISPLAYMODE_SLIDE,
@@ -101,7 +101,7 @@ const snew_slide_value_info editmodes[] =
     {0, u""_ustr, {}, "" }
 };
 
-const snew_slide_value_info mastermodes[] =
+constexpr snew_slide_value_info mastermodes[] =
 {
     {5,
         BMP_DISPLAYMODE_SLIDE_MASTER,

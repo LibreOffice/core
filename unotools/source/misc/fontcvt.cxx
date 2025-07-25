@@ -1304,7 +1304,7 @@ struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
 }
 
-const RecodeTable aStarSymbolRecodeTable[] =
+constexpr RecodeTable aStarSymbolRecodeTable[] =
 {
     // the first two entries must be StarMath and StarBats; do not reorder!
     // reason: see CreateFontToSubsFontConverter method

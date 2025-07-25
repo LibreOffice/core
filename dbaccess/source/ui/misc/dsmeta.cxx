@@ -57,7 +57,7 @@ namespace dbaui
     };
 
     // global tables
-    const FeatureMapping s_aMappings[] = {
+    constexpr FeatureMapping s_aMappings[] = {
         { DSID_AUTORETRIEVEENABLED,     u"GeneratedValues"_ustr },
         { DSID_AUTOINCREMENTVALUE,      u"GeneratedValues"_ustr },
         { DSID_AUTORETRIEVEVALUE,       u"GeneratedValues"_ustr },
