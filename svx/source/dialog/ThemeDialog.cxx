@@ -19,7 +19,6 @@ namespace svx
 {
 ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     : GenericDialogController(pParent, u"svx/ui/themedialog.ui"_ustr, u"ThemeDialog"_ustr)
-    , mpWindow(pParent)
     , mpTheme(pTheme)
     , mxIconViewThemeColors(m_xBuilder->weld_icon_view(u"iconview_theme_colors"_ustr))
     , mxAdd(m_xBuilder->weld_button(u"button_add"_ustr))
@@ -132,7 +131,7 @@ void ThemeDialog::runThemeColorEditDialog()
     if (mxSubDialog)
         return;
 
-    mxSubDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
+    mxSubDialog = std::make_shared<svx::ThemeColorEditDialog>(getDialog(), *mpCurrentColorSet);
 
     weld::DialogController::runAsync(mxSubDialog, [this](sal_uInt32 nResult) {
         if (nResult != RET_OK)
