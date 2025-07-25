@@ -32,9 +32,15 @@ static bool IsSeparator(const SvTreeListEntry* entry)
     return entry && entry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR;
 }
 
+IconView& IconViewImpl::GetIconView() const
+{
+    assert(m_pView);
+    return static_cast<IconView&>(*m_pView);
+}
+
 Size IconViewImpl::GetEntrySize(const SvTreeListEntry& entry) const
 {
-    return static_cast<const IconView*>(m_pView.get())->GetEntrySize(entry);
+    return GetIconView().GetEntrySize(entry);
 }
 
 void IconViewImpl::IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fromStartEntry) const
@@ -511,12 +517,12 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         SetCursor(m_pStartEntry, bNotSelect);
     }
 
-    auto PaintEntry = [iconView = static_cast<IconView*>(m_pView.get()), &rRect,
+    auto PaintEntry = [&rIconView = GetIconView(), &rRect,
                        &rRenderContext](const EntryAreaInfo& info)
     {
         if (!info.area.GetIntersection(rRect).IsEmpty())
         {
-            iconView->PaintEntry(*info.entry, info.area.Left(), info.area.Top(), rRenderContext);
+            rIconView.PaintEntry(*info.entry, info.area.Left(), info.area.Top(), rRenderContext);
         }
         else if (info.area.Top() > rRect.Bottom())
         {

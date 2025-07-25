@@ -77,6 +77,8 @@ private:
 
     void IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fromStartEntry = false) const;
 
+    IconView& GetIconView() const;
+
     Size GetEntrySize(const SvTreeListEntry& entry) const;
     // Get first entry at most n rows above; nullptr if no rows above
     SvTreeListEntry* GoToPrevRow(SvTreeListEntry* pEntry, int n) const;
