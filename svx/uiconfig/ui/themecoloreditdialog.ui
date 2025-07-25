@@ -90,9 +90,6 @@
                 <property name="margin-bottom">6</property>
                 <property name="hexpand">True</property>
                 <property name="truncate-multiline">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="labelThemeColorsName"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -108,9 +105,8 @@
                 <property name="margin-top">6</property>
                 <property name="margin-bottom">6</property>
                 <property name="label" translatable="yes" context="themecoloreditdialog|labelThemeColorsName">Name:</property>
-                <accessibility>
-                  <relation type="label-for" target="entryThemeColorsName"/>
-                </accessibility>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">entryThemeColorsName</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -153,9 +149,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelDark1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -172,9 +165,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelLight1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -191,9 +181,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelDark2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -207,10 +194,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelDark">Dark 1:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonDark1</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonDark1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -224,10 +210,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelLight1">Light 1:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonLight1</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonLight1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -241,10 +226,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelDark2">Dark 2:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonDark2</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonDark2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -258,10 +242,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelLight2">Light 2:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonLight2</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonLight2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -278,9 +261,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelLight2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -294,10 +274,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent1">Accent 1:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent1</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -311,10 +290,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent2">Accent 2:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent2</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -331,9 +309,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent1"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -350,9 +325,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent2"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -366,10 +338,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent3">Accent 3:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent3</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent3"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -383,10 +354,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent4">Accent 4:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent4</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent4"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -400,10 +370,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent5">Accent 5:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent5</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent5"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -417,10 +386,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelAccent6">Accent 6:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonAccent6</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonAccent6"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
@@ -437,9 +405,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent3"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -456,9 +421,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent4"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -475,9 +437,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent5"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -494,9 +453,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelAccent6"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">3</property>
@@ -510,10 +466,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelHyperlink">Hyperlink:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonHyperlink</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonHyperlink"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -527,10 +482,9 @@
                     <property name="margin-start">6</property>
                     <property name="margin-end">12</property>
                     <property name="label" translatable="yes" context="themecoloreditdialog|labelFollowedHyperlink">Followed Hyperlink:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">buttonFollowHyperlink</property>
                     <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="buttonFollowHyperlink"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -547,9 +501,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelHyperlink"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -566,9 +517,6 @@
                     <child>
                       <placeholder/>
                     </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="labelFollowedHyperlink"/>
-                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
