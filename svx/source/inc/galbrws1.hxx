@@ -92,7 +92,6 @@ typedef ::std::vector<ThemeEntry> GalleryThemeEntries;
 
 class GalleryBrowser1 final : public SfxListener
 {
-    friend class GalleryBrowser;
     friend class svx::sidebar::GalleryControl;
 
 private:
