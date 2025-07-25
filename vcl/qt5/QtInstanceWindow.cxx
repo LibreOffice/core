@@ -218,6 +218,9 @@ const vcl::ILibreOfficeKitNotifier* QtInstanceWindow::GetLOKNotifier() { return 
 
 bool QtInstanceWindow::eventFilter(QObject* pObject, QEvent* pEvent)
 {
+    SolarMutexGuard g;
+    assert(GetQtInstance().IsMainThread());
+
     if (pObject != getQWidget())
         return false;
 
