@@ -1056,7 +1056,12 @@ QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(const weld::TreeIter& 
 
 void QtInstanceTreeView::setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol)
 {
-    assert(nCol != -1 && "Special column -1 not handled yet");
+    // set the "expander image" for the Qt::DecorationRole in the first column
+    // It can still contain additional data (like text) for other roles, but not
+    // another image. If that turns out to be problematic, another solution needs
+    // to be found.
+    if (nCol == -1)
+        nCol = 0;
 
     SolarMutexGuard g;
 
