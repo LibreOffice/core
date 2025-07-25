@@ -49,11 +49,13 @@ published interface XSheetLinkable: com::sun::star::uno::XInterface
         are copied.
 
         @param nLinkMode
+            @parblock
             the value specifying the link mode for this spreadsheet.
 
-            <p>If the value is SheetLinkMode::NORMAL,
+            If the value is SheetLinkMode::NORMAL,
             formulas are copied.  With SheetLinkMode::VALUE,
-            only results of formulas are used.</p>
+            only results of formulas are used.
+            @endparblock
      */
     void setLinkMode( [in] com::sun::star::sheet::SheetLinkMode nLinkMode );
 

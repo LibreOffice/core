@@ -146,7 +146,6 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
             mixed Western/CJK text may lead to wrong word iteration.
             This is fixed in later versions.
             @endparblock
-
         @param nWordType
             One of WordType, specifies the type of
             traveling.

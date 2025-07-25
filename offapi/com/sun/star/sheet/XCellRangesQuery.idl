@@ -34,7 +34,7 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all visible cells.
 
         @returns
-            the visible (not hidden) cells of the current cell range(s).
+            The visible (not hidden) cells of the current cell range(s).
      */
     com::sun::star::sheet::XSheetCellRanges queryVisibleCells();
 
@@ -42,7 +42,7 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all empty cells.
 
         @returns
-            the empty cells of the current cell range(s).
+            The empty cells of the current cell range(s).
      */
     com::sun::star::sheet::XSheetCellRanges queryEmptyCells();
 
@@ -50,16 +50,18 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all cells with the specified content type(s).
 
         @param nContentFlags
+            @parblock
             a combination of CellFlags flags.
 
-            <p>Attention: Despite the CellFlags flags are
+            Attention: Despite the CellFlags flags are
             `long` values, this method expects a `short`
-            parameter.</p>
+            parameter.
 
-            <p>Attention: Empty cells in the range may be skipped depending on
+            Attention: Empty cells in the range may be skipped depending on
             the content flag used.  For instance, when querying for STYLES,
             the returned ranges may not include empty cells even if styles are
-            applied to those cells.</p>
+            applied to those cells.
+            @endparblock
 
         @returns
             all cells of the current cell range(s) with the specified
@@ -72,7 +74,7 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
     /** queries all formula cells with the specified result type.
 
         @param nResultFlags
-            a combination of FormulaResult flags.
+            A combination of FormulaResult flags.
 
         @returns
             all formula cells of the current cell range(s) with the

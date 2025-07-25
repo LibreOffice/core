@@ -31,39 +31,42 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
     /** calls a function and returns the result of the call.
 
         @param aName
-        the (programmatic) name of the function.
+            the (programmatic) name of the function.
 
         @param aArguments
-        the arguments for the function call.
-        <p>Each element must be of one of the following types:</p>
+            @parblock
+            the arguments for the function call.
+            Each element must be of one of the following types:
 
-        <dl>
-        <dt>`long` or `double`</dt>
-        <dd>for a numeric value.</dd>
+            <dl>
+            <dt>`long` or `double`</dt>
+            <dd>for a numeric value.</dd>
 
-        <dt>`string`</dt>
-        <dd>for a textual value.</dd>
+            <dt>`string`</dt>
+            <dd>for a textual value.</dd>
 
-        <dt>`long[][]` or `double[][]`</dt>
-        <dd>for an array of numeric values.</dd>
+            <dt>`long[][]` or `double[][]`</dt>
+            <dd>for an array of numeric values.</dd>
 
-        <dt>`string[][]`</dt>
-        <dd>for an array of textual values.</dd>
+            <dt>`string[][]`</dt>
+            <dd>for an array of textual values.</dd>
 
-        <dt>`any[][]`</dt>
-        <dd>for a mixed array, where each element must be of `VOID`,
-        `long`, `double` or `string`
-        type.</dd>
+            <dt>`any[][]`</dt>
+            <dd>for a mixed array, where each element must be of `VOID`,
+            `long`, `double` or `string`
+            type.</dd>
 
-        <dt>com::sun::star::table::XCellRange</dt>
-        <dd>for a SheetCellRange object that contains the
-        data.</dd>
-        </dl>
+            <dt>com::sun::star::table::XCellRange</dt>
+            <dd>for a SheetCellRange object that contains the
+            data.</dd>
+            </dl>
+            @endparblock
 
         @returns
+            @parblock
             the result of the function call.
 
-            <p>Possible types for the result are:</p>
+            Possible types for the result are:
 
             <dl>
             <dt>`VOID`</dt>
@@ -79,6 +82,7 @@ published interface XFunctionAccess: com::sun::star::uno::XInterface
             <dd>for an array result, containing `double` and
             `string` values.</dd>
             </dl>
+            @endparblock
 
         @throws com::sun::star::container::NoSuchElementException
             if the named function does not exist.

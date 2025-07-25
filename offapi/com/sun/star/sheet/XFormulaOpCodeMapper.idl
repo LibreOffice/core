@@ -59,29 +59,31 @@ interface XFormulaOpCodeMapper
             is thrown.
 
         @returns
+            @parblock
             a sequence of FormulaToken matching the input
             sequence in order.
 
-            <p>Each string element in parameter Names according to the formula
+            Each string element in parameter Names according to the formula
             language in parameter Language is mapped to a FormulaToken
             containing the internal OpCode used by the spreadsheet
             application in FormulaToken::OpCode and by
             contract maybe additional information in
-            FormulaToken::Data.</p>
+            FormulaToken::Data.
 
-            <p>The order of the FormulaToken sequence returned matches the
-            input order of the string sequence.</p>
+            The order of the FormulaToken sequence returned matches the
+            input order of the string sequence.
 
-            <p>An unknown Name string gets the OpCode value of
-            #OpCodeUnknown assigned.</p>
+            An unknown Name string gets the OpCode value of
+            #OpCodeUnknown assigned.
 
-            <p>Additional information in FormulaToken::Data
+            Additional information in FormulaToken::Data
             is returned for:
             <ul>
             <li>Add-in names: the programmatic name. The OpCode value used
             for add-ins can be queried with the #OpCodeExternal
             getter method.</li>
-            </ul></p>
+            </ul>
+            @endparblock
      */
     sequence< FormulaToken > getMappings(
             [in] sequence< string > Names,
@@ -103,14 +105,16 @@ interface XFormulaOpCodeMapper
             FormulaMapGroup constants.
 
         @returns
+            @parblock
             Sequence of FormulaOpCodeMapEntry.
 
-            <p>Each element of the formula language in parameter Language is
+            Each element of the formula language in parameter Language is
             mapped to a FormulaToken containing the internal
             OpCode used by the spreadsheet application in
             FormulaToken::OpCode and by contract maybe additional
             information in FormulaToken::Data. See
-            getMappings() for more details.</p>
+            getMappings() for more details.
+            @endparblock
      */
     sequence< FormulaOpCodeMapEntry > getAvailableMappings(
             [in] long Language, [in] long Groups )

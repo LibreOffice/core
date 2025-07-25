@@ -46,10 +46,12 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
     /** removes the given range from the collection of cell ranges.
 
         @param aCellRangeAddress
+            @parblock
             contains the address of the range to be removed.
 
-            <p>The specified range must fit exactly to an element of the
-            collection. The method does not try to shorten a range.</p>
+            The specified range must fit exactly to an element of the
+            collection. The method does not try to shorten a range.
+            @endparblock
 
         @throws com::sun::star::container::NoSuchElementException
             if the collection does not contain the specified range.
@@ -76,10 +78,12 @@ published interface XSheetCellRangeContainer: com::sun::star::sheet::XSheetCellR
     /** removes the given ranges from the collection of cell ranges.
 
         @param aCellRangeAddresses
+            @parblock
             contains a sequence of addresses of all ranges to be removed.
 
-            <p>All specified ranges must fit exactly to elements of the
-            collection. The method does not try to shorten ranges.</p>
+            All specified ranges must fit exactly to elements of the
+            collection. The method does not try to shorten ranges.
+            @endparblock
 
         @throws com::sun::star::container::NoSuchElementException
             if the collection does not contain any of the specified ranges.

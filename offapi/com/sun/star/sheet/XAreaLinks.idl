@@ -40,11 +40,12 @@ published interface XAreaLinks: com::sun::star::container::XIndexAccess
             the URL of the source document.
 
         @param aSourceArea
+            @parblock
             the name of the range in the source document.
 
-            <p>This can be the address of a cell or range in the form
-            "Sheet1.A1:C5", or the name of a named range or database range.</p>
-
+            This can be the address of a cell or range in the form
+            "Sheet1.A1:C5", or the name of a named range or database range.
+            @endparblock
         @param aFilter
             the name of the filter used to load the source document.
 
