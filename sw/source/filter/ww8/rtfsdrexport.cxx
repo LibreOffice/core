@@ -681,7 +681,7 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
         const sal_Int32 nEnd = aStr.getLength();
 
         aAttrIter.OutParaAttr(false);
-        m_rAttrOutput.RunText().append(m_rAttrOutput.MoveCharacterProperties(true));
+        m_rAttrOutput.RunText().append(m_rAttrOutput.MoveProperties(RtfAttributeOutput::ForRun));
 
         do
         {
@@ -690,7 +690,8 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes e
 
             aAttrIter.OutAttr(nCurrentPos);
             m_rAttrOutput.RunText().append('{');
-            m_rAttrOutput.RunText().append(m_rAttrOutput.MoveCharacterProperties(true));
+            m_rAttrOutput.RunText().append(
+                m_rAttrOutput.MoveProperties(RtfAttributeOutput::ForRun));
             m_rAttrOutput.RunText().append(SAL_NEWLINE_STRING);
             bool bTextAtr = aAttrIter.IsTextAttr(nCurrentPos);
             if (!bTextAtr)

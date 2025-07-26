@@ -1004,6 +1004,42 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167679)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167569_2)
+{
+    // Given an RTF with some complex formatting, with text runs having attributes for RTL and CJK:
+    createSwDoc("tdf167569-2.rtf");
+
+    // 1. Get the height of lines in the list starting with "FFF":
+
+    OUString lineHeight;
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPathContent(pLayout, "//anchored/fly/txt[9]", u"FFF");
+        lineHeight = getXPath(pLayout, "//anchored/fly/txt[9]/infos/bounds", "height");
+        assertXPath(pLayout, "//anchored/fly/txt[10]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[11]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[12]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[13]/infos/bounds", "height", lineHeight);
+    }
+
+    saveAndReload(mpFilter);
+
+    // 2. After round-tripping the RTF, the lines must keep the same height.
+
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPathContent(pLayout, "//anchored/fly/txt[9]", u"FFF");
+        // Before the fix, this failed at least on Linux:
+        // - Expected: 305
+        // - Actual  : 364
+        assertXPath(pLayout, "//anchored/fly/txt[9]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[10]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[11]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[12]/infos/bounds", "height", lineHeight);
+        assertXPath(pLayout, "//anchored/fly/txt[13]/infos/bounds", "height", lineHeight);
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

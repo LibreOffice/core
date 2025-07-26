@@ -92,6 +92,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svl/grabbagitem.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <formatflysplit.hxx>
@@ -342,7 +343,8 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
     SwNodeIndex aNextIndex(rNode, 1);
     if (rNode.IsTextNode())
     {
-        OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
+        OSL_ENSURE(m_aParaFormatting.isEmpty() && m_aCharFormatting.Count() == 0,
+                   "formatting is not empty");
 
         // output page/section breaks
         m_rExport.Strm().WriteOString(m_aSectionBreaks);
@@ -395,25 +397,26 @@ void RtfAttributeOutput::StartParagraphProperties()
         m_aSectionHeaders.append(aPar);
 }
 
-/// Outputs an item set, that contains the formatting of the paragraph marker.
-/// Similar to respective function in sw/source/filter/ww8/docxattributeoutput.cxx.
-static void lcl_writeParagraphMarkerProperties(RtfAttributeOutput& rAttributeOutput,
-                                               const SfxItemSet& rParagraphMarkerProperties)
+void RtfAttributeOutput::ApplyCharFormatItems(const SfxItemSet& items)
 {
-    for (SfxItemIter it(rParagraphMarkerProperties); !it.IsAtEnd(); it.NextItem())
+    if (auto* pStyle = items.GetItemIfSet(RES_TXTATR_CHARFMT))
+        ApplyCharFormatProperties(*pStyle);
+    if (auto* pAutoStyle = items.GetItemIfSet(RES_TXTATR_AUTOFMT))
+        ApplyCharFormatProperties(*pAutoStyle);
+
+    SfxWhichIter it(items);
+    for (auto nWhichId = it.FirstWhich(); nWhichId; nWhichId = it.NextWhich())
     {
-        const auto nWhichId = it.GetCurWhich();
-        if (isCHRATR(nWhichId) || nWhichId == RES_TXTATR_CHARFMT)
-        {
-            rAttributeOutput.OutputItem(*it.GetCurItem());
-        }
-        else if (nWhichId == RES_TXTATR_AUTOFMT)
-        {
-            const SwFormatAutoFormat& rAutoFormat
-                = it.GetCurItem()->StaticWhichCast(RES_TXTATR_AUTOFMT);
-            lcl_writeParagraphMarkerProperties(rAttributeOutput, *rAutoFormat.GetStyleHandle());
-        }
+        const SfxPoolItem* pItem;
+        if (isCHRATR(nWhichId) && items.GetItemState(nWhichId, true, &pItem) == SfxItemState::SET)
+            OutputItem(*pItem);
     }
+}
+
+void RtfAttributeOutput::ApplyCharFormatProperties(const SfxPoolItem& charFormatItem)
+{
+    if (const SfxItemSet* pItemSet = CharFormat::GetItemSet(charFormatItem))
+        ApplyCharFormatItems(*pItemSet);
 }
 
 void RtfAttributeOutput::EndParagraphProperties(
@@ -421,25 +424,11 @@ void RtfAttributeOutput::EndParagraphProperties(
     const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/,
     const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
 {
-    // Do not call MoveCharacterProperties(),
-    // Otherwise associate properties in the paragraph style are ruined.
-    const OString aProperties = m_aStyles.makeStringAndClear();
+    const OString aProperties = MoveProperties(StyleDefinition);
     m_rExport.Strm().WriteOString(aProperties);
 
-    // Backup other styles strings, to avoid modification by marker properties
-    OString aStylesAssocHich(m_aStylesAssocHich.makeStringAndClear());
-    OString aStylesAssocDbch(m_aStylesAssocDbch.makeStringAndClear());
-    OString aStylesAssocRtlch(m_aStylesAssocRtlch.makeStringAndClear());
-    OString aStylesAssocLtrch(m_aStylesAssocLtrch.makeStringAndClear());
-
-    lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
-    m_aParagraphMarkerProperties = m_aStyles.makeStringAndClear();
-
-    // Restore these
-    m_aStylesAssocHich = aStylesAssocHich;
-    m_aStylesAssocDbch = aStylesAssocDbch;
-    m_aStylesAssocRtlch = aStylesAssocRtlch;
-    m_aStylesAssocLtrch = aStylesAssocLtrch;
+    ApplyCharFormatItems(rParagraphMarkerProperties);
+    m_aParagraphMarkerProperties = MoveProperties(StyleDefinition);
 }
 
 void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, sal_Int32 /*nPos*/,
@@ -477,82 +466,332 @@ void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/,
 
 void RtfAttributeOutput::StartRunProperties()
 {
-    OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
+    OSL_ENSURE(m_aParaFormatting.isEmpty() && m_aCharFormatting.Count() == 0,
+               "formatting is not empty");
 }
 
 bool RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 {
-    const OString aProperties = MoveCharacterProperties(true);
+    const OString aProperties = MoveProperties(ForRun);
     m_aRun->append(aProperties);
     return !aProperties.isEmpty();
 }
 
-OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
+// Very much like AttributeOutputBase::OutputItem
+void RtfAttributeOutput::OutputFormattingItem(const SfxPoolItem& item, OStringBuffer& buf) const
 {
-    const OString aAssocHich = m_aStylesAssocHich.makeStringAndClear();
-    const OString aAssocDbch = m_aStylesAssocDbch.makeStringAndClear();
-    const OString aAssocRtlch = m_aStylesAssocRtlch.makeStringAndClear();
-    const OString aAssocLtrch = m_aStylesAssocLtrch.makeStringAndClear();
-    const OString aNormal = m_aStyles.makeStringAndClear();
-    OStringBuffer aBuf;
-
-    if (aAutoWriteRtlLtr && !m_bControlLtrRtl)
+    switch (item.Which())
     {
-        m_bControlLtrRtl = !aAssocRtlch.isEmpty();
-        m_bIsRTL = false;
-        m_nScript = i18n::ScriptType::LATIN;
+        case RES_CHRATR_CASEMAP:
+            OutputCharCaseMap(item.StaticWhichCast(RES_CHRATR_CASEMAP), buf);
+            break;
+        case RES_CHRATR_COLOR:
+            OutputCharColor(item.StaticWhichCast(RES_CHRATR_COLOR), buf);
+            break;
+        case RES_CHRATR_CONTOUR:
+            OutputCharContour(item.StaticWhichCast(RES_CHRATR_CONTOUR), buf);
+            break;
+        case RES_CHRATR_CROSSEDOUT:
+            OutputCharCrossedOut(item.StaticWhichCast(RES_CHRATR_CROSSEDOUT), buf);
+            break;
+        case RES_CHRATR_ESCAPEMENT:
+            OutputCharEscapement(item.StaticWhichCast(RES_CHRATR_ESCAPEMENT), buf);
+            break;
+        case RES_CHRATR_KERNING:
+            OutputCharKerning(item.StaticWhichCast(RES_CHRATR_KERNING), buf);
+            break;
+        case RES_CHRATR_SHADOWED:
+            OutputCharShadow(item.StaticWhichCast(RES_CHRATR_SHADOWED), buf);
+            break;
+        case RES_CHRATR_UNDERLINE:
+            // Handle underline here, in case it needs a keyword not in assoc area
+            OutputCharUnderline(item.StaticWhichCast(RES_CHRATR_UNDERLINE), buf);
+            break;
+        case RES_CHRATR_AUTOKERN:
+            OutputCharAutoKern(item.StaticWhichCast(RES_CHRATR_AUTOKERN), buf);
+            break;
+        case RES_CHRATR_BLINK:
+            OutputCharAnimatedText(item.StaticWhichCast(RES_CHRATR_BLINK), buf);
+            break;
+        case RES_CHRATR_BACKGROUND:
+            OutputCharBackground(item.StaticWhichCast(RES_CHRATR_BACKGROUND), buf);
+            break;
+
+        case RES_CHRATR_ROTATE:
+            OutputCharRotate(item.StaticWhichCast(RES_CHRATR_ROTATE), buf);
+            break;
+        case RES_CHRATR_EMPHASIS_MARK:
+            OutputCharEmphasisMark(item.StaticWhichCast(RES_CHRATR_EMPHASIS_MARK), buf);
+            break;
+        case RES_CHRATR_TWO_LINES:
+            OutputCharTwoLines(item.StaticWhichCast(RES_CHRATR_TWO_LINES), buf);
+            break;
+        case RES_CHRATR_SCALEW:
+            OutputCharScaleWidth(item.StaticWhichCast(RES_CHRATR_SCALEW), buf);
+            break;
+        case RES_CHRATR_RELIEF:
+            OutputCharRelief(item.StaticWhichCast(RES_CHRATR_RELIEF), buf);
+            break;
+        case RES_CHRATR_HIDDEN:
+            OutputCharHidden(item.StaticWhichCast(RES_CHRATR_HIDDEN), buf);
+            break;
+        case RES_CHRATR_BOX:
+            OutputCharBorder(item.StaticWhichCast(RES_CHRATR_BOX), buf);
+            break;
+        case RES_CHRATR_HIGHLIGHT:
+            OutputCharHighlight(item.StaticWhichCast(RES_CHRATR_HIGHLIGHT), buf);
+            break;
+        case RES_TXTATR_CHARFMT:
+            OutputTextCharFormat(item.StaticWhichCast(RES_TXTATR_CHARFMT), buf);
+            break;
+
+        default:
+            SAL_INFO("sw.rtf", "Unhandled SfxPoolItem with id " << item.Which());
+            break;
+    }
+}
+
+void RtfAttributeOutput::OutputCharAssocFormattingItem(const SfxPoolItem& item, OStringBuffer& buf,
+                                                       bool assoc) const
+{
+    switch (item.Which())
+    {
+        case RES_CHRATR_FONT:
+            OutputCharFontAssoc(item.StaticWhichCast(RES_CHRATR_FONT), buf, assoc);
+            break;
+        case RES_CHRATR_FONTSIZE:
+            OutputCharFontSizeAssoc(item.StaticWhichCast(RES_CHRATR_FONTSIZE), buf, assoc);
+            break;
+        case RES_CHRATR_LANGUAGE:
+            OutputCharLanguageAssoc(item.StaticWhichCast(RES_CHRATR_LANGUAGE), buf, assoc);
+            break;
+        case RES_CHRATR_POSTURE:
+            OutputCharPostureAssoc(item.StaticWhichCast(RES_CHRATR_POSTURE), buf, assoc);
+            break;
+        case RES_CHRATR_UNDERLINE:
+            // Handle underline here, too, in case it needs a keyword in assoc area
+            OutputCharUnderlineAssoc(item.StaticWhichCast(RES_CHRATR_UNDERLINE), buf, assoc);
+            break;
+        case RES_CHRATR_WEIGHT:
+            OutputCharWeightAssoc(item.StaticWhichCast(RES_CHRATR_WEIGHT), buf, assoc);
+            break;
+
+        case RES_CHRATR_CJK_FONT:
+            OutputCharFontAssoc(item.StaticWhichCast(RES_CHRATR_CJK_FONT), buf, assoc);
+            break;
+        case RES_CHRATR_CJK_FONTSIZE:
+            OutputCharFontSizeAssoc(item.StaticWhichCast(RES_CHRATR_CJK_FONTSIZE), buf, assoc);
+            break;
+        case RES_CHRATR_CJK_LANGUAGE:
+            OutputCharLanguageCJK(item.StaticWhichCast(RES_CHRATR_CJK_LANGUAGE), buf);
+            break;
+        case RES_CHRATR_CJK_POSTURE:
+            OutputCharPostureAssoc(item.StaticWhichCast(RES_CHRATR_CJK_POSTURE), buf, assoc);
+            break;
+        case RES_CHRATR_CJK_WEIGHT:
+            OutputCharWeightAssoc(item.StaticWhichCast(RES_CHRATR_CJK_WEIGHT), buf, assoc);
+            break;
+
+        case RES_CHRATR_CTL_FONT:
+            OutputCharFontAssoc(item.StaticWhichCast(RES_CHRATR_CTL_FONT), buf, assoc);
+            break;
+        case RES_CHRATR_CTL_FONTSIZE:
+            OutputCharFontSizeAssoc(item.StaticWhichCast(RES_CHRATR_CTL_FONTSIZE), buf, assoc);
+            break;
+        case RES_CHRATR_CTL_LANGUAGE:
+            OutputCharLanguageAssoc(item.StaticWhichCast(RES_CHRATR_CTL_LANGUAGE), buf, assoc);
+            break;
+        case RES_CHRATR_CTL_POSTURE:
+            OutputCharPostureAssoc(item.StaticWhichCast(RES_CHRATR_CTL_POSTURE), buf, assoc);
+            break;
+        case RES_CHRATR_CTL_WEIGHT:
+            OutputCharWeightAssoc(item.StaticWhichCast(RES_CHRATR_CTL_WEIGHT), buf, assoc);
+            break;
+
+        default:
+            SAL_INFO("sw.rtf", "Unhandled SfxPoolItem with id " << item.Which());
+            break;
+    }
+}
+
+namespace
+{
+void apply(const SfxPoolItem* pItem, const auto& fn)
+{
+    if (pItem)
+        fn(*pItem);
+}
+
+// for_each_* use shallow search, only taking items in m_aCharFormatting, not in its parent
+
+auto for_each_Western = [](const SfxItemSet& set, const auto& fn) {
+    apply(set.GetItemIfSet(RES_CHRATR_FONT, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_FONTSIZE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_LANGUAGE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_POSTURE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_UNDERLINE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_WEIGHT, false), fn);
+};
+
+auto for_each_CJK = [](const SfxItemSet& set, const auto& fn) {
+    apply(set.GetItemIfSet(RES_CHRATR_CJK_FONT, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CJK_FONTSIZE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CJK_LANGUAGE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CJK_POSTURE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CJK_WEIGHT, false), fn);
+    // Should we also output RES_CHRATR_UNDERLINE here?
+};
+
+auto for_each_CTL = [](const SfxItemSet& set, const auto& fn) {
+    apply(set.GetItemIfSet(RES_CHRATR_CTL_FONT, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CTL_FONTSIZE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CTL_LANGUAGE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false), fn);
+    apply(set.GetItemIfSet(RES_CHRATR_CTL_WEIGHT, false), fn);
+    // Should we also output RES_CHRATR_UNDERLINE here?
+};
+}
+
+OString RtfAttributeOutput::MoveProperties(GetCharacterPropertiesMode mode)
+{
+    // 1. The initial content is para formatting.
+    OStringBuffer& rBuf = m_aParaFormatting; // will clear m_aParaFormatting before return
+
+    // 2. Add the character formatting, that is not part of assoc groups
+    if (auto* pStyleItem = m_aCharFormatting.GetItemIfSet(RES_TXTATR_CHARFMT, false))
+        OutputFormattingItem(*pStyleItem, rBuf);
+    for (SfxItemIter it(m_aCharFormatting); !it.IsAtEnd(); it.NextItem())
+    {
+        if (it.GetCurWhich() != RES_TXTATR_CHARFMT)
+            OutputFormattingItem(*it.GetCurItem(), rBuf);
     }
 
-    if (m_bIsRTL)
+    auto get = [this](const auto& fn, bool assoc) {
+        OStringBuffer buf;
+        fn(m_aCharFormatting, [this, &buf, assoc](const SfxPoolItem& item) {
+            OutputCharAssocFormattingItem(item, buf, assoc);
+        });
+        return buf.makeStringAndClear();
+    };
+    auto getWestern = [&get](bool assoc) { return get(for_each_Western, assoc); };
+    auto getCJK = [&get](bool assoc) { return get(for_each_CJK, assoc); };
+    auto getCTL = [&get](bool assoc) { return get(for_each_CTL, assoc); };
+
+    // 3. Now add assoc groups, depending on the mode, current run script, and available properties.
+
+    // Whenever <loch props> appear below, they could be either
+    //     \hich <Western props> \dbch <CJK props> \loch <Western props>
+    // or, when there is no <CJK props>, then simply
+    //     <Western props>
+    // Note that \hich and \loch have identical properties (except \loch could use normal keywords,
+    // when goes last; and \hich always uses \a... assoc keywords). Hope that works in general.
+
+    if (mode == StyleDefinition)
     {
-        if (!aAssocRtlch.isEmpty())
+        // \rtlch <CTL props> \ltrch <loch props>
+        // or, when there is no <CTL props>, then simply
+        // <loch props>
+        // This mode doesn't use or reset m_bControlLtrRtl, m_bIsRTL, or m_nScript
+
+        if (OString ctl = getCTL(true); !ctl.isEmpty())
         {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH + aAssocLtrch
-                        + " " OOO_STRING_SVTOOLS_RTF_RTLCH + aAssocRtlch);
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH + ctl + OOO_STRING_SVTOOLS_RTF_LTRCH);
+        }
+
+        if (OString cjk = getCJK(true); !cjk.isEmpty())
+        {
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + getWestern(true));
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + cjk);
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + getWestern(false));
+        }
+        else
+        {
+            rBuf.append(getWestern(false));
         }
     }
     else
     {
-        if (!aAssocRtlch.isEmpty())
-        {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH + aAssocRtlch
-                        + " " OOO_STRING_SVTOOLS_RTF_LTRCH + aAssocLtrch);
-        }
-        if (!aAssocHich.isEmpty())
-        {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + aAssocHich);
-        }
-        if (!aNormal.isEmpty())
-        {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + aNormal);
-        }
-        if (!aAssocDbch.isEmpty())
-        {
-            aBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + aAssocDbch);
-        }
-    }
+        assert(mode == ForRun);
+        // We are producing formatting for the current run. Provide all the assoc group properties,
+        // with the group for the run's script going last and having normal property keywords.
 
-    if (m_bControlLtrRtl)
-    {
+        if (!m_bControlLtrRtl)
+        {
+            // RTLAndCJKState wasn't called since the last time we emitted properties for a run;
+            // reset the possible leftover values here. At least that's how I read this; but I
+            // wonder why can't we just reset them hard here.
+            m_bIsRTL = false;
+            m_nScript = i18n::ScriptType::LATIN;
+        }
         m_bControlLtrRtl = false;
 
-        switch (m_nScript)
+        if (m_bIsRTL)
         {
-            case i18n::ScriptType::LATIN:
-                aBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH);
-                break;
-            case i18n::ScriptType::ASIAN:
-                aBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH);
-                break;
-            case i18n::ScriptType::COMPLEX:
-                /* noop */
-            default:
-                /* should not happen? */
-                break;
+            // \ltrch <loch props> \rtlch <CTL props>
+
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_LTRCH);
+            OString western = getWestern(true);
+            if (OString cjk = getCJK(true); !cjk.isEmpty())
+            {
+                rBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + western);
+                rBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + cjk);
+                rBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + western);
+            }
+            else
+            {
+                rBuf.append(western);
+            }
+
+            rBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH + getCTL(false));
+        }
+        else
+        {
+            // \rtlch <CTL props> \ltrch ...
+            // or, when there is no <CTL props>, then simply
+            // ...
+
+            if (OString ctl = getCTL(true); !ctl.isEmpty())
+            {
+                rBuf.append(OOO_STRING_SVTOOLS_RTF_RTLCH + ctl + OOO_STRING_SVTOOLS_RTF_LTRCH);
+            }
+
+            switch (m_nScript)
+            {
+                case i18n::ScriptType::ASIAN:
+                {
+                    // ... \loch <Western props> \hich <Western props> \dbch <CJK props>
+                    OString western = getWestern(true);
+                    rBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + western);
+                    rBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + western);
+                    rBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + getCJK(false));
+                    break;
+                }
+                case i18n::ScriptType::LATIN:
+                case i18n::ScriptType::COMPLEX: // Should we use CTL here?
+                default:
+                {
+                    // ... <loch props>
+                    if (OString cjk = getCJK(true); !cjk.isEmpty())
+                    {
+                        // \hich <Western props> \dbch <CJK props> \loch <Western props>
+                        rBuf.append(OOO_STRING_SVTOOLS_RTF_HICH + getWestern(true));
+                        rBuf.append(OOO_STRING_SVTOOLS_RTF_DBCH + cjk);
+                        rBuf.append(OOO_STRING_SVTOOLS_RTF_LOCH + getWestern(false));
+                    }
+                    else
+                    {
+                        // <Western props>
+                        rBuf.append(getWestern(false));
+                    }
+                    break;
+                }
+            }
         }
     }
 
-    return aBuf.makeStringAndClear();
+    m_aCharFormatting.ClearItem();
+    m_aCharFormattingParent.ClearItem();
+    return rBuf.makeStringAndClear();
 }
 
 void RtfAttributeOutput::RunText(const OUString& rText, rtl_TextEncoding /*eCharSet*/,
@@ -718,11 +957,11 @@ void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
 void RtfAttributeOutput::TableInfoCell(
     const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_INTBL);
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_INTBL);
     if (m_nTableDepth > 1)
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ITAP);
-        m_aStyles.append(static_cast<sal_Int32>(m_nTableDepth));
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_ITAP);
+        m_aParaFormatting.append(static_cast<sal_Int32>(m_nTableDepth));
     }
     m_bWroteCellInfo = true;
 }
@@ -1368,7 +1607,7 @@ void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType, sal_
 
 void RtfAttributeOutput::EndStyle()
 {
-    OString aStyles = MoveCharacterProperties();
+    OString aStyles = MoveProperties(StyleDefinition);
     m_rExport.InsStyle(m_nStyleId, aStyles);
     m_aStylesheet.append(aStyles);
     m_aStylesheet.append(' ');
@@ -1390,10 +1629,10 @@ void RtfAttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
     if (nLvl >= WW8ListManager::nMaxLevel)
         nLvl = WW8ListManager::nMaxLevel - 1;
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
-    m_aStyles.append(static_cast<sal_Int32>(nLvl));
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_OUTLINELEVEL);
-    m_aStyles.append(static_cast<sal_Int32>(nLvl));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_ILVL);
+    m_aParaFormatting.append(static_cast<sal_Int32>(nLvl));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_OUTLINELEVEL);
+    m_aParaFormatting.append(static_cast<sal_Int32>(nLvl));
 }
 
 void RtfAttributeOutput::PageBreakBefore(bool bBreak)
@@ -1887,7 +2126,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
         }
         m_rExport.OutputItemSet(*pOutSet, false, true, i18n::ScriptType::LATIN,
                                 m_rExport.m_bExportModeRTF);
-        const OString aProperties = MoveCharacterProperties(true);
+        const OString aProperties = MoveProperties(StyleDefinition);
         m_rExport.Strm().WriteOString(aProperties);
     }
 
@@ -2295,8 +2534,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
             }
 
             m_rExport.Strm().WriteOString(m_aRunText.makeStringAndClear());
-            m_rExport.Strm().WriteOString(m_aStyles);
-            m_aStyles.setLength(0);
+            m_rExport.Strm().WriteOString(MoveProperties(ForRun));
             m_rExport.m_bOutFlyFrameAttrs = false;
             m_rExport.SetRTFFlySyntax(false);
             m_pFlyFrameSize = nullptr;
@@ -2615,57 +2853,85 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
 
 void RtfAttributeOutput::CharCaseMap(const SvxCaseMapItem& rCaseMap)
 {
+    m_aCharFormatting.Put(rCaseMap);
+}
+
+void RtfAttributeOutput::OutputCharCaseMap(const SvxCaseMapItem& rCaseMap, OStringBuffer& buf)
+{
     switch (rCaseMap.GetValue())
     {
         case SvxCaseMap::SmallCaps:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SCAPS);
+            buf.append(OOO_STRING_SVTOOLS_RTF_SCAPS);
             break;
         case SvxCaseMap::Uppercase:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CAPS);
+            buf.append(OOO_STRING_SVTOOLS_RTF_CAPS);
             break;
         default: // Something that rtf does not support
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SCAPS);
-            m_aStyles.append(sal_Int32(0));
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CAPS);
-            m_aStyles.append(sal_Int32(0));
+            buf.append(OOO_STRING_SVTOOLS_RTF_SCAPS);
+            buf.append(sal_Int32(0));
+            buf.append(OOO_STRING_SVTOOLS_RTF_CAPS);
+            buf.append(sal_Int32(0));
             break;
     }
 }
 
-void RtfAttributeOutput::CharColor(const SvxColorItem& rColor)
+void RtfAttributeOutput::CharColor(const SvxColorItem& rColor) { m_aCharFormatting.Put(rColor); }
+
+void RtfAttributeOutput::OutputCharColor(const SvxColorItem& rColor, OStringBuffer& buf) const
 {
     const Color aColor(rColor.GetValue());
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CF);
-    m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
+    buf.append(OOO_STRING_SVTOOLS_RTF_CF);
+    buf.append(static_cast<sal_Int32>(m_rExport.GetColor(aColor)));
 }
 
 void RtfAttributeOutput::CharContour(const SvxContourItem& rContour)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_OUTL);
+    m_aCharFormatting.Put(rContour);
+}
+
+void RtfAttributeOutput::OutputCharContour(const SvxContourItem& rContour, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_OUTL);
     if (!rContour.GetValue())
-        m_aStyles.append(sal_Int32(0));
+        buf.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharCrossedOut(const SvxCrossedOutItem& rCrossedOut)
 {
+    m_aCharFormatting.Put(rCrossedOut);
+}
+
+void RtfAttributeOutput::OutputCharCrossedOut(const SvxCrossedOutItem& rCrossedOut,
+                                              OStringBuffer& buf)
+{
     switch (rCrossedOut.GetStrikeout())
     {
         case STRIKEOUT_NONE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
-            m_aStyles.append(sal_Int32(0));
+            buf.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
+            buf.append(sal_Int32(0));
             break;
         case STRIKEOUT_DOUBLE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKED);
-            m_aStyles.append(sal_Int32(1));
+            buf.append(OOO_STRING_SVTOOLS_RTF_STRIKED);
+            buf.append(sal_Int32(1));
             break;
         default:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
+            buf.append(OOO_STRING_SVTOOLS_RTF_STRIKE);
             break;
     }
 }
 
 void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
+{
+    m_aCharFormatting.Put(rEscapement);
+    // If there's not (yet?) a font size item in m_aCharFormatting, add it to parent, to avoid
+    // exporting the item that is not explicitly set here, but find it below
+    if (m_aCharFormatting.GetItemState(RES_CHRATR_FONTSIZE) != SfxItemState::SET)
+        m_aCharFormattingParent.Put(m_rExport.GetItem(RES_CHRATR_FONTSIZE));
+}
+
+void RtfAttributeOutput::OutputCharEscapement(const SvxEscapementItem& rEscapement,
+                                              OStringBuffer& buf) const
 {
     short nEsc = rEscapement.GetEsc();
     short nProp = rEscapement.GetProportionalHeight();
@@ -2673,9 +2939,9 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
     if (DFLT_ESC_PROP == nProp || nProp < 1 || nProp > 100)
     {
         if (DFLT_ESC_SUB == nEsc || DFLT_ESC_AUTO_SUB == nEsc)
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUB);
+            buf.append(OOO_STRING_SVTOOLS_RTF_SUB);
         else if (DFLT_ESC_SUPER == nEsc || DFLT_ESC_AUTO_SUPER == nEsc)
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SUPER);
+            buf.append(OOO_STRING_SVTOOLS_RTF_SUPER);
         return;
     }
     if (DFLT_ESC_AUTO_SUPER == nEsc)
@@ -2691,7 +2957,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
 
     const char* pUpDn;
 
-    double fHeight = m_rExport.GetItem(RES_CHRATR_FONTSIZE).GetHeight();
+    double fHeight = m_aCharFormatting.Get(RES_CHRATR_FONTSIZE /* search in parent */).GetHeight();
 
     if (0 < nEsc)
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
@@ -2703,12 +2969,12 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
     else
         return;
 
-    m_aStyles.append('{');
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_UPDNPROP);
-    m_aStyles.append(nProp100);
-    m_aStyles.append('}');
-    m_aStyles.append(pUpDn);
+    buf.append('{');
+    buf.append(OOO_STRING_SVTOOLS_RTF_IGNORE);
+    buf.append(OOO_STRING_SVTOOLS_RTF_UPDNPROP);
+    buf.append(nProp100);
+    buf.append('}');
+    buf.append(pUpDn);
 
     /*
      * Calculate the act. FontSize and the percentage of the displacement;
@@ -2717,18 +2983,18 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEscapement)
      *                    -----------------------  = ------------
      *                      100%                       Escapement
      */
-    m_aStyles.append(static_cast<sal_Int32>(round(fHeight * nEsc / 1000)));
+    buf.append(static_cast<sal_Int32>(round(fHeight * nEsc / 1000)));
 }
 
-void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
-{
-    // Insert \loch in MoveCharacterProperties
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_F);
-    m_aStyles.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
+void RtfAttributeOutput::CharFont(const SvxFontItem& rFont) { m_aCharFormatting.Put(rFont); }
 
-    // Insert \hich in MoveCharacterProperties
-    m_aStylesAssocHich.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStylesAssocHich.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
+void RtfAttributeOutput::OutputCharFontAssoc(const SvxFontItem& rFont, OStringBuffer& buf,
+                                             bool assoc) const
+{
+    buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AF : OOO_STRING_SVTOOLS_RTF_F);
+    buf.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
+    if (assoc)
+        return;
 
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
@@ -2742,96 +3008,118 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
 
 void RtfAttributeOutput::CharFontSize(const SvxFontHeightItem& rFontSize)
 {
-    switch (rFontSize.Which())
-    {
-        case RES_CHRATR_FONTSIZE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FS);
-            m_aStyles.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
-            break;
-        case RES_CHRATR_CJK_FONTSIZE:
-            m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AFS);
-            m_aStylesAssocDbch.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
-            break;
-        case RES_CHRATR_CTL_FONTSIZE:
-            m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AFS);
-            m_aStylesAssocRtlch.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
-            break;
-    }
+    m_aCharFormatting.Put(rFontSize);
+}
+
+void RtfAttributeOutput::OutputCharFontSizeAssoc(const SvxFontHeightItem& rFontSize,
+                                                 OStringBuffer& buf, bool assoc)
+{
+    buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AFS : OOO_STRING_SVTOOLS_RTF_FS);
+    buf.append(static_cast<sal_Int32>(rFontSize.GetHeight() / 10));
 }
 
 void RtfAttributeOutput::CharKerning(const SvxKerningItem& rKerning)
 {
+    m_aCharFormatting.Put(rKerning);
+}
+
+void RtfAttributeOutput::OutputCharKerning(const SvxKerningItem& rKerning, OStringBuffer& buf)
+{
     // in quarter points then in twips
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_EXPND);
-    m_aStyles.append(static_cast<sal_Int32>(rKerning.GetValue() / 5));
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_EXPNDTW);
-    m_aStyles.append(static_cast<sal_Int32>(rKerning.GetValue()));
+    buf.append(OOO_STRING_SVTOOLS_RTF_EXPND);
+    buf.append(static_cast<sal_Int32>(rKerning.GetValue() / 5));
+    buf.append(OOO_STRING_SVTOOLS_RTF_EXPNDTW);
+    buf.append(static_cast<sal_Int32>(rKerning.GetValue()));
 }
 
 void RtfAttributeOutput::CharLanguage(const SvxLanguageItem& rLanguage)
 {
-    switch (rLanguage.Which())
-    {
-        case RES_CHRATR_LANGUAGE:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LANG);
-            m_aStyles.append(
-                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
-            m_aStylesAssocLtrch.append(OOO_STRING_SVTOOLS_RTF_LANG);
-            m_aStylesAssocLtrch.append(
-                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
-            break;
-        case RES_CHRATR_CJK_LANGUAGE:
-            m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
-            m_aStylesAssocDbch.append(
-                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
-            m_aStylesAssocLtrch.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
-            m_aStylesAssocLtrch.append(
-                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
-            break;
-        case RES_CHRATR_CTL_LANGUAGE:
-            m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_ALANG);
-            m_aStylesAssocRtlch.append(
-                static_cast<sal_Int32>(static_cast<sal_uInt16>(rLanguage.GetLanguage())));
-            break;
-    }
+    m_aCharFormatting.Put(rLanguage);
+}
+
+void RtfAttributeOutput::OutputCharLanguageAssoc(const SvxLanguageItem& rLanguage,
+                                                 OStringBuffer& buf, bool assoc)
+{
+    buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_ALANG : OOO_STRING_SVTOOLS_RTF_LANG);
+    buf.append(static_cast<sal_Int32>(rLanguage.GetLanguage().get()));
 }
 
 void RtfAttributeOutput::CharPosture(const SvxPostureItem& rPosture)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_I);
+    m_aCharFormatting.Put(rPosture);
+}
+
+void RtfAttributeOutput::OutputCharPostureAssoc(const SvxPostureItem& rPosture, OStringBuffer& buf,
+                                                bool assoc)
+{
+    buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AI : OOO_STRING_SVTOOLS_RTF_I);
     if (rPosture.GetPosture() == ITALIC_NONE)
-        m_aStyles.append(sal_Int32(0));
+        buf.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharShadow(const SvxShadowedItem& rShadow)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SHAD);
+    m_aCharFormatting.Put(rShadow);
+}
+
+void RtfAttributeOutput::OutputCharShadow(const SvxShadowedItem& rShadow, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_SHAD);
     if (!rShadow.GetValue())
-        m_aStyles.append(sal_Int32(0));
+        buf.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
 {
-    const char* pStr = nullptr;
-    const SfxPoolItem* pItem = m_rExport.HasItem(RES_CHRATR_WORDLINEMODE);
-    bool bWord = false;
-    // No StaticWhichCast(RES_CHRATR_WORDLINEMODE), this may be for a postit, where the which ids
-    // don't match.
-    if (pItem)
-        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
+    m_aCharFormatting.Put(rUnderline);
+    if (const SfxPoolItem* pItem = m_rExport.HasItem(RES_CHRATR_WORDLINEMODE))
+        m_aCharFormattingParent.Put(*pItem);
+}
+
+void RtfAttributeOutput::OutputCharUnderlineAssoc(const SvxUnderlineItem& rUnderline,
+                                                  OStringBuffer& buf, bool assoc) const
+{
     switch (rUnderline.GetLineStyle())
     {
         case LINESTYLE_SINGLE:
-            pStr = bWord ? OOO_STRING_SVTOOLS_RTF_ULW : OOO_STRING_SVTOOLS_RTF_UL;
+            // No StaticWhichCast(RES_CHRATR_WORDLINEMODE), this may be for a postit, where the
+            // which ids don't match.
+            if (const auto* pItem = m_aCharFormatting.GetItemIfSet(RES_CHRATR_WORDLINEMODE);
+                pItem && pItem->GetValue())
+            {
+                buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AULW : OOO_STRING_SVTOOLS_RTF_ULW);
+            }
+            else
+            {
+                buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AUL : OOO_STRING_SVTOOLS_RTF_UL);
+            }
             break;
         case LINESTYLE_DOUBLE:
-            pStr = OOO_STRING_SVTOOLS_RTF_ULDB;
+            buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AULDB : OOO_STRING_SVTOOLS_RTF_ULDB);
             break;
         case LINESTYLE_NONE:
-            pStr = OOO_STRING_SVTOOLS_RTF_ULNONE;
+            buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AULNONE : OOO_STRING_SVTOOLS_RTF_ULNONE);
             break;
         case LINESTYLE_DOTTED:
-            pStr = OOO_STRING_SVTOOLS_RTF_ULD;
+            buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AULD : OOO_STRING_SVTOOLS_RTF_ULD);
+            break;
+        default:
+            break;
+    }
+}
+
+void RtfAttributeOutput::OutputCharUnderline(const SvxUnderlineItem& rUnderline,
+                                             OStringBuffer& buf) const
+{
+    const char* pStr = nullptr;
+    switch (rUnderline.GetLineStyle())
+    {
+        case LINESTYLE_SINGLE:
+        case LINESTYLE_DOUBLE:
+        case LINESTYLE_NONE:
+        case LINESTYLE_DOTTED:
+            // Handled in OutputCharUnderlineAssoc; here just add \ulcN
+            pStr = "";
             break;
         case LINESTYLE_DASH:
             pStr = OOO_STRING_SVTOOLS_RTF_ULDASH;
@@ -2878,48 +3166,64 @@ void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
 
     if (pStr)
     {
-        m_aStyles.append(pStr);
+        buf.append(pStr);
         // NEEDSWORK looks like here rUnderline.GetColor() is always black,
         // even if the color in the odt is for example green...
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ULC);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rUnderline.GetColor())));
+        buf.append(OOO_STRING_SVTOOLS_RTF_ULC);
+        buf.append(static_cast<sal_Int32>(m_rExport.GetColor(rUnderline.GetColor())));
     }
 }
 
 void RtfAttributeOutput::CharWeight(const SvxWeightItem& rWeight)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_B);
+    m_aCharFormatting.Put(rWeight);
+}
+
+void RtfAttributeOutput::OutputCharWeightAssoc(const SvxWeightItem& rWeight, OStringBuffer& buf,
+                                               bool assoc)
+{
+    buf.append(assoc ? OOO_STRING_SVTOOLS_RTF_AB : OOO_STRING_SVTOOLS_RTF_B);
     if (rWeight.GetWeight() != WEIGHT_BOLD)
-        m_aStyles.append(sal_Int32(0));
+        buf.append(sal_Int32(0));
 }
 
 void RtfAttributeOutput::CharAutoKern(const SvxAutoKernItem& rAutoKern)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_KERNING);
-    m_aStyles.append(static_cast<sal_Int32>(rAutoKern.GetValue() ? 1 : 0));
+    m_aCharFormatting.Put(rAutoKern);
+}
+
+void RtfAttributeOutput::OutputCharAutoKern(const SvxAutoKernItem& rAutoKern, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_KERNING);
+    buf.append(static_cast<sal_Int32>(rAutoKern.GetValue() ? 1 : 0));
 }
 
 void RtfAttributeOutput::CharAnimatedText(const SvxBlinkItem& rBlink)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ANIMTEXT);
-    m_aStyles.append(static_cast<sal_Int32>(rBlink.GetValue() ? 2 : 0));
+    m_aCharFormatting.Put(rBlink);
+}
+
+void RtfAttributeOutput::OutputCharAnimatedText(const SvxBlinkItem& rBlink, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_ANIMTEXT);
+    buf.append(static_cast<sal_Int32>(rBlink.GetValue() ? 2 : 0));
 }
 
 void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
 {
+    m_aCharFormatting.Put(rBrush);
+}
+
+void RtfAttributeOutput::OutputCharBackground(const SvxBrushItem& rBrush, OStringBuffer& buf) const
+{
     if (!rBrush.GetColor().IsTransparent())
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
+        buf.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
+        buf.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
     }
 }
 
-void RtfAttributeOutput::CharFontCJK(const SvxFontItem& rFont)
-{
-    // Insert \dbch in MoveCharacterProperties
-    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStylesAssocDbch.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
-}
+void RtfAttributeOutput::CharFontCJK(const SvxFontItem& rFont) { CharFont(rFont); }
 
 void RtfAttributeOutput::CharFontSizeCJK(const SvxFontHeightItem& rFontSize)
 {
@@ -2931,26 +3235,17 @@ void RtfAttributeOutput::CharLanguageCJK(const SvxLanguageItem& rLanguageItem)
     CharLanguage(rLanguageItem);
 }
 
-void RtfAttributeOutput::CharPostureCJK(const SvxPostureItem& rPosture)
+void RtfAttributeOutput::OutputCharLanguageCJK(const SvxLanguageItem& rLanguage, OStringBuffer& buf)
 {
-    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_I);
-    if (rPosture.GetPosture() == ITALIC_NONE)
-        m_aStylesAssocDbch.append(sal_Int32(0));
+    buf.append(OOO_STRING_SVTOOLS_RTF_LANGFE);
+    buf.append(static_cast<sal_Int32>(rLanguage.GetLanguage().get()));
 }
 
-void RtfAttributeOutput::CharWeightCJK(const SvxWeightItem& rWeight)
-{
-    m_aStylesAssocDbch.append(OOO_STRING_SVTOOLS_RTF_AB);
-    if (rWeight.GetWeight() != WEIGHT_BOLD)
-        m_aStylesAssocDbch.append(sal_Int32(0));
-}
+void RtfAttributeOutput::CharPostureCJK(const SvxPostureItem& rPosture) { CharPosture(rPosture); }
 
-void RtfAttributeOutput::CharFontCTL(const SvxFontItem& rFont)
-{
-    // Insert \rtlch in MoveCharacterProperties
-    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AF);
-    m_aStylesAssocRtlch.append(static_cast<sal_Int32>(m_rExport.m_aFontHelper.GetId(rFont)));
-}
+void RtfAttributeOutput::CharWeightCJK(const SvxWeightItem& rWeight) { CharWeight(rWeight); }
+
+void RtfAttributeOutput::CharFontCTL(const SvxFontItem& rFont) { CharFont(rFont); }
 
 void RtfAttributeOutput::CharFontSizeCTL(const SvxFontHeightItem& rFontSize)
 {
@@ -2962,19 +3257,9 @@ void RtfAttributeOutput::CharLanguageCTL(const SvxLanguageItem& rLanguageItem)
     CharLanguage(rLanguageItem);
 }
 
-void RtfAttributeOutput::CharPostureCTL(const SvxPostureItem& rPosture)
-{
-    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AI);
-    if (rPosture.GetPosture() == ITALIC_NONE)
-        m_aStylesAssocRtlch.append(sal_Int32(0));
-}
+void RtfAttributeOutput::CharPostureCTL(const SvxPostureItem& rPosture) { CharPosture(rPosture); }
 
-void RtfAttributeOutput::CharWeightCTL(const SvxWeightItem& rWeight)
-{
-    m_aStylesAssocRtlch.append(OOO_STRING_SVTOOLS_RTF_AB);
-    if (rWeight.GetWeight() != WEIGHT_BOLD)
-        m_aStylesAssocRtlch.append(sal_Int32(0));
-}
+void RtfAttributeOutput::CharWeightCTL(const SvxWeightItem& rWeight) { CharWeight(rWeight); }
 
 void RtfAttributeOutput::CharBidiRTL(const SfxPoolItem& /*rItem*/) {}
 
@@ -2982,26 +3267,42 @@ void RtfAttributeOutput::CharIdctHint(const SfxPoolItem& /*rItem*/) {}
 
 void RtfAttributeOutput::CharRotate(const SvxCharRotateItem& rRotate)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HORZVERT);
-    m_aStyles.append(static_cast<sal_Int32>(rRotate.IsFitToLine() ? 1 : 0));
+    m_aCharFormatting.Put(rRotate);
+}
+
+void RtfAttributeOutput::OutputCharRotate(const SvxCharRotateItem& rRotate, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_HORZVERT);
+    buf.append(static_cast<sal_Int32>(rRotate.IsFitToLine() ? 1 : 0));
 }
 
 void RtfAttributeOutput::CharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMark)
 {
+    m_aCharFormatting.Put(rEmphasisMark);
+}
+
+void RtfAttributeOutput::OutputCharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMark,
+                                                OStringBuffer& buf)
+{
     FontEmphasisMark v = rEmphasisMark.GetEmphasisMark();
     if (v == FontEmphasisMark::NONE)
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCNONE);
+        buf.append(OOO_STRING_SVTOOLS_RTF_ACCNONE);
     else if (v == (FontEmphasisMark::Dot | FontEmphasisMark::PosAbove))
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCDOT);
+        buf.append(OOO_STRING_SVTOOLS_RTF_ACCDOT);
     else if (v == (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove))
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCOMMA);
+        buf.append(OOO_STRING_SVTOOLS_RTF_ACCCOMMA);
     else if (v == (FontEmphasisMark::Circle | FontEmphasisMark::PosAbove))
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCIRCLE);
+        buf.append(OOO_STRING_SVTOOLS_RTF_ACCCIRCLE);
     else if (v == (FontEmphasisMark::Dot | FontEmphasisMark::PosBelow))
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT);
+        buf.append(OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT);
 }
 
 void RtfAttributeOutput::CharTwoLines(const SvxTwoLinesItem& rTwoLines)
+{
+    m_aCharFormatting.Put(rTwoLines);
+}
+
+void RtfAttributeOutput::OutputCharTwoLines(const SvxTwoLinesItem& rTwoLines, OStringBuffer& buf)
 {
     if (!rTwoLines.GetValue())
         return;
@@ -3021,17 +3322,28 @@ void RtfAttributeOutput::CharTwoLines(const SvxTwoLinesItem& rTwoLines)
     else // all other kind of brackets
         nType = 1;
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TWOINONE);
-    m_aStyles.append(static_cast<sal_Int32>(nType));
+    buf.append(OOO_STRING_SVTOOLS_RTF_TWOINONE);
+    buf.append(static_cast<sal_Int32>(nType));
 }
 
 void RtfAttributeOutput::CharScaleWidth(const SvxCharScaleWidthItem& rScaleWidth)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHARSCALEX);
-    m_aStyles.append(static_cast<sal_Int32>(rScaleWidth.GetValue()));
+    m_aCharFormatting.Put(rScaleWidth);
+}
+
+void RtfAttributeOutput::OutputCharScaleWidth(const SvxCharScaleWidthItem& rScaleWidth,
+                                              OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_CHARSCALEX);
+    buf.append(static_cast<sal_Int32>(rScaleWidth.GetValue()));
 }
 
 void RtfAttributeOutput::CharRelief(const SvxCharReliefItem& rRelief)
+{
+    m_aCharFormatting.Put(rRelief);
+}
+
+void RtfAttributeOutput::OutputCharRelief(const SvxCharReliefItem& rRelief, OStringBuffer& buf)
 {
     const char* pStr;
     switch (rRelief.GetValue())
@@ -3048,28 +3360,47 @@ void RtfAttributeOutput::CharRelief(const SvxCharReliefItem& rRelief)
     }
 
     if (pStr)
-        m_aStyles.append(pStr);
+        buf.append(pStr);
 }
 
 void RtfAttributeOutput::CharHidden(const SvxCharHiddenItem& rHidden)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_V);
-    if (!rHidden.GetValue())
-        m_aStyles.append(sal_Int32(0));
+    m_aCharFormatting.Put(rHidden);
 }
 
-void RtfAttributeOutput::CharBorder(const editeng::SvxBorderLine* pAllBorder,
-                                    const sal_uInt16 nDist, const bool bShadow)
+void RtfAttributeOutput::OutputCharHidden(const SvxCharHiddenItem& rHidden, OStringBuffer& buf)
 {
-    m_aStyles.append(
-        OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist,
-                      bShadow ? SvxShadowLocation::BottomRight : SvxShadowLocation::NONE));
+    buf.append(OOO_STRING_SVTOOLS_RTF_V);
+    if (!rHidden.GetValue())
+        buf.append(sal_Int32(0));
+}
+
+void RtfAttributeOutput::CharBorder(const SvxBoxItem& rBox)
+{
+    m_aCharFormatting.Put(rBox);
+    if (auto* item = m_rExport.HasItem(RES_CHRATR_SHADOW))
+        m_aCharFormattingParent.Put(*item);
+}
+
+void RtfAttributeOutput::OutputCharBorder(const SvxBoxItem& rBox, OStringBuffer& buf) const
+{
+    const auto[pAllBorder, nDist, bShadow] = FormatCharBorder(rBox, &m_aCharFormatting);
+    buf.append(OutBorderLine(m_rExport, pAllBorder, OOO_STRING_SVTOOLS_RTF_CHBRDR, nDist,
+                             bShadow ? SvxShadowLocation::BottomRight : SvxShadowLocation::NONE));
 }
 
 void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
-    m_aStyles.append(static_cast<sal_Int32>(msfilter::util::TransColToIco(rBrush.GetColor())));
+    // Depending on background save mode, for a RES_CHRATR_BACKGROUND, either its native
+    // CharBackground can be called, or CharHighlight (see AttributeOutputBase::CharBackgroundBase).
+    // We need to store the brush with the chosen which, to output it accordingly later.
+    m_aCharFormatting.PutAsTargetWhich(rBrush, RES_CHRATR_HIGHLIGHT);
+}
+
+void RtfAttributeOutput::OutputCharHighlight(const SvxBrushItem& rBrush, OStringBuffer& buf)
+{
+    buf.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
+    buf.append(static_cast<sal_Int32>(msfilter::util::TransColToIco(rBrush.GetColor())));
 }
 
 void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)
@@ -3077,26 +3408,25 @@ void RtfAttributeOutput::TextINetFormat(const SwFormatINetFormat& rURL)
     if (rURL.GetValue().isEmpty())
         return;
 
-    const SwCharFormat* pFormat;
-    const SwTextINetFormat* pTextAtr = rURL.GetTextINetFormat();
-
-    if (pTextAtr && nullptr != (pFormat = pTextAtr->GetCharFormat()))
-    {
-        sal_uInt16 nStyle = m_rExport.GetId(pFormat);
-        OString* pString = m_rExport.GetStyle(nStyle);
-        if (pString)
-            m_aStyles.append(*pString);
-    }
+    // Apply style properties directly
+    ApplyCharFormatProperties(rURL);
 }
 
 void RtfAttributeOutput::TextCharFormat(const SwFormatCharFormat& rCharFormat)
 {
+    m_aCharFormatting.Put(rCharFormat);
+
+    // Also apply style properties directly: "If a character style is specified,
+    // style properties must be specified with the character run."
+    ApplyCharFormatProperties(rCharFormat);
+}
+
+void RtfAttributeOutput::OutputTextCharFormat(const SwFormatCharFormat& rCharFormat,
+                                              OStringBuffer& buf) const
+{
     sal_uInt16 nStyle = m_rExport.GetId(rCharFormat.GetCharFormat());
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CS);
-    m_aStyles.append(static_cast<sal_Int32>(nStyle));
-    OString* pString = m_rExport.GetStyle(nStyle);
-    if (pString)
-        m_aStyles.append(*pString);
+    buf.append(OOO_STRING_SVTOOLS_RTF_CS);
+    buf.append(static_cast<sal_Int32>(nStyle));
 }
 
 void RtfAttributeOutput::WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote)
@@ -3152,10 +3482,10 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
 
 void RtfAttributeOutput::ParaLineSpacing_Impl(short nSpace, short nMulti)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SL);
-    m_aStyles.append(static_cast<sal_Int32>(nSpace));
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SLMULT);
-    m_aStyles.append(static_cast<sal_Int32>(nMulti));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SL);
+    m_aParaFormatting.append(static_cast<sal_Int32>(nSpace));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SLMULT);
+    m_aParaFormatting.append(static_cast<sal_Int32>(nMulti));
 }
 
 void RtfAttributeOutput::ParaAdjust(const SvxAdjustItem& rAdjust)
@@ -3163,20 +3493,20 @@ void RtfAttributeOutput::ParaAdjust(const SvxAdjustItem& rAdjust)
     switch (rAdjust.GetAdjust())
     {
         case SvxAdjust::Left:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QL);
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_QL);
             break;
         case SvxAdjust::Right:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QR);
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_QR);
             break;
         case SvxAdjust::BlockLine:
         case SvxAdjust::Block:
             if (rAdjust.GetLastBlock() == SvxAdjust::Block)
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QD);
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_QD);
             else
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QJ);
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_QJ);
             break;
         case SvxAdjust::Center:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_QC);
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_QC);
             break;
         default:
             break;
@@ -3186,15 +3516,15 @@ void RtfAttributeOutput::ParaAdjust(const SvxAdjustItem& rAdjust)
 void RtfAttributeOutput::ParaSplit(const SvxFormatSplitItem& rSplit)
 {
     if (!rSplit.GetValue())
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_KEEP);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_KEEP);
 }
 
 void RtfAttributeOutput::ParaWidows(const SvxWidowsItem& rWidows)
 {
     if (rWidows.GetValue())
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_WIDCTLPAR);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_WIDCTLPAR);
     else
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_NOWIDCTLPAR);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_NOWIDCTLPAR);
 }
 
 void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
@@ -3228,7 +3558,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
                     break;
             }
             if (pFill)
-                m_aStyles.append(pFill);
+                m_aParaFormatting.append(pFill);
 
             const char* pAdjStr = nullptr;
             switch (rTS.GetAdjustment())
@@ -3246,9 +3576,9 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
                     break;
             }
             if (pAdjStr)
-                m_aStyles.append(pAdjStr);
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TX);
-            m_aStyles.append(static_cast<sal_Int32>(rTS.GetTabPos() + nOffset));
+                m_aParaFormatting.append(pAdjStr);
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_TX);
+            m_aParaFormatting.append(static_cast<sal_Int32>(rTS.GetTabPos() + nOffset));
         }
         else
         {
@@ -3260,8 +3590,8 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 
 void RtfAttributeOutput::ParaHyphenZone(const SvxHyphenZoneItem& rHyphenZone)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HYPHPAR);
-    m_aStyles.append(sal_Int32(rHyphenZone.IsHyphen()));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_HYPHPAR);
+    m_aParaFormatting.append(sal_Int32(rHyphenZone.IsHyphen()));
 }
 
 void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 nLvl,
@@ -3284,11 +3614,11 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
 
     const SfxItemSet& rNdSet = pTextNd->GetSwAttrSet();
 
-    m_aStyles.append('{');
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PARD);
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
-    m_aStyles.append(' ');
+    m_aParaFormatting.append('{');
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LISTTEXT);
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_PARD);
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
+    m_aParaFormatting.append(' ');
 
     SvxFirstLineIndentItem firstLine(rNdSet.Get(RES_MARGIN_FIRSTLINE));
     SvxTextLeftMarginItem leftMargin(rNdSet.Get(RES_MARGIN_TEXTLEFT));
@@ -3301,7 +3631,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
     sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
     OString* pString = m_rExport.GetStyle(nStyle);
     if (pString)
-        m_aStyles.append(*pString);
+        m_aParaFormatting.append(*pString);
 
     {
         OUString sText;
@@ -3316,31 +3646,33 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
 
         if (!sText.isEmpty())
         {
-            m_aStyles.append(' ');
-            m_aStyles.append(msfilter::rtfutil::OutString(sText, m_rExport.GetDefaultEncoding()));
+            m_aParaFormatting.append(' ');
+            m_aParaFormatting.append(
+                msfilter::rtfutil::OutString(sText, m_rExport.GetDefaultEncoding()));
         }
 
         if (OUTLINE_RULE != pRule->GetRuleType())
         {
             if (!sText.isEmpty())
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB);
-            m_aStyles.append('}');
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ILVL);
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_TAB);
+            m_aParaFormatting.append('}');
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_ILVL);
             if (nLvl > 8) // RTF knows only 9 levels
             {
-                m_aStyles.append(sal_Int32(8));
-                m_aStyles.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
-                m_aStyles.append(nLvl);
-                m_aStyles.append('}');
+                m_aParaFormatting.append(sal_Int32(8));
+                m_aParaFormatting.append(
+                    "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SOUTLVL);
+                m_aParaFormatting.append(nLvl);
+                m_aParaFormatting.append('}');
             }
             else
-                m_aStyles.append(nLvl);
+                m_aParaFormatting.append(nLvl);
         }
         else
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetNumberingId(*pRule)) + 1);
-        m_aStyles.append(' ');
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_TAB "}");
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LS);
+        m_aParaFormatting.append(static_cast<sal_Int32>(m_rExport.GetNumberingId(*pRule)) + 1);
+        m_aParaFormatting.append(' ');
     }
     FormatFirstLineIndent(firstLine);
     FormatTextLeftMargin(leftMargin);
@@ -3351,7 +3683,7 @@ void RtfAttributeOutput::ParaScriptSpace(const SfxBoolItem& rScriptSpace)
     if (!rScriptSpace.GetValue())
         return;
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
 }
 
 void RtfAttributeOutput::ParaHangingPunctuation(const SfxBoolItem& /*rItem*/)
@@ -3386,7 +3718,7 @@ void RtfAttributeOutput::ParaVerticalAlign(const SvxParaVertAlignItem& rAlign)
             pStr = OOO_STRING_SVTOOLS_RTF_FAAUTO;
             break;
     }
-    m_aStyles.append(pStr);
+    m_aParaFormatting.append(pStr);
 }
 
 void RtfAttributeOutput::ParaSnapToGrid(const SvxParaGridItem& /*rGrid*/)
@@ -3422,16 +3754,16 @@ void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rItem)
 
 void RtfAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
-    m_aStyles.append(rFirstLine.ResolveTextFirstLineOffset({}));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_FI);
+    m_aParaFormatting.append(rFirstLine.ResolveTextFirstLineOffset({}));
 }
 
 void RtfAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
 {
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LI);
-    m_aStyles.append(rTextLeftMargin.ResolveTextLeft({}));
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LIN);
-    m_aStyles.append(rTextLeftMargin.ResolveTextLeft({}));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LI);
+    m_aParaFormatting.append(rTextLeftMargin.ResolveTextLeft({}));
+    m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LIN);
+    m_aParaFormatting.append(rTextLeftMargin.ResolveTextLeft({}));
 }
 
 void RtfAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
@@ -3441,10 +3773,10 @@ void RtfAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargi
     else
 #endif
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RI);
-        m_aStyles.append(rRightMargin.ResolveRight({}));
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
-        m_aStyles.append(rRightMargin.ResolveRight({}));
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_RI);
+        m_aParaFormatting.append(rRightMargin.ResolveRight({}));
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_RIN);
+        m_aParaFormatting.append(rRightMargin.ResolveRight({}));
     }
 }
 
@@ -3491,16 +3823,16 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
         }
         else
         {
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LI);
-            m_aStyles.append(rLRSpace.ResolveTextLeft({}));
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RI);
-            m_aStyles.append(rLRSpace.ResolveRight({}));
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LIN);
-            m_aStyles.append(rLRSpace.ResolveTextLeft({}));
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
-            m_aStyles.append(rLRSpace.ResolveRight({}));
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
-            m_aStyles.append(rLRSpace.ResolveTextFirstLineOffset({}));
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LI);
+            m_aParaFormatting.append(rLRSpace.ResolveTextLeft({}));
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_RI);
+            m_aParaFormatting.append(rLRSpace.ResolveRight({}));
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LIN);
+            m_aParaFormatting.append(rLRSpace.ResolveTextLeft({}));
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_RIN);
+            m_aParaFormatting.append(rLRSpace.ResolveRight({}));
+            m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_FI);
+            m_aParaFormatting.append(rLRSpace.ResolveTextFirstLineOffset({}));
         }
     }
     else if (m_rExport.GetRTFFlySyntax())
@@ -3569,39 +3901,39 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
         {
             // Spacing before.
             if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper())
-                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SBAUTO "1");
+                m_aParaFormatting.append(LO_STRING_SVTOOLS_RTF_SBAUTO "1");
             else if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == -1)
             {
-                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SBAUTO "0");
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SB);
-                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
+                m_aParaFormatting.append(LO_STRING_SVTOOLS_RTF_SBAUTO "0");
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SB);
+                m_aParaFormatting.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
             }
             else
             {
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SB);
-                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SB);
+                m_aParaFormatting.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
             }
             m_bParaBeforeAutoSpacing = false;
 
             // Spacing after.
             if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == rULSpace.GetLower())
-                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SAAUTO "1");
+                m_aParaFormatting.append(LO_STRING_SVTOOLS_RTF_SAAUTO "1");
             else if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == -1)
             {
-                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SAAUTO "0");
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
-                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetLower()));
+                m_aParaFormatting.append(LO_STRING_SVTOOLS_RTF_SAAUTO "0");
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SA);
+                m_aParaFormatting.append(static_cast<sal_Int32>(rULSpace.GetLower()));
             }
             else
             {
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
-                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetLower()));
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_SA);
+                m_aParaFormatting.append(static_cast<sal_Int32>(rULSpace.GetLower()));
             }
             m_bParaAfterAutoSpacing = false;
 
             // Contextual spacing.
             if (rULSpace.GetContext())
-                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
+                m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
         }
     }
     else if (m_rExport.GetRTFFlySyntax())
@@ -3798,8 +4130,8 @@ void RtfAttributeOutput::FormatBackground(const SvxBrushItem& rBrush)
     }
     else if (!rBrush.GetColor().IsTransparent())
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
-        m_aStyles.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
+        m_aParaFormatting.append(static_cast<sal_Int32>(m_rExport.GetColor(rBrush.GetColor())));
     }
 }
 
@@ -3968,7 +4300,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
 
     if (!m_bBufferSectionBreaks)
     {
-        m_aStyles.append(m_aSectionBreaks);
+        m_aParaFormatting.append(m_aSectionBreaks);
         m_aSectionBreaks.setLength(0);
     }
 }
@@ -4011,7 +4343,7 @@ void RtfAttributeOutput::FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol&
 void RtfAttributeOutput::FormatKeep(const SvxFormatKeepItem& rItem)
 {
     if (rItem.GetValue())
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_KEEPN);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_KEEPN);
 }
 
 void RtfAttributeOutput::FormatTextGrid(const SwTextGridItem& /*rGrid*/)
@@ -4022,7 +4354,7 @@ void RtfAttributeOutput::FormatTextGrid(const SwTextGridItem& /*rGrid*/)
 void RtfAttributeOutput::FormatLineNumbering(const SwFormatLineNumber& rNumbering)
 {
     if (!rNumbering.IsCount())
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_NOLINE);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_NOLINE);
 }
 
 void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDirection)
@@ -4064,9 +4396,9 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
     }
 
     if (nDir == SvxFrameDirection::Horizontal_RL_TB)
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_RTLPAR);
     else
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);
+        m_aParaFormatting.append(OOO_STRING_SVTOOLS_RTF_LTRPAR);
 }
 
 void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
@@ -4198,6 +4530,8 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_pPrevPageDesc(nullptr)
     , m_nStyleId(0)
     , m_nListId(0)
+    , m_aCharFormattingParent(rExport.m_rDoc.GetAttrPool())
+    , m_aCharFormatting(rExport.m_rDoc.GetAttrPool())
     , m_bIsRTL(false)
     , m_nScript(i18n::ScriptType::LATIN)
     , m_bControlLtrRtl(false)
@@ -4222,6 +4556,7 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
     , m_bParaAfterAutoSpacing(false)
     , m_nParaAfterSpacing(0)
 {
+    m_aCharFormatting.SetParent(&m_aCharFormattingParent);
 }
 
 RtfAttributeOutput::~RtfAttributeOutput() = default;
@@ -4729,8 +5064,8 @@ void RtfAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
 void RtfAttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
 {
     // Text wrapping break of type:
-    m_aStyles.append(LO_STRING_SVTOOLS_RTF_LBR);
-    m_aStyles.append(static_cast<sal_Int32>(rLineBreak.GetEnumValue()));
+    m_aParaFormatting.append(LO_STRING_SVTOOLS_RTF_LBR);
+    m_aParaFormatting.append(static_cast<sal_Int32>(rLineBreak.GetEnumValue()));
 
     // Write the linebreak itself.
     RunText(u"\x0b"_ustr);

@@ -1385,8 +1385,10 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
     OutputWW8Attribute( 7, rHidden.GetValue() );
 }
 
-void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
+void WW8AttributeOutput::CharBorder( const SvxBoxItem& rBox )
 {
+    const auto [ pAllBorder, nDist, bShadow ] = FormatCharBorder(rBox);
+    (void)nDist;
     WW8Export::Out_BorderLine( *m_rWW8Export.m_pO, pAllBorder, 0, NS_sprm::CBrc80::val, NS_sprm::CBrc::val, bShadow );
 }
 
@@ -5733,7 +5735,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharHidden(rHt.StaticWhichCast(RES_CHRATR_HIDDEN));
             break;
         case RES_CHRATR_BOX:
-            FormatCharBorder(rHt.StaticWhichCast(RES_CHRATR_BOX));
+            CharBorder(rHt.StaticWhichCast(RES_CHRATR_BOX));
             break;
         case RES_CHRATR_HIGHLIGHT:
             CharHighlight(rHt.StaticWhichCast(RES_CHRATR_HIGHLIGHT));
@@ -5972,7 +5974,8 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
     }
 }
 
-void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
+std::tuple<const ::editeng::SvxBorderLine*, sal_uInt16, bool>
+AttributeOutputBase::FormatCharBorder(const SvxBoxItem& rBox, const SfxItemSet* pItemSet) const
 {
     // Get one of the borders (if there is any border then in docx also will be)
     const SvxBorderLine* pBorderLine = nullptr;
@@ -5998,13 +6001,17 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
        nDist = rBox.GetDistance( SvxBoxItemLine::RIGHT );
     }
 
-    const SfxPoolItem* pItem = GetExport().HasItem( RES_CHRATR_SHADOW );
+    const SfxPoolItem* pItem;
+    if (pItemSet)
+        pItem = pItemSet->GetItemIfSet(RES_CHRATR_SHADOW);
+    else
+        pItem = GetExport().HasItem(RES_CHRATR_SHADOW);
     const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
     const bool bShadow = pBorderLine &&
         pShadowItem && pShadowItem->GetLocation() != SvxShadowLocation::NONE &&
         pShadowItem->GetWidth() > 0;
 
-    CharBorder( pBorderLine, nDist, bShadow );
+    return { pBorderLine, nDist, bShadow };
 }
 
 /*

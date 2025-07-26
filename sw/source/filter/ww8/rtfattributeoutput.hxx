@@ -91,7 +91,13 @@ public:
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();
-    OString MoveCharacterProperties(bool aAutoWriteRtlLtr = false);
+
+    enum GetCharacterPropertiesMode
+    {
+        StyleDefinition,
+        ForRun,
+    };
+    OString MoveProperties(GetCharacterPropertiesMode mode);
 
     /// Output text (without markup).
     void RawText(const OUString& rText, rtl_TextEncoding eCharSet) override;
@@ -355,8 +361,7 @@ protected:
     void CharHidden(const SvxCharHiddenItem& rHidden) override;
 
     /// Sfx item RES_CHRATR_BOX
-    void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, sal_uInt16 nDist,
-                    bool bShadow) override;
+    void CharBorder(const SvxBoxItem& rBox) override;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     void CharHighlight(const SvxBrushItem& rBrush) override;
@@ -524,6 +529,48 @@ private:
 
     void WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote);
 
+    static void OutputCharCaseMap(const SvxCaseMapItem& rCaseMap, OStringBuffer& buf);
+    void OutputCharColor(const SvxColorItem& rColor, OStringBuffer& buf) const;
+    static void OutputCharContour(const SvxContourItem& rContour, OStringBuffer& buf);
+    static void OutputCharCrossedOut(const SvxCrossedOutItem& rCrossedOut, OStringBuffer& buf);
+    void OutputCharEscapement(const SvxEscapementItem& rEscapement, OStringBuffer& buf) const;
+    void OutputCharFontAssoc(const SvxFontItem& rFont, OStringBuffer& buf, bool assoc) const;
+    static void OutputCharFontSizeAssoc(const SvxFontHeightItem& rFontSize, OStringBuffer& buf,
+                                        bool assoc);
+    static void OutputCharKerning(const SvxKerningItem& rKerning, OStringBuffer& buf);
+    static void OutputCharLanguageAssoc(const SvxLanguageItem& rLanguage, OStringBuffer& buf,
+                                        bool assoc);
+    static void OutputCharLanguageCJK(const SvxLanguageItem& rLanguage, OStringBuffer& buf);
+    static void OutputCharPostureAssoc(const SvxPostureItem& rPosture, OStringBuffer& buf,
+                                       bool assoc);
+    static void OutputCharShadow(const SvxShadowedItem& rShadow, OStringBuffer& buf);
+    // OutputCharUnderline is special. Some underline keywords have associated variants, some don't.
+    // Therefore, the two functions each output their parts of keywords.
+    void OutputCharUnderline(const SvxUnderlineItem& rUnderline, OStringBuffer& buf) const;
+    void OutputCharUnderlineAssoc(const SvxUnderlineItem& rUnderline, OStringBuffer& buf,
+                                  bool assoc) const;
+    static void OutputCharWeightAssoc(const SvxWeightItem& rWeight, OStringBuffer& buf, bool assoc);
+    static void OutputCharAutoKern(const SvxAutoKernItem& rAutoKern, OStringBuffer& buf);
+    static void OutputCharAnimatedText(const SvxBlinkItem& rBlink, OStringBuffer& buf);
+    void OutputCharBackground(const SvxBrushItem& rBrush, OStringBuffer& buf) const;
+    static void OutputCharRotate(const SvxCharRotateItem& rRotate, OStringBuffer& buf);
+    static void OutputCharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMark,
+                                       OStringBuffer& buf);
+    static void OutputCharTwoLines(const SvxTwoLinesItem& rTwoLines, OStringBuffer& buf);
+    static void OutputCharScaleWidth(const SvxCharScaleWidthItem& rScaleWidth, OStringBuffer& buf);
+    static void OutputCharRelief(const SvxCharReliefItem& rRelief, OStringBuffer& buf);
+    static void OutputCharHidden(const SvxCharHiddenItem& rHidden, OStringBuffer& buf);
+    void OutputCharBorder(const SvxBoxItem& rBox, OStringBuffer& buf) const;
+    static void OutputCharHighlight(const SvxBrushItem& rBrush, OStringBuffer& buf);
+    void OutputTextCharFormat(const SwFormatCharFormat& rCharFormat, OStringBuffer& buf) const;
+
+    void OutputFormattingItem(const SfxPoolItem& item, OStringBuffer& buf) const;
+    void OutputCharAssocFormattingItem(const SfxPoolItem& item, OStringBuffer& buf,
+                                       bool assoc) const;
+
+    void ApplyCharFormatItems(const SfxItemSet& items);
+    void ApplyCharFormatProperties(const SfxPoolItem& charFormatItem);
+
     /*
      * Current style name and its ID.
      */
@@ -551,14 +598,13 @@ private:
     /*
      * This one just holds the style commands in the current style.
      */
-    OStringBuffer m_aStyles;
-    /*
-     * This is the same as m_aStyles but the contents of it is Assoc.
-     */
-    OStringBuffer m_aStylesAssocHich;
-    OStringBuffer m_aStylesAssocDbch;
-    OStringBuffer m_aStylesAssocRtlch;
-    OStringBuffer m_aStylesAssocLtrch;
+    OStringBuffer m_aParaFormatting;
+
+    // for properties that shouldn't be output themselves, but need to be found when searching
+    // items in m_aCharFormatting including parent
+    SfxAllItemSet m_aCharFormattingParent;
+
+    SfxAllItemSet m_aCharFormatting;
 
     bool m_bIsRTL;
     sal_uInt16 m_nScript;
