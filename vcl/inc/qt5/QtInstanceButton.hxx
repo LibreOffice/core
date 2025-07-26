@@ -36,7 +36,6 @@ public:
     // same result if called on the corresponding QtInstanceButton)
     static bool hasCustomClickHandler(const QAbstractButton& rButton);
 
-protected:
     QAbstractButton& getButton() const;
 
 private slots:

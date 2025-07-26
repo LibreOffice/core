@@ -190,15 +190,39 @@ std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
     return std::make_unique<QtInstanceContainer>(m_pContentArea);
 }
 
-void QtInstanceDialog::change_default_button(weld::Button*, weld::Button*)
+void QtInstanceDialog::change_default_button(weld::Button* pOld, weld::Button* pNew)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QtInstanceButton* pOldButton = dynamic_cast<QtInstanceButton*>(pOld))
+        {
+            if (QPushButton* pPushButton = qobject_cast<QPushButton*>(&pOldButton->getButton()))
+                pPushButton->setDefault(false);
+        }
+
+        if (QtInstanceButton* pNewButton = dynamic_cast<QtInstanceButton*>(pNew))
+        {
+            if (QPushButton* pPushButton = qobject_cast<QPushButton*>(&pNewButton->getButton()))
+                pPushButton->setDefault(true);
+        }
+    });
 }
 
-bool QtInstanceDialog::is_default_button(const weld::Button*) const
+bool QtInstanceDialog::is_default_button(const weld::Button* pCandidate) const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+
+    bool bDefault = false;
+    GetQtInstance().RunInMainThread([&] {
+        if (const QtInstanceButton* pButton = dynamic_cast<const QtInstanceButton*>(pCandidate))
+        {
+            if (QPushButton* pPushButton = qobject_cast<QPushButton*>(&pButton->getButton()))
+                bDefault = pPushButton->isDefault();
+        }
+    });
+
+    return bDefault;
 }
 
 void QtInstanceDialog::dialogFinished(int nResult)
