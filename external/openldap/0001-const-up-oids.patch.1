@@ -1,0 +1,44 @@
+From c7571ffd4d17825a9054e2e204ee61127bedb0b0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@gmail.com>
+Date: Sat, 26 Jul 2025 21:00:50 +0100
+Subject: [PATCH] const up oids
+
+to move it out of the .data section
+---
+ libraries/libldap/tls2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libraries/libldap/tls2.c b/libraries/libldap/tls2.c
+index 1bda3fb2aa..1fb878aab8 100644
+--- a/libraries/libldap/tls2.c
++++ b/libraries/libldap/tls2.c
+@@ -51,7 +51,7 @@ typedef struct oid_name {
+ 	struct berval name;
+ } oid_name;
+ 
+-static oid_name oids[] = {
++static const oid_name oids[] = {
+ 	{ BER_BVC("2.5.4.3"), BER_BVC("cn") },
+ 	{ BER_BVC("2.5.4.4"), BER_BVC("sn") },
+ 	{ BER_BVC("2.5.4.6"), BER_BVC("c") },
+@@ -1394,7 +1394,7 @@ ldap_start_tls_s ( LDAP *ld,
+ #define	LBER_TAG_UNIVERSAL	((ber_tag_t) 0x1cUL)
+ #define	LBER_TAG_BMP		((ber_tag_t) 0x1eUL)
+ 
+-static oid_name *
++static const oid_name *
+ find_oid( struct berval *oid )
+ {
+ 	int i;
+@@ -1519,7 +1519,7 @@ ldap_X509dn2bv( void *x509_name, struct berval *bv, LDAPDN_rewrite_func *func,
+ 	int csize;
+ 	ber_tag_t tag;
+ 	ber_len_t len;
+-	oid_name *oidname;
++	const oid_name *oidname;
+ 
+ 	struct berval	Oid, Val, oid2, *in = x509_name;
+ 
+-- 
+2.49.0
+
