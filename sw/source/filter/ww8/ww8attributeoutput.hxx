@@ -309,7 +309,7 @@ protected:
     virtual void CharHidden( const SvxCharHiddenItem& ) override;
 
     /// Sfx item RES_CHRATR_BOX
-    virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow ) override;
+    virtual void CharBorder( const SvxBoxItem& ) override;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     virtual void CharHighlight( const SvxBrushItem& ) override;

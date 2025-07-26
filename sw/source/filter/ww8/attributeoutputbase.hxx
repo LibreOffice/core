@@ -27,6 +27,7 @@
 #include <editeng/svxenum.hxx>
 #include <tools/solar.h>
 #include <optional>
+#include <tuple>
 
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
@@ -462,8 +463,10 @@ protected:
     virtual void CharHidden( const SvxCharHiddenItem& ) = 0;
 
     /// Sfx item RES_CHRATR_BOX
-    void FormatCharBorder( const SvxBoxItem& rBox );
-    virtual void CharBorder( const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow ) = 0;
+    // pAllBorder, nDist, bShadow
+    std::tuple<const editeng::SvxBorderLine*, sal_uInt16, bool>
+    FormatCharBorder(const SvxBoxItem& rBox, const SfxItemSet* pItemSet = nullptr) const;
+    virtual void CharBorder( const SvxBoxItem& ) = 0;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
     virtual void CharHighlight( const SvxBrushItem& ) = 0;
