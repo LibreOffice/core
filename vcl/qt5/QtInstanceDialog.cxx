@@ -168,12 +168,6 @@ std::unique_ptr<weld::Button> QtInstanceDialog::weld_button_for_response(int nRe
     return nullptr;
 }
 
-void QtInstanceDialog::set_default_response(int nResponse)
-{
-    std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
-    change_default_button(nullptr, pButton.get());
-}
-
 std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
 {
     if (!m_pContentArea)

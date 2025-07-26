@@ -7195,11 +7195,6 @@ public:
             ::set_help_id(pWidget, rHelpId);
     }
 
-    virtual void set_default_response(int nResponse) override
-    {
-        gtk_dialog_set_default_response(GTK_DIALOG(m_pDialog), VclToGtk(nResponse));
-    }
-
     virtual GtkButton* get_widget_for_response(int nGtkResponse)
     {
         return GTK_BUTTON(gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), nGtkResponse));

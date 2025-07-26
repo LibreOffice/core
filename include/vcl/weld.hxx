@@ -655,7 +655,6 @@ public:
         = 0;
     virtual void response(int response) = 0;
     virtual void add_button(const OUString& rText, int response, const OUString& rHelpId = {}) = 0;
-    virtual void set_default_response(int response) = 0;
     virtual std::unique_ptr<Button> weld_button_for_response(int response) = 0;
     virtual std::unique_ptr<weld::Container> weld_content_area() = 0;
 
@@ -663,6 +662,12 @@ public:
     // it, otherwise use as hint to the old default
     virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) = 0;
     virtual bool is_default_button(const weld::Button* pCandidate) const = 0;
+
+    virtual void set_default_response(int nResponse)
+    {
+        std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
+        change_default_button(nullptr, pButton.get());
+    }
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;

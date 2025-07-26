@@ -58,8 +58,6 @@ public:
 
     virtual std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
 
-    virtual void set_default_response(int nResponse) override;
-
     virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
     virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) override;
