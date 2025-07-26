@@ -585,6 +585,14 @@ void PDFIProcessor::intersectClipToStroke(const uno::Reference< rendering::XPoly
     getCurrentContext().Clip = std::move(aNewClip);
 }
 
+void PDFIProcessor::beginTransparencyGroup(const bool /*bForSoftMask*/)
+{
+}
+
+void PDFIProcessor::endTransparencyGroup()
+{
+}
+
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
                                const OUString&           rURI )
 {

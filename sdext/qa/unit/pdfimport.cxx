@@ -442,6 +442,13 @@ namespace
         {
         }
 
+        virtual void beginTransparencyGroup(bool) override
+        {
+        }
+        virtual void endTransparencyGroup(void) override
+        {
+        }
+
         typedef std::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 

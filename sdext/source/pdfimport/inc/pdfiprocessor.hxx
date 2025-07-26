@@ -158,6 +158,9 @@ namespace pdfi
                                        css::geometry::AffineMatrix2D& rMat,
                                        const css::uno::Sequence<css::beans::PropertyValue>& xTile) override;
 
+        virtual void beginTransparencyGroup(bool bForSoftMask) override;
+        virtual void endTransparencyGroup(void) override;
+
         void startIndicator( const OUString& rText );
         void endIndicator();
 

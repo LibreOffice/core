@@ -178,6 +178,8 @@ namespace pdfi
                                        int nPaintType,
                                        css::geometry::AffineMatrix2D& rMat,
                                        const css::uno::Sequence<css::beans::PropertyValue>& xTile) = 0;
+        virtual void beginTransparencyGroup(bool bForSoftMask) = 0;
+        virtual void endTransparencyGroup(void) = 0;
     };
 
     typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;

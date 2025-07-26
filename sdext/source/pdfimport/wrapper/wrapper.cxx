@@ -854,15 +854,14 @@ void LineParser::readTilingPatternFill()
 
 void LineParser::beginTransparencyGroup()
 {
-    // TODO
     sal_Int32 nForSoftMask;
     readInt32( nForSoftMask );
+    m_parser.m_pSink->beginTransparencyGroup(!!nForSoftMask);
 }
 
 void LineParser::endTransparencyGroup()
 {
-    // TODO - dummy to avoid static warning until next patch
-    m_nCharIndex = std::string_view::npos;
+    m_parser.m_pSink->endTransparencyGroup();
 }
 
 void Parser::parseLine( std::string_view aLine )
