@@ -39,6 +39,7 @@ $(eval $(call gb_Library_set_include,sfx,\
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/source/inc \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
+    $(if $(ENABLE_GDRIVE),-I$(SRCDIR)) \
     $$(INCLUDE) \
 ))
 
@@ -65,6 +66,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     tk \
     tl \
     ucbhelper \
+    $(if $(ENABLE_GDRIVE),ucpgdrive) \
     utl \
     vcl \
     $(if $(ENABLE_BREAKPAD), \
@@ -74,6 +76,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
 
 $(eval $(call gb_Library_use_externals,sfx,\
     boost_headers \
+    curl \
     frozen \
     icu_headers \
     icui18n \
@@ -167,6 +170,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/thumbnailview \
     sfx2/source/control/charmapcontrol \
     sfx2/source/control/charwin \
+    sfx2/source/control/documenttabbar \
     sfx2/source/control/unoctitm \
     sfx2/source/devtools/DevelopmentToolChildWindow \
     sfx2/source/devtools/DevelopmentToolDockingWindow \
@@ -182,6 +186,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/documentfontsdialog \
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \
+    sfx2/source/dialog/googledrivedialog \
     sfx2/source/dialog/infobar \
     sfx2/source/dialog/inputdlg \
     sfx2/source/dialog/mailmodel \
@@ -297,6 +302,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/toolbox/weldutils \
     sfx2/source/view/classificationcontroller \
     sfx2/source/view/classificationhelper \
+    sfx2/source/view/documenttabbarintegration \
     sfx2/source/view/frame \
     sfx2/source/view/frame2 \
     sfx2/source/view/frmload \
