@@ -1607,7 +1607,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
 /// inner loop of LayoutStrings
 void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pThisRowInfo,
             SCCOL const nX, SCROW const nY, SCSIZE const nArrY,
-            std::optional<SCCOL>& oLastEmptyCellX,
+            std::optional<SCCOL>& oFirstNonEmptyCellX,
             SCCOL const nLastContentCol,
             std::vector<std::unique_ptr<ScPatternAttr> >& aAltPatterns,
             const ScPatternAttr*& pOldPattern,
@@ -1656,19 +1656,19 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
 
     if ( bEmpty && !bMergeEmpty && nX < mnX1 && !bOverlapped )
     {
-        if (!oLastEmptyCellX)
+        if (!oFirstNonEmptyCellX)
         {
             SCCOL nTempX=mnX1;
             while (nTempX > 0 && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
                 --nTempX;
-            oLastEmptyCellX = nTempX;
+            oFirstNonEmptyCellX = nTempX;
         }
 
-        if ( *oLastEmptyCellX < mnX1 &&
-             !IsEmptyCellText( pThisRowInfo, *oLastEmptyCellX, nY ) &&
-             !mpDoc->HasAttrib( *oLastEmptyCellX,nY,mnTab, mnX1,nY,mnTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+        if ( *oFirstNonEmptyCellX < mnX1 &&
+             !IsEmptyCellText( pThisRowInfo, *oFirstNonEmptyCellX, nY ) &&
+             !mpDoc->HasAttrib( *oFirstNonEmptyCellX,nY,mnTab, mnX1,nY,mnTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
         {
-            nCellX = *oLastEmptyCellX;
+            nCellX = *oFirstNonEmptyCellX;
             bDoCell = true;
         }
     }

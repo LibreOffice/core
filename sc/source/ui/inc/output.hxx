@@ -316,7 +316,7 @@ private:
 
     /// inner loop of LayoutStrings
     void LayoutStringsImpl(bool bPixelToLogic, RowInfo* pThisRowInfo, SCCOL nX, SCROW nY, SCSIZE nArrY,
-                           std::optional<SCCOL>& oLastEmptyCellX,
+                           std::optional<SCCOL>& oFirstNonEmptyCellX,
                            SCCOL nLastContentCol,
                            std::vector<std::unique_ptr<ScPatternAttr> >& aAltPatterns,
                            const ScPatternAttr*& pOldPattern,
