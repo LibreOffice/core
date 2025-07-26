@@ -70,7 +70,7 @@
 #include <utility>
 #include <vector>
 
-static OString ImplGetDialogText( Dialog* pDialog )
+static OUString ImplGetDialogText(Dialog* pDialog)
 {
     OUString aErrorStr(pDialog->GetText());
 
@@ -81,7 +81,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
             aErrorStr += ", " + sMessage;
     }
 
-    return OUStringToOString(aErrorStr, RTL_TEXTENCODING_UTF8);
+    return aErrorStr;
 }
 
 static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
