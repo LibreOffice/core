@@ -1580,12 +1580,13 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < mnX1 )
                 nPosX -= mpRowInfo[0].basicCellInfo(nLoopStartX).nWidth * nLayoutSign;
+            std::optional<SCCOL> oFirstNonEmptyCellX;
             std::optional<SCCOL> oLastEmptyCellX;
             for (SCCOL nX=nLoopStartX; nX<=mnX2; nX++)
             {
                 if (bTaggedPDF)
                     pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::TableData, u"TD"_ustr);
-                LayoutStringsImpl(bPixelToLogic, pThisRowInfo, nX, nY, nArrY, oLastEmptyCellX, nLastContentCol,
+                LayoutStringsImpl(bPixelToLogic, pThisRowInfo, nX, nY, nArrY, oFirstNonEmptyCellX, oLastEmptyCellX, nLastContentCol,
                                   aAltPatterns, pOldPattern, pOldCondSet, nOldScript, aVars,
                                   bProgress, nPosX, nPosY, bTaggedPDF, pPDF, nLayoutSign, aDX);
                 nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
@@ -1608,6 +1609,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
 void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pThisRowInfo,
             SCCOL const nX, SCROW const nY, SCSIZE const nArrY,
             std::optional<SCCOL>& oFirstNonEmptyCellX,
+            std::optional<SCCOL>& oLastEmptyCellX,
             SCCOL const nLastContentCol,
             std::vector<std::unique_ptr<ScPatternAttr> >& aAltPatterns,
             const ScPatternAttr*& pOldPattern,
@@ -1677,17 +1679,20 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
 
     if ( bEmpty && !bMergeEmpty && nX == mnX2 && !bOverlapped )
     {
-        //  don't have to look further than nLastContentCol
-
-        SCCOL nTempX=nX;
-        while (nTempX < nLastContentCol && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
-            ++nTempX;
-
-        if ( nTempX > nX &&
-             !IsEmptyCellText( pThisRowInfo, nTempX, nY ) &&
-             !mpDoc->HasAttrib( nTempX,nY,mnTab, nX,nY,mnTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+        if (!oLastEmptyCellX)
         {
-            nCellX = nTempX;
+            //  don't have to look further than nLastContentCol
+            SCCOL nTempX=nX;
+            while (nTempX < nLastContentCol && IsEmptyCellText( pThisRowInfo, nTempX, nY ))
+                ++nTempX;
+            oLastEmptyCellX = nTempX;
+        }
+
+        if ( *oLastEmptyCellX > nX &&
+             !IsEmptyCellText( pThisRowInfo, *oLastEmptyCellX, nY ) &&
+             !mpDoc->HasAttrib( *oLastEmptyCellX, nY,mnTab, nX,nY,mnTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
+        {
+            nCellX = *oLastEmptyCellX;
             bDoCell = true;
         }
     }
