@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 
 #include <basegfx/utils/gradienttools.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -906,6 +907,100 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167661)
         // - Expected: Wingdings
         // - Actual  : 0
         CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, level1[u"BulletFontName"_ustr].get<OUString>());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167679)
+{
+    // Given a document with a char style with a border with a shadow, and a direct formatting
+    // applied over it, which turns off the border and the shadow:
+    createSwDoc("tdf167679.fodt");
+
+    {
+        auto xRun = getRun(getParagraph(1), 1, u"s"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 2, u"om"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 4, 0, 0, 4), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 3, u"eth"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 4, u"in"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 4, 0, 0, 4), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 5, u"g"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    }
+
+    // Check that after export to RTF, the area in the middle still has no border
+    saveAndReload(mpFilter);
+
+    {
+        auto xRun = getRun(getParagraph(1), 1, u"s"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    }
+    {
+        // Without a fix, this failed, because the second run was "omethin": the middle
+        // direct formatting that cancelled the border didn't round-trip.
+        auto xRun = getRun(getParagraph(1), 2, u"om"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 4, 0, 0, 4), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 3, u"eth"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 4, u"in"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000, 0, 4, 0, 0, 4), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    }
+    {
+        auto xRun = getRun(getParagraph(1), 5, u"g"_ustr);
+        auto aBorder = getProperty<table::BorderLine2>(xRun, u"CharTopBorder"_ustr);
+        CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x000000, 0, 0, 0, 32767, 0), aBorder);
+
+        auto aShadow = getProperty<table::ShadowFormat>(xRun, u"CharShadowFormat"_ustr);
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_NONE, aShadow.Location);
     }
 }
 
