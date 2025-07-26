@@ -40,6 +40,7 @@
 #include <QtInstanceScrollbar.hxx>
 #include <QtInstanceScrolledWindow.hxx>
 #include <QtInstanceSpinButton.hxx>
+#include <QtInstanceSpinner.hxx>
 #include <QtInstanceTextView.hxx>
 #include <QtInstanceToggleButton.hxx>
 #include <QtInstanceToolbar.hxx>
@@ -451,10 +452,16 @@ std::unique_ptr<weld::LevelBar> QtInstanceBuilder::weld_level_bar(const OUString
     return xRet;
 }
 
-std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
+std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    SolarMutexGuard g;
+
+    std::unique_ptr<weld::Spinner> xRet;
+    GetQtInstance().RunInMainThread([&] {
+        if (QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId))
+            xRet = std::make_unique<QtInstanceSpinner>(pProgressBar);
+    });
+    return xRet;
 }
 
 std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString& rId)

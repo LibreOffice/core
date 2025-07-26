@@ -132,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceScrollbar \
     vcl/qt5/QtInstanceScrolledWindow \
     vcl/qt5/QtInstanceSpinButton \
+    vcl/qt5/QtInstanceSpinner \
     vcl/qt5/QtInstanceTextView \
     vcl/qt5/QtInstanceToggleButton \
     vcl/qt5/QtInstanceToolbar \

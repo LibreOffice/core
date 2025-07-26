@@ -49,6 +49,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceScrollbar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceScrolledWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceSpinButton.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceSpinner.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceTextView.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceToggleButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceToolbar.moc \

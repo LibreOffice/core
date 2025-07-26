@@ -359,6 +359,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         setSpinButtonProperties(*pSpinBox, rMap);
         pObject = pSpinBox;
     }
+    else if (sName == u"GtkSpinner")
+    {
+        // use a QProgressBar in undetermined state (i.e. with range [0, 0])
+        QProgressBar* pProgressBar = new QProgressBar(pParentWidget);
+        pProgressBar->setRange(0, 0);
+        pObject = pProgressBar;
+    }
     else if (sName == u"GtkTextView")
     {
         QPlainTextEdit* pTextEdit = new QPlainTextEdit(pParentWidget);
