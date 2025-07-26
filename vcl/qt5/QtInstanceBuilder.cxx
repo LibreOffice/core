@@ -97,6 +97,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/uitabpage.ui"_ustr,
         u"cui/ui/welcomedialog.ui"_ustr,
         u"cui/ui/whatsnewtabpage.ui"_ustr,
+        u"cui/ui/widgettestdialog.ui"_ustr,
         u"cui/ui/zoomdialog.ui"_ustr,
         u"dbaccess/ui/savedialog.ui"_ustr,
         u"dbaccess/ui/tabledesignsavemodifieddialog.ui"_ustr,
