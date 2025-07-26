@@ -149,68 +149,68 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
     mrTabInfo( rTabInfo ),
-    pRowInfo( rTabInfo.mpRowInfo.get() ),
-    nArrCount( rTabInfo.mnArrCount ),
+    mpRowInfo( rTabInfo.mpRowInfo.get() ),
+    mnArrCount( rTabInfo.mnArrCount ),
     mpDoc( pNewDoc ),
-    nTab( nNewTab ),
-    nScrX( nNewScrX ),
-    nScrY( nNewScrY ),
-    nX1( nNewX1 ),
-    nY1( nNewY1 ),
-    nX2( nNewX2 ),
-    nY2( nNewY2 ),
-    eType( eNewType ),
+    mnTab( nNewTab ),
+    mnScrX( nNewScrX ),
+    mnScrY( nNewScrY ),
+    mnX1( nNewX1 ),
+    mnY1( nNewY1 ),
+    mnX2( nNewX2 ),
+    mnY2( nNewY2 ),
+    meType( eNewType ),
     mnPPTX( nPixelPerTwipsX ),
     mnPPTY( nPixelPerTwipsY ),
-    pViewShell( nullptr ),
-    pDrawView( nullptr ),
-    bEditMode( false ),
-    nEditCol( 0 ),
-    nEditRow( 0 ),
-    bMetaFile( false ),
-    bPagebreakMode( false ),
-    bSolidBackground( false ),
+    mpViewShell( nullptr ),
+    mpDrawView( nullptr ),
+    mbEditMode( false ),
+    mnEditCol( 0 ),
+    mnEditRow( 0 ),
+    mbMetaFile( false ),
+    mbPagebreakMode( false ),
+    mbSolidBackground( false ),
     mbUseStyleColor( false ),
     mbForceAutoColor( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() ),
     mbSyntaxMode( false ),
-    aGridColor( COL_BLACK ),
+    maGridColor( COL_BLACK ),
     mbShowNullValues( true ),
     mbShowFormulas( false ),
-    bShowSpellErrors( false ),
-    bMarkClipped( false ), // sal_False for printer/metafile etc.
-    bSnapPixel( false ),
-    bAnyClipped( false ),
-    bVertical(false),
+    mbShowSpellErrors( false ),
+    mbMarkClipped( false ), // sal_False for printer/metafile etc.
+    mbSnapPixel( false ),
+    mbAnyClipped( false ),
+    mbVertical(false),
     mpTargetPaintWindow(nullptr), // #i74769# use SdrPaintWindow direct
     mpSpellCheckCxt(nullptr)
 {
     if (pZoomX)
-        aZoomX = *pZoomX;
+        maZoomX = *pZoomX;
     else
-        aZoomX = Fraction(1,1);
+        maZoomX = Fraction(1,1);
     if (pZoomY)
-        aZoomY = *pZoomY;
+        maZoomY = *pZoomY;
     else
-        aZoomY = Fraction(1,1);
+        maZoomY = Fraction(1,1);
 
-    nVisX1 = nX1;
-    nVisY1 = nY1;
-    nVisX2 = nX2;
-    nVisY2 = nY2;
-    mpDoc->StripHidden( nVisX1, nVisY1, nVisX2, nVisY2, nTab );
+    mnVisX1 = mnX1;
+    mnVisY1 = mnY1;
+    mnVisX2 = mnX2;
+    mnVisY2 = mnY2;
+    mpDoc->StripHidden( mnVisX1, mnVisY1, mnVisX2, mnVisY2, mnTab );
 
-    nScrW = 0;
-    for (SCCOL nX=nVisX1; nX<=nVisX2; nX++)
-        nScrW += pRowInfo[0].basicCellInfo(nX).nWidth;
+    mnScrW = 0;
+    for (SCCOL nX=mnVisX1; nX<=mnVisX2; nX++)
+        mnScrW += mpRowInfo[0].basicCellInfo(nX).nWidth;
 
-    nMirrorW = nScrW;
+    mnMirrorW = mnScrW;
 
-    nScrH = 0;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
-        nScrH += pRowInfo[nArrY].nHeight;
+    mnScrH = 0;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
+        mnScrH += mpRowInfo[nArrY].nHeight;
 
-    bTabProtected = mpDoc->IsTabProtected( nTab );
-    bLayoutRTL = mpDoc->IsLayoutRTL( nTab );
+    mbTabProtected = mpDoc->IsTabProtected( mnTab );
+    mbLayoutRTL = mpDoc->IsLayoutRTL( mnTab );
 
     // always needed, so call at the end of the constructor
     SetCellRotations();
@@ -239,17 +239,17 @@ void ScOutputData::SetContentDevice( OutputDevice* pContentDev )
 
 void ScOutputData::SetMirrorWidth( tools::Long nNew )
 {
-    nMirrorW = nNew;
+    mnMirrorW = nNew;
 }
 
 void ScOutputData::SetGridColor( const Color& rColor )
 {
-    aGridColor = rColor;
+    maGridColor = rColor;
 }
 
 void ScOutputData::SetMarkClipped( bool bSet )
 {
-    bMarkClipped = bSet;
+    mbMarkClipped = bSet;
 }
 
 void ScOutputData::SetShowNullValues( bool bSet )
@@ -264,26 +264,26 @@ void ScOutputData::SetShowFormulas( bool bSet )
 
 void ScOutputData::SetShowSpellErrors( bool bSet )
 {
-    bShowSpellErrors = bSet;
+    mbShowSpellErrors = bSet;
     // reset EditEngine because it depends on bShowSpellErrors
     mxOutputEditEngine.reset();
 }
 
 void ScOutputData::SetSnapPixel()
 {
-    bSnapPixel = true;
+    mbSnapPixel = true;
 }
 
 void ScOutputData::SetEditCell( SCCOL nCol, SCROW nRow )
 {
-    nEditCol = nCol;
-    nEditRow = nRow;
-    bEditMode = true;
+    mnEditCol = nCol;
+    mnEditRow = nRow;
+    mbEditMode = true;
 }
 
 void ScOutputData::SetMetaFileMode( bool bNewMode )
 {
-    bMetaFile = bNewMode;
+    mbMetaFile = bNewMode;
 }
 
 void ScOutputData::SetSyntaxMode( bool bNewMode )
@@ -365,7 +365,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     Color aPageColor;
     Color aManualColor;
 
-    if (bPagebreakMode)
+    if (mbPagebreakMode)
         bPage = false;          // no "normal" breaks over the whole width/height
 
     // It is a big mess to distinguish when we are using pixels and when logic
@@ -376,7 +376,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     //   * drawing to the screen - everything is internally counted in pixels there
     //
     // 'Internally' in the above means the pCellInfo[...].nWidth and
-    // pRowInfo[...]->nHeight:
+    // mpRowInfo[...]->nHeight:
     //
     //   * when bWorksInPixels is true: these are in pixels
     //   * when bWorksInPixels is false: these are in the logic units
@@ -386,11 +386,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     // there gradually (get rid of setting MapUnit::MapPixel first), otherwise we'd
     // break all the drawing by one change.
     // So until that happens, we need to special case.
-    bool bWorksInPixels = bMetaFile;
+    bool bWorksInPixels = mbMetaFile;
     const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     Color aSheetBGColor = rColorCfg.GetColorValue(::svtools::DOCCOLOR).nColor;
 
-    if ( eType == OUTTYPE_WINDOW )
+    if ( meType == OUTTYPE_WINDOW )
     {
         bWorksInPixels = true;
         aPageColor = rColorCfg.GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
@@ -398,8 +398,8 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     }
     else
     {
-        aPageColor = aGridColor;
-        aManualColor = aGridColor;
+        aPageColor = maGridColor;
+        aManualColor = maGridColor;
     }
 
     tools::Long nOneX = 1;
@@ -411,22 +411,22 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
         nOneY = aOnePixel.Height();
     }
 
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
     tools::Long nSignedOneX = nOneX * nLayoutSign;
 
-    rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
+    rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : maGridColor);
 
     ScGridMerger aGrid(&rRenderContext, nOneX, nOneY);
 
     // vertical lines
 
-    nPosX = nScrX;
-    if ( bLayoutRTL )
-        nPosX += nMirrorW - nOneX;
+    nPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nPosX += mnMirrorW - nOneX;
 
-    for (nX=nX1; nX<=nX2; nX++)
+    for (nX=mnX1; nX<=mnX2; nX++)
     {
-        sal_uInt16 nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+        sal_uInt16 nWidth = mpRowInfo[0].basicCellInfo(nX).nWidth;
         if (nWidth)
         {
             nPosX += nWidth * nLayoutSign;
@@ -437,8 +437,8 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 SCCOL nCol = nX + 1;
                 while (nCol <= mpDoc->MaxCol())
                 {
-                    nBreak = mpDoc->HasColBreak(nCol, nTab);
-                    bool bHidden = mpDoc->ColHidden(nCol, nTab);
+                    nBreak = mpDoc->HasColBreak(nCol, mnTab);
+                    bool bHidden = mpDoc->ColHidden(nCol, mnTab);
 
                     if ( nBreak != ScBreakType::NONE || !bHidden )
                         break;
@@ -457,7 +457,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                     }
                     else
                     {
-                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
+                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : maGridColor);
                         bDashed = false;
                     }
 
@@ -467,16 +467,16 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover; // simple grid only if set that way
 
-            sal_uInt16 nWidthXplus1 = pRowInfo[0].basicCellInfo(nX+1).nWidth;
+            sal_uInt16 nWidthXplus1 = mpRowInfo[0].basicCellInfo(nX+1).nWidth;
             bool bSingle = false; //! get into Fillinfo !!!!!
             if ( nX<mpDoc->MaxCol() )
             {
                 bSingle = ( nWidthXplus1 == 0 );
-                for (nArrY=1; nArrY+1<nArrCount && !bSingle; nArrY++)
+                for (nArrY=1; nArrY+1<mnArrCount && !bSingle; nArrY++)
                 {
-                    if (pRowInfo[nArrY].cellInfo(nX+1).bHOverlapped)
+                    if (mpRowInfo[nArrY].cellInfo(nX+1).bHOverlapped)
                         bSingle = true;
-                    if (pRowInfo[nArrY].cellInfo(nX).bHideGrid)
+                    if (mpRowInfo[nArrY].cellInfo(nX).bHideGrid)
                         bSingle = true;
                 }
             }
@@ -486,13 +486,13 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 if ( nX<mpDoc->MaxCol() && bSingle )
                 {
                     SCCOL nVisX = nX + 1;
-                    while ( nVisX < mpDoc->MaxCol() && !mpDoc->GetColWidth(nVisX,nTab) )
+                    while ( nVisX < mpDoc->MaxCol() && !mpDoc->GetColWidth(nVisX,mnTab) )
                         ++nVisX;
 
-                    nPosY = nScrY;
-                    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+                    nPosY = mnScrY;
+                    for (nArrY=1; nArrY+1<mnArrCount; nArrY++)
                     {
-                        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+                        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
                         const tools::Long nNextY = nPosY + pThisRowInfo->nHeight;
 
                         bool bHOver = pThisRowInfo->cellInfo(nX).bHideGrid;
@@ -502,15 +502,15 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                                 bHOver = pThisRowInfo->cellInfo(nX+1).bHOverlapped;
                             else
                             {
-                                if (nVisX <= nX2)
+                                if (nVisX <= mnX2)
                                     bHOver = pThisRowInfo->cellInfo(nVisX).bHOverlapped;
                                 else
                                     bHOver = mpDoc->GetAttr(
-                                                nVisX,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG)
+                                                nVisX,pThisRowInfo->nRowNo,mnTab,ATTR_MERGE_FLAG)
                                                 ->IsHorOverlapped();
                                 if (bHOver)
                                     bHOver = mpDoc->GetAttr(
-                                                nX + 1,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG)
+                                                nX + 1,pThisRowInfo->nRowNo,mnTab,ATTR_MERGE_FLAG)
                                                 ->IsHorOverlapped();
                             }
                         }
@@ -524,7 +524,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
                 else if (!bMergeCover)
                 {
-                    aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, nScrY, nScrY+nScrH-nOneY, bDashed);
+                    aGrid.AddVerLine(bWorksInPixels, nPosX-nSignedOneX, mnScrY, mnScrY+mnScrH-nOneY, bDashed);
                 }
             }
         }
@@ -534,22 +534,22 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
     bool bHiddenRow = true;
     SCROW nHiddenEndRow = -1;
-    nPosY = nScrY;
-    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+    nPosY = mnScrY;
+    for (nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
         SCSIZE nArrYplus1 = nArrY+1;
-        nY = pRowInfo[nArrY].nRowNo;
+        nY = mpRowInfo[nArrY].nRowNo;
         SCROW nYplus1 = nY+1;
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosY += mpRowInfo[nArrY].nHeight;
 
-        if (pRowInfo[nArrY].bChanged)
+        if (mpRowInfo[nArrY].bChanged)
         {
             if ( bPage )
             {
                 for (SCROW i = nYplus1; i <= mpDoc->MaxRow(); ++i)
                 {
                     if (i > nHiddenEndRow)
-                        bHiddenRow = mpDoc->RowHidden(i, nTab, nullptr, &nHiddenEndRow);
+                        bHiddenRow = mpDoc->RowHidden(i, mnTab, nullptr, &nHiddenEndRow);
                     /* TODO: optimize the row break thing for large hidden
                      * segments where HasRowBreak() has to be called
                      * nevertheless for each row, as a row break is drawn also
@@ -557,7 +557,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                      * once per hidden segment, maybe giving manual breaks
                      * priority. Something like GetNextRowBreak() and
                      * GetNextManualRowBreak(). */
-                    nBreak = mpDoc->HasRowBreak(i, nTab);
+                    nBreak = mpDoc->HasRowBreak(i, mnTab);
                     if (!bHiddenRow || nBreak != ScBreakType::NONE)
                         break;
                 }
@@ -574,7 +574,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                     }
                     else
                     {
-                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : aGridColor);
+                        rRenderContext.SetLineColor(bMergeCover ? aSheetBGColor : maGridColor);
                         bDashed = false;
                     }
 
@@ -584,11 +584,11 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover;    // simple grid only if set so
 
-            bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
+            bool bNextYisNextRow = (mpRowInfo[nArrYplus1].nRowNo == nYplus1);
             bool bSingle = !bNextYisNextRow;             // Hidden
-            for (SCCOL i=nX1; i<=nX2 && !bSingle; i++)
+            for (SCCOL i=mnX1; i<=mnX2 && !bSingle; i++)
             {
-                if (pRowInfo[nArrYplus1].cellInfo(i).bVOverlapped)
+                if (mpRowInfo[nArrYplus1].cellInfo(i).bVOverlapped)
                     bSingle = true;
             }
 
@@ -596,27 +596,27 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
             {
                 if ( bSingle && nY<mpDoc->MaxRow() )
                 {
-                    SCROW nVisY = pRowInfo[nArrYplus1].nRowNo;
+                    SCROW nVisY = mpRowInfo[nArrYplus1].nRowNo;
 
-                    nPosX = nScrX;
-                    if ( bLayoutRTL )
-                        nPosX += nMirrorW - nOneX;
+                    nPosX = mnScrX;
+                    if ( mbLayoutRTL )
+                        nPosX += mnMirrorW - nOneX;
 
-                    for (SCCOL i=nX1; i<=nX2; i++)
+                    for (SCCOL i=mnX1; i<=mnX2; i++)
                     {
-                        const tools::Long nNextX = nPosX + pRowInfo[0].basicCellInfo(i).nWidth * nLayoutSign;
+                        const tools::Long nNextX = nPosX + mpRowInfo[0].basicCellInfo(i).nWidth * nLayoutSign;
                         if (nNextX != nPosX)                                // visible
                         {
                             bool bVOver;
                             if ( bNextYisNextRow )
-                                bVOver = pRowInfo[nArrYplus1].cellInfo(i).bVOverlapped;
+                                bVOver = mpRowInfo[nArrYplus1].cellInfo(i).bVOverlapped;
                             else
                             {
                                 bVOver = mpDoc->GetAttr(
-                                            i,nYplus1,nTab,ATTR_MERGE_FLAG)
+                                            i,nYplus1,mnTab,ATTR_MERGE_FLAG)
                                             ->IsVerOverlapped()
                                     &&   mpDoc->GetAttr(
-                                            i,nVisY,nTab,ATTR_MERGE_FLAG)
+                                            i,nVisY,mnTab,ATTR_MERGE_FLAG)
                                             ->IsVerOverlapped();
                                     //! nVisY from Array ??
                             }
@@ -631,7 +631,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 }
                 else if (!bMergeCover)
                 {
-                    aGrid.AddHorLine(bWorksInPixels, nScrX, nScrX+nScrW-nOneX, nPosY-nOneY, bDashed);
+                    aGrid.AddHorLine(bWorksInPixels, mnScrX, mnScrX+mnScrW-nOneX, nPosY-nOneY, bDashed);
                 }
             }
         }
@@ -640,7 +640,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
 void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
 {
-    bPagebreakMode = true;
+    mbPagebreakMode = true;
     if (!pPageData)
         return;                     // not yet initialized -> everything "not printed"
 
@@ -652,14 +652,14 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
     {
         ScRange aRange = pPageData->GetData( nPos ).GetPrintRange();
 
-        SCCOL nStartX = std::max( aRange.aStart.Col(), nX1 );
-        SCCOL nEndX   = std::min( aRange.aEnd.Col(),   nX2 );
-        SCROW nStartY = std::max( aRange.aStart.Row(), nY1 );
-        SCROW nEndY   = std::min( aRange.aEnd.Row(),   nY2 );
+        SCCOL nStartX = std::max( aRange.aStart.Col(), mnX1 );
+        SCCOL nEndX   = std::min( aRange.aEnd.Col(),   mnX2 );
+        SCROW nStartY = std::max( aRange.aStart.Row(), mnY1 );
+        SCROW nEndY   = std::min( aRange.aEnd.Row(),   mnY2 );
 
-        for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+        for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
         {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+            RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
             if ( pThisRowInfo->bChanged && pThisRowInfo->nRowNo >= nStartY &&
                                            pThisRowInfo->nRowNo <= nEndY )
             {
@@ -673,17 +673,17 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
 void ScOutputData::SetCellRotations()
 {
     //! save nRotMax
-    SCCOL nRotMax = nX2;
-    for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
-        if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
-            nRotMax = pRowInfo[nRotY].nRotMaxCol;
+    SCCOL nRotMax = mnX2;
+    for (SCSIZE nRotY=0; nRotY<mnArrCount; nRotY++)
+        if (mpRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && mpRowInfo[nRotY].nRotMaxCol > nRotMax)
+            nRotMax = mpRowInfo[nRotY].nRotMaxCol;
 
-    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
+    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->nRotMaxCol != SC_ROTMAX_NONE &&
-             ( pThisRowInfo->bChanged || pRowInfo[nArrY-1].bChanged ||
-               ( nArrY+1<nArrCount && pRowInfo[nArrY+1].bChanged ) ) )
+             ( pThisRowInfo->bChanged || mpRowInfo[nArrY-1].bChanged ||
+               ( nArrY+1<mnArrCount && mpRowInfo[nArrY+1].bChanged ) ) )
         {
             SCROW nY = pThisRowInfo->nRowNo;
 
@@ -693,10 +693,10 @@ void ScOutputData::SetCellRotations()
                 const ScPatternAttr* pPattern = pInfo->pPatternAttr;
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
 
-                if ( !pPattern && !mpDoc->ColHidden(nX, nTab) )
+                if ( !pPattern && !mpDoc->ColHidden(nX, mnTab) )
                 {
-                    pPattern = mpDoc->GetPattern( nX, nY, nTab );
-                    pCondSet = mpDoc->GetCondResult( nX, nY, nTab );
+                    pPattern = mpDoc->GetPattern( nX, nY, mnTab );
+                    pCondSet = mpDoc->GetCondResult( nX, nY, mnTab );
                 }
 
                 if ( pPattern )     // column isn't hidden
@@ -708,8 +708,8 @@ void ScOutputData::SetCellRotations()
                         pInfo->nRotateDir = nDir;
 
                         // create target coordinates
-                        const SCCOL nTargetX(nX - nVisX1 + 1);
-                        const SCROW nTargetY(nY - nVisY1 + 1);
+                        const SCCOL nTargetX(nX - mnVisX1 + 1);
+                        const SCROW nTargetY(nY - mnVisY1 + 1);
 
                         // Check for values - below in SetCellRotation these will
                         // be converted to size_t and thus may not be negative
@@ -718,7 +718,7 @@ void ScOutputData::SetCellRotations()
                             // add rotation info to Array information
                             const Degree100 nAttrRotate(pPattern->GetRotateVal(pCondSet));
                             const SvxRotateMode eRotMode(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue());
-                            const double fOrient((bLayoutRTL ? -1.0 : 1.0) * toRadians(nAttrRotate)); // 1/100th degrees -> [0..2PI]
+                            const double fOrient((mbLayoutRTL ? -1.0 : 1.0) * toRadians(nAttrRotate)); // 1/100th degrees -> [0..2PI]
                             svx::frame::Array& rArray = mrTabInfo.maArray;
 
                             rArray.SetCellRotation(nTargetX, nTargetY, eRotMode, fOrient);
@@ -730,10 +730,10 @@ void ScOutputData::SetCellRotations()
     }
 }
 
-static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB mnTab )
 {
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-    const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, mnTab );
+    const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, mnTab );
 
     ScRotateDir nRet = ScRotateDir::NONE;
 
@@ -763,37 +763,37 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
     return nRet;
 }
 
-static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB mnTab )
 {
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-    const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
+    const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, mnTab );
+    const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, mnTab );
     const SvxBrushItem* pBackground =
                             &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
 
-    ScRotateDir nDir = lcl_GetRotateDir( pDoc, nCol, nRow, nTab );
+    ScRotateDir nDir = lcl_GetRotateDir( pDoc, nCol, nRow, mnTab );
 
     // treat CENTER like RIGHT
     if ( nDir == ScRotateDir::Right || nDir == ScRotateDir::Center )
     {
         // text goes to the right -> take background from the left
-        while ( nCol > 0 && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
+        while ( nCol > 0 && lcl_GetRotateDir( pDoc, nCol, nRow, mnTab ) == nDir &&
                             pBackground->GetColor().GetAlpha() != 0 )
         {
             --nCol;
-            pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-            pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
+            pPattern = pDoc->GetPattern( nCol, nRow, mnTab );
+            pCondSet = pDoc->GetCondResult( nCol, nRow, mnTab );
             pBackground = &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
         }
     }
     else if ( nDir == ScRotateDir::Left )
     {
         // text goes to the left -> take background from the right
-        while ( nCol < pDoc->MaxCol() && lcl_GetRotateDir( pDoc, nCol, nRow, nTab ) == nDir &&
+        while ( nCol < pDoc->MaxCol() && lcl_GetRotateDir( pDoc, nCol, nRow, mnTab ) == nDir &&
                             pBackground->GetColor().GetAlpha() != 0 )
         {
             ++nCol;
-            pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-            pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
+            pPattern = pDoc->GetPattern( nCol, nRow, mnTab );
+            pCondSet = pDoc->GetCondResult( nCol, nRow, mnTab );
             pBackground = &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
         }
     }
@@ -802,7 +802,7 @@ static const SvxBrushItem* lcl_FindBackground( const ScDocument* pDoc, SCCOL nCo
 }
 
 static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
-                    SCCOL nX1, SCCOL nX2, bool bShowProt, bool bPagebreakMode )
+                    SCCOL mnX1, SCCOL mnX2, bool bShowProt, bool bPagebreakMode )
 {
     if ( rFirst.bChanged   != rOther.bChanged ||
          rFirst.bEmptyBack != rOther.bEmptyBack )
@@ -811,7 +811,7 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
     SCCOL nX;
     if ( bShowProt )
     {
-        for ( nX=nX1; nX<=nX2; nX++ )
+        for ( nX=mnX1; nX<=mnX2; nX++ )
         {
             const ScPatternAttr* pPat1 = rFirst.cellInfo(nX).pPatternAttr;
             const ScPatternAttr* pPat2 = rOther.cellInfo(nX).pPatternAttr;
@@ -822,22 +822,22 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
     }
     else
     {
-        for ( nX=nX1; nX<=nX2; nX++ )
+        for ( nX=mnX1; nX<=mnX2; nX++ )
             if ( !SfxPoolItem::areSame(rFirst.cellInfo(nX).maBackground.getItem(), rOther.cellInfo(nX).maBackground.getItem() ) )
                 return false;
     }
 
     if ( rFirst.nRotMaxCol != SC_ROTMAX_NONE || rOther.nRotMaxCol != SC_ROTMAX_NONE )
-        for ( nX=nX1; nX<=nX2; nX++ )
+        for ( nX=mnX1; nX<=mnX2; nX++ )
             if ( rFirst.cellInfo(nX).nRotateDir != rOther.cellInfo(nX).nRotateDir )
                 return false;
 
     if ( bPagebreakMode )
-        for ( nX=nX1; nX<=nX2; nX++ )
+        for ( nX=mnX1; nX<=mnX2; nX++ )
             if ( rFirst.cellInfo(nX).bPrinted != rOther.cellInfo(nX).bPrinted )
                 return false;
 
-    for ( nX=nX1; nX<=nX2; nX++ )
+    for ( nX=mnX1; nX<=mnX2; nX++ )
     {
         std::optional<Color> const & pCol1 = rFirst.cellInfo(nX).mxColorScale;
         std::optional<Color> const & pCol2 = rOther.cellInfo(nX).mxColorScale;
@@ -869,15 +869,15 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
 
 void ScOutputData::DrawDocumentBackground()
 {
-    if ( !bSolidBackground )
+    if ( !mbSolidBackground )
         return;
 
     Color aBgColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
     mpDev->SetLineColor(aBgColor);
     mpDev->SetFillColor(aBgColor);
 
-    Point aScreenPos  = mpDev->PixelToLogic(Point(nScrX, nScrY));
-    Size  aScreenSize = mpDev->PixelToLogic(Size(nScrW - 1,nScrH - 1));
+    Point aScreenPos  = mpDev->PixelToLogic(Point(mnScrX, mnScrY));
+    Size  aScreenSize = mpDev->PixelToLogic(Size(mnScrW - 1,mnScrH - 1));
 
     mpDev->DrawRect(tools::Rectangle(aScreenPos, aScreenSize));
 }
@@ -1084,7 +1084,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     // See more about bWorksInPixels in ScOutputData::DrawGrid
     bool bWorksInPixels = false;
-    if (eType == OUTTYPE_WINDOW)
+    if (meType == OUTTYPE_WINDOW)
         bWorksInPixels = true;
 
     tools::Long nOneX = 1;
@@ -1097,26 +1097,26 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     tools::Rectangle aRect;
 
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     rRenderContext.SetLineColor();
 
-    bool bShowProt = mbSyntaxMode && mpDoc->IsTabProtected(nTab);
-    bool bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
+    bool bShowProt = mbSyntaxMode && mpDoc->IsTabProtected(mnTab);
+    bool bDoAll = bShowProt || mbPagebreakMode || mbSolidBackground;
 
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    tools::Long nPosY = nScrY;
+    tools::Long nPosY = mnScrY;
 
     const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     Color aProtectedColor( rColorCfg.GetColorValue( svtools::CALCPROTECTEDBACKGROUND ).nColor );
     auto pProtectedBackground = std::make_shared<SvxBrushItem>( aProtectedColor, ATTR_BACKGROUND );
 
     // iterate through the rows to show
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         tools::Long nRowHeight = pThisRowInfo->nHeight;
 
         if ( pThisRowInfo->bChanged )
@@ -1132,18 +1132,18 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                 // scan for rows with the same background:
                 SCSIZE nSkip = 0;
-                while ( nArrY+nSkip+2<nArrCount &&
-                        lcl_EqualBack( *pThisRowInfo, pRowInfo[nArrY+nSkip+1],
-                                        nX1, nX2, bShowProt, bPagebreakMode ) )
+                while ( nArrY+nSkip+2<mnArrCount &&
+                        lcl_EqualBack( *pThisRowInfo, mpRowInfo[nArrY+nSkip+1],
+                                        mnX1, mnX2, bShowProt, mbPagebreakMode ) )
                 {
                     ++nSkip;
-                    nRowHeight += pRowInfo[nArrY+nSkip].nHeight;    // after incrementing
+                    nRowHeight += mpRowInfo[nArrY+nSkip].nHeight;    // after incrementing
                 }
 
-                tools::Long nPosX = nScrX;
+                tools::Long nPosX = mnScrX;
 
-                if ( bLayoutRTL )
-                    nPosX += nMirrorW - nOneX;
+                if ( mbLayoutRTL )
+                    nPosX += mnMirrorW - nOneX;
 
                 aRect = tools::Rectangle(nPosX, nPosY - nOneY, nPosX, nPosY - nOneY + nRowHeight);
                 if (bWorksInPixels)
@@ -1157,7 +1157,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 SCCOL nMergedCols = 1;
                 SCCOL nOldMerged = 0;
 
-                for (SCCOL nX=nX1; nX + nMergedCols <= nX2 + 1; nX += nOldMerged)
+                for (SCCOL nX=mnX1; nX + nMergedCols <= mnX2 + 1; nX += nOldMerged)
                 {
                     ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX-1+nMergedCols);
 
@@ -1176,9 +1176,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     for (SCCOL nMerged = 0; nMerged < nMergedCols; ++nMerged)
                     {
                         SCCOL nCol = nX+nOldMerged+nMerged;
-                        if (nCol > nX2+2)
+                        if (nCol > mnX2+2)
                             break;
-                        nNewPosX += pRowInfo[0].basicCellInfo(nCol-1).nWidth * nLayoutSign;
+                        nNewPosX += mpRowInfo[0].basicCellInfo(nCol-1).nWidth * nLayoutSign;
                     }
 
                     if (nNewPosX == nPosX)
@@ -1206,15 +1206,15 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     else
                         pBackground = static_cast<const SvxBrushItem*>(pInfo->maBackground.getItem());
 
-                    if ( bPagebreakMode && !pInfo->bPrinted )
+                    if ( mbPagebreakMode && !pInfo->bPrinted )
                         pBackground = pProtectedBackground.get();
 
                     if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                             !pBackground->GetColor().IsFullyTransparent() &&
                             !bCellContrast )
                     {
-                        SCROW nY = pRowInfo[nArrY].nRowNo;
-                        pBackground = lcl_FindBackground( mpDoc, nX, nY, nTab );
+                        SCROW nY = mpRowInfo[nArrY].nRowNo;
+                        pBackground = lcl_FindBackground( mpDoc, nX, nY, mnTab );
                     }
 
                     std::optional<Color> const & pColor = pInfo->mxColorScale;
@@ -1264,31 +1264,31 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
     if ( bCellContrast )
         aAutoTextColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         tools::Long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += mnMirrorW - nOneX;
     }
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY - pRowInfo[0].nHeight;
-    for (SCSIZE nArrY=0; nArrY<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY - mpRowInfo[0].nHeight;
+    for (SCSIZE nArrY=0; nArrY<mnArrCount; nArrY++)
     {
-        bool bCornerY = ( nArrY == 0 ) || ( nArrY+1 == nArrCount );
-        bool bSkipY = ( nArrY==0 && !bTop ) || ( nArrY+1 == nArrCount && !bBottom );
+        bool bCornerY = ( nArrY == 0 ) || ( nArrY+1 == mnArrCount );
+        bool bSkipY = ( nArrY==0 && !bTop ) || ( nArrY+1 == mnArrCount && !bBottom );
 
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         tools::Long nRowHeight = pThisRowInfo->nHeight;
 
         if ( pThisRowInfo->bChanged && !bSkipY )
         {
-            tools::Long nPosX = nInitPosX - pRowInfo[0].basicCellInfo(nX1-1).nWidth * nLayoutSign;
-            for (SCCOL nCol=nX1-1; nCol<=nX2+1; nCol++)
+            tools::Long nPosX = nInitPosX - mpRowInfo[0].basicCellInfo(mnX1-1).nWidth * nLayoutSign;
+            for (SCCOL nCol=mnX1-1; nCol<=mnX2+1; nCol++)
             {
-                bool bCornerX = ( nCol==nX1-1 || nCol==nX2+1 );
-                bool bSkipX = ( nCol==nX1-1 && !bLeft ) || ( nCol==nX2+1 && !bRight );
+                bool bCornerX = ( nCol==mnX1-1 || nCol==mnX2+1 );
+                bool bSkipX = ( nCol==mnX1-1 && !bLeft ) || ( nCol==mnX2+1 && !bRight );
 
                 for (sal_uInt16 nPass=0; nPass<2; nPass++) // horizontal / vertical
                 {
@@ -1311,21 +1311,21 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
 
                         if (bDo)
                         {
-                            tools::Long nThisWidth = pRowInfo[0].basicCellInfo(nCol).nWidth;
+                            tools::Long nThisWidth = mpRowInfo[0].basicCellInfo(nCol).nWidth;
                             tools::Long nMaxWidth = nThisWidth;
                             if (!nMaxWidth)
                             {
                                 //! direction must depend on shadow location
                                 SCCOL nWx = nCol+1;
-                                while (nWx<nX2 && !pRowInfo[0].basicCellInfo(nWx).nWidth)
+                                while (nWx<mnX2 && !mpRowInfo[0].basicCellInfo(nWx).nWidth)
                                     ++nWx;
-                                nMaxWidth = pRowInfo[0].basicCellInfo(nWx).nWidth;
+                                nMaxWidth = mpRowInfo[0].basicCellInfo(nWx).nWidth;
                             }
 
                             // rectangle is in logical orientation
                             tools::Rectangle aRect( nPosX, nPosY,
                                              nPosX + ( nThisWidth - 1 ) * nLayoutSign,
-                                             nPosY + pRowInfo[nArrY].nHeight - 1 );
+                                             nPosY + mpRowInfo[nArrY].nHeight - 1 );
 
                             tools::Long nSize = pAttr->GetWidth();
                             tools::Long nSizeX = static_cast<tools::Long>(nSize*mnPPTX);
@@ -1336,7 +1336,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             nSizeX *= nLayoutSign;      // used only to add to rectangle values
 
                             SvxShadowLocation eLoc = pAttr->GetLocation();
-                            if ( bLayoutRTL )
+                            if ( mbLayoutRTL )
                             {
                                 //  Shadow location is specified as "visual" (right is always right),
                                 //  so the attribute's location value is mirrored here and in FillInfo.
@@ -1394,7 +1394,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                     }
                 }
 
-                nPosX += pRowInfo[0].basicCellInfo(nCol).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nCol).nWidth * nLayoutSign;
             }
         }
         nPosY += nRowHeight;
@@ -1411,31 +1411,31 @@ void ScOutputData::DrawClear()
     // (called only for ScGridWindow)
     Color aBgColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
-    if (bMetaFile)
+    if (mbMetaFile)
         nOneX = nOneY = 0;
 
     mpDev->SetLineColor();
 
     mpDev->SetFillColor( aBgColor );
 
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         tools::Long nRowHeight = pThisRowInfo->nHeight;
 
         if ( pThisRowInfo->bChanged )
         {
             // scan for more rows which must be painted:
             SCSIZE nSkip = 0;
-            while ( nArrY+nSkip+2<nArrCount && pRowInfo[nArrY+nSkip+1].bChanged )
+            while ( nArrY+nSkip+2<mnArrCount && mpRowInfo[nArrY+nSkip+1].bChanged )
             {
                 ++nSkip;
-                nRowHeight += pRowInfo[nArrY+nSkip].nHeight;    // after incrementing
+                nRowHeight += mpRowInfo[nArrY+nSkip].nHeight;    // after incrementing
             }
 
-            aRect = tools::Rectangle( Point( nScrX, nPosY ),
-                    Size( nScrW+1-nOneX, nRowHeight+1-nOneY) );
+            aRect = tools::Rectangle( Point( mnScrX, nPosY ),
+                    Size( mnScrW+1-nOneX, nRowHeight+1-nOneY) );
             mpDev->DrawRect( aRect );
 
             nArrY += nSkip;
@@ -1446,14 +1446,14 @@ void ScOutputData::DrawClear()
 
 // Lines
 
-static tools::Long lclGetSnappedX( const OutputDevice& rDev, tools::Long nPosX, bool bSnapPixel )
+static tools::Long lclGetSnappedX( const OutputDevice& rDev, tools::Long nPosX, bool mbSnapPixel )
 {
-    return (bSnapPixel && nPosX) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( nPosX, 0 ) ) ).Width() : nPosX;
+    return (mbSnapPixel && nPosX) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( nPosX, 0 ) ) ).Width() : nPosX;
 }
 
-static tools::Long lclGetSnappedY( const OutputDevice& rDev, tools::Long nPosY, bool bSnapPixel )
+static tools::Long lclGetSnappedY( const OutputDevice& rDev, tools::Long nPosY, bool mbSnapPixel )
 {
-    return (bSnapPixel && nPosY) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( 0, nPosY ) ) ).Height() : nPosY;
+    return (mbSnapPixel && nPosY) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( 0, nPosY ) ) ).Height() : nPosY;
 }
 
 void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
@@ -1500,14 +1500,14 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
         DrawRotatedFrame(rRenderContext);        // removes the lines that must not be painted here
     }
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
     {
         Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
         tools::Long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += mnMirrorW - nOneX;
     }
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     // *** set column and row sizes of the frame border array ***
 
@@ -1519,13 +1519,13 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     // row 0 is not visible (dummy for borders from top) - subtract its height from initial position
     // subtract 1 unit more, because position 0 is first *in* cell, grid line is one unit before
-    tools::Long nOldPosY = nScrY - 1 - pRowInfo[ 0 ].nHeight;
-    tools::Long nOldSnapY = lclGetSnappedY( rRenderContext, nOldPosY, bSnapPixel );
+    tools::Long nOldPosY = mnScrY - 1 - mpRowInfo[ 0 ].nHeight;
+    tools::Long nOldSnapY = lclGetSnappedY( rRenderContext, nOldPosY, mbSnapPixel );
     rArray.SetYOffset( nOldSnapY );
     for( size_t nRow = 0; nRow < nRowCount; ++nRow )
     {
-        tools::Long nNewPosY = nOldPosY + pRowInfo[ nRow ].nHeight;
-        tools::Long nNewSnapY = lclGetSnappedY( rRenderContext, nNewPosY, bSnapPixel );
+        tools::Long nNewPosY = nOldPosY + mpRowInfo[ nRow ].nHeight;
+        tools::Long nNewSnapY = lclGetSnappedY( rRenderContext, nNewPosY, mbSnapPixel );
         rArray.SetRowHeight( nRow, nNewSnapY - nOldSnapY );
         nOldPosY = nNewPosY;
         nOldSnapY = nNewSnapY;
@@ -1533,23 +1533,23 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     // column widths
 
-    // column nX1-1 is not visible (dummy for borders from left) - subtract its width from initial position
+    // column mnX1-1 is not visible (dummy for borders from left) - subtract its width from initial position
     // subtract 1 unit more, because position 0 is first *in* cell, grid line is one unit above
-    tools::Long nOldPosX = nInitPosX - nLayoutSign * (1 + pRowInfo[ 0 ].basicCellInfo( nX1 - 1 ).nWidth);
-    tools::Long nOldSnapX = lclGetSnappedX( rRenderContext, nOldPosX, bSnapPixel );
+    tools::Long nOldPosX = nInitPosX - nLayoutSign * (1 + mpRowInfo[ 0 ].basicCellInfo( mnX1 - 1 ).nWidth);
+    tools::Long nOldSnapX = lclGetSnappedX( rRenderContext, nOldPosX, mbSnapPixel );
     // set X offset for left-to-right sheets; for right-to-left sheets this is done after for() loop
-    if( !bLayoutRTL )
+    if( !mbLayoutRTL )
         rArray.SetXOffset( nOldSnapX );
-    for( SCCOL nCol = nX1 - 1; nCol <= nX2 + 1; ++nCol )
+    for( SCCOL nCol = mnX1 - 1; nCol <= mnX2 + 1; ++nCol )
     {
-        size_t nArrCol = bLayoutRTL ? nX2 + 1 - nCol : nCol - (nX1 - 1);
-        tools::Long nNewPosX = nOldPosX + pRowInfo[ 0 ].basicCellInfo( nCol ).nWidth * nLayoutSign;
-        tools::Long nNewSnapX = lclGetSnappedX( rRenderContext, nNewPosX, bSnapPixel );
+        size_t nArrCol = mbLayoutRTL ? mnX2 + 1 - nCol : nCol - (mnX1 - 1);
+        tools::Long nNewPosX = nOldPosX + mpRowInfo[ 0 ].basicCellInfo( nCol ).nWidth * nLayoutSign;
+        tools::Long nNewSnapX = lclGetSnappedX( rRenderContext, nNewPosX, mbSnapPixel );
         rArray.SetColWidth( nArrCol, std::abs( nNewSnapX - nOldSnapX ) );
         nOldPosX = nNewPosX;
         nOldSnapX = nNewSnapX;
     }
-    if( bLayoutRTL )
+    if( mbLayoutRTL )
         rArray.SetXOffset( nOldSnapX );
 
     // *** draw the array ***
@@ -1569,11 +1569,11 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
         return;
     while( nRow1 <= nLastRow )
     {
-        while( (nRow1 <= nLastRow) && !pRowInfo[ nRow1 ].bChanged ) ++nRow1;
+        while( (nRow1 <= nLastRow) && !mpRowInfo[ nRow1 ].bChanged ) ++nRow1;
         if( nRow1 <= nLastRow )
         {
             size_t nRow2 = nRow1;
-            while( (nRow2 + 1 <= nLastRow) && pRowInfo[ nRow2 + 1 ].bChanged ) ++nRow2;
+            while( (nRow2 + 1 <= nLastRow) && mpRowInfo[ nRow2 + 1 ].bChanged ) ++nRow2;
             auto xPrimitive = rArray.CreateB2DPrimitiveRange(
                     nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
             pProcessor->process(xPrimitive);
@@ -1591,10 +1591,10 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 {
     //! save nRotMax
-    SCCOL nRotMax = nX2;
-    for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
-        if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
-            nRotMax = pRowInfo[nRotY].nRotMaxCol;
+    SCCOL nRotMax = mnX2;
+    for (SCSIZE nRotY=0; nRotY<mnArrCount; nRotY++)
+        if (mpRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && mpRowInfo[nRotY].nRotMaxCol > nRotMax)
+            nRotMax = mpRowInfo[nRotY].nRotMaxCol;
 
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
@@ -1602,17 +1602,17 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     bool bCellContrast = mbUseStyleColor && rStyleSettings.GetHighContrastMode();
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
     {
         Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
         tools::Long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += mnMirrorW - nOneX;
     }
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
-    if (bMetaFile)
+    tools::Rectangle aClipRect( Point(mnScrX, mnScrY), Size(mnScrW, mnScrH) );
+    if (mbMetaFile)
     {
         rRenderContext.Push();
         rRenderContext.IntersectClipRegion( aClipRect );
@@ -1621,29 +1621,29 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
         rRenderContext.SetClipRegion( vcl::Region( aClipRect ) );
 
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)
     {
         // Rotated is also drawn one line above/below Changed if parts extend into the cell
 
-        RowInfo& rPrevRowInfo = pRowInfo[nArrY-1];
-        RowInfo& rThisRowInfo = pRowInfo[nArrY];
-        RowInfo& rNextRowInfo = pRowInfo[nArrY+1];
+        RowInfo& rPrevRowInfo = mpRowInfo[nArrY-1];
+        RowInfo& rThisRowInfo = mpRowInfo[nArrY];
+        RowInfo& rNextRowInfo = mpRowInfo[nArrY+1];
 
         tools::Long nRowHeight = rThisRowInfo.nHeight;
         if ( rThisRowInfo.nRotMaxCol != SC_ROTMAX_NONE &&
              ( rThisRowInfo.bChanged || rPrevRowInfo.bChanged ||
-               ( nArrY+1<nArrCount && rNextRowInfo.bChanged ) ) )
+               ( nArrY+1<mnArrCount && rNextRowInfo.bChanged ) ) )
         {
             SCROW nY = rThisRowInfo.nRowNo;
             tools::Long nPosX = 0;
             SCCOL nX;
             for (nX=0; nX<=nRotMax; nX++)
             {
-                if (nX==nX1) nPosX = nInitPosX;     // calculated individually for preceding positions
+                if (nX==mnX1) nPosX = nInitPosX;     // calculated individually for preceding positions
 
                 ScCellInfo* pInfo = &rThisRowInfo.cellInfo(nX);
-                tools::Long nColWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+                tools::Long nColWidth = mpRowInfo[0].basicCellInfo(nX).nWidth;
                 if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
@@ -1651,9 +1651,9 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                     pCondSet = pInfo->pConditionSet;
                     if (!pPattern)
                     {
-                        pPattern = mpDoc->GetPattern( nX, nY, nTab );
+                        pPattern = mpDoc->GetPattern( nX, nY, mnTab );
                         pInfo->pPatternAttr = pPattern;
-                        pCondSet = mpDoc->GetCondResult( nX, nY, nTab );
+                        pCondSet = mpDoc->GetCondResult( nX, nY, mnTab );
                         pInfo->pConditionSet = pCondSet;
                     }
 
@@ -1665,14 +1665,14 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
                     if (nAttrRotate)
                     {
-                        if (nX < nX1)         // compute negative position
+                        if (nX < mnX1)         // compute negative position
                         {
                             nPosX = nInitPosX;
-                            SCCOL nCol = nX1;
+                            SCCOL nCol = mnX1;
                             while (nCol > nX)
                             {
                                 --nCol;
-                                nPosX -= nLayoutSign * static_cast<tools::Long>(pRowInfo[0].basicCellInfo(nCol).nWidth);
+                                nPosX -= nLayoutSign * static_cast<tools::Long>(mpRowInfo[0].basicCellInfo(nCol).nWidth);
                             }
                         }
 
@@ -1781,7 +1781,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 
     pProcessor.reset();
 
-    if (bMetaFile)
+    if (mbMetaFile)
         rRenderContext.Pop();
     else
         rRenderContext.SetClipRegion();
@@ -1795,7 +1795,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
         return nullptr;
 
     basegfx::B2DRange aViewRange;
-    SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+    SdrPage *pDrawPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( mnTab ) );
     drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     aNewViewInfos.setViewTransformation(mpDev->GetViewTransformation());
     aNewViewInfos.setViewport(aViewRange);
@@ -1812,15 +1812,15 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
     vcl::Region aRegion;
     tools::Rectangle aDrawingRect;
     bool bHad(false);
-    tools::Long nPosY = nScrY;
+    tools::Long nPosY = mnScrY;
     SCSIZE nArrY;
 
-    aDrawingRect.SetLeft( nScrX );
-    aDrawingRect.SetRight( nScrX+nScrW-1 );
+    aDrawingRect.SetLeft( mnScrX );
+    aDrawingRect.SetRight( mnScrX+mnScrW-1 );
 
-    for(nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for(nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
 
         if(pThisRowInfo->bChanged)
         {
@@ -1830,7 +1830,7 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
                 bHad = true;
             }
 
-            aDrawingRect.SetBottom( nPosY + pRowInfo[nArrY].nHeight - 1 );
+            aDrawingRect.SetBottom( nPosY + mpRowInfo[nArrY].nHeight - 1 );
         }
         else if(bHad)
         {
@@ -1838,7 +1838,7 @@ vcl::Region ScOutputData::GetChangedAreaRegion()
             bHad = false;
         }
 
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosY += mpRowInfo[nArrY].nHeight;
     }
 
     if(bHad)
@@ -1854,15 +1854,15 @@ bool ScOutputData::SetChangedClip()
     tools::PolyPolygon aPoly;
 
     tools::Rectangle aDrawingRect;
-    aDrawingRect.SetLeft( nScrX );
-    aDrawingRect.SetRight( nScrX+nScrW-1 );
+    aDrawingRect.SetLeft( mnScrX );
+    aDrawingRect.SetRight( mnScrX+mnScrW-1 );
 
     bool    bHad    = false;
-    tools::Long    nPosY   = nScrY;
+    tools::Long    nPosY   = mnScrY;
     SCSIZE  nArrY;
-    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+    for (nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
 
         if ( pThisRowInfo->bChanged )
         {
@@ -1871,14 +1871,14 @@ bool ScOutputData::SetChangedClip()
                 aDrawingRect.SetTop( nPosY );
                 bHad = true;
             }
-            aDrawingRect.SetBottom( nPosY + pRowInfo[nArrY].nHeight - 1 );
+            aDrawingRect.SetBottom( nPosY + mpRowInfo[nArrY].nHeight - 1 );
         }
         else if (bHad)
         {
             aPoly.Insert( tools::Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
             bHad = false;
         }
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosY += mpRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
@@ -1897,18 +1897,18 @@ void ScOutputData::FindChanged()
 
     bool bWasIdleEnabled = mpDoc->IsIdleEnabled();
     mpDoc->EnableIdle(false);
-    for (nArrY=0; nArrY<nArrCount; nArrY++)
-        pRowInfo[nArrY].bChanged = false;
+    for (nArrY=0; nArrY<mnArrCount; nArrY++)
+        mpRowInfo[nArrY].bChanged = false;
 
     SCCOL nCol1 = mpDoc->MaxCol(), nCol2 = 0;
     SCROW nRow1 = mpDoc->MaxRow(), nRow2 = 0;
     bool bAnyDirty = false;
     bool bAnyChanged = false;
 
-    for (nArrY=0; nArrY<nArrCount; nArrY++)
+    for (nArrY=0; nArrY<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        for (nX=nX1; nX<=nX2; nX++)
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
+        for (nX=mnX1; nX<=mnX2; nX++)
         {
             const ScRefCellValue& rCell = pThisRowInfo->cellInfo(nX).maCell;
 
@@ -1952,12 +1952,12 @@ void ScOutputData::FindChanged()
     if (bAnyDirty || bAnyChanged)
     {
         if (bAnyDirty)
-            mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), true);
+            mpDoc->EnsureFormulaCellResults(ScRange(nCol1, nRow1, mnTab, nCol2, nRow2, mnTab), true);
 
-        for (nArrY=0; nArrY<nArrCount; nArrY++)
+        for (nArrY=0; nArrY<mnArrCount; nArrY++)
         {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-            for (nX=nX1; nX<=nX2; nX++)
+            RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
+            for (nX=mnX1; nX<=mnX2; nX++)
             {
                 const ScRefCellValue& rCell = pThisRowInfo->cellInfo(nX).maCell;
 
@@ -1977,10 +1977,10 @@ void ScOutputData::FindChanged()
                 if ( pThisRowInfo->cellInfo(nX).bMerged )
                 {
                     SCSIZE nOverY = nArrY + 1;
-                    while ( nOverY<nArrCount &&
-                            pRowInfo[nOverY].cellInfo(nX).bVOverlapped )
+                    while ( nOverY<mnArrCount &&
+                            mpRowInfo[nOverY].cellInfo(nX).bVOverlapped )
                     {
-                        pRowInfo[nOverY].bChanged = true;
+                        mpRowInfo[nOverY].bChanged = true;
                         ++nOverY;
                     }
                 }
@@ -2003,30 +2003,30 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
     PutInOrder( nRefStartY, nRefEndY );
 
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
-        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
+        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, mnTab );
 
-    if ( nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
-         nRefStartY <= nVisY2 && nRefEndY >= nVisY1 )
+    if ( nRefStartX <= mnVisX2 && nRefEndX >= mnVisX1 &&
+         nRefStartY <= mnVisY2 && nRefEndY >= mnVisY1 )
     {
-        tools::Long nMinX = nScrX;
-        tools::Long nMinY = nScrY;
-        tools::Long nMaxX = nScrX + nScrW - 1;
-        tools::Long nMaxY = nScrY + nScrH - 1;
-        if ( bLayoutRTL )
+        tools::Long nMinX = mnScrX;
+        tools::Long nMinY = mnScrY;
+        tools::Long nMaxX = mnScrX + mnScrW - 1;
+        tools::Long nMaxY = mnScrY + mnScrH - 1;
+        if ( mbLayoutRTL )
             std::swap( nMinX, nMaxX );
-        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
         bool bTop    = false;
         bool bBottom = false;
         bool bLeft   = false;
         bool bRight  = false;
 
-        tools::Long nPosY = nScrY;
-        bool bNoStartY = ( nY1 < nRefStartY );
+        tools::Long nPosY = mnScrY;
+        bool bNoStartY = ( mnY1 < nRefStartY );
         bool bNoEndY   = false;
-        for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+        for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)      // loop to end for bNoEndY check
         {
-            SCROW nY = pRowInfo[nArrY].nRowNo;
+            SCROW nY = mpRowInfo[nArrY].nRowNo;
 
             if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
             {
@@ -2035,7 +2035,7 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
             }
             if ( nY==nRefEndY )
             {
-                nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
+                nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 2;
                 bBottom = true;
             }
             if ( nY>nRefEndY && bNoEndY )
@@ -2045,14 +2045,14 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
             }
             bNoStartY = ( nY < nRefStartY );
             bNoEndY   = ( nY < nRefEndY );
-            nPosY += pRowInfo[nArrY].nHeight;
+            nPosY += mpRowInfo[nArrY].nHeight;
         }
 
-        tools::Long nPosX = nScrX;
-        if ( bLayoutRTL )
-            nPosX += nMirrorW - 1;      // always in pixels
+        tools::Long nPosX = mnScrX;
+        if ( mbLayoutRTL )
+            nPosX += mnMirrorW - 1;      // always in pixels
 
-        for (SCCOL nX=nX1; nX<=nX2; nX++)
+        for (SCCOL nX=mnX1; nX<=mnX2; nX++)
         {
             if ( nX==nRefStartX )
             {
@@ -2061,10 +2061,10 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
             }
             if ( nX==nRefEndX )
             {
-                nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
+                nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
                 bRight = true;
             }
-            nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+            nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
         }
 
         if (bTop && bBottom && bLeft && bRight)
@@ -2074,7 +2074,7 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
                                      nMinY / mnPPTY,
                                      ( nMaxX - nMinX ) / mnPPTX,
                                      ( nMaxY - nMinY ) / mnPPTY,
-                                     nTab,
+                                     mnTab,
                                      rColor );
         }
     }
@@ -2090,34 +2090,34 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     PutInOrder( nRefStartY, nRefEndY );
 
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
-        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
+        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, mnTab );
     else if (mpDoc->ValidCol(nRefEndX) && mpDoc->ValidRow(nRefEndY) &&
-             mpDoc->HasAttrib(nRefEndX, nRefEndY, nTab, HasAttrFlags::Merged))
-        mpDoc->ExtendMerge(nRefEndX, nRefEndY, nRefEndX, nRefEndY, nTab);
+             mpDoc->HasAttrib(nRefEndX, nRefEndY, mnTab, HasAttrFlags::Merged))
+        mpDoc->ExtendMerge(nRefEndX, nRefEndY, nRefEndX, nRefEndY, mnTab);
 
-    if ( !(nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
-         nRefStartY <= nVisY2 && nRefEndY >= nVisY1) )
+    if ( !(nRefStartX <= mnVisX2 && nRefEndX >= mnVisX1 &&
+         nRefStartY <= mnVisY2 && nRefEndY >= mnVisY1) )
         return;
 
-    tools::Long nMinX = nScrX;
-    tools::Long nMinY = nScrY;
-    tools::Long nMaxX = nScrX + nScrW - 1;
-    tools::Long nMaxY = nScrY + nScrH - 1;
-    if ( bLayoutRTL )
+    tools::Long nMinX = mnScrX;
+    tools::Long nMinY = mnScrY;
+    tools::Long nMaxX = mnScrX + mnScrW - 1;
+    tools::Long nMaxY = mnScrY + mnScrH - 1;
+    if ( mbLayoutRTL )
         std::swap( nMinX, nMaxX );
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     bool bTop    = false;
     bool bBottom = false;
     bool bLeft   = false;
     bool bRight  = false;
 
-    tools::Long nPosY = nScrY;
-    bool bNoStartY = ( nY1 < nRefStartY );
+    tools::Long nPosY = mnScrY;
+    bool bNoStartY = ( mnY1 < nRefStartY );
     bool bNoEndY   = false;
-    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)      // loop to end for bNoEndY check
     {
-        SCROW nY = pRowInfo[nArrY].nRowNo;
+        SCROW nY = mpRowInfo[nArrY].nRowNo;
 
         if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
         {
@@ -2126,7 +2126,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nY==nRefEndY )
         {
-            nMaxY = nPosY + pRowInfo[nArrY].nHeight - 2;
+            nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 2;
             bBottom = true;
         }
         if ( nY>nRefEndY && bNoEndY )
@@ -2136,14 +2136,14 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         }
         bNoStartY = ( nY < nRefStartY );
         bNoEndY   = ( nY < nRefEndY );
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosY += mpRowInfo[nArrY].nHeight;
     }
 
-    tools::Long nPosX = nScrX;
-    if ( bLayoutRTL )
-        nPosX += nMirrorW - 1;      // always in pixels
+    tools::Long nPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nPosX += mnMirrorW - 1;      // always in pixels
 
-    for (SCCOL nX=nX1; nX<=nX2; nX++)
+    for (SCCOL nX=mnX1; nX<=mnX2; nX++)
     {
         if ( nX==nRefStartX )
         {
@@ -2152,10 +2152,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nX==nRefEndX )
         {
-            nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
+            nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
             bRight = true;
         }
-        nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+        nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
     }
 
     if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
@@ -2216,31 +2216,31 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
     PutInOrder( nRefStartY, nRefEndY );
 
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
-        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
+        mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, mnTab );
 
-    if ( !(nRefStartX <= nVisX2 + 1 && nRefEndX >= nVisX1 &&
-         nRefStartY <= nVisY2 + 1 && nRefEndY >= nVisY1) )       // +1 because it touches next cells left/top
+    if ( !(nRefStartX <= mnVisX2 + 1 && nRefEndX >= mnVisX1 &&
+         nRefStartY <= mnVisY2 + 1 && nRefEndY >= mnVisY1) )       // +1 because it touches next cells left/top
         return;
 
-    tools::Long nMinX = nScrX;
-    tools::Long nMinY = nScrY;
-    tools::Long nMaxX = nScrX+nScrW-1;
-    tools::Long nMaxY = nScrY+nScrH-1;
-    if ( bLayoutRTL )
+    tools::Long nMinX = mnScrX;
+    tools::Long nMinY = mnScrY;
+    tools::Long nMaxX = mnScrX+mnScrW-1;
+    tools::Long nMaxY = mnScrY+mnScrH-1;
+    if ( mbLayoutRTL )
         std::swap( nMinX, nMaxX );
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     bool bTop    = false;
     bool bBottom = false;
     bool bLeft   = false;
     bool bRight  = false;
 
-    tools::Long nPosY = nScrY;
-    bool bNoStartY = ( nY1 < nRefStartY );
+    tools::Long nPosY = mnScrY;
+    bool bNoStartY = ( mnY1 < nRefStartY );
     bool bNoEndY   = false;
-    for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)      // loop to end for bNoEndY check
+    for (SCSIZE nArrY=1; nArrY<mnArrCount; nArrY++)      // loop to end for bNoEndY check
     {
-        SCROW nY = pRowInfo[nArrY].nRowNo;
+        SCROW nY = mpRowInfo[nArrY].nRowNo;
 
         if ( nY==nRefStartY || (nY>nRefStartY && bNoStartY) )
         {
@@ -2249,7 +2249,7 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nY==nRefEndY )
         {
-            nMaxY = nPosY + pRowInfo[nArrY].nHeight - 1;
+            nMaxY = nPosY + mpRowInfo[nArrY].nHeight - 1;
             bBottom = true;
         }
         if ( nY>nRefEndY && bNoEndY )
@@ -2259,14 +2259,14 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
         }
         bNoStartY = ( nY < nRefStartY );
         bNoEndY   = ( nY < nRefEndY );
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosY += mpRowInfo[nArrY].nHeight;
     }
 
-    tools::Long nPosX = nScrX;
-    if ( bLayoutRTL )
-        nPosX += nMirrorW - 1;      // always in pixels
+    tools::Long nPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nPosX += mnMirrorW - 1;      // always in pixels
 
-    for (SCCOL nX=nX1; nX<=nX2+1; nX++)
+    for (SCCOL nX=mnX1; nX<=mnX2+1; nX++)
     {
         if ( nX==nRefStartX )
         {
@@ -2275,10 +2275,10 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nX==nRefEndX )
         {
-            nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 1 ) * nLayoutSign;
+            nMaxX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 1 ) * nLayoutSign;
             bRight = true;
         }
-        nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+        nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
     }
 
     if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
@@ -2334,11 +2334,11 @@ void ScOutputData::DrawChangeTrack()
     //  clipping happens from the outside
     //! without clipping, only paint affected cells ??!??!?
 
-    SCCOL nEndX = nX2;
-    SCROW nEndY = nY2;
+    SCCOL nEndX = mnX2;
+    SCROW nEndY = mnY2;
     if ( nEndX < mpDoc->MaxCol() ) ++nEndX;      // also from the next cell since the mark
     if ( nEndY < mpDoc->MaxRow() ) ++nEndY;      // protrudes from the preceding cell
-    ScRange aViewRange( nX1, nY1, nTab, nEndX, nEndY, nTab );
+    ScRange aViewRange( mnX1, mnY1, mnTab, nEndX, nEndY, mnTab );
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
@@ -2346,7 +2346,7 @@ void ScOutputData::DrawChangeTrack()
         {
             ScChangeActionType eActionType = pAction->GetType();
             const ScBigRange& rBig = pAction->GetBigRange();
-            if ( rBig.aStart.Tab() == nTab )
+            if ( rBig.aStart.Tab() == mnTab )
             {
                 ScRange aRange = rBig.MakeRange( *mpDoc );
 
@@ -2367,7 +2367,7 @@ void ScOutputData::DrawChangeTrack()
             }
             if ( eActionType == SC_CAT_MOVE &&
                     static_cast<const ScChangeActionMove*>(pAction)->
-                        GetFromRange().aStart.Tab() == nTab )
+                        GetFromRange().aStart.Tab() == mnTab )
             {
                 ScRange aRange = static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().MakeRange( *mpDoc );
@@ -2394,7 +2394,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 
     // See more about bWorksInPixels in ScOutputData::DrawGrid
     bool bWorksInPixels = false;
-    if (eType == OUTTYPE_WINDOW)
+    if (meType == OUTTYPE_WINDOW)
         bWorksInPixels = true;
 
     tools::Long nOneX = 1;
@@ -2405,50 +2405,50 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
         nOneY = nOneYLogic;
     }
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nInitPosX += mnMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             tools::Long nPosX = nInitPosX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
 
-                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                if ( nX==mnX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
                     // find start of merged cell
                     bIsMerged = true;
-                    SCROW nY = pRowInfo[nArrY].nRowNo;
+                    SCROW nY = mpRowInfo[nArrY].nRowNo;
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
-                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, mnTab );
                 }
 
                 std::shared_ptr<sc::Sparkline> pSparkline;
-                ScAddress aCurrentAddress(nX, pRowInfo[nArrY].nRowNo, nTab);
+                ScAddress aCurrentAddress(nX, mpRowInfo[nArrY].nRowNo, mnTab);
 
-                if (!mpDoc->ColHidden(nX, nTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
+                if (!mpDoc->ColHidden(nX, mnTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-                    const tools::Long nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+                    const tools::Long nWidth = mpRowInfo[0].basicCellInfo(nX).nWidth;
                     const tools::Long nHeight = pThisRowInfo->nHeight;
 
                     Point aPoint(nPosX, nPosY);
                     Size aSize(nWidth, nHeight);
 
                     sc::SparklineRenderer renderer(*mpDoc);
-                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), nOneX, nOneY, double(aZoomX), double(aZoomY));
+                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), nOneX, nOneY, double(maZoomX), double(maZoomY));
                 }
 
-                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2463,34 +2463,34 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nInitPosX += mnMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY - 1;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY - 1;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             tools::Long nPosX = nInitPosX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
 
-                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                if ( nX==mnX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
                     // find start of merged cell
                     bIsMerged = true;
-                    SCROW nY = pRowInfo[nArrY].nRowNo;
+                    SCROW nY = mpRowInfo[nArrY].nRowNo;
                     SCCOL nMergeX = nX;
                     SCROW nMergeY = nY;
-                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, mnTab );
                 }
 
-                if (!mpDoc->ColHidden(nX, nTab) && mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab)
+                if (!mpDoc->ColHidden(nX, mnTab) && mpDoc->GetNote(nX, mpRowInfo[nArrY].nRowNo, mnTab)
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
                     ScModule* mod = ScModule::get();
@@ -2502,14 +2502,14 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     else
                         rRenderContext.SetFillColor( mod->GetColorConfig().GetColorValue(svtools::CALCCOMMENTS).nColor );
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 1) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - 1) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
                         SCCOL nNextX = nX + 1;
-                        while ( nNextX <= nX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
+                        while ( nNextX <= mnX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
                         {
-                            nMarkX += pRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
+                            nMarkX += mpRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
                             ++nNextX;
                         }
                     }
@@ -2518,21 +2518,21 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                     sal_Int16 nSize = officecfg::Office::Calc::Content::Display::NoteIndicator::get();
                     if (nSize < 1)
                     {
-                       const double fSize(rRenderContext.GetDPIScaleFactor() * aZoomX * 3 + 3);
+                       const double fSize(rRenderContext.GetDPIScaleFactor() * maZoomX * 3 + 3);
                        nSize = static_cast<sal_Int16>(fSize);
                     }
                     Point aPoints[3];
                     aPoints[0] = Point(nMarkX, nPosY);
-                    aPoints[0].setX( bLayoutRTL ? aPoints[0].X() + nSize : aPoints[0].X() - nSize );
+                    aPoints[0].setX( mbLayoutRTL ? aPoints[0].X() + nSize : aPoints[0].X() - nSize );
                     aPoints[1] = Point(nMarkX, nPosY);
                     aPoints[2] = Point(nMarkX, nPosY + nSize);
                     tools::Polygon aPoly(3, aPoints);
 
-                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    if ( mbLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < mnScrX+mnScrW ) )
                         rRenderContext.DrawPolygon(aPoly);
                 }
 
-                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2543,22 +2543,22 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
 {
     bool bFirst = true;
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nInitPosX += mnMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             tools::Long nPosX = nInitPosX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
-                if (!mpDoc->ColHidden(nX, nTab) && !mpDoc->GetFormula(nX, pRowInfo[nArrY].nRowNo, nTab).isEmpty()
+                if (!mpDoc->ColHidden(nX, mnTab) && !mpDoc->GetFormula(nX, mpRowInfo[nArrY].nRowNo, mnTab).isEmpty()
                     && (!pInfo->bHOverlapped && !pInfo->bVOverlapped))
                 {
                     if (bFirst)
@@ -2578,33 +2578,33 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
                     tools::Long nMarkY = nPosY + pThisRowInfo->nHeight - 2;
                     if ( pInfo->bMerged )
                     {
-                        for (SCSIZE nNextY=nArrY+1; nNextY+1<nArrCount; nNextY++)
+                        for (SCSIZE nNextY=nArrY+1; nNextY+1<mnArrCount; nNextY++)
                         {
                             bool bVOver;
-                            if (pRowInfo[nNextY + 1].nRowNo == (pRowInfo[nNextY].nRowNo + 1)) {
-                                bVOver = pRowInfo[nNextY].cellInfo(nX).bVOverlapped;
+                            if (mpRowInfo[nNextY + 1].nRowNo == (mpRowInfo[nNextY].nRowNo + 1)) {
+                                bVOver = mpRowInfo[nNextY].cellInfo(nX).bVOverlapped;
                             } else {
-                                bVOver = mpDoc->GetAttr(nX,nNextY,nTab,ATTR_MERGE_FLAG)->IsVerOverlapped();
+                                bVOver = mpDoc->GetAttr(nX,nNextY,mnTab,ATTR_MERGE_FLAG)->IsVerOverlapped();
                             }
                             if (!bVOver) break;
-                            nMarkY += pRowInfo[nNextY].nHeight;
+                            nMarkY += mpRowInfo[nNextY].nHeight;
                         }
                     }
                     // DPI/ZOOM 100/100 => 10, 100/50 => 7, 100/150 => 13
                     // DPI/ZOOM 150/100 => 13, 150/50 => 8.5, 150/150 => 17.5
-                    const double nSize( rRenderContext.GetDPIScaleFactor() * aZoomX * 6 + 4);
+                    const double nSize( rRenderContext.GetDPIScaleFactor() * maZoomX * 6 + 4);
                     Point aPoints[3];
                     aPoints[0] = Point(nMarkX, nMarkY);
-                    aPoints[0].setX( bLayoutRTL ? aPoints[0].X() - nSize : aPoints[0].X() + nSize );
+                    aPoints[0].setX( mbLayoutRTL ? aPoints[0].X() - nSize : aPoints[0].X() + nSize );
                     aPoints[1] = Point(nMarkX, nMarkY);
                     aPoints[2] = Point(nMarkX, nMarkY - nSize);
                     tools::Polygon aPoly(3, aPoints);
 
-                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    if ( mbLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < mnScrX+mnScrW ) )
                         rRenderContext.DrawPolygon(aPoly);
                 }
 
-                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2617,64 +2617,64 @@ void ScOutputData::AddPDFNotes()
     if ( !pPDFData || !pPDFData->GetIsExportNotes() )
         return;
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         tools::Long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += mnMirrorW - nOneX;
     }
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             tools::Long nPosX = nInitPosX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
-                SCROW nY = pRowInfo[nArrY].nRowNo;
+                SCROW nY = mpRowInfo[nArrY].nRowNo;
                 SCCOL nMergeX = nX;
                 SCROW nMergeY = nY;
 
-                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                if ( nX==mnX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
                     // find start of merged cell
                     bIsMerged = true;
-                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, mnTab );
                     // use origin's pCell for NotePtr test below
                 }
 
-                ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
+                ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, mnTab);
 
                 if ( pNote && ( bIsMerged || ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     tools::Long nNoteWidth = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     tools::Long nNoteHeight = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTY );
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - nNoteWidth ) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( mpRowInfo[0].basicCellInfo(nX).nWidth - nNoteWidth ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
                         SCCOL nNextX = nX + 1;
-                        while ( nNextX <= nX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
+                        while ( nNextX <= mnX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
                         {
-                            nMarkX += pRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
+                            nMarkX += mpRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
                             ++nNextX;
                         }
                     }
-                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    if ( mbLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < mnScrX+mnScrW ) )
                     {
                         tools::Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
 
                         vcl::pdf::PDFNote aNote;
 
                         // Note title is the cell address (as on printed note pages)
-                        ScAddress aAddress( nMergeX, nMergeY, nTab );
+                        ScAddress aAddress( nMergeX, nMergeY, mnTab );
                         aNote.maTitle = aAddress.Format(ScRefFlags::VALID, mpDoc, mpDoc->GetAddressConvention());
 
                         // Content has to be a simple string without line breaks
@@ -2689,7 +2689,7 @@ void ScOutputData::AddPDFNotes()
 
                         SdrCaptionObj* pCaption = pNote->GetCaption();
                         tools::Rectangle aCaptionRect(pCaption->GetLogicRect());
-                        Point aPoint(aCaptionRect.getX() + nScrX, aCaptionRect.getY() + nScrY);
+                        Point aPoint(aCaptionRect.getX() + mnScrX, aCaptionRect.getY() + mnScrY);
                         Size aSize(aCaptionRect.GetWidth(), aCaptionRect.GetHeight());
                         tools::Rectangle aPopupRect(aPoint, aSize);
 
@@ -2700,7 +2700,7 @@ void ScOutputData::AddPDFNotes()
                     }
                 }
 
-                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2709,7 +2709,7 @@ void ScOutputData::AddPDFNotes()
 
 void ScOutputData::DrawClipMarks()
 {
-    if (!bAnyClipped)
+    if (!mbAnyClipped)
         return;
 
     ScModule* mod = ScModule::get();
@@ -2718,21 +2718,21 @@ void ScOutputData::DrawClipMarks()
 
     DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
 
-    tools::Long nInitPosX = nScrX;
-    if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
-    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nInitPosX = mnScrX;
+    if ( mbLayoutRTL )
+        nInitPosX += mnMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
 
     tools::Rectangle aCellRect;
-    tools::Long nPosY = nScrY;
-    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    tools::Long nPosY = mnScrY;
+    for (SCSIZE nArrY=1; nArrY+1<mnArrCount; nArrY++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &mpRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             SCROW nY = pThisRowInfo->nRowNo;
             tools::Long nPosX = nInitPosX;
-            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            for (SCCOL nX=mnX1; nX<=mnX2; nX++)
             {
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 if (pInfo->nClipMark != ScClipMark::NONE)
@@ -2747,36 +2747,36 @@ void ScOutputData::DrawClipMarks()
                         tools::Long nStartPosY = nPosY;
 
                         while ( nOverX > 0 && ( mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Hor ) )
+                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Hor ) )
                         {
                             --nOverX;
-                            nStartPosX -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
+                            nStartPosX -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,mnTab) * mnPPTX );
                         }
 
                         while ( nOverY > 0 && ( mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Ver ) )
+                                nOverX, nOverY, mnTab, ATTR_MERGE_FLAG )->GetValue() & ScMF::Ver ) )
                         {
                             --nOverY;
-                            nStartPosY -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                            nStartPosY -= nLayoutSign * static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,mnTab) * mnPPTY );
                         }
 
-                        tools::Long nOutWidth = static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
-                        tools::Long nOutHeight = static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                        tools::Long nOutWidth = static_cast<tools::Long>( mpDoc->GetColWidth(nOverX,mnTab) * mnPPTX );
+                        tools::Long nOutHeight = static_cast<tools::Long>( mpDoc->GetRowHeight(nOverY,mnTab) * mnPPTY );
 
-                        const ScMergeAttr* pMerge = mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
+                        const ScMergeAttr* pMerge = mpDoc->GetAttr( nOverX, nOverY, mnTab, ATTR_MERGE );
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
-                            nOutWidth += mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX;
+                            nOutWidth += mpDoc->GetColWidth(nOverX+i,mnTab) * mnPPTX;
                         SCROW nCountY = pMerge->GetRowMerge();
-                        nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                        nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, mnTab, mnPPTY);
 
-                        if ( bLayoutRTL )
+                        if ( mbLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
                         aCellRect = tools::Rectangle( Point( nStartPosX, nStartPosY ), Size( nOutWidth, nOutHeight ) );
                     }
                     else
                     {
-                        tools::Long nOutWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+                        tools::Long nOutWidth = mpRowInfo[0].basicCellInfo(nX).nWidth;
                         tools::Long nOutHeight = pThisRowInfo->nHeight;
 
                         if ( pInfo->bMerged && pInfo->pPatternAttr )
@@ -2787,13 +2787,13 @@ void ScOutputData::DrawClipMarks()
                                     &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
-                                nOutWidth += mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX;
+                                nOutWidth += mpDoc->GetColWidth(nOverX+i,mnTab) * mnPPTX;
                             SCROW nCountY = pMerge->GetRowMerge();
-                            nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                            nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, mnTab, mnPPTY);
                         }
 
                         tools::Long nStartPosX = nPosX;
-                        if ( bLayoutRTL )
+                        if ( mbLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
                         // #i80447# create aCellRect from two points in case nOutWidth is 0
                         aCellRect = tools::Rectangle( Point( nStartPosX, nPosY ),
@@ -2801,7 +2801,7 @@ void ScOutputData::DrawClipMarks()
                     }
 
                     aCellRect.AdjustBottom( -1 );    // don't paint over the cell grid
-                    if ( bLayoutRTL )
+                    if ( mbLayoutRTL )
                         aCellRect.AdjustLeft(1 );
                     else
                         aCellRect.AdjustRight( -1 );
@@ -2817,16 +2817,16 @@ void ScOutputData::DrawClipMarks()
                     else
                         mpDev->SetDrawMode( nOldDrawMode | DrawModeFlags::BlackLine );
 
-                    if (bVertical)
+                    if (mbVertical)
                     {
-                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Bottom : ScClipMark::Top))
+                        if (pInfo->nClipMark & (mbLayoutRTL ? ScClipMark::Bottom : ScClipMark::Top))
                         {
                             //  visually top
                             tools::Rectangle aMarkRect = aCellRect;
                             aMarkRect.SetBottom(aCellRect.Top() + nMarkPixel - 1);
                             SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true, true);
                         }
-                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Top : ScClipMark::Bottom))
+                        if (pInfo->nClipMark & (mbLayoutRTL ? ScClipMark::Top : ScClipMark::Bottom))
                         {
                             //  visually bottom
                             tools::Rectangle aMarkRect = aCellRect;
@@ -2837,7 +2837,7 @@ void ScOutputData::DrawClipMarks()
                     }
                     else
                     {
-                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Right : ScClipMark::Left))
+                        if (pInfo->nClipMark & (mbLayoutRTL ? ScClipMark::Right : ScClipMark::Left))
                         {
                             //  visually left
                             tools::Rectangle aMarkRect = aCellRect;
@@ -2845,7 +2845,7 @@ void ScOutputData::DrawClipMarks()
                             SvxFont::DrawArrow(*mpDev, aMarkRect, aMarkSize, aArrowFillCol, true,
                                 false);
                         }
-                        if (pInfo->nClipMark & (bLayoutRTL ? ScClipMark::Left : ScClipMark::Right))
+                        if (pInfo->nClipMark & (mbLayoutRTL ? ScClipMark::Left : ScClipMark::Right))
                         {
                             //  visually right
                             tools::Rectangle aMarkRect = aCellRect;
@@ -2855,7 +2855,7 @@ void ScOutputData::DrawClipMarks()
                         }
                     }
                 }
-                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+                nPosX += mpRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;

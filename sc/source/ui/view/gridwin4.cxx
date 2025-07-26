@@ -714,13 +714,13 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                 && comphelper::LibreOfficeKit::isCompatFlagSet(
                                        comphelper::LibreOfficeKit::Compat::scNoGridBackground);
 
-    SCTAB nTab = aOutputData.nTab;
-    SCCOL nX1 = aOutputData.nX1;
-    SCROW nY1 = aOutputData.nY1;
-    SCCOL nX2 = aOutputData.nX2;
-    SCROW nY2 = aOutputData.nY2;
-    tools::Long nScrX = aOutputData.nScrX;
-    tools::Long nScrY = aOutputData.nScrY;
+    SCTAB nTab = aOutputData.mnTab;
+    SCCOL nX1 = aOutputData.mnX1;
+    SCROW nY1 = aOutputData.mnY1;
+    SCCOL nX2 = aOutputData.mnX2;
+    SCROW nY2 = aOutputData.mnY2;
+    tools::Long nScrX = aOutputData.mnScrX;
+    tools::Long nScrY = aOutputData.mnScrY;
 
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
     Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID ).nColor );
@@ -1108,11 +1108,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 Point aOrigin = aOriginalMode.GetOrigin();
                 if (bLayoutRTL)
                     aOrigin.setX(-aOrigin.getX()
-                                 + o3tl::toTwips(aOutputData.nScrX + aOutputData.GetScrW(), o3tl::Length::px));
+                                 + o3tl::toTwips(aOutputData.mnScrX + aOutputData.GetScrW(), o3tl::Length::px));
                 else
-                    aOrigin.AdjustX(o3tl::toTwips(aOutputData.nScrX, o3tl::Length::px));
+                    aOrigin.AdjustX(o3tl::toTwips(aOutputData.mnScrX, o3tl::Length::px));
 
-                aOrigin.AdjustY(o3tl::toTwips(aOutputData.nScrY, o3tl::Length::px));
+                aOrigin.AdjustY(o3tl::toTwips(aOutputData.mnScrY, o3tl::Length::px));
                 aOrigin = o3tl::convert(aOrigin, o3tl::Length::twip, o3tl::Length::mm100);
                 // keep into account the zoom factor
                 aOrigin = aOrigin.scale(

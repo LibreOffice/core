@@ -194,41 +194,41 @@ private:
     VclPtr<OutputDevice> mpRefDevice;  // printer if used for preview
     VclPtr<OutputDevice> pFmtDevice;   // reference for text formatting
     ScTableInfo& mrTabInfo;
-    RowInfo* pRowInfo;          // Info block
-    SCSIZE nArrCount;           // occupied lines in info block
+    RowInfo* mpRowInfo;          // Info block
+    SCSIZE mnArrCount;           // occupied lines in info block
     ScDocument* mpDoc;          // Document
-    SCTAB nTab;                 // sheet
-    tools::Long nScrX;                 // Output Startpos. (Pixel)
-    tools::Long nScrY;
-    tools::Long nScrW;                 // Output size (Pixel)
-    tools::Long nScrH;
-    tools::Long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    SCCOL nX1;                  // Start-/End coordinates
-    SCROW nY1;                  //  ( incl. hidden )
-    SCCOL nX2;
-    SCROW nY2;
-    SCCOL nVisX1;               // Start-/End coordinates
-    SCROW nVisY1;               //  ( visible range )
-    SCCOL nVisX2;
-    SCROW nVisY2;
-    ScOutputType eType;         // Screen/Printer ...
+    SCTAB mnTab;                 // sheet
+    tools::Long mnScrX;                 // Output Startpos. (Pixel)
+    tools::Long mnScrY;
+    tools::Long mnScrW;                 // Output size (Pixel)
+    tools::Long mnScrH;
+    tools::Long mnMirrorW;              // Visible output width for mirroring (default: nScrW)
+    SCCOL mnX1;                  // Start-/End coordinates
+    SCROW mnY1;                  //  ( incl. hidden )
+    SCCOL mnX2;
+    SCROW mnY2;
+    SCCOL mnVisX1;               // Start-/End coordinates
+    SCROW mnVisY1;               //  ( visible range )
+    SCCOL mnVisX2;
+    SCROW mnVisY2;
+    ScOutputType meType;         // Screen/Printer ...
     double mnPPTX;              // Pixel per Twips
     double mnPPTY;
-    Fraction aZoomX;
-    Fraction aZoomY;
+    Fraction maZoomX;
+    Fraction maZoomY;
 
-    ScTabViewShell* pViewShell; // for connect from visible plug-ins
+    ScTabViewShell* mpViewShell; // for connect from visible plug-ins
 
-    FmFormView* pDrawView;      // SdrView to paint to
+    FmFormView* mpDrawView;      // SdrView to paint to
 
-    bool bEditMode;             // InPlace edited cell - do not output
-    SCCOL nEditCol;
-    SCROW nEditRow;
+    bool mbEditMode;             // InPlace edited cell - do not output
+    SCCOL mnEditCol;
+    SCROW mnEditRow;
 
-    bool bMetaFile;             // Output to metafile (not pixels!)
+    bool mbMetaFile;             // Output to metafile (not pixels!)
 
-    bool bPagebreakMode;        // Page break preview
-    bool bSolidBackground;      // white instead of transparent
+    bool mbPagebreakMode;        // Page break preview
+    bool mbSolidBackground;      // white instead of transparent
 
     bool mbUseStyleColor;
     bool mbForceAutoColor;
@@ -238,19 +238,19 @@ private:
     std::optional<Color> mxTextColor;
     std::optional<Color> mxFormulaColor;
 
-    Color   aGridColor;
+    Color   maGridColor;
 
     bool    mbShowNullValues;
     bool    mbShowFormulas;
-    bool    bShowSpellErrors;   // Show spelling errors in EditObjects
-    bool    bMarkClipped;
+    bool    mbShowSpellErrors;   // Show spelling errors in EditObjects
+    bool    mbMarkClipped;
 
-    bool    bSnapPixel;
+    bool    mbSnapPixel;
 
-    bool    bAnyClipped;        // internal
-    bool    bVertical;
-    bool    bTabProtected;
-    bool    bLayoutRTL;
+    bool    mbAnyClipped;        // internal
+    bool    mbVertical;
+    bool    mbTabProtected;
+    bool    mbLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
@@ -350,11 +350,11 @@ public:
 
     void    SetRefDevice( OutputDevice* pRDev );
     void    SetFmtDevice( OutputDevice* pRDev );
-    void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
+    void    SetViewShell( ScTabViewShell* pSh ) { mpViewShell = pSh; }
 
-    void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
+    void    SetDrawView( FmFormView* pNew )     { mpDrawView = pNew; }
 
-    void    SetSolidBackground( bool bSet )     { bSolidBackground = bSet; }
+    void    SetSolidBackground( bool bSet )     { mbSolidBackground = bSet; }
     void    SetUseStyleColor( bool bSet );
 
     void    SetEditCell( SCCOL nCol, SCROW nRow );
@@ -366,8 +366,8 @@ public:
     void    SetShowFormulas   ( bool bSet );
     void    SetShowSpellErrors( bool bSet );
     void    SetMirrorWidth( tools::Long nNew );
-    tools::Long    GetScrW() const     { return nScrW; }
-    tools::Long    GetScrH() const     { return nScrH; }
+    tools::Long    GetScrW() const     { return mnScrW; }
+    tools::Long    GetScrH() const     { return mnScrH; }
 
     void    SetSnapPixel();
 
