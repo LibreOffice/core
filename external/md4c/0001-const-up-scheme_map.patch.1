@@ -1,0 +1,25 @@
+From 66526366b67e3b42eb4c30cefa6f5efdff690c8e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sat, 26 Jul 2025 21:38:34 +0100
+Subject: [PATCH] const up scheme_map
+
+---
+ src/md4c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/md4c.c b/src/md4c.c
+index e3f5cf9..947f5c9 100644
+--- a/src/md4c.c
++++ b/src/md4c.c
+@@ -3238,7 +3238,7 @@ md_collect_marks(MD_CTX* ctx, const MD_LINE* lines, MD_SIZE n_lines, int table_m
+ 
+             /* A potential permissive URL autolink. */
+             if(ch == _T(':')) {
+-                static struct {
++                static const struct {
+                     const CHAR* scheme;
+                     SZ scheme_size;
+                     const CHAR* suffix;
+-- 
+2.49.0
+

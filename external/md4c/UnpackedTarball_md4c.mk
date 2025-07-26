@@ -10,4 +10,12 @@
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,md4c))
 $(eval $(call gb_UnpackedTarball_set_tarball,md4c,$(MD4C_TARBALL)))
 
+# 0001-const-up-scheme_map.patch.1 effort to upstream at:
+# https://github.com/mity/md4c/pull/291
+
+$(eval $(call gb_UnpackedTarball_add_patches,md4c,\
+	external/md4c/0001-const-up-scheme_map.patch.1 \
+))
+
+
 # vim: set noet sw=4 ts=4:
