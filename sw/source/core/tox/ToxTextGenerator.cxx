@@ -178,7 +178,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
     // FIXME this operates directly on the node text
     OUString & rText = const_cast<OUString&>(pTOXNd->GetText());
     rText.clear();
-    OUString rAltText;
+    OUString sAltText;
     for(sal_uInt16 nIndex = indexOfEntryToProcess; nIndex < indexOfEntryToProcess + numberOfEntriesToProcess; nIndex++)
     {
         if(nIndex > indexOfEntryToProcess)
@@ -215,7 +215,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
             {
                 HandledTextToken htt = HandleTextToken(rBase, rDoc.GetAttrPool(), pLayout);
                 ApplyHandledTextToken(htt, *pTOXNd);
-                rAltText += htt.text;
+                sAltText += htt.text;
             }
             break;
 
@@ -225,7 +225,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
                 rText += GetNumStringOfFirstNode(rBase, true, MAXLEVEL, pLayout);
                 HandledTextToken htt = HandleTextToken(rBase, rDoc.GetAttrPool(), pLayout);
                 ApplyHandledTextToken(htt, *pTOXNd);
-                rAltText += htt.text;
+                sAltText += htt.text;
             }
             break;
 
@@ -252,7 +252,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
 
             case TOKEN_LINK_START:
                 mLinkProcessor->StartNewLink(rText.getLength(), aToken.sCharStyleName);
-                rAltText = "";
+                sAltText = "";
                 break;
 
             case TOKEN_LINK_END:
@@ -265,7 +265,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
                         ++iter->second;
                         url = "#" + OUString::number(iter->second) + url;
                     }
-                    mLinkProcessor->CloseLink(rText.getLength(), url, rAltText, /*bRelative=*/true);
+                    mLinkProcessor->CloseLink(rText.getLength(), url, sAltText, /*bRelative=*/true);
                 }
                 break;
 
@@ -286,7 +286,7 @@ ToxTextGenerator::GenerateText(SwDoc& rDoc,
                         OUString aURL = SwTOXAuthority::GetSourceURL(
                             rAuthority.GetText(AUTH_FIELD_URL, pLayout));
 
-                        mLinkProcessor->CloseLink(rText.getLength(), aURL, rAltText, /*bRelative=*/false);
+                        mLinkProcessor->CloseLink(rText.getLength(), aURL, sAltText, /*bRelative=*/false);
                     }
                 }
                 break;

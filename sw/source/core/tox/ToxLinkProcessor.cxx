@@ -24,7 +24,7 @@ ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const UIName& characterS
     m_oStartedLink.emplace(startPosition, characterStyle);
 }
 
-void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, const OUString& sAltText, bool bRelative)
+void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, const OUString& rAltText, bool bRelative)
 {
     if (!m_oStartedLink)
     {
@@ -58,7 +58,7 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, con
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
     pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
-    pClosedLink->mINetFormat.SetName(sAltText);
+    pClosedLink->mINetFormat.SetName(rAltText);
 
     m_ClosedLinks.push_back(std::move(pClosedLink));
     m_oStartedLink.reset();
