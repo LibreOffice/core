@@ -2210,21 +2210,14 @@ namespace
         gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
         if (GTK_IS_GRID(pParent))
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
                     "left-attach", &nLeftAttach,
                     "top-attach", &nTopAttach,
                     "width", &nWidth,
                     "height", &nHeight,
                     nullptr);
-#else
-            gtk_grid_query_child(GTK_GRID(pParent), pWidget,
-                                 &nLeftAttach, &nTopAttach,
-                                 &nWidth, &nHeight);
-#endif
         }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         gboolean bExpand(false), bFill(false);
         GtkPackType ePackType(GTK_PACK_START);
         guint nPadding(0);
@@ -2239,18 +2232,12 @@ namespace
                     "position", &nPosition,
                     nullptr);
         }
-#endif
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // for gtk3 remove before replacement inserted, or there are warnings
         // from GTK_BIN about having two children
         container_remove(pParent, pWidget);
-#endif
 
         gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
-#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_no_show_all(pReplacement, gtk_widget_get_no_show_all(pWidget));
-#endif
 
         int nReqWidth, nReqHeight;
         gtk_widget_get_size_request(pWidget, &nReqWidth, &nReqHeight);
@@ -2284,20 +2271,14 @@ namespace
         }
         else if (GTK_IS_BOX(pParent))
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_box_pack_start(GTK_BOX(pParent), pReplacement, bExpand, bFill, nPadding);
             gtk_container_child_set(GTK_CONTAINER(pParent), pReplacement,
                     "pack-type", ePackType,
                     "position", nPosition,
                     nullptr);
-#else
-            gtk_box_insert_child_after(GTK_BOX(pParent), pReplacement, pWidget);
-#endif
         }
-#if !GTK_CHECK_VERSION(4, 0, 0)
         else
             gtk_container_add(GTK_CONTAINER(pParent), pReplacement);
-#endif
 
         if (gtk_widget_get_hexpand_set(pWidget))
             gtk_widget_set_hexpand(pReplacement, gtk_widget_get_hexpand(pWidget));
@@ -2308,17 +2289,10 @@ namespace
         gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
         gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-        // for gtk4 remove after replacement inserted so we could use gtk_box_insert_child_after
-        container_remove(pParent, pWidget);
-#endif
-
         // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
     }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     void insertAsParent(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
         g_object_ref(pWidget);
