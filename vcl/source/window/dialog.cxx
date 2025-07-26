@@ -74,16 +74,13 @@ static OString ImplGetDialogText( Dialog* pDialog )
 {
     OUString aErrorStr(pDialog->GetText());
 
-    OUString sMessage;
     if (MessageDialog* pMessDialog = dynamic_cast<MessageDialog*>(pDialog))
     {
-        sMessage = pMessDialog->get_primary_text();
+        const OUString sMessage = pMessDialog->get_primary_text();
+        if (!sMessage.isEmpty())
+            aErrorStr += ", " + sMessage;
     }
 
-    if (!sMessage.isEmpty())
-    {
-        aErrorStr += ", " + sMessage;
-    }
     return OUStringToOString(aErrorStr, RTL_TEXTENCODING_UTF8);
 }
 
