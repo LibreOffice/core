@@ -324,6 +324,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         extractRadioButtonGroup(rId, rMap);
         pObject = pRadioButton;
     }
+    else if (sName == u"GtkScale")
+    {
+        QSlider* pSlider = new QSlider(pParentWidget);
+        setScaleProperties(*pSlider, rMap);
+        pObject = pSlider;
+    }
     else if (sName == u"GtkScrollbar")
     {
         pObject = new QScrollBar(pParentWidget);
@@ -340,12 +346,6 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QFrame* pFrame = new QFrame(pParentWidget);
         pFrame->setFrameShape(bVertical ? QFrame::VLine : QFrame::HLine);
         pObject = pFrame;
-    }
-    else if (sName == u"GtkScale")
-    {
-        QSlider* pSlider = new QSlider(pParentWidget);
-        setScaleProperties(*pSlider, rMap);
-        pObject = pSlider;
     }
     else if (sName == u"GtkSeparatorToolItem")
     {
