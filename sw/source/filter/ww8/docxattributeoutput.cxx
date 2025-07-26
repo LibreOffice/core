@@ -8434,9 +8434,9 @@ void DocxAttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
         m_pSerializer->singleElementNS(XML_w, XML_vanish, FSNS(XML_w, XML_val), "false");
 }
 
-void DocxAttributeOutput::CharBorder(
-    const SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow )
+void DocxAttributeOutput::CharBorder(const SvxBoxItem& rBox)
 {
+    const auto [ pAllBorder, nDist, bShadow ] = FormatCharBorder(rBox);
     css::table::BorderLine2 rStyleBorder;
     const SvxBoxItem* pInherited = nullptr;
     if ( GetExport().m_bStyDef && GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom() )
