@@ -195,12 +195,12 @@
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="link_btn_1">
-                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="label" translatable="no">LibreOffice</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="relief">none</property>
-                    <property name="uri">https://www.collaboraoffice.com/</property>
+                    <property name="uri">https://www.libreoffice.org/</property>
                     <property name="visited">True</property>
                   </object>
                   <packing>
@@ -210,13 +210,13 @@
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="link_btn_2">
-                    <property name="label" translatable="no">Collabora Office</property>
+                    <property name="label" translatable="no">LibreOffice</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="relief">none</property>
-                    <property name="uri">https://www.collaboraoffice.com/</property>
+                    <property name="uri">https://www.libreoffice.org/</property>
                     <property name="visited">True</property>
                   </object>
                   <packing>
