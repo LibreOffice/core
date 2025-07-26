@@ -79,9 +79,6 @@ public:
 
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OUString& id) override;
 
-    virtual std::unique_ptr<weld::MenuToggleButton>
-    weld_menu_toggle_button(const OUString& id) override;
-
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OUString& id) override;
 
     virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OUString& id) override;

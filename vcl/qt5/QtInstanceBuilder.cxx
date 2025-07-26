@@ -363,12 +363,6 @@ std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUSt
     return xRet;
 }
 
-std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_button(const OUString&)
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
 std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUString& rId)
 {
     SolarMutexGuard g;

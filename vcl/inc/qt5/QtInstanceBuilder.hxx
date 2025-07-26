@@ -44,8 +44,6 @@ public:
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OUString& rId) override;
     virtual std::unique_ptr<weld::Button> weld_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OUString& rId) override;
-    virtual std::unique_ptr<weld::MenuToggleButton>
-    weld_menu_toggle_button(const OUString&) override;
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OUString& rId) override;
