@@ -30,7 +30,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 namespace basegfx::utils
 {

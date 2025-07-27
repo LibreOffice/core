@@ -35,7 +35,6 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -28,7 +28,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <comphelper/random.hxx>
 #include <rtl/math.hxx>
 
 using namespace ::basegfx;

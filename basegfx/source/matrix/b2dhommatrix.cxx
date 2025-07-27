@@ -22,7 +22,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <memory>
 
 namespace basegfx
 {

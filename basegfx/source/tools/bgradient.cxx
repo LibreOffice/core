@@ -10,7 +10,6 @@
 #include <basegfx/utils/bgradient.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
-#include <com/sun/star/awt/Gradient2.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <map>
 

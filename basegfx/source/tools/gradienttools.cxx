@@ -21,7 +21,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <com/sun/star/awt/Gradient2.hpp>
 #include <osl/endian.h>
 
 #include <algorithm>

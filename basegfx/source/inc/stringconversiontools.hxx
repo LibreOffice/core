@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <sal/types.h>
-#include <rtl/ustring.hxx>
 
 namespace basegfx::internal
     {
