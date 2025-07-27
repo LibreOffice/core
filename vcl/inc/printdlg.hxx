@@ -42,7 +42,7 @@ namespace vcl
             Size                maPreviewSize;
             sal_Int32           mnDPIX;
             sal_Int32           mnDPIY;
-            BitmapEx            maPreviewBitmap;
+            Bitmap              maPreviewBitmap;
             OUString            maReplacementString;
             bool                mbGreyscale;
 
