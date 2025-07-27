@@ -573,7 +573,7 @@ private:
 
         void         ImpGetLine(tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color nColor1, Color nColor2, Color nColorDist,
-                                SvxBorderLineStyle nStyle, BitmapEx& rBmp);
+                                SvxBorderLineStyle nStyle, Bitmap& rBmp);
 
         void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
 
@@ -618,7 +618,7 @@ private:
 
     void LineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color aColor1, Color aColor2, Color aColorDist,
-                                SvxBorderLineStyle nStyle, BitmapEx& rBmp )
+                                SvxBorderLineStyle nStyle, Bitmap& rBmp )
     {
         auto nMinWidth = GetDrawingArea()->get_ref_device().approximate_digit_width() * COMBO_WIDTH_IN_CHARS;
         Size aSize(nMinWidth, aTxtSize.Height());
@@ -773,7 +773,7 @@ private:
             auto& pData = m_vLineList[ n ];
             if ( pData->GetMinWidth() <= m_nWidth )
             {
-                BitmapEx aBmp;
+                Bitmap aBmp;
                 ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
                         pData->GetLine2ForWidth( m_nWidth ),
                         pData->GetDistForWidth( m_nWidth ),
