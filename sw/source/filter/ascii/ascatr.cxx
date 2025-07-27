@@ -266,13 +266,11 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
         OUString level;
         if (!bIsOutlineNumRule)
         {
-            //ensures indentation is not applied to styles such as headings aligned at 0.00",in case of pasting as unformatted text.
-            //checks the left margin & the left margin for tab values is set to 0 & outline level > 0
-            bool bSkipIndentation = false;
-            if (rNd.GetLeftMarginWithNum() == 0 && rNd.GetAttrOutlineLevel() > 0 && rNd.GetLeftMarginForTabCalculation() == 0)
-               bSkipIndentation = true;
+            bool bSkipIndentationForHeadings = (rNd.GetLeftMarginWithNum() == 0)  //ensures the left margin of current node or numbering level is 0
+                                               && (rNd.GetAttrOutlineLevel() > 0) //all heading styles have outline level > 0
+                                               && (rNd.GetLeftMarginForTabCalculation() == 0); //ensures no indentation from tab stops is applied (left margin is 0)
 
-            if(!bSkipIndentation)
+            if(!bSkipIndentationForHeadings)
             {
                 // indent each numbering level by 4 spaces
                 for (int i = 0; i <= rNd.GetActualListLevel(); ++i)
