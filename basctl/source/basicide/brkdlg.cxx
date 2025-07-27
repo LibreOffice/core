@@ -21,8 +21,8 @@
 
 #include "breakpoint.hxx"
 #include "brkdlg.hxx"
-#include <basobj.hxx>
 
+#include <basctl/basctldllpublic.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>

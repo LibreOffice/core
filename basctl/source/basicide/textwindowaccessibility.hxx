@@ -26,20 +26,14 @@
 #include <vcl/textview.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
-#include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
 #include <unordered_map>
 

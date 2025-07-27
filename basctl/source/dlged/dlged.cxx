@@ -39,7 +39,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <svl/itempool.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdpagv.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

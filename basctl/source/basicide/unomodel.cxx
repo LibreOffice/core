@@ -22,8 +22,6 @@
 #include <basidesh.hxx>
 #include <iderdll.hxx>
 #include <com/sun/star/io/IOException.hpp>
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>

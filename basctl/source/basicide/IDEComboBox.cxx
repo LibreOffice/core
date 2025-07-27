@@ -19,13 +19,13 @@
 
 #include <strings.hrc>
 #include <basidesh.hxx>
-#include <basobj.hxx>
 #include <IDEComboBox.hxx>
 #include <iderdll.hxx>
 #include <iderid.hxx>
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
 
+#include <basctl/basctldllpublic.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>

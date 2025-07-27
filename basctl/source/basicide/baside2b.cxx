@@ -33,6 +33,7 @@
 #include <basobj.hxx>
 #include <iderdll.hxx>
 
+#include <basctl/basctldllpublic.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -40,7 +41,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/string.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
@@ -53,7 +53,6 @@
 #include <vcl/weldutils.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/textview.hxx>

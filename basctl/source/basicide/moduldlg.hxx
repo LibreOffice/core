@@ -27,8 +27,6 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <basctl/basctldllpublic.hxx>
-
 class SvxPasswordDialog;
 
 namespace basctl

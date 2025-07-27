@@ -36,6 +36,7 @@
 #include <localizationmgr.hxx>
 #include <dlged.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <basctl/basctldllpublic.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>

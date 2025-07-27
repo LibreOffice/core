@@ -19,13 +19,10 @@
 
 #include <basidesh.hxx>
 #include <iderdll.hxx>
+#include <iderid.hxx>
 #include <ColorSchemeDialog.hxx>
-#include <strings.hrc>
 #include <vcl/weld.hxx>
-#include <vcl/settings.hxx>
-#include <tools/debug.hxx>
 #include "baside2.hxx"
-#include <officecfg/Office/BasicIDE.hxx>
 #include <BasicColorConfig.hxx>
 #include <memory>
 

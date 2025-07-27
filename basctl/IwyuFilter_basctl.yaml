@@ -6,6 +6,10 @@ excludelist:
     - svx/svxids.hrc
     - svx/unomid.hxx
     - editeng/memberids.h
+    basctl/source/inc/basobj.hxx:
+    # TODO this is needed to avoid this mysterious linking error in cui...
+    # MacroManagerDialog.cxx`:(.text+0xff5a):` undefined reference to `basctl::IsValidSbxName(std::basic_string_view<char16_t, std::char_traits<char16_t> >)'
+    - basctl/basctldllpublic.hxx
     basctl/source/basicide/basidesh.cxx:
     # Needed for TypedWhichId defines is basslots.hxx
     - sfx2/dinfdlg.hxx

@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
+#include <basctl/basctldllpublic.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>

@@ -33,6 +33,7 @@
 #include <helpids.h>
 #include <strings.hrc>
 
+#include <basctl/basctldllpublic.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
 #include <basic/sbmeth.hxx>
@@ -71,7 +72,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cassert>
 #include <osl/diagnose.h>
-#include <officecfg/Office/Common.hxx>
 #include <BasicColorConfig.hxx>
 
 namespace basctl

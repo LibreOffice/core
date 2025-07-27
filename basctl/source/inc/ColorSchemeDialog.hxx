@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <utility>
 #include <vcl/weld.hxx>
 
 namespace basctl

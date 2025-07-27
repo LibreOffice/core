@@ -27,17 +27,16 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-class VclSimpleEvent;
+#include "accessibledialogcontrolshape.hxx"
+
 class VclWindowEvent;
 
 namespace basctl
 {
 
 class DialogWindow;
-class DlgEditor;
 class DlgEdModel;
 class DlgEdObj;
-class AccessibleDialogControlShape;
 
 class AccessibleDialogWindow final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,

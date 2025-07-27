@@ -22,7 +22,6 @@
 #include <basctl/sbxitem.hxx>
 #include "ObjectCatalog.hxx"
 
-#include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
 #include <svl/srchitem.hxx>

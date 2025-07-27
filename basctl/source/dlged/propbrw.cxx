@@ -42,7 +42,6 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 
-#include <memory>
 #include <comphelper/sequence.hxx>
 
 namespace basctl

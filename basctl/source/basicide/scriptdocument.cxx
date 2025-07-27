@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <basctl/basctldllpublic.hxx>
 #include <basctl/scriptdocument.hxx>
 #include <basobj.hxx>
 #include <strings.hrc>
@@ -42,7 +43,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 
 #include <basic/basicmanagerrepository.hxx>

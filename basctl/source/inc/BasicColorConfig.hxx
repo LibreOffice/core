@@ -24,9 +24,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/resmgr.hxx>
 #include <svtools/colorcfg.hxx>
 #include "colorscheme.hxx"
-#include "iderid.hxx"
 #include <map>
 
 namespace basctl

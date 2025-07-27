@@ -28,11 +28,11 @@
 #include "baside2.hxx"
 #include <baside3.hxx>
 #include <basidesh.hxx>
-#include <basobj.hxx>
 #include <iderdll.hxx>
 #include "iderdll2.hxx"
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <basctl/basctldllpublic.hxx>
 #include <sal/log.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>

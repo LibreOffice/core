@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <basctl/basctldllpublic.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/filedlghelper.hxx>

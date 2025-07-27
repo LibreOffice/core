@@ -27,6 +27,7 @@
 #include "iderdll2.hxx"
 
 #include "moduldlg.hxx"
+#include <basctl/basctldllpublic.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>

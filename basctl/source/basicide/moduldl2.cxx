@@ -26,6 +26,7 @@
 #include "iderdll2.hxx"
 #include <iderid.hxx>
 #include <basobj.hxx>
+#include <basctl/basctldllpublic.hxx>
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>

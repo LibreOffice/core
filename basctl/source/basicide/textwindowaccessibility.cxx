@@ -33,7 +33,6 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>

@@ -29,10 +29,12 @@
 #include <svtools/imagemgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <basctl/basctldllpublic.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
+#include <vcl/svapp.hxx>
 
 #include <initializer_list>
 #include <memory>

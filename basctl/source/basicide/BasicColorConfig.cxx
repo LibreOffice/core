@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/solar.h>
 #include <BasicColorConfig.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
-
-#include <sal/log.hxx>
 
 namespace basctl
 {

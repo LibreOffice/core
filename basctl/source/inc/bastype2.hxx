@@ -29,7 +29,6 @@
 #include <basctl/sbxitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/svapp.hxx>
 
 
 class SbModule;

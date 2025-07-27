@@ -24,7 +24,6 @@
 #include <layout.hxx>
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
-#include <colorscheme.hxx>
 
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -38,7 +37,6 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <set>
-#include <map>
 #include <string_view>
 
 #include <vcl/textdata.hxx>

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/frame/XController.hpp>
-#include <memory>
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }

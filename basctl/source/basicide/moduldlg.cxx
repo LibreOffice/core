@@ -28,6 +28,7 @@
 #include <basidesh.hxx>
 #include <basobj.hxx>
 
+#include <basctl/basctldllpublic.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>

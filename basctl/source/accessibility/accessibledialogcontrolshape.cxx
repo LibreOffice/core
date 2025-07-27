@@ -22,14 +22,12 @@
 #include <dlgeddef.hxx>
 #include <dlgedview.hxx>
 #include <dlgedobj.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/diagnose_ex.hxx>

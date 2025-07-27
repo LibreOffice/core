@@ -29,8 +29,8 @@
 #define ShellClass_basctl_DocShell
 #include <basslots.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/itemset.hxx>
-#include <svx/svxids.hrc>
 #include <tools/globname.hxx>
 #include <tools/debug.hxx>
 

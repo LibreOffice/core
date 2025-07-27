@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <basctl/basctldllpublic.hxx>
 #include <basctl/scriptdocument.hxx>
 #include <basctl/sbxitem.hxx>
 #include <svtools/scrolladaptor.hxx>
