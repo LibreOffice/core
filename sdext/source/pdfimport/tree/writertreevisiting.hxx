@@ -49,6 +49,7 @@ namespace pdfi
         virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+        virtual void visit( GroupElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
@@ -76,6 +77,7 @@ namespace pdfi
         virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+        virtual void visit( GroupElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
@@ -101,6 +103,7 @@ namespace pdfi
         virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+        virtual void visit( GroupElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
         virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;

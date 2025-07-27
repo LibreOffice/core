@@ -115,6 +115,12 @@ void FrameElement::visitedBy( ElementTreeVisitor&                          rVisi
     rVisitor.visit(*this,rParentIt);
 }
 
+void GroupElement::visitedBy( ElementTreeVisitor&                          rVisitor,
+                              const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt )
+{
+    rVisitor.visit(*this,rParentIt);
+}
+
 void ImageElement::visitedBy( ElementTreeVisitor&                          rVisitor,
                               const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt)
 {

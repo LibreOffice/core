@@ -170,6 +170,16 @@ namespace pdfi
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
     };
 
+    struct GroupElement final : public DrawElement
+    {
+        friend class ElementFactory;
+        GroupElement( Element* pParent, sal_Int32 nGCId )
+        : DrawElement( pParent, nGCId ) {}
+
+    public:
+        virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+    };
+
     struct TextElement final : public GraphicalElement
     {
         friend class ElementFactory;
@@ -298,6 +308,8 @@ namespace pdfi
 
         static FrameElement* createFrameElement( Element* pParent, sal_Int32 nGCId )
         { return new FrameElement( pParent, nGCId ); }
+        static GroupElement* createGroupElement( Element* pParent, sal_Int32 nGCId )
+        { return new GroupElement( pParent, nGCId ); }
         static PolyPolyElement*
             createPolyPolyElement( Element* pParent,
                                    sal_Int32 nGCId,

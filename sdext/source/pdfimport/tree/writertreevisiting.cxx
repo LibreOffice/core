@@ -302,6 +302,11 @@ void WriterXmlEmitter::visit( FrameElement& elem, const std::list< std::unique_p
     m_rEmitContext.rEmitter.endTag( "draw:frame" );
 }
 
+void WriterXmlEmitter::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
+{
+    elem.applyToChildren(*this);
+}
+
 void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )
 {
     elem.updateGeometry();
@@ -431,6 +436,11 @@ void WriterXmlOptimizer::visit( TextElement&, const std::list< std::unique_ptr<E
 }
 
 void WriterXmlOptimizer::visit( FrameElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )
+{
+    elem.applyToChildren(*this);
+}
+
+void WriterXmlOptimizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
     elem.applyToChildren(*this);
 }
@@ -1186,6 +1196,11 @@ void WriterXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
+    elem.applyToChildren(*this);
+}
+
+void WriterXmlFinalizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
+{
     elem.applyToChildren(*this);
 }
 

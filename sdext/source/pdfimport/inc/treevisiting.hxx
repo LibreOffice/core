@@ -30,6 +30,7 @@ namespace pdfi
     struct TextElement;
     struct ParagraphElement;
     struct FrameElement;
+    struct GroupElement;
     struct PolyPolyElement;
     struct ImageElement;
     struct PageElement;
@@ -47,6 +48,7 @@ namespace pdfi
         virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
         virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
         virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+        virtual void visit( GroupElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
         virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
         virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
         virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;

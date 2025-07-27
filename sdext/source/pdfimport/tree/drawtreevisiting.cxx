@@ -277,6 +277,11 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< std::unique_ptr
     m_rEmitContext.rEmitter.endTag( "draw:frame" );
 }
 
+void DrawXmlEmitter::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
+{
+    elem.applyToChildren(*this);
+}
+
 void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )
 {
     elem.updateGeometry();
@@ -400,6 +405,11 @@ void DrawXmlOptimizer::visit( TextElement&, const std::list< std::unique_ptr<Ele
 }
 
 void DrawXmlOptimizer::visit( FrameElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator& )
+{
+    elem.applyToChildren(*this);
+}
+
+void DrawXmlOptimizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
     elem.applyToChildren(*this);
 }
@@ -1003,6 +1013,11 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique_p
         elem.TextStyleId = m_rStyleContainer.getStyleId(style2);
     }
 
+    elem.applyToChildren(*this);
+}
+
+void DrawXmlFinalizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
+{
     elem.applyToChildren(*this);
 }
 
