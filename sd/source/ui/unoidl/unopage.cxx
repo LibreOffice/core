@@ -1156,11 +1156,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     nPgNum++;
                 }
                 std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
-                BitmapEx aBitmap;
+                Bitmap aBitmap;
                 if (xMetaFile && xMetaFile->CreateThumbnail(aBitmap))
                 {
                     SvMemoryStream aMemStream;
-                    WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
+                    WriteDIB(aBitmap, aMemStream, false, false);
                     uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
                     aAny <<= aSeq;
                 }

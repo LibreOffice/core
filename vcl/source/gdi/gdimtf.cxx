@@ -2267,7 +2267,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
     return nSizeBytes;
 }
 
-bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConversion, BmpScaleFlag nScaleFlag) const
+bool GDIMetaFile::CreateThumbnail(Bitmap& rBitmap, BmpConversion eColorConversion, BmpScaleFlag nScaleFlag) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     ScopedVclPtrInstance< VirtualDevice > aVDev;
@@ -2282,8 +2282,8 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
     Size            aSizePix( std::abs( aBRPix.X() - aTLPix.X() ) + 1, std::abs( aBRPix.Y() - aTLPix.Y() ) + 1 );
     sal_uInt32      nMaximumExtent = 512;
 
-    if (!rBitmapEx.IsEmpty())
-        rBitmapEx.SetEmpty();
+    if (!rBitmap.IsEmpty())
+        rBitmap.SetEmpty();
 
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
@@ -2324,7 +2324,7 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         const_cast<GDIMetaFile *>(this)->Play(*aVDev, Point(), aAntialias);
 
         // get paint bitmap
-        BitmapEx aBitmap( aVDev->GetBitmap( aNullPt, aVDev->GetOutputSizePixel() ) );
+        Bitmap aBitmap( aVDev->GetBitmap( aNullPt, aVDev->GetOutputSizePixel() ) );
 
         // scale down the image to the desired size - use the input scaler for the scaling operation
         aBitmap.Scale(aDrawSize, nScaleFlag);
@@ -2334,10 +2334,10 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
         if (aSize.Width() && aSize.Height())
             aBitmap.Convert(eColorConversion);
 
-        rBitmapEx = aBitmap;
+        rBitmap = aBitmap;
     }
 
-    return !rBitmapEx.IsEmpty();
+    return !rBitmap.IsEmpty();
 }
 
 void GDIMetaFile::UseCanvas( bool _bUseCanvas )

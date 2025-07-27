@@ -180,7 +180,7 @@ public:
     SAL_DLLPRIVATE sal_uLong GetSizeBytes() const;
 
     /// Creates an antialiased thumbnail
-    bool            CreateThumbnail(BitmapEx& rBitmapEx,
+    bool            CreateThumbnail(Bitmap& rBitmapEx,
                                     BmpConversion nColorConversion = BmpConversion::N24Bit,
                                     BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
 

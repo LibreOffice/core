@@ -309,11 +309,11 @@ bool SaveOlePropertySet(
 uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile const * i_pThumb)
 {
     if (i_pThumb) {
-        BitmapEx aBitmap;
+        Bitmap aBitmap;
         SvMemoryStream aStream;
         if (i_pThumb->CreateThumbnail(aBitmap))
         {
-            WriteDIB(aBitmap.GetBitmap(), aStream, false, false);
+            WriteDIB(aBitmap, aStream, false, false);
             return uno::Sequence<sal_Int8>(static_cast< const sal_Int8* >( aStream.GetData() ), aStream.TellEnd());
         }
     }
