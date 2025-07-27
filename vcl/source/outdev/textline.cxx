@@ -52,7 +52,7 @@ namespace {
         {
         }
 
-        bool find( Color aLineColor, size_t nLineWidth, size_t nWaveHeight, size_t nWordWidth, BitmapEx& rOutput )
+        bool find( Color aLineColor, size_t nLineWidth, size_t nWaveHeight, size_t nWordWidth, Bitmap& rOutput )
         {
             Key aKey = { nWaveHeight, sal_uInt32(aLineColor) };
             auto item = m_aItems.find( aKey );
@@ -67,7 +67,7 @@ namespace {
             return true;
         }
 
-        void insert( const BitmapEx& aBitmap, const Color& aLineColor, const size_t nLineWidth, const size_t nWaveHeight, const size_t nWordWidth, BitmapEx& rOutput )
+        void insert( const Bitmap& aBitmap, const Color& aLineColor, const size_t nLineWidth, const size_t nWaveHeight, const size_t nWordWidth, Bitmap& rOutput )
         {
             Key aKey = { nWaveHeight, sal_uInt32(aLineColor) };
             m_aItems.insert( std::pair< Key, WavyLineCacheItem>( aKey, { nLineWidth, nWordWidth, aBitmap } ) );
@@ -93,7 +93,7 @@ namespace {
         {
             size_t m_aLineWidth;
             size_t m_aWordWidth;
-            BitmapEx m_Bitmap;
+            Bitmap m_Bitmap;
         };
 
         struct Key
@@ -1063,7 +1063,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
         if ( !snLineCache.get() )
             return;
         WavyLineCache& rLineCache = *snLineCache.get();
-        BitmapEx aWavylinebmp;
+        Bitmap aWavylinebmp;
         if ( !rLineCache.find( GetLineColor(), nLineWidth, nWaveHeight, nEndX - nStartX, aWavylinebmp ) )
         {
             size_t nWordLength = nEndX - nStartX;
@@ -1076,19 +1076,11 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
             pVirtDev->Erase();
             pVirtDev->SetAntialiasing( AntialiasingFlags::Enable );
             pVirtDev->ImplDrawWaveLineBezier( 0, 0, nWordLength, 0, nWaveHeight, fOrientation, nLineWidth );
-            BitmapEx aBitmapEx(pVirtDev->GetBitmap(Point(0, 0), pVirtDev->GetOutputSize()));
+            Bitmap aBitmap(pVirtDev->GetBitmap(Point(0, 0), pVirtDev->GetOutputSize()));
 
-            // Ideally we don't need this block, but in the split rgb surface + separate alpha surface
-            // with Antialiasing enabled and the svp/cairo backend we get both surfaces antialiased
-            // so their combination of aliases merge to overly wash-out the color. Hack it by taking just
-            // the alpha surface and use it to blend the original solid line color
-            Bitmap aSolidColor(aBitmapEx.GetBitmap());
-            aSolidColor.Erase(GetLineColor());
-            aBitmapEx = BitmapEx(aSolidColor, aBitmapEx.GetAlphaMask());
-
-            rLineCache.insert( aBitmapEx, GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
+            rLineCache.insert( aBitmap, GetLineColor(), nLineWidth, nWaveHeight, nWordLength, aWavylinebmp );
         }
-        if ( aWavylinebmp.ImplGetBitmapSalBitmap() != nullptr )
+        if ( aWavylinebmp.ImplGetSalBitmap() != nullptr )
         {
             Size _size( nEndX - nStartX, aWavylinebmp.GetSizePixel().Height() );
             DrawBitmapEx(Point( rStartPos.X(), rStartPos.Y() ), PixelToLogic( _size ), Point(), _size, aWavylinebmp);

@@ -1333,6 +1333,13 @@ public:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel,
                                     const BitmapEx& rBitmapEx);
+    // draw bitmap (potentially with alpha)
+    void                        DrawBitmapEx(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap);
 
     SAL_DLLPRIVATE void         DrawBitmapEx(
                                     const Point& rDestPt,
