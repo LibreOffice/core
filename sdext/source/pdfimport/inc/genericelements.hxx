@@ -178,6 +178,8 @@ namespace pdfi
 
     public:
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+        bool isTransparencyGroup;
+        bool isForSoftMask;
     };
 
     struct TextElement final : public GraphicalElement

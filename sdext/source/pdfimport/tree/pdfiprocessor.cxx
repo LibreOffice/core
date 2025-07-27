@@ -585,12 +585,27 @@ void PDFIProcessor::intersectClipToStroke(const uno::Reference< rendering::XPoly
     getCurrentContext().Clip = std::move(aNewClip);
 }
 
-void PDFIProcessor::beginTransparencyGroup(const bool /*bForSoftMask*/)
+void PDFIProcessor::beginTransparencyGroup(const bool bForSoftMask)
 {
+    const GraphicsContext& rGC(getCurrentContext());
+    const sal_Int32 nGCId = getGCId(rGC);
+    GroupElement* pGroup = ElementFactory::createGroupElement( m_pCurElement, nGCId );
+    pGroup->ZOrder = m_nNextZOrder++;
+    pGroup->isTransparencyGroup = true;
+    pGroup->isForSoftMask = bForSoftMask;
+    pGroup->w = 0;
+    pGroup->h = 0;
+    m_pCurElement = pGroup;
+
 }
 
 void PDFIProcessor::endTransparencyGroup()
 {
+    GroupElement* pGroup = dynamic_cast<GroupElement*>(m_pCurElement);
+    if( pGroup )
+    {
+        m_pCurElement = pGroup->Parent;
+    }
 }
 
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,

@@ -304,6 +304,13 @@ void WriterXmlEmitter::visit( FrameElement& elem, const std::list< std::unique_p
 
 void WriterXmlEmitter::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
+    if (elem.isTransparencyGroup && elem.isForSoftMask)
+    {
+        // Hack: We don't have a way to do TG or SoftMask yet, but avoiding
+        // rendering the geometry that's only used for generating the soft
+        // mask generally gives us better results
+        return;
+    }
     elem.applyToChildren(*this);
 }
 
@@ -442,6 +449,13 @@ void WriterXmlOptimizer::visit( FrameElement& elem, const std::list< std::unique
 
 void WriterXmlOptimizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
+    if (elem.isTransparencyGroup && elem.isForSoftMask)
+    {
+        // Hack: We don't have a way to do TG or SoftMask yet, but avoiding
+        // rendering the geometry that's only used for generating the soft
+        // mask generally gives us better results
+        return;
+    }
     elem.applyToChildren(*this);
 }
 
@@ -1201,6 +1215,13 @@ void WriterXmlFinalizer::visit( FrameElement& elem, const std::list< std::unique
 
 void WriterXmlFinalizer::visit(GroupElement& elem, const std::list< std::unique_ptr<Element> >::const_iterator&)
 {
+    if (elem.isTransparencyGroup && elem.isForSoftMask)
+    {
+        // Hack: We don't have a way to do TG or SoftMask yet, but avoiding
+        // rendering the geometry that's only used for generating the soft
+        // mask generally gives us better results
+        return;
+    }
     elem.applyToChildren(*this);
 }
 
