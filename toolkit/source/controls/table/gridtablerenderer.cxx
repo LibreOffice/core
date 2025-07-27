@@ -62,22 +62,22 @@ namespace svt::table
         {
         }
 
-        BitmapEx const & getBitmapFor(vcl::RenderContext const & i_device, tools::Long const i_headerHeight,
+        Bitmap const & getBitmapFor(vcl::RenderContext const & i_device, tools::Long const i_headerHeight,
                                       StyleSettings const & i_style, bool const i_sortAscending);
 
     private:
         tools::Long m_lastHeaderHeight;
         Color m_lastArrowColor;
-        BitmapEx m_sortAscending;
-        BitmapEx m_sortDescending;
+        Bitmap m_sortAscending;
+        Bitmap m_sortDescending;
     };
 
     }
 
-    BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, tools::Long const i_headerHeight,
+    Bitmap const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, tools::Long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )
     {
-        BitmapEx& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
+        Bitmap& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
         if (rBitmap.IsEmpty() || (i_headerHeight != m_lastHeaderHeight) || (i_style.GetActiveColor() != m_lastArrowColor))
         {
             tools::Long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
@@ -274,7 +274,7 @@ namespace svt::table
         if ( aCurrentSortOrder.nColumnPos == _nCol )
         {
             tools::Long const nHeaderHeight( _rArea.GetHeight() );
-            BitmapEx const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor(rRenderContext, nHeaderHeight, _rStyle,
+            Bitmap const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor(rRenderContext, nHeaderHeight, _rStyle,
                                                                                    aCurrentSortOrder.eSortDirection == ColumnSortAscending);
             Size const aBitmapSize( aIndicatorBitmap.GetSizePixel() );
             tools::Long const nSortIndicatorPaddingX = 2;
