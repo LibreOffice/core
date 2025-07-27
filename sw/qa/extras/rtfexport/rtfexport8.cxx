@@ -1211,6 +1211,70 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569_2)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162342)
+{
+    // Given an RTF with some page settings, and two page breaks:
+    createSwDoc("tdf162342.rtf");
+
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//page['pass 1']", 3);
+
+        // Without the fix, this failed with
+        // - Expected: 6120
+        // - Actual  : 12240
+        // i.e., the page geometry was ignored.
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/bounds", "height", u"7937"); // Not 7920?
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[1]['pass 1']/infos/prtBounds", "height", u"6497");
+
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/bounds", "height", u"7937");
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[2]['pass 1']/infos/prtBounds", "height", u"6497");
+
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/bounds", "height", u"7937");
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[3]['pass 1']/infos/prtBounds", "height", u"6497");
+    }
+
+    saveAndReload(mpFilter);
+
+    {
+        xmlDocUniquePtr pLayout = parseLayoutDump();
+        assertXPath(pLayout, "//page['pass 2']", 3);
+
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/bounds", "height", u"7937");
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[1]['pass 2']/infos/prtBounds", "height", u"6497");
+
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/bounds", "height", u"7937");
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[2]['pass 2']/infos/prtBounds", "height", u"6497");
+
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/bounds", "width", u"6120");
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/bounds", "height", u"7937");
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/prtBounds", "left", u"720");
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/prtBounds", "top", u"720");
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/prtBounds", "width", u"5040");
+        assertXPath(pLayout, "//page[3]['pass 2']/infos/prtBounds", "height", u"6497");
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
