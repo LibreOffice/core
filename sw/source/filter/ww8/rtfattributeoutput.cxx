@@ -475,11 +475,10 @@ void RtfAttributeOutput::StartRunProperties()
                "formatting is not empty");
 }
 
-bool RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
+void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 {
     const OString aProperties = MoveProperties(ForRun);
     m_aRun->append(aProperties);
-    return !aProperties.isEmpty();
 }
 
 // Very much like AttributeOutputBase::OutputItem
@@ -3455,9 +3454,9 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
 {
     SAL_INFO("sw.rtf", __func__ << " start");
 
-    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_SUPER " ");
-    if (EndRunProperties(nullptr))
-        m_aRun->append(' ');
+    m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_SUPER);
+    EndRunProperties(nullptr);
+    m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FOOTNOTE);
     if (rFootnote.IsEndNote() || m_rExport.m_rDoc.GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER)
