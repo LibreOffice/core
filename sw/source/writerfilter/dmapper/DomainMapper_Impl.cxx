@@ -1370,13 +1370,39 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
     }
 
     m_aPropertyStacks[eId].pop();
+    {
+        // !!!FIXME!!!
+        // We sometimes pop out of order. Just try to comment out this fixing block, keeping the
+        // assert; and run `make check`. Sigh! In that case, popping from m_aContextStack would
+        // make it (and m_pTopContext) out-of-sync. This must be an abort; but let's try to fix
+        // the stack instead, as a temporary (?) measure. I don't replace the stack with a more
+        // easy-to-manipulate container: I don't optimize for invalid case.
+        // !!!FIXME!!!
+        SAL_WARN_IF(m_aContextStack.top() != eId, "writerfilter.dmapper", "pop out of order");
+        std::stack<ContextType> tmp;
+        while (m_aContextStack.top() != eId)
+        {
+            tmp.push(m_aContextStack.top());
+            m_aContextStack.pop();
+        }
+        m_aContextStack.pop();
+        while (!tmp.empty())
+        {
+            m_aContextStack.push(tmp.top());
+            tmp.pop();
+        }
+        m_aContextStack.push(eId); // to pop below
+    }
+    assert(m_aContextStack.top() == eId);
     m_aContextStack.pop();
-    if(!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())
-
-            m_pTopContext = m_aPropertyStacks[m_aContextStack.top()].top();
+    if (!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())
+    {
+        m_pTopContext = m_aPropertyStacks[m_aContextStack.top()].top();
+    }
     else
     {
-        // OSL_ENSURE(eId == CONTEXT_SECTION, "this should happen at a section context end");
+        SAL_WARN_IF(eId != CONTEXT_SECTION, "writerfilter.dmapper",
+                    "this should happen at a section context end");
         m_pTopContext.clear();
     }
 }
