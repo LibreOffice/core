@@ -189,6 +189,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/filtergrouping \
     sfx2/source/dialog/googledrivedialog \
     sfx2/source/dialog/dropboxdialog \
+    sfx2/source/dialog/slackshardialog \
     sfx2/source/dialog/infobar \
     sfx2/source/dialog/inputdlg \
     sfx2/source/dialog/mailmodel \

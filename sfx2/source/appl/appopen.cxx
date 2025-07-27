@@ -54,6 +54,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/googledrivedialog.hxx>
 #include <sfx2/dropboxdialog.hxx>
+#include <sfx2/slackshardialog.hxx>
 #include <memory>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

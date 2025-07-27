@@ -58,6 +58,15 @@
 #define ONEDRIVE_REDIRECT_URI "http://localhost/LibreOffice"
 #define ONEDRIVE_SCOPE "Files.ReadWrite offline_access"
 
+/* Slack */
+#define SLACK_BASE_URL "https://slack.com/api"
+#define SLACK_CLIENT_ID ""
+#define SLACK_CLIENT_SECRET ""
+#define SLACK_AUTH_URL "https://slack.com/oauth/v2/authorize"
+#define SLACK_TOKEN_URL "https://slack.com/api/oauth.v2.access"
+#define SLACK_REDIRECT_URI "http://localhost:8080/callback"
+#define SLACK_SCOPES "files:write,chat:write,channels:read"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
