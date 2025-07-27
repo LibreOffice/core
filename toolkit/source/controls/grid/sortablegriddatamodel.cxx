@@ -609,7 +609,7 @@ void lcl_clear( STLCONTAINER& i_container )
         aGuard.unlock();
         sal_Int32 nRowCount = delegator->getRowCount();
         aGuard.lock();
-        
+
         ::sal_Int32 const rowIndex = i_index == nRowCount ? i_index : impl_getPrivateRowIndex_throw( aGuard, i_index );
             // note that |RowCount| is a valid index in this method, but not for impl_getPrivateRowIndex_throw
 

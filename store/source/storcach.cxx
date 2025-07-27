@@ -388,7 +388,7 @@ storeError PageCache::removePageAt (sal_uInt32 nOffset)
 }
 
 /**
- 
+
    Old OStorePageCache implementation.
 
    (two-way association (sorted address array, LRU chain)).

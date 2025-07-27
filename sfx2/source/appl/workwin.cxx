@@ -34,11 +34,16 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
+#include <sfx2/chalign.hxx>
+#include <sfx2/documenttabbar.hxx>
+#include <sfx2/documenttabbarintegration.hxx>
 #include <splitwin.hxx>
+#include <iostream>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <svl/eitem.hxx>
 #include <tools/svborder.hxx>
 #include <tools/debug.hxx>
@@ -447,6 +452,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     pBindings(&pFrm->GetCurrentViewFrame()->GetBindings()),
     pWorkWin (pWin),
     pActiveChild( nullptr ),
+    pDocumentTabBar( nullptr ),
     nUpdateMode(SfxVisibilityFlags::Standard),
     nChildren( 0 ),
     nOrigMode( SfxVisibilityFlags::Invisible ),
@@ -504,6 +510,7 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
         pSplit[n] = VclPtr<SfxSplitWindow>::Create(pWorkWin, eAlign, this, true );
     }
 
+
     nOrigMode = SfxVisibilityFlags::Standard;
     nUpdateMode = SfxVisibilityFlags::Standard;
 }
@@ -513,6 +520,13 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 
 SfxWorkWindow::~SfxWorkWindow()
 {
+    // Dispose DocumentTabBar
+    if (pDocumentTabBar)
+    {
+        // Unregister from the global manager before disposing
+        sfx2::UnregisterDocumentTabBar(pDocumentTabBar.get());
+        pDocumentTabBar.disposeAndClear();
+    }
 
     // Delete SplitWindows
     for (VclPtr<SfxSplitWindow> & p : pSplit)
@@ -667,6 +681,9 @@ void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
     if ( aClientArea.IsEmpty() )
         return;
 
+    // Initialize DocumentTabBar first so it's included in layout calculation
+    InitializeDocumentTabBar();
+
     SvBorder aBorder;
     if ( nChildren && IsVisible_Impl() )
         aBorder = Arrange_Impl();
@@ -683,6 +700,11 @@ void SfxWorkWindow::ArrangeChildren_Impl( bool bForce )
     pMasterFrame->SetToolSpaceBorderPixel_Impl( aBorder );
 
     ArrangeAutoHideWindows( nullptr );
+
+    // Ensure DocumentTabBar is on top after all layout is complete
+    if (pDocumentTabBar && pDocumentTabBar->IsVisible()) {
+        pDocumentTabBar->ToTop();
+    }
 }
 
 void SfxWorkWindow::FlushPendingChildSizes()
@@ -765,8 +787,10 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
                 aTmp.AdjustTop(aSize.Height() );
-                if ( pCli->eAlign == SfxChildAlignment::HIGHESTTOP )
+                if ( pCli->eAlign == SfxChildAlignment::HIGHESTTOP ) {
                     aUpperClientArea.AdjustTop(aSize.Height() );
+                    std::cerr << "*** HIGHESTTOP child processed: height=" << aSize.Height() << " border.Top=" << aBorder.Top() << " ***" << std::endl;
+                }
                 break;
 
             case SfxChildAlignment::LOWESTBOTTOM:
@@ -2350,6 +2374,49 @@ void SfxWorkWindow::SetActiveChild_Impl( vcl::Window *pChild )
 void SfxWorkWindow::DataChanged_Impl()
 {
     ArrangeChildren_Impl();
+}
+
+void SfxWorkWindow::InitializeDocumentTabBar()
+{
+    // Initialize global document tab bar system first
+    sfx2::InitializeDocumentTabBar();
+
+    // Now check if document tabbing is enabled
+    if (!sfx2::IsDocumentTabbingEnabled())
+        return;
+
+    if (!pDocumentTabBar && pWorkWin)
+    {
+        // Create DocumentTabBar as child of work window
+        pDocumentTabBar = VclPtr<DocumentTabBar>::Create(pWorkWin, pFrame->GetCurrentViewFrame());
+
+        if (pDocumentTabBar)
+        {
+            // Register this tab bar with the global manager for synchronization
+            sfx2::RegisterDocumentTabBar(pDocumentTabBar.get());
+
+            // Use SfxWorkWindow layout system for DocumentTabBar positioning
+            std::cout << "DEBUG: Using SfxWorkWindow approach for DocumentTabBar" << std::endl;
+            pDocumentTabBar->SetSizePixel(Size(800, 28));
+            RegisterChild_Impl(*pDocumentTabBar, SfxChildAlignment::HIGHESTTOP);
+            pDocumentTabBar->Show();
+
+            // Register this view frame with the global tab system
+            if (pFrame && pFrame->GetCurrentViewFrame())
+                sfx2::RegisterViewFrameForTabs(pFrame->GetCurrentViewFrame());
+        }
+    }
+}
+
+void SfxWorkWindow::ShowDocumentTabBar(bool bShow)
+{
+    if (pDocumentTabBar)
+    {
+        pDocumentTabBar->Show(bShow);
+
+        // Trigger layout update to adjust other UI elements
+        ArrangeChildren_Impl();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

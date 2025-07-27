@@ -192,6 +192,11 @@ short RemoteFilesDialog::run()
 
 static OUString lcl_GetServiceType( const ServicePtr& pService )
 {
+    // First check if it's a gdrive:// URL directly
+    OUString sURL = pService->GetUrlObject().GetMainURL(INetURLObject::DecodeMechanism::NONE);
+    if (sURL.startsWithIgnoreAsciiCase(u"gdrive://"_ustr))
+        return u"Google Drive"_ustr;
+
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
     switch( aProtocol )
     {
@@ -217,7 +222,12 @@ static OUString lcl_GetServiceType( const ServicePtr& pService )
         case INetProtocol::Https:
             return u"WebDAV"_ustr;
         case INetProtocol::Generic:
+        {
+            // Check if it's a gdrive:// URL (fallback case)
+            if (sURL.startsWithIgnoreAsciiCase(u"gdrive://"_ustr))
+                return u"Google Drive"_ustr;
             return u"SSH"_ustr;
+        }
         default:
             return OUString();
     }

@@ -136,7 +136,7 @@ handleLockedDocumentRequest_(
             aResLocale);
         aMessage = UUIInteractionHelper::replaceMessageWithArguments(
             aMessage, aArguments );
-      
+
         TryLaterQueryBox aDialog(pParent, aResLocale, aMessage, bAllowOverride);
         nResult = aDialog.run();
     }

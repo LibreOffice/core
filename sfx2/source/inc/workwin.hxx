@@ -31,6 +31,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
+#include <sfx2/documenttabbar.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/shell.hxx>
@@ -198,6 +199,7 @@ class SfxWorkWindow final
     SfxBindings*            pBindings;
     VclPtr<vcl::Window>     pWorkWin;
     VclPtr<vcl::Window>     pActiveChild;
+    VclPtr<DocumentTabBar>  pDocumentTabBar;
     SfxVisibilityFlags      nUpdateMode;
     sal_uInt16              nChildren;
     SfxVisibilityFlags      nOrigMode;
@@ -287,6 +289,11 @@ public:
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( vcl::Window *pChild );
     const VclPtr<vcl::Window>& GetActiveChild_Impl() const { return pActiveChild; }
+
+    // Methods for DocumentTabBar
+    void                    InitializeDocumentTabBar();
+    void                    ShowDocumentTabBar(bool bShow);
+    DocumentTabBar*         GetDocumentTabBar() const { return pDocumentTabBar.get(); }
 
     // Methods for StatusBar
     void                    ResetStatusBar_Impl();

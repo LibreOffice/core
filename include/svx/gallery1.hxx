@@ -54,7 +54,7 @@ public:
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
     ~GalleryThemeEntry();
-    
+
     GalleryStorageLocations& getGalleryStorageLocations() const;
 
     GalleryTheme* createGalleryTheme(Gallery* pGallery);

@@ -38,6 +38,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/virdev.hxx>
+#include <sfx2/documenttabbar.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/string_view.hxx>
@@ -960,6 +961,27 @@ void SystemWindow::SetMenuBarMode( MenuBarMode nMode )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarMode( false );
         }
     }
+}
+
+void SystemWindow::SetDocumentTabBar(DocumentTabBar* pDocumentTabBar)
+{
+    if ( mpDocumentTabBar == pDocumentTabBar )
+        return;
+
+    mpDocumentTabBar = pDocumentTabBar;
+
+    if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
+    {
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetDocumentTabBarWindow(pDocumentTabBar);
+        ImplToBottomChild();
+    }
+}
+
+int SystemWindow::GetDocumentTabBarHeight() const
+{
+    if (mpDocumentTabBar && mpDocumentTabBar->IsVisible())
+        return mpDocumentTabBar->GetSizePixel().Height();
+    return 0;
 }
 
 bool SystemWindow::ImplIsInTaskPaneList( vcl::Window* pWin )

@@ -1,0 +1,36 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Local OAuth2 Configuration Template
+ * 
+ * Copy this file to config_oauth2_local.h and fill in your credentials.
+ * DO NOT commit config_oauth2_local.h to version control!
+ */
+
+#ifndef CONFIG_OAUTH2_LOCAL_H
+#define CONFIG_OAUTH2_LOCAL_H
+
+// Google Drive OAuth2 Credentials
+// Get these from Google Cloud Console: https://console.cloud.google.com/
+#undef GDRIVE_CLIENT_ID
+#undef GDRIVE_CLIENT_SECRET
+
+#define GDRIVE_CLIENT_ID "your-client-id-here.apps.googleusercontent.com"
+#define GDRIVE_CLIENT_SECRET "your-client-secret-here"
+
+/*
+ * Instructions:
+ * 1. Replace the placeholder values above with your actual credentials
+ * 2. Save this file as config_oauth2_local.h (remove .template extension)
+ * 3. Make sure config_oauth2_local.h is in your .gitignore
+ * 
+ * To get credentials:
+ * 1. Go to Google Cloud Console
+ * 2. APIs & Services > Credentials > Create Credentials > OAuth 2.0 Client IDs
+ * 3. Choose "Desktop application"
+ * 4. Set redirect URI to: http://localhost:8080/callback
+ * 5. Enable Google Drive API in APIs & Services > Library
+ */
+
+#endif // CONFIG_OAUTH2_LOCAL_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -341,7 +341,7 @@ bool childDescriptorPtrLess(const ChildDescriptor* lhs, const ChildDescriptor* r
 }
 
 }
-    
+
 void ChildrenManagerImpl::RemoveNonVisibleChildren (
     const std::vector<ChildDescriptor*>& rNonVisibleChildren)
 {

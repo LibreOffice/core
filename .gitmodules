@@ -1,12 +1,12 @@
 [submodule "dictionaries"]
 	path = dictionaries
-	url = ../dictionaries
+	url = https://github.com/LibreOffice/dictionaries
 	branch = .
 [submodule "helpcontent2"]
 	path = helpcontent2
-	url = ../help
+	url = https://github.com/LibreOffice/help
 	branch = .
 [submodule "translations"]
 	path = translations
-	url = ../translations
+	url = https://github.com/LibreOffice/translations
 	branch = .

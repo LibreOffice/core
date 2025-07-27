@@ -67,6 +67,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     tl \
     ucbhelper \
     $(if $(ENABLE_GDRIVE),ucpgdrive) \
+    ucpdropbox \
     utl \
     vcl \
     $(if $(ENABLE_BREAKPAD), \
@@ -187,6 +188,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \
     sfx2/source/dialog/googledrivedialog \
+    sfx2/source/dialog/dropboxdialog \
     sfx2/source/dialog/infobar \
     sfx2/source/dialog/inputdlg \
     sfx2/source/dialog/mailmodel \

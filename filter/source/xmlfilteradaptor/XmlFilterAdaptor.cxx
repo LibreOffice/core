@@ -196,7 +196,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
                     xStatusIndicator->end();
                 return false;
             }
-        }        
+        }
         else
         {
             SAL_WARN("filter.xmlfa", "no working combination found");

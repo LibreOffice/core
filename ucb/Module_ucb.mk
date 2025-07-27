@@ -15,6 +15,8 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucb1 \
 	$(if $(ENABLE_LIBCMIS),Library_ucpcmis1) \
 	$(if $(WITH_WEBDAV),Library_ucpdav1) \
+	$(if $(ENABLE_GDRIVE),Library_ucpgdrive) \
+	Library_ucpdropbox \
 	Library_ucpexpand1 \
 	Library_ucpext \
 	Library_ucpfile1 \
@@ -22,6 +24,10 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	Library_ucpimage \
 	Library_ucppkg1 \
 	Library_ucptdoc1 \
+))
+
+$(eval $(call gb_Module_add_check_targets,ucb,\
+	$(if $(ENABLE_GDRIVE),CppunitTest_ucb_gdrive) \
 ))
 
 ifeq ($(ENABLE_GIO),TRUE)

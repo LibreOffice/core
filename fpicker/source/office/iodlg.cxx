@@ -2229,6 +2229,10 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
 
 void SvtFileDialog::initDefaultPlaces( )
 {
+    // Add Google Drive as a built-in system place
+    PlacePtr pGoogleDrive = std::make_shared<Place>(u"Google Drive"_ustr, u"gdrive://root"_ustr, false);
+    m_xImpl->m_xPlaces->AppendPlace(pGoogleDrive);
+
     // Load from user settings
     Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get());
     Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get());

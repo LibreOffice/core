@@ -22,6 +22,8 @@
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:OpenFromWriter"/>
       <menu:menuitem menu:id=".uno:OpenRemote" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:OpenGoogleDrive" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:OpenDropbox" menu:style="text"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuseparator/>

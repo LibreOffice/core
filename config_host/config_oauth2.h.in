@@ -20,8 +20,23 @@
 #define GDRIVE_CLIENT_SECRET ""
 #define GDRIVE_AUTH_URL "https://accounts.google.com/o/oauth2/v2/auth"
 #define GDRIVE_TOKEN_URL "https://oauth2.googleapis.com/token"
-#define GDRIVE_REDIRECT_URI "urn:ietf:wg:oauth:2.0:oob"
+#define GDRIVE_REDIRECT_URI "http://localhost:8080/callback"
 #define GDRIVE_SCOPE "https://www.googleapis.com/auth/drive.file"
+
+/* Dropbox settings */
+#define DROPBOX_BASE_URL "https://api.dropboxapi.com/2"
+#define DROPBOX_CLIENT_ID "5pbaocend3v7vbw"
+#define DROPBOX_CLIENT_SECRET "b4rt057cythwu45"
+#define DROPBOX_AUTH_URL "https://www.dropbox.com/oauth2/authorize"
+#define DROPBOX_TOKEN_URL "https://api.dropbox.com/oauth2/token"
+#define DROPBOX_REDIRECT_URI "http://localhost:8080/callback"
+#define DROPBOX_SCOPE "files.content.read"
+
+// Include local OAuth2 configuration if available
+// Copy config_oauth2_local.h.template to config_oauth2_local.h and add your credentials
+#if __has_include("../config_oauth2_local.h")
+#include "../config_oauth2_local.h"
+#endif
 
 
 /* Alfresco Cloud */

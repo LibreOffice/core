@@ -33,6 +33,7 @@ class MnemonicGenerator;
 class NotebookBar;
 class TaskPaneList;
 class VclBuilder;
+class DocumentTabBar;
 struct NotebookBarAddonsItem;
 
 #define ICON_LO_DEFAULT                 1
@@ -117,6 +118,7 @@ private:
 
     std::unique_ptr<ImplData> mpImplData;
     VclPtr<MenuBar> mpMenuBar;
+    VclPtr<DocumentTabBar> mpDocumentTabBar;
     OUString        maNotebookBarUIFile;
     Size            maMinOutSize;
     MenuBarMode     mnMenuBarMode = MenuBarMode::Normal;
@@ -207,6 +209,10 @@ public:
     void            SetMenuBarMode( MenuBarMode nMode );
     void            CollectMenuBarMnemonics(MnemonicGenerator& rMnemonicGenerator) const;
     int             GetMenuBarHeight() const;
+
+    void            SetDocumentTabBar(DocumentTabBar* pDocumentTabBar);
+    DocumentTabBar* GetDocumentTabBar() const { return mpDocumentTabBar; }
+    int             GetDocumentTabBarHeight() const;
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,

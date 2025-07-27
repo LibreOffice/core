@@ -117,7 +117,7 @@ public:
     MarshalData() = default;
     MarshalData(const MarshalData&) = delete;
     const MarshalData& operator=(const MarshalData&) = delete;
-    
+
     std::vector< char > * newBlob() {
         blobs_.push_back(std::vector< char >());
         return &blobs_.back();
@@ -688,7 +688,7 @@ public:
     Impl() = default;
     Impl(const Impl&) = delete;
     const Impl& operator=(const Impl&) = delete;
-    
+
     Dll * getDll(OUString const & name);
 
     Dlls dlls;

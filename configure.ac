@@ -15317,13 +15317,16 @@ if test "$with_gdrive_client_id" = "no" -o -z "$with_gdrive_client_id"; then
     AC_MSG_RESULT([not set])
     GDRIVE_CLIENT_ID="\"\""
     GDRIVE_CLIENT_SECRET="\"\""
+    ENABLE_GDRIVE=
 else
     AC_MSG_RESULT([set])
     GDRIVE_CLIENT_ID="\"$with_gdrive_client_id\""
     GDRIVE_CLIENT_SECRET="\"$with_gdrive_client_secret\""
+    ENABLE_GDRIVE=TRUE
 fi
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_ID, $GDRIVE_CLIENT_ID)
 AC_DEFINE_UNQUOTED(GDRIVE_CLIENT_SECRET, $GDRIVE_CLIENT_SECRET)
+AC_SUBST(ENABLE_GDRIVE)
 
 AC_MSG_CHECKING([for Alfresco Cloud client id and secret])
 if test "$with_alfresco_cloud_client_id" = "no" -o -z "$with_alfresco_cloud_client_id"; then

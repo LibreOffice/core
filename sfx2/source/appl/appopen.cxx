@@ -42,12 +42,39 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
+#include <config_oauth2.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <sfx2/googledrivedialog.hxx>
+#include <sfx2/dropboxdialog.hxx>
+#include <memory>
+#include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
+#include <ucbhelper/content.hxx>
+#include <ucbhelper/authenticationfallback.hxx>
+#include <ucbhelper/commandenvironment.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/ucb/XContentIdentifier.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/ucb/OpenCommandArgument3.hpp>
+#include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/ucb/XDynamicResultSet.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
 #include <svl/intitem.hxx>
@@ -1158,6 +1185,164 @@ void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
 {
     rReq.AppendItem( SfxBoolItem( SID_REMOTE_DIALOG, true ) );
     GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
+}
+
+void SfxApplication::OpenGoogleDriveExec_Impl( SfxRequest& /* rReq */ )
+{
+    // Check if Google Drive is configured
+    rtl::OUString sClientId = rtl::OUString::createFromAscii(GDRIVE_CLIENT_ID);
+    if (sClientId.isEmpty()) {
+        // Google Drive not configured - show error message
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+        if (pParent) {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                VclMessageType::Info, VclButtonsType::Ok,
+                u"Google Drive integration is not configured in this build of LibreOffice."_ustr));
+            xBox->run();
+        }
+        return;
+    }
+
+    try {
+        SAL_WARN("sfx.appl", "OpenGoogleDriveExec_Impl called - Standalone Google Drive dialog");
+
+        // Get the current frame's window for dialog parent
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+
+        SAL_WARN("sfx.appl", "Creating GoogleDriveDialog...");
+
+        // Create and show Google Drive dialog
+        std::unique_ptr<GoogleDriveDialog> pDlg;
+        try {
+            pDlg = std::make_unique<GoogleDriveDialog>(pParent);
+            SAL_WARN("sfx.appl", "Dialog created successfully");
+        } catch (const std::exception& e) {
+            SAL_WARN("sfx.appl", "Failed to create dialog: " << e.what());
+            // Fallback to test message
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Failed to create Google Drive dialog.\nError: " + OUString::fromUtf8(e.what())));
+                xBox->run();
+            }
+            return;
+        }
+
+        SAL_WARN("sfx.appl", "Dialog created, calling Execute()...");
+
+        if (pDlg->Execute())
+        {
+            // User selected a file, get the gdrive:// URL
+            OUString sFileURL = pDlg->GetSelectedFileURL();
+
+            if (!sFileURL.isEmpty())
+            {
+                SAL_WARN("sfx.appl", "Opening selected file: " << sFileURL);
+
+                // Open the file through the UCB framework
+                try {
+                    SAL_WARN("sfx.appl", "Creating SID_OPENDOC request for: " << sFileURL);
+
+                    // Create a new open request with the gdrive:// URL
+                    SfxStringItem aURL(SID_FILE_NAME, sFileURL);
+                    SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
+                    SfxBoolItem aSilent(SID_SILENT, false);
+                    SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
+
+                    SAL_WARN("sfx.appl", "About to execute SID_OPENDOC dispatch");
+
+                    // Open the document
+                    const SfxPoolItem* pArgs[] = { &aURL, &aNewView, &aSilent, &aReadOnly, nullptr };
+                    GetDispatcher_Impl()->Execute(
+                        SID_OPENDOC,
+                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                        pArgs);
+
+                    SAL_WARN("sfx.appl", "SID_OPENDOC dispatch completed");
+
+                } catch (const css::uno::Exception& e) {
+                    SAL_WARN("sfx.appl", "Failed to open Google Drive file: " << e.Message);
+                    if (pParent) {
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                            VclMessageType::Error, VclButtonsType::Ok,
+                            u"Failed to open file: " + e.Message));
+                        xBox->run();
+                    }
+                }
+            }
+            else
+            {
+                SAL_WARN("sfx.appl", "No file selected in Google Drive dialog");
+            }
+        }
+        else
+        {
+            SAL_WARN("sfx.appl", "Google Drive dialog was cancelled or failed");
+        }
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.appl", "Exception in OpenGoogleDriveExec_Impl: " << e.what());
+    } catch (...) {
+        SAL_WARN("sfx.appl", "Unknown exception in OpenGoogleDriveExec_Impl");
+    }
+}
+
+void SfxApplication::OpenDropboxExec_Impl( SfxRequest& /* rReq */ )
+{
+    try {
+        SAL_WARN("sfx.appl", "OpenDropboxExec_Impl called - Standalone Dropbox dialog");
+
+        // Get the current frame's window for dialog parent
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+
+        SAL_WARN("sfx.appl", "Creating minimal DropboxDialog...");
+
+        // Create and show minimal Dropbox dialog
+        try {
+            std::unique_ptr<DropboxDialog> pDlg = std::make_unique<DropboxDialog>(pParent);
+            SAL_WARN("sfx.appl", "Dialog created successfully");
+
+            bool bResult = pDlg->Execute();
+            SAL_WARN("sfx.appl", "Dialog Execute completed with result: " << bResult);
+
+            if (bResult) {
+                // Get the selected file URL and open it
+                OUString sFileUrl = pDlg->GetSelectedFileUrl();
+                SAL_WARN("sfx.appl", "Opening file: " << sFileUrl);
+
+                if (!sFileUrl.isEmpty()) {
+                    // Open the file using LibreOffice's standard mechanism
+                    SfxStringItem aFileItem(SID_FILE_NAME, sFileUrl);
+                    SfxBoolItem aTemplateItem(SID_TEMPLATE, false);
+                    SfxStringItem aTargetItem(SID_TARGETNAME, "_default");
+
+                    if (pViewFrame) {
+                        pViewFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
+                            SfxCallMode::ASYNCHRON, { &aFileItem, &aTemplateItem, &aTargetItem });
+                        SAL_WARN("sfx.appl", "File opening request dispatched");
+                    }
+                } else {
+                    SAL_WARN("sfx.appl", "No file URL returned from dialog");
+                }
+            }
+
+        } catch (const std::exception& e) {
+            SAL_WARN("sfx.appl", "Failed to create/show dialog: " << e.what());
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Failed to create Dropbox dialog.\nError: "_ustr + OUString::fromUtf8(e.what())));
+                xBox->run();
+            }
+        }
+
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.appl", "Exception in OpenDropboxExec_Impl: " << e.what());
+    } catch (...) {
+        SAL_WARN("sfx.appl", "Unknown exception in OpenDropboxExec_Impl");
+    }
 }
 
 void SfxApplication::SignPDFExec_Impl(SfxRequest& rReq)

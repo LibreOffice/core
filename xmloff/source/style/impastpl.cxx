@@ -292,7 +292,7 @@ bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, std::vec
 {
     if (rFamilyData.maNameSet.find(rName) != rFamilyData.maNameSet.end())
         return false;
-    
+
     auto it = std::lower_bound(m_PropertiesList.begin(), m_PropertiesList.end(), rProperties, ComparePartial{rFamilyData});
 
     it = m_PropertiesList.emplace(it, rFamilyData, std::move(rProperties), msParent);

@@ -345,7 +345,7 @@ void SAL_CALL OTempFileService::truncate()
                 css::beans::PropertyAttribute::READONLY )
         },
         true );
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( 
+    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo( ourPropertyInfo ) );
     return xInfo;
 }

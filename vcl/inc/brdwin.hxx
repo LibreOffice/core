@@ -83,6 +83,7 @@ class ImplBorderWindow final : public vcl::Window
 private:
     std::unique_ptr<ImplBorderWindowView> mpBorderView;
     VclPtr<vcl::Window>     mpMenuBarWindow;
+    VclPtr<vcl::Window>     mpDocumentTabBarWindow;
     VclPtr<NotebookBar>     mpNotebookBar;
     tools::Long                    mnMinWidth;
     tools::Long                    mnMinHeight;
@@ -148,6 +149,7 @@ public:
 
     void                    UpdateMenuHeight();
     void                    SetMenuBarWindow( vcl::Window* pWindow );
+    void                    SetDocumentTabBarWindow( vcl::Window* pWindow );
     void                    SetMenuBarMode( bool bHide );
 
     void SetNotebookBar(const OUString& rUIXMLDescription,

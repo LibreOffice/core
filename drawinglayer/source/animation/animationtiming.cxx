@@ -195,12 +195,12 @@ namespace drawinglayer::animation
         {
             const AnimationEntryList* pCompare = dynamic_cast<const AnimationEntryList*>(&rCandidate);
 
-            if (pCompare && mfDuration == pCompare->mfDuration) 
+            if (pCompare && mfDuration == pCompare->mfDuration)
             {
                 return std::equal(maEntries.cbegin(), maEntries.cend(),
                                 pCompare->maEntries.cbegin(), pCompare->maEntries.cend(),
                                 [](const auto& lhs, const auto& rhs) {
-                                     return *lhs == *rhs; 
+                                     return *lhs == *rhs;
                                 });
             }
 

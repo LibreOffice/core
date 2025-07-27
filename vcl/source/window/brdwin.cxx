@@ -1709,6 +1709,9 @@ void ImplBorderWindow::Resize()
             if ( !nMenuHeight )
                 nMenuHeight = mnOrgMenuHeight;
         }
+        std::cout << "DEBUG: Positioning MenuBar at x=" << nLeftBorder
+                  << " y=" << nTopBorder << " w=" << (aSize.Width()-nLeftBorder-nRightBorder)
+                  << " h=" << nMenuHeight << std::endl;
         mpMenuBarWindow->setPosSizePixel(
                 nLeftBorder, nTopBorder,
                 aSize.Width()-nLeftBorder-nRightBorder,
@@ -1717,6 +1720,7 @@ void ImplBorderWindow::Resize()
         // shift the notebookbar down accordingly
         nTopBorder += nMenuHeight;
     }
+
 
     if (mpNotebookBar)
     {
@@ -1930,6 +1934,14 @@ void ImplBorderWindow::SetMenuBarWindow( vcl::Window* pWindow )
         pWindow->Show();
 }
 
+void ImplBorderWindow::SetDocumentTabBarWindow( vcl::Window* pWindow )
+{
+    mpDocumentTabBarWindow = pWindow;
+    UpdateMenuHeight(); // This will need to be updated to handle DocumentTabBar height too
+    if ( pWindow )
+        pWindow->Show();
+}
+
 void ImplBorderWindow::SetMenuBarMode( bool bHide )
 {
     mbMenuHide = bHide;
@@ -1959,6 +1971,9 @@ void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                   sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
     mpBorderView->GetBorder(rLeftBorder, rTopBorder, rRightBorder, rBottomBorder);
+
+    if (mpDocumentTabBarWindow)
+        rTopBorder += mpDocumentTabBarWindow->GetSizePixel().Height();
 
     if (mpMenuBarWindow && !mbMenuHide)
         rTopBorder += mpMenuBarWindow->GetSizePixel().Height();

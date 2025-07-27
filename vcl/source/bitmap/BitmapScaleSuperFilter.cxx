@@ -33,10 +33,10 @@
 A scaling algorithm that uses bilinear if not downscaling too much,
 and averaging otherwise (bilinear would produce poor results for big downscaling).
 
-By default the combination of two filters is used: bilinear and averaging algorithm. 
+By default the combination of two filters is used: bilinear and averaging algorithm.
 Bilinear filtering is used for bitmap enlarging and shrinking till factor 0.6. Below
-this bilinear gives bad results because of limited sampling. For such cases averaging 
-is used which is a simple algorithm for shrinking. In averaging the algorithm 
+this bilinear gives bad results because of limited sampling. For such cases averaging
+is used which is a simple algorithm for shrinking. In averaging the algorithm
 calculates the average of samples which result is the new pixel.
 */
 

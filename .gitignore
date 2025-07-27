@@ -200,3 +200,4 @@ gdbtrace.log
 
 # xml unit tests sometimes leave these lying around
 **/secmod.db
+config_oauth2_local.h

@@ -1,4 +1,8 @@
 sfx2/uiconfig/ui/bookmarkdialog.ui://GtkLabel[@id='alttitle'] orphan-label
+sfx2/uiconfig/ui/googledrivedialog.ui://GtkLabel[@id='current_folder_label'] orphan-label
+sfx2/uiconfig/ui/googledrivedialog.ui://GtkTreeView[@id='file_list'] no-labelled-by
+sfx2/uiconfig/ui/googledrivedialog.ui://GtkLabel[@id='status_label'] orphan-label
+sfx2/uiconfig/ui/googledrivedialog.ui://GtkProgressBar[@id='progress_bar'] no-labelled-by
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label1'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label2'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='charinfolabel'] orphan-label

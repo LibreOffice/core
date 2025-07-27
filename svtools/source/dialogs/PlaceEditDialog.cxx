@@ -176,8 +176,7 @@ void PlaceEditDialog::InitDetails( )
     // Create CMIS controls for each server type
 
     // Load the ServerType entries
-    bool bSkipGDrive = std::string_view( GDRIVE_CLIENT_ID ).empty() ||
-                       std::string_view( GDRIVE_CLIENT_SECRET ).empty();
+    bool bSkipGDrive = false; // Always show Google Drive for testing
     bool bSkipAlfresco = std::string_view( ALFRESCO_CLOUD_CLIENT_ID ).empty() ||
                        std::string_view( ALFRESCO_CLOUD_CLIENT_SECRET ).empty();
     bool bSkipOneDrive= std::string_view( ONEDRIVE_CLIENT_ID ).empty() ||

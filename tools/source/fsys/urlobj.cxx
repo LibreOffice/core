@@ -247,7 +247,7 @@ sal_Int32 INetURLObject::SubString::set(OUString & rString,
 {
     sal_Int32 nDelta = rSubString.size() - m_nLength;
 
-    rString = OUString::Concat(rString.subView(0, m_nBegin)) + 
+    rString = OUString::Concat(rString.subView(0, m_nBegin)) +
              rSubString + rString.subView(m_nBegin + m_nLength);
 
     m_nLength = rSubString.size();
