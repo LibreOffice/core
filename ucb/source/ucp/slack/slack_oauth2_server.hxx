@@ -17,9 +17,14 @@
 namespace ucp {
 namespace slack {
 
+// Forward declaration
+namespace https {
+class NativeHTTPSServer;
+}
+
 /**
- * Simple HTTP server to listen for OAuth2 callback from Slack
- * Listens on localhost:8080/callback for the authorization code
+ * OAuth2 server to listen for callback from Slack
+ * Uses native HTTPS server implementation for production readiness
  */
 class SlackOAuth2Server
 {
@@ -38,25 +43,19 @@ public:
     rtl::OUString waitForAuthCode(sal_Int32 timeoutSeconds = 120);
 
     // Get the port the server is listening on
-    sal_Int32 getPort() const { return m_nPort; }
+    sal_Int32 getPort() const;
 
     // Get the full callback URL
     rtl::OUString getCallbackURL() const;
 
 private:
-    void serverLoop();
-    void serverLoopHTTPS();
-    rtl::OUString parseAuthCodeFromRequest(const rtl::OUString& request);
-    rtl::OUString generateSuccessPage();
-    bool loadSSLCertificates();
+    // OAuth callback handler
+    void handleOAuthCallback(const rtl::OUString& authCode);
 
     std::atomic<bool> m_bRunning;
     std::atomic<bool> m_bCodeReceived;
-    sal_Int32 m_nPort;
-    sal_Int32 m_nSocketFd;
     rtl::OUString m_sAuthCode;
-    std::unique_ptr<std::thread> m_pServerThread;
-    void* m_pSSLCtx; // SSL_CTX pointer (using void* to avoid including OpenSSL headers)
+    std::unique_ptr<https::NativeHTTPSServer> m_pHttpsServer;
 };
 
 } // namespace slack

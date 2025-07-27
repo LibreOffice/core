@@ -31,10 +31,38 @@ $(eval $(call gb_Library_use_externals,ucpslack,\
 	openssl \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,ucpslack,\
+	Security \
+	CoreFoundation \
+))
+# Add system OpenSSL for HTTPS server
+$(eval $(call gb_Library_add_libs,ucpslack,\
+	-L/opt/homebrew/lib \
+	-lssl \
+	-lcrypto \
+))
+$(eval $(call gb_Library_add_cxxflags,ucpslack,\
+	-I/opt/homebrew/include \
+))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,ucpslack,\
+	secur32 \
+	crypt32 \
+	ws2_32 \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,ucpslack,\
 	ucb/source/ucp/slack/SlackApiClient \
 	ucb/source/ucp/slack/slack_json \
 	ucb/source/ucp/slack/slack_oauth2_server \
+	ucb/source/ucp/slack/native_https/NativeHTTPSServer \
+	ucb/source/ucp/slack/native_https/ssl_securetransport \
+	ucb/source/ucp/slack/native_https/ssl_schannel \
+	ucb/source/ucp/slack/native_https/ssl_openssl \
 ))
 
 # vim: set noet sw=4 ts=4:
