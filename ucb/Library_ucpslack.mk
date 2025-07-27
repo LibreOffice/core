@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,ucpslack,\
 $(eval $(call gb_Library_use_externals,ucpslack,\
 	boost_headers \
 	curl \
+	openssl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpslack,\

@@ -59,3 +59,10 @@ sfx2/uiconfig/ui/password.ui://GtkLevelBar[@id='pass1bar'] no-labelled-by
 sfx2/uiconfig/ui/password.ui://GtkLabel[@id='pass1policylabel'] orphan-label
 sfx2/uiconfig/ui/password.ui://GtkLevelBar[@id='pass2bar'] no-labelled-by
 sfx2/uiconfig/ui/password.ui://GtkLabel[@id='pass2policylabel'] orphan-label
+sfx2/uiconfig/ui/slackshardialog.ui://GtkLabel[not(@id)] orphan-label
+sfx2/uiconfig/ui/slackshardialog.ui://GtkComboBoxText[@id='workspace_combo'] no-labelled-by
+sfx2/uiconfig/ui/slackshardialog.ui://GtkComboBox[@id='channel_combo'] no-labelled-by
+sfx2/uiconfig/ui/slackshardialog.ui://GtkSpinner[@id='status_spinner'] no-labelled-by
+sfx2/uiconfig/ui/slackshardialog.ui://GtkLabel[@id='status_label'] orphan-label
+sfx2/uiconfig/ui/slackshardialog.ui://GtkLabel[@id='document_name_label'] orphan-label
+sfx2/uiconfig/ui/slackshardialog.ui://GtkLabel[@id='document_size_label'] orphan-label

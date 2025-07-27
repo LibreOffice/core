@@ -698,6 +698,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
+	ucpslack \
     $(call gb_CondExeUnopkg,unopkgapp) \
 	xmlsecurity \
 	xsec_xmlsec \

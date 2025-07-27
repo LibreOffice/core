@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,ucb,\
 	$(if $(WITH_WEBDAV),Library_ucpdav1) \
 	$(if $(ENABLE_GDRIVE),Library_ucpgdrive) \
 	Library_ucpdropbox \
+	Library_ucpslack \
 	Library_ucpexpand1 \
 	Library_ucpext \
 	Library_ucpfile1 \

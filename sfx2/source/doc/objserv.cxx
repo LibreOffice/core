@@ -97,6 +97,9 @@
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -113,6 +116,7 @@
 #include <comphelper/base64.hxx>
 
 #include <autoredactdialog.hxx>
+#include <sfx2/slackshardialog.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -980,6 +984,112 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
         }
             [[fallthrough]];
+        case SID_SHARETOSLACK:
+        {
+            // Handle Share to Slack using the full implementation
+            try
+            {
+                // Get document information
+                OUString aDocName = GetTitle();
+                OUString aDocPath = GetMedium() ? GetMedium()->GetName() : OUString();
+
+                // Get document stream for sharing
+                uno::Reference<io::XInputStream> xDocStream;
+                sal_Int64 nDocumentSize = 0;
+
+                SAL_WARN("sfx.slack", "Attempting to create document stream for sharing");
+
+                try
+                {
+                    // Create a temporary file to save the current document
+                    uno::Reference<io::XTempFile> xTempFile = io::TempFile::create(comphelper::getProcessComponentContext());
+
+                    // Get the temp file URL
+                    OUString sTempURL = xTempFile->getUri();
+                    SAL_WARN("sfx.slack", "Created temp file: " << sTempURL);
+
+                    // Save document to temporary file in its native format
+                    uno::Sequence<beans::PropertyValue> aArgs;
+                    uno::Reference<frame::XStorable> xStorable(GetModel(), uno::UNO_QUERY);
+                    if (xStorable.is())
+                    {
+                        xStorable->storeToURL(sTempURL, aArgs);
+                        SAL_WARN("sfx.slack", "Document saved to temp file");
+
+                        // Get input stream from temp file
+                        xDocStream = xTempFile->getInputStream();
+
+                        // Get the size
+                        uno::Reference<io::XSeekable> xSeekable(xDocStream, uno::UNO_QUERY);
+                        if (xSeekable.is())
+                        {
+                            nDocumentSize = xSeekable->getLength();
+                            xSeekable->seek(0); // Reset to beginning
+                            SAL_WARN("sfx.slack", "Document temp stream ready, size: " << nDocumentSize);
+                        }
+                    }
+                    else
+                    {
+                        SAL_WARN("sfx.slack", "Failed to get XStorable interface from document");
+                    }
+                }
+                catch (const uno::Exception& e)
+                {
+                    SAL_WARN("sfx.slack", "Exception creating document stream: " << e.Message);
+                }
+
+                // Get dialog parent
+                weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
+                if (!pDialogParent)
+                {
+                    SAL_WARN("sfx.slack", "No dialog parent available");
+                    rReq.Done();
+                    return;
+                }
+
+                // Create and execute Slack share dialog
+                SlackShareDialog aDialog(pDialogParent, aDocName, aDocPath, nDocumentSize, xDocStream);
+
+                if (aDialog.Execute())
+                {
+                    // Sharing was successful
+                    OUString sSharedURL = aDialog.getSharedFileURL();
+                    SAL_INFO("sfx.slack", "Document shared successfully: " << sSharedURL);
+                }
+                // If Execute() returns false, user cancelled or error occurred
+            }
+            catch (const uno::Exception& e)
+            {
+                SAL_WARN("sfx.slack", "Exception in Slack share: " << e.Message);
+
+                // Show error to user
+                weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
+                if (pDialogParent)
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(
+                        Application::CreateMessageDialog(pDialogParent, VclMessageType::Error, VclButtonsType::Ok,
+                            "Failed to share document to Slack: " + e.Message));
+                    xBox->run();
+                }
+            }
+            catch (...)
+            {
+                SAL_WARN("sfx.slack", "Unknown exception in Slack share");
+
+                // Show error to user
+                weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
+                if (pDialogParent)
+                {
+                    std::unique_ptr<weld::MessageDialog> xBox(
+                        Application::CreateMessageDialog(pDialogParent, VclMessageType::Error, VclButtonsType::Ok,
+                            "An unexpected error occurred while sharing to Slack."));
+                    xBox->run();
+                }
+            }
+
+            rReq.Done();
+            return;
+        }
         case SID_EXPORTDOCASPDF:
             bIsPDFExport = true;
             [[fallthrough]];
@@ -1593,6 +1703,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_REDACTDOC:
             case SID_AUTOREDACTDOC:
             case SID_SAVEASREMOTE:
+            case SID_SHARETOSLACK:
             {
                 if (isExportLocked())
                     rSet.DisableItem( nWhich );

@@ -16,8 +16,8 @@
 #include <sal/log.hxx>
 
 // Include Google Drive API client
-#include <ucb/source/ucp/gdrive/GoogleDriveApiClient.hxx>
-#include <ucb/source/ucp/gdrive/gdrive_json.hxx>
+#include "../../../ucb/source/ucp/gdrive/GoogleDriveApiClient.hxx"
+#include "../../../ucb/source/ucp/gdrive/gdrive_json.hxx"
 
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

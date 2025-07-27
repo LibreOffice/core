@@ -3830,6 +3830,25 @@ SfxStringItem SaveAsRemote SID_SAVEASREMOTE
 ]
 
 
+SfxVoidItem ShareToSlack SID_SHARETOSLACK
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    ViewerApp = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Document;
+]
+
+
 SfxVoidItem SaveAsTemplate SID_DOCTEMPLATE
 (SfxStringItem TemplateRegion SID_TEMPLATE_REGIONNAME,SfxStringItem TemplateName SID_TEMPLATE_NAME)
 [

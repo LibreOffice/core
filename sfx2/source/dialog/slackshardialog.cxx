@@ -17,8 +17,8 @@
 #include <rtl/ustrbuf.hxx>
 
 // Include Slack API client
-#include <ucb/source/ucp/slack/SlackApiClient.hxx>
-#include <ucb/source/ucp/slack/slack_json.hxx>
+#include "../../../ucb/source/ucp/slack/SlackApiClient.hxx"
+#include "../../../ucb/source/ucp/slack/slack_json.hxx"
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -82,7 +82,7 @@ void SlackShareDialog::InitializeUI()
     // Get UI controls
     m_xDocumentNameLabel = m_xBuilder->weld_label(u"document_name_label"_ustr);
     m_xDocumentSizeLabel = m_xBuilder->weld_label(u"document_size_label"_ustr);
-    m_xWorkspaceCombo = m_xBuilder->weld_combo_box_text(u"workspace_combo"_ustr);
+    m_xWorkspaceCombo = m_xBuilder->weld_combo_box(u"workspace_combo"_ustr);
     m_xChannelCombo = m_xBuilder->weld_combo_box(u"channel_combo"_ustr);
     m_xMessageText = m_xBuilder->weld_text_view(u"message_text"_ustr);
     m_xStatusLabel = m_xBuilder->weld_label(u"status_label"_ustr);
@@ -203,14 +203,22 @@ void SlackShareDialog::OnAuthenticationComplete()
 {
     SAL_WARN("sfx.slack", "Authentication completed, loading workspaces and channels");
 
-    ShowStatus(u"Loading workspaces..."_ustr, true);
-    LoadWorkspaces();
+    try {
+        ShowStatus(u"Loading workspaces..."_ustr, true);
+        LoadWorkspaces();
 
-    ShowStatus(u"Loading channels..."_ustr, true);
-    LoadChannels();
+        ShowStatus(u"Loading channels..."_ustr, true);
+        LoadChannels();
 
-    ShowStatus(u"Ready to share"_ustr, false);
-    UpdateShareButtonState();
+        ShowStatus(u"Ready to share"_ustr, false);
+        UpdateShareButtonState();
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.slack", "Exception in OnAuthenticationComplete: " << e.what());
+        ShowError(u"Error loading Slack workspaces. Authentication succeeded but workspace data could not be loaded."_ustr);
+    } catch (...) {
+        SAL_WARN("sfx.slack", "Unknown exception in OnAuthenticationComplete");
+        ShowError(u"Unknown error loading Slack workspaces."_ustr);
+    }
 }
 
 void SlackShareDialog::LoadWorkspaces()
@@ -251,23 +259,45 @@ void SlackShareDialog::LoadWorkspaces()
 void SlackShareDialog::LoadChannels()
 {
     if (!m_pApiClient || !m_bAuthenticated) {
+        SAL_WARN("sfx.slack", "Cannot load channels: API client or authentication missing");
         return;
     }
 
     try {
+        // First test if our authentication is working
+        if (!m_pApiClient->isAuthenticated()) {
+            SAL_WARN("sfx.slack", "Authentication check failed before loading channels");
+            ShowError(u"Slack authentication expired. Please try authenticating again."_ustr);
+            return;
+        }
+
+        SAL_WARN("sfx.slack", "Calling listChannels for workspace: " + m_sSelectedWorkspaceId);
         std::vector<ucp::slack::SlackChannel> channels = m_pApiClient->listChannels(m_sSelectedWorkspaceId);
+
+        SAL_WARN("sfx.slack", "API returned " << channels.size() << " channels");
 
         if (m_xChannelCombo) {
             m_xChannelCombo->clear();
 
             for (const auto& channel : channels) {
                 rtl::OUString displayName;
-                if (channel.isPrivate) {
+
+                // Use appropriate icons for different channel types
+                if (channel.name.startsWith("@")) {
+                    // Direct message
+                    displayName = u"💬 "_ustr + channel.name;
+                } else if (channel.name.startsWith("Group Message") || channel.name.startsWith("mpdm-")) {
+                    // Group direct message
+                    displayName = u"👥 "_ustr + channel.name;
+                } else if (channel.isPrivate) {
+                    // Private channel
                     displayName = u"🔒 "_ustr + channel.name;
                 } else {
+                    // Public channel
                     displayName = u"# "_ustr + channel.name;
                 }
 
+                SAL_WARN("sfx.slack", "Adding channel: " + channel.name + " (ID: " + channel.id + ")");
                 // Add to combo box (name, id, type)
                 m_xChannelCombo->append(channel.id, displayName);
             }
@@ -279,10 +309,16 @@ void SlackShareDialog::LoadChannels()
 
                 // Set selected channel ID
                 m_sSelectedChannelId = channels[0].id;
+                SAL_WARN("sfx.slack", "Selected first channel: " + m_sSelectedChannelId);
+            } else {
+                SAL_WARN("sfx.slack", "No channels returned from API - share button will remain disabled");
+                ShowError(u"No Slack channels found. Please check that you have access to channels in your workspace."_ustr);
             }
+        } else {
+            SAL_WARN("sfx.slack", "Channel combo box not available");
         }
 
-        SAL_WARN("sfx.slack", "Loaded " << channels.size() << " channels");
+        SAL_WARN("sfx.slack", "LoadChannels completed. Channels loaded: " << (m_bChannelsLoaded ? "true" : "false"));
 
     } catch (const std::exception& e) {
         SAL_WARN("sfx.slack", "Exception loading channels: " << e.what());
@@ -305,7 +341,7 @@ IMPL_LINK_NOARG(SlackShareDialog, OnCancelClicked, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
-IMPL_LINK_NOARG(SlackShareDialog, OnWorkspaceSelected, weld::ComboBoxText&, void)
+IMPL_LINK_NOARG(SlackShareDialog, OnWorkspaceSelected, weld::ComboBox&, void)
 {
     OnWorkspaceChanged();
 }
@@ -416,13 +452,24 @@ void SlackShareDialog::OnShareError(const rtl::OUString& sError)
 
 void SlackShareDialog::UpdateShareButtonState()
 {
+    SAL_WARN("sfx.slack", "=== UpdateShareButtonState ===");
+    SAL_WARN("sfx.slack", "m_bAuthenticated: " << (m_bAuthenticated ? "true" : "false"));
+    SAL_WARN("sfx.slack", "m_bChannelsLoaded: " << (m_bChannelsLoaded ? "true" : "false"));
+    SAL_WARN("sfx.slack", "m_sSelectedChannelId.isEmpty(): " << (m_sSelectedChannelId.isEmpty() ? "true" : "false"));
+    SAL_WARN("sfx.slack", "m_xDocumentStream.is(): " << (m_xDocumentStream.is() ? "true" : "false"));
+
     bool bCanShare = m_bAuthenticated &&
                      m_bChannelsLoaded &&
                      !m_sSelectedChannelId.isEmpty() &&
                      m_xDocumentStream.is();
 
+    SAL_WARN("sfx.slack", "bCanShare: " << (bCanShare ? "true" : "false"));
+
     if (m_xBtnShare) {
         m_xBtnShare->set_sensitive(bCanShare);
+        SAL_WARN("sfx.slack", "Share button sensitivity set to: " << (bCanShare ? "enabled" : "disabled"));
+    } else {
+        SAL_WARN("sfx.slack", "Share button not found!");
     }
 }
 

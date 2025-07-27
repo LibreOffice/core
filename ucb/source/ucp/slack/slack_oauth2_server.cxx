@@ -24,8 +24,15 @@
 #include <fcntl.h>
 #endif
 
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <openssl/x509.h>
+#include <openssl/pem.h>
+
 #include <cstring>
 #include <chrono>
+#include <fstream>
+#include <vector>
 
 namespace ucp {
 namespace slack {
@@ -33,18 +40,34 @@ namespace slack {
 SlackOAuth2Server::SlackOAuth2Server()
     : m_bRunning(false)
     , m_bCodeReceived(false)
-    , m_nPort(8080)
+    , m_nPort(8080) // Changed to 8080 for direct HTTPS
     , m_nSocketFd(-1)
+    , m_pSSLCtx(nullptr)
 {
 #ifdef _WIN32
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif
+
+    // Initialize OpenSSL
+    SSL_load_error_strings();
+    SSL_library_init();
+    OpenSSL_add_all_algorithms();
 }
 
 SlackOAuth2Server::~SlackOAuth2Server()
 {
     stop();
+
+    // Cleanup SSL context
+    if (m_pSSLCtx) {
+        SSL_CTX_free(static_cast<SSL_CTX*>(m_pSSLCtx));
+        m_pSSLCtx = nullptr;
+    }
+
+    // Cleanup OpenSSL
+    EVP_cleanup();
+
 #ifdef _WIN32
     WSACleanup();
 #endif
@@ -56,7 +79,13 @@ bool SlackOAuth2Server::start()
         return true; // Already running
     }
 
-    SAL_WARN("ucb.ucp.slack", "Starting Slack OAuth2 HTTP server on port " + OUString::number(m_nPort));
+    SAL_WARN("ucb.ucp.slack", "Starting native HTTPS server on port " + OUString::number(m_nPort));
+
+    // Load SSL certificates first
+    if (!loadSSLCertificates()) {
+        SAL_WARN("ucb.ucp.slack", "Failed to load SSL certificates");
+        return false;
+    }
 
     // Create socket
 #ifdef _WIN32
@@ -117,10 +146,10 @@ bool SlackOAuth2Server::start()
     m_bCodeReceived = false;
     m_sAuthCode.clear();
 
-    // Start server thread
-    m_pServerThread = std::make_unique<std::thread>(&SlackOAuth2Server::serverLoop, this);
+    // Start HTTPS server thread
+    m_pServerThread = std::make_unique<std::thread>(&SlackOAuth2Server::serverLoopHTTPS, this);
 
-    SAL_WARN("ucb.ucp.slack", "OAuth2 server started successfully");
+    SAL_WARN("ucb.ucp.slack", "HTTPS OAuth2 server started successfully");
     return true;
 }
 
@@ -145,10 +174,18 @@ void SlackOAuth2Server::stop()
     }
 
     // Wait for server thread to finish
-    if (m_pServerThread && m_pServerThread->joinable()) {
-        m_pServerThread->join();
+    if (m_pServerThread) {
+        try {
+            if (m_pServerThread->joinable()) {
+                m_pServerThread->join();
+            }
+        } catch (const std::exception& e) {
+            SAL_WARN("ucb.ucp.slack", "Exception joining OAuth server thread: " << e.what());
+        } catch (...) {
+            SAL_WARN("ucb.ucp.slack", "Unknown exception joining OAuth server thread");
+        }
+        m_pServerThread.reset();
     }
-    m_pServerThread.reset();
 
     SAL_WARN("ucb.ucp.slack", "OAuth2 server stopped");
 }
@@ -181,7 +218,7 @@ rtl::OUString SlackOAuth2Server::waitForAuthCode(sal_Int32 timeoutSeconds)
 
 rtl::OUString SlackOAuth2Server::getCallbackURL() const
 {
-    return rtl::OUString(SLACK_REDIRECT_URI);
+    return rtl::OUString("https://localhost:8080/callback");
 }
 
 void SlackOAuth2Server::serverLoop()
@@ -269,50 +306,239 @@ void SlackOAuth2Server::serverLoop()
 
 rtl::OUString SlackOAuth2Server::parseAuthCodeFromRequest(const rtl::OUString& request)
 {
+    // Convert to std::string for thread-safe parsing
+    std::string requestStr = request.toUtf8().getStr();
+
     // Look for "code=" parameter in the HTTP request
-    sal_Int32 codePos = request.indexOf("code=");
-    if (codePos == -1) {
+    size_t codePos = requestStr.find("code=");
+    if (codePos == std::string::npos) {
         return rtl::OUString();
     }
 
-    sal_Int32 startPos = codePos + 5; // Length of "code="
-    sal_Int32 endPos = request.indexOf("&", startPos);
-    if (endPos == -1) {
-        endPos = request.indexOf(" ", startPos); // Space before HTTP/1.1
+    size_t startPos = codePos + 5; // Length of "code="
+    size_t endPos = requestStr.find("&", startPos);
+    if (endPos == std::string::npos) {
+        endPos = requestStr.find(" ", startPos); // Space before HTTP/1.1
     }
 
-    if (endPos == -1) {
-        endPos = request.getLength();
+    if (endPos == std::string::npos) {
+        endPos = requestStr.length();
     }
 
-    return request.copy(startPos, endPos - startPos);
+    std::string authCode = requestStr.substr(startPos, endPos - startPos);
+    return rtl::OUString::fromUtf8(authCode.c_str());
 }
 
 rtl::OUString SlackOAuth2Server::generateSuccessPage()
 {
-    rtl::OUStringBuffer response;
-    response.append("HTTP/1.1 200 OK\r\n");
-    response.append("Content-Type: text/html\r\n");
-    response.append("Connection: close\r\n\r\n");
-    response.append("<!DOCTYPE html>\n");
-    response.append("<html>\n");
-    response.append("<head>\n");
-    response.append("    <title>Slack Authorization Successful</title>\n");
-    response.append("    <style>\n");
-    response.append("        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }\n");
-    response.append("        .success { color: #28a745; }\n");
-    response.append("        .info { color: #6c757d; margin-top: 20px; }\n");
-    response.append("    </style>\n");
-    response.append("</head>\n");
-    response.append("<body>\n");
-    response.append("    <h1 class=\"success\">✅ Authorization Successful!</h1>\n");
-    response.append("    <p>You have successfully authorized LibreOffice to access your Slack workspace.</p>\n");
-    response.append("    <p class=\"info\">You can now close this browser window and return to LibreOffice.</p>\n");
-    response.append("    <script>setTimeout(function(){ window.close(); }, 3000);</script>\n");
-    response.append("</body>\n");
-    response.append("</html>\n");
+    // Use std::string to avoid thread-safety issues with OUStringBuffer
+    std::string response =
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html; charset=UTF-8\r\n"
+        "Connection: close\r\n\r\n"
+        "<!DOCTYPE html>\n"
+        "<html>\n"
+        "<head>\n"
+        "    <meta charset=\"UTF-8\">\n"
+        "    <title>Slack Authorization Successful</title>\n"
+        "    <style>\n"
+        "        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }\n"
+        "        .success { color: #28a745; }\n"
+        "        .info { color: #6c757d; margin-top: 20px; }\n"
+        "    </style>\n"
+        "</head>\n"
+        "<body>\n"
+        "    <h1 class=\"success\">&#x2705; Authorization Successful!</h1>\n"
+        "    <p>You have successfully authorized LibreOffice to access your Slack workspace.</p>\n"
+        "    <p class=\"info\">You can now close this browser window and return to LibreOffice.</p>\n"
+        "    <script>setTimeout(function(){ window.close(); }, 3000);</script>\n"
+        "</body>\n"
+        "</html>\n";
 
-    return response.makeStringAndClear();
+    return rtl::OUString::fromUtf8(response.c_str());
+}
+
+bool SlackOAuth2Server::loadSSLCertificates()
+{
+    // Create SSL context
+    const SSL_METHOD* method = TLS_server_method();
+    SSL_CTX* ctx = SSL_CTX_new(method);
+    if (!ctx) {
+        SAL_WARN("ucb.ucp.slack", "Failed to create SSL context");
+        return false;
+    }
+
+    // Set SSL options for better security
+    SSL_CTX_set_options(ctx, SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 | SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
+    SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
+
+    // Look for certificates in standard locations
+    std::vector<std::string> certPaths = {
+        "localhost+1.pem",  // Current directory (development)
+        "ucb/source/ucp/slack/certs/localhost+1.pem",  // Relative to project root
+        std::string(getenv("HOME") ? getenv("HOME") : "") + "/.local/share/mkcert/localhost+1.pem",  // User directory
+        "/usr/local/share/ca-certificates/localhost+1.pem"  // System directory
+    };
+
+    std::vector<std::string> keyPaths = {
+        "localhost+1-key.pem",
+        "ucb/source/ucp/slack/certs/localhost+1-key.pem",
+        std::string(getenv("HOME") ? getenv("HOME") : "") + "/.local/share/mkcert/localhost+1-key.pem",
+        "/usr/local/share/ca-certificates/localhost+1-key.pem"
+    };
+
+    bool certLoaded = false;
+    bool keyLoaded = false;
+
+    // Try to load certificate
+    for (const auto& certPath : certPaths) {
+        if (certPath.empty()) continue;
+        std::ifstream certFile(certPath);
+        if (certFile.good()) {
+            if (SSL_CTX_use_certificate_file(ctx, certPath.c_str(), SSL_FILETYPE_PEM) == 1) {
+                SAL_WARN("ucb.ucp.slack", "Loaded SSL certificate from: " + OUString::fromUtf8(certPath.c_str()));
+                certLoaded = true;
+                break;
+            }
+        }
+    }
+
+    // Try to load private key
+    for (const auto& keyPath : keyPaths) {
+        if (keyPath.empty()) continue;
+        std::ifstream keyFile(keyPath);
+        if (keyFile.good()) {
+            if (SSL_CTX_use_PrivateKey_file(ctx, keyPath.c_str(), SSL_FILETYPE_PEM) == 1) {
+                SAL_WARN("ucb.ucp.slack", "Loaded SSL private key from: " + OUString::fromUtf8(keyPath.c_str()));
+                keyLoaded = true;
+                break;
+            }
+        }
+    }
+
+    if (!certLoaded || !keyLoaded) {
+        SAL_WARN("ucb.ucp.slack", "Failed to load SSL certificate or key. Please run: mkcert localhost 127.0.0.1");
+        SSL_CTX_free(ctx);
+        return false;
+    }
+
+    // Verify that the private key matches the certificate
+    if (SSL_CTX_check_private_key(ctx) != 1) {
+        SAL_WARN("ucb.ucp.slack", "SSL private key does not match certificate");
+        SSL_CTX_free(ctx);
+        return false;
+    }
+
+    m_pSSLCtx = static_cast<void*>(ctx);
+    SAL_WARN("ucb.ucp.slack", "SSL certificates loaded successfully");
+    return true;
+}
+
+void SlackOAuth2Server::serverLoopHTTPS()
+{
+    SAL_WARN("ucb.ucp.slack", "HTTPS OAuth2 server loop started");
+
+    SSL_CTX* ctx = static_cast<SSL_CTX*>(m_pSSLCtx);
+    if (!ctx) {
+        SAL_WARN("ucb.ucp.slack", "SSL context is null");
+        return;
+    }
+
+    while (m_bRunning.load()) {
+        struct sockaddr_in clientAddress;
+#ifdef _WIN32
+        int clientAddrLen = sizeof(clientAddress);
+        SOCKET clientSocket = accept(m_nSocketFd, (struct sockaddr*)&clientAddress, &clientAddrLen);
+        if (clientSocket == INVALID_SOCKET) {
+#else
+        socklen_t clientAddrLen = sizeof(clientAddress);
+        int clientSocket = accept(m_nSocketFd, (struct sockaddr*)&clientAddress, &clientAddrLen);
+        if (clientSocket < 0) {
+#endif
+            if (m_bRunning.load()) {
+                SAL_WARN("ucb.ucp.slack", "Failed to accept HTTPS connection");
+            }
+            break;
+        }
+
+        // Create SSL connection
+        SSL* ssl = SSL_new(ctx);
+        if (!ssl) {
+            SAL_WARN("ucb.ucp.slack", "Failed to create SSL connection");
+#ifdef _WIN32
+            closesocket(clientSocket);
+#else
+            close(clientSocket);
+#endif
+            continue;
+        }
+
+        SSL_set_fd(ssl, clientSocket);
+
+        // Perform SSL handshake
+        if (SSL_accept(ssl) <= 0) {
+            SAL_WARN("ucb.ucp.slack", "SSL handshake failed");
+            SSL_free(ssl);
+#ifdef _WIN32
+            closesocket(clientSocket);
+#else
+            close(clientSocket);
+#endif
+            continue;
+        }
+
+        SAL_WARN("ucb.ucp.slack", "SSL connection established");
+
+        // Read HTTPS request
+        char buffer[4096];
+        memset(buffer, 0, sizeof(buffer));
+        int bytesRead = SSL_read(ssl, buffer, sizeof(buffer) - 1);
+
+        if (bytesRead > 0) {
+            rtl::OUString request = rtl::OUString::fromUtf8(buffer);
+            SAL_WARN("ucb.ucp.slack", "Received HTTPS request");
+
+            // Parse authorization code from request
+            rtl::OUString authCode = parseAuthCodeFromRequest(request);
+
+            if (!authCode.isEmpty()) {
+                m_sAuthCode = authCode;
+                m_bCodeReceived = true;
+                SAL_WARN("ucb.ucp.slack", "Authorization code extracted from HTTPS request");
+
+                // Send success response over SSL
+                rtl::OUString response = generateSuccessPage();
+                std::string responseStr = response.toUtf8().getStr();
+                SSL_write(ssl, responseStr.c_str(), responseStr.length());
+            } else {
+                SAL_WARN("ucb.ucp.slack", "No authorization code found in HTTPS request");
+
+                // Send error response over SSL
+                std::string errorResponse = "HTTP/1.1 400 Bad Request\r\n"
+                                          "Content-Type: text/html\r\n"
+                                          "Connection: close\r\n\r\n"
+                                          "<html><body><h1>Error</h1><p>No authorization code received.</p></body></html>";
+                SSL_write(ssl, errorResponse.c_str(), errorResponse.length());
+            }
+        }
+
+        // Clean up SSL connection
+        SSL_shutdown(ssl);
+        SSL_free(ssl);
+
+        // Close client connection
+#ifdef _WIN32
+        closesocket(clientSocket);
+#else
+        close(clientSocket);
+#endif
+
+        if (m_bCodeReceived.load()) {
+            break; // Mission accomplished
+        }
+    }
+
+    SAL_WARN("ucb.ucp.slack", "HTTPS OAuth2 server loop ended");
 }
 
 } // namespace slack

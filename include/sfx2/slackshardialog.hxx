@@ -45,7 +45,7 @@ private:
     // UI Controls
     std::unique_ptr<weld::Label> m_xDocumentNameLabel;
     std::unique_ptr<weld::Label> m_xDocumentSizeLabel;
-    std::unique_ptr<weld::ComboBoxText> m_xWorkspaceCombo;
+    std::unique_ptr<weld::ComboBox> m_xWorkspaceCombo;
     std::unique_ptr<weld::ComboBox> m_xChannelCombo;
     std::unique_ptr<weld::TextView> m_xMessageText;
     std::unique_ptr<weld::Label> m_xStatusLabel;
@@ -93,7 +93,7 @@ private:
     // Event handlers
     DECL_LINK(OnShareClicked, weld::Button&, void);
     DECL_LINK(OnCancelClicked, weld::Button&, void);
-    DECL_LINK(OnWorkspaceSelected, weld::ComboBoxText&, void);
+    DECL_LINK(OnWorkspaceSelected, weld::ComboBox&, void);
     DECL_LINK(OnChannelSelected, weld::ComboBox&, void);
     DECL_LINK(OnMessageChanged, weld::TextView&, void);
 

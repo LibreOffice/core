@@ -45,8 +45,10 @@ public:
 
 private:
     void serverLoop();
+    void serverLoopHTTPS();
     rtl::OUString parseAuthCodeFromRequest(const rtl::OUString& request);
     rtl::OUString generateSuccessPage();
+    bool loadSSLCertificates();
 
     std::atomic<bool> m_bRunning;
     std::atomic<bool> m_bCodeReceived;
@@ -54,6 +56,7 @@ private:
     sal_Int32 m_nSocketFd;
     rtl::OUString m_sAuthCode;
     std::unique_ptr<std::thread> m_pServerThread;
+    void* m_pSSLCtx; // SSL_CTX pointer (using void* to avoid including OpenSSL headers)
 };
 
 } // namespace slack

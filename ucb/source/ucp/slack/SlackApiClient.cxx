@@ -64,17 +64,10 @@ SlackApiClient::~SlackApiClient()
 
 rtl::OUString SlackApiClient::authenticate()
 {
-    SAL_WARN("ucb.ucp.slack", "Starting Slack OAuth2 authentication");
+    SAL_WARN("ucb.ucp.slack", "Starting Slack OAuth2 manual authentication");
 
     try {
-        // Create OAuth2 callback server
-        SlackOAuth2Server oauthServer;
-        if (!oauthServer.start()) {
-            SAL_WARN("ucb.ucp.slack", "Failed to start OAuth2 callback server");
-            return rtl::OUString();
-        }
-
-        // Build authorization URL
+        // Build authorization URL with manual redirect
         rtl::OUStringBuffer authUrl;
         authUrl.append(SLACK_AUTH_URL);
         authUrl.append("?client_id=");
@@ -86,7 +79,7 @@ rtl::OUString SlackApiClient::authenticate()
         authUrl.append("&response_type=code");
         authUrl.append("&state=libreoffice_slack_auth");
 
-        SAL_WARN("ucb.ucp.slack", "Opening browser for Slack authentication");
+        SAL_WARN("ucb.ucp.slack", "Opening browser for manual Slack authentication");
 
         // Open browser for user authentication
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
@@ -97,22 +90,32 @@ rtl::OUString SlackApiClient::authenticate()
                              rtl::OUString(),
                              css::system::SystemShellExecuteFlags::URIS_ONLY);
 
-        // Wait for authorization code
+        // Create OAuth2 callback server with HTTPS support
+        SlackOAuth2Server oauthServer;
+        if (!oauthServer.start()) {
+            SAL_WARN("ucb.ucp.slack", "Failed to start OAuth2 HTTPS callback server");
+            return rtl::OUString();
+        }
+
+        // Wait for authorization code from HTTPS callback
         rtl::OUString authCode = oauthServer.waitForAuthCode(120); // 2 minute timeout
         oauthServer.stop();
 
         if (authCode.isEmpty()) {
-            SAL_WARN("ucb.ucp.slack", "No authorization code received");
+            SAL_WARN("ucb.ucp.slack", "No authorization code provided by user");
             return rtl::OUString();
         }
 
-        SAL_WARN("ucb.ucp.slack", "Received authorization code, exchanging for token");
+        SAL_WARN("ucb.ucp.slack", "Received authorization code from user, exchanging for token");
 
         // Exchange authorization code for access token
         rtl::OUString accessToken = exchangeCodeForToken(authCode);
+
         if (!accessToken.isEmpty()) {
             m_sAccessToken = accessToken;
             SAL_WARN("ucb.ucp.slack", "Successfully authenticated with Slack");
+        } else {
+            SAL_WARN("ucb.ucp.slack", "Token exchange returned empty token");
         }
 
         return accessToken;
@@ -173,30 +176,50 @@ rtl::OUString SlackApiClient::refreshAccessToken()
 
 rtl::OUString SlackApiClient::exchangeCodeForToken(const rtl::OUString& sAuthCode)
 {
-    SAL_WARN("ucb.ucp.slack", "Exchanging authorization code for access token");
+    SAL_WARN("ucb.ucp.slack", "=== STARTING TOKEN EXCHANGE ===");
 
-    // Create token request
-    rtl::OUString requestBody = SlackJsonHelper::createTokenRequest(sAuthCode);
+    try {
+        SAL_WARN("ucb.ucp.slack", "Creating token request body");
 
-    // Send token exchange request
-    rtl::OUString response = sendRequestForString("POST", SLACK_TOKEN_URL, requestBody);
+        // Create token request
+        rtl::OUString requestBody = SlackJsonHelper::createTokenRequest(sAuthCode);
+        SAL_WARN("ucb.ucp.slack", "Token request body created successfully");
 
-    if (response.isEmpty()) {
-        SAL_WARN("ucb.ucp.slack", "Empty response from token exchange");
+        SAL_WARN("ucb.ucp.slack", "Sending token exchange request to Slack");
+
+        // Send token exchange request
+        rtl::OUString response = sendRequestForString("POST", SLACK_TOKEN_URL, requestBody);
+        SAL_WARN("ucb.ucp.slack", "Token exchange request completed");
+
+        if (response.isEmpty()) {
+            SAL_WARN("ucb.ucp.slack", "Empty response from token exchange");
+            return rtl::OUString();
+        }
+
+        SAL_WARN("ucb.ucp.slack", "Parsing token response");
+
+        // Parse token response
+        auto tokens = SlackJsonHelper::parseTokenResponse(response);
+        SAL_WARN("ucb.ucp.slack", "Token response parsed");
+
+        if (tokens.first.isEmpty()) {
+            SAL_WARN("ucb.ucp.slack", "Failed to parse access token from response");
+            return rtl::OUString();
+        }
+
+        m_sRefreshToken = tokens.second; // May be empty for Slack
+        SAL_WARN("ucb.ucp.slack", "Successfully obtained access token");
+        SAL_WARN("ucb.ucp.slack", "=== TOKEN EXCHANGE COMPLETED ===");
+
+        return tokens.first;
+
+    } catch (const std::exception& e) {
+        SAL_WARN("ucb.ucp.slack", "Exception in token exchange: " << e.what());
+        return rtl::OUString();
+    } catch (...) {
+        SAL_WARN("ucb.ucp.slack", "Unknown exception in token exchange");
         return rtl::OUString();
     }
-
-    // Parse token response
-    auto tokens = SlackJsonHelper::parseTokenResponse(response);
-    if (tokens.first.isEmpty()) {
-        SAL_WARN("ucb.ucp.slack", "Failed to parse access token from response");
-        return rtl::OUString();
-    }
-
-    m_sRefreshToken = tokens.second; // May be empty for Slack
-    SAL_WARN("ucb.ucp.slack", "Successfully obtained access token");
-
-    return tokens.first;
 }
 
 std::vector<SlackWorkspace> SlackApiClient::listWorkspaces()
@@ -213,7 +236,7 @@ std::vector<SlackWorkspace> SlackApiClient::listWorkspaces()
 
 std::vector<SlackChannel> SlackApiClient::listChannels(const rtl::OUString& workspaceId)
 {
-    SAL_WARN("ucb.ucp.slack", "Listing channels for workspace: " + workspaceId);
+    SAL_WARN("ucb.ucp.slack", "=== LISTING CHANNELS for workspace: " + workspaceId + " ===");
 
     rtl::OUString accessToken = getAccessToken();
     if (accessToken.isEmpty()) {
@@ -221,19 +244,34 @@ std::vector<SlackChannel> SlackApiClient::listChannels(const rtl::OUString& work
         return std::vector<SlackChannel>();
     }
 
-    // Get public channels
-    rtl::OUString url = rtl::OUString(SLACK_BASE_URL) + "/conversations.list?types=public_channel,private_channel";
+    SAL_WARN("ucb.ucp.slack", "Access token available, making API request");
+
+    // Get all channel types including DMs, with higher limit for pagination
+    rtl::OUString url = rtl::OUString(SLACK_BASE_URL) + "/conversations.list?types=public_channel,private_channel,im,mpim&limit=200";
+    SAL_WARN("ucb.ucp.slack", "API URL: " + url);
+
     rtl::OUString response = sendRequestForString("GET", url, "");
 
-    if (response.isEmpty() || SlackJsonHelper::isErrorResponse(response)) {
-        SAL_WARN("ucb.ucp.slack", "Failed to list channels");
+    SAL_WARN("ucb.ucp.slack", "API response received, length: " + rtl::OUString::number(response.getLength()));
+
+    if (response.isEmpty()) {
+        SAL_WARN("ucb.ucp.slack", "Empty response from channels API");
         return std::vector<SlackChannel>();
     }
 
-    return SlackJsonHelper::parseChannelList(response);
+    if (SlackJsonHelper::isErrorResponse(response)) {
+        SAL_WARN("ucb.ucp.slack", "Error response from channels API: " + response);
+        return std::vector<SlackChannel>();
+    }
+
+    SAL_WARN("ucb.ucp.slack", "Parsing channel list from response");
+    std::vector<SlackChannel> channels = SlackJsonHelper::parseChannelList(response);
+
+    SAL_WARN("ucb.ucp.slack", "=== PARSED " << channels.size() << " CHANNELS ===");
+    return channels;
 }
 
-std::vector<SlackUser> SlackApiClient::listUsers(const rtl::OUString& workspaceId)
+std::vector<SlackUser> SlackApiClient::listUsers(const rtl::OUString& /*workspaceId*/)
 {
     // TODO: Implement user listing for DM support
     return std::vector<SlackUser>();
@@ -265,6 +303,7 @@ rtl::OUString SlackApiClient::shareFile(const rtl::OUString& filename,
         if (response.isEmpty() || SlackJsonHelper::isErrorResponse(response)) {
             SAL_WARN("ucb.ucp.slack", "Failed to get upload URL");
             if (!response.isEmpty()) {
+                SAL_WARN("ucb.ucp.slack", "Full response: " + response);
                 SAL_WARN("ucb.ucp.slack", "Error: " + SlackJsonHelper::extractErrorMessage(response));
             }
             return rtl::OUString();
@@ -299,7 +338,7 @@ rtl::OUString SlackApiClient::shareFile(const rtl::OUString& filename,
     }
 }
 
-rtl::OUString SlackApiClient::getUploadURL(const rtl::OUString& filename, sal_Int64 fileSize, const rtl::OUString& channelId)
+rtl::OUString SlackApiClient::getUploadURL(const rtl::OUString& filename, sal_Int64 fileSize, const rtl::OUString& /*channelId*/)
 {
     SAL_WARN("ucb.ucp.slack", "Getting upload URL for file: " + filename + " (" + OUString::number(fileSize) + " bytes)");
 
@@ -350,6 +389,13 @@ void SlackApiClient::uploadFileToURL(const rtl::OUString& uploadUrl, const uno::
     std::string fileContent;
 
     try {
+        // Reset stream position to beginning if seekable
+        uno::Reference<io::XSeekable> xSeekable(xInputStream, uno::UNO_QUERY);
+        if (xSeekable.is()) {
+            xSeekable->seek(0);
+            SAL_WARN("ucb.ucp.slack", "Reset stream position to beginning");
+        }
+
         do {
             nBytesRead = xInputStream->readBytes(aBuffer, 8192);
             if (nBytesRead > 0) {
@@ -430,6 +476,7 @@ rtl::OUString SlackApiClient::completeUpload(const rtl::OUString& fileId, const 
     if (response.isEmpty() || SlackJsonHelper::isErrorResponse(response)) {
         SAL_WARN("ucb.ucp.slack", "Failed to complete upload");
         if (!response.isEmpty()) {
+            SAL_WARN("ucb.ucp.slack", "Full response: " + response);
             SAL_WARN("ucb.ucp.slack", "Error: " + SlackJsonHelper::extractErrorMessage(response));
         }
         return rtl::OUString();
@@ -514,11 +561,11 @@ rtl::OUString SlackApiClient::sendRequestForStringWithRetry(const rtl::OUString&
                 curl_easy_setopt(m_pCurl, CURLOPT_POSTFIELDSIZE, body.length());
 
                 // Determine content type based on URL and body content
-                if (url.find("oauth.v2.access") != std::string::npos) {
-                    // Slack token requests expect form data
+                if (url.find("oauth.v2.access") != std::string::npos || url.find("files.completeUploadExternal") != std::string::npos) {
+                    // Slack token requests and file completion expect form data
                     headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
-                } else if (body.find('{') != std::string::npos || body.find('[') != std::string::npos) {
-                    // JSON content
+                } else if (body[0] == '{' || body[0] == '[') {
+                    // JSON content (starts with { or [)
                     headers = curl_slist_append(headers, "Content-Type: application/json");
                 } else {
                     // Default to form data
@@ -622,12 +669,24 @@ size_t SlackApiClient::WriteCallback(void* contents, size_t size, size_t nmemb, 
     return totalSize;
 }
 
-size_t SlackApiClient::ReadCallback(void* ptr, size_t size, size_t nmemb, void* userdata)
+size_t SlackApiClient::ReadCallback(void* /*ptr*/, size_t /*size*/, size_t /*nmemb*/, void* /*userdata*/)
 {
     // This callback is used for streaming file uploads
     // Currently we read the entire file into memory in uploadFileToURL
     // This could be optimized for large files in the future
     return 0;
+}
+
+rtl::OUString SlackApiClient::promptForAuthCode()
+{
+    // Show a simple input dialog asking user to paste the auth code
+    // This replaces the complex OAuth callback server approach
+
+    SAL_WARN("ucb.ucp.slack", "Prompting user for authorization code");
+
+    // For now, return empty string - this will be handled by the calling dialog
+    // The actual UI prompt will be implemented in the SlackShareDialog
+    return rtl::OUString();
 }
 
 } // namespace slack

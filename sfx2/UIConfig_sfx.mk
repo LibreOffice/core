@@ -63,6 +63,7 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/searchdialog \
 	sfx2/uiconfig/ui/securityinfopage \
 	sfx2/uiconfig/ui/singletabdialog \
+	sfx2/uiconfig/ui/slackshardialog \
 	sfx2/uiconfig/ui/startcenter \
 	sfx2/uiconfig/ui/stylecontextmenu \
 	sfx2/uiconfig/ui/tabbar \

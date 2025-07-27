@@ -60,12 +60,18 @@
 
 /* Slack */
 #define SLACK_BASE_URL "https://slack.com/api"
+#ifndef SLACK_CLIENT_ID
 #define SLACK_CLIENT_ID ""
+#endif
+#ifndef SLACK_CLIENT_SECRET
 #define SLACK_CLIENT_SECRET ""
+#endif
 #define SLACK_AUTH_URL "https://slack.com/oauth/v2/authorize"
 #define SLACK_TOKEN_URL "https://slack.com/api/oauth.v2.access"
-#define SLACK_REDIRECT_URI "http://localhost:8080/callback"
-#define SLACK_SCOPES "files:write,chat:write,channels:read"
+#ifndef SLACK_REDIRECT_URI
+#define SLACK_REDIRECT_URI "https://localhost:8080/callback"
+#endif
+#define SLACK_SCOPES "files:write,chat:write,channels:read,groups:read"
 
 #endif
 

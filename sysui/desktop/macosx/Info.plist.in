@@ -1969,6 +1969,17 @@
     <array>
         <string>MacOSX</string>
     </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>LibreOffice Slack OAuth</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>libreoffice-slack</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab: -->

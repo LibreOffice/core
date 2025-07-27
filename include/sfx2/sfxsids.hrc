@@ -130,6 +130,7 @@ class SvxZoomItem;
 #define SID_OPENREMOTE                      (SID_SFX_START + 517)
 #define SID_OPENGOOGLEDRIVE                 (SID_SFX_START + 611)
 #define SID_OPENDROPBOX                     (SID_SFX_START + 612)
+#define SID_SHARETOSLACK                    (SID_SFX_START + 613)
 #define SID_OPENURL                         (SID_SFX_START + 596)
 #define SID_JUMPTOMARK                      TypedWhichId<SfxStringItem>(SID_SFX_START + 598)
 #define SID_OPENTEMPLATE                    (SID_SFX_START + 594)

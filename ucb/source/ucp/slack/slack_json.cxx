@@ -58,21 +58,82 @@ std::vector<SlackChannel> SlackJsonHelper::parseChannelList(const rtl::OUString&
         }
 
         // Parse channels array
-        for (const auto& item : pt.get_child("channels")) {
+        SAL_WARN("ucb.ucp.slack", "Starting to parse channels array");
+
+        // Check if 'channels' key exists
+        auto channelsIter = pt.find("channels");
+        if (channelsIter == pt.not_found()) {
+            SAL_WARN("ucb.ucp.slack", "'channels' key not found in response");
+
+            // Try 'conversations' instead (alternative key name)
+            channelsIter = pt.find("conversations");
+            if (channelsIter == pt.not_found()) {
+                SAL_WARN("ucb.ucp.slack", "'conversations' key also not found in response");
+                return channels;
+            } else {
+                SAL_WARN("ucb.ucp.slack", "Found 'conversations' key instead of 'channels'");
+            }
+        }
+
+        const auto& channelsChild = channelsIter->second;
+        SAL_WARN("ucb.ucp.slack", "Found channels array with " << channelsChild.size() << " items");
+
+        for (const auto& item : channelsChild) {
             const boost::property_tree::ptree& channelPt = item.second;
 
             SlackChannel channel;
             channel.id = stdStringToOUString(channelPt.get<std::string>("id", ""));
-            channel.name = stdStringToOUString(channelPt.get<std::string>("name", ""));
+
+            // Get channel type to handle DMs vs channels differently
+            std::string channelType = channelPt.get<std::string>("is_channel", "false") == "true" ? "channel" :
+                                     channelPt.get<std::string>("is_group", "false") == "true" ? "group" :
+                                     channelPt.get<std::string>("is_im", "false") == "true" ? "im" :
+                                     channelPt.get<std::string>("is_mpim", "false") == "true" ? "mpim" : "unknown";
+
+            // Handle different naming for DMs vs channels
+            if (channelType == "im") {
+                // For DMs, use user ID or "Direct Message" as fallback
+                std::string userName = channelPt.get<std::string>("user", "");
+                if (!userName.empty()) {
+                    channel.name = stdStringToOUString("@" + userName);
+                } else {
+                    channel.name = u"Direct Message"_ustr;
+                }
+                channel.isPrivate = true;
+            } else if (channelType == "mpim") {
+                // For group DMs, try to get a name or use fallback
+                std::string name = channelPt.get<std::string>("name", "");
+                if (!name.empty()) {
+                    channel.name = stdStringToOUString(name);
+                } else {
+                    channel.name = u"Group Message"_ustr;
+                }
+                channel.isPrivate = true;
+            } else {
+                // Regular channels
+                channel.name = stdStringToOUString(channelPt.get<std::string>("name", ""));
+                channel.isPrivate = channelPt.get<bool>("is_private", false);
+            }
+
             channel.purpose = stdStringToOUString(channelPt.get<std::string>("purpose.value", ""));
             channel.topic = stdStringToOUString(channelPt.get<std::string>("topic.value", ""));
-            channel.isPrivate = channelPt.get<bool>("is_private", false);
             channel.isArchived = channelPt.get<bool>("is_archived", false);
-            channel.isMember = channelPt.get<bool>("is_member", false);
+            channel.isMember = channelPt.get<bool>("is_member", true); // DMs are always "member"
             channel.memberCount = channelPt.get<int>("num_members", 0);
+
+            // Include if not archived and has valid ID
+            SAL_WARN("ucb.ucp.slack", "Processing channel: id=" << channel.id
+                                    << ", name=" << channel.name
+                                    << ", archived=" << channel.isArchived
+                                    << ", type=" << channelType);
 
             if (!channel.id.isEmpty() && !channel.isArchived) {
                 channels.push_back(channel);
+                SAL_WARN("ucb.ucp.slack", "Channel added to list");
+            } else {
+                SAL_WARN("ucb.ucp.slack", "Channel rejected: "
+                                        << (channel.id.isEmpty() ? "empty ID" : "")
+                                        << (channel.isArchived ? " archived" : ""));
             }
         }
 
@@ -147,20 +208,48 @@ SlackFileInfo SlackJsonHelper::parseCompleteUploadResponse(const rtl::OUString& 
     SlackFileInfo fileInfo;
 
     try {
+        SAL_WARN("ucb.ucp.slack", "Complete upload response: " << jsonResponse);
+
         std::istringstream jsonStream(ouStringToStdString(jsonResponse));
         boost::property_tree::ptree pt;
         boost::property_tree::read_json(jsonStream, pt);
 
         bool ok = pt.get<bool>("ok", false);
+        SAL_WARN("ucb.ucp.slack", "Response ok: " << (ok ? "true" : "false"));
+
         if (ok) {
-            const boost::property_tree::ptree& filePt = pt.get_child("file");
-            fileInfo.id = stdStringToOUString(filePt.get<std::string>("id", ""));
-            fileInfo.name = stdStringToOUString(filePt.get<std::string>("name", ""));
-            fileInfo.mimetype = stdStringToOUString(filePt.get<std::string>("mimetype", ""));
-            fileInfo.size = filePt.get<long long>("size", 0);
-            fileInfo.url = stdStringToOUString(filePt.get<std::string>("url_private", ""));
-            fileInfo.permalink = stdStringToOUString(filePt.get<std::string>("permalink", ""));
-            fileInfo.timestamp = stdStringToOUString(filePt.get<std::string>("timestamp", ""));
+            // Try to get files array first (files.completeUploadExternal returns an array)
+            auto filesOpt = pt.get_child_optional("files");
+            if (filesOpt && !filesOpt->empty()) {
+                // Get first file from the files array
+                const boost::property_tree::ptree& filePt = filesOpt->begin()->second;
+                fileInfo.id = stdStringToOUString(filePt.get<std::string>("id", ""));
+                fileInfo.name = stdStringToOUString(filePt.get<std::string>("name", ""));
+                fileInfo.mimetype = stdStringToOUString(filePt.get<std::string>("mimetype", ""));
+                fileInfo.size = filePt.get<long long>("size", 0);
+                fileInfo.url = stdStringToOUString(filePt.get<std::string>("url_private", ""));
+                fileInfo.permalink = stdStringToOUString(filePt.get<std::string>("permalink", ""));
+                fileInfo.timestamp = stdStringToOUString(filePt.get<std::string>("timestamp", ""));
+                SAL_WARN("ucb.ucp.slack", "Parsed file info: id=" << fileInfo.id << " name=" << fileInfo.name);
+            } else {
+                // Fallback: try single file object (for other API endpoints)
+                auto fileOpt = pt.get_child_optional("file");
+                if (fileOpt) {
+                    const boost::property_tree::ptree& filePt = *fileOpt;
+                    fileInfo.id = stdStringToOUString(filePt.get<std::string>("id", ""));
+                    fileInfo.name = stdStringToOUString(filePt.get<std::string>("name", ""));
+                    fileInfo.mimetype = stdStringToOUString(filePt.get<std::string>("mimetype", ""));
+                    fileInfo.size = filePt.get<long long>("size", 0);
+                    fileInfo.url = stdStringToOUString(filePt.get<std::string>("url_private", ""));
+                    fileInfo.permalink = stdStringToOUString(filePt.get<std::string>("permalink", ""));
+                    fileInfo.timestamp = stdStringToOUString(filePt.get<std::string>("timestamp", ""));
+                    SAL_WARN("ucb.ucp.slack", "Parsed file info: id=" << fileInfo.id << " name=" << fileInfo.name);
+                } else {
+                    SAL_WARN("ucb.ucp.slack", "No 'files' array or 'file' object found in response");
+                }
+            }
+        } else {
+            SAL_WARN("ucb.ucp.slack", "Response indicates failure");
         }
 
     } catch (const std::exception& e) {
@@ -187,39 +276,47 @@ rtl::OUString SlackJsonHelper::createTokenRequest(const rtl::OUString& authCode)
 
 rtl::OUString SlackJsonHelper::createUploadURLRequest(const rtl::OUString& filename, sal_Int64 fileSize)
 {
-    tools::JsonWriter aJson;
-    aJson.put("filename", filename);
-    aJson.put("length", fileSize);
+    // Slack files.getUploadURLExternal expects form data, not JSON
+    rtl::OUStringBuffer request;
+    request.append("filename=");
+    request.append(filename);
+    request.append("&length=");
+    request.append(rtl::OUString::number(fileSize));
 
-    return rtl::OUString::fromUtf8(aJson.finishAndGetAsOString());
+    return request.makeStringAndClear();
 }
 
 rtl::OUString SlackJsonHelper::createCompleteUploadRequest(const rtl::OUString& fileId, const rtl::OUString& channelId, const rtl::OUString& message, const rtl::OUString& threadTs)
 {
-    tools::JsonWriter aJson;
+    // Slack files.completeUploadExternal expects form data with files as JSON array
+    rtl::OUStringBuffer request;
 
-    // Create files array with single file
-    aJson.startArray("files");
-    aJson.startObject();
-    aJson.put("id", fileId);
-    aJson.put("title", message.isEmpty() ? rtl::OUString("Document") : message);
-    aJson.endObject();
-    aJson.endArray();
+    // Create the files JSON array manually (tools::JsonWriter creates an object, but we need just an array)
+    rtl::OUStringBuffer filesJson;
+    filesJson.append("[{\"id\":\"");
+    filesJson.append(fileId);
+    filesJson.append("\",\"title\":\"");
+    filesJson.append(message.isEmpty() ? rtl::OUString("Document") : message);
+    filesJson.append("\"}]");
 
-    // Set channel
-    aJson.put("channel_id", channelId);
+    request.append("files=");
+    request.append(filesJson.toString());
+    request.append("&channel_id=");
+    request.append(channelId);
 
     // Add initial comment if provided
     if (!message.isEmpty()) {
-        aJson.put("initial_comment", message);
+        request.append("&initial_comment=");
+        request.append(message);
     }
 
     // Add thread timestamp if replying to thread
     if (!threadTs.isEmpty()) {
-        aJson.put("thread_ts", threadTs);
+        request.append("&thread_ts=");
+        request.append(threadTs);
     }
 
-    return rtl::OUString::fromUtf8(aJson.finishAndGetAsOString());
+    return request.makeStringAndClear();
 }
 
 rtl::OUString SlackJsonHelper::createChannelListRequest()

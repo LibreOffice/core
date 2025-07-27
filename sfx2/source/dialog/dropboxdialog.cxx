@@ -16,8 +16,8 @@
 #include <sal/log.hxx>
 
 // Include Dropbox API client
-#include <ucb/source/ucp/dropbox/DropboxApiClient.hxx>
-#include <ucb/source/ucp/dropbox/dropbox_json.hxx>
+#include "../../../ucb/source/ucp/dropbox/DropboxApiClient.hxx"
+#include "../../../ucb/source/ucp/dropbox/dropbox_json.hxx"
 
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

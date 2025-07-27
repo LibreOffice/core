@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     ucbhelper \
     $(if $(ENABLE_GDRIVE),ucpgdrive) \
     ucpdropbox \
+    ucpslack \
     utl \
     vcl \
     $(if $(ENABLE_BREAKPAD), \
@@ -187,7 +188,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/documentfontsdialog \
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \
-    sfx2/source/dialog/googledrivedialog \
     sfx2/source/dialog/dropboxdialog \
     sfx2/source/dialog/slackshardialog \
     sfx2/source/dialog/infobar \
@@ -322,6 +322,13 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/viewprn \
     sfx2/source/view/viewsh \
 ))
+
+# Google Drive integration (conditional)
+ifneq ($(ENABLE_GDRIVE),)
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/dialog/googledrivedialog \
+))
+endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 

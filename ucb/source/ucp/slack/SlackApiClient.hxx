@@ -58,6 +58,7 @@ private:
     rtl::OUString getAccessToken();
     rtl::OUString refreshAccessToken();
     bool isTokenValid();
+    rtl::OUString promptForAuthCode();
     rtl::OUString exchangeCodeForToken(const rtl::OUString& sAuthCode);
 
     // HTTP infrastructure

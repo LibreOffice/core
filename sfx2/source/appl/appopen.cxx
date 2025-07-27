@@ -1190,102 +1190,14 @@ void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OpenGoogleDriveExec_Impl( SfxRequest& /* rReq */ )
 {
-    // Check if Google Drive is configured
-    rtl::OUString sClientId = rtl::OUString::createFromAscii(GDRIVE_CLIENT_ID);
-    if (sClientId.isEmpty()) {
-        // Google Drive not configured - show error message
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
-        if (pParent) {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                VclMessageType::Info, VclButtonsType::Ok,
-                u"Google Drive integration is not configured in this build of LibreOffice."_ustr));
-            xBox->run();
-        }
-        return;
-    }
-
-    try {
-        SAL_WARN("sfx.appl", "OpenGoogleDriveExec_Impl called - Standalone Google Drive dialog");
-
-        // Get the current frame's window for dialog parent
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
-
-        SAL_WARN("sfx.appl", "Creating GoogleDriveDialog...");
-
-        // Create and show Google Drive dialog
-        std::unique_ptr<GoogleDriveDialog> pDlg;
-        try {
-            pDlg = std::make_unique<GoogleDriveDialog>(pParent);
-            SAL_WARN("sfx.appl", "Dialog created successfully");
-        } catch (const std::exception& e) {
-            SAL_WARN("sfx.appl", "Failed to create dialog: " << e.what());
-            // Fallback to test message
-            if (pParent) {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                    VclMessageType::Error, VclButtonsType::Ok,
-                    u"Failed to create Google Drive dialog.\nError: " + OUString::fromUtf8(e.what())));
-                xBox->run();
-            }
-            return;
-        }
-
-        SAL_WARN("sfx.appl", "Dialog created, calling Execute()...");
-
-        if (pDlg->Execute())
-        {
-            // User selected a file, get the gdrive:// URL
-            OUString sFileURL = pDlg->GetSelectedFileURL();
-
-            if (!sFileURL.isEmpty())
-            {
-                SAL_WARN("sfx.appl", "Opening selected file: " << sFileURL);
-
-                // Open the file through the UCB framework
-                try {
-                    SAL_WARN("sfx.appl", "Creating SID_OPENDOC request for: " << sFileURL);
-
-                    // Create a new open request with the gdrive:// URL
-                    SfxStringItem aURL(SID_FILE_NAME, sFileURL);
-                    SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, false);
-                    SfxBoolItem aSilent(SID_SILENT, false);
-                    SfxBoolItem aReadOnly(SID_DOC_READONLY, false);
-
-                    SAL_WARN("sfx.appl", "About to execute SID_OPENDOC dispatch");
-
-                    // Open the document
-                    const SfxPoolItem* pArgs[] = { &aURL, &aNewView, &aSilent, &aReadOnly, nullptr };
-                    GetDispatcher_Impl()->Execute(
-                        SID_OPENDOC,
-                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
-                        pArgs);
-
-                    SAL_WARN("sfx.appl", "SID_OPENDOC dispatch completed");
-
-                } catch (const css::uno::Exception& e) {
-                    SAL_WARN("sfx.appl", "Failed to open Google Drive file: " << e.Message);
-                    if (pParent) {
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
-                            VclMessageType::Error, VclButtonsType::Ok,
-                            u"Failed to open file: " + e.Message));
-                        xBox->run();
-                    }
-                }
-            }
-            else
-            {
-                SAL_WARN("sfx.appl", "No file selected in Google Drive dialog");
-            }
-        }
-        else
-        {
-            SAL_WARN("sfx.appl", "Google Drive dialog was cancelled or failed");
-        }
-    } catch (const std::exception& e) {
-        SAL_WARN("sfx.appl", "Exception in OpenGoogleDriveExec_Impl: " << e.what());
-    } catch (...) {
-        SAL_WARN("sfx.appl", "Unknown exception in OpenGoogleDriveExec_Impl");
+    // Google Drive integration is not fully configured - show message
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+    if (pParent) {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+            VclMessageType::Info, VclButtonsType::Ok,
+            u"Google Drive integration is not available in this build of LibreOffice."_ustr));
+        xBox->run();
     }
 }
 

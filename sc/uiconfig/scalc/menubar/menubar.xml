@@ -43,6 +43,7 @@
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveAsRemote" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShareToSlack" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveACopy" menu:style="text"/>
       <menu:menuitem menu:id=".uno:SaveAll" menu:style="text"/>
       <menu:menuseparator/>

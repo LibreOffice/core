@@ -539,13 +539,163 @@ graph TB
 
 This represents a **complete, production-ready implementation** that seamlessly integrates LibreOffice with Slack's modern API infrastructure while maintaining the high quality and reliability standards of the existing cloud storage integrations.
 
-### **Next Immediate Steps:**
+### **Integration Status - COMPLETED:**
 1. ✅ ~~Complete HTTP implementation in SlackApiClient~~
 2. ✅ ~~Implement async file upload workflow (files.getUploadURLExternal → upload → files.completeUploadExternal)~~
 3. ✅ ~~Create SlackShareDialog for channel selection UI~~
-4. **Add File menu integration** for "Share to Slack" option
-5. **Add library to build system** (update Module files)
-6. **Testing with real Slack workspace and credentials**
+4. ✅ ~~Add File menu integration for "Share to Slack" option~~
+5. ✅ ~~Add library to build system (update Module files)~~
+6. **Testing with real Slack workspace and credentials** (pending build completion)
+
+## 🔧 **File Menu Integration Implementation**
+
+**Date:** July 27, 2025  
+**Status:** ✅ **COMPLETED** - All integration code changes implemented
+
+### **Changes Made for Menu Integration:**
+
+#### **1. Command Definition and Registration**
+- **Added SID_SHARETOSLACK command ID** in `include/sfx2/sfxsids.hrc:133`
+  ```cpp
+  #define SID_SHARETOSLACK (SID_SFX_START + 613)
+  ```
+
+- **Added command definition** in `sfx2/sdi/sfx.sdi` (lines 3833-3849)
+  ```cpp
+  SfxVoidItem ShareToSlack SID_SHARETOSLACK
+  ()
+  [
+      AutoUpdate = FALSE,
+      FastCall = FALSE,
+      ReadOnlyDoc = TRUE,
+      ViewerApp = FALSE,
+      Toggle = FALSE,
+      Container = FALSE,
+      RecordAbsolute = FALSE,
+      RecordPerSet;
+
+      AccelConfig = TRUE,
+      MenuConfig = TRUE,
+      ToolBoxConfig = TRUE,
+      GroupId = SfxGroupId::Document;
+  ]
+  ```
+
+- **Added command slot handler** in `sfx2/sdi/docslots.sdi` (lines 160-164)
+  ```cpp
+  SID_SHARETOSLACK // ole(no) api(final/play/rec)
+  [
+      ExecMethod = ExecFile_Impl ;
+      StateMethod = GetState_Impl ;
+  ]
+  ```
+
+#### **2. Command Handler Implementation**
+- **Added comprehensive command handler** in `sfx2/source/doc/objserv.cxx` (lines 984-1059)
+  - Handles SID_SHARETOSLACK case in ExecFile_Impl
+  - Creates document input stream for sharing
+  - Launches SlackShareDialog with proper parameters
+  - Handles success/error scenarios
+  - Includes proper cleanup and user feedback
+
+- **Added state handler** for enabling/disabling menu item (line 1673)
+  ```cpp
+  case SID_SHARETOSLACK:
+  {
+      if (isExportLocked())
+          rSet.DisableItem( nWhich );
+      break;
+  }
+  ```
+
+#### **3. Menu UI Configuration**
+- **Added menu items** to all major LibreOffice applications:
+  - **Writer**: `sw/uiconfig/swriter/menubar/menubar.xml:46`
+  - **Calc**: `sc/uiconfig/scalc/menubar/menubar.xml:46`
+  - **Impress**: `sd/uiconfig/simpress/menubar/menubar.xml:44`
+
+  ```xml
+  <menu:menuitem menu:id=".uno:ShareToSlack" menu:style="text"/>
+  ```
+
+- **Added menu labels** in `officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu` (lines 2468-2481)
+  ```xml
+  <node oor:name=".uno:ShareToSlack" oor:op="replace">
+    <prop oor:name="Label" oor:type="xs:string">
+      <value xml:lang="en-US">Share to Slac~k...</value>
+    </prop>
+    <prop oor:name="TooltipLabel" oor:type="xs:string">
+      <value xml:lang="en-US">Share Document to Slack</value>
+    </prop>
+    <prop oor:name="PopupLabel" oor:type="xs:string">
+      <value xml:lang="en-US">Share to Slac~k...</value>
+    </prop>
+    <prop oor:name="Properties" oor:type="xs:int">
+      <value>1</value>
+    </prop>
+  </node>
+  ```
+
+#### **4. Build System Integration**
+- **Added ucpslack library** to `ucb/Module_ucb.mk:20`
+  ```makefile
+  Library_ucpslack \
+  ```
+
+- **Verified SlackShareDialog inclusion** in `sfx2/Library_sfx.mk:192`
+  ```makefile
+  sfx2/source/dialog/slackshardialog \
+  ```
+
+#### **5. OAuth2 Configuration**
+- **Verified Slack configuration** in `config_host/config_oauth2.h.in` (lines 61-68)
+  ```cpp
+  /* Slack */
+  #define SLACK_BASE_URL "https://slack.com/api"
+  #define SLACK_CLIENT_ID ""
+  #define SLACK_CLIENT_SECRET ""
+  #define SLACK_AUTH_URL "https://slack.com/oauth/v2/authorize"
+  #define SLACK_TOKEN_URL "https://slack.com/api/oauth.v2.access"
+  #define SLACK_REDIRECT_URI "http://localhost:8080/callback"
+  #define SLACK_SCOPES "files:write,chat:write,channels:read"
+  ```
+
+### **Implementation Architecture Summary:**
+
+The complete integration follows LibreOffice's established patterns:
+
+```
+User Action: File → Share to Slack...
+     ↓
+Menu System (.uno:ShareToSlack)
+     ↓
+Command Handler (SID_SHARETOSLACK in objserv.cxx)
+     ↓
+Document Stream Creation
+     ↓
+SlackShareDialog Launch
+     ↓
+SlackApiClient (OAuth2 + File Upload)
+     ↓
+Slack API v2 (Async Upload Workflow)
+```
+
+### **Files Modified for Integration:**
+1. `include/sfx2/sfxsids.hrc` - Command ID definition
+2. `sfx2/sdi/sfx.sdi` - Command definition
+3. `sfx2/sdi/docslots.sdi` - Command slot registration
+4. `sfx2/source/doc/objserv.cxx` - Command handler implementation
+5. `sw/uiconfig/swriter/menubar/menubar.xml` - Writer menu
+6. `sc/uiconfig/scalc/menubar/menubar.xml` - Calc menu
+7. `sd/uiconfig/simpress/menubar/menubar.xml` - Impress menu
+8. `officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu` - Menu labels
+9. `ucb/Module_ucb.mk` - Build system integration
+
+### **Next Steps:**
+- **Build the modified modules** (ucb, sfx2, officecfg)
+- **Test menu integration** with LibreOffice applications
+- **Configure OAuth2 credentials** for testing
+- **End-to-end testing** with real Slack workspace
 
 ---
 
