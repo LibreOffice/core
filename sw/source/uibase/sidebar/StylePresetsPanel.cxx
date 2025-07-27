@@ -47,7 +47,7 @@ void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevic
     }
 }
 
-BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
+Bitmap GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
 {
     sfx2::StyleManager* pStyleManager = rSource.GetStyleManager();
 
@@ -113,10 +113,10 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
         renderPreview(pStyleManager, *pVirtualDev, u"Body Text", nTextBodyHeight, aRenderRect);
     }
 
-    return BitmapEx(pVirtualDev->GetBitmap(Point(), aSize));
+    return pVirtualDev->GetBitmap(Point(), aSize);
 }
 
-BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
+Bitmap CreatePreview(OUString const & aUrl, OUString const & aName)
 {
     if (SfxObjectShell* pObjectShell = SfxObjectShell::Current())
     {
@@ -126,7 +126,7 @@ BitmapEx CreatePreview(OUString const & aUrl, OUString const & aName)
         if (xTemplDoc->LoadFrom(aMedium))
             return GenerateStylePreview(*xTemplDoc, aName);
     }
-    return BitmapEx();
+    return Bitmap();
 }
 
 }
@@ -165,7 +165,7 @@ void StylePresetsPanel::RefreshList()
             {
                 OUString aName = aTemplates.GetName(i,j);
                 OUString aURL = aTemplates.GetPath(i,j);
-                BitmapEx aPreview = CreatePreview(aURL, aName);
+                Bitmap aPreview = CreatePreview(aURL, aName);
                 sal_uInt16 nId = j + 1;
                 mxValueSet->InsertItem(nId, Image(aPreview), aName);
                 maTemplateEntries.push_back(std::make_unique<TemplateEntry>(aURL));
