@@ -3848,6 +3848,37 @@
         <p>Copyright (C) 2006 - 2013 by Raimundo Santos Moura &lt;raimundo.smoura@gmail.com&gt;</p>
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
+        <h3>Thesaurus</h3>
+        <p>The following software may be included in this product: Portuguese (Brazilian) thesaurus. Use of
+        any of this software is governed by the terms of the license below:</p>
+        <p>Copyright 2003 Kevin B. Hendricks, Stratford, Ontario, Canada
+        And Contributors.  All rights reserved.</p>
+        <p>Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions
+        are met:</p>
+        <ol>
+        <li>Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.</li>
+        <li>Redistributions in binary form must reproduce the above copyright
+        notice, this list of conditions and the following disclaimer in the
+        documentation and/or other materials provided with the distribution.</li>
+        <li>All modifications to the source code must be clearly marked as
+        such. Binary redistributions based on modified source code
+        must be clearly marked as modified versions in the documentation
+        and/or other materials provided with the distribution.</li>
+        </ol>
+        <p>THIS SOFTWARE IS PROVIDED BY KEVIN B. HENDRICKS AND CONTRIBUTORS
+        ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+        FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+        KEVIN B. HENDRICKS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+        INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+        BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+        LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+        HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+        LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+        OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+        SUCH DAMAGE.</p>
         <h3>Portuguese Brazilian sentence checker for LibreOffice</h3>
         <p>The following software may be included in this product: Portuguese (Brazilian) sentence checker. Use of any
         of this software is governed by the terms of the license below:</p>
