@@ -8,6 +8,7 @@
  *
  */
 
+#include <string_view>
 #include <utility>
 #include <widgetdraw/WidgetDefinition.hxx>
 
@@ -70,7 +71,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
             bAdd = false;
         }
 
-        OString sExtra = "any"_ostr;
+        std::string_view sExtra = "any";
 
         switch (eType)
         {
@@ -80,13 +81,13 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
 
                 if (rTabItemValue.isLeftAligned() && rTabItemValue.isRightAligned()
                     && rTabItemValue.isFirst() && rTabItemValue.isLast())
-                    sExtra = "first_last"_ostr;
+                    sExtra = "first_last";
                 else if (rTabItemValue.isLeftAligned() || rTabItemValue.isFirst())
-                    sExtra = "first"_ostr;
+                    sExtra = "first";
                 else if (rTabItemValue.isRightAligned() || rTabItemValue.isLast())
-                    sExtra = "last"_ostr;
+                    sExtra = "last";
                 else
-                    sExtra = "middle"_ostr;
+                    sExtra = "middle";
             }
             break;
             case ControlType::ListHeader:
@@ -94,9 +95,9 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
                 if (ePart == ControlPart::Arrow)
                 {
                     if (rValue.getNumericVal() == 1)
-                        sExtra = "down"_ostr;
+                        sExtra = "down";
                     else
-                        sExtra = "up"_ostr;
+                        sExtra = "up";
                 }
             }
             break;
@@ -104,7 +105,7 @@ WidgetDefinitionPart::getStates(ControlType eType, ControlPart ePart, ControlSta
             {
                 auto const& rPushButtonValue = static_cast<PushButtonValue const&>(rValue);
                 if (rPushButtonValue.mbIsAction)
-                    sExtra = "action"_ostr;
+                    sExtra = "action";
             }
             break;
             default:
