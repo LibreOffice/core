@@ -123,8 +123,8 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
-    static BitmapEx GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
-                                     SfxStyleSheetBase* pStyleHint = nullptr);
+    static Bitmap GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
+                                   SfxStyleSheetBase* pStyleHint = nullptr);
     static OString GetCachedPreviewJson(const std::pair<OUString, OUString>& rStyle);
 
 private:

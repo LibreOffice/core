@@ -80,13 +80,13 @@ private:
         virtual void Invoke() override { StylePreviewCache::gJsonStylePreviewCache.clear(); }
     };
 
-    static std::map<OUString, BitmapEx> gStylePreviewCache;
+    static std::map<OUString, Bitmap> gStylePreviewCache;
     static std::map<OUString, OString> gJsonStylePreviewCache;
     static int gStylePreviewCacheClients;
     static JsonStylePreviewCacheClear gJsonIdleClear;
 
 public:
-    static std::map<OUString, BitmapEx>& Get() { return gStylePreviewCache; }
+    static std::map<OUString, Bitmap>& Get() { return gStylePreviewCache; }
     static std::map<OUString, OString>& GetJson() { return gJsonStylePreviewCache; }
 
     static void ClearCache(bool bHard)
@@ -119,7 +119,7 @@ public:
     }
 };
 
-std::map<OUString, BitmapEx> StylePreviewCache::gStylePreviewCache;
+std::map<OUString, Bitmap> StylePreviewCache::gStylePreviewCache;
 std::map<OUString, OString> StylePreviewCache::gJsonStylePreviewCache;
 int StylePreviewCache::gStylePreviewCacheClients;
 StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
@@ -544,7 +544,7 @@ void StylesListUpdateTask::Invoke()
     m_rStylesList.UpdateSelection();
 }
 
-static OString extractPngString(const BitmapEx& rBitmap)
+static OString extractPngString(const Bitmap& rBitmap)
 {
     SvMemoryStream aOStm(65535, 65535);
     // Use fastest compression "1"
@@ -581,8 +581,8 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
-                                                    SfxStyleSheetBase* pStyleHint)
+Bitmap StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
+                                                  SfxStyleSheetBase* pStyleHint)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.second);
     if (aFound != StylePreviewCache::Get().end())
@@ -595,7 +595,7 @@ BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OU
 
         StyleItemController aStyleController(rStyle);
         aStyleController.Paint(*pImg, pStyleHint);
-        BitmapEx aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
+        Bitmap aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
         StylePreviewCache::Get()[rStyle.second] = aBitmap;
 
         return aBitmap;
@@ -608,7 +608,7 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const std::pair<OUString,
     if (aJsonFound != StylePreviewCache::GetJson().end())
         return StylePreviewCache::GetJson()[rStyle.second];
 
-    BitmapEx aBitmap = GetCachedPreview(rStyle);
+    Bitmap aBitmap = GetCachedPreview(rStyle);
     OString sResult = extractPngString(aBitmap);
     StylePreviewCache::GetJson()[rStyle.second] = sResult;
     return sResult;
@@ -656,8 +656,9 @@ void StylesPreviewWindow_Base::UpdateStylesList()
             auto it = aStylesHint.find(nIndex);
             if (it != aStylesHint.end())
                 pStyleHint = it->second;
-            BitmapEx aPreview = GetCachedPreview(rStyle, pStyleHint);
-            m_xStylesView->append(rStyle.first, rStyle.second, &aPreview);
+            Bitmap aPreview = GetCachedPreview(rStyle, pStyleHint);
+            BitmapEx aPreviewTmp(aPreview);
+            m_xStylesView->append(rStyle.first, rStyle.second, &aPreviewTmp);
         }
         else
             m_xStylesView->append(rStyle.first, rStyle.second, nullptr);
