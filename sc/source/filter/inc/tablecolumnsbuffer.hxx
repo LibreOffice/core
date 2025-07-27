@@ -44,12 +44,17 @@ public:
     const OUString&     getName() const;
     /** Gets the attributes of this column. */
     const TableColumnAttributes& getColumnAttributes() const;
+    /** Imports XML column properties for the xmlColumnPr element. */
+    void                importXmlColumnPr(const AttributeList& rAttribs);
+    /** Gets the XML column properties. <xmlColumnPr> */
+    const XmlColumnPrAttributes& getXmlColumnPrAttributes() const;
 
 private:
     OUString            maName;
     sal_Int32           mnId;
     sal_Int32           mnDataDxfId;
     TableColumnAttributes maColumnAttributes;
+    XmlColumnPrAttributes maXmlColumnPrAttributes;
 };
 
 class TableColumns : public WorkbookHelper
