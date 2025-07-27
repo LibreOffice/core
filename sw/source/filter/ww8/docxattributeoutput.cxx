@@ -3689,7 +3689,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     }
 }
 
-bool DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
+void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to run properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
@@ -3728,7 +3728,6 @@ bool DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WritePostponedOLE();
 
     WritePostponedActiveXControl(true);
-    return false;
 }
 
 void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)

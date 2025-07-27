@@ -82,8 +82,8 @@ public:
     /// Called before we start outputting the attributes.
     void StartRunProperties() override;
 
-    /// Called after we end outputting the attributes, returns true if commands were added.
-    bool EndRunProperties(const SwRedlineData* pRedlineData) override;
+    /// Called after we end outputting the attributes.
+    void EndRunProperties(const SwRedlineData* pRedlineData) override;
 
     /// Output text (inside a run).
     void RunText(const OUString& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8,

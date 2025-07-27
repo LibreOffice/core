@@ -232,7 +232,7 @@ public:
     virtual void StartRunProperties() override;
 
     /// Called after we end outputting the attributes.
-    virtual bool EndRunProperties( const SwRedlineData* pRedlineData ) override;
+    virtual void EndRunProperties( const SwRedlineData* pRedlineData ) override;
 
     virtual bool FootnoteEndnoteRefTag() override;
 
