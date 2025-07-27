@@ -1169,7 +1169,7 @@ void SdrHdlColor::CreateB2dIAObject()
     }
 }
 
-BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
+Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
 {
     // get the Bitmap
     VclPtr<VirtualDevice> pWrite(VclPtr<VirtualDevice>::Create());
@@ -1206,7 +1206,7 @@ BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
     pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
     pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
 
-    return BitmapEx(pWrite->GetBitmap(Point(0,0), m_aMarkerSize));
+    return pWrite->GetBitmap(Point(0,0), m_aMarkerSize);
 }
 
 Color SdrHdlColor::GetLuminance(const Color& rCol)
