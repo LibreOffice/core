@@ -78,6 +78,7 @@
 #include <officecfg/Office/Calc.hxx>
 
 #include <xestream.hxx>
+#include <ucbhelper/content.hxx>
 
 namespace oox::xls {
 
@@ -398,6 +399,39 @@ void WorkbookFragment::finalizeImport()
     OUString aCustomXmlFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"customXml" );
     if (!aCustomXmlFragmentPath.isEmpty())
         getScDocument().setHasCustomXml(true, aCustomXmlFragmentPath);
+
+    // read the xmlMaps substream (from xl/_rels/workbook.xml.rels)
+    OUString aXmlMapsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( u"xmlMaps" );
+    if (!aXmlMapsFragmentPath.isEmpty())
+    {
+        // read xmlMaps.xml
+        std::string sXmlMapsContent;
+        size_t nBufferSize = 4096;
+
+        ucbhelper::Content aContent(aXmlMapsFragmentPath,
+                                    Reference<css::ucb::XCommandEnvironment>(),
+                                    comphelper::getProcessComponentContext());
+
+        Reference<XInputStream> xXmlMapsInputStream(
+            getBaseFilter().openInputStream(aXmlMapsFragmentPath), UNO_SET_THROW);
+
+        std::ostringstream aStrmBuf;
+        Sequence<sal_Int8> aBytes;
+        size_t nBytesRead = 0;
+
+        do
+        {
+            nBytesRead = xXmlMapsInputStream->readBytes(aBytes, nBufferSize);
+            const sal_Int8* p = aBytes.getConstArray();
+            aStrmBuf << std::string(p, p + nBytesRead);
+        } while (nBytesRead == nBufferSize);
+
+        // put raw content of xmlMaps.xml into sXmlMapsContent
+        sXmlMapsContent = aStrmBuf.str();
+
+        if (!sXmlMapsContent.empty())
+            getScDocument().setHasXmlMaps(true, sXmlMapsContent);
+    }
 
     xGlobalSegment->setPosition( 1.0 );
 

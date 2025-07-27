@@ -57,6 +57,19 @@ const TableColumnAttributes& TableColumn::getColumnAttributes() const
     return maColumnAttributes;
 }
 
+void TableColumn::importXmlColumnPr(const AttributeList& rAttribs)
+{
+    maXmlColumnPrAttributes.mnMapId = rAttribs.getInteger(XML_mapId, 0);
+    maXmlColumnPrAttributes.msXpath = rAttribs.getXString(XML_xpath, OUString());
+    maXmlColumnPrAttributes.msXmlDataType = rAttribs.getXString(XML_xmlDataType, OUString());
+    maXmlColumnPrAttributes.mbDenormalized = rAttribs.getBool(XML_denormalized, false);
+}
+
+const XmlColumnPrAttributes& TableColumn::getXmlColumnPrAttributes() const
+{
+    return maXmlColumnPrAttributes;
+}
+
 TableColumns::TableColumns( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnCount(0)
@@ -95,6 +108,7 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         {
             aNames[i] = rxTableColumn->getName();
             aAttributesVector[i] = rxTableColumn->getColumnAttributes();
+            pDBData->SetXmlColumnPrAttributes( rxTableColumn->getXmlColumnPrAttributes() );
             ++i;
         }
         pDBData->SetTableColumnNames( std::move(aNames) );

@@ -70,6 +70,7 @@ enum class Relationship
     VMLDRAWING,
     WORDVBADATA,
     WORKSHEET,
+    XMLMAPS,
     NUM_ENTRIES // last, unused
 };
 

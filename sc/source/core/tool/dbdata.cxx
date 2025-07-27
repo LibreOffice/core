@@ -702,6 +702,11 @@ void ScDBData::SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&
     maTableColumnAttributes = std::move(rAttributes);
 }
 
+void ScDBData::SetXmlColumnPrAttributes( const XmlColumnPrAttributes& rAttributes )
+{
+    maXmlColumnPrAttributes.push_back(rAttributes);
+}
+
 void ScDBData::AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
         SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 )
 {

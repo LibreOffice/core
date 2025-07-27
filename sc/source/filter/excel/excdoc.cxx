@@ -1274,6 +1274,33 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                           oox::getRelationship(Relationship::CUSTOMXML), sCustomXmlPath);
     }
 
+    if (rDoc.hasXmlMaps())
+    {
+        // save xl/xmlMaps.xml relationship into xl/_rels/workbook.xml.rels
+        // save xl/xmlMaps.xml reference into [Content_Types].xml and open stream to xl/xmlMaps.xml
+        sax_fastparser::FSHelperPtr aXmlMapsXml = rStrm.CreateOutputStream(
+            "xl/xmlMaps.xml", u"/xl/xmlMaps.xml", rStrm.GetCurrentStream()->getOutputStream(),
+            "application/xml", oox::getRelationship(Relationship::XMLMAPS));
+
+        // start exporting xl/xmlMaps.xml
+        /* this adds <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        XML declaration automatically at the top of the file. */
+        rStrm.PushStream(aXmlMapsXml);
+
+        // get xmlMaps.xml content as string
+        std::string sXmlMapsContent = rDoc.getXmlMapsItem();
+
+        /* we should remove <?xml version="1.0" encoding="UTF-8"?>
+        XML declaration from the string as rStrm.PushStream() already adds it. */
+        sal_uInt32 nXmlDeclarationLocation = sXmlMapsContent.find(">");
+        sXmlMapsContent = sXmlMapsContent.substr(nXmlDeclarationLocation + 1);
+
+        // write contents into xl/xmlMaps.xml
+        rStrm.GetCurrentStream()->write(sXmlMapsContent);
+
+        rStrm.PopStream();
+    }
+
     // write if it has been read|imported or explicitly changed
     // or if ref syntax isn't what would be native for our file format
     // i.e. ExcelA1 in this case

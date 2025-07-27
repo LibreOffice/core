@@ -48,6 +48,15 @@ struct TableColumnAttributes
     std::optional<OUString> maTotalsFunction = std::nullopt;
 };
 
+// xmlColumnPr attributes
+struct XmlColumnPrAttributes
+{
+    sal_uInt32          mnMapId;
+    OUString            msXpath;
+    OUString            msXmlDataType;
+    bool                mbDenormalized;
+};
+
 /** Container base class to provide selected access for ScDBData. */
 class ScDBDataContainerBase
 {
@@ -99,6 +108,7 @@ private:
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
     ::std::vector< TableColumnAttributes > maTableColumnAttributes; ///< attributes of table columns
+    ::std::vector< XmlColumnPrAttributes > maXmlColumnPrAttributes; ///< attributes of <xmlColumnPr>
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
 
@@ -155,6 +165,8 @@ public:
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
     SC_DLLPUBLIC void SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes );
     SC_DLLPUBLIC const ::std::vector< TableColumnAttributes >& GetTableColumnAttributes() const { return maTableColumnAttributes; }
+    SC_DLLPUBLIC void SetXmlColumnPrAttributes( const XmlColumnPrAttributes& rAttributes );
+    SC_DLLPUBLIC const ::std::vector< XmlColumnPrAttributes >& GetXmlColumnPrAttributes() const { return maXmlColumnPrAttributes; }
     bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 
     /** Refresh/update the column names with the header row's cell contents. */
