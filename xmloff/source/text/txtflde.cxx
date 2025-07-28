@@ -2264,12 +2264,12 @@ void XMLTextFieldExport::SetExportOnlyUsedFieldDeclarations(
 
     // create used masters set (if none is used)
     if (bExportOnlyUsed)
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14 && __GNUC__ <= 15
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14 && __GNUC__ <= 16
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
         moUsedMasters.emplace();
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14 && __GNUC__ <= 15
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 14 && __GNUC__ <= 16
 #pragma GCC diagnostic pop
 #endif
 }
