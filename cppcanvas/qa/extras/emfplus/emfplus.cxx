@@ -33,7 +33,7 @@ public:
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
-        BitmapEx aResultBitmap;
+        Bitmap aResultBitmap;
         CPPUNIT_ASSERT(xMetaFile->CreateThumbnail(aResultBitmap));
         // If this is set, the metafile will be dumped as a PNG one for debug purposes.
         char* pEnv = getenv("CPPCANVAS_DEBUG_EMFPLUS_DUMP_TO");
@@ -44,7 +44,7 @@ public:
             CPPUNIT_ASSERT(aWriter.write(aResultBitmap));
         }
 
-        return aResultBitmap.GetBitmap();
+        return aResultBitmap;
     }
 };
 

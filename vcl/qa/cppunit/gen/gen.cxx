@@ -34,9 +34,9 @@ public:
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
-        BitmapEx aResultBitmap;
+        Bitmap aResultBitmap;
         CPPUNIT_ASSERT(xMetaFile->CreateThumbnail(aResultBitmap));
-        return aResultBitmap.GetBitmap();
+        return aResultBitmap;
     }
 };
 
