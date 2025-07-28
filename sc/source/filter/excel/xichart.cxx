@@ -4081,7 +4081,7 @@ void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
     sal_uInt16 nNewSeriesIdx = static_cast< sal_uInt16 >( maSeries.size() );
     XclImpChSeriesRef xSeries = std::make_shared<XclImpChSeries>( GetChRoot(), nNewSeriesIdx );
     xSeries->ReadRecordGroup( rStrm );
-    maSeries.push_back( xSeries );
+    maSeries.push_back(std::move(xSeries));
 }
 
 void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
