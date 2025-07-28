@@ -1056,7 +1056,7 @@ void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstruction
                                   aMergeToolbarInstruction.aMergeToolbarItems );
 
             MergeToolbarInstructionContainer& rVector = rCachedToolbarMergingInstructions[ aMergeToolbarInstruction.aMergeToolbar ];
-            rVector.push_back( aMergeToolbarInstruction );
+            rVector.push_back(std::move(aMergeToolbarInstruction));
         }
     }
 }
