@@ -198,6 +198,8 @@ public:
     SAL_DLLPRIVATE void         OpenRemoteExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OpenGoogleDriveExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OpenDropboxExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE void         SaveToGoogleDriveExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE void         SaveToDropboxExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         SignPDFExec_Impl(SfxRequest&);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);

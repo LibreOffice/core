@@ -2945,6 +2945,42 @@ SfxVoidItem OpenDropbox SID_OPENDROPBOX
     GroupId = SfxGroupId::Application;
 ]
 
+SfxVoidItem SaveToGoogleDrive SID_SAVETOGOOGLEDRIVE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
+SfxVoidItem SaveToDropbox SID_SAVETODROPBOX
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
+
 SfxVoidItem SignPDF SID_SIGNPDF
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem OpenFlags SID_OPTIONS,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxInt16Item Version SID_VERSION,SfxStringItem Referer SID_REFERER,SfxStringItem SuggestedSaveAsDir SID_DEFAULTFILEPATH,SfxStringItem SuggestedSaveAsName SID_DEFAULTFILENAME)
 [

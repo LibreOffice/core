@@ -26,6 +26,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -36,6 +37,7 @@ GoogleDriveDialog::GoogleDriveDialog(weld::Window* pParent)
     , m_xContext(comphelper::getProcessComponentContext())
     , m_sCurrentFolderId(u"root"_ustr)
     , m_bAuthenticated(false)
+    , m_bUploadMode(false)
     , m_aAuthTimer("GoogleDriveAuthTimer")
     , m_aLoadTimer("GoogleDriveLoadTimer")
 {
@@ -125,6 +127,97 @@ GoogleDriveDialog::GoogleDriveDialog(weld::Window* pParent)
     }
 }
 
+GoogleDriveDialog::GoogleDriveDialog(weld::Window* pParent, const OUString& uploadFilePath, const OUString& uploadFileName)
+    : GenericDialogController(pParent, u"sfx/ui/googledrivedialog.ui"_ustr, u"GoogleDriveDialog"_ustr)
+    , m_xContext(comphelper::getProcessComponentContext())
+    , m_sCurrentFolderId(u"root"_ustr)
+    , m_bAuthenticated(false)
+    , m_bUploadMode(true)
+    , m_sUploadFilePath(uploadFilePath)
+    , m_sUploadFileName(uploadFileName)
+    , m_aAuthTimer("GoogleDriveAuthTimer")
+    , m_aLoadTimer("GoogleDriveLoadTimer")
+{
+    try {
+        SAL_WARN("sfx.googledrive", "GoogleDriveDialog upload constructor - file: " << uploadFileName);
+
+        // Get UI controls with safety checks
+        m_xFileList = m_xBuilder->weld_tree_view(u"file_list"_ustr);
+        m_xBtnOpen = m_xBuilder->weld_button(u"btn_open"_ustr);
+        m_xBtnCancel = m_xBuilder->weld_button(u"btn_cancel"_ustr);
+        m_xStatusLabel = m_xBuilder->weld_label(u"status_label"_ustr);
+        m_xProgressBar = m_xBuilder->weld_progress_bar(u"progress_bar"_ustr);
+        m_xBtnBack = m_xBuilder->weld_button(u"btn_back"_ustr);
+        m_xCurrentFolderLabel = m_xBuilder->weld_label(u"current_folder_label"_ustr);
+
+        if (!m_xFileList || !m_xBtnOpen || !m_xBtnCancel || !m_xStatusLabel ||
+            !m_xProgressBar || !m_xBtnBack || !m_xCurrentFolderLabel) {
+            SAL_WARN("sfx.googledrive", "Failed to get one or more UI controls from upload dialog");
+            return;
+        }
+
+        // In upload mode, change the button text
+        if (m_xBtnOpen) {
+            m_xBtnOpen->set_label(u"Upload Here"_ustr);
+            m_xBtnOpen->set_sensitive(true); // Always enabled in upload mode
+        }
+
+        // Create command environment for Google Drive API
+        m_xCmdEnv = new ucbhelper::CommandEnvironment(
+            Reference<css::task::XInteractionHandler>(),
+            Reference<css::ucb::XProgressHandler>());
+
+        // Create Google Drive API client
+        try {
+            m_pApiClient = std::make_unique<ucp::gdrive::GoogleDriveApiClient>(m_xCmdEnv);
+            SAL_WARN("sfx.googledrive", "GoogleDriveApiClient created successfully for upload");
+        } catch (const std::exception& e) {
+            SAL_WARN("sfx.googledrive", "Failed to create GoogleDriveApiClient for upload: " << e.what());
+        }
+
+        // Setup TreeView columns programmatically
+        m_xFileList->clear();
+        m_xFileList->set_column_title(0, u"Name"_ustr);
+        m_xFileList->set_column_title(1, u"Type"_ustr);
+        m_xFileList->set_column_title(2, u"Size"_ustr);
+        m_xFileList->set_column_title(3, u"Modified"_ustr);
+
+        // Setup file list columns
+        std::vector<int> aWidths;
+        aWidths.push_back(300); // Name
+        aWidths.push_back(100); // Type
+        aWidths.push_back(80);  // Size
+        aWidths.push_back(120); // Modified
+        m_xFileList->set_column_fixed_widths(aWidths);
+
+        // Connect event handlers
+        m_xFileList->connect_row_activated(LINK(this, GoogleDriveDialog, FileListDoubleClick));
+        m_xFileList->connect_selection_changed(LINK(this, GoogleDriveDialog, FileListSelectionChanged));
+        m_xBtnOpen->connect_clicked(LINK(this, GoogleDriveDialog, OpenButtonClicked));
+        m_xBtnCancel->connect_clicked(LINK(this, GoogleDriveDialog, CancelButtonClicked));
+        m_xBtnBack->connect_clicked(LINK(this, GoogleDriveDialog, BackButtonClicked));
+
+        // Setup timers
+        m_aAuthTimer.SetTimeout(3000);
+        m_aAuthTimer.SetInvokeHandler(LINK(this, GoogleDriveDialog, AuthTimerHandler));
+
+        m_aLoadTimer.SetTimeout(500);
+        m_aLoadTimer.SetInvokeHandler(LINK(this, GoogleDriveDialog, LoadTimerHandler));
+
+        // Set initial status for upload mode
+        SetStatus(u"Preparing to upload: " + uploadFileName);
+        if (m_xCurrentFolderLabel) {
+            m_xCurrentFolderLabel->set_label(u"Google Drive"_ustr);
+        }
+
+        SAL_WARN("sfx.googledrive", "GoogleDriveDialog upload constructor completed successfully");
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.googledrive", "Exception in GoogleDriveDialog upload constructor: " << e.what());
+    } catch (...) {
+        SAL_WARN("sfx.googledrive", "Unknown exception in GoogleDriveDialog upload constructor");
+    }
+}
+
 GoogleDriveDialog::~GoogleDriveDialog()
 {
     m_aAuthTimer.Stop();
@@ -134,7 +227,7 @@ GoogleDriveDialog::~GoogleDriveDialog()
 bool GoogleDriveDialog::Execute()
 {
     try {
-        SAL_WARN("sfx.googledrive", "GoogleDriveDialog::Execute() called");
+        SAL_WARN("sfx.googledrive", "GoogleDriveDialog::Execute() called - upload mode: " << (m_bUploadMode ? "true" : "false"));
 
         // Start authentication process
         StartAuthentication();
@@ -142,6 +235,13 @@ bool GoogleDriveDialog::Execute()
         // Run the dialog
         int nResult = run();
         SAL_WARN("sfx.googledrive", "Dialog run() returned: " << nResult);
+
+        // In upload mode, return true for successful uploads (RET_OK)
+        if (m_bUploadMode) {
+            return (nResult == RET_OK);
+        }
+
+        // In browse mode, use normal return value
         return nResult == RET_OK;
     } catch (const std::exception& e) {
         SAL_WARN("sfx.googledrive", "Exception in GoogleDriveDialog::Execute(): " << e.what());
@@ -393,6 +493,20 @@ IMPL_LINK_NOARG(GoogleDriveDialog, FileListSelectionChanged, weld::TreeView&, vo
 
 IMPL_LINK_NOARG(GoogleDriveDialog, OpenButtonClicked, weld::Button&, void)
 {
+    if (m_bUploadMode) {
+        // Upload mode: upload file to current folder
+        SAL_WARN("sfx.googledrive", "Upload button clicked - uploading file: " << m_sUploadFileName);
+
+        // Perform the upload
+        if (UploadFile(m_sUploadFilePath, m_sUploadFileName)) {
+            // Upload successful - close dialog with success
+            m_xDialog->response(RET_OK);
+        }
+        // If upload failed, stay in dialog to let user try different folder
+        return;
+    }
+
+    // Browse mode: handle file/folder selection
     if (m_sSelectedFileId.isEmpty())
         return;
 
@@ -556,6 +670,76 @@ void GoogleDriveDialog::AddTestData()
     PopulateFileList();
     UpdateUI();
     SetStatus(u"Test data loaded (Google Drive unavailable)"_ustr, false);
+}
+
+bool GoogleDriveDialog::UploadFile(const OUString& filePath, const OUString& fileName)
+{
+    try {
+        SAL_WARN("sfx.googledrive", "UploadFile called - file: " << fileName << " path: " << filePath);
+
+        if (!m_pApiClient) {
+            SAL_WARN("sfx.googledrive", "No API client available for upload");
+            SetStatus(u"Error: Google Drive not available"_ustr, false);
+            return false;
+        }
+
+        if (filePath.isEmpty() || fileName.isEmpty()) {
+            SAL_WARN("sfx.googledrive", "Invalid file path or name for upload");
+            SetStatus(u"Error: Invalid file information"_ustr, false);
+            return false;
+        }
+
+        // Set upload status
+        SetStatus(u"Uploading " + fileName + u" to Google Drive..."_ustr, true);
+
+        // Create input stream from the temp file
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess = css::ucb::SimpleFileAccess::create(xContext);
+
+        if (!xFileAccess.is()) {
+            SAL_WARN("sfx.googledrive", "Failed to create file access service");
+            SetStatus(u"Error: Failed to access file"_ustr, false);
+            return false;
+        }
+
+        // Get input stream from file
+        css::uno::Reference<css::io::XInputStream> xInputStream;
+        try {
+            xInputStream = xFileAccess->openFileRead(filePath);
+        } catch (const css::uno::Exception& e) {
+            SAL_WARN("sfx.googledrive", "Failed to open file for reading: " << e.Message);
+            SetStatus(u"Error: Failed to read file for upload"_ustr, false);
+            return false;
+        }
+
+        if (!xInputStream.is()) {
+            SAL_WARN("sfx.googledrive", "Failed to get input stream for file: " << filePath);
+            SetStatus(u"Error: Failed to read file for upload"_ustr, false);
+            return false;
+        }
+
+        // Call the Google Drive API upload method
+        SAL_WARN("sfx.googledrive", "Calling API uploadFile - parentId: '" << m_sCurrentFolderId << "' fileName: '" << fileName << "'");
+        m_pApiClient->uploadFile(m_sCurrentFolderId, fileName, xInputStream);
+
+        // Upload completed successfully
+        SetStatus(u"Upload completed successfully!"_ustr, false);
+        SAL_WARN("sfx.googledrive", "Upload completed successfully");
+        return true;
+
+    } catch (const css::uno::Exception& e) {
+        SAL_WARN("sfx.googledrive", "UNO Exception in UploadFile: " << e.Message);
+        SetStatus(u"Upload failed: " + e.Message, false);
+        return false;
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.googledrive", "Exception in UploadFile: " << e.what());
+        SetStatus(u"Upload failed due to error"_ustr, false);
+        return false;
+    } catch (...) {
+        SAL_WARN("sfx.googledrive", "Unknown exception in UploadFile");
+        SetStatus(u"Upload failed due to unknown error"_ustr, false);
+        return false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

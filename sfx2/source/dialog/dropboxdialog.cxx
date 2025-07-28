@@ -43,6 +43,7 @@ DropboxDialog::DropboxDialog(weld::Window* pParent)
     , m_xContext(comphelper::getProcessComponentContext())
     , m_sCurrentFolderId(u""_ustr) // Dropbox uses empty string for root
     , m_bAuthenticated(false)
+    , m_bUploadMode(false)
     , m_aLoadTimer("DropboxLoadTimer")
 {
     try {
@@ -104,6 +105,65 @@ DropboxDialog::DropboxDialog(weld::Window* pParent)
     }
 }
 
+// Upload constructor
+DropboxDialog::DropboxDialog(weld::Window* pParent, const OUString& uploadFilePath, const OUString& uploadFileName)
+    : GenericDialogController(pParent, u"sfx/ui/googledrivedialog.ui"_ustr, u"GoogleDriveDialog"_ustr)
+    , m_xContext(comphelper::getProcessComponentContext())
+    , m_sCurrentFolderId(u""_ustr) // Dropbox uses empty string for root
+    , m_bAuthenticated(false)
+    , m_bUploadMode(true)
+    , m_sUploadFilePath(uploadFilePath)
+    , m_sUploadFileName(uploadFileName)
+    , m_aLoadTimer("DropboxLoadTimer")
+{
+    try {
+        SAL_WARN("sfx.dropbox", "DropboxDialog upload constructor - file: " << uploadFileName);
+
+        if (!m_xBuilder) {
+            SAL_WARN("sfx.dropbox", "Builder is null - UI file not loaded!");
+            throw std::runtime_error("Failed to load UI file");
+        }
+
+        // Get basic UI controls
+        m_xFileList = m_xBuilder->weld_tree_view(u"file_list"_ustr);
+        m_xBtnOpen = m_xBuilder->weld_button(u"btn_open"_ustr);
+        m_xBtnCancel = m_xBuilder->weld_button(u"btn_cancel"_ustr);
+        m_xStatusLabel = m_xBuilder->weld_label(u"status_label"_ustr);
+        m_xProgressBar = m_xBuilder->weld_progress_bar(u"progress_bar"_ustr);
+        m_xBtnBack = m_xBuilder->weld_button(u"btn_back"_ustr);
+        m_xBtnRefresh = m_xBuilder->weld_button(u"btn_refresh"_ustr);
+        m_xCurrentFolderLabel = m_xBuilder->weld_label(u"current_folder_label"_ustr);
+
+        if (!m_xFileList || !m_xBtnOpen || !m_xBtnCancel || !m_xStatusLabel ||
+            !m_xProgressBar || !m_xBtnBack || !m_xCurrentFolderLabel) {
+            SAL_WARN("sfx.dropbox", "Failed to get one or more UI controls from dialog");
+            return;
+        }
+
+        // Change button text for upload mode
+        m_xBtnOpen->set_label(u"Upload Here"_ustr);
+        SetStatus(u"Preparing to upload: " + uploadFileName);
+
+        // Initialize API client and UI
+        m_xCmdEnv = new ucbhelper::CommandEnvironment(
+            css::uno::Reference<css::task::XInteractionHandler>(),
+            css::uno::Reference<css::ucb::XProgressHandler>());
+
+        m_pApiClient = std::make_unique<ucp::dropbox::DropboxApiClient>(m_xCmdEnv);
+        SAL_WARN("sfx.dropbox", "DropboxApiClient initialized successfully for upload");
+
+        SetupEventHandlers();
+        SAL_WARN("sfx.dropbox", "DropboxDialog upload constructor completed successfully");
+
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.dropbox", "Exception in DropboxDialog upload constructor: " << e.what());
+        throw;
+    } catch (...) {
+        SAL_WARN("sfx.dropbox", "Unknown exception in DropboxDialog upload constructor");
+        throw;
+    }
+}
+
 DropboxDialog::~DropboxDialog() = default;
 
 bool DropboxDialog::Execute()
@@ -124,6 +184,14 @@ bool DropboxDialog::Execute()
         short nRet = run();
         SAL_WARN("sfx.dropbox", "Dialog returned: " << nRet);
 
+        // In upload mode, just check if dialog returned OK
+        if (m_bUploadMode) {
+            bool bSuccess = (nRet == RET_OK);
+            SAL_WARN("sfx.dropbox", "Upload mode - returning: " << (bSuccess ? "true" : "false"));
+            return bSuccess;
+        }
+
+        // In browse mode, check if file was selected
         if (nRet == RET_OK && IsFileSelected()) {
             SAL_WARN("sfx.dropbox", "File selected: " << GetSelectedFileName());
             return true;
@@ -457,6 +525,24 @@ IMPL_LINK_NOARG(DropboxDialog, OnFileSelect, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(DropboxDialog, OnOpenClicked, weld::Button&, void)
 {
+    // Handle upload mode
+    if (m_bUploadMode) {
+        SAL_WARN("sfx.dropbox", "Upload button clicked - uploading file: " << m_sUploadFileName);
+
+        try {
+            if (UploadFile(m_sUploadFilePath, m_sUploadFileName)) {
+                SetStatus(u"Upload completed successfully!"_ustr);
+                m_xDialog->response(RET_OK);
+            } else {
+                SetStatus(u"Upload failed. Please try again."_ustr);
+            }
+        } catch (const std::exception& e) {
+            SetStatus(u"Upload error: "_ustr + OUString::createFromAscii(e.what()));
+        }
+        return;
+    }
+
+    // Original open/browse mode
     if (IsFileSelected()) {
         OUString sFileName = GetSelectedFileName();
         SAL_WARN("sfx.dropbox", "Open clicked for file: " << sFileName);
@@ -780,21 +866,48 @@ OUString DropboxDialog::CreateTempFileFromStream(const uno::Reference<css::io::X
                 OUString sTempFileUrl = xTempFile->getUri();
                 SAL_WARN("sfx.dropbox", "Temporary file created: " + sTempFileUrl);
 
-                // Rename to include proper extension if needed
-                if (!sExtension.isEmpty() && !sTempFileUrl.endsWith(sExtension)) {
-                    OUString sNewUrl = sTempFileUrl + sExtension;
-                    try {
-                        // Try to rename the file to include extension
-                        uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess(
-                            css::ucb::SimpleFileAccess::create(xContext));
-                        if (xFileAccess.is()) {
-                            xFileAccess->move(sTempFileUrl, sNewUrl);
-                            sTempFileUrl = sNewUrl;
-                            SAL_WARN("sfx.dropbox", "Renamed to: " + sTempFileUrl);
+                // Create meaningful filename based on original name
+                try {
+                    // Extract just the filename from the full path
+                    OUString sBaseName = fileName;
+                    sal_Int32 nLastSlash = std::max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+                    if (nLastSlash >= 0) {
+                        sBaseName = fileName.copy(nLastSlash + 1);
+                    }
+
+                    // Remove any invalid filesystem characters
+                    sBaseName = sBaseName.replaceAll(":", "_").replaceAll("?", "_").replaceAll("*", "_");
+
+                    // Create new meaningful URL in same temp directory
+                    OUString sTempDir = sTempFileUrl.copy(0, sTempFileUrl.lastIndexOf('/') + 1);
+                    OUString sMeaningfulUrl = sTempDir + sBaseName;
+
+                    SAL_WARN("sfx.dropbox", "Attempting to rename to meaningful name: " + sMeaningfulUrl);
+
+                    // Try to rename to meaningful name
+                    uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess(
+                        css::ucb::SimpleFileAccess::create(xContext));
+                    if (xFileAccess.is()) {
+                        xFileAccess->move(sTempFileUrl, sMeaningfulUrl);
+                        sTempFileUrl = sMeaningfulUrl;
+                        SAL_WARN("sfx.dropbox", "Successfully renamed to: " + sTempFileUrl);
+                    }
+                } catch (...) {
+                    // If rename fails, fall back to adding extension only
+                    SAL_WARN("sfx.dropbox", "Failed to create meaningful name, adding extension only");
+                    if (!sExtension.isEmpty() && !sTempFileUrl.endsWith(sExtension)) {
+                        OUString sNewUrl = sTempFileUrl + sExtension;
+                        try {
+                            uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess(
+                                css::ucb::SimpleFileAccess::create(xContext));
+                            if (xFileAccess.is()) {
+                                xFileAccess->move(sTempFileUrl, sNewUrl);
+                                sTempFileUrl = sNewUrl;
+                                SAL_WARN("sfx.dropbox", "Renamed to: " + sTempFileUrl);
+                            }
+                        } catch (...) {
+                            SAL_WARN("sfx.dropbox", "Failed to rename file, using original URL");
                         }
-                    } catch (...) {
-                        // If rename fails, use original URL
-                        SAL_WARN("sfx.dropbox", "Failed to rename file, using original URL");
                     }
                 }
 
@@ -814,6 +927,78 @@ OUString DropboxDialog::CreateTempFileFromStream(const uno::Reference<css::io::X
     } catch (...) {
         SAL_WARN("sfx.dropbox", "Unknown exception creating temp file");
         return OUString();
+    }
+}
+
+bool DropboxDialog::UploadFile(const OUString& filePath, const OUString& fileName)
+{
+    try {
+        SAL_WARN("sfx.dropbox", "UploadFile called - file: " << fileName << " path: " << filePath);
+
+        if (!m_pApiClient) {
+            SAL_WARN("sfx.dropbox", "API client not initialized");
+            return false;
+        }
+
+        // Authenticate if not already done
+        if (!m_bAuthenticated) {
+            SetStatus(u"Authenticating with Dropbox..."_ustr);
+            if (!AuthenticateUser()) {
+                SetStatus(u"Authentication failed"_ustr);
+                return false;
+            }
+        }
+
+        SetStatus(u"Uploading file: " + fileName);
+        SetProgress(10);
+
+        // Create input stream from file
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess(
+            css::ucb::SimpleFileAccess::create(xContext));
+
+        if (!xFileAccess.is()) {
+            SAL_WARN("sfx.dropbox", "Failed to create file access service");
+            return false;
+        }
+
+        if (!xFileAccess->exists(filePath)) {
+            SAL_WARN("sfx.dropbox", "Upload file does not exist: " << filePath);
+            return false;
+        }
+
+        SetProgress(25);
+
+        css::uno::Reference<css::io::XInputStream> xInputStream = xFileAccess->openFileRead(filePath);
+        if (!xInputStream.is()) {
+            SAL_WARN("sfx.dropbox", "Failed to open file for reading: " << filePath);
+            return false;
+        }
+
+        SetProgress(50);
+
+        // Upload using API client
+        // Upload to current folder (m_sCurrentFolderId)
+        SAL_WARN("sfx.dropbox", "Calling API uploadFile - parentId: '" << m_sCurrentFolderId << "' fileName: '" << fileName << "'");
+        m_pApiClient->uploadFile(m_sCurrentFolderId, fileName, xInputStream);
+
+        SetProgress(100);
+        SAL_WARN("sfx.dropbox", "File uploaded successfully");
+
+        return true;
+
+    } catch (const css::uno::Exception& e) {
+        SAL_WARN("sfx.dropbox", "UNO Exception in UploadFile: " << e.Message);
+        SetStatus(u"Upload failed: " + e.Message);
+        return false;
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.dropbox", "Exception in UploadFile: " << e.what());
+        SetStatus(u"Upload failed: " + OUString::createFromAscii(e.what()));
+        return false;
+    } catch (...) {
+        SAL_WARN("sfx.dropbox", "Unknown exception in UploadFile");
+        SetStatus(u"Upload failed with unknown error"_ustr);
+        return false;
     }
 }
 

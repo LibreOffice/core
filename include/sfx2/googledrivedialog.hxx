@@ -51,17 +51,26 @@ private:
     OUString m_sSelectedFileId;
     bool m_bAuthenticated;
 
+    // Upload mode state
+    bool m_bUploadMode;
+    OUString m_sUploadFilePath;
+    OUString m_sUploadFileName;
+
     // Timer for async operations
     Timer m_aAuthTimer;
     Timer m_aLoadTimer;
 
 public:
     GoogleDriveDialog(weld::Window* pParent);
+    GoogleDriveDialog(weld::Window* pParent, const OUString& uploadFilePath, const OUString& uploadFileName);
     virtual ~GoogleDriveDialog() override;
 
     // Main interface
     OUString GetSelectedFileURL() const;
     bool Execute();
+
+    // Upload functionality
+    bool UploadFile(const OUString& filePath, const OUString& fileName);
 
 private:
     // Authentication

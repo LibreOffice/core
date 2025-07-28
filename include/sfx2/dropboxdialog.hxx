@@ -53,15 +53,24 @@ private:
     OUString m_sSelectedFileUrl;
     bool m_bAuthenticated;
 
+    // Upload mode state
+    bool m_bUploadMode;
+    OUString m_sUploadFilePath;
+    OUString m_sUploadFileName;
+
     // Timer for async operations
     Timer m_aLoadTimer;
 
 public:
     explicit DropboxDialog(weld::Window* pParent);
+    explicit DropboxDialog(weld::Window* pParent, const OUString& uploadFilePath, const OUString& uploadFileName);
     virtual ~DropboxDialog() override;
 
     bool Execute();
     OUString GetSelectedFileUrl() const { return m_sSelectedFileUrl; }
+
+    // Upload functionality
+    bool UploadFile(const OUString& filePath, const OUString& fileName);
 
 private:
     void InitializeUI();

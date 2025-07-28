@@ -376,4 +376,10 @@ $(eval $(call gb_Library_use_system_win32_libs,sfx,\
 
 endif
 
+ifneq ($(ENABLE_GDRIVE),)
+$(eval $(call gb_Library_add_defs,sfx,\
+    -DENABLE_GDRIVE \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

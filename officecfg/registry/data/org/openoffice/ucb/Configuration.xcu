@@ -191,7 +191,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider44" oor:op="replace">
+            <node oor:name="Provider44" oor:op="replace" install:module="gdrive">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.GoogleDriveContentProvider</value>
               </prop>

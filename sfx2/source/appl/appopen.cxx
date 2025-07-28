@@ -46,15 +46,26 @@
 
 #include <config_oauth2.h>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/TempFile.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include "../../inc/inputdlg.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <sfx2/googledrivedialog.hxx>
 #include <sfx2/dropboxdialog.hxx>
 #include <sfx2/slackshardialog.hxx>
+#ifdef ENABLE_GDRIVE
+#include <sfx2/googledrivedialog.hxx>
+#endif
 #include <memory>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -69,6 +80,10 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument3.hpp>
@@ -1190,6 +1205,33 @@ void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OpenGoogleDriveExec_Impl( SfxRequest& /* rReq */ )
 {
+#ifdef ENABLE_GDRIVE
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+
+    GoogleDriveDialog aDlg(pParent);
+    if (aDlg.Execute())
+    {
+        OUString sURL = aDlg.GetSelectedFileURL();
+        if (!sURL.isEmpty())
+        {
+            SfxStringItem aName(SID_FILE_NAME, sURL);
+            SfxBoolItem aTemplate(SID_TEMPLATE, false);
+            SfxBoolItem aAsTemplate(SID_DOC_READONLY, false);
+            SfxBoolItem aHidden(SID_HIDDEN, false);
+            SfxStringItem aTargetFrameName(SID_TARGETNAME, OUString("_default"));
+            SfxStringItem aReferer(SID_REFERER, OUString("private:user"));
+            SfxRequest aRequest(SID_OPENDOC, SfxCallMode::SYNCHRON, GetPool());
+            aRequest.AppendItem(aName);
+            aRequest.AppendItem(aTemplate);
+            aRequest.AppendItem(aAsTemplate);
+            aRequest.AppendItem(aHidden);
+            aRequest.AppendItem(aTargetFrameName);
+            aRequest.AppendItem(aReferer);
+            GetDispatcher_Impl()->Execute(SID_OPENDOC, SfxCallMode::SYNCHRON, *aRequest.GetArgs());
+        }
+    }
+#else
     // Google Drive integration is not fully configured - show message
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
@@ -1199,6 +1241,7 @@ void SfxApplication::OpenGoogleDriveExec_Impl( SfxRequest& /* rReq */ )
             u"Google Drive integration is not available in this build of LibreOffice."_ustr));
         xBox->run();
     }
+#endif
 }
 
 void SfxApplication::OpenDropboxExec_Impl( SfxRequest& /* rReq */ )
@@ -1255,6 +1298,337 @@ void SfxApplication::OpenDropboxExec_Impl( SfxRequest& /* rReq */ )
         SAL_WARN("sfx.appl", "Exception in OpenDropboxExec_Impl: " << e.what());
     } catch (...) {
         SAL_WARN("sfx.appl", "Unknown exception in OpenDropboxExec_Impl");
+    }
+}
+
+void SfxApplication::SaveToGoogleDriveExec_Impl( SfxRequest& /* rReq */ )
+{
+#ifdef ENABLE_GDRIVE
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (!pViewFrame)
+        return;
+
+    SfxObjectShell* pDoc = pViewFrame->GetObjectShell();
+    if (!pDoc)
+        return;
+
+    weld::Window* pParent = pViewFrame->GetFrameWeld();
+
+    // Get document title for default filename
+    OUString sDefaultName = pDoc->GetTitle();
+    if (sDefaultName.isEmpty())
+        sDefaultName = u"Document"_ustr;
+
+    // Add appropriate extension based on document type
+    OUString sFileName = sDefaultName;
+    css::uno::Reference<css::frame::XModel> xModel = pDoc->GetModel();
+    if (xModel.is())
+    {
+        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(xModel, css::uno::UNO_QUERY);
+        if (xServiceInfo.is())
+        {
+            if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
+                sFileName += u".odt"_ustr;
+            else if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
+                sFileName += u".ods"_ustr;
+            else if (xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
+                sFileName += u".odp"_ustr;
+            else if (xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
+                sFileName += u".odg"_ustr;
+            else
+                sFileName += u".odt"_ustr; // Default to Writer format
+        }
+        else
+        {
+            sFileName += u".odt"_ustr; // Default to Writer format
+        }
+    }
+
+    // Create a temporary file and save the document
+    css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    css::uno::Reference<css::io::XTempFile> xTempFile = css::io::TempFile::create(xContext);
+
+    if (!xTempFile.is())
+    {
+        if (pParent) {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                VclMessageType::Error, VclButtonsType::Ok,
+                u"Failed to create temporary file for upload."_ustr));
+            xBox->run();
+        }
+        return;
+    }
+
+    // Get the temp file URL
+    OUString sTempURL = xTempFile->getUri();
+
+    // Save document to temporary file
+    css::uno::Reference<css::frame::XStorable> xStorable(pDoc->GetModel(), css::uno::UNO_QUERY);
+    if (!xStorable.is())
+    {
+        if (pParent) {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                VclMessageType::Error, VclButtonsType::Ok,
+                u"Document cannot be saved for upload."_ustr));
+            xBox->run();
+        }
+        return;
+    }
+
+    // Store document to temp file
+    css::uno::Sequence<css::beans::PropertyValue> aArgs;
+    try {
+        xStorable->storeToURL(sTempURL, aArgs);
+    } catch (const css::uno::Exception& /* e */) {
+        if (pParent) {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                VclMessageType::Error, VclButtonsType::Ok,
+                u"Failed to save document for upload."_ustr));
+            xBox->run();
+        }
+        return;
+    }
+
+    // Open Google Drive dialog in upload mode with the temp file
+    GoogleDriveDialog aDlg(pParent, sTempURL, sFileName);
+
+    if (aDlg.Execute())
+    {
+        if (pParent) {
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                VclMessageType::Info, VclButtonsType::Ok,
+                u"Document successfully uploaded to Google Drive!"_ustr));
+            xBox->run();
+        }
+    }
+#else
+    // Google Drive integration is not fully configured - show message
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    weld::Window* pParent = pViewFrame ? pViewFrame->GetFrameWeld() : nullptr;
+    if (pParent) {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+            VclMessageType::Info, VclButtonsType::Ok,
+            u"Google Drive integration is not available in this build of LibreOffice."_ustr));
+        xBox->run();
+    }
+#endif
+}
+
+void SfxApplication::SaveToDropboxExec_Impl( SfxRequest& /* rReq */ )
+{
+    try {
+        SAL_WARN("sfx.appl", "SaveToDropboxExec_Impl called");
+
+        // Get the current view frame and document
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if (!pViewFrame)
+        {
+            SAL_WARN("sfx.appl", "No current view frame for save to Dropbox");
+            return;
+        }
+
+        SfxObjectShell* pDoc = pViewFrame->GetObjectShell();
+        if (!pDoc)
+        {
+            SAL_WARN("sfx.appl", "No current document for save to Dropbox");
+            return;
+        }
+
+        // Get parent window for dialogs
+        weld::Window* pParent = pViewFrame->GetFrameWeld();
+
+        // Get document title for default filename
+        OUString sDefaultName = pDoc->GetTitle();
+        if (sDefaultName.isEmpty())
+            sDefaultName = u"Document"_ustr;
+
+        // Add appropriate extension based on document type
+        OUString sFileName = sDefaultName;
+        css::uno::Reference<css::frame::XModel> xModel = pDoc->GetModel();
+        if (xModel.is())
+        {
+            // Try to get the current filter to determine extension
+            css::uno::Reference<css::frame::XController> xController = xModel->getCurrentController();
+            if (xController.is() && xController->getFrame().is())
+            {
+                // Use XServiceInfo to determine document type
+                css::uno::Reference<css::lang::XServiceInfo> xServiceInfo(xModel, css::uno::UNO_QUERY);
+                if (xServiceInfo.is())
+                {
+                    if (xServiceInfo->supportsService(u"com.sun.star.text.TextDocument"_ustr))
+                        sFileName += u".odt"_ustr;
+                    else if (xServiceInfo->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
+                        sFileName += u".ods"_ustr;
+                    else if (xServiceInfo->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
+                        sFileName += u".odp"_ustr;
+                    else if (xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
+                        sFileName += u".odg"_ustr;
+                    else
+                        sFileName += u".odt"_ustr; // Default to Writer format
+                }
+                else
+                {
+                    sFileName += u".odt"_ustr; // Default to Writer format
+                }
+            }
+        }
+
+        // Show input dialog for filename
+        if (pParent)
+        {
+            InputDialog aDlg(pParent, u"Enter filename:"_ustr);
+            aDlg.SetEntryText(sFileName);
+
+            int nResult = aDlg.run();
+            if (nResult != RET_OK)
+                return;
+
+            sFileName = aDlg.GetEntryText();
+            if (sFileName.isEmpty())
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Warning, VclButtonsType::Ok,
+                    u"Please enter a valid filename."_ustr));
+                xBox->run();
+                return;
+            }
+        }
+
+        // Create a temporary file and save the document
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::io::XTempFile> xTempFile = css::io::TempFile::create(xContext);
+
+        if (!xTempFile.is())
+        {
+            SAL_WARN("sfx.appl", "Failed to create temporary file for Dropbox upload");
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Failed to create temporary file for upload."_ustr));
+                xBox->run();
+            }
+            return;
+        }
+
+        // Get the temp file URL
+        OUString sTempURL = xTempFile->getUri();
+        SAL_WARN("sfx.appl", "Created temp file: " << sTempURL);
+
+        // Save document to temporary file
+        css::uno::Reference<css::frame::XStorable> xStorable(pDoc->GetModel(), css::uno::UNO_QUERY);
+        if (!xStorable.is())
+        {
+            SAL_WARN("sfx.appl", "Document is not storable");
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Document cannot be saved for upload."_ustr));
+                xBox->run();
+            }
+            return;
+        }
+
+        // Store document to temp file
+        css::uno::Sequence<css::beans::PropertyValue> aArgs;
+        try {
+            xStorable->storeToURL(sTempURL, aArgs);
+            SAL_WARN("sfx.appl", "Document saved to temp file successfully");
+        } catch (const css::uno::Exception& e) {
+            SAL_WARN("sfx.appl", "Failed to save document to temp file: " << e.Message);
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Failed to save document for upload."_ustr));
+                xBox->run();
+            }
+            return;
+        }
+
+        // Get input stream from temp file
+        css::uno::Reference<css::io::XInputStream> xInputStream = xTempFile->getInputStream();
+        if (!xInputStream.is())
+        {
+            SAL_WARN("sfx.appl", "Failed to get input stream from temp file");
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Failed to read saved document for upload."_ustr));
+                xBox->run();
+            }
+            return;
+        }
+
+        // Save to Dropbox using upload-enabled dialog
+        try {
+            SAL_WARN("sfx.appl", "Saving document to Dropbox: " << sFileName);
+
+            // Get file size for display
+            css::uno::Reference<css::io::XSeekable> xSeekable(xInputStream, css::uno::UNO_QUERY);
+            sal_Int64 nFileSize = 0;
+            if (xSeekable.is())
+            {
+                nFileSize = xSeekable->getLength();
+                xSeekable->seek(0); // Reset to beginning
+            }
+
+            SAL_WARN("sfx.appl", "Creating Dropbox upload dialog...");
+
+            // Create and show Dropbox dialog in upload mode
+            if (pParent) {
+                try {
+                    // Create Dropbox dialog in upload mode
+                    DropboxDialog aDlg(pParent, sTempURL, sFileName);
+                    SAL_WARN("sfx.appl", "Dropbox dialog created, executing...");
+
+                    // Execute the dialog - this will handle authentication and upload
+                    bool bResult = aDlg.Execute();
+
+                    if (bResult) {
+                        SAL_WARN("sfx.appl", "Dropbox upload completed successfully");
+                        std::unique_ptr<weld::MessageDialog> xSuccessBox(Application::CreateMessageDialog(pParent,
+                            VclMessageType::Info, VclButtonsType::Ok,
+                            (u"Document '" + sFileName + u"' successfully uploaded to Dropbox!\n" +
+                             u"File size: " + OUString::number(nFileSize) + u" bytes")));
+                        xSuccessBox->run();
+                    } else {
+                        SAL_WARN("sfx.appl", "Dropbox upload was cancelled or failed");
+                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                            VclMessageType::Warning, VclButtonsType::Ok,
+                            u"Dropbox upload was cancelled or failed."_ustr));
+                        xBox->run();
+                    }
+
+                } catch (const std::exception& e) {
+                    SAL_WARN("sfx.appl", "Exception creating Dropbox dialog: " << e.what());
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                        VclMessageType::Error, VclButtonsType::Ok,
+                        u"Failed to open Dropbox upload dialog. Please check your configuration."_ustr));
+                    xBox->run();
+                }
+            }
+
+        } catch (const css::uno::Exception& e) {
+            SAL_WARN("sfx.appl", "Dropbox save failed with UNO exception: " << e.Message);
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    (u"Dropbox save failed: " + e.Message)));
+                xBox->run();
+            }
+        } catch (const std::exception& e) {
+            SAL_WARN("sfx.appl", "Dropbox save failed with std::exception: " << e.what());
+            if (pParent) {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    u"Dropbox save failed. Please check your configuration."_ustr));
+                xBox->run();
+            }
+        }
+
+    } catch (const std::exception& e) {
+        SAL_WARN("sfx.appl", "Exception in SaveToDropboxExec_Impl: " << e.what());
+    } catch (...) {
+        SAL_WARN("sfx.appl", "Unknown exception in SaveToDropboxExec_Impl");
     }
 }
 

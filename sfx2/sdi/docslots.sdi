@@ -38,6 +38,14 @@ interface Documents
     [
         ExecMethod = OpenDropboxExec_Impl ;
     ]
+    SID_SAVETOGOOGLEDRIVE
+    [
+        ExecMethod = SaveToGoogleDriveExec_Impl ;
+    ]
+    SID_SAVETODROPBOX
+    [
+        ExecMethod = SaveToDropboxExec_Impl ;
+    ]
     SID_SIGNPDF
     [
         ExecMethod = SignPDFExec_Impl ;
