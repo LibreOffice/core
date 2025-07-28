@@ -73,7 +73,6 @@ namespace svx
         bool        mbWasHiContrastMode;
         sal_uInt16  mnSlotId;
         Color       maCurColor;
-        tools::Rectangle   maUpdRect;
         Size        maBmpSize;
         vcl::ImageType meImageType;
         OUString    maCommandLabel;
