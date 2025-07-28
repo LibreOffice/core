@@ -2096,7 +2096,35 @@ void ScViewFunc::RemoveCurrentSheetView()
     GetViewData().SetTabNo(nTab);
     GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
 
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.PostPaintGridAll();
     PaintExtras();
+}
+
+void ScViewFunc::SwitchSheetView()
+{
+    SCTAB nTab = GetViewData().GetTabNumber();
+    ScDocument& rDocument = GetViewData().GetDocument();
+    if (rDocument.IsSheetView(nTab))
+        return;
+
+    sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
+    auto pSheetManager = rDocument.GetSheetViewManager(nTab);
+    sc::SheetViewID nNextSheetViewID = pSheetManager->getNextSheetView(nSheetViewID);
+
+    GetViewData().SetSheetViewID(nNextSheetViewID);
+
+    if (nNextSheetViewID != sc::DefaultSheetViewID)
+    {
+        SCTAB nNextSheetViewTab = rDocument.GetSheetViewNumber(nTab, nNextSheetViewID);
+        GetViewData().SetTabNo(nNextSheetViewTab); // force add the sheet view tab
+    }
+
+    // Update
+    GetViewData().SetTabNo(nTab); // then change back to the current tab
+    ScDocShell& rDocSh = GetViewData().GetDocShell();
+    rDocSh.PostPaintGridAll();
+    PaintExtras(); // update Tab Control
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

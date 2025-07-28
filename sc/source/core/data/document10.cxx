@@ -1171,7 +1171,7 @@ SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
 {
     if (ScTable* pMainSheet = FetchTable(nTab))
     {
-        if (pMainSheet->IsSheetView())
+        if (pMainSheet->IsSheetView() || nID == sc::DefaultSheetViewID)
             return nTab;
 
         sc::SheetView aView = pMainSheet->GetSheetViewManager()->get(nID);

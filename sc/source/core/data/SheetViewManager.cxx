@@ -39,6 +39,36 @@ SheetView SheetViewManager::get(SheetViewID nID) const
     }
     return SheetView();
 }
+
+/// Calculate the next existing sheet view to use.
+SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
+{
+    if (maViews.empty())
+        return DefaultSheetViewID;
+
+    // Set to max, so we prevent the for loop to run
+    size_t startIndex = std::numeric_limits<size_t>::max();
+
+    // Start with first index and search for the first sheet view in for loop.
+    if (nID == DefaultSheetViewID)
+    {
+        startIndex = 0;
+    }
+    // If we assume currnet ID is valid, so set the start to current + 1 to search
+    // for then next valid sheet view in the for loop.
+    else if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
+    {
+        startIndex = size_t(nID) + 1;
+    }
+
+    for (size_t nIndex = startIndex; nIndex < maViews.size(); ++nIndex)
+    {
+        if (maViews[nIndex].isValid())
+            return SheetViewID(nIndex);
+    }
+
+    return DefaultSheetViewID;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
