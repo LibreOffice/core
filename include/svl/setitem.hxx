@@ -36,7 +36,7 @@ public:
     SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet);
     SfxSetItem(const SfxSetItem&, SfxItemPool* pPool = nullptr);
 
-    virtual bool operator==(const SfxPoolItem&) const override;
+    virtual bool operator==(const SfxPoolItem&) const override final;
 
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
                                  MapUnit ePresMetric, OUString& rText,

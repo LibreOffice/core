@@ -33,9 +33,9 @@ public:
     CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue):
         SfxPoolItem(which), m_nValue(nTheValue) {}
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const override;
+    virtual bool operator ==(const SfxPoolItem & rItem) const override final;
 
-    virtual bool supportsHashCode() const override;
+    virtual bool supportsHashCode() const override final;
     virtual size_t hashCode() const override final;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -102,7 +102,7 @@ public:
         SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
-    virtual bool operator ==(const SfxPoolItem & rItem) const override;
+    virtual bool operator ==(const SfxPoolItem & rItem) const override final;
 
     virtual bool supportsHashCode() const override final;
     virtual size_t hashCode() const override final;

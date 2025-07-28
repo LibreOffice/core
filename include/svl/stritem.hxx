@@ -39,7 +39,7 @@ public:
     // Note that all the subclasses are currently marked as false since we haven't check them to
     // be safe under hashing
     virtual bool supportsHashCode() const override { return true; }
-    virtual size_t hashCode() const override { return m_aValue.hashCode(); }
+    virtual size_t hashCode() const override final { return m_aValue.hashCode(); }
 
     virtual bool GetPresentation(SfxItemPresentation,
                                  MapUnit, MapUnit,

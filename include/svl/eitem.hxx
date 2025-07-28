@@ -82,7 +82,7 @@ class SVL_DLLPUBLIC SfxBoolItem
     bool m_bValue;
 
 protected:
-    virtual ItemInstanceManager* getItemInstanceManager() const override;
+    virtual ItemInstanceManager* getItemInstanceManager() const override final;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -96,7 +96,7 @@ public:
     void SetValue(bool const bTheValue);
 
     // SfxPoolItem
-    virtual bool operator ==(const SfxPoolItem & rItem) const override;
+    virtual bool operator ==(const SfxPoolItem & rItem) const override final;
 
     virtual bool GetPresentation(SfxItemPresentation,
                                  MapUnit, MapUnit,

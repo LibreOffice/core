@@ -307,11 +307,11 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    virtual bool        isUsedByModel() const override;
+    virtual bool        isUsedByModel() const override final;
 
     virtual bool        SetParent( const OUString& ) override;
 
-    virtual bool        IsSfxStyleSheet() const override;
+    virtual bool        IsSfxStyleSheet() const override final;
 
 protected:
     virtual             ~SfxStyleSheet() override;

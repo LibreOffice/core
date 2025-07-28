@@ -49,8 +49,8 @@ public:
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
-    virtual bool supportsHashCode() const override { return true; }
-    virtual size_t hashCode() const override { return m_nValue; }
+    virtual bool supportsHashCode() const override final { return true; }
+    virtual size_t hashCode() const override final { return m_nValue; }
 
     virtual bool GetPresentation(SfxItemPresentation,
                                                 MapUnit, MapUnit,
