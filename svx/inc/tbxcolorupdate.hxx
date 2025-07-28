@@ -71,7 +71,6 @@ protected:
     bool mbWasHiContrastMode;
     sal_uInt16 mnSlotId;
     Color maCurColor;
-    Size maBmpSize;
     vcl::ImageType meImageType;
     OUString maCommandLabel;
     OUString maCommandURL;

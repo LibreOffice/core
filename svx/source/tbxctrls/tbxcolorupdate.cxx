@@ -247,13 +247,12 @@ void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdat
         = vcl::CommandInfoProvider::GetXGraphicForCommand(maCommandURL, mxFrame, meImageType);
     Image aImage(xImage);
 
-    Size aItemSize = GetItemSize(aImage.GetSizePixel());
+    const Size aItemSize = GetItemSize(aImage.GetSizePixel());
     if (!aItemSize.Width() || !aItemSize.Height())
         return;
 
     ScopedVclPtr<VirtualDevice> pVirDev(CreateVirtualDevice());
     pVirDev->SetOutputSizePixel(aItemSize, /*bErase*/ true, /*bAlphaMaskTransparent*/ true);
-    maBmpSize = aItemSize;
 
     std::unique_ptr<GDIMetaFile> xMetaFile;
     if (RecordVirtualDevice())
@@ -266,20 +265,20 @@ void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdat
     }
 
     tools::Rectangle aUpdateRect;
-    if (maBmpSize.Width() == maBmpSize.Height())
+    if (aItemSize.Width() == aItemSize.Height())
         // tdf#84985 align color bar with icon bottom edge; integer arithmetic e.g. 26 - 26/4 <> 26 * 3/4
-        aUpdateRect = tools::Rectangle(Point(0, maBmpSize.Height() - maBmpSize.Height() / 4),
-                                       Size(maBmpSize.Width(), maBmpSize.Height() / 4));
+        aUpdateRect = tools::Rectangle(Point(0, aItemSize.Height() - aItemSize.Height() / 4),
+                                       Size(aItemSize.Width(), aItemSize.Height() / 4));
     else
-        aUpdateRect = tools::Rectangle(Point(maBmpSize.Height() + 2, 2),
-                                       Point(maBmpSize.Width() - 3, maBmpSize.Height() - 3));
+        aUpdateRect = tools::Rectangle(Point(aItemSize.Height() + 2, 2),
+                                       Point(aItemSize.Width() - 3, aItemSize.Height() - 3));
 
     pVirDev->Push(vcl::PushFlags::CLIPREGION);
 
     // tdf#135121 don't include the part of the image which we will
     // overwrite with the target color so that for the transparent color
     // case the original background of the device is shown
-    vcl::Region aRegion(tools::Rectangle(Point(0, 0), maBmpSize));
+    vcl::Region aRegion(tools::Rectangle(Point(0, 0), aItemSize));
     aRegion.Exclude(aUpdateRect);
     pVirDev->SetClipRegion(aRegion);
 
@@ -290,7 +289,7 @@ void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdat
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     mbWasHiContrastMode = rStyleSettings.GetHighContrastMode();
 
-    if ((COL_TRANSPARENT != aColor) && (maBmpSize.Width() == maBmpSize.Height()))
+    if ((COL_TRANSPARENT != aColor) && (aItemSize.Width() == aItemSize.Height()))
         pVirDev->SetLineColor(aColor);
     else
         pVirDev->SetLineColor(rStyleSettings.GetDisableColor());
