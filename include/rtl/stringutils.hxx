@@ -256,7 +256,7 @@ struct ConstCharArrayDetector< const char[ N ], T >
     static char const * toPointer(char const (& literal)[N]) { return literal; }
 };
 
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
 //to silence over zealous warnings that the loop is logically dead
 //for the single char case
 template< typename T >
