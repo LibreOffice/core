@@ -14,7 +14,7 @@
 
 #include <cstdlib>
 
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
 #define suppress_fun_call_w_exception(expr)                                                        \
     do                                                                                             \
     {                                                                                              \
