@@ -16875,7 +16875,7 @@ private:
         }
     }
 
-    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const BitmapEx* pIcon)
+    void insert_item(GtkTreeIter& iter, int pos, const OUString* pId, const OUString* pText, const Bitmap* pIcon)
     {
         // m_nTextCol may be -1, so pass it last, to not terminate the sequence before the Id value
         gtk_tree_store_insert_with_values(m_pTreeStore, &iter, nullptr, pos,
@@ -16884,7 +16884,7 @@ private:
                                           -1);
         if (pIcon)
         {
-            GdkPixbuf* pixbuf = getPixbuf(*pIcon);
+            GdkPixbuf* pixbuf = getPixbuf(BitmapEx(*pIcon));
             gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
             if (pixbuf)
                 g_object_unref(pixbuf);
@@ -17077,7 +17077,7 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString* pText, const OUString* pId, const BitmapEx* pIcon, weld::TreeIter* pRet) override
+    virtual void insert(int pos, const OUString* pText, const OUString* pId, const Bitmap* pIcon, weld::TreeIter* pRet) override
     {
         disable_notify_events();
         GtkTreeIter iter;

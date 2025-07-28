@@ -55,11 +55,11 @@ void ThemeDialog::initColorSets()
     {
         auto const& rColorSet = maColorSets[i];
         VclPtr<VirtualDevice> pVirDev = CreateColorSetPreview(rColorSet);
-        BitmapEx aBitmapEx(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
+        Bitmap aBitmap(pVirDev->GetBitmap(Point(0, 0), pVirDev->GetOutputSizePixel()));
 
         OUString sId = OUString::number(i);
         OUString sName = rColorSet.getName();
-        mxIconViewThemeColors->insert(-1, &sName, &sId, &aBitmapEx, nullptr);
+        mxIconViewThemeColors->insert(-1, &sName, &sId, &aBitmap, nullptr);
     }
 }
 

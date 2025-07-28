@@ -530,7 +530,7 @@ void LayoutMenu::Fill()
                 }
                 else
                 {
-                    BitmapEx aPreviewBitmap = GetPreviewAsBitmap(aImg);
+                    Bitmap aPreviewBitmap = GetPreviewAsBitmap(aImg);
                     mxLayoutIconView->insert(id, &sLayoutName, &sId, &aPreviewBitmap, nullptr);
                 }
                 maLayoutToStringMap[elem.maAutoLayout] = elem.mpStrResId;

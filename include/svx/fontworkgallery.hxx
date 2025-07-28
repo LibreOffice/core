@@ -53,7 +53,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     rtl::Reference<SdrObject> mxSdrObject;
     SdrModel*           mpDestModel;
 
-    std::vector<BitmapEx> maFavoritesHorizontal;
+    std::vector<Bitmap> maFavoritesHorizontal;
     // mapping between item ID and item title
     std::map<OUString, OUString> maIdToTitleMap;
 

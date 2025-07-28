@@ -400,7 +400,7 @@ void MasterPagesSelector::SetItem (
             }
             else
             {
-                BitmapEx aPreviewBitmap = GetPreviewAsBitmap(aPreview);
+                Bitmap aPreviewBitmap = GetPreviewAsBitmap(aPreview);
                 OUString sId = OUString::number(aToken);
                 mxPreviewIconView->insert(nIndex, nullptr, &sId, &aPreviewBitmap, nullptr);
                 mxPreviewIconView->set_item_accessible_name(

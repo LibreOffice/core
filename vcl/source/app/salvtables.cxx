@@ -5444,7 +5444,7 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
 }
 
 void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* pId,
-                                 const BitmapEx* pIcon, weld::TreeIter* pRet)
+                                 const Bitmap* pIcon, weld::TreeIter* pRet)
 {
     const Image aImage = pIcon ? Image(*pIcon) : Image();
     insert(pos, pStr, pId, aImage, pRet);

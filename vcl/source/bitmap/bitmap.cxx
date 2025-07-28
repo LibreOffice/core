@@ -132,6 +132,21 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
     mxSalBmp->Create(rSizePixel, ePixelFormat, *pPal);
 }
 
+Bitmap::Bitmap(const BitmapEx& rBitmapEx)
+    : maPrefMapMode(rBitmapEx.GetPrefMapMode())
+    , maPrefSize(rBitmapEx.GetPrefSize())
+{
+    if (!rBitmapEx.IsAlpha())
+        mxSalBmp = rBitmapEx.GetBitmap().mxSalBmp;
+    else
+    {
+        ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
+        xDev->SetOutputSize(maPrefSize);
+        xDev->DrawBitmapEx(Point(0, 0), maPrefSize, rBitmapEx);
+        mxSalBmp = xDev->GetBitmap(Point(0,0), maPrefSize).mxSalBmp;
+    }
+}
+
 #ifdef DBG_UTIL
 
 namespace

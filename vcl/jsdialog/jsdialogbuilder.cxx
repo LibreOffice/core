@@ -1891,7 +1891,7 @@ void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId,
     sendUpdate();
 }
 
-void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId, const BitmapEx* pIcon,
+void JSIconView::insert(int pos, const OUString* pStr, const OUString* pId, const Bitmap* pIcon,
                         weld::TreeIter* pRet)
 {
     SalInstanceIconView::insert(pos, pStr, pId, pIcon, pRet);

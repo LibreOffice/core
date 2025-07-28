@@ -657,8 +657,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
             if (it != aStylesHint.end())
                 pStyleHint = it->second;
             Bitmap aPreview = GetCachedPreview(rStyle, pStyleHint);
-            BitmapEx aPreviewTmp(aPreview);
-            m_xStylesView->append(rStyle.first, rStyle.second, &aPreviewTmp);
+            m_xStylesView->append(rStyle.first, rStyle.second, &aPreview);
         }
         else
             m_xStylesView->append(rStyle.first, rStyle.second, nullptr);

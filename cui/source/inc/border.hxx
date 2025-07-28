@@ -192,7 +192,7 @@ private:
     void UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset );
 
     static OUString GetShadowTypeName(sal_uInt16 nIconViewIdx);
-    static BitmapEx GetPreviewAsBitmap(const Image& rImage);
+    static Bitmap GetPreviewAsBitmap(const Image& rImage);
 };
 
 

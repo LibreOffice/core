@@ -36,6 +36,8 @@
 #include <algorithm>
 #include <memory>
 
+class BitmapEx;
+
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 {
     return basegfx::fround<sal_uInt8>(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0);
@@ -109,6 +111,7 @@ public:
 
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
+                            Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
     SAL_DLLPRIVATE explicit Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
                             ~Bitmap();

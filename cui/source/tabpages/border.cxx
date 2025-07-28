@@ -1453,7 +1453,7 @@ void SvxBorderTabPage::FillPresetIV()
     for( sal_uInt16 nIdx = 1; nIdx <= BORDER_PRESET_COUNT; ++nIdx )
     {
         OUString sId = OUString::number(nIdx);
-        BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
+        Bitmap aPreviewBitmap = GetPreviewAsBitmap(m_aBorderImgVec[GetPresetImageId(nIdx) - 1]);
         m_xWndPresets->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
         m_xWndPresets->set_item_accessible_name(m_xWndPresets->n_children() - 1,
                                                 GetPresetName(nIdx));
@@ -1472,7 +1472,7 @@ void SvxBorderTabPage::FillShadowIV()
     for( sal_uInt16 nIdx = 1; nIdx <= BORDER_SHADOW_COUNT; ++nIdx )
     {
         OUString sId = OUString::number(nIdx);
-        BitmapEx aPreviewBitmap = GetPreviewAsBitmap(m_aShadowImgVec[nIdx-1]);
+        Bitmap aPreviewBitmap = GetPreviewAsBitmap(m_aShadowImgVec[nIdx-1]);
         m_xWndShadows->insert(-1, nullptr, &sId, &aPreviewBitmap, nullptr);
         m_xWndShadows->set_item_accessible_name(m_xWndShadows->n_children() - 1,
                                                 GetShadowTypeName(nIdx));
@@ -1482,9 +1482,9 @@ void SvxBorderTabPage::FillShadowIV()
     m_xWndShadows->select(0);
 }
 
-BitmapEx SvxBorderTabPage::GetPreviewAsBitmap(const Image& rImage)
+Bitmap SvxBorderTabPage::GetPreviewAsBitmap(const Image& rImage)
 {
-    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
+    Bitmap aPreviewBitmap(rImage.GetBitmapEx());
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
