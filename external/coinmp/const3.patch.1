@@ -1,0 +1,72 @@
+diff -ur coinmp.org/Cbc/src/CbcMessage.cpp coinmp/Cbc/src/CbcMessage.cpp
+--- coinmp.org/Cbc/src/CbcMessage.cpp	2025-07-28 15:00:37.211778871 +0200
++++ coinmp/Cbc/src/CbcMessage.cpp	2025-07-28 15:03:22.762019637 +0200
+@@ -17,7 +17,7 @@
+     char detail;
+     const char * message;
+ } Cbc_message;
+-static Cbc_message us_english[] = {
++static const Cbc_message us_english[] = {
+     {CBC_END_GOOD, 1, 1, "Search completed - best objective %.16g, took %d iterations and %d nodes (%.2f seconds)"},
+     {CBC_MAXNODES, 3, 1, "Exiting on maximum nodes"},
+     {CBC_SOLUTION, 4, 1, "Integer solution of %g found after %d iterations and %d nodes (%.2f seconds)"},
+@@ -80,7 +80,7 @@
+     language_ = language;
+     strcpy(source_, "Cbc");
+     class_ = 0; // branch and bound
+-    Cbc_message * message = us_english;
++    const Cbc_message * message = us_english;
+ 
+     while (message->internalNumber != CBC_DUMMY_END) {
+         CoinOneMessage oneMessage(message->externalNumber, message->detail,
+diff -ur coinmp.org/Cgl/src/CglMessage.cpp coinmp/Cgl/src/CglMessage.cpp
+--- coinmp.org/Cgl/src/CglMessage.cpp	2025-07-28 15:03:31.823083500 +0200
++++ coinmp/Cgl/src/CglMessage.cpp	2014-11-18 13:10:45.000000000 +0200
+@@ -13,7 +13,7 @@
+   char detail;
+   const char * message;
+ } Cgl_message;
+-static Cgl_message us_english[]=
++static const Cgl_message us_english[]=
+ {
+   {CGL_INFEASIBLE,0,1,"Cut generators found to be infeasible! (or unbounded)"},
+   {CGL_CLIQUES,1,2,"%d cliques of average size %g"},
+@@ -40,7 +40,7 @@
+   language_=language;
+   strcpy(source_,"Cgl");
+   class_ = 3; // Cuts
+-  Cgl_message * message = us_english;
++  const Cgl_message * message = us_english;
+ 
+   while (message->internalNumber!=CGL_DUMMY_END) {
+      CoinOneMessage oneMessage(message->externalNumber,message->detail,
+diff -ur coinmp.org/CoinUtils/src/CoinMessage.cpp coinmp/CoinUtils/src/CoinMessage.cpp
+--- coinmp.org/CoinUtils/src/CoinMessage.cpp	2025-07-28 15:00:37.186452665 +0200
++++ coinmp/CoinUtils/src/CoinMessage.cpp	2025-07-28 15:03:12.442763209 +0200
+@@ -18,7 +18,7 @@
+   char detail;
+   const char * message;
+ } Coin_message;
+-static Coin_message us_english[]=
++static const Coin_message us_english[]=
+ {
+   {COIN_MPS_LINE,1,1,"At line %d %s"},
+   {COIN_MPS_STATS,2,1,"Problem %s has %d rows, %d columns and %d elements"},
+@@ -66,7 +66,7 @@
+   {COIN_DUMMY_END,999999,0,""}
+ };
+ // **** aiutami!
+-static Coin_message italian[]=
++static const Coin_message italian[]=
+ {
+   {COIN_MPS_LINE,1,1,"al numero %d %s"},
+   {COIN_MPS_STATS,2,1,"matrice %s ha %d file, %d colonne and %d elementi (diverso da zero)"},
+@@ -79,7 +79,7 @@
+   language_=language;
+   strcpy(source_,"Coin");
+   class_= 2; // Coin
+-  Coin_message * message = us_english;
++  const Coin_message * message = us_english;
+ 
+   while (message->internalNumber!=COIN_DUMMY_END) {
+     CoinOneMessage oneMessage(message->externalNumber,message->detail,
