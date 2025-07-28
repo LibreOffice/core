@@ -907,7 +907,7 @@ static void FillCellInfoMatrix( const CellInfoVector& rStyle, const TableStyleSe
     }
 }
 
-static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
+static Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, const TableStyleSettings& rSettings, bool bIsPageDark )
 {
     CellInfoVector aCellInfoVector(sdr::table::style_count);
     FillCellInfoVector( xTableStyle, aCellInfoVector );
@@ -1018,7 +1018,7 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
         }
     }
 
-    return BitmapEx(pVirDev->GetBitmap(Point(0,0), aBmpSize));
+    return pVirDev->GetBitmap(Point(0,0), aBmpSize);
 }
 
 void TableDesignWidget::FillDesignPreviewControl()
