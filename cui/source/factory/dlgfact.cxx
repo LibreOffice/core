@@ -223,7 +223,7 @@ public:
     {
         return this->m_pDlg->selectPageByUIXMLDescription(rUIXMLDescription);
     }
-    BitmapEx createScreenshot() const override { return this->m_pDlg->createScreenshot(); }
+    Bitmap createScreenshot() const override { return this->m_pDlg->createScreenshot(); }
     OUString GetScreenshotId() const override { return this->m_pDlg->GetScreenshotId(); }
 };
 }

@@ -34,7 +34,7 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 
 namespace com::sun::star::frame { class XModel; }
 
-class BitmapEx;
+class Bitmap;
 class SdrObjGroup;
 namespace weld
 {
@@ -86,7 +86,7 @@ public:
     // Screenshot interface
     virtual std::vector<OUString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
-    virtual BitmapEx createScreenshot() const;
+    virtual Bitmap createScreenshot() const;
     virtual OUString GetScreenshotId() const { return {}; };
 };
 

@@ -1173,7 +1173,7 @@ bool SfxTabDialogController::selectPageByUIXMLDescription(const OUString& rUIXML
     return m_xTabCtrl->get_current_page_ident() == rUIXMLDescription;
 }
 
-BitmapEx SfxTabDialogController::createScreenshot() const
+Bitmap SfxTabDialogController::createScreenshot() const
 {
     // if we haven't run Start_Impl yet, do so now to create the initial pages
     if (!m_pImpl->bStarted)
@@ -1182,7 +1182,7 @@ BitmapEx SfxTabDialogController::createScreenshot() const
     }
 
     VclPtr<VirtualDevice> xDialogSurface(m_xDialog->screenshot());
-    return BitmapEx(xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel()));
+    return xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel());
 }
 
 OUString SfxTabDialogController::GetScreenshotId() const

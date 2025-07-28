@@ -184,7 +184,7 @@ public:
     //screenshotting
     std::vector<OUString> getAllPageUIXMLDescriptions() const;
     bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription);
-    BitmapEx createScreenshot() const;
+    Bitmap createScreenshot() const;
     OUString GetScreenshotId() const;
 };
 

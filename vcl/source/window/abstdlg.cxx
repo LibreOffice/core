@@ -51,10 +51,10 @@ bool VclAbstractDialog::selectPageByUIXMLDescription(const OUString& /*rUIXMLDes
     return true;
 }
 
-BitmapEx VclAbstractDialog::createScreenshot() const
+Bitmap VclAbstractDialog::createScreenshot() const
 {
     // default returns empty bitmap
-    return BitmapEx();
+    return Bitmap();
 }
 
 VclAbstractDialogFactory::~VclAbstractDialogFactory() {}

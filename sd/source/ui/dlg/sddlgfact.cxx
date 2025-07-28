@@ -56,10 +56,10 @@ public:
     using ImplTemplate<Base, Dialog>::ImplTemplate;
 
     // screenshotting
-    BitmapEx createScreenshot() const override
+    Bitmap createScreenshot() const override
     {
         VclPtr<VirtualDevice> xDialogSurface(this->m_pDlg->getDialog()->screenshot());
-        return BitmapEx(xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel()));
+        return xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel());
     }
     OUString GetScreenshotId() const override { return this->m_pDlg->get_help_id(); }
 };
