@@ -921,7 +921,7 @@ void newConcat(rtl_tString** ppThis, const C1* pLeft, sal_Int32 nLeftLength,
             *ppThis = nullptr;
         else
         {
-#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
+#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2024
             throw std::length_error("newConcat");
 #else
             //coverity doesn't report std::bad_alloc as an unhandled exception when
