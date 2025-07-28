@@ -661,8 +661,7 @@ void VbaFormControl::finalizeEmbeddedControls()
             // open a new control group, if the last group is an option group
             if( bLastWasOptionButton || aControlGroups.empty() )
             {
-                VbaFormControlVectorRef xControlGroup = std::make_shared<VbaFormControlVector>();
-                aControlGroups.push_back( xControlGroup );
+                aControlGroups.push_back(std::make_shared<VbaFormControlVector>());
             }
             // append the control to the last control group
             VbaFormControlVector& rLastGroup = *aControlGroups.back();
