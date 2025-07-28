@@ -1,0 +1,298 @@
+Only in lcms2: a-conftest.dwo
+Only in lcms2: build.log
+Only in lcms2: config.log
+Only in lcms2: config.status
+Only in lcms2/include: Makefile
+Only in lcms2: lcms2.pc
+Only in lcms2: libtool
+Only in lcms2: Makefile
+Only in lcms2/plugins/fast_float/include: Makefile
+Only in lcms2/plugins/fast_float: Makefile
+Only in lcms2/plugins/fast_float/src/.deps: fast_16_tethra.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_8_curves.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_8_matsh.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_8_matsh_sse.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_8_tethra.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_15bits.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_15mats.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_cmyk.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_curves.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_lab.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_matsh.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_separate.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_sup.Plo
+Only in lcms2/plugins/fast_float/src/.deps: fast_float_tethra.Plo
+Only in lcms2/plugins/fast_float/src: Makefile
+Only in lcms2/plugins/fast_float/testbed/.deps: fast_float_testbed.Po
+Only in lcms2/plugins/fast_float/testbed: Makefile
+diff -ur lcms2.org/plugins/Makefile lcms2/plugins/Makefile
+--- lcms2.org/plugins/Makefile	2025-07-28 14:27:59.953675836 +0200
++++ lcms2/plugins/Makefile	2025-07-28 14:30:37.410209400 +0200
+@@ -184,28 +184,28 @@
+     dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
+   done; \
+   reldir="$$dir2"
+-ACLOCAL = ${SHELL} '/home/marti/git/Little-CMS/missing' aclocal-1.16
++ACLOCAL = ${SHELL} '/home/noel/libo3/workdir/UnpackedTarball/lcms2/missing' aclocal-1.16
+ AMTAR = $${TAR-tar}
+ AM_DEFAULT_VERBOSITY = 1
+-AR = ar
++AR = gcc-ar
+ AS = as
+-AUTOCONF = ${SHELL} '/home/marti/git/Little-CMS/missing' autoconf
+-AUTOHEADER = ${SHELL} '/home/marti/git/Little-CMS/missing' autoheader
+-AUTOMAKE = ${SHELL} '/home/marti/git/Little-CMS/missing' automake-1.16
+-AWK = mawk
+-CC = gcc
++AUTOCONF = ${SHELL} '/home/noel/libo3/workdir/UnpackedTarball/lcms2/missing' autoconf
++AUTOHEADER = ${SHELL} '/home/noel/libo3/workdir/UnpackedTarball/lcms2/missing' autoheader
++AUTOMAKE = ${SHELL} '/home/noel/libo3/workdir/UnpackedTarball/lcms2/missing' automake-1.16
++AWK = gawk
++CC = /usr/bin/ccache gcc 
+ CCDEPMODE = depmode=gcc3
+-CFLAGS = -g -O2 -fvisibility=hidden -pthread
+-CPP = gcc -E
+-CPPFLAGS = 
++CFLAGS =  -O2 -mtune=generic -ggdb2 -gsplit-dwarf -gdwarf-4 -ggnu-pubnames -fvisibility=hidden -pthread
++CPP = /usr/bin/ccache gcc  -E
++CPPFLAGS =  -I/usr/lib/jvm/java-21-openjdk-amd64/include -I/usr/lib/jvm/java-21-openjdk-amd64/include/linux
+ CSCOPE = cscope
+ CTAGS = ctags
+-CXX = g++
+-CXXCPP = g++ -E
++CXX = /usr/bin/ccache g++ 
++CXXCPP = /usr/bin/ccache g++  -E
+ CXXDEPMODE = depmode=gcc3
+ CXXFLAGS = -g -O2 -pthread
+ CYGPATH_W = echo
+-DEFS = -DPACKAGE_NAME=\"lcms2\" -DPACKAGE_TARNAME=\"lcms2\" -DPACKAGE_VERSION=\"2.16\" -DPACKAGE_STRING=\"lcms2\ 2.16\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_FUNC_ATTRIBUTE_VISIBILITY=1 -DHAVE_GMTIME_R=1 -DHAVE_PTHREAD_PRIO_INHERIT=1 -DHAVE_PTHREAD=1 -DHasTHREADS=1 -DHasJPEG=1 -DHasZLIB=1 -DHasTIFF=1 -DHAVE_TIFFCONF_H=1
++DEFS = -DPACKAGE_NAME=\"lcms2\" -DPACKAGE_TARNAME=\"lcms2\" -DPACKAGE_VERSION=\"2.17\" -DPACKAGE_STRING=\"lcms2\ 2.17\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_FUNC_ATTRIBUTE_VISIBILITY=1 -DHAVE_GMTIME_R=1 -DHAVE_PTHREAD_PRIO_INHERIT=1 -DHAVE_PTHREAD=1 -DHasTHREADS=1 -DHasZLIB=1
+ DEPDIR = .deps
+ DLLTOOL = false
+ DSYMUTIL = 
+@@ -224,32 +224,32 @@
+ INSTALL_PROGRAM = ${INSTALL}
+ INSTALL_SCRIPT = ${INSTALL}
+ INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
+-JPEGICC_DEPLIBS = -ljpeg -lm -lpthread
++JPEGICC_DEPLIBS = -lm -lpthread
+ LCMS_LIB_DEPLIBS = -lm -lpthread
+ LD = /usr/bin/ld -m elf_x86_64
+ LDFLAGS = 
+ LIBOBJS = 
+ LIBRARY_AGE = 0
+ LIBRARY_CURRENT = 2
+-LIBRARY_REVISION = 16
++LIBRARY_REVISION = 17
+ LIBS = 
+ LIBTOOL = $(SHELL) $(top_builddir)/libtool
+ LIBTOOL_DEPS = .//ltmain.sh
+-LIB_JPEG = -ljpeg
++LIB_JPEG = 
+ LIB_MATH = -lm
+ LIB_PLUGINS = 
+ LIB_THREAD = -lpthread
+-LIB_TIFF = -ltiff
++LIB_TIFF = 
+ LIB_ZLIB = -lz
+ LIPO = 
+ LN_S = ln -s
+ LTLIBOBJS = 
+ LT_SYS_LIBRARY_PATH = 
+-MAINT = 
+-MAKEINFO = ${SHELL} '/home/marti/git/Little-CMS/missing' makeinfo
++MAINT = #
++MAKEINFO = ${SHELL} '/home/noel/libo3/workdir/UnpackedTarball/lcms2/missing' makeinfo
+ MANIFEST_TOOL = :
+ MKDIR_P = /usr/bin/mkdir -p
+-NM = /usr/bin/nm -B
++NM = gcc-nm
+ NMEDIT = 
+ OBJDUMP = objdump
+ OBJEXT = o
+@@ -258,29 +258,29 @@
+ PACKAGE = lcms2
+ PACKAGE_BUGREPORT = 
+ PACKAGE_NAME = lcms2
+-PACKAGE_STRING = lcms2 2.16
++PACKAGE_STRING = lcms2 2.17
+ PACKAGE_TARNAME = lcms2
+ PACKAGE_URL = 
+-PACKAGE_VERSION = 2.16
++PACKAGE_VERSION = 2.17
+ PATH_SEPARATOR = :
+-PTHREAD_CC = gcc
++PTHREAD_CC = /usr/bin/ccache gcc 
+ PTHREAD_CFLAGS = -pthread
+-PTHREAD_CXX = g++
++PTHREAD_CXX = /usr/bin/ccache g++ 
+ PTHREAD_LIBS = -lpthread
+-RANLIB = ranlib
++RANLIB = gcc-ranlib
+ SED = /usr/bin/sed
+ SET_MAKE = 
+ SHELL = /bin/bash
+ STRIP = strip
+-TIFFICC_DEPLIBS = -ltiff -ljpeg -lz -lm -lpthread
+-VERSION = 2.16
+-abs_builddir = /home/marti/git/Little-CMS/plugins
+-abs_srcdir = /home/marti/git/Little-CMS/plugins
+-abs_top_builddir = /home/marti/git/Little-CMS
+-abs_top_srcdir = /home/marti/git/Little-CMS
+-ac_ct_AR = ar
+-ac_ct_CC = gcc
+-ac_ct_CXX = g++
++TIFFICC_DEPLIBS = -lz -lm -lpthread
++VERSION = 2.17
++abs_builddir = /home/noel/libo3/workdir/UnpackedTarball/lcms2/plugins
++abs_srcdir = /home/noel/libo3/workdir/UnpackedTarball/lcms2/plugins
++abs_top_builddir = /home/noel/libo3/workdir/UnpackedTarball/lcms2
++abs_top_srcdir = /home/noel/libo3/workdir/UnpackedTarball/lcms2
++ac_ct_AR = 
++ac_ct_CC = 
++ac_ct_CXX = 
+ ac_ct_DUMPBIN = 
+ am__include = include
+ am__leading_dot = .
+@@ -290,7 +290,7 @@
+ ax_pthread_config = 
+ bindir = ${exec_prefix}/bin
+ build = x86_64-pc-linux-gnu
+-build_alias = 
++build_alias = x86_64-pc-linux-gnu
+ build_cpu = x86_64
+ build_os = linux-gnu
+ build_vendor = pc
+@@ -301,7 +301,7 @@
+ dvidir = ${docdir}
+ exec_prefix = ${prefix}
+ host = x86_64-pc-linux-gnu
+-host_alias = 
++host_alias = x86_64-pc-linux-gnu
+ host_cpu = x86_64
+ host_os = linux-gnu
+ host_vendor = pc
+@@ -309,7 +309,7 @@
+ includedir = ${prefix}/include
+ infodir = ${datarootdir}/info
+ inline = 
+-install_sh = ${SHELL} /home/marti/git/Little-CMS/install-sh
++install_sh = ${SHELL} /home/noel/libo3/workdir/UnpackedTarball/lcms2/install-sh
+ libdir = ${exec_prefix}/lib
+ libexecdir = ${exec_prefix}/libexec
+ localedir = ${datarootdir}/locale
+@@ -334,7 +334,7 @@
+ all: all-recursive
+ 
+ .SUFFIXES:
+-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
++$(srcdir)/Makefile.in: # $(srcdir)/Makefile.am  $(am__configure_deps)
+ 	@for dep in $?; do \
+ 	  case '$(am__configure_deps)' in \
+ 	    *$$dep*) \
+@@ -358,9 +358,9 @@
+ $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+ 
+-$(top_srcdir)/configure:  $(am__configure_deps)
++$(top_srcdir)/configure: # $(am__configure_deps)
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+-$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
++$(ACLOCAL_M4): # $(am__aclocal_m4_deps)
+ 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+ $(am__aclocal_m4_deps):
+ 
+Only in lcms2/plugins/threaded/include: Makefile
+Only in lcms2/plugins/threaded: Makefile
+Only in lcms2/plugins/threaded/src/.deps: threaded_core.Plo
+Only in lcms2/plugins/threaded/src/.deps: threaded_main.Plo
+Only in lcms2/plugins/threaded/src/.deps: threaded_scheduler.Plo
+Only in lcms2/plugins/threaded/src/.deps: threaded_split.Plo
+Only in lcms2/plugins/threaded/src: Makefile
+Only in lcms2/plugins/threaded/testbed/.deps: threaded_testbed.Po
+Only in lcms2/plugins/threaded/testbed: Makefile
+Only in lcms2/src: cmsalpha.lo
+Only in lcms2/src: cmscam02.lo
+Only in lcms2/src: cmscgats.lo
+Only in lcms2/src: cmscnvrt.lo
+Only in lcms2/src: cmserr.lo
+Only in lcms2/src: cmsgamma.lo
+Only in lcms2/src: cmsgmt.lo
+Only in lcms2/src: cmshalf.lo
+Only in lcms2/src: cmsintrp.lo
+Only in lcms2/src: cmsio0.lo
+Only in lcms2/src: cmsio1.lo
+Only in lcms2/src: cmslut.lo
+Only in lcms2/src: cmsmd5.lo
+Only in lcms2/src: cmsmtrx.lo
+Only in lcms2/src: cmsnamed.lo
+Only in lcms2/src: cmsopt.lo
+Only in lcms2/src: cmspack.lo
+Only in lcms2/src: cmspcs.lo
+Only in lcms2/src: cmsplugin.lo
+Only in lcms2/src: cmsps2.lo
+Only in lcms2/src: cmssamp.lo
+Only in lcms2/src: cmssm.lo
+diff -ur lcms2.org/src/cmstypes.c lcms2/src/cmstypes.c
+--- lcms2.org/src/cmstypes.c	2025-07-28 14:27:59.954279541 +0200
++++ lcms2/src/cmstypes.c	2025-07-28 14:30:31.630036454 +0200
+@@ -4701,7 +4701,7 @@
+ 
+ 
+ // This is the list of built-in MPE types
+-static _cmsTagTypeLinkedList SupportedMPEtypes[] = {
++static _cmsTagTypeLinkedList const SupportedMPEtypes[] = {
+ 
+ {{ (cmsTagTypeSignature) cmsSigBAcsElemType, NULL, NULL, NULL, NULL, NULL, 0 }, &SupportedMPEtypes[1] },   // Ignore those elements for now
+ {{ (cmsTagTypeSignature) cmsSigEAcsElemType, NULL, NULL, NULL, NULL, NULL, 0 }, &SupportedMPEtypes[2] },   // (That's what the spec says)
+@@ -6028,7 +6028,7 @@
+ } _cmsTagLinkedList;
+ 
+ // This is the list of built-in tags. The data of this list can be modified by plug-ins
+-static _cmsTagLinkedList SupportedTags[] = {
++static const _cmsTagLinkedList SupportedTags[] = {
+ 
+     { cmsSigAToB0Tag,               { 1, 3,  { cmsSigLut16Type,  cmsSigLutAtoBType, cmsSigLut8Type}, DecideLUTtypeA2B}, &SupportedTags[1]},
+     { cmsSigAToB1Tag,               { 1, 3,  { cmsSigLut16Type,  cmsSigLutAtoBType, cmsSigLut8Type}, DecideLUTtypeA2B}, &SupportedTags[2]},
+Only in lcms2/src: cmstypes.lo
+Only in lcms2/src: cmsvirt.lo
+Only in lcms2/src: cmswtpnt.lo
+Only in lcms2/src: cmsxform.lo
+Only in lcms2/src/.deps: cmsalpha.Plo
+Only in lcms2/src/.deps: cmscam02.Plo
+Only in lcms2/src/.deps: cmscgats.Plo
+Only in lcms2/src/.deps: cmscnvrt.Plo
+Only in lcms2/src/.deps: cmserr.Plo
+Only in lcms2/src/.deps: cmsgamma.Plo
+Only in lcms2/src/.deps: cmsgmt.Plo
+Only in lcms2/src/.deps: cmshalf.Plo
+Only in lcms2/src/.deps: cmsintrp.Plo
+Only in lcms2/src/.deps: cmsio0.Plo
+Only in lcms2/src/.deps: cmsio1.Plo
+Only in lcms2/src/.deps: cmslut.Plo
+Only in lcms2/src/.deps: cmsmd5.Plo
+Only in lcms2/src/.deps: cmsmtrx.Plo
+Only in lcms2/src/.deps: cmsnamed.Plo
+Only in lcms2/src/.deps: cmsopt.Plo
+Only in lcms2/src/.deps: cmspack.Plo
+Only in lcms2/src/.deps: cmspcs.Plo
+Only in lcms2/src/.deps: cmsplugin.Plo
+Only in lcms2/src/.deps: cmsps2.Plo
+Only in lcms2/src/.deps: cmssamp.Plo
+Only in lcms2/src/.deps: cmssm.Plo
+Only in lcms2/src/.deps: cmstypes.Plo
+Only in lcms2/src/.deps: cmsvirt.Plo
+Only in lcms2/src/.deps: cmswtpnt.Plo
+Only in lcms2/src/.deps: cmsxform.Plo
+Only in lcms2/src: liblcms2.la
+Only in lcms2/src: .libs
+Only in lcms2/src: Makefile
+Only in lcms2/testbed/.deps: testcms2.Po
+Only in lcms2/testbed/.deps: testplugin.Po
+Only in lcms2/testbed/.deps: zoo_icc.Po
+Only in lcms2/testbed: Makefile
+Only in lcms2/utils/jpgicc: Makefile
+Only in lcms2/utils/linkicc: Makefile
+Only in lcms2/utils/psicc: Makefile
+Only in lcms2/utils/tificc: Makefile
+Only in lcms2/utils/transicc: Makefile
