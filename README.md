@@ -41,7 +41,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: 11
     * Build: 13 or later + Xcode 14.3 or later (using latest version available for a given version of macOS)
 * Linux:
-    * Runtime: RHEL 8 or CentOS 8 and comparable
+    * Runtime: RHEL 9 or CentOS 9 and comparable
     * Build: either GCC 12; or Clang 12 with libstdc++ 10
 * iOS (only for LibreOfficeKit):
     * Runtime: 14.5 (only support for newer i devices == 64 bit)

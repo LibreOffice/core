@@ -1,6 +1,10 @@
 --enable-dbgutil
 --enable-compiler-plugins
+--enable-gtk4
+--enable-qt5
+--enable-qt6
 --enable-kf5
+--enable-gtk3-kde5
 --disable-compiler-plugins-analyzer-pch
 --disable-dependency-tracking
 --disable-split-debug

@@ -88,7 +88,7 @@ programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 # of maintaining ABI stability
 # allow extending the allowlist using the environment variable to be able to work
 # on the installer stuff without the need for a baseline setup
-globalallowlist="ld-linux-x86-64.so.2 ld-linux-aarch64.so.1 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.1 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 libnspr4.so libnss3.so libnssutil3.so libplc4.so libplds4.so libsmime3.so libssl3.so ${LO_ELFCHECK_ALLOWLIST-}"
+globalallowlist="ld-linux-x86-64.so.2 ld-linux-aarch64.so.1 ld-linux.so.2 libc.so.6 libm.so.6 libdl.so.2 libpthread.so.0 librt.so.1 libutil.so.1 libnsl.so.1 libcrypt.so.2 libgcc_s.so.1 libstdc++.so.6 libz.so.1 libfontconfig.so.1 libfreetype.so.6 libxml2.so.2 libxslt.so.1 libexslt.so.0 libnspr4.so libnss3.so libnssutil3.so libplc4.so libplds4.so libsmime3.so libssl3.so ${LO_ELFCHECK_ALLOWLIST-}"
 x11allowlist="libX11.so.6 libX11-xcb.so.1 libXext.so.6 libSM.so.6 libICE.so.6 libXinerama.so.1 libXrender.so.1 libXrandr.so.2 libcairo.so.2"
 openglallowlist="libGL.so.1"
 gobjectallowlist="libgobject-2.0.so.0 libglib-2.0.so.0"
@@ -98,7 +98,7 @@ gstreamerallowlist="libgsttag-1.0.so.0 libgstaudio-1.0.so.0 libgstpbutils-1.0.so
 gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
 gtk4allowlist="libgtk-4.so.1 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libatk-1.0.so.0 libcairo.so.2 libpango-1.0.so.0 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 libgraphene-1.0.so.0 ${gioallowlist}"
 qt5allowlist="libQt5Core.so.5 libQt5Gui.so.5 libQt5Network.so.5 libQt5Widgets.so.5 libQt5X11Extras.so.5 libcairo.so.2 libxcb.so.1 libxcb-icccm.so.4 ${gobjectallowlist}"
-qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Multimedia.so.6 libQt6MultimediaWidgets.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libxcb.so.1"
+qt6allowlist="libQt6Core.so.6 libQt6Gui.so.6 libQt6Multimedia.so.6 libQt6MultimediaWidgets.so.6 libQt6Network.so.6 libQt6Widgets.so.6 libcairo.so.2 libxcb.so.1"
 kf5allowlist="libKF5ConfigCore.so.5 libKF5CoreAddons.so.5 libKF5I18n.so.5 libKF5KIOCore.so.5 libKF5KIOFileWidgets.so.5 libKF5KIOWidgets.so.5 libKF5WindowSystem.so.5"
 avahiallowlist="libavahi-common.so.3 libavahi-client.so.3 ${gdbusallowlist}"
 kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"

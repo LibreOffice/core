@@ -1,5 +1,9 @@
 --disable-werror
 --disable-odk
 --with-jdk-home=/etc/alternatives/java_sdk_17
+--enable-gtk4
+--enable-qt5
+--enable-qt6
 --enable-kf5
+--enable-gtk3-kde5
 --enable-python=internal
