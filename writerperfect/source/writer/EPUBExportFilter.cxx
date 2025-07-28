@@ -165,7 +165,7 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
             static_cast<const sal_Int8*>(aMemoryStream.GetData()), aMemoryStream.Tell());
         aPage.aCssPixels = aCss;
         aPage.aChapterNames = aRenderer.getChapterNames();
-        rPageMetafiles.push_back(aPage);
+        rPageMetafiles.push_back(std::move(aPage));
     }
 }
 
