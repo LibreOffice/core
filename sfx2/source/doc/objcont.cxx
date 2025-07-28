@@ -103,15 +103,15 @@ SfxObjectShell::GetPreviewMetaFile( bool bFullContent, bool bOutputForScreen ) c
     return xFile;
 }
 
-BitmapEx SfxObjectShell::GetPreviewBitmap() const
+Bitmap SfxObjectShell::GetPreviewBitmap() const
 {
     SfxCloseVetoLock lock(this);
     ScopedVclPtrInstance< VirtualDevice > pDevice(DeviceFormat::WITH_ALPHA);
     pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
     if(!CreatePreview_Impl(/*bFullContent*/false, false, pDevice, nullptr))
-        return BitmapEx();
+        return Bitmap();
     Size size = pDevice->GetOutputSizePixel();
-    BitmapEx aBitmap( pDevice->GetBitmap( Point(), size) );
+    Bitmap aBitmap( pDevice->GetBitmap( Point(), size) );
     // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
     size = Size( size.Width() / 4, size.Height() / 4 );
     aBitmap.Scale(size, BmpScaleFlag::BestQuality);

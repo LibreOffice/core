@@ -54,7 +54,7 @@ public:
     }
 
     static bool getThumbnailFormatFromBitmap_Impl(
-            const BitmapEx& rBitmap,
+            const Bitmap& rBitmap,
             const css::uno::Reference< css::io::XStream >& xStream );
 
     static OUString getThumbnailReplacementIDByFactoryName_Impl(

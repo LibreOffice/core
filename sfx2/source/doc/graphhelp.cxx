@@ -170,7 +170,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
 
 // static
-bool GraphicHelper::getThumbnailFormatFromBitmap_Impl(const BitmapEx& rBitmap, const uno::Reference<io::XStream>& xStream)
+bool GraphicHelper::getThumbnailFormatFromBitmap_Impl(const Bitmap& rBitmap, const uno::Reference<io::XStream>& xStream)
 {
     if (rBitmap.IsEmpty() || !xStream.is())
         return false;
@@ -180,7 +180,7 @@ bool GraphicHelper::getThumbnailFormatFromBitmap_Impl(const BitmapEx& rBitmap, c
     if (pStream->GetError())
         return false;
 
-    BitmapEx bitmap(rBitmap);
+    Bitmap bitmap(rBitmap);
     bitmap.Convert(BmpConversion::N8BitColors);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();

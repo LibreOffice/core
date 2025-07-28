@@ -106,7 +106,7 @@ void SfxPickListImpl::AddDocumentToPickList(const SfxObjectShell* pDocSh, bool b
         }
         else
         {
-            BitmapEx aResultBitmap = pDocSh->GetPreviewBitmap();
+            Bitmap aResultBitmap = pDocSh->GetPreviewBitmap();
             if (!aResultBitmap.IsEmpty())
             {
                 SvMemoryStream aStream(65535, 65535);

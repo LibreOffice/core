@@ -4155,7 +4155,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XS
         }
         else
         {
-            BitmapEx bitmap = GetPreviewBitmap();
+            Bitmap bitmap = GetPreviewBitmap();
             if (!bitmap.IsEmpty())
             {
                 bResult = GraphicHelper::getThumbnailFormatFromBitmap_Impl(bitmap, xStream);
