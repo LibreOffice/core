@@ -151,9 +151,9 @@ public:
 
 void CopyFromClipContext::startListeningFormulas()
 {
-    const auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(mrDestDoc);
-    sc::StartListeningContext aStartCxt(mrDestDoc, pSet);
-    sc::EndListeningContext aEndCxt(mrDestDoc, pSet, nullptr);
+    auto xSet = std::make_shared<sc::ColumnBlockPositionSet>(mrDestDoc);
+    sc::StartListeningContext aStartCxt(mrDestDoc, xSet);
+    sc::EndListeningContext aEndCxt(mrDestDoc, std::move(xSet), nullptr);
 
     StartListeningAction aAction(mrDestDoc, aStartCxt, aEndCxt);
     maListeningFormulaSpans.executeAction(mrDestDoc, aAction);
