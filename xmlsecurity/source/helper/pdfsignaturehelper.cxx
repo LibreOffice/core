@@ -287,7 +287,7 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<PageChecksum>&
                     break;
             }
         }
-        rPageChecksums.push_back(aPageChecksum);
+        rPageChecksums.push_back(std::move(aPageChecksum));
     }
 }
 
