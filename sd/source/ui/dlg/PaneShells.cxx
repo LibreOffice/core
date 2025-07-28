@@ -28,7 +28,7 @@ namespace sd {
 
 //===== LeftImpressPaneShell ==================================================
 
-const SfxSlot aLeftImpressPaneShellSlots_Impl[] =
+constexpr SfxSlot aLeftImpressPaneShellSlots_Impl[] =
 {
     { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
@@ -52,7 +52,7 @@ LeftImpressPaneShell::~LeftImpressPaneShell()
 
 //===== BottomImpressPaneShell ==================================================
 
-const SfxSlot aBottomImpressPaneShellSlots_Impl[]
+constexpr SfxSlot aBottomImpressPaneShellSlots_Impl[]
     = { { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr,
           0, SfxDisableFlags::NONE, u""_ustr } };
 
@@ -69,7 +69,7 @@ BottomImpressPaneShell::~BottomImpressPaneShell() {}
 
 //===== LeftDrawPaneShell =====================================================
 
-const SfxSlot aLeftDrawPaneShellSlots_Impl[] =
+constexpr SfxSlot aLeftDrawPaneShellSlots_Impl[] =
 {
     { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, u""_ustr }
 };
