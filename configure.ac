@@ -1975,7 +1975,9 @@ AC_ARG_ENABLE(build-opensymbol,
 
 AC_ARG_ENABLE(dependency-tracking,
     AS_HELP_STRING([--enable-dependency-tracking],
-        [Do not reject slow dependency extractors.])[
+        [Do not reject slow dependency extractors.  --enable-dependency-tracking=sysincludes enables
+         dependency tracking also of system include files; currently only implemented for GCC-like
+         compilers.])[
   --disable-dependency-tracking
                           Disables generation of dependency information.
                           Speed up one-time builds.],
@@ -15357,13 +15359,23 @@ dnl Hook up LibreOffice's nodep environmental variable to automake's equivalent
 dnl --enable-dependency-tracking configure option
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable dependency tracking])
+DEPS_SYSINCLUDES=
 if test "$enable_dependency_tracking" = "no"; then
     nodep=TRUE
     AC_MSG_RESULT([no])
+elif test "$enable_dependency_tracking" = sysincludes; then
+    if test "$COM" != GCC; then
+        AC_MSG_ERROR(
+            [--enable-dependency-tracking=sysincludes is currently only implemented for GCC-like compilers])
+    else
+        AC_MSG_RESULT([yes, including system include files])
+        DEPS_SYSINCLUDES=TRUE
+    fi
 else
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(nodep)
+AC_SUBST([DEPS_SYSINCLUDES])
 
 dnl ===================================================================
 dnl Number of CPUs to use during the build
