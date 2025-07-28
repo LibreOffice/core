@@ -416,7 +416,7 @@ bool SwCTB::Read( SvStream &rS)
             SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
-            m_rTBC.push_back( aTBC );
+            m_rTBC.push_back(std::move(aTBC));
         }
     }
     return rS.good();
