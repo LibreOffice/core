@@ -30,7 +30,7 @@
 namespace o3tl
 {
 
-#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
+#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2024
 
 namespace detail {
 
