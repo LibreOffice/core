@@ -28,11 +28,11 @@
 class SVXCORE_DLLPUBLIC XOBitmap
 {
 private:
-    std::unique_ptr<GraphicObject> xGraphicObject;
-    std::unique_ptr<sal_uInt16[]>  pPixelArray;
-    Color           aPixelColor;
-    Color           aBckgrColor;
-    bool            bGraphicDirty;
+    std::unique_ptr<GraphicObject> m_xGraphicObject;
+    std::unique_ptr<sal_uInt16[]>  m_pPixelArray;
+    Color           m_aPixelColor;
+    Color           m_aBckgrColor;
+    bool            m_bGraphicDirty;
 
     const GraphicObject& GetGraphicObject() const;
 
@@ -47,11 +47,11 @@ public:
     void Bitmap2Array();
     void Array2Bitmap();
 
-    void SetPixelColor( const Color& rColor )           { aPixelColor = rColor; bGraphicDirty = true; }
-    void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
+    void SetPixelColor( const Color& rColor )           { m_aPixelColor = rColor; m_bGraphicDirty = true; }
+    void SetBackgroundColor( const Color& rColor )      { m_aBckgrColor = rColor; m_bGraphicDirty = true; }
 
     BitmapEx                GetBitmap() const;
-    const Color&            GetBackgroundColor() const  { return aBckgrColor; }
+    const Color&            GetBackgroundColor() const  { return m_aBckgrColor; }
 };
 
 #endif

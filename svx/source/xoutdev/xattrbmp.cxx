@@ -43,8 +43,8 @@
 using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const BitmapEx& rBmp ) :
-    xGraphicObject  (new GraphicObject(rBmp)),
-    bGraphicDirty   ( false )
+    m_xGraphicObject  (new GraphicObject(rBmp)),
+    m_bGraphicDirty   ( false )
 {
 }
 
@@ -59,10 +59,10 @@ BitmapEx XOBitmap::GetBitmap() const
 
 const GraphicObject& XOBitmap::GetGraphicObject() const
 {
-    if( bGraphicDirty )
+    if( m_bGraphicDirty )
         const_cast<XOBitmap*>(this)->Array2Bitmap();
 
-    return *xGraphicObject;
+    return *m_xGraphicObject;
 }
 
 void XOBitmap::Bitmap2Array()
@@ -72,26 +72,26 @@ void XOBitmap::Bitmap2Array()
     const BitmapEx  aBitmap( GetBitmap() );
     const sal_Int32 nLines = 8; // type dependent
 
-    if( !pPixelArray )
-        pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
+    if( !m_pPixelArray )
+        m_pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
 
     pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
     pVDev->DrawBitmapEx( Point(), aBitmap );
-    aPixelColor = aBckgrColor = pVDev->GetPixel( Point() );
+    m_aPixelColor = m_aBckgrColor = pVDev->GetPixel( Point() );
 
     // create array and determine foreground and background color
     for (sal_Int32 i = 0; i < nLines; ++i)
     {
         for (sal_Int32 j = 0; j < nLines; ++j)
         {
-            if ( pVDev->GetPixel( Point( j, i ) ) == aBckgrColor )
-                pPixelArray[ j + i * nLines ] = 0;
+            if ( pVDev->GetPixel( Point( j, i ) ) == m_aBckgrColor )
+                m_pPixelArray[ j + i * nLines ] = 0;
             else
             {
-                pPixelArray[ j + i * nLines ] = 1;
+                m_pPixelArray[ j + i * nLines ] = 1;
                 if( !bPixelColor )
                 {
-                    aPixelColor = pVDev->GetPixel( Point( j, i ) );
+                    m_aPixelColor = pVDev->GetPixel( Point( j, i ) );
                     bPixelColor = true;
                 }
             }
@@ -102,7 +102,7 @@ void XOBitmap::Bitmap2Array()
 /// convert array, fore- and background color into a bitmap
 void XOBitmap::Array2Bitmap()
 {
-    if (!pPixelArray)
+    if (!m_pPixelArray)
         return;
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
@@ -115,15 +115,15 @@ void XOBitmap::Array2Bitmap()
     {
         for (sal_Int32 j = 0; j < nLines; ++j)
         {
-            if( pPixelArray[ j + i * nLines ] == 0 )
-                pVDev->DrawPixel( Point( j, i ), aBckgrColor );
+            if( m_pPixelArray[ j + i * nLines ] == 0 )
+                pVDev->DrawPixel( Point( j, i ), m_aBckgrColor );
             else
-                pVDev->DrawPixel( Point( j, i ), aPixelColor );
+                pVDev->DrawPixel( Point( j, i ), m_aPixelColor );
         }
     }
 
-    xGraphicObject.reset(new GraphicObject(pVDev->GetBitmap(Point(), Size(nLines, nLines))));
-    bGraphicDirty = false;
+    m_xGraphicObject.reset(new GraphicObject(pVDev->GetBitmap(Point(), Size(nLines, nLines))));
+    m_bGraphicDirty = false;
 }
 
 
