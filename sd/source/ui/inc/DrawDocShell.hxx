@@ -130,7 +130,7 @@ public:
 
     void                    GotoBookmark(std::u16string_view rBookmark);
 
-    SD_DLLPUBLIC BitmapEx GetPagePreviewBitmap(SdPage* pPage);
+    SD_DLLPUBLIC Bitmap GetPagePreviewBitmap(SdPage* pPage);
 
     /** checks, if the given name is a valid new name for a slide
 
