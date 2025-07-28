@@ -384,8 +384,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
                                     if (p != aUserData.end())
                                         p->Value >>= xMaster;
 
-                                    AfterEffectNodePtr pAfterEffectNode = std::make_shared<AfterEffectNode>( xChildNode3, xMaster );
-                                    maAfterEffectNodes.push_back( pAfterEffectNode );
+                                    maAfterEffectNodes.push_back(std::make_shared<AfterEffectNode>(xChildNode3, xMaster));
                                 }
                                 break;
                             }
