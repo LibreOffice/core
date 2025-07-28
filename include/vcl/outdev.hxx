@@ -1461,16 +1461,6 @@ private:
                                 tools::Rectangle aDstRect, tools::Rectangle aBmpRect,
                                 Size const & aOutSz, Point const & aOutPt);
 
-
-    static SAL_DLLPRIVATE Bitmap BlendBitmapWithAlpha(
-                                    Bitmap&             aBmp,
-                                    BitmapReadAccess const *   pP,
-                                    BitmapReadAccess const *   pA,
-                                    const sal_Int32     nDstHeight,
-                                    const sal_Int32     nDstWidth,
-                                    const sal_Int32*         pMapX,
-                                    const sal_Int32*         pMapY );
-
     ///@}
 
 

@@ -411,6 +411,81 @@ private:
 };
 
 
+// Co = Cs + Cd*(1-As) premultiplied alpha -or-
+// Co = (AsCs + AdCd*(1-As)) / Ao
+sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
+                            const sal_uInt8 nDstAlpha, const sal_uInt8 nResAlpha, const sal_uInt8 nDestColor )
+{
+    int c = nResAlpha ? ( static_cast<int>(nSourceAlpha)*nSourceColor + static_cast<int>(nDstAlpha)*nDestColor -
+                          static_cast<int>(nDstAlpha)*nDestColor*nSourceAlpha/255 ) / static_cast<int>(nResAlpha) : 0;
+    return sal_uInt8( c );
+}
+
+BitmapColor AlphaBlend( int nX,               int nY,
+                               const tools::Long            nMapX,
+                               const tools::Long            nMapY,
+                               BitmapReadAccess const *  pP,
+                               BitmapReadAccess const *  pA,
+                               BitmapReadAccess const *  pB)
+{
+    BitmapColor aDstCol,aSrcCol;
+    aSrcCol = pP->GetColor( nMapY, nMapX );
+    aDstCol = pB->GetColor( nY, nX );
+
+    const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
+    const sal_uInt8 nDstAlpha = aDstCol.GetAlpha();
+
+    // Perform porter-duff compositing 'over' operation
+
+    // Co = Cs + Cd*(1-As)
+    // Ad = As + Ad*(1-As)
+    sal_uInt8 nResAlpha = static_cast<int>(nSrcAlpha) + static_cast<int>(nDstAlpha)
+              - static_cast<int>(nDstAlpha) * nSrcAlpha / 255;
+    aDstCol.SetAlpha(nResAlpha);
+    aDstCol.SetRed( CalcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
+    aDstCol.SetBlue( CalcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
+    aDstCol.SetGreen( CalcColor( aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen() ) );
+
+    return aDstCol;
+}
+
+Bitmap lcl_BlendBitmapWithAlpha(
+            Bitmap&             aBmp,
+            BitmapReadAccess const *   pP,
+            BitmapReadAccess const *   pA,
+            const sal_Int32     nDstHeight,
+            const sal_Int32     nDstWidth,
+            const sal_Int32*    pMapX,
+            const sal_Int32*    pMapY )
+
+{
+    Bitmap      res;
+
+    {
+        BitmapScopedWriteAccess pB(aBmp);
+        if (pB && pP && pA)
+        {
+            for( int nY = 0; nY < nDstHeight; nY++ )
+            {
+                const tools::Long  nMapY = pMapY[ nY ];
+                Scanline pScanlineB = pB->GetScanline(nY);
+
+                for( int nX = 0; nX < nDstWidth; nX++ )
+                {
+                    const tools::Long nMapX = pMapX[ nX ];
+                    BitmapColor aDstCol = AlphaBlend(nX, nY, nMapX, nMapY, pP, pA, pB.get());
+
+                    pB->SetPixelOnData(pScanlineB, nX, aDstCol);
+                }
+            }
+        }
+        pB.reset();
+        res = aBmp;
+    }
+
+    return res;
+}
+
 } // end anonymous namespace
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
@@ -466,7 +541,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     {
         Bitmap aNewBitmap;
 
-        aNewBitmap = BlendBitmapWithAlpha(
+        aNewBitmap = lcl_BlendBitmapWithAlpha(
                         aBmp, pBitmapReadAccess.get(), pAlphaReadAccess.get(),
                         nDstHeight,
                         nDstWidth,
@@ -512,84 +587,6 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
         else
             rNonConstImage.Draw(this, rPos, nStyle);
     }
-}
-
-namespace
-{
-    // Co = Cs + Cd*(1-As) premultiplied alpha -or-
-    // Co = (AsCs + AdCd*(1-As)) / Ao
-    sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
-                                const sal_uInt8 nDstAlpha, const sal_uInt8 nResAlpha, const sal_uInt8 nDestColor )
-    {
-        int c = nResAlpha ? ( static_cast<int>(nSourceAlpha)*nSourceColor + static_cast<int>(nDstAlpha)*nDestColor -
-                              static_cast<int>(nDstAlpha)*nDestColor*nSourceAlpha/255 ) / static_cast<int>(nResAlpha) : 0;
-        return sal_uInt8( c );
-    }
-
-    BitmapColor AlphaBlend( int nX,               int nY,
-                                   const tools::Long            nMapX,
-                                   const tools::Long            nMapY,
-                                   BitmapReadAccess const *  pP,
-                                   BitmapReadAccess const *  pA,
-                                   BitmapReadAccess const *  pB)
-    {
-        BitmapColor aDstCol,aSrcCol;
-        aSrcCol = pP->GetColor( nMapY, nMapX );
-        aDstCol = pB->GetColor( nY, nX );
-
-        const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
-        const sal_uInt8 nDstAlpha = aDstCol.GetAlpha();
-
-        // Perform porter-duff compositing 'over' operation
-
-        // Co = Cs + Cd*(1-As)
-        // Ad = As + Ad*(1-As)
-        sal_uInt8 nResAlpha = static_cast<int>(nSrcAlpha) + static_cast<int>(nDstAlpha)
-                  - static_cast<int>(nDstAlpha) * nSrcAlpha / 255;
-        aDstCol.SetAlpha(nResAlpha);
-        aDstCol.SetRed( CalcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
-        aDstCol.SetBlue( CalcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
-        aDstCol.SetGreen( CalcColor( aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen() ) );
-
-        return aDstCol;
-    }
-}
-
-Bitmap OutputDevice::BlendBitmapWithAlpha(
-            Bitmap&             aBmp,
-            BitmapReadAccess const *   pP,
-            BitmapReadAccess const *   pA,
-            const sal_Int32     nDstHeight,
-            const sal_Int32     nDstWidth,
-            const sal_Int32*    pMapX,
-            const sal_Int32*    pMapY )
-
-{
-    Bitmap      res;
-
-    {
-        BitmapScopedWriteAccess pB(aBmp);
-        if (pB && pP && pA)
-        {
-            for( int nY = 0; nY < nDstHeight; nY++ )
-            {
-                const tools::Long  nMapY = pMapY[ nY ];
-                Scanline pScanlineB = pB->GetScanline(nY);
-
-                for( int nX = 0; nX < nDstWidth; nX++ )
-                {
-                    const tools::Long nMapX = pMapX[ nX ];
-                    BitmapColor aDstCol = AlphaBlend(nX, nY, nMapX, nMapY, pP, pA, pB.get());
-
-                    pB->SetPixelOnData(pScanlineB, nX, aDstCol);
-                }
-            }
-        }
-        pB.reset();
-        res = aBmp;
-    }
-
-    return res;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
