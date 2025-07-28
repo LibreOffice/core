@@ -22,6 +22,7 @@
 
 #include <ctime>
 #include <rootfrm.hxx>
+#include <rowfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewimp.hxx>
 #include <crsrsh.hxx>
@@ -1320,6 +1321,23 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             {
                 SwPageFrame* pPageFrame = static_cast<SwPageFrame*>(pLay);
                 aPaint = pPageFrame->GetBoundRect(pRenderContext);
+            }
+            else if (pLay->IsRowFrame())
+            {
+                // tdf#167419 Changing the borders of a table doesn't refresh
+                // the bottom border. That border is outside the FrameArea
+                // of the table when the default CollapsingBorders is enabled.
+                // Add it in here for the last row when determining the area
+                // to refresh.
+                const SwRowFrame* pRowFrame = static_cast<SwRowFrame*>(pLay);
+                const bool bLastRow = !pRowFrame->GetNext();
+                const SwTwips nBorderThicknessUnderArea = bLastRow ? pRowFrame->GetBottomLineSize() : 0;
+                if (nBorderThicknessUnderArea)
+                {
+                    const SwTabFrame* pTabFrame = pRowFrame->FindTabFrame();
+                    if (pTabFrame && pTabFrame->IsCollapsingBorders())
+                        aPaint.AddBottom(nBorderThicknessUnderArea);
+                }
             }
 
             bool bPageInBrowseMode = pLay->IsPageFrame();
