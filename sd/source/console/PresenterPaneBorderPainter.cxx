@@ -73,7 +73,6 @@ namespace {
         SharedBitmapDescriptor mpBottomLeft;
         SharedBitmapDescriptor mpBottom;
         SharedBitmapDescriptor mpBottomRight;
-        SharedBitmapDescriptor mpBottomCallout;
         SharedBitmapDescriptor mpEmpty;
         PresenterTheme::SharedFontDescriptor mpFont;
         sal_Int32 mnFontXOffset;
@@ -616,7 +615,6 @@ RendererPaneStyle::RendererPaneStyle (
     mpBottomLeft = GetBitmap(rpTheme, rsStyleName, u"BottomLeft"_ustr);
     mpBottom = GetBitmap(rpTheme, rsStyleName, u"Bottom"_ustr);
     mpBottomRight = GetBitmap(rpTheme, rsStyleName, u"BottomRight"_ustr);
-    mpBottomCallout = GetBitmap(rpTheme, rsStyleName, u"BottomCallout"_ustr);
 
     // Get font description.
     mpFont = rpTheme->GetFont(rsStyleName);
