@@ -209,6 +209,7 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
 
     if (isForbidden(name, osl_File_OpenFlag_Create))
     {
+        close (pPipe->m_Socket);
         destroyPipeImpl(pPipe);
         return nullptr;
     }
