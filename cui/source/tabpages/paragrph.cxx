@@ -2131,6 +2131,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             aPageNumState.bTriStateEnabled = false;
             m_xPageNumBox->set_state(TRISTATE_TRUE);
             SfxUInt16Item const*const pItem(rSet->GetItem<SfxUInt16Item>(SID_ATTR_PARA_PAGENUM));
+            assert(pItem && "has to exist due to GetItemState");
             const sal_uInt16 nPageNum(pItem->GetValue());
             m_xPagenumEdit->set_value(nPageNum);
             break;
