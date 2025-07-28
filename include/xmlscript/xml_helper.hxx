@@ -81,12 +81,12 @@ public:
         css::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
 
     // XAttributeList
-    virtual sal_Int16 SAL_CALL getLength() override;
-    virtual OUString SAL_CALL getNameByIndex( sal_Int16 nPos ) override;
-    virtual OUString SAL_CALL getTypeByIndex( sal_Int16 nPos ) override;
-    virtual OUString SAL_CALL getTypeByName( OUString const & rName ) override;
-    virtual OUString SAL_CALL getValueByIndex( sal_Int16 nPos ) override;
-    virtual OUString SAL_CALL getValueByName( OUString const & rName ) override;
+    virtual sal_Int16 SAL_CALL getLength() override final;
+    virtual OUString SAL_CALL getNameByIndex( sal_Int16 nPos ) override final;
+    virtual OUString SAL_CALL getTypeByIndex( sal_Int16 nPos ) override final;
+    virtual OUString SAL_CALL getTypeByName( OUString const & rName ) override final;
+    virtual OUString SAL_CALL getValueByIndex( sal_Int16 nPos ) override final;
+    virtual OUString SAL_CALL getValueByName( OUString const & rName ) override final;
 
 private:
     ::std::vector< css::uno::Reference<
