@@ -54,6 +54,7 @@ public:
     bool isEmpty() const { return maViews.empty(); }
     bool remove(SheetViewID nID);
     std::vector<SheetView> const& getSheetViews() const { return maViews; }
+    SheetViewID getNextSheetView(SheetViewID nID);
 };
 }
 
