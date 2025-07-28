@@ -243,9 +243,8 @@ void ToolboxButtonColorUpdaterBase::Update(const Color& rColor, bool bForceUpdat
     if ((maCurColor == aColor) && !bSizeChanged && !bDisplayModeChanged && !bForceUpdate)
         return;
 
-    auto xImage
-        = vcl::CommandInfoProvider::GetXGraphicForCommand(maCommandURL, mxFrame, meImageType);
-    Image aImage(xImage);
+    const Image aImage
+        = vcl::CommandInfoProvider::GetImageForCommand(maCommandURL, mxFrame, meImageType);
 
     const Size aItemSize = GetItemSize(aImage.GetSizePixel());
     if (!aItemSize.Width() || !aItemSize.Height())
