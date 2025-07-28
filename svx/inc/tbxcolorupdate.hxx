@@ -35,118 +35,112 @@ class VirtualDevice;
 
 namespace weld
 {
-    class Toolbar;
+class Toolbar;
 }
 
 namespace svx
 {
+//= ToolboxButtonColorUpdater
 
+/** helper class to update a color in a toolbox button image
 
-    //= ToolboxButtonColorUpdater
+    formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
+*/
+class ToolboxButtonColorUpdaterBase : public SfxListener
+{
+public:
+    ToolboxButtonColorUpdaterBase(bool bWideButton, OUString aCommandLabel, OUString aCommandURL,
+                                  sal_uInt16 nSlotId,
+                                  css::uno::Reference<css::frame::XFrame> xFrame);
 
-    /** helper class to update a color in a toolbox button image
+    virtual ~ToolboxButtonColorUpdaterBase();
 
-        formerly known as SvxTbxButtonColorUpdater_Impl, residing in svx/source/tbxctrls/colorwindow.hxx.
-    */
-    class ToolboxButtonColorUpdaterBase : public SfxListener
-    {
-    public:
-        ToolboxButtonColorUpdaterBase(bool bWideButton, OUString aCommandLabel,
-                                      OUString aCommandURL, sal_uInt16 nSlotId,
-                                      css::uno::Reference<css::frame::XFrame> xFrame);
+    void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
+    void SetRecentColor(const NamedColor& rNamedColor, bool bBroadcast = true);
+    void Update(const NamedColor& rNamedColor);
+    void Update(const Color& rColor, bool bForceUpdate = false);
+    Color const& GetCurrentColor() const { return maCurColor; }
+    OUString GetCurrentColorName() const;
 
-        virtual ~ToolboxButtonColorUpdaterBase();
+private:
+    ToolboxButtonColorUpdaterBase(ToolboxButtonColorUpdaterBase const&) = delete;
+    ToolboxButtonColorUpdaterBase& operator=(ToolboxButtonColorUpdaterBase const&) = delete;
 
-        void        Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-        void        SetRecentColor(const NamedColor& rNamedColor, bool bBroadcast = true);
-        void        Update( const NamedColor& rNamedColor );
-        void        Update( const Color& rColor, bool bForceUpdate = false );
-        Color const & GetCurrentColor() const { return maCurColor; }
-        OUString    GetCurrentColorName() const;
+protected:
+    bool mbWideButton;
+    bool mbWasHiContrastMode;
+    sal_uInt16 mnSlotId;
+    Color maCurColor;
+    Size maBmpSize;
+    vcl::ImageType meImageType;
+    OUString maCommandLabel;
+    OUString maCommandURL;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
-    private:
-        ToolboxButtonColorUpdaterBase(ToolboxButtonColorUpdaterBase const &) = delete;
-        ToolboxButtonColorUpdaterBase& operator =(ToolboxButtonColorUpdaterBase const &) = delete;
+    void Init(sal_uInt16 nSlotId);
 
-    protected:
-        bool        mbWideButton;
-        bool        mbWasHiContrastMode;
-        sal_uInt16  mnSlotId;
-        Color       maCurColor;
-        Size        maBmpSize;
-        vcl::ImageType meImageType;
-        OUString    maCommandLabel;
-        OUString    maCommandURL;
-        css::uno::Reference<css::frame::XFrame> mxFrame;
+    virtual void SetQuickHelpText(const OUString& rText) = 0;
+    virtual OUString GetQuickHelpText() const = 0;
+    virtual void SetImage(VirtualDevice* pVirDev) = 0;
+    virtual VclPtr<VirtualDevice> CreateVirtualDevice() const = 0;
+    // true -> use Device to Record to Metafile, false -> Render to Device
+    virtual bool RecordVirtualDevice() const = 0;
+    virtual vcl::ImageType GetImageSize() const = 0;
+    virtual Size GetItemSize(const Size& rImageSize) const = 0;
+};
 
-        void Init(sal_uInt16 nSlotId);
+class VclToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
+{
+public:
+    VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* ptrTbx,
+                                 bool bWideButton, const OUString& rCommandLabel,
+                                 const OUString& rCommandURL,
+                                 const css::uno::Reference<css::frame::XFrame>& rFrame);
 
-        virtual void SetQuickHelpText(const OUString& rText) = 0;
-        virtual OUString GetQuickHelpText() const = 0;
-        virtual void SetImage(VirtualDevice* pVirDev) = 0;
-        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const = 0;
-        // true -> use Device to Record to Metafile, false -> Render to Device
-        virtual bool RecordVirtualDevice() const = 0;
-        virtual vcl::ImageType GetImageSize() const = 0;
-        virtual Size GetItemSize(const Size& rImageSize) const = 0;
-    };
+private:
+    ToolBoxItemId mnBtnId;
+    VclPtr<ToolBox> mpTbx;
 
-    class VclToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
-    {
-    public:
-        VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
-                                     const OUString& rCommandLabel, const OUString& rCommandURL,
-                                     const css::uno::Reference<css::frame::XFrame>& rFrame);
+    virtual void SetQuickHelpText(const OUString& rText) override;
+    virtual OUString GetQuickHelpText() const override;
+    virtual void SetImage(VirtualDevice* pVirDev) override;
+    virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+    virtual bool RecordVirtualDevice() const override { return true; }
+    virtual vcl::ImageType GetImageSize() const override;
+    virtual Size GetItemSize(const Size& rImageSize) const override;
+};
 
+class ToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
+{
+public:
+    ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx,
+                              bool bWideButton, const OUString& rCommandLabel,
+                              const css::uno::Reference<css::frame::XFrame>& rFrame);
 
-    private:
-        ToolBoxItemId   mnBtnId;
-        VclPtr<ToolBox> mpTbx;
+private:
+    OUString msBtnId;
+    weld::Toolbar* mpTbx;
 
-        virtual void SetQuickHelpText(const OUString& rText) override;
-        virtual OUString GetQuickHelpText() const override;
-        virtual void SetImage(VirtualDevice* pVirDev) override;
-        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
-        virtual bool RecordVirtualDevice() const  override
-        {
-            return true;
-        }
-        virtual vcl::ImageType GetImageSize() const override;
-        virtual Size GetItemSize(const Size& rImageSize) const override;
-    };
+    virtual void SetQuickHelpText(const OUString& rText) override;
+    virtual OUString GetQuickHelpText() const override;
+    virtual void SetImage(VirtualDevice* pVirDev) override;
+    virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
+    virtual bool RecordVirtualDevice() const override { return false; }
+    virtual vcl::ImageType GetImageSize() const override;
+    virtual Size GetItemSize(const Size& rImageSize) const override;
+};
 
-    class ToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
-    {
-    public:
-        ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
-                                  const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame);
+class ToolboxButtonLineStyleUpdater
+{
+private:
+    css::drawing::LineStyle m_eXLS;
+    int m_nDashStyleIndex;
 
-    private:
-        OUString msBtnId;
-        weld::Toolbar* mpTbx;
-
-        virtual void SetQuickHelpText(const OUString& rText) override;
-        virtual OUString GetQuickHelpText() const override;
-        virtual void SetImage(VirtualDevice* pVirDev) override;
-        virtual VclPtr<VirtualDevice> CreateVirtualDevice() const override;
-        virtual bool RecordVirtualDevice() const  override
-        {
-            return false;
-        }
-        virtual vcl::ImageType GetImageSize() const override;
-        virtual Size GetItemSize(const Size& rImageSize) const override;
-    };
-
-    class ToolboxButtonLineStyleUpdater
-    {
-    private:
-        css::drawing::LineStyle m_eXLS;
-        int m_nDashStyleIndex;
-    public:
-        ToolboxButtonLineStyleUpdater();
-        void Update(const css::frame::FeatureStateEvent& rEvent);
-        int GetStyleIndex() const;
-    };
+public:
+    ToolboxButtonLineStyleUpdater();
+    void Update(const css::frame::FeatureStateEvent& rEvent);
+    int GetStyleIndex() const;
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

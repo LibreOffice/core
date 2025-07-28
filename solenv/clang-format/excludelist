@@ -11138,7 +11138,6 @@ svx/inc/sxsalitm.hxx
 svx/inc/sxsiitm.hxx
 svx/inc/sxsoitm.hxx
 svx/inc/sxtraitm.hxx
-svx/inc/tbxcolorupdate.hxx
 svx/inc/textchaincursor.hxx
 svx/inc/xpolyimp.hxx
 svx/source/accessibility/AccessibleControlShape.cxx
@@ -11677,7 +11676,6 @@ svx/source/tbxctrls/tbcontrl.cxx
 svx/source/tbxctrls/tbunocontroller.cxx
 svx/source/tbxctrls/tbunosearchcontrollers.cxx
 svx/source/tbxctrls/tbxcolor.cxx
-svx/source/tbxctrls/tbxcolorupdate.cxx
 svx/source/tbxctrls/tbxdrctl.cxx
 svx/source/toolbars/extrusionbar.cxx
 svx/source/toolbars/fontworkbar.cxx
