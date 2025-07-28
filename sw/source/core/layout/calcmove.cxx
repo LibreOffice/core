@@ -1372,7 +1372,17 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         oNotify->SetBordersJoinedWithPrev();
     }
 
-    const bool bKeep{!isHiddenNow && IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem())};
+    bool bKeep{!isHiddenNow && IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem())};
+    if (bKeep && IsTextFrame())
+    {
+        auto pTextFrame = DynCastTextFrame();
+        if (pTextFrame->HasSplitFlyDrawObjs())
+        {
+            // The SwTextFrameBreak ctor already turns off bKeep for split fly anchors, don't
+            // change that decision here.
+            bKeep = false;
+        }
+    }
 
     std::unique_ptr<SwSaveFootnoteHeight> pSaveFootnote;
     if ( bFootnote )
