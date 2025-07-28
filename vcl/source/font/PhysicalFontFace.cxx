@@ -396,7 +396,7 @@ const std::vector<ColorPalette>& PhysicalFontFace::GetColorPalettes() const
                 auto b = hb_color_get_blue(aColor);
                 aPalette[nColor] = Color(ColorAlphaTag::ColorAlpha, a, r, g, b);
             }
-            mxColorPalettes->push_back(aPalette);
+            mxColorPalettes->push_back(std::move(aPalette));
         }
     }
 
