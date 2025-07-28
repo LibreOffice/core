@@ -75,7 +75,7 @@ private:
     std::unique_ptr<ILayerInvalidator> mpLayerInvalidator;
     // Center of the insertion indicator.
     Point maLocation;
-    BitmapEx maIcon;
+    Bitmap maIcon;
     std::unique_ptr<FramePainter> mpShadowPainter;
 
     Point PaintRepresentatives (
