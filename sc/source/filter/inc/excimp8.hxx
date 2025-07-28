@@ -27,7 +27,7 @@
 class ScDBData;
 class XclImpStream;
 
-class ImportExcel8 : public ImportExcel
+class ImportExcel8 final : public ImportExcel
 {
 public:
                             ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );

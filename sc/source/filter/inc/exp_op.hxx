@@ -52,7 +52,7 @@ public:
     ErrCode             Write() override;
 };
 
-class ExportBiff8 : public ExportBiff5
+class ExportBiff8 final : public ExportBiff5
 {
 public:
                         ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm );

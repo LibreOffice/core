@@ -29,7 +29,7 @@ namespace oox::xls {
     The sheetData element embedded in the externalBook element contains cached
     cells from externally linked sheets.
  */
-class ExternalSheetDataContext : public WorkbookContextBase
+class ExternalSheetDataContext final : public WorkbookContextBase
 {
 public:
     explicit            ExternalSheetDataContext(
@@ -67,7 +67,7 @@ private:
     sal_Int32           mnCurrType;                 /// Data type of current cell.
 };
 
-class ExternalLinkFragment : public WorkbookFragmentBase
+class ExternalLinkFragment final : public WorkbookFragmentBase
 {
 public:
     explicit            ExternalLinkFragment(

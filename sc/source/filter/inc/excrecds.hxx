@@ -108,7 +108,7 @@ public:
 //-------------------------------------------------------------- class ExcBof -
 // Header Record for WORKSHEETS
 
-class ExcBof : public ExcBof_Base
+class ExcBof final : public ExcBof_Base
 {
 private:
     virtual void            SaveCont( XclExpStream& rStrm ) override;
@@ -122,7 +122,7 @@ public:
 //------------------------------------------------------------- class ExcBofW -
 // Header Record for WORKBOOKS
 
-class ExcBofW : public ExcBof_Base
+class ExcBofW final : public ExcBof_Base
 {
 private:
     virtual void            SaveCont( XclExpStream& rStrm ) override;
@@ -135,7 +135,7 @@ public:
 
 //-------------------------------------------------------------- class ExcEof -
 
-class ExcEof : public ExcRecord
+class ExcEof final : public ExcRecord
 {
 private:
 public:
@@ -146,7 +146,7 @@ public:
 //--------------------------------------------------------- class ExcDummy_00 -
 // INTERFACEHDR to FNGROUPCOUNT (see excrecds.cxx)
 
-class ExcDummy_00 : public ExcDummyRec
+class ExcDummy_00 final : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
@@ -157,7 +157,7 @@ public:
 };
 
 // EXC_ID_WINDOWPROTECTION
-class XclExpWindowProtection : public   XclExpBoolRecord
+class XclExpWindowProtection final : public XclExpBoolRecord
 {
     public:
         XclExpWindowProtection(bool bValue);
@@ -172,7 +172,7 @@ class XclExpProtection : public XclExpBoolRecord
         XclExpProtection(bool bValue);
 };
 
-class XclExpSheetProtection : public XclExpProtection
+class XclExpSheetProtection final : public XclExpProtection
 {
     SCTAB                   mnTab;
     public:
@@ -180,7 +180,7 @@ class XclExpSheetProtection : public XclExpProtection
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
-class XclExpPassHash : public XclExpRecord
+class XclExpPassHash final : public XclExpRecord
 {
 public:
     XclExpPassHash(const css::uno::Sequence<sal_Int8>& aHash);
@@ -196,7 +196,7 @@ private:
 //-------------------------------------------------------- class ExcDummy_04x -
 // PASSWORD to BOOKBOOL (see excrecds.cxx), no 1904
 
-class ExcDummy_040 : public ExcDummyRec
+class ExcDummy_040 final : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
@@ -206,7 +206,7 @@ public:
     virtual const sal_uInt8*        GetData() const override;
 };
 
-class ExcDummy_041 : public ExcDummyRec
+class ExcDummy_041 final : public ExcDummyRec
 {
 private:
     static const sal_uInt8     pMyData[];
@@ -218,7 +218,7 @@ public:
 
 //------------------------------------------------------------- class Exc1904 -
 
-class Exc1904 : public ExcBoolRecord
+class Exc1904 final : public ExcBoolRecord
 {
 public:
                             Exc1904( const ScDocument& rDoc );
@@ -250,7 +250,7 @@ public:
     virtual sal_uInt16          GetNum() const override;
 };
 
-class ExcBundlesheet : public ExcBundlesheetBase
+class ExcBundlesheet final : public ExcBundlesheetBase
 {
 private:
     OString            aName;
@@ -265,7 +265,7 @@ public:
 //--------------------------------------------------------- class ExcDummy_02 -
 // sheet dummies: CALCMODE to SETUP
 
-class ExcDummy_02a : public ExcDummyRec
+class ExcDummy_02a final : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
@@ -276,7 +276,7 @@ public:
 };
 
 /** This record contains the Windows country IDs for the UI and document language. */
-class XclExpCountry : public XclExpRecord
+class XclExpCountry final : public XclExpRecord
 {
 public:
     explicit                    XclExpCountry( const XclExpRoot& rRoot );
@@ -291,7 +291,7 @@ private:
 
 // XclExpWsbool ===============================================================
 
-class XclExpWsbool : public XclExpUInt16Record
+class XclExpWsbool final : public XclExpUInt16Record
 {
 public:
     explicit XclExpWsbool( bool bFitToPages );
@@ -300,7 +300,7 @@ public:
 /**
  * Save sheetPr element and its children for xlsx export.
  */
-class XclExpXmlSheetPr : public XclExpRecordBase
+class XclExpXmlSheetPr final : public XclExpRecordBase
 {
 public:
     explicit XclExpXmlSheetPr(
@@ -316,13 +316,13 @@ private:
     bool mbSummaryBelow;
 };
 
-class XclExpFiltermode : public XclExpEmptyRecord
+class XclExpFiltermode final : public XclExpEmptyRecord
 {
 public:
     explicit            XclExpFiltermode();
 };
 
-class XclExpAutofilterinfo : public XclExpUInt16Record
+class XclExpAutofilterinfo final : public XclExpUInt16Record
 {
 public:
     explicit            XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol );
@@ -357,7 +357,7 @@ public:
     void                    SaveText( XclExpStream& rStrm );
 };
 
-class XclExpAutofilter : public XclExpRecord, protected XclExpRoot
+class XclExpAutofilter final : public XclExpRecord, protected XclExpRoot
 {
 private:
     enum FilterType
@@ -398,7 +398,7 @@ public:
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
-class ExcAutoFilterRecs : public XclExpRecordBase, protected XclExpRoot
+class ExcAutoFilterRecs final : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** @param  pDefinedData
@@ -434,7 +434,7 @@ private:
 };
 
 /** Sheet filter manager. Contains auto filters or advanced filters from all sheets. */
-class XclExpFilterManager : protected XclExpRoot
+class XclExpFilterManager final : protected XclExpRoot
 {
 public:
     explicit            XclExpFilterManager( const XclExpRoot& rRoot );

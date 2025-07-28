@@ -52,7 +52,7 @@ struct ExternalNameModel
 
 class ExternalLink;
 
-class ExternalName : public DefinedNameBase
+class ExternalName final : public DefinedNameBase
 {
 public:
     explicit            ExternalName( const ExternalLink& rParentLink );
@@ -187,7 +187,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     }
 }
 
-class ExternalLink : public WorkbookHelper
+class ExternalLink final : public WorkbookHelper
 {
 public:
     explicit            ExternalLink( const WorkbookHelper& rHelper );
@@ -298,7 +298,7 @@ struct RefSheetsModel
     void                readBiff12Data( SequenceInputStream& rStrm );
 };
 
-class ExternalLinkBuffer : public WorkbookHelper
+class ExternalLinkBuffer final : public WorkbookHelper
 {
 public:
     explicit            ExternalLinkBuffer( const WorkbookHelper& rHelper );

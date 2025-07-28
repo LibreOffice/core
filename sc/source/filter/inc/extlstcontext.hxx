@@ -24,7 +24,7 @@ namespace oox::xls { class WorksheetFragment; }
 
 namespace oox::xls {
 
-class ExtCfRuleContext : public WorksheetContextBase
+class ExtCfRuleContext final : public WorksheetContextBase
 {
 public:
     explicit ExtCfRuleContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pDataBar );
@@ -48,7 +48,7 @@ struct ExtCondFormatRuleModel
     OUString aStyle;
 };
 
-class ExtConditionalFormattingContext : public WorksheetContextBase
+class ExtConditionalFormattingContext final : public WorksheetContextBase
 {
 public:
     explicit ExtConditionalFormattingContext(WorksheetContextBase& rFragment);
@@ -79,7 +79,7 @@ private:
  *
  * ExtLstLocalContext is for the entry in the datastructure that needs to be extended
  */
-class ExtLstLocalContext : public WorksheetContextBase
+class ExtLstLocalContext final : public WorksheetContextBase
 {
 public:
     explicit ExtLstLocalContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ); // until now a ExtLst always extends an existing entry
@@ -96,7 +96,7 @@ private:
 /**
  * A single ext entry. Will be skipped until the actual entry with the correct uri is found
  */
-class ExtGlobalContext : public WorksheetContextBase
+class ExtGlobalContext final : public WorksheetContextBase
 {
 public:
     explicit ExtGlobalContext( WorksheetContextBase& rFragment );
@@ -112,7 +112,7 @@ private:
  * Used for the actual ExtLst containing the new extended definition.
  * Uses the saved data from the ExtLstLocalContext
  */
-class ExtLstGlobalContext : public WorksheetContextBase
+class ExtLstGlobalContext final : public WorksheetContextBase
 {
 public:
     explicit ExtLstGlobalContext( WorksheetFragment& rFragment );
@@ -121,7 +121,7 @@ protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
 
-class ExtGlobalWorkbookContext : public WorkbookContextBase
+class ExtGlobalWorkbookContext final : public WorkbookContextBase
 {
 public:
     explicit ExtGlobalWorkbookContext( WorkbookContextBase& rFragment );
@@ -133,7 +133,7 @@ protected:
 private:
 };
 
-class ExtLstGlobalWorkbookContext : public WorkbookContextBase
+class ExtLstGlobalWorkbookContext final : public WorkbookContextBase
 {
 public:
     explicit ExtLstGlobalWorkbookContext( WorkbookFragment& rFragment );

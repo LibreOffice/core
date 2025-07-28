@@ -259,7 +259,7 @@ struct ExCfRuleModel
     bool mbIsLower; // Cfvo
 };
 
-class ExtCfDataBarRule : public WorksheetHelper
+class ExtCfDataBarRule final : public WorksheetHelper
 {
     enum RuleType
     {
