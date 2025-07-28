@@ -1124,7 +1124,8 @@ bool ODatabaseModelImpl::checkMacrosOnLoading()
     Reference< XInteractionHandler > xInteraction;
     xInteraction = m_aMediaDescriptor.getOrDefault( u"InteractionHandler"_ustr, xInteraction );
     const bool bHasMacros = m_aMacroMode.hasMacros();
-    return m_aMacroMode.checkMacrosOnLoading(xInteraction, false /*HasValidContentSignature*/, bHasMacros);
+    // Since Base does not support document signatures, we always assume that the content signature is valid.
+    return m_aMacroMode.checkMacrosOnLoading(xInteraction, true /*HasValidContentSignature*/, bHasMacros);
 }
 
 void ODatabaseModelImpl::resetMacroExecutionMode()
