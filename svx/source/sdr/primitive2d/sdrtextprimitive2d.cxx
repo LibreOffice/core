@@ -29,7 +29,6 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
-#include <vcl/svapp.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <utility>
 #include <osl/diagnose.h>
@@ -104,8 +103,7 @@ namespace drawinglayer::primitive2d
             mnLastPageCount(0),
             mbContainsPageField(false),
             mbContainsPageCountField(false),
-            mbContainsOtherFields(false),
-            mbEditViewActive(false)
+            mbContainsOtherFields(false)
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
 
@@ -198,14 +196,6 @@ namespace drawinglayer::primitive2d
                     }
                 }
 
-                // tdf#167511 check if EditViewActive has changed, but only if we are in
-                // HighContrast mode at all
-                if (!bDoDelete && mbEditViewActive != rViewInformation.getEditViewActive()
-                    && Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-                {
-                    bDoDelete = true;
-                }
-
                 if(bDoDelete)
                 {
                     const_cast< SdrTextPrimitive2D* >(this)->setBuffered2DDecomposition(nullptr);
@@ -239,7 +229,6 @@ namespace drawinglayer::primitive2d
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageNumber = nCurrentlyValidPageNumber;
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageCount = nCurrentlyValidPageCount;
                 const_cast< SdrTextPrimitive2D* >(this)->maLastTextBackgroundColor = aNewTextBackgroundColor;
-                const_cast< SdrTextPrimitive2D* >(this)->mbEditViewActive = rViewInformation.getEditViewActive();
             }
 
             // call parent

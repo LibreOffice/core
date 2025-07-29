@@ -72,9 +72,6 @@ namespace drawinglayer::primitive2d
             bool                                    mbContainsPageCountField : 1;
             bool                                    mbContainsOtherFields : 1;
 
-            // tdf#167511 also need to react for EditViewActive to correctly show HighContrast
-            bool                                    mbEditViewActive : 1;
-
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
             static Primitive2DReference encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate);
