@@ -157,6 +157,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"sfx/ui/helpmanual.ui"_ustr,
         u"sfx/ui/inputdialog.ui"_ustr,
         u"sfx/ui/licensedialog.ui"_ustr,
+        u"sfx/ui/loadtemplatedialog.ui"_ustr,
         u"sfx/ui/password.ui"_ustr,
         u"sfx/ui/printeroptionsdialog.ui"_ustr,
         u"sfx/ui/querysavedialog.ui"_ustr,
