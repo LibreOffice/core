@@ -85,8 +85,7 @@ CheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive,
 }
 
 rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D>
-buildTextPortionPrimitive(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-                          const DrawPortionInfo& rInfo, const OUString& rText,
+buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
                           const drawinglayer::attribute::FontAttribute& rFontAttribute,
                           const std::vector<double>& rDXArray,
                           const basegfx::B2DHomMatrix& rNewTransform)
@@ -104,9 +103,7 @@ buildTextPortionPrimitive(const drawinglayer::geometry::ViewInformation2D& rView
     }
 
     // tdf#167511 get FontColor, evtl. adapted for HighContrast
-    const bool bHighContrast(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                             && rViewInformation2D.getEditViewActive());
-    const Color aFontColor(bHighContrast
+    const Color aFontColor(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                                ? Application::GetSettings().GetStyleSettings().GetWindowTextColor()
                                : rInfo.mrFont.GetColor());
     const basegfx::BColor aBFontColor(aFontColor.getBColor());
@@ -225,7 +222,6 @@ buildTextPortionPrimitive(const drawinglayer::geometry::ViewInformation2D& rView
 class DoCapitalsDrawPortionInfo : public SvxDoCapitals
 {
 private:
-    const drawinglayer::geometry::ViewInformation2D& mrViewInformation2D;
     drawinglayer::primitive2d::Primitive2DContainer& mrTarget;
     const basegfx::B2DHomMatrix& mrNewTransformA;
     const basegfx::B2DHomMatrix& mrNewTransformB;
@@ -233,13 +229,11 @@ private:
     SvxFont m_aFont;
 
 public:
-    DoCapitalsDrawPortionInfo(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-                              drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    DoCapitalsDrawPortionInfo(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                               const basegfx::B2DHomMatrix& rNewTransformA,
                               const basegfx::B2DHomMatrix& rNewTransformB,
                               const DrawPortionInfo& rInfo)
         : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
-        , mrViewInformation2D(rViewInformation2D)
         , mrTarget(rTarget)
         , mrNewTransformA(rNewTransformA)
         , mrNewTransformB(rNewTransformB)
@@ -261,7 +255,6 @@ public:
 };
 
 void CreateTextPortionPrimitivesFromDrawPortionInfo(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB,
     const DrawPortionInfo& rInfo)
@@ -347,8 +340,7 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
 
     OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(
-        buildTextPortionPrimitive(rViewInformation2D, rInfo, caseMappedText, aFontAttribute,
-                                  aDXArray, aNewTransform));
+        buildTextPortionPrimitive(rInfo, caseMappedText, aFontAttribute, aDXArray, aNewTransform));
 
     bool bSmallCaps = rInfo.mrFont.IsCapital();
     if (bSmallCaps && rInfo.mpDXArray.empty())
@@ -359,8 +351,8 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
     if (bSmallCaps)
     {
         // rerun with each sub-portion
-        DoCapitalsDrawPortionInfo aDoDrawPortionInfo(rViewInformation2D, rTarget, rNewTransformA,
-                                                     rNewTransformB, rInfo);
+        DoCapitalsDrawPortionInfo aDoDrawPortionInfo(rTarget, rNewTransformA, rNewTransformB,
+                                                     rInfo);
         rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
 
         // transfer collected primitives from rTarget to a new container
@@ -533,8 +525,8 @@ void DoCapitalsDrawPortionInfo::Do(const OUString& rSpanTxt, const sal_Int32 nSp
         nullptr, /* no field in subportion, handled outside */
         false, false, false, m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor);
 
-    CreateTextPortionPrimitivesFromDrawPortionInfo(mrViewInformation2D, mrTarget, mrNewTransformA,
-                                                   mrNewTransformB, aInfo);
+    CreateTextPortionPrimitivesFromDrawPortionInfo(mrTarget, mrNewTransformA, mrNewTransformB,
+                                                   aInfo);
 
     if (!bUpper)
         m_aFont.SetPropr(nProp);
@@ -607,9 +599,8 @@ void TextHierarchyBreakup::flushLinePrimitivesToParagraphPrimitives(sal_Int32 nP
 
 void TextHierarchyBreakup::processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo)
 {
-    CreateTextPortionPrimitivesFromDrawPortionInfo(getViewInformation2D(), maTextPortionPrimitives,
-                                                   maNewTransformA, maNewTransformB,
-                                                   rDrawPortionInfo);
+    CreateTextPortionPrimitivesFromDrawPortionInfo(maTextPortionPrimitives, maNewTransformA,
+                                                   maNewTransformB, rDrawPortionInfo);
 
     if (rDrawPortionInfo.mbEndOfLine || rDrawPortionInfo.mbEndOfParagraph)
     {
@@ -665,10 +656,8 @@ void TextHierarchyBreakup::directlyAddB2DPrimitive(
     maTextPortionPrimitives.push_back(rSource);
 }
 
-TextHierarchyBreakup::TextHierarchyBreakup(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
-    : StripPortionsHelper(rViewInformation2D)
-    , maTextPortionPrimitives()
+TextHierarchyBreakup::TextHierarchyBreakup()
+    : maTextPortionPrimitives()
     , maLinePrimitives()
     , maParagraphPrimitives()
     , maNewTransformA()
@@ -676,11 +665,9 @@ TextHierarchyBreakup::TextHierarchyBreakup(
 {
 }
 
-TextHierarchyBreakup::TextHierarchyBreakup(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-    const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
-    : StripPortionsHelper(rViewInformation2D)
-    , maTextPortionPrimitives()
+TextHierarchyBreakup::TextHierarchyBreakup(const basegfx::B2DHomMatrix& rNewTransformA,
+                                           const basegfx::B2DHomMatrix& rNewTransformB)
+    : maTextPortionPrimitives()
     , maLinePrimitives()
     , maParagraphPrimitives()
     , maNewTransformA(rNewTransformA)
@@ -720,17 +707,16 @@ sal_Int32 TextHierarchyBreakupOutliner::getParagraphCount() const
     return mrOutliner.GetParagraphCount();
 }
 
-TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, Outliner& rOutliner)
-    : TextHierarchyBreakup(rViewInformation2D)
+TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(Outliner& rOutliner)
+    : TextHierarchyBreakup()
     , mrOutliner(rOutliner)
 {
 }
 
 TextHierarchyBreakupOutliner::TextHierarchyBreakupOutliner(
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, Outliner& rOutliner,
-    const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
-    : TextHierarchyBreakup(rViewInformation2D, rNewTransformA, rNewTransformB)
+    Outliner& rOutliner, const basegfx::B2DHomMatrix& rNewTransformA,
+    const basegfx::B2DHomMatrix& rNewTransformB)
+    : TextHierarchyBreakup(rNewTransformA, rNewTransformB)
     , mrOutliner(rOutliner)
 {
 }

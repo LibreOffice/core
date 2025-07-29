@@ -411,8 +411,7 @@ void EditView::DrawText_ToEditView( const tools::Rectangle& rRect, OutputDevice*
 {
     // use TextHierarchyBreakup to get all text embedded to the
     // TextHierarchy.*Primitive2D groupings for better processing
-    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-    TextHierarchyBreakup aHelper(aViewInformation2D);
+    TextHierarchyBreakup aHelper;
 
     // hand that Helper over to DrawText_ToEditView at the EditEngine
     // for usage

@@ -109,23 +109,11 @@ public:
 
 class EDITENG_DLLPUBLIC StripPortionsHelper
 {
-    const drawinglayer::geometry::ViewInformation2D& mrViewInformation2D;
-
 public:
-    StripPortionsHelper(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
-        : mrViewInformation2D(rViewInformation2D)
-    {
-    }
-
     virtual void processDrawPortionInfo(const DrawPortionInfo&) = 0;
     virtual void processDrawBulletInfo(const DrawBulletInfo&) = 0;
     virtual void directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&)
         = 0;
-
-    const drawinglayer::geometry::ViewInformation2D& getViewInformation2D() const
-    {
-        return mrViewInformation2D;
-    }
 };
 
 class EDITENG_DLLPUBLIC TextHierarchyBreakup : public StripPortionsHelper
@@ -148,9 +136,8 @@ public:
     virtual void
     directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&) override;
 
-    TextHierarchyBreakup(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
-    TextHierarchyBreakup(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
-                         const basegfx::B2DHomMatrix& rNewTransformA,
+    TextHierarchyBreakup();
+    TextHierarchyBreakup(const basegfx::B2DHomMatrix& rNewTransformA,
                          const basegfx::B2DHomMatrix& rNewTransformB);
 
     const drawinglayer::primitive2d::Primitive2DContainer& getTextPortionPrimitives();
@@ -165,11 +152,9 @@ protected:
     virtual sal_Int32 getParagraphCount() const override;
 
 public:
-    TextHierarchyBreakupOutliner(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, Outliner& rOutliner);
-    TextHierarchyBreakupOutliner(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, Outliner& rOutliner,
-        const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB);
+    TextHierarchyBreakupOutliner(Outliner& rOutliner);
+    TextHierarchyBreakupOutliner(Outliner& rOutliner, const basegfx::B2DHomMatrix& rNewTransformA,
+                                 const basegfx::B2DHomMatrix& rNewTransformB);
 };
 
 #endif // INCLUDED_EDITENG_STRIPPORTIONSHELPER_HXX

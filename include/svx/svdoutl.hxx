@@ -63,7 +63,6 @@ public:
     virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override;
 
     TextHierarchyBreakupBlockText(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
         SdrOutliner& rOutliner,
         const basegfx::B2DHomMatrix& rNewTransformA,
         const basegfx::B2DHomMatrix& rNewTransformB,
@@ -79,7 +78,6 @@ public:
     virtual void processDrawPortionInfo(const DrawPortionInfo& rDrawPortionInfo) override;
 
     TextHierarchyBreakupContourText(
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
         SdrOutliner& rOutliner,
         const basegfx::B2DHomMatrix& rNewTransformA,
         const basegfx::B2DHomMatrix& rNewTransformB,
