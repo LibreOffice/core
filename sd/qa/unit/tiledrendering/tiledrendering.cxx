@@ -1472,73 +1472,80 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
 }
 
 /**
- * tests a cut/paste bug around bullet items in a list
+ * tests a cut/paste bug around bullet items in a list and
+ * graphic (bitmap) bullet items in a list (Tdf103083, Tdf166882)
  */
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf103083)
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
 {
-    // Load the document.
-    SdXImpressDocument* pXImpressDocument = createDoc("tdf103083.fodp");
-    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    SdPage* pActualPage = pViewShell->GetActualPage();
+    std::vector<const char*> aFileNames = { "tdf103083.fodp", "tdf166882.odp" };
+    for (const char* pFileName : aFileNames)
+    {
+        // Load the document.
+        SdXImpressDocument* pXImpressDocument = createDoc(pFileName);
+        CPPUNIT_ASSERT(pXImpressDocument);
 
-    SdrObject* pObject1 = pActualPage->GetObj(1);
-    CPPUNIT_ASSERT_EQUAL(SdrObjKind::OutlineText, pObject1->GetObjIdentifier());
-    SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
+        sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+        SdPage* pActualPage = pViewShell->GetActualPage();
 
-    SdrView* pView = pViewShell->GetView();
+        SdrObject* pObject1 = pActualPage->GetObj(1);
+        CPPUNIT_ASSERT_EQUAL(SdrObjKind::OutlineText, pObject1->GetObjIdentifier());
+        SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject1);
 
-    // select contents of bullet item
-    ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
-                                      1, MOUSE_LEFT, 0);
-    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
-                                      1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
-    pView->SdrBeginTextEdit(pTextObject);
-    CPPUNIT_ASSERT(pView->GetTextEditObject());
-    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
-    rEditView.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView.GetSelected());
-    SdrOutliner* pOutliner = pView->GetTextEditOutliner();
-    CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
-                         pOutliner->GetStyleSheet(2)->GetName());
-    const EditTextObject& aEdit = pTextObject->GetOutlinerParaObject()->GetTextObject();
-    const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
-    SvxNumberFormat aNumFmt(pNumFmt->GetNumRule().GetLevel(2));
+        SdrView* pView = pViewShell->GetView();
 
-    // cut contents of bullet item
-    dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
+        // select contents of bullet item
+        ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
+        pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+            o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
+            1, MOUSE_LEFT, 0);
+        pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+            o3tl::toTwips(aRect.Left() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.Top() + 2, o3tl::Length::mm100),
+            1, MOUSE_LEFT, 0);
+        Scheduler::ProcessEventsToIdle();
+        pView->SdrBeginTextEdit(pTextObject);
+        CPPUNIT_ASSERT(pView->GetTextEditObject());
+        EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+        rEditView.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
+        CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView.GetSelected());
+        SdrOutliner* pOutliner = pView->GetTextEditOutliner();
+        CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
+            pOutliner->GetStyleSheet(2)->GetName());
+        const EditTextObject& aEdit = pTextObject->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt = aEdit.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+        SvxNumberFormat aNumFmt(pNumFmt->GetNumRule().GetLevel(2));
 
-    CPPUNIT_ASSERT(pView->GetTextEditObject());
-    EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
-    rEditView2.SetSelection(ESelection(2, 0, 2, 10)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(OUString(), rEditView2.GetSelected());
+        // cut contents of bullet item
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
 
-    // paste contents of bullet item
-    dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
+        CPPUNIT_ASSERT(pView->GetTextEditObject());
+        EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
+        rEditView2.SetSelection(ESelection(2, 0, 2, 10)); // start para, start char, end para, end char.
+        CPPUNIT_ASSERT_EQUAL(OUString(), rEditView2.GetSelected());
 
-    // send an ESC key to trigger the commit of the edit to the main model
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
-    Scheduler::ProcessEventsToIdle();
+        // paste contents of bullet item
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
 
-    pView->SdrBeginTextEdit(pTextObject);
-    CPPUNIT_ASSERT(pView->GetTextEditObject());
-    pOutliner = pView->GetTextEditOutliner();
-    EditView& rEditView3 = pView->GetTextEditOutlinerView()->GetEditView();
-    rEditView3.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView3.GetSelected());
-    CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
-                         pOutliner->GetStyleSheet(2)->GetName());
+        // send an ESC key to trigger the commit of the edit to the main model
+        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
+        pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
+        Scheduler::ProcessEventsToIdle();
 
-    const EditTextObject& aEdit2 = pTextObject->GetOutlinerParaObject()->GetTextObject();
-    const SvxNumBulletItem* pNumFmt2 = aEdit2.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
-    SvxNumberFormat aNumFmt2(pNumFmt2->GetNumRule().GetLevel(2));
+        pView->SdrBeginTextEdit(pTextObject);
+        CPPUNIT_ASSERT(pView->GetTextEditObject());
+        pOutliner = pView->GetTextEditOutliner();
+        EditView& rEditView3 = pView->GetTextEditOutlinerView()->GetEditView();
+        rEditView3.SetSelection(ESelection(2, 0, 2, 33)); // start para, start char, end para, end char.
+        CPPUNIT_ASSERT_EQUAL(u"They have all the same formatting"_ustr, rEditView3.GetSelected());
+        CPPUNIT_ASSERT_EQUAL(u"No-Logo Content~LT~Gliederung 2"_ustr,
+            pOutliner->GetStyleSheet(2)->GetName());
 
-    bool bEqual(aNumFmt2 == aNumFmt);
-    CPPUNIT_ASSERT_MESSAGE("Bullet properties changed after paste", bEqual);
+        const EditTextObject& aEdit2 = pTextObject->GetOutlinerParaObject()->GetTextObject();
+        const SvxNumBulletItem* pNumFmt2 = aEdit2.GetParaAttribs(2).GetItem(EE_PARA_NUMBULLET);
+        SvxNumberFormat aNumFmt2(pNumFmt2->GetNumRule().GetLevel(2));
+
+        bool bEqual(aNumFmt2 == aNumFmt);
+        CPPUNIT_ASSERT_MESSAGE("Bullet properties changed after paste", bEqual);
+    }
 }
 
 /**
