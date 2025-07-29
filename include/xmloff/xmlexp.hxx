@@ -101,7 +101,7 @@ enum class SvXMLExportFlags {
     SCRIPTS                  = 0x0020,
     SETTINGS                 = 0x0040,
     FONTDECLS                = 0x0080,
-    EMBEDDED                 = 0x0100,
+    EMBEDDED                 = 0x0100, // for flat-ODF export
     PRETTY                   = 0x0400,
     OASIS                    = 0x8000,
     ALL                      = 0x05ff
