@@ -492,11 +492,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
                 // On % values initialize size
-                SwFormatFrameSize& rSize = const_cast<SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE));
-                if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
-                    rSize.SetWidth(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width());
-                if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
-                    rSize.SetHeight(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height());
+                SwFormatFrameSize aSize(aSet.Get(RES_FRM_SIZE));
+                if (aSize.GetWidthPercent() && aSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
+                    aSize.SetWidth(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width());
+                if (aSize.GetHeightPercent() && aSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
+                    aSize.SetHeight(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height());
+                if (aSize != aSet.Get(RES_FRM_SIZE))
+                {
+                    aSet.Put(aSize);
+                }
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
