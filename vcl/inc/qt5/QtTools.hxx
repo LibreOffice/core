@@ -75,6 +75,8 @@ inline QSize toQSize(const Size& rSize) { return QSize(rSize.Width(), rSize.Heig
 
 inline Size toSize(const QSize& rSize) { return Size(rSize.width(), rSize.height()); }
 
+inline QPoint toQPoint(const Point& rPoint) { return QPoint(rPoint.X(), rPoint.Y()); }
+
 inline Point toPoint(const QPoint& rPoint) { return Point(rPoint.x(), rPoint.y()); }
 
 inline QColor toQColor(const Color& rColor)

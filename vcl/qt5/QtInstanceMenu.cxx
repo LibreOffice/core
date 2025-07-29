@@ -11,6 +11,8 @@
 #include <QtInstanceMenu.moc>
 
 #include <QtInstance.hxx>
+#include <QtInstanceWidget.hxx>
+#include <QtTools.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/qt/QtUtils.hxx>
@@ -24,10 +26,29 @@ QtInstanceMenu::QtInstanceMenu(QMenu* pMenu)
     assert(m_pMenu);
 }
 
-OUString QtInstanceMenu::popup_at_rect(weld::Widget*, const tools::Rectangle&, weld::Placement)
+OUString QtInstanceMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                       weld::Placement ePlace)
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    assert(ePlace == weld::Placement::Under && "placement type not supported yet");
+    (void)ePlace;
+
+    OUString sActionId;
+    GetQtInstance().RunInMainThread([&] {
+        m_pMenu->adjustSize();
+
+        QtInstanceWidget* pQtParent = dynamic_cast<QtInstanceWidget*>(pParent);
+        assert(pQtParent && "No parent");
+        QWidget* pParentWidget = pQtParent->getQWidget();
+        assert(pParentWidget);
+        const QPoint aPos = pParentWidget->mapToGlobal(toQPoint(rRect.TopLeft()));
+
+        if (const QAction* pTriggeredAction = m_pMenu->exec(aPos))
+            sActionId = toOUString(pTriggeredAction->objectName());
+    });
+
+    return sActionId;
 }
 
 void QtInstanceMenu::set_sensitive(const OUString& rIdent, bool bSensitive)
