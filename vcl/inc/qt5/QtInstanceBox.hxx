@@ -20,6 +20,9 @@ public:
 
     virtual void reorder_child(weld::Widget* pWidget, int nPosition) override;
     virtual void sort_native_button_order() override;
+
+protected:
+    virtual QBoxLayout& getLayout() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -16,8 +16,26 @@ QtInstanceBox::QtInstanceBox(QWidget* pWidget)
     assert(qobject_cast<QBoxLayout*>(pWidget->layout()) && "widget doesn't have a box layout");
 }
 
-void QtInstanceBox::reorder_child(weld::Widget*, int) { assert(false && "Not implemented yet"); }
+void QtInstanceBox::reorder_child(weld::Widget* pWidget, int nPosition)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
+        assert(pQtInstanceWidget);
+        QWidget* pQWidget = pQtInstanceWidget->getQWidget();
+        assert(pQWidget);
+
+        getLayout().removeWidget(pQWidget);
+        getLayout().insertWidget(nPosition, pQWidget);
+    });
+}
 
 void QtInstanceBox::sort_native_button_order() { assert(false && "Not implemented yet"); }
+
+QBoxLayout& QtInstanceBox::getLayout() const
+{
+    return static_cast<QBoxLayout&>(QtInstanceContainer::getLayout());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
