@@ -606,6 +606,18 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     python/DocumentHandling/DocumentSaver.py \
     python/DocumentHandling/README.md \
     python/DocumentHandling/tests/hello.odt \
+    python/Text/BookmarkInsertion.py \
+    python/Text/GraphicsInserter.py \
+    python/Text/HardFormatting.py \
+    python/Text/StyleCreation.py \
+    python/Text/StyleInitialization.py \
+    python/Text/SWriter.py \
+    python/Text/TextDocumentStructure.py \
+    python/Text/TextReplace.py \
+    python/Text/WriterSelector.py \
+    python/Spreadsheet/ChartTypeChange.py \
+    python/Spreadsheet/EuroAdaption.py \
+    python/Spreadsheet/SCalc.py \
     python/Drawing/SDraw.py \
 ))
 
