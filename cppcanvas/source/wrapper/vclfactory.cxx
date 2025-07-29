@@ -54,7 +54,7 @@ namespace cppcanvas
     }
 
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
-                                              const ::BitmapEx&         rBmpEx )
+                                              const ::Bitmap&         rBmp )
     {
         OSL_ENSURE( rCanvas && rCanvas->getUNOCanvas().is(),
                     "VCLFactory::createBitmap(): Invalid canvas" );
@@ -67,7 +67,7 @@ namespace cppcanvas
             return BitmapSharedPtr();
 
         return std::make_shared<internal::ImplBitmap>( rCanvas,
-                                                          vcl::unotools::xBitmapFromBitmapEx(rBmpEx) );
+                                                          vcl::unotools::xBitmapFromBitmap(rBmp) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,

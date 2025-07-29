@@ -28,7 +28,7 @@
 #include <cppcanvas/cppcanvasdllapi.h>
 
 namespace vcl { class Window; }
-class BitmapEx;
+class Bitmap;
 
 class GDIMetaFile;
 
@@ -62,7 +62,7 @@ namespace cppcanvas
 
         /** Create a bitmap from a VCL Bitmap
          */
-        static BitmapSharedPtr   createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx );
+        static BitmapSharedPtr   createBitmap( const CanvasSharedPtr&, const ::Bitmap& rBmp );
 
         /** Create a renderer object from a Metafile
 

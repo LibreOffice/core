@@ -137,7 +137,7 @@ Reference<rendering::XBitmap> PresenterPreviewCache::getSlidePreview (
     else
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
-            aPreview)->getUNOBitmap();
+            Bitmap(aPreview))->getUNOBitmap();
 }
 
 void PresenterPreviewCache::addPreviewCreationNotifyListener (

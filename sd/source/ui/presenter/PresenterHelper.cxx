@@ -328,7 +328,7 @@ Reference<rendering::XBitmap> PresenterHelper::loadBitmap (
         BitmapEx aBitmapEx(bmpid);
         cppcanvas::BitmapSharedPtr xBitmap(
             cppcanvas::VCLFactory::createBitmap(pCanvas,
-                aBitmapEx));
+                Bitmap(aBitmapEx)));
         if (!xBitmap)
             return nullptr;
         return xBitmap->getUNOBitmap();

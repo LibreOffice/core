@@ -53,7 +53,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     if (pCanvas)
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
-            CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
+            Bitmap(CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor)))->getUNOBitmap();
     else
         return nullptr;
 }

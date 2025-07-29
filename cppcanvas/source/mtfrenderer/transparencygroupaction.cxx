@@ -383,9 +383,9 @@ namespace cppcanvas::internal
                     // update buffered bitmap and transformation
                     BitmapSharedPtr aBmp( VCLFactory::createBitmap(
                                               mpCanvas,
-                                              BitmapEx(aVDev->GetBitmap(
+                                              aVDev->GetBitmap(
                                                   aBitmapPoint,
-                                                  aBitmapSizePixel ) ) ));
+                                                  aBitmapSizePixel ) ) );
                     mxBufferBitmap = aBmp->getUNOBitmap();
                     maLastTransformation = aTotalTransform;
                     maLastSubset = rSubset;

@@ -49,13 +49,6 @@ using namespace ::com::sun::star;
 
 namespace vcl::unotools
 {
-        uno::Reference< rendering::XBitmap > xBitmapFromBitmapEx(const ::BitmapEx& inputBitmap )
-        {
-            SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
-
-            return new vcl::unotools::VclCanvasBitmap( Bitmap(inputBitmap) );
-        }
-
         uno::Reference< rendering::XBitmap > xBitmapFromBitmap(const ::Bitmap& inputBitmap )
         {
             SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
@@ -154,11 +147,6 @@ namespace vcl::unotools
 
                 return true;
             }
-        }
-
-        ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
-        {
-            return BitmapEx(bitmapFromXBitmap(xInputBitmap));
         }
 
         ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )

@@ -1683,8 +1683,8 @@ namespace cppcanvas::internal
                                     Graphic aGraphic;
                                     aFill.getGraphic( aGraphic );
 
-                                    BitmapEx     aBmpEx( aGraphic.GetBitmapEx() );
-                                    const ::Size aBmpSize( aBmpEx.GetSizePixel() );
+                                    Bitmap aBmp( aGraphic.GetBitmapEx() );
+                                    const ::Size aBmpSize( aBmp.GetSizePixel() );
 
                                     ::SvtGraphicFill::Transform aTransform;
                                     aFill.getTransform( aTransform );
@@ -1723,7 +1723,7 @@ namespace cppcanvas::internal
                                         aMatrix );
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
-                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmapEx( aBmpEx );
+                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmap( aBmp );
                                     if( aFill.isTiling() )
                                     {
                                         aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;
@@ -2111,7 +2111,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    BitmapEx(pAct->GetBitmap()),
+                                    pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rCanvas,
@@ -2134,7 +2134,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    BitmapEx(pAct->GetBitmap()),
+                                    pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform * vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform * vcl::unotools::b2DVectorFromSize( pAct->GetSize() ),
                                     rCanvas,
@@ -2164,7 +2164,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    BitmapEx(aBmp),
+                                    aBmp,
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetDestPoint() ),
                                     rStates.getState().mapModeTransform *
@@ -2189,7 +2189,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    pAct->GetBitmapEx(),
+                                    Bitmap(pAct->GetBitmapEx()),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rCanvas,
@@ -2212,7 +2212,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    pAct->GetBitmapEx(),
+                                    Bitmap(pAct->GetBitmapEx()),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *
@@ -2237,7 +2237,7 @@ namespace cppcanvas::internal
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
-                        BitmapEx aBmp( pAct->GetBitmapEx() );
+                        Bitmap aBmp( pAct->GetBitmapEx() );
                         const ::tools::Rectangle aCropRect( pAct->GetSrcPoint(),
                                                    pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
@@ -2270,7 +2270,7 @@ namespace cppcanvas::internal
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         std::shared_ptr<Action> pBmpAction(
@@ -2299,7 +2299,7 @@ namespace cppcanvas::internal
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         std::shared_ptr<Action> pBmpAction(
@@ -2330,7 +2330,7 @@ namespace cppcanvas::internal
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         // crop bitmap to given source rectangle (no

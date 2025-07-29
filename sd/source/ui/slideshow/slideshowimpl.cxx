@@ -1258,7 +1258,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         {
             BitmapEx waitSymbolBitmap(BMP_WAIT_ICON);
             const Reference<rendering::XBitmap> xBitmap(
-                vcl::unotools::xBitmapFromBitmapEx( waitSymbolBitmap ) );
+                vcl::unotools::xBitmapFromBitmap( Bitmap(waitSymbolBitmap) ) );
             if (xBitmap.is())
             {
                 mxShow->setProperty(
@@ -1270,7 +1270,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
 
             BitmapEx pointerSymbolBitmap(BMP_POINTER_ICON);
             const Reference<rendering::XBitmap> xPointerBitmap(
-                vcl::unotools::xBitmapFromBitmapEx( pointerSymbolBitmap ) );
+                vcl::unotools::xBitmapFromBitmap( Bitmap(pointerSymbolBitmap) ) );
             if (xPointerBitmap.is())
             {
                 mxShow->setProperty(
@@ -1313,7 +1313,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                 }
                 BitmapEx prevSlideBm(prevSlidePath);
                 const Reference<rendering::XBitmap> xPrevSBitmap(
-                    vcl::unotools::xBitmapFromBitmapEx(prevSlideBm));
+                    vcl::unotools::xBitmapFromBitmap(Bitmap(prevSlideBm)));
                 if (xPrevSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlidePrev"_ustr, -1,
@@ -1322,7 +1322,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                 }
                 BitmapEx menuSlideBm(menuPath);
                 const Reference<rendering::XBitmap> xMenuSBitmap(
-                    vcl::unotools::xBitmapFromBitmapEx(menuSlideBm));
+                    vcl::unotools::xBitmapFromBitmap(Bitmap(menuSlideBm)));
                 if (xMenuSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlideMenu"_ustr, -1,
@@ -1331,7 +1331,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                 }
                 BitmapEx nextSlideBm(nextSlidePath);
                 const Reference<rendering::XBitmap> xNextSBitmap(
-                    vcl::unotools::xBitmapFromBitmapEx(nextSlideBm));
+                    vcl::unotools::xBitmapFromBitmap(Bitmap(nextSlideBm)));
                 if (xNextSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlideNext"_ustr, -1,

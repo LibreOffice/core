@@ -175,9 +175,9 @@ namespace slideshow::internal
                 }
 
                 Graphic aGraphic(xGraphic);
-                const BitmapEx aBmp = aGraphic.GetBitmapEx();
+                const Bitmap aBmp(aGraphic.GetBitmapEx());
 
-                uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmapEx(aBmp));
+                uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmap(aBmp));
 
                 rendering::ViewState aViewState;
                 aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;

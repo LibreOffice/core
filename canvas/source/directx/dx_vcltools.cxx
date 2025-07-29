@@ -295,11 +295,11 @@ namespace dxcanvas::tools
             if( !xIntBmp.is() )
                 return false;
 
-            ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap( xIntBmp );
-            if( aBmpEx.IsEmpty() )
+            ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xIntBmp );
+            if( aBmp.IsEmpty() )
                 return false;
 
-            return drawVCLBitmapEx( rGraphics, aBmpEx );
+            return drawVCLBitmapEx( rGraphics, BitmapEx(aBmp) );
         }
 }
 

@@ -79,6 +79,7 @@ VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( BitmapEx const & rBmpEx, Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
+VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const css::geometry::IntegerRectangle2D& rect);
 

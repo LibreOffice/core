@@ -143,7 +143,7 @@ namespace drawinglayer::unorenderer
                             aPrimitive2DSequence));
                     primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
-                    BitmapEx aBitmapEx(
+                    Bitmap aBitmap(
                         convertToBitmapEx(
                             std::move(xEmbedSeq),
                             aViewInformation2D,
@@ -151,11 +151,11 @@ namespace drawinglayer::unorenderer
                             nDiscreteHeight,
                             MaximumQuadraticPixels));
 
-                    if(!aBitmapEx.IsEmpty())
+                    if(!aBitmap.IsEmpty())
                     {
-                        aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                        aBitmapEx.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
-                        XBitmap = vcl::unotools::xBitmapFromBitmapEx(aBitmapEx);
+                        aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                        aBitmap.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
+                        XBitmap = vcl::unotools::xBitmapFromBitmap(aBitmap);
                     }
                 }
             }

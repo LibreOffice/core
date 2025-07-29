@@ -31,7 +31,6 @@ class Point;
 class Size;
 namespace tools { class Rectangle; }
 class Bitmap;
-class BitmapEx;
 class Color;
 
 namespace basegfx
@@ -65,18 +64,11 @@ namespace vcl::unotools
         // Bitmap conversions
 
 
-        /** Create an XBitmap from VCL BitmapEx
-         */
-        css::uno::Reference< css::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmapEx( const ::BitmapEx& inputBitmap );
         /** Create an XBitmap from VCL Bitmap(
          */
         css::uno::Reference< css::rendering::XBitmap >
             VCL_DLLPUBLIC xBitmapFromBitmap( const ::Bitmap& inputBitmap );
 
-        /** Create a BitmapEx from an XBitmap
-         */
-        ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const css::uno::Reference< css::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
         /** Create a Bitmap from an XBitmap
          */
         ::Bitmap VCL_DLLPUBLIC bitmapFromXBitmap( const css::uno::Reference< css::rendering::XIntegerReadOnlyBitmap >& xInputBitmap );
