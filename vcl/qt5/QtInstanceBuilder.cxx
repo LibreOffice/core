@@ -75,6 +75,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/imageviewer.ui"_ustr,
         u"cui/ui/insertrowcolumn.ui"_ustr,
         u"cui/ui/javastartparametersdialog.ui"_ustr,
+        u"cui/ui/linedialog.ui"_ustr,
         u"cui/ui/namedialog.ui"_ustr,
         u"cui/ui/numberdialog.ui"_ustr,
         u"cui/ui/objecttitledescdialog.ui"_ustr,
@@ -191,11 +192,12 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
     // These UI files are only supported inside native Qt dialogs/widgets
     static std::unordered_set<OUString> aSupportedWithQtParent = {
         u"cui/ui/appearance.ui"_ustr,         u"cui/ui/graphictestentry.ui"_ustr,
-        u"cui/ui/possizetabpage.ui"_ustr,     u"cui/ui/rotationtabpage.ui"_ustr,
-        u"cui/ui/slantcornertabpage.ui"_ustr, u"cui/ui/textattrtabpage.ui"_ustr,
-        u"cui/ui/textanimtabpage.ui"_ustr,    u"cui/ui/textcolumnstabpage.ui"_ustr,
-        u"svt/ui/datewindow.ui"_ustr,         u"svx/ui/colorwindow.ui"_ustr,
-        u"vcl/ui/editmenu.ui"_ustr,
+        u"cui/ui/lineendstabpage.ui"_ustr,    u"cui/ui/linetabpage.ui"_ustr,
+        u"cui/ui/linestyletabpage.ui"_ustr,   u"cui/ui/possizetabpage.ui"_ustr,
+        u"cui/ui/rotationtabpage.ui"_ustr,    u"cui/ui/slantcornertabpage.ui"_ustr,
+        u"cui/ui/textattrtabpage.ui"_ustr,    u"cui/ui/textanimtabpage.ui"_ustr,
+        u"cui/ui/textcolumnstabpage.ui"_ustr, u"svt/ui/datewindow.ui"_ustr,
+        u"svx/ui/colorwindow.ui"_ustr,        u"vcl/ui/editmenu.ui"_ustr,
     };
 
     if (aSupportedUIFiles.contains(rUIFile))
