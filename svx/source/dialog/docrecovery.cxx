@@ -703,7 +703,6 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     aWidths.push_back(5 * nWidth / 100);
     m_xFileListLB->set_column_fixed_widths(aWidths);
     m_xFileListLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    m_xFileListLB->connect_toggled( LINK(this, RecoveryDialog, ToggleRowHdl) );
 
     m_xNextBtn->set_sensitive(true);
     m_xNextBtn->connect_clicked( LINK( this, RecoveryDialog, NextButtonHdl ) );
@@ -727,6 +726,8 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     // mark first item
     if (m_xFileListLB->n_children())
         m_xFileListLB->set_cursor(0);
+
+    m_xFileListLB->connect_toggled(LINK(this, RecoveryDialog, ToggleRowHdl));
 }
 
 RecoveryDialog::~RecoveryDialog()
