@@ -4083,32 +4083,46 @@ void SwWW8ImplReader::Read_CharSet(sal_uInt16 , const sal_uInt8* pData, short nL
 
 void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
-    switch( nId )
+    TypedWhichId<SvxLanguageItem> nTypedId = RES_CHRATR_LANGUAGE;
+    switch (nId)
     {
         case NS_sprm::v6::sprmCLid:
         case NS_sprm::CRgLid0_80::val:
         case NS_sprm::CRgLid0::val:
-            nId = RES_CHRATR_LANGUAGE;
+            nTypedId = RES_CHRATR_LANGUAGE;
             break;
         case NS_sprm::CRgLid1_80::val:
         case NS_sprm::CRgLid1::val:
-            nId = RES_CHRATR_CJK_LANGUAGE;
+            nTypedId = RES_CHRATR_CJK_LANGUAGE;
             break;
         case 83:  // WW2
         case 114: // WW7
         case NS_sprm::CLidBi::val:
-            nId = RES_CHRATR_CTL_LANGUAGE;
+            nTypedId = RES_CHRATR_CTL_LANGUAGE;
             break;
         default:
             return;
     }
 
     if (nLen < 2)                  // end of attribute
-        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), nTypedId);
     else
     {
-        sal_uInt16 nLang = SVBT16ToUInt16( pData );  // Language-Id
-        NewAttr(SvxLanguageItem(LanguageType(nLang), nId));
+        auto eLang = LanguageType(SVBT16ToUInt16(pData)); // Language-Id
+
+        // tdf#117636: Certain DOC files may contain spurious language spans.
+        // These may cause performance issues when present, and are stripped
+        // automatically by newer versions of Word. Do the same thing here.
+        std::optional<LanguageType> eCurrLanguage;
+        if (const SvxLanguageItem* pLang = GetFormatAttr(nTypedId); pLang)
+        {
+            eCurrLanguage = pLang->GetLanguage();
+        }
+
+        if (eLang != eCurrLanguage)
+        {
+            NewAttr(SvxLanguageItem(eLang, nTypedId));
+        }
     }
 }
 

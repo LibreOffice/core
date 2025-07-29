@@ -832,6 +832,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     fnVerify(false);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf117636, "tdf117636.doc")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // The fix for bug 117636 works by coalescing runs that are separated by unnecessary
+    // language tags. There is some unrelated platform-specific difference in the number
+    // of spans in this document, but if the fix is working most of the line portions
+    // should be combined.
+    // Without the fix in place, this fails with:
+    // Expected: 1 or 2
+    // Actual:   6
+    CPPUNIT_ASSERT_LESS(3, countXPathNodes(pXmlDoc, "//SwLinePortion"));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
