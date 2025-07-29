@@ -191,7 +191,6 @@ private:
     static OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
     static css::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
-    bool mbIsSplitPara;
     bool mbHasControls;
     bool mbWasShapeInPara;
     bool mbIsLastPara = false;

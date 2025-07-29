@@ -120,7 +120,6 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),
     m_pImpl(new DomainMapper_Impl(*this, xContext, xModel, eDocumentType, rMediaDesc)),
-    mbIsSplitPara(false),
     mbHasControls(false),
     mbWasShapeInPara(false)
 {
@@ -1200,7 +1199,6 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 {
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun())
                     {
-                        mbIsSplitPara = true;
                         m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
@@ -3890,16 +3888,7 @@ void DomainMapper::lcl_startParagraphGroup()
 
     const bool bIsSplitPara = m_pImpl->m_bIsSplitPara; // preserve flag reset by PushProperties
 
-    /*
-     * Add new para properties only if paragraph is not split
-     * or the top context is not of paragraph properties
-     * Set mbIsSplitPara to false as it has been handled
-     */
-    if (!mbIsSplitPara)
-        m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
-    mbIsSplitPara = false;
-    if (m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) != m_pImpl->GetTopContext())
-        m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
+    m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
 
     if (!m_pImpl->IsInShape() && !m_pImpl->IsInComments())
     {
@@ -4599,7 +4588,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                     assert(pContext); // can't have deferred break without
                     if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
                     {
-                        mbIsSplitPara = true;
                         m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
@@ -4691,7 +4679,6 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 {
                     if (m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() || mbWasShapeInPara)
                     {
-                        mbIsSplitPara = true;
                         m_pImpl->m_bIsSplitPara = true;
                         finishParagraph();
                         lcl_startParagraphGroup();
