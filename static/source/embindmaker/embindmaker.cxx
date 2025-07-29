@@ -795,15 +795,9 @@ void dumpWrapperClassMembers(std::ostream& out, rtl::Reference<TypeManager> cons
         out << " get" << attr.name << "() override {";
         if (attr.type == "any" || attr.type.startsWith("[]"))
         {
-            out << "\n"
-                   "        auto & the_ptr = call<";
+            out << " return *call<std::unique_ptr<";
             dumpType(out, manager, attr.type);
-            out << " const &>(\"get" << attr.name
-                << "\");\n"
-                   "        auto const the_copy(the_ptr);\n"
-                   "        delete &the_ptr;\n"
-                   "        return the_copy;\n"
-                   "    }\n";
+            out << ">>(\"get" << attr.name << "\"); }\n";
         }
         else
         {
@@ -904,19 +898,14 @@ void dumpWrapperClassMembers(std::ostream& out, rtl::Reference<TypeManager> cons
         out << ") override {";
         if (meth.returnType == "any" || meth.returnType.startsWith("[]"))
         {
-            out << "\n"
-                   "        auto & the_ptr = call<";
+            out << " return *call<std::unique_ptr<";
             dumpType(out, manager, meth.returnType);
-            out << " const &>(\"" << meth.name << "\"";
+            out << ">>(\"" << meth.name << "\"";
             for (auto const& param : meth.parameters)
             {
                 out << ", " << param.name;
             }
-            out << ");\n"
-                   "        auto const the_copy(the_ptr);\n"
-                   "        delete &the_ptr;\n"
-                   "        return the_copy;\n"
-                   "    }\n";
+            out << "); }\n";
         }
         else
         {
@@ -1060,7 +1049,8 @@ SAL_IMPLEMENT_MAIN()
             std::cerr << "Cannot open \"" << cppPathname << "\" for writing\n";
             std::exit(EXIT_FAILURE);
         }
-        cppOut << "#include <emscripten/bind.h>\n"
+        cppOut << "#include <memory>\n"
+                  "#include <emscripten/bind.h>\n"
                   "#include <com/sun/star/uno/Any.hxx>\n"
                   "#include <com/sun/star/uno/Reference.hxx>\n"
                   "#include <o3tl/unreachable.hxx>\n"
