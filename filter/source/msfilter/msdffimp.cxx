@@ -1272,7 +1272,7 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
             aBitmap.SetPixel(nY, nX, Color(static_cast<sal_Int8>(nRed), static_cast<sal_Int8>(nGreen), static_cast<sal_Int8>(nBlue)));
         }
     }
-    BitmapEx aBitmapEx = vcl::bitmap::CreateFromData( std::move(aBitmap) );
+    Bitmap aBitmapEx = vcl::bitmap::CreateFromData( std::move(aBitmap) );
 
     if ( nFix16Angle )
     {

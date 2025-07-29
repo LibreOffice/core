@@ -880,7 +880,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                                                                     moOpacity, COL_LIGHTGRAY)
                                           .getColor(rGraphicHelper);
 
-                                XOBitmap aXOB(aGraphic.GetBitmapEx());
+                                XOBitmap aXOB(Bitmap(aGraphic.GetBitmapEx()));
                                 aXOB.Bitmap2Array();
                                 // LO uses the first pixel's color to represent background pixels
                                 if (aXOB.GetBackgroundColor() == COL_WHITE)

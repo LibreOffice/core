@@ -11,16 +11,16 @@
 
 #include <o3tl/safeint.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 namespace vcl::bitmap
 {
 /**
- * Intended to be used to feed into CreateFromData to create a BitmapEx. RGB data format.
+ * Intended to be used to feed into CreateFromData to create a Bitmap. RGB data format.
  */
 class VCL_DLLPUBLIC RawBitmap
 {
-    friend BitmapEx VCL_DLLPUBLIC CreateFromData(RawBitmap&& rawBitmap);
+    friend Bitmap VCL_DLLPUBLIC CreateFromData(RawBitmap&& rawBitmap);
     std::unique_ptr<sal_uInt8[]> mpData;
     Size maSize;
     sal_uInt8 mnBitCount;

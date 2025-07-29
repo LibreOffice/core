@@ -1352,9 +1352,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBitBltStretchBltWMF)
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "width", u"10");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[1]", "row",
-                u"000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
+                u"000000,00001b,000037,000054,000071,00008d,0000aa,0000c6,0000e2,0000ff");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[5]", "row",
-                u"720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
+                u"720000,721d1d,723838,725555,727272,72728d,56728d,39738c,1d728d,00728d");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)

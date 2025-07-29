@@ -897,7 +897,7 @@ namespace emfio
                     std::unique_ptr< sal_uInt8[] > pData;
                     pData.reset( new sal_uInt8[ nHeight * nBytesPerScan ] );
                     mpInputStream->ReadBytes( pData.get(), nHeight * nBytesPerScan );
-                    BitmapEx aBitmap = vcl::bitmap::CreateFromData( pData.get(), nWidth, nHeight, nBytesPerScan, nBitCount, true );
+                    Bitmap aBitmap = vcl::bitmap::CreateFromData( pData.get(), nWidth, nHeight, nBytesPerScan, nBitCount, true );
                     if ( nSye && nSxe &&
                          ( nXSrc + nSxe <= nWidth ) &&
                          ( nYSrc + nSye <= nHeight ) )

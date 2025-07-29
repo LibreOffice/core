@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 
-XOBitmap::XOBitmap( const BitmapEx& rBmp ) :
+XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     m_xGraphicObject  (new GraphicObject(rBmp)),
     m_bGraphicDirty   ( false )
 {
@@ -52,9 +52,9 @@ XOBitmap::~XOBitmap()
 {
 }
 
-BitmapEx XOBitmap::GetBitmap() const
+Bitmap XOBitmap::GetBitmap() const
 {
-    return GetGraphicObject().GetGraphic().GetBitmapEx();
+    return Bitmap(GetGraphicObject().GetGraphic().GetBitmapEx());
 }
 
 const GraphicObject& XOBitmap::GetGraphicObject() const

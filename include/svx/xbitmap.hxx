@@ -41,7 +41,7 @@ private:
 
 
 public:
-    XOBitmap( const BitmapEx& rBitmap );
+    XOBitmap( const Bitmap& rBitmap );
     ~XOBitmap();
 
     void Bitmap2Array();
@@ -50,7 +50,7 @@ public:
     void SetPixelColor( const Color& rColor )           { m_aPixelColor = rColor; m_bGraphicDirty = true; }
     void SetBackgroundColor( const Color& rColor )      { m_aBckgrColor = rColor; m_bGraphicDirty = true; }
 
-    BitmapEx                GetBitmap() const;
+    Bitmap                  GetBitmap() const;
     const Color&            GetBackgroundColor() const  { return m_aBckgrColor; }
 };
 

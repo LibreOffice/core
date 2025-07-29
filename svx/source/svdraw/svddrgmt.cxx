@@ -257,7 +257,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
 
             aRetval = drawinglayer::primitive2d::Primitive2DContainer {
                     new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
-                        drawinglayer::primitive2d::createDefaultCross_3x3(aColor))
+                        BitmapEx(drawinglayer::primitive2d::createDefaultCross_3x3(aColor)))
             };
         }
         else

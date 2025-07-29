@@ -50,14 +50,14 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param nStride
     The number of bytes in a scanline, must be >= (width * bitcount / 8)
 */
-BitmapEx VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
+Bitmap VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
                                       sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride,
                                       sal_Int8 nBitsPerPixel,
                                       bool bReversColors = false, bool bReverseAlpha = false);
 
 void VCL_DLLPUBLIC fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx);
 
-BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
+Bitmap VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 
 #if ENABLE_CAIRO_CANVAS
 VCL_DLLPUBLIC BitmapEx* CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);

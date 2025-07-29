@@ -129,7 +129,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param bReversColors
     In case the endianness of pData is wrong, you could reverse colors
 */
-BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight,
+Bitmap CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight,
                         sal_Int32 nStride, sal_Int8 nBitCount,
                         bool bReversColors, bool bReverseAlpha)
 {
@@ -159,15 +159,28 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
     BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
     if( !pWrite )
-        return BitmapEx();
-    std::optional<AlphaMask> pAlphaMask;
-    BitmapScopedWriteAccess xMaskAcc;
+        return Bitmap();
     if (nBitCount == 32)
     {
-        pAlphaMask.emplace( Size(nWidth, nHeight) );
-        xMaskAcc = *pAlphaMask;
+        for( tools::Long y = 0; y < nHeight; ++y )
+        {
+            sal_uInt8 const *p = pData + (y * nStride);
+            Scanline pScanline = pWrite->GetScanline(y);
+            for (tools::Long x = 0; x < nWidth; ++x)
+            {
+                // FIXME this parameter is badly named
+                const sal_uInt8 nAlphaValue = bReverseAlpha ? p[3] : 0xff - p[3];
+                BitmapColor col;
+                if ( bReversColors )
+                    col = BitmapColor( ColorAlpha, p[2], p[1], p[0], nAlphaValue );
+                else
+                    col = BitmapColor( ColorAlpha, p[0], p[1], p[2], nAlphaValue );
+                pWrite->SetPixelOnData(pScanline, x, col);
+                p += 4;
+            }
+        }
     }
-    if (nBitCount == 1)
+    else if (nBitCount == 1)
     {
         for( tools::Long y = 0; y < nHeight; ++y )
         {
@@ -199,33 +212,17 @@ BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHei
                 pWrite->SetPixelOnData(pScanline, x, col);
                 p += nBitCount/8;
             }
-            if (nBitCount == 32)
-            {
-                p = pData + (y * nStride) + 3;
-                Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
-                for (tools::Long x = 0; x < nWidth; ++x)
-                {
-                    // FIXME this parameter is badly named
-                    const sal_uInt8 nValue = bReverseAlpha ? *p : 0xff - *p;
-                    xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(nValue));
-                    p += 4;
-                }
-            }
         }
     }
     // Avoid further bitmap use with unfinished write access
     pWrite.reset();
-    xMaskAcc.reset();
-    if (nBitCount == 32)
-        return BitmapEx(aBmp, *pAlphaMask);
-    else
-        return BitmapEx(aBmp);
+    return aBmp;
 }
 
 /** Copy block of image data into the bitmap.
     Assumes that the Bitmap has been constructed with the desired size.
 */
-BitmapEx CreateFromData( RawBitmap&& rawBitmap )
+Bitmap CreateFromData( RawBitmap&& rawBitmap )
 {
     auto nBitCount = rawBitmap.GetBitCount();
     assert( nBitCount == 24 || nBitCount == 32);
@@ -244,47 +241,42 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     BitmapScopedWriteAccess pWrite(aBmp);
     assert(pWrite.get());
     if( !pWrite )
-        return BitmapEx();
-    std::optional<AlphaMask> pAlphaMask;
-    BitmapScopedWriteAccess xMaskAcc;
-    if (nBitCount == 32)
-    {
-        pAlphaMask.emplace( rawBitmap.maSize );
-        xMaskAcc = *pAlphaMask;
-    }
+        return Bitmap();
 
     auto nHeight = rawBitmap.maSize.getHeight();
     auto nWidth = rawBitmap.maSize.getWidth();
     auto nStride = nWidth * nBitCount / 8;
-    for( tools::Long y = 0; y < nHeight; ++y )
+    if (nBitCount == 32)
     {
-        sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nStride);
-        Scanline pScanline = pWrite->GetScanline(y);
-        for (tools::Long x = 0; x < nWidth; ++x)
+        for( tools::Long y = 0; y < nHeight; ++y )
         {
-            BitmapColor col(p[0], p[1], p[2]);
-            pWrite->SetPixelOnData(pScanline, x, col);
-            p += nBitCount/8;
-        }
-        if (nBitCount == 32)
-        {
-            p = rawBitmap.mpData.get() + (y * nStride) + 3;
-            Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
+            sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nStride);
+            Scanline pScanline = pWrite->GetScanline(y);
             for (tools::Long x = 0; x < nWidth; ++x)
             {
-                xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                BitmapColor col(ColorAlpha, p[0], p[1], p[2], p[3]);
+                pWrite->SetPixelOnData(pScanline, x, col);
                 p += 4;
             }
         }
     }
-
-    xMaskAcc.reset();
+    else
+    {
+        for( tools::Long y = 0; y < nHeight; ++y )
+        {
+            sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nStride);
+            Scanline pScanline = pWrite->GetScanline(y);
+            for (tools::Long x = 0; x < nWidth; ++x)
+            {
+                BitmapColor col(p[0], p[1], p[2]);
+                pWrite->SetPixelOnData(pScanline, x, col);
+                p += nBitCount/8;
+            }
+        }
+    }
     pWrite.reset();
 
-    if (nBitCount == 32)
-        return BitmapEx(aBmp, *pAlphaMask);
-    else
-        return BitmapEx(aBmp);
+    return aBmp;
 }
 
 void fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx)

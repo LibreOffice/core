@@ -374,7 +374,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    SAL_DLLPRIVATE bool Rotate( Degree10 nAngle10, const Color& rFillColor );
+    bool Rotate( Degree10 nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 

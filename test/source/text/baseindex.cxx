@@ -24,7 +24,7 @@
 
 namespace
 {
-BitmapEx createExampleBitmap()
+Bitmap createExampleBitmap()
 {
     vcl::bitmap::RawBitmap aRawBitmap(Size(4, 4), 24);
     aRawBitmap.SetPixel(0, 0, COL_LIGHTBLUE);
@@ -36,7 +36,7 @@ BitmapEx createExampleBitmap()
 
 void writerFileWithBitmap(OUString const& rURL)
 {
-    BitmapEx aBitmapEx = createExampleBitmap();
+    Bitmap aBitmapEx = createExampleBitmap();
     SvFileStream aFileStream(rURL, StreamMode::READ | StreamMode::WRITE);
     vcl::PngImageWriter aWriter(aFileStream);
     aWriter.write(aBitmapEx);

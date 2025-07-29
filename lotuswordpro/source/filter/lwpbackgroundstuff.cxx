@@ -114,7 +114,7 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     GetPattern(m_nID, aPttnArray);
 
     // create bitmap object from the pattern array
-    BitmapEx aBmp = vcl::bitmap::CreateFromData(aPttnArray, 8, 8, 1, /*nBitsPerPixel*/ 1);
+    Bitmap aBmp = vcl::bitmap::CreateFromData(aPttnArray, 8, 8, 1, /*nBitsPerPixel*/ 1);
 
     // create XOBitmap object from bitmap object
     XOBitmap aXOBitmap(aBmp);
@@ -145,7 +145,7 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     // transfer image data from XOBitmap->SvStream->BYTE-Array
     SvMemoryStream aPicMemStream;
     aXOBitmap.Array2Bitmap();
-    WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream);
+    WriteDIB(BitmapEx(aXOBitmap.GetBitmap()), aPicMemStream);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
     std::unique_ptr<sal_uInt8[]> pImageBuff(new sal_uInt8[nSize]);
     memcpy(pImageBuff.get(), aPicMemStream.GetData(), nSize);

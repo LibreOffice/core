@@ -184,8 +184,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
             {
                 if (SUCCEEDED(pBuffer->Lock(&pBitmapData, nullptr, &cbBitmapData)) && cbBitmapData)
                 {
-                    BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBitmapData, mnFrameWidth, mnFrameHeight, mnFrameWidth * 4, /*nBitsPerPixel*/32, true);
-                    Graphic aGraphic(aBitmapEx);
+                    Bitmap aBitmap = vcl::bitmap::CreateFromData(pBitmapData, mnFrameWidth, mnFrameHeight, mnFrameWidth * 4, /*nBitsPerPixel*/32, true);
+                    Graphic aGraphic(aBitmap);
                     xRet = aGraphic.GetXGraphic();
                 }
                 pBuffer->Unlock();

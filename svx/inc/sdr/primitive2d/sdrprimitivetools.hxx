@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 // predefines
 
@@ -33,7 +33,7 @@ class BColor;
 namespace drawinglayer::primitive2d
 {
 // create a 3x3 cross in given color as BitmapEx
-BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
+Bitmap createDefaultCross_3x3(const basegfx::BColor& rBColor);
 } // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

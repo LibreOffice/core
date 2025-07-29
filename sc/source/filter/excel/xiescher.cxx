@@ -750,14 +750,14 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
             Bitmap aBitmap;
             (void)ReadDIB(aBitmap, aMemStrm, false);
 
-            XOBitmap aXOBitmap(( BitmapEx(aBitmap) ));
+            XOBitmap aXOBitmap( aBitmap );
             aXOBitmap.Bitmap2Array();
             if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
                 ::std::swap( aPattColor, aBackColor );
             aXOBitmap.SetPixelColor( aPattColor );
             aXOBitmap.SetBackgroundColor( aBackColor );
             aXOBitmap.Array2Bitmap();
-            aBitmap = aXOBitmap.GetBitmap().GetBitmap();
+            aBitmap = aXOBitmap.GetBitmap();
 
             rSdrObj.SetMergedItem(XFillStyleItem(drawing::FillStyle_BITMAP));
             rSdrObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(BitmapEx(aBitmap))));
