@@ -434,7 +434,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
 
     QWidget* pWidget = qobject_cast<QWidget*>(pObject);
-    if (!pWidget)
+    if (pWidget)
+        setWidgetProperties(*pWidget, rMap);
+    else
         pWidget = pLayoutParentWidget;
 
     if (QSplitter* pSplitterParent = qobject_cast<QSplitter*>(pParentWidget))
@@ -1043,6 +1045,13 @@ void QtBuilder::setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rPro
         if (rKey == u"accepts-tab")
             rTextEdit.setTabChangesFocus(!toBool(rValue));
     }
+}
+
+void QtBuilder::setWidgetProperties(QWidget& rWidget, stringmap& rProps)
+{
+    auto aSensitiveIt = rProps.find(u"sensitive"_ustr);
+    if (aSensitiveIt != rProps.end())
+        rWidget.setEnabled(toBool(aSensitiveIt->second));
 }
 
 QWidget* QtBuilder::windowForObject(QObject* pObject)

@@ -98,6 +98,7 @@ private:
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
+    static void setWidgetProperties(QWidget& rWidget, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
 
     static void applyGridPackingProperties(QWidget* pCurrentChild, QGridLayout& rGrid,
