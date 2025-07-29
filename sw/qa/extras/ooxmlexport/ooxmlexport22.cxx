@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <comphelper/configuration.hxx>
@@ -183,6 +184,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165047_contextualSpacingTopMargin)
     SwTwips nParaTopMargin
         = getXPath(pXmlDoc, "/root/page[2]/body/section/infos/prtBounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(0), nParaTopMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf166553_paraStyleAfterBreak)
+{
+    // Given a distinctively styled paragraph containing a (column) break in the middle of the para
+    createSwDoc("tdf166553_paraStyleAfterBreak.docx");
+    saveAndReload(mpFilter);
+
+    // Note: we emulate this by creating two real paragraphs.
+    // The paragraph style/formatting after the break must be (almost) the same as before the break
+    uno::Reference<text::XTextRange> xPara
+        = getParagraph(2, "A paragraph with a large 75pt top margin, split");
+    CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, getProperty<OUString>(xPara, u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2646), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+
+    xPara.set(getParagraph(3, " by a column break")); // after the break
+    CPPUNIT_ASSERT_EQUAL(u"Subtitle"_ustr, getProperty<OUString>(xPara, u"ParaStyleName"_ustr));
+    // The top margin ONLY applies at the beginning of the paragraph (i.e. before the break)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
+    xPara.set(getRun(getParagraph(3), 1));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
