@@ -215,6 +215,7 @@ struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 struct ScDataAreaExtras;
 enum class ScConditionMode;
+class ScTableStyles;
 
 namespace sc {
 
@@ -438,6 +439,7 @@ private:
 
     std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
     std::unique_ptr<ScMacroManager>       mpMacroMgr;
+    std::unique_ptr<ScTableStyles>        mpTableStyles;
 
     // mutable for lazy construction
     mutable std::unique_ptr< ScFormulaParserPool >
@@ -2757,6 +2759,9 @@ public:
     SCROW GetLOKFreezeRow(SCTAB nTab) const;
     bool  SetLOKFreezeCol(SCCOL nFreezeCol, SCTAB nTab);
     bool  SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab);
+
+    SC_DLLPUBLIC ScTableStyles& GetTableStyles();
+    SC_DLLPUBLIC const ScTableStyles& GetTableStyles() const;
 
 private:
 

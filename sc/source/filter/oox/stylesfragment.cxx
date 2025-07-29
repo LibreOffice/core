@@ -170,6 +170,34 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
     return nullptr;
 }
 
+ContextHandlerRef TableStyleContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( tableStyle ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( tableStyleElement ): return this;
+            }
+        break;
+    }
+    return nullptr;
+}
+
+void TableStyleContext::onStartElement( const AttributeList& rAttribs )
+{
+    sal_Int32 nCurrentElement = getCurrentElement();
+    switch(nCurrentElement)
+    {
+        case XLS_TOKEN(tableStyle):
+            mxTableStyle->setName(rAttribs.getString( XML_name, OUString()));
+        break;
+        case XLS_TOKEN(tableStyleElement):
+            mxTableStyle->importTableStyleElement(rAttribs);
+        break;
+    }
+}
+
 StylesFragment::StylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
 {
@@ -194,6 +222,7 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
                 case XLS_TOKEN( cellXfs ):
                 case XLS_TOKEN( cellStyleXfs ):
                 case XLS_TOKEN( dxfs ):
+                case XLS_TOKEN( tableStyles ):
                 case XLS_TOKEN( cellStyles ):   return this;
             }
         break;
@@ -221,6 +250,9 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
         break;
         case XLS_TOKEN( dxfs ):
             if( nElement == XLS_TOKEN( dxf ) ) return new DxfContext( *this, getStyles().createDxf() );
+        break;
+        case XLS_TOKEN( tableStyles ):
+            if( nElement == XLS_TOKEN( tableStyle ) && rAttribs.getBool(XML_table, true)) return new TableStyleContext( *this, getStyles().createTableStyle() );
         break;
         case XLS_TOKEN( cellStyles ):
             if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );

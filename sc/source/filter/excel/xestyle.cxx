@@ -48,6 +48,7 @@
 #include <xltools.hxx>
 #include <conditio.hxx>
 #include <dbdata.hxx>
+#include <tablestyle.hxx>
 #include <filterentries.hxx>
 #include <export/ExportTools.hxx>
 #include <dpobject.hxx>
@@ -3068,12 +3069,12 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
 
 XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot ),
+    mxFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US )),
     mpKeywordTable( new NfKeywordTable )
 {
     sal_Int32 nDxfId = 0;
     // Special number formatter for conversion.
-    SvNumberFormatterPtr xFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ));
-    xFormatter->FillKeywordTableForExcel( *mpKeywordTable );
+    mxFormatter->FillKeywordTableForExcel( *mpKeywordTable );
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)
@@ -3149,7 +3150,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             continue;
 
                         SfxItemSet& rSet = pStyle->GetItemSet();
-                        fillDxfFrom(rSet, xFormatter);
+                        fillDxfFrom(rSet);
                         nDxfId++;
                     }
 
@@ -3172,7 +3173,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                     continue;
 
                 SfxItemSet& rItemSet = rFormat.pPattern->GetItemSetWritable();
-                fillDxfFrom(rItemSet, xFormatter);
+                fillDxfFrom(rItemSet);
                 maPatternToDxfId.emplace(rFormat.pPattern.get(), nDxfId);
                 nDxfId++;
             }
@@ -3180,7 +3181,14 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     }
 }
 
-void XclExpDxfs::fillDxfFrom(const SfxItemSet& rItemSet, const SvNumberFormatterPtr& xFormatter)
+sal_Int32 XclExpDxfs::fillFromPattern(const ScPatternAttr* pPattern)
+{
+    sal_Int32 nIndex = maDxf.size();
+    fillDxfFrom(pPattern->GetItemSet());
+    return nIndex;
+}
+
+void XclExpDxfs::fillDxfFrom(const SfxItemSet& rItemSet)
 {
     std::unique_ptr<XclExpCellBorder> pBorder(new XclExpCellBorder);
     if (!pBorder->FillFromItemSet(rItemSet, GetPalette(), GetBiff()))
@@ -3205,7 +3213,7 @@ void XclExpDxfs::fillDxfFrom(const SfxItemSet& rItemSet, const SvNumberFormatter
     {
         sal_uInt32 nScNumberFormat = pPoolItem->GetValue();
         sal_Int32 nXclNumberFormat = GetRoot().GetNumFmtBuffer().Insert(nScNumberFormat);
-        pNumberFormat.reset(new XclExpNumFmt(nScNumberFormat, nXclNumberFormat, GetNumberFormatCode(*this, nScNumberFormat, xFormatter.get(), mpKeywordTable.get())));
+        pNumberFormat.reset(new XclExpNumFmt(nScNumberFormat, nXclNumberFormat, GetNumberFormatCode(*this, nScNumberFormat, mxFormatter.get(), mpKeywordTable.get())));
     }
 
     maDxf.push_back(std::make_unique<XclExpDxf>(GetRoot(), std::move(pAlign), std::move(pBorder),
@@ -3341,6 +3349,68 @@ void XclExpDxf::SaveXmlExt( XclExpXmlStream& rStrm )
     rStyleSheet->endElementNS( XML_x14, XML_dxf );
 }
 
+XclExpXmlTableStyle::XclExpXmlTableStyle(const XclExpRoot& rRoot, const ScTableStyle* pTableStyle):
+    XclExpRoot(rRoot),
+    maStyleName(pTableStyle->GetName())
+{
+    XclExpDxfs& rDxfs = GetDxfs();
+    std::map<ScTableStyleElement, const ScPatternAttr*> aTableElements = pTableStyle->GetSetPatterns();
+    for (auto& rElement : aTableElements)
+    {
+        maTableElements.emplace(rElement.first, rDxfs.fillFromPattern(rElement.second));
+    }
+}
+
+const std::map<ScTableStyleElement, const char*> aTableStyleElementToOOXML = { {ScTableStyleElement::WholeTable, "wholeTable"}, {ScTableStyleElement::FirstColumnStripe, "firstColumnStripe"}, {ScTableStyleElement::SecondColumnStripe, "secondColumnStripe"}, {ScTableStyleElement::FirstRowStripe, "firstRowStripe"}, {ScTableStyleElement::SecondRowStripe, "secondRowStripe"}, {ScTableStyleElement::LastColumn, "lastColumn"}, {ScTableStyleElement::FirstColumn, "firstColumn"}, {ScTableStyleElement::HeaderRow, "headerRow"}, {ScTableStyleElement::TotalRow, "totalRow"}, {ScTableStyleElement::FirstHeaderCell, "firstHeaderCell"}, {ScTableStyleElement::LastHeaderCell, "LastHeaderCell"} };
+
+void XclExpXmlTableStyle::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    rStyleSheet->startElement( XML_tableStyle, XML_count, OString::number(maTableElements.size()), XML_name, maStyleName.toUtf8());
+    for (auto& rTableStyleElement : maTableElements)
+    {
+        rStyleSheet->singleElement( XML_tableStyleElement, XML_dxfId, OString::number(rTableStyleElement.second), XML_type, aTableStyleElementToOOXML.find(rTableStyleElement.first)->second);
+    }
+    rStyleSheet->endElement(XML_tableStyle);
+}
+
+XclExpXmlTableStyles::XclExpXmlTableStyles( const XclExpRoot& rRoot):
+    XclExpRoot(rRoot)
+{
+    std::set<OUString> aTableStyleNames;
+
+    const ScDBCollection* pDBCollection = GetDoc().GetDBCollection();
+    const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
+    const ScTableStyles& rTableStyles = GetDoc().GetTableStyles();
+    for (auto itr = rDBs.begin(); itr != rDBs.end(); ++itr)
+    {
+        const ScTableStyleParam* pParam = itr->get()->GetTableStyleInfo();
+        if (pParam && rTableStyles.GetTableStyle(pParam->maStyleName))
+        {
+            aTableStyleNames.insert(pParam->maStyleName);
+        }
+    }
+
+    for (const OUString& aTableStyleName : aTableStyleNames)
+    {
+        const ScTableStyle* pTableStyle = rTableStyles.GetTableStyle(aTableStyleName);
+        maTableStyles.push_back(std::make_unique<XclExpXmlTableStyle>(rRoot, pTableStyle));
+    }
+}
+
+void XclExpXmlTableStyles::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
+    if (maTableStyles.empty())
+        return;
+
+    rStyleSheet->startElement( XML_tableStyles, XML_count, OString::number(maTableStyles.size()) );
+    for (auto& rTableStyleElement : maTableStyles)
+    {
+        rTableStyleElement->SaveXml(rStrm);
+    }
+    rStyleSheet->endElement( XML_tableStyles );
+}
 
 XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot )
@@ -3363,6 +3433,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_TABLESTYLES )->SaveXml( rStrm );
     CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
 
     aStyleSheet->endElement( XML_styleSheet );

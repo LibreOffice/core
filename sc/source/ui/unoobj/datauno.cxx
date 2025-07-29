@@ -128,6 +128,11 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDBRangePropertyMap()
         { SC_UNONAME_USEFLTCRT,0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_TOTALSROW,0,  cppu::UnoType<bool>::get(),                      0, 0},
         { SC_UNONAME_CONTHDR  ,0,  cppu::UnoType<bool>::get(),                      0, 0},
+        { SC_UNONAME_TABLE_STYLENAME,0,  cppu::UnoType<OUString>::get(),            0, 0},
+        { SC_UNONAME_ROW_STRIPES,0,  cppu::UnoType<bool>::get(),                    0, 0},
+        { SC_UNONAME_COL_STRIPES,0,  cppu::UnoType<bool>::get(),                    0, 0},
+        { SC_UNONAME_FIRST_COL,0,  cppu::UnoType<bool>::get(),                      0, 0},
+        { SC_UNONAME_LAST_COL,0,  cppu::UnoType<bool>::get(),                       0, 0},
     };
     return aDBRangePropertyMap_Impl;
 }
@@ -1984,6 +1989,40 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         aValue >>= aStrVal;
         aNewData.SetTableType(aStrVal);
     }
+    else if (aPropertyName == SC_UNONAME_TABLE_STYLENAME)
+    {
+        OUString aStyleName;
+        aValue >>= aStyleName;
+        ScTableStyleParam aParam;
+        const ScTableStyleParam* pOldParam = pData->GetTableStyleInfo();
+        if (pOldParam)
+        {
+            aParam = *pOldParam;
+        }
+        aParam.maStyleName = aStyleName;
+
+        aNewData.SetTableStyleInfo(aParam);
+    }
+    else if (aPropertyName == SC_UNONAME_ROW_STRIPES || aPropertyName == SC_UNONAME_COL_STRIPES || aPropertyName == SC_UNONAME_FIRST_COL || aPropertyName == SC_UNONAME_LAST_COL)
+    {
+        bool bVal = ScUnoHelpFunctions::GetBoolFromAny(aValue);
+        ScTableStyleParam aParam;
+        const ScTableStyleParam* pOldParam = pData->GetTableStyleInfo();
+        if (pOldParam)
+        {
+            aParam = *pOldParam;
+        }
+        if (aPropertyName == SC_UNONAME_ROW_STRIPES)
+            aParam.mbRowStripes = bVal;
+        else if (aPropertyName == SC_UNONAME_COL_STRIPES)
+            aParam.mbColumnStripes = bVal;
+        else if (aPropertyName == SC_UNONAME_FIRST_COL)
+            aParam.mbFirstColumn = bVal;
+        else if (aPropertyName == SC_UNONAME_LAST_COL)
+            aParam.mbLastColumn = bVal;
+
+        aNewData.SetTableStyleInfo(aParam);
+    }
     else
         bDo = false;
 
@@ -2075,6 +2114,30 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
             OUString sType(GetDBData_Impl()->GetTableType());
 
             aRet <<= sType;
+        }
+        else if (aPropertyName == SC_UNONAME_TABLE_STYLENAME)
+        {
+            const ScTableStyleParam* pTableStyleInfo = GetDBData_Impl()->GetTableStyleInfo();
+            if (pTableStyleInfo)
+                aRet <<= pTableStyleInfo->maStyleName;
+            else
+                aRet <<= OUString();
+
+        }
+        else if (aPropertyName == SC_UNONAME_ROW_STRIPES || aPropertyName == SC_UNONAME_COL_STRIPES || aPropertyName == SC_UNONAME_FIRST_COL || aPropertyName == SC_UNONAME_LAST_COL)
+        {
+            const ScTableStyleParam* pTableStyleInfo = GetDBData_Impl()->GetTableStyleInfo();
+            bool bVal = false;
+            if (aPropertyName == SC_UNONAME_ROW_STRIPES)
+                bVal = pTableStyleInfo->mbRowStripes;
+            else if (aPropertyName == SC_UNONAME_COL_STRIPES)
+                bVal = pTableStyleInfo->mbColumnStripes;
+            else if (aPropertyName == SC_UNONAME_FIRST_COL)
+                bVal = pTableStyleInfo->mbFirstColumn;
+            else if (aPropertyName == SC_UNONAME_LAST_COL)
+                bVal = pTableStyleInfo->mbLastColumn;
+
+            aRet <<= bVal;
         }
     }
     return aRet;
