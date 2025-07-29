@@ -39,6 +39,14 @@ namespace oox::xls {
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
+TableStyleInfo::TableStyleInfo():
+    mbShowFirstColumn(true),
+    mbShowLastColumn(true),
+    mbShowRowStripes(true),
+    mbShowColStripes(true)
+{
+}
+
 TableModel::TableModel() :
     mnId( -1 ),
     mnType( XML_worksheet ),
@@ -83,6 +91,18 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
     AddressConverter::convertToCellRangeUnchecked( maModel.maRange, aBinRange, nSheet );
     static const sal_Int32 spnTypes[] = { XML_worksheet, XML_TOKEN_INVALID, XML_TOKEN_INVALID, XML_queryTable };
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
+}
+
+void Table::importTableStyleInfo(const AttributeList& rAttribs)
+{
+    TableStyleInfo aInfo;
+    aInfo.maStyleName = rAttribs.getString(XML_name, OUString());
+    aInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, true);
+    aInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, true);
+    aInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, true);
+    aInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, true);
+
+    maStyleInfo = aInfo;
 }
 
 void Table::finalizeImport()
@@ -146,6 +166,15 @@ void Table::finalizeImport()
         // get formula token index of the database range
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
+
+        if(maStyleInfo && maStyleInfo->maStyleName)
+        {
+            aPropSet.setProperty( PROP_TableStyleName, css::uno::Any(*maStyleInfo->maStyleName));
+            aPropSet.setProperty( PROP_UseRowStripes, maStyleInfo->mbShowRowStripes);
+            aPropSet.setProperty( PROP_UseColStripes, maStyleInfo->mbShowColStripes);
+            aPropSet.setProperty( PROP_UseFirstColumnFormatting, maStyleInfo->mbShowFirstColumn);
+            aPropSet.setProperty( PROP_UseLastColumnFormatting, maStyleInfo->mbShowLastColumn);
+        }
     }
     catch( Exception& )
     {

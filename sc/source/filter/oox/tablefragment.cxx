@@ -53,6 +53,8 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
                     return new AutoFilterContext( *this, mrTable.createAutoFilter() );
                 case XLS_TOKEN( tableColumns ):
                     return new TableColumnsContext( *this, mrTable.createTableColumns() );
+                case XLS_TOKEN( tableStyleInfo ):
+                    mrTable.importTableStyleInfo(rAttribs);
             }
         break;
     }

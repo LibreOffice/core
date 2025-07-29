@@ -125,6 +125,21 @@ protected:
     virtual void        finalizeImport() override;
 };
 
+class TableStyleContext : public WorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    explicit TableStyleContext( ParentType& rParent, const TableStyleRef& rxTableStyle ) :
+                            WorkbookContextBase( rParent ), mxTableStyle( rxTableStyle ) {}
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+    virtual void onStartElement( const AttributeList& rAttribs ) override;
+
+private:
+    TableStyleRef mxTableStyle;
+};
+
 } // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
