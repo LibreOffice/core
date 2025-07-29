@@ -3887,6 +3887,9 @@ void DomainMapper::lcl_startParagraphGroup()
 {
     if (m_pImpl->hasTableManager())
         m_pImpl->getTableManager().startParagraphGroup();
+
+    const bool bIsSplitPara = m_pImpl->m_bIsSplitPara; // preserve flag reset by PushProperties
+
     /*
      * Add new para properties only if paragraph is not split
      * or the top context is not of paragraph properties
@@ -3902,10 +3905,14 @@ void DomainMapper::lcl_startParagraphGroup()
     {
         if (m_pImpl->GetTopContext())
         {
-            const OUString sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
             auto pContext = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContext().get());
-            m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sDefaultParaStyle ) );
-            m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );
+
+            if (!bIsSplitPara)
+            {
+                const OUString sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_STYLE_NAME, uno::Any(sDefaultParaStyle));
+                m_pImpl->SetCurrentParaStyleName(sDefaultParaStyle);
+            }
 
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
             {
