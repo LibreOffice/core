@@ -46,8 +46,7 @@ namespace vcl_cairocanvas
                                   public ::vcl_canvas::GraphicDevice,
                                   public ::vcl_canvas::Updatable,
                                   public ::vcl_canvas::SpriteSurface,
-                                  public SurfaceProvider,
-                                  public css::awt::XWindowListener
+                                  public SurfaceProvider
     {
     protected:
         mutable ::osl::Mutex m_aMutex;
@@ -90,13 +89,13 @@ namespace vcl_cairocanvas
                       const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void initialize();
-        virtual void SAL_CALL acquire() override{}
+        /* virtual void SAL_CALL acquire() override{}
         virtual void SAL_CALL release() override{}
         virtual ::css::uno::Any SAL_CALL queryInterface( const ::css::uno::Type& aType ) override
         {
             return ::css::uno::Any();
         }
-        virtual void SAL_CALL disposing( const ::css::lang::EventObject& Source ) override{}
+        virtual void SAL_CALL disposing( const ::css::lang::EventObject& Source ) override{} */
         /// Dispose all internal references
         // virtual void disposeThis() override;
 

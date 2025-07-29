@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "com/sun/star/awt/XWindowListener.hdl"
+#include "com/sun/star/uno/Reference.h"
 #include <com/sun/star/awt/XWindow2.hpp>
 
 #include <vcl_canvas/canvastools.hxx>
@@ -75,6 +77,47 @@ namespace vcl_canvas
               class UnambiguousBase = css::uno::XInterface > class BufferedGraphicDeviceBase :
         public GraphicDeviceBase< Base, DeviceHelper, Mutex, UnambiguousBase >
     {
+    private:
+        class WindowListenerBridge : public ::cppu::WeakImplHelper<css::awt::XWindowListener>
+        {
+        private:
+            typedef BufferedGraphicDeviceBase<Base, DeviceHelper, Mutex, UnambiguousBase>
+                BufferedGraphicDeviceBase;
+            BufferedGraphicDeviceBase& mrBufferedGraphicDeviceBase;
+            // XWindowListener
+            virtual void disposing(const css::lang::EventObject& Source) override
+            {
+                mrBufferedGraphicDeviceBase.disposeEventSource(Source);
+            }
+
+            virtual void SAL_CALL windowResized(const css::awt::WindowEvent& e) override
+            {
+                mrBufferedGraphicDeviceBase.windowResized(e);
+            }
+
+            virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& e) override
+            {
+                mrBufferedGraphicDeviceBase.windowMoved(e);
+            }
+
+            virtual void SAL_CALL windowShown(const css::lang::EventObject& e) override
+            {
+                mrBufferedGraphicDeviceBase.windowShown(e);
+            }
+
+            virtual void SAL_CALL windowHidden(const css::lang::EventObject& e) override
+            {
+                mrBufferedGraphicDeviceBase.windowHidden(e);
+            }
+
+        public:
+            WindowListenerBridge(BufferedGraphicDeviceBase& rBufferedGraphicDeviceBase)
+                : mrBufferedGraphicDeviceBase(rBufferedGraphicDeviceBase)
+            {
+            }
+        };
+        css::uno::Reference<css::awt::XWindowListener> mxWindowListener;
+
     public:
         typedef GraphicDeviceBase< Base, DeviceHelper, Mutex, UnambiguousBase > BaseType;
         typedef Mutex MutexType;
@@ -86,6 +129,7 @@ namespace vcl_canvas
             BaseType::maPropHelper.addProperties(
                 PropertySetHelper::MakeMap("Window",
                    [this] () { return this->getXWindow(); }));
+            mxWindowListener = new WindowListenerBridge(*this);
         }
 
         // XGraphicDevice
@@ -135,7 +179,7 @@ namespace vcl_canvas
         void setWindow( const css::uno::Reference< css::awt::XWindow2 >& rWindow )
         {
             if( mxWindow.is() )
-                mxWindow->removeWindowListener( this );
+                mxWindow->removeWindowListener( mxWindowListener );
 
             mxWindow = rWindow;
 
@@ -148,7 +192,7 @@ namespace vcl_canvas
                         css::uno::UNO_QUERY ).is();
 
                 maBounds = transformBounds( mxWindow->getPosSize() );
-                mxWindow->addWindowListener( this );
+                mxWindow->addWindowListener( mxWindowListener );
             }
         }
 
@@ -204,34 +248,33 @@ namespace vcl_canvas
         }
 
         // XWindowListener
-        /* virtual void disposeEventSource( const css::lang::EventObject& Source ) override
+        virtual void disposeEventSource( const css::lang::EventObject& Source )
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             if( Source.Source == mxWindow )
                 mxWindow.clear();
 
-            BaseType::disposeEventSource(Source);
-        } */
+        }
 
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e )
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e )
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& ) override
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& )
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             mbIsVisible = true;
         }
 
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& ) override
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& )
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
