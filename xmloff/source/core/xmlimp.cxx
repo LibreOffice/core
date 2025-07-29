@@ -589,8 +589,9 @@ void SAL_CALL SvXMLImport::startDocument()
         {
             // #99870# Import... instead of Export...
             mxGraphicStorageHandler.set(
-                xFactory->createInstance(u"com.sun.star.document.ImportGraphicStorageHandler"_ustr),
-                UNO_QUERY);
+                GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
+                u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, uno::Sequence<uno::Any>(), GetComponentContext()),
+                uno::UNO_QUERY );
             mpImpl->mbOwnGraphicResolver = mxGraphicStorageHandler.is();
         }
 

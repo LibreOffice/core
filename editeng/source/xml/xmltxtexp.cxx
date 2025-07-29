@@ -265,7 +265,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ESelection& rSel,
     const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
 :   SvXMLExport( xContext, u""_ustr, /*rFileName*/u""_ustr, xHandler, static_cast<frame::XModel*>(new SvxSimpleUnoModel()), FieldUnit::CM,
-    SvXMLExportFlags::OASIS  |  SvXMLExportFlags::AUTOSTYLES  |  SvXMLExportFlags::CONTENT )
+    SvXMLExportFlags::OASIS  |  SvXMLExportFlags::AUTOSTYLES  |  SvXMLExportFlags::CONTENT  |  SvXMLExportFlags::EMBEDDED )
 {
     SvxEditEngineSource aEditSource( pEditEngine );
 
