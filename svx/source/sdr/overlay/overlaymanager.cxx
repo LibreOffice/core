@@ -49,10 +49,8 @@ namespace sdr::overlay
             // taken from the system High Contrast settings
             const DrawModeFlags nOriginalDrawMode(rDestinationDevice.GetDrawMode());
 
-            // create processor
-            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                rDestinationDevice,
-                getCurrentViewInformation2D()));
+            // prepare ViewInformation2D
+            drawinglayer::geometry::ViewInformation2D aViewInformation2D(getCurrentViewInformation2D());
 
             for(const auto& rpOverlayObject : maOverlayObjects)
             {
@@ -67,24 +65,28 @@ namespace sdr::overlay
                     {
                         if(rRange.overlaps(rCandidate.getBaseRange()))
                         {
-                            const bool bCurrentAA(pProcessor->getViewInformation2D().getUseAntiAliasing());
+                            const bool bCurrentAA(aViewInformation2D.getUseAntiAliasing());
                             const bool bWantedAA(rCandidate.allowsAntiAliase());
 
                             if (bCurrentAA != bWantedAA)
                             {
                                 // set AntiAliasing at Processor2D
-                                drawinglayer::geometry::ViewInformation2D aViewInformation2D(pProcessor->getViewInformation2D());
                                 aViewInformation2D.setUseAntiAliasing(bWantedAA);
-                                pProcessor->setViewInformation2D(aViewInformation2D);
                             }
 
-                            const bool bIsHighContrastSelection = rCandidate.isHighContrastSelection();
+                            const bool bIsHighContrastSelection(rCandidate.isHighContrastSelection());
                             if (bIsHighContrastSelection)
                             {
                                 // overrule DrawMode settings
                                 rDestinationDevice.SetDrawMode(nOriginalDrawMode | DrawModeFlags::SettingsForSelection);
                             }
 
+                            // create processor
+                            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                                rDestinationDevice,
+                                aViewInformation2D));
+
+                            // render primitive
                             pProcessor->process(aSequence);
 
                             if (bIsHighContrastSelection)
@@ -96,9 +98,6 @@ namespace sdr::overlay
                     }
                 }
             }
-
-            // destroy Processor2D and restore AA settings
-            pProcessor.reset();
         }
 
         void OverlayManager::ImpStripeDefinitionChanged()

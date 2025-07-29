@@ -964,11 +964,12 @@ void CairoPixelProcessor2D::updateViewInformation(
                                                                           : CAIRO_ANTIALIAS_NONE);
 }
 
-CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                             cairo_surface_t* pTarget)
+CairoPixelProcessor2D::CairoPixelProcessor2D(
+    const basegfx::BColorModifierStack& rBColorModifierStack, const DrawModeFlags& rDrawModeFlags,
+    const geometry::ViewInformation2D& rViewInformation, cairo_surface_t* pTarget)
     : BaseProcessor2D(rViewInformation)
     , mpTargetOutputDevice(nullptr)
-    , maBColorModifierStack()
+    , maBColorModifierStack(rBColorModifierStack)
     , mpOwnedSurface(nullptr)
     , mpRT(nullptr)
     , mbRenderSimpleTextDirect(
@@ -976,6 +977,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
+    , maDrawModeFlags(rDrawModeFlags)
     , mbCairoCoordinateLimitWorkaroundActive(false)
 {
     // no target, nothing to initialize
@@ -1012,6 +1014,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
+    , maDrawModeFlags(DrawModeFlags::Default)
     , mbCairoCoordinateLimitWorkaroundActive(false)
 {
     if (nWidthPixel <= 0 || nHeightPixel <= 0)
@@ -1054,6 +1057,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(OutputDevice& rOutputDevice,
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
+    , maDrawModeFlags(rOutputDevice.GetDrawMode())
     , mbCairoCoordinateLimitWorkaroundActive(false)
 {
     SystemGraphicsData aData(mpTargetOutputDevice->GetSystemGfxData());
@@ -1278,7 +1282,38 @@ BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
 void CairoPixelProcessor2D::processBitmapPrimitive2D(
     const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
+    const bool bDrawModeFlagsUsed(maDrawModeFlags & BITMAP);
+
+    if (bDrawModeFlagsUsed)
+    {
+        // if DrawModeFlags for Bitmap are used, encapsulate with
+        // corresponding BColorModifier
+        if (maDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (maDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
+    }
+
     paintBitmapAlpha(rBitmapCandidate.getBitmap(), rBitmapCandidate.getTransform());
+
+    if (bDrawModeFlagsUsed)
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
@@ -1464,8 +1499,8 @@ void CairoPixelProcessor2D::processPointArrayPrimitive2D(
     cairo_save(mpRT);
 
     // determine & set color
-    const basegfx::BColor aPointColor(
-        maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
+    basegfx::BColor aPointColor(getLineColor(rPointArrayCandidate.getRGBColor()));
+    aPointColor = maBColorModifierStack.getModifiedColor(aPointColor);
     cairo_set_source_rgb(mpRT, aPointColor.getRed(), aPointColor.getGreen(), aPointColor.getBlue());
 
     // To really paint a single pixel I found nothing better than
@@ -1502,8 +1537,8 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
     cairo_save(mpRT);
 
     // determine & set color
-    const basegfx::BColor aHairlineColor(
-        maBColorModifierStack.getModifiedColor(rPolygonHairlinePrimitive2D.getBColor()));
+    basegfx::BColor aHairlineColor(getLineColor(rPolygonHairlinePrimitive2D.getBColor()));
+    aHairlineColor = maBColorModifierStack.getModifiedColor(aHairlineColor);
     cairo_set_source_rgb(mpRT, aHairlineColor.getRed(), aHairlineColor.getGreen(),
                          aHairlineColor.getBlue());
 
@@ -1551,8 +1586,12 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
 void CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D)
 {
-    paintPolyPolygonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(),
-                         rPolyPolygonColorPrimitive2D.getBColor());
+    if (maDrawModeFlags & DrawModeFlags::NoFill)
+        // NoFill wanted, done
+        return;
+
+    const basegfx::BColor aFillColor(getFillColor(rPolyPolygonColorPrimitive2D.getBColor()));
+    paintPolyPolygonRGBA(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), aFillColor);
 }
 
 void CairoPixelProcessor2D::paintPolyPolygonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
@@ -1669,7 +1708,8 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
     const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pMask(cairo_surface_create_similar_image(pTarget, CAIRO_FORMAT_ARGB32,
                                                               fContainedWidth, fContainedHeight));
-    CairoPixelProcessor2D aMaskRenderer(aViewInformation2D, pMask);
+    CairoPixelProcessor2D aMaskRenderer(getBColorModifierStack(), maDrawModeFlags,
+                                        aViewInformation2D, pMask);
     aMaskRenderer.process(rTransCandidate.getTransparence());
 
     // convert mask to something cairo can use
@@ -1678,11 +1718,8 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
     // draw content to temporary surface
     cairo_surface_t* pContent(cairo_surface_create_similar(
         pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
-    CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
-
-    // important for content rendering: need to take over the ColorModifierStack
-    aContent.setBColorModifierStack(getBColorModifierStack());
-
+    CairoPixelProcessor2D aContent(getBColorModifierStack(), maDrawModeFlags, aViewInformation2D,
+                                   pContent);
     aContent.process(rTransCandidate.getChildren());
 
     // munge the temporary surfaces to our target surface
@@ -1740,11 +1777,8 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
     const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pContent(cairo_surface_create_similar_image(
         pTarget, CAIRO_FORMAT_ARGB32, fContainedWidth, fContainedHeight));
-    CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
-
-    // take over evtl. used ColorModifierStack for content
-    aContent.setBColorModifierStack(getBColorModifierStack());
-
+    CairoPixelProcessor2D aContent(getBColorModifierStack(), maDrawModeFlags, aViewInformation2D,
+                                   pContent);
     aContent.process(rInvertCandidate.getChildren());
     cairo_surface_flush(pContent);
 
@@ -2058,11 +2092,8 @@ void CairoPixelProcessor2D::processUnifiedTransparencePrimitive2D(
     const double fContainedHeight(aVisibleRange.getHeight());
     cairo_surface_t* pContent(cairo_surface_create_similar(
         pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
-    CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
-
-    // take over evtl. used ColorModifierStack for content
-    aContent.setBColorModifierStack(getBColorModifierStack());
-
+    CairoPixelProcessor2D aContent(getBColorModifierStack(), maDrawModeFlags, aViewInformation2D,
+                                   pContent);
     aContent.process(rTransCandidate.getChildren());
 
     // paint temporary surface to target with fixed transparence
@@ -2094,10 +2125,55 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
         return;
     }
 
+    // prepare Marker's Bitmap
+    BitmapEx aBitmapEx(rMarkerArrayCandidate.getMarker());
+
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
+    if (maDrawModeFlags & BITMAP)
+    {
+        if (maDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (maDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
+
+        // need to apply ColorModifier to Bitmap data
+        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+
+        if (aBitmapEx.IsEmpty())
+        {
+            // color gets completely replaced, get it
+            const basegfx::BColor aReplacementColor(
+                maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+            Bitmap aBitmap(rMarker.GetSizePixel(), vcl::PixelFormat::N24_BPP);
+            aBitmap.Erase(Color(aReplacementColor));
+
+            if (rMarker.IsAlpha())
+                aBitmapEx = BitmapEx(aBitmap, rMarker.GetAlphaMask());
+            else
+                aBitmapEx = BitmapEx(aBitmap);
+        }
+
+        maBColorModifierStack.pop();
+    }
+
     // access or create cairo bitmap data
-    const BitmapEx& rBitmapEx(rMarkerArrayCandidate.getMarker());
     std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(
-        getOrCreateCairoSurfaceHelper(rBitmapEx));
+        getOrCreateCairoSurfaceHelper(aBitmapEx));
     if (!aCairoSurfaceHelper)
     {
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
@@ -2145,6 +2221,10 @@ void CairoPixelProcessor2D::processBackgroundColorPrimitive2D(
         || rBackgroundColorCandidate.getTransparency() >= 1.0)
         return;
 
+    if (maDrawModeFlags & DrawModeFlags::NoFill)
+        // NoFill wanted, done
+        return;
+
     if (!getViewInformation2D().getViewport().isEmpty())
     {
         // we have a Viewport set with limitations, render as needed/defined
@@ -2156,8 +2236,8 @@ void CairoPixelProcessor2D::processBackgroundColorPrimitive2D(
 
     // no Viewport set, render surface completely
     cairo_save(mpRT);
-    const basegfx::BColor aFillColor(
-        maBColorModifierStack.getModifiedColor(rBackgroundColorCandidate.getBColor()));
+    basegfx::BColor aFillColor(getFillColor(rBackgroundColorCandidate.getBColor()));
+    aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
     cairo_set_source_rgba(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue(),
                           1.0 - rBackgroundColorCandidate.getTransparency());
     // to also copy alpha part of color, see cairo docu. Will be reset by restore below
@@ -2268,7 +2348,8 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
     cairo_set_line_cap(mpRT, eCairoLineCap);
 
     // determine & set color
-    basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rLineAttribute.getColor()));
+    basegfx::BColor aLineColor(getLineColor(rLineAttribute.getColor()));
+    aLineColor = maBColorModifierStack.getModifiedColor(aLineColor);
     if (bRenderDecomposeForCompareInRed)
         aLineColor.setRed(0.5);
     cairo_set_source_rgb(mpRT, aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
@@ -2365,8 +2446,8 @@ void CairoPixelProcessor2D::processLineRectanglePrimitive2D(
     aRange.transform(getViewInformation2D().getObjectToViewTransformation());
     cairo_identity_matrix(mpRT);
 
-    const basegfx::BColor aHairlineColor(
-        maBColorModifierStack.getModifiedColor(rLineRectanglePrimitive2D.getBColor()));
+    basegfx::BColor aHairlineColor(getLineColor(rLineRectanglePrimitive2D.getBColor()));
+    aHairlineColor = maBColorModifierStack.getModifiedColor(aHairlineColor);
     cairo_set_source_rgb(mpRT, aHairlineColor.getRed(), aHairlineColor.getGreen(),
                          aHairlineColor.getBlue());
 
@@ -2391,6 +2472,10 @@ void CairoPixelProcessor2D::processFilledRectanglePrimitive2D(
         return;
     }
 
+    if (maDrawModeFlags & DrawModeFlags::NoFill)
+        // NoFill wanted, done
+        return;
+
     cairo_save(mpRT);
 
     // work in view coordinates
@@ -2398,8 +2483,8 @@ void CairoPixelProcessor2D::processFilledRectanglePrimitive2D(
     aRange.transform(getViewInformation2D().getObjectToViewTransformation());
     cairo_identity_matrix(mpRT);
 
-    const basegfx::BColor aFillColor(
-        maBColorModifierStack.getModifiedColor(rFilledRectanglePrimitive2D.getBColor()));
+    basegfx::BColor aFillColor(getFillColor(rFilledRectanglePrimitive2D.getBColor()));
+    aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
     cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
 
     cairo_rectangle(mpRT, aRange.getMinX(), aRange.getMinY(), aRange.getWidth(),
@@ -2414,8 +2499,8 @@ void CairoPixelProcessor2D::processSingleLinePrimitive2D(
 {
     cairo_save(mpRT);
 
-    const basegfx::BColor aLineColor(
-        maBColorModifierStack.getModifiedColor(rSingleLinePrimitive2D.getBColor()));
+    basegfx::BColor aLineColor(getLineColor(rSingleLinePrimitive2D.getBColor()));
+    aLineColor = maBColorModifierStack.getModifiedColor(aLineColor);
     cairo_set_source_rgb(mpRT, aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
 
     const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
@@ -2460,38 +2545,70 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     if (aPreparedBitmap.IsEmpty())
     {
         // output needed and Bitmap data empty, so no bitmap data based
-        // tiled rendering is suggested. Use fallback for paint (decomposition)
+        // tiled rendering is suggested. Use fallback for paint
+        // and decomposition
         process(rFillGraphicPrimitive2D);
         return;
     }
 
-    // render tiled using the prepared Bitmap data
-    if (maBColorModifierStack.count())
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
+    basegfx::BColor aReplacementColor(0, 0, 0);
+    bool bTemporaryGrayColorModifier(false);
+    if (maDrawModeFlags & BITMAP)
     {
-        // need to apply ColorModifier to Bitmap data
+        if (maDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            // aReplacementColor already set
+            aPreparedBitmap.SetEmpty();
+        }
+        else if (maDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            aReplacementColor = basegfx::BColor(1, 1, 1);
+            aPreparedBitmap.SetEmpty();
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            bTemporaryGrayColorModifier = true;
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
+    }
+
+    if (!aPreparedBitmap.IsEmpty() && maBColorModifierStack.count())
+    {
+        // apply ColorModifier to Bitmap data
         aPreparedBitmap = aPreparedBitmap.ModifyBitmapEx(maBColorModifierStack);
 
         if (aPreparedBitmap.IsEmpty())
         {
-            // color gets completely replaced, get it (any input works)
-            const basegfx::BColor aModifiedColor(
-                maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-
-            // use unit geometry as fallback object geometry. Do *not*
-            // transform, the below used method will use the already
-            // correctly initialized local ViewInformation
-            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
-
-            // what we still need to apply is the object transform from the
-            // local primitive, that is not part of DisplayInfo yet
-            aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
-
-            // draw directly
-            paintPolyPolygonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor,
-                                 rFillGraphicPrimitive2D.getTransparency());
-
-            return;
+            // color gets completely replaced, get it
+            aReplacementColor = maBColorModifierStack.getModifiedColor(basegfx::BColor());
         }
+
+        if (bTemporaryGrayColorModifier)
+            // cleanup temporary BColorModifier
+            maBColorModifierStack.pop();
+    }
+
+    // if PreparedBitmap is empty, draw geometry in single color using
+    // prepared ReplacementColor
+    if (aPreparedBitmap.IsEmpty())
+    {
+        // use unit geometry as fallback object geometry. Do *not*
+        // transform, the below used method will use the already
+        // correctly initialized local ViewInformation
+        basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+
+        // what we still need to apply is the object transform from the
+        // local primitive, that is not part of DisplayInfo yet
+        aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
+
+        // draw directly, done
+        paintPolyPolygonRGBA(basegfx::B2DPolyPolygon(aPolygon), aReplacementColor,
+                             rFillGraphicPrimitive2D.getTransparency());
+        return;
     }
 
     // access or create cairo bitmap data
@@ -2584,12 +2701,13 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
 void CairoPixelProcessor2D::processFillGradientPrimitive2D_drawOutputRange(
     const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D)
 {
+    // prepare outer color
+    basegfx::BColor aOuterColor(getGradientColor(rFillGradientPrimitive2D.getOuterColor()));
+    aOuterColor = maBColorModifierStack.getModifiedColor(aOuterColor);
+
     cairo_save(mpRT);
 
     // fill simple rect with outer color
-    const basegfx::BColor aColor(
-        maBColorModifierStack.getModifiedColor(rFillGradientPrimitive2D.getOuterColor()));
-
     if (rFillGradientPrimitive2D.hasAlphaGradient())
     {
         const attribute::FillGradientAttribute& rAlphaGradient(
@@ -2604,12 +2722,13 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D_drawOutputRange(
                 fLuminance = rAlphaGradient.getColorStops().front().getStopColor().luminance();
         }
 
-        cairo_set_source_rgba(mpRT, aColor.getRed(), aColor.getGreen(), aColor.getBlue(),
-                              1.0 - fLuminance);
+        cairo_set_source_rgba(mpRT, aOuterColor.getRed(), aOuterColor.getGreen(),
+                              aOuterColor.getBlue(), 1.0 - fLuminance);
     }
     else
     {
-        cairo_set_source_rgb(mpRT, aColor.getRed(), aColor.getGreen(), aColor.getBlue());
+        cairo_set_source_rgb(mpRT, aOuterColor.getRed(), aOuterColor.getGreen(),
+                             aOuterColor.getBlue());
     }
 
     const basegfx::B2DHomMatrix aTrans(getViewInformation2D().getObjectToViewTransformation());
@@ -3291,6 +3410,24 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
+    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::BlackGradient
+                                            | DrawModeFlags::WhiteGradient
+                                            | DrawModeFlags::SettingsGradient);
+    if (maDrawModeFlags & SIMPLE_GRADIENT)
+    {
+        // use simple, single-color OutputRange draw
+        processFillGradientPrimitive2D_drawOutputRange(rFillGradientPrimitive2D);
+        return;
+    }
+
+    const bool bTemporaryGrayColorModifier(maDrawModeFlags & DrawModeFlags::GrayGradient);
+    if (bTemporaryGrayColorModifier)
+    {
+        const basegfx::BColorModifierSharedPtr aBColorModifier(
+            std::make_shared<basegfx::BColorModifier_gray>());
+        maBColorModifierStack.push(aBColorModifier);
+    }
+
     // evtl. prefer fallback: cairo does *not* render hard color transitions
     // in gradients anti-aliased which is most visible in 'step'ed gradients,
     // but may also happen in normal ones -> may need to be checked in
@@ -3306,79 +3443,92 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
     if (bPreferAntiAliasedHardColorTransitions && rFillGradient.getSteps())
     {
         processFillGradientPrimitive2D_fallback_decompose(rFillGradientPrimitive2D);
-        return;
     }
-
-    switch (rFillGradient.getStyle())
+    else
     {
-        case css::awt::GradientStyle_LINEAR:
-        case css::awt::GradientStyle_AXIAL:
+        switch (rFillGradient.getStyle())
         {
-            // use specialized renderer for this cases - linear, axial
-            processFillGradientPrimitive2D_linear_axial(rFillGradientPrimitive2D);
-            return;
-        }
-        case css::awt::GradientStyle_RADIAL:
-        case css::awt::GradientStyle_ELLIPTICAL:
-        {
-            // use specialized renderer for this cases - radial, elliptical
+            case css::awt::GradientStyle_LINEAR:
+            case css::awt::GradientStyle_AXIAL:
+            {
+                // use specialized renderer for this cases - linear, axial
+                processFillGradientPrimitive2D_linear_axial(rFillGradientPrimitive2D);
+                break;
+            }
+            case css::awt::GradientStyle_RADIAL:
+            case css::awt::GradientStyle_ELLIPTICAL:
+            {
+                // use specialized renderer for this cases - radial, elliptical
 
-            //  NOTE for css::awt::GradientStyle_ELLIPTICAL:
-            // The first time ever I will accept slight deviations for the
-            // elliptical case here due to it's old chaotic move-two-pixels inside
-            // rendering method that cannot be patched into a lineartransformation
-            // and is hard/difficult to support in more modern systems. Differences
-            // are small and mostly would be visible *if* in steps-mode what is
-            // also rare. IF that should make problems reactivation of that case
-            // for the default case below is possible. main reason is that speed
-            // for direct rendering in cairo is much better.
-            processFillGradientPrimitive2D_radial_elliptical(rFillGradientPrimitive2D);
-            return;
-        }
-        case css::awt::GradientStyle_SQUARE:
-        case css::awt::GradientStyle_RECT:
-        {
-            // use specialized renderer for this cases - square, rect
-            // NOTE: *NO* support for FillGradientAlpha here. it is anyways
-            // hard to map these to direct rendering, but to do so the four
-            // trapezoids/sides are 'stitched' together, so painting RGBA
-            // directly will make the overlaps look bad and like errors.
-            // Anyways, these gradient types are only our internal heritage
-            // and rendering them directly is already much faster, will be okay.
-            processFillGradientPrimitive2D_square_rect(rFillGradientPrimitive2D);
-            return;
-        }
-        default:
-        {
-            // NOTE: All cases are covered above, but keep this as fallback,
-            // so it is possible anytime to exclude one of the cases above again
-            // and go back to decomposed version - just in case...
-            processFillGradientPrimitive2D_fallback_decompose(rFillGradientPrimitive2D);
-            break;
+                //  NOTE for css::awt::GradientStyle_ELLIPTICAL:
+                // The first time ever I will accept slight deviations for the
+                // elliptical case here due to it's old chaotic move-two-pixels inside
+                // rendering method that cannot be patched into a lineartransformation
+                // and is hard/difficult to support in more modern systems. Differences
+                // are small and mostly would be visible *if* in steps-mode what is
+                // also rare. IF that should make problems reactivation of that case
+                // for the default case below is possible. main reason is that speed
+                // for direct rendering in cairo is much better.
+                processFillGradientPrimitive2D_radial_elliptical(rFillGradientPrimitive2D);
+                break;
+            }
+            case css::awt::GradientStyle_SQUARE:
+            case css::awt::GradientStyle_RECT:
+            {
+                // use specialized renderer for this cases - square, rect
+                // NOTE: *NO* support for FillGradientAlpha here. it is anyways
+                // hard to map these to direct rendering, but to do so the four
+                // trapezoids/sides are 'stitched' together, so painting RGBA
+                // directly will make the overlaps look bad and like errors.
+                // Anyways, these gradient types are only our internal heritage
+                // and rendering them directly is already much faster, will be okay.
+                processFillGradientPrimitive2D_square_rect(rFillGradientPrimitive2D);
+                break;
+            }
+            default:
+            {
+                // NOTE: All cases are covered above, but keep this as fallback,
+                // so it is possible anytime to exclude one of the cases above again
+                // and go back to decomposed version - just in case...
+                processFillGradientPrimitive2D_fallback_decompose(rFillGradientPrimitive2D);
+                break;
+            }
         }
     }
+
+    if (bTemporaryGrayColorModifier)
+        // cleanup temporary BColorModifier
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::processPolyPolygonRGBAPrimitive2D(
     const primitive2d::PolyPolygonRGBAPrimitive2D& rPolyPolygonRGBAPrimitive2D)
 {
+    if (maDrawModeFlags & DrawModeFlags::NoFill)
+        // NoFill wanted, done
+        return;
+
+    const basegfx::BColor aFillColor(getFillColor(rPolyPolygonRGBAPrimitive2D.getBColor()));
+
     if (!rPolyPolygonRGBAPrimitive2D.hasTransparency())
     {
         // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
-        paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
-                             rPolyPolygonRGBAPrimitive2D.getBColor());
+        paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(), aFillColor);
         return;
     }
 
     // draw with alpha directly
-    paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(),
-                         rPolyPolygonRGBAPrimitive2D.getBColor(),
+    paintPolyPolygonRGBA(rPolyPolygonRGBAPrimitive2D.getB2DPolyPolygon(), aFillColor,
                          rPolyPolygonRGBAPrimitive2D.getTransparency());
 }
 
 void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     const primitive2d::PolyPolygonAlphaGradientPrimitive2D& rPolyPolygonAlphaGradientPrimitive2D)
 {
+    if (maDrawModeFlags & DrawModeFlags::NoFill)
+        // NoFill wanted, done
+        return;
+
     const basegfx::B2DPolyPolygon& rPolyPolygon(
         rPolyPolygonAlphaGradientPrimitive2D.getB2DPolyPolygon());
     if (0 == rPolyPolygon.count())
@@ -3387,14 +3537,16 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
         return;
     }
 
-    const basegfx::BColor& rColor(rPolyPolygonAlphaGradientPrimitive2D.getBColor());
+    basegfx::BColor aFillColor(getFillColor(rPolyPolygonAlphaGradientPrimitive2D.getBColor()));
+    aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
+
     const attribute::FillGradientAttribute& rAlphaGradient(
         rPolyPolygonAlphaGradientPrimitive2D.getAlphaGradient());
     if (rAlphaGradient.isDefault())
     {
         // default is a single ColorStop at 0.0 with black (0, 0, 0). The
         // luminance is then 0.0, too -> not transparent at all
-        paintPolyPolygonRGBA(rPolyPolygon, rColor);
+        paintPolyPolygonRGBA(rPolyPolygon, aFillColor);
         return;
     }
 
@@ -3403,7 +3555,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     if (rAlphaStops.isSingleColor(aSingleColor))
     {
         // draw with alpha directly
-        paintPolyPolygonRGBA(rPolyPolygon, rColor, aSingleColor.luminance());
+        paintPolyPolygonRGBA(rPolyPolygon, aFillColor, aSingleColor.luminance());
         return;
     }
 
@@ -3426,7 +3578,7 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
     // create ColorStops at same stops but single color
     aColorStops.reserve(rAlphaStops.size());
     for (const auto& entry : rAlphaStops)
-        aColorStops.emplace_back(entry.getStopOffset(), rColor);
+        aColorStops.emplace_back(entry.getStopOffset(), aFillColor);
 
     // create FillGradient using that single-color ColorStops
     const attribute::FillGradientAttribute aFillGradient(
@@ -3453,17 +3605,48 @@ void CairoPixelProcessor2D::processPolyPolygonAlphaGradientPrimitive2D(
 void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
     const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D)
 {
+    constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
+                                   | DrawModeFlags::GrayBitmap);
+    const bool bDrawModeFlagsUsed(maDrawModeFlags & BITMAP);
+
+    if (bDrawModeFlagsUsed)
+    {
+        if (maDrawModeFlags & DrawModeFlags::BlackBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0, 0, 0)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else if (maDrawModeFlags & DrawModeFlags::WhiteBitmap)
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1, 1, 1)));
+            maBColorModifierStack.push(aBColorModifier);
+        }
+        else // DrawModeFlags::GrayBitmap
+        {
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
+    }
+
     if (!rBitmapAlphaPrimitive2D.hasTransparency())
     {
         // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
         paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
                          rBitmapAlphaPrimitive2D.getTransform());
-        return;
+    }
+    else
+    {
+        // draw with alpha directly
+        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
+                         rBitmapAlphaPrimitive2D.getTransform(),
+                         rBitmapAlphaPrimitive2D.getTransparency());
     }
 
-    // draw with alpha directly
-    paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(), rBitmapAlphaPrimitive2D.getTransform(),
-                     rBitmapAlphaPrimitive2D.getTransparency());
+    if (bDrawModeFlagsUsed)
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::processTextSimplePortionPrimitive2D(
@@ -3509,8 +3692,8 @@ void CairoPixelProcessor2D::renderTextBackground(
     cairo_matrix_init(&aMatrix, rTransform.a(), rTransform.b(), rTransform.c(), rTransform.d(),
                       rTransform.e(), rTransform.f());
     cairo_set_matrix(mpRT, &aMatrix);
-    const basegfx::BColor aFillColor(
-        maBColorModifierStack.getModifiedColor(rTextCandidate.getTextFillColor().getBColor()));
+    basegfx::BColor aFillColor(getFillColor(rTextCandidate.getTextFillColor().getBColor()));
+    aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
     cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
     cairo_rectangle(mpRT, 0.0, -fAscent, fTextWidth, fAscent + fDescent);
     cairo_fill(mpRT);
@@ -3618,6 +3801,9 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                              pSalLayout->GetTextWidth());
     }
 
+    // get TextColor early, may have to be modified
+    basegfx::BColor aTextColor(getTextColor(rTextCandidate.getFontColor()));
+
     if (rTextCandidate.hasShadow())
     {
         // Text shadow is constant, relative to font size, *not* rotated with
@@ -3628,8 +3814,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         // see ::ImplDrawSpecialText -> no longer simple fixed color
         const basegfx::BColor aBlack(0.0, 0.0, 0.0);
         basegfx::BColor aShadowColor(aBlack);
-        if (aBlack == rTextCandidate.getFontColor()
-            || rTextCandidate.getFontColor().luminance() < (8.0 / 255.0))
+        if (aBlack == aTextColor || aTextColor.luminance() < (8.0 / 255.0))
             aShadowColor = COL_LIGHTGRAY.getBColor();
         aShadowColor = maBColorModifierStack.getModifiedColor(aShadowColor);
 
@@ -3656,9 +3841,6 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                                                               &aTransform, &aShadowColor);
         }
     }
-    // get TextColor early, may have to be modified
-    basegfx::BColor aTextColor(rTextCandidate.getFontColor());
-
     if (rTextCandidate.hasOutline())
     {
         // render as outline
@@ -3700,7 +3882,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
                             getViewInformation2D().getUseAntiAliasing());
             if (rTextCandidate.hasTextDecoration())
             {
-                const basegfx::B2DHomMatrix aTransform(
+                basegfx::B2DHomMatrix aTransform(
                     aInvViewTransform * aDiscreteOffset
                     * getViewInformation2D().getObjectToViewTransformation());
                 renderTextDecorationWithOptionalTransformAndColor(*pDecoratedCandidate, aDecTrans,
@@ -3799,14 +3981,30 @@ bool CairoPixelProcessor2D::handleSvgGradientHelper(
         return true;
     }
 
-    if (rCandidate.getSingleEntry())
+    basegfx::BColor aSimpleColor;
+    bool bDrawSimple(false);
+    primitive2d::SvgGradientEntryVector::const_reference aEntry(
+        rCandidate.getGradientEntries().back());
+
+    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::BlackGradient
+                                            | DrawModeFlags::WhiteGradient
+                                            | DrawModeFlags::SettingsGradient);
+    if (maDrawModeFlags & SIMPLE_GRADIENT)
+    {
+        aSimpleColor = getGradientColor(aSimpleColor);
+        bDrawSimple = true;
+    }
+
+    if (!bDrawSimple && rCandidate.getSingleEntry())
     {
         // only one color entry, fill with last existing color, done
-        primitive2d::SvgGradientEntryVector::const_reference aEntry(
-            rCandidate.getGradientEntries().back());
-        paintPolyPolygonRGBA(rCandidate.getPolyPolygon(), aEntry.getColor(),
-                             1.0 - aEntry.getOpacity());
+        aSimpleColor = aEntry.getColor();
+        bDrawSimple = true;
+    }
 
+    if (bDrawSimple)
+    {
+        paintPolyPolygonRGBA(rCandidate.getPolyPolygon(), aSimpleColor, 1.0 - aEntry.getOpacity());
         return true;
     }
 
@@ -3824,6 +4022,14 @@ void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
     }
 
     cairo_save(mpRT);
+
+    const bool bTemporaryGrayColorModifier(maDrawModeFlags & DrawModeFlags::GrayGradient);
+    if (bTemporaryGrayColorModifier)
+    {
+        const basegfx::BColorModifierSharedPtr aBColorModifier(
+            std::make_shared<basegfx::BColorModifier_gray>());
+        maBColorModifierStack.push(aBColorModifier);
+    }
 
     // set ObjectToView as regular transformation at CairoContext
     const basegfx::B2DHomMatrix aTrans(getViewInformation2D().getObjectToViewTransformation());
@@ -3885,6 +4091,10 @@ void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
     // cleanup
     cairo_pattern_destroy(pPattern);
     cairo_restore(mpRT);
+
+    if (bTemporaryGrayColorModifier)
+        // cleanup temporary BColorModifier
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
@@ -3898,6 +4108,15 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
     }
 
     cairo_save(mpRT);
+
+    bool bTemporaryGrayColorModifier(false);
+    if (maDrawModeFlags & DrawModeFlags::GrayGradient)
+    {
+        bTemporaryGrayColorModifier = true;
+        const basegfx::BColorModifierSharedPtr aBColorModifier(
+            std::make_shared<basegfx::BColorModifier_gray>());
+        maBColorModifierStack.push(aBColorModifier);
+    }
 
     // set ObjectToView as regular transformation at CairoContext
     const basegfx::B2DHomMatrix aTrans(getViewInformation2D().getObjectToViewTransformation());
@@ -3980,6 +4199,10 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
     // cleanup
     cairo_pattern_destroy(pPattern);
     cairo_restore(mpRT);
+
+    if (bTemporaryGrayColorModifier)
+        // cleanup temporary BColorModifier
+        maBColorModifierStack.pop();
 }
 
 void CairoPixelProcessor2D::processControlPrimitive2D(
@@ -4087,6 +4310,111 @@ void CairoPixelProcessor2D::evaluateCairoCoordinateLimitWorkaround()
         // 24.8 cairo format, thus workaround is needed, set flag
         mbCairoCoordinateLimitWorkaroundActive = true;
     }
+}
+
+basegfx::BColor CairoPixelProcessor2D::getLineColor(const basegfx::BColor& rColor) const
+{
+    constexpr DrawModeFlags LINE(DrawModeFlags::BlackLine | DrawModeFlags::WhiteLine
+                                 | DrawModeFlags::GrayLine | DrawModeFlags::SettingsLine);
+    if (!(maDrawModeFlags & LINE))
+        return rColor;
+
+    if (maDrawModeFlags & DrawModeFlags::BlackLine)
+        return basegfx::BColor(0, 0, 0);
+
+    if (maDrawModeFlags & DrawModeFlags::WhiteLine)
+        return basegfx::BColor(1, 1, 1);
+
+    if (maDrawModeFlags & DrawModeFlags::GrayLine)
+    {
+        const double fLuminance(rColor.luminance());
+        return basegfx::BColor(fLuminance, fLuminance, fLuminance);
+    }
+
+    // DrawModeFlags::SettingsLine
+    if (maDrawModeFlags & DrawModeFlags::SettingsForSelection)
+        return Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor();
+
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().getBColor();
+}
+
+basegfx::BColor CairoPixelProcessor2D::getFillColor(const basegfx::BColor& rColor) const
+{
+    constexpr DrawModeFlags FILL(DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill
+                                 | DrawModeFlags::GrayFill | DrawModeFlags::SettingsFill);
+    if (!(maDrawModeFlags & FILL))
+        return rColor;
+
+    if (maDrawModeFlags & DrawModeFlags::BlackFill)
+        return basegfx::BColor(0, 0, 0);
+
+    if (maDrawModeFlags & DrawModeFlags::WhiteFill)
+        return basegfx::BColor(1, 1, 1);
+
+    if (maDrawModeFlags & DrawModeFlags::GrayFill)
+    {
+        const double fLuminance(rColor.luminance());
+        return basegfx::BColor(fLuminance, fLuminance, fLuminance);
+    }
+
+    // DrawModeFlags::SettingsFill
+    if (maDrawModeFlags & DrawModeFlags::SettingsForSelection)
+        return Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor();
+
+    return Application::GetSettings().GetStyleSettings().GetWindowColor().getBColor();
+}
+
+basegfx::BColor CairoPixelProcessor2D::getTextColor(const basegfx::BColor& rColor) const
+{
+    constexpr DrawModeFlags TEXT(DrawModeFlags::BlackText | DrawModeFlags::WhiteText
+                                 | DrawModeFlags::GrayText | DrawModeFlags::SettingsText);
+    if (!(maDrawModeFlags & TEXT))
+        return rColor;
+
+    if (maDrawModeFlags & DrawModeFlags::BlackText)
+        return basegfx::BColor(0, 0, 0);
+
+    if (maDrawModeFlags & DrawModeFlags::WhiteText)
+        return basegfx::BColor(1, 1, 1);
+
+    if (maDrawModeFlags & DrawModeFlags::GrayText)
+    {
+        const double fLuminance(rColor.luminance());
+        return basegfx::BColor(fLuminance, fLuminance, fLuminance);
+    }
+
+    // DrawModeFlags::SettingsText
+    if (maDrawModeFlags & DrawModeFlags::SettingsForSelection)
+        return Application::GetSettings().GetStyleSettings().GetHighlightTextColor().getBColor();
+
+    return Application::GetSettings().GetStyleSettings().GetWindowTextColor().getBColor();
+}
+
+basegfx::BColor CairoPixelProcessor2D::getGradientColor(const basegfx::BColor& rColor) const
+{
+    constexpr DrawModeFlags GRADIENT(DrawModeFlags::BlackGradient | DrawModeFlags::GrayGradient
+                                     | DrawModeFlags::WhiteGradient
+                                     | DrawModeFlags::SettingsGradient);
+    if (!(maDrawModeFlags & GRADIENT))
+        return rColor;
+
+    if (maDrawModeFlags & DrawModeFlags::BlackGradient)
+        return basegfx::BColor(0, 0, 0);
+
+    if (maDrawModeFlags & DrawModeFlags::WhiteGradient)
+        return basegfx::BColor(1, 1, 1);
+
+    if (maDrawModeFlags & DrawModeFlags::GrayGradient)
+    {
+        const double fLuminance(rColor.luminance());
+        return basegfx::BColor(fLuminance, fLuminance, fLuminance);
+    }
+
+    // DrawModeFlags::SettingsGradient
+    if (maDrawModeFlags & DrawModeFlags::SettingsForSelection)
+        return Application::GetSettings().GetStyleSettings().GetHighlightColor().getBColor();
+
+    return Application::GetSettings().GetStyleSettings().GetWindowColor().getBColor();
 }
 
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
