@@ -920,6 +920,10 @@ void QtBuilder::setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps)
     if (aIt != rProps.end())
         rLineEdit.setPlaceholderText(toQString(aIt->second));
 
+    aIt = rProps.find(u"text"_ustr);
+    if (aIt != rProps.end())
+        rLineEdit.setText(toQString(aIt->second));
+
     aIt = rProps.find(u"visibility"_ustr);
     if (aIt != rProps.end() && !toBool(aIt->second))
         rLineEdit.setEchoMode(QLineEdit::Password);
