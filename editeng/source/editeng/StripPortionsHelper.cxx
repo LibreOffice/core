@@ -102,11 +102,10 @@ buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
         }
     }
 
-    // tdf#167511 get FontColor, evtl. adapted for HighContrast
-    const Color aFontColor(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                               ? Application::GetSettings().GetStyleSettings().GetWindowTextColor()
-                               : rInfo.mrFont.GetColor());
+    // create complex text primitive and append
+    const Color aFontColor(rInfo.mrFont.GetColor());
     const basegfx::BColor aBFontColor(aFontColor.getBColor());
+
     const Color aTextFillColor(rInfo.mrFont.GetFillColor());
 
     // prepare wordLineMode (for underline and strikeout)
