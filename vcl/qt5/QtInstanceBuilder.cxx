@@ -165,6 +165,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"svx/ui/fontworkgallerydialog.ui"_ustr,
         u"svx/ui/deletefooterdialog.ui"_ustr,
         u"svx/ui/deleteheaderdialog.ui"_ustr,
+        u"svx/ui/fileexporteddialog.ui"_ustr,
         u"svx/ui/gotopagedialog.ui"_ustr,
         u"svx/ui/safemodedialog.ui"_ustr,
         u"svx/ui/themecoloreditdialog.ui"_ustr,
