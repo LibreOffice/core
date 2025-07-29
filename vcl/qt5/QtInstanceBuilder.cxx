@@ -79,6 +79,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/namedialog.ui"_ustr,
         u"cui/ui/numberdialog.ui"_ustr,
         u"cui/ui/objecttitledescdialog.ui"_ustr,
+        u"cui/ui/objectnamedialog.ui"_ustr,
         u"cui/ui/optlingupage.ui"_ustr,
         u"cui/ui/optnewdictionarydialog.ui"_ustr,
         u"cui/ui/password.ui"_ustr,
