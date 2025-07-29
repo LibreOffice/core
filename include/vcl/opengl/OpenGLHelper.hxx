@@ -14,7 +14,7 @@
 #include <epoxy/gl.h>
 #include <sal/detail/log.h>
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sstream>
@@ -63,7 +63,7 @@ public:
      * this method. The buffer size is assumed to be 4*width*height and the format
      * to be OptimalBufferFormat().
     **/
-    SAL_DLLPRIVATE static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight);
+    SAL_DLLPRIVATE static Bitmap ConvertBufferToBitmap(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight);
     /**
      * Returns the optimal buffer format for OpenGL (GL_BGRA or GL_RGBA).
     **/

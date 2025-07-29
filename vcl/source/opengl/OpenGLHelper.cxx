@@ -529,7 +529,7 @@ void OpenGLHelper::renderToFile(tools::Long nWidth, tools::Long nHeight, const O
 
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nWidth*nHeight*4]);
     glReadPixels(0, 0, nWidth, nHeight, OptimalBufferFormat(), GL_UNSIGNED_BYTE, pBuffer.get());
-    BitmapEx aBitmap = ConvertBufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
+    Bitmap aBitmap = ConvertBufferToBitmap(pBuffer.get(), nWidth, nHeight);
     try {
         SvFileStream sOutput( rFileName, StreamMode::WRITE );
         vcl::PngImageWriter aWriter( sOutput );
@@ -551,48 +551,41 @@ GLenum OpenGLHelper::OptimalBufferFormat()
 #endif
 }
 
-BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight)
+Bitmap OpenGLHelper::ConvertBufferToBitmap(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight)
 {
     assert(pBuffer);
-    Bitmap aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-    AlphaMask aAlpha(Size(nWidth, nHeight));
+    Bitmap aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N32_BPP);
 
     {
         BitmapScopedWriteAccess pWriteAccess( aBitmap );
-        BitmapScopedWriteAccess pAlphaWriteAccess( aAlpha );
 #ifdef _WIN32
-        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr);
+        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N32BitTcBgra);
         assert(pWriteAccess->IsTopDown());
-        assert(pAlphaWriteAccess->IsTopDown());
 #else
-        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb);
+        assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N32BitTcRgba);
         assert(!pWriteAccess->IsTopDown());
-        assert(!pAlphaWriteAccess->IsTopDown());
 #endif
-        assert(pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
         size_t nCurPos = 0;
         for( tools::Long y = 0; y < nHeight; ++y)
         {
 #ifdef _WIN32
             Scanline pScan = pWriteAccess->GetScanline(y);
-            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
 #else
             Scanline pScan = pWriteAccess->GetScanline(nHeight-1-y);
-            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(nHeight-1-y);
 #endif
             for( tools::Long x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];
                 *pScan++ = pBuffer[nCurPos+1];
                 *pScan++ = pBuffer[nCurPos+2];
+                *pScan++ = pBuffer[nCurPos+3];
 
-                nCurPos += 3;
-                *pAlphaScan++ = pBuffer[nCurPos++];
+                nCurPos += 4;
             }
         }
     }
-    return BitmapEx(aBitmap, aAlpha);
+    return aBitmap;
 }
 
 const char* OpenGLHelper::GLErrorString(GLenum errorCode)
