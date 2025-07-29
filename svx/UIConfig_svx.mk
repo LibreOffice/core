@@ -79,6 +79,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/gallerymenu1 \
 	svx/uiconfig/ui/gallerymenu2 \
 	svx/uiconfig/ui/genericcheckdialog \
+	svx/uiconfig/ui/dropdownfielddialog \
 	svx/uiconfig/ui/genericcheckentry \
 	svx/uiconfig/ui/gotopagedialog \
 	svx/uiconfig/ui/grafctrlbox \

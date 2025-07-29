@@ -1037,6 +1037,7 @@
 
 #define RID_SVXSTR_EXPORT_GRAPHIC_TITLE                     NC_("RID_SVXSTR_EXPORT_GRAPHIC_TITLE", "Image Export")
 #define RID_SVXSTR_SAVEAS_IMAGE                             NC_("RID_SVXSTR_SAVEAS_IMAGE", "Save as Image")
+#define RID_SVXSTR_PASTE_AS_DIALOG_TITLE                    NC_("RID_SVXSTR_PASTE_AS_DIALOG_TITLE", "Paste As")
 
 // Strings for the Draw Dialog --------------------------------------------
 #define RID_SVX_3D_UNDO_EXCHANGE_PASTE                      NC_("RID_SVX_3D_UNDO_EXCHANGE_PASTE", "Insert object(s)")
