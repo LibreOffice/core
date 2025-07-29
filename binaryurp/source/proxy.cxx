@@ -32,7 +32,6 @@
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
-#include <uno/dispatcher.h>
 #include <uno/dispatcher.hxx>
 
 #include "binaryany.hxx"

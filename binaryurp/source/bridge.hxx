@@ -31,7 +31,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

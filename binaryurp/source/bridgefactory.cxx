@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
 #include <cassert>
 
 #include <com/sun/star/bridge/BridgeExistsException.hpp>
