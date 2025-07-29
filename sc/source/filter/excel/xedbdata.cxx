@@ -11,6 +11,7 @@
 #include <excrecds.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
+#include <tablestyle.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sax/fastattribs.hxx>
@@ -294,7 +295,15 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         pTableStrm->endElement( XML_tableColumns);
     }
 
-    // OOXTODO: write <tableStyleInfo> once we have table styles.
+    if (const ScTableStyleParam* pParam = rData.GetTableStyleInfo())
+    {
+        const OUString& rStyleName = pParam->maStyleName;
+        const ScTableStyle* pTableStyle = rStrm.GetRoot().GetDoc().GetTableStyles().GetTableStyle(rStyleName);
+        if (pTableStyle)
+        {
+            pTableStrm->singleElement( XML_tableStyleInfo, XML_name, rStyleName.toUtf8(), XML_showFirstColumn, ToPsz10(pParam->mbFirstColumn), XML_showLastColumn, ToPsz10(pParam->mbLastColumn), XML_showRowStripes, ToPsz10(pParam->mbRowStripes), XML_showColumnStripes, ToPsz10(pParam->mbColumnStripes));
+        }
+    }
 
     pTableStrm->endElement( XML_table);
 }

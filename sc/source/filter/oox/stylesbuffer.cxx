@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <stylesbuffer.hxx>
 #include <patterncache.hxx>
 
@@ -87,6 +88,7 @@
 #include <stlsheet.hxx>
 #include <biffhelper.hxx>
 #include <docuno.hxx>
+#include <tablestyle.hxx>
 
 namespace oox::xls {
 
@@ -1580,6 +1582,16 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
+void Border::setBorderElement( sal_Int32 nElement, const XlsColor& rColor, sal_Int32 nStyle)
+{
+    if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
+    {
+        pBorderLine->maColor = rColor;
+        pBorderLine->mnStyle = nStyle;
+        pBorderLine->mbUsed = true;
+    }
+}
+
 void Border::finalizeImport( bool bRTL )
 {
     if (bRTL)
@@ -1942,6 +1954,19 @@ void Fill::importDxfStop( SequenceInputStream& rStrm )
     if( !mxGradientModel )
         mxGradientModel = std::make_shared<GradientFillModel>();
     mxGradientModel->readGradientStop( rStrm, true );
+}
+
+void Fill::setFillColors(const XlsColor& rFgColor, const XlsColor& rBgColor)
+{
+    mxPatternModel = std::make_shared<PatternFillModel>(true);
+    mxPatternModel->mnPattern = XML_solid;
+    mxPatternModel->mbPatternUsed = true;
+
+    mxPatternModel->maPatternColor = rFgColor;
+    mxPatternModel->mbPattColorUsed = true;
+
+    mxPatternModel->maFillColor = rBgColor;
+    mxPatternModel->mbFillColorUsed = true;
 }
 
 void Fill::finalizeImport()
@@ -2429,6 +2454,21 @@ ProtectionRef const & Dxf::createProtection( bool bAlwaysNew )
     return mxProtection;
 }
 
+void Dxf::setFill(FillRef xFill)
+{
+    mxFill = xFill;
+}
+
+void Dxf::setBorder(BorderRef xBorder)
+{
+    mxBorder = xBorder;
+}
+
+void Dxf::setFont(FontRef xFont)
+{
+    mxFont = xFont;
+}
+
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
     // don't propagate number formats defined in Dxf entries
@@ -2526,6 +2566,109 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
         mxBorder->fillToItemSet(rSet);
     if (mxFill)
         mxFill->fillToItemSet(rSet);
+}
+
+TableStyleElementInfo::TableStyleElementInfo():
+    mnDxfID(-1),
+    mnStripeCount(1)
+{
+}
+
+TableStyle::TableStyle(const WorkbookHelper& rHelper, bool bDefaultOOXMLStyle):
+    WorkbookHelper( rHelper ),
+    mbDefaultOOXMLStyle(bDefaultOOXMLStyle)
+{
+}
+
+void TableStyle::setName(const OUString& rName)
+{
+    maName = rName;
+}
+
+void TableStyle::setUIName(const OUString& rName)
+{
+    maUIName = rName;
+}
+
+void TableStyle::importTableStyleElement(const AttributeList& rAttribs)
+{
+    TableStyleElementInfo aInfo;
+    aInfo.mnDxfID = rAttribs.getInteger(XML_dxfId, -1);
+    OUString aTableStyleElementName = rAttribs.getString(XML_type, OUString());
+    static const std::unordered_map<OUString, ScTableStyleElement> aTableStyleElementMap
+        = { { "wholeTable", ScTableStyleElement::WholeTable },
+            { "firstColumnStripe", ScTableStyleElement::FirstColumnStripe },
+            { "secondColumnStripe", ScTableStyleElement::SecondColumnStripe },
+            { "firstRowStripe", ScTableStyleElement::FirstRowStripe },
+            { "secondRowStripe", ScTableStyleElement::SecondRowStripe },
+            { "firstColumn", ScTableStyleElement::FirstColumn },
+            { "lastColumn", ScTableStyleElement::LastColumn },
+            { "headerRow", ScTableStyleElement::HeaderRow },
+            { "totalRow", ScTableStyleElement::TotalRow },
+            { "firstHeaderCell", ScTableStyleElement::FirstHeaderCell },
+            { "lastHeaderCell", ScTableStyleElement::LastHeaderCell }
+        };
+    auto aElementItr = aTableStyleElementMap.find(aTableStyleElementName);
+    if (aElementItr == aTableStyleElementMap.end())
+    {
+        SAL_WARN("sc", "TableStyle::importTableStyleElement - unknown Table Style Element");
+        return;
+    }
+
+    ScTableStyleElement eElement = aElementItr->second;
+    aInfo.mnStripeCount = rAttribs.getInteger(XML_size, 1);
+
+    maTableStyleElements.insert({eElement, aInfo});
+}
+
+void TableStyle::setTableStyleElement(ScTableStyleElement eElement, sal_Int32 nDxfId)
+{
+    TableStyleElementInfo aInfo;
+    aInfo.mnDxfID = nDxfId;
+    maTableStyleElements.insert({eElement, aInfo});
+}
+
+void TableStyle::finalizeImport(const DxfVector& rDxfs)
+{
+    ::ScDocument& rDoc = getScDocument();
+    ScTableStyles& rStyles = rDoc.GetTableStyles();
+    std::unique_ptr<ScTableStyle> pTableStyle = std::make_unique<ScTableStyle>(maName, maUIName);
+    pTableStyle->SetOOXMLDefault(mbDefaultOOXMLStyle);
+    for (const auto& aTableStyleElementInfo : maTableStyleElements)
+    {
+        if (aTableStyleElementInfo.second.mnDxfID < 0 || aTableStyleElementInfo.second.mnDxfID >= sal_Int32(rDxfs.size()))
+        {
+            // TODO: report a warning message
+            continue;
+        }
+        ScTableStyleElement eElement = aTableStyleElementInfo.first;
+        DxfRef xDxf = rDxfs.get(aTableStyleElementInfo.second.mnDxfID);
+        std::unique_ptr<ScPatternAttr> pPattern = std::make_unique<ScPatternAttr>(rDoc.getCellAttributeHelper());
+        xDxf->fillToItemSet(pPattern->GetItemSetWritable());
+
+        pTableStyle->SetPattern(eElement, std::move(pPattern));
+        sal_Int32 nStripeCount = aTableStyleElementInfo.second.mnStripeCount;
+        if (nStripeCount <= 1)
+            continue;
+
+        switch (eElement) {
+            case ScTableStyleElement::FirstRowStripe:
+                pTableStyle->SetRowStripeSize(nStripeCount, -1);
+                break;
+            case ScTableStyleElement::SecondRowStripe:
+                pTableStyle->SetRowStripeSize(-1, nStripeCount);
+                break;
+            case ScTableStyleElement::FirstColumnStripe:
+                pTableStyle->SetColStripeSize(nStripeCount, -1);
+                break;
+            case ScTableStyleElement::SecondColumnStripe:
+                pTableStyle->SetRowStripeSize(-1, nStripeCount);
+                break;
+            default:
+                SAL_WARN("sc", "the stripe count should only be set for row and column stripe elements");
+        }
+    }
+    rStyles.AddTableStyle(std::move(pTableStyle));
 }
 
 namespace {
@@ -2942,6 +3085,13 @@ DxfRef StylesBuffer::createDxf()
     return xDxf;
 }
 
+TableStyleRef StylesBuffer::createTableStyle()
+{
+    TableStyleRef xTableStyle = std::make_shared<TableStyle>(*this, false);
+    maTableStyles.push_back(xTableStyle);
+    return xTableStyle;
+}
+
 DxfRef StylesBuffer::createExtDxf()
 {
     DxfRef xDxf = std::make_shared<Dxf>( *this );
@@ -2999,6 +3149,7 @@ void StylesBuffer::finalizeImport()
     maCellStyles.finalizeImport();
     // differential formatting (for conditional formatting)
     maDxfs.forEachMem( &Dxf::finalizeImport );
+    maTableStyles.forEachMem( &TableStyle::finalizeImport, maDxfs );
 }
 
 ::Color StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const

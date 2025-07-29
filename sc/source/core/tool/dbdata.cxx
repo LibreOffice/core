@@ -42,6 +42,34 @@
 #include <memory>
 #include <utility>
 
+ScTableStyleParam::ScTableStyleParam():
+    mbRowStripes(true),
+    mbColumnStripes(false),
+    mbFirstColumn(false),
+    mbLastColumn(false)
+{
+}
+
+bool ScTableStyleParam::operator==(const ScTableStyleParam& rParam) const
+{
+    if(maStyleName != rParam.maStyleName)
+        return false;
+
+    if (mbRowStripes != rParam.mbRowStripes)
+        return false;
+
+    if (mbColumnStripes != rParam.mbColumnStripes)
+        return false;
+
+    if (mbFirstColumn != rParam.mbFirstColumn)
+        return false;
+
+    if (mbLastColumn != rParam.mbLastColumn)
+        return false;
+
+    return true;
+}
+
 bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const std::unique_ptr<ScDBData>& right) const
 {
     return ScGlobal::GetTransliteration().compareString(left->GetUpperName(), right->GetUpperName()) < 0;
@@ -116,6 +144,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty),
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
+    if (rData.mpTableStyles)
+        mpTableStyles.reset(new ScTableStyleParam(*rData.mpTableStyles));
 }
 
 ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
@@ -153,6 +183,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     nFilteredRowCount   (rData.nFilteredRowCount)
 {
     aUpper = ScGlobal::getCharClass().uppercase(aUpper);
+    if (rData.mpTableStyles)
+        mpTableStyles.reset(new ScTableStyleParam(*rData.mpTableStyles));
 }
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
@@ -193,6 +225,11 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         nIndex              = rData.nIndex;
         bAutoFilter         = rData.bAutoFilter;
         nFilteredRowCount   = rData.nFilteredRowCount;
+        if (rData.mpTableStyles)
+            mpTableStyles.reset(new ScTableStyleParam(*rData.mpTableStyles));
+        else
+            mpTableStyles.reset();
+
 
         if (bHeaderRangeDiffers)
             InvalidateTableColumnNames( true);
@@ -243,6 +280,12 @@ bool ScDBData::operator== (const ScDBData& rData) const
     GetSubTotalParam(aSubTotal1);
     rData.GetSubTotalParam(aSubTotal2);
     if (!(aSubTotal1 == aSubTotal2))
+        return false;
+
+    if ((mpTableStyles && !rData.mpTableStyles ) || (!mpTableStyles && rData.mpTableStyles))
+        return false;
+
+    if (mpTableStyles && ((*mpTableStyles) != (*rData.mpTableStyles)))
         return false;
 
     ScImportParam aImport1, aImport2;
@@ -1004,6 +1047,16 @@ void ScDBData::GetFilterSelCount( SCSIZE& nSelected, SCSIZE& nTotal )
         nSelected = nFilteredRowCount;
 }
 
+void ScDBData::SetTableStyleInfo(const ScTableStyleParam& rParam)
+{
+    mpTableStyles.reset(new ScTableStyleParam(rParam));
+}
+
+const ScTableStyleParam* ScDBData::GetTableStyleInfo() const
+{
+    return mpTableStyles.get();
+}
+
 namespace {
 
 class FindByTable
@@ -1499,6 +1552,39 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
             return pNoNameData;
 
     return nullptr;
+}
+
+namespace {
+
+bool intersectsRange(const ScDBData* pDBData, ScRange& rRange)
+{
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    return rRange.Intersects(aRange);
+}
+
+}
+
+std::vector<const ScDBData*> ScDBCollection::GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const
+{
+    ScRange aTargetRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    std::vector<const ScDBData*> aDBData;
+    for (const auto& rxNamedDB: maNamedDBs)
+    {
+        if (rxNamedDB->GetTab() != nTab)
+            continue;
+
+        if (intersectsRange(rxNamedDB.get(), aTargetRange))
+        {
+            aDBData.emplace_back(rxNamedDB.get());
+        }
+    }
+    const ScDBData* pAnonDBData = rDoc.GetAnonymousDBData(nTab);
+    if (pAnonDBData && intersectsRange(pAnonDBData, aTargetRange))
+    {
+        aDBData.emplace_back(pAnonDBData);
+    }
+    return aDBData;
 }
 
 void ScDBCollection::RefreshDirtyTableColumnNames()

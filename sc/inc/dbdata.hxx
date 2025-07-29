@@ -85,6 +85,20 @@ protected:
     ScRangeList maDirtyTableColumnNames;
 };
 
+
+struct SAL_DLLPUBLIC ScTableStyleParam
+{
+    OUString maStyleName;
+    bool mbRowStripes;
+    bool mbColumnStripes;
+    bool mbFirstColumn;
+    bool mbLastColumn;
+
+    ScTableStyleParam();
+
+    bool operator== (const ScTableStyleParam& rData) const;
+};
+
 class SAL_DLLPUBLIC_RTTI ScDBData final : public SvtListener, public ScRefreshTimer
 {
 private:
@@ -92,6 +106,7 @@ private:
     std::unique_ptr<ScQueryParam> mpQueryParam;
     std::unique_ptr<ScSubTotalParam> mpSubTotal;
     std::unique_ptr<ScImportParam> mpImportParam;
+    std::unique_ptr<ScTableStyleParam> mpTableStyles;
 
     ScDBDataContainerBase* mpContainer;
 
@@ -257,6 +272,9 @@ public:
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 
+    void SetTableStyleInfo(const ScTableStyleParam& rParams);
+    const ScTableStyleParam* GetTableStyleInfo() const;
+
 private:
 
     void AdjustTableColumnAttributes( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
@@ -366,6 +384,7 @@ public:
     SC_DLLPUBLIC ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     SC_DLLPUBLIC ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC std::vector<ScDBData*> GetAllDBsFromTab(SCTAB nTab);
+    std::vector<const ScDBData*> GetAllDBsInArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab) const;
 
     void RefreshDirtyTableColumnNames();
 

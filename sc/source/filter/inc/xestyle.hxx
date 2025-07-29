@@ -32,6 +32,9 @@
 #include <vector>
 #include <docmodel/color/ComplexColor.hxx>
 
+class ScTableStyle;
+enum class ScTableStyleElement;
+
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
 ============================================================================ */
@@ -39,6 +42,7 @@
 const sal_uInt16 EXC_ID_FONTLIST    = 0x8031;   /// For internal use only.
 const sal_uInt16 EXC_ID_FORMATLIST  = 0x801E;   /// For internal use only.
 const sal_uInt16 EXC_ID_XFLIST      = 0x8043;   /// For internal use only.
+const sal_uInt16 EXC_ID_TABLESTYLES = 0x9998;
 const sal_uInt16 EXC_ID_DXFS        = 0x9999;   /// For internal use only. TODO:moggi: find a better/correct value
 
 // PALETTE record - color information =========================================
@@ -764,6 +768,7 @@ public:
     sal_Int32 GetDxfIdForPattern(ScPatternAttr* pPattern) const;
     sal_Int32 GetDxfByColor(Color aColor) const;
     void addColor(Color aColor);
+    sal_Int32 fillFromPattern(const ScPatternAttr* pPattern);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
     void Finalize();
@@ -774,10 +779,33 @@ private:
     std::map<Color, sal_Int32> maColorToDxfId;
     std::map<ScPatternAttr*, sal_Int32> maPatternToDxfId;
     DxfContainer maDxf;
+    SvNumberFormatterPtr mxFormatter;
     std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 
-    void fillDxfFrom(const SfxItemSet& rItemSet, const SvNumberFormatterPtr& xFormatter);
+    void fillDxfFrom(const SfxItemSet& rItemSet);
 
+};
+
+class XclExpXmlTableStyle : public XclExpRecordBase, protected XclExpRoot
+{
+    std::map<ScTableStyleElement, sal_Int32> maTableElements;
+    OUString maStyleName;
+
+public:
+    explicit            XclExpXmlTableStyle( const XclExpRoot& rRoot, const ScTableStyle* pTableStyle );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
+};
+
+class XclExpXmlTableStyles : public XclExpRecordBase, protected XclExpRoot
+{
+private:
+    typedef std::vector< std::unique_ptr<XclExpXmlTableStyle> > TableStyleContainer;
+    TableStyleContainer maTableStyles;
+public:
+    explicit            XclExpXmlTableStyles( const XclExpRoot& rRoot );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 };
 
 class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot

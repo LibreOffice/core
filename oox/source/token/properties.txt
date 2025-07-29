@@ -586,6 +586,7 @@ TableBorder
 TableLayout
 TableSelected
 Tables
+TableStyleName
 Tabstop
 Tag
 TargetFrame
@@ -635,9 +636,13 @@ Type
 URL
 UnnamedDatabaseRanges
 Url
+UseColStripes
 UseFilterCriteriaSource
+UseFirstColumnFormatting
+UseLastColumnFormatting
 UseRegularExpressions
 UseRings
+UseRowStripes
 UseSelectedPage
 VScroll
 Validation
