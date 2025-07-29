@@ -37,6 +37,7 @@
 #include <vector>
 
 class ScPatternCache;
+enum class ScTableStyleElement;
 
 namespace oox { class SequenceInputStream; }
 
@@ -463,6 +464,9 @@ public:
     /** Imports a border from a DXF record from the passed stream. */
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
 
+    // for OOXML default table styles
+    void                setBorderElement(sal_Int32 nElement, const XlsColor& rColor, sal_Int32 nStyle);
+
     /** Final processing after import of all style settings. */
     void                finalizeImport( bool bRTL );
 
@@ -573,6 +577,9 @@ public:
     void                importDxfGradient( SequenceInputStream& rStrm );
     /** Imports gradient stop settings from a DXF record. */
     void                importDxfStop( SequenceInputStream& rStrm );
+
+    // for dealing with OOXML default table styles
+    void                setFillColors(const XlsColor& rFgColor, const XlsColor& rBgColor);
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
@@ -699,6 +706,11 @@ public:
     /** Creates a new empty protection object. */
     ProtectionRef const & createProtection( bool bAlwaysNew = true );
 
+    // methods for OOXML default table style import
+    void setFill(FillRef xFill);
+    void setBorder(BorderRef xBorder);
+    void setFont(FontRef xFont);
+
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
 
@@ -824,6 +836,39 @@ struct AutoFormatModel
     explicit            AutoFormatModel();
 };
 
+struct TableStyleElementInfo
+{
+    sal_Int32 mnDxfID;
+    sal_Int32 mnStripeCount;
+
+    TableStyleElementInfo();
+};
+
+typedef RefVector< Dxf > DxfVector;
+typedef RefVector< Border > BorderVector;
+typedef RefVector< Fill > FillVector;
+typedef RefVector< Font > FontVector;
+
+class TableStyle : public WorkbookHelper
+{
+    OUString maName;
+    std::unordered_map<ScTableStyleElement, TableStyleElementInfo> maTableStyleElements;
+    bool mbDefaultOOXMLStyle;
+    std::optional<OUString> maUIName;
+public:
+    explicit TableStyle( const WorkbookHelper& rHelper, bool bDefaultOOXMLStyle );
+
+    void setName(const OUString& rName);
+    void setUIName(const OUString& rName);
+    void importTableStyleElement(const AttributeList& rAttribs);
+    void finalizeImport(const DxfVector& mrDxfs);
+
+    // for OOXML default table styles
+    void setTableStyleElement(ScTableStyleElement eTableStyleElement, sal_Int32  nDxfId);
+};
+
+typedef std::shared_ptr< TableStyle > TableStyleRef;
+
 class StylesBuffer : public WorkbookHelper
 {
 public:
@@ -845,6 +890,8 @@ public:
     /** Creates a new empty differential formatting object. */
     DxfRef              createDxf();
     DxfRef              createExtDxf();
+
+    TableStyleRef createTableStyle();
 
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );
@@ -909,12 +956,9 @@ public:
     const RefVector< Dxf >& getExtDxfs() const { return maExtDxfs; }
 
 private:
-    typedef RefVector< Font >                           FontVector;
-    typedef RefVector< Border >                         BorderVector;
-    typedef RefVector< Fill >                           FillVector;
     typedef RefVector< Xf >                             XfVector;
-    typedef RefVector< Dxf >                            DxfVector;
     typedef ::std::map< sal_Int32, OUString >    DxfStyleMap;
+    typedef RefVector< TableStyle > TableStyleVector;
 
     ColorPalette        maPalette;          /// Color palette.
     FontVector          maFonts;            /// List of font objects.
@@ -927,6 +971,7 @@ private:
     DxfVector           maDxfs;             /// List of differential cell styles.
     DxfVector           maExtDxfs;          /// List of differential extlst cell styles.
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
+    TableStyleVector    maTableStyles;
 };
 
 } // namespace oox::xls

@@ -221,6 +221,7 @@ void XclExpRoot::InitializeGlobals()
     {
         mrExpData.mxXmlPTableMgr = std::make_shared<XclExpXmlPivotTableManager>(GetRoot());
         mrExpData.mxTablesMgr = std::make_shared<XclExpTablesManager>(GetRoot());
+        mrExpData.mxTableStyles = new XclExpXmlTableStyles( GetRoot() );
 
         do
         {
@@ -293,6 +294,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
         case EXC_ID_DXFS:           xRec = mrExpData.mxDxfs;        break;
+        case EXC_ID_TABLESTYLES:    xRec = mrExpData.mxTableStyles; break;
     }
     OSL_ENSURE( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;

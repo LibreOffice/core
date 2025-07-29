@@ -34,10 +34,20 @@
 #include <biffhelper.hxx>
 #include <docuno.hxx>
 #include <datauno.hxx>
+#include <unonames.hxx>
+
 namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
+
+TableStyleInfo::TableStyleInfo():
+    mbShowFirstColumn(true),
+    mbShowLastColumn(true),
+    mbShowRowStripes(true),
+    mbShowColStripes(true)
+{
+}
 
 TableModel::TableModel() :
     mnId( -1 ),
@@ -85,6 +95,18 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
+void Table::importTableStyleInfo(const AttributeList& rAttribs)
+{
+    TableStyleInfo aInfo;
+    aInfo.maStyleName = rAttribs.getString(XML_name, OUString());
+    aInfo.mbShowFirstColumn = rAttribs.getBool(XML_showFirstColumn, true);
+    aInfo.mbShowLastColumn = rAttribs.getBool(XML_showLastColumn, true);
+    aInfo.mbShowRowStripes = rAttribs.getBool(XML_showRowStripes, true);
+    aInfo.mbShowColStripes = rAttribs.getBool(XML_showColumnStripes, true);
+
+    maStyleInfo = aInfo;
+}
+
 void Table::finalizeImport()
 {
     // Create database range.  Note that Excel 2007 and later names database
@@ -122,6 +144,15 @@ void Table::finalizeImport()
         // get formula token index of the database range
         if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
+
+        if(maStyleInfo && maStyleInfo->maStyleName)
+        {
+            xDatabaseRange->setPropertyValue( SC_UNONAME_STYLENAME, css::uno::Any(*maStyleInfo->maStyleName));
+            xDatabaseRange->setPropertyValue( SC_UNONAME_ROW_STRIPES, css::uno::Any(maStyleInfo->mbShowRowStripes));
+            xDatabaseRange->setPropertyValue( SC_UNONAME_COL_STRIPES, css::uno::Any(maStyleInfo->mbShowColStripes));
+            xDatabaseRange->setPropertyValue( SC_UNONAME_FIRST_COL, css::uno::Any(maStyleInfo->mbShowFirstColumn));
+            xDatabaseRange->setPropertyValue( SC_UNONAME_LAST_COL, css::uno::Any(maStyleInfo->mbShowLastColumn));
+        }
     }
     catch( Exception& )
     {

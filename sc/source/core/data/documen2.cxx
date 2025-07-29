@@ -91,6 +91,7 @@
 #include <sharedstringpoolpurge.hxx>
 #include <docpool.hxx>
 #include <config_features.h>
+#include <tablestyle.hxx>
 
 using namespace com::sun::star;
 
@@ -140,6 +141,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
         pEOFormulaTrack( nullptr ),
+        mpTableStyles(new ScTableStyles),
         pPreviewCellStyle( nullptr ),
         maPreviewSelection(*mxSheetLimits),
         nUnoObjectId( 0 ),
@@ -394,6 +396,7 @@ ScDocument::~ScDocument()
 
     pUnoRefUndoList.reset();
     pUnoListenerCalls.reset();
+    mpTableStyles.reset();
 
     Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
 
@@ -1531,6 +1534,16 @@ sc::IconSetBitmapMap& ScDocument::GetIconSetBitmapMap()
         m_pIconSetBitmapMap.reset(new sc::IconSetBitmapMap);
     }
     return *m_pIconSetBitmapMap;
+}
+
+ScTableStyles& ScDocument::GetTableStyles()
+{
+    return *mpTableStyles.get();
+}
+
+const ScTableStyles& ScDocument::GetTableStyles() const
+{
+    return *mpTableStyles.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

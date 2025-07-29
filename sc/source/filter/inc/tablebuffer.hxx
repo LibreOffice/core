@@ -20,10 +20,22 @@
 #pragma once
 
 #include "autofilterbuffer.hxx"
+#include "stylesbuffer.hxx"
 #include "tablecolumnsbuffer.hxx"
 #include "workbookhelper.hxx"
 
 namespace oox::xls {
+
+struct TableStyleInfo
+{
+    std::optional<OUString> maStyleName;
+    bool mbShowFirstColumn;
+    bool mbShowLastColumn;
+    bool mbShowRowStripes;
+    bool mbShowColStripes;
+
+    explicit TableStyleInfo();
+};
 
 struct TableModel
 {
@@ -52,6 +64,8 @@ public:
     /** Creates a new tableColumns handler and stores it internally. */
     TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
 
+    void importTableStyleInfo(const AttributeList& rAttribs);
+
     /** Creates a database range from this tables. */
     void                finalizeImport();
     void                applyAutoFilters();
@@ -79,6 +93,7 @@ public:
 
 private:
     TableModel          maModel;
+    std::optional<TableStyleInfo> maStyleInfo;
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
     TableColumnsBuffer  maTableColumns;     /// Column names of this table.
     OUString            maDBRangeName;      /// Name of the database range in the Calc document.
