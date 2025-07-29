@@ -201,9 +201,6 @@ public:
     using QtInstanceWidget::get_sensitive;
 
 private:
-    // Returns column index as used in the weld::TreeView API
-    int externalColumnIndex(const QModelIndex& rIndex);
-
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter, int nCol = 0) const;

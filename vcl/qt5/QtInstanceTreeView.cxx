@@ -577,6 +577,9 @@ void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState
 {
     SolarMutexGuard g;
 
+    assert((nCol != 0 || !m_bExtraToggleButtonColumnEnabled)
+           && "Column 0 is already used by \"expander toggle\" using special index -1");
+
     GetQtInstance().RunInMainThread([&] {
         QModelIndex aIndex = nCol == -1 ? toggleButtonModelIndex(rIter) : modelIndex(rIter, nCol);
         itemFromIndex(aIndex)->setCheckState(toQtCheckState(eState));
@@ -586,6 +589,9 @@ void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState
 TriState QtInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int nCol) const
 {
     SolarMutexGuard g;
+
+    assert((nCol != 0 || !m_bExtraToggleButtonColumnEnabled)
+           && "Column 0 is already used by \"expander toggle\" using special index -1");
 
     TriState eState = TRISTATE_INDET;
     GetQtInstance().RunInMainThread([&] {
@@ -795,9 +801,8 @@ void QtInstanceTreeView::make_sorted()
 
     GetQtInstance().RunInMainThread([&] {
         m_pTreeView->setSortingEnabled(true);
-        // sort by first "normal" column
-        const int nSortColumn = m_bExtraToggleButtonColumnEnabled ? 1 : 0;
-        m_pModel->sort(nSortColumn);
+        // sort by first column
+        m_pModel->sort(0);
     });
 }
 
@@ -1006,14 +1011,6 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
-int QtInstanceTreeView::externalColumnIndex(const QModelIndex& rIndex)
-{
-    if (m_bExtraToggleButtonColumnEnabled)
-        return rIndex.column() - 1;
-
-    return rIndex.column();
-}
-
 QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
                                            const QModelIndex& rParentIndex) const
 {
@@ -1022,9 +1019,6 @@ QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
 
 QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter, int nCol) const
 {
-    if (m_bExtraToggleButtonColumnEnabled)
-        nCol += 1;
-
     QModelIndex aModelIndex = static_cast<const QtInstanceTreeIter&>(rIter).modelIndex();
     return m_pModel->index(aModelIndex.row(), nCol, aModelIndex.parent());
 }
@@ -1099,7 +1093,12 @@ void QtInstanceTreeView::handleDataChanged(const QModelIndex& rTopLeft,
     assert(rTopLeft == rBottomRight && "Case of multiple changes not implemented yet");
     (void)rBottomRight;
 
-    signal_toggled(iter_col(QtInstanceTreeIter(rTopLeft), externalColumnIndex(rTopLeft)));
+    int nColIndex = rTopLeft.column();
+    if (m_bExtraToggleButtonColumnEnabled && nColIndex == 0)
+        // use special index of -1 for the "expander toggle"
+        nColIndex = -1;
+
+    signal_toggled(iter_col(QtInstanceTreeIter(rTopLeft), nColIndex));
 }
 
 void QtInstanceTreeView::handleSelectionChanged()
