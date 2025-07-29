@@ -171,7 +171,7 @@ private:
         MasterPageContainer::Token aToken);
 
     static VclPtr<VirtualDevice> GetVirtualDevice(const Image& rPreview);
-    static BitmapEx GetPreviewAsBitmap(const Image& rPreview);
+    static Bitmap GetPreviewAsBitmap(const Image& rPreview);
 };
 
 } // end of namespace sd::sidebar

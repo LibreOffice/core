@@ -451,9 +451,9 @@ VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
     return pVDev;
 }
 
-BitmapEx LayoutMenu::GetPreviewAsBitmap(const Image& rImage)
+Bitmap LayoutMenu::GetPreviewAsBitmap(const Image& rImage)
 {
-    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
+    Bitmap aPreviewBitmap(rImage.GetBitmapEx());
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());

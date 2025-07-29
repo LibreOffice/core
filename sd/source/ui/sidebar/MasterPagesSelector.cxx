@@ -483,9 +483,9 @@ VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
     return pVDev;
 }
 
-BitmapEx MasterPagesSelector::GetPreviewAsBitmap(const Image& rImage)
+Bitmap MasterPagesSelector::GetPreviewAsBitmap(const Image& rImage)
 {
-    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
+    Bitmap aPreviewBitmap(rImage.GetBitmapEx());
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());

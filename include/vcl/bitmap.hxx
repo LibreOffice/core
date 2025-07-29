@@ -111,7 +111,7 @@ public:
 
                             Bitmap();
                             Bitmap( const Bitmap& rBitmap );
-                            Bitmap( const BitmapEx& rBitmapEx );
+    explicit                Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
     SAL_DLLPRIVATE explicit Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
                             ~Bitmap();
