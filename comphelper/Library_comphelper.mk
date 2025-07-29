@@ -34,6 +34,7 @@ $(eval $(call gb_Library_add_defs,comphelper,\
 $(eval $(call gb_Library_use_externals,comphelper,\
 	gpgmepp \
     boost_headers \
+    icui18n \
     icuuc \
     icu_headers \
     zlib \
@@ -118,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/interaction \
     comphelper/source/misc/logging \
     comphelper/source/misc/lok \
+    comphelper/source/misc/markdown \
     comphelper/source/misc/mimeconfighelper \
     comphelper/source/misc/namedvaluecollection \
     comphelper/source/misc/numberedcollection \

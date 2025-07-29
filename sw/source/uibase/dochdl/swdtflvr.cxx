@@ -28,6 +28,8 @@
 
 #include <officecfg/Office/Writer.hxx>
 
+#include <svtools/svtresid.hxx>
+#include <svtools/strings.hrc>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
@@ -37,11 +39,14 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/markdown.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/temporary.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
@@ -130,6 +135,7 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
+#include <svx/GenericDropDownFieldDialog.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -2195,28 +2201,64 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
         {
             pRead = ReadAscii;
 
-            const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
-            if (CanSkipInvalidateNumRules(rInsertPosition))
-            {
-                // Insertion point is not a numbering and we paste plain text: then no need to
-                // invalidate all numberings.
-                bSkipInvalidateNumRules = true;
-            }
-
             if( rData.GetString( nFormat, sData ) )
             {
-                pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
+                OUString aSelection;
+                std::vector<OUString> aFormats;
+                aFormats.push_back(SvtResId(STR_FORMAT_STRING));
+
+                if(comphelper::IsMarkdownData(sData)) //markdown
+                {
+                    aFormats.push_back(SvtResId(STR_FORMAT_ID_MARKDOWN));
+                }
+
+                if(aFormats.size() > 1)
+                {
+                    GenericDropDownFieldDialog aDialog(GetActiveView()->GetFrameWeld(),
+                                                       SvxResId(RID_SVXSTR_PASTE_AS_DIALOG_TITLE),
+                                                       aFormats);
+                    short nRet = aDialog.run();
+                    if( nRet == RET_OK)
+                    {
+                        aSelection = aDialog.GetSelectedItem();
+                    }
+                    else if(nRet == RET_CANCEL)
+                        return false;
+                }
+
+                if(aSelection == SvtResId(STR_FORMAT_ID_MARKDOWN))
+                {
+                    OString aData = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
+
+                    pStream = new SvMemoryStream();
+                    pStream->WriteBytes(aData.getStr(), aData.getLength());
+                    pStream->Seek(0);
+
+                    pRead = ReadMarkdown;
+                }
+                else
+                {
+                    const SwPosition& rInsertPosition = *rSh.GetCursor()->Start();
+                    if (CanSkipInvalidateNumRules(rInsertPosition))
+                    {
+                        // Insertion point is not a numbering and we paste plain text: then no need to
+                        // invalidate all numberings.
+                        bSkipInvalidateNumRules = true;
+                    }
+
+                    pStream = new SvMemoryStream( const_cast<sal_Unicode *>(sData.getStr()),
                             sData.getLength() * sizeof( sal_Unicode ),
                             StreamMode::READ );
 #ifdef OSL_BIGENDIAN
-                pStream->SetEndian( SvStreamEndian::BIG );
+                    pStream->SetEndian( SvStreamEndian::BIG );
 #else
-                pStream->SetEndian( SvStreamEndian::LITTLE );
+                    pStream->SetEndian( SvStreamEndian::LITTLE );
 #endif
 
-                SwAsciiOptions aAOpt;
-                aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
-                pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
+                    SwAsciiOptions aAOpt;
+                    aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
+                    pRead->GetReaderOpt().SetASCIIOpts( aAOpt );
+                }
                 break;
             }
         }

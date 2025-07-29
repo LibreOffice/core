@@ -124,6 +124,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/customshapes/EnhancedCustomShapeFontWork \
     svx/source/customshapes/EnhancedCustomShapeHandle \
     svx/source/dialog/GenericCheckDialog \
+    svx/source/dialog/GenericDropDownFieldDialog \
     svx/source/dialog/_bmpmask \
     svx/source/dialog/charmap \
     svx/source/dialog/cuicharmap \
