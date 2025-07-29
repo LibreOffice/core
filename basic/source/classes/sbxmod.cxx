@@ -30,6 +30,7 @@
 #include <sbjsmod.hxx>
 #include <sbintern.hxx>
 #include <sbprop.hxx>
+#include <filefmt.hxx>
 #include <image.hxx>
 #include <opcodes.hxx>
 #include <runtime.hxx>

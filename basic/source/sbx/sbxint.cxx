@@ -21,13 +21,10 @@
 
 #include <config_features.h>
 
-#include <o3tl/safeint.hxx>
 #include <comphelper/errcode.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
 #include <runtime.hxx>
-
-#include <rtl/math.hxx>
 
 namespace
 {

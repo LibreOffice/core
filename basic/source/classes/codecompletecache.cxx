@@ -20,7 +20,6 @@
 #include <basic/codecompletecache.hxx>
 #include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
-#include <officecfg/Office/Common.hxx>
 
 namespace
 {

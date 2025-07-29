@@ -21,7 +21,6 @@
 #include <config_folders.h>
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -34,7 +33,6 @@
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/temporary.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -66,9 +64,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <memory>
 #include <string_view>
 

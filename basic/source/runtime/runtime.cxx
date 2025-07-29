@@ -23,12 +23,10 @@
 #include <string_view>
 #include <unordered_map>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -44,7 +42,6 @@
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/character.hxx>
 
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>

@@ -21,7 +21,6 @@
 
 #include <basic/sberrors.hxx>
 #include <basic/sbxvar.hxx>
-#include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

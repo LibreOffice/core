@@ -21,7 +21,6 @@
 #include <array>
 
 #include <basic/sberrors.hxx>
-#include <sal/macros.h>
 #include <o3tl/string_view.hxx>
 #include <basiccharclass.hxx>
 #include <token.hxx>

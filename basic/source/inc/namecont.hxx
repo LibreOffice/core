@@ -42,15 +42,10 @@
 #include <com/sun/star/script/vba/XVBAScriptListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-#include <osl/mutex.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 

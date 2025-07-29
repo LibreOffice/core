@@ -21,7 +21,6 @@
 
 #include <basic/sbx.hxx>
 #include <rtl/ustring.hxx>
-#include "filefmt.hxx"
 #include <o3tl/typed_flags_set.hxx>
 #include <cstddef>
 #include <vector>

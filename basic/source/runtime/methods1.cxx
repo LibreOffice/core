@@ -22,8 +22,6 @@
 #include <sal/config.h>
 #include <config_version.h>
 
-#include <cstddef>
-
 #include <rtl/math.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
@@ -38,7 +36,6 @@
 #include <o3tl/environment.hxx>
 #include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
-#include <osl/process.h>
 #include <sbobjmod.hxx>
 #include <basic/sbuno.hxx>
 

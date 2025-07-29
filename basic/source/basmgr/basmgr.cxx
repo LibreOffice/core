@@ -18,7 +18,6 @@
  */
 
 #include <utility>
-#include <vcl/errinf.hxx>
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
@@ -39,7 +38,6 @@
 #include <basic/basmgr.hxx>
 #include <global.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XPersistentLibraryContainer.hpp>
 
 #include <scriptcont.hxx>
 

@@ -10,6 +10,7 @@
 #include "basictest.hxx"
 #include <osl/file.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <test/bootstrapfixture.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 namespace

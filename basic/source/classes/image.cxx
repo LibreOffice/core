@@ -23,6 +23,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <basic/sbx.hxx>
+#include <filefmt.hxx>
 #include <sb.hxx>
 #include <sbxprop.hxx>
 #include <string.h>

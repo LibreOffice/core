@@ -11,6 +11,7 @@
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <basic/sbuno.hxx>
+#include <test/bootstrapfixture.hxx>
 
 namespace
 {

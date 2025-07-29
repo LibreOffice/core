@@ -21,7 +21,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

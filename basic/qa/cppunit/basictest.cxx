@@ -8,7 +8,9 @@
  */
 
 #include "basictest.hxx"
+#include <cppunit/TestAssert.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>

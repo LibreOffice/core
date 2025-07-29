@@ -23,7 +23,6 @@
 #include <string_view>
 
 #include <osl/diagnose.h>
-#include <o3tl/float_int_conversion.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <sot/storage.hxx>
 

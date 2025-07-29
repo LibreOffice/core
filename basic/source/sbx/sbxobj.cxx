@@ -31,7 +31,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include "sbxdec.hxx"
 #include "sbxres.hxx"
-#include <filefmt.hxx>
 
 
 static OUString pNameProp;          // Name-Property

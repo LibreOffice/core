@@ -8,6 +8,7 @@
  */
 
 #include "basictest.hxx"
+#include <test/bootstrapfixture.hxx>
 
 namespace
 {

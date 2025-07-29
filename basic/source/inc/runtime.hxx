@@ -38,7 +38,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <o3tl/deleter.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <tools/wldcrd.hxx>
 
 class SbiRuntime;                   // active StarBASIC procedure instance

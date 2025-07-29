@@ -8,6 +8,7 @@
  */
 #include "basictest.hxx"
 #include <unotools/syslocaleoptions.hxx>
+#include <test/bootstrapfixture.hxx>
 
 #ifdef _WIN32
 #include <string.h>
@@ -17,7 +18,9 @@
 #include <systools/win32/odbccp32.hxx>
 #endif
 
+#ifdef _WIN64
 using namespace ::com::sun::star;
+#endif
 
 namespace
 {
