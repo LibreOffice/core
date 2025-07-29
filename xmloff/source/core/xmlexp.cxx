@@ -1242,7 +1242,10 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             {
                 if (!mxGraphicStorageHandler.is())
                 {
-                    mxGraphicStorageHandler.set(xFactory->createInstance( u"com.sun.star.document.ExportGraphicStorageHandler"_ustr), UNO_QUERY);
+                    mxGraphicStorageHandler.set(
+                        getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
+                        u"com.sun.star.comp.Svx.GraphicExportHelper"_ustr, uno::Sequence<uno::Any>(), getComponentContext()),
+                        uno::UNO_QUERY );
                     bOwnGraphicResolver = mxGraphicStorageHandler.is();
                 }
 
