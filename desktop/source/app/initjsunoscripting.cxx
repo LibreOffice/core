@@ -45,6 +45,7 @@ extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
 
 #if HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
 EM_JS(void, runUnoScriptUrls, (emscripten::EM_VAL handle), {
+    globalThis.Module ||= Module;
     importScripts.apply(self, Emval.toValue(handle));
 });
 #else
