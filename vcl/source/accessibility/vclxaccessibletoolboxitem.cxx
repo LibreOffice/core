@@ -345,11 +345,9 @@ OUString VCLXAccessibleToolBoxItem::implGetAccessibleName()
         return sRet;
 
     vcl::Window* pItemWindow = m_pToolBox->GetItemWindow( m_nItemId );
-    if ( m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is() &&
-        pItemWindow->GetAccessible()->getAccessibleContext().is() )
-    {
-        sRet = pItemWindow->GetAccessible()->getAccessibleContext()->getAccessibleName();
-    }
+    if (m_nRole == AccessibleRole::PANEL && pItemWindow && pItemWindow->GetAccessible().is())
+        sRet = pItemWindow->GetAccessible()->getAccessibleName();
+
     return sRet;
 }
 
