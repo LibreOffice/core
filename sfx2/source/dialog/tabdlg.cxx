@@ -884,8 +884,8 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, /* Page ID */
                                         const OUString* pIconName)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     AddTabPage(rName, pCreateFunc, nullptr);
+    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName,
@@ -901,8 +901,8 @@ void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& r
                                         const OUString* pIconName)
 {
     assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
-    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
     AddTabPage(rName, nPageCreateId);
+    m_xTabCtrl->append_page(rName, rRiderText, pIconName);
 }
 
 void SfxTabDialogController::AddTabPage(const OUString &rName, const OUString& rRiderText,
