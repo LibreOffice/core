@@ -58,10 +58,11 @@ sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 void EditBrowseBox::implCreateActiveAccessible( )
 {
     DBG_ASSERT( IsEditing(), "EditBrowseBox::implCreateActiveAccessible: not to be called if we're not editing currently!" );
-    DBG_ASSERT( !m_xActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called if the old one is still alive!" );
+    DBG_ASSERT(!m_pActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called "
+                                    "if the old one is still alive!");
 
-    if (m_xActiveCell.is() || !IsEditing())
-         return;
+    if (m_pActiveCell.is() || !IsEditing())
+        return;
 
     ControlBase& rControl = aController->GetWindow();
 
@@ -73,9 +74,9 @@ void EditBrowseBox::implCreateActiveAccessible( )
           + ", " + SvtResId(STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(nRow));
     rControl.SetAccessibleName(sAccName);
 
-    m_xActiveCell = rControl.GetAccessible();
+    m_pActiveCell = rControl.GetAccessible();
 
-    commitBrowseBoxEvent(CHILD, Any(m_xActiveCell), Any());
+    commitBrowseBoxEvent(CHILD, Any(css::uno::Reference<XAccessible>(m_pActiveCell)), Any());
 }
 
 
@@ -85,14 +86,14 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nInd
 
     if ( isAccessibleAlive() )
     {
-        if (!m_xActiveCell.is())
+        if (!m_pActiveCell.is())
             implCreateActiveAccessible();
     }
 
-    return m_xActiveCell;
+    return m_pActiveCell;
 }
 
-void EditBrowseBox::clearActiveCell() { m_xActiveCell.clear(); }
+void EditBrowseBox::clearActiveCell() { m_pActiveCell.clear(); }
 
 void EditBrowseBox::GrabTableFocus()
 {

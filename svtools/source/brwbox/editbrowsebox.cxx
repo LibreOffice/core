@@ -1008,9 +1008,10 @@ void EditBrowseBox::DeactivateCell(bool bUpdate)
     if (!IsEditing())
         return;
 
-    if (isAccessibleAlive() && m_xActiveCell.is())
+    if (isAccessibleAlive() && m_pActiveCell.is())
     {
-        commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(), Any(m_xActiveCell));
+        commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(),
+                             Any(css::uno::Reference<XAccessible>(m_pActiveCell)));
         clearActiveCell();
     }
 

@@ -956,7 +956,7 @@ namespace svt
 
         EditBrowseBoxFlags  m_nBrowserFlags;
 
-        css::uno::Reference<css::accessibility::XAccessible> m_xActiveCell;
+        rtl::Reference<comphelper::OAccessible> m_pActiveCell;
         void clearActiveCell();
 
     protected:
