@@ -51,7 +51,6 @@ constexpr int EDGE_BOTTOM = 8;
 constexpr int EDGE_HORZ   = EDGE_RIGHT | EDGE_LEFT;
 constexpr int EDGE_VERT   = EDGE_TOP | EDGE_BOTTOM;
 constexpr double SMALL_DVALUE = 0.0000001;
-#define FSQRT2          1.4142135623730950488016887242097
 
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
@@ -1380,7 +1379,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
                     if( ( fGradPrev > 0.0 && fGradB < 0.0 && fGradNext > 0.0 ) ||
                         ( fGradPrev < 0.0 && fGradB > 0.0 && fGradNext < 0.0 ) )
                     {
-                        if( ( fLenFact < ( FSQRT2 + SMALL_DVALUE ) ) &&
+                        if( ( fLenFact < ( M_SQRT2 + SMALL_DVALUE ) ) &&
                             ( ( ( fDist1 + fDist4 ) / ( fDist2 + fDist3 ) ) * 2000.0 ) > fBound )
                         {
                             bDeletePoint = true;
