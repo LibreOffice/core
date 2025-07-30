@@ -471,13 +471,9 @@ Reference< XAccessible > AccessibleTabBarPageList::getAccessibleAtPoint( const a
         rtl::Reference< AccessibleTabBarPage > xAcc = getAccessibleChildImpl( i );
         if ( xAcc.is() )
         {
-            Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
-            if ( xComp.is() )
-            {
-                tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xComp->getBounds());
-                if ( aRect.Contains( aPos ) )
-                    return xAcc;
-            }
+            tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xAcc->getBounds());
+            if (aRect.Contains(aPos))
+                return xAcc;
         }
     }
 
