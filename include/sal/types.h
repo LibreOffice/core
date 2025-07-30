@@ -361,7 +361,7 @@ typedef struct _sal_Sequence
     which won't throw in practice, or where std::terminate is
     an acceptable response if they do
 */
-#if defined(LIBO_INTERNAL_ONLY) && defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
+#if defined(LIBO_INTERNAL_ONLY) && defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
 #   define COVERITY_NOEXCEPT_FALSE noexcept(false)
 #else
 #   define COVERITY_NOEXCEPT_FALSE
