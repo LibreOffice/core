@@ -371,24 +371,18 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
     }
     else if ( mpWindow )
     {
-        css::uno::Reference < css::accessibility::XAccessible > xAcc =
-                                                    mpWindow->GetAccessible();
-        if ( xAcc.is() )
+        rtl::Reference<comphelper::OAccessible> pAcc = mpWindow->GetAccessible();
+        if (pAcc.is())
         {
-            css::uno::Reference < css::accessibility::XAccessibleContext > xAccContext =
-                                                xAcc->getAccessibleContext();
-            if ( xAccContext.is() )
+            css::uno::Reference<css::accessibility::XAccessible> xAccParent
+                = pAcc->getAccessibleParent();
+            if (xAccParent.is())
             {
-                css::uno::Reference < css::accessibility::XAccessible > xAccParent =
-                                                xAccContext->getAccessibleParent();
-                if ( xAccParent.is() )
+                SwAccessibleContext* pAccParentImpl
+                    = dynamic_cast<SwAccessibleContext*>(xAccParent.get());
+                if (pAccParentImpl)
                 {
-                    SwAccessibleContext* pAccParentImpl =
-                                dynamic_cast< SwAccessibleContext *>( xAccParent.get() );
-                    if ( pAccParentImpl )
-                    {
-                        pParent = pAccParentImpl->GetFrame();
-                    }
+                    pParent = pAccParentImpl->GetFrame();
                 }
             }
         }
