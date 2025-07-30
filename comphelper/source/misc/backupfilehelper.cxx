@@ -896,13 +896,13 @@ namespace
 
                         nSize -= nToTransfer;
                     }
+                }
 
 #if !defined Z_PREFIX
-                    deflateEnd(&zstream);
+                deflateEnd(&zstream);
 #else
-                    z_deflateEnd(&zstream);
+                z_deflateEnd(&zstream);
 #endif
-                }
             }
 
             maFile->close();
