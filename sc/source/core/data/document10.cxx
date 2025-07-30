@@ -409,9 +409,9 @@ void ScDocument::EnableDelayStartListeningFormulaCells( ScColumn* column, bool d
         {
             if( it->second.first != -1 )
             {
-                const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
-                sc::StartListeningContext aStartCxt(*this, pPosSet);
-                sc::EndListeningContext aEndCxt(*this, pPosSet);
+                auto xPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+                sc::StartListeningContext aStartCxt(*this, xPosSet);
+                sc::EndListeningContext aEndCxt(*this, std::move(xPosSet));
                 column->StartListeningFormulaCells(aStartCxt, aEndCxt, it->second.first, it->second.second);
             }
             pDelayedStartListeningFormulaCells.erase( it );

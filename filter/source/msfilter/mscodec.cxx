@@ -377,10 +377,9 @@ void MSCodec_CryptoAPI::InitKey (
     }
 
     // calculate SHA1 hash of initialData
-    std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
+    m_aDigestValue = ::comphelper::Hash::calculateHash(
             initialData.data(), initialData.size(),
-            ::comphelper::HashType::SHA1));
-    m_aDigestValue = sha1;
+            ::comphelper::HashType::SHA1);
 
     lcl_PrintDigest(m_aDigestValue.data(), "digest value");
 

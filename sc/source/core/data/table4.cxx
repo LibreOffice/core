@@ -1254,7 +1254,7 @@ void  ScTable::FillSparkline(bool bVertical, SCCOLROW nFixed,
     {
         auto pSparkline = bVertical ? GetSparkline(nFixed, nCurrent) : GetSparkline(nCurrent, nFixed);
         bHasSparklines = bHasSparklines || pSparkline;
-        aSparklineSeries.push_back(pSparkline);
+        aSparklineSeries.push_back(std::move(pSparkline));
     }
 
     if (bHasSparklines)

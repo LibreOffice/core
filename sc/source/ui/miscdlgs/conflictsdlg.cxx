@@ -184,7 +184,7 @@ ScConflictsListEntry& ScConflictsFinder::GetEntry( sal_uLong nSharedAction, cons
     ScConflictsListEntry aEntry;
     aEntry.meConflictAction = SC_CONFLICT_ACTION_NONE;
     aEntry.maSharedActions.push_back( nSharedAction );
-    mrConflictsList.push_back( aEntry );
+    mrConflictsList.push_back(std::move(aEntry));
     return mrConflictsList.back();
 }
 

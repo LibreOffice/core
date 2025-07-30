@@ -667,7 +667,7 @@ const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
     {
         OpenCLPlatformInfo aPlatformInfo;
         if(createPlatformInfo(pPlatforms[i], aPlatformInfo))
-            aPlatforms.push_back(aPlatformInfo);
+            aPlatforms.push_back(std::move(aPlatformInfo));
     }
 
     return aPlatforms;

@@ -189,7 +189,7 @@ void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op
     aEntry.eConnect = meConn;
     setQueryOp(aEntry, op);
 
-    maEntries.push_back(aEntry);
+    maEntries.push_back(std::move(aEntry));
 }
 
 os::iface::import_auto_filter_node* ScOrcusAutoFilterNode::start_node(os::auto_filter_node_op_t op)

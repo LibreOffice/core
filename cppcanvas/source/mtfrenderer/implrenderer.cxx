@@ -238,8 +238,7 @@ namespace cppcanvas::internal
         void VectorOfOutDevStates::clearStateStack()
         {
             m_aStates.clear();
-            const OutDevState aDefaultState;
-            m_aStates.push_back(aDefaultState);
+            m_aStates.push_back(OutDevState());
         }
 
         OutDevState& VectorOfOutDevStates::getState()

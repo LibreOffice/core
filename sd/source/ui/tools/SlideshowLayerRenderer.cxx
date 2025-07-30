@@ -503,7 +503,7 @@ public:
                 aTextFieldPass.maFieldType = sTextFieldType;
                 aTextFieldPass.mpObject = pObject;
 
-                mrRenderState.maTextFields.push_back(aTextFieldPass);
+                mrRenderState.maTextFields.push_back(std::move(aTextFieldPass));
             }
             return;
         }

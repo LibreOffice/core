@@ -2334,7 +2334,7 @@ bool GDIMetaFile::CreateThumbnail(Bitmap& rBitmap, BmpConversion eColorConversio
         if (aSize.Width() && aSize.Height())
             aBitmap.Convert(eColorConversion);
 
-        rBitmap = aBitmap;
+        rBitmap = std::move(aBitmap);
     }
 
     return !rBitmap.IsEmpty();

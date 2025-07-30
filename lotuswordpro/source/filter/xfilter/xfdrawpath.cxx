@@ -88,7 +88,7 @@ void    XFDrawPath::MoveTo(XFPoint pt)
 
     entry.SetCommand(u"M"_ustr);
     entry.AddPoint(pt);
-    m_aPaths.push_back(entry);
+    m_aPaths.push_back(std::move(entry));
 }
 
 void    XFDrawPath::LineTo(XFPoint pt)
@@ -97,7 +97,7 @@ void    XFDrawPath::LineTo(XFPoint pt)
 
     entry.SetCommand(u"L"_ustr);
     entry.AddPoint(pt);
-    m_aPaths.push_back(entry);
+    m_aPaths.push_back(std::move(entry));
 }
 
 void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2)
@@ -109,7 +109,7 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2)
     entry.AddPoint(ctrl2);
     entry.AddPoint(dest);
 
-    m_aPaths.push_back(entry);
+    m_aPaths.push_back(std::move(entry));
 }
 
 void    XFDrawPath::ClosePath()
@@ -118,7 +118,7 @@ void    XFDrawPath::ClosePath()
 
     entry.SetCommand(u"Z"_ustr);
 
-    m_aPaths.push_back(entry);
+    m_aPaths.push_back(std::move(entry));
 }
 
 void    XFDrawPath::ToXml(IXFStream *pStrm)
