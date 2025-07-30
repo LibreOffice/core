@@ -31,31 +31,31 @@ void DAVProperties::createSerfPropName( ::std::u16string_view const rFullName,
 {
     if (o3tl::starts_with(rFullName, u"DAV:"))
     {
-        rName.nspace = "DAV:";
+        rName.nspace = "DAV:"_ostr;
         rName.name
-            = strdup( OUStringToOString(
-                        rFullName.substr(RTL_CONSTASCII_LENGTH("DAV:")),
-                                        RTL_TEXTENCODING_UTF8 ).getStr() );
+            = OUStringToOString(
+                rFullName.substr(RTL_CONSTASCII_LENGTH("DAV:")),
+                                RTL_TEXTENCODING_UTF8 );
     }
     else if (o3tl::starts_with(rFullName, u"http://apache.org/dav/props/"))
     {
-        rName.nspace = "http://apache.org/dav/props/";
-        rName.name
-            = strdup( OUStringToOString(
-                        rFullName.substr(
-                            RTL_CONSTASCII_LENGTH(
-                                "http://apache.org/dav/props/" ) ),
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
+        rName.nspace = "http://apache.org/dav/props/"_ostr;
+        rName.name =
+            OUStringToOString(
+              rFullName.substr(
+                  RTL_CONSTASCII_LENGTH(
+                      "http://apache.org/dav/props/" ) ),
+                  RTL_TEXTENCODING_UTF8 );
     }
     else if (o3tl::starts_with(rFullName, u"http://ucb.openoffice.org/dav/props/"))
     {
-        rName.nspace = "http://ucb.openoffice.org/dav/props/";
-        rName.name
-            = strdup( OUStringToOString(
-                        rFullName.substr(
-                            RTL_CONSTASCII_LENGTH(
-                                "http://ucb.openoffice.org/dav/props/" ) ),
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
+        rName.nspace = "http://ucb.openoffice.org/dav/props/"_ostr;
+        rName.name =
+            OUStringToOString(
+              rFullName.substr(
+                  RTL_CONSTASCII_LENGTH(
+                      "http://ucb.openoffice.org/dav/props/" ) ),
+                  RTL_TEXTENCODING_UTF8 );
     }
     else if (o3tl::starts_with(rFullName, u"<prop:"))
     {
@@ -68,11 +68,11 @@ void DAVProperties::createSerfPropName( ::std::u16string_view const rFullName,
 
         sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
         sal_Int32 nLen = aFullName.indexOf( ' ' ) - nStart;
-        rName.name = strdup( aFullName.copy( nStart, nLen ).getStr() );
+        rName.name = aFullName.copy( nStart, nLen );
 
         nStart = aFullName.indexOf( '=', nStart + nLen ) + 2; // after ="
         nLen = aFullName.getLength() - RTL_CONSTASCII_LENGTH( "\">" ) - nStart;
-        rName.nspace = strdup( aFullName.copy( nStart, nLen ).getStr() );
+        rName.nspace = aFullName.copy( nStart, nLen );
     }
     else
     {
@@ -80,10 +80,10 @@ void DAVProperties::createSerfPropName( ::std::u16string_view const rFullName,
         // to the "<prop:" form above
         assert(rFullName.find(':') == ::std::u16string_view::npos);
         // Add our namespace to our own properties.
-        rName.nspace = "http://ucb.openoffice.org/dav/props/";
-        rName.name
-            = strdup( OUStringToOString( rFullName,
-                                              RTL_TEXTENCODING_UTF8 ).getStr() );
+        rName.nspace = "http://ucb.openoffice.org/dav/props/"_ostr;
+        rName.name =
+            OUStringToOString( rFullName,
+                                    RTL_TEXTENCODING_UTF8 );
     }
 }
 
@@ -154,10 +154,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
 // static
 bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
 {
-    return ( rName.nspace &&
-             ( rtl_str_compareIgnoreAsciiCase(
-                 rName.nspace, "http://ucb.openoffice.org/dav/props/" )
-               == 0 ) );
+    return rName.nspace.equalsIgnoreAsciiCase("http://ucb.openoffice.org/dav/props/");
 }
 
 bool DAVProperties::isUCBSpecialProperty(std::u16string_view rFullName, OUString& rParsedName)

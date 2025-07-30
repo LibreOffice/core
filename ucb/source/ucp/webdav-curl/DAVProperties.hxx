@@ -21,11 +21,12 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 namespace http_dav_ucp
 {
 
-typedef struct { const char *nspace, *name; } SerfPropName;
+typedef struct { OString nspace; OString name; } SerfPropName;
 
 struct DAVProperties
 {
