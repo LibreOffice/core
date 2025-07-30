@@ -161,7 +161,7 @@ class TBCBitMap final : public TBBase
 {
 friend class TBCBSpecific; // #FIXME hacky access, need to fix
     sal_Int32 cbDIB;
-    BitmapEx mBitMap;
+    Bitmap mBitMap;
 public:
     TBCBitMap();
     virtual ~TBCBitMap() override;
@@ -170,7 +170,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
    // #FIXME Const-ness
-    BitmapEx& getBitMap() { return mBitMap;}
+    Bitmap& getBitMap() { return mBitMap;}
 };
 
 class MSFILTER_DLLPUBLIC TBCMenuSpecific final : public TBBase

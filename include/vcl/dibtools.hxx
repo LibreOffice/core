@@ -49,6 +49,12 @@ bool VCL_DLLPUBLIC ReadDIBBitmapEx(
     bool bFileHeader = true,
     bool bMSOFormat = false);
 
+bool VCL_DLLPUBLIC ReadDIBBitmapEx(
+    Bitmap& rTarget,
+    SvStream& rIStm,
+    bool bFileHeader = true,
+    bool bMSOFormat = false);
+
 bool VCL_DLLPUBLIC ReadDIBV5(
     Bitmap& rTarget,
     AlphaMask& rTargetAlpha,

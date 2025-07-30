@@ -296,7 +296,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                     TBCBitMap* pIconMask = pSpecificInfo->getIconMask();
                     if (pIconMask)
                     {
-                        const Bitmap& rMaskBase(pIconMask->getBitMap().GetBitmap());
+                        const Bitmap& rMaskBase(pIconMask->getBitMap());
                         Size aMaskSize = rMaskBase.GetSizePixel();
                         if (aMaskSize.Width() && aMaskSize.Height())
                         {

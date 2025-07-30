@@ -1681,6 +1681,78 @@ bool ReadDIBBitmapEx(
     return bRetval;
 }
 
+bool ReadDIBBitmapEx(
+    Bitmap& rTarget,
+    SvStream& rIStm,
+    bool bFileHeader,
+    bool bMSOFormat)
+{
+    Bitmap aBmp;
+    if (!ImplReadDIB(aBmp, nullptr, rIStm, bFileHeader, bMSOFormat) && !rIStm.GetError())
+        return false;
+
+    // base bitmap was read, set as return value and try to read alpha extra-data
+    const sal_uInt64 nStmPos(rIStm.Tell());
+    sal_uInt32 nMagic1(0);
+    sal_uInt32 nMagic2(0);
+
+    rTarget = aBmp;
+    if (rIStm.remainingSize() >= 4)
+        rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
+    bool bRetval = (0x25091962 == nMagic1) && (0xACB20201 == nMagic2) && !rIStm.GetError();
+
+    if(bRetval)
+    {
+        sal_uInt8 tmp = 0;
+        rIStm.ReadUChar( tmp );
+        bRetval = !rIStm.GetError();
+
+        if(bRetval)
+        {
+            switch (tmp)
+            {
+            case 2: // TransparentType::Bitmap
+                {
+                    Bitmap aMask;
+
+                    bRetval = ImplReadDIB(aMask, nullptr, rIStm, true);
+
+                    if(bRetval && !aMask.IsEmpty())
+                        rTarget = Bitmap(BitmapEx(aBmp, aMask));
+
+                    break;
+                }
+            case 1: // backwards compat for old option TransparentType::Color
+                {
+                    Color aTransparentColor;
+
+                    tools::GenericTypeSerializer aSerializer(rIStm);
+                    aSerializer.readColor(aTransparentColor);
+
+                    bRetval = rIStm.good();
+
+                    if(bRetval)
+                    {
+                        rTarget = Bitmap(BitmapEx(aBmp, aTransparentColor));
+                    }
+                    break;
+                }
+            default: break;
+            }
+        }
+    }
+
+    if(!bRetval)
+    {
+        // alpha extra data could not be read; reset, but use base bitmap as result
+        rIStm.ResetError();
+        rIStm.Seek(nStmPos);
+        bRetval = true;
+    }
+
+    return bRetval;
+}
+
 bool ReadDIBV5(
     Bitmap& rTarget,
     AlphaMask& rTargetAlpha,
