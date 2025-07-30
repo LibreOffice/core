@@ -278,7 +278,7 @@ public:
 class SVXCORE_DLLPUBLIC XDashList final : public XPropertyList
 {
 private:
-    BitmapEx            maBitmapSolidLine;
+    Bitmap            maBitmapSolidLine;
     OUString            maStringSolidLine;
     OUString            maStringNoLine;
 
@@ -298,7 +298,7 @@ public:
     // Special call to get a bitmap for the solid line representation. It
     // creates a bitmap fitting in size and style to the ones you get by
     // using GetUiBitmap for existing entries.
-    BitmapEx const & GetBitmapForUISolidLine() const;
+    Bitmap const & GetBitmapForUISolidLine() const;
 
     static Bitmap CreateBitmapForXDash(const XDash* pDash, double fLineThickness);
 

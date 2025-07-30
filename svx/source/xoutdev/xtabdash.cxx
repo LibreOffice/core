@@ -189,7 +189,7 @@ Bitmap XDashList::CreateBitmapForUI( tools::Long nIndex )
     return CreateBitmapForXDash(&rDash, ImpGetDefaultLineThickness());
 }
 
-BitmapEx const & XDashList::GetBitmapForUISolidLine() const
+Bitmap const & XDashList::GetBitmapForUISolidLine() const
 {
     if(maBitmapSolidLine.IsEmpty())
     {

@@ -941,7 +941,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
         m_xControl->append_text(pList->GetStringForUiNoLine());
 
         // entry for solid line
-        const BitmapEx aBitmap = pList->GetBitmapForUISolidLine();
+        const Bitmap aBitmap = pList->GetBitmapForUISolidLine();
         const Size aBmpSize(aBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
         pVD->DrawBitmapEx(Point(), aBitmap);
