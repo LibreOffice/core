@@ -1049,7 +1049,8 @@ SAL_IMPLEMENT_MAIN()
             std::cerr << "Cannot open \"" << cppPathname << "\" for writing\n";
             std::exit(EXIT_FAILURE);
         }
-        cppOut << "#include <memory>\n"
+        cppOut << "#include <sal/config.h>\n"
+                  "#include <memory>\n"
                   "#include <emscripten/bind.h>\n"
                   "#include <com/sun/star/uno/Any.hxx>\n"
                   "#include <com/sun/star/uno/Reference.hxx>\n"
