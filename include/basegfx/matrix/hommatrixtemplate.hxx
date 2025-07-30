@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
+#include <cassert>
 #include <cmath>
 
 namespace basegfx::internal
@@ -154,6 +155,7 @@ namespace basegfx::internal
                         return false;
                     }
 
+                    assert(fBig != 0.0 && "help coverity see it's not zero");
                     fStorage[a] = 1.0 / fBig;
                 }
 
