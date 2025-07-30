@@ -1861,6 +1861,21 @@ bool SwContentFrame::CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDont
     return bRet;
 }
 
+bool SwContentFrame::IgnoringSplitFlyAnchor(bool bValue) const
+{
+    bool bRet = bValue;
+    if (IsTextFrame())
+    {
+        auto pTextFrame = DynCastTextFrame();
+        if (pTextFrame->HasSplitFlyDrawObjs())
+        {
+            // Turn off the value for split fly anchors.
+            bRet = false;
+        }
+    }
+    return bRet;
+}
+
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
 static bool lcl_InnerCalcLayout( SwFrame *pFrame,

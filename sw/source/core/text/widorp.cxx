@@ -74,11 +74,11 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     m_bKeep = m_bKeep || !m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetSplit().GetValue() ||
         m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep().GetValue();
 
-    if (m_bKeep && m_pFrame->HasSplitFlyDrawObjs())
+    if (m_bKeep)
     {
         // Ignore keep-together and keep-with-next if this is an anchor for a floating table. It's
         // OK to split the text frame into two, to separate the floating table and the anchor text.
-        m_bKeep = false;
+        m_bKeep = m_pFrame->IgnoringSplitFlyAnchor(m_bKeep);
     }
 
     m_bBreak = false;
@@ -259,13 +259,9 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
         if( ( bFirstLine && m_pFrame->GetIndPrev() )
             || ( rLine.GetLineNr() <= rLine.GetDropLines() ) )
         {
-            bool bSplitFly = !m_bKeep && m_pFrame->HasSplitFlyDrawObjs();
             // The SwTextFrameBreak ctor already turns off m_bKeep for split fly anchors, don't
             // change that decision here.
-            if (!bSplitFly)
-            {
-                m_bKeep = true;
-            }
+            m_bKeep = m_pFrame->IgnoringSplitFlyAnchor(true);
             m_bBreak = false;
         }
         else if(bFirstLine && m_pFrame->IsInFootnote() && !m_pFrame->FindFootnoteFrame()->GetPrev())

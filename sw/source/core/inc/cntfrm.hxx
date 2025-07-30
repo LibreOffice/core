@@ -117,6 +117,9 @@ public:
     inline  SwContentFrame* GetPrevContentFrame() const;
     static bool CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDontLeave,
             tools::Long nBottom, bool bSkipRowSpanCells);
+
+    /// Returns bValue as is, unless this frame has split fly draw objects.
+    bool IgnoringSplitFlyAnchor(bool bValue) const;
 };
 
 inline SwContentFrame* SwContentFrame::GetNextContentFrame() const
