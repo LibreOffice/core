@@ -483,9 +483,9 @@ test::AccessibleTestBase::Dialog::Dialog(const uno::Reference<awt::XDialog2>& xD
     uno::Reference<css::awt::XWindow> xWindow(xDialog2, uno::UNO_QUERY_THROW);
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     assert(pWindow);
-    mxAccessible = pWindow->GetAccessible();
-    if (mxAccessible)
-        setWindow(mxAccessible);
+    mpAccessible = pWindow->GetAccessible();
+    if (mpAccessible)
+        setWindow(mpAccessible);
     else
     {
         std::cerr << "WARNING: AccessibleTestBase::Dialog() constructed with awt::XDialog2 '"

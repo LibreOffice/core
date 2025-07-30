@@ -208,7 +208,7 @@ protected:
     private:
         bool mbAutoClose;
         css::uno::Reference<css::awt::XDialog2> mxDialog2;
-        css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
+        rtl::Reference<comphelper::OAccessible> mpAccessible;
 
     public:
         Dialog(const css::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
@@ -216,9 +216,9 @@ protected:
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
 
-        const css::uno::Reference<css::accessibility::XAccessible>& getAccessible() const
+        css::uno::Reference<css::accessibility::XAccessible> getAccessible() const
         {
-            return mxAccessible;
+            return mpAccessible;
         }
 
         void close(sal_Int32 result = VclResponseType::RET_CANCEL);
