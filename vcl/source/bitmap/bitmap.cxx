@@ -141,9 +141,10 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
     else
     {
         ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
-        xDev->SetOutputSize(maPrefSize);
-        xDev->DrawBitmapEx(Point(0, 0), maPrefSize, rBitmapEx);
-        mxSalBmp = xDev->GetBitmap(Point(0,0), maPrefSize).mxSalBmp;
+        Size aPixelSize = rBitmapEx.GetSizePixel();
+        xDev->SetOutputSize(aPixelSize);
+        xDev->DrawBitmapEx(Point(0, 0), aPixelSize, rBitmapEx);
+        mxSalBmp = xDev->GetBitmap(Point(0,0), aPixelSize).mxSalBmp;
     }
 }
 
