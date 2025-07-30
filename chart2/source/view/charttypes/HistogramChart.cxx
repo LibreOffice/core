@@ -10,28 +10,12 @@
 #include "HistogramChart.hxx"
 
 #include <ChartType.hxx>
-#include <../chart2/inc/ChartModel.hxx>
-#include <ShapeFactory.hxx>
-#include <CommonConverters.hxx>
-#include <ObjectIdentifier.hxx>
-#include <LabelPositionHelper.hxx>
-#include <AxisIndexDefines.hxx>
-#include <Clipping.hxx>
-#include <DateHelper.hxx>
-#include <svx/scene3d.hxx>
-#include <comphelper/scopeguard.hxx>
 
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
-
-#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::rtl::math;
-using namespace ::com::sun::star::chart2;
 
 HistogramChart::HistogramChart(const rtl::Reference<ChartType>& xChartTypeModel,
                                sal_Int32 nDimensionCount)

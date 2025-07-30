@@ -31,7 +31,6 @@
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;

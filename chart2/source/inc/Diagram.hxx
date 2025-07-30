@@ -19,6 +19,7 @@
 #pragma once
 
 #include "OPropertySet.hxx"
+#include "ChartTypeTemplate.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -31,9 +32,6 @@
 
 #include <vector>
 
-namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
@@ -42,7 +40,6 @@ class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class ChartTypeManager;
-class ChartTypeTemplate;
 class DataSeries;
 class Legend;
 class DataTable;

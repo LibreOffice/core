@@ -9,12 +9,9 @@
 
 #pragma once
 
-#include <svx/svxdllapi.h>
 #include <svx/ChartColorPaletteType.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <tools/gen.hxx>
-
-#include <array>
 
 class OutputDevice;
 

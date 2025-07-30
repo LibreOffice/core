@@ -347,6 +347,9 @@ excludelist:
     chart2/source/tools/WrappedProperty.cxx:
     # Actually used
     - com/sun/star/beans/XPropertyState.hpp
+    chart2/source/tools/WrappedDefaultProperty.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertyState.hpp
     chart2/source/view/inc/VLineProperties.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/Reference.h
@@ -449,12 +452,6 @@ excludelist:
     chart2/source/controller/inc/ItemPropertyMap.hxx:
     # base class has to be a complete type
     - map
-    chart2/source/controller/inc/RangeSelectionHelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/uno/Sequence.h
-    chart2/source/controller/inc/RangeSelectionListener.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sheet/XRangeSelectionListener.hpp
     chart2/source/controller/accessibility/AccessibleChartShape.hxx:
     # base class has to be a complete type
     - AccessibleBase.hxx
@@ -557,15 +554,6 @@ excludelist:
     chart2/source/controller/main/ChartFrameloader.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp
-    chart2/source/controller/main/CommandDispatch.hxx:
-    # base class has to be a complete type
-    - com/sun/star/frame/XDispatch.hpp
-    - com/sun/star/util/XModifyListener.hpp
-    - comphelper/interfacecontainer2.hxx
-    chart2/source/controller/main/ControllerCommandDispatch.hxx:
-    # base class has to be a complete type
-    - CommandDispatch.hxx
-    - com/sun/star/view/XSelectionChangeListener.hpp
     chart2/source/controller/main/ElementSelector.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

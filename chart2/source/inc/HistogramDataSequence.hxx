@@ -12,7 +12,6 @@
 // helper classes
 #include <comphelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer2.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <rtl/ref.hxx>
@@ -25,7 +24,6 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 
 namespace chart
 {

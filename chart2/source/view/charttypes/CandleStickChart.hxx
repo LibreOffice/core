@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include "BarPositionHelper.hxx"
 #include <VSeriesPlotter.hxx>
 

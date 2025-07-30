@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-
 #include <dlg_DataSource.hxx>
 #include <ChartTypeTemplateProvider.hxx>
 #include <ChartTypeTemplate.hxx>
@@ -29,7 +27,6 @@
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"
 
-using namespace ::com::sun::star;
 using namespace ::chart;
 
 namespace chart

@@ -31,7 +31,6 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
-class DataSeries;
 
 class DiagramHelper
 {

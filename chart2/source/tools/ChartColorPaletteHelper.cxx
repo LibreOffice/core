@@ -8,11 +8,9 @@
  */
 
 #include <ChartColorPaletteHelper.hxx>
-#include <ChartModel.hxx>
 #include <sal/log.hxx>
-#include <docmodel/uno/UnoTheme.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/virdev.hxx>
 
 namespace chart
 {

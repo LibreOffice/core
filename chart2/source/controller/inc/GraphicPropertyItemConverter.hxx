@@ -22,8 +22,6 @@
 
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-
 class SdrModel;
 
 namespace chart { class ChartModel; }

@@ -22,8 +22,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
 
-namespace com::sun::star::beans { class XPropertySetInfo; }
-
 namespace chart
 {
 class ChartModel;

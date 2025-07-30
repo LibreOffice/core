@@ -26,8 +26,6 @@
 
 namespace chart
 {
-using namespace ::com::sun::star;
-
 class SplinePropertiesDialog;
 class SteppedPropertiesDialog;
 

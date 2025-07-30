@@ -43,14 +43,7 @@
 #include <memory>
 #include <string_view>
 
-namespace com::sun::star::accessibility { class XAccessible; }
-namespace com::sun::star::awt { class XFocusListener; }
-namespace com::sun::star::awt { class XKeyListener; }
-namespace com::sun::star::awt { class XMouseListener; }
-namespace com::sun::star::awt { class XMouseMotionListener; }
-namespace com::sun::star::awt { class XPaintListener; }
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::awt { class XWindowListener; }
 namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::frame { class XDispatch; }

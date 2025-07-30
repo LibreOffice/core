@@ -28,7 +28,6 @@
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ref.hxx>
 
 #include <vector>
@@ -36,7 +35,6 @@
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2::data { class XTextualDataSequence; }
 
 namespace chart

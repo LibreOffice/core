@@ -19,7 +19,6 @@
 #pragma once
 
 
-#include <config_options.h>
 // helper classes
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>

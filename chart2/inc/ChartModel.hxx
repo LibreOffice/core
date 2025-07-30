@@ -66,7 +66,6 @@ namespace com::sun::star::document { class XFilter; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::uno { class XAggregation; }
 
 class SvNumberFormatter;
 class SvNumberFormatsSupplierObj;

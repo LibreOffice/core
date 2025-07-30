@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <BaseGFXHelper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <basegfx/vector/b2dvector.hxx>

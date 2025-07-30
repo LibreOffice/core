@@ -25,7 +25,6 @@
 #include <ObjectIdentifier.hxx>
 #include "Splines.hxx"
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <LabelPositionHelper.hxx>
 #include <Clipping.hxx>
 #include <Stripe.hxx>

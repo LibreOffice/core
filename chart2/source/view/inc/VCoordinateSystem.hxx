@@ -33,17 +33,10 @@
 
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
-namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::drawing { class XShapes; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
-class ExplicitCategoriesProvider;
 class ScaleAutomatism;
 class ChartModel;
 class Axis;

@@ -20,7 +20,6 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include <DiagramHelper.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <DataSourceHelper.hxx>
@@ -36,7 +35,6 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <svl/numuno.hxx>
 
 #include <limits>
 

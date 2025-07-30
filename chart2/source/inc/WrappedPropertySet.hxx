@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include "WrappedProperty.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>

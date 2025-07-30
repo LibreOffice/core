@@ -24,8 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <comphelper/OAccessible.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <tools/color.hxx>
 #include <unotools/weakref.hxx>
 #include <vcl/window.hxx>
@@ -33,9 +31,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-
-namespace com::sun::star::awt { class XWindow; }
-
 
 class SdrView;
 

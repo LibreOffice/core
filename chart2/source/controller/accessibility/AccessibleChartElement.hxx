@@ -20,8 +20,6 @@
 
 #include <AccessibleBase.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
-
 namespace chart
 {
 class AccessibleTextHelper;

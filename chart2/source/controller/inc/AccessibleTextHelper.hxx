@@ -23,7 +23,6 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 
 
 namespace chart

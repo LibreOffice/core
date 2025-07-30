@@ -17,7 +17,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::frame { class XFramesSupplier; }
 
 namespace chart {

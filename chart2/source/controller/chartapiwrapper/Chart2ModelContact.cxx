@@ -21,7 +21,6 @@
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <CommonConverters.hxx>
-#include <servicenames.hxx>
 #include <ObjectIdentifier.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <Axis.hxx>
@@ -32,7 +31,6 @@
 
 #include <ChartModel.hxx>
 
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;

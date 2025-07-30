@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/uno/Any.hxx>
 

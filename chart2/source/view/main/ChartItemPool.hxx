@@ -18,9 +18,7 @@
  */
 #pragma once
 
-#include <tools/mapunit.hxx>
 #include <svl/itempool.hxx>
-#include <memory>
 
 namespace chart
 {

@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include "FastPropertyIdRanges.hxx"
 
 #include <vector>

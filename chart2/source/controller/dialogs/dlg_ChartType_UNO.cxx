@@ -20,7 +20,6 @@
 #include <dlg_ChartType_UNO.hxx>
 #include <dlg_ChartType.hxx>
 #include <ChartModel.hxx>
-#include <servicenames.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 

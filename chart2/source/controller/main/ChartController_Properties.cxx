@@ -41,7 +41,6 @@
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>

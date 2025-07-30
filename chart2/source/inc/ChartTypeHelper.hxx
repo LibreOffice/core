@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include "ChartType.hxx"
 #include <rtl/ref.hxx>

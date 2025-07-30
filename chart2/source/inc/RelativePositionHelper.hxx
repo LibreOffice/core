@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 #include <com/sun/star/awt/Point.hpp>

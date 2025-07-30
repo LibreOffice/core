@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <rtl/ref.hxx>
 #include "GridProperties.hxx"

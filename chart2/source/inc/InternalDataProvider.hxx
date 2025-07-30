@@ -35,8 +35,6 @@
 
 #include <map>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-
 namespace chart
 {
 class ChartModel;

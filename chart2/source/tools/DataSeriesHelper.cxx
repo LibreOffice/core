@@ -19,7 +19,6 @@
 
 #include <DataSeriesHelper.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesProperties.hxx>
 #include <DataSource.hxx>
 #include <ChartType.hxx>
 #include <unonames.hxx>
@@ -31,10 +30,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/SymbolStyle.hpp>
-#include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -47,7 +42,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

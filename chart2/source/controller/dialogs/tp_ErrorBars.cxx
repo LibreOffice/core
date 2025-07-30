@@ -19,8 +19,6 @@
 
 #include "tp_ErrorBars.hxx"
 
-using namespace ::com::sun::star;
-
 namespace chart
 {
 

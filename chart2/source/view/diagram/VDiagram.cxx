@@ -24,10 +24,8 @@
 #include <ViewDefines.hxx>
 #include <Stripe.hxx>
 #include <ObjectIdentifier.hxx>
-#include <DiagramHelper.hxx>
 #include <ChartType.hxx>
 #include <BaseGFXHelper.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <editeng/unoprnms.hxx>

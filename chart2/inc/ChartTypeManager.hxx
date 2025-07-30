@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

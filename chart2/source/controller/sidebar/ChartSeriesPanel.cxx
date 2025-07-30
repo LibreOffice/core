@@ -28,7 +28,6 @@
 #include <ChartModel.hxx>
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveModel.hxx>

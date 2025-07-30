@@ -20,6 +20,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <rtl/ref.hxx>
 
 namespace chart::DisposeHelper
 {

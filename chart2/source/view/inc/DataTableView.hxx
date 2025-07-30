@@ -11,17 +11,15 @@
 
 #include <svx/unoshape.hxx>
 #include <svx/unodraw/SvxTableShape.hxx>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <ChartModel.hxx>
 #include <DataTable.hxx>
 #include "VLineProperties.hxx"
 
 namespace chart
 {
 class VSeriesPlotter;
-class ChartModel;
-class LegendEntryProvider;
 
 /**
  * DataTableView is responsible to create the table object, set the cell

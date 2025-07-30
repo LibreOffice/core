@@ -28,8 +28,6 @@
 
 #include <vcl/tabs.hrc>
 
-using namespace ::com::sun::star;
-
 namespace chart
 {
 

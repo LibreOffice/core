@@ -20,7 +20,6 @@
 
 #include <AccessibleBase.hxx>
 
-#include <cppuhelper/implbase.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 
 namespace accessibility

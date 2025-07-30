@@ -21,7 +21,6 @@
 
 #include <Diagram.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>

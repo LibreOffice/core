@@ -18,7 +18,6 @@
  */
 
 #include "ChartFrameloader.hxx"
-#include <servicenames.hxx>
 #include <MediaDescriptorHelper.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>

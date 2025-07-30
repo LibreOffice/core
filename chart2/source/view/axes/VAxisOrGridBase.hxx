@@ -24,8 +24,6 @@
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-namespace com::sun::star::drawing { struct HomogenMatrix; }
-
 namespace chart
 {
 

@@ -21,7 +21,6 @@
 // helper classes
 #include <comphelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer2.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <rtl/ref.hxx>
@@ -35,8 +34,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-
-namespace com::sun::star::beans { class XPropertySetInfo; }
 
 namespace chart
 {

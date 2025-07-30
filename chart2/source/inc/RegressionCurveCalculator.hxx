@@ -23,7 +23,6 @@
 
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 
-namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 namespace chart

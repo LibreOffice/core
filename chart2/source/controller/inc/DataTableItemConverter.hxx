@@ -13,10 +13,6 @@
 #include <rtl/ref.hxx>
 #include <vector>
 
-namespace com::sun::star::awt
-{
-struct Size;
-}
 namespace com::sun::star::beans
 {
 class XPropertySet;

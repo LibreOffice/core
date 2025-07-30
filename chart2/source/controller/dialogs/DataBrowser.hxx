@@ -29,14 +29,7 @@ namespace com::sun::star {
     namespace awt {
         class XWindow;
     }
-    namespace chart2 {
-        class XChartDocument;
-    }
 }
-
-namespace com::sun::star::uno { class XComponentContext; }
-
-class OutputDevice;
 
 namespace chart
 {

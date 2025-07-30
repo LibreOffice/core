@@ -45,7 +45,6 @@
 #include <RegressionCurveModel.hxx>
 #include <StatisticsHelper.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <DataSeriesProperties.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>

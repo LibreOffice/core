@@ -21,8 +21,6 @@
 #include <ChartModel.hxx>
 #include <utility>
 
-using namespace ::com::sun::star;
-
 namespace chart
 {
 

@@ -31,7 +31,6 @@
 #include <PotentialRegressionCurveCalculator.hxx>
 #include <CommonConverters.hxx>
 #include <RegressionCurveModel.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
@@ -40,7 +39,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <o3tl/safeint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/property.hxx>

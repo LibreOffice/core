@@ -31,7 +31,6 @@
 namespace chart { struct ExplicitIncrementData; }
 namespace chart { struct ExplicitScaleData; }
 namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2 { class XTitle; }
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::uno { class XComponentContext; }
@@ -39,7 +38,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
-class ExplicitValueProvider;
 class ChartModel;
 
 namespace wrapper

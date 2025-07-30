@@ -28,7 +28,6 @@
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <utility>
 
 using namespace ::com::sun::star;

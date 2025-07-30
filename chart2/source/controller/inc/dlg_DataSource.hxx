@@ -22,8 +22,6 @@
 #include <vcl/weld.hxx>
 #include <memory>
 
-class BuilderPage;
-
 namespace chart
 {
 class ChartModel;

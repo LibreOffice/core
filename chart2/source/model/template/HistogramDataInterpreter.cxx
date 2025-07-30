@@ -10,16 +10,6 @@
 #include <sal/config.h>
 
 #include "HistogramDataInterpreter.hxx"
-#include <HistogramDataSequence.hxx>
-#include "HistogramCalculator.hxx"
-#include <LabeledDataSequence.hxx>
-
-#include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
-#include <CommonConverters.hxx>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <comphelper/diagnose_ex.hxx>
-#include <sal/log.hxx>
 
 using namespace css;
 

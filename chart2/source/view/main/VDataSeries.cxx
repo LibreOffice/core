@@ -18,7 +18,6 @@
  */
 
 #include <limits>
-#include <memory>
 #include <VDataSeries.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesProperties.hxx>
@@ -34,7 +33,6 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 

@@ -43,8 +43,6 @@
 
 #include <vcl/timer.hxx>
 
-namespace com::sun::star::drawing { class XDrawPage; }
-namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XUpdatable2; }

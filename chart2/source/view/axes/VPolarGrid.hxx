@@ -22,7 +22,6 @@
 #include "Tickmarks.hxx"
 #include <PlottingPositionHelper.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <memory>
 
 namespace chart { struct VLineProperties; }
 

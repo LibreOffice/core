@@ -29,7 +29,6 @@
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
@@ -40,7 +39,6 @@
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 

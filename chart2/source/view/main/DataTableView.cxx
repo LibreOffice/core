@@ -16,21 +16,17 @@
 
 #include <svx/svdotable.hxx>
 
-#include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/util/XBroadcaster.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <o3tl/unit_conversion.hxx>
 

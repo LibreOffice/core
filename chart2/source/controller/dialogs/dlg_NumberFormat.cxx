@@ -27,8 +27,6 @@
 
 namespace chart
 {
-using namespace ::com::sun::star;
-
 NumberFormatDialog::NumberFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialogController(pParent, &rSet, u"cui/ui/formatnumberdialog.ui"_ustr, u"FormatNumberDialog"_ustr)
     , m_xContent( m_xBuilder->weld_container(u"content"_ustr) )

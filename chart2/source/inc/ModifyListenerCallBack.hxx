@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

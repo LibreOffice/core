@@ -18,7 +18,6 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
-#include <ChartColorPalettes.hxx>
 
 class ToolbarUnoDispatcher;
 

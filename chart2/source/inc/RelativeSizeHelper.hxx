@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
-
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }

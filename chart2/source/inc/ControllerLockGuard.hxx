@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
-
 #include <rtl/ref.hxx>
 
 namespace chart

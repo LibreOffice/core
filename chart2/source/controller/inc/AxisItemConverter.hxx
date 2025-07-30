@@ -26,8 +26,6 @@
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XChartDocument; }
 namespace chart { class Axis; }
 namespace chart { struct ExplicitIncrementData; }
 namespace chart { struct ExplicitScaleData; }

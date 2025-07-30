@@ -21,7 +21,6 @@
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/awt/Size.hpp>

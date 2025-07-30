@@ -37,7 +37,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <LabelPositionHelper.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <Clipping.hxx>
 #include <servicenames_charttypes.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -87,9 +86,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
-#include <functional>
 #include <map>
-#include <unordered_map>
 
 
 namespace chart {

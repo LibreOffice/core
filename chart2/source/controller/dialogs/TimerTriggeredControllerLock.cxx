@@ -24,8 +24,6 @@
 
 namespace chart
 {
-using namespace ::com::sun::star;
-
 TimerTriggeredControllerLock::TimerTriggeredControllerLock(
     rtl::Reference<::chart::ChartModel> xModel)
     : m_xModel(std::move(xModel))

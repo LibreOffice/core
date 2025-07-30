@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include "StackMode.hxx"
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
@@ -30,14 +29,12 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace chart { class BaseCoordinateSystem; }
 namespace chart { class ChartType; }
 namespace chart { class DataSource; }
 namespace chart { class Diagram; }
 namespace chart { class DataSeries; }
-namespace chart { class ChartModel; }
 
 namespace chart::DataSeriesHelper
 {

@@ -25,16 +25,11 @@
 
 #include <RangeSelectionListener.hxx>
 
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-
 namespace chart { class TabPageNotifiable; }
 
 namespace chart
 {
-class ChartType;
 class ChartTypeTemplateProvider;
-class DataSeries;
 class DialogModel;
 
 class SeriesEntry

@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <tools/date.hxx>
 

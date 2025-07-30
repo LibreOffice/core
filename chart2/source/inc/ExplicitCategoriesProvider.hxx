@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <unotools/weakref.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -27,7 +26,6 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }

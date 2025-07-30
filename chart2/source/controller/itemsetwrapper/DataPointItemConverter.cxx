@@ -26,7 +26,6 @@
 #include <StatisticsItemConverter.hxx>
 #include <SeriesOptionsItemConverter.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <DataSeriesProperties.hxx>
 #include <Diagram.hxx>
 #include <ChartModel.hxx>

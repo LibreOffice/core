@@ -11,7 +11,6 @@
 
 #include "BarChart.hxx"
 #include "BarPositionHelper.hxx"
-#include <memory>
 
 namespace chart
 {

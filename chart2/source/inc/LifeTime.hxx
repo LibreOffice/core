@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <mutex>
 #include <osl/conditn.hxx>
 #include <comphelper/interfacecontainer4.hxx>

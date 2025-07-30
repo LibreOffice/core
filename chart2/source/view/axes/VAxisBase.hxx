@@ -31,7 +31,6 @@ namespace chart
 class VSeriesPlotter;
 class DataTableView;
 class ChartModel;
-class LegendEntryProvider;
 
 class VAxisBase : public VAxisOrGridBase
 {

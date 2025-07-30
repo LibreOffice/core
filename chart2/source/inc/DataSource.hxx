@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>

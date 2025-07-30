@@ -31,7 +31,6 @@
 #include <AxisHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
 

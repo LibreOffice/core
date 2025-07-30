@@ -28,8 +28,6 @@
 #include <PlottingPositionHelper.hxx>
 #include <tools/color.hxx>
 
-#include <memory>
-
 namespace chart
 {
 using namespace ::com::sun::star;

@@ -21,7 +21,6 @@
 #include <DataBrowserModel.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeManager.hxx>
-#include <ChartView.hxx>
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>

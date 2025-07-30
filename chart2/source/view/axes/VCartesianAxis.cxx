@@ -35,9 +35,7 @@
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
-#include <VSeriesPlotter.hxx>
 #include <DataTableView.hxx>
-#include <ChartModel.hxx>
 
 #include <comphelper/scopeguard.hxx>
 

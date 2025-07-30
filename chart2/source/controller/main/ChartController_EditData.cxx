@@ -27,8 +27,6 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace ::com::sun::star;
-
 namespace chart
 {
 

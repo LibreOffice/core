@@ -22,7 +22,6 @@
 #include "NetChartType.hxx"
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <ChartType.hxx>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>

@@ -23,7 +23,6 @@
 
 #include "SeriesPlotterContainer.hxx"
 
-#include <ChartView.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
@@ -33,7 +32,6 @@
 #include <DiagramHelper.hxx>
 #include <Axis.hxx>
 #include <AxisIndexDefines.hxx>
-#include <ConfigColorScheme.hxx>
 #include <ChartColorScheme.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -44,7 +42,6 @@
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <comphelper/classids.hxx>
 #include <servicenames_charttypes.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

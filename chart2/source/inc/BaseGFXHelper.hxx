@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>

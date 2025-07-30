@@ -9,16 +9,9 @@
 
 #include <HistogramDataSequence.hxx>
 
-#include <CommonFunctors.hxx>
 #include <ModifyListenerHelper.hxx>
 
-#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
-#include <algorithm>
-#include <strings.hrc>
-#include <ResId.hxx>
-#include <utility>
 
 using namespace css;
 

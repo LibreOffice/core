@@ -24,7 +24,6 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <mutex>
 #include <algorithm>
 #include <utility>
 

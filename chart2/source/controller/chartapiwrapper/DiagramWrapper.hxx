@@ -37,7 +37,6 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::lang { class XEventListener; }
 namespace chart { class Diagram; }
 

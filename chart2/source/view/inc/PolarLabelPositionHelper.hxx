@@ -21,6 +21,7 @@
 
 #include "LabelPositionHelper.hxx"
 #include <com/sun/star/awt/Point.hpp>
+#include <basegfx/vector/b3dvector.hxx>
 
 namespace chart
 {

@@ -20,7 +20,6 @@
 #include <dlg_CreationWizard_UNO.hxx>
 #include <dlg_CreationWizard.hxx>
 #include <ChartModel.hxx>
-#include <servicenames.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

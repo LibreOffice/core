@@ -29,7 +29,6 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <GridProperties.hxx>
 #include <LegendHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>

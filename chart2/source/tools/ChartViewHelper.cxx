@@ -20,7 +20,6 @@
 #include <ChartViewHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartView.hxx>
-#include <servicenames.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>

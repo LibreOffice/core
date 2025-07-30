@@ -24,8 +24,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <algorithm>
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Sequence;

@@ -28,10 +28,8 @@
 
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/unoshtxt.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <osl/diagnose.h>
 

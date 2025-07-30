@@ -19,15 +19,12 @@
 
 #include "AccessibleChartElement.hxx"
 #include <AccessibleTextHelper.hxx>
-#include <CharacterProperties.hxx>
 #include <ChartModel.hxx>
 #include <ChartController.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;

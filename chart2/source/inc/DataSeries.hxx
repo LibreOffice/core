@@ -42,7 +42,6 @@ namespace com::sun::star::beans { class XPropertySet; }
 
 namespace chart
 {
-class LabeledDataSequence;
 class RegressionCurveModel;
 
 namespace impl

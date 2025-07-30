@@ -20,9 +20,8 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <ThreeDHelper.hxx>
 #include <Diagram.hxx>
-#include <ChartTypeHelper.hxx>
+#include <ChartType.hxx>
 #include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
 #include <defines.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -33,7 +32,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::rtl::math::cos;

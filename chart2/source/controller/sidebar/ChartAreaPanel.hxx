@@ -10,20 +10,12 @@
 #pragma once
 
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflgrit.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xbtmpit.hxx>
 
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
 #include "ChartSidebarSelectionListener.hxx"
 #include "ChartColorWrapper.hxx"
-
-class XFillFloatTransparenceItem;
-class XFillTransparenceItem;
-class XFillColorItem;
 
 namespace chart {
 

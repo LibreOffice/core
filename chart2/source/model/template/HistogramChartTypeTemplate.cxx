@@ -16,9 +16,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/diagnose_ex.hxx>
 
 #include <algorithm>
 

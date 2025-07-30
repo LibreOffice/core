@@ -23,8 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
-#include <cmath>
-#include <iostream>
+
 namespace com::sun::star::uno
 {
 class XComponentContext;

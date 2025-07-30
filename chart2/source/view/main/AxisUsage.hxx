@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sal/types.h>
-#include <memory>
 #include <map>
 
 #include <VCoordinateSystem.hxx>

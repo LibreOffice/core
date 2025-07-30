@@ -19,8 +19,6 @@
 
 #include "WrappedTextRotationProperty.hxx"
 
-namespace com::sun::star::beans { class XPropertyState; }
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 

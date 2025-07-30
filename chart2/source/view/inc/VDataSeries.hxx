@@ -29,7 +29,6 @@
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
-#include <memory>
 #include <map>
 
 namespace com::sun::star::beans { class XPropertySet; }

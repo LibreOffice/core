@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>

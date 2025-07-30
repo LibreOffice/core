@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/drawing/FillStyle.hpp>
-
 #include <memory>
-#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/virdev.hxx>
@@ -28,7 +25,6 @@
 #include <ChartColorPaletteHelper.hxx>
 #include "ChartColorPaletteControl.hxx"
 
-#include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 
 using namespace css;

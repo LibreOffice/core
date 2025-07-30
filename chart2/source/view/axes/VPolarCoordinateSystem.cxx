@@ -25,9 +25,7 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <Diagram.hxx>
-#include <DataTable.hxx>
 #include <ChartModel.hxx>
-#include <GridProperties.hxx>
 
 namespace chart
 {

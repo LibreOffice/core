@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <config_options.h>
-
 #include <comphelper/compbase.hxx>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 

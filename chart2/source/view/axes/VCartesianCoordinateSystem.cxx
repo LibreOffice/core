@@ -23,12 +23,10 @@
 #include <BaseCoordinateSystem.hxx>
 #include <AxisIndexDefines.hxx>
 #include <Axis.hxx>
-#include <DataTable.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ChartModel.hxx>
-#include <GridProperties.hxx>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 

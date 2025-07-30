@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
@@ -26,8 +25,6 @@
 #include "ModifyListenerHelper.hxx"
 
 namespace com::sun::star::chart2::data { class XDataSequence; }
-namespace com::sun::star::util { class XCloneable; }
-namespace com::sun::star::util { class XModifyListener; }
 
 namespace chart
 {

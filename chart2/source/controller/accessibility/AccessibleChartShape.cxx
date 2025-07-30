@@ -19,8 +19,6 @@
 
 #include "AccessibleChartShape.hxx"
 
-#include <com/sun/star/awt/XWindow.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>

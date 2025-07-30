@@ -18,17 +18,12 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <svx/chrtitem.hxx>
 #include <rtl/ref.hxx>
 
-#include <vector>
-
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XRegressionCurve; }
-namespace com::sun::star::chart2 { class XRegressionCurveCalculator; }
 namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
-namespace com::sun::star::chart2::data { class XDataSource; }
 namespace chart { class ChartModel; }
 namespace chart { class DataSeries; }
 namespace chart { class RegressionCurveModel; }

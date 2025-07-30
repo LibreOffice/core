@@ -22,7 +22,6 @@
 #include <string_view>
 
 #include "WrappedAxisAndGridExistenceProperties.hxx"
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <WrappedProperty.hxx>

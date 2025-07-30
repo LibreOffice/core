@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <VSeriesPlotter.hxx>
 #include <PlottingPositionHelper.hxx>
 #include <basegfx/vector/b2ivector.hxx>

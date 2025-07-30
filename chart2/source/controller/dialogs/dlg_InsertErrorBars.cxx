@@ -30,7 +30,6 @@
 #include <DataSeries.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 
 namespace chart
 {

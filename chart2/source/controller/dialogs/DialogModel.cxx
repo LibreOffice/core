@@ -28,7 +28,6 @@
 #include <ResId.hxx>
 #include <ControllerLockGuard.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>

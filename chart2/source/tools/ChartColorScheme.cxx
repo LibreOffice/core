@@ -19,8 +19,6 @@
 
 #include <ChartColorScheme.hxx>
 
-#include <cppuhelper/supportsservice.hxx>
-
 namespace chart
 {
 // explicit

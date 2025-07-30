@@ -27,7 +27,6 @@
 
 #include <vcl/wizardmachine.hxx>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
 namespace weld { class CustomWeld; }
 
 class ValueSet;

@@ -24,7 +24,6 @@
 #include <chartview/ChartSfxItemIds.hxx>
 #include <vcl/weld.hxx>
 #include <ChartModel.hxx>
-#include "DialogModel.hxx"
 
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>

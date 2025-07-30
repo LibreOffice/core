@@ -20,7 +20,6 @@
 #include <ConfigColorScheme.hxx>
 
 #include <unotools/configitem.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 

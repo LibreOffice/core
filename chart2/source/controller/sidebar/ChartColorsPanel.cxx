@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
 #include "ChartColorsPanel.hxx"
@@ -26,12 +25,10 @@
 #include <ChartColorPaletteHelper.hxx>
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
-#include <DataSeries.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <sfx2/weldutils.hxx>
-#include <svtools/toolbarmenu.hxx>
 
 #include <algorithm>
 

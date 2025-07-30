@@ -30,12 +30,9 @@
 #include <svx/unoshape.hxx>
 
 namespace com::sun::star::awt { struct Point; }
-namespace com::sun::star::chart2 { class XChartType; }
-
 
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { struct ExplicitScaleData; }
-namespace chart { class ChartModel; }
 
 namespace com::sun::star {
     namespace util {

@@ -30,7 +30,6 @@
 #include <ShapeFactory.hxx>
 #include <servicenames_coosystems.hxx>
 #include <ObjectIdentifier.hxx>
-#include <ExplicitCategoriesProvider.hxx>
 #include <Axis.hxx>
 #include "VAxisBase.hxx"
 #include <defines.hxx>

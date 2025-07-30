@@ -25,25 +25,18 @@
 #include <Axis.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/sdangitm.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svx3ditems.hxx>
 #include <svx/ChartColorPaletteType.hxx>
 #include <svl/intitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ilstitem.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <vector>
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 
 namespace chart
 {

@@ -23,7 +23,6 @@
 #include <InternalDataProvider.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <algorithm>
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <utility>

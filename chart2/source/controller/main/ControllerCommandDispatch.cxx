@@ -28,7 +28,6 @@
 #include <LegendHelper.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ChartController.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <DataSeries.hxx>
@@ -46,12 +45,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
-
-// only needed until #i68864# is fixed
-#include <com/sun/star/frame/XLayoutManager.hpp>
 
 using namespace ::com::sun::star;
 

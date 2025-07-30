@@ -23,7 +23,6 @@
 #include <ChartType.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DataSeriesHelper.hxx>

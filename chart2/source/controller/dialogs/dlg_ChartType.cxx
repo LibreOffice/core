@@ -24,8 +24,6 @@
 
 namespace chart
 {
-using namespace ::com::sun::star;
-
 ChartTypeDialog::ChartTypeDialog(weld::Window* pParent,
                                  rtl::Reference<::chart::ChartModel> xChartModel)
     : GenericDialogController(pParent, u"modules/schart/ui/charttypedialog.ui"_ustr,

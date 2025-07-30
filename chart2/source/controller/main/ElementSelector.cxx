@@ -20,7 +20,6 @@
 #include "ElementSelector.hxx"
 #include <ObjectNameProvider.hxx>
 #include <ObjectHierarchy.hxx>
-#include <servicenames.hxx>
 #include <DrawViewWrapper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
@@ -33,8 +32,6 @@
 #include <o3tl/safeint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-
-namespace chart { class ExplicitValueProvider; }
 
 namespace chart
 {

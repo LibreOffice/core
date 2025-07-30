@@ -23,7 +23,6 @@
 #include <config_wasm_strip.h>
 #include <ChartController.hxx>
 #include <ChartView.hxx>
-#include <servicenames.hxx>
 #include <ResId.hxx>
 #include <dlg_DataSource.hxx>
 #include <ChartModel.hxx>
@@ -51,7 +50,6 @@
 #include "UndoActions.hxx"
 #include <ViewElementListProvider.hxx>
 
-#include <comphelper/dispatchcommand.hxx>
 #include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/frame/XController2.hpp>
@@ -74,7 +72,6 @@
 #include <comphelper/lok.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute
@@ -82,8 +79,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
 #include <comphelper/diagnose_ex.hxx>
-
-#include <editeng/fontitem.hxx>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view

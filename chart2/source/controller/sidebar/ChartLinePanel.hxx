@@ -16,9 +16,6 @@
 #include "ChartSidebarSelectionListener.hxx"
 #include "ChartColorWrapper.hxx"
 
-class XLineTransparenceItem;
-class XLineWidthItem;
-
 namespace chart {
 
 class ChartController;

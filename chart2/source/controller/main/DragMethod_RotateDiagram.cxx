@@ -24,7 +24,6 @@
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 #include <ChartType.hxx>
-#include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <defines.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
