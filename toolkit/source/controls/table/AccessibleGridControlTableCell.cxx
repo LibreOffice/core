@@ -86,7 +86,7 @@ OUString AccessibleGridControlTableCell::implGetText()
 css::lang::Locale AccessibleGridControlTableCell::implGetLocale()
 {
     ensureAlive();
-    return m_aTable.GetAccessible()->getAccessibleContext()->getLocale();
+    return m_aTable.GetAccessible()->getLocale();
 }
 
 void AccessibleGridControlTableCell::implGetSelection(sal_Int32& nStartIndex, sal_Int32& nEndIndex)
