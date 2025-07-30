@@ -1502,8 +1502,8 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                                           pFrameFormat->GetDoc().GetNumberFormatter());
                 if (pOldBoxItem)
                 {
-                    // There was an old item, so it's guaranteed that there's a new item
                     const SvxBoxItem* pBoxItem2(rAttrSet.GetItem(RES_BOX));
+                    assert(pBoxItem2 && "There was an old item, so it's guaranteed that there's a new item");
                     if (*pBoxItem2 != *pOldBoxItem)
                     {
                         std::unique_ptr<SvxBoxItem> pNewBoxItem(pBoxItem2->Clone());
