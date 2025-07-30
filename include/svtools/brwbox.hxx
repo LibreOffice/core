@@ -816,7 +816,7 @@ public:
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) override;
     virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const override;
     virtual void                    GrabFocus() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() override;
+    virtual rtl::Reference<comphelper::OAccessible> GetAccessible() override;
     virtual vcl::Window*            GetAccessibleParentWindow() const override;
     virtual vcl::Window*            GetWindowInstance() override;
 

@@ -476,7 +476,7 @@ void BrowseBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > BrowseBox::GetAccessible()
+rtl::Reference<comphelper::OAccessible> BrowseBox::GetAccessible()
 {
     return Control::GetAccessible();
 }

@@ -111,7 +111,7 @@ public:
     // Window
     virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window& rRelativeWindow) const = 0;
     virtual void                    GrabFocus() = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible() = 0;
+    virtual rtl::Reference<comphelper::OAccessible> GetAccessible() = 0;
     virtual vcl::Window*                 GetAccessibleParentWindow() const = 0;
     virtual vcl::Window*                 GetWindowInstance() = 0;
 

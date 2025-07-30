@@ -54,7 +54,7 @@ OUString AccessibleBrowseBoxTableCell::implGetText()
 
 css::lang::Locale AccessibleBrowseBoxTableCell::implGetLocale()
 {
-    return mpBrowseBox->GetAccessible()->getAccessibleContext()->getLocale();
+    return mpBrowseBox->GetAccessible()->getLocale();
 }
 
 void AccessibleBrowseBoxTableCell::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )

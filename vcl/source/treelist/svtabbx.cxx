@@ -1080,7 +1080,7 @@ void SvHeaderTabListBox::GrabFocus()
     Control::GrabFocus();
 }
 
-Reference< XAccessible > SvHeaderTabListBox::GetAccessible()
+rtl::Reference<comphelper::OAccessible> SvHeaderTabListBox::GetAccessible()
 {
     return Control::GetAccessible();
 }
