@@ -140,14 +140,6 @@ Sequence< OUString > MSAAServiceImpl::getSupportedServiceNames()
    return { "com.sun.star.accessibility.MSAAService" };
 }
 
-static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService>& xAccMgr,
-                                             vcl::Window* pWindow)
-{
-    assert(xAccMgr.is());
-    assert(pWindow);
-    xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(pWindow));
-}
-
 /*
  * Setup and notify the OS of Accessible peers for all existing windows.
  */
@@ -164,7 +156,7 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
             if ( xAC.is())
             {
                 if ( !xAC->getAccessibleName().isEmpty() )
-                    AccessBridgeHandleExistingWindow(xAccMgr, pTopWindow);
+                    xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(pTopWindow));
             }
         }
     }
