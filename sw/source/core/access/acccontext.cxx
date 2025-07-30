@@ -550,7 +550,7 @@ uno::Reference< XAccessible> SAL_CALL
         throw aExcept;
     }
 
-    uno::Reference< XAccessible > xChild;
+    rtl::Reference<comphelper::OAccessible> pChild;
     if( aChild.GetSwFrame() )
     {
         ::rtl::Reference < SwAccessibleContext > xChildImpl(
@@ -558,7 +558,7 @@ uno::Reference< XAccessible> SAL_CALL
         if( xChildImpl.is() )
         {
             xChildImpl->SetParent( this );
-            xChild = xChildImpl.get();
+            pChild = xChildImpl;
         }
     }
     else if ( aChild.GetDrawObject() )
@@ -567,14 +567,14 @@ uno::Reference< XAccessible> SAL_CALL
                 GetMap()->GetContextImpl( aChild.GetDrawObject(),
                                           this, !m_isDisposing) );
         if( xChildImpl.is() )
-            xChild = xChildImpl.get();
+            pChild = xChildImpl;
     }
     else if ( aChild.GetWindow() )
     {
-        xChild = aChild.GetWindow()->GetAccessible();
+        pChild = aChild.GetWindow()->GetAccessible();
     }
 
-    return xChild;
+    return pChild;
 }
 
 css::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
