@@ -672,9 +672,7 @@ static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QS
     uno::Reference<accessibility::XAccessibleEditableText> xText;
     try
     {
-        uno::Reference<accessibility::XAccessible> xAccessible(pFocusWin->GetAccessible());
-        if (xAccessible.is())
-            xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
+        xText = FindFocusedEditableText(pFocusWin->GetAccessible());
     }
     catch (const uno::Exception&)
     {
