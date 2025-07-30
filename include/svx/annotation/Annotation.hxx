@@ -22,7 +22,7 @@
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/TextAPI.hxx>
 #include <tools/UniqueID.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 class SdrUndoAction;
 class SfxViewShell;
@@ -77,7 +77,7 @@ struct CreationInfo
     bool mbColor = false;
     Color maColor = COL_TRANSPARENT;
 
-    BitmapEx maBitmapEx;
+    Bitmap maBitmap;
 };
 
 /** Data of an annotation */

@@ -219,7 +219,7 @@ bool SdPdfFilter::Import()
                         rPDFAnnotation.mpMarker.get());
 
                     aInfo.meType = sdr::annotation::AnnotationType::Stamp;
-                    aInfo.maBitmapEx = pMarker->maBitmapEx;
+                    aInfo.maBitmap = Bitmap(pMarker->maBitmapEx);
                 }
 
                 xAnnotation->setCreationInfo(aInfo);

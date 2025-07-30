@@ -1101,7 +1101,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         }
         else if (rInfo.meType == sdr::annotation::AnnotationType::Stamp)
         {
-            rtl::Reference<SdrGrafObj> pGrafObject = new SdrGrafObj(rModel, Graphic(rInfo.maBitmapEx), aRectangle);
+            rtl::Reference<SdrGrafObj> pGrafObject = new SdrGrafObj(rModel, Graphic(rInfo.maBitmap), aRectangle);
             pNewObject = pGrafObject;
 
             applyAnnotationCommon(*pNewObject, xAnnotation);
