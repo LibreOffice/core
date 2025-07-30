@@ -160,8 +160,8 @@ public:
     static void                 InsertAllThemes(weld::ComboBox& rListBox);
 
     // for buffering PreviewBitmaps and strings for object and path
-    SAL_DLLPRIVATE void GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath);
-    SAL_DLLPRIVATE void SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath);
+    SAL_DLLPRIVATE void GetPreviewBitmapAndStrings(sal_uInt32 nPos, Bitmap& rBitmap, Size& rSize, OUString& rTitle, OUString& rPath);
+    SAL_DLLPRIVATE void SetPreviewBitmapAndStrings(sal_uInt32 nPos, const Bitmap& rBitmap, const Size& rSize, const OUString& rTitle, const OUString& rPath);
 };
 
 #endif // INCLUDED_SVX_GALTHEME_HXX

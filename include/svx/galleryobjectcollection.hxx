@@ -36,7 +36,7 @@ struct SVXCORE_DLLPUBLIC GalleryObject
     bool mbDelete;
 
     //UI visualization buffering
-    BitmapEx maPreviewBitmapEx;
+    Bitmap maPreviewBitmap;
     Size maPreparedSize;
     OUString maTitle;
     OUString maPath;

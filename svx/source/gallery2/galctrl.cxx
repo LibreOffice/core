@@ -314,14 +314,14 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 
     const tools::Rectangle& rRect = rUDEvt.GetRect();
     const Size aSize(rRect.GetWidth(), rRect.GetHeight());
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
     Size aPreparedSize;
     OUString aItemTextTitle;
     OUString aItemTextPath;
 
-    mpTheme->GetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aPreparedSize, aItemTextTitle, aItemTextPath);
+    mpTheme->GetPreviewBitmapAndStrings(nId - 1, aBitmap, aPreparedSize, aItemTextTitle, aItemTextPath);
 
-    bool bNeedToCreate(aBitmapEx.IsEmpty());
+    bool bNeedToCreate(aBitmap.IsEmpty());
 
     if (!bNeedToCreate && aItemTextTitle.isEmpty())
     {
@@ -339,28 +339,28 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 
         if(pObj)
         {
-            aBitmapEx = pObj->createPreviewBitmapEx(aSize);
+            aBitmap = Bitmap(pObj->createPreviewBitmapEx(aSize));
             aItemTextTitle = GalleryBrowser::GetItemText(*pObj, GalleryItemFlags::Title);
 
-            mpTheme->SetPreviewBitmapExAndStrings(nId - 1, aBitmapEx, aSize, aItemTextTitle, aItemTextPath);
+            mpTheme->SetPreviewBitmapAndStrings(nId - 1, aBitmap, aSize, aItemTextTitle, aItemTextPath);
         }
     }
 
-    if (!aBitmapEx.IsEmpty())
+    if (!aBitmap.IsEmpty())
     {
-        const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
+        const Size aBitmapExSizePixel(aBitmap.GetSizePixel());
         const Point aPos(
             ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
             ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
         OutputDevice* pDev = rUDEvt.GetRenderContext();
 
-        if(aBitmapEx.IsAlpha())
+        if(aBitmap.HasAlpha())
         {
             // draw checkered background for full rectangle.
             GalleryIconView::drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
         }
 
-        pDev->DrawBitmapEx(aPos, aBitmapEx);
+        pDev->DrawBitmapEx(aPos, aBitmap);
     }
 
     SetItemText(nId, aItemTextTitle);

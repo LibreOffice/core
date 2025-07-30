@@ -1096,16 +1096,16 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
             return false;
 
         // get the icon for the listview
-        BitmapEx aBitmapEx;
+        Bitmap aBitmap;
         Size aPreparedSize;
 
         OUString sItemTextTitle;
         OUString sItemTextPath;
 
         sal_Int32 i = sId.toUInt32();
-        mpCurTheme->GetPreviewBitmapExAndStrings(i, aBitmapEx, aPreparedSize, sItemTextTitle, sItemTextPath);
+        mpCurTheme->GetPreviewBitmapAndStrings(i, aBitmap, aPreparedSize, sItemTextTitle, sItemTextPath);
 
-        bool bNeedToCreate(aBitmapEx.IsEmpty());
+        bool bNeedToCreate(aBitmap.IsEmpty());
         if (!bNeedToCreate && (sItemTextTitle.isEmpty() || aPreparedSize != maPreviewSize))
             bNeedToCreate = true;
 
@@ -1114,31 +1114,31 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
             std::unique_ptr<SgaObject> xObj = mpCurTheme->AcquireObject(i);
             if (xObj)
             {
-                aBitmapEx = xObj->createPreviewBitmapEx(maPreviewSize);
+                aBitmap = Bitmap(xObj->createPreviewBitmapEx(maPreviewSize));
                 sItemTextTitle = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Title);
                 sItemTextPath = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Path);
 
-                mpCurTheme->SetPreviewBitmapExAndStrings(i, aBitmapEx, maPreviewSize, sItemTextTitle, sItemTextPath);
+                mpCurTheme->SetPreviewBitmapAndStrings(i, aBitmap, maPreviewSize, sItemTextTitle, sItemTextPath);
             }
         }
 
         ScopedVclPtr<VirtualDevice> xDev(mxListView->create_virtual_device());
         xDev->SetOutputSizePixel(maPreviewSize);
 
-        if (!aBitmapEx.IsEmpty())
+        if (!aBitmap.IsEmpty())
         {
-            const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
+            const Size aBitmapSizePixel(aBitmap.GetSizePixel());
             const Point aPos(
-                ((maPreviewSize.Width() - aBitmapExSizePixel.Width()) >> 1),
-                ((maPreviewSize.Height() - aBitmapExSizePixel.Height()) >> 1));
+                ((maPreviewSize.Width() - aBitmapSizePixel.Width()) >> 1),
+                ((maPreviewSize.Height() - aBitmapSizePixel.Height()) >> 1));
 
-            if (aBitmapEx.IsAlpha())
+            if (aBitmap.HasAlpha())
             {
                 // draw checkered background
-                GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapExSizePixel);
+                GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapSizePixel);
             }
 
-            xDev->DrawBitmapEx(aPos, aBitmapEx);
+            xDev->DrawBitmapEx(aPos, aBitmap);
         }
 
         mxListView->set_text(rEntry, sItemTextTitle);

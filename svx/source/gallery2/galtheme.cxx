@@ -145,21 +145,21 @@ std::unique_ptr<SgaObject> GalleryTheme::AcquireObject(sal_uInt32 nPos)
     return mpGalleryStorageEngine->implReadSgaObject(maGalleryObjectCollection.getForPosition(nPos));
 }
 
-void GalleryTheme::GetPreviewBitmapExAndStrings(sal_uInt32 nPos, BitmapEx& rBitmapEx, Size& rSize, OUString& rTitle, OUString& rPath)
+void GalleryTheme::GetPreviewBitmapAndStrings(sal_uInt32 nPos, Bitmap& rBitmap, Size& rSize, OUString& rTitle, OUString& rPath)
 {
     const GalleryObject* pGalleryObject = maGalleryObjectCollection.get(nPos).get();
 
-    rBitmapEx = pGalleryObject->maPreviewBitmapEx;
+    rBitmap = pGalleryObject->maPreviewBitmap;
     rSize = pGalleryObject->maPreparedSize;
     rTitle = pGalleryObject->maTitle;
     rPath = pGalleryObject->maPath;
 }
 
-void GalleryTheme::SetPreviewBitmapExAndStrings(sal_uInt32 nPos, const BitmapEx& rBitmapEx, const Size& rSize, const OUString& rTitle, const OUString& rPath)
+void GalleryTheme::SetPreviewBitmapAndStrings(sal_uInt32 nPos, const Bitmap& rBitmap, const Size& rSize, const OUString& rTitle, const OUString& rPath)
 {
     GalleryObject* pGalleryObject = maGalleryObjectCollection.get(nPos).get();
 
-    pGalleryObject->maPreviewBitmapEx = rBitmapEx;
+    pGalleryObject->maPreviewBitmap = rBitmap;
     pGalleryObject->maPreparedSize = rSize;
     pGalleryObject->maTitle = rTitle;
     pGalleryObject->maPath = rPath;
