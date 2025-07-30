@@ -79,8 +79,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
     commitBrowseBoxEvent(CHILD, Any(css::uno::Reference<XAccessible>(m_pActiveCell)), Any());
 }
 
-
-Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
+rtl::Reference<comphelper::OAccessible> EditBrowseBox::CreateAccessibleControl(sal_Int32 _nIndex)
 {
     DBG_ASSERT( 0 == _nIndex, "EditBrowseBox::CreateAccessibleControl: invalid index!" );
 

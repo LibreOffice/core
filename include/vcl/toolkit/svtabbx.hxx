@@ -169,7 +169,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) override;
 
     virtual sal_Int32               GetAccessibleControlCount() const override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex ) override;
+    rtl::Reference<comphelper::OAccessible> CreateAccessibleControl(sal_Int32 _nIndex) override;
     virtual bool                    ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;
 
     virtual bool                    ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) override;

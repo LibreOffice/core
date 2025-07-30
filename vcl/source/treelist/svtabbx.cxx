@@ -883,10 +883,9 @@ sal_Int32 SvHeaderTabListBox::GetAccessibleControlCount() const
     return -1;
 }
 
-Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleControl( sal_Int32 )
+rtl::Reference<comphelper::OAccessible> SvHeaderTabListBox::CreateAccessibleControl(sal_Int32)
 {
-    Reference< XAccessible > xControl;
-    return xControl;
+    return {};
 }
 
 bool SvHeaderTabListBox::ConvertPointToControlIndex( sal_Int32&, const Point& )

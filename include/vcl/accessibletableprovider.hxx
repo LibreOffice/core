@@ -91,7 +91,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
 
     virtual sal_Int32               GetAccessibleControlCount() const = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible >                    CreateAccessibleControl( sal_Int32 _nIndex ) = 0;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleControl(sal_Int32 _nIndex) = 0;
     virtual bool                    ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) = 0;
 
     virtual bool                    ConvertPointToCellAddress( sal_Int32& _rnRow, sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;

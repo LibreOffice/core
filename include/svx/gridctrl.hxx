@@ -543,11 +543,10 @@ public:
         @param _nIndex
             The 0-based index of the control.
         @return
-            The XAccessible interface of the specified control.
+            The accessible object of the specified control.
     */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible >
-    CreateAccessibleControl( sal_Int32 _nIndex ) override;
+    virtual rtl::Reference<comphelper::OAccessible>
+    CreateAccessibleControl(sal_Int32 _nIndex) override;
 
     // IAccessibleTableProvider
     /** Creates the accessible object of a data table cell.

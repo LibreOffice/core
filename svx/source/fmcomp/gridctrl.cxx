@@ -3386,16 +3386,12 @@ sal_Int32 DbGridControl::GetAccessibleControlCount() const
     return EditBrowseBox::GetAccessibleControlCount() + 1; // the navigation control
 }
 
-Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nIndex )
+rtl::Reference<comphelper::OAccessible> DbGridControl::CreateAccessibleControl(sal_Int32 _nIndex)
 {
-    Reference<XAccessible > xRet;
-    if ( _nIndex == EditBrowseBox::GetAccessibleControlCount() )
-    {
-        xRet = m_aBar->GetAccessible();
-    }
-    else
-        xRet = EditBrowseBox::CreateAccessibleControl( _nIndex );
-    return xRet;
+    if (_nIndex == EditBrowseBox::GetAccessibleControlCount())
+        return m_aBar->GetAccessible();
+
+    return EditBrowseBox::CreateAccessibleControl(_nIndex);
 }
 
 Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )

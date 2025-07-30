@@ -1079,9 +1079,9 @@ namespace svt
             @param nIndex
                 The 0-based index of the control.
             @return
-                The XAccessible interface of the specified control. */
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-        CreateAccessibleControl( sal_Int32 nIndex ) override;
+                The accessible object of the specified control. */
+        virtual rtl::Reference<comphelper::OAccessible>
+        CreateAccessibleControl(sal_Int32 nIndex) override;
 
         /** Sets focus to current cell of the data table. */
         virtual void GrabTableFocus() override;
