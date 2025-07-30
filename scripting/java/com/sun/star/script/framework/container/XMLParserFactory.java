@@ -121,7 +121,11 @@ public class XMLParserFactory {
 
         public void write(Document doc, OutputStream out) throws IOException {
             try {
-                TransformerFactory.newInstance().newTransformer().transform(
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+                transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+                transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+                transformerFactory.newTransformer().transform(
                     new DOMSource(doc), new StreamResult(out));
             } catch (TransformerException ex1) {
                 IOException ex2 = new IOException();
