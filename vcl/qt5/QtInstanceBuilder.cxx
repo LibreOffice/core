@@ -190,6 +190,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"xmlsec/ui/macrosecuritydialog.ui"_ustr,
         u"xmlsec/ui/securitylevelpage.ui"_ustr,
         u"xmlsec/ui/securitytrustpage.ui"_ustr,
+        u"xmlsec/ui/viewcertdialog.ui"_ustr,
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
 
@@ -202,6 +203,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/textattrtabpage.ui"_ustr,    u"cui/ui/textanimtabpage.ui"_ustr,
         u"cui/ui/textcolumnstabpage.ui"_ustr, u"svt/ui/datewindow.ui"_ustr,
         u"svx/ui/colorwindow.ui"_ustr,        u"vcl/ui/editmenu.ui"_ustr,
+        u"xmlsec/ui/certdetails.ui"_ustr,     u"xmlsec/ui/certgeneral.ui"_ustr,
     };
 
     if (aSupportedUIFiles.contains(rUIFile))
