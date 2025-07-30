@@ -9,7 +9,7 @@
 
 #pragma once
 
-inline constexpr OUString BMP_STATE_NOT_VALIDATED = u"xmlecurity/res/notcertificate_40x56.png"_ustr;
+inline constexpr OUString BMP_STATE_NOT_VALIDATED = u"xmlsecurity/res/notcertificate_40x56.png"_ustr;
 
 #define BMP_CERT_OK                     "xmlsecurity/res/certificate_16.png"
 #define BMP_CERT_NOT_OK                 "xmlsecurity/res/notcertificate_16.png"
