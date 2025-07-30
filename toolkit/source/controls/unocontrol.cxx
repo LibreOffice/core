@@ -1468,9 +1468,9 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  )
             // in alive mode, use the accessible context of the window
             if (vcl::Window* pWindow = VCLUnoHelper::GetWindow(getPeer()))
             {
-                Reference<XAccessible> xWinAcc = pWindow->GetAccessible();
-                if (xWinAcc.is())
-                    xCurrentContext = xWinAcc->getAccessibleContext();
+                rtl::Reference<comphelper::OAccessible> pWinAcc = pWindow->GetAccessible();
+                if (pWinAcc.is())
+                    xCurrentContext = pWinAcc;
             }
         }
         else
