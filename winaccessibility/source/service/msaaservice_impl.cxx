@@ -149,16 +149,9 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
     for (tools::Long i = 0; i < nTopWindowCount; i++)
     {
         vcl::Window* pTopWindow = Application::GetTopWindow( i );
-        css::uno::Reference< css::accessibility::XAccessible > xAccessible = pTopWindow->GetAccessible();
-        if ( xAccessible.is() )
-        {
-            css::uno::Reference< css::accessibility::XAccessibleContext > xAC( xAccessible->getAccessibleContext() );
-            if ( xAC.is())
-            {
-                if ( !xAC->getAccessibleName().isEmpty() )
-                    xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(pTopWindow));
-            }
-        }
+        rtl::Reference<comphelper::OAccessible> pAccessible = pTopWindow->GetAccessible();
+        if (pAccessible.is() && !pAccessible->getAccessibleName().isEmpty())
+            xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(pTopWindow));
     }
 }
 
