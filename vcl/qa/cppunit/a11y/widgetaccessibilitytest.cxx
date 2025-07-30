@@ -48,39 +48,29 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, AccessibleDropDownListBox)
     pDialog->Show();
 
     // perform various a11y checks on the dropdown listbox
-    css::uno::Reference<css::accessibility::XAccessible> xListBoxAcc = pListBox->GetAccessible();
-    CPPUNIT_ASSERT(xListBoxAcc.is());
-    css::uno::Reference<css::accessibility::XAccessibleContext> xContext
-        = xListBoxAcc->getAccessibleContext();
-    CPPUNIT_ASSERT(xContext.is());
+    rtl::Reference<comphelper::OAccessible> pListBoxAcc = pListBox->GetAccessible();
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Drop down listbox has incorrect role",
                                  css::accessibility::AccessibleRole::COMBO_BOX,
-                                 xContext->getAccessibleRole());
+                                 pListBoxAcc->getAccessibleRole());
 
-    XAccessibleContextTester aContextTester(xContext);
+    XAccessibleContextTester aContextTester(pListBoxAcc);
     aContextTester.testAll();
 
-    css::uno::Reference<css::accessibility::XAccessibleComponent> xAccessibleComponent(
-        xContext, css::uno::UNO_QUERY_THROW);
-    XAccessibleComponentTester aComponentTester(xAccessibleComponent);
+    XAccessibleComponentTester aComponentTester(pListBoxAcc);
     aComponentTester.testAll();
 
-    css::uno::Reference<css::accessibility::XAccessibleExtendedComponent>
-        xAccessibleExtendedComponent(xContext, css::uno::UNO_QUERY_THROW);
-    XAccessibleExtendedComponentTester aExtendedComponentTester(xAccessibleExtendedComponent);
+    XAccessibleExtendedComponentTester aExtendedComponentTester(pListBoxAcc);
     aExtendedComponentTester.testAll();
 
     css::uno::Reference<css::accessibility::XAccessibleAction> xAccessibleAction(
-        xContext, css::uno::UNO_QUERY_THROW);
+        pListBoxAcc->getXWeak(), css::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("No accessible action provided",
                            xAccessibleAction->getAccessibleActionCount() > 0);
     XAccessibleActionTester aActionTester(xAccessibleAction);
     aActionTester.testAll();
 
-    css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> xEventBroadcaster(
-        xContext, css::uno::UNO_QUERY_THROW);
-    WindowXAccessibleEventBroadcasterTester aEventBroadcasterTester(xEventBroadcaster, pListBox);
+    WindowXAccessibleEventBroadcasterTester aEventBroadcasterTester(pListBoxAcc, pListBox);
     aEventBroadcasterTester.testAll();
 }
 
