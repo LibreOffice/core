@@ -325,13 +325,13 @@ void VCLXAccessibleToolBox::ReleaseSubToolBox( ToolBox* _pSubToolBox )
     if ( !xItem.is() )
         return;
 
-    Reference< XAccessible > xChild = _pSubToolBox->GetAccessible();
+    rtl::Reference<comphelper::OAccessible> pChild = _pSubToolBox->GetAccessible();
     VCLXAccessibleToolBoxItem* pItem =
         static_cast< VCLXAccessibleToolBoxItem* >( xItem.get() );
-    if ( pItem->GetChild() == xChild )
+    if (pItem->GetChild() == pChild)
     {
-        pItem->SetChild( Reference< XAccessible >() );
-        pItem->NotifyChildEvent( xChild, false );
+        pItem->SetChild({});
+        pItem->NotifyChildEvent(pChild, false);
     }
 }
 

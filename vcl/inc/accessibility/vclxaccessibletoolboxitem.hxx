@@ -42,7 +42,7 @@ private:
     bool                    m_bIsChecked;
     bool                    m_bIndeterminate;
 
-    css::uno::Reference< css::accessibility::XAccessible >    m_xChild;
+    rtl::Reference<comphelper::OAccessible> m_pChild;
 
 public:
     sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
@@ -72,9 +72,8 @@ public:
     void                SetIndeterminate( bool _bIndeterminate );
     void         ReleaseToolBox() { m_pToolBox = nullptr; }
     void                NameChanged();
-    void                SetChild( const css::uno::Reference< css::accessibility::XAccessible >& _xChild );
-    const css::uno::Reference< css::accessibility::XAccessible >&
-                        GetChild() const { return m_xChild; }
+    void SetChild(const rtl::Reference<comphelper::OAccessible>& rpChild);
+    const rtl::Reference<comphelper::OAccessible>& GetChild() const { return m_pChild; }
     void                NotifyChildEvent( const css::uno::Reference< css::accessibility::XAccessible >& _xChild, bool _bShow );
 
     void                ToggleEnableState();

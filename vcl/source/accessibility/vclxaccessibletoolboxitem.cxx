@@ -174,9 +174,9 @@ void VCLXAccessibleToolBoxItem::NameChanged()
     }
 }
 
-void VCLXAccessibleToolBoxItem::SetChild( const Reference< XAccessible >& _xChild )
+void VCLXAccessibleToolBoxItem::SetChild(const rtl::Reference<comphelper::OAccessible>& rpChild)
 {
-    m_xChild = _xChild;
+    m_pChild = rpChild;
 }
 
 void VCLXAccessibleToolBoxItem::NotifyChildEvent( const Reference< XAccessible >& _xChild, bool _bShow )
@@ -278,7 +278,7 @@ sal_Int64 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  )
 {
     OContextEntryGuard aGuard( this );
 
-    return m_xChild.is() ? 1 : 0;
+    return m_pChild.is() ? 1 : 0;
 }
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild( sal_Int64 i )
@@ -286,10 +286,10 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild(
     OContextEntryGuard aGuard( this );
 
     // no child -> so index is out of bounds
-    if ( !m_xChild.is() || i != 0 )
+    if (!m_pChild.is() || i != 0)
         throw IndexOutOfBoundsException();
 
-    return m_xChild;
+    return m_pChild;
 }
 
 Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleParent(  )
@@ -317,7 +317,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  )
 {
     OExternalLockGuard aGuard( this );
 
-    if (m_nRole == AccessibleRole::PANEL && m_xChild.is())
+    if (m_nRole == AccessibleRole::PANEL && m_pChild.is())
     {
         return VclResId( RID_STR_ACC_PANEL_DESCRIPTION );
     }
