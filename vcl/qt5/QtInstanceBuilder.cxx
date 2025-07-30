@@ -187,6 +187,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"vcl/ui/printerpaperpage.ui"_ustr,
         u"vcl/ui/printerpropertiesdialog.ui"_ustr,
         u"vcl/ui/printprogressdialog.ui"_ustr,
+        u"xmlsec/ui/digitalsignaturesdialog.ui"_ustr,
         u"xmlsec/ui/macrosecuritydialog.ui"_ustr,
         u"xmlsec/ui/securitylevelpage.ui"_ustr,
         u"xmlsec/ui/securitytrustpage.ui"_ustr,
