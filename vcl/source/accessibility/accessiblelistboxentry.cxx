@@ -113,17 +113,13 @@ tools::Rectangle AccessibleListBoxEntry::GetBoundingBox_Impl() const
 
 bool AccessibleListBoxEntry::IsShowing_Impl() const
 {
-    Reference< XAccessible > xParent = implGetParentAccessible( );
+    rtl::Reference<comphelper::OAccessible> pParent = implGetParentAccessible();
 
     bool bShowing = false;
-    Reference< XAccessibleContext > xParentContext =
-        xParent.is() ? xParent->getAccessibleContext() : Reference< XAccessibleContext >();
-    if( xParentContext.is() )
+    if (pParent.is())
     {
-        Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
-        if( xParentComp.is() )
-            bShowing = GetBoundingBox_Impl().Overlaps(
-                vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
+        bShowing = GetBoundingBox_Impl().Overlaps(
+            vcl::unohelper::ConvertToVCLRect(pParent->getBounds()));
     }
 
     return bShowing;
