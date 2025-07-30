@@ -3804,9 +3804,9 @@ namespace
         uno::Reference<accessibility::XAccessibleEditableText> xText;
         try
         {
-            uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible() );
-            if (xAccessible.is())
-                xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
+            rtl::Reference<comphelper::OAccessible> pAccessible = pFocusWin->GetAccessible();
+            if (pAccessible.is())
+                xText = FindFocusedEditableText(pAccessible);
         }
         catch(const uno::Exception&)
         {
