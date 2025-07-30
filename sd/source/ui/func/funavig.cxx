@@ -170,8 +170,8 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                     weld::DialogController::runAsync(xDialog, [xDialog, xRequest, xThis](sal_uInt32 nResult) {
                         if (nResult == RET_OK)
                         {
-                            auto pDrawViewShell2 = dynamic_cast<DrawViewShell *>(&xThis->mrViewShell);
-                            pDrawViewShell2->SwitchPage(xDialog->GetPageSelection() - 1);
+                            DrawViewShell& rDrawViewShell2 = dynamic_cast<DrawViewShell&>(xThis->mrViewShell);
+                            rDrawViewShell2.SwitchPage(xDialog->GetPageSelection() - 1);
                         }
                         xThis->Finish();
                         xRequest->Done();
