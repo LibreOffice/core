@@ -232,7 +232,7 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
     return eRole;
 }
 
-static css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(GtkWidget* pWidget)
+static rtl::Reference<comphelper::OAccessible> get_uno_accessible(GtkWidget* pWidget)
 {
     GtkWidget* pTopLevel = widget_get_toplevel(pWidget);
     if (!pTopLevel)
@@ -870,14 +870,9 @@ gboolean get_platform_state(GtkAccessible* self, GtkAccessiblePlatformState stat
 static gboolean get_bounds(GtkAccessible* accessible, int* x, int* y, int* width, int* height)
 {
     OOoFixed* pFixed = OOO_FIXED(accessible);
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible(
-        get_uno_accessible(GTK_WIDGET(pFixed)));
-    css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
-        xAccessible->getAccessibleContext());
-    css::uno::Reference<css::accessibility::XAccessibleComponent> xAccessibleComponent(
-        xContext, css::uno::UNO_QUERY);
+    rtl::Reference<comphelper::OAccessible> pAccessible = get_uno_accessible(GTK_WIDGET(pFixed));
 
-    css::awt::Rectangle aBounds = xAccessibleComponent->getBounds();
+    css::awt::Rectangle aBounds = pAccessible->getBounds();
     *x = aBounds.X;
     *y = aBounds.Y;
     *width = aBounds.Width;
@@ -888,16 +883,13 @@ static gboolean get_bounds(GtkAccessible* accessible, int* x, int* y, int* width
 static GtkAccessible* get_first_accessible_child(GtkAccessible* accessible)
 {
     OOoFixed* pFixed = OOO_FIXED(accessible);
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible(
-        get_uno_accessible(GTK_WIDGET(pFixed)));
-    if (!xAccessible)
+    rtl::Reference<comphelper::OAccessible> pAccessible = get_uno_accessible(GTK_WIDGET(pFixed));
+    if (!pAccessible.is())
         return nullptr;
-    css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
-        xAccessible->getAccessibleContext());
-    if (!xContext->getAccessibleChildCount())
+    if (!pAccessible->getAccessibleChildCount())
         return nullptr;
     css::uno::Reference<css::accessibility::XAccessible> xFirstChild(
-        xContext->getAccessibleChild(0));
+        pAccessible->getAccessibleChild(0));
     LoAccessible* child_accessible = GtkAccessibleRegistry::getLOAccessible(
         xFirstChild, gtk_widget_get_display(GTK_WIDGET(pFixed)), accessible);
     return GTK_ACCESSIBLE(g_object_ref(child_accessible));
