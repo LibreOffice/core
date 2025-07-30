@@ -408,7 +408,7 @@ void SvxFillToolBoxControl::Update()
                         rtl::Reference<XGradientList> xGradientList = new XGradientList( u""_ustr, u""_ustr/*TODO?*/ );
                         xGradientList->Insert(std::make_unique<XGradientEntry>(mpFillGradientItem->GetGradientValue(), aTmpStr));
                         xGradientList->SetDirty( false );
-                        const BitmapEx aBmp = xGradientList->GetUiBitmap( 0 );
+                        const Bitmap aBmp = xGradientList->GetUiBitmap( 0 );
 
                         if (!aBmp.IsEmpty())
                         {
@@ -471,7 +471,7 @@ void SvxFillToolBoxControl::Update()
                         rtl::Reference<XHatchList> xHatchList = new XHatchList( u""_ustr, u""_ustr/*TODO?*/ );
                         xHatchList->Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                         xHatchList->SetDirty( false );
-                        const BitmapEx aBmp = xHatchList->GetUiBitmap( 0 );
+                        const Bitmap aBmp = xHatchList->GetUiBitmap( 0 );
 
                         if( !aBmp.IsEmpty() )
                         {

@@ -79,7 +79,7 @@ double XDashList::ImpGetDefaultLineThickness()
     return StyleSettings::GetListBoxPreviewDefaultLineWidth() * 1.1;
 }
 
-BitmapEx XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickness)
+Bitmap XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickness)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
@@ -172,7 +172,7 @@ BitmapEx XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickne
     pProcessor2D.reset();
 
     // get result bitmap and scale
-    BitmapEx aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
+    Bitmap aRetval(pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel()));
 
     if(1 != nFactor)
     {
@@ -182,7 +182,7 @@ BitmapEx XDashList::CreateBitmapForXDash(const XDash* pDash, double fLineThickne
     return aRetval;
 }
 
-BitmapEx XDashList::CreateBitmapForUI( tools::Long nIndex )
+Bitmap XDashList::CreateBitmapForUI( tools::Long nIndex )
 {
     const XDash& rDash = GetDash(nIndex)->GetDash();
 

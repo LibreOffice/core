@@ -151,9 +151,9 @@ bool XColorList::Create()
     return(165 == Count());
 }
 
-BitmapEx XColorList::CreateBitmapForUI( tools::Long /*nIndex*/ )
+Bitmap XColorList::CreateBitmapForUI( tools::Long /*nIndex*/ )
 {
-    return BitmapEx();
+    return Bitmap();
 }
 
 tools::Long XColorList::GetIndexOfColor( const Color& rColor ) const

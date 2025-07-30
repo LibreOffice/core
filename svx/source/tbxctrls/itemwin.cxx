@@ -252,12 +252,12 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XHatchEntry* pEntry = pList->GetHatch(i);
-        const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
-        if( !aBitmapEx.IsEmpty() )
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
         {
-            const Size aBmpSize(aBitmapEx.GetSizePixel());
+            const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            pVD->DrawBitmapEx(Point(), aBitmap);
             rBox.append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else
@@ -279,12 +279,12 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XGradientEntry* pEntry = pList->GetGradient(i);
-        const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
-        if( !aBitmapEx.IsEmpty() )
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
         {
-            const Size aBmpSize(aBitmapEx.GetSizePixel());
+            const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(aBmpSize, false);
-            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            pVD->DrawBitmapEx(Point(), aBitmap);
             rBox.append(u""_ustr, pEntry->GetName(), *pVD);
         }
         else

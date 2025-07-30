@@ -956,7 +956,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XDashEntry* pEntry = pList->GetDash(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
@@ -1026,7 +1026,7 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XLineEndEntry* pEntry = pList->GetLineEnd(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());

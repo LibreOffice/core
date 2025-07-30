@@ -43,17 +43,17 @@ bool XBitmapList::Create()
     return true;
 }
 
-BitmapEx XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
+Bitmap XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
 {
     OSL_ENSURE( nIndex < Count(), "Access out of range" );
 
     if(nIndex < Count())
     {
-        BitmapEx rBitmapEx = GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx();
+        Bitmap rBitmap( GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx());
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         pVirtualDevice->SetOutputSizePixel(rSize);
 
-        if(rBitmapEx.IsAlpha())
+        if(rBitmap.HasAlpha())
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -73,14 +73,14 @@ BitmapEx XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) cons
             }
         }
 
-        if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+        if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
         {
-            rBitmapEx.Scale(rSize);
-            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+            rBitmap.Scale(rSize);
+            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmap);
         }
         else
         {
-            const Size aBitmapSize(rBitmapEx.GetSizePixel());
+            const Size aBitmapSize(rBitmap.GetSizePixel());
 
             for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
@@ -88,25 +88,25 @@ BitmapEx XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) cons
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
-                        rBitmapEx);
+                        rBitmap);
                 }
             }
         }
-        rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
-        return rBitmapEx;
+        rBitmap = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+        return rBitmap;
     }
     else
-        return BitmapEx();
+        return Bitmap();
 }
 
-BitmapEx XBitmapList::CreateBitmapForUI( tools::Long nIndex )
+Bitmap XBitmapList::CreateBitmapForUI( tools::Long nIndex )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-BitmapEx XBitmapList::GetBitmapForPreview( tools::Long nIndex, const Size& rSize )
+Bitmap XBitmapList::GetBitmapForPreview( tools::Long nIndex, const Size& rSize )
 {
     return CreateBitmap(nIndex, rSize);
 }

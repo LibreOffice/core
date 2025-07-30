@@ -189,9 +189,9 @@ tools::Long XPropertyList::GetIndex(std::u16string_view rName) const
     return -1;
 }
 
-BitmapEx XPropertyList::GetUiBitmap( tools::Long nIndex ) const
+Bitmap XPropertyList::GetUiBitmap( tools::Long nIndex ) const
 {
-    BitmapEx aRetval;
+    Bitmap aRetval;
     if (!isValidIdx(nIndex))
         return aRetval;
 

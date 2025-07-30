@@ -365,7 +365,7 @@ void SvxLineEndWindow::FillValueSet()
         comphelper::LibreOfficeKit::isActive() ? SvxResId(RID_SVXSTR_INVISIBLE)
             : SvxResId(RID_SVXSTR_NONE)));
     const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
-    BitmapEx aBmp = mpLineEndList->GetUiBitmap( nCount );
+    Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
     OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
     maBmpSize = aBmp.GetSizePixel();
@@ -552,7 +552,7 @@ void SvxLineBox::Fill( const XDashListRef &pList )
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XDashEntry* pEntry = pList->GetDash(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap(i);
+        const Bitmap aBitmap = pList->GetUiBitmap(i);
 
         mxLineStyleSet->InsertItem(i + 3, Image(aBitmap), pEntry->GetName());
     }

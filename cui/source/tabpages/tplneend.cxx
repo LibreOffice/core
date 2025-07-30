@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
         m_xEdtName->set_text(aName);
 
-        m_xLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, pLineEndList->GetUiBitmap(nPos));
+        m_xLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, BitmapEx(pLineEndList->GetUiBitmap(nPos)));
         m_xLbLineEnds->set_active(nPos);
 
         // set flag for modified
@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
                 pLineEndList->Insert(std::make_unique<XLineEndEntry>(aNewPolyPolygon, aName), nLineEndCount);
 
                 // add to the ListBox
-                m_xLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount), pLineEndList->GetUiBitmap(nLineEndCount));
+                m_xLbLineEnds->Append(*pLineEndList->GetLineEnd(nLineEndCount), BitmapEx(pLineEndList->GetUiBitmap(nLineEndCount)));
                 m_xLbLineEnds->set_active(m_xLbLineEnds->get_count() - 1);
 
                 *pnLineEndListState |= ChangeType::MODIFIED;

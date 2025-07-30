@@ -867,7 +867,7 @@ tools::Long SvxBitmapTabPage::AddBitmap(const GraphicObject& rGraphicObject, con
         xBitmapEntry->SetSavingAllowed(false);
     m_pBitmapList->Insert(std::move(xBitmapEntry), nLastPos);
 
-    BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview(nLastPos, m_xBitmapLB->GetIconSize());
+    Bitmap aBitmap = m_pBitmapList->GetBitmapForPreview(nLastPos, m_xBitmapLB->GetIconSize());
 
     const sal_uInt16 nHighestId = m_xBitmapLB->GetItemId(nLastPos - 1);
     m_xBitmapLB->InsertItem(nHighestId + 1, Image(aBitmap), rName);

@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_pGradientList->Insert(std::make_unique<XGradientEntry>(aBGradient, aName), nCount);
 
         sal_Int32 nId = m_xGradientLB->GetItemId(nCount - 1); //calculate the last ID
-        BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_xGradientLB->GetIconSize() );
+        Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( nCount, m_xGradientLB->GetIconSize() );
         m_xGradientLB->InsertItem( nId + 1, Image(aBitmap), aName );
         m_xGradientLB->SelectItem( nId + 1 );
         m_xGradientLB->Resize();
@@ -435,7 +435,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
     m_pGradientList->Replace(std::make_unique<XGradientEntry>(aBGradient, aName), nPos);
 
-    BitmapEx aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xGradientLB->GetIconSize() );
+    Bitmap aBitmap = m_pGradientList->GetBitmapForPreview( static_cast<sal_uInt16>(nPos), m_xGradientLB->GetIconSize() );
     m_xGradientLB->RemoveItem( nId );
     m_xGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
     m_xGradientLB->SelectItem( nId );
