@@ -91,7 +91,15 @@ bool QtInstanceTextView::get_editable() const
     return bEditable;
 }
 
-void QtInstanceTextView::set_monospace(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceTextView::set_monospace(bool bMonospace)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pTextEdit->setFont(bMonospace ? QFontDatabase::systemFont(QFontDatabase::FixedFont)
+                                        : QApplication::font());
+    });
+}
 
 void QtInstanceTextView::set_max_length(int) { assert(false && "Not implemented yet"); }
 
