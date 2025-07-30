@@ -477,10 +477,10 @@ CPPUNIT_TEST_FIXTURE(Atspi2TestTree, Test1)
                                       accessibility::AccessibleRelationType_CONTENT_FLOWS_TO));
     // END HACK
 
-    auto xContext = getWindowAccessibleContext();
-    CPPUNIT_ASSERT(xContext.is());
+    rtl::Reference<comphelper::OAccessible> pAccessible = getWindowAccessible();
+    CPPUNIT_ASSERT(pAccessible.is());
 
-    //~ dumpA11YTree(xContext);
+    //~ dumpA11YTree(pAccessible);
 
     // get the window manager frame
     auto xAtspiWindow = getDescendentAtPath(m_pAtspiApp, 0, ATSPI_ROLE_FRAME);

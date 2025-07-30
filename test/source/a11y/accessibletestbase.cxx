@@ -81,22 +81,11 @@ void test::AccessibleTestBase::loadFromSrc(const rtl::OUString& sSrcPath)
     load(m_directories.getURLFromSrc(sSrcPath));
 }
 
-uno::Reference<accessibility::XAccessible> test::AccessibleTestBase::getWindowAccessible()
+rtl::Reference<comphelper::OAccessible> test::AccessibleTestBase::getWindowAccessible()
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(mxWindow);
     assert(pWindow);
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
-
-    return xAccessible;
-}
-
-uno::Reference<accessibility::XAccessibleContext>
-test::AccessibleTestBase::getWindowAccessibleContext()
-{
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible = getWindowAccessible();
-    assert(xAccessible.is());
-
-    return xAccessible->getAccessibleContext();
+    return pWindow->GetAccessible();
 }
 
 bool test::AccessibleTestBase::isDocumentRole(const sal_Int16 role)

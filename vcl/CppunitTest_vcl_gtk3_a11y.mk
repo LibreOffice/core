@@ -38,7 +38,9 @@ $(eval $(call gb_CppunitTest_add_libs,vcl_gtk3_a11y,\
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_gtk3_a11y, \
 	sal \
+	comphelper \
 	cppu \
+	cppuhelper \
 	subsequenttest \
 	test \
 	i18nlangtag \

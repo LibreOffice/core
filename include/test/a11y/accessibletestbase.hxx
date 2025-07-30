@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/OAccessible.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/window.hxx>
@@ -51,8 +52,7 @@ protected:
     virtual void load(const rtl::OUString& sURL);
     virtual void loadFromSrc(const rtl::OUString& sSrcPath);
     void close();
-    css::uno::Reference<css::accessibility::XAccessible> getWindowAccessible();
-    css::uno::Reference<css::accessibility::XAccessibleContext> getWindowAccessibleContext();
+    rtl::Reference<comphelper::OAccessible> getWindowAccessible();
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>
     getDocumentAccessibleContext();
 
@@ -146,7 +146,8 @@ protected:
     template <typename... Ts> bool activateMenuItem(Ts... names)
     {
         auto menuBar = AccessibilityTools::getAccessibleObjectForRole(
-            getWindowAccessibleContext(), css::accessibility::AccessibleRole::MENU_BAR);
+            css::uno::Reference<css::accessibility::XAccessibleContext>(getWindowAccessible()),
+            css::accessibility::AccessibleRole::MENU_BAR);
         CPPUNIT_ASSERT(menuBar.is());
         return activateMenuItem(menuBar, names...);
     }

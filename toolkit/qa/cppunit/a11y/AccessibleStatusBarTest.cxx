@@ -69,7 +69,7 @@ public:
 
 uno::Reference<accessibility::XAccessibleContext> AccessibleStatusBarTest::getTestObject()
 {
-    uno::Reference<accessibility::XAccessibleContext> xWinContext = getWindowAccessibleContext();
+    uno::Reference<accessibility::XAccessibleContext> xWinContext = getWindowAccessible();
     std::cout << "got accessible: " << xWinContext << std::endl;
     std::cout << "accessible name: " << AccessibilityTools::debugString(xWinContext) << std::endl;
 
