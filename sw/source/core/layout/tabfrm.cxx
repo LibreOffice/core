@@ -1873,10 +1873,15 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
                                       tools::Long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
+    bool bRet = false;
+    if (!pFrame)
+    {
+        return bRet;
+    }
+
     vcl::RenderContext* pRenderContext = pFrame->getRootFrame()->GetCurrShell() ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
-    bool bRet = false;
     const SwFrame* pOldUp = pFrame->GetUpper();
     SwRectFnSet aRectFnSet(pFrame);
     do
