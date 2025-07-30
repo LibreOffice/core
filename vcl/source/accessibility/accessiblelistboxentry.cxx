@@ -242,15 +242,15 @@ Reference< XAccessible > SAL_CALL AccessibleListBoxEntry::getAccessibleChild( sa
     return xListBox->implGetAccessible(*pEntry);
 }
 
-Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
+rtl::Reference<comphelper::OAccessible> AccessibleListBoxEntry::implGetParentAccessible() const
 {
-    Reference< XAccessible > xParent;
+    rtl::Reference<comphelper::OAccessible> pParent;
     assert( m_aEntryPath.size() ); // invalid path
     if ( m_aEntryPath.size() == 1 )
     {   // we're a top level entry
         // -> our parent is the tree listbox itself
         if ( m_pTreeListBox )
-            xParent = m_pTreeListBox->GetAccessible( );
+            pParent = m_pTreeListBox->GetAccessible();
     }
     else
     {   // we have an entry as parent -> get its accessible
@@ -272,7 +272,7 @@ Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) cons
         }
     }
 
-    return xParent;
+    return pParent;
 }
 
 
@@ -379,14 +379,14 @@ OUString SAL_CALL AccessibleListBoxEntry::getAccessibleName(  )
 
 Reference< XAccessibleRelationSet > SAL_CALL AccessibleListBoxEntry::getAccessibleRelationSet(  )
 {
-    Reference< XAccessible > xParent;
+    rtl::Reference<comphelper::OAccessible> pParent;
     if ( m_aEntryPath.size() > 1 ) // not a root entry
-        xParent = implGetParentAccessible();
-    if ( !xParent )
+        pParent = implGetParentAccessible();
+    if (!pParent.is())
         return nullptr;
 
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
-    Sequence<Reference<XAccessible>> aSequence { xParent };
+    Sequence<Reference<XAccessible>> aSequence{ pParent };
     pRelationSetHelper->AddRelation(
         AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
     return pRelationSetHelper;

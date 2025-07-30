@@ -159,7 +159,7 @@ private:
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
     virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
-    css::uno::Reference< css::accessibility::XAccessible > implGetParentAccessible( ) const;
+    rtl::Reference<comphelper::OAccessible> implGetParentAccessible() const;
     SvTreeListEntry* GetRealChild(sal_Int32 nIndex);
     sal_Int32 GetRoleType() const;
 };
