@@ -167,7 +167,11 @@ CacheMemory& CacheMemory::GetMemoryResource()
 //static
 std::pmr::memory_resource& CacheOwner::GetMemoryResource()
 {
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    return *std::pmr::get_default_resource();
+#else
     return CacheMemory::GetMemoryResource();
+#endif
 }
 #endif
 
