@@ -11,6 +11,8 @@
 
 #include <memory>
 
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+
 #include <IDocumentLayoutAccess.hxx>
 #include <doc.hxx>
 #include <frame.hxx>
@@ -107,6 +109,46 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableHeadingSplitFooter)
     SwLayoutFrame* pBody3 = pPage3->FindBodyCont();
     SwTextFrame* pPage3Para1 = pBody3->ContainsContent()->DynCastTextFrame();
     CPPUNIT_ASSERT_EQUAL(u"page 3"_ustr, pPage3Para1->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableHeadingSplitHyphen)
+{
+    // Page 3 top paragraph has a hyphenated word and changing that would influence the widow/orphan
+    // code, so just avoid this test if the English hyphen patterns are missing.
+    uno::Reference<linguistic2::XLinguServiceManager2> xLingu
+        = linguistic2::LinguServiceManager::create(m_xContext);
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = xLingu->getHyphenator();
+    if (!xHyphenator.is())
+    {
+        return;
+    }
+    lang::Locale aLocale;
+    aLocale.Language = u"en"_ustr;
+    aLocale.Country = u"US"_ustr;
+    if (!xHyphenator->hasLocale(aLocale))
+    {
+        return;
+    }
+
+    // Given a document with a floating table on page 3:
+    // When loading that document & laying it out:
+    createSwDoc("floattable-heading-split-hyphen.docx");
+
+    // Then make sure that the floating table is on page 3 and the last heading + footnote is on
+    // page 4:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    // Without the accompanying fix in place, this test would have failed, the floating table went
+    // to page 4, not to page 3.
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    CPPUNIT_ASSERT(!pPage3->FindFootnoteCont());
+    auto pPage4 = pPage3->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(!pPage4->GetSortedObjs());
+    CPPUNIT_ASSERT(pPage4->FindFootnoteCont());
 }
 }
 

@@ -1373,15 +1373,11 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     }
 
     bool bKeep{!isHiddenNow && IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem())};
-    if (bKeep && IsTextFrame())
+    if (bKeep)
     {
-        auto pTextFrame = DynCastTextFrame();
-        if (pTextFrame->HasSplitFlyDrawObjs())
-        {
-            // The SwTextFrameBreak ctor already turns off bKeep for split fly anchors, don't
-            // change that decision here.
-            bKeep = false;
-        }
+        // The SwTextFrameBreak ctor already turns off bKeep for split fly anchors, don't
+        // change that decision here.
+        bKeep = IgnoringSplitFlyAnchor(bKeep);
     }
 
     std::unique_ptr<SwSaveFootnoteHeight> pSaveFootnote;
@@ -2298,8 +2294,16 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             }
         }
 
+        bool bKeep = false;
         if (bRet && !bSplit && !isIgnoreKeep
             && pFrame->IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem()))
+        {
+            // The SwTextFrameBreak ctor already turns off bKeep for split fly anchors, don't
+            // change that decision here.
+            bKeep = pFrame->IgnoringSplitFlyAnchor(true);
+        }
+
+        if (bKeep)
         {
             if( bTstMove )
             {
