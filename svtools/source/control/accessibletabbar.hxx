@@ -33,7 +33,7 @@ namespace accessibility
 class AccessibleTabBar final
     : public cppu::ImplInheritanceHelper<AccessibleTabBarBase, css::lang::XServiceInfo>
 {
-    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
+    std::vector<rtl::Reference<comphelper::OAccessible>> m_aAccessibleChildren;
 
     virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     void            FillAccessibleStateSet( sal_Int64& rStateSet );

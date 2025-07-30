@@ -50,7 +50,7 @@ AccessibleTabBar::AccessibleTabBar( TabBar* pTabBar )
     :ImplInheritanceHelper( pTabBar )
 {
     if ( m_pTabBar )
-        m_aAccessibleChildren.assign( m_pTabBar->GetAccessibleChildWindowCount() + 1, Reference< XAccessible >() );
+        m_aAccessibleChildren.assign(m_pTabBar->GetAccessibleChildWindowCount() + 1, {});
 }
 
 
@@ -155,11 +155,10 @@ void AccessibleTabBar::disposing()
     AccessibleTabBarBase::disposing();
 
     // dispose all children
-    for (const Reference<XAccessible>& i : m_aAccessibleChildren)
+    for (const rtl::Reference<comphelper::OAccessible>& pChild : m_aAccessibleChildren)
     {
-        Reference< XComponent > xComponent( i, UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
+        if (pChild.is())
+            pChild->dispose();
     }
     m_aAccessibleChildren.clear();
 }
@@ -203,8 +202,8 @@ Reference< XAccessible > AccessibleTabBar::getAccessibleChild( sal_Int64 i )
     if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild = m_aAccessibleChildren[i];
-    if ( !xChild.is() )
+    rtl::Reference<comphelper::OAccessible> pChild = m_aAccessibleChildren[i];
+    if (!pChild.is())
     {
         if ( m_pTabBar )
         {
@@ -212,21 +211,22 @@ Reference< XAccessible > AccessibleTabBar::getAccessibleChild( sal_Int64 i )
 
             if ( i < nCount )
             {
-                vcl::Window* pChild = m_pTabBar->GetAccessibleChildWindow( static_cast<sal_uInt16>(i) );
-                if ( pChild )
-                    xChild = pChild->GetAccessible();
+                vcl::Window* pChildWin
+                    = m_pTabBar->GetAccessibleChildWindow(static_cast<sal_uInt16>(i));
+                if (pChildWin)
+                    pChild = pChildWin->GetAccessible();
             }
             else if ( i == nCount )
             {
-                xChild = new AccessibleTabBarPageList( m_pTabBar, i );
+                pChild = new AccessibleTabBarPageList(m_pTabBar, i);
             }
 
             // insert into child list
-            m_aAccessibleChildren[i] = xChild;
+            m_aAccessibleChildren[i] = pChild;
         }
     }
 
-    return xChild;
+    return pChild;
 }
 
 
