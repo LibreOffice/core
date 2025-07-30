@@ -6374,12 +6374,10 @@ SalInstanceDrawingArea::~SalInstanceDrawingArea()
     // rather than waiting for `m_xDrawingArea` to get disposed, to prevent
     // unsafe use of the now potentially non-functional accessible until it
     // gets disposed with the VclDrawingArea
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible
-        = m_xDrawingArea->GetAccessible();
-    css::uno::Reference<css::lang::XComponent> xComp(xAccessible, css::uno::UNO_QUERY);
-    if (xComp.is())
+    rtl::Reference<comphelper::OAccessible> pAccessible = m_xDrawingArea->GetAccessible();
+    if (pAccessible.is())
     {
-        xComp->dispose();
+        pAccessible->dispose();
         m_xDrawingArea->SetAccessible(nullptr);
     }
 }
