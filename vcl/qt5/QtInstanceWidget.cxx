@@ -67,31 +67,25 @@ bool QtInstanceWidget::get_sensitive() const
 bool QtInstanceWidget::get_visible() const
 {
     SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        bool bVisible = false;
-        rQtInstance.RunInMainThread([&] { bVisible = get_visible(); });
-        return bVisible;
-    }
 
-    return getQWidget()->isVisible();
+    bool bVisible = false;
+    GetQtInstance().RunInMainThread([this, &bVisible] {
+        QWidget* pWidget = getQWidget();
+        bVisible = pWidget->isVisible()
+                   || (!pWidget->isWindow() && pWidget->isVisibleTo(pWidget->parentWidget()));
+    });
+
+    return bVisible;
 }
 
 bool QtInstanceWidget::is_visible() const
 {
     SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        bool bVisible = false;
-        rQtInstance.RunInMainThread([&] { bVisible = is_visible(); });
-        return bVisible;
-    }
 
-    QWidget* pTopLevel = getQWidget()->topLevelWidget();
-    assert(pTopLevel);
-    return getQWidget()->isVisibleTo(pTopLevel) && pTopLevel->isVisible();
+    bool bVisible = false;
+    GetQtInstance().RunInMainThread([this, &bVisible] { bVisible = getQWidget()->isVisible(); });
+
+    return bVisible;
 }
 
 void QtInstanceWidget::set_can_focus(bool bCanFocus)
