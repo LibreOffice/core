@@ -190,6 +190,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"xmlsec/ui/macrosecuritydialog.ui"_ustr,
         u"xmlsec/ui/securitylevelpage.ui"_ustr,
         u"xmlsec/ui/securitytrustpage.ui"_ustr,
+        u"xmlsec/ui/selectcertificatedialog.ui"_ustr,
         u"xmlsec/ui/viewcertdialog.ui"_ustr,
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
