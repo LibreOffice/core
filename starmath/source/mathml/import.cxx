@@ -917,8 +917,8 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             case XML_HREF:
             {
                 aAttribute.setMlAttributeValueType(SmMlAttributeValueType::MlHref);
-                OUString* aRef = new OUString(aIter.toString());
-                SmMlHref aHref = { SmMlAttributeValueHref::NMlValid, aRef };
+                OUString aRef(aIter.toString());
+                SmMlHref aHref = { SmMlAttributeValueHref::NMlValid, &aRef };
                 aAttribute.setMlHref(&aHref);
                 break;
             }
