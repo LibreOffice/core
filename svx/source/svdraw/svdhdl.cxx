@@ -2342,7 +2342,7 @@ SdrCropHdl::SdrCropHdl(
 }
 
 
-BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
+Bitmap SdrCropHdl::GetBitmapForHandle( const Bitmap& rBitmap, int nSize )
 {
     int nPixelSize = 0, nX = 0, nY = 0, nOffset = 0;
 
@@ -2377,7 +2377,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
 
     tools::Rectangle aSourceRect( Point( nX * nPixelSize + nOffset,  nY * nPixelSize), Size(nPixelSize, nPixelSize) );
 
-    BitmapEx aRetval(rBitmap);
+    Bitmap aRetval(rBitmap);
     aRetval.Crop(aSourceRect);
     return aRetval;
 }
@@ -2397,8 +2397,8 @@ void SdrCropHdl::CreateB2dIAObject()
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     int nHdlSize = m_pHdlList->GetHdlSize();
 
-    const BitmapEx aHandlesBitmap(SIP_SA_CROP_MARKERS);
-    BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
+    const Bitmap aHandlesBitmap((BitmapEx(SIP_SA_CROP_MARKERS)));
+    Bitmap aBmp1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
     for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)
     {
@@ -2419,19 +2419,19 @@ void SdrCropHdl::CreateB2dIAObject()
                     if( nHdlSize >= 2 )
                         nHdlSize = 1;
 
-                    BitmapEx aBmpEx2( GetBitmapForHandle( aHandlesBitmap, nHdlSize + 1 ) );
+                    Bitmap aBmp2( GetBitmapForHandle( aHandlesBitmap, nHdlSize + 1 ) );
 
                     const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
                     pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(
                         aPosition,
-                        aBmpEx1,
-                        aBmpEx2,
+                        BitmapEx(aBmp1),
+                        BitmapEx(aBmp2),
                         nBlinkTime,
-                        static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                        static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                        static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                        static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1,
+                        static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
+                        static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,
+                        static_cast<sal_uInt16>(aBmp2.GetSizePixel().Width() - 1) >> 1,
+                        static_cast<sal_uInt16>(aBmp2.GetSizePixel().Height() - 1) >> 1,
                         mfShearX,
                         mfRotation));
                 }
@@ -2440,9 +2440,9 @@ void SdrCropHdl::CreateB2dIAObject()
                     // create centered handle as default
                     pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx(
                         aPosition,
-                        aBmpEx1,
-                        static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                        static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                        BitmapEx(aBmp1),
+                        static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
+                        static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,
                         0.0,
                         mfShearX,
                         mfRotation));

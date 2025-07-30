@@ -494,7 +494,7 @@ private:
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
-    BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
+    Bitmap GetBitmapForHandle( const Bitmap& rBitmap, int nSize );
 
     // evtl. shear and rotation, equal to the object's one to allow adaptation of
     // the visualization handles
