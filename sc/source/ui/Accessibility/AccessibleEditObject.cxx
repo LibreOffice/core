@@ -191,23 +191,19 @@ tools::Rectangle ScAccessibleEditObject::GetBoundingBox()
 
     if ( mpWindow )
     {
-        uno::Reference< XAccessible > xThis( mpWindow->GetAccessible() );
-        if ( xThis.is() )
+        rtl::Reference<comphelper::OAccessible> pThis = mpWindow->GetAccessible();
+        if (pThis.is())
         {
-            uno::Reference< XAccessibleContext > xContext( xThis->getAccessibleContext() );
-            if ( xContext.is() )
+            uno::Reference<XAccessible> xParent = pThis->getAccessibleParent();
+            if ( xParent.is() )
             {
-                uno::Reference< XAccessible > xParent( xContext->getAccessibleParent() );
-                if ( xParent.is() )
+                uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
+                if ( xParentComponent.is() )
                 {
-                    uno::Reference< XAccessibleComponent > xParentComponent( xParent->getAccessibleContext(), uno::UNO_QUERY );
-                    if ( xParentComponent.is() )
-                    {
-                        Point aScreenLoc = aBounds.TopLeft();
-                        awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
-                        Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
-                        aBounds.SetPos( aPos );
-                    }
+                    Point aScreenLoc = aBounds.TopLeft();
+                    awt::Point aParentScreenLoc = xParentComponent->getLocationOnScreen();
+                    Point aPos( aScreenLoc.getX() - aParentScreenLoc.X, aScreenLoc.getY() - aParentScreenLoc.Y );
+                    aBounds.SetPos( aPos );
                 }
             }
         }
