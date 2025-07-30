@@ -100,19 +100,15 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  )
     Reference< XAccessible > xParent;
     if ( m_pTabControl )
     {
-        Reference< XAccessible > xAcc( m_pTabControl->GetAccessible() );
-        if ( xAcc.is() )
+        rtl::Reference<comphelper::OAccessible> pAcc = m_pTabControl->GetAccessible();
+        if (pAcc.is())
         {
-            Reference< XAccessibleContext > xCont( xAcc->getAccessibleContext() );
-            if ( xCont.is() )
-            {
-                sal_uInt16 const nPagePos(m_pTabControl->GetPagePos(m_nPageId));
-                SAL_WARN_IF(nPagePos == TAB_PAGE_NOTFOUND, "accessibility",
+            sal_uInt16 const nPagePos(m_pTabControl->GetPagePos(m_nPageId));
+            SAL_WARN_IF(nPagePos == TAB_PAGE_NOTFOUND, "accessibility",
                         "getAccessibleParent(): no tab page");
-                if (nPagePos != TAB_PAGE_NOTFOUND)
-                {
-                    xParent = xCont->getAccessibleChild(nPagePos);
-                }
+            if (nPagePos != TAB_PAGE_NOTFOUND)
+            {
+                xParent = pAcc->getAccessibleChild(nPagePos);
             }
         }
     }
