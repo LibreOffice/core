@@ -566,19 +566,24 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
             g_szWndClsName, nullptr, 0, 0, 0, 0, 0, nullptr, nullptr, pSalData->mhInst, nullptr );
 }
 
-unsigned int CMtaOleClipboard::run( )
+unsigned __stdcall CMtaOleClipboard::oleThreadProc(void* pParam)
 {
+    osl_setThreadName("CMtaOleClipboard::oleThreadProc()");
+
+    CMtaOleClipboard* pInst = static_cast<CMtaOleClipboard*>(pParam);
+    assert(pInst);
+
     HRESULT hr = OleInitialize( nullptr );
     OSL_ASSERT( SUCCEEDED( hr ) );
 
-    createMtaOleReqWnd( );
+    pInst->createMtaOleReqWnd();
 
     unsigned int nRet = ~0U; // = error
 
-    if ( IsWindow( m_hwndMtaOleReqWnd ) )
+    if (IsWindow(pInst->m_hwndMtaOleReqWnd))
     {
-        if ( nullptr != m_hEvtThrdReady )
-            SetEvent( m_hEvtThrdReady );
+        if (nullptr != pInst->m_hEvtThrdReady)
+            SetEvent(pInst->m_hEvtThrdReady);
 
         nRet = 0;
 
@@ -604,17 +609,6 @@ unsigned int CMtaOleClipboard::run( )
     OleUninitialize( );
 
     return nRet;
-}
-
-unsigned __stdcall CMtaOleClipboard::oleThreadProc( void* pParam )
-{
-    osl_setThreadName("CMtaOleClipboard::run()");
-
-    CMtaOleClipboard* pInst =
-        static_cast<CMtaOleClipboard*>( pParam );
-    OSL_ASSERT( nullptr != pInst );
-
-    return pInst->run( );
 }
 
 unsigned __stdcall CMtaOleClipboard::clipboardChangedNotifierThreadProc(void* pParam)

@@ -51,8 +51,6 @@ public:
     void registerClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback);
 
 private:
-    unsigned int run( );
-
     // create a hidden window which serves as a request target; so we
     // guarantee synchronization
     void createMtaOleReqWnd( );
