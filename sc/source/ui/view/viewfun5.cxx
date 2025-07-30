@@ -26,12 +26,17 @@
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 
+#include <svtools/svtresid.hxx>
+#include <svtools/strings.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/GenericDropDownFieldDialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/classids.hxx>
@@ -45,12 +50,14 @@
 #include <osl/thread.h>
 #include <o3tl/unit_conversion.hxx>
 #include <o3tl/string_view.hxx>
+#include <md4c.h>
 
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/markdown.hxx>
 
 #include <viewfunc.hxx>
 #include <docsh.hxx>
@@ -657,6 +664,89 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
     return bRet;
 }
 
+static bool lcl_convert_markdown_to_csv(OUString& rData)
+{
+
+    auto enter_block_callbck = [](MD_BLOCKTYPE, void*, void*) -> int {
+        return 0;
+    };
+
+    auto leave_block_callbck = [](MD_BLOCKTYPE type, void*, void* userdata) -> int {
+
+        OUString& rStr = *static_cast<OUString*>(userdata);
+        switch(type)
+        {
+            case MD_BLOCK_DOC:
+            case MD_BLOCK_QUOTE:
+            case MD_BLOCK_UL:
+            case MD_BLOCK_OL:
+            case MD_BLOCK_LI:
+            case MD_BLOCK_HR:
+            case MD_BLOCK_H:
+            case MD_BLOCK_CODE:
+            case MD_BLOCK_HTML:
+            case MD_BLOCK_P:
+            case MD_BLOCK_TABLE:
+            case MD_BLOCK_THEAD:
+            case MD_BLOCK_TBODY:
+                break;
+            case MD_BLOCK_TR:
+            {
+                rStr += u"\n"_ustr;
+                break;
+            }
+            case MD_BLOCK_TH:
+            case MD_BLOCK_TD:
+            {
+                rStr += u","_ustr;
+                break;
+            }
+        }
+
+        return 0;
+    };
+
+    auto enter_span_callbck = [](MD_SPANTYPE, void*, void*) -> int {
+        return 0;
+    };
+
+    auto leave_span_callbck = [](MD_SPANTYPE, void*, void*) -> int {
+        return 0;
+    };
+
+    auto text_callbck = [](MD_TEXTTYPE, const MD_CHAR* text, MD_SIZE size, void* userdata) -> int {
+
+        OUString& rStr = *static_cast<OUString*>(userdata);
+
+        OUString aText = OStringToOUString({text, size}, RTL_TEXTENCODING_UTF8);
+        rStr += aText;
+
+        return 0;
+    };
+
+    MD_PARSER parser = {0,
+                        MD_FLAG_TABLES,
+                        enter_block_callbck,
+                        leave_block_callbck,
+                        enter_span_callbck,
+                        leave_span_callbck,
+                        text_callbck,
+                        nullptr,
+                        nullptr};
+
+
+    OUString aConvertedData;
+    OString rawData = OUStringToOString(rData, RTL_TEXTENCODING_UTF8);
+
+    int ret = md_parse(rawData.getStr(), rawData.getLength(), &parser, static_cast<void*>(&aConvertedData));
+
+    if(ret != 0)
+        return false;
+
+    rData = aConvertedData;
+    return true;
+}
+
 bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     SCCOL nPosX, SCROW nPosY, bool bAllowDialogs,
@@ -733,6 +823,35 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
             && nDelim >= 0 && nDelim != pStrBuffer->getLength () - 1)
         {
             vcl::Window* pParent = GetActiveWin();
+
+            OUString aSelection;
+            std::vector<OUString> aFormats;
+            aFormats.push_back(SvtResId(STR_FORMAT_STRING));
+
+            if(comphelper::IsMarkdownData(*pStrBuffer)) //markdown
+            {
+                aFormats.push_back(SvtResId(STR_FORMAT_ID_MARKDOWN));
+            }
+
+            if(aFormats.size() > 1)
+            {
+                GenericDropDownFieldDialog aDialog(pParent->GetFrameWeld(),
+                                                   SvxResId(RID_SVXSTR_PASTE_AS_DIALOG_TITLE),
+                                                   aFormats);
+                short nRet = aDialog.run();
+                if( nRet == RET_OK)
+                {
+                    aSelection = aDialog.GetSelectedItem();
+                }
+                else if(nRet == RET_CANCEL)
+                    return false;
+            }
+
+            if(aSelection == SvtResId(STR_FORMAT_ID_MARKDOWN))
+            {
+                if(!lcl_convert_markdown_to_csv(*pStrBuffer))
+                    return false;
+            }
 
             auto pStrm = std::make_shared<ScImportStringStream>(*pStrBuffer);
 

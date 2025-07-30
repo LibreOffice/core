@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_externals,sc,\
     icuuc \
     libxml2 \
     mdds_headers \
+    md4c \
 ))
 
 ifneq ($(SYSTEM_LIBORCUS),)

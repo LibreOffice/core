@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc$(1),\
 	mdds_headers \
 	orcus \
 	orcus-parser \
+    md4c \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc$(1), \
