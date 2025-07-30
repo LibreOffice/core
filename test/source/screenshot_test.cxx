@@ -78,7 +78,7 @@ void ScreenshotTest::setUp()
     }
 }
 
-void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, std::u16string_view rScreenshotId)
+void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, std::u16string_view rScreenshotId)
 {
     std::u16string_view aSplitDirname, aBasename;
     splitHelpId(rScreenshotId, aSplitDirname, aBasename);
@@ -105,7 +105,7 @@ void ScreenshotTest::implSaveScreenshot(const BitmapEx& rScreenshot, std::u16str
 
 void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 {
-    const BitmapEx aScreenshot(rDialog.createScreenshot());
+    const Bitmap aScreenshot(rDialog.createScreenshot());
 
     if (!aScreenshot.IsEmpty())
     {
@@ -121,7 +121,7 @@ void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 void ScreenshotTest::saveScreenshot(weld::Window& rDialog)
 {
     VclPtr<VirtualDevice> xDialogSurface(rDialog.screenshot());
-    const BitmapEx aScreenshot(xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel()));
+    const Bitmap aScreenshot(xDialogSurface->GetBitmap(Point(), xDialogSurface->GetOutputSizePixel()));
 
     if (!aScreenshot.IsEmpty())
     {
