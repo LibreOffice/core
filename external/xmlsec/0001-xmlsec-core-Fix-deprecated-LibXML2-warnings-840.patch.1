@@ -1,0 +1,443 @@
+From 22bb1045ffd62795b2e26140d1b3c1bf43f4de69 Mon Sep 17 00:00:00 2001
+From: lsh123 <aleksey@aleksey.com>
+Date: Thu, 29 Aug 2024 22:47:41 -0400
+Subject: [PATCH] (xmlsec-core) Fix deprecated LibXML2 warnings (#840)
+
+---
+ apps/xmlsec.c            |  9 +++-
+ configure.ac             | 89 ++++++++++++++++++----------------------
+ include/xmlsec/private.h | 10 ++---
+ include/xmlsec/xmlsec.h  | 41 +++++++++---------
+ src/gcrypt/signatures.c  |  1 +
+ src/gcrypt/symkeys.c     |  1 +
+ src/gnutls/asymkeys.c    |  1 +
+ src/gnutls/keysstore.c   |  1 +
+ src/keysmngr.c           |  3 +-
+ src/mscng/certkeys.c     |  1 +
+ src/mscng/symkeys.c      |  1 +
+ src/mscng/x509vfy.c      |  1 +
+ src/mscrypto/certkeys.c  |  1 +
+ src/mscrypto/symkeys.c   |  1 +
+ src/mscrypto/x509vfy.c   |  1 +
+ src/nss/keysstore.c      |  1 +
+ src/nss/symkeys.c        |  1 +
+ src/openssl/keysstore.c  |  1 +
+ src/parser.c             | 29 ++++++++++---
+ src/templates.c          |  3 +-
+ src/xmlsec.c             | 27 ++++++------
+ src/xpath.c              |  4 +-
+ 22 files changed, 131 insertions(+), 97 deletions(-)
+
+diff --git a/apps/xmlsec.c b/apps/xmlsec.c
+index 0969af3c..e22637a1 100644
+--- a/apps/xmlsec.c
++++ b/apps/xmlsec.c
+@@ -1356,7 +1356,14 @@ xmlSecAppExecute(xmlSecAppCommand command, const char** utf8_argv, int argc) {
+ 
+     /* enable XXE? */
+     if(xmlSecAppCmdLineParamIsSet(&xxeParam)) {
+-        xmlSecSetExternalEntityLoader( NULL );     // reset to libxml2's default handler
++        /* new parser option XML_PARSE_NO_XXE available since 2.13.0 */
++#if LIBXML_VERSION < 21300
++        xmlSecSetExternalEntityLoader(NULL);     /* reset to libxml2's default handler */
++#else  /* LIBXML_VERSION < 21300 */
++        int options = xmlSecParserGetDefaultOptions();
++        options &= (~(XML_PARSE_NO_XXE));
++        xmlSecParserSetDefaultOptions(options);
++#endif /* LIBXML_VERSION < 21300 */
+     }
+ 
+     /* enable verbose mode? */
+diff --git a/include/xmlsec/private.h b/include/xmlsec/private.h
+index d7bc2406..a23c0002 100644
+--- a/include/xmlsec/private.h
++++ b/include/xmlsec/private.h
+@@ -654,13 +654,13 @@ struct _xmlSecCryptoDLFunctions {
+  *
+  * Macro used to signal to GCC unused function parameters
+  */
+-#ifdef __GNUC__
+ #ifndef ATTRIBUTE_UNUSED
++#ifdef __GNUC__
++#define ATTRIBUTE_UNUSED __attribute__((unused))
++#else  /* __GNUC__ */
+ #define ATTRIBUTE_UNUSED
+-#endif
+-#else
+-#define ATTRIBUTE_UNUSED
+-#endif
++#endif /* __GNUC__ */
++#endif  /* ATTRIBUTE_UNUSED */
+ 
+ /**
+  * UNREFERENCED_PARAMETER:
+diff --git a/include/xmlsec/xmlsec.h b/include/xmlsec/xmlsec.h
+index 9cce5331..14b7cd73 100644
+--- a/include/xmlsec/xmlsec.h
++++ b/include/xmlsec/xmlsec.h
+@@ -22,6 +22,26 @@
+ extern "C" {
+ #endif /* __cplusplus */
+ 
++/**
++ * XMLSEC_DEPRECATED:
++ *
++ * Marks function as deprecated.
++ */
++#if !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO)
++#if defined(__GNUC__)
++#define XMLSEC_DEPRECATED __attribute__((deprecated))
++#elif defined(__clang__)
++#define XMLSEC_DEPRECATED __attribute__((deprecated))
++#elif defined(_MSC_VER)
++#define XMLSEC_DEPRECATED __declspec(deprecated)
++#else /* defined(_MSC_VER) */
++#warning "WARNING: You need to implement XMLSEC_DEPRECATED for this compiler"
++#define XMLSEC_DEPRECATED
++#endif /* defined(_MSC_VER) */
++#else  /* !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO) */
++#define XMLSEC_DEPRECATED
++#endif /* !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO) */
++
+ /***********************************************************************
+  *
+  * Basic types to make ports to exotic platforms easier
+@@ -93,28 +113,11 @@ typedef struct _xmlSecEncCtx                    xmlSecEncCtx, *xmlSecEncCtxPtr;
+ XMLSEC_EXPORT int                               xmlSecInit              (void);
+ XMLSEC_EXPORT int                               xmlSecShutdown          (void);
+ XMLSEC_EXPORT const xmlChar *                   xmlSecGetDefaultCrypto  (void);
++
+ XMLSEC_EXPORT void                              xmlSecSetExternalEntityLoader (xmlExternalEntityLoader entityLoader);
+ XMLSEC_EXPORT xmlSecSize                        xmlSecStrlen            (const xmlChar * str);
+ 
+-/**
+- * XMLSEC_DEPRECATED:
+- *
+- * Marks function as deprecated.
+- */
+-#if !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO)
+-#if defined(__GNUC__)
+-#define XMLSEC_DEPRECATED __attribute__((deprecated))
+-#elif defined(__clang__)
+-#define XMLSEC_DEPRECATED __attribute__((deprecated))
+-#elif defined(_MSC_VER)
+-#define XMLSEC_DEPRECATED __declspec(deprecated)
+-#else /* defined(_MSC_VER) */
+-#warning "WARNING: You need to implement XMLSEC_DEPRECATED for this compiler"
+-#define XMLSEC_DEPRECATED
+-#endif /* defined(_MSC_VER) */
+-#else  /* !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO) */
+-#define XMLSEC_DEPRECATED
+-#endif /* !defined(IN_XMLSEC) && !defined(IN_XMLSEC_CRYPTO) */
++
+ 
+ /***********************************************************************
+  *
+diff --git a/src/gcrypt/signatures.c b/src/gcrypt/signatures.c
+index 3cfe5293..d09aeb66 100644
+--- a/src/gcrypt/signatures.c
++++ b/src/gcrypt/signatures.c
+@@ -22,6 +22,7 @@
+ #include <xmlsec/keys.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/gcrypt/crypto.h>
+ 
+diff --git a/src/gcrypt/symkeys.c b/src/gcrypt/symkeys.c
+index cb2c1e69..49083a42 100644
+--- a/src/gcrypt/symkeys.c
++++ b/src/gcrypt/symkeys.c
+@@ -22,6 +22,7 @@
+ #include <xmlsec/keyinfo.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/gcrypt/crypto.h>
+ #include "../keysdata_helpers.h"
+diff --git a/src/gnutls/asymkeys.c b/src/gnutls/asymkeys.c
+index 511f0306..d23a53fe 100644
+--- a/src/gnutls/asymkeys.c
++++ b/src/gnutls/asymkeys.c
+@@ -27,6 +27,7 @@
+ #include <xmlsec/keys.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/xmltree.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/gnutls/crypto.h>
+ 
+diff --git a/src/gnutls/keysstore.c b/src/gnutls/keysstore.c
+index 4472cfe7..4c391683 100644
+--- a/src/gnutls/keysstore.c
++++ b/src/gnutls/keysstore.c
+@@ -25,6 +25,7 @@
+ #include <xmlsec/base64.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/keysmngr.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/gnutls/crypto.h>
+ #include <xmlsec/gnutls/keysstore.h>
+diff --git a/src/keysmngr.c b/src/keysmngr.c
+index 635669fb..92a3ccca 100644
+--- a/src/keysmngr.c
++++ b/src/keysmngr.c
+@@ -30,6 +30,7 @@
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/keysmngr.h>
+ #include <xmlsec/errors.h>
++#include <xmlsec/parser.h>
+ #include <xmlsec/private.h>
+ 
+ #include "cast_helpers.h"
+diff --git a/src/mscng/certkeys.c b/src/mscng/certkeys.c
+index dc3138a6..41393b40 100644
+--- a/src/mscng/certkeys.c
++++ b/src/mscng/certkeys.c
+@@ -26,6 +26,7 @@
+ #include <xmlsec/keys.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/xmltree.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscng/certkeys.h>
+ #include <xmlsec/mscng/crypto.h>
+diff --git a/src/mscng/symkeys.c b/src/mscng/symkeys.c
+index 34728167..0c9e79e3 100644
+--- a/src/mscng/symkeys.c
++++ b/src/mscng/symkeys.c
+@@ -23,6 +23,7 @@
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/bn.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscng/crypto.h>
+ 
+diff --git a/src/mscng/x509vfy.c b/src/mscng/x509vfy.c
+index 4593fa45..c6497c98 100644
+--- a/src/mscng/x509vfy.c
++++ b/src/mscng/x509vfy.c
+@@ -27,6 +27,7 @@
+ #include <xmlsec/keyinfo.h>
+ #include <xmlsec/keysmngr.h>
+ #include <xmlsec/xmltree.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscng/crypto.h>
+ #include <xmlsec/mscng/x509.h>
+diff --git a/src/mscrypto/certkeys.c b/src/mscrypto/certkeys.c
+index 2a20b8bd..8f94f70e 100644
+--- a/src/mscrypto/certkeys.c
++++ b/src/mscrypto/certkeys.c
+@@ -32,6 +32,7 @@
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/bn.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscrypto/certkeys.h>
+ #include <xmlsec/mscrypto/crypto.h>
+diff --git a/src/mscrypto/symkeys.c b/src/mscrypto/symkeys.c
+index e4fb190c..121f7876 100644
+--- a/src/mscrypto/symkeys.c
++++ b/src/mscrypto/symkeys.c
+@@ -24,6 +24,7 @@
+ #include <xmlsec/keyinfo.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscrypto/crypto.h>
+ 
+diff --git a/src/mscrypto/x509vfy.c b/src/mscrypto/x509vfy.c
+index 00af88d2..54366a50 100644
+--- a/src/mscrypto/x509vfy.c
++++ b/src/mscrypto/x509vfy.c
+@@ -31,6 +31,7 @@
+ #include <xmlsec/bn.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/xmltree.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/mscrypto/crypto.h>
+ #include <xmlsec/mscrypto/x509.h>
+diff --git a/src/nss/keysstore.c b/src/nss/keysstore.c
+index d233ec8b..c7c16e33 100644
+--- a/src/nss/keysstore.c
++++ b/src/nss/keysstore.c
+@@ -38,6 +38,7 @@
+ #include <xmlsec/base64.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/keysmngr.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/nss/crypto.h>
+ #include <xmlsec/nss/keysstore.h>
+diff --git a/src/nss/symkeys.c b/src/nss/symkeys.c
+index f94b72a2..9e8b7aa9 100644
+--- a/src/nss/symkeys.c
++++ b/src/nss/symkeys.c
+@@ -23,6 +23,7 @@
+ #include <xmlsec/keyinfo.h>
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/errors.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/nss/crypto.h>
+ 
+diff --git a/src/openssl/keysstore.c b/src/openssl/keysstore.c
+index ac4adf39..e4d861f6 100644
+--- a/src/openssl/keysstore.c
++++ b/src/openssl/keysstore.c
+@@ -25,6 +25,7 @@
+ #include <xmlsec/base64.h>
+ #include <xmlsec/errors.h>
+ #include <xmlsec/keysmngr.h>
++#include <xmlsec/private.h>
+ 
+ #include <xmlsec/openssl/crypto.h>
+ #include <xmlsec/openssl/keysstore.h>
+diff --git a/src/parser.c b/src/parser.c
+index 4c6404da..9485be10 100644
+--- a/src/parser.c
++++ b/src/parser.c
+@@ -567,20 +567,39 @@ void
+ xmlSecParsePrepareCtxt(xmlParserCtxtPtr ctxt) {
+     xmlSecAssert(ctxt != NULL);
+ 
++#if LIBXML_VERSION < 21300
+     /* required for c14n! */
+     ctxt->loadsubset = XML_DETECT_IDS | XML_COMPLETE_ATTRS;
+     ctxt->replaceEntities = 1;
++#else  /* LIBXML_VERSION < 21300 */
++    xmlCtxtSetOptions(ctxt, xmlSecParserGetDefaultOptions());
++#endif /* LIBXML_VERSION < 21300 */
+ 
+     xmlCtxtUseOptions(ctxt, xmlSecParserGetDefaultOptions());
+ }
+ 
++
+ /*
+- * XML_PARSE_NONET  to support c14n
+- * XML_PARSE_NODICT to avoid problems with moving nodes around
+- * XML_PARSE_HUGE   to enable parsing of XML documents with large text nodes
++ * To block network access and loading of external entities:
++ * - XML_PARSE_NO_XXE: disable loading of external content (available >= 2.13.0),
++ *   it disables XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR ut we keep those in defaults
++ *   to make it work if XML_PARSE_NO_XXE is disabled (e.g. with --xxe option)
++ * - XML_PARSE_NONET: forbid network access
++ *
++ * To support c14n:
++ * - XML_PARSE_NOENT: substitute entities
++ * - XML_PARSE_DTDLOAD: load the external subset (disabled with XML_PARSE_NO_XXE)
++ * - XML_PARSE_DTDATTR: default DTD attributes (disabled with XML_PARSE_NO_XXE)
++ *
++ * Misc:
++ * XML_PARSE_NODICT: do not reuse the context dictionary (to avoid problems with moving nodes around)
++ * XML_PARSE_HUGE: relax any hardcoded limit from the parser (to enable parsing of XML documents with large text nodes)
+  */
+-static int g_xmlsec_parser_default_options = XML_PARSE_NONET | XML_PARSE_NODICT | XML_PARSE_HUGE;
+-
++#if LIBXML_VERSION < 21300
++static int g_xmlsec_parser_default_options = XML_PARSE_NONET | XML_PARSE_NOENT | XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR | XML_PARSE_NODICT | XML_PARSE_HUGE;
++#else  /* LIBXML_VERSION < 21300 */
++static int g_xmlsec_parser_default_options = XML_PARSE_NO_XXE | XML_PARSE_NONET | XML_PARSE_NOENT | XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR | XML_PARSE_NODICT | XML_PARSE_HUGE;
++#endif /* LIBXML_VERSION < 21300 */
+ /**
+  * xmlSecParserGetDefaultOptions:
+  *
+diff --git a/src/templates.c b/src/templates.c
+index 4fcbf774..32efdeba 100644
+--- a/src/templates.c
++++ b/src/templates.c
+@@ -26,6 +26,7 @@
+ #include <xmlsec/strings.h>
+ #include <xmlsec/base64.h>
+ #include <xmlsec/templates.h>
++#include <xmlsec/parser.h>
+ #include <xmlsec/errors.h>
+ 
+ 
+diff --git a/src/xmlsec.c b/src/xmlsec.c
+index 4fdc78fe..8187ff8b 100644
+--- a/src/xmlsec.c
++++ b/src/xmlsec.c
+@@ -29,26 +29,20 @@
+ #include <xmlsec/transforms.h>
+ #include <xmlsec/app.h>
+ #include <xmlsec/io.h>
++#include <xmlsec/parser.h>
+ #include <xmlsec/errors.h>
+ 
+ #include "cast_helpers.h"
+ 
+-/*
+- * Custom external entity handler, denies all files except the initial
+- * document we're parsing (input_id == 1)
+- */
++
+ /* default external entity loader, pointer saved during xmlInit */
+-static xmlExternalEntityLoader
+-xmlSecDefaultExternalEntityLoader = NULL;
++static xmlExternalEntityLoader xmlSecDefaultExternalEntityLoader = NULL;
+ 
++/* new parser option XML_PARSE_NO_XXE available since 2.13.0 */
++#if LIBXML_VERSION < 21300
+ /*
+- * xmlSecNoXxeExternalEntityLoader:
+- * @URL:        the URL for the entity to load
+- * @ID:         public ID for the entity to load
+- * @ctxt:       XML parser context, or NULL
+- *
+- * See libxml2's xmlLoadExternalEntity and xmlNoNetExternalEntityLoader.
+- * This function prevents any external (file or network) entities from being loaded.
++ * Custom external entity handler, denies all files except the initial
++ * document we're parsing (input_id == 1)
+  */
+ static xmlParserInputPtr
+ xmlSecNoXxeExternalEntityLoader(const char *URL, const char *ID,
+@@ -64,6 +58,8 @@ xmlSecNoXxeExternalEntityLoader(const char *URL, const char *ID,
+     return(NULL);
+ }
+ 
++#endif /* LIBXML_VERSION < 21300 */
++
+ /**
+  * xmlSecSetExternalEntityLoader:
+  * @entityLoader:       the new entity resolver function, or NULL to restore libxml2's default handler
+@@ -113,8 +109,11 @@ xmlSecInit(void) {
+     if (!xmlSecDefaultExternalEntityLoader) {
+         xmlSecDefaultExternalEntityLoader = xmlGetExternalEntityLoader();
+     }
+-    xmlSetExternalEntityLoader(xmlSecNoXxeExternalEntityLoader);
+ 
++    /* new parser option XML_PARSE_NO_XXE available since 2.13.0 and is set as default options for parsers */
++#if LIBXML_VERSION < 21300
++    xmlSetExternalEntityLoader(xmlSecNoXxeExternalEntityLoader);
++#endif /* LIBXML_VERSION < 21300 */
+ 
+     /* we use rand() function to generate id attributes */
+     srand((unsigned int)time(NULL));
+diff --git a/src/xpath.c b/src/xpath.c
+index 9d8291c7..1f3821be 100644
+--- a/src/xpath.c
++++ b/src/xpath.c
+@@ -111,9 +111,9 @@ xmlSecXPathDataCreate(xmlSecXPathDataType type) {
+         }
+         break;
+     case xmlSecXPathDataTypeXPointer:
+-        data->ctx = xmlXPtrNewContext(NULL, NULL, NULL); /* we'll set doc in the context later */
++        data->ctx = xmlXPathNewContext(NULL); /* we'll set doc in the context later */
+         if(data->ctx == NULL) {
+-            xmlSecXmlError("xmlXPtrNewContext", NULL);
++            xmlSecXmlError("xmlXPathNewContext", NULL);
+             xmlSecXPathDataDestroy(data);
+             return(NULL);
+         }
+-- 
+2.50.1
+
