@@ -258,6 +258,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167583)
     fnVerify(false);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf150822)
+{
+    createSwDoc("tdf150822.docx");
+
+    auto fnVerify = [this] {
+        auto pXmlDoc = parseLayoutDump();
+
+        // Without the fix, vertical layout won't be parsed
+        assertXPath(pXmlDoc, "//txt[@WritingMode='Vertical']", 3);
+    };
+
+    fnVerify();
+    saveAndReload(mpFilter);
+    fnVerify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

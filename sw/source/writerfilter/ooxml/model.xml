@@ -12183,16 +12183,22 @@
         <choice>
           <!-- Left to Right, Top to Bottom -->
           <value>lrTb</value>
+          <value>tb</value> <!-- Strict -->
           <!-- Top to Bottom, Right to Left -->
           <value>tbRl</value>
+          <value>rl</value> <!-- Strict -->
           <!-- Bottom to Top, Left to Right -->
           <value>btLr</value>
+          <value>lr</value> <!-- Strict -->
           <!-- Left to Right, Top to Bottom Rotated -->
           <value>lrTbV</value>
+          <value>tbV</value> <!-- Strict -->
           <!-- Top to Bottom, Right to Left Rotated -->
           <value>tbRlV</value>
+          <value>rlV</value> <!-- Strict -->
           <!-- Top to Bottom, Left to Right Rotated -->
           <value>tbLrV</value>
+          <value>lrV</value> <!-- Strict -->
         </choice>
       </define>
       <define name="CT_TextDirection">
@@ -17534,11 +17540,17 @@
     </resource>
     <resource name="ST_TextDirection" resource="List">
       <value tokenid="ooxml:Value_ST_TextDirection_lrTb">lrTb</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_lrTb">tb</value> <!-- Strict -->
       <value tokenid="ooxml:Value_ST_TextDirection_tbRl">tbRl</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbRl">rl</value> <!-- Strict -->
       <value tokenid="ooxml:Value_ST_TextDirection_btLr">btLr</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_btLr">lr</value> <!-- Strict -->
       <value tokenid="ooxml:Value_ST_TextDirection_lrTbV">lrTbV</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_lrTbV">tbV</value> <!-- Strict -->
       <value tokenid="ooxml:Value_ST_TextDirection_tbRlV">tbRlV</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbRlV">rlV</value> <!-- Strict -->
       <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">tbLrV</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">lrV</value> <!-- Strict -->
     </resource>
     <resource name="CT_TextDirection" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextDirection_val" action="setValue"/>
