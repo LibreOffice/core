@@ -47,7 +47,7 @@ class ScFormulaDlg final : public formula::FormulaDlg,
 public:
     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         weld::Window* pParent, const ScViewData& rViewData, const formula::IFunctionManager* _pFunctionMgr);
-    virtual ~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE override;
+    virtual ~ScFormulaDlg() override;
 
     // IFormulaEditorHelper
     virtual void notifyChange() override;
@@ -95,6 +95,7 @@ public:
     virtual void ViewShellChanged() override;
 
 private:
+    void ImplDestroy();
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 

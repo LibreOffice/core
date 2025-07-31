@@ -73,6 +73,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/itemset.hxx>
@@ -4233,11 +4234,7 @@ namespace sfx::intern {
 
         ~ViewCreationGuard()
         {
-            if ( !m_bSuccess && m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
-            {
-                m_aWeakFrame->SetFrameInterface_Impl( nullptr );
-                m_aWeakFrame->DoClose();
-            }
+            suppress_fun_call_w_exception(ImplDestroy());
         }
 
         void takeFrameOwnership( SfxFrame* i_pFrame )
@@ -4255,6 +4252,15 @@ namespace sfx::intern {
     private:
         bool             m_bSuccess;
         SfxFrameWeakRef  m_aWeakFrame;
+
+        void ImplDestroy()
+        {
+            if ( !m_bSuccess && m_aWeakFrame && !m_aWeakFrame->GetCurrentDocument() )
+            {
+                m_aWeakFrame->SetFrameInterface_Impl( nullptr );
+                m_aWeakFrame->DoClose();
+            }
+        }
     };
 }
 

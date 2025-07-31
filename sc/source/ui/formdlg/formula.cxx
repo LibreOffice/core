@@ -229,7 +229,12 @@ void ScFormulaDlg::fill()
     pScMod->SetRefInputHdl(nullptr);
 }
 
-ScFormulaDlg::~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE
+ScFormulaDlg::~ScFormulaDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
+}
+
+void ScFormulaDlg::ImplDestroy()
 {
     ScFormEditData* pData = m_pViewShell->GetFormEditData();
 
