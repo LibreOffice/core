@@ -1031,11 +1031,15 @@ void SfxTabDialogController::Start_Impl()
     // something that the sort dialog in calc depends on
     if (m_sAppPageId.isEmpty())
     {
+        int nInitialPage = 0;
         SvtViewOptions aDlgOpt(EViewType::TabDialog, m_xDialog->get_help_id());
         if (aDlgOpt.Exists())
-            m_xTabCtrl->set_current_page(aDlgOpt.GetPageID());
-        else
-            m_xTabCtrl->set_current_page(0);
+        {
+            const int nIndex = m_xTabCtrl->get_page_index(aDlgOpt.GetPageID());
+            if (nIndex >= 0)
+                nInitialPage = nIndex;
+        }
+        m_xTabCtrl->set_current_page(nInitialPage);
     }
 
     ActivatePage(m_xTabCtrl->get_current_page_ident());
