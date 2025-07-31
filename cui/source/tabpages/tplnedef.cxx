@@ -526,7 +526,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
 
             tools::Long nDashCount = pDashList->Count();
             pDashList->Insert( std::make_unique<XDashEntry>(aDash, aName), nDashCount );
-            m_xLbLineStyles->Append( *pDashList->GetDash(nDashCount), BitmapEx(pDashList->GetUiBitmap(nDashCount)) );
+            m_xLbLineStyles->Append( *pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount) );
 
             m_xLbLineStyles->set_active(m_xLbLineStyles->get_count() - 1);
 
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
             FillDash_Impl();
 
             pDashList->Replace(std::make_unique<XDashEntry>(aDash, aName), nPos);
-            m_xLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, BitmapEx(pDashList->GetUiBitmap(nPos)));
+            m_xLbLineStyles->Modify(*pDashList->GetDash(nPos), nPos, pDashList->GetUiBitmap(nPos));
 
             m_xLbLineStyles->set_active(nPos);
 

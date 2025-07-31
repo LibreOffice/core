@@ -225,8 +225,8 @@ public:
     bool getAddStandardFields() const { return mbAddStandardFields; }
     void setAddStandardFields(bool bNew);
 
-    void Append(const XDashEntry& rEntry, const BitmapEx& rBitmap );
-    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
+    void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
 
     void clear() { m_xControl->clear(); }
     void remove(int nPos) { m_xControl->remove(nPos); }

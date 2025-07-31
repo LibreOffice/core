@@ -973,7 +973,7 @@ void SvxLineLB::Fill( const XDashListRef &pList )
     m_xControl->thaw();
 }
 
-void SvxLineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
+void SvxLineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 {
     if (!rBitmap.IsEmpty())
     {
@@ -990,7 +990,7 @@ void SvxLineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
     }
 }
 
-void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap)
+void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap)
 {
     m_xControl->remove(nPos);
 
