@@ -1425,10 +1425,8 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if (bCanUseThemeColors)
                     return drawThemedControl(hDC, nType, MENU_POPUPBACKGROUND, iState, rc);
 
-                return
-                ImplDrawTheme( hTheme, hDC, MENU_POPUPBACKGROUND, 0, rc, aCaption ) &&
-                ImplDrawTheme( hTheme, hDC, MENU_POPUPGUTTER, 0, aGutterRC, aCaption )
-                ;
+                return ImplDrawTheme(hTheme, hDC, MENU_POPUPBACKGROUND, 0, rc, aCaption)
+                       && ImplDrawTheme(hTheme, hDC, MENU_POPUPGUTTER, 0, aGutterRC, aCaption);
             }
             else if( nPart == ControlPart::MenuItem )
             {
