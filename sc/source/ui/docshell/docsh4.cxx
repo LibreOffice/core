@@ -110,6 +110,7 @@
 #include <helpids.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/urlfieldhelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <svx/xdef.hxx>
@@ -2289,6 +2290,33 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     if ( IsReadOnly() || GetObjectShell()->isExportLocked() )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case SID_OPEN_HYPERLINK:
+                {
+                    ScViewData* pViewData = GetViewData();
+                    if (!pViewData)
+                    {
+                        rSet.DisableItem(nWhich);
+                        break;
+                    }
+
+                    if (ScModule::get()->IsEditMode())
+                    {
+                        if (EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart()))
+                            if (!URLFieldHelper::IsCursorAtURLField(*pEditView, true))
+                                rSet.DisableItem(nWhich);
+                    }
+                    else
+                    {
+                        if (ScGridWindow* pWin = pViewData->GetActiveWin())
+                        {
+                            std::vector<UrlData> vUrls = pWin->GetEditUrls(pViewData->GetCurPos());
+                            if (vUrls.empty())
+                                rSet.DisableItem(nWhich);
+                        }
                     }
                 }
                 break;
