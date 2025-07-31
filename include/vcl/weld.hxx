@@ -663,11 +663,7 @@ public:
     virtual void change_default_button(weld::Button* pOld, weld::Button* pNew) = 0;
     virtual bool is_default_button(const weld::Button* pCandidate) const = 0;
 
-    virtual void set_default_response(int nResponse)
-    {
-        std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
-        change_default_button(nullptr, pButton.get());
-    }
+    virtual inline void set_default_response(int nResponse);
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;
@@ -2947,6 +2943,12 @@ public:
     virtual Dialog* getDialog() override;
     SAL_DLLPRIVATE virtual ~AssistantController() override;
 };
+
+void Dialog::set_default_response(int nResponse)
+{
+    std::unique_ptr<weld::Button> pButton = weld_button_for_response(nResponse);
+    change_default_button(nullptr, pButton.get());
+}
 }
 #endif
 
