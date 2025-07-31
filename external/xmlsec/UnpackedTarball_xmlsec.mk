@@ -9,6 +9,9 @@
 
 xmlsec_patches :=
 
+# backport 1.3.6 fix for ATTRIBUTE_UNUSED
+xmlsec_patches += 0001-xmlsec-core-Fix-deprecated-LibXML2-warnings-840.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(XMLSEC_TARBALL),,xmlsec))
