@@ -166,8 +166,8 @@ void DrawViewShell::DeleteActualLayer()
                                                    aString));
     if (xQueryBox->run() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(aName);
-        mpDrawView->DeleteLayer( pLayer->GetName() );
+        if (const SdrLayer* pLayer = rAdmin.GetLayer(aName))
+            mpDrawView->DeleteLayer(pLayer->GetName());
 
         /* in order to redraw TabBar and Window; should be initiated later on by
            a hint from Joe (as by a change if the layer order). */
