@@ -437,8 +437,8 @@ void AnnotationWindow::DoResize()
     */
     nPageSize = std::min(nPageSize, nUpper);
 
-    mxVScrollbar->vadjustment_configure(nCurrentDocPos, 0, nUpper,
-                                        nStepIncrement, nPageIncrement, nPageSize);
+    mxVScrollbar->vadjustment_configure(nCurrentDocPos, nUpper, nStepIncrement, nPageIncrement,
+                                        nPageSize);
 }
 
 void AnnotationWindow::SetScrollbar()

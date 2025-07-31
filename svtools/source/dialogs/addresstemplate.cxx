@@ -568,8 +568,8 @@ void AssignmentPersistentData::ImplCommit()
 
         // limit the scrollbar range accordingly
         sal_Int32 nOverallFieldPairs = m_pImpl->aFieldLabels.size() / 2;
-        m_xFieldScroller->vadjustment_configure(0, 0, nOverallFieldPairs,
-                                                1, FIELD_PAIRS_VISIBLE - 1, FIELD_PAIRS_VISIBLE);
+        m_xFieldScroller->vadjustment_configure(0, nOverallFieldPairs, 1, FIELD_PAIRS_VISIBLE - 1,
+                                                FIELD_PAIRS_VISIBLE);
 
         // reset the current field assignments
         m_pImpl->aFieldAssignments.resize(m_pImpl->aFieldLabels.size());

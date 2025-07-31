@@ -235,12 +235,12 @@ void SmGraphicWindow::Resize()
     // resize scrollbars and set their ranges
     if ( bHVisible )
     {
-        mxScrolledWindow->hadjustment_configure(-aPixOffset.X(), 0, aTotPixSz.Width(), nColumnPixW,
+        mxScrolledWindow->hadjustment_configure(-aPixOffset.X(), aTotPixSz.Width(), nColumnPixW,
                                                 aOutPixSz.Width(), aOutPixSz.Width());
     }
     if ( bVVisible )
     {
-        mxScrolledWindow->vadjustment_configure(-aPixOffset.Y(), 0, aTotPixSz.Height(), nLinePixH,
+        mxScrolledWindow->vadjustment_configure(-aPixOffset.Y(), aTotPixSz.Height(), nLinePixH,
                                                 aOutPixSz.Height(), aOutPixSz.Height());
     }
 }

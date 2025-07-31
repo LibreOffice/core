@@ -136,25 +136,21 @@ void ScCsvTableBox::InitControls()
 
 void ScCsvTableBox::InitHScrollBar()
 {
-    int nLower = 0;
     int nValue = mxGrid->GetFirstVisPos();
     int nUpper = mxGrid->GetPosCount() + 2;
     int nPageSize = mxGrid->GetVisPosCount();
 
     // Undo scrollbar RTL
     if (AllSettings::GetLayoutRTL())
-        nValue = nUpper - (nValue - nLower + nPageSize);
+        nValue = nUpper - (nValue + nPageSize);
 
-    mxScroll->hadjustment_configure(nValue, nLower, nUpper,
-                                    1, mxGrid->GetVisPosCount() * 3 / 4,
-                                    nPageSize);
+    mxScroll->hadjustment_configure(nValue, nUpper, 1, mxGrid->GetVisPosCount() * 3 / 4, nPageSize);
 }
 
 void ScCsvTableBox::InitVScrollBar()
 {
-    mxScroll->vadjustment_configure(mxGrid->GetFirstVisLine(), 0, mxGrid->GetLineCount() + 1,
-                                    1, mxGrid->GetVisLineCount() - 2,
-                                    mxGrid->GetVisLineCount());
+    mxScroll->vadjustment_configure(mxGrid->GetFirstVisLine(), mxGrid->GetLineCount() + 1, 1,
+                                    mxGrid->GetVisLineCount() - 2, mxGrid->GetVisLineCount());
 }
 
 void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )

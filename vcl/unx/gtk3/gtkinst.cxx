@@ -8350,14 +8350,14 @@ public:
         enable_notify_events();
     }
 
-    virtual void hadjustment_configure(int value, int lower, int upper,
-                                       int step_increment, int page_increment,
+    virtual void hadjustment_configure(int value, int upper, int step_increment, int page_increment,
                                        int page_size) override
     {
         disable_notify_events();
         if (SwapForRTL())
-            value = upper - (value - lower + page_size);
-        gtk_adjustment_configure(m_pHAdjustment, value, lower, upper, step_increment, page_increment, page_size);
+            value = upper - (value + page_size);
+        gtk_adjustment_configure(m_pHAdjustment, value, 0, upper, step_increment, page_increment,
+                                 page_size);
         enable_notify_events();
     }
 
@@ -8438,12 +8438,12 @@ public:
         return GtkToVcl(eGtkHPolicy);
     }
 
-    virtual void vadjustment_configure(int value, int lower, int upper,
-                                       int step_increment, int page_increment,
+    virtual void vadjustment_configure(int value, int upper, int step_increment, int page_increment,
                                        int page_size) override
     {
         disable_notify_events();
-        gtk_adjustment_configure(m_pVAdjustment, value, lower, upper, step_increment, page_increment, page_size);
+        gtk_adjustment_configure(m_pVAdjustment, value, 0, upper, step_increment, page_increment,
+                                 page_size);
         enable_notify_events();
     }
 

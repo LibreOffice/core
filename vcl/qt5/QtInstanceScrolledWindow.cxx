@@ -32,9 +32,8 @@ css::uno::Reference<css::awt::XWindow> QtInstanceScrolledWindow::CreateChildFram
 
 void QtInstanceScrolledWindow::child_grab_focus() { assert(false && "Not implemented yet"); }
 
-void QtInstanceScrolledWindow::hadjustment_configure(int nValue, int nLower, int nUpper,
-                                                     int nStepIncrement, int nPageIncrement,
-                                                     int nPageSize)
+void QtInstanceScrolledWindow::hadjustment_configure(int nValue, int nUpper, int nStepIncrement,
+                                                     int nPageIncrement, int nPageSize)
 {
     SolarMutexGuard g;
 
@@ -44,7 +43,6 @@ void QtInstanceScrolledWindow::hadjustment_configure(int nValue, int nLower, int
             return;
 
         pScrollBar->setValue(nValue);
-        pScrollBar->setMinimum(nLower);
         pScrollBar->setMaximum(nUpper);
         pScrollBar->setSingleStep(nStepIncrement);
         pScrollBar->setPageStep(nPageIncrement);
@@ -161,9 +159,8 @@ VclPolicyType QtInstanceScrolledWindow::get_hpolicy() const
     return ePolicy;
 }
 
-void QtInstanceScrolledWindow::vadjustment_configure(int nValue, int nLower, int nUpper,
-                                                     int nStepIncrement, int nPageIncrement,
-                                                     int nPageSize)
+void QtInstanceScrolledWindow::vadjustment_configure(int nValue, int nUpper, int nStepIncrement,
+                                                     int nPageIncrement, int nPageSize)
 {
     SolarMutexGuard g;
 
@@ -173,7 +170,6 @@ void QtInstanceScrolledWindow::vadjustment_configure(int nValue, int nLower, int
             return;
 
         pScrollBar->setValue(nValue);
-        pScrollBar->setMinimum(nLower);
         pScrollBar->setMaximum(nUpper);
         pScrollBar->setSingleStep(nStepIncrement);
         pScrollBar->setPageStep(nPageIncrement);

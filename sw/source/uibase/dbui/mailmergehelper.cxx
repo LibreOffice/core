@@ -368,7 +368,7 @@ void SwAddressPreview::UpdateScrollBar()
         if (nValue > nResultingRows)
             nValue = nResultingRows;
         m_xVScrollBar->set_vpolicy(m_pImpl->bEnableScrollBar && nResultingRows > m_pImpl->nRows ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
-        m_xVScrollBar->vadjustment_configure(nValue, 0, nResultingRows, 1, 10, m_pImpl->nRows);
+        m_xVScrollBar->vadjustment_configure(nValue, nResultingRows, 1, 10, m_pImpl->nRows);
     }
 }
 

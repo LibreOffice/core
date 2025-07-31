@@ -385,8 +385,8 @@ void ScOptSolverDlg::ShowConditions()
     // allow to scroll one page behind the visible or stored rows
     tools::Long nVisible = nScrollPos + EDIT_ROW_COUNT;
     tools::Long nMax = std::max( nVisible, static_cast<tools::Long>(m_aConditions.size()) );
-    m_xScrollBar->vadjustment_configure(nScrollPos, 0, nMax + EDIT_ROW_COUNT, 1,
-                                        EDIT_ROW_COUNT - 1, EDIT_ROW_COUNT);
+    m_xScrollBar->vadjustment_configure(nScrollPos, nMax + EDIT_ROW_COUNT, 1, EDIT_ROW_COUNT - 1,
+                                        EDIT_ROW_COUNT);
 
     EnableButtons();
 }

@@ -1233,7 +1233,8 @@ void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t & rSymbolSet)
 void SmShowSymbolSet::SetScrollBarRange()
 {
     const int nLastRow = (aSymbolSet.size() - 1 + nColumns) / nColumns;
-    m_xScrolledWindow->vadjustment_configure(m_xScrolledWindow->vadjustment_get_value(), 0, nLastRow, 1, nRows - 1, nRows);
+    m_xScrolledWindow->vadjustment_configure(m_xScrolledWindow->vadjustment_get_value(), nLastRow,
+                                             1, nRows - 1, nRows);
     Invalidate();
 }
 

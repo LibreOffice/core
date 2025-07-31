@@ -603,7 +603,7 @@ void SvxRubyDialog::Update()
 
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     sal_Int32 nLen = aRubyValues.getLength();
-    m_xScrolledWindow->vadjustment_configure(0, 0, !nLen ? 1 : nLen, 1, 4, 4);
+    m_xScrolledWindow->vadjustment_configure(0, !nLen ? 1 : nLen, 1, 4, 4);
     if (nLen > 4)
         m_xScrolledWindow->set_vpolicy(VclPolicyType::ALWAYS);
     else

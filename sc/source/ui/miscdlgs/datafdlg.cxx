@@ -172,7 +172,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
 
     FillCtrls();
 
-    m_xSlider->vadjustment_configure(0, 0, nEndRow - nStartRow + 1, 1, 10, 1);
+    m_xSlider->vadjustment_configure(0, nEndRow - nStartRow + 1, 1, 10, 1);
 
     m_xBtnNew->connect_clicked(LINK( this, ScDataFormDlg, Impl_NewHdl));
     m_xBtnPrev->connect_clicked(LINK( this, ScDataFormDlg, Impl_PrevHdl));

@@ -1219,8 +1219,8 @@ void SentenceEditWindow_Impl::SetScrollBarRange()
     */
     nVPageSize = std::min(nVPageSize, nVUpper);
 
-    m_xScrolledWindow->vadjustment_configure(nVCurrentDocPos, 0, nVUpper,
-                                             nVStepIncrement, nVPageIncrement, nVPageSize);
+    m_xScrolledWindow->vadjustment_configure(nVCurrentDocPos, nVUpper, nVStepIncrement,
+                                             nVPageIncrement, nVPageSize);
     m_xScrolledWindow->set_vpolicy(nVUpper > nVPageSize ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
 }
 

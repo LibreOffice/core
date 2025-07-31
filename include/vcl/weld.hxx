@@ -452,8 +452,8 @@ protected:
     void signal_hadjustment_changed() { m_aHChangeHdl.Call(*this); }
 
 public:
-    virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
-                                       int page_increment, int page_size)
+    virtual void hadjustment_configure(int value, int upper, int step_increment, int page_increment,
+                                       int page_size)
         = 0;
     virtual int hadjustment_get_value() const = 0;
     virtual void hadjustment_set_value(int value) = 0;
@@ -470,8 +470,8 @@ public:
         m_aHChangeHdl = rLink;
     }
 
-    virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
-                                       int page_increment, int page_size)
+    virtual void vadjustment_configure(int value, int upper, int step_increment, int page_increment,
+                                       int page_size)
         = 0;
     virtual int vadjustment_get_value() const = 0;
     virtual void vadjustment_set_value(int value) = 0;

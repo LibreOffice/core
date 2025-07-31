@@ -491,8 +491,8 @@ void SmEditWindow::SetScrollBarRanges()
     */
     nVPageSize = std::min(nVPageSize, nVUpper);
 
-    mxScrolledWindow->vadjustment_configure(nVCurrentDocPos, 0, nVUpper,
-                                            nVStepIncrement, nVPageIncrement, nVPageSize);
+    mxScrolledWindow->vadjustment_configure(nVCurrentDocPos, nVUpper, nVStepIncrement,
+                                            nVPageIncrement, nVPageSize);
 }
 
 OUString SmEditWindow::GetText() const

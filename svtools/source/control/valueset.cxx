@@ -1153,8 +1153,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
                 tools::Long nPageSize = mnVisLines;
                 if (nPageSize < 1)
                     nPageSize = 1;
-                mxScrolledWindow->vadjustment_configure(mnFirstLine, 0, mnLines, 1,
-                                                        mnVisLines, nPageSize);
+                mxScrolledWindow->vadjustment_configure(mnFirstLine, mnLines, 1, mnVisLines,
+                                                        nPageSize);
             }
 
             if (bTurnScrollbarOn)

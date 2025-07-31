@@ -707,7 +707,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     nY = aSize.Height() / ROW_COUNT;
 
     const int nLastRow = (mxFontCharMap->GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
+    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), nLastRow, 1,
+                                        ROW_COUNT - 1, ROW_COUNT);
 
     // restore last selected unicode
     int nMapIndex = mxFontCharMap->GetIndexFromChar(getSelectedChar());

@@ -199,7 +199,8 @@ void SvxSearchCharSet::UpdateScrollRange()
 {
     //scrollbar settings
     int nLastRow = (getMaxCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
-    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), 0, nLastRow, 1, ROW_COUNT - 1, ROW_COUNT);
+    mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), nLastRow, 1,
+                                        ROW_COUNT - 1, ROW_COUNT);
 }
 
 void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)

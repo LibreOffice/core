@@ -1455,7 +1455,7 @@ namespace svx
         static_assert(MAXNUM_SUGGESTIONS >= 5, "number of suggestions should not under-run the value of 5");
 
         // 4 here, because we have 4 edits / page
-        m_xScrollSB->vadjustment_configure(0, 0, MAXNUM_SUGGESTIONS, 1, 4, 4);
+        m_xScrollSB->vadjustment_configure(0, MAXNUM_SUGGESTIONS, 1, 4, 4);
         m_xScrollSB->connect_vadjustment_changed(LINK(this, HangulHanjaEditDictDialog, ScrollHdl));
 
         m_xEdit1->connect_changed( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl1 ) );

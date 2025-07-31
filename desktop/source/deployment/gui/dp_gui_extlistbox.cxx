@@ -682,9 +682,8 @@ void ExtensionBox_Impl::SetupScrollBar()
         if ( m_nTopIndex + aSize.Height() > nTotalHeight )
             m_nTopIndex = nTotalHeight - aSize.Height();
 
-        m_xScrollBar->vadjustment_configure(m_nTopIndex, 0, nTotalHeight,
-                                            m_nStdHeight, ( aSize.Height() * 4 ) / 5,
-                                            aSize.Height());
+        m_xScrollBar->vadjustment_configure(m_nTopIndex, nTotalHeight, m_nStdHeight,
+                                            (aSize.Height() * 4) / 5, aSize.Height());
 
         if (!m_bHasScrollBar)
             m_xScrollBar->set_vpolicy(VclPolicyType::ALWAYS);

@@ -428,7 +428,7 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     }
     else
     {
-        m_xSlider->vadjustment_configure(nOffset, 0, nMaxArgs, 1, 4, 4);
+        m_xSlider->vadjustment_configure(nOffset, nMaxArgs, 1, 4, 4);
         m_xSlider->set_vpolicy(VclPolicyType::ALWAYS);
         Size aPrefSize(m_xGrid->get_preferred_size());
         m_xSlider->set_size_request(aPrefSize.Width(), aPrefSize.Height());

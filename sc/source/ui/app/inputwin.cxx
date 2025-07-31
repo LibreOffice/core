@@ -1431,8 +1431,7 @@ void ScTextWnd::SetScrollBarRange()
     nPageSize = std::min(nPageSize, nUpper);
 
     weld::ScrolledWindow& rVBar = mrGroupBar.GetScrollWin();
-    rVBar.vadjustment_configure(nCurrentDocPos, 0, nUpper,
-                                nStepIncrement, nPageIncrement, nPageSize);
+    rVBar.vadjustment_configure(nCurrentDocPos, nUpper, nStepIncrement, nPageIncrement, nPageSize);
 }
 
 void ScTextWnd::DoScroll()

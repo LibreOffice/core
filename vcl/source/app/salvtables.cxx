@@ -2329,12 +2329,11 @@ SalInstanceScrolledWindow::SalInstanceScrolledWindow(VclScrolledWindow* pScrolle
     m_xScrolledWindow->setUserManagedScrolling(m_bUserManagedScrolling);
 }
 
-void SalInstanceScrolledWindow::hadjustment_configure(int value, int lower, int upper,
-                                                      int step_increment, int page_increment,
-                                                      int page_size)
+void SalInstanceScrolledWindow::hadjustment_configure(int value, int upper, int step_increment,
+                                                      int page_increment, int page_size)
 {
     ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
-    rHorzScrollBar.SetRangeMin(lower);
+    rHorzScrollBar.SetRangeMin(0);
     rHorzScrollBar.SetRangeMax(upper);
     rHorzScrollBar.SetLineSize(step_increment);
     rHorzScrollBar.SetPageSize(page_increment);
@@ -2413,12 +2412,11 @@ VclPolicyType SalInstanceScrolledWindow::get_hpolicy() const
     return VclPolicyType::NEVER;
 }
 
-void SalInstanceScrolledWindow::vadjustment_configure(int value, int lower, int upper,
-                                                      int step_increment, int page_increment,
-                                                      int page_size)
+void SalInstanceScrolledWindow::vadjustment_configure(int value, int upper, int step_increment,
+                                                      int page_increment, int page_size)
 {
     ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
-    rVertScrollBar.SetRangeMin(lower);
+    rVertScrollBar.SetRangeMin(0);
     rVertScrollBar.SetRangeMax(upper);
     rVertScrollBar.SetLineSize(step_increment);
     rVertScrollBar.SetPageSize(page_increment);

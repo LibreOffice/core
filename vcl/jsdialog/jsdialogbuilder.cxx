@@ -1124,11 +1124,11 @@ JSScrolledWindow::JSScrolledWindow(JSDialogSender* pSender, ::VclScrolledWindow*
 {
 }
 
-void JSScrolledWindow::vadjustment_configure(int value, int lower, int upper, int step_increment,
+void JSScrolledWindow::vadjustment_configure(int value, int upper, int step_increment,
                                              int page_increment, int page_size)
 {
-    SalInstanceScrolledWindow::vadjustment_configure(value, lower, upper, step_increment,
-                                                     page_increment, page_size);
+    SalInstanceScrolledWindow::vadjustment_configure(value, upper, step_increment, page_increment,
+                                                     page_size);
     sendUpdate();
 }
 
@@ -1155,11 +1155,11 @@ void JSScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)
     sendUpdate();
 }
 
-void JSScrolledWindow::hadjustment_configure(int value, int lower, int upper, int step_increment,
+void JSScrolledWindow::hadjustment_configure(int value, int upper, int step_increment,
                                              int page_increment, int page_size)
 {
-    SalInstanceScrolledWindow::hadjustment_configure(value, lower, upper, step_increment,
-                                                     page_increment, page_size);
+    SalInstanceScrolledWindow::hadjustment_configure(value, upper, step_increment, page_increment,
+                                                     page_size);
     sendUpdate();
 }
 
