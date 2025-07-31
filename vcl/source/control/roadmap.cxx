@@ -95,7 +95,7 @@ class RoadmapImpl : public RoadmapTypes
 protected:
     const ORoadmap&     m_rAntiImpl;
     Link<LinkParamNone*,void> m_aSelectHdl;
-    BitmapEx            m_aPicture;
+    Bitmap              m_aPicture;
     HL_Vector           m_aRoadmapSteps;
     ItemId              m_iCurItemID;
     bool                m_bInteractive : 1;
@@ -158,11 +158,11 @@ public:
         return m_bComplete;
     }
 
-    void setPicture(const BitmapEx& _rPic)
+    void setPicture(const Bitmap& _rPic)
     {
         m_aPicture = _rPic;
     }
-    const BitmapEx& getPicture() const
+    const Bitmap& getPicture() const
     {
         return m_aPicture;
     }
@@ -293,7 +293,7 @@ RoadmapItem* ORoadmap::InsertHyperLabel(ItemIndex Index, const OUString& _sLabel
     return pItem;
 }
 
-void ORoadmap::SetRoadmapBitmap(const BitmapEx& _rBmp)
+void ORoadmap::SetRoadmapBitmap(const Bitmap& _rBmp)
 {
     m_pImpl->setPicture( _rBmp );
     Invalidate( );

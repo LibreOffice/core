@@ -52,7 +52,7 @@ public:
     virtual ~ORoadmap( ) override;
     virtual void dispose() override;
 
-    void            SetRoadmapBitmap( const BitmapEx& maBitmap );
+    void            SetRoadmapBitmap( const Bitmap& maBitmap );
 
     void            EnableRoadmapItem( ItemId _nItemId, bool _bEnable );
 

@@ -2220,7 +2220,7 @@ void SalInstanceAssistant::set_page_side_help_id(const OUString& rHelpId)
 
 void SalInstanceAssistant::set_page_side_image(const OUString& rImage)
 {
-    m_xWizard->SetRoadmapBitmap(createImage(rImage).GetBitmapEx());
+    m_xWizard->SetRoadmapBitmap(Bitmap(createImage(rImage).GetBitmapEx()));
 }
 
 SalInstanceAssistant::~SalInstanceAssistant()

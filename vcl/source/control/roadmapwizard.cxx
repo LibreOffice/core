@@ -169,7 +169,7 @@ namespace vcl
         mpRoadmap->SetHelpId( _rId );
     }
 
-    void RoadmapWizard::SetRoadmapBitmap(const BitmapEx& rBmp)
+    void RoadmapWizard::SetRoadmapBitmap(const Bitmap& rBmp)
     {
         mpRoadmap->SetRoadmapBitmap(rBmp);
     }
