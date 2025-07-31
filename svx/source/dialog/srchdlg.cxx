@@ -262,6 +262,8 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xSearchLabel(m_xBuilder->weld_label(u"searchlabel"_ustr))
     , m_xSearchIcon(m_xBuilder->weld_image(u"searchicon"_ustr))
     , m_xSearchBox(m_xBuilder->weld_container(u"searchbox"_ustr))
+    , m_xFindTabBtn(m_xBuilder->weld_toggle_button(u"find_tab_btn"_ustr))
+    , m_xReplaceTabBtn(m_xBuilder->weld_toggle_button(u"replace_tab_btn"_ustr))
     , m_xReplaceFrame(m_xBuilder->weld_frame(u"replaceframe"_ustr))
     , m_xReplaceLB(m_xBuilder->weld_combo_box(u"replaceterm"_ustr))
     , m_xReplaceTmplLB(m_xBuilder->weld_combo_box(u"replacelist"_ustr))
@@ -343,6 +345,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xReplaceTmplLB->set_size_request(nTermWidth, -1);
 
     Construct_Impl();
+    SetReplaceCtrlsVisible(false);
 }
 
 IMPL_LINK_NOARG(SvxSearchDialog, PresentTimeoutHdl_Impl, Timer*, void)
@@ -372,6 +375,16 @@ SvxSearchDialog::~SvxSearchDialog()
     m_aPresentIdle.Stop();
     pSearchItem.reset();
     pImpl.reset();
+}
+
+void SvxSearchDialog::SetReplaceCtrlsVisible(bool bVisible)
+{
+    m_xFindTabBtn->set_active(!bVisible);
+    m_xReplaceTabBtn->set_active(bVisible);
+
+    m_xReplaceFrame->set_visible(bVisible);
+    m_xReplaceBtn->set_visible(bVisible);
+    m_xReplaceAllBtn->set_visible(bVisible);
 }
 
 void SvxSearchDialog::Construct_Impl()
@@ -641,6 +654,8 @@ void SvxSearchDialog::InitControls_Impl()
 
     m_xSearchLB->connect_changed( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
     m_xReplaceLB->connect_changed( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
+    m_xFindTabBtn->connect_toggled(LINK(this, SvxSearchDialog, OnTabBtnClick));
+    m_xReplaceTabBtn->connect_toggled(LINK(this, SvxSearchDialog, OnTabBtnClick));
 
     Link<weld::Widget&,void> aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
     m_xSearchLB->connect_focus_in( aLink );
@@ -1268,6 +1283,11 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
 
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
+}
+
+IMPL_LINK(SvxSearchDialog, OnTabBtnClick, weld::Toggleable&, rBtn, void)
+{
+    SetReplaceCtrlsVisible(&rBtn == m_xReplaceTabBtn.get());
 }
 
 IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)

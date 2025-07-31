@@ -188,6 +188,8 @@ private:
     std::unique_ptr<weld::Label> m_xSearchLabel;
     std::unique_ptr<weld::Image> m_xSearchIcon;
     std::unique_ptr<weld::Container> m_xSearchBox;
+    std::unique_ptr<weld::ToggleButton> m_xFindTabBtn;
+    std::unique_ptr<weld::ToggleButton> m_xReplaceTabBtn;
 
     std::unique_ptr<weld::Frame> m_xReplaceFrame;
     std::unique_ptr<weld::ComboBox> m_xReplaceLB;
@@ -249,8 +251,10 @@ private:
     DECL_DLLPRIVATE_LINK(NoFormatHdl_Impl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(AttributeHdl_Impl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK( TimeoutHdl_Impl, Timer*, void );
+    DECL_DLLPRIVATE_LINK(OnTabBtnClick, weld::Toggleable&, void);
     SVX_DLLPRIVATE void ClickHdl_Impl(const weld::Widget* pCtrl);
 
+    SVX_DLLPRIVATE void SetReplaceCtrlsVisible(bool bVisible);
     SVX_DLLPRIVATE void Construct_Impl();
     SVX_DLLPRIVATE void InitControls_Impl();
     SVX_DLLPRIVATE void ShowOptionalControls_Impl();
