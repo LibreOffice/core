@@ -72,13 +72,13 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
     BinaryDataContainer aDataContainer = vcl::convertUnoBinaryDataContainer(xDataContainer);
 
-    std::vector<BitmapEx> aBitmaps;
+    std::vector<Bitmap> aBitmaps;
     int rv = vcl::RenderPDFBitmaps(aDataContainer.getData(), aDataContainer.getSize(), aBitmaps,
                                    nPageIndex, 1);
     if (rv == 0)
         return {}; // happens if we do not have PDFium
 
-    BitmapEx aReplacement(aBitmaps[0]);
+    Bitmap aReplacement(aBitmaps[0]);
 
     // short form for scale and translate transformation
     const Size aBitmapSize(aReplacement.GetSizePixel());
@@ -90,7 +90,7 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
 
     // create primitive
     return drawinglayer::primitive2d::Primitive2DContainer{
-        new drawinglayer::primitive2d::BitmapPrimitive2D(aReplacement, aBitmapTransform)
+        new drawinglayer::primitive2d::BitmapPrimitive2D(BitmapEx(aReplacement), aBitmapTransform)
     }
         .toSequence();
 }

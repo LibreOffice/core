@@ -37,7 +37,7 @@
 #include <vcl/pdf/PDFAnnotAActionType.hxx>
 
 class SvMemoryStream;
-class BitmapEx;
+class Bitmap;
 
 namespace vcl::pdf
 {
@@ -83,8 +83,8 @@ public:
     virtual int getWidth() = 0;
     virtual int getHeight() = 0;
     virtual PDFBitmapType getFormat() = 0;
-    /// Convert the bitmap buffer to a BitmapEx
-    virtual BitmapEx createBitmapFromBuffer() = 0;
+    /// Convert the bitmap buffer to a Bitmap
+    virtual Bitmap createBitmapFromBuffer() = 0;
 };
 
 class VCL_DLLPUBLIC PDFiumAnnotation

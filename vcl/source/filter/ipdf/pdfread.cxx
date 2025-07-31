@@ -24,7 +24,7 @@ using namespace com::sun::star;
 
 namespace vcl
 {
-size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
+size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
@@ -86,15 +86,15 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         pPdfBitmap->fillRect(0, 0, nPageWidth, nPageHeight, nColor);
         pPdfBitmap->renderPageBitmap(pPdfDocument.get(), pPdfPage.get(), /*nStartX=*/0,
                                      /*nStartY=*/0, nPageWidth, nPageHeight);
-        BitmapEx aBitmapEx = pPdfBitmap->createBitmapFromBuffer();
+        Bitmap aBitmap = pPdfBitmap->createBitmapFromBuffer();
 
         if (bTransparent)
         {
-            rBitmaps.emplace_back(std::move(aBitmapEx));
+            rBitmaps.emplace_back(std::move(aBitmap));
         }
         else
         {
-            rBitmaps.emplace_back(aBitmapEx.GetBitmap());
+            rBitmaps.emplace_back(BitmapEx(aBitmap).GetBitmap());
         }
     }
 

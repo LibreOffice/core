@@ -279,7 +279,7 @@ public:
     int getWidth() override;
     int getHeight() override;
     PDFBitmapType getFormat() override;
-    BitmapEx createBitmapFromBuffer() override;
+    Bitmap createBitmapFromBuffer() override;
 };
 
 class PDFiumPathSegmentImpl final : public PDFiumPathSegment
@@ -1317,13 +1317,13 @@ PDFBitmapType PDFiumBitmapImpl::getFormat()
     return static_cast<PDFBitmapType>(FPDFBitmap_GetFormat(mpBitmap));
 }
 
-BitmapEx PDFiumBitmapImpl::createBitmapFromBuffer()
+Bitmap PDFiumBitmapImpl::createBitmapFromBuffer()
 {
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
 
     const vcl::pdf::PDFBitmapType eFormat = getFormat();
     if (eFormat == vcl::pdf::PDFBitmapType::Unknown)
-        return aBitmapEx;
+        return aBitmap;
 
     const int nWidth = getWidth();
     const int nHeight = getHeight();
@@ -1333,41 +1333,30 @@ BitmapEx PDFiumBitmapImpl::createBitmapFromBuffer()
     {
         case vcl::pdf::PDFBitmapType::BGR:
         {
-            aBitmapEx = BitmapEx(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-            ReadRawDIB(aBitmapEx, getBuffer(), ScanlineFormat::N24BitTcBgr, nHeight, nStride);
+            aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
+            ReadRawDIB(aBitmap, getBuffer(), ScanlineFormat::N24BitTcBgr, nHeight, nStride);
         }
         break;
 
         case vcl::pdf::PDFBitmapType::BGRx:
         {
-            aBitmapEx = BitmapEx(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-            ReadRawDIB(aBitmapEx, getBuffer(), ScanlineFormat::N32BitTcRgba, nHeight, nStride);
+            aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
+            ReadRawDIB(aBitmap, getBuffer(), ScanlineFormat::N32BitTcRgbx, nHeight, nStride);
         }
         break;
 
         case vcl::pdf::PDFBitmapType::BGRA:
         {
-            Bitmap aBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-            AlphaMask aMask(Size(nWidth, nHeight));
+            aBitmap = Bitmap(Size(nWidth, nHeight), vcl::PixelFormat::N32_BPP);
             {
                 BitmapScopedWriteAccess pWriteAccess(aBitmap);
-                BitmapScopedWriteAccess pMaskAccess(aMask);
                 ConstScanline pBuffer = getBuffer();
-                std::vector<sal_uInt8> aScanlineAlpha(nWidth);
                 for (int nRow = 0; nRow < nHeight; ++nRow)
                 {
                     ConstScanline pLine = pBuffer + (nStride * nRow);
                     pWriteAccess->CopyScanline(nRow, pLine, ScanlineFormat::N32BitTcBgra, nStride);
-                    for (int nCol = 0; nCol < nWidth; ++nCol)
-                    {
-                        aScanlineAlpha[nCol] = pLine[3];
-                        pLine += 4;
-                    }
-                    pMaskAccess->CopyScanline(nRow, aScanlineAlpha.data(), ScanlineFormat::N8BitPal,
-                                              nWidth);
                 }
             }
-            aBitmapEx = BitmapEx(aBitmap, aMask);
         }
         break;
 
@@ -1375,7 +1364,7 @@ BitmapEx PDFiumBitmapImpl::createBitmapFromBuffer()
             break;
     }
 
-    return aBitmapEx;
+    return aBitmap;
 }
 
 PDFiumAnnotationImpl::PDFiumAnnotationImpl(FPDF_ANNOTATION pAnnotation)

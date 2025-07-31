@@ -66,6 +66,12 @@ bool VCL_DLLPUBLIC ReadRawDIB(
     const ScanlineFormat nFormat,
     const int nHeight,
     const int nStride);
+bool VCL_DLLPUBLIC ReadRawDIB(
+    Bitmap& rTarget,
+    const unsigned char* pBuf,
+    const ScanlineFormat nFormat,
+    const int nHeight,
+    const int nStride);
 
 
 bool VCL_DLLPUBLIC WriteDIB(

@@ -151,7 +151,7 @@ void VectorGraphicData::ensurePdfReplacement()
         return; // nothing to do
 
     // use PDFium directly
-    std::vector<BitmapEx> aBitmaps;
+    std::vector<Bitmap> aBitmaps;
     sal_Int32 nUsePageIndex = 0;
     if (mnPageIndex >= 0)
         nUsePageIndex = mnPageIndex;
@@ -196,11 +196,11 @@ BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
         basegfx::B2DTuple sizeMM100(
             o3tl::convert(pixelSize.Width() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100),
             o3tl::convert(pixelSize.Height() / dpi / vcl::PDF_INSERT_MAGIC_SCALE_FACTOR, o3tl::Length::in, o3tl::Length::mm100));
-        std::vector<BitmapEx> aBitmaps;
+        std::vector<Bitmap> aBitmaps;
         vcl::RenderPDFBitmaps(maDataContainer.getData(), maDataContainer.getSize(), aBitmaps,
                               nUsePageIndex, 1, &sizeMM100);
         if (!aBitmaps.empty())
-            return aBitmaps[0];
+            return BitmapEx(aBitmaps[0]);
     }
 
     if (getPrimitive2DSequence().empty())

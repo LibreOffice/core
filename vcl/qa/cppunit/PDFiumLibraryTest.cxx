@@ -283,13 +283,13 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testFormFields)
     aMemory.Seek(0);
 
     // When rendering its first (and only) page to a bitmap:
-    std::vector<BitmapEx> aBitmaps;
+    std::vector<Bitmap> aBitmaps;
     int nRet = vcl::RenderPDFBitmaps(aMemory.GetData(), aMemory.GetSize(), aBitmaps);
     CPPUNIT_ASSERT(nRet);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aBitmaps.size());
 
     // Then make sure the bitmap contains that text:
-    Bitmap aBitmap = aBitmaps[0].GetBitmap();
+    Bitmap aBitmap = aBitmaps[0];
     BitmapReadAccess aAccess(aBitmap);
     Size aSize = aBitmap.GetSizePixel();
     std::set<sal_uInt32> aColors;

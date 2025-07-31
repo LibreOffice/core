@@ -1781,6 +1781,20 @@ bool ReadRawDIB(
     return true;
 }
 
+bool ReadRawDIB(
+    Bitmap& rTarget,
+    const unsigned char* pBuf,
+    const ScanlineFormat nFormat,
+    const int nHeight,
+    const int nStride)
+{
+    BitmapEx aTmp;
+    bool bRet = ReadRawDIB(aTmp, pBuf, nFormat, nHeight, nStride);
+    if (bRet)
+        rTarget = Bitmap(aTmp);
+    return bRet;
+}
+
 bool WriteDIB(
     const Bitmap& rSource,
     SvStream& rOStm,
