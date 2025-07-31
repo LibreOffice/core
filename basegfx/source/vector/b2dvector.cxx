@@ -30,6 +30,8 @@ namespace basegfx
 
         if(!fTools::equalZero(fLen))
         {
+            assert(fLen != 0.0 && "help coverity see it's not zero");
+
             const double fOne(1.0);
 
             if(!fTools::equal(fOne, fLen))
