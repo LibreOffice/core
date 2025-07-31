@@ -223,7 +223,7 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, std::siz
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs);
 #endif
 
-class EditEngineItemPool final : public SfxItemPool
+class EDITENG_DLLPUBLIC EditEngineItemPool final : public SfxItemPool
 {
 public:
     EditEngineItemPool();
