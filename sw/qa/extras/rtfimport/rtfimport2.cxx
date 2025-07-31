@@ -536,6 +536,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf91684)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1337), getShape(1)->getSize().Height);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167710)
+{
+    createSwDoc("tdf167710.rtf");
+    // problem was that text was erroneously imported
+    CPPUNIT_ASSERT(getParagraph(1)->getString().isEmpty());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFlip)
 {
     createSwDoc("flip.rtf");
