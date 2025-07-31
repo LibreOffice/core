@@ -103,11 +103,11 @@ void MyWorkWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aSize.setWidth( aSize.Width() * (1 + (0.1*sin(mnPaintCount/60.))) );
     aSize.setHeight( aSize.Height() * (1 + (0.1*sin(mnPaintCount/50.))) );
 
-    BitmapEx aEmpty;
+    Bitmap aEmpty;
     mpFixedBitmap->SetBitmap( aEmpty );
     GraphicConversionParameters aConv( aSize );
     mpBitmap = new BitmapEx(maGraphic.GetBitmapEx( aConv ));
-    mpFixedBitmap->SetBitmap( *mpBitmap );
+    mpFixedBitmap->SetBitmap( Bitmap(*mpBitmap) );
     mpFixedBitmap->SetSizePixel( aSize );
 
     WorkWindow::Paint(rRenderContext, rRect);

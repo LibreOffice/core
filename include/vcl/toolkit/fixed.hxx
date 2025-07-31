@@ -121,7 +121,7 @@ public:
 class VCL_DLLPUBLIC FixedBitmap final : public Control
 {
 private:
-    BitmapEx        maBitmap;
+    Bitmap        maBitmap;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -140,7 +140,7 @@ public:
     SAL_DLLPRIVATE virtual void StateChanged( StateChangedType nType ) override;
     SAL_DLLPRIVATE virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void SetBitmap( const BitmapEx& rBitmap );
+    void SetBitmap( const Bitmap& rBitmap );
 };
 
 class VCL_DLLPUBLIC FixedImage : public Control
