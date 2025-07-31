@@ -1056,6 +1056,41 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
         CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlineData1.GetType());
         CPPUNIT_ASSERT(!rRedlineData1.Next());
     }
+
+    // And given a reset state + reject on BBB + undo:
+    pWrtShell->Undo();
+    // Undo() creates a new cursor.
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // A redline is found.
+    CPPUNIT_ASSERT_LESS(rRedlines.size(), nRedline);
+    pWrtShell->RejectRedline(nRedline);
+    pWrtShell->Undo();
+
+    // When executing redo:
+    pWrtShell->Redo();
+
+    // Then make sure that the delete is gone, but the format is preserved:
+    pCursor = pWrtShell->GetCursor();
+    pCursor->DeleteMark();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    // Move inside "BBB".
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    nRedline = 0;
+    pRedline = rRedlines.FindAtPosition(*pCursor->Start(), nRedline);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the format redline was lost on redo.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    CPPUNIT_ASSERT(pRedline);
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
+    CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
