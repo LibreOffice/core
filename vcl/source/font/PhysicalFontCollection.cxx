@@ -1047,11 +1047,10 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         rFSD.maTargetName = aOrigName;
 
         // check if the current font name token or its substitute is valid
-        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
-        if( pFoundData )
+        if (PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName))
             return pFoundData;
 
-        if (pFoundData = FindMetricCompatibleFont(rFSD); pFoundData)
+        if (PhysicalFontFamily* pFoundData = FindMetricCompatibleFont(rFSD))
             return pFoundData;
 
         // some systems provide special customization
@@ -1070,8 +1069,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         {
             rFSD.maTargetName = sStrippedName;
             rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
-            pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
-            if( pFoundData )
+            if (PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName))
                 return pFoundData;
         }
 
@@ -1084,8 +1082,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         // to restore the features to make the font selection data unique
         rFSD.maTargetName = aOrigName;
 
-        pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
-        if( pFoundData )
+        if (PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName))
             return pFoundData;
 
         // break after last font name token was checked unsuccessfully
