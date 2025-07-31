@@ -54,6 +54,8 @@ template <class interface_type> class Reference;
 template <typename> class Sequence;
 }
 
+enum class DrawModeFlags : sal_uInt32;
+
 namespace drawinglayer::geometry
 {
 /** ViewInformation2D class
@@ -162,6 +164,9 @@ public:
 
     Color getAutoColor() const;
     void setAutoColor(Color aNew);
+
+    DrawModeFlags getDrawModeFlags() const;
+    void setDrawModeFlags(DrawModeFlags aNew);
 
     /// claim that in the view processed a TextEdit is active
     bool getTextEditActive() const;

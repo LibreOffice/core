@@ -47,13 +47,13 @@ void TextExtractor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D&
             aViewInformation2D.setObjectTransformation(
                 getViewInformation2D().getObjectTransformation()
                 * rTransformCandidate.getTransformation());
-            updateViewInformation(aViewInformation2D);
+            setViewInformation2D(aViewInformation2D);
 
             // process content
             process(rTransformCandidate.getChildren());
 
             // restore transformations
-            updateViewInformation(aLastViewInformation2D);
+            setViewInformation2D(aLastViewInformation2D);
 
             break;
         }

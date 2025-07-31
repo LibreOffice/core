@@ -109,9 +109,8 @@ protected:
     void adaptLineToFillDrawMode() const;
     void adaptTextToFillDrawMode() const;
 
-    // allow to react on changes
-    virtual void
-    updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D) override;
+    // allow to react on changes of ViewInformation2D
+    virtual void onViewInformation2DChanged() override;
 
 public:
     // constructor/destructor

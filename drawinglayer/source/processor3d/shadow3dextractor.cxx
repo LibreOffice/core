@@ -108,7 +108,7 @@ namespace drawinglayer::processor3d
                         aLastViewInformation3D.getDeviceToView(),
                         aLastViewInformation3D.getViewTime(),
                         aLastViewInformation3D.getExtendedInformationSequence());
-                    updateViewInformation(aNewViewInformation3D);
+                    setViewInformation3D(aNewViewInformation3D);
 
                     if(mbShadowProjectionIsValid)
                     {
@@ -121,7 +121,7 @@ namespace drawinglayer::processor3d
                     process(rPrimitive.getChildren());
 
                     // restore transformations
-                    updateViewInformation(aLastViewInformation3D);
+                    setViewInformation3D(aLastViewInformation3D);
 
                     if(mbShadowProjectionIsValid)
                     {

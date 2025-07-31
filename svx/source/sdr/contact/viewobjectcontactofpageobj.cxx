@@ -144,7 +144,7 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
         // no time; page previews are not animated
         aNewViewInformation2D.setViewTime(0.0);
 
-        updateViewInformation2D(aNewViewInformation2D);
+        setViewInformation2D2D(aNewViewInformation2D);
 
         // create copy of DisplayInfo to set PagePainting
         DisplayInfo aDisplayInfo;

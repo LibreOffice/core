@@ -71,7 +71,13 @@ namespace drawinglayer::processor2d
         void BaseProcessor2D::setViewInformation2D(const geometry::ViewInformation2D& rNew)
         {
             if (rNew != maViewInformation2D)
-                updateViewInformation(rNew);
+            {
+                // set if changed
+                maViewInformation2D = rNew;
+
+                // allow reaction on change
+                onViewInformation2DChanged();
+            }
         }
 } // end of namespace
 

@@ -461,13 +461,13 @@ namespace drawinglayer::processor3d
                 aLastViewInformation3D.getDeviceToView(),
                 aLastViewInformation3D.getViewTime(),
                 aLastViewInformation3D.getExtendedInformationSequence());
-            updateViewInformation(aNewViewInformation3D);
+            setViewInformation3D(aNewViewInformation3D);
 
             // let break down recursively
             process(rTransformCandidate.getChildren());
 
             // restore transformations
-            updateViewInformation(aLastViewInformation3D);
+            setViewInformation3D(aLastViewInformation3D);
         }
 
         void DefaultProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)

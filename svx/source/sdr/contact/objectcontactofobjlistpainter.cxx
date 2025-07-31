@@ -101,7 +101,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     aNewViewInformation2D.setViewTransformation(pTargetDevice->GetViewTransformation());
     aNewViewInformation2D.setViewport(aViewRange);
     aNewViewInformation2D.setVisualizedPage(GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)));
-    updateViewInformation2D(aNewViewInformation2D);
+    setViewInformation2D2D(aNewViewInformation2D);
 
     // collect primitive data in a sequence; this will already use the updated ViewInformation2D
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

@@ -14,7 +14,6 @@
 #include <tools/long.hxx>
 #include <sal/config.h>
 #include <vcl/vclptr.hxx>
-#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 // cairo-specific
 #include <cairo.h>
@@ -91,10 +90,6 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     // recursion counter for CairoPixelProcessor2D::processMaskPrimitive2D,
     // see comment there
     sal_uInt16 mnClipRecursionCount;
-
-    // DrawModeFlags from OutputDevice: These do modify how stuff
-    // needs to be colored/painted, context-dependent
-    DrawModeFlags maDrawModeFlags;
 
     // calculated result of if we are in outsideCairoCoordinateLimits mode
     bool mbCairoCoordinateLimitWorkaroundActive;
@@ -204,9 +199,8 @@ protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
 
-    // allow to react on changes
-    virtual void
-    updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D) override;
+    // allow to react on changes of ViewInformation2D
+    virtual void onViewInformation2DChanged() override;
 
     // constructor to create a CairoPixelProcessor2D for
     // the given cairo_surface_t pTarget. pTarget will not
@@ -215,9 +209,6 @@ protected:
     CairoPixelProcessor2D(
         // take over current BColorModifierStack
         const basegfx::BColorModifierStack& rBColorModifierStack,
-
-        // take over current DrawModeFlags
-        const DrawModeFlags& rDrawModeFlags,
 
         // the ViewInformation
         const geometry::ViewInformation2D& rViewInformation,

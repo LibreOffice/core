@@ -591,7 +591,7 @@ public:
                 aInvViewTransform.invert();
                 aViewport.transform(aInvViewTransform);
                 aViewInformation.setViewport(aViewport);
-                updateViewInformation(aViewInformation);
+                setViewInformation2D(aViewInformation);
             }
 
             // clear as render preparation
@@ -1473,13 +1473,13 @@ void D2DPixelProcessor2D::processTransformPrimitive2D(
     geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
     aViewInformation2D.setObjectTransformation(getViewInformation2D().getObjectTransformation()
                                                * rTransformCandidate.getTransformation());
-    updateViewInformation(aViewInformation2D);
+    setViewInformation2D(aViewInformation2D);
 
     // process content
     process(rTransformCandidate.getChildren());
 
     // restore transformations
-    updateViewInformation(aLastViewInformation2D);
+    setViewInformation2D(aLastViewInformation2D);
 }
 
 void D2DPixelProcessor2D::processPolygonStrokePrimitive2D(

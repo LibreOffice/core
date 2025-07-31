@@ -62,9 +62,9 @@ namespace sdr::overlay
 
             // hold buffered the logic length of discrete vector (1.0, 0.0) and the
             // view transformation belonging to it. Update happens in getDiscreteOne()
-            basegfx::B2DHomMatrix                       maViewTransformation;
-            drawinglayer::geometry::ViewInformation2D   maViewInformation2D;
-            double                                      mfDiscreteOne;
+            mutable basegfx::B2DHomMatrix                       maViewTransformation;
+            mutable drawinglayer::geometry::ViewInformation2D   maViewInformation2D;
+            mutable double                                      mfDiscreteOne;
 
             // internal
             void ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const;
@@ -77,6 +77,7 @@ namespace sdr::overlay
             double getDiscreteOne() const;
 
             tools::Rectangle RangeToInvalidateRectangle(const basegfx::B2DRange& rRange) const;
+            bool isOutputToRecordingMetaFile() const;
 
             OverlayManager(OutputDevice& rOutputDevice);
             virtual ~OverlayManager() override;

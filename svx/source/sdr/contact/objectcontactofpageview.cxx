@@ -224,12 +224,17 @@ namespace sdr::contact
             if (static_cast<SdrPaintView&>(mrPageWindow.GetPageView().GetView()).IsTextEdit())
                 aNewViewInformation2D.setTextEditActive(true);
 
-            // this is the EditView repaint, provide that information,
-            // but only if we do not export to metafile
             if (!isOutputToRecordingMetaFile())
+            {
+                // this is the EditView repaint, provide that information,
+                // but only if we do not export to metafile
                 aNewViewInformation2D.setEditViewActive(true);
 
-            updateViewInformation2D(aNewViewInformation2D);
+                // also copy the current DrawModeFlags
+                aNewViewInformation2D.setDrawModeFlags(rTargetOutDev.GetDrawMode());
+            }
+
+            setViewInformation2D2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
 

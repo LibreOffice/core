@@ -562,7 +562,7 @@ namespace drawinglayer::processor3d
                 aDeviceToView,
                 getViewInformation3D().getViewTime(),
                 getViewInformation3D().getExtendedInformationSequence());
-            updateViewInformation(aNewViewInformation3D);
+            setViewInformation3D(aNewViewInformation3D);
 
             // prepare inverse EyeToView transformation. This can be done in constructor
             // since changes in object transformations when processing TransformPrimitive3Ds

@@ -1053,14 +1053,14 @@ void VclProcessor2D::RenderTransformPrimitive2D(
     geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
     aViewInformation2D.setObjectTransformation(getViewInformation2D().getObjectTransformation()
                                                * rTransformCandidate.getTransformation());
-    updateViewInformation(aViewInformation2D);
+    setViewInformation2D(aViewInformation2D);
 
     // process content
     process(rTransformCandidate.getChildren());
 
     // restore transformations
     maCurrentTransformation = aLastCurrentTransformation;
-    updateViewInformation(aLastViewInformation2D);
+    setViewInformation2D(aLastViewInformation2D);
 }
 
 // new XDrawPage for ViewInformation2D
@@ -1073,13 +1073,13 @@ void VclProcessor2D::RenderPagePreviewPrimitive2D(
     // create new local ViewInformation2D
     geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
     aViewInformation2D.setVisualizedPage(rPagePreviewCandidate.getXDrawPage());
-    updateViewInformation(aViewInformation2D);
+    setViewInformation2D(aViewInformation2D);
 
     // process decomposed content
     process(rPagePreviewCandidate);
 
     // restore transformations
-    updateViewInformation(aLastViewInformation2D);
+    setViewInformation2D(aLastViewInformation2D);
 }
 
 // marker
@@ -1596,14 +1596,8 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
     mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
 }
 
-void VclProcessor2D::updateViewInformation(const geometry::ViewInformation2D& rViewInformation2D)
+void VclProcessor2D::onViewInformation2DChanged()
 {
-    if (rViewInformation2D == getViewInformation2D())
-        return;
-
-    // call parent to actually set
-    BaseProcessor2D::updateViewInformation(rViewInformation2D);
-
     // apply AntiAlias information to target device
     if (getViewInformation2D().getUseAntiAliasing())
         mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing()
@@ -1611,6 +1605,10 @@ void VclProcessor2D::updateViewInformation(const geometry::ViewInformation2D& rV
     else
         mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing()
                                         & ~AntialiasingFlags::Enable);
+
+    // apply DrawModeFlags to target device
+    if (getViewInformation2D().getDrawModeFlags() != mpOutputDevice->GetDrawMode())
+        mpOutputDevice->SetDrawMode(getViewInformation2D().getDrawModeFlags());
 }
 
 // process support

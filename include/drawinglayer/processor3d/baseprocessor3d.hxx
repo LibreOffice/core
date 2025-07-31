@@ -41,10 +41,10 @@ namespace drawinglayer::processor3d
             geometry::ViewInformation3D                     maViewInformation3D;
 
         protected:
-            void updateViewInformation(const geometry::ViewInformation3D& rViewInformation3D)
-            {
-                maViewInformation3D = rViewInformation3D;
-            }
+            /*  callback method to allow the implementations to react on changes
+                to the current ViewInformation2D if needed
+             */
+            virtual void onViewInformation3DChanged() {}
 
             /*  as tooling, the process() implementation takes over API handling and calls this
                 virtual render method when the primitive implementation is BasePrimitive3D-based.
@@ -59,8 +59,9 @@ namespace drawinglayer::processor3d
             // the central processing method
             void process(const primitive3d::Primitive3DContainer& rSource);
 
-            // data access
+            /// data read/write access to ViewInformation2D
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
+            void setViewInformation3D(const geometry::ViewInformation3D& rNew);
         };
 
 } // end of namespace drawinglayer::processor3d

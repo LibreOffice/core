@@ -83,7 +83,7 @@ protected:
     void setPreviewRenderer(bool bNew) { mbIsPreviewRenderer = bNew; }
 
     // interface to allow derivates to set ViewInformation2D
-    void updateViewInformation2D(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D) { maViewInformation2D = rViewInformation2D; }
+    void setViewInformation2D2D(const drawinglayer::geometry::ViewInformation2D& rViewInformation2D) { maViewInformation2D = rViewInformation2D; }
 
 public:
     // basic constructor

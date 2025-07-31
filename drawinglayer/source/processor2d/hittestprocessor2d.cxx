@@ -276,13 +276,13 @@ namespace drawinglayer::processor2d
                     // create new local ViewInformation2D containing transformation
                     geometry::ViewInformation2D aViewInformation2D(getViewInformation2D());
                     aViewInformation2D.setObjectTransformation(getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation());
-                    updateViewInformation(aViewInformation2D);
+                    setViewInformation2D(aViewInformation2D);
 
                     // process child content recursively
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
-                    updateViewInformation(aLastViewInformation2D);
+                    setViewInformation2D(aLastViewInformation2D);
 
                     break;
                 }

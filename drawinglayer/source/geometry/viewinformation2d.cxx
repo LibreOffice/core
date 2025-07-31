@@ -28,6 +28,7 @@
 #include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
 
 #include <atomic>
 #include <utility>
@@ -84,6 +85,10 @@ protected:
     // color to use for automatic color
     Color maAutoColor;
 
+    // DrawModeFlags to use, these may ask to modify the
+    // colors/Bitmap paint according to the flags
+    DrawModeFlags maDrawModeFlags;
+
     // a hint that the View that is being painted has an active TextEdit. This
     // is important for handling of TextHierarchyEditPrimitive2D to suppress
     // the text for objects in TextEdit - the text is visualized by the
@@ -113,6 +118,7 @@ public:
         , mxVisualizedPage()
         , mfViewTime(0.0)
         , maAutoColor(COL_AUTO)
+        , maDrawModeFlags(DrawModeFlags::Default)
         , mbTextEditActive(false)
         , mbEditViewActive(false)
         , mbReducedDisplayQuality(false)
@@ -207,6 +213,9 @@ public:
     Color getAutoColor() const { return maAutoColor; }
     void setAutoColor(Color aNew) { maAutoColor = aNew; }
 
+    DrawModeFlags getDrawModeFlags() const { return maDrawModeFlags; }
+    void setDrawModeFlags(DrawModeFlags aNew) { maDrawModeFlags = aNew; }
+
     bool getTextEditActive() const { return mbTextEditActive; }
     void setTextEditActive(bool bNew) { mbTextEditActive = bNew; }
 
@@ -229,6 +238,7 @@ public:
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
                 && mfViewTime == rCandidate.mfViewTime && maAutoColor == rCandidate.maAutoColor
+                && maDrawModeFlags == rCandidate.maDrawModeFlags
                 && mbTextEditActive == rCandidate.mbTextEditActive
                 && mbEditViewActive == rCandidate.mbEditViewActive
                 && mbReducedDisplayQuality == rCandidate.mbReducedDisplayQuality
@@ -363,6 +373,16 @@ void ViewInformation2D::setUseAntiAliasing(bool bNew)
 Color ViewInformation2D::getAutoColor() const { return mpViewInformation2D->getAutoColor(); }
 
 void ViewInformation2D::setAutoColor(Color aNew) { mpViewInformation2D->setAutoColor(aNew); }
+
+DrawModeFlags ViewInformation2D::getDrawModeFlags() const
+{
+    return mpViewInformation2D->getDrawModeFlags();
+}
+
+void ViewInformation2D::setDrawModeFlags(DrawModeFlags aNew)
+{
+    mpViewInformation2D->setDrawModeFlags(aNew);
+}
 
 bool ViewInformation2D::getTextEditActive() const
 {

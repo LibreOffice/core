@@ -24,6 +24,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/gdimtf.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -44,13 +45,13 @@ namespace sdr::overlay
             if(!nSize)
                 return;
 
-            // tdf#150622 for High Contrast we typically force colors to a single pair Fore/Back,
-            // but it seems reasonable to allow overlays to use the selection color
-            // taken from the system High Contrast settings
-            const DrawModeFlags nOriginalDrawMode(rDestinationDevice.GetDrawMode());
-
             // prepare ViewInformation2D
             drawinglayer::geometry::ViewInformation2D aViewInformation2D(getCurrentViewInformation2D());
+
+            // create processor
+            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                rDestinationDevice,
+                aViewInformation2D));
 
             for(const auto& rpOverlayObject : maOverlayObjects)
             {
@@ -65,35 +66,23 @@ namespace sdr::overlay
                     {
                         if(rRange.overlaps(rCandidate.getBaseRange()))
                         {
-                            const bool bCurrentAA(aViewInformation2D.getUseAntiAliasing());
-                            const bool bWantedAA(rCandidate.allowsAntiAliase());
+                            // update AA flag at local ViewInformation2D
+                            aViewInformation2D.setUseAntiAliasing(rCandidate.allowsAntiAliase());
 
-                            if (bCurrentAA != bWantedAA)
+                            // update DrawModeFlags at local ViewInformation2D
+                            aViewInformation2D.setDrawModeFlags(rCandidate.isHighContrastSelection() ?
+                                aViewInformation2D.getDrawModeFlags() | DrawModeFlags::SettingsForSelection :
+                                aViewInformation2D.getDrawModeFlags() & ~DrawModeFlags::SettingsForSelection);
+
+                            // set if changed - this will update the renderer and/or render
+                            // target, including changed settings, renderer-independent
+                            if (aViewInformation2D != pProcessor->getViewInformation2D())
                             {
-                                // set AntiAliasing at Processor2D
-                                aViewInformation2D.setUseAntiAliasing(bWantedAA);
+                                pProcessor->setViewInformation2D(aViewInformation2D);
                             }
-
-                            const bool bIsHighContrastSelection(rCandidate.isHighContrastSelection());
-                            if (bIsHighContrastSelection)
-                            {
-                                // overrule DrawMode settings
-                                rDestinationDevice.SetDrawMode(nOriginalDrawMode | DrawModeFlags::SettingsForSelection);
-                            }
-
-                            // create processor
-                            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
-                                rDestinationDevice,
-                                aViewInformation2D));
 
                             // render primitive
                             pProcessor->process(aSequence);
-
-                            if (bIsHighContrastSelection)
-                            {
-                                // restore DrawMode settings
-                                rDestinationDevice.SetDrawMode(nOriginalDrawMode);
-                            }
                         }
                     }
                 }
@@ -146,8 +135,16 @@ namespace sdr::overlay
             return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice));
         }
 
+        bool OverlayManager::isOutputToRecordingMetaFile() const
+        {
+            GDIMetaFile* pMetaFile(getOutputDevice().GetConnectMetaFile());
+            return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+        }
+
         drawinglayer::geometry::ViewInformation2D const & OverlayManager::getCurrentViewInformation2D() const
         {
+            drawinglayer::geometry::ViewInformation2D aViewInformation(maViewInformation2D);
+
             if(getOutputDevice().GetViewTransformation() != maViewTransformation)
             {
                 basegfx::B2DRange aViewRange(maViewInformation2D.getViewport());
@@ -165,15 +162,25 @@ namespace sdr::overlay
                     }
                 }
 
-                OverlayManager* pThis = const_cast< OverlayManager* >(this);
-
-                pThis->maViewTransformation = getOutputDevice().GetViewTransformation();
-                drawinglayer::geometry::ViewInformation2D aViewInformation(maViewInformation2D);
+                maViewTransformation = getOutputDevice().GetViewTransformation();
                 aViewInformation.setViewTransformation(maViewTransformation);
                 aViewInformation.setViewport(aViewRange);
-                pThis->maViewInformation2D = std::move(aViewInformation);
+                mfDiscreteOne = 0.0;
+            }
 
-                pThis->mfDiscreteOne = 0.0;
+            if (!isOutputToRecordingMetaFile())
+            {
+                // this is the EditView repaint, provide that information,
+                // but only if we do not export to metafile
+                aViewInformation.setEditViewActive(true);
+
+                // also copy the current DrawModeFlags
+                aViewInformation.setDrawModeFlags(getOutputDevice().GetDrawMode());
+            }
+
+            if (aViewInformation != maViewInformation2D)
+            {
+                maViewInformation2D = aViewInformation;
             }
 
             return maViewInformation2D;
