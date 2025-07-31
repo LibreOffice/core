@@ -50,8 +50,6 @@ public:
     virtual void vadjustment_set_page_size(int nSize) override;
     virtual void vadjustment_set_page_increment(int nSize) override;
     virtual void vadjustment_set_step_increment(int nSize) override;
-    virtual int vadjustment_get_lower() const override;
-    virtual void vadjustment_set_lower(int nLower) override;
     virtual void set_vpolicy(VclPolicyType eVPolicy) override;
     virtual VclPolicyType get_vpolicy() const override;
     virtual int get_scroll_thickness() const override;

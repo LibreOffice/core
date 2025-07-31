@@ -2181,8 +2181,6 @@ public:
     virtual void vadjustment_set_value(int value) override;
     virtual int vadjustment_get_upper() const override;
     virtual void vadjustment_set_upper(int upper) override;
-    virtual int vadjustment_get_lower() const override;
-    virtual void vadjustment_set_lower(int lower) override;
     virtual int vadjustment_get_page_size() const override;
     virtual void vadjustment_set_page_size(int size) override;
     virtual void vadjustment_set_page_increment(int size) override;

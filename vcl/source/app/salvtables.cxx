@@ -2450,18 +2450,6 @@ void SalInstanceScrolledWindow::vadjustment_set_upper(int upper)
     rVertScrollBar.SetRangeMax(upper);
 }
 
-int SalInstanceScrolledWindow::vadjustment_get_lower() const
-{
-    ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
-    return rVertScrollBar.GetRangeMin();
-}
-
-void SalInstanceScrolledWindow::vadjustment_set_lower(int lower)
-{
-    ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
-    rVertScrollBar.SetRangeMin(lower);
-}
-
 int SalInstanceScrolledWindow::vadjustment_get_page_size() const
 {
     ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();

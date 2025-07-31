@@ -2039,7 +2039,6 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
 
     m_xPropertiesWin->SetRemovedHdl( LINK( this, CustomPropertiesControl, RemovedHdl ) );
 
-    m_xVertScroll->vadjustment_set_lower(0);
     m_xVertScroll->vadjustment_set_upper(0);
     m_xVertScroll->vadjustment_set_page_size(0xFFFF);
 

@@ -1079,7 +1079,7 @@ namespace svx
         if( _bUp )
         {
             if( !m_pPrev )
-                bRet = m_pScrollBar->vadjustment_get_value() > m_pScrollBar->vadjustment_get_lower();
+                bRet = m_pScrollBar->vadjustment_get_value() > 0;
         }
         else
         {

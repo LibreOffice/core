@@ -267,29 +267,6 @@ void QtInstanceScrolledWindow::vadjustment_set_step_increment(int nSize)
     });
 }
 
-int QtInstanceScrolledWindow::vadjustment_get_lower() const
-{
-    SolarMutexGuard g;
-
-    int nMin = 0;
-    GetQtInstance().RunInMainThread([&] {
-        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
-            nMin = pScrollBar->minimum();
-    });
-
-    return nMin;
-}
-
-void QtInstanceScrolledWindow::vadjustment_set_lower(int nLower)
-{
-    SolarMutexGuard g;
-
-    GetQtInstance().RunInMainThread([&] {
-        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
-            pScrollBar->setMinimum(nLower);
-    });
-}
-
 void QtInstanceScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)
 {
     SolarMutexGuard g;

@@ -8471,18 +8471,6 @@ public:
         enable_notify_events();
     }
 
-    virtual int vadjustment_get_lower() const override
-    {
-         return gtk_adjustment_get_lower(m_pVAdjustment);
-    }
-
-    virtual void vadjustment_set_lower(int lower) override
-    {
-        disable_notify_events();
-        gtk_adjustment_set_lower(m_pVAdjustment, lower);
-        enable_notify_events();
-    }
-
     virtual int vadjustment_get_page_size() const override
     {
         return gtk_adjustment_get_page_size(m_pVAdjustment);
