@@ -930,23 +930,32 @@ std::unique_ptr<PhysicalFontFaceCollection> PhysicalFontCollection::GetFontFaceC
 // These are the metric-compatible replacement fonts that are bundled with
 // LibreOffice, we prefer them over generic substitutions that might be
 // provided by the system.
-const std::vector<std::pair<OUString, OUString>> aMetricCompatibleMap =
+constexpr std::pair<std::u16string_view, std::u16string_view> aMetricCompatibleMap[] =
 {
-    { "Times New Roman", "Liberation Serif" },
-    { "Arial",           "Liberation Sans" },
-    { "Arial Narrow",    "Liberation Sans Narrow" },
-    { "Courier New",     "Liberation Mono" },
-    { "Cambria",         "Caladea" },
-    { "Calibri",         "Carlito" },
+    { u"Times New Roman", u"Liberation Serif" },
+    { u"Arial",           u"Liberation Sans" },
+    { u"Arial Narrow",    u"Liberation Sans Narrow" },
+    { u"Courier New",     u"Liberation Mono" },
+    { u"Cambria",         u"Caladea" },
+    { u"Calibri",         u"Carlito" },
+
+    // Official replacements for Bundes* fonts. https://github.com/google/fonts/issues/9720
+    // prevents from using Carlito as direct metric-compatible replacement.
+    { u"BundesSans",          u"Calibri" },
+    { u"BundesSans Office",   u"Calibri" },
+    { u"BundesSans Regular",  u"Calibri" },
+    { u"BundesSerif",         u"Cambria" },
+    { u"BundesSerif Office",  u"Cambria" },
+    { u"BundesSerif Regular", u"Cambria" },
 };
 
-static bool FindMetricCompatibleFont(FontSelectPattern& rFontSelData)
+static bool FindMetricCompatibleFont_impl(FontSelectPattern& rFontSelData)
 {
-    for (const auto& aSub : aMetricCompatibleMap)
+    for (const auto& [font, metric_compatible_font] : aMetricCompatibleMap)
     {
-        if (rFontSelData.maSearchName == GetEnglishSearchFontName(aSub.first))
+        if (rFontSelData.maSearchName == GetEnglishSearchFontName(font))
         {
-            rFontSelData.maSearchName = aSub.second;
+            rFontSelData.maSearchName = GetEnglishSearchFontName(metric_compatible_font);
             return true;
         }
     }
@@ -971,6 +980,19 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         assert(pFont);
         return pFont;
     }
+
+    auto FindMetricCompatibleFont = [this](FontSelectPattern& rFontSelData) -> PhysicalFontFamily*
+    {
+        while (FindMetricCompatibleFont_impl(rFontSelData))
+        {
+            if (auto* pFont = ImplFindFontFamilyBySearchName(rFontSelData.maSearchName))
+                return pFont;
+            // Try again, with the updated maSearchName: maybe there is a metric-compatible font
+            // for metric-compatible font? E.g., Bundes* family of fonts has preferred substitute
+            // MS fonts; and those have their substitutions.
+        }
+        return nullptr;
+    };
 
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
@@ -1030,6 +1052,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         if( pFoundData )
             return pFoundData;
 
+        if (pFoundData = FindMetricCompatibleFont(rFSD); pFoundData)
+            return pFoundData;
+
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
@@ -1051,8 +1076,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
                 return pFoundData;
         }
 
-        if (FindMetricCompatibleFont(rFSD) ||
-            (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD)))
+        if (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD))
         {
             aSearchName = GetEnglishSearchFontName(aSearchName);
         }
