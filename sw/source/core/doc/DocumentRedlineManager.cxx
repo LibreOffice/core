@@ -3687,7 +3687,14 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             bool bHierarchicalFormat = bHierarchical && pTmp->GetType() == RedlineType::Format;
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                auto pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, 0, bHierarchical);
+                sal_Int8 nDepth = 0;
+                if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Delete)
+                {
+                    // Only work with the underlying delete, so the undo action matches the UI
+                    // action below.
+                    nDepth = 1;
+                }
+                auto pUndoRdl = std::make_unique<SwUndoRejectRedline>(*pTmp, nDepth, bHierarchical);
 #if OSL_DEBUG_LEVEL > 0
                 pUndoRdl->SetRedlineCountDontCheck(true);
 #endif
