@@ -1431,7 +1431,7 @@ namespace
 
 void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
-                            SvxBorderLineStyle nStyle, BitmapEx& rBmp )
+                            SvxBorderLineStyle nStyle, Bitmap& rBmp )
 {
     Size aSize(getPreviewSize(*m_xControl));
 
@@ -1600,7 +1600,7 @@ void SvtLineListBox::UpdateEntries()
     while ( n < nCount )
     {
         auto& pData = m_vLineList[ n ];
-        BitmapEx aBmp;
+        Bitmap aBmp;
         ImpGetLine( pData->GetLine1ForWidth( m_nWidth ),
                 pData->GetLine2ForWidth( m_nWidth ),
                 pData->GetDistForWidth( m_nWidth ),

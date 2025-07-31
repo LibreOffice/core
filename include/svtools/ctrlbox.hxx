@@ -30,7 +30,7 @@
 
 namespace weld { class CustomWeld; }
 
-class BitmapEx;
+class Bitmap;
 class FontList;
 class VclSimpleEvent;
 class VirtualDevice;
@@ -248,7 +248,7 @@ private:
 
     SVT_DLLPRIVATE void         ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                     Color nColor1, Color nColor2, Color nColorDist,
-                                    SvxBorderLineStyle nStyle, BitmapEx& rBmp );
+                                    SvxBorderLineStyle nStyle, Bitmap& rBmp );
 
     DECL_DLLPRIVATE_LINK(ValueSelectHdl, ValueSet*, void);
     DECL_DLLPRIVATE_LINK(ToggleHdl, weld::Toggleable&, void);
