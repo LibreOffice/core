@@ -253,8 +253,8 @@ public:
 
     void Fill( const XLineEndListRef &pList, bool bStart = true );
 
-    void    Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap );
-    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
+    void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap );
+    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
 
     void clear() { m_xControl->clear(); }
     void remove(int nPos) { m_xControl->remove(nPos); }

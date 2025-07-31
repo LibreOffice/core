@@ -1041,7 +1041,7 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     m_xControl->thaw();
 }
 
-void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap )
+void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
     {
@@ -1058,7 +1058,7 @@ void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap 
     }
 }
 
-void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
+void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     m_xControl->remove(nPos);
 
