@@ -65,6 +65,7 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/string.hxx>
 
 #include <vcl/uitest/logger.hxx>
@@ -606,6 +607,11 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     sal_Int32 nPageZoomValue = tools::Long(aPageZoomY * 100);
     pSettings[SC_TABLE_ZOOM_TYPE].Name = SC_ZOOMTYPE;
     pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
+
+    const std::optional<sal_uInt16>& oExportZoom = rViewData.GetExportZoom();
+    if (oExportZoom && comphelper::IsContextFlagActive(u"IsLOKExport"_ustr))
+        nZoomValue = *oExportZoom;
+
     pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
     pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
     pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;
@@ -3643,6 +3649,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             rTabSett.mbPageMode = bPagebreak;
             rTabSett.mnNormalZoom = static_cast< tools::Long >( pViewTab->aZoomY * Fraction( 100.0 ) );
             rTabSett.mnPageZoom = static_cast< tools::Long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
+            rTabSett.moExportZoom = GetExportZoom();
         }
     }
 }
@@ -3857,6 +3864,10 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     sal_Int32 nPageZoomValue = tools::Long(pThisTab->aPageZoomY * 100);
     pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
     pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
+
+    if (oExportZoom && comphelper::IsContextFlagActive(u"IsLOKExport"_ustr))
+        nZoomValue = *oExportZoom;
+
     pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;
     pSettings[SC_ZOOM_VALUE].Value <<= nZoomValue;
     pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = SC_PAGEVIEWZOOMVALUE;

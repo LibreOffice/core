@@ -3914,7 +3914,6 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteraction;
         }
 
-
         if (bTakeOwnership)
             xStorable->storeAsURL(aURL, aSaveMediaDescriptor.getAsConstPropertyValueList());
         else
@@ -5871,9 +5870,28 @@ static bool doc_renderNextSlideLayer(
     return bDone;
 }
 
-static void doc_setViewOption(LibreOfficeKitDocument* /*pDoc*/, const char* /*pOption*/, const char* /*pValue*/)
+static void doc_setViewOption(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue)
 {
-    // placeholder for now
+    comphelper::ProfileZone aZone("doc_setViewOption");
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return;
+    }
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    const OUString sOption = getUString(pOption);
+    if (sOption == "zoom")
+    {
+        const int nZoom = getUString(pValue).toInt32();
+
+        if (nZoom)
+            pDoc->setExportZoom(nZoom);
+    }
 }
 
 static bool getFromTransferable(

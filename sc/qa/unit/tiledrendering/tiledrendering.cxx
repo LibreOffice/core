@@ -18,6 +18,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/SetFlagContextHelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
@@ -3132,6 +3133,23 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     CPPUNIT_ASSERT_RECTANGLE_EQUAL_WITH_TOLERANCE(aView2.m_aInvalidations[0],
                                                   aView1.m_aInvalidations[0],
                                                   50);
+    // cool#4250: zoom values
+    pModelObj->setExportZoom(150);
+
+    {
+        uno::ContextLayer aLayer(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
+        save(u"calc8"_ustr); // .ODS
+    }
+    xmlDocUniquePtr pSettingsXml = parseExport(u"settings.xml"_ustr);
+    // Multi-user export: don't save every user's view into the exported file
+    // assertXPath(pSettingsXml, "//config:config-item[@config:name='ViewId']", 1);
+    // Use view's logic (not technical) zoom level for export
+    assertXPathContent(pSettingsXml, "//config:config-item[@config:name='ZoomValue'][1]", u"150");
+
+    save(u"Calc Office Open XML"_ustr); // .XLSX
+    xmlDocUniquePtr pSheet1Xml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    // Use view's logic (not technical) zoom level for export
+    assertXPath(pSheet1Xml, "//x:sheetViews/x:sheetView", "zoomScale", u"150");
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)

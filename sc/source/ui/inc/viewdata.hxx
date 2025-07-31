@@ -296,6 +296,8 @@ private:
     Fraction            aDefZoomY;
     Fraction            aDefPageZoomX;              // zoom in page break preview mode
     Fraction            aDefPageZoomY;
+    // If the actual zoom values are for implemention-only purposes, then provide a value for export
+    std::optional<sal_uInt16> oExportZoom; // used for all sheets
 
     ScRefType           eRefType;
 
@@ -488,6 +490,9 @@ public:
     SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
     const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
     const Fraction& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
+
+    void SetExportZoom(sal_uInt16 nExportZoom) { oExportZoom = nExportZoom; }
+    const std::optional<sal_uInt16>& GetExportZoom() const { return oExportZoom; }
 
     void            SetShowGrid( bool bShow );
     bool            GetShowGrid() const { return pThisTab->bShowGrid; }
