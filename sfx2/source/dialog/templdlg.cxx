@@ -256,8 +256,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
 {
     mxFilterLb->set_help_id(HID_TEMPLATE_FILTER);
     mxPreviewCheckbox->set_active(officecfg::Office::Common::StylesAndFormatting::Preview::get());
-    if (comphelper::LibreOfficeKit::isActive())
-        mxPreviewCheckbox->hide();
 }
 
 void SfxTemplateDialog_Impl::EnableEdit(bool bEnable, StyleList* rStyleList)
