@@ -395,6 +395,16 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
 
     return BitmapEx();
 }
+
+Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& rSequence,
+                                               const basegfx::B2DRange& rTargetRange,
+                                               sal_uInt32 nMaximumQuadraticPixels,
+                                               const o3tl::Length eTargetUnit,
+                                               const std::optional<Size>& rTargetDPI)
+{
+    return Bitmap(convertPrimitive2DContainerToBitmapEx(std::move(rSequence), rTargetRange, nMaximumQuadraticPixels, eTargetUnit, rTargetDPI));
+}
+
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,7 +52,7 @@ private:
 
 protected:
 
-    BitmapEx                aThumbBmp; // Allow transparence to survive
+    Bitmap                  aThumbBmp; // Allow transparence to survive
     GDIMetaFile             aThumbMtf;
     INetURLObject           aURL;
     OUString                aTitle;
@@ -73,7 +73,7 @@ public:
     virtual SgaObjKind      GetObjKind() const = 0;
     virtual sal_uInt16      GetVersion() const = 0;
 
-    virtual BitmapEx        GetThumbBmp() const { return aThumbBmp; }
+    virtual Bitmap          GetThumbBmp() const { return aThumbBmp; }
     const GDIMetaFile&      GetThumbMtf() const { return aThumbMtf; }
     const INetURLObject&    GetURL() const { return aURL; }
     bool                IsValid() const { return bIsValid; }
@@ -106,7 +106,7 @@ public:
     virtual            ~SgaObjectSound() override;
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Sound; }
-    virtual BitmapEx    GetThumbBmp() const override;
+    virtual Bitmap      GetThumbBmp() const override;
 };
 
 class FmFormModel;

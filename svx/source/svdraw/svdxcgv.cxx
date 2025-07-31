@@ -422,9 +422,9 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     }
 }
 
-BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const sal_uInt32 nMaximumQuadraticPixels, const std::optional<Size>& rTargetDPI) const
+Bitmap SdrExchangeView::GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked, const sal_uInt32 nMaximumQuadraticPixels, const std::optional<Size>& rTargetDPI) const
 {
-    BitmapEx aBmp;
+    Bitmap aBmp;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     if(1 == rMarkList.GetMarkCount())
@@ -435,12 +435,12 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
             if(bNoVDevIfOneBmpMarked)
             {
                 if (pGrafObj->GetGraphicType() == GraphicType::Bitmap)
-                    aBmp = pGrafObj->GetTransformedGraphic().GetBitmapEx();
+                    aBmp = Bitmap(pGrafObj->GetTransformedGraphic().GetBitmapEx());
             }
             else
             {
                 if (pGrafObj->isEmbeddedVectorGraphicData())
-                    aBmp = pGrafObj->GetGraphic().getVectorGraphicData()->getReplacement();
+                    aBmp = Bitmap(pGrafObj->GetGraphic().getVectorGraphicData()->getReplacement());
             }
         }
     }
@@ -489,7 +489,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked, const
 
             // if we have geometry and it has a range, convert to BitmapEx using
             // common tooling
-            aBmp = drawinglayer::convertPrimitive2DContainerToBitmapEx(
+            aBmp = drawinglayer::convertPrimitive2DContainerToBitmap(
                 std::move(xPrimitives),
                 aRange,
                 nMaximumQuadraticPixels,

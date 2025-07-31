@@ -57,7 +57,7 @@ public:
 
     // Draw all marked objects onto a bitmap, with the display's color depth
     // and resolution
-    BitmapEx GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked = false, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt) const;
+    Bitmap GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked = false, const sal_uInt32 nMaximumQuadraticPixels = 500000, const std::optional<Size>& rTargetDPI = std::nullopt) const;
 
     // Copy all marked objects to a new model, consisting of exactly one page,
     // with the flag PageNotValid set. This means, that only the page's objects

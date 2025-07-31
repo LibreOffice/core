@@ -1484,7 +1484,7 @@ void SvxLineTabPage::PopulateMenus()
                 pObj->SetMergedItemSet(m_rOutAttrs);
             }
             aView.MarkAll();
-            BitmapEx aBitmapEx(aView.GetMarkedObjBitmapEx());
+            Bitmap aBitmap(aView.GetMarkedObjBitmap());
             GDIMetaFile aMeta(aView.GetMarkedObjMetaFile());
             aView.UnmarkAll();
             pPage->RemoveObject(1);
@@ -1495,17 +1495,17 @@ void SvxLineTabPage::PopulateMenus()
             pInfo->sItemId = "symbol" + OUString::number(i);
             m_aSymbolBrushItems.emplace_back(pInfo);
 
-            Size aSize(aBitmapEx.GetSizePixel());
+            Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {
                 bool bWidth = aSize.Width() > aSize.Height();
                 double nScale = bWidth ?
                                     double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
                                     double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                aBitmapEx.Scale(nScale, nScale);
+                aBitmap.Scale(nScale, nScale);
             }
-            pVD->SetOutputSizePixel(aBitmapEx.GetSizePixel());
-            pVD->DrawBitmapEx(Point(), aBitmapEx);
+            pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
+            pVD->DrawBitmapEx(Point(), aBitmap);
             m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr, *pVD);
         }
         pPage->RemoveObject(0);

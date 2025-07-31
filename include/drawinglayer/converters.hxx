@@ -50,6 +50,11 @@ BitmapEx DRAWINGLAYER_DLLPUBLIC convertPrimitive2DContainerToBitmapEx(
     const sal_uInt32 nMaximumQuadraticPixels = 500000,
     const o3tl::Length eTargetUnit = o3tl::Length::mm100,
     const std::optional<Size>& rTargetDPI = std::nullopt);
+Bitmap DRAWINGLAYER_DLLPUBLIC convertPrimitive2DContainerToBitmap(
+    drawinglayer::primitive2d::Primitive2DContainer&& rSeq, const basegfx::B2DRange& rTargetRange,
+    const sal_uInt32 nMaximumQuadraticPixels = 500000,
+    const o3tl::Length eTargetUnit = o3tl::Length::mm100,
+    const std::optional<Size>& rTargetDPI = std::nullopt);
 
 } // end of namespace drawinglayer
 

@@ -1820,6 +1820,13 @@ bool WriteDIBBitmapEx(
     return false;
 }
 
+bool WriteDIBBitmapEx(
+    const Bitmap& rSource,
+    SvStream& rOStm)
+{
+    return WriteDIBBitmapEx(BitmapEx(rSource), rOStm);
+}
+
 sal_uInt32 getDIBV5HeaderSize()
 {
     return DIBV5HEADERSIZE;

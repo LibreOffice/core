@@ -1772,7 +1772,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         // switch on undo for the next operations
                         mpDrawView->BegUndo(SdResId(STR_UNDO_CONVERT_TO_BITMAP));
-                        aGraphic = Graphic(mpDrawView->GetMarkedObjBitmapEx());
+                        aGraphic = Graphic(mpDrawView->GetMarkedObjBitmap());
                         // Restore online spelling
                         GetDoc()->SetOnlineSpell(bOnlineSpell);
                     }

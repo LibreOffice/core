@@ -508,7 +508,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
                 if (bToggleOnlineSpell)
                     mpSdDrawDocumentIntern->SetOnlineSpell(false);
-                bOK = SetBitmapEx( mpSdViewIntern->GetMarkedObjBitmapEx(true), rFlavor );
+                bOK = SetBitmapEx( BitmapEx(mpSdViewIntern->GetMarkedObjBitmap(true)), rFlavor );
                 if (bToggleOnlineSpell)
                     mpSdDrawDocumentIntern->SetOnlineSpell(true);
             }

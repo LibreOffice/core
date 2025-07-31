@@ -1324,7 +1324,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
         else if( SotClipboardFormatId::GDIMETAFILE == nFormat )
             rGrf = Imp()->GetDrawView()->GetMarkedObjMetaFile();
         else if( SotClipboardFormatId::BITMAP == nFormat || SotClipboardFormatId::PNG == nFormat )
-            rGrf = Imp()->GetDrawView()->GetMarkedObjBitmapEx();
+            rGrf = Imp()->GetDrawView()->GetMarkedObjBitmap();
     }
     return bConvert;
 }
