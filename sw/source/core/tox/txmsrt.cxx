@@ -840,8 +840,8 @@ OUString SwTOXAuthority::GetText(sal_uInt16 nAuthField, const SwRootFrame* pLayo
     else if(AUTH_FIELD_AUTHORITY_TYPE == nAuthField)
     {
         sal_uInt16 nLevel = GetLevel();
-        if(nLevel)
-            sText = SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(--nLevel));
+        if (nLevel > 0)
+            sText = SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(nLevel - 1));
     }
     else
         sText = pField->GetFieldText(static_cast<ToxAuthorityField>(nAuthField));
