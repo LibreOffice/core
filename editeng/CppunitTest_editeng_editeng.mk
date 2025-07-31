@@ -15,8 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,editeng_editeng, \
     editeng/qa/editeng/editeng \
 ))
 
-$(eval $(call gb_CppunitTest_use_library_objects,editeng_editeng,editeng))
-
 $(eval $(call gb_CppunitTest_use_libraries,editeng_editeng, \
     basegfx \
     comphelper \
@@ -25,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_editeng, \
     docmodel \
 	drawinglayercore \
     drawinglayer \
+    editeng \
     i18nlangtag \
     i18nutil \
     lng \

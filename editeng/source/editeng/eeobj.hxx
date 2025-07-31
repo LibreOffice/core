@@ -19,12 +19,13 @@
 
 #pragma once
 
+#include <editeng/editengdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <tools/stream.hxx>
 
-class EditDataObject :  public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
+class EDITENG_DLLPUBLIC EditDataObject :  public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 private:
     SvMemoryStream  maRTFData;
