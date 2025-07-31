@@ -996,49 +996,48 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
 
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
-    OUString& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
     for(;;)
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
-        aSearchName = rFSD.maTargetName;
+        rFSD.maSearchName = rFSD.maTargetName;
 
         // Until features are properly supported, they are appended to the
         // font name, so we need to strip them off so the font is found.
-        sal_Int32 nFeat = aSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
+        sal_Int32 nFeat = rFSD.maSearchName.indexOf(FontSelectPattern::FEAT_PREFIX);
         OUString aOrigName = rFSD.maTargetName;
-        OUString aBaseFontName = aSearchName.copy( 0, (nFeat != -1) ? nFeat : aSearchName.getLength() );
+        OUString aBaseFontName
+            = rFSD.maSearchName.copy(0, (nFeat != -1) ? nFeat : rFSD.maSearchName.getLength());
 
         if (nFeat != -1)
         {
-            aSearchName = aBaseFontName;
+            rFSD.maSearchName = aBaseFontName;
             rFSD.maTargetName = aBaseFontName;
         }
 
-        aSearchName = GetEnglishSearchFontName( aSearchName );
-        ImplFontSubstitute(aSearchName);
+        rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maSearchName);
+        ImplFontSubstitute(rFSD.maSearchName);
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
-        if( (rFSD.GetWeight() > WEIGHT_MEDIUM) &&
-            aSearchName.startsWithIgnoreAsciiCase( "hg" ) )
+        if ((rFSD.GetWeight() > WEIGHT_MEDIUM) && rFSD.maSearchName.startsWithIgnoreAsciiCase("hg"))
         {
             OUString aBoldName;
-            if( aSearchName.startsWithIgnoreAsciiCase( "hggothicb" ) )
+            if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hggothicb"))
                 aBoldName = "hggothice";
-            else if( aSearchName.startsWithIgnoreAsciiCase( "hgpgothicb" ) )
+            else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgpgothicb"))
                 aBoldName = "hgpgothice";
-            else if( aSearchName.startsWithIgnoreAsciiCase( "hgminchol" ) )
+            else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgminchol"))
                 aBoldName = "hgminchob";
-            else if( aSearchName.startsWithIgnoreAsciiCase( "hgpminchol" ) )
+            else if (rFSD.maSearchName.startsWithIgnoreAsciiCase("hgpminchol"))
                 aBoldName = "hgpminchob";
-            else if( aSearchName.equalsIgnoreAsciiCase( "hgminchob" ) )
+            else if (rFSD.maSearchName.equalsIgnoreAsciiCase("hgminchob"))
                 aBoldName = "hgminchoe";
-            else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchob" ) )
+            else if (rFSD.maSearchName.equalsIgnoreAsciiCase("hgpminchob"))
                 aBoldName = "hgpminchoe";
 
             if( !aBoldName.isEmpty() && ImplFindFontFamilyBySearchName( aBoldName ) )
             {
                 // the other font is available => use it
-                aSearchName = aBoldName;
+                rFSD.maSearchName = aBoldName;
                 // prevent synthetic emboldening of bold version
                 rFSD.SetWeight(WEIGHT_DONTKNOW);
             }
@@ -1048,7 +1047,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         rFSD.maTargetName = aOrigName;
 
         // check if the current font name token or its substitute is valid
-        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(aSearchName);
+        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
         if( pFoundData )
             return pFoundData;
 
@@ -1070,22 +1069,22 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         if (sStrippedName != rFSD.maTargetName)
         {
             rFSD.maTargetName = sStrippedName;
-            aSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
-            pFoundData = ImplFindFontFamilyBySearchName(aSearchName);
+            rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
+            pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
             if( pFoundData )
                 return pFoundData;
         }
 
         if (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD))
         {
-            aSearchName = GetEnglishSearchFontName(aSearchName);
+            rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maSearchName);
         }
 
         // the prematch hook uses the target name to search, but we now need
         // to restore the features to make the font selection data unique
         rFSD.maTargetName = aOrigName;
 
-        pFoundData = ImplFindFontFamilyBySearchName( aSearchName );
+        pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
         if( pFoundData )
             return pFoundData;
 
@@ -1105,17 +1104,17 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         if( bMultiToken )
         {
             rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
-            aSearchName = GetEnglishSearchFontName( rFSD.maTargetName );
+            rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
         }
         else
             nTokenPos = -1;
         if (FindMetricCompatibleFont(rFSD) ||
             (mpPreMatchHook && mpPreMatchHook->FindFontSubstitute(rFSD)))
         {
-            aSearchName = GetEnglishSearchFontName( aSearchName );
+            rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maSearchName);
         }
-        ImplFontSubstitute(aSearchName);
-        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(aSearchName);
+        ImplFontSubstitute(rFSD.maSearchName);
+        PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
         if( pFoundData )
             return pFoundData;
     }
@@ -1126,7 +1125,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     {
         nTokenPos = 0;
         rFSD.maTargetName = GetNextFontToken( rFSD.GetFamilyName(), nTokenPos );
-        aSearchName = GetEnglishSearchFontName( rFSD.maTargetName );
+        rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
     }
 
     OUString      aSearchShortName;
@@ -1134,12 +1133,12 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     FontWeight    eSearchWeight   = rFSD.GetWeight();
     FontWidth     eSearchWidth    = rFSD.GetWidthType();
     ImplFontAttrs nSearchType     = ImplFontAttrs::None;
-    utl::FontSubstConfiguration::getMapName( aSearchName, aSearchShortName, aSearchFamilyName,
+    utl::FontSubstConfiguration::getMapName( rFSD.maSearchName, aSearchShortName, aSearchFamilyName,
                                              eSearchWeight, eSearchWidth, nSearchType );
 
     // note: the search name was already translated to english (if possible)
     // use the font's shortened name if needed
-    if ( aSearchShortName != aSearchName )
+    if (aSearchShortName != rFSD.maSearchName)
     {
         PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(aSearchShortName);
         if( pFoundData )
@@ -1149,7 +1148,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
             a korean bitmap font that is not suitable here. Use the font replacement table,
             that automatically leads to the desired "HG Mincho Light J". Same story for
             MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */
-            if ((aSearchName != "msmincho") && (aSearchName != "msgothic"))
+            if ((rFSD.maSearchName != "msmincho") && (rFSD.maSearchName != "msgothic"))
                 // TODO: add heuristic to only throw out the fake ms* fonts
 #endif
             {
@@ -1160,13 +1159,13 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
 
     // use font fallback
     const utl::FontNameAttr* pFontAttr = nullptr;
-    if (!aSearchName.isEmpty() && !comphelper::IsFuzzing())
+    if (!rFSD.maSearchName.isEmpty() && !comphelper::IsFuzzing())
     {
         // get fallback info using FontSubstConfiguration and
         // the target name, it's shortened name and family name in that order
         const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
-        pFontAttr = rFontSubst.getSubstInfo( aSearchName );
-        if ( !pFontAttr && (aSearchShortName != aSearchName) )
+        pFontAttr = rFontSubst.getSubstInfo(rFSD.maSearchName);
+        if (!pFontAttr && (aSearchShortName != rFSD.maSearchName))
             pFontAttr = rFontSubst.getSubstInfo( aSearchShortName );
         if ( !pFontAttr && (aSearchFamilyName != aSearchShortName) )
             pFontAttr = rFontSubst.getSubstInfo( aSearchFamilyName );
@@ -1185,10 +1184,10 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
     {
         LanguageTag aDefaultLanguageTag(u"en"_ustr);
         if (comphelper::IsFuzzing())
-            aSearchName = "OpenSymbol";
+            rFSD.maSearchName = "OpenSymbol";
         else
-            aSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
-        PhysicalFontFamily* pFoundData = FindFontFamilyByTokenNames(aSearchName);
+            rFSD.maSearchName = utl::DefaultFontConfiguration::get().getDefaultFont( aDefaultLanguageTag, DefaultFontType::SYMBOL );
+        PhysicalFontFamily* pFoundData = FindFontFamilyByTokenNames(rFSD.maSearchName);
         if( pFoundData )
             return pFoundData;
     }
@@ -1200,18 +1199,18 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
         if( rFSD.maTargetName.isEmpty() )
             continue;
 
-        aSearchName = GetEnglishSearchFontName( rFSD.maTargetName );
+        rFSD.maSearchName = GetEnglishSearchFontName(rFSD.maTargetName);
 
         OUString      aTempShortName;
         OUString      aTempFamilyName;
         ImplFontAttrs nTempType   = ImplFontAttrs::None;
         FontWeight    eTempWeight = rFSD.GetWeight();
         FontWidth     eTempWidth  = WIDTH_DONTKNOW;
-        utl::FontSubstConfiguration::getMapName( aSearchName, aTempShortName, aTempFamilyName,
+        utl::FontSubstConfiguration::getMapName( rFSD.maSearchName, aTempShortName, aTempFamilyName,
                                                  eTempWeight, eTempWidth, nTempType );
 
         // use a shortened token name if available
-        if( aTempShortName != aSearchName )
+        if (aTempShortName != rFSD.maSearchName)
         {
             PhysicalFontFamily* pFoundData = ImplFindFontFamilyBySearchName(aTempShortName);
             if( pFoundData )
@@ -1225,9 +1224,9 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily(FontSelectPattern& rF
             // get fallback info using FontSubstConfiguration and
             // the target name, it's shortened name and family name in that order
             const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
-            pTempFontAttr = rFontSubst.getSubstInfo( aSearchName );
+            pTempFontAttr = rFontSubst.getSubstInfo(rFSD.maSearchName);
 
-            if ( !pTempFontAttr && (aTempShortName != aSearchName) )
+            if (!pTempFontAttr && (aTempShortName != rFSD.maSearchName))
                 pTempFontAttr = rFontSubst.getSubstInfo( aTempShortName );
 
             if ( !pTempFontAttr && (aTempFamilyName != aTempShortName) )
