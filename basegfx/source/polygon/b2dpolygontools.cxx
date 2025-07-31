@@ -36,9 +36,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // #i37443#
-#define ANGLE_BOUND_START_VALUE     (2.25)
-#define ANGLE_BOUND_MINIMUM_VALUE   (0.1)
-#define STEPSPERQUARTER     (3)
+constexpr double ANGLE_BOUND_START_VALUE = 2.25;
+constexpr double ANGLE_BOUND_MINIMUM_VALUE = 0.1;
+constexpr sal_uInt32 STEPSPERQUARTER = 3;
 
 namespace basegfx::utils
 {
