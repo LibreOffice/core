@@ -1833,9 +1833,10 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
         DffRecordHeader aHd;
         ReadDffRecordHeader( rStCtrl, aHd );
 
-        sal_uInt32 nLen = aHd.nRecLen - 4;
-        if ( static_cast<sal_Int32>(nLen) > 0 )
+        if (aHd.nRecLen > 4)
         {
+            sal_uInt32 nLen = aHd.nRecLen - 4;
+
             bool bSuccess = false;
 
             rStCtrl.SeekRel( 4 );
