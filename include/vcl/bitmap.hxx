@@ -155,7 +155,17 @@ public:
     static const BitmapPalette&
                             GetGreyPalette( int nEntries );
 
-public:
+    /** Get pixel color (including alpha) at given position
+
+        @param nX
+        integer X-Position in Bitmap
+
+        @param nY
+        integer Y-Position in Bitmap
+     */
+    ::Color             GetPixelColor(
+                            sal_Int32 nX,
+                            sal_Int32 nY) const;
 
     /** Convert bitmap format
 

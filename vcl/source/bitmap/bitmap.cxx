@@ -1828,5 +1828,13 @@ std::pair<Bitmap, AlphaMask> Bitmap::SplitIntoColorAndAlpha() const
     return { std::move(aColorBmp), std::move(aAlphaBmp) };
 }
 
+Color Bitmap::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
+{
+    BitmapScopedReadAccess pReadAccess( *this );
+    assert(pReadAccess);
+
+    BitmapColor aColor = pReadAccess->GetColor(nY, nX);
+    return aColor;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

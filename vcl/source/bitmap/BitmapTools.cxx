@@ -1078,7 +1078,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, const Bitmap & aBitm
         return aRes;
     }
 
-    BitmapEx createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
+    Bitmap createHistorical8x8FromArray(std::array<sal_uInt8,64> const & pArray, Color aColorPix, Color aColorBack)
     {
         BitmapPalette aPalette(2);
 
@@ -1103,18 +1103,16 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, const Bitmap & aBitm
             }
         }
 
-        return BitmapEx(aBitmap);
+        return aBitmap;
     }
 
-    bool isHistorical8x8(const BitmapEx& rBitmapEx, Color& o_rBack, Color& o_rFront)
+    bool isHistorical8x8(const Bitmap& rBitmap, Color& o_rBack, Color& o_rFront)
     {
         bool bRet(false);
 
-        if(!rBitmapEx.IsAlpha())
+        if(!rBitmap.HasAlpha())
         {
-            const Bitmap& aBitmap(rBitmapEx.GetBitmap());
-
-            if(8 == aBitmap.GetSizePixel().Width() && 8 == aBitmap.GetSizePixel().Height())
+            if(8 == rBitmap.GetSizePixel().Width() && 8 == rBitmap.GetSizePixel().Height())
             {
                 // Historical 1bpp images are getting really historical,
                 // even to the point that e.g. the png loader actually loads
@@ -1122,7 +1120,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, const Bitmap & aBitm
                 // assumption that any 2-color 1bpp bitmap is a pattern, and so it would
                 // get confused by RGB. Try to detect if this image is really
                 // just two colors and say it's a pattern bitmap if so.
-                BitmapScopedReadAccess access(aBitmap);
+                BitmapScopedReadAccess access(rBitmap);
                 o_rBack = access->GetColor(0,0);
                 bool foundSecondColor = false;;
                 for(tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)

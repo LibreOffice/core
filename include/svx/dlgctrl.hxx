@@ -175,7 +175,7 @@ public:
     SAL_DLLPRIVATE virtual void Resize() override;
     SAL_DLLPRIVATE virtual tools::Rectangle GetFocusRect() override;
 
-    void    SetXBitmap( const BitmapEx& rBitmapEx );
+    void    SetXBitmap( const Bitmap& rBitmap );
 
     void    SetPixelColor( const Color& rCol ) { aPixelColor = rCol; }
     void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }

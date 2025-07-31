@@ -866,7 +866,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                             const Graphic aGraphic(aFillProps.maBlipProps.mxFillGraphic);
                             ::Color nBackColor;
                             ::Color nPixelColor;
-                            bool bIs8x8 = vcl::bitmap::isHistorical8x8(aGraphic.GetBitmapEx(),
+                            bool bIs8x8 = vcl::bitmap::isHistorical8x8(Bitmap(aGraphic.GetBitmapEx()),
                                                                        nBackColor, nPixelColor);
                             if (bIs8x8)
                             {

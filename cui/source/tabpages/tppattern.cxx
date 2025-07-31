@@ -60,10 +60,10 @@ public:
     }
 
     // BitmapCtl: Returns the Bitmap
-    BitmapEx GetBitmapEx() const
+    Bitmap GetBitmap() const
     {
         if (!pBmpArray)
-            return BitmapEx();
+            return Bitmap();
         return vcl::bitmap::createHistorical8x8FromArray(*pBmpArray, aPixelColor, aBackgroundColor);
     }
 
@@ -212,9 +212,9 @@ bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
     }
     else
     {
-        const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
+        const Bitmap aBitmap(m_xBitmapCtl->GetBitmap());
 
-        _rOutAttrs->Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
+        _rOutAttrs->Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
     }
     _rOutAttrs->Put(XFillBmpTileItem(true));
     return true;
@@ -228,7 +228,7 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     m_xBitmapCtl->SetBmpArray( m_xCtlPixel->GetBitmapPixelPtr() );
 
     // get bitmap and display it
-    const XFillBitmapItem aBmpItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx()));
+    const XFillBitmapItem aBmpItem(OUString(), Graphic(m_xBitmapCtl->GetBitmap()));
     if(aBmpItem.isPattern())
     {
         m_rXFSet.Put( aBmpItem );
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 
     Color aBackColor;
     Color aPixelColor;
-    bool bIs8x8(vcl::bitmap::isHistorical8x8(pGraphicObject->GetGraphic().GetBitmapEx(), aBackColor, aPixelColor));
+    bool bIs8x8(vcl::bitmap::isHistorical8x8(Bitmap(pGraphicObject->GetGraphic().GetBitmapEx()), aBackColor, aPixelColor));
 
     m_xLbColor->SetNoSelection();
     m_xLbBackgroundColor->SetNoSelection();
@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 
         // setting the pixel control
 
-        m_xCtlPixel->SetXBitmap(pGraphicObject->GetGraphic().GetBitmapEx());
+        m_xCtlPixel->SetXBitmap(Bitmap(pGraphicObject->GetGraphic().GetBitmapEx()));
 
         m_xLbColor->SelectEntry( aPixelColor );
         m_xLbBackgroundColor->SelectEntry( aBackColor );
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
         m_xBitmapCtl->SetBackgroundColor( aBackColor );
         m_rXFSet.ClearItem();
         m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmap())));
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }
@@ -377,9 +377,9 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
         std::unique_ptr<XBitmapEntry> pEntry;
         if( m_xCtlPixel->IsEnabled() )
         {
-            const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
+            const Bitmap aBitmap(m_xBitmapCtl->GetBitmap());
 
-            pEntry.reset(new XBitmapEntry(Graphic(aBitmapEx), aName));
+            pEntry.reset(new XBitmapEntry(Graphic(aBitmap), aName));
         }
         else // it must be a not existing imported bitmap
         {
@@ -423,10 +423,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
     OUString aName( m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetName() );
 
-    const BitmapEx aBitmapEx(m_xBitmapCtl->GetBitmapEx());
-
     // #i123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-    m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(aBitmapEx), aName), nPos);
+    m_pPatternList->Replace(std::make_unique<XBitmapEntry>(Graphic(m_xBitmapCtl->GetBitmap()), aName), nPos);
 
     Bitmap aBitmap = m_pPatternList->GetBitmapForPreview( static_cast<sal_uInt16>( nPos ), m_xPatternLB->GetIconSize() );
     m_xPatternLB->RemoveItem(nId);
@@ -528,7 +526,7 @@ void SvxPatternTabPage::ChangeColor_Impl()
     m_xBitmapCtl->SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+    m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmap())));
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlPreview.Invalidate();
 }
@@ -540,7 +538,7 @@ void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
         m_xBitmapCtl->SetBmpArray(m_xCtlPixel->GetBitmapPixelPtr());
 
         // get bitmap and display it
-        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmap())));
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }
