@@ -1532,6 +1532,9 @@ void RTFDocumentImpl::text(OUString& rString)
     switch (m_aStates.top().getDestination())
     {
         // Note: in stylesheet and revtbl groups are mandatory
+        case Destination::STYLESHEET:
+        case Destination::REVISIONTABLE:
+            break; // no text allowed here - ignore it
         case Destination::STYLEENTRY:
         case Destination::LISTNAME:
         case Destination::REVISIONENTRY:
