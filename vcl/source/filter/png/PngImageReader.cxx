@@ -10,6 +10,7 @@
 
 #include <vcl/filter/PngImageReader.hxx>
 #include <png.h>
+#include <iostream>
 #include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <vcl/bitmap.hxx>
@@ -51,6 +52,11 @@ void lclReadStream(png_structp pPng, png_bytep pOutBytes, png_size_t nBytesToRea
             png_warning(pPng, "Stream read: read less bytes than asked for.");
         }
     }
+}
+
+void lclError(png_structp /*pPng*/, png_const_charp error_msg)
+{
+    throw std::runtime_error(error_msg);
 }
 
 bool isPng(SvStream& rStream)
@@ -324,10 +330,6 @@ bool fcTLbeforeIDAT(SvStream& rStream)
     return false;
 }
 
-#if defined __GNUC__ && __GNUC__ <= 14 && !defined __clang__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wclobbered"
-#endif
 bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
             BitmapScopedWriteAccess* pAccess = nullptr,
@@ -369,141 +371,235 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     const bool bUseExistingBitmap
         = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
 
-    if (setjmp(png_jmpbuf(pPng)))
+    int nNumberOfPasses(0);
+    int colorType = -1;
+    png_uint_32 width = 0;
+    png_uint_32 height = 0;
+
+    try
     {
+        png_set_option(pPng, PNG_MAXIMUM_INFLATE_WINDOW, PNG_OPTION_ON);
+
+        png_set_read_fn(pPng, &rStream, lclReadStream);
+
+        png_set_error_fn(pPng, nullptr, lclError, nullptr);
+
+        if (!bFuzzing)
+            png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
+        else
+            png_set_crc_action(pPng, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
+
+        png_set_sig_bytes(pPng, PNG_SIGNATURE_SIZE);
+
+        png_read_info(pPng, pInfo);
+
+        int bitDepth = 0;
+        int interlace = -1;
+
+        png_uint_32 returnValue = png_get_IHDR(pPng, pInfo, &width, &height, &bitDepth, &colorType,
+                                               &interlace, nullptr, nullptr);
+
+        if (returnValue != 1)
+            return false;
+
+        if (colorType == PNG_COLOR_TYPE_PALETTE)
+            png_set_palette_to_rgb(pPng);
+
+        if (colorType == PNG_COLOR_TYPE_GRAY)
+            png_set_expand_gray_1_2_4_to_8(pPng);
+
+        if (png_get_valid(pPng, pInfo, PNG_INFO_tRNS))
+            png_set_tRNS_to_alpha(pPng);
+
+        if (bitDepth == 16)
+            png_set_scale_16(pPng);
+
+        if (bitDepth < 8)
+            png_set_packing(pPng);
+
+        // Convert gray+alpha to RGBA, keep gray as gray.
+        if (colorType == PNG_COLOR_TYPE_GRAY_ALPHA
+            || (colorType == PNG_COLOR_TYPE_GRAY && png_get_valid(pPng, pInfo, PNG_INFO_tRNS)))
+        {
+            png_set_gray_to_rgb(pPng);
+        }
+
+        // Sets the filler byte - if RGB it converts to RGBA
+        // png_set_filler(pPng, 0xFF, PNG_FILLER_AFTER);
+
+        nNumberOfPasses = png_set_interlace_handling(pPng);
+
+        png_read_update_info(pPng, pInfo);
+        returnValue = png_get_IHDR(pPng, pInfo, &width, &height, &bitDepth, &colorType, nullptr,
+                                   nullptr, nullptr);
+
+        if (returnValue != 1)
+            return false;
+
+        if (bitDepth != 8
+            || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA
+                && colorType != PNG_COLOR_TYPE_GRAY))
+        {
+            return false;
+        }
+
+        png_uint_32 res_x = 0;
+        png_uint_32 res_y = 0;
+        int unit_type = 0;
+        if (png_get_pHYs(pPng, pInfo, &res_x, &res_y, &unit_type) != 0
+            && unit_type == PNG_RESOLUTION_METER && res_x && res_y)
+        {
+            // convert into MapUnit::Map100thMM
+            prefSize = Size(static_cast<sal_Int32>((100000.0 * width) / res_x),
+                            static_cast<sal_Int32>((100000.0 * height) / res_y));
+        }
+
+        if (!bUseExistingBitmap)
+        {
+            switch (colorType)
+            {
+                case PNG_COLOR_TYPE_RGB:
+                    aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+                    break;
+                case PNG_COLOR_TYPE_RGBA:
+                    aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+                    aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
+                    aBitmapAlpha.Erase(0); // opaque
+                    break;
+                case PNG_COLOR_TYPE_GRAY:
+                    aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP,
+                                     &Bitmap::GetGreyPalette(256));
+                    break;
+                default:
+                    abort();
+            }
+
+            if (bOnlyCreateBitmap)
+            {
+                if (!aBitmapAlpha.IsEmpty())
+                    aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
+                else
+                    aBitmapEx = BitmapEx(aBitmap);
+                if (!prefSize.IsEmpty())
+                {
+                    aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                    aBitmapEx.SetPrefSize(prefSize);
+                }
+                rImportOutput.moBitmap = aBitmapEx;
+                return true;
+            }
+
+            pWriteAccessInstance = aBitmap;
+            if (!pWriteAccessInstance)
+                return false;
+            if (!aBitmapAlpha.IsEmpty())
+            {
+                pWriteAccessAlphaInstance = aBitmapAlpha;
+                if (!pWriteAccessAlphaInstance)
+                    return false;
+            }
+        }
+    }
+    catch (const std::runtime_error& ex)
+    {
+        std::cerr << "libpng error: " << ex.what() << std::endl;
+
         pWriteAccessInstance.reset();
         pWriteAccessAlphaInstance.reset();
         return false;
     }
 
-    png_set_option(pPng, PNG_MAXIMUM_INFLATE_WINDOW, PNG_OPTION_ON);
-
-    png_set_read_fn(pPng, &rStream, lclReadStream);
-
-    if (!bFuzzing)
-        png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
-    else
-        png_set_crc_action(pPng, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
-
-    png_set_sig_bytes(pPng, PNG_SIGNATURE_SIZE);
-
-    png_read_info(pPng, pInfo);
-
-    png_uint_32 width = 0;
-    png_uint_32 height = 0;
-    int bitDepth = 0;
-    int colorType = -1;
-    int interlace = -1;
-
-    png_uint_32 returnValue = png_get_IHDR(pPng, pInfo, &width, &height, &bitDepth, &colorType,
-                                           &interlace, nullptr, nullptr);
-
-    if (returnValue != 1)
-        return false;
-
-    if (colorType == PNG_COLOR_TYPE_PALETTE)
-        png_set_palette_to_rgb(pPng);
-
-    if (colorType == PNG_COLOR_TYPE_GRAY)
-        png_set_expand_gray_1_2_4_to_8(pPng);
-
-    if (png_get_valid(pPng, pInfo, PNG_INFO_tRNS))
-        png_set_tRNS_to_alpha(pPng);
-
-    if (bitDepth == 16)
-        png_set_scale_16(pPng);
-
-    if (bitDepth < 8)
-        png_set_packing(pPng);
-
-    // Convert gray+alpha to RGBA, keep gray as gray.
-    if (colorType == PNG_COLOR_TYPE_GRAY_ALPHA
-        || (colorType == PNG_COLOR_TYPE_GRAY && png_get_valid(pPng, pInfo, PNG_INFO_tRNS)))
-    {
-        png_set_gray_to_rgb(pPng);
-    }
-
-    // Sets the filler byte - if RGB it converts to RGBA
-    // png_set_filler(pPng, 0xFF, PNG_FILLER_AFTER);
-
-    int nNumberOfPasses = png_set_interlace_handling(pPng);
-
-    png_read_update_info(pPng, pInfo);
-    returnValue = png_get_IHDR(pPng, pInfo, &width, &height, &bitDepth, &colorType, nullptr,
-                               nullptr, nullptr);
-
-    if (returnValue != 1)
-        return false;
-
-    if (bitDepth != 8
-        || (colorType != PNG_COLOR_TYPE_RGB && colorType != PNG_COLOR_TYPE_RGB_ALPHA
-            && colorType != PNG_COLOR_TYPE_GRAY))
-    {
-        return false;
-    }
-
-    png_uint_32 res_x = 0;
-    png_uint_32 res_y = 0;
-    int unit_type = 0;
-    if (png_get_pHYs(pPng, pInfo, &res_x, &res_y, &unit_type) != 0
-        && unit_type == PNG_RESOLUTION_METER && res_x && res_y)
-    {
-        // convert into MapUnit::Map100thMM
-        prefSize = Size(static_cast<sal_Int32>((100000.0 * width) / res_x),
-                        static_cast<sal_Int32>((100000.0 * height) / res_y));
-    }
-
-    if (!bUseExistingBitmap)
-    {
-        switch (colorType)
-        {
-            case PNG_COLOR_TYPE_RGB:
-                aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-                break;
-            case PNG_COLOR_TYPE_RGBA:
-                aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-                aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
-                aBitmapAlpha.Erase(0); // opaque
-                break;
-            case PNG_COLOR_TYPE_GRAY:
-                aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP,
-                                 &Bitmap::GetGreyPalette(256));
-                break;
-            default:
-                abort();
-        }
-
-        if (bOnlyCreateBitmap)
-        {
-            if (!aBitmapAlpha.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-            else
-                aBitmapEx = BitmapEx(aBitmap);
-            if (!prefSize.IsEmpty())
-            {
-                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                aBitmapEx.SetPrefSize(prefSize);
-            }
-            rImportOutput.moBitmap = aBitmapEx;
-            return true;
-        }
-
-        pWriteAccessInstance = aBitmap;
-        if (!pWriteAccessInstance)
-            return false;
-        if (!aBitmapAlpha.IsEmpty())
-        {
-            pWriteAccessAlphaInstance = aBitmapAlpha;
-            if (!pWriteAccessAlphaInstance)
-                return false;
-        }
-    }
     BitmapScopedWriteAccess& pWriteAccess = pAccess ? *pAccess : pWriteAccessInstance;
     BitmapScopedWriteAccess& pWriteAccessAlpha
         = pAlphaAccess ? *pAlphaAccess : pWriteAccessAlphaInstance;
 
-    if (setjmp(png_jmpbuf(pPng)))
+    try
     {
+        if (colorType == PNG_COLOR_TYPE_RGB)
+        {
+            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+            if (eFormat == ScanlineFormat::N24BitTcBgr)
+                png_set_bgr(pPng);
+
+            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            {
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    png_read_row(pPng, pScanline, nullptr);
+                }
+            }
+        }
+        else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
+        {
+            size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
+            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
+            if (eFormat == ScanlineFormat::N24BitTcBgr)
+                png_set_bgr(pPng);
+
+            if (nNumberOfPasses == 1)
+            {
+                // optimise the common case, where we can use a buffer of only a single row
+                std::vector<png_byte> aRow(aRowSizeBytes, 0);
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
+                    png_bytep pRow = aRow.data();
+                    png_read_row(pPng, pRow, nullptr);
+                    size_t iAlpha = 0;
+                    size_t iColor = 0;
+                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                    {
+                        pScanline[iColor++] = pRow[i + 0];
+                        pScanline[iColor++] = pRow[i + 1];
+                        pScanline[iColor++] = pRow[i + 2];
+                        pScanAlpha[iAlpha++] = pRow[i + 3];
+                    }
+                }
+            }
+            else
+            {
+                std::vector<std::vector<png_byte>> aRows(height);
+                for (auto& rRow : aRows)
+                    rRow.resize(aRowSizeBytes, 0);
+                for (int pass = 0; pass < nNumberOfPasses; pass++)
+                {
+                    for (png_uint_32 y = 0; y < height; y++)
+                    {
+                        Scanline pScanline = pWriteAccess->GetScanline(y);
+                        Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
+                        png_bytep pRow = aRows[y].data();
+                        png_read_row(pPng, pRow, nullptr);
+                        size_t iAlpha = 0;
+                        size_t iColor = 0;
+                        for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                        {
+                            pScanline[iColor++] = pRow[i + 0];
+                            pScanline[iColor++] = pRow[i + 1];
+                            pScanline[iColor++] = pRow[i + 2];
+                            pScanAlpha[iAlpha++] = pRow[i + 3];
+                        }
+                    }
+                }
+            }
+        }
+        else if (colorType == PNG_COLOR_TYPE_GRAY)
+        {
+            for (int pass = 0; pass < nNumberOfPasses; pass++)
+            {
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    png_read_row(pPng, pScanline, nullptr);
+                }
+            }
+        }
+    }
+    catch (const std::runtime_error& ex)
+    {
+        std::cerr << "libpng error: " << ex.what() << std::endl;
+
         pWriteAccessInstance.reset();
         pWriteAccessAlphaInstance.reset();
 
@@ -526,91 +622,15 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         }
         return false;
     }
-
-    if (colorType == PNG_COLOR_TYPE_RGB)
-    {
-        ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-        if (eFormat == ScanlineFormat::N24BitTcBgr)
-            png_set_bgr(pPng);
-
-        for (int pass = 0; pass < nNumberOfPasses; pass++)
-        {
-            for (png_uint_32 y = 0; y < height; y++)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline(y);
-                png_read_row(pPng, pScanline, nullptr);
-            }
-        }
-    }
-    else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
-    {
-        size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
-        ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-        if (eFormat == ScanlineFormat::N24BitTcBgr)
-            png_set_bgr(pPng);
-
-        if (nNumberOfPasses == 1)
-        {
-            // optimise the common case, where we can use a buffer of only a single row
-            std::vector<png_byte> aRow(aRowSizeBytes, 0);
-            for (png_uint_32 y = 0; y < height; y++)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline(y);
-                Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                png_bytep pRow = aRow.data();
-                png_read_row(pPng, pRow, nullptr);
-                size_t iAlpha = 0;
-                size_t iColor = 0;
-                for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                {
-                    pScanline[iColor++] = pRow[i + 0];
-                    pScanline[iColor++] = pRow[i + 1];
-                    pScanline[iColor++] = pRow[i + 2];
-                    pScanAlpha[iAlpha++] = pRow[i + 3];
-                }
-            }
-        }
-        else
-        {
-            std::vector<std::vector<png_byte>> aRows(height);
-            for (auto& rRow : aRows)
-                rRow.resize(aRowSizeBytes, 0);
-            for (int pass = 0; pass < nNumberOfPasses; pass++)
-            {
-                for (png_uint_32 y = 0; y < height; y++)
-                {
-                    Scanline pScanline = pWriteAccess->GetScanline(y);
-                    Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
-                    png_bytep pRow = aRows[y].data();
-                    png_read_row(pPng, pRow, nullptr);
-                    size_t iAlpha = 0;
-                    size_t iColor = 0;
-                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                    {
-                        pScanline[iColor++] = pRow[i + 0];
-                        pScanline[iColor++] = pRow[i + 1];
-                        pScanline[iColor++] = pRow[i + 2];
-                        pScanAlpha[iAlpha++] = pRow[i + 3];
-                    }
-                }
-            }
-        }
-    }
-    else if (colorType == PNG_COLOR_TYPE_GRAY)
-    {
-        for (int pass = 0; pass < nNumberOfPasses; pass++)
-        {
-            for (png_uint_32 y = 0; y < height; y++)
-            {
-                Scanline pScanline = pWriteAccess->GetScanline(y);
-                png_read_row(pPng, pScanline, nullptr);
-            }
-        }
-    }
-
     // If an error is thrown when calling png_read_end
-    if (setjmp(png_jmpbuf(pPng)))
+    try
     {
+        png_read_end(pPng, pInfo);
+    }
+    catch (const std::runtime_error& ex)
+    {
+        std::cerr << "libpng error: " << ex.what() << std::endl;
+
         if (!bUseExistingBitmap)
         {
             pWriteAccessInstance.reset();
@@ -629,8 +649,6 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         // Return true in this case, as we read the bitmap
         return true;
     }
-
-    png_read_end(pPng, pInfo);
 
     if (!bUseExistingBitmap)
     {
@@ -784,9 +802,6 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
             return {};
     }
 }
-#if defined __GNUC__ && __GNUC__ <= 14 && !defined __clang__
-#pragma GCC diagnostic pop
-#endif
 
 } // anonymous namespace
 
