@@ -432,30 +432,24 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             break;
                         }
                     }
-                    rReq.Ignore();
-                    break;
                 }
-
-                ScGridWindow* pWin = pViewData->GetActiveWin();
-                if ( !pWin )
+                else
                 {
-                    rReq.Ignore();
-                    break;
+                    if (ScGridWindow* pWin = pViewData->GetActiveWin())
+                    {
+                        std::vector<UrlData> vUrls = pWin->GetEditUrls(pViewData->GetCurPos());
+                        if (!vUrls.empty())
+                        {
+                            for (UrlData& data : vUrls)
+                            {
+                                ScGlobal::OpenURL(data.aUrl, data.aTarget, true);
+                            }
+                            rReq.Done();
+                            break;
+                        }
+                    }
                 }
-
-                ScAddress aCell {pViewData->GetCurPos()};
-                std::vector<UrlData> vUrls = pWin->GetEditUrls(aCell);
-                if (vUrls.empty())
-                {
-                    rReq.Ignore();
-                    break;
-                }
-
-                for (UrlData& data : vUrls)
-                {
-                    ScGlobal::OpenURL(data.aUrl, data.aTarget, true);
-                }
-                rReq.Done();
+                rReq.Ignore();
             }
             break;
         case FID_RECALC:
