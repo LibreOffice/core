@@ -81,13 +81,13 @@ private:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    std::unique_ptr<BitmapEx> pBitmap;
+    std::unique_ptr<Bitmap> pBitmap;
     CTL_STATE m_nState;
     bool mbCompleteDisable : 1;
 
     SVX_DLLPRIVATE static void      InitSettings(vcl::RenderContext& rRenderContext);
     SVX_DLLPRIVATE void             InitRectBitmap();
-    SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
+    SVX_DLLPRIVATE Bitmap&          GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl(const Size& rSize);
 
     SvxRectCtl(const SvxRectCtl&) = delete;

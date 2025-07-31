@@ -500,8 +500,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    SAL_DLLPRIVATE bool Replace(
-                                const Color* pSearchColors,
+    bool Replace(const Color* pSearchColors,
                                 const Color* rReplaceColors,
                                 size_t nColorCount,
                                 sal_uInt8 const * pTols );

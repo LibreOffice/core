@@ -53,7 +53,7 @@ using namespace ::com::sun::star::accessibility;
 // Control for display and selection of the corner points and
 // mid point of an object
 
-BitmapEx& SvxRectCtl::GetRectBitmap()
+Bitmap& SvxRectCtl::GetRectBitmap()
 {
     if( !pBitmap )
         InitRectBitmap();
@@ -125,7 +125,7 @@ void SvxRectCtl::InitRectBitmap()
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap.reset(new BitmapEx(RID_SVXCTRL_RECTBTNS));
+    pBitmap.reset(new Bitmap(BitmapEx(RID_SVXCTRL_RECTBTNS)));
 
     // set bitmap-colors
     Color aColorAry1[7];
@@ -162,7 +162,7 @@ void SvxRectCtl::InitRectBitmap()
     }
 #endif
 
-    pBitmap->Replace( aColorAry1, aColorAry2, 7 );
+    pBitmap->Replace( aColorAry1, aColorAry2, 7, nullptr );
 }
 
 void SvxRectCtl::StyleUpdated()
@@ -321,7 +321,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     bool bNoHorz = bool(m_nState & CTL_STATE::NOHORZ);
     bool bNoVert = bool(m_nState & CTL_STATE::NOVERT);
 
-    BitmapEx& rBitmap = GetRectBitmap();
+    Bitmap& rBitmap = GetRectBitmap();
 
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (IsCompletelyDisabled())
