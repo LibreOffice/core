@@ -257,6 +257,15 @@ public:
                                int /*nTileTwipHeight*/)
     {}
 
+    /**
+     * Provide the zoom level that will used during save/export
+     *
+     * @param nExportZoom - the zoom level as a percent
+     */
+    virtual void setExportZoom(int /*nExportZoom*/)
+    {
+    }
+
     /// @see lok::Document::setClientVisibleArea().
     virtual void setClientVisibleArea(const tools::Rectangle& /*rRectangle*/)
     {

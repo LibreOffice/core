@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/lok.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -1781,6 +1782,12 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
     if(!xViewDataSupplier.is())
         return;
+
+    std::optional<css::uno::ContextLayer> oLayer;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        oLayer.emplace(comphelper::NewFlagContext(u"IsLOKExport"_ustr));
+    }
 
     uno::Reference<container::XIndexAccess> xIndexAccess;
     xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence

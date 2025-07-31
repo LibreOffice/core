@@ -1117,6 +1117,19 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
         pDrawView->resetGridOffsetsForAllSdrPageViews();
 }
 
+void ScModelObj::setExportZoom(int nExportZoom)
+{
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return;
+
+    if (pViewData->GetZoomType() != SvxZoomType::PERCENT)
+        return;
+
+    assert(nExportZoom > 0 && nExportZoom <= SAL_MAX_UINT16);
+    pViewData->SetExportZoom(nExportZoom);
+}
+
 void ScModelObj::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::JsonWriter& rJsonWriter)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();

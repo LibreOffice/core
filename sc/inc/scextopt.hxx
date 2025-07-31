@@ -57,6 +57,7 @@ struct ScExtTabSettings
     Color               maGridColor;        ///< Grid color.
     tools::Long                mnNormalZoom;       ///< Zoom in percent for normal view.
     tools::Long                mnPageZoom;         ///< Zoom in percent for pagebreak preview.
+    std::optional<sal_uInt16> moExportZoom; ///< Zoom in percent - use when NormalZoom isn't accurate
     bool                mbSelected;         ///< true = Sheet is selected.
     bool                mbFrozenPanes;      ///< true = Frozen panes; false = Normal splits.
     bool                mbPageMode;         ///< true = Pagebreak mode; false = Normal view mode.

@@ -383,7 +383,9 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
 
         // view mode and zoom
         maData.mbPageMode       = (GetBiff() == EXC_BIFF8) && rTabSett.mbPageMode;
-        maData.mnNormalZoom     = lclGetXclZoom( rTabSett.mnNormalZoom, EXC_WIN2_NORMALZOOM_DEF );
+        const tools::Long nNormalZoom
+            = rTabSett.moExportZoom ? *rTabSett.moExportZoom : rTabSett.mnNormalZoom;
+        maData.mnNormalZoom = lclGetXclZoom(nNormalZoom, EXC_WIN2_NORMALZOOM_DEF);
         maData.mnPageZoom       = lclGetXclZoom( rTabSett.mnPageZoom, EXC_WIN2_PAGEZOOM_DEF );
         maData.mnCurrentZoom    = maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom;
     }

@@ -364,6 +364,9 @@ public:
     /// @see vcl::ITiledRenderable::setClientZoom().
     virtual void setClientZoom(int nTilePixelWidth, int nTilePixelHeight, int nTileTwipWidth, int nTileTwipHeight) override;
 
+    /// @see vcl::ITiledRenderable::setExportZoom().
+    virtual void setExportZoom(int nExportZoom) override;
+
     /// @see vcl::ITiledRenderable::setOutlineState().
     virtual void setOutlineState(bool bColumn, int nLevel, int nIndex, bool bHidden) override;
 
