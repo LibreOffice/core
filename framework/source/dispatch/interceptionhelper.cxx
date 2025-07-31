@@ -130,7 +130,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     {
         xInterceptor->setMasterDispatchProvider(xThis   );
         xInterceptor->setSlaveDispatchProvider (m_xSlave);
-        m_lInterceptionRegs.push_back(aInfo);
+        m_lInterceptionRegs.push_back(std::move(aInfo));
     }
 
     // b) OK - there is at least one interceptor already registered.
@@ -147,7 +147,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
         xInterceptor->setSlaveDispatchProvider (xSlaveD           );
         xSlaveI->setMasterDispatchProvider     (aInfo.xInterceptor);
 
-        m_lInterceptionRegs.push_front(aInfo);
+        m_lInterceptionRegs.push_front(std::move(aInfo));
     }
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);

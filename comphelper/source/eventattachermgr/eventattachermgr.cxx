@@ -579,7 +579,7 @@ void ImplEventAttacherManager::attach(std::unique_lock<std::mutex>& l, sal_Int32
     AttachedObject_Impl aTmp;
     aTmp.xTarget = xObject;
     aTmp.aHelper = Helper;
-    aCurrentPosition->aObjList.push_back( aTmp );
+    aCurrentPosition->aObjList.push_back(std::move(aTmp));
 
     AttachedObject_Impl & rCurObj = aCurrentPosition->aObjList.back();
     rCurObj.aAttachedListenerSeq = std::vector< Reference< XEventListener > >( aCurrentPosition->aEventList.size() );

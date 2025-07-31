@@ -212,11 +212,11 @@ void PlaceEditDialog::InitDetails( )
     // Create WebDAV / SSH details control
     std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
     xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xDavDetails);
+    m_aDetailsContainers.push_back(std::move(xDavDetails));
 
     std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "sftp"));
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xSshDetails);
+    m_aDetailsContainers.push_back(std::move(xSshDetails));
 
     // Remove Windows Share entry from dialog on Windows OS, where it's non-functional
 #if defined(_WIN32)
@@ -227,7 +227,7 @@ void PlaceEditDialog::InitDetails( )
     // Create Windows Share control
     std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
     xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xSmbDetails);
+    m_aDetailsContainers.push_back(std::move(xSmbDetails));
 #endif
 
     // Set default to first value

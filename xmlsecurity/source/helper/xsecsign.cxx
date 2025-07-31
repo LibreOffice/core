@@ -222,7 +222,7 @@ void XSecController::setX509Certificate(
         isi.signatureInfor.X509Datas.back().back().X509Certificate = ouX509Cert;
         isi.signatureInfor.X509Datas.back().back().CertDigest = ouX509CertDigest;
         isi.signatureInfor.eAlgorithmID = eAlgorithmID;
-        m_vInternalSignatureInformations.push_back( isi );
+        m_vInternalSignatureInformations.push_back(std::move(isi));
     }
     else
     {
@@ -328,7 +328,7 @@ void XSecController::setSignatureLineValidGraphic(sal_Int32 nSecurityId,
     {
         InternalSignatureInformation aInformation(nSecurityId, nullptr);
         aInformation.signatureInfor.aValidSignatureImage = xValidGraphic;
-        m_vInternalSignatureInformations.push_back(aInformation);
+        m_vInternalSignatureInformations.push_back(std::move(aInformation));
     }
     else
     {
@@ -347,7 +347,7 @@ void XSecController::setSignatureLineInvalidGraphic(
     {
         InternalSignatureInformation aInformation(nSecurityId, nullptr);
         aInformation.signatureInfor.aInvalidSignatureImage = xInvalidGraphic;
-        m_vInternalSignatureInformations.push_back(aInformation);
+        m_vInternalSignatureInformations.push_back(std::move(aInformation));
     }
     else
     {

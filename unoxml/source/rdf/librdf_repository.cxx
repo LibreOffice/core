@@ -1711,7 +1711,7 @@ librdf_Repository::getStatementsRDFa(
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const std::shared_ptr<librdf_stream> pStream(
+    std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1727,7 +1727,7 @@ librdf_Repository::getStatementsRDFa(
             "librdf_stream_add_map failed"_ustr, *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream,
+    return new librdf_GraphResult(this, m_aMutex, std::move(pStream),
                                   std::shared_ptr<librdf_node>());
 }
 
@@ -2302,12 +2302,12 @@ librdf_TypeConverter::Statement librdf_TypeConverter::extractStatement_NoLock(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
-    std::shared_ptr<Resource> const pSubject(
+    std::shared_ptr<Resource> pSubject(
             extractResource_NoLock(i_xSubject));
-    std::shared_ptr<URI> const pPredicate(
+    std::shared_ptr<URI> pPredicate(
         std::dynamic_pointer_cast<URI>(extractResource_NoLock(i_xPredicate)));
-    std::shared_ptr<Node> const pObject(extractNode_NoLock(i_xObject));
-    return Statement(pSubject, pPredicate, pObject);
+    std::shared_ptr<Node> pObject(extractNode_NoLock(i_xObject));
+    return Statement(std::move(pSubject), std::move(pPredicate), std::move(pObject));
 }
 
 librdf_statement* librdf_TypeConverter::mkStatement_Lock(librdf_world* i_pWorld,

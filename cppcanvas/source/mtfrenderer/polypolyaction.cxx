@@ -153,14 +153,14 @@ namespace cppcanvas::internal
                 {
                     // TODO(E3): Use DBO's finalizer here,
                     // fillPolyPolygon() might throw
-                    const uno::Sequence< double > aTmpColor( aLocalState.DeviceColor );
+                    uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
                     rCachedPrimitive = mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
                                                                                   mpCanvas->getViewState(),
                                                                                   aLocalState );
 
-                    aLocalState.DeviceColor = aTmpColor;
+                    aLocalState.DeviceColor = std::move(aTmpColor);
                 }
 
                 if( aLocalState.DeviceColor.hasElements() )

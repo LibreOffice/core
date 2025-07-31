@@ -116,16 +116,14 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
-    css::frame::DispatchStatement aStatement( aURL.Complete, OUString(), lArguments, 0, false );
-    m_aStatements.push_back( aStatement );
+    m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, false);
 }
 
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     // last parameter must be set to true -> it's a comment
-    css::frame::DispatchStatement aStatement( aURL.Complete, OUString(), lArguments, 0, true );
-    m_aStatements.push_back( aStatement );
+    m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, true);
 }
 
 void SAL_CALL DispatchRecorder::endRecording()

@@ -42,15 +42,15 @@ namespace sdr::contact
             // handle ghosted
             if(isPrimitiveGhosted(rDisplayInfo))
             {
-                const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                const ::basegfx::BColorModifierSharedPtr aBColorModifier =
+                ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
+                ::basegfx::BColorModifierSharedPtr aBColorModifier =
                     std::make_shared<basegfx::BColorModifier_interpolate>(
                         aRGBWhite,
                         0.5);
-                const drawinglayer::primitive3d::Primitive3DReference xReference(
+                drawinglayer::primitive3d::Primitive3DReference xReference(
                     new drawinglayer::primitive3d::ModifiedColorPrimitive3D(
                         xRetval,
-                        aBColorModifier));
+                        std::move(aBColorModifier)));
 
                 xRetval = { xReference };
             }

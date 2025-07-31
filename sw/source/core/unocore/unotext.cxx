@@ -2236,7 +2236,7 @@ SwXText::convertToSwTable(
             ConvertCell(pRow[nCell], aRowNodes, pLastCell);
         }
         assert(!aRowNodes.empty());
-        aTableNodes.push_back(aRowNodes);
+        aTableNodes.push_back(std::move(aRowNodes));
     }
 
     std::vector< TableColumnSeparators >

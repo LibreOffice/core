@@ -66,7 +66,7 @@ void XMLFetchThread::execute()
         aRangeLink.maPos = ScAddress(0, 0, 0);
         aRangeLink.maFieldPaths.push_back(OUStringToOString(maID, RTL_TEXTENCODING_UTF8));
         maParam.maRangeLinks.clear();
-        maParam.maRangeLinks.push_back(aRangeLink);
+        maParam.maRangeLinks.push_back(std::move(aRangeLink));
     }
     // Do the import.
     SolarMutexGuard aGuard;

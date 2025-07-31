@@ -168,8 +168,7 @@ void XMLEventsImportContext::AddEventValues(
     }
     else
     {
-        EventNameValuesPair aPair(rEventName, rValues);
-        m_aCollectEvents.push_back(aPair);
+        m_aCollectEvents.emplace_back(rEventName, rValues);
     }
 }
 

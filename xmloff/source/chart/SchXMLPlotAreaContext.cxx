@@ -1272,7 +1272,7 @@ void SchXMLStatisticsObjectContext::startFastElement (sal_Int32 /*Element*/,
             break;
     }
 
-    mrStyleVector.push_back( aStyle );
+    mrStyleVector.push_back(std::move(aStyle));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

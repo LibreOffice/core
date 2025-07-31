@@ -339,15 +339,15 @@ void ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInf
         // handle ghosted
         if(isPrimitiveGhosted(rDisplayInfo))
         {
-            const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-            const basegfx::BColorModifierSharedPtr aBColorModifier =
+            basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
+            basegfx::BColorModifierSharedPtr aBColorModifier =
                 std::make_shared<basegfx::BColorModifier_interpolate>(
                     aRGBWhite,
                     0.5);
             xRetval = drawinglayer::primitive2d::Primitive2DContainer{
                     new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                         std::move(xRetval),
-                        aBColorModifier)
+                        std::move(aBColorModifier))
             };
         }
     }

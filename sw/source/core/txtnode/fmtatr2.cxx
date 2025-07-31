@@ -853,7 +853,7 @@ std::shared_ptr<MetaField>
 MetaFieldManager::makeMetaField(SwFormatMeta * const i_pFormat,
         const sal_uInt32 nNumberFormat, const bool bIsFixedLanguage)
 {
-    const std::shared_ptr<MetaField> pMetaField(
+    std::shared_ptr<MetaField> pMetaField(
         new MetaField(i_pFormat, nNumberFormat, bIsFixedLanguage) );
     m_MetaFields.push_back(pMetaField);
     return pMetaField;
