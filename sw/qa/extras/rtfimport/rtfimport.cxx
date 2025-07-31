@@ -2053,6 +2053,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166191)
     CPPUNIT_ASSERT_EQUAL(12.0f, getProperty<float>(textRun, u"CharHeight"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167710)
+{
+    createSwDoc("tdf167710.rtf");
+    // problem was that text was erroneously imported
+    CPPUNIT_ASSERT(getParagraph(1)->getString().isEmpty());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
