@@ -24,6 +24,7 @@ class QtInstanceSpinButton : public QtInstanceEntry, public virtual weld::SpinBu
 
 public:
     QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox);
+    virtual ~QtInstanceSpinButton();
 
     virtual QWidget* getQWidget() const override;
 

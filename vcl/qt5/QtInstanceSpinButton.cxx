@@ -41,6 +41,12 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
     });
 }
 
+QtInstanceSpinButton::~QtInstanceSpinButton()
+{
+    m_pSpinBox->setFormatValueFunction(nullptr);
+    m_pSpinBox->setParseTextFunction(nullptr);
+}
+
 QWidget* QtInstanceSpinButton::getQWidget() const { return m_pSpinBox; }
 
 void QtInstanceSpinButton::set_floating_point_value(double fValue)

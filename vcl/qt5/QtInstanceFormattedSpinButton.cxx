@@ -90,6 +90,9 @@ void QtInstanceFormattedSpinButton::SetFormatter(weld::EntryFormatter* pFormatte
 
 QtInstanceFormattedSpinButton::~QtInstanceFormattedSpinButton()
 {
+    m_pSpinBox->setFormatValueFunction(nullptr);
+    m_pSpinBox->setParseTextFunction(nullptr);
+
     m_pFormatter = nullptr;
     m_xOwnFormatter.reset();
 }
