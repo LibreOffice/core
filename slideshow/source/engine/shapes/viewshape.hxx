@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWSHAPE_HXX
 
-#include "canvas/elapsedtime.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "sal/types.h"
-#include "svx/sdr/animation/objectanimator.hxx"
+#include "vcl_canvas/customsprite.hxx"
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/bitmap.hxx>
 

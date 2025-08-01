@@ -576,7 +576,7 @@ Window::~Window()
     return mpWindowImpl ? mpWindowImpl->mxOutDev.get() : nullptr;
 }
 
-std::shared_ptr<vcl_cairocanvas::SpriteCanvas> Window::GetSpriteCanvas()
+std::shared_ptr<::vcl_canvas::SpriteCanvas> Window::GetSpriteCanvas()
 {
     const Sequence< Any > aArg{
         Any(reinterpret_cast<sal_Int64>(GetOutDev())),
@@ -586,7 +586,6 @@ std::shared_ptr<vcl_cairocanvas::SpriteCanvas> Window::GetSpriteCanvas()
         GetOutDev()->GetSystemGfxDataAny()
     };
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    // auto pSpriteCanvas = std::make_shared<vcl_cairocanvas::SpriteCanvas>(aArg, xContext);
     auto pSpriteCanvas = std::shared_ptr<vcl_cairocanvas::SpriteCanvas>(
         new vcl_cairocanvas::SpriteCanvas(aArg, xContext)
     );

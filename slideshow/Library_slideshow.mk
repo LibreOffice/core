@@ -16,6 +16,7 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/source/ui/slideshow \
+    -I$(SRCDIR)/vcl/canvas_inc \
     -I$(SRCDIR)/canvas/source/cairo \
     -I$(SRCDIR)/canvas/inc \
     -I$(SRCDIR)/svx/inc \

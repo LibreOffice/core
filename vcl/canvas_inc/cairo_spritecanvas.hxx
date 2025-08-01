@@ -38,7 +38,6 @@
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
 #include "cairo_spritecanvashelper.hxx"
-#include "com/sun/star/awt/XWindowListener.hdl"
 
 namespace vcl_cairocanvas
 {

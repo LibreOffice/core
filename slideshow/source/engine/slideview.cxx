@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "vcl_canvas/spritecanvas.hxx"
+#include "slideshowviewimpl.hxx"
 #include <comphelper/diagnose_ex.hxx>
 #include <canvas/canvastools.hxx>
 
@@ -622,6 +624,11 @@ private:
         return mpOutputCanvas;
     }
 
+    virtual vcl_canvas::SpriteCanvasSharedPtr getSpriteCanvas() const override
+    {
+        return mpParentView->getSpriteCanvas();
+    }
+
     virtual void setClip( const basegfx::B2DPolyPolygon& rClip ) override
     {
         basegfx::B2DPolyPolygon aNewClip = prepareClip( rClip );
@@ -682,6 +689,7 @@ private:
     virtual void clear() const override;
     virtual void clearAll() const override;
     virtual cppcanvas::CanvasSharedPtr getCanvas() const override;
+    virtual vcl_canvas::SpriteCanvasSharedPtr getSpriteCanvas() const override;
     virtual cppcanvas::CustomSpriteSharedPtr createSprite( const ::basegfx::B2DSize& rSpriteSizePixel,
                                                            double                    nPriority ) const override;
     virtual void setPriority( const basegfx::B1DRange& rRange ) override;
@@ -911,6 +919,13 @@ cppcanvas::CanvasSharedPtr SlideView::getCanvas() const
                       "SlideView::getCanvas(): Disposed" );
 
     return mpCanvas;
+}
+
+vcl_canvas::SpriteCanvasSharedPtr SlideView::getSpriteCanvas() const
+{
+    rtl::Reference< sd::SlideShowView > pImpl = static_cast< sd::SlideShowView* >( mxView.get() );
+    return pImpl->getSpriteCanvas();
+    // return vcl_canvas::SpriteCanvasSharedPtr();
 }
 
 cppcanvas::CustomSpriteSharedPtr SlideView::createSprite(

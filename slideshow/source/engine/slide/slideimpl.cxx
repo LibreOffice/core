@@ -453,8 +453,8 @@ void SlideImpl::show( bool bSlideBackgroundPainted )
     // render slide to screen, if requested
     if( !bSlideBackgroundPainted )
     {
-        for( const auto& rContext : maContext.mrViewContainer )
-            slideRenderer( this, rContext );
+        /* for( const auto& rContext : maContext.mrViewContainer )
+            slideRenderer( this, rContext ); */
 
         maContext.mrScreenUpdater.notifyUpdate();
     }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <com/sun/star/rendering/XAnimation.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include "canvas.hxx"
 #include "customsprite.hxx"

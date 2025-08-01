@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_INC_VIEWLAYER_HXX
 
+#include "vcl_canvas/spritecanvas.hxx"
 #include <sal/config.h>
 #include <memory>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
@@ -66,6 +67,7 @@ namespace slideshow::internal
                 long as this object is alive.
             */
             virtual cppcanvas::CanvasSharedPtr getCanvas() const = 0;
+            virtual vcl_canvas::SpriteCanvasSharedPtr getSpriteCanvas() const = 0;
 
             /** Clear the clipped view layer area
 

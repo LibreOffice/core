@@ -32,6 +32,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
+#include <vcl_canvas/spritecanvas.hxx>
 
 struct ImplSVEvent;
 struct ImplWinData;
@@ -83,10 +84,6 @@ namespace com::sun::star {
 
 namespace vcl {
     struct ControlLayoutData;
-}
-
-namespace vcl_cairocanvas {
-    class SpriteCanvas;
 }
 
 namespace svt { class PopupWindowControllerImpl; }
@@ -555,7 +552,7 @@ public:
                    void                 DecModalCount();
 
     SAL_DLLPRIVATE static void          ImplCalcSymbolRect( tools::Rectangle& rRect );
-    std::shared_ptr<vcl_cairocanvas::SpriteCanvas> GetSpriteCanvas();
+    std::shared_ptr<::vcl_canvas::SpriteCanvas> GetSpriteCanvas();
 
 protected:
 

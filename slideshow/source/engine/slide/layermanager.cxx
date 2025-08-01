@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <memory>
 #include <utility>
 
 #include "layermanager.hxx"
@@ -573,6 +574,13 @@ namespace slideshow::internal
                     ENSURE_OR_THROW( false,
                                       "DummyLayer::createSprite(): This method is not supposed to be called!" );
                     return ::cppcanvas::CustomSpriteSharedPtr();
+                }
+
+                vcl_canvas::SpriteCanvasSharedPtr getSpriteCanvas() const override
+                {
+                    ENSURE_OR_THROW( false,
+                                      "DummyLayer::getSpriteCanvas(): This method is not supposed to be called!" );
+                    return std::shared_ptr<vcl_canvas::SpriteCanvas>();
                 }
 
                 virtual void setPriority( const basegfx::B1DRange& /*rRange*/ ) override
