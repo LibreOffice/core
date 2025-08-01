@@ -48,14 +48,8 @@ int QtInstanceIconView::get_item_width() const
 
 void QtInstanceIconView::set_item_width(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceIconView::insert(int, const OUString*, const OUString*, const OUString*,
-                                weld::TreeIter*)
-{
-    assert(false && "Not implemented yet");
-}
-
 void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
-                                const Bitmap* pIcon, weld::TreeIter* pRet)
+                                const QPixmap* pIcon, weld::TreeIter* pRet)
 {
     assert(!pRet && "Support for pRet param not implemented yet");
     (void)pRet;
@@ -73,15 +67,31 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
             pItem->setData(toQString(*pId), ROLE_ID);
         if (pIcon)
         {
-            pItem->setIcon(QIcon(toQPixmap(BitmapEx(*pIcon))));
+            pItem->setIcon(QIcon(*pIcon));
             // set list view icon size to avoid downscaling
-            const QSize aIconSize
-                = m_pListView->iconSize().expandedTo(toQSize(pIcon->GetSizePixel()));
+            const QSize aIconSize = m_pListView->iconSize().expandedTo(pIcon->size());
             m_pListView->setIconSize(aIconSize);
         }
 
         m_pModel->insertRow(nPos, pItem);
     });
+}
+
+void QtInstanceIconView::insert(int, const OUString*, const OUString*, const OUString*,
+                                weld::TreeIter*)
+{
+    assert(false && "Not implemented yet");
+}
+
+void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
+                                const Bitmap* pIcon, weld::TreeIter* pRet)
+{
+    std::optional<QPixmap> oPixmap;
+    if (pIcon)
+        oPixmap = toQPixmap(BitmapEx(*pIcon));
+
+    const QPixmap* pPixmapIcon = oPixmap.has_value() ? &oPixmap.value() : nullptr;
+    insert(nPos, pStr, pId, pPixmapIcon, pRet);
 }
 
 void QtInstanceIconView::insert_separator(int, const OUString*)

@@ -75,6 +75,9 @@ public:
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 
 private:
+    void insert(int nPos, const OUString* pStr, const OUString* pId, const QPixmap* pIcon,
+                weld::TreeIter* pRet);
+
     QModelIndex modelIndex(int nPos) const;
     QModelIndex modelIndex(const weld::TreeIter& rIter) const;
     static int position(const weld::TreeIter& rIter);
