@@ -349,6 +349,8 @@ void PlaceEditDialog::SelectType(bool bSkipSeparator)
         m_xCurrentDetails->set_visible(false);
 
     const int nPos = m_xLBServerType->get_active( );
+    if (nPos < 0)
+        return;
     m_xCurrentDetails = m_aDetailsContainers[nPos];
     m_nCurrentType = nPos;
 
