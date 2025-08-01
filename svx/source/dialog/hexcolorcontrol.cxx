@@ -64,9 +64,10 @@ void HexColorControl::SetColor(Color nColor)
     if (sColor == m_xEntry->get_text())
         return;
     int nStartPos, nEndPos;
-    m_xEntry->get_selection_bounds(nStartPos, nEndPos);
+    const bool bSelection = m_xEntry->get_selection_bounds(nStartPos, nEndPos);
     m_xEntry->set_text(sColor);
-    m_xEntry->select_region(nStartPos, nEndPos);
+    if (bSelection)
+        m_xEntry->select_region(nStartPos, nEndPos);
 }
 
 Color HexColorControl::GetColor() const
