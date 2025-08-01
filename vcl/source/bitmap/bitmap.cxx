@@ -1797,7 +1797,10 @@ std::pair<Bitmap, AlphaMask> Bitmap::SplitIntoColorAndAlpha() const
 {
     assert(getPixelFormat() == vcl::PixelFormat::N32_BPP && "only valid to call this when this is a 32-bit combined color+alpha bitmap");
     Bitmap aColorBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
+    aColorBmp.SetPrefSize(GetPrefSize());
+    aColorBmp.SetPrefMapMode(GetPrefMapMode());
     AlphaMask aAlphaBmp(GetSizePixel());
+    aAlphaBmp.SetPrefMapMode(GetPrefMapMode());
 
     // We will probably need to make this more efficient by pushing it down to the *SalBitmap implementations,
     // but for now, do the simple and safe thing.
