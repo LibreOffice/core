@@ -57,7 +57,7 @@ namespace pcr
         css::uno::Reference< css::inspection::XPropertyControl >
                                 m_xControl;
         weld::Container*        m_pInitialControlParent;
-        weld::Container*        m_pParent;
+        weld::Box*              m_pParent;
         weld::Widget*           m_pControlWindow;
         weld::Button*           m_pBrowseButton;
         weld::Button*           m_pAdditionalBrowseButton;
@@ -68,7 +68,7 @@ namespace pcr
         bool                    m_bReadOnly;
 
     public:
-        OBrowserLine(OUString aEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+        OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
                      weld::Container* pInitialControlParent);
         ~OBrowserLine();
 

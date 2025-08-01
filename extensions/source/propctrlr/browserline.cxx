@@ -51,7 +51,7 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    OBrowserLine::OBrowserLine(OUString aEntryName, weld::Container* pParent, weld::SizeGroup* pLabelGroup,
+    OBrowserLine::OBrowserLine(OUString aEntryName, weld::Box* pParent, weld::SizeGroup* pLabelGroup,
                                weld::Container* pInitialControlParent)
         : m_sEntryName(std::move(aEntryName))
         , m_xBuilder(Application::CreateBuilder(pParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
