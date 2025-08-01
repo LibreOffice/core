@@ -112,12 +112,6 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Pl
     m_xFTPasswordLabel->hide();
     m_xCBPassword->hide();
 
-    m_xBTOk->connect_clicked( LINK( this, PlaceEditDialog, OKHdl) );
-    m_xBTDelete->connect_clicked( LINK( this, PlaceEditDialog, DelHdl) );
-
-    m_xEDServerName->connect_changed( LINK( this, PlaceEditDialog, ModifyHdl) );
-    m_xLBServerType->connect_changed( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
-
     InitDetails( );
 
     m_xEDServerName->set_text(rPlace->GetName());
@@ -144,6 +138,12 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Pl
 
     // In edit mode user can't change connection type
     m_xTypeGrid->hide();
+
+    m_xBTOk->connect_clicked(LINK(this, PlaceEditDialog, OKHdl));
+    m_xBTDelete->connect_clicked(LINK(this, PlaceEditDialog, DelHdl));
+
+    m_xEDServerName->connect_changed(LINK(this, PlaceEditDialog, ModifyHdl));
+    m_xLBServerType->connect_changed(LINK(this, PlaceEditDialog, SelectTypeHdl));
 }
 
 PlaceEditDialog::~PlaceEditDialog()
@@ -294,12 +294,12 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditHdl, DetailsContainer*, void )
             sLabel = sLabel.replaceFirst( "$service$", m_xLBServerType->get_active_text() );
 
             m_xEDServerName->set_text( sLabel );
-            m_bLabelChanged = false;
         }
         else
         {
             m_xEDServerName->set_text( m_xLBServerType->get_active_text( ) );
         }
+        m_bLabelChanged = false;
     }
 
     OUString sUrl = GetServerUrl( );
