@@ -925,7 +925,7 @@ ReadState GIFReader::ReadGIF(ImportOutput& rImportOutput)
     if (aAnimation.Count() == 1)
     {
         rImportOutput.mbIsAnimated = false;
-        rImportOutput.moBitmap = aAnimation.Get(0).maBitmapEx;
+        rImportOutput.moBitmap = Bitmap(aAnimation.Get(0).maBitmapEx);
 
         if (aPrefSize.Width() && aPrefSize.Height())
         {

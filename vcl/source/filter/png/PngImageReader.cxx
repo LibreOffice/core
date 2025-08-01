@@ -690,11 +690,11 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             bool bSuccess = reader(aFrameStream, aFrameImportOutput);
             if (!bSuccess)
                 return false;
-            BitmapEx aFrameBitmapEx = *aFrameImportOutput.moBitmap;
+            Bitmap aFrameBitmap = *aFrameImportOutput.moBitmap;
             Point aStartPoint(aFctlChunk->x_offset, aFctlChunk->y_offset);
             Size aSize(aFctlChunk->width, aFctlChunk->height);
             AnimationFrame aAnimationFrame(
-                aFrameBitmapEx, aStartPoint, aSize,
+                BitmapEx(aFrameBitmap), aStartPoint, aSize,
                 NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
             aAnimation.Insert(aAnimationFrame);
         }
@@ -775,7 +775,7 @@ bool PngImageReader::read(Bitmap& rBitmap)
     ImportOutput aImportOutput;
     bool bRet = reader(mrStream, aImportOutput);
     if (bRet)
-        rBitmap = Bitmap(*aImportOutput.moBitmap);
+        rBitmap = *aImportOutput.moBitmap;
     return bRet;
 }
 
@@ -787,7 +787,7 @@ Bitmap PngImageReader::read()
     if (read(aImportOutput))
     {
         if (!aImportOutput.mbIsAnimated)
-            return Bitmap(*aImportOutput.moBitmap);
+            return *aImportOutput.moBitmap;
         else
             return Bitmap(aImportOutput.moAnimation->GetBitmapEx());
     }

@@ -248,7 +248,7 @@ ReadState JPEGReader::Read(ImportOutput& rImportOutput, GraphicFilterImportFlags
     if (bUseExistingBitmap || !mpBitmap->IsEmpty())
     {
         if (!bUseExistingBitmap)
-            rImportOutput.moBitmap = BitmapEx(*mpBitmap);
+            rImportOutput.moBitmap = *mpBitmap;
 
         bRet = true;
     }

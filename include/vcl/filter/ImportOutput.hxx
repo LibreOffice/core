@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/gdimtf.hxx>
 
@@ -18,7 +18,7 @@ class VCL_DLLPUBLIC ImportOutput
 {
 public:
     bool mbIsAnimated = false;
-    std::optional<BitmapEx> moBitmap;
+    std::optional<Bitmap> moBitmap;
     std::optional<Animation> moAnimation;
     std::optional<GDIMetaFile> moGDIMetaFile;
 };

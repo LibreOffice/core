@@ -570,7 +570,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 
                     if (ImportJPEG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                     {
-                        Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pImportOutput->moBitmap->GetBitmap());
+                        Bitmap& rBitmap = *rContext.m_pImportOutput->moBitmap;
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
@@ -586,8 +586,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                     rContext.m_eLinkType = GfxLinkType::NativePng;
                     if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                     {
-                        const BitmapEx& rBitmapEx = *rContext.m_pImportOutput->moBitmap;
-                        Bitmap& rBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmap());
+                        Bitmap& rBitmap = *rContext.m_pImportOutput->moBitmap;
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
@@ -957,7 +956,7 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
     }
     else
     {
-        Bitmap& rBitmap = const_cast<Bitmap&>(aImportOutput.moBitmap->GetBitmap());
+        Bitmap& rBitmap = *aImportOutput.moBitmap;
         BitmapScopedWriteAccess pWriteAccess(rBitmap);
         rStream.Seek(nPosition);
         if (!ImportJPEG(rStream, aImportOutput, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess))

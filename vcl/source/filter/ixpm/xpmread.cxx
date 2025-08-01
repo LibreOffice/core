@@ -111,7 +111,7 @@ private:
 public:
     explicit XPMReader(SvStream& rStream);
 
-    ReadState ReadXPM(BitmapEx& rBitmapEx);
+    ReadState ReadXPM(Bitmap& rBitmap);
 };
 
 }
@@ -122,7 +122,7 @@ XPMReader::XPMReader(SvStream& rStream)
 {
 }
 
-ReadState XPMReader::ReadXPM(BitmapEx& rBitmapEx)
+ReadState XPMReader::ReadXPM(Bitmap& rBitmap)
 {
     if (!mrStream.good())
         return XPMREAD_ERROR;
@@ -226,11 +226,11 @@ ReadState XPMReader::ReadXPM(BitmapEx& rBitmapEx)
         if (mpMaskWriterAccess)
         {
             mpMaskWriterAccess.reset();
-            rBitmapEx = BitmapEx(maBitmap, maMaskBitmap);
+            rBitmap = Bitmap(BitmapEx(maBitmap, maMaskBitmap));
         }
         else
         {
-            rBitmapEx = BitmapEx(maBitmap);
+            rBitmap = maBitmap;
         }
         eReadState = XPMREAD_OK;
     }
@@ -639,12 +639,12 @@ VCL_DLLPUBLIC bool ImportXPM(SvStream& rStream, ImportOutput& rImportOutput)
 {
     XPMReader aXPMReader(rStream);
 
-    BitmapEx aBitmapEx;
-    ReadState eReadState = aXPMReader.ReadXPM(aBitmapEx);
+    Bitmap aBitmap;
+    ReadState eReadState = aXPMReader.ReadXPM(aBitmap);
 
     if (eReadState == XPMREAD_ERROR)
         return false;
-    rImportOutput.moBitmap = aBitmapEx;
+    rImportOutput.moBitmap = aBitmap;
     return true;
 }
 

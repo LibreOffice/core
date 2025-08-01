@@ -65,7 +65,7 @@ public:
 
     explicit XBMReader(SvStream& rStream);
 
-    ReadState ReadXBM(BitmapEx& rBitmapEx);
+    ReadState ReadXBM(Bitmap& rBitmap);
 };
 
 }
@@ -261,7 +261,7 @@ void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
     }
 }
 
-ReadState XBMReader::ReadXBM(BitmapEx& rBitmapEx)
+ReadState XBMReader::ReadXBM(Bitmap& rBitmap)
 {
     if (!mrStream.good())
         return XBMREAD_ERROR;
@@ -339,7 +339,7 @@ ReadState XBMReader::ReadXBM(BitmapEx& rBitmapEx)
 
         mpWriteAccess.reset();
         aBlackBmp.Erase( COL_BLACK );
-        rBitmapEx = BitmapEx(aBlackBmp, maBitmap);
+        rBitmap = Bitmap(BitmapEx(aBlackBmp, maBitmap));
         eReadState = XBMREAD_OK;
     }
 
@@ -349,11 +349,11 @@ ReadState XBMReader::ReadXBM(BitmapEx& rBitmapEx)
 VCL_DLLPUBLIC bool ImportXBM(SvStream& rStmeam, ImportOutput& rImportOutput)
 {
     XBMReader aXBMReader(rStmeam);
-    BitmapEx aBitmapEx;
-    ReadState eReadState = aXBMReader.ReadXBM(aBitmapEx);
+    Bitmap aBitmap;
+    ReadState eReadState = aXBMReader.ReadXBM(aBitmap);
     if (eReadState == XBMREAD_ERROR)
         return false;
-    rImportOutput.moBitmap = aBitmapEx;
+    rImportOutput.moBitmap = aBitmap;
     return true;
 }
 
