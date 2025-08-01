@@ -102,7 +102,7 @@ static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, bool bZoomIn)
     {
         25, 50, 75, 100, 150, 200, 400, 600
     };
-    const int nZoomArrSize = static_cast<int>(SAL_N_ELEMENTS(aZoomArr));
+    const int nZoomArrSize = std::ssize(aZoomArr);
     if (bZoomIn)
     {
         for(sal_uInt16 i : aZoomArr)
