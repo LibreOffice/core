@@ -2267,7 +2267,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
 /* This list needs to be sorted, or you'll introduce serious bugs */
 
     PrefixInfo const * pFirst = aMap + 1;
-    PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
+    PrefixInfo const * pLast = std::end(aMap) - 1;
     PrefixInfo const * pMatch = nullptr;
     sal_Unicode const * pMatched = rBegin;
     sal_Unicode const * p = rBegin;
