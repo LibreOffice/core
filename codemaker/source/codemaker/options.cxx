@@ -23,10 +23,7 @@ Options::Options() {}
 
 Options::~Options() {}
 
-bool Options::isValid(const OString& option) const
-{
-    return m_options.find(option) != m_options.end();
-}
+bool Options::isValid(const OString& option) const { return m_options.contains(option); }
 
 const OString& Options::getOption(const OString& option) const
 {

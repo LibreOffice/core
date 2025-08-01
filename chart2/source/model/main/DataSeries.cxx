@@ -753,7 +753,7 @@ bool DataSeries::hasPointOwnColor(
 bool DataSeries::hasPointOwnProperties( sal_Int32 nPointIndex )
 {
     MutexGuard aGuard( m_aMutex );
-    return m_aAttributedDataPoints.find(nPointIndex) != m_aAttributedDataPoints.end();
+    return m_aAttributedDataPoints.contains(nPointIndex);
 }
 
 sal_Int32 DataSeries::getAttachedAxisIndex()
@@ -925,7 +925,7 @@ bool DataSeries::hasDataLabelAtPoint( sal_Int32 nPointIndex )
         bool bFound = false;
         {
             MutexGuard aGuard( m_aMutex );
-            bFound = m_aAttributedDataPoints.find(nPointIndex) != m_aAttributedDataPoints.end();
+            bFound = m_aAttributedDataPoints.contains(nPointIndex);
         }
         if (bFound)
             xProp = getDataPointByIndex(nPointIndex);

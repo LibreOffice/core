@@ -81,7 +81,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
 {
     std::scoped_lock aGuard( maMutex );
 
-    if( maProperties.find( aName ) != maProperties.end() )
+    if( maProperties.contains( aName ) )
         throw ElementExistException();
 
     if( aElement.getValueType() != maType )
