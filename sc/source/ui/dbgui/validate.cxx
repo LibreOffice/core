@@ -377,7 +377,7 @@ ScTPValidationValue::ScTPValidationValue(weld::Container* pPage, weld::DialogCon
     , m_xEdMax(new formula::RefEdit(m_xBuilder->weld_entry(u"max"_ustr)))
     , m_xFtHint(m_xBuilder->weld_label(u"hintft"_ustr))
     , m_xBtnRef(new formula::RefButton(m_xBuilder->weld_button(u"validref"_ustr)))
-    , m_xRefGrid(m_xBuilder->weld_container(u"refgrid"_ustr))
+    , m_xRefGrid(m_xBuilder->weld_grid(u"refgrid"_ustr))
     , m_pRefEditParent(m_xRefGrid.get())
     , m_pBtnRefParent(m_xRefGrid.get())
 {

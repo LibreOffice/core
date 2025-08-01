@@ -128,7 +128,7 @@ private:
     std::unique_ptr<formula::RefEdit> m_xEdMax;
     std::unique_ptr<weld::Label> m_xFtHint;       /// Hint text for cell range validity.
     std::unique_ptr<formula::RefButton> m_xBtnRef;
-    std::unique_ptr<weld::Container> m_xRefGrid;
+    std::unique_ptr<weld::Grid> m_xRefGrid;
 
     weld::Container* m_pRefEditParent;
     weld::Container* m_pBtnRefParent;
