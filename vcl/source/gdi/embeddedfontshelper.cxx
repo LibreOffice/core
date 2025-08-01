@@ -219,8 +219,9 @@ void EmbeddedFontsHelper::activateFonts()
     if (m_aAccumulatedFonts.empty())
         return;
     UpdateFontsGuard aUpdateFontsGuard;
+    OutputDevice *pDevice = Application::GetDefaultDevice();
     for (const auto& rEntry : m_aAccumulatedFonts)
-        EmbeddedFontsHelper::activateFont(rEntry.first, rEntry.second);
+        pDevice->AddTempDevFont(rEntry.second, rEntry.first);
     m_aAccumulatedFonts.clear();
 }
 
@@ -245,12 +246,6 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
     path += "/user/temp/embeddedfonts/fromdocs/";
     osl::Directory::createPath( path );
     return path + filename;
-}
-
-void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString& fileUrl )
-{
-    OutputDevice *pDevice = Application::GetDefaultDevice();
-    pDevice->AddTempDevFont(fileUrl, fontName);
 }
 
 // Check if it's (legally) allowed to embed the font file into a document
