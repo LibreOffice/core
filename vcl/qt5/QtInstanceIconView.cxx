@@ -77,10 +77,15 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
     });
 }
 
-void QtInstanceIconView::insert(int, const OUString*, const OUString*, const OUString*,
-                                weld::TreeIter*)
+void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
+                                const OUString* pIconName, weld::TreeIter* pRet)
 {
-    assert(false && "Not implemented yet");
+    std::optional<QPixmap> oPixmap;
+    if (pIconName)
+        oPixmap = loadQPixmapIcon(*pIconName);
+
+    const QPixmap* pPixmapIcon = oPixmap.has_value() ? &oPixmap.value() : nullptr;
+    insert(nPos, pStr, pId, pPixmapIcon, pRet);
 }
 
 void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
