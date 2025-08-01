@@ -23,10 +23,6 @@ public:
     QtInstanceScrolledWindow(QScrollArea* pScrollArea);
 
 public:
-    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
-    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
-    virtual void child_grab_focus() override;
-
     virtual void hadjustment_configure(int nValue, int nUpper, int nStepIncrement,
                                        int nPageIncrement, int nPageSize) override;
     virtual int hadjustment_get_value() const override;

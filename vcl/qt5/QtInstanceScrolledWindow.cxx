@@ -19,19 +19,6 @@ QtInstanceScrolledWindow::QtInstanceScrolledWindow(QScrollArea* pScrollArea)
     assert(m_pScrollArea);
 }
 
-void QtInstanceScrolledWindow::move(weld::Widget*, weld::Container*)
-{
-    assert(false && "Not implemented yet");
-}
-
-css::uno::Reference<css::awt::XWindow> QtInstanceScrolledWindow::CreateChildFrame()
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
-void QtInstanceScrolledWindow::child_grab_focus() { assert(false && "Not implemented yet"); }
-
 void QtInstanceScrolledWindow::hadjustment_configure(int nValue, int nUpper, int nStepIncrement,
                                                      int nPageIncrement, int nPageSize)
 {

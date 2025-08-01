@@ -440,7 +440,7 @@ public:
     virtual int get_position() const = 0;
 };
 
-class VCL_DLLPUBLIC ScrolledWindow : virtual public Container
+class VCL_DLLPUBLIC ScrolledWindow : virtual public Widget
 {
     friend class ::LOKTrigger;
 
