@@ -60,7 +60,7 @@ private:
     bool                        mbSequenceCreated;
     basegfx::B2DRange           maRange;
     std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
-    BitmapEx                    maReplacement;
+    Bitmap                      maReplacement;
     size_t                      mNestedBitmapSize;
     VectorGraphicDataType meType;
 
@@ -104,8 +104,8 @@ public:
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
     const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
-    BitmapEx getBitmap(const Size& pixelSize) const;
-    const BitmapEx& getReplacement() const;
+    Bitmap getBitmap(const Size& pixelSize) const;
+    const Bitmap& getReplacement() const;
     BitmapChecksum GetChecksum() const;
 
     sal_Int32 getPageIndex() const

@@ -179,11 +179,11 @@ void VectorGraphicData::ensureReplacement()
 
     if (!maSequence.empty())
     {
-        maReplacement = convertPrimitive2DSequenceToBitmapEx(maSequence, getRange());
+        maReplacement = Bitmap(convertPrimitive2DSequenceToBitmapEx(maSequence, getRange()));
     }
 }
 
-BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
+Bitmap VectorGraphicData::getBitmap(const Size& pixelSize) const
 {
     if (!maReplacement.IsEmpty() && maReplacement.GetSizePixel() == pixelSize)
         return maReplacement;
@@ -200,7 +200,7 @@ BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
         vcl::RenderPDFBitmaps(maDataContainer.getData(), maDataContainer.getSize(), aBitmaps,
                               nUsePageIndex, 1, &sizeMM100);
         if (!aBitmaps.empty())
-            return BitmapEx(aBitmaps[0]);
+            return aBitmaps[0];
     }
 
     if (getPrimitive2DSequence().empty())
@@ -209,7 +209,7 @@ BitmapEx VectorGraphicData::getBitmap(const Size& pixelSize) const
     Size dpi(
         std::round(pixelSize.Width() / o3tl::convert(maRange.getWidth(), o3tl::Length::mm100, o3tl::Length::in)),
         std::round(pixelSize.Height() / o3tl::convert(maRange.getHeight(), o3tl::Length::mm100, o3tl::Length::in)));
-    return convertPrimitive2DSequenceToBitmapEx(maSequence, maRange, 4096 * 4096, o3tl::Length::mm100, dpi);
+    return Bitmap(convertPrimitive2DSequenceToBitmapEx(maSequence, maRange, 4096 * 4096, o3tl::Length::mm100, dpi));
 }
 
 void VectorGraphicData::ensureSequenceAndRange()
@@ -346,7 +346,7 @@ const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& VectorGra
     return maSequence;
 }
 
-const BitmapEx& VectorGraphicData::getReplacement() const
+const Bitmap& VectorGraphicData::getReplacement() const
 {
     const_cast< VectorGraphicData* >(this)->ensureReplacement();
 

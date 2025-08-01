@@ -440,7 +440,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked, const sal
             else
             {
                 if (pGrafObj->isEmbeddedVectorGraphicData())
-                    aBmp = Bitmap(pGrafObj->GetGraphic().getVectorGraphicData()->getReplacement());
+                    aBmp = pGrafObj->GetGraphic().getVectorGraphicData()->getReplacement();
             }
         }
     }
