@@ -448,7 +448,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
-    const wchar_t* pEnd = pStyleName + sizeof(rEnumFont.elfStyle)/sizeof(*rEnumFont.elfStyle);
+    const wchar_t* pEnd = std::end(rEnumFont.elfStyle);
     const wchar_t* p = pStyleName;
     for(; *p && (p < pEnd); ++p )
         if( *p < 0x0020 )
