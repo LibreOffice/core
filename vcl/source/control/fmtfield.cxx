@@ -817,7 +817,9 @@ std::optional<double> Formatter::ParseText(const OUString& rText)
         if (GetOrCreateFormatter().GetType(m_nFormatKey) == SvNumFormatType::PERCENT)
         {
             // the language of our format
-            LanguageType eLanguage = m_pFormatter->GetEntry(m_nFormatKey)->GetLanguage();
+            const SvNumberformat* pFormatEntry = m_pFormatter->GetEntry(m_nFormatKey);
+            assert(pFormatEntry && "due to GetType");
+            LanguageType eLanguage = pFormatEntry->GetLanguage();
             // the default number format for this language
             sal_uLong nStandardNumericFormat = m_pFormatter->GetStandardFormat(SvNumFormatType::NUMBER, eLanguage);
 
