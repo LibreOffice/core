@@ -6120,12 +6120,6 @@ int SalInstanceTextView::vadjustment_get_upper() const
     return rVertScrollBar.GetRangeMax();
 }
 
-int SalInstanceTextView::vadjustment_get_lower() const
-{
-    ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();
-    return rVertScrollBar.GetRangeMin();
-}
-
 int SalInstanceTextView::vadjustment_get_page_size() const
 {
     ScrollBar& rVertScrollBar = m_xTextView->GetVScrollBar();

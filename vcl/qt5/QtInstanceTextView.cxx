@@ -139,12 +139,6 @@ int QtInstanceTextView::vadjustment_get_upper() const
     return -1;
 }
 
-int QtInstanceTextView::vadjustment_get_lower() const
-{
-    assert(false && "Not implemented yet");
-    return -1;
-}
-
 int QtInstanceTextView::vadjustment_get_page_size() const
 {
     assert(false && "Not implemented yet");

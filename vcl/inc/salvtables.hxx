@@ -1474,8 +1474,6 @@ public:
 
     virtual int vadjustment_get_upper() const override;
 
-    virtual int vadjustment_get_lower() const override;
-
     virtual int vadjustment_get_page_size() const override;
 
     virtual bool has_focus() const override;

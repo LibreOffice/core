@@ -2474,7 +2474,6 @@ public:
 
     virtual int vadjustment_get_value() const = 0;
     virtual int vadjustment_get_upper() const = 0;
-    virtual int vadjustment_get_lower() const = 0;
     virtual int vadjustment_get_page_size() const = 0;
     virtual void vadjustment_set_value(int value) = 0;
     void connect_vadjustment_changed(const Link<TextView&, void>& rLink) { m_aVChangeHdl = rLink; }
