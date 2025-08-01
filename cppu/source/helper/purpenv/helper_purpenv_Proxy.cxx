@@ -397,6 +397,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
     void * ret = pReturn;
     if (pReturnTypeRef)
     {
+        // coverity[freed_arg] - pReturnTypeRef's nRefCount is > 1 here
         TYPELIB_DANGER_GET(&return_td, pReturnTypeRef);
 
         if (relatesToInterface(return_td))

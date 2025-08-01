@@ -113,6 +113,7 @@ static void cpp_call(
 
     // Return
     typelib_TypeDescription * pReturnTypeDescr = nullptr;
+    // coverity[freed_arg] - pReturnTypeRef's nRefCount is > 1 here
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     assert(pReturnTypeDescr);
 
