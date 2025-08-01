@@ -1570,6 +1570,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96218)
     createSwDoc("tdf96218.docx");
     // Image had a bad position because layoutInCell attribute was not ignored
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+
+    // tdf#167770: emulate no text-wrap gap when right-aligned-to-page-edge instead of 0.32cm
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(1), u"RightMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf101626)

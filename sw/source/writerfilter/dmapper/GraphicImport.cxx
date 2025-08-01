@@ -1218,6 +1218,29 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                 m_nHoriRelation = text::RelOrientation::PRINT_AREA;
                         }
 
+                        // adjust margins
+                        // when impossible to wrap text on a side, remove the margin gap
+                        if (m_nHoriRelation != text::RelOrientation::CHAR)
+                        {
+                            const bool bRightSide
+                                = m_nHoriRelation == text::RelOrientation::PAGE_RIGHT
+                                    || m_nHoriRelation == text::RelOrientation::FRAME_RIGHT;
+                            const bool bLeftSide
+                                = m_nHoriRelation == text::RelOrientation::PAGE_LEFT
+                                    || m_nHoriRelation == text::RelOrientation::FRAME_LEFT;
+
+                            assert(bRightSide || bLeftSide
+                                || m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA //margin
+                                || m_nHoriRelation == text::RelOrientation::PAGE_FRAME // page
+                                || m_nHoriRelation == text::RelOrientation::PRINT_AREA // column
+                                || m_nHoriRelation == text::RelOrientation::FRAME /*margin*/ );
+
+                            if (m_nHoriOrient == text::HoriOrientation::LEFT && !bRightSide)
+                                m_nLeftMargin = 0;
+                            else if (m_nHoriOrient == text::HoriOrientation::RIGHT && !bLeftSide)
+                                m_nRightMargin = 0;
+                        }
+
                         // Anchored: Word only supports at-char in that case.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
 
@@ -1570,16 +1593,6 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
                     m_bPageToggle = pHandler->GetPageToggle();
                     m_nHoriOrient = pHandler->orientation();
                     m_nLeftPosition = pHandler->position();
-
-                    // Left adjustments: if horizontally aligned to left of margin, then remove the
-                    // left wrapping.
-                    if (m_nHoriOrient == text::HoriOrientation::LEFT)
-                    {
-                        if (m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA)
-                        {
-                            m_nLeftMargin = 0;
-                        }
-                    }
                 }
             }
         }
@@ -1783,18 +1796,35 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
                 }
 
                 //adjust margins
-                if( (m_nHoriOrient == text::HoriOrientation::LEFT &&
-                    (m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_nHoriRelation == text::RelOrientation::FRAME) ) ||
-                    (m_nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_nLeftMargin = 0;
-                if((m_nHoriOrient == text::HoriOrientation::RIGHT &&
-                    (m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
-                        m_nHoriRelation == text::RelOrientation::FRAME) ) ||
-                    (m_nHoriOrient == text::HoriOrientation::INSIDE &&
-                        m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ))
-                    m_nRightMargin = 0;
+                // when impossible to wrap text on a side, remove the margin gap
+                if (m_nHoriRelation != text::RelOrientation::CHAR)
+                {
+                    const bool bRightSide
+                        = m_nHoriRelation == text::RelOrientation::PAGE_RIGHT
+                            || m_nHoriRelation == text::RelOrientation::FRAME_RIGHT;
+                    const bool bLeftSide
+                        = m_nHoriRelation == text::RelOrientation::PAGE_LEFT
+                            || m_nHoriRelation == text::RelOrientation::FRAME_LEFT;
+
+                    assert(bRightSide || bLeftSide
+                           || m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA // margin
+                           || m_nHoriRelation == text::RelOrientation::PAGE_FRAME // page
+                           || m_nHoriRelation == text::RelOrientation::PRINT_AREA // column
+                           || m_nHoriRelation == text::RelOrientation::FRAME /*margin*/ );
+
+                    if (m_nHoriOrient == text::HoriOrientation::LEFT && !bRightSide)
+                        m_nLeftMargin = 0;
+                    else if (m_nHoriOrient == text::HoriOrientation::RIGHT && !bLeftSide)
+                        m_nRightMargin = 0;
+                    else if (m_nHoriOrient == text::HoriOrientation::INSIDE)
+                    {
+                        if (m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA)
+                        {
+                            m_nLeftMargin = 0;
+                            m_nRightMargin = 0;
+                        }
+                    }
+                }
                 // adjust top/bottom margins
                 if( m_nVertOrient == text::VertOrientation::TOP &&
                     ( m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
