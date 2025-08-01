@@ -4325,11 +4325,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     xModel->attachResource(maTempFile.GetURL(), xModel->getArgs());
 
-    for (unsigned int i = 0; i < (sizeof(URIs) / sizeof(URIs[0])); i++)
+    for (const auto& uri : URIs)
     {
         // Test the filename rewriting
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "ExportLinksRelativeFsys", uno::Any(URIs[i].relativeFsys) },
+            { "ExportLinksRelativeFsys", uno::Any(uri.relativeFsys) },
             { "ConvertOOoTargetToPDFTarget", uno::Any(true) },
         }));
         aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
@@ -4338,7 +4338,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(URIs[i].in));
+        xCursorProps->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(uri.in));
         xCursorProps->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(u"Testname"_ustr));
 
         // Save as PDF.
@@ -4380,7 +4380,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
             pAction->LookupElement("URI"_ostr));
         CPPUNIT_ASSERT(pURIElem);
         // Check it matches
-        CPPUNIT_ASSERT_EQUAL(URIs[i].out, pURIElem->GetValue());
+        CPPUNIT_ASSERT_EQUAL(uri.out, pURIElem->GetValue());
         // tdf#148934 check a11y
         CPPUNIT_ASSERT_EQUAL(u"Testname"_ustr, ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                    *dynamic_cast<vcl::filter::PDFHexStringElement*>(
