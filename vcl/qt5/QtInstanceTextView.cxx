@@ -13,6 +13,7 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QTextCursor>
+#include <QtWidgets/QScrollBar>
 
 QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)
     : QtInstanceWidget(pTextEdit)
@@ -24,6 +25,10 @@ QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)
             &QtInstanceTextView::handleCursorPositionChanged);
     connect(m_pTextEdit, &QPlainTextEdit::textChanged, this,
             &QtInstanceTextView::handleTextChanged);
+
+    if (QScrollBar* pVerticalScrollBar = m_pTextEdit->verticalScrollBar())
+        connect(pVerticalScrollBar, &QScrollBar::valueChanged, this,
+                &QtInstanceTextView::handleVerticalScrollValueChanged);
 }
 
 void QtInstanceTextView::set_text(const OUString& rText)
@@ -129,23 +134,52 @@ void QtInstanceTextView::set_alignment(TxtAlign) { assert(false && "Not implemen
 
 int QtInstanceTextView::vadjustment_get_value() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nValue = -1;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pTextEdit->verticalScrollBar())
+            nValue = pVerticalScrollBar->value() - vadjustment_get_page_size();
+    });
+
+    return nValue;
 }
 
 int QtInstanceTextView::vadjustment_get_upper() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nUpper = -1;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pTextEdit->verticalScrollBar())
+            nUpper = pVerticalScrollBar->maximum();
+    });
+
+    return nUpper;
 }
 
 int QtInstanceTextView::vadjustment_get_page_size() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nPageSize = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pTextEdit->verticalScrollBar())
+            nPageSize = pVerticalScrollBar->pageStep();
+    });
+
+    return nPageSize;
 }
 
-void QtInstanceTextView::vadjustment_set_value(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTextView::vadjustment_set_value(int nValue)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pTextEdit->verticalScrollBar())
+            pVerticalScrollBar->setValue(nValue + vadjustment_get_page_size());
+    });
+}
 
 void QtInstanceTextView::handleCursorPositionChanged()
 {
@@ -157,6 +191,12 @@ void QtInstanceTextView::handleTextChanged()
 {
     SolarMutexGuard aGuard;
     signal_changed();
+}
+
+void QtInstanceTextView::handleVerticalScrollValueChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_vadjustment_value_changed();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
