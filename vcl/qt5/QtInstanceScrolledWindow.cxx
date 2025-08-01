@@ -17,6 +17,14 @@ QtInstanceScrolledWindow::QtInstanceScrolledWindow(QScrollArea* pScrollArea)
     , m_pScrollArea(pScrollArea)
 {
     assert(m_pScrollArea);
+
+    if (QScrollBar* pHorizontalScrollBar = m_pScrollArea->horizontalScrollBar())
+        connect(pHorizontalScrollBar, &QScrollBar::valueChanged, this,
+                &QtInstanceScrolledWindow::handleHorizontalScrollValueChanged);
+
+    if (QScrollBar* pVerticalScrollBar = m_pScrollArea->verticalScrollBar())
+        connect(pVerticalScrollBar, &QScrollBar::valueChanged, this,
+                &QtInstanceScrolledWindow::handleVerticalScrollValueChanged);
 }
 
 void QtInstanceScrolledWindow::hadjustment_configure(int nValue, int nUpper, int nStepIncrement,
@@ -335,6 +343,18 @@ VclPolicyType QtInstanceScrolledWindow::toVclPolicy(Qt::ScrollBarPolicy eQtPolic
             assert(false && "Unhandled scroll bar policy");
             return VclPolicyType::AUTOMATIC;
     }
+}
+
+void QtInstanceScrolledWindow::handleHorizontalScrollValueChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_hadjustment_value_changed();
+}
+
+void QtInstanceScrolledWindow::handleVerticalScrollValueChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_vadjustment_value_changed();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

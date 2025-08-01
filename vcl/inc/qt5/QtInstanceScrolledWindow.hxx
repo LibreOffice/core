@@ -57,6 +57,10 @@ public:
 private:
     static Qt::ScrollBarPolicy toQtPolicy(VclPolicyType eVclPolicy);
     static VclPolicyType toVclPolicy(Qt::ScrollBarPolicy eQtPolicy);
+
+private Q_SLOTS:
+    void handleHorizontalScrollValueChanged();
+    void handleVerticalScrollValueChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
