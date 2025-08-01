@@ -74,16 +74,6 @@ struct TTGlyphMetrics {
 }
 
 /*- Data access methods for data stored in big-endian format */
-static sal_Int16 GetInt16(const sal_uInt8 *ptr, size_t offset)
-{
-    sal_Int16 t;
-    assert(ptr != nullptr);
-
-    t = (ptr+offset)[0] << 8 | (ptr+offset)[1];
-
-    return t;
-}
-
 static sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset)
 {
     sal_uInt16 t;
@@ -94,15 +84,9 @@ static sal_uInt16 GetUInt16(const sal_uInt8 *ptr, size_t offset)
     return t;
 }
 
-static sal_Int32  GetInt32(const sal_uInt8 *ptr, size_t offset)
+static sal_Int16 GetInt16(const sal_uInt8* ptr, size_t offset)
 {
-    sal_Int32 t;
-    assert(ptr != nullptr);
-
-    t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
-        (ptr+offset)[2] << 8  | (ptr+offset)[3];
-
-    return t;
+    return static_cast<sal_Int16>(GetUInt16(ptr, offset));
 }
 
 static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
@@ -114,6 +98,11 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
         (ptr+offset)[2] << 8  | (ptr+offset)[3];
 
     return t;
+}
+
+static sal_Int32 GetInt32(const sal_uInt8* ptr, size_t offset)
+{
+    return static_cast<sal_Int32>(GetUInt32(ptr, offset));
 }
 
 static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
