@@ -1502,7 +1502,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
             m_xWordSpacingMinimum->set_value(rAdj.GetPropWordSpacingMinimum(), FieldUnit::PERCENT);
             m_xWordSpacingMaximum->set_value(rAdj.GetPropWordSpacingMaximum(), FieldUnit::PERCENT);
             m_xLabelLetterSpacing->set_sensitive(true);
-            // TODO add LetterSpacing (CharKern) and and LetterSpacingMinimum
+            // TODO add LetterSpacing (CharKern) and LetterSpacingMinimum
             m_xLetterSpacingMaximum->set_sensitive(true);
             m_xLetterSpacingMinimum->set_value(rAdj.GetPropLetterSpacingMinimum(), FieldUnit::PERCENT);
             m_xLetterSpacingMaximum->set_value(rAdj.GetPropLetterSpacingMaximum(), FieldUnit::PERCENT);
