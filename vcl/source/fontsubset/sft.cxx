@@ -616,7 +616,9 @@ static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std:
 
 static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFlag, OUString* ucs2result )
 {
-    OStringBuffer res;
+    if( ucs2result )
+        ucs2result->clear();
+
     const sal_uInt8* ptr = name + GetUInt16(name, 4) + GetUInt16(name + 6, 12 * n + 10);
     int len = GetUInt16(name+6, 12 * n + 8);
 
@@ -625,13 +627,10 @@ static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int db
     const int available_space = ptr > end_table ? 0 : (end_table - ptr);
     if( (len <= 0) || len > available_space)
     {
-        if( ucs2result )
-            ucs2result->clear();
         return OString();
     }
 
-    if( ucs2result )
-        ucs2result->clear();
+    OStringBuffer res;
     if (dbFlag) {
         res.setLength(len/2);
         for (int i = 0; i < len/2; i++)
@@ -651,8 +650,7 @@ static OString nameExtract( const sal_uInt8* name, int nTableSize, int n, int db
             *ucs2result = buf.makeStringAndClear();
         }
     } else {
-        res.setLength(len);
-        memcpy(static_cast<void*>(const_cast<char*>(res.getStr())), ptr, len);
+        memcpy(res.appendUninitialized(len), ptr, len);
     }
 
     return res.makeStringAndClear();
