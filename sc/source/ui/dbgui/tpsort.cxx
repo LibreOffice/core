@@ -91,7 +91,7 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
     , m_xBtnTopDown(m_xBuilder->weld_radio_button(u"rbTopDown"_ustr))
     , m_xBtnLeftRight(m_xBuilder->weld_radio_button(u"rbLeftRight"_ustr))
     , m_xScrolledWindow(m_xBuilder->weld_scrolled_window(u"SortCriteriaPage"_ustr))
-    , m_xBox(m_xBuilder->weld_container(u"SortKeyWindow"_ustr))
+    , m_xBox(m_xBuilder->weld_box(u"SortKeyWindow"_ustr))
     , m_aSortWin(m_xBox.get())
 {
     // tdf#147722 set some nominal small default height so the height adapts

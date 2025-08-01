@@ -76,7 +76,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
     std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
-    std::unique_ptr<weld::Container> m_xBox;
+    std::unique_ptr<weld::Box> m_xBox;
     ScSortKeyWindow m_aSortWin;
 
     void AddSortKey( sal_uInt16 nItem );

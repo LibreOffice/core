@@ -23,9 +23,9 @@ struct ScSortKeyItem
     std::unique_ptr<weld::RadioButton> m_xBtnUp;
     std::unique_ptr<weld::RadioButton> m_xBtnDown;
     std::unique_ptr<weld::Label> m_xLabel;
-    weld::Container* m_pParent;
+    weld::Box* m_pParent;
 
-    ScSortKeyItem(weld::Container* pParent);
+    ScSortKeyItem(weld::Box* pParent);
     ~ScSortKeyItem();
 
     void DisableField();
@@ -40,10 +40,10 @@ public:
     ScSortKeyItems m_aSortKeyItems;
 
 private:
-    weld::Container* m_pBox;
+    weld::Box* m_pBox;
 
 public:
-    ScSortKeyWindow(weld::Container* pBox);
+    ScSortKeyWindow(weld::Box* pBox);
     ~ScSortKeyWindow();
 
     void AddSortKey(sal_uInt16 nItem);

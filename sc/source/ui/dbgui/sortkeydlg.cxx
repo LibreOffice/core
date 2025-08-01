@@ -15,7 +15,7 @@
 #include <scresid.hxx>
 #include <strings.hrc>
 
-ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
+ScSortKeyItem::ScSortKeyItem(weld::Box* pParent)
     : m_xBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/sortkey.ui"_ustr))
     , m_xFrame(m_xBuilder->weld_frame(u"SortKeyFrame"_ustr))
     , m_xLbSort(m_xBuilder->weld_combo_box(u"sortlb"_ustr))
@@ -47,7 +47,7 @@ void ScSortKeyItem::EnableField()
     m_xFrame->set_sensitive(true);
 }
 
-ScSortKeyWindow::ScSortKeyWindow(weld::Container* pBox)
+ScSortKeyWindow::ScSortKeyWindow(weld::Box* pBox)
     : m_pBox(pBox)
 {
 }
