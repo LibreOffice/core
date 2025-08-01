@@ -5391,6 +5391,12 @@ static bool ImplHandleIMEEndComposition( HWND hWnd )
 
         // tdf#155158: Windows IMEs do not necessarily send a composition message if they are
         // dismissed during composition (for example, by an input method/language change).
+        // tdf#167740: Also clear the candidate text when the IME is dismissed.
+        SalExtTextInputEvent aEvt;
+        aEvt.mpTextAttr = nullptr;
+        aEvt.mnCursorPos = 0;
+        aEvt.mnCursorFlags = 0;
+        pFrame->CallCallback(SalEvent::ExtTextInput, &aEvt);
         pFrame->CallCallback(SalEvent::EndExtTextInput, nullptr);
     }
 
