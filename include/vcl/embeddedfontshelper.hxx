@@ -28,15 +28,6 @@ class VCL_DLLPUBLIC EmbeddedFontsHelper
 private:
     std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
 
-    /**
-      Adds the given font to the list of known fonts. The font is used only until application
-      exit.
-
-      @param fontName name of the font (e.g. 'Times New Roman')
-      @param fileUrl URL of the font file
-    */
-    static void activateFont( const OUString& fontName, const OUString& fileUrl );
-
 public:
     /// Specification of what kind of operation is allowed when embedding a font
     enum class FontRights
