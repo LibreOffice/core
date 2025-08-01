@@ -431,7 +431,7 @@ public:
     virtual int get_child_top_attach(weld::Widget& rWidget) const = 0;
 };
 
-class VCL_DLLPUBLIC Paned : virtual public Container
+class VCL_DLLPUBLIC Paned : virtual public Widget
 {
 public:
     // set pixel position of divider
