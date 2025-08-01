@@ -2789,7 +2789,7 @@ SwTokenWindow::SwTokenWindow(std::unique_ptr<weld::Container> xParent)
     , m_xScrollWin(m_xBuilder->weld_scrolled_window(u"scrollwin"_ustr))
     , m_xRightScrollWin(m_xBuilder->weld_button(u"right"_ustr))
 {
-    m_xScrollWin->connect_hadjustment_changed(LINK(this, SwTokenWindow, ScrollHdl));
+    m_xScrollWin->connect_hadjustment_value_changed(LINK(this, SwTokenWindow, ScrollHdl));
     m_xCtrlParentWin->connect_size_allocate(LINK(this, SwTokenWindow, AdjustPositionsHdl));
 
     for (sal_uInt32 i = 0; i < TOKEN_END; ++i)

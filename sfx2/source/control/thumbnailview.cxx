@@ -199,7 +199,7 @@ ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std:
     , mxContextMenu(std::move(xMenu))
 {
     ImplInit();
-    mxScrolledWindow->connect_vadjustment_changed(LINK(this, ThumbnailView, ImplScrollHdl));
+    mxScrolledWindow->connect_vadjustment_value_changed(LINK(this, ThumbnailView, ImplScrollHdl));
 }
 
 ThumbnailView::~ThumbnailView()

@@ -88,7 +88,7 @@ namespace rptui
 
         m_xCopy.set( m_xFormatConditions->createClone(), UNO_QUERY_THROW );
 
-        m_xScrollWindow->connect_vadjustment_changed(LINK(this, ConditionalFormattingDialog, OnScroll));
+        m_xScrollWindow->connect_vadjustment_value_changed(LINK(this, ConditionalFormattingDialog, OnScroll));
 
         impl_initializeConditions();
 

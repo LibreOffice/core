@@ -444,12 +444,12 @@ class VCL_DLLPUBLIC ScrolledWindow : virtual public Widget
 {
     friend class ::LOKTrigger;
 
-    Link<ScrolledWindow&, void> m_aVChangeHdl;
-    Link<ScrolledWindow&, void> m_aHChangeHdl;
+    Link<ScrolledWindow&, void> m_aVValueChangeHdl;
+    Link<ScrolledWindow&, void> m_aHValueChangeHdl;
 
 protected:
-    void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
-    void signal_hadjustment_changed() { m_aHChangeHdl.Call(*this); }
+    void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
+    void signal_hadjustment_value_changed() { m_aHValueChangeHdl.Call(*this); }
 
 public:
     virtual void hadjustment_configure(int value, int upper, int step_increment, int page_increment,
@@ -465,9 +465,9 @@ public:
     virtual void hadjustment_set_step_increment(int size) = 0;
     virtual void set_hpolicy(VclPolicyType eHPolicy) = 0;
     virtual VclPolicyType get_hpolicy() const = 0;
-    void connect_hadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
+    void connect_hadjustment_value_changed(const Link<ScrolledWindow&, void>& rLink)
     {
-        m_aHChangeHdl = rLink;
+        m_aHValueChangeHdl = rLink;
     }
 
     virtual void vadjustment_configure(int value, int upper, int step_increment, int page_increment,
@@ -483,9 +483,9 @@ public:
     virtual void vadjustment_set_step_increment(int size) = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
     virtual VclPolicyType get_vpolicy() const = 0;
-    void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
+    void connect_vadjustment_value_changed(const Link<ScrolledWindow&, void>& rLink)
     {
-        m_aVChangeHdl = rLink;
+        m_aVValueChangeHdl = rLink;
     }
     virtual int get_scroll_thickness() const = 0;
     virtual void set_scroll_thickness(int nThickness) = 0;

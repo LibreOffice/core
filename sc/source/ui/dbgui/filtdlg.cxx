@@ -313,7 +313,7 @@ void ScFilterDlg::Init()
         UpdateColorList(i+1);
     }
 
-    m_xScrollBar->connect_vadjustment_changed( LINK( this, ScFilterDlg, ScrollHdl ) );
+    m_xScrollBar->connect_vadjustment_value_changed( LINK( this, ScFilterDlg, ScrollHdl ) );
     m_xScrollBar->vadjustment_configure(0, 8, 1, 3, 4);
     Size aSize(m_xContents->get_preferred_size());
     m_xContents->set_size_request(aSize.Width(), aSize.Height());

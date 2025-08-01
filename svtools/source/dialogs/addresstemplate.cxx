@@ -576,7 +576,7 @@ void AssignmentPersistentData::ImplCommit()
         // (empty strings mean "no assignment")
 
         // some knittings
-        m_xFieldScroller->connect_vadjustment_changed(LINK(this, AddressBookSourceDialog, OnFieldScroll));
+        m_xFieldScroller->connect_vadjustment_value_changed(LINK(this, AddressBookSourceDialog, OnFieldScroll));
         m_xAdministrateDatasources->connect_clicked(LINK(this, AddressBookSourceDialog, OnAdministrateDatasources));
         m_xDatasource->set_entry_completion(true);
         m_xTable->set_entry_completion(true);

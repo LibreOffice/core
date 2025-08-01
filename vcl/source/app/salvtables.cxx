@@ -2528,14 +2528,14 @@ SalInstanceScrolledWindow::~SalInstanceScrolledWindow()
 
 IMPL_LINK(SalInstanceScrolledWindow, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
-    signal_vadjustment_changed();
+    signal_vadjustment_value_changed();
     if (!m_bUserManagedScrolling)
         m_aOrigVScrollHdl.Call(pScrollBar);
 }
 
 IMPL_LINK_NOARG(SalInstanceScrolledWindow, HscrollHdl, ScrollBar*, void)
 {
-    signal_hadjustment_changed();
+    signal_hadjustment_value_changed();
     if (!m_bUserManagedScrolling)
         m_aOrigHScrollHdl.Call(&m_xScrolledWindow->getHorzScrollBar());
 }

@@ -29,12 +29,12 @@ public:
 
     static void trigger_scrollv(weld::ScrolledWindow& rScrolledWindow)
     {
-        rScrolledWindow.signal_vadjustment_changed();
+        rScrolledWindow.signal_vadjustment_value_changed();
     }
 
     static void trigger_scrollh(weld::ScrolledWindow& rScrolledWindow)
     {
-        rScrolledWindow.signal_hadjustment_changed();
+        rScrolledWindow.signal_hadjustment_value_changed();
     }
 
     static void trigger_toggled(weld::Toggleable& rButton) { rButton.signal_toggled(); }

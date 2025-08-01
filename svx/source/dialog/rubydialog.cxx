@@ -428,7 +428,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     m_xCharStyleLB->connect_changed(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
     Link<weld::ScrolledWindow&, void> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
-    m_xScrolledWindow->connect_vadjustment_changed(aScrLk);
+    m_xScrolledWindow->connect_vadjustment_value_changed(aScrLk);
 
     Link<weld::Entry&, void> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     Link<weld::Widget&, void> aFocusLk(LINK(this, SvxRubyDialog, EditFocusHdl_Impl));

@@ -1066,7 +1066,7 @@ SmShowSymbolSet::SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolled
     , nSelectSymbol(SYMBOL_NONE)
     , m_xScrolledWindow(std::move(pScrolledWindow))
 {
-    m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SmShowSymbolSet, ScrollHdl));
+    m_xScrolledWindow->connect_vadjustment_value_changed(LINK(this, SmShowSymbolSet, ScrollHdl));
 }
 
 Point SmShowSymbolSet::OffsetPoint(const Point &rPoint) const

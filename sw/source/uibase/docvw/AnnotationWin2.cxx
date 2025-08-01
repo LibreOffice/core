@@ -361,7 +361,7 @@ void SwAnnotationWin::InitControls()
     mpOutlinerView->SetOutputArea( PixelToLogic( tools::Rectangle(0,0,1,1) ) );
 
     mxVScrollbar->set_direction(false);
-    mxVScrollbar->connect_vadjustment_changed(LINK(this, SwAnnotationWin, ScrollHdl));
+    mxVScrollbar->connect_vadjustment_value_changed(LINK(this, SwAnnotationWin, ScrollHdl));
     mxVScrollbar->connect_mouse_move(LINK(this, SwAnnotationWin, MouseMoveHdl));
 
     EEControlBits nCntrl = mpOutliner->GetControlWord();

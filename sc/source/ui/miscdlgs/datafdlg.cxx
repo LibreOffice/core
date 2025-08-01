@@ -182,7 +182,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     m_xBtnDelete->connect_clicked(LINK( this, ScDataFormDlg, Impl_DeleteHdl));
     m_xBtnClose->connect_clicked(LINK( this, ScDataFormDlg, Impl_CloseHdl));
 
-    m_xSlider->connect_vadjustment_changed(LINK( this, ScDataFormDlg, Impl_ScrollHdl));
+    m_xSlider->connect_vadjustment_value_changed(LINK( this, ScDataFormDlg, Impl_ScrollHdl));
 
     SetButtonState();
 }

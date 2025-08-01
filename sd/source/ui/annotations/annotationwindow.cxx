@@ -277,7 +277,7 @@ void AnnotationWindow::InitControls()
     OutputDevice& rDevice = mxTextControl->GetDrawingArea()->get_ref_device();
 
     mxVScrollbar->set_direction(false);
-    mxVScrollbar->connect_vadjustment_changed(LINK(this, AnnotationWindow, ScrollHdl));
+    mxVScrollbar->connect_vadjustment_value_changed(LINK(this, AnnotationWindow, ScrollHdl));
 
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutlinerView->SetOutputArea(rDevice.PixelToLogic(::tools::Rectangle(0, 0, 1, 1)));

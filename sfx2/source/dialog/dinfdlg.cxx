@@ -2043,7 +2043,7 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
     m_xVertScroll->vadjustment_set_page_size(0xFFFF);
 
     Link<weld::ScrolledWindow&,void> aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
-    m_xVertScroll->connect_vadjustment_changed(aScrollLink);
+    m_xVertScroll->connect_vadjustment_value_changed(aScrollLink);
 
     ResizeHdl(Size(-1, nHeight));
 }

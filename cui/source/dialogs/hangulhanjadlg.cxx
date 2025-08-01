@@ -1456,7 +1456,7 @@ namespace svx
 
         // 4 here, because we have 4 edits / page
         m_xScrollSB->vadjustment_configure(0, MAXNUM_SUGGESTIONS, 1, 4, 4);
-        m_xScrollSB->connect_vadjustment_changed(LINK(this, HangulHanjaEditDictDialog, ScrollHdl));
+        m_xScrollSB->connect_vadjustment_value_changed(LINK(this, HangulHanjaEditDictDialog, ScrollHdl));
 
         m_xEdit1->connect_changed( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl1 ) );
         m_xEdit2->connect_changed( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl2 ) );

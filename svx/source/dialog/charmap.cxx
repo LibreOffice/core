@@ -98,7 +98,7 @@ void SvxShowCharSet::init()
     m_nXGap = 0;
     m_nYGap = 0;
 
-    mxScrollArea->connect_vadjustment_changed(LINK(this, SvxShowCharSet, VscrollHdl));
+    mxScrollArea->connect_vadjustment_value_changed(LINK(this, SvxShowCharSet, VscrollHdl));
     getFavCharacterList();
     // other settings depend on selected font => see RecalculateFont
 

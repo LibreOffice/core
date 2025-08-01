@@ -42,8 +42,8 @@ ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     mxRuler->SetCmdHdl( aLink );
     mxGrid->SetCmdHdl( aLink );
 
-    mxScroll->connect_hadjustment_changed(LINK(this, ScCsvTableBox, HScrollHdl));
-    mxScroll->connect_vadjustment_changed(LINK(this, ScCsvTableBox, VScrollHdl));
+    mxScroll->connect_hadjustment_value_changed(LINK(this, ScCsvTableBox, HScrollHdl));
+    mxScroll->connect_vadjustment_value_changed(LINK(this, ScCsvTableBox, VScrollHdl));
 
     maEndScrollIdle.SetPriority(TaskPriority::LOWEST);
     maEndScrollIdle.SetInvokeHandler(LINK(this,ScCsvTableBox,ScrollEndHdl));

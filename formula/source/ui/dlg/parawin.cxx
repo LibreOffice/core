@@ -91,7 +91,7 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     nEdFocus = NOT_FOUND;
     nActiveLine = 0;
 
-    m_xSlider->connect_vadjustment_changed(LINK(this, ParaWin, ScrollHdl));
+    m_xSlider->connect_vadjustment_value_changed(LINK(this, ParaWin, ScrollHdl));
 
     InitArgInput( 0, *m_xFtArg1, *m_xBtnFx1, *m_xEdArg1, *m_xRefBtn1);
     InitArgInput( 1, *m_xFtArg2, *m_xBtnFx2, *m_xEdArg2, *m_xRefBtn2);

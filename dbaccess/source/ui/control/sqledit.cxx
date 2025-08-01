@@ -75,7 +75,7 @@ SQLEditView::SQLEditView(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     , m_bInUpdate(false)
     , m_bDisableInternalUndo(false)
 {
-    m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SQLEditView, ScrollHdl));
+    m_xScrolledWindow->connect_vadjustment_value_changed(LINK(this, SQLEditView, ScrollHdl));
 }
 
 void SQLEditView::DisableInternalUndo()

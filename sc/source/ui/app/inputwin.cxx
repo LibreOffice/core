@@ -1164,7 +1164,7 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
     , mxTextWndWin(new weld::CustomWeld(rParent.GetBuilder(), u"sc_input_window"_ustr, *mxTextWnd))
     , mrParent(rParent)
 {
-    mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
+    mxScrollWin->connect_vadjustment_value_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
     if (ScTabViewShell* pActiveViewShell = comphelper::LibreOfficeKit::isActive() ?
             dynamic_cast<ScTabViewShell*>(SfxViewShell::Current()) : nullptr)
     {

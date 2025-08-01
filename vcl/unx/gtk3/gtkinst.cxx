@@ -8278,14 +8278,14 @@ private:
     {
         GtkInstanceScrolledWindow* pThis = static_cast<GtkInstanceScrolledWindow*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_vadjustment_changed();
+        pThis->signal_vadjustment_value_changed();
     }
 
     static void signalHAdjustValueChanged(GtkAdjustment*, gpointer widget)
     {
         GtkInstanceScrolledWindow* pThis = static_cast<GtkInstanceScrolledWindow*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_hadjustment_changed();
+        pThis->signal_hadjustment_value_changed();
     }
 
 public:

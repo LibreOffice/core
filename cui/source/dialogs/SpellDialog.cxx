@@ -1127,7 +1127,7 @@ SentenceEditWindow_Impl::SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledW
     , m_nErrorEnd(0)
     , m_bIsUndoEditMode(false)
 {
-    m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SentenceEditWindow_Impl, ScrollHdl));
+    m_xScrolledWindow->connect_vadjustment_value_changed(LINK(this, SentenceEditWindow_Impl, ScrollHdl));
 }
 
 void SentenceEditWindow_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)

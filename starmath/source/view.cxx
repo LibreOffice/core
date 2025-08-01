@@ -131,8 +131,8 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell& rShell)
 {
     InitControlBase(mxGraphic->GetDrawingArea());
 
-    mxScrolledWindow->connect_hadjustment_changed(LINK(this, SmGraphicWindow, ScrollHdl));
-    mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmGraphicWindow, ScrollHdl));
+    mxScrolledWindow->connect_hadjustment_value_changed(LINK(this, SmGraphicWindow, ScrollHdl));
+    mxScrolledWindow->connect_vadjustment_value_changed(LINK(this, SmGraphicWindow, ScrollHdl));
 
     // docking windows are usually hidden (often already done in the
     // resource) and will be shown by the sfx framework.

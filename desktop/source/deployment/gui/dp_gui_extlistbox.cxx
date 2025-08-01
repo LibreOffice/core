@@ -201,7 +201,7 @@ ExtensionBox_Impl::ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScro
 
 void ExtensionBox_Impl::Init()
 {
-    m_xScrollBar->connect_vadjustment_changed( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
+    m_xScrollBar->connect_vadjustment_value_changed( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
 
     auto nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
     auto nTitleHeight = 2*TOP_OFFSET + GetTextHeight();

@@ -316,7 +316,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
 
     Size aSize(m_xContents->get_preferred_size());
     m_xContents->set_size_request(aSize.Width(), aSize.Height());
-    m_xScrollBar->connect_vadjustment_changed( LINK( this, ScOptSolverDlg, ScrollHdl ) );
+    m_xScrollBar->connect_vadjustment_value_changed( LINK( this, ScOptSolverDlg, ScrollHdl ) );
 
     m_xScrollBar->vadjustment_set_page_increment( EDIT_ROW_COUNT );
     m_xScrollBar->vadjustment_set_page_size( EDIT_ROW_COUNT );

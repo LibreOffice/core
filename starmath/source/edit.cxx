@@ -138,7 +138,7 @@ SmEditWindow::SmEditWindow(SmCmdBoxWindow &rMyCmdBoxWin, weld::Builder& rBuilder
     : rCmdBox(rMyCmdBoxWin)
     , mxScrolledWindow(rBuilder.weld_scrolled_window(u"scrolledwindow"_ustr, true))
 {
-    mxScrolledWindow->connect_vadjustment_changed(LINK(this, SmEditWindow, ScrollHdl));
+    mxScrolledWindow->connect_vadjustment_value_changed(LINK(this, SmEditWindow, ScrollHdl));
 
     CreateEditView(rBuilder);
 }
