@@ -96,7 +96,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
     for( nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
     {
-        BitmapEx aThumb;
+        Bitmap aThumb;
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !aThumb.IsEmpty())
         {

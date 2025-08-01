@@ -295,7 +295,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
     UnlockBroadcaster();
 }
 
-bool GalleryTheme::GetThumb(sal_uInt32 nPos, BitmapEx& rBmp)
+bool GalleryTheme::GetThumb(sal_uInt32 nPos, Bitmap& rBmp)
 {
     std::unique_ptr<SgaObject> pObj = AcquireObject( nPos );
     bool        bRet = false;

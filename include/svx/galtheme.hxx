@@ -131,7 +131,7 @@ public:
         return maGalleryObjectCollection.getURLForPosition(nPos);
     }
 
-    SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, BitmapEx& rBmp);
+    SAL_DLLPRIVATE bool         GetThumb(sal_uInt32 nPos, Bitmap& rBmp);
 
     bool                        GetGraphic(sal_uInt32 nPos, Graphic& rGraphic);
     bool                        InsertGraphic(const Graphic& rGraphic, sal_uInt32 nInsertPos);

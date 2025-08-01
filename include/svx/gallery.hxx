@@ -91,7 +91,7 @@
 
 class SdrModel;
 class Graphic;
-class BitmapEx;
+class Bitmap;
 
 class SVXCORE_DLLPUBLIC GalleryExplorer
 {
@@ -118,9 +118,9 @@ public:
     static sal_uInt32           GetSdrObjCount( sal_uInt32 nThemeId );
 
     static bool                 GetSdrObj( std::u16string_view rThemeName, sal_uInt32 nSdrModelPos,
-                                           SdrModel* pModel, BitmapEx* pThumb = nullptr );
+                                           SdrModel* pModel, Bitmap* pThumb = nullptr );
     static bool                 GetSdrObj( sal_uInt32 nThemeId, sal_uInt32 nSdrModelPos,
-                                           SdrModel* pModel, BitmapEx* pThumb = nullptr );
+                                           SdrModel* pModel, Bitmap* pThumb = nullptr );
 
     static bool                 BeginLocking( std::u16string_view rThemeName );
     static bool                 BeginLocking( sal_uInt32 nThemeId );
