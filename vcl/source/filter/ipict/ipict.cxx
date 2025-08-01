@@ -1104,10 +1104,11 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
                                 nCount = aScanline.size() - i;
                             if (pPict->remainingSize() < nCount)
                                 return 0xffffffff;
-                            while( nCount-- )
+                            while (nCount > 0)
                             {
                                 pPict->ReadUChar( nDat );
                                 aScanline[ i++ ] = nDat;
+                                --nCount;
                             }
                         }
                         else
@@ -1118,8 +1119,11 @@ sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bC
                             if (( i + nCount) > aScanline.size())
                                 nCount = aScanline.size() - i;
                             pPict->ReadUChar( nDat );
-                            while( nCount-- )
+                            while (nCount > 0)
+                            {
                                 aScanline[ i++ ] = nDat;
+                                --nCount;
+                            }
                         }
                     }
                     sal_uInt8* pTmp = aScanline.data();
