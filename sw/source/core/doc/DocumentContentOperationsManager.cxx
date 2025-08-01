@@ -4412,8 +4412,13 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl(SwPaM & rPam
         // (randomTest and testTdf54819 triggers it)
         SAL_WARN_IF((eOld & RedlineFlags::ShowMask) != RedlineFlags::ShowMask,
                 "sw.core", "redlines will be moved in DeleteAndJoin");
-        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
-            RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+        RedlineFlags eFlags = RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
+        if (eOld & RedlineFlags::DontCombineRedlines)
+        {
+            // Reinstate disables redline compressing, don't drop that here.
+            eFlags |= RedlineFlags::DontCombineRedlines;
+        }
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(eFlags);
 
         for (std::unique_ptr<SwRangeRedline> & pRedline : redlines)
         {

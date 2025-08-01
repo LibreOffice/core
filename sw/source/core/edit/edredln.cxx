@@ -96,7 +96,13 @@ void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
 {
     if (rRedline.GetType() == RedlineType::Insert)
     {
+        // Disable compressing redlines, that would merge a self-insert and a self-delete, which is
+        // not wanted for reinstate.
+        IDocumentRedlineAccess& rIDRA = GetDoc()->getIDocumentRedlineAccess();
+        RedlineFlags eOld = rIDRA.GetRedlineFlags();
+        rIDRA.SetRedlineFlags(eOld | RedlineFlags::DontCombineRedlines);
         DeleteSel(rPaM, /*isArtificialSelection=*/true);
+        rIDRA.SetRedlineFlags(eOld);
     }
     else if (rRedline.GetType() == RedlineType::Delete)
     {

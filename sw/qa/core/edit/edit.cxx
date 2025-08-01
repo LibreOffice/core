@@ -424,6 +424,33 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateAll)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rRedlines.size());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRedlineReinstateSelf)
+{
+    // Given a document with a self-insert:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwModule* pModule = SwModule::get();
+    pModule->SetRedlineAuthor("Alice");
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    pWrtShell->SetRedlineFlags(nMode | RedlineFlags::On);
+    pWrtShell->Insert("x");
+
+    // When reinstating that insert:
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->ReinstateRedline(0);
+
+    // Then make sure the insert and the newly created delete redlines are not compressed:
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the original redline was lost instead of replacing that with an insert-then-delete
+    // redline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
