@@ -6142,7 +6142,7 @@ SalInstanceTextView::~SalInstanceTextView()
 
 IMPL_LINK(SalInstanceTextView, VscrollHdl, ScrollBar*, pScrollBar, void)
 {
-    signal_vadjustment_changed();
+    signal_vadjustment_value_changed();
     m_aOrigVScrollHdl.Call(pScrollBar);
 }
 

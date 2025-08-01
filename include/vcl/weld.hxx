@@ -2412,12 +2412,12 @@ private:
 
 protected:
     Link<TextView&, void> m_aChangeHdl;
-    Link<TextView&, void> m_aVChangeHdl;
+    Link<TextView&, void> m_aVValueChangeHdl;
     Link<TextView&, void> m_aCursorPositionHdl;
 
     void signal_changed() { m_aChangeHdl.Call(*this); }
     void signal_cursor_position() { m_aCursorPositionHdl.Call(*this); }
-    void signal_vadjustment_changed() { m_aVChangeHdl.Call(*this); }
+    void signal_vadjustment_value_changed() { m_aVValueChangeHdl.Call(*this); }
 
 public:
     virtual void set_text(const OUString& rText) = 0;
@@ -2476,7 +2476,10 @@ public:
     virtual int vadjustment_get_upper() const = 0;
     virtual int vadjustment_get_page_size() const = 0;
     virtual void vadjustment_set_value(int value) = 0;
-    void connect_vadjustment_changed(const Link<TextView&, void>& rLink) { m_aVChangeHdl = rLink; }
+    void connect_vadjustment_value_changed(const Link<TextView&, void>& rLink)
+    {
+        m_aVValueChangeHdl = rLink;
+    }
 };
 
 class VCL_DLLPUBLIC Expander : virtual public Widget

@@ -102,7 +102,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_xAcceptButton->connect_clicked( LINK(this, LicenseDialogImpl, AcceptHdl) );
     m_xDeclineButton->connect_clicked( LINK(this, LicenseDialogImpl, CancelHdl) );
 
-    m_xLicense->connect_vadjustment_changed(LINK(this, LicenseDialogImpl, ScrolledHdl));
+    m_xLicense->connect_vadjustment_value_changed(LINK(this, LicenseDialogImpl, ScrolledHdl));
     m_xDown->connect_mouse_press(LINK(this, LicenseDialogImpl, MousePressHdl));
     m_xDown->connect_mouse_release(LINK(this, LicenseDialogImpl, MouseReleaseHdl));
     m_xDown->connect_key_press(LINK(this, LicenseDialogImpl, KeyInputHdl));

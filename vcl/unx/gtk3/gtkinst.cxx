@@ -18015,7 +18015,7 @@ private:
     {
         GtkInstanceTextView* pThis = static_cast<GtkInstanceTextView*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_vadjustment_changed();
+        pThis->signal_vadjustment_value_changed();
     }
 
 public:
