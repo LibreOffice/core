@@ -19,13 +19,10 @@
 
 #include <algorithm>
 #include <cassert>
-#include <memory>
 
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/io/IOException.hpp>
-//#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/memorystream.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>

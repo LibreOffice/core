@@ -27,7 +27,6 @@
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -41,7 +40,6 @@
 
 #include <rtl/digest.h>
 #include <rtl/random.h>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <ucbhelper/content.hxx>

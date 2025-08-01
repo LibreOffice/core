@@ -11,7 +11,6 @@
 
 #include <atomic>
 #include <mutex>
-#include <iostream>
 
 #include <comphelper/profilezone.hxx>
 #include <comphelper/sequence.hxx>

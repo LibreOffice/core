@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <comphelper/solarmutex.hxx>
-#include <osl/thread.hxx>
 
 #include <assert.h>
 #include <cstdlib>

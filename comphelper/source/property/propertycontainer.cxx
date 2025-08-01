@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/propertycontainer.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 
 namespace comphelper
@@ -26,7 +25,6 @@ namespace comphelper
 
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 
 OPropertyContainer::OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper)
     :OPropertySetHelper(_rBHelper)

@@ -25,6 +25,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -39,10 +40,8 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace comphelper;

@@ -18,13 +18,10 @@
  */
 
 #include <comphelper/propertycontainer2.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 namespace comphelper
 {
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
 
 OPropertyContainer2::OPropertyContainer2() {}
 

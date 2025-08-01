@@ -34,9 +34,14 @@ excludelist:
     comphelper/source/container/enumerablemap.cxx:
     # Avoid loplugin:unreffun error
     - comphelper_services.hxx
+    # Needed for typedef
+    - com/sun/star/lang/XServiceInfo.hpp
     comphelper/source/container/namecontainer.cxx:
     # Needed for NameContainer_createInstance
     - comphelper/namecontainer.hxx
+    comphelper/source/crypto/Crypto_NSS.cxx:
+    # Keep catch-all interface file of NSPR
+    - nspr.h
     comphelper/source/eventattachermgr/eventattachermgr.cxx:
     # Needed for linker visibility
     - comphelper/eventattachermgr.hxx
@@ -52,6 +57,9 @@ excludelist:
     comphelper/source/misc/graphicmimetype.cxx:
     # Needed for direct member access
     - com/sun/star/io/XInputStream.hpp
+    comphelper/source/misc/hash.cxx:
+    # Keep catch-all interface file of NSPR
+    - nspr.h
     comphelper/source/misc/instancelocker.cxx:
     # Needed for template
     - com/sun/star/embed/XActionsApproval.hpp

@@ -25,7 +25,6 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 
 typedef std::map<OUString, css::uno::Any> SvGenericNameContainerMapImpl;

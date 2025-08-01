@@ -19,7 +19,6 @@
 
 
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/sequence.hxx>
 
 
 using namespace ::comphelper;

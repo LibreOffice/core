@@ -28,7 +28,6 @@
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

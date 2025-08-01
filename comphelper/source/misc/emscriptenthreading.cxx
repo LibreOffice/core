@@ -9,11 +9,12 @@
 
 #include <sal/config.h>
 
-#include <comphelper/emscriptenthreading.hxx>
 #include <config_emscripten.h>
 #include <config_vclplug.h>
 
 #if defined EMSCRIPTEN && ENABLE_QT6 && HAVE_EMSCRIPTEN_JSPI && !HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
+
+#include <comphelper/emscriptenthreading.hxx>
 
 #include <mutex>
 #include <thread>

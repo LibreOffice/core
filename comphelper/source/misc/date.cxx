@@ -19,8 +19,6 @@
 
 #include <comphelper/date.hxx>
 
-#include <cassert>
-
 namespace comphelper::date
 {
 // Once upon a time the number of days we internally handled in tools' class

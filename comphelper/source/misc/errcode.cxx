@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/errcode.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <o3tl/runtimetooustring.hxx>
 
 UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString ErrCode::toString() const

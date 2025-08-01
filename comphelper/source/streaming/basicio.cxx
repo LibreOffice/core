@@ -19,7 +19,6 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/bytereader.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 namespace comphelper

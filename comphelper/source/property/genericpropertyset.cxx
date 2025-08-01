@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weakagg.hxx>
+#include <com/sun/star/uno/XAggregation.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/multiinterfacecontainer4.hxx>
 #include <comphelper/propertysethelper.hxx>

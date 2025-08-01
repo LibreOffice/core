@@ -47,7 +47,6 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <comphelper/anytostring.hxx>
-#include <sal/log.hxx>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 

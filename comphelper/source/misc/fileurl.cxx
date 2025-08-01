@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <comphelper/fileurl.hxx>
-#include <rtl/ustring.hxx>
 #include <o3tl/string_view.hxx>
 
 bool comphelper::isFileUrl(std::u16string_view url)

@@ -23,7 +23,6 @@
 
 #include <limits>
 #include <map>
-#include <memory>
 #include <unordered_map>
 
 using namespace ::com::sun::star::uno;

@@ -12,7 +12,7 @@
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
 
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

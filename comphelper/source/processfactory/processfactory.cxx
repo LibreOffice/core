@@ -25,8 +25,6 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace com::sun::star::uno { class XComponentContext; }
-
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

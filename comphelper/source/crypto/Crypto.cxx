@@ -8,9 +8,7 @@
  */
 
 #include <comphelper/crypto/Crypto.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/types.h>
-#include <config_oox.h>
 
 namespace comphelper
 {

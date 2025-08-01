@@ -19,16 +19,10 @@
 
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <com/sun/star/i18n/CharType.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
 
 #include <unotest/bootstrapfixturebase.hxx>
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;

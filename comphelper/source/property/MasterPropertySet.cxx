@@ -25,7 +25,6 @@
 #include <comphelper/solarmutex.hxx>
 
 
-#include <memory>
 #include <vector>
 #include <optional>
 

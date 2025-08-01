@@ -11,13 +11,11 @@
  */
 
 #include <comphelper/random.hxx>
-#include <sal/log.hxx>
 #include <assert.h>
 #include <time.h>
 #include <mutex>
 #include <random>
 #include <rtl/random.h>
-#include <stdexcept>
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
 #endif

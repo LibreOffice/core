@@ -22,7 +22,6 @@
 #include <comphelper/solarmutex.hxx>
 
 
-#include <memory>
 #include <optional>
 
 using namespace ::comphelper;

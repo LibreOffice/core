@@ -22,8 +22,7 @@
 
 #include <o3tl/hash_combine.hxx>
 #include <typelib/typedescription.hxx>
-
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 #include "typedescriptionref.hxx"
 
