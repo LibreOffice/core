@@ -972,10 +972,10 @@ sal_Int32 SwCursor::FindAll( SwFindParas& rParas,
     SwCursor* pFndRing = nullptr;
     SwNodes& rNds = GetDoc().GetNodes();
 
-    // search in sections?
+    // search in selections?
     if( FindRanges::InSel & eFndRngs )
     {
-        // if string was not found in region then get all sections (cursors
+        // if string was not found in region then get all selections (cursors
         // stays unchanged)
         nFound = lcl_FindSelection( rParas, this, fnMove,
                                     pFndRing, aRegion, eFndRngs,
