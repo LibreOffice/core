@@ -40,8 +40,8 @@ DataEditor::DataEditor(weld::Window* pParent,
     , m_xTbxData(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xCloseBtn(m_xBuilder->weld_button(u"close"_ustr))
     , m_xTable(m_xBuilder->weld_container(u"datawindow"_ustr))
-    , m_xColumns(m_xBuilder->weld_container(u"columns"_ustr))
-    , m_xColors(m_xBuilder->weld_container(u"colorcolumns"_ustr))
+    , m_xColumns(m_xBuilder->weld_box(u"columns"_ustr))
+    , m_xColors(m_xBuilder->weld_box(u"colorcolumns"_ustr))
     , m_xTableCtrlParent(m_xTable->CreateChildFrame())
     , m_xBrwData(VclPtr<DataBrowser>::Create(m_xTableCtrlParent, m_xColumns.get(), m_xColors.get()))
 {

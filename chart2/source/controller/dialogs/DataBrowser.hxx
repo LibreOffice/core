@@ -70,7 +70,7 @@ protected:
 
 public:
     DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
-                weld::Container* pColumns, weld::Container* pColors);
+                weld::Box* pColumns, weld::Box* pColors);
 
     virtual ~DataBrowser() override;
     virtual void dispose() override;
@@ -160,8 +160,8 @@ private:
 
     VclPtr<svt::FormattedControl> m_aNumberEditField;
     VclPtr<svt::EditControl>    m_aTextEditField;
-    weld::Container*            m_pColumnsWin;
-    weld::Container*            m_pColorsWin;
+    weld::Box* m_pColumnsWin;
+    weld::Box* m_pColorsWin;
 
     /// note: m_aNumberEditField must precede this member!
     ::svt::CellControllerRef    m_rNumberEditController;

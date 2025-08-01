@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(SeriesHeaderEdit, MousePressHdl, const MouseEvent&, bool)
 class SeriesHeader
 {
 public:
-    explicit SeriesHeader(weld::Container* pParent, weld::Container* pColorParent, sal_Int32 nHeader);
+    explicit SeriesHeader(weld::Box* pParent, weld::Box* pColorParent, sal_Int32 nHeader);
             ~SeriesHeader();
 
     void SetColor( const Color & rCol );
@@ -207,8 +207,8 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder1;
     std::unique_ptr<weld::Builder> m_xBuilder2;
 
-    weld::Container* m_pParent;
-    weld::Container* m_pColorParent;
+    weld::Box* m_pParent;
+    weld::Box* m_pColorParent;
 
     std::unique_ptr<weld::Container> m_xContainer1;
     std::unique_ptr<weld::Container> m_xContainer2;
@@ -233,7 +233,7 @@ private:
     bool      m_bSeriesNameChangePending;
 };
 
-SeriesHeader::SeriesHeader(weld::Container* pParent, weld::Container* pColorParent, sal_Int32 nHeader)
+SeriesHeader::SeriesHeader(weld::Box* pParent, weld::Box* pColorParent, sal_Int32 nHeader)
     : m_aUpdateDataTimer( "SeriesHeader UpdateDataTimer" )
     , m_xBuilder1(Application::CreateBuilder(pParent, u"modules/schart/ui/columnfragment.ui"_ustr))
     , m_xBuilder2(Application::CreateBuilder(pColorParent, u"modules/schart/ui/imagefragment.ui"_ustr))
@@ -473,7 +473,7 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 } // anonymous namespace
 
 DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
-                         weld::Container* pColumns, weld::Container* pColors) :
+                         weld::Box* pColumns, weld::Box* pColors) :
     ::svt::EditBrowseBox(VCLUnoHelper::GetWindow(rParent),
             EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT,
             WB_BORDER | WB_TABSTOP, BrowserStdFlags ),

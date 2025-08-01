@@ -50,8 +50,8 @@ private:
     std::unique_ptr<weld::Toolbar> m_xTbxData;
     std::unique_ptr<weld::Button> m_xCloseBtn;
     std::unique_ptr<weld::Container> m_xTable;
-    std::unique_ptr<weld::Container> m_xColumns;
-    std::unique_ptr<weld::Container> m_xColors;
+    std::unique_ptr<weld::Box> m_xColumns;
+    std::unique_ptr<weld::Box> m_xColors;
     css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
     VclPtr<DataBrowser> m_xBrwData;
 
