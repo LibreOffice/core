@@ -490,6 +490,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin2, "tdf160049_anchorMargin2.d
     // which is "Paragraph text area"/PRINT_AREA/1, not "Entire paragraph area"/FRAME/0
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PRINT_AREA,
                          getProperty<sal_Int16>(getShape(1), u"HoriOrientRelation"_ustr));
+
+    // tdf#167770: emulate no text-wrap gap when left-aligned-to-paragraph-margin instead of 0.90cm
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(1), u"LeftMargin"_ustr));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMargin14, "tdf160049_anchorMargin14.docx")
