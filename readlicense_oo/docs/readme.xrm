@@ -24,7 +24,7 @@
 			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text packaged with this ${PRODUCTNAME} download.</p>
 			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} Free for Any User?</h3>
 			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading Open Source productivity software for home and office.</p>
-			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure that ${PRODUCTNAME} continues to be available far into the future, please consider contributing to the project - see <a href="https://www.documentfoundation.org/contribution/">https://www.documentfoundation.org/contribution/</a> for details. Everyone can make a contribution of some kind.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure that ${PRODUCTNAME} continues to be available far into the future, please consider contributing to the project - see <a href="https://www.libreoffice.org/community/get-involved/">https://www.libreoffice.org/community/get-involved/</a> for details. Everyone can make a contribution of some kind.</p>
 		</div>
 
 		<div id="Installation">
