@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <sal/types.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <framework/fwkdllapi.h>
@@ -238,8 +238,8 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    An empty image
         *//*-*****************************************************************************************************/
 
-        BitmapEx GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const;
-        BitmapEx GetImageFromURL( const OUString& aURL, bool bBig ) const;
+        Bitmap GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale ) const;
+        Bitmap GetImageFromURL( const OUString& aURL, bool bBig ) const;
 
     //  private methods
 
