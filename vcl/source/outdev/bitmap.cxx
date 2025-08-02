@@ -495,7 +495,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     mpMetaFile = nullptr; // fdo#55044 reset before GetBitmap!
     mbMap = false;
 
-    Bitmap aBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
+    Bitmap aDeviceBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
 
     // #109044# The generated bitmap need not necessarily be
     // of aDstRect dimensions, it's internally clipped to
@@ -503,9 +503,9 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     // since we later use it (in nDstWidth/Height) for pixel
     // access)
     // #i38887# reading from screen may sometimes fail
-    if (aBmp.ImplGetSalBitmap())
+    if (aDeviceBmp.ImplGetSalBitmap())
     {
-        aDstRect.SetSize(aBmp.GetSizePixel());
+        aDstRect.SetSize(aDeviceBmp.GetSizePixel());
     }
 
     const tools::Long nDstWidth = aDstRect.GetWidth();
@@ -531,12 +531,12 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     assert(pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
     // #i38887# reading from screen may sometimes fail
-    if (aBmp.ImplGetSalBitmap())
+    if (aDeviceBmp.ImplGetSalBitmap())
     {
         Bitmap aNewBitmap;
 
         aNewBitmap = lcl_BlendBitmapWithAlpha(
-                        aBmp, pBitmapReadAccess.get(), pAlphaReadAccess.get(),
+                        aDeviceBmp, pBitmapReadAccess.get(), pAlphaReadAccess.get(),
                         nDstHeight,
                         nDstWidth,
                         aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
