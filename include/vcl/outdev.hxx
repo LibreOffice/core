@@ -201,12 +201,14 @@ private:
     tools::Long                            mnOutOffOrigY;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffLogicY;
+public:
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     tools::Long                            mnOutOffX;
     /// Output offset for device output in pixel (pseudo window offset within window system's frames)
     tools::Long                            mnOutOffY;
     tools::Long                            mnOutWidth;
     tools::Long                            mnOutHeight;
+private:
     sal_Int32                       mnDPIX;
     sal_Int32                       mnDPIY;
     sal_Int32                       mnDPIScalePercentage; ///< For HiDPI displays, we want to draw elements for a percentage larger

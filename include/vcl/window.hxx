@@ -473,6 +473,7 @@ private:
     //       but use class WindowImpl instead
 
     std::unique_ptr<WindowImpl> mpWindowImpl;
+    std::shared_ptr<vcl_canvas::SpriteCanvas> mpSpriteCanvas;
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );

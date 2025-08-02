@@ -578,18 +578,23 @@ Window::~Window()
 
 std::shared_ptr<::vcl_canvas::SpriteCanvas> Window::GetSpriteCanvas()
 {
-    const Sequence< Any > aArg{
-        Any(reinterpret_cast<sal_Int64>(GetOutDev())),
-        Any(css::awt::Rectangle( 0, 0, 0, 0 )),
-        Any(false),
-        Any(Reference< css::awt::XWindow >()),
-        GetOutDev()->GetSystemGfxDataAny()
-    };
+    if(mpSpriteCanvas)
+        return mpSpriteCanvas;
+    const Sequence<Any> aArg{ Any(reinterpret_cast<sal_Int64>(mpWindowImpl->mxOutDev.get())),
+                              Any(css::awt::Rectangle(mpWindowImpl->mxOutDev->mnOutOffX,
+                                                      mpWindowImpl->mxOutDev->mnOutOffY,
+                                                      mpWindowImpl->mxOutDev->mnOutWidth,
+                                                      mpWindowImpl->mxOutDev->mnOutHeight)),
+                              Any(mpWindowImpl->mbAlwaysOnTop),
+                              Any(Reference<css::awt::XWindow>(GetComponentInterface(), UNO_QUERY)),
+                              mpWindowImpl->mxOutDev->GetSystemGfxDataAny() };
     const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    auto pSpriteCanvas = std::shared_ptr<vcl_cairocanvas::SpriteCanvas>(
+    auto mpSpriteCanvasImpl = std::shared_ptr<vcl_cairocanvas::SpriteCanvas>(
         new vcl_cairocanvas::SpriteCanvas(aArg, xContext)
     );
-    return pSpriteCanvas;
+    mpSpriteCanvasImpl->initialize();
+    mpSpriteCanvas = mpSpriteCanvasImpl;
+    return mpSpriteCanvas;
 }
 
 Color WindowOutputDevice::GetBackgroundColor() const
