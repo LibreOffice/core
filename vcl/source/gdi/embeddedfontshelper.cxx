@@ -42,6 +42,16 @@ namespace libeot
 using namespace com::sun::star;
 using namespace vcl;
 
+namespace
+{
+OUString GetEmbeddedFontsRoot()
+{
+    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
+    rtl::Bootstrap::expandMacros( path );
+    return path + "/user/temp/embeddedfonts/";
+}
+}
+
 static void clearDir( const OUString& path )
 {
     osl::Directory dir( path );
@@ -61,9 +71,7 @@ static void clearDir( const OUString& path )
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
-    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
-    rtl::Bootstrap::expandMacros( path );
-    path += "/user/temp/embeddedfonts/";
+    OUString path = GetEmbeddedFontsRoot();
     clearDir( path + "fromdocs/" );
     clearDir( path + "fromsystem/" );
 }
@@ -241,9 +249,7 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
         filename = "font" + OUString::number(uniqueCounter++) + ".ttf";
     }
 
-    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
-    rtl::Bootstrap::expandMacros( path );
-    path += "/user/temp/embeddedfonts/fromdocs/";
+    OUString path = GetEmbeddedFontsRoot() + "fromdocs/";
     osl::Directory::createPath( path );
     return path + filename;
 }
@@ -279,9 +285,7 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, tools::Long siz
 OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, FontRights rights )
 {
-    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
-    rtl::Bootstrap::expandMacros( path );
-    path += "/user/temp/embeddedfonts/fromsystem/";
+    OUString path = GetEmbeddedFontsRoot() + "fromsystem/";
     osl::Directory::createPath( path );
     OUString filename = OUString::Concat(familyName) + "_" + OUString::number( family ) + "_" + OUString::number( italic )
         + "_" + OUString::number( weight ) + "_" + OUString::number( pitch )
