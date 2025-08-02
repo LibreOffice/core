@@ -996,10 +996,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         switch (rHoriOri.GetHoriOrient())
         {
             case text::HoriOrientation::LEFT:
-                alignH = "left";
+                alignH = rHoriOri.IsPosToggle() ? "inside" : "left";
                 break;
             case text::HoriOrientation::RIGHT:
-                alignH = "right";
+                alignH = rHoriOri.IsPosToggle() ? "outside" : "right";
                 break;
             case text::HoriOrientation::CENTER:
                 alignH = "center";

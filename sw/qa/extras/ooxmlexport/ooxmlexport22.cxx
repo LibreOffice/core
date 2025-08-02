@@ -75,6 +75,67 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166201_simplePosCM)
                          getProperty<sal_Int32>(getShape(1), u"VertOrientPosition"_ustr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf167770_marginInsideOutside, "tdf167770_marginInsideOutside.docx")
+{
+    // given shapes and pictures that use inside / outside with the two options margin and page
+    uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 1")); // page 1
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"PageToggle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
+
+    xShape.set(getShapeByName(u"Right Arrow 2")); // page 1
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_FRAME,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"PageToggle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
+
+    xShape.set(getShapeByName(u"Picture 4")); // page 2
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"PageToggle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"RightMargin"_ustr));
+
+    xShape.set(getShapeByName(u"Right Arrow 3")); // page 2
+    CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
+                         getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT,
+                         getProperty<sal_Int16>(xShape, u"HoriOrient"_ustr));
+    CPPUNIT_ASSERT(getProperty<bool>(xShape, u"PageToggle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, u"LeftMargin"_ustr));
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    const SwTwips nPageLeft = getXPath(pXmlDoc, "//page[1]/infos/bounds", "left").toInt32();
+    const SwTwips nPicture1Left
+        = getXPath(pXmlDoc, "//page[1]//fly/infos/bounds", "left").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nPageLeft, nPicture1Left); // page 1: INSIDE == left
+
+    const SwTwips nPageRight = getXPath(pXmlDoc, "//page[1]/infos/bounds", "right").toInt32();
+    const SwTwips nArrow2Right
+        = getXPath(pXmlDoc, "//page[1]//SwAnchoredDrawObject/bounds", "right").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPageRight, nArrow2Right, 50); // page 1: OUTSIDE == right
+
+    const SwTwips nPageMarginRight
+        = getXPath(pXmlDoc, "//page[2]//body/infos/bounds", "right").toInt32();
+    const SwTwips nPicture4Right
+        = getXPath(pXmlDoc, "//page[2]//fly/infos/bounds", "right").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nPageMarginRight, nPicture4Right); // page 2: INSIDE == right
+
+    const SwTwips nPageMarginLeft
+        = getXPath(pXmlDoc, "//page[2]//body/infos/bounds", "left").toInt32();
+    const SwTwips nArrow3Left
+        = getXPath(pXmlDoc, "//page[2]//SwAnchoredDrawObject/bounds", "left").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nPageMarginLeft, nArrow3Left, 50); // page 2: OUTSIDE == left
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf166975)
 {
     createSwDoc("WordOK.docx");
