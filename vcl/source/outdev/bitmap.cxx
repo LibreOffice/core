@@ -413,7 +413,7 @@ private:
 
 // Co = Cs + Cd*(1-As) premultiplied alpha -or-
 // Co = (AsCs + AdCd*(1-As)) / Ao
-sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
+sal_uInt8 lcl_CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
                             const sal_uInt8 nDstAlpha, const sal_uInt8 nResAlpha, const sal_uInt8 nDestColor )
 {
     int c = nResAlpha ? ( static_cast<int>(nSourceAlpha)*nSourceColor + static_cast<int>(nDstAlpha)*nDestColor -
@@ -421,7 +421,7 @@ sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
     return sal_uInt8( c );
 }
 
-BitmapColor AlphaBlend( int nX,               int nY,
+BitmapColor lcl_AlphaBlend(int nX, int nY,
                                const tools::Long            nMapX,
                                const tools::Long            nMapY,
                                BitmapReadAccess const *  pP,
@@ -442,9 +442,9 @@ BitmapColor AlphaBlend( int nX,               int nY,
     sal_uInt8 nResAlpha = static_cast<int>(nSrcAlpha) + static_cast<int>(nDstAlpha)
               - static_cast<int>(nDstAlpha) * nSrcAlpha / 255;
     aDstCol.SetAlpha(nResAlpha);
-    aDstCol.SetRed( CalcColor( aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed() ) );
-    aDstCol.SetBlue( CalcColor( aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue() ) );
-    aDstCol.SetGreen( CalcColor( aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen() ) );
+    aDstCol.SetRed(lcl_CalcColor(aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed()));
+    aDstCol.SetBlue(lcl_CalcColor(aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue()));
+    aDstCol.SetGreen(lcl_CalcColor(aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen()));
 
     return aDstCol;
 }
@@ -473,7 +473,7 @@ Bitmap lcl_BlendBitmapWithAlpha(
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
                     const tools::Long nMapX = pMapX[ nX ];
-                    BitmapColor aDstCol = AlphaBlend(nX, nY, nMapX, nMapY, pP, pA, pB.get());
+                    BitmapColor aDstCol = lcl_AlphaBlend(nX, nY, nMapX, nMapY, pP, pA, pB.get());
 
                     pB->SetPixelOnData(pScanlineB, nX, aDstCol);
                 }
