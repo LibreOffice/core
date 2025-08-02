@@ -31,8 +31,7 @@ private:
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
 
 public:
-    MasterPasswordDialog(weld::Window* pParent, css::task::PasswordRequestMode nDlgMode,
-                         const std::locale& rLocale);
+    MasterPasswordDialog(weld::Window* pParent);
     virtual ~MasterPasswordDialog() override;
 
     OUString GetMasterPassword() const { return m_xEDMasterPassword->get_text(); }

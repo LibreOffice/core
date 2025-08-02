@@ -423,7 +423,15 @@ executeMasterPasswordDialog(
         }
         else
         {
-            MasterPasswordDialog aDialog(pParent, nMode, aResLocale);
+            if (nMode == css::task::PasswordRequestMode_PASSWORD_REENTER)
+            {
+                OUString aErrorMsg(Translate::get(STR_ERROR_MASTERPASSWORD_WRONG, aResLocale));
+                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(
+                    pParent, VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
+                xErrorBox->run();
+            }
+
+            MasterPasswordDialog aDialog(pParent);
             rInfo.SetResult(aDialog.run()
                 == RET_OK ? DialogMask::ButtonsOk : DialogMask::ButtonsCancel);
             aMaster = OUStringToOString(
