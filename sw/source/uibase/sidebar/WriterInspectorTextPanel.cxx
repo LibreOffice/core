@@ -680,7 +680,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 MetadataToTreeNode(xBookmark, aCurNode);
                 // show bookmark only if it has RDF metadata
                 if (aCurNode.children.size() > 0)
-                    aBookmarksNode.children.push_back(aCurNode);
+                    aBookmarksNode.children.push_back(std::move(aCurNode));
             }
         }
         catch (const lang::IllegalArgumentException&)
@@ -748,10 +748,10 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
         aStore.push_back(aFieldsNode);
         rParIdx++;
     }
-    aStore.push_back(aParaNode);
-    aStore.push_back(aParaDFNode);
-    aStore.push_back(aCharNode);
-    aStore.push_back(aCharDFNode);
+    aStore.push_back(std::move(aParaNode));
+    aStore.push_back(std::move(aParaDFNode));
+    aStore.push_back(std::move(aCharNode));
+    aStore.push_back(std::move(aCharDFNode));
 }
 
 IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, void)

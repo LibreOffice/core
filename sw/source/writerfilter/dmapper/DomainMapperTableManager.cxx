@@ -446,12 +446,9 @@ void DomainMapperTableManager::startLevel( )
         m_aParagraphsToEndTable.top()->pop_back();
     }
 
-    IntVectorPtr pNewGrid = std::make_shared<std::vector<sal_Int32>>();
-    IntVectorPtr pNewCellWidths = std::make_shared<std::vector<sal_Int32>>();
-    TablePositionHandlerPtr pNewPositionHandler;
-    m_aTableGrid.push_back( pNewGrid );
-    m_aCellWidths.push_back( pNewCellWidths );
-    m_aTablePositions.push_back( pNewPositionHandler );
+    m_aTableGrid.push_back(std::make_shared<std::vector<sal_Int32>>());
+    m_aCellWidths.push_back(std::make_shared<std::vector<sal_Int32>>());
+    m_aTablePositions.push_back(TablePositionHandlerPtr());
     // empty name will be replaced by the table style name, if it exists
     m_aTableStyleNames.push_back( OUString() );
     m_aMoved.push_back( OUString() );

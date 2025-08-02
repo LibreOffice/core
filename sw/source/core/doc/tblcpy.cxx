@@ -243,8 +243,7 @@ namespace
         if( bComplex )
         {
             SubTable aSubTable;
-            SubLine aSubLine;
-            aSubTable.push_back( aSubLine );
+            aSubTable.emplace_back();
             SubTable::iterator pStartLn = aSubTable.begin();
             SubTable::iterator pEndLn = aSubTable.end();
             for( auto pBox : rBoxes )

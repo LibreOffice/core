@@ -953,7 +953,7 @@ void ViewStyleContainer::ProcessViewStyle(
     if (pBackground && pBackground->GetNormalBitmap().is())
         pStyle->mpBackground = std::move(pBackground);
 
-    mStyles.push_back(pStyle);
+    mStyles.push_back(std::move(pStyle));
 }
 
 SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) const

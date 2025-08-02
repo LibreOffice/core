@@ -127,7 +127,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             }
 
             // take over Bitmap
-            aThumbBmp = aBmp;
+            aThumbBmp = std::move(aBmp);
 
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {

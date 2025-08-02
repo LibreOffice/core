@@ -3956,7 +3956,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
         ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
             GetLevelsObject()->getByIndex(0)->GetMembersObject();
         if (pGrpFilter->getMatchItemCount() < o3tl::make_unsigned(pMembers->getCount()))
-            rFilters.push_back(aCri);
+            rFilters.push_back(std::move(aCri));
     }
 }
 

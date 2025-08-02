@@ -534,7 +534,6 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter(const std:
     return m_xTypeConverter;
 }
 
-
 template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
 void PropertyValueSet::appendValue(const OUString& rPropName, PropsSet nTypeName, const T& rValue)
 {
@@ -546,9 +545,8 @@ void PropertyValueSet::appendValue(const OUString& rPropName, PropsSet nTypeName
     aNewValue.nOrigValue    = nTypeName;
     aNewValue.*_member_name_ = rValue;
 
-    m_pValues->push_back( aNewValue );
+    m_pValues->push_back(std::move(aNewValue));
 }
-
 
 void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
@@ -556,13 +554,11 @@ void PropertyValueSet::appendString( const OUString& rPropName,
     appendValue<OUString, &ucbhelper_impl::PropertyValue::aString>(rPropName, PropsSet::String, rValue);
 }
 
-
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       bool bValue )
 {
     appendValue<bool, &ucbhelper_impl::PropertyValue::bBoolean>(rPropName, PropsSet::Boolean, bValue);
 }
-
 
 void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )

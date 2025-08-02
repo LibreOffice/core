@@ -2127,10 +2127,10 @@ void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
     xSrcLink->ReadChSourceLink( rStrm );
     switch( xSrcLink->GetDestType() )
     {
-        case EXC_CHSRCLINK_TITLE:       mxTitleLink = xSrcLink;     break;
-        case EXC_CHSRCLINK_VALUES:      mxValueLink = xSrcLink;     break;
-        case EXC_CHSRCLINK_CATEGORY:    mxCategLink = xSrcLink;     break;
-        case EXC_CHSRCLINK_BUBBLES:     mxBubbleLink = xSrcLink;    break;
+        case EXC_CHSRCLINK_TITLE:    mxTitleLink = std::move(xSrcLink);  break;
+        case EXC_CHSRCLINK_VALUES:   mxValueLink = std::move(xSrcLink);  break;
+        case EXC_CHSRCLINK_CATEGORY: mxCategLink = std::move(xSrcLink);  break;
+        case EXC_CHSRCLINK_BUBBLES:  mxBubbleLink = std::move(xSrcLink); break;
     }
 }
 
@@ -2154,7 +2154,7 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 {
     XclImpChSerTrendLineRef xTrendLine = std::make_shared<XclImpChSerTrendLine>( GetChRoot() );
     xTrendLine->ReadChSerTrendLine( rStrm );
-    maTrendLines.push_back( xTrendLine );
+    maTrendLines.push_back(std::move(xTrendLine));
 }
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )

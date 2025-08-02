@@ -1907,7 +1907,7 @@ void AutoRecovery::implts_readConfig()
 
         /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-        m_lDocCache.push_back(aInfo);
+        m_lDocCache.push_back(std::move(aInfo));
         } /* SAFE */
     }
 
