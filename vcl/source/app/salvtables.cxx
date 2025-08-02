@@ -7008,7 +7008,7 @@ IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { si
 
 SalInstanceColorChooserDialog::SalInstanceColorChooserDialog(
     AbstractColorPickerDialog* pColorDialog)
-    : SalInstanceDialog(dynamic_cast<SalInstanceDialog*>(pColorDialog->GetDialog())->getDialog(),
+    : SalInstanceDialog(dynamic_cast<SalInstanceDialog&>(*pColorDialog->GetDialog()).getDialog(),
                         nullptr, false)
     , m_pAbstractColorPickerDialog(pColorDialog)
 {
