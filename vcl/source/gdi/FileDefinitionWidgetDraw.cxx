@@ -474,7 +474,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     vcl::bitmap::loadFromSvg(aFileStream, u""_ustr, aBitmap, nScaleFactor);
                     if (!aBitmap.IsEmpty())
                     {
-                        rCacheImages.insert(std::make_pair(rCacheKey, aBitmap));
+                        rCacheImages.insert(std::make_pair(rCacheKey, Bitmap(aBitmap)));
                     }
                 }
                 else

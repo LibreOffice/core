@@ -241,7 +241,7 @@ struct ImplSVGDIData
     tools::Long                    mnAppFontY = 0;                 // AppFont Y-Numenator for 80/tel Height
     bool                    mbFontSubChanged = false;       // true: FontSubstitution was changed between Begin/End
 
-    o3tl::lru_map<OUString, BitmapEx> maThemeImageCache = o3tl::lru_map<OUString, BitmapEx>(10);
+    o3tl::lru_map<OUString, Bitmap> maThemeImageCache = o3tl::lru_map<OUString, Bitmap>(10);
     o3tl::lru_map<OUString, gfx::DrawRoot> maThemeDrawCommandsCache = o3tl::lru_map<OUString, gfx::DrawRoot>(50);
 };
 
