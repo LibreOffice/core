@@ -140,6 +140,38 @@ void selectApproved(uno::Sequence<uno::Reference<task::XInteractionContinuation>
     }
 }
 
+bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    uno::Any const request(xRequest->getRequest());
+
+    if (task::DocumentMacroConfirmationRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (document::BrokenPackageRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (document::FilterOptionsRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (beans::NamedValue aStruct; request >>= aStruct)
+        if (aStruct.Name == "LoadReadOnlyRequest")
+            if (OUString aFileName; aStruct.Value >>= aFileName)
+                return true;
+
+    return false;
+}
+
+bool FallbackToStandard(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    auto xInteraction(task::InteractionHandler::createWithParent(
+        comphelper::getProcessComponentContext(), nullptr));
+
+    if (xInteraction.is())
+        xInteraction->handleInteractionRequest(xRequest);
+
+    return true;
+}
+
 }
 
 bool LOKInteractionHandler::handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest)
@@ -335,78 +367,6 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
     return true;
 }
 
-bool LOKInteractionHandler::handleMacroConfirmationRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
-{
-    uno::Any const request(xRequest->getRequest());
-
-    task::DocumentMacroConfirmationRequest aConfirmRequest;
-    if (request >>= aConfirmRequest)
-    {
-        auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
-
-        if (xInteraction.is())
-            xInteraction->handleInteractionRequest(xRequest);
-
-        return true;
-    }
-    return false;
-}
-
-bool LOKInteractionHandler::handlePackageReparationRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
-{
-    uno::Any const request(xRequest->getRequest());
-
-    document::BrokenPackageRequest aBrokenPackageRequest;
-    if (request >>= aBrokenPackageRequest)
-    {
-        auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
-
-        if (xInteraction.is())
-            xInteraction->handleInteractionRequest(xRequest);
-
-        return true;
-    }
-    return false;
-}
-
-bool LOKInteractionHandler::handleLoadReadOnlyRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
-{
-    uno::Any const request(xRequest->getRequest());
-
-    OUString aFileName;
-    beans::NamedValue aLoadReadOnlyRequest;
-    if ((request >>= aLoadReadOnlyRequest) &&
-        aLoadReadOnlyRequest.Name == "LoadReadOnlyRequest" &&
-        (aLoadReadOnlyRequest.Value >>= aFileName))
-    {
-        auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
-
-        if (xInteraction.is())
-            xInteraction->handleInteractionRequest(xRequest);
-
-        return true;
-    }
-    return false;
-}
-
-bool LOKInteractionHandler::handleFilterOptionsRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
-{
-    document::FilterOptionsRequest aFilterOptionsRequest;
-    uno::Any const request(xRequest->getRequest());
-    if (request >>= aFilterOptionsRequest)
-    {
-        uno::Reference< task::XInteractionHandler2 > xInteraction(
-            task::InteractionHandler::createWithParent(
-                ::comphelper::getProcessComponentContext(), nullptr));
-
-        if (xInteraction.is())
-            xInteraction->handleInteractionRequest(xRequest);
-
-        return true;
-    }
-    return false;
-}
-
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
@@ -422,17 +382,8 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
     if (handlePasswordRequest(aContinuations, request))
         return true;
 
-    if (handleFilterOptionsRequest(xRequest))
-        return true;
-
-    if (handleMacroConfirmationRequest(xRequest))
-        return true;
-
-    if (handlePackageReparationRequest(xRequest))
-        return true;
-
-    if (handleLoadReadOnlyRequest(xRequest))
-        return true;
+    if (ShouldFallbackToStandard(xRequest))
+        return FallbackToStandard(xRequest);
 
     // TODO: perform more interactions 'for real' like the above
     selectApproved(aContinuations);
