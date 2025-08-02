@@ -4820,7 +4820,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if (!pShapeFormat)
                     {
                         pSdrView->UnmarkAllObj();
-                        pSdrView->MarkObj(pObj, pPV);
+                        rSh.SelectObj(aDocPos, 0, pObj);
                         if (rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&
                             SwModule::get()->GetUsrPref(
                                 dynamic_cast<const SwWebView*>(&m_rView) != nullptr)->
@@ -4832,7 +4832,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         // If the fly frame is a textbox of a shape, then select the shape instead.
                         SdrObject* pShape = pShapeFormat->FindSdrObject();
                         pSdrView->UnmarkAllObj();
-                        pSdrView->MarkObj(pShape, pPV);
+                        rSh.SelectObj(aDocPos, SW_ALLOW_TEXTBOX, pShape);
                     }
                 }
             }
