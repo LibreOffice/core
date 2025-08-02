@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">res/fp015.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">res/fp015.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">res/fp010.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">res/fp010.png</property>
   </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
@@ -21,38 +21,35 @@
     </columns>
   </object>
   <object class="GtkDialog" id="CollectionView">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="collectionviewdialog|CollectionView">Save</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="collectionviewdialog|ok">_Save</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -64,9 +61,9 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -79,9 +76,9 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -95,14 +92,14 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
@@ -110,13 +107,13 @@
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkLabel" id="currentPathLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="hexpand">True</property>
@@ -131,13 +128,13 @@
                 <child>
                   <object class="GtkButton" id="newFolderButton">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="focus_on_click">False</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="collectionviewdialog|newFolderButton|tooltip_text">Create New Directory</property>
+                    <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
+                    <property name="can-default">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="collectionviewdialog|newFolderButton|tooltip_text">Create New Directory</property>
                     <property name="image">image1</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -148,12 +145,12 @@
                 <child>
                   <object class="GtkButton" id="upButton">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="collectionviewdialog|upButton|tooltip_text">Up One Level</property>
+                    <property name="can-focus">True</property>
+                    <property name="can-default">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="collectionviewdialog|upButton|tooltip_text">Up One Level</property>
                     <property name="image">image2</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -171,19 +168,19 @@
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="viewTreeview">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="vexpand">True</property>
                     <property name="model">liststore1</property>
-                    <property name="headers_clickable">False</property>
-                    <property name="search_column">1</property>
-                    <property name="show_expanders">False</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="search-column">1</property>
+                    <property name="show-expanders">False</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                     </child>
@@ -211,16 +208,16 @@
             <child>
               <object class="GtkBox" id="box3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="fileNameLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="collectionviewdialog|fileNameLabel">File _name:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">fileNameEntry</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">fileNameEntry</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -231,10 +228,10 @@
                 <child>
                   <object class="GtkEntry" id="fileNameEntry">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates-default">True</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
