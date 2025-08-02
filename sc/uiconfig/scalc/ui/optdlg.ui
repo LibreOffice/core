@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="optCalcPrintPage">
@@ -24,22 +24,16 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkCheckButton" id="suppressCB">
-                <property name="label" translatable="yes" context="optdlg|suppressCB">_Suppress output of empty pages</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="suppressCB-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|suppressCB">Specifies that empty pages that have no cell contents or draw objects are not printed.</property>
-                  </object>
-                </child>
+              <object class="GtkImage" id="lockforceBreaksCB">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
@@ -57,19 +51,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="lockforceBreaksCB">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkImage" id="locksuppressCB">
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
@@ -79,6 +60,25 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="suppressCB">
+                <property name="label" translatable="yes" context="optdlg|suppressCB">_Suppress output of empty pages</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="suppressCB-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|suppressCB">Specifies that empty pages that have no cell contents or draw objects are not printed.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
