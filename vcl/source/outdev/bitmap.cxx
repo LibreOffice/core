@@ -428,9 +428,8 @@ BitmapColor lcl_AlphaBlend(int nX, int nY,
                                BitmapReadAccess const *  pA,
                                BitmapReadAccess const *  pB)
 {
-    BitmapColor aDstCol,aSrcCol;
-    aSrcCol = pP->GetColor( nMapY, nMapX );
-    aDstCol = pB->GetColor( nY, nX );
+    BitmapColor aSrcCol = pP->GetColor(nMapY, nMapX);
+    BitmapColor aDstCol = pB->GetColor(nY, nX);
 
     const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
     const sal_uInt8 nDstAlpha = aDstCol.GetAlpha();
