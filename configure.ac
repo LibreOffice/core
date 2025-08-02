@@ -11651,7 +11651,7 @@ else
         else
             # autodetect, prefer meson.py / standalone version that can more likely be run
             # by different python runtimes
-            AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/packages/meson-1.7.2:$PATH])
+            AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/opt/bin:$PATH])
             if test -z "$MESON"; then
                 AC_MSG_WARN([meson not found, using internal copy])
                 BUILD_TYPE="$BUILD_TYPE MESON"
@@ -11661,7 +11661,24 @@ else
                 MESON="$formatted_path"
                 AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
                 if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
-                    AC_MSG_RESULT([yes])
+                    # Xcode 26 and higher need a newer version of meson so use
+                    # the internal meson if the external meson's version is
+                    # too old
+                    if test $_os = Darwin -a $MACOSX_SDK_VERSION -ge 260000; then
+                        _meson_minver=1.8.3
+                        _meson_minmajmin=`echo $_meson_minver | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                        _meson_version=`$PYTHON_FOR_BUILD $MESON --version 2>/dev/null`
+                        _meson_majmin=`echo $_meson_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                        if test "$_meson_majmin" -lt "$_meson_minmajmin"; then
+                            AC_MSG_WARN([meson "$_meson_version" is too old, using internal copy])
+                            BUILD_TYPE="$BUILD_TYPE MESON"
+                            MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+                        else
+                            AC_MSG_RESULT([yes])
+                        fi
+                    else
+                        AC_MSG_RESULT([yes])
+                    fi
                 else
                     AC_MSG_RESULT([no])
                     AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
