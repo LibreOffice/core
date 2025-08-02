@@ -151,7 +151,6 @@ struct FilterBaseImpl
     Reference< XInputStream >           mxInStream;
     Reference< XStream >                mxOutStream;
     Reference< XStatusIndicator >       mxStatusIndicator;
-    Reference< XInteractionHandler >    mxInteractionHandler;
     Reference< XShape >                 mxParentShape;
 
     bool mbExportVBA;
@@ -549,7 +548,6 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->maFileUrl = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL, OUString() );
     mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME, Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR, Reference< XStatusIndicator >() );
-    mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER, Reference< XInteractionHandler >() );
     mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( u"ParentShape"_ustr, mxImpl->mxParentShape );
     mxImpl->maFilterData = mxImpl->maMediaDesc.getUnpackedValueOrDefault( u"FilterData"_ustr, Sequence< PropertyValue >() );
 
