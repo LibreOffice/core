@@ -62,7 +62,7 @@
 
 namespace {
     void lcl_ResetIndentAttrs(SwDoc *pDoc, const SwPaM &rPam,
-            const o3tl::sorted_vector<sal_uInt16> aResetAttrsArray,
+            const o3tl::sorted_vector<sal_uInt16>& rResetAttrsArray,
             SwRootFrame const*const pLayout)
     {
         // #i114929#
@@ -73,11 +73,11 @@ namespace {
         {
             SwPaM aPam( rPam.Start()->GetNode(), 0,
                         rPam.End()->GetNode(), rPam.End()->GetNode().GetTextNode()->Len() );
-            pDoc->ResetAttrs( aPam, false, aResetAttrsArray, true, pLayout );
+            pDoc->ResetAttrs( aPam, false, rResetAttrsArray, true, pLayout );
         }
         else
         {
-            pDoc->ResetAttrs( rPam, false, aResetAttrsArray, true, pLayout );
+            pDoc->ResetAttrs( rPam, false, rResetAttrsArray, true, pLayout );
         }
     }
 

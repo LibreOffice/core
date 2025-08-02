@@ -256,7 +256,7 @@ void FilterConfigCache::ImplInitSmart()
         if ( aEntry.nFlags & 1 )
             aImport.push_back( aEntry );
         if ( aEntry.nFlags & 2 )
-            aExport.push_back( aEntry );
+            aExport.push_back(std::move(aEntry));
     }
 }
 

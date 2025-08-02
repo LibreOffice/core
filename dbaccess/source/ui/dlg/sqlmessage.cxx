@@ -228,7 +228,7 @@ namespace
             aDisplayInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
             aDisplayInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), false );
 
-            _out_rChain.push_back( aDisplayInfo );
+            _out_rChain.push_back(std::move(aDisplayInfo));
 
             if ( aCurrentElement.getType() == SQLExceptionInfo::TYPE::SQLContext )
             {

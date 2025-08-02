@@ -99,7 +99,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
                                                    new ORowSetValueDecorator(rName),
                                                    new ORowSetValueDecorator(aTable),
                                                    ODatabaseMetaDataResultSet::getEmptyValue() };
-            aRows.push_back(aRow);
+            aRows.push_back(std::move(aRow));
         }
     }
 

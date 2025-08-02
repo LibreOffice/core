@@ -67,7 +67,7 @@ namespace slideshow::internal
         {
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
-            const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
+            ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
             pContentCanvas->clear();
 
             // extract linear part of canvas view transformation

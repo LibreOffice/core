@@ -1212,8 +1212,7 @@ ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, c
 {
     if ( aElementToken == A_TOKEN( path ) )
     {
-        Path2D aPath2D;
-        mrPath2DList.push_back( aPath2D );
+        mrPath2DList.push_back(Path2D());
         return new Path2DContext( *this, rAttribs, mrCustomShapeProperties,  mrSegments, mrPath2DList.back() );
     }
     return nullptr;

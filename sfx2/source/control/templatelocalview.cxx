@@ -128,7 +128,7 @@ void TemplateLocalView::Populate()
                                                                           mnThumbnailHeight);
 
             pItem->maTemplates.push_back(aProperties);
-            maAllTemplates.push_back(aProperties);
+            maAllTemplates.push_back(std::move(aProperties));
         }
 
         maRegions.push_back(std::move(pItem));
