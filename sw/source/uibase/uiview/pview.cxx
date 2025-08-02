@@ -68,6 +68,7 @@
 
 #include <svx/svxdlg.hxx>
 
+#include <algorithm>
 #include <memory>
 #include <vcl/EnumContext.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
@@ -98,28 +99,20 @@ void SwPagePreview::InitInterface_Impl()
 
 static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, bool bZoomIn)
 {
-    static const sal_uInt16 aZoomArr[] =
-    {
-        25, 50, 75, 100, 150, 200, 400, 600
-    };
-    const int nZoomArrSize = std::ssize(aZoomArr);
+    static constexpr sal_uInt16 aZoomArr[] = { 50, 75, 100, 150, 200, 400 };
     if (bZoomIn)
     {
-        for(sal_uInt16 i : aZoomArr)
-        {
-            if(nCurrentZoom < i)
-                return i;
-        }
+        auto it = std::find_if(std::begin(aZoomArr), std::end(aZoomArr),
+                               [nCurrentZoom](sal_uInt16 i) { return nCurrentZoom < i; });
+        return it == std::end(aZoomArr) ? MAX_PREVIEW_ZOOM : *it;
     }
     else
     {
-        for(int i = nZoomArrSize - 1; i >= 0; --i)
-        {
-            if(nCurrentZoom > aZoomArr[i] || !i)
-                return aZoomArr[i];
-        }
+        const std::reverse_iterator r_begin(std::end(aZoomArr)), r_end(std::begin(aZoomArr));
+        auto it = std::find_if(r_begin, r_end,
+                               [nCurrentZoom](sal_uInt16 i) { return nCurrentZoom > i; });
+        return it == r_end ? MIN_PREVIEW_ZOOM : *it;
     }
-    return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
 };
 
 static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
