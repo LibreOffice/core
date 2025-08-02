@@ -295,6 +295,7 @@
                             <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="accepts-tab">False</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="edit_comment-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="signsignatureline|extended_tip|edit_comment">Enter comments about the signature. The comments are displayed in the Description field of the certificate.</property>
