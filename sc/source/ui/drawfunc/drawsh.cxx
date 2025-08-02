@@ -353,8 +353,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCaptionDialog(pWin ? pWin->GetFrameWeld() : nullptr, pView));
 
-                                const WhichRangesContainer aRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
-                                SfxItemSet aCombSet( *aNewAttr.GetPool(), aRange );
+                                SfxItemSet aCombSet(*aNewAttr.GetPool(), pDlg->GetInputRanges(*aNewAttr.GetPool()));
                                 aCombSet.Put( aNewAttr );
                                 aCombSet.Put( aNewGeoAttr );
                                 pDlg->SetInputSet( &aCombSet );

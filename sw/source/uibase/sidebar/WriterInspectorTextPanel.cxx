@@ -526,7 +526,7 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
                 aCurNode.aValue <<= NestedTextContentToText(aCurNode.aValue);
             }
 
-            rNode.children.push_back(aCurNode);
+            rNode.children.push_back(std::move(aCurNode));
         }
     }
 
@@ -735,17 +735,17 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
     // show sections, bookmarks and fields only if they have RDF metadata
     if (aTextSectionsNode.children.size() > 0)
     {
-        aStore.push_back(aTextSectionsNode);
+        aStore.push_back(std::move(aTextSectionsNode));
         rParIdx++;
     }
     if (aBookmarksNode.children.size() > 0)
     {
-        aStore.push_back(aBookmarksNode);
+        aStore.push_back(std::move(aBookmarksNode));
         rParIdx++;
     }
     if (aFieldsNode.children.size() > 0)
     {
-        aStore.push_back(aFieldsNode);
+        aStore.push_back(std::move(aFieldsNode));
         rParIdx++;
     }
     aStore.push_back(std::move(aParaNode));

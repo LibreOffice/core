@@ -88,7 +88,7 @@ void XclImpSst::ReadSst( XclImpStream& rStrm )
     {
         XclImpString aString;
         aString.Read( rStrm );
-        maStrings.push_back( aString );
+        maStrings.push_back(std::move(aString));
         --nStrCount;
     }
 }

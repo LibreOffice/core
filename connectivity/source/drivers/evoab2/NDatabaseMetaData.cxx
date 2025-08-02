@@ -1044,7 +1044,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow[1] = new ORowSetValueDecorator(u"VARCHAR"_ustr);
         aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(65535));
-        tmp.push_back(aRow);
+        tmp.push_back(std::move(aRow));
         return tmp;
     }();
     pResultSet->setRows(std::move(aRows));

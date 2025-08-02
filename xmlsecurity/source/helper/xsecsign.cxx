@@ -189,7 +189,7 @@ void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, boo
     {
         InternalSignatureInformation isi(securityId, nullptr);
         isi.addReference(type, digestID, uri, -1, OUString());
-        m_vInternalSignatureInformations.push_back( isi );
+        m_vInternalSignatureInformations.push_back(std::move(isi));
     }
     else
     {
@@ -252,7 +252,7 @@ void XSecController::setGpgCertificate(
         isi.signatureInfor.ouGpgCertificate = ouCert;
         isi.signatureInfor.ouGpgOwner = ouOwner;
         isi.signatureInfor.ouGpgKeyID = ouKeyDigest;
-        m_vInternalSignatureInformations.push_back( isi );
+        m_vInternalSignatureInformations.push_back(std::move(isi));
     }
     else
     {

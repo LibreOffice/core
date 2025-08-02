@@ -241,7 +241,7 @@ static utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css:
 
     for ( const auto& rModeNodeName : aModeNodeNames )
     {
-        const utl::OConfigurationNode aImplNode( aImplsNode.openNode( rModeNodeName ) );
+        utl::OConfigurationNode aImplNode( aImplsNode.openNode( rModeNodeName ) );
         if ( !aImplNode.isValid() )
             continue;
 

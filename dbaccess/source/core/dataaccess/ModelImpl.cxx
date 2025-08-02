@@ -1378,7 +1378,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(
         uno::Reference<security::XDocumentDigitalSignatures> xSigner(
             security::DocumentDigitalSignatures::createWithVersion(
                 comphelper::getProcessComponentContext(), aODFVersion));
-        const uno::Sequence<security::DocumentSignatureInformation> aInfo
+        uno::Sequence<security::DocumentSignatureInformation> aInfo
             = xSigner->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
 
@@ -1400,7 +1400,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(
             task::DocumentMacroConfirmationRequest aRequest;
             aRequest.DocumentURL = m_sDocFileLocation;
             aRequest.DocumentStorage = std::move(xStorage);
-            aRequest.DocumentSignatureInformation = aInfo;
+            aRequest.DocumentSignatureInformation = std::move(aInfo);
             aRequest.DocumentVersion = aODFVersion;
             aRequest.Classification = task::InteractionClassification_QUERY;
             bResult = SfxMedium::CallApproveHandler(_rxInteraction, uno::Any(aRequest), true);
