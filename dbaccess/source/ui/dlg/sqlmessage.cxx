@@ -247,11 +247,6 @@ namespace
             }
         }
     }
-
-    void lcl_insertExceptionEntry(weld::TreeView& rList, size_t nElementPos, const ExceptionDisplayInfo& rEntry)
-    {
-        rList.append(OUString::number(nElementPos), rEntry.pLabelProvider->getLabel(), rEntry.pImageProvider->getImage());
-    }
 }
 
 namespace {
@@ -271,6 +266,9 @@ public:
 
 protected:
     DECL_LINK(OnExceptionSelected, weld::TreeView&, void);
+
+private:
+    void insertExceptionEntry(size_t nElementPos, const ExceptionDisplayInfo& rEntry);
 };
 
 }
@@ -298,7 +296,7 @@ OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDis
 
     for (auto const& elem : m_aExceptions)
     {
-        lcl_insertExceptionEntry(*m_xExceptionList, elementPos, elem);
+        insertExceptionEntry(elementPos, elem);
         bHave22018 = elem.sSQLState == "22018";
         ++elementPos;
     }
@@ -315,7 +313,7 @@ OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDis
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::TYPE::SQLContext );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry(*m_xExceptionList, m_aExceptions.size() - 1, aInfo22018);
+        insertExceptionEntry(m_aExceptions.size() - 1, aInfo22018);
     }
 
     if (m_xExceptionList->n_children())
@@ -323,6 +321,13 @@ OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDis
         m_xExceptionList->select(0);
         OnExceptionSelected(*m_xExceptionList);
     }
+}
+
+void OExceptionChainDialog::insertExceptionEntry(size_t nElementPos,
+                                                 const ExceptionDisplayInfo& rEntry)
+{
+    m_xExceptionList->append(OUString::number(nElementPos), rEntry.pLabelProvider->getLabel(),
+                             rEntry.pImageProvider->getImage());
 }
 
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, weld::TreeView&, void)
