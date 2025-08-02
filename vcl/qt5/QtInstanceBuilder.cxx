@@ -194,6 +194,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"svx/ui/themecoloreditdialog.ui"_ustr,
         u"svx/ui/themedialog.ui"_ustr,
         u"uui/ui/password.ui"_ustr,
+        u"uui/ui/setmasterpassworddlg.ui"_ustr,
         u"vcl/ui/openlockedquerybox.ui"_ustr,
         u"vcl/ui/printerdevicepage.ui"_ustr,
         u"vcl/ui/printerpaperpage.ui"_ustr,
