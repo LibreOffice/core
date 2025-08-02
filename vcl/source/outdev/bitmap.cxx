@@ -516,7 +516,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
 
     const tools::Long nOffY = aDstRect.Top() - aOutPoint.Y();
 
-    TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
+    const TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
     BitmapScopedReadAccess pCheckAlphaReadAccess(rAlpha);
 
