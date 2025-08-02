@@ -819,9 +819,9 @@ void TemplateLocalView::setExportTemplateHdl(const Link<void*,void> &rLink)
     maExportTemplateHdl = rLink;
 }
 
-BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height)
+Bitmap TemplateLocalView::scaleImg (const Bitmap &rImg, tools::Long width, tools::Long height)
 {
-    BitmapEx aImg = rImg;
+    Bitmap aImg = rImg;
 
     if (!rImg.IsEmpty())
     {
@@ -883,7 +883,7 @@ BitmapEx TemplateLocalView::getDefaultThumbnail( std::u16string_view rPath )
     return aImg;
 }
 
-BitmapEx TemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
+Bitmap TemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
 {
     return TemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }

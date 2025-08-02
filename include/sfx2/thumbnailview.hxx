@@ -18,7 +18,7 @@
 
 #include <vcl/customweld.hxx>
 
-class BitmapEx;
+class Bitmap;
 class ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 class ThumbnailViewAcc;
@@ -232,7 +232,7 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    static BitmapEx readThumbnail(const OUString &msURL);
+    static Bitmap readThumbnail(const OUString &msURL);
 
 protected:
 

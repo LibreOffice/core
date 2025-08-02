@@ -242,10 +242,9 @@ public:
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    SAL_DLLPRIVATE bool CopyPixel(
-                                const tools::Rectangle& rRectDst,
-                                const tools::Rectangle& rRectSrc,
-                                const Bitmap& rBmpSrc );
+    bool CopyPixel( const tools::Rectangle& rRectDst,
+                    const tools::Rectangle& rRectSrc,
+                    const Bitmap& rBmpSrc );
 
     /** Copy a rectangular area inside this bitmap.
 

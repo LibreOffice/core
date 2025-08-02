@@ -132,7 +132,7 @@ getFirstStreamByRelType(const OUString& URL, std::initializer_list<OUString> typ
     return {};
 }
 
-BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
+Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -185,7 +185,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     // Note that the preview is returned without scaling it to the desired
     // width.  This gives the caller the chance to take advantage of a
     // possibly larger resolution then was asked for.
-    return aThumbnail;
+    return Bitmap(aThumbnail);
 }
 
 ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)

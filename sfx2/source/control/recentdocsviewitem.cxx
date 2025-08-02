@@ -147,7 +147,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
 
-    BitmapEx aThumbnail;
+    Bitmap aThumbnail;
 
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
     if (officecfg::Office::Common::History::RecentDocsThumbnail::get())
@@ -159,20 +159,20 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
             SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
             vcl::PngImageReader aReader(aStream);
-            aThumbnail = aReader.read();
+            aThumbnail = Bitmap(aReader.read());
         }
         else if (sfx2::RecentDocsView::typeMatchesExtension(sfx2::ApplicationType::TYPE_DATABASE,
                                                             aURLObj.getExtension()))
         {
             aThumbnail
-                = BitmapEx(nThumbnailSize > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
+                = Bitmap(BitmapEx(nThumbnailSize > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192));
         }
     }
 
     if (aThumbnail.IsEmpty())
     {
         // 1. Thumbnail absent: get the default thumbnail, checking for encryption.
-        BitmapEx aExt(getDefaultThumbnail(rURL));
+        Bitmap aExt(getDefaultThumbnail(rURL));
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
@@ -202,8 +202,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         }
 
         // create empty, and copy the default thumbnail in
-        sal_uInt8 nAlpha = 255;
-        aThumbnail = BitmapEx(Bitmap(aThumbnailSize, vcl::PixelFormat::N24_BPP), AlphaMask(aThumbnailSize, &nAlpha));
+        aThumbnail = Bitmap(aThumbnailSize, vcl::PixelFormat::N32_BPP);
 
         aThumbnail.CopyPixel(
                 ::tools::Rectangle(Point((aThumbnailSize.Width() - aExtSize.Width()) / 2, (aThumbnailSize.Height() - aExtSize.Height()) / 2), aExtSize),

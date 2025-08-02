@@ -150,11 +150,11 @@ public:
 
     bool IsBuiltInRegion(const OUString& rRegionName);
 
-    static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
+    static Bitmap scaleImg (const Bitmap &rImg, tools::Long width, tools::Long height);
 
     static BitmapEx getDefaultThumbnail( std::u16string_view rPath );
 
-    static BitmapEx fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
+    static Bitmap fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
