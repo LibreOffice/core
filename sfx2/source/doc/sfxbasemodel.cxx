@@ -2038,6 +2038,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     {
         // file recovery: restore original filter
         const SfxStringItem* pFilterItem = pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false);
+        assert(pFilterItem && "this will exist");
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         std::shared_ptr<const SfxFilter> pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
