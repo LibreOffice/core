@@ -479,7 +479,7 @@ Bitmap lcl_BlendBitmapWithAlpha(
 } // end anonymous namespace
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
-    const AlphaMask& rAlpha, const tools::Rectangle& rDstRect, tools::Rectangle aBmpRect, Size const & aOutSize, Point const & aOutPoint)
+    const AlphaMask& rAlpha, const tools::Rectangle& rDstRect, const tools::Rectangle& rBmpRect, Size const& rOutSize, Point const& rOutPoint)
 {
     assert(!is_double_buffered_window());
 
@@ -511,12 +511,12 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     // are in mirrored coordinates, so the intersection of (aOutPt,aOutSz) with these
     // is content wise somewhere else and needs to take mirroring into account
     const tools::Long nOffX = IsRTLEnabled()
-                            ? aOutSize.Width() - aDstRect.GetWidth() - (aDstRect.Left() - aOutPoint.X())
-                            : aDstRect.Left() - aOutPoint.X();
+                            ? rOutSize.Width() - aDstRect.GetWidth() - (aDstRect.Left() - rOutPoint.X())
+                            : aDstRect.Left() - rOutPoint.X();
 
-    const tools::Long nOffY = aDstRect.Top() - aOutPoint.Y();
+    const tools::Long nOffY = aDstRect.Top() - rOutPoint.Y();
 
-    const TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
+    const TradScaleContext aTradContext(aDstRect, rBmpRect, rOutSize, nOffX, nOffY);
 
     BitmapScopedReadAccess pCheckAlphaReadAccess(rAlpha);
 
