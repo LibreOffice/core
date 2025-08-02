@@ -383,7 +383,7 @@ namespace slideshow::internal
                                 pPolyPoly->setStrokeWidth(mnStrokeWidth);
                                 pPolyPoly->setRGBALineColor( maStrokeColor.getIntegerColor() );
                                 pPolyPoly->draw();
-                                maPolygons.push_back(pPolyPoly);
+                                maPolygons.push_back(std::move(pPolyPoly));
                             }
                         }
 

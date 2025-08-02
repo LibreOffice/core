@@ -1474,7 +1474,7 @@ sal_Int32 OTableController::getFirstEmptyRowPosition()
         auto pTabEdRow = std::make_shared<OTableRow>();
         pTabEdRow->SetReadOnly(bReadRow);
         nRet = m_vRowList.size();
-        m_vRowList.push_back( pTabEdRow);
+        m_vRowList.push_back(std::move(pTabEdRow));
     }
     return nRet;
 }

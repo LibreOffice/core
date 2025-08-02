@@ -275,7 +275,7 @@ void XSecController::setDate(
     {
         InternalSignatureInformation isi(nSecurityId, nullptr);
         isi.signatureInfor.stDateTime = rDateTime;
-        m_vInternalSignatureInformations.push_back( isi );
+        m_vInternalSignatureInformations.push_back(std::move(isi));
     }
     else
     {

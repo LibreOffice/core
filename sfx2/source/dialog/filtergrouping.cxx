@@ -286,7 +286,7 @@ namespace sfx2
             lcl_ReadFilterClass( m_aClassesNode, _rName, aClass );
 
             // insert the class descriptor
-            m_rClasses.push_back( aClass );
+            m_rClasses.push_back(std::move(aClass));
         }
     };
 

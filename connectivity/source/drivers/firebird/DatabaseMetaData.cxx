@@ -985,7 +985,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     aResults.push_back(aRow);
 
     aRow[1] = new ORowSetValueDecorator(u"SYSTEM TABLE"_ustr);
-    aResults.push_back(aRow);
+    aResults.push_back(std::move(aRow));
 
     pResultSet->setRows(std::move(aResults));
     return pResultSet;

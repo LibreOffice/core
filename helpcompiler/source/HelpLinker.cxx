@@ -501,7 +501,7 @@ void HelpLinker::main( std::vector<std::string> &args,
             std::string token;
             fileReader >> token;
             if (!token.empty())
-                stringList.push_back(token);
+                stringList.push_back(std::move(token));
         }
         fileReader.close();
 

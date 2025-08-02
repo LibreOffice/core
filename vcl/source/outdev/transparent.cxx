@@ -1647,7 +1647,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     pCurrAct, nActionNum );
 
             // add aTotalComponents as a new entry to aCCList
-            aCCList.push_back( aTotalComponents );
+            aCCList.push_back(std::move(aTotalComponents));
 
             SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
                         "Printer::GetPreparedMetaFile empty component" );

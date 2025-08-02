@@ -214,7 +214,7 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     auto pNewFile = std::make_shared<osl::File>(OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
     if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
-        aGeneratedFiles.push_back(pNewFile);
+        aGeneratedFiles.push_back(std::move(pNewFile));
         SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
     }
     else
