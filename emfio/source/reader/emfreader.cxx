@@ -1356,6 +1356,33 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_ANGLEARC:
+                    {
+                        sal_Int32 nCenterX, nCenterY;
+                        sal_uInt32 nRadius;
+                        float fStartAngle, fSweepAngle;
+                        mpInputStream->ReadInt32(nCenterX).ReadInt32(nCenterY).ReadUInt32(nRadius);
+                        mpInputStream->ReadFloat(fStartAngle).ReadFloat(fSweepAngle);
+                        SAL_INFO("emfio", "\t\t Center: " << nCenterX << ":" << nCenterY << ", Radius: " << nRadius);
+                        SAL_INFO("emfio", "\t\t Start Angle: " << fStartAngle << ", Sweep Angle: " << fSweepAngle);
+
+                        if (!mpInputStream->good())
+                            bStatus = false;
+                        else
+                        {
+                            // Convert from degrees to radians and start angle to draw from x-axis
+                            fStartAngle = basegfx::deg2rad(fStartAngle);
+                            fSweepAngle = basegfx::deg2rad(fSweepAngle);
+
+                            tools::Polygon aPoly(Point(nCenterX, nCenterY), nRadius, fStartAngle, fSweepAngle, IsArcDirectionClockWise());
+
+                            // Before drawing the arc, AngleArc draws the line segment from the current position to the beginning of the arc
+                            LineTo(aPoly[0], mbRecordPath);
+                            DrawPolyLine(std::move(aPoly), true, mbRecordPath);
+                        }
+                    }
+                    break;
+
                     case EMR_ARC :
                     case EMR_ARCTO :
                     case EMR_CHORD :
@@ -2174,7 +2201,6 @@ namespace emfio
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :
-                    case EMR_ANGLEARC :
                     case EMR_SETCOLORADJUSTMENT :
                     case EMR_POLYDRAW16 :
                     case EMR_SETCOLORSPACE :

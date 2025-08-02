@@ -306,6 +306,34 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
         mnPoints = 0;
 }
 
+ImplPolygon::ImplPolygon(const Point& aCenter, const sal_uInt32 nRadius, const float fStartAngle,
+                         const float fSweepAngle, const bool bClockWiseArcDirection)
+{
+    float fStart = fStartAngle;
+    float fEnd = fStartAngle + fSweepAngle;
+
+    if (bClockWiseArcDirection)
+        std::swap(fStart, fEnd);
+    float fDiff = fEnd - fStart;
+    float fStep = static_cast<float>(M_PI / 128.0);
+
+    if ((fSweepAngle < 0.0) || bClockWiseArcDirection)
+        fStep = -fStep;
+
+    const sal_uInt16 nPoints = static_cast<sal_uInt16>(fDiff / fStep) + 1;
+
+    ImplInitSize(nPoints);
+
+    for (sal_uInt16 i = 0; i < nPoints; i++, fStart += fStep)
+    {
+        Point& rPt = mxPointAry[i];
+        rPt.setX(basegfx::fround<tools::Long>(aCenter.X() + nRadius * cos(fStart)));
+        rPt.setY(basegfx::fround<tools::Long>(aCenter.Y() - nRadius * sin(fStart)));
+    }
+    mxPointAry[nPoints - 1].setX(basegfx::fround<tools::Long>(aCenter.X() + nRadius * cos(fEnd)));
+    mxPointAry[nPoints - 1].setY(basegfx::fround<tools::Long>(aCenter.Y() - nRadius * sin(fEnd)));
+}
+
 ImplPolygon::ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1,
     const Point& rBezPt2, const Point& rCtrlPt2, sal_uInt16 nPoints )
 {
@@ -908,6 +936,12 @@ Polygon::Polygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
 Polygon::Polygon(const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
                  PolyStyle eStyle, const bool bClockWiseArcDirection)
     : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle, bClockWiseArcDirection))
+{
+}
+
+Polygon::Polygon(const Point& aCenter, const sal_uInt32 nRadius, const float fStartAngle,
+                 const float fSweepAngle, const bool bClockWiseArcDirection)
+    : mpImplPolygon(ImplPolygon(aCenter, nRadius, fStartAngle, fSweepAngle, bClockWiseArcDirection))
 {
 }
 
