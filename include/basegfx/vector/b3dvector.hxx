@@ -21,6 +21,7 @@
 
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <cassert>
 
 namespace basegfx
 {
@@ -138,6 +139,8 @@ namespace basegfx
 
             if(!::basegfx::fTools::equalZero(fLenNow))
             {
+                assert(fLenNow != 0.0 && "help coverity see it's not zero");
+
                 const double fOne(1.0);
 
                 if(!::basegfx::fTools::equal(fOne, fLenNow))

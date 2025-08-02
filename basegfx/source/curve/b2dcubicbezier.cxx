@@ -25,6 +25,7 @@
 
 #include <osl/diagnose.h>
 
+#include <cassert>
 #include <cmath>
 #include <limits>
 
@@ -819,6 +820,7 @@ namespace basegfx
 
                     if(!bStartIsZero)
                     {
+                        assert(fEnd != 0.0 && "help coverity see it's not zero");
                         fStart /= fEnd;
                     }
                 }
