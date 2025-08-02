@@ -74,12 +74,6 @@ private:
     bool handleIOException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     bool handleNetworkException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
-    static bool handleMacroConfirmationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
-
-    static bool handleFilterOptionsRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request);
-    static bool handlePackageReparationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
-
-    static bool handleLoadReadOnlyRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
 
 public:
     void SetPassword(char const* pPassword);
