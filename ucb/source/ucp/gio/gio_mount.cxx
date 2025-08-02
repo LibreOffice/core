@@ -55,6 +55,7 @@ void ooo_mount_operation_finalize (GObject *object)
 
     mount_op->~OOoMountOperation();
 
+    // coverity[pass_freed_arg : FALSE] - object is still valid for parent's purpose
     G_OBJECT_CLASS (ooo_mount_operation_parent_class)->finalize (object);
 }
 
