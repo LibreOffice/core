@@ -505,9 +505,6 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
         aDstRect.SetSize(aDeviceBmp.GetSizePixel());
     }
 
-    const tools::Long nDstWidth = aDstRect.GetWidth();
-    const tools::Long nDstHeight = aDstRect.GetHeight();
-
     // calculate offset in original bitmap
     // in RTL case this is a little more complicated since the contents of the
     // bitmap is not mirrored (it never is), however the paint region and bmp region
@@ -534,7 +531,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
         Bitmap aNewBitmap;
 
         aNewBitmap = lcl_BlendBitmapWithAlpha(
-                        aDeviceBmp, rBitmap, rAlpha, nDstHeight, nDstWidth,
+                        aDeviceBmp, rBitmap, rAlpha, aDstRect.GetHeight(), aDstRect.GetWidth(),
                         aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
 
         DrawBitmap(aDstRect.TopLeft(), aNewBitmap);
