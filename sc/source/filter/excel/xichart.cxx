@@ -4108,7 +4108,7 @@ void XclImpChChart::ReadChText( XclImpStream& rStrm )
     switch( xText->GetLinkTarget() )
     {
         case EXC_CHOBJLINK_TITLE:
-            mxTitle = xText;
+            mxTitle = std::move(xText);
         break;
         case EXC_CHOBJLINK_DATA:
         {

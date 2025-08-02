@@ -2405,7 +2405,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 }
                 else
                 {
-                    rEffectSequence.push_back( pEffect );
+                    rEffectSequence.push_back(std::move(pEffect));
                 }
                 bChanged = true;
             }

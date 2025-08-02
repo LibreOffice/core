@@ -242,7 +242,7 @@ namespace
                     aSubInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), true );
                     aSubInfo.bSubEntry = true;
 
-                    _out_rChain.push_back( aSubInfo );
+                    _out_rChain.push_back(std::move(aSubInfo));
                 }
             }
         }

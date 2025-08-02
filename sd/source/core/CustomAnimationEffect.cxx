@@ -2954,7 +2954,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
                     if( pEffect->mnNodeType != -1 )
                     {
                         pEffect->setEffectSequence( this );
-                        maEffects.push_back(pEffect);
+                        maEffects.push_back(std::move(pEffect));
                     }
                 }
                 break;

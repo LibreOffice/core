@@ -831,7 +831,7 @@ namespace
                                             http_dav_ucp::DAVResourceInfo aDAVResourceInfo;
 
                                             aDAVResourceInfo.properties = maResponseNames;
-                                            maResult_PropName.push_back(aDAVResourceInfo);
+                                            maResult_PropName.push_back(std::move(aDAVResourceInfo));
                                         }
                                     }
                                 }

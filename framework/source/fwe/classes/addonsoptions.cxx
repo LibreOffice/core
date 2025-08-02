@@ -1130,7 +1130,7 @@ void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
             MergeNotebookBarInstructionContainer& rVector
                 = rCachedNotebookBarMergingInstructions[aMergeNotebookBarInstruction
                                                             .aMergeNotebookBar];
-            rVector.push_back(aMergeNotebookBarInstruction);
+            rVector.push_back(std::move(aMergeNotebookBarInstruction));
         }
     }
 }
@@ -1197,7 +1197,7 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
             ReadMergeStatusbarData( aMergeAddonInstructionBase,
                                     aMergeStatusbarInstruction.aMergeStatusbarItems );
 
-            aContainer.push_back( aMergeStatusbarInstruction );
+            aContainer.push_back(std::move(aMergeStatusbarInstruction));
         }
     }
 }

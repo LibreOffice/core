@@ -55,7 +55,7 @@ namespace DOM
         // Windows/VC++ seems to mess up if .back() is directly passed as
         // parameter. i.e. Don't use push_back( .back() );
         Context::NamespaceVectorType::value_type aVal = io_rContext.maNamespaces.back();
-        io_rContext.maNamespaces.push_back( aVal );
+        io_rContext.maNamespaces.push_back(std::move(aVal));
     }
 
     void popContext(Context& io_rContext)

@@ -663,7 +663,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                 pGraphic->SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, rContext.m_eLinkType));
         }
 
-        rGraphics.push_back(pGraphic);
+        rGraphics.push_back(std::move(pGraphic));
     }
 }
 
