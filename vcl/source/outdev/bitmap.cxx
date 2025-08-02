@@ -421,31 +421,24 @@ sal_uInt8 lcl_CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAl
     return sal_uInt8( c );
 }
 
-BitmapColor lcl_AlphaBlend(int nX, int nY,
-                               const tools::Long            nMapX,
-                               const tools::Long            nMapY,
-                               BitmapReadAccess const* pSrcBmp,
-                               BitmapReadAccess const* pSrcAlphaBmp,
-                               BitmapReadAccess const* pDstBmp)
-{
-    const BitmapColor aSrcCol = pSrcBmp->GetColor(nMapY, nMapX);
-    BitmapColor aDstCol = pDstBmp->GetColor(nY, nX);
+// blend one color with another color with an alpha value
 
-    const sal_uInt8 nSrcAlpha = pSrcAlphaBmp->GetPixelIndex(nMapY, nMapX);
-    const sal_uInt8 nDstAlpha = aDstCol.GetAlpha();
+BitmapColor lcl_AlphaBlend(const BitmapColor& rCol1, const BitmapColor& rCol2, const sal_uInt8 nAlpha)
+{
+    BitmapColor aCol(rCol2);
 
     // Perform porter-duff compositing 'over' operation
 
     // Co = Cs + Cd*(1-As)
     // Ad = As + Ad*(1-As)
-    sal_uInt8 nResAlpha = static_cast<int>(nSrcAlpha) + static_cast<int>(nDstAlpha)
-              - static_cast<int>(nDstAlpha) * nSrcAlpha / 255;
-    aDstCol.SetAlpha(nResAlpha);
-    aDstCol.SetRed(lcl_CalcColor(aSrcCol.GetRed(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetRed()));
-    aDstCol.SetBlue(lcl_CalcColor(aSrcCol.GetBlue(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetBlue()));
-    aDstCol.SetGreen(lcl_CalcColor(aSrcCol.GetGreen(), nSrcAlpha, nDstAlpha, nResAlpha, aDstCol.GetGreen()));
+    sal_uInt8 nResAlpha = static_cast<int>(nAlpha) + static_cast<int>(rCol2.GetAlpha())
+              - static_cast<int>(rCol2.GetAlpha()) * nAlpha / 255;
+    aCol.SetAlpha(nResAlpha);
+    aCol.SetRed(lcl_CalcColor(rCol1.GetRed(), nAlpha, rCol2.GetAlpha(), nResAlpha, aCol.GetRed()));
+    aCol.SetBlue(lcl_CalcColor(rCol1.GetBlue(), nAlpha, rCol2.GetAlpha(), nResAlpha, aCol.GetBlue()));
+    aCol.SetGreen(lcl_CalcColor(rCol1.GetGreen(), nAlpha, rCol2.GetAlpha(), nResAlpha, aCol.GetGreen()));
 
-    return aDstCol;
+    return aCol;
 }
 
 Bitmap lcl_BlendBitmapWithAlpha(
@@ -471,8 +464,9 @@ Bitmap lcl_BlendBitmapWithAlpha(
 
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
-                    const tools::Long nMapX = pMapX[ nX ];
-                    BitmapColor aDstCol = lcl_AlphaBlend(nX, nY, nMapX, nMapY, pSrcBmp, pSrcAlphaBmp, pDstBmp.get());
+                    BitmapColor aDstCol = lcl_AlphaBlend(pSrcBmp->GetColor(nMapY, pMapX[nX]),
+                                                         pDstBmp->GetColor(nY, nX),
+                                                         pSrcAlphaBmp->GetPixelIndex(nMapY, pMapX[nX]));
 
                     pDstBmp->SetPixelOnData(pScanlineB, nX, aDstCol);
                 }
