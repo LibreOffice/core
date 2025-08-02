@@ -49,7 +49,7 @@ class ScFormulaReferenceHelper
 
 public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg, SfxBindings* _pBindings);
-    ~ScFormulaReferenceHelper() COVERITY_NOEXCEPT_FALSE;
+    ~ScFormulaReferenceHelper();
     void dispose();
 
     void                ShowSimpleReference(std::u16string_view rStr);
