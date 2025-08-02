@@ -1037,7 +1037,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
 
         if (bDefaultOrSet)
         {
-            if(mpBitmapItem->isPattern())
+            if (mpBitmapItem && mpBitmapItem->isPattern())
                 mxLbFillType->set_active(PATTERN);
             else
                 mxLbFillType->set_active(BITMAP);
