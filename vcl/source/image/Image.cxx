@@ -35,12 +35,12 @@ Image::Image()
 
 Image::Image(const BitmapEx& rBitmapEx)
 {
-    ImplInit(rBitmapEx);
+    ImplInit(Bitmap(rBitmapEx));
 }
 
 Image::Image(const Bitmap& rBitmap)
 {
-    ImplInit(BitmapEx(rBitmap));
+    ImplInit(rBitmap);
 }
 
 Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
@@ -55,7 +55,7 @@ Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
         else if (aGraphic.GetType() == GraphicType::GdiMetafile)
             mpImplData = std::make_shared<ImplImage>(aGraphic.GetGDIMetaFile());
         else
-            ImplInit(aGraphic.GetBitmapEx());
+            ImplInit(Bitmap(aGraphic.GetBitmapEx()));
     }
 }
 
@@ -68,7 +68,7 @@ Image::Image(const OUString & rFileUrl)
     {
         Graphic aGraphic;
         if (ERRCODE_NONE == GraphicFilter::LoadGraphic(rFileUrl, u"" IMP_PNG ""_ustr, aGraphic))
-            ImplInit(aGraphic.GetBitmapEx());
+            ImplInit(Bitmap(aGraphic.GetBitmapEx()));
     }
 }
 
@@ -77,10 +77,10 @@ Image::Image(StockImage, const OUString & rFileUrl)
 {
 }
 
-void Image::ImplInit(const BitmapEx& rBitmapEx)
+void Image::ImplInit(const Bitmap& rBitmap)
 {
-    if (!rBitmapEx.IsEmpty())
-        mpImplData = std::make_shared<ImplImage>(rBitmapEx);
+    if (!rBitmap.IsEmpty())
+        mpImplData = std::make_shared<ImplImage>(rBitmap);
 }
 
 const OUString & Image::GetStock() const
@@ -98,12 +98,12 @@ Size Image::GetSizePixel() const
         return Size();
 }
 
-BitmapEx Image::GetBitmapEx() const
+Bitmap Image::GetBitmap() const
 {
     if (mpImplData)
-        return mpImplData->getBitmapEx();
+        return mpImplData->getBitmap();
     else
-        return BitmapEx();
+        return Bitmap();
 }
 
 void Image::SetOptional(bool bValue)
@@ -135,7 +135,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
 
     Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(mpImplData->getSizePixel());
 
-    BitmapEx aRenderBmp = mpImplData->getBitmapExForHiDPI(bool(nStyle & DrawImageFlags::Disable), pOutDev->GetGraphics());
+    Bitmap aRenderBmp = mpImplData->getBitmapForHiDPI(bool(nStyle & DrawImageFlags::Disable), pOutDev->GetGraphics());
 
     if (!(nStyle & DrawImageFlags::Disable) &&
         (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
@@ -169,7 +169,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
                 aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aTempBitmapEx.GetSizePixel(), &cErase));
             }
         }
-        aRenderBmp = aTempBitmapEx;
+        aRenderBmp = Bitmap(aTempBitmapEx);
     }
 
     pOutDev->DrawBitmapEx(rPos, aOutSize, aRenderBmp);

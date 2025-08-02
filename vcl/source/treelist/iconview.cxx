@@ -234,7 +234,7 @@ FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::cr
 
 static OString extractPngString(const SvLBoxContextBmp* pBmpItem)
 {
-    BitmapEx aImage = pBmpItem->GetBitmap1().GetBitmapEx();
+    Bitmap aImage = pBmpItem->GetBitmap1().GetBitmap();
     SvMemoryStream aOStm(65535, 65535);
     // Use fastest compression "1"
     css::uno::Sequence<css::beans::PropertyValue> aFilterData{

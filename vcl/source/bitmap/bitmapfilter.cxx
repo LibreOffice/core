@@ -31,6 +31,15 @@ bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter)
     return true;
 }
 
+bool BitmapFilter::Filter(Bitmap& rBmp, BitmapFilter const& rFilter)
+{
+    BitmapEx aBitmapEx(rBmp);
+    bool bRet = Filter(aBitmapEx, rFilter);
+    if (bRet)
+        rBmp = Bitmap(aBitmapEx);
+    return bRet;
+}
+
 bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter const& rFilter)
 {
     SAL_WARN_IF(rAnimation.IsInAnimation(), "vcl", "Animation modified while it is animated");

@@ -1590,7 +1590,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
         // create BitmapPrimitive2D and add directly
         const drawinglayer::primitive2d::Primitive2DReference xBitmap(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                maSlideImage.GetBitmapEx(),
+                BitmapEx(maSlideImage.GetBitmap()),
                 basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aImageSize.Width(), aImageSize.Height(),
                     aImagePos.X(), aImagePos.Y())));

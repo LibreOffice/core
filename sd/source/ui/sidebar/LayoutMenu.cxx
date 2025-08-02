@@ -439,7 +439,7 @@ SfxRequest LayoutMenu::CreateRequest (
 
 VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
 {
-    BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
+    Bitmap aPreviewBitmap = pImage.GetBitmap();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);
     if (pVDev->GetDPIScaleFactor() > 1)
@@ -453,7 +453,7 @@ VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
 
 Bitmap LayoutMenu::GetPreviewAsBitmap(const Image& rImage)
 {
-    Bitmap aPreviewBitmap(rImage.GetBitmapEx());
+    Bitmap aPreviewBitmap(rImage.GetBitmap());
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
@@ -511,7 +511,7 @@ void LayoutMenu::Fill()
 
             if (bRightToLeft && (WritingMode_TB_RL != elem.meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
-                BitmapEx aRTL = aImg.GetBitmapEx();
+                Bitmap aRTL = aImg.GetBitmap();
                 aRTL.Mirror(BmpMirrorFlags::Horizontal);
                 aImg = Image(aRTL);
             }

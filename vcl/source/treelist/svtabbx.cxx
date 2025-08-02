@@ -120,8 +120,8 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                         // custom bitmap - send png
                         else
                         {
-                            BitmapEx aCollapsedImage = pBmpItem->GetBitmap1().GetBitmapEx();
-                            BitmapEx aExpandedImage = pBmpItem->GetBitmap2().GetBitmapEx();
+                            BitmapEx aCollapsedImage(pBmpItem->GetBitmap1().GetBitmap());
+                            BitmapEx aExpandedImage(pBmpItem->GetBitmap2().GetBitmap());
                             bool bHasCollapsed = !aCollapsedImage.IsEmpty() && !aCollapsedImage.GetSizePixel().IsEmpty();
                             bool bHasExpanded = !aExpandedImage.IsEmpty() && !aExpandedImage.GetSizePixel().IsEmpty();
                             if (bHasCollapsed || bHasExpanded)

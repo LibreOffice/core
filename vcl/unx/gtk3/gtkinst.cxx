@@ -4755,9 +4755,9 @@ namespace
 {
     Image mirrorImage(const Image& rImage)
     {
-        BitmapEx aMirrBitmapEx(rImage.GetBitmapEx());
-        aMirrBitmapEx.Mirror(BmpMirrorFlags::Horizontal);
-        return Image(aMirrBitmapEx);
+        Bitmap aMirrBitmap(rImage.GetBitmap());
+        aMirrBitmap.Mirror(BmpMirrorFlags::Horizontal);
+        return Image(aMirrBitmap);
     }
 
     GdkPixbuf* getPixbuf(const css::uno::Reference<css::graphic::XGraphic>& rImage)
@@ -4773,10 +4773,10 @@ namespace
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
             u"Compression"_ustr, sal_Int32(1)) };
-        auto aBitmapEx = aImage.GetBitmapEx();
+        auto aBitmap = aImage.GetBitmap();
         vcl::PngImageWriter aWriter(aMemStm);
         aWriter.setParameters(aFilterData);
-        aWriter.write(aBitmapEx);
+        aWriter.write(aBitmap);
 
         return load_icon_from_stream(aMemStm);
     }
@@ -4800,10 +4800,10 @@ namespace
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
         css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
             u"Compression"_ustr, sal_Int32(1)) };
-        auto aBitmapEx = aImage.GetBitmapEx();
+        auto aBitmap = aImage.GetBitmap();
         vcl::PngImageWriter aWriter(*pStream);
         aWriter.setParameters(aFilterData);
-        aWriter.write(aBitmapEx);
+        aWriter.write(aBitmap);
 
         xRet->CloseStream();
         return xRet;

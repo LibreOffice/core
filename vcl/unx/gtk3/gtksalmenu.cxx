@@ -809,9 +809,9 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
     if (!!rNewItem.maImage)
     {
         SvMemoryStream* pMemStm = new SvMemoryStream;
-        auto aBitmapEx = rNewItem.maImage.GetBitmapEx();
+        auto aBitmap = rNewItem.maImage.GetBitmap();
         vcl::PngImageWriter aWriter(*pMemStm);
-        aWriter.write(aBitmapEx);
+        aWriter.write(aBitmap);
 
         GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
                                                     pMemStm->TellEnd(),
@@ -1199,9 +1199,9 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
     if (!!rImage)
     {
         SvMemoryStream* pMemStm = new SvMemoryStream;
-        auto aBitmapEx = rImage.GetBitmapEx();
+        auto aBitmap = rImage.GetBitmap();
         vcl::PngImageWriter aWriter(*pMemStm);
-        aWriter.write(aBitmapEx);
+        aWriter.write(aBitmap);
 
         GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
                                                     pMemStm->TellEnd(),

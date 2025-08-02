@@ -954,20 +954,20 @@ void* ToolBox::GetItemData( ToolBoxItemId nItemId ) const
 
 static Image ImplMirrorImage( const Image& rImage )
 {
-    BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
+    Bitmap aMirrBitmap( rImage.GetBitmap() );
 
-    aMirrBitmapEx.Mirror( BmpMirrorFlags::Horizontal );
+    aMirrBitmap.Mirror( BmpMirrorFlags::Horizontal );
 
-    return Image( aMirrBitmapEx );
+    return Image( aMirrBitmap );
 }
 
 static Image ImplRotImage( const Image& rImage, Degree10 nAngle10 )
 {
-    BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
+    Bitmap aRotBitmap( rImage.GetBitmap() );
 
-    aRotBitmapEx.Rotate( nAngle10, COL_WHITE );
+    aRotBitmap.Rotate( nAngle10, COL_WHITE );
 
-    return Image( aRotBitmapEx );
+    return Image( aRotBitmap );
 }
 
 void ToolBox::SetItemImage( ToolBoxItemId nItemId, const Image& rImage )
@@ -1775,7 +1775,7 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 if (!!aImage)
                 {
                     SvMemoryStream aOStm(6535, 6535);
-                    if (GraphicConverter::Export(aOStm, aImage.GetBitmapEx(),
+                    if (GraphicConverter::Export(aOStm, aImage.GetBitmap(),
                                                  ConvertDataFormat::PNG)
                         == ERRCODE_NONE)
                     {

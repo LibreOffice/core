@@ -270,9 +270,9 @@ QImage toQImage(const Image& rImage)
     if (!!rImage)
     {
         SvMemoryStream aMemStm;
-        auto rBitmapEx = rImage.GetBitmapEx();
+        auto rBitmap = rImage.GetBitmap();
         vcl::PngImageWriter aWriter(aMemStm);
-        aWriter.write(rBitmapEx);
+        aWriter.write(rBitmap);
         aImage.loadFromData(static_cast<const uchar*>(aMemStm.GetData()), aMemStm.TellEnd());
     }
 

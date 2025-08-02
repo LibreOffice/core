@@ -126,14 +126,14 @@ BitmapEx SlideRenderer::CreatePreview (
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
         true);
     if (nFactor == 1)
-        return aPreview.GetBitmapEx();
+        return BitmapEx(aPreview.GetBitmap());
     else
     {
-        BitmapEx aScaledPreview = aPreview.GetBitmapEx();
+        Bitmap aScaledPreview = aPreview.GetBitmap();
         aScaledPreview.Scale(
             Size(aPreviewSize.Width,aPreviewSize.Height),
             BmpScaleFlag::BestQuality);
-        return aScaledPreview;
+        return BitmapEx(aScaledPreview);
     }
 }
 

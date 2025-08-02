@@ -277,7 +277,7 @@ void PageObjectPainter::PaintTransitionEffect (
 
         rDevice.DrawBitmapEx(
             aBox.TopCenter(),
-            pPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
+            pPageObjectLayouter->GetTransitionEffectIcon().GetBitmap());
     }
 }
 
@@ -298,7 +298,7 @@ void PageObjectPainter::PaintCustomAnimationEffect (
             PageObjectLayouter::ModelCoordinateSystem));
         rDevice.DrawBitmapEx(
             aBox.TopCenter(),
-            pPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmapEx());
+            pPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmap());
     }
 }
 

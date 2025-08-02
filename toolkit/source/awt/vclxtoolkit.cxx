@@ -1356,7 +1356,7 @@ void SVTXRoadmap::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
     VclPtr< ::vcl::ORoadmap > pButton = GetAs< ::vcl::ORoadmap >();
-    pButton->SetRoadmapBitmap( Bitmap(GetImage().GetBitmapEx()) );
+    pButton->SetRoadmapBitmap( GetImage().GetBitmap() );
 }
 
 void SVTXRoadmap::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )

@@ -2852,7 +2852,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
         if ( graphics.hasElements() )
         {
             Image img(graphics[0]);
-            if (!img.GetBitmapEx().IsEmpty())
+            if (!img.GetBitmap().IsEmpty())
             {
                 m_aGraphics.push_back(graphics[0]);
                 m_xTbSymbol->InsertItem(m_aGraphics.size(), img, elem.first);
@@ -2999,13 +2999,13 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 Image aImage( xGraphic );
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
-                    BitmapEx aBitmap = aImage.GetBitmapEx();
+                    BitmapEx aBitmap(aImage.GetBitmap());
                     BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
                 m_xTbSymbol->InsertItem(nId, aImage, aURL, nPos); //modify
 
-                m_aGraphics[nPos] = Graphic(aImage.GetBitmapEx()).GetXGraphic();
+                m_aGraphics[nPos] = Graphic(aImage.GetBitmap()).GetXGraphic();
 
                 m_xImportedImageManager->replaceImages( SvxConfigPageHelper::GetImageType(), { aURL }, { xGraphic } );
                 m_xImportedImageManager->store();
@@ -3142,13 +3142,13 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
             if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
             {
-                BitmapEx aBitmap = aImage.GetBitmapEx();
+                BitmapEx aBitmap(aImage.GetBitmap());
                 BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                 aImage = Image( aBitmapex);
             }
             if ( bOK && !!aImage )
             {
-                m_aGraphics.push_back(Graphic(aImage.GetBitmapEx()).GetXGraphic());
+                m_aGraphics.push_back(Graphic(aImage.GetBitmap()).GetXGraphic());
                 m_xTbSymbol->InsertItem(m_aGraphics.size(), aImage, aURL);
 
                 uno::Sequence<OUString> aImportURL { aURL };

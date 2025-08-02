@@ -57,7 +57,7 @@ BitmapEx BitmapFactory::CreateBitmap (
         &rPage,
         aSize,
         true,
-        false).GetBitmapEx());
+        false).GetBitmap());
     if (bDoSuperSampling)
     {
         aPreview.Scale(rPixelSize, BmpScaleFlag::BestQuality);

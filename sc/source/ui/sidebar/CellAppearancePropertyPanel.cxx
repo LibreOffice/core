@@ -468,7 +468,7 @@ void CellAppearancePropertyPanel::UpdateControlState()
 void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight,
                                                    bool bVer, bool bHor, bool bTLBR, bool bBLTR)
 {
-    const Size aBmpSize = maIMGCellBorder.GetBitmapEx().GetSizePixel();
+    const Size aBmpSize = maIMGCellBorder.GetBitmap().GetSizePixel();
 
     if (aBmpSize.Width() == 43 && aBmpSize.Height() == 43)
     {

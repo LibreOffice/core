@@ -49,7 +49,7 @@ inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
     return aPixmap;
 }
 
-inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(rImage.GetBitmapEx()); }
+inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(BitmapEx(rImage.GetBitmap())); }
 
 inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {

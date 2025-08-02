@@ -48,7 +48,7 @@ public:
     explicit Image(StockImage, OUString const & rPNGFilePath);
 
     Size GetSizePixel() const;
-    BitmapEx GetBitmapEx() const;
+    Bitmap GetBitmap() const;
     void SetOptional(bool bValue);
 
     bool operator!() const
@@ -69,7 +69,7 @@ private:
 
     std::shared_ptr<ImplImage> mpImplData;
 
-    SAL_DLLPRIVATE void ImplInit(BitmapEx const & rBmpEx);
+    SAL_DLLPRIVATE void ImplInit(Bitmap const & rBmp);
 };
 
 #endif // INCLUDED_VCL_IMAGE_HXX

@@ -258,7 +258,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         if (!sIconName.isEmpty())
         {
             const Image aImage = loadThemeImage(sIconName);
-            if (!aImage.GetBitmapEx().IsEmpty())
+            if (!aImage.GetBitmap().IsEmpty())
             {
                 pLabel->setPixmap(toQPixmap(aImage));
             }

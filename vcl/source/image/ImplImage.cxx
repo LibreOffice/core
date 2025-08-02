@@ -35,10 +35,10 @@
 
 #include <utility>
 
-ImplImage::ImplImage(const BitmapEx &rBitmapEx)
+ImplImage::ImplImage(const Bitmap &rBitmap)
     : maBitmapChecksum(0)
-    , maSizePixel(rBitmapEx.GetSizePixel())
-    , maBitmapEx(rBitmapEx)
+    , maSizePixel(rBitmap.GetSizePixel())
+    , maBitmap(rBitmap)
 {
 }
 
@@ -55,7 +55,7 @@ ImplImage::ImplImage(const GDIMetaFile& rMetaFile)
 {
 }
 
-bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
+bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
 {
     BitmapEx aBitmapEx;
 
@@ -105,7 +105,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
             return false;
         }
     }
-    rBitmapEx = aBitmapEx;
+    rBitmap = Bitmap(aBitmapEx);
     return true;
 }
 
@@ -116,11 +116,11 @@ Size ImplImage::getSizePixel()
         aRet = maSizePixel;
     else if (isStock())
     {
-        if (loadStockAtScale(nullptr, maBitmapEx))
+        if (loadStockAtScale(nullptr, maBitmap))
         {
-            assert(maDisabledBitmapEx.IsEmpty());
+            assert(maDisabledBitmap.IsEmpty());
             assert(maBitmapChecksum == 0);
-            maSizePixel = maBitmapEx.GetSizePixel();
+            maSizePixel = maBitmap.GetSizePixel();
             aRet = maSizePixel;
         }
         else
@@ -130,24 +130,24 @@ Size ImplImage::getSizePixel()
 }
 
 /// non-HiDPI compatibility method.
-BitmapEx const & ImplImage::getBitmapEx(bool bDisabled)
+Bitmap const & ImplImage::getBitmap(bool bDisabled)
 {
     getSizePixel(); // force load, and at unity scale.
     if (bDisabled)
     {
         // Changed since we last generated this.
-        BitmapChecksum aChecksum = maBitmapEx.GetChecksum();
+        BitmapChecksum aChecksum = maBitmap.GetChecksum();
         if (maBitmapChecksum != aChecksum ||
-            maDisabledBitmapEx.GetSizePixel() != maBitmapEx.GetSizePixel())
+            maDisabledBitmap.GetSizePixel() != maBitmap.GetSizePixel())
         {
-            maDisabledBitmapEx = maBitmapEx;
-            BitmapFilter::Filter(maDisabledBitmapEx, BitmapDisabledImageFilter());
+            maDisabledBitmap = maBitmap;
+            BitmapFilter::Filter(maDisabledBitmap, BitmapDisabledImageFilter());
             maBitmapChecksum = aChecksum;
         }
-        return maDisabledBitmapEx;
+        return maDisabledBitmap;
     }
 
-    return maBitmapEx;
+    return maBitmap;
 }
 
 void ImplImage::SetOptional(bool bValue) { bOptional = bValue; }
@@ -159,10 +159,10 @@ bool ImplImage::isEqual(const ImplImage &ref) const
     if (isStock())
         return maStockName == ref.maStockName;
     else
-        return maBitmapEx == ref.maBitmapEx;
+        return maBitmap == ref.maBitmap;
 }
 
-BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGraphics)
+Bitmap const & ImplImage::getBitmapForHiDPI(bool bDisabled, SalGraphics* pGraphics)
 {
     if ((isStock() || mxMetaFile) && pGraphics)
     {   // check we have the right bitmap cached.
@@ -170,10 +170,10 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
         pGraphics->ShouldDownscaleIconsAtSurface(fScale);
         Size aTarget(maSizePixel.Width()*fScale,
                      maSizePixel.Height()*fScale);
-        if (maBitmapEx.GetSizePixel() != aTarget)
+        if (maBitmap.GetSizePixel() != aTarget)
         {
             if (isStock())
-                loadStockAtScale(pGraphics, maBitmapEx);
+                loadStockAtScale(pGraphics, maBitmap);
             else // if (mxMetaFile)
             {
                 ScopedVclPtrInstance<VirtualDevice> aVDev(DeviceFormat::WITH_ALPHA);
@@ -188,11 +188,11 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
                 aVDev->SetOutputSizePixel(aTarget, true, bAlphaMaskTransparent);
                 mxMetaFile->WindStart();
                 mxMetaFile->Play(*aVDev, Point(), aTarget);
-                maBitmapEx = aVDev->GetBitmap(Point(), aTarget);
+                maBitmap = aVDev->GetBitmap(Point(), aTarget);
             }
         }
     }
-    return getBitmapEx(bDisabled);
+    return getBitmap(bDisabled);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

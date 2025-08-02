@@ -45,18 +45,18 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
     if( !nCount )
         return BitmapEx();
 
-    BitmapEx aTempl = maImages[ 0 ]->maImage.GetBitmapEx();
+    Bitmap aTempl = maImages[ 0 ]->maImage.GetBitmap();
     Size aImageSize(aTempl.GetSizePixel());
     Size aSize(aImageSize.Width() * nCount, aImageSize.Height());
-    BitmapEx aResult( aTempl, Point(), aSize );
+    BitmapEx aResult( BitmapEx(aTempl), Point(), aSize );
 
     tools::Rectangle aSrcRect( Point( 0, 0 ), aImageSize );
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
     {
         tools::Rectangle aDestRect( Point( nIdx * aImageSize.Width(), 0 ), aImageSize );
         ImageAryData *pData = maImages[ nIdx ].get();
-        BitmapEx aTmp = pData->maImage.GetBitmapEx();
-        aResult.CopyPixel( aDestRect, aSrcRect, aTmp);
+        Bitmap aTmp = pData->maImage.GetBitmap();
+        aResult.CopyPixel( aDestRect, aSrcRect, BitmapEx(aTmp));
     }
 
     return aResult;

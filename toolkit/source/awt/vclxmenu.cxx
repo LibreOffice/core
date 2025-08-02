@@ -583,7 +583,7 @@ namespace
                 ::Size aNewSize( nIdealWidth, nIdealHeight );
 
                 bool bModified( false );
-                BitmapEx aBitmapEx = aImage.GetBitmapEx();
+                Bitmap aBitmapEx = aImage.GetBitmap();
                 bModified = aBitmapEx.Scale( aNewSize, BmpScaleFlag::BestQuality );
 
                 if ( bModified )
@@ -831,7 +831,7 @@ VCLXMenu::getItemImage(
     {
         Image aImage = mpMenu->GetItemImage( nItemId );
         if ( !!aImage )
-            rxGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
+            rxGraphic = Graphic(aImage.GetBitmap()).GetXGraphic();
     }
     return rxGraphic;
 }

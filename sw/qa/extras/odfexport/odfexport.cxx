@@ -1458,7 +1458,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
         Image aImage(m_directories.getURLFromSrc(u"/sw/qa/extras/odfexport/data/libreoffice.png"));
         CPPUNIT_ASSERT(!!aImage);
 
-        uno::Reference<graphic::XGraphic> xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
+        uno::Reference<graphic::XGraphic> xGraphic = Graphic(aImage.GetBitmap()).GetXGraphic();
         CPPUNIT_ASSERT(xGraphic.is());
 
         uno::Sequence<OUString> aImportURL{ u".uno:OpenFromWriter"_ustr };

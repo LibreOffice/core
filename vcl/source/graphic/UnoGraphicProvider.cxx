@@ -220,19 +220,19 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( st
     {
         if ( sImageName == u"info" )
         {
-            xRet = Graphic(GetStandardInfoBoxImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardInfoBoxImage().GetBitmap()).GetXGraphic();
         }
         else if ( sImageName == u"warning" )
         {
-            xRet = Graphic(GetStandardWarningBoxImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardWarningBoxImage().GetBitmap()).GetXGraphic();
         }
         else if ( sImageName == u"error" )
         {
-            xRet = Graphic(GetStandardErrorBoxImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardErrorBoxImage().GetBitmap()).GetXGraphic();
         }
         else if ( sImageName == u"query" )
         {
-            xRet = Graphic(GetStandardQueryBoxImage().GetBitmapEx()).GetXGraphic();
+            xRet = Graphic(GetStandardQueryBoxImage().GetBitmap()).GetXGraphic();
         }
     }
     return xRet;

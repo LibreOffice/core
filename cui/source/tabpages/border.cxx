@@ -1484,7 +1484,7 @@ void SvxBorderTabPage::FillShadowIV()
 
 Bitmap SvxBorderTabPage::GetPreviewAsBitmap(const Image& rImage)
 {
-    Bitmap aPreviewBitmap(rImage.GetBitmapEx());
+    Bitmap aPreviewBitmap(rImage.GetBitmap());
     ScopedVclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     if (pVDev->GetDPIScaleFactor() > 1)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());

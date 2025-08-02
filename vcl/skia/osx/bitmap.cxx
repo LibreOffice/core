@@ -34,8 +34,7 @@ namespace SkiaHelper
 {
 CGImageRef createCGImage(const Image& rImage)
 {
-    BitmapEx bitmapEx(rImage.GetBitmapEx());
-    Bitmap bitmap(bitmapEx.GetBitmap());
+    Bitmap bitmap(rImage.GetBitmap());
 
     if (bitmap.IsEmpty() || !bitmap.ImplGetSalBitmap())
         return nullptr;
@@ -54,7 +53,7 @@ CGImageRef createCGImage(const Image& rImage)
     matrix.preTranslate(0, targetBitmap.height());
     matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
 
-    if (!bitmapEx.IsAlpha())
+    if (!bitmap.HasAlpha())
     {
         SkCanvas canvas(targetBitmap);
         canvas.concat(matrix);
@@ -62,6 +61,7 @@ CGImageRef createCGImage(const Image& rImage)
     }
     else
     {
+        BitmapEx bitmapEx(bitmap);
         AlphaMask alpha(bitmapEx.GetAlphaMask());
         // tdf#156854 invert alpha mask for macOS native menu item images
         // At the time of this change, only the AquaSalMenu class calls this

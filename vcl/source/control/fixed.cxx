@@ -982,7 +982,7 @@ void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (!!maImage)
     {
         SvMemoryStream aOStm(6535, 6535);
-        if(GraphicConverter::Export(aOStm, maImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+        if(GraphicConverter::Export(aOStm, maImage.GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
         {
             css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
             OStringBuffer aBuffer("data:image/png;base64,");

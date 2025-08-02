@@ -296,7 +296,7 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
     switch ( nPropType )
     {
         case BASEPROPERTY_GRAPHIC:
-            aProp <<= Graphic(maImage.GetBitmapEx()).GetXGraphic();
+            aProp <<= Graphic(maImage.GetBitmap()).GetXGraphic();
             break;
         case BASEPROPERTY_IMAGEALIGN:
         {

@@ -1034,8 +1034,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         return SkiaHelper::createCGImage( rImage );
 #endif
 
-    BitmapEx aBmpEx( rImage.GetBitmapEx() );
-    Bitmap aBmp( aBmpEx.GetBitmap() );
+    Bitmap aBmp( rImage.GetBitmap() );
 
     if( aBmp.IsEmpty() || ! aBmp.ImplGetSalBitmap() )
         return nullptr;
@@ -1047,10 +1046,11 @@ CGImageRef CreateCGImage( const Image& rImage )
         return nullptr;
 
     CGImageRef xImage = nullptr;
-    if( !aBmpEx.IsAlpha() )
+    if( !aBmp.HasAlpha() )
         xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     else
     {
+        BitmapEx aBmpEx(aBmp);
         AlphaMask aAlphaMask( aBmpEx.GetAlphaMask() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
         QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
