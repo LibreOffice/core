@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="PrintOptionsPage">
@@ -581,51 +581,6 @@
             <property name="margin-top">6</property>
             <property name="row-spacing">6</property>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="grid7">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="column-spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="printoptionspage|label5">_Fax:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">fax</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="label5-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|label5">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="fax">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="fax-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fax">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="blankpages">
                 <property name="label" translatable="yes" context="printoptionspage|blankpages">Print _automatically inserted blank pages</property>
                 <property name="visible">True</property>
@@ -699,6 +654,51 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid" id="grid7">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="printoptionspage|label5">_Fax:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">fax</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="label5-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|label5">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="fax">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="fax-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|fax">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
