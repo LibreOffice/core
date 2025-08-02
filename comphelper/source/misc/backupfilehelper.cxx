@@ -977,13 +977,12 @@ namespace
 
                         nSize -= nToTransfer;
                     }
-
-#if !defined Z_PREFIX
-                    deflateEnd(&zstream);
-#else
-                    z_deflateEnd(&zstream);
-#endif
                 }
+#if !defined Z_PREFIX
+                deflateEnd(&zstream);
+#else
+                z_deflateEnd(&zstream);
+#endif
             }
 
             maFile->close();
