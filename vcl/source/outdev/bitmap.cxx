@@ -423,7 +423,7 @@ sal_uInt8 lcl_CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAl
 
 // blend one color with another color with an alpha value
 
-BitmapColor lcl_AlphaBlend(const BitmapColor& rCol1, const BitmapColor& rCol2, const sal_uInt8 nAlpha)
+BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rCol2, const sal_uInt8 nAlpha)
 {
     BitmapColor aCol(rCol2);
 
@@ -464,11 +464,10 @@ Bitmap lcl_BlendBitmapWithAlpha(
 
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
-                    BitmapColor aDstCol = lcl_AlphaBlend(pSrcBmp->GetColor(nMapY, pMapX[nX]),
-                                                         pDstBmp->GetColor(nY, nX),
-                                                         pSrcAlphaBmp->GetPixelIndex(nMapY, pMapX[nX]));
-
-                    pDstBmp->SetPixelOnData(pScanlineB, nX, aDstCol);
+                    pDstBmp->SetPixelOnData(pScanlineB, nX,
+                                            lcl_AlphaBlendColors(pSrcBmp->GetColor(nMapY, pMapX[nX]),
+                                                                 pDstBmp->GetColor(nY, nX),
+                                                                 pSrcAlphaBmp->GetPixelIndex(nMapY, pMapX[nX])));
                 }
             }
         }
