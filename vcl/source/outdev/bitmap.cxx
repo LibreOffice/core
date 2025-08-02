@@ -431,8 +431,9 @@ BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rC
 
     // Co = Cs + Cd*(1-As)
     // Ad = As + Ad*(1-As)
-    sal_uInt8 nResAlpha = static_cast<int>(nAlpha) + static_cast<int>(rCol2.GetAlpha())
+    const sal_uInt8 nResAlpha = static_cast<int>(nAlpha) + static_cast<int>(rCol2.GetAlpha())
               - static_cast<int>(rCol2.GetAlpha()) * nAlpha / 255;
+
     aCol.SetAlpha(nResAlpha);
     aCol.SetRed(lcl_CalcColor(rCol1.GetRed(), nAlpha, rCol2.GetAlpha(), nResAlpha, aCol.GetRed()));
     aCol.SetBlue(lcl_CalcColor(rCol1.GetBlue(), nAlpha, rCol2.GetAlpha(), nResAlpha, aCol.GetBlue()));
