@@ -3744,16 +3744,16 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
         tools::Long nRstHeight = 0;
         while (pLow && pLow->IsLayoutFrame())
         {
-            nRstHeight += ::CalcRowRstHeight(static_cast<SwLayoutFrame*>(pLow));
+            nRstHeight += ::CalcRowRstHeight(*static_cast<SwLayoutFrame*>(pLow));
             pLow = pLow->GetNext();
         }
         return nRstHeight;
     }
 }
 
-SwTwips CalcRowRstHeight( SwLayoutFrame *pRow )
+SwTwips CalcRowRstHeight(SwLayoutFrame& rRow)
 {
-    SwFrame *pLow = pRow->Lower();
+    SwFrame *pLow = rRow.Lower();
     if (!(pLow && pLow->IsLayoutFrame()))
     {
         return 0;

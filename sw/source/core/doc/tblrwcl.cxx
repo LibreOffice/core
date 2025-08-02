@@ -2954,7 +2954,7 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
 
     SwFrameSize eSize = SwFrameSize::Minimum;
     if( !bMinSize &&
-        ( nMyOldH - nMyNewH ) > ( CalcRowRstHeight( pLineFrame ) + ROWFUZZY ))
+        ( nMyOldH - nMyNewH ) > ( CalcRowRstHeight(*pLineFrame) + ROWFUZZY ))
         eSize = SwFrameSize::Fixed;
 
     pFormat->SetFormatAttr( SwFormatFrameSize( eSize, 0, nMyNewH ) );
@@ -2981,8 +2981,8 @@ static bool lcl_SetSelLineHeight( SwTableLine* pLine, const CR_SetLineHeight& rP
     {
         // Calculate the new relative size by means of the old one
         SwLayoutFrame* pLineFrame = GetRowFrame( *pLine );
-        OSL_ENSURE( pLineFrame, "Where is the Frame from the SwTableLine?" );
-        SwTwips nRstHeight = CalcRowRstHeight( pLineFrame );
+        assert(pLineFrame && "Where is the Frame from the SwTableLine?");
+        SwTwips nRstHeight = CalcRowRstHeight(*pLineFrame);
         if( (nRstHeight + ROWFUZZY) < nDist )
             bRet = false;
     }
@@ -3006,7 +3006,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& 
                 nDist *= pLineFrame->getFrameArea().Height();
                 nDist /= rParam.nMaxHeight;
             }
-            bRet = nDist <= CalcRowRstHeight( pLineFrame );
+            bRet = nDist <= CalcRowRstHeight(*pLineFrame);
         }
     }
     else
@@ -3029,7 +3029,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, const CR_SetLineHeight& 
             else
             {
                 // Calculate the new relative size by means of the old one
-                nDist *= CalcRowRstHeight( pLineFrame );
+                nDist *= CalcRowRstHeight(*pLineFrame);
                 nDist /= rParam.nMaxSpace;
             }
         }
@@ -3115,7 +3115,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                     {
                         SwLayoutFrame* pLineFrame = GetRowFrame( *(*pLines)[ n ] );
                         assert(pLineFrame && "Where is the Frame from the SwTableLine??");
-                        aParam.nMaxSpace += CalcRowRstHeight( pLineFrame );
+                        aParam.nMaxSpace += CalcRowRstHeight(*pLineFrame);
                         aParam.nMaxHeight += pLineFrame->getFrameArea().Height();
                     }
                     if( bBigger && aParam.nMaxSpace < nAbsDiff )

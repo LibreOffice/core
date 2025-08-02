@@ -149,7 +149,7 @@ extern bool bObjsDirect;
 extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
-SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
+SwTwips CalcRowRstHeight(SwLayoutFrame& rRow);
 tools::Long CalcHeightWithFlys( const SwFrame *pFrame );
 
 namespace sw {
