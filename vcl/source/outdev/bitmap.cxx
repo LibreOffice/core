@@ -480,7 +480,7 @@ Bitmap lcl_BlendBitmapWithAlpha(
 } // end anonymous namespace
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
-    const AlphaMask& rAlpha, tools::Rectangle aDstRect, tools::Rectangle aBmpRect, Size const & aOutSize, Point const & aOutPoint)
+    const AlphaMask& rAlpha, const tools::Rectangle& rDstRect, tools::Rectangle aBmpRect, Size const & aOutSize, Point const & aOutPoint)
 {
     assert(!is_double_buffered_window());
 
@@ -492,7 +492,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     mpMetaFile = nullptr; // fdo#55044 reset before GetBitmap!
     mbMap = false;
 
-    Bitmap aDeviceBmp(GetBitmap(aDstRect.TopLeft(), aDstRect.GetSize()));
+    Bitmap aDeviceBmp(GetBitmap(rDstRect.TopLeft(), rDstRect.GetSize()));
 
     // #109044# The generated bitmap need not necessarily be
     // of aDstRect dimensions, it's internally clipped to
@@ -500,10 +500,11 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     // since we later use it (in nDstWidth/Height) for pixel
     // access)
     // #i38887# reading from screen may sometimes fail
+
+    tools::Rectangle aDstRect(rDstRect);
+
     if (aDeviceBmp.ImplGetSalBitmap())
-    {
         aDstRect.SetSize(aDeviceBmp.GetSizePixel());
-    }
 
     // calculate offset in original bitmap
     // in RTL case this is a little more complicated since the contents of the

@@ -1463,7 +1463,7 @@ private:
 
     SAL_DLLPRIVATE void DrawDeviceAlphaBitmapSlowPath(
                                 const Bitmap& rBitmap, const AlphaMask& rAlpha,
-                                tools::Rectangle aDstRect, tools::Rectangle aBmpRect,
+                                const tools::Rectangle& rDstRect, tools::Rectangle aBmpRect,
                                 Size const & aOutSz, Point const & aOutPt);
 
     ///@}
