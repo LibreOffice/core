@@ -360,7 +360,7 @@ static bool lcl_MergeGCBox(SwTableBox* pTableBox, GCLinePara* pPara)
                 pTabBox->SetUpper( pInsLine );
 
             SfxPoolItem const* pRowBrush(nullptr);
-            pCpyLine->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pRowBrush);
+            (void)pCpyLine->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pRowBrush);
             if (pRowBrush)
             {
                 for (auto pBox : pCpyLine->GetTabBoxes())

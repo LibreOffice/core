@@ -2038,8 +2038,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                                          m_pCSS1Parser->GetWhichMap() );
                     SvxCSS1PropertyInfo aPropInfo;
                     OUString aDummy;
-                    ParseStyleOptions( aDummy, aDummy, aDummy, aItemSet,
-                                       aPropInfo, nullptr, &rDir );
+                    (void)ParseStyleOptions(aDummy, aDummy, aDummy, aItemSet,
+                                            aPropInfo, nullptr, &rDir);
 
                     m_pCSS1Parser->SetPageDescAttrs( nullptr, &aItemSet );
                     break;

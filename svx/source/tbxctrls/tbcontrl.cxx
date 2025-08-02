@@ -2437,7 +2437,7 @@ void ColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     if ( rEvent.State >>= aTable )
     {
         SvxBorderLine aLine;
-        SvxBoxItem::LineToSvxLine( aTable, aLine, false );
+        (void)SvxBoxItem::LineToSvxLine( aTable, aLine, false );
         if ( !aLine.isEmpty() )
             aColor = aLine.GetColor();
     }
