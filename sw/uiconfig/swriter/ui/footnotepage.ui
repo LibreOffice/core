@@ -40,6 +40,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label6">Numbering:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">numberinglb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -85,6 +87,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|offset">Start at:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">offsetnf</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -97,6 +101,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label8">Before:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">prefix</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -126,6 +132,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label11">After:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">suffix</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -155,6 +163,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label7">Counting:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">countinglb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -289,6 +299,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label4">Paragraph:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">parastylelb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -316,6 +328,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|pagestyleft">Page:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">pagestylelb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -377,6 +391,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label4">Anchor in text:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">charanchorstylelb</property>
                 <property name="width-chars">11</property>
                 <property name="max-width-chars">15</property>
                 <property name="xalign">0</property>
@@ -406,6 +422,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|pagestyleft">Anchor in footnote:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">charstylelb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -467,6 +485,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label17">End of footnote:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">conted</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -498,6 +518,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|label18">Start of next page:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">contfromed</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
