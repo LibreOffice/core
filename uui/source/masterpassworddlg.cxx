@@ -36,11 +36,9 @@ MasterPasswordDialog::MasterPasswordDialog(weld::Window* pParent)
     , m_xEDMasterPassword(m_xBuilder->weld_entry(u"password"_ustr))
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
 {
-    m_xOKBtn->connect_clicked( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
+    m_xOKBtn->connect_clicked(LINK(this, MasterPasswordDialog, OKHdl_Impl));
 };
 
-MasterPasswordDialog::~MasterPasswordDialog()
-{
-}
+MasterPasswordDialog::~MasterPasswordDialog() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

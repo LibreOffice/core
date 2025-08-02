@@ -13960,7 +13960,6 @@ uui/source/logindlg.cxx
 uui/source/logindlg.hxx
 uui/source/loginerr.hxx
 uui/source/masterpasscrtdlg.cxx
-uui/source/masterpassworddlg.cxx
 uui/source/nameclashdlg.cxx
 uui/source/nameclashdlg.hxx
 uui/source/openlocked.cxx
