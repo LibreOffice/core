@@ -31,7 +31,7 @@ class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeVie
 
     QItemSelectionModel* m_pSelectionModel;
 
-    bool m_bExtraToggleButtonColumnEnabled = false;
+    bool m_bExtraToggleButtonsEnabled = false;
 
 public:
     QtInstanceTreeView(QTreeView* pTreeView);

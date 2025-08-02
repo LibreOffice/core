@@ -74,7 +74,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         else if (pImageSurface)
             pItem->setIcon(toQPixmap(*pImageSurface));
 
-        if (m_bExtraToggleButtonColumnEnabled)
+        if (m_bExtraToggleButtonsEnabled)
             itemFromIndex(toggleButtonModelIndex(QtInstanceTreeIter(aIndex)))->setCheckable(true);
 
         if (pRet)
@@ -121,14 +121,11 @@ OUString QtInstanceTreeView::get_selected_id() const
     return sId;
 }
 
-void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType eType)
+void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
 {
-    (void)eType;
-    assert(eType == weld::ColumnToggleType::Check && "Only checkboxes supported so far");
-
     assert(m_pModel->rowCount() == 0 && "Must be called before inserting any data");
 
-    m_bExtraToggleButtonColumnEnabled = true;
+    m_bExtraToggleButtonsEnabled = true;
 
     m_pTreeView->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 }
@@ -577,7 +574,7 @@ void QtInstanceTreeView::set_toggle(const weld::TreeIter& rIter, TriState eState
 {
     SolarMutexGuard g;
 
-    assert((nCol != 0 || !m_bExtraToggleButtonColumnEnabled)
+    assert((nCol != 0 || !m_bExtraToggleButtonsEnabled)
            && "Column 0 is already used by \"expander toggle\" using special index -1");
 
     GetQtInstance().RunInMainThread([&] {
@@ -590,7 +587,7 @@ TriState QtInstanceTreeView::get_toggle(const weld::TreeIter& rIter, int nCol) c
 {
     SolarMutexGuard g;
 
-    assert((nCol != 0 || !m_bExtraToggleButtonColumnEnabled)
+    assert((nCol != 0 || !m_bExtraToggleButtonsEnabled)
            && "Column 0 is already used by \"expander toggle\" using special index -1");
 
     TriState eState = TRISTATE_INDET;
@@ -1036,10 +1033,10 @@ QStandardItem* QtInstanceTreeView::itemFromIndex(const QModelIndex& rIndex) cons
 
 QModelIndex QtInstanceTreeView::toggleButtonModelIndex(const weld::TreeIter& rIter) const
 {
-    assert(m_bExtraToggleButtonColumnEnabled && "Special toggle button column is not enabled");
+    assert(m_bExtraToggleButtonsEnabled && "Special toggle buttons are not enabled");
 
     const QModelIndex aIndex = modelIndex(rIter);
-    // Special toggle button column is always the first one
+    // Special toggle buttons are always in the first column
     return m_pModel->index(aIndex.row(), 0, aIndex.parent());
 }
 
@@ -1094,7 +1091,7 @@ void QtInstanceTreeView::handleDataChanged(const QModelIndex& rTopLeft,
     (void)rBottomRight;
 
     int nColIndex = rTopLeft.column();
-    if (m_bExtraToggleButtonColumnEnabled && nColIndex == 0)
+    if (m_bExtraToggleButtonsEnabled && nColIndex == 0)
         // use special index of -1 for the "expander toggle"
         nColIndex = -1;
 
