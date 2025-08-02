@@ -95,6 +95,9 @@ public:
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = PolyStyle::Arc,
                                  const bool bClockWiseArcDirection = false);
+                        Polygon( const Point& aCenter, const sal_uInt32 nRadius,
+                                 const float fStartAngle, const float fSweepAngle,
+                                 const bool bClockWiseArcDirection);
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints );

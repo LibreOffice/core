@@ -40,6 +40,9 @@ public:
                     ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY );
                     ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
                                     PolyStyle eStyle, bool bClockWiseArcDirection );
+                    ImplPolygon( const Point& aCenter, const sal_uInt32 nRadius,
+                                    const float fStartAngle, const float fSweepAngle,
+                                    const bool bClockWiseArcDirection );
                     ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1, const Point& rBezPt2,
                                     const Point& rCtrlPt2, sal_uInt16 nPoints );
                     ImplPolygon(const basegfx::B2DPolygon& rPolygon);

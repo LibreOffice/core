@@ -607,6 +607,36 @@ CPPUNIT_TEST_FIXTURE(Test, testChordWithModifyWorldTransform)
                        "575,716 608,704 654,725 720,700 753,688 819,664 853,652 919,628");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAngleArc)
+{
+    // tdf167616 EMF import test of displaying AngleArc which draw a line segment and an arc in a single operation
+    // Records: EMR_ANGLEARC, EMR_SETARCDIRECTION
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestAngleArc.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 20);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[1]", "color", u"#000000");
+
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[5]/polygon",
+                       u"2350,990 4000,640");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[7]/polygon",
+                       u"4000,640 1140,2000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[9]/polygon",
+                       u"640,2500 2350,2350");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[11]/polygon",
+                       u"2350,1650 4000,2000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[13]/polygon",
+                       u"4000,2000 640,3000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[15]/polygon",
+                       u"1140,3500 2350,3850");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[17]/polygon",
+                       u"1650,3850 3500,3000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[19]/polygon",
+                       u"3500,4000 1280,4250");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testArcStartPointEqualEndPoint)
 {
     // i73608 EMF import test where StartPoint == EndPoint. It should draw full circle
