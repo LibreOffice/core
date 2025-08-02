@@ -424,14 +424,14 @@ sal_uInt8 lcl_CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAl
 BitmapColor lcl_AlphaBlend(int nX, int nY,
                                const tools::Long            nMapX,
                                const tools::Long            nMapY,
-                               BitmapReadAccess const *  pP,
-                               BitmapReadAccess const *  pA,
-                               BitmapReadAccess const *  pB)
+                               BitmapReadAccess const* pSrcBmp,
+                               BitmapReadAccess const* pSrcAlphaBmp,
+                               BitmapReadAccess const* pDstBmp)
 {
-    BitmapColor aSrcCol = pP->GetColor(nMapY, nMapX);
-    BitmapColor aDstCol = pB->GetColor(nY, nX);
+    BitmapColor aSrcCol = pSrcBmp->GetColor(nMapY, nMapX);
+    BitmapColor aDstCol = pDstBmp->GetColor(nY, nX);
 
-    const sal_uInt8 nSrcAlpha = pA->GetPixelIndex( nMapY, nMapX );
+    const sal_uInt8 nSrcAlpha = pSrcAlphaBmp->GetPixelIndex(nMapY, nMapX);
     const sal_uInt8 nDstAlpha = aDstCol.GetAlpha();
 
     // Perform porter-duff compositing 'over' operation
