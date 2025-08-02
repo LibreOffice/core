@@ -450,8 +450,8 @@ BitmapColor lcl_AlphaBlend(int nX, int nY,
 
 Bitmap lcl_BlendBitmapWithAlpha(
             Bitmap&             aBmp,
-            BitmapReadAccess const *   pP,
-            BitmapReadAccess const *   pA,
+            BitmapReadAccess const* pSrcBmp,
+            BitmapReadAccess const* pSrcAlphaBmp,
             const sal_Int32     nDstHeight,
             const sal_Int32     nDstWidth,
             const sal_Int32*    pMapX,
@@ -461,24 +461,25 @@ Bitmap lcl_BlendBitmapWithAlpha(
     Bitmap      res;
 
     {
-        BitmapScopedWriteAccess pB(aBmp);
-        if (pB && pP && pA)
+        BitmapScopedWriteAccess pDstBmp(aBmp);
+        if (pDstBmp && pSrcBmp && pSrcAlphaBmp)
         {
             for( int nY = 0; nY < nDstHeight; nY++ )
             {
                 const tools::Long  nMapY = pMapY[ nY ];
-                Scanline pScanlineB = pB->GetScanline(nY);
+                Scanline pScanlineB = pSrcBmp->GetScanline(nY);
 
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
                     const tools::Long nMapX = pMapX[ nX ];
-                    BitmapColor aDstCol = lcl_AlphaBlend(nX, nY, nMapX, nMapY, pP, pA, pB.get());
+                    BitmapColor aDstCol = lcl_AlphaBlend(nX, nY, nMapX, nMapY, pSrcBmp, pSrcAlphaBmp, pDstBmp.get());
 
-                    pB->SetPixelOnData(pScanlineB, nX, aDstCol);
+                    pDstBmp->SetPixelOnData(pScanlineB, nX, aDstCol);
                 }
             }
         }
-        pB.reset();
+
+        pDstBmp.reset();
         res = aBmp;
     }
 
