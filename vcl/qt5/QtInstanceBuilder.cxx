@@ -129,6 +129,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
         u"modules/simpress/ui/customslideshows.ui"_ustr,
         u"modules/simpress/ui/definecustomslideshow.ui"_ustr,
+        u"modules/simpress/ui/masterlayoutdlg.ui"_ustr,
         u"modules/simpress/ui/presentationdialog.ui"_ustr,
         u"modules/simpress/ui/slidedesigndialog.ui"_ustr,
         u"modules/smath/ui/alignmentdialog.ui"_ustr,
