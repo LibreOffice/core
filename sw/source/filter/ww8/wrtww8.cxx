@@ -440,7 +440,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
             aProperty.m_nValue = std::distance(aSet.begin(), aSet.find(rPair.second));
             aPropertyBag.m_aProperties.push_back(aProperty);
         }
-        aSmartTagData.m_aPropBags.push_back(aPropertyBag);
+        aSmartTagData.m_aPropBags.push_back(std::move(aPropertyBag));
     }
 
     aSmartTagData.Write(rExport);

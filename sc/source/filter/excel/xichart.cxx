@@ -4096,8 +4096,8 @@ void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )
     xAxesSet->ReadRecordGroup( rStrm );
     switch( xAxesSet->GetAxesSetId() )
     {
-        case EXC_CHAXESSET_PRIMARY:     mxPrimAxesSet = xAxesSet;   break;
-        case EXC_CHAXESSET_SECONDARY:   mxSecnAxesSet = xAxesSet;   break;
+        case EXC_CHAXESSET_PRIMARY:   mxPrimAxesSet = std::move(xAxesSet); break;
+        case EXC_CHAXESSET_SECONDARY: mxSecnAxesSet = std::move(xAxesSet); break;
     }
 }
 

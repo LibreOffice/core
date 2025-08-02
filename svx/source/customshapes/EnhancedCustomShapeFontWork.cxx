@@ -165,9 +165,9 @@ static bool InitializeFontWorkData(
                     // retrieving some paragraph attributes
                     const SfxItemSet& rParaSet = rTextObj.GetParaAttribs(aLineParaID[nLine]);
                     aParagraphData.nFrameDirection = rParaSet.Get(EE_PARA_WRITINGDIR).GetValue();
-                    aTextArea.vParagraphs.push_back(aParagraphData);
+                    aTextArea.vParagraphs.push_back(std::move(aParagraphData));
                 }
-                rFWData.vTextAreas.push_back(aTextArea);
+                rFWData.vTextAreas.push_back(std::move(aTextArea));
                 nLinesLeft -= nLinesInPara;
                 nTextAreaCount--;
             }

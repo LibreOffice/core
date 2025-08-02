@@ -1173,7 +1173,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
         row[4] <<= xRow->getString(4);
 
         // no description in postgresql AFAIK
-        vec.push_back( row );
+        vec.push_back(std::move(row));
     }
     Reference< XCloseable > closeable( statement, UNO_QUERY );
     if( closeable.is() )

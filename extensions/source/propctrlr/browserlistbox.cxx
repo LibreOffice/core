@@ -474,7 +474,7 @@ namespace pcr
         if ( _nPos >= m_aLines.size() )
         {
             nInsertPos = m_aLines.size();
-            m_aLines.push_back( aNewLine );
+            m_aLines.push_back(std::move(aNewLine));
         }
         else
             m_aLines.insert( m_aLines.begin() + _nPos, aNewLine );

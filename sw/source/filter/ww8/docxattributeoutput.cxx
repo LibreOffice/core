@@ -1138,8 +1138,7 @@ void DocxAttributeOutput::EndParagraph( const ww8::WW8TableNodeInfoInner::Pointe
 
             if (!m_bWritingHeaderFooter && SwTextBoxHelper::TextBoxIsFramePr(rFrameFormat))
             {
-                std::shared_ptr<ww8::Frame> pFramePr = std::make_shared<ww8::Frame>(aFrame);
-                aFramePrTextbox.push_back(pFramePr);
+                aFramePrTextbox.push_back(std::make_shared<ww8::Frame>(aFrame));
             }
             else
             {

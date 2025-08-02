@@ -454,7 +454,7 @@ cppcanvas::CustomSpriteSharedPtr SlideChangeBase::createSprite(
     double                   nPrio ) const
 {
     // TODO(P2): change to bitmapsprite once that's working
-    const cppcanvas::CustomSpriteSharedPtr pSprite(
+    cppcanvas::CustomSpriteSharedPtr pSprite(
         pView->createSprite( rSpriteSize,
                              nPrio ));
 

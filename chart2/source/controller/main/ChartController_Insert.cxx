@@ -374,7 +374,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
             ObjectIdentifier::getSeriesParticleFromCID(m_aSelection.getSelectedCID()), aChildParticle );
 
-        ChartController::executeDlg_ObjectProperties_withUndoGuard( aUndoGuard, aObjectCID, true );
+        ChartController::executeDlg_ObjectProperties_withUndoGuard(std::move(aUndoGuard), aObjectCID, true );
         return;
     }
     try

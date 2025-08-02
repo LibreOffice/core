@@ -99,14 +99,14 @@ namespace sdr::contact
                 if(isPrimitiveGhosted(rDisplayInfo))
                 {
                     const ::basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
-                    const ::basegfx::BColorModifierSharedPtr aBColorModifier =
+                    ::basegfx::BColorModifierSharedPtr aBColorModifier =
                         std::make_shared<basegfx::BColorModifier_interpolate>(
                             aRGBWhite,
                             0.5);
                     const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             std::move(xRetval),
-                            aBColorModifier));
+                            std::move(aBColorModifier)));
 
                     xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
                 }
