@@ -1983,8 +1983,7 @@ std::unique_ptr<SvMemoryStream> SdrPowerPointImport::ImportExOleObjStg( sal_uInt
         ReadDffRecordHeader( rStCtrl, aHd );
         if ( aHd.nRecType == DFF_PST_ExOleObjStg )
         {
-            sal_uInt32 nLen = aHd.nRecLen - 4;
-            if ( static_cast<sal_Int32>(nLen) > 0 )
+            if (aHd.nRecLen > 4)
             {
                 rStCtrl.ReadUInt32( nOleId );
                 pRet.reset(new SvMemoryStream);
