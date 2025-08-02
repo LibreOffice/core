@@ -444,8 +444,8 @@ BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rC
 
 Bitmap lcl_BlendBitmapWithAlpha(
             Bitmap&             aBmp,
-            BitmapReadAccess const* pSrcBmp,
-            BitmapReadAccess const* pSrcAlphaBmp,
+            const Bitmap& rBitmap,
+            const AlphaMask& rAlpha,
             const sal_Int32     nDstHeight,
             const sal_Int32     nDstWidth,
             const sal_Int32*    pMapX,
@@ -453,6 +453,9 @@ Bitmap lcl_BlendBitmapWithAlpha(
 
 {
     Bitmap      res;
+
+    BitmapScopedReadAccess pSrcBmp(rBitmap);
+    BitmapScopedReadAccess pSrcAlphaBmp(rAlpha);
 
     {
         BitmapScopedWriteAccess pDstBmp(aBmp);
@@ -524,11 +527,12 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
 
     TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
-    BitmapScopedReadAccess pBitmapReadAccess(rBitmap);
-    BitmapScopedReadAccess pAlphaReadAccess(rAlpha);
+    BitmapScopedReadAccess pCheckAlphaReadAccess(rAlpha);
 
-    SAL_WARN_IF(pAlphaReadAccess->GetScanlineFormat() != ScanlineFormat::N8BitPal, "vcl.gdi", "non-8bit alpha no longer supported!");
-    assert(pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
+    SAL_WARN_IF(pCheckAlphaReadAccess->GetScanlineFormat() != ScanlineFormat::N8BitPal, "vcl.gdi", "non-8bit alpha no longer supported!");
+    assert(pCheckAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
+
+    pCheckAlphaReadAccess.reset();
 
     // #i38887# reading from screen may sometimes fail
     if (aDeviceBmp.ImplGetSalBitmap())
@@ -536,10 +540,9 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
         Bitmap aNewBitmap;
 
         aNewBitmap = lcl_BlendBitmapWithAlpha(
-                        aDeviceBmp, pBitmapReadAccess.get(), pAlphaReadAccess.get(),
-                        nDstHeight,
-                        nDstWidth,
+                        aDeviceBmp, rBitmap, rAlpha, nDstHeight, nDstWidth,
                         aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
+
         DrawBitmap(aDstRect.TopLeft(), aNewBitmap);
     }
 
