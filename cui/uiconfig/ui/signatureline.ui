@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="SignatureLineDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="signatureline|SignatureLineDialog">Signature Line</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -37,10 +37,10 @@
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -53,8 +53,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -72,42 +72,42 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=1 n-rows=2 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">6</property>
             <property name="margin-end">6</property>
-            <property name="margin_top">6</property>
-            <property name="margin_bottom">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkFrame">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=2 n-rows=3 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkEntry" id="edit_name">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="placeholder_text" translatable="yes" context="signatureline|edit_name">John Doe</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="placeholder-text" translatable="yes" context="signatureline|edit_name">John Doe</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_name-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_name">Enter your name as signer of the document. Your name will be inserted above the signature horizontal line.</property>
@@ -115,18 +115,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="edit_title">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="placeholder_text" translatable="yes" context="signatureline|edit_title">Director</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="placeholder-text" translatable="yes" context="signatureline|edit_title">Director</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_title-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_title">Enter the title of the signer. The title is displayed in the signature line graphic box.</property>
@@ -134,18 +134,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="edit_email">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
-                        <property name="placeholder_text" translatable="yes" context="signatureline|edit_email">john.doe@example.org</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
+                        <property name="placeholder-text" translatable="yes" context="signatureline|edit_email">john.doe@example.org</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit_email-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|edit_email">Enter the email of the signer. The email is not displayed in the signature line graphic box, but is used for the digital signature.</property>
@@ -153,50 +153,50 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label_name">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="signatureline|label_name" comments="Suggested Signer Name">Name:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">edit_name</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_name</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label_title">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="signatureline|label_title" comments="Suggested Signer Title">Title:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">edit_title</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_title</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label_email">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="signatureline|label_email" comments="Suggested Signer email">Email:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">edit_email</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_email</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                   </object>
@@ -204,7 +204,7 @@
                 <child type="label">
                   <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="signatureline|label_suggestedsigner">Suggested Signer</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -213,36 +213,36 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=1 n-rows=1 -->
+                  <!-- n-columns=1 n-rows=4 -->
                   <object class="GtkGrid">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkCheckButton" id="checkbox_can_add_comments">
                         <property name="label" translatable="yes" context="signatureline|checkbox_can_add_comments">Signer can add comments</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="checkbox_can_add_comments-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|checkbox_can_add_comments">Enable signer to insert comments in the Sign Signature Line dialog at time of signature.</property>
@@ -250,19 +250,19 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbox_show_sign_date">
                         <property name="label" translatable="yes" context="signatureline|checkbox_show_sign_date">Show sign date in signature line</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="checkbox_show_sign_date-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="signatureline|extended_tip|checkbox_show_sign_date">Mark this checkbox to display the date of the signature, at the time when the document is digitally signed.</property>
@@ -270,36 +270,36 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label_instructions">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes" context="signatureline|label_instructions">Instructions to the signer:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">edit_instructions</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_instructions</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTextView" id="edit_instructions">
-                            <property name="height_request">60</property>
+                            <property name="height-request">60</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <child internal-child="accessible">
@@ -311,8 +311,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                   </object>
@@ -320,7 +320,7 @@
                 <child type="label">
                   <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="signatureline|label_more">More</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -329,8 +329,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
@@ -347,8 +347,5 @@
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
