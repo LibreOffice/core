@@ -11,33 +11,33 @@
 #include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapAlphaClampFilter::execute(Bitmap const& rBitmap) const
 {
-    if (!rBitmapEx.IsAlpha())
-        return rBitmapEx;
+    if (!rBitmap.HasAlpha())
+        return rBitmap;
 
-    AlphaMask aBitmapAlpha(rBitmapEx.GetAlphaMask());
+    Bitmap aNewBitmap(rBitmap);
     {
-        BitmapScopedWriteAccess pWriteAlpha(aBitmapAlpha);
-        const Size aSize(rBitmapEx.GetSizePixel());
+        BitmapScopedWriteAccess pWriteAcc(aNewBitmap);
+        const Size aSize(aNewBitmap.GetSizePixel());
 
         for (sal_Int32 nY = 0; nY < sal_Int32(aSize.Height()); ++nY)
         {
-            Scanline pScanAlpha = pWriteAlpha->GetScanline(nY);
+            Scanline pScan = pWriteAcc->GetScanline(nY);
 
             for (sal_Int32 nX = 0; nX < sal_Int32(aSize.Width()); ++nX)
             {
-                BitmapColor aBitmapAlphaValue(pWriteAlpha->GetPixelFromData(pScanAlpha, nX));
-                if ((255 - aBitmapAlphaValue.GetIndex()) > mcThreshold)
+                BitmapColor aBitmapValue(pWriteAcc->GetPixelFromData(pScan, nX));
+                if ((255 - aBitmapValue.GetAlpha()) > mcThreshold)
                 {
-                    aBitmapAlphaValue.SetIndex(0);
-                    pWriteAlpha->SetPixelOnData(pScanAlpha, nX, aBitmapAlphaValue);
+                    aBitmapValue.SetAlpha(0);
+                    pWriteAcc->SetPixelOnData(pScan, nX, aBitmapValue);
                 }
             }
         }
     }
 
-    return BitmapEx(rBitmapEx.GetBitmap(), aBitmapAlpha);
+    return aNewBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

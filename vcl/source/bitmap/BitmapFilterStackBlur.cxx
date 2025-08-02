@@ -601,14 +601,7 @@ BitmapFilterStackBlur::BitmapFilterStackBlur(sal_Int32 nRadius)
 
 BitmapFilterStackBlur::~BitmapFilterStackBlur() {}
 
-BitmapEx BitmapFilterStackBlur::execute(BitmapEx const& rBitmapEx) const
-{
-    const Bitmap& aBitmap = rBitmapEx.GetBitmap();
-    Bitmap result = filter(aBitmap);
-    return BitmapEx(result, rBitmapEx.GetAlphaMask());
-}
-
-Bitmap BitmapFilterStackBlur::filter(Bitmap const& rBitmap) const
+Bitmap BitmapFilterStackBlur::execute(Bitmap const& rBitmap) const
 {
     Bitmap bitmapCopy(rBitmap);
     ScanlineFormat nScanlineFormat;

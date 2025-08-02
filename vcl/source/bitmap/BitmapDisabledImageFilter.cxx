@@ -11,13 +11,13 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapDisabledImageFilter.hxx>
 
-BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapDisabledImageFilter::execute(Bitmap const& rBitmap) const
 {
-    const Size aSize(rBitmapEx.GetSizePixel());
+    const Size aSize(rBitmap.GetSizePixel());
 
     // keep disable image at same depth as original where possible, otherwise
     // use 8 bit
-    auto ePixelFormat = rBitmapEx.getPixelFormat();
+    auto ePixelFormat = rBitmap.getPixelFormat();
     if (sal_uInt16(ePixelFormat) < 8)
         ePixelFormat = vcl::PixelFormat::N8_BPP;
 
@@ -26,8 +26,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aGrey(aSize, ePixelFormat, pPal);
     BitmapScopedWriteAccess pGrey(aGrey);
 
-    const Bitmap& aReadBitmap(rBitmapEx.GetBitmap());
-    BitmapScopedReadAccess pRead(aReadBitmap);
+    BitmapScopedReadAccess pRead(rBitmap);
     if (pRead && pGrey)
     {
         for (sal_Int32 nY = 0; nY < sal_Int32(aSize.Height()); ++nY)
@@ -46,10 +45,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    if (rBitmapEx.IsAlpha())
-        return BitmapEx(aGrey, rBitmapEx.GetAlphaMask());
-
-    return BitmapEx(aGrey);
+    return aGrey;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

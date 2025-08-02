@@ -216,7 +216,7 @@ template <> struct hash<ScaleCacheKey>
 
 } // end std namespace
 
-typedef o3tl::lru_map<ScaleCacheKey, BitmapEx> lru_scale_cache;
+typedef o3tl::lru_map<ScaleCacheKey, Bitmap> lru_scale_cache;
 
 struct ImplSVGDIData
 {

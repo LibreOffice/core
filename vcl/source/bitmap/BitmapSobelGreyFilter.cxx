@@ -15,21 +15,21 @@
 
 #include <algorithm>
 
-BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapSobelGreyFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     if (!aBitmap.ImplMakeGreyscales())
-        return BitmapEx();
+        return Bitmap();
 
     BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
-        return BitmapEx();
+        return Bitmap();
 
     Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &pReadAcc->GetPalette());
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     BitmapColor aGrey(sal_uInt8(0));
     const sal_Int32 nWidth = pWriteAcc->Width();
@@ -138,15 +138,10 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
     pWriteAcc.reset();
     pReadAcc.reset();
 
-    const MapMode aMap(aBitmap.GetPrefMapMode());
-    const Size aPrefSize(aBitmap.GetPrefSize());
+    aNewBmp.SetPrefMapMode(aBitmap.GetPrefMapMode());
+    aNewBmp.SetPrefSize(aBitmap.GetPrefSize());
 
-    aBitmap = std::move(aNewBmp);
-
-    aBitmap.SetPrefMapMode(aMap);
-    aBitmap.SetPrefSize(aPrefSize);
-
-    return BitmapEx(aBitmap);
+    return aNewBmp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

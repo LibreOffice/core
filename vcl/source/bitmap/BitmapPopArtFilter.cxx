@@ -13,20 +13,20 @@
 #include <vcl/bitmap/BitmapPopArtFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapPopArtFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     bool bConvert = isPalettePixelFormat(aBitmap.getPixelFormat())
                     || aBitmap.Convert(BmpConversion::N8BitColors);
 
     if (!bConvert)
-        return BitmapEx();
+        return Bitmap();
 
     BitmapScopedWriteAccess pWriteAcc(aBitmap);
 
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     const sal_Int32 nWidth = pWriteAcc->Width();
     const sal_Int32 nHeight = pWriteAcc->Height();
@@ -82,7 +82,7 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
     // cleanup
     pWriteAcc.reset();
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

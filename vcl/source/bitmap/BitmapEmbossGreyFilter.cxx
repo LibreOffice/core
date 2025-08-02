@@ -17,21 +17,21 @@
 
 #include <algorithm>
 
-BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapEmbossGreyFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     if (!aBitmap.ImplMakeGreyscales())
-        return BitmapEx();
+        return Bitmap();
 
     BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
-        return BitmapEx();
+        return Bitmap();
 
     Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &pReadAcc->GetPalette());
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     const sal_Int32 nWidth = pWriteAcc->Width();
     const sal_Int32 nHeight = pWriteAcc->Height();
@@ -130,7 +130,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aPrefSize);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

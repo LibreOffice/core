@@ -20,9 +20,9 @@ static sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 color1,
     return static_cast<sal_uInt8>(color1 + color2);
 }
 
-BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapDuoToneFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     const sal_Int32 nWidth = aBitmap.GetSizePixel().Width();
     const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
@@ -52,7 +52,7 @@ BitmapEx BitmapDuoToneFilter::execute(BitmapEx const& rBitmapEx) const
     pReadAcc.reset();
     aBitmap.ReassignWithSize(aResultBitmap);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

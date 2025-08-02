@@ -26,11 +26,9 @@ public:
     BitmapBasicMorphologyFilter(BasicMorphologyOp op, sal_Int32 nRadius, sal_uInt8 nValueOutside);
     virtual ~BitmapBasicMorphologyFilter();
 
-    virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 
 private:
-    Bitmap filter(Bitmap const& rBitmap) const;
-
     BasicMorphologyOp m_eOp;
     sal_Int32 m_nRadius;
     sal_uInt8 m_nValueOutside = 0;

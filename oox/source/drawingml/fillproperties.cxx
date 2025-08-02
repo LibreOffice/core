@@ -210,10 +210,10 @@ Reference<XGraphic> lclApplyBlackWhiteEffect(const BlipFillProperties& aBlipProp
         BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
         const AlphaMask& aMask(aBitmapEx.GetAlphaMask());
 
-        BitmapEx aTmpBmpEx(aBitmapEx.GetBitmap());
-        BitmapFilter::Filter(aTmpBmpEx, BitmapMonochromeFilter{ nThreshold });
+        Bitmap aTmpBmp(aBitmapEx.GetBitmap());
+        BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ nThreshold });
 
-        aReturnGraphic = ::Graphic(BitmapEx(aTmpBmpEx.GetBitmap(), aMask));
+        aReturnGraphic = ::Graphic(BitmapEx(aTmpBmp, aMask));
         aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
         return aReturnGraphic.GetXGraphic();
     }

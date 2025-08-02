@@ -21,9 +21,7 @@ public:
     BitmapFilterStackBlur(sal_Int32 nRadius);
     virtual ~BitmapFilterStackBlur();
 
-    virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
-
-    Bitmap filter(Bitmap const& rBitmap) const;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 };
 
 #endif // INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX

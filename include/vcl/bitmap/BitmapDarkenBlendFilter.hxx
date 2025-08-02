@@ -15,12 +15,12 @@
 class VCL_DLLPUBLIC BitmapDarkenBlendFilter final : public BitmapFilter
 {
 private:
-    BitmapEx maBlendBitmapBitmapEx;
+    Bitmap maBlendBitmapBitmap;
 
 public:
-    BitmapDarkenBlendFilter(BitmapEx const& rBitmapBlendEx);
+    BitmapDarkenBlendFilter(Bitmap const& rBitmapBlend);
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

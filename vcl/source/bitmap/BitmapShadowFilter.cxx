@@ -12,13 +12,13 @@
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapShadowFilter::execute(Bitmap const& rBitmap) const
 {
-    const BitmapEx& aBitmapEx(rBitmapEx);
-    BitmapScopedWriteAccess pWriteAccess(const_cast<Bitmap&>(aBitmapEx.GetBitmap()));
+    Bitmap aBitmap(rBitmap);
+    BitmapScopedWriteAccess pWriteAccess(aBitmap);
 
     if (!pWriteAccess)
-        return rBitmapEx;
+        return Bitmap();
 
     for (sal_Int32 y(0), nHeight(pWriteAccess->Height()); y < nHeight; y++)
     {
@@ -40,7 +40,7 @@ BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    return aBitmapEx;
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

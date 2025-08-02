@@ -135,9 +135,7 @@ public:
 
         maIntroBW = maIntro.GetBitmap();
 
-        BitmapEx aTmpBmpEx(maIntroBW);
-        BitmapFilter::Filter(aTmpBmpEx, BitmapEmbossGreyFilter(0_deg100, 0_deg100));
-        maIntroBW = aTmpBmpEx.GetBitmap();
+        BitmapFilter::Filter(maIntroBW, BitmapEmbossGreyFilter(0_deg100, 0_deg100));
 
         InitRenderers();
         mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,

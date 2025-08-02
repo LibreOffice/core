@@ -147,7 +147,7 @@ void BitmapFilterTest::testBlurCorrectness()
 
     // Perform blur
     BitmapFilterStackBlur aBlurFilter(2);
-    aBitmap24Bit = aBlurFilter.filter(aBitmap24Bit);
+    aBitmap24Bit = aBlurFilter.execute(aBitmap24Bit);
 
     // Check the result
 
@@ -229,7 +229,7 @@ void BitmapFilterTest::testPerformance()
     for (int i = 0; i < nIterations; i++)
     {
         BitmapFilterStackBlur aBlurFilter(250);
-        aResult = aBlurFilter.filter(aBigBitmap);
+        aResult = aBlurFilter.execute(aBigBitmap);
     }
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = (end - start) / nIterations;
@@ -443,31 +443,27 @@ void BitmapFilterTest::testDarkenBlendFilter()
         aWriteAccess->Erase(COL_AUTO);
     }
 
-    BitmapEx aRedBitmapEx(aRedBitmap);
-    BitmapEx aGreenBitmapEx(aGreenBitmap);
-    BitmapEx aTransparentBitmapEx(aTransparentBitmap);
-
     // same color
     {
-        BitmapDarkenBlendFilter aArithmeticFilter(aRedBitmapEx);
-        BitmapEx aResBitmapEx = aArithmeticFilter.execute(aRedBitmapEx);
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(2, 2));
+        BitmapDarkenBlendFilter aArithmeticFilter(aRedBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute(aRedBitmap);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(2, 2));
     }
 
     // different color
     {
-        BitmapDarkenBlendFilter aArithmeticFilter(aGreenBitmapEx);
-        BitmapEx aResBitmapEx = aArithmeticFilter.execute(aRedBitmapEx);
+        BitmapDarkenBlendFilter aArithmeticFilter(aGreenBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute(aRedBitmap);
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0x00, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(2, 2));
+                             aResBitmap.GetPixelColor(2, 2));
     }
 
     // transparent
     {
-        BitmapDarkenBlendFilter aArithmeticFilter(aTransparentBitmapEx);
-        BitmapEx aResBitmapEx = aArithmeticFilter.execute(aRedBitmapEx);
+        BitmapDarkenBlendFilter aArithmeticFilter(aTransparentBitmap);
+        Bitmap aResBitmap = aArithmeticFilter.execute(aRedBitmap);
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(2, 2));
+                             aResBitmap.GetPixelColor(2, 2));
     }
 }
 
@@ -602,215 +598,207 @@ void BitmapFilterTest::testArithmeticBlendFilter()
         aWriteAccess->Erase(COL_AUTO);
     }
 
-    BitmapEx aRedBitmapEx(aRedBitmap);
-    BitmapEx aGreenBitmapEx(aGreenBitmap);
-    BitmapEx aTransparentBitmapEx(aTransparentBitmap);
-
     // same color
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 1, 0, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 1, 0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 1, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 1, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0, 1, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0, 0, 1));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0, 1));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0.5, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0.5, 0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0.5, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0.5, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0, 0.5, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0.5, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmapEx, 0, 0, 0, 0.5));
+        BitmapEx aResBitmapEx(aRedBitmap);
+        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0, 0.5));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
                              aResBitmapEx.GetPixelColor(0, 0));
     }
 
     // Different colors
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0, 0, 0));
+        BitmapEx aResBitmapEx(aRedBitmap);
+        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
                              aResBitmapEx.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmapEx, 1, 0, 0, 0));
+        BitmapEx aResBitmapEx(aRedBitmap);
+        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmap, 1, 0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_BLACK, aResBitmapEx.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 1, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 1, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0, 1, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_GREEN, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_GREEN, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0, 0, 1));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0, 1));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aGreenBitmapEx, 0.5, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0.5, 0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0x00, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0.5, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0.5, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0, 0.5, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0.5, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0x00, 0x81, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aGreenBitmapEx, 0, 0, 0, 0.5));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0, 0.5));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     // transparent
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0, 0, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 1, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 1, 0, 0, 0));
 
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 1, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 1, 0, 0));
 
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmapEx.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0, 1, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0, 1, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0, 0, 1));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0, 0, 1));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xFF, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0.5, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0.5, 0, 0, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0.5, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0.5, 0, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0, 0.5, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0, 0.5, 0));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmapEx);
-        BitmapFilter::Filter(aResBitmapEx,
-                             BitmapArithmeticBlendFilter(aTransparentBitmapEx, 0, 0, 0, 0.5));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap,
+                             BitmapArithmeticBlendFilter(aTransparentBitmap, 0, 0, 0, 0.5));
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 }
 

@@ -141,8 +141,6 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
                    DrawImageFlags::Deactive | DrawImageFlags::SemiTransparent)))
     {
-        BitmapEx aTempBitmapEx(aRenderBmp);
-
         if (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive))
         {
             const StyleSettings& rSettings = pOutDev->GetSettings().GetStyleSettings();
@@ -152,11 +150,12 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
             else
                 aColor = rSettings.GetDeactiveColor();
 
-            BitmapFilter::Filter(aTempBitmapEx, BitmapColorizeFilter(aColor));
+            BitmapFilter::Filter(aRenderBmp, BitmapColorizeFilter(aColor));
         }
 
         if (nStyle & DrawImageFlags::SemiTransparent)
         {
+            BitmapEx aTempBitmapEx(aRenderBmp);
             if (aTempBitmapEx.IsAlpha())
             {
                 Bitmap aAlphaBmp(aTempBitmapEx.GetAlphaMask().GetBitmap());
@@ -168,8 +167,8 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
                 sal_uInt8 cErase = 128;
                 aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aTempBitmapEx.GetSizePixel(), &cErase));
             }
+            aRenderBmp = Bitmap(aTempBitmapEx);
         }
-        aRenderBmp = Bitmap(aTempBitmapEx);
     }
 
     pOutDev->DrawBitmapEx(rPos, aOutSize, aRenderBmp);

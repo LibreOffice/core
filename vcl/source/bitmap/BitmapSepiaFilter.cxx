@@ -15,12 +15,12 @@
 
 #include <algorithm>
 
-BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapSepiaFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
     BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
-        return BitmapEx();
+        return Bitmap();
 
     const sal_Int32 nSepia
         = 10000 - 100 * std::clamp(mnSepiaPercent, sal_uInt16(0), sal_uInt16(100));
@@ -39,7 +39,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aSepiaPal);
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     BitmapColor aCol(sal_uInt8(0));
     const sal_Int32 nWidth = pWriteAcc->Width();
@@ -90,7 +90,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aPrefSize);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,7 +70,7 @@ public:
     BitmapFilter();
     virtual ~BitmapFilter();
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const = 0;
+    virtual Bitmap execute(Bitmap const& rBitmap) const = 0;
 
     static bool Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter);
     static bool Filter(Bitmap& rBmp, BitmapFilter const& rFilter);

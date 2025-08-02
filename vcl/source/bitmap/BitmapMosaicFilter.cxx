@@ -11,12 +11,12 @@
 #include <vcl/bitmap/BitmapMosaicFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapMosaicFilter::execute(Bitmap const& rBitmap) const
 {
     if (!(mnTileWidth > 1 || mnTileHeight > 1))
-        return BitmapEx();
+        return Bitmap();
 
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     std::optional<Bitmap> pNewBmp;
     BitmapScopedReadAccess pReadAcc;
@@ -173,9 +173,9 @@ BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const
     }
 
     if (bRet)
-        return BitmapEx(aBitmap);
+        return aBitmap;
 
-    return BitmapEx();
+    return Bitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

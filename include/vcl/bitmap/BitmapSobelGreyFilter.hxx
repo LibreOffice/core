@@ -17,7 +17,7 @@ class VCL_DLLPUBLIC BitmapSobelGreyFilter final : public BitmapFilter
 public:
     BitmapSobelGreyFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

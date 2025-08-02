@@ -26,9 +26,9 @@
 #include <bitmap/BitmapFastScaleFilter.hxx>
 #include <bitmap/BitmapInterpolateScaleFilter.hxx>
 
-BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapInterpolateScaleFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     const Size aSizePix(aBitmap.GetSizePixel());
     const sal_Int32 nNewWidth = basegfx::fround(aSizePix.Width() * mfScaleX);
@@ -231,15 +231,13 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
     if (!bRet)
     {
         // fallback to fast scale filter
-        BitmapEx aBmpEx(aBitmap);
-        bRet = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(mfScaleX, mfScaleY));
-        aBitmap = aBmpEx.GetBitmap();
+        bRet = BitmapFilter::Filter(aBitmap, BitmapFastScaleFilter(mfScaleX, mfScaleY));
     }
 
     if (bRet)
-        return BitmapEx(aBitmap);
+        return aBitmap;
 
-    return BitmapEx();
+    return Bitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

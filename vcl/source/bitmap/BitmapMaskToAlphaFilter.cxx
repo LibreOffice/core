@@ -16,14 +16,13 @@
 /**
  * Convert a 1-bit mask to an alpha bitmap
  */
-BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapMaskToAlphaFilter::execute(Bitmap const& rBitmap) const
 {
-    const Size aSize(rBitmapEx.GetSizePixel());
+    const Size aSize(rBitmap.GetSizePixel());
 
-    const Bitmap& aBitmap(rBitmapEx.GetBitmap());
     Bitmap aOutBitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
-    BitmapScopedReadAccess pRead(aBitmap);
+    BitmapScopedReadAccess pRead(rBitmap);
     BitmapScopedWriteAccess pWrite(aOutBitmap);
 
     if (pRead && pWrite)
@@ -52,7 +51,7 @@ BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
     pWrite.reset();
     pRead.reset();
 
-    return BitmapEx(aOutBitmap);
+    return aOutBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

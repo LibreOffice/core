@@ -16,16 +16,16 @@
 #include <algorithm>
 #include <cstdlib>
 
-BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
+Bitmap BitmapColorQuantizationFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap = aBitmapEx.GetBitmap();
+    Bitmap aBitmap = rBitmap;
 
     if (vcl::numberOfColors(aBitmap.getPixelFormat()) <= sal_Int64(mnNewColorCount))
-        return BitmapEx(aBitmap);
+        return aBitmap;
 
     BitmapScopedReadAccess pRAcc(aBitmap);
     if (!pRAcc)
-        return BitmapEx();
+        return Bitmap();
 
     const sal_uInt32 nValidBits = 4;
     const sal_uInt32 nColorsPerComponent = 1 << nValidBits;
@@ -124,7 +124,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &aNewPal);
     BitmapScopedWriteAccess pWAcc(aNewBmp);
     if (!pWAcc)
-        return BitmapEx();
+        return Bitmap();
 
     BitmapColor aDstCol(sal_uInt8(0));
     std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[nTotalColors]);
@@ -195,7 +195,7 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aSize);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

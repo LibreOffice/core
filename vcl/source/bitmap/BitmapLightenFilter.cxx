@@ -13,14 +13,14 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
 
-BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapLightenFilter::execute(Bitmap const& rBitmap) const
 {
-    const Size aSize(rBitmapEx.GetSizePixel());
+    const Size aSize(rBitmap.GetSizePixel());
 
-    const Bitmap& aBitmap(rBitmapEx.GetBitmap());
-    Bitmap aDarkBitmap(aSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aDarkBitmap(aSize,
+                       rBitmap.HasAlpha() ? vcl::PixelFormat::N32_BPP : vcl::PixelFormat::N24_BPP);
 
-    BitmapScopedReadAccess pRead(aBitmap);
+    BitmapScopedReadAccess pRead(rBitmap);
     BitmapScopedWriteAccess pWrite(aDarkBitmap);
 
     if (pRead && pWrite)
@@ -61,7 +61,7 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
     pWrite.reset();
     pRead.reset();
 
-    return BitmapEx(aDarkBitmap, rBitmapEx.GetAlphaMask());
+    return aDarkBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

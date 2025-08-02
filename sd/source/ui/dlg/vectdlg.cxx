@@ -120,9 +120,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale 
     else
         rScale = Fraction( 1, 1 );
 
-    BitmapEx aNewBmpEx(aNew);
-    BitmapFilter::Filter(aNewBmpEx, BitmapSimpleColorQuantizationFilter(m_xNmLayers->get_value()));
-    aNew = aNewBmpEx.GetBitmap();
+    BitmapFilter::Filter(aNew, BitmapSimpleColorQuantizationFilter(m_xNmLayers->get_value()));
 
     return aNew;
 }

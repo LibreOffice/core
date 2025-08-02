@@ -27,7 +27,7 @@ public:
     BitmapScaleSuperFilter(const double& rScaleX, const double& rScaleY);
     virtual ~BitmapScaleSuperFilter() override;
 
-    virtual BitmapEx execute(BitmapEx const& rBitmap) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 
 private:
     double mrScaleX;

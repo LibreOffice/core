@@ -19,25 +19,25 @@ BitmapFilter::~BitmapFilter() {}
 
 bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter)
 {
-    BitmapEx aTmpBmpEx(rFilter.execute(rBmpEx));
+    Bitmap aBitmap(rBmpEx);
+    bool bRet = Filter(aBitmap, rFilter);
+    if (bRet)
+        rBmpEx = BitmapEx(aBitmap);
+    return bRet;
+}
 
-    if (aTmpBmpEx.IsEmpty())
+bool BitmapFilter::Filter(Bitmap& rBmp, BitmapFilter const& rFilter)
+{
+    Bitmap aTmpBmp(rFilter.execute(rBmp));
+
+    if (aTmpBmp.IsEmpty())
     {
         SAL_WARN("vcl.gdi", "Bitmap filter failed " << typeid(rFilter).name());
         return false;
     }
 
-    rBmpEx = aTmpBmpEx;
+    rBmp = aTmpBmp;
     return true;
-}
-
-bool BitmapFilter::Filter(Bitmap& rBmp, BitmapFilter const& rFilter)
-{
-    BitmapEx aBitmapEx(rBmp);
-    bool bRet = Filter(aBitmapEx, rFilter);
-    if (bRet)
-        rBmp = Bitmap(aBitmapEx);
-    return bRet;
 }
 
 bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter const& rFilter)

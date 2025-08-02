@@ -14,18 +14,16 @@
 #include <vcl/bitmap/BitmapSeparableUnsharpenFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapSeparableUnsharpenFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     const sal_Int32 nWidth = aBitmap.GetSizePixel().Width();
     const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
 
     Bitmap aBlur(aBitmap);
-    BitmapEx aBlurEx(aBlur);
 
-    BitmapFilter::Filter(aBlurEx, BitmapGaussianSeparableBlurFilter(-mfRadius));
-    aBlur = aBlurEx.GetBitmap();
+    BitmapFilter::Filter(aBlur, BitmapGaussianSeparableBlurFilter(-mfRadius));
 
     // Amount of unsharpening effect on image - currently set to a fixed value
     double aAmount = 2.0;
@@ -67,7 +65,7 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
     pReadAccBlur.reset();
     aBitmap.ReassignWithSize(aResultBitmap);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

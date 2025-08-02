@@ -2035,10 +2035,10 @@ void PngFilterTest::testTdf153180MonochromeFilterPngExport()
     BitmapEx aBitmapEx(aGraphicOriginal.GetBitmapEx());
     AlphaMask aAlphaMask(aBitmapEx.GetAlphaMask());
 
-    BitmapEx aTmpBmpEx(aBitmapEx.GetBitmap());
-    BitmapFilter::Filter(aTmpBmpEx, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
+    Bitmap aTmpBmp(aBitmapEx.GetBitmap());
+    BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
 
-    Graphic aGraphicAfterFilter{ BitmapEx(aTmpBmpEx.GetBitmap(), aAlphaMask) };
+    Graphic aGraphicAfterFilter{ BitmapEx(aTmpBmp, aAlphaMask) };
     CPPUNIT_ASSERT(aGraphicAfterFilter.IsAlpha());
 
     // export the resulting graphic

@@ -15,18 +15,18 @@
 class VCL_DLLPUBLIC BitmapArithmeticBlendFilter final : public BitmapFilter
 {
 private:
-    BitmapEx maBitmapEx2;
+    Bitmap maBitmap2;
     double mnK1;
     double mnK2;
     double mnK3;
     double mnK4;
 
 public:
-    BitmapArithmeticBlendFilter(BitmapEx const& rBmpEx2, double nK1, double nK2, double nK3,
+    BitmapArithmeticBlendFilter(Bitmap const& rBmp2, double nK1, double nK2, double nK3,
                                 double nK4);
     ~BitmapArithmeticBlendFilter();
 
-    BitmapEx execute(BitmapEx const& rBitmapEx) const;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

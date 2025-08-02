@@ -11,17 +11,16 @@
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
+Bitmap BitmapMonochromeFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap = aBitmapEx.GetBitmap();
-    BitmapScopedReadAccess pReadAcc(aBitmap);
+    BitmapScopedReadAccess pReadAcc(rBitmap);
     if (!pReadAcc)
-        return BitmapEx();
+        return Bitmap();
 
-    Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
+    Bitmap aNewBmp(rBitmap.GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
     const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
@@ -71,15 +70,10 @@ BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
     pWriteAcc.reset();
     pReadAcc.reset();
 
-    const MapMode aMap(aBitmap.GetPrefMapMode());
-    const Size aSize(aBitmap.GetPrefSize());
+    aNewBmp.SetPrefMapMode(rBitmap.GetPrefMapMode());
+    aNewBmp.SetPrefSize(rBitmap.GetPrefSize());
 
-    aBitmap = std::move(aNewBmp);
-
-    aBitmap.SetPrefMapMode(aMap);
-    aBitmap.SetPrefSize(aSize);
-
-    return BitmapEx(aBitmap);
+    return aNewBmp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

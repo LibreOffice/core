@@ -14,13 +14,13 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapColorizeFilter.hxx>
 
-BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapColorizeFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap = rBitmapEx.GetBitmap();
+    Bitmap aBitmap = rBitmap;
     BitmapScopedWriteAccess pWriteAccess(aBitmap);
 
     if (!pWriteAccess)
-        return rBitmapEx;
+        return rBitmap;
 
     std::vector<sal_uInt8> aMapR(256);
     std::vector<sal_uInt8> aMapG(256);
@@ -90,7 +90,7 @@ BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    return rBitmapEx;
+    return aBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

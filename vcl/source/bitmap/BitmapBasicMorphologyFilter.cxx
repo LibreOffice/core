@@ -330,13 +330,7 @@ BitmapBasicMorphologyFilter::BitmapBasicMorphologyFilter(BasicMorphologyOp op, s
 
 BitmapBasicMorphologyFilter::~BitmapBasicMorphologyFilter() = default;
 
-BitmapEx BitmapBasicMorphologyFilter::execute(BitmapEx const& rBitmapEx) const
-{
-    Bitmap result = filter(rBitmapEx.GetBitmap());
-    return BitmapEx(result, rBitmapEx.GetAlphaMask());
-}
-
-Bitmap BitmapBasicMorphologyFilter::filter(Bitmap const& rBitmap) const
+Bitmap BitmapBasicMorphologyFilter::execute(Bitmap const& rBitmap) const
 {
     Bitmap bitmapCopy(rBitmap);
     ScanlineFormat nScanlineFormat;

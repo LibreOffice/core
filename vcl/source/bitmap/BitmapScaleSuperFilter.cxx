@@ -857,9 +857,9 @@ BitmapScaleSuperFilter::BitmapScaleSuperFilter(const double& rScaleX, const doub
 BitmapScaleSuperFilter::~BitmapScaleSuperFilter()
 {}
 
-BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
+Bitmap BitmapScaleSuperFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmap.GetBitmap());
+    Bitmap aBitmap(rBitmap);
     bool bRet = false;
 
     const Size aSizePix(rBitmap.GetSizePixel());
@@ -876,7 +876,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     constexpr double fScaleThresh = 0.6;
 
     if (nDstW <= 1 || nDstH <= 1)
-        return BitmapEx();
+        return Bitmap();
 
     // check cache for a previously scaled version of this
     ScaleCacheKey aKey(aBitmap.ImplGetSalBitmap().get(),
@@ -909,7 +909,7 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
         if (!aOutSize.Width() || !aOutSize.Height())
         {
             SAL_WARN("vcl.gdi", "bmp creation failed");
-            return BitmapEx();
+            return Bitmap();
         }
 
         BitmapScopedWriteAccess pWriteAccess(aOutBmp);
@@ -1038,12 +1038,11 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
     {
         tools::Rectangle aRect(Point(0, 0), Point(nDstW, nDstH));
         aBitmap.Crop(aRect);
-        BitmapEx aRet(aBitmap);
-        rCache.insert(std::make_pair(aKey, aRet));
-        return aRet;
+        rCache.insert(std::make_pair(aKey, aBitmap));
+        return aBitmap;
     }
 
-    return BitmapEx();
+    return Bitmap();
 
 }
 

@@ -255,14 +255,15 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
                 aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
-        BitmapArithmeticBlendFilter aArithmeticFilter(aBmpEx2, maK1.getNumber(), maK2.getNumber(),
-                                                      maK3.getNumber(), maK4.getNumber());
-        BitmapEx aResBmpEx = aArithmeticFilter.execute(aBmpEx);
+        BitmapArithmeticBlendFilter aArithmeticFilter(Bitmap(aBmpEx2), maK1.getNumber(),
+                                                      maK2.getNumber(), maK3.getNumber(),
+                                                      maK4.getNumber());
+        Bitmap aResBmp = aArithmeticFilter.execute(Bitmap(aBmpEx));
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                aResBmpEx, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                               aBaseRange.getRange(), aBaseRange.getMinimum())));
+                BitmapEx(aResBmp), basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                       aBaseRange.getRange(), aBaseRange.getMinimum())));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }

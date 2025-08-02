@@ -31,7 +31,7 @@ public:
         Separable Blur implementation uses 2x separable 1D convolution
         to process the image.
     */
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 
 private:
     double mfRadius;

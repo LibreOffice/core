@@ -14,8 +14,8 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 
-BitmapDarkenBlendFilter::BitmapDarkenBlendFilter(BitmapEx const& rBitmapBlendEx)
-    : maBlendBitmapBitmapEx(rBitmapBlendEx)
+BitmapDarkenBlendFilter::BitmapDarkenBlendFilter(Bitmap const& rBitmapBlend)
+    : maBlendBitmapBitmap(rBitmapBlend)
 {
 }
 
@@ -30,31 +30,28 @@ static sal_uInt8 lcl_calculate(const sal_uInt8 aColor, const sal_uInt8 aAlpha,
     return result * 255.0;
 }
 
-BitmapEx BitmapDarkenBlendFilter::execute(BitmapEx const& rBitmapBlendEx) const
+Bitmap BitmapDarkenBlendFilter::execute(Bitmap const& rBitmapBlend) const
 {
-    if (rBitmapBlendEx.IsEmpty() || maBlendBitmapBitmapEx.IsEmpty())
-        return BitmapEx();
+    if (rBitmapBlend.IsEmpty() || maBlendBitmapBitmap.IsEmpty())
+        return Bitmap();
 
-    const Size aSize = rBitmapBlendEx.GetBitmap().GetSizePixel();
-    const Size aSize2 = maBlendBitmapBitmapEx.GetBitmap().GetSizePixel();
+    const Size aSize = rBitmapBlend.GetSizePixel();
+    const Size aSize2 = maBlendBitmapBitmap.GetSizePixel();
     const sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
     const sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
 
-    Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-    Bitmap aDstAlpha(AlphaMask(Size(nWidth, nHeight)).GetBitmap());
+    Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N32_BPP);
 
     BitmapScopedWriteAccess pWriteAccess(aDstBitmap);
-    BitmapScopedWriteAccess pAlphaWriteAccess(aDstAlpha);
 
     for (tools::Long y(0); y < nHeight; ++y)
     {
         Scanline pScanline = pWriteAccess->GetScanline(y);
-        Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
         for (tools::Long x(0); x < nWidth; ++x)
         {
-            const BitmapColor i1 = vcl::bitmap::premultiply(rBitmapBlendEx.GetPixelColor(x, y));
+            const BitmapColor i1 = vcl::bitmap::premultiply(rBitmapBlend.GetPixelColor(x, y));
             const BitmapColor i2
-                = vcl::bitmap::premultiply(maBlendBitmapBitmapEx.GetPixelColor(x, y));
+                = vcl::bitmap::premultiply(maBlendBitmapBitmap.GetPixelColor(x, y));
             const sal_uInt8 r(
                 lcl_calculate(i1.GetRed(), i1.GetAlpha(), i2.GetRed(), i2.GetAlpha()));
             const sal_uInt8 g(
@@ -66,14 +63,12 @@ BitmapEx BitmapDarkenBlendFilter::execute(BitmapEx const& rBitmapBlendEx) const
 
             pWriteAccess->SetPixelOnData(
                 pScanline, x, vcl::bitmap::unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
-            pAlphaWriteAccess->SetPixelOnData(pScanAlpha, x, BitmapColor(a));
         }
     }
 
     pWriteAccess.reset();
-    pAlphaWriteAccess.reset();
 
-    return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
+    return aDstBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

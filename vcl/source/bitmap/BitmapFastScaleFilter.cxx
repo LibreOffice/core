@@ -25,11 +25,11 @@
 
 #include <bitmap/BitmapFastScaleFilter.hxx>
 
-BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapFastScaleFilter::execute(Bitmap const& rBitmap) const
 {
     SAL_INFO("vcl.gdi", "BitmapFastScaleFilter::execute()");
 
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     const Size aSizePix(aBitmap.GetSizePixel());
     const sal_Int32 nNewWidth = basegfx::fround(aSizePix.Width() * mfScaleX);
@@ -112,18 +112,10 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
         }
     }
 
-    AlphaMask aMask(rBitmapEx.GetAlphaMask());
-
-    if (bRet && !aMask.IsEmpty())
-        bRet = aMask.Scale(Size(nNewWidth, nNewHeight), BmpScaleFlag::Fast);
-
-    SAL_WARN_IF(!aMask.IsEmpty() && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
-                "BitmapEx::Scale(): size mismatch for bitmap and alpha mask.");
-
     if (bRet)
-        return BitmapEx(aBitmap, aMask);
+        return aBitmap;
 
-    return BitmapEx();
+    return Bitmap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

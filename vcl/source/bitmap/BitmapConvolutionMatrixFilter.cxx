@@ -16,18 +16,18 @@
 
 #include <array>
 
-BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapConvolutionMatrixFilter::execute(Bitmap const& rBitmap) const
 {
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     BitmapScopedReadAccess pReadAcc(aBitmap);
     if (!pReadAcc)
-        return BitmapEx();
+        return Bitmap();
 
     Bitmap aNewBmp(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
     if (!pWriteAcc)
-        return BitmapEx();
+        return Bitmap();
 
     std::array<std::array<sal_Int32, 256>, 9> aCoeff;
 
@@ -189,7 +189,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     aBitmap.SetPrefMapMode(aMap);
     aBitmap.SetPrefSize(aPrefSize);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 const sal_Int32 g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };

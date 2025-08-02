@@ -870,11 +870,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
     switch( eConversion )
     {
         case BmpConversion::N1BitThreshold:
-        {
-            BitmapEx aBmpEx(*this);
-            bRet = BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(128));
-            *this = aBmpEx.GetBitmap();
-        }
+            bRet = BitmapFilter::Filter(*this, BitmapMonochromeFilter(128));
         break;
 
         case BmpConversion::N8BitGreys:
@@ -1372,43 +1368,39 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         }
     }
 
-    BitmapEx aBmpEx(*this);
     bool bRetval(false);
 
     switch(nScaleFlag)
     {
         case BmpScaleFlag::Default:
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
-                bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
+                bRetval = BitmapFilter::Filter(*this, BitmapFastScaleFilter(rScaleX, rScaleY));
             else
-                bRetval = BitmapFilter::Filter(aBmpEx, BitmapScaleSuperFilter(rScaleX, rScaleY));
+                bRetval = BitmapFilter::Filter(*this, BitmapScaleSuperFilter(rScaleX, rScaleY));
             break;
 
         case BmpScaleFlag::Fast:
         case BmpScaleFlag::NearestNeighbor:
-            bRetval = BitmapFilter::Filter(aBmpEx, BitmapFastScaleFilter(rScaleX, rScaleY));
+            bRetval = BitmapFilter::Filter(*this, BitmapFastScaleFilter(rScaleX, rScaleY));
             break;
 
         case BmpScaleFlag::Interpolate:
-            bRetval = BitmapFilter::Filter(aBmpEx, BitmapInterpolateScaleFilter(rScaleX, rScaleY));
+            bRetval = BitmapFilter::Filter(*this, BitmapInterpolateScaleFilter(rScaleX, rScaleY));
             break;
 
         case BmpScaleFlag::BestQuality:
         case BmpScaleFlag::Lanczos:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
+            bRetval = BitmapFilter::Filter(*this, vcl::BitmapScaleLanczos3Filter(rScaleX, rScaleY));
             break;
 
         case BmpScaleFlag::BiCubic:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
+            bRetval = BitmapFilter::Filter(*this, vcl::BitmapScaleBicubicFilter(rScaleX, rScaleY));
             break;
 
         case BmpScaleFlag::BiLinear:
-            bRetval = BitmapFilter::Filter(aBmpEx, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
+            bRetval = BitmapFilter::Filter(*this, vcl::BitmapScaleBilinearFilter(rScaleX, rScaleY));
             break;
     }
-
-    if (bRetval)
-        *this = aBmpEx.GetBitmap();
 
     OSL_ENSURE(!bRetval || eStartPixelFormat == getPixelFormat(), "Bitmap::Scale has changed the ColorDepth, this should *not* happen (!)");
     return bRetval;

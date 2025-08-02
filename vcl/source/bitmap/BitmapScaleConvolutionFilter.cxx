@@ -338,17 +338,17 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
 
 } // end anonymous namespace
 
-BitmapEx BitmapScaleConvolutionFilter::execute(BitmapEx const& rBitmapEx) const
+Bitmap BitmapScaleConvolutionFilter::execute(Bitmap const& rBitmap) const
 {
     bool bRetval = false;
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap);
 
     bRetval = ImplScaleConvolution(aBitmap, mrScaleX, mrScaleY, *mxKernel);
 
     if (bRetval)
-        return BitmapEx(aBitmap);
+        return aBitmap;
 
-    return BitmapEx();
+    return Bitmap();
 }
 
 }

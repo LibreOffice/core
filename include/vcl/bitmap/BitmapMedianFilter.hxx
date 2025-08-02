@@ -17,7 +17,7 @@ class VCL_DLLPUBLIC BitmapMedianFilter final : public BitmapFilter
 public:
     BitmapMedianFilter() {}
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    virtual Bitmap execute(Bitmap const& rBitmap) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
