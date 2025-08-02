@@ -959,7 +959,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
         aRow.push_back(Any(OUString{})); // TODO
         // deferrability
         aRow.push_back(Any(Deferrability::NONE));
-        aRows.push_back(aRow);
+        aRows.push_back(std::move(aRow));
     }
     lcl_setRows_throw(xResultSet, 1, aRows);
     return xResultSet;

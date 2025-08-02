@@ -1123,17 +1123,16 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                                                       RTL_TEXTENCODING_UTF8 );
         OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
                                                       RTL_TEXTENCODING_UTF8 );
-        ODatabaseMetaDataResultSet::ORow aRow{
+        aRows.push_back(ODatabaseMetaDataResultSet::ORow{
             ORowSetValueDecoratorRef(),
             ORowSetValueDecoratorRef(),
             ORowSetValueDecoratorRef(),
             new ORowSetValueDecorator(aHumanName), //tablename
             new ORowSetValueDecorator(ORowSetValue(aTable)),
-            new ORowSetValueDecorator(aUID)}; //comment
+            new ORowSetValueDecorator(aUID)}); //comment
         //I'd prefer to swap the comment and the human name and
         //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
         //in open book rather than search for the name again
-        aRows.push_back(aRow);
     }
 
     g_list_foreach (pSources, object_unref, nullptr);

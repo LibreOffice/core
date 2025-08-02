@@ -161,7 +161,7 @@ void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op
     aEntry.GetQueryItem().meType = ScQueryEntry::ByValue;
     aEntry.GetQueryItem().mfVal = value;
 
-    maEntries.push_back(aEntry);
+    maEntries.push_back(std::move(aEntry));
 }
 
 void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op,

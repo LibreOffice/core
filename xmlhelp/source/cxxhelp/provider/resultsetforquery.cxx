@@ -102,7 +102,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 tmp,0,tmp.getLength(),aSeq);
 
             currentQuery.push_back( toliterate );
-            queryList.push_back( currentQuery );
+            queryList.push_back(std::move(currentQuery));
 
             int nCpy = 1 + idx;
             if( nCpy >= query.getLength() )

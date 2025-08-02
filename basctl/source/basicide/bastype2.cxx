@@ -506,9 +506,7 @@ void SbTreeListBox::ReloadAllEntries()
     while (bValidIter)
     {
         if (m_xControl->get_row_expanded(*m_xScratchIter)) {
-            EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
-
-            aExpandedRows.insert(aDesc);
+            aExpandedRows.insert(GetEntryDescriptor(m_xScratchIter.get()));
         }
 
         bValidIter = m_xControl->iter_next(*m_xScratchIter);

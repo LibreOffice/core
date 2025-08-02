@@ -3650,8 +3650,8 @@ void HwpReader::makeHyperText(TxtBox * hbox)
     if( !hypert ) return;
 
     if (hypert->filename[0] != '\0') {
-          ::std::string const tmp = hstr2ksstr(hypert->bookmark);
-          ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
+          ::std::string tmp = hstr2ksstr(hypert->bookmark);
+          ::std::string tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
               reinterpret_cast<uchar const *>(urltowin(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #else
@@ -3659,7 +3659,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 #endif
           mxList->addAttribute(u"xlink:type"_ustr, sXML_CDATA, u"simple"_ustr);
           if (!tmp.empty() && strcmp(tmp.c_str(), "[HTML]")) {
-              ::std::string tmp3(tmp2);
+              ::std::string tmp3(std::move(tmp2));
               tmp3.push_back('#');
               tmp3.append(tmp);
               mxList->addAttribute(u"xlink:href"_ustr, sXML_CDATA,

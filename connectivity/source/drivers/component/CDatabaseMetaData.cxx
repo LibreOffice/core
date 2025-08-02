@@ -108,7 +108,7 @@ Reference< XResultSet > OComponentDatabaseMetaData::impl_getTypeInfo_throw(  )
     aRow[3] = ODatabaseMetaDataResultSet::get0Value();
     aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
     aRow[15] = ODatabaseMetaDataResultSet::get0Value();
-    aRows.push_back(aRow);
+    aRows.push_back(std::move(aRow));
 
     pResult->setRows(std::move(aRows));
     return pResult;
