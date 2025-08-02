@@ -213,7 +213,7 @@ make_unsigned(T value)
 template<typename T1, typename T2> constexpr std::enable_if_t<std::is_unsigned_v<T1>, T1>
 clamp_to_unsigned(T2 value) {
     if constexpr (std::is_unsigned_v<T2>) {
-        // coverity[result_independent_of_operands] - suppress warning for template
+        // coverity[dead_error_line] - suppress warning for template
         return value <= std::numeric_limits<T1>::max() ? value : std::numeric_limits<T1>::max();
     } else {
         static_assert(std::is_signed_v<T2>);
