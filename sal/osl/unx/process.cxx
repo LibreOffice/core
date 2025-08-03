@@ -45,7 +45,7 @@
 #include <machine/param.h>
 #endif
 
-#ifdef IOS
+#if defined(IOS) || defined(FREEBSD)
 #include <signal.h>
 #endif
 

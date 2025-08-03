@@ -14,6 +14,8 @@ pdfium_patches += c++20-comparison.patch
 
 pdfium_patches += constexpr-template.patch
 
+pdfium_patches += freebsd.patch
+
 pdfium_patches += system-abseil.diff
 
 # https://pdfium-review.googlesource.com/c/pdfium/+/130970
