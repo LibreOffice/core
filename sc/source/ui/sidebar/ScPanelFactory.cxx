@@ -22,6 +22,7 @@
 #include "AlignmentPropertyPanel.hxx"
 #include "CellAppearancePropertyPanel.hxx"
 #include "NumberFormatPropertyPanel.hxx"
+#include "DatabasePropertyPanel.hxx"
 #include <navipi.hxx>
 #include <dwfunctr.hxx>
 
@@ -92,6 +93,11 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
         else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
             xPanel = std::make_unique<ScFunctionWin>(pParent, pBindings);
+            nMinimumSize = 0;
+        }
+        else if (rsResourceURL.endsWith("/DatabasePropertyPanel"))
+        {
+            xPanel = ScDatabasePropertyPanel::Create( pParent, xFrame, pBindings );
             nMinimumSize = 0;
         }
 

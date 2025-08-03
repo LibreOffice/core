@@ -532,6 +532,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/sidebar/CellLineStyleValueSet \
     sc/source/ui/sidebar/CellAppearancePropertyPanel \
     sc/source/ui/sidebar/CellBorderStyleControl \
+    sc/source/ui/sidebar/DatabasePropertyPanel \
     sc/source/ui/sidebar/NumberFormatControl \
     sc/source/ui/sidebar/NumberFormatPropertyPanel \
     sc/source/ui/sidebar/ScPanelFactory \
@@ -688,6 +689,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/spelleng \
     sc/source/ui/view/spellcheckcontext \
     sc/source/ui/view/tabcont \
+    sc/source/ui/view/tableshell \
     sc/source/ui/view/tabsplit \
     sc/source/ui/view/tabview \
     sc/source/ui/view/tabview2 \

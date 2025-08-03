@@ -47,6 +47,7 @@
 #include <editsh.hxx>
 #include <pivotsh.hxx>
 #include <SparklineShell.hxx>
+#include <tableshell.hxx>
 #include <auditsh.hxx>
 #include <drtxtob.hxx>
 #include <inputhdl.hxx>
@@ -754,6 +755,25 @@ void ScTabViewShell::SetSparklineShell(bool bActive)
         SetCurSubShell(OST_Cell);
 }
 
+void ScTabViewShell::SetTableShell(bool bActive)
+{
+    if (eCurOST != OST_Table && eCurOST != OST_Cell)
+        return;
+
+    if (bActive)
+    {
+        bActiveDrawTextSh = bActiveDrawSh = false;
+        bActiveDrawFormSh=false;
+        bActiveGraphicSh=false;
+        bActiveMediaSh=false;
+        bActiveOleObjectSh=false;
+        bActiveChartSh=false;
+        SetCurSubShell(OST_Table);
+    }
+    else
+        SetCurSubShell(OST_Cell);
+}
+
 void ScTabViewShell::SetAuditShell( bool bActive )
 {
     if ( bActive )
@@ -1027,6 +1047,20 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             bCellBrush = true;
         }
         break;
+        case OST_Table:
+        {
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
+
+            if (!m_pTableShell)
+            {
+                m_pTableShell.reset(new ScTableShell(this));
+                m_pTableShell->SetRepeatTarget(&aTarget);
+            }
+            AddSubShell(*m_pTableShell);
+            bCellBrush = true;
+        }
+        break;
         default:
         OSL_FAIL("wrong shell requested");
         break;
@@ -1075,7 +1109,7 @@ SfxShell* ScTabViewShell::GetMySubShell() const
              pSub == pPivotShell.get() || pSub == pAuditingShell.get() || pSub == pDrawFormShell.get() ||
              pSub == pCellShell.get()  || pSub == pOleObjectShell.get() || pSub == pChartShell.get() ||
              pSub == pGraphicShell.get() || pSub == pMediaShell.get() || pSub == pPageBreakShell.get() ||
-             pSub == m_pSparklineShell.get())
+             pSub == m_pSparklineShell.get() || pSub == m_pTableShell.get())
         {
             return pSub;    // found
         }
@@ -2229,6 +2263,7 @@ ScTabViewShell::~ScTabViewShell()
     pEditShell.reset();
     pPivotShell.reset();
     m_pSparklineShell.reset();
+    m_pTableShell.reset();
     pAuditingShell.reset();
     pCurFrameLine.reset();
     mpFormEditData.reset();
