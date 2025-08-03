@@ -42,13 +42,15 @@ DateFormFieldDialog::~DateFormFieldDialog() {}
 
 void DateFormFieldDialog::Apply()
 {
-    if (m_pDateField == nullptr)
+    if (!m_pDateField)
         return;
 
     // Try to find out the current date value and replace the content
     // with the right formatted date string
     sw::mark::Fieldmark::parameter_map_t* pParameters = m_pDateField->GetParameters();
     const SvNumberformat* pFormat = m_pNumberFormatter->GetEntry(m_xFormatLB->GetFormat());
+    if (!pFormat)
+        return;
 
     // Get date value first
     std::pair<bool, double> aResult = m_pDateField->GetCurrentDate();
