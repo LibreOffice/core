@@ -227,6 +227,8 @@ private:
                                                 const Color*& rpColor );
     SVX_DLLPRIVATE static void PosToCategory_Impl(sal_uInt16 nPos, SvNumFormatType& rCategory);
     SVX_DLLPRIVATE static void CategoryToPos_Impl(SvNumFormatType nCategory, sal_uInt16& rPos);
+
+    SVX_DLLPRIVATE bool IsNotNatNum12(short nEntry) const;
 };
 
 #endif

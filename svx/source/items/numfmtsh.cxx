@@ -1328,6 +1328,12 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
     return false;
 }
 
+bool SvxNumberFormatShell::IsNotNatNum12(short nEntry) const
+{
+    const SvNumberformat* pNumEntry = pFormatter->GetEntry(aCurEntryList[nEntry]);
+    return !pNumEntry || pNumEntry->GetFormatstring().indexOf("NatNum12") < 0;
+}
+
 /*
  * Function:   Returns the format string for a given entry.
  * Input:      Number of the entry
@@ -1338,10 +1344,7 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     if (nEntry < 0)
         return OUString();
 
-    if (!aCurrencyFormatList.empty()
-        && (!pFormatter->GetEntry(aCurEntryList[nEntry])
-            || pFormatter->GetEntry(aCurEntryList[nEntry])->GetFormatstring().indexOf("NatNum12")
-                   < 0))
+    if (!aCurrencyFormatList.empty() && IsNotNatNum12(nEntry))
     {
         if (aCurrencyFormatList.size() > o3tl::make_unsigned(nEntry))
             return aCurrencyFormatList[nEntry];
