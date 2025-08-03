@@ -45,6 +45,7 @@ public:
     void testDrawAlphaBitmapEx();
     void testAlphaVirtualDevice();
     void testTdf116888();
+    void testAlphaErase();
 
     CPPUNIT_TEST_SUITE(BitmapRenderTest);
     CPPUNIT_TEST(testTdf104141);
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testDrawAlphaBitmapEx);
     CPPUNIT_TEST(testAlphaVirtualDevice);
     CPPUNIT_TEST(testTdf116888);
+    CPPUNIT_TEST(testAlphaErase);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -278,6 +280,14 @@ void BitmapRenderTest::testTdf116888()
     CPPUNIT_ASSERT_EQUAL(white, pAccess->GetColor(pAccess->Height() - 1, 0));
     CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK),
                          pAccess->GetColor(pAccess->Height() - 1, pAccess->Width() - 1));
+}
+
+void BitmapRenderTest::testAlphaErase()
+{
+    // verify that SetOutputSizePixel correctly produces a transparent background
+    ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
+    xDev->SetOutputSizePixel(Size(10, 10), /*bErase*/ true, /*bAlphaMaskTransparent*/ true);
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), xDev->GetPixel(Point(0, 0)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BitmapRenderTest);

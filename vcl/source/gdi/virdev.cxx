@@ -286,7 +286,15 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
         {
             mnOutWidth  = rNewSize.Width();
             mnOutHeight = rNewSize.Height();
-            Erase();
+            // So, in theory, the bAlphaMaskTransparent param to the SetSize() call just above should
+            // be initialising the data to transparent. But this only works on Linux. On Windows and macOS we
+            // have two different kinds of problems in the VirtualDevice subclasses,
+            // which means that it ends up being completely ineffective.
+            // So just take the heavy handed approach here and force the data to transparent.
+            if (bAlphaMaskTransparent)
+                DrawWallpaper(tools::Rectangle(0, 0, mnOutWidth, mnOutHeight), Wallpaper(COL_TRANSPARENT));
+            else
+                Erase();
         }
     }
     else
