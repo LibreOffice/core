@@ -30,7 +30,7 @@ namespace basegfx
 
         if(!fTools::equalZero(fLen))
         {
-            assert(fLen != 0.0 && "help coverity see it's not zero");
+            assert(fLen != 0 && "help coverity see it's not zero");
 
             const double fOne(1.0);
 
@@ -92,7 +92,7 @@ namespace basegfx
 
         if(!fTools::equalZero(fLenNow))
         {
-            assert(fLenNow != 0.0 && "help coverity see it's not zero");
+            assert(fLenNow != 0 && "help coverity see it's not zero");
 
             const double fOne(1.0);
 

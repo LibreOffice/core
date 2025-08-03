@@ -155,7 +155,7 @@ namespace basegfx::internal
                         return false;
                     }
 
-                    assert(fBig != 0.0 && "help coverity see it's not zero");
+                    assert(fBig != 0 && "help coverity see it's not zero");
                     fStorage[a] = 1.0 / fBig;
                 }
 

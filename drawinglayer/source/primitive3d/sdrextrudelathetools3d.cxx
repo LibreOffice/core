@@ -129,10 +129,22 @@ namespace
                 if(bCreateTextureCoordinates)
                 {
                     const double fPolygonLengthA(basegfx::utils::getLength(aSubA));
-                    fTexHorMultiplicatorA = basegfx::fTools::equalZero(fPolygonLengthA) ? 1.0 : 1.0 / fPolygonLengthA;
+                    if (basegfx::fTools::equalZero(fPolygonLengthA))
+                        fTexHorMultiplicatorA = 1.0;
+                    else
+                    {
+                        assert(fPolygonLengthA != 0 && "help coverity see it's not zero");
+                        fTexHorMultiplicatorA = 1.0 / fPolygonLengthA;
+                    }
 
                     const double fPolygonLengthB(basegfx::utils::getLength(aSubB));
-                    fTexHorMultiplicatorB = basegfx::fTools::equalZero(fPolygonLengthB) ? 1.0 : 1.0 / fPolygonLengthB;
+                    if (basegfx::fTools::equalZero(fPolygonLengthB))
+                        fTexHorMultiplicatorB = 1.0;
+                    else
+                    {
+                        assert(fPolygonLengthB != 0 && "help coverity see it's not zero");
+                        fTexHorMultiplicatorB = 1.0 / fPolygonLengthB;
+                    }
                 }
 
                 for(sal_uInt32 b(0); b < nEdgeCount; b++)

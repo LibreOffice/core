@@ -820,7 +820,7 @@ namespace basegfx
 
                     if(!bStartIsZero)
                     {
-                        assert(fEnd != 0.0 && "help coverity see it's not zero");
+                        assert(fEnd != 0 && "help coverity see it's not zero");
                         fStart /= fEnd;
                     }
                 }
