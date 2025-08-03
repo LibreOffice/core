@@ -949,7 +949,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
             }
 
             if (!aModuleInfo.sModuleShortName.isEmpty())
-                vModulesInfo.push_back(aModuleInfo);
+                vModulesInfo.push_back(std::move(aModuleInfo));
         }
     }
 

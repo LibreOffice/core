@@ -79,29 +79,29 @@ Primitive2DReference TextEffectPrimitive2D::create2DDecomposition(
             if (bDefaultTextColor)
             {
                 // emboss/engrave in black, original forced to white
-                const basegfx::BColorModifierSharedPtr aBColorModifierToGray
+                basegfx::BColorModifierSharedPtr aBColorModifierToGray
                     = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(0.0));
-                const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
-                    Primitive2DContainer(getTextContent()), aBColorModifierToGray));
+                Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
+                    Primitive2DContainer(getTextContent()), std::move(aBColorModifierToGray)));
 
                 aContainer.push_back(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));
 
                 // add original, too
-                const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
+                basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                     = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0));
 
                 aContainer.push_back(new ModifiedColorPrimitive2D(
-                    Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
+                    Primitive2DContainer(getTextContent()), std::move(aBColorModifierToWhite)));
             }
             else
             {
                 // emboss/engrave in gray, keep original's color
-                const basegfx::BColorModifierSharedPtr aBColorModifierToGray
+                basegfx::BColorModifierSharedPtr aBColorModifierToGray
                     = std::make_shared<basegfx::BColorModifier_replace>(
                         basegfx::BColor(0.75)); // 192
-                const Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
-                    Primitive2DContainer(getTextContent()), aBColorModifierToGray));
+                Primitive2DReference xModifiedColor(new ModifiedColorPrimitive2D(
+                    Primitive2DContainer(getTextContent()), std::move(aBColorModifierToGray)));
 
                 aContainer.push_back(
                     new TransformPrimitive2D(aTransform, Primitive2DContainer{ xModifiedColor }));

@@ -713,7 +713,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
                 MetadataToTreeNode(xTextSection, aCurNode);
                 // show section only if it has RDF metadata
                 if (aCurNode.children.size() > 0)
-                    aTextSectionsNode.children.push_back(aCurNode);
+                    aTextSectionsNode.children.push_back(std::move(aCurNode));
             }
         }
         catch (const lang::IllegalArgumentException&)
