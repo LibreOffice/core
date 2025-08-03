@@ -52,6 +52,7 @@
 #include <pgbrksh.hxx>
 #include <scdll.hxx>
 #include <SparklineShell.hxx>
+#include <tableshell.hxx>
 
 #include <appoptio.hxx>
 #include <searchresults.hxx>
@@ -129,6 +130,7 @@ void ScDLL::Init()
     ScEditShell         ::RegisterInterface(pMod);
     ScPivotShell        ::RegisterInterface(pMod);
     sc::SparklineShell  ::RegisterInterface(pMod);
+    ScTableShell        ::RegisterInterface(pMod);
     ScAuditingShell     ::RegisterInterface(pMod);
     ScFormatShell       ::RegisterInterface(pMod);
     ScCellShell         ::RegisterInterface(pMod);

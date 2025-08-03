@@ -21,6 +21,18 @@ module StarCalc
     SlotIdFile( "scslots.hrc" )
 ]
 {
+    struct ScDatabaseSetting
+    {
+        BOOL HeaderRow              MID_1;
+        BOOL TotalRow               MID_2;
+        BOOL FirstCol               MID_3;
+        BOOL LastCol                MID_4;
+        BOOL StripedRows            MID_5;
+        BOOL StripedCols            MID_6;
+        BOOL ShowFilters            MID_7;
+    };
+    item ScDatabaseSetting ScDatabaseSettingItem;
+
     struct ScProtection
     {
         BOOL    Locked              MID_1;
@@ -59,6 +71,7 @@ module StarCalc
     include "pgbrksh.sdi"
     include "mediash.sdi"
     include "SparklineShell.sdi"
+    include "tableshell.sdi"
 
 }
 

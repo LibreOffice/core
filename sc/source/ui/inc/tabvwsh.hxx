@@ -66,8 +66,11 @@ class ScNavigatorSettings;
 class ScDrawTransferObj;
 class ScCondFormatDlgData;
 class ScDispatchProviderInterceptor;
+class ScTableShell;
 
-namespace sc { class SparklineShell; }
+namespace sc {
+    class SparklineShell;
+}
 
 struct ScHeaderFieldData;
 
@@ -93,6 +96,7 @@ enum ObjectSelectionType
     OST_Graphic,
     OST_Media,
     OST_Sparkline,
+    OST_Table,
 };
 
 class ScFormEditData;
@@ -128,6 +132,7 @@ private:
     std::unique_ptr<ScEditShell>         pEditShell;
     std::unique_ptr<ScPivotShell>        pPivotShell;
     std::unique_ptr<sc::SparklineShell>  m_pSparklineShell;
+    std::unique_ptr<ScTableShell>        m_pTableShell;
     std::unique_ptr<ScAuditingShell>     pAuditingShell;
     std::unique_ptr<ScDrawFormShell>     pDrawFormShell;
     std::unique_ptr<ScCellShell>         pCellShell;
@@ -332,6 +337,7 @@ public:
 
     void            SetPivotShell( bool bActive );
     void            SetSparklineShell(bool bActive);
+    void            SetTableShell(bool bActive);
     void            SetDialogDPObject( std::unique_ptr<ScDPObject> pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject.get(); }
 

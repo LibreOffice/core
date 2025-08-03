@@ -125,6 +125,7 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application::Calc, Context::Cell):
         case CombinedEnumContext(Application::Calc, Context::Pivot):
         case CombinedEnumContext(Application::Calc, Context::Sparkline):
+        case CombinedEnumContext(Application::Calc, Context::Table):
         case CombinedEnumContext(Application::DrawImpress, Context::Text):
         case CombinedEnumContext(Application::DrawImpress, Context::OutlineText):
             set_hyphenation_base_visible(false);

@@ -26,6 +26,7 @@
 #include "rangelst.hxx"
 
 #include <svl/listener.hxx>
+#include <svl/poolitem.hxx>
 
 #include <memory>
 #include <set>
@@ -35,6 +36,40 @@ class ScDocument;
 struct ScSortParam;
 struct ScQueryParam;
 struct ScSubTotalParam;
+
+class SC_DLLPUBLIC ScDatabaseSettingItem final : public SfxPoolItem
+{
+    bool mbHeaderRow;
+    bool mbTotalRow;
+    bool mbFirstCol;
+    bool mbLastCol;
+    bool mbStripedRows;
+    bool mbStripedCols;
+    bool mbShowFilters;
+
+public:
+    static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(ScDatabaseSettingItem)
+    ScDatabaseSettingItem();
+    ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol, bool bStripedRows, bool bStripedCols, bool bShowFilter);
+    ScDatabaseSettingItem( const ScDatabaseSettingItem& rItem );
+    virtual ~ScDatabaseSettingItem() override;
+
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+
+    ScDatabaseSettingItem& operator=( const ScDatabaseSettingItem& rItem );
+    virtual bool operator==( const SfxPoolItem& ) const override;
+    virtual ScDatabaseSettingItem* Clone( SfxItemPool *pPool = nullptr ) const override;
+
+    bool HasHeaderRow() const;
+    bool HasTotalRow() const;
+    bool HasFirstCol() const;
+    bool HasLastCol() const;
+    bool HasStripedRows() const;
+    bool HasStripedCols() const;
+    bool HasShowFilters() const;
+};
 
 /** Enum used to indicate which portion of the DBArea is to be considered. */
 enum class ScDBDataPortion
@@ -95,6 +130,7 @@ struct SAL_DLLPUBLIC ScTableStyleParam
     bool mbLastColumn;
 
     ScTableStyleParam();
+    ScTableStyleParam(const ScTableStyleParam& rParam) = default;
 
     bool operator== (const ScTableStyleParam& rData) const;
 };

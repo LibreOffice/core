@@ -24,6 +24,9 @@
 #define MID_2 2
 #define MID_3 3
 #define MID_4 4
+#define MID_5 4
+#define MID_6 4
+#define MID_7 4
 
 #endif
 

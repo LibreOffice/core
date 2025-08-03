@@ -42,6 +42,187 @@
 #include <memory>
 #include <utility>
 
+using namespace com::sun::star;
+
+ScDatabaseSettingItem::ScDatabaseSettingItem():
+    SfxPoolItem(SCITEM_DATABASE_SETTING),
+    mbHeaderRow(false),
+    mbTotalRow(false),
+    mbFirstCol(false),
+    mbLastCol(false),
+    mbStripedRows(false),
+    mbStripedCols(false),
+    mbShowFilters(false)
+{
+}
+
+ScDatabaseSettingItem::ScDatabaseSettingItem(bool bHeaderRow, bool bTotalRow, bool bFirstCol, bool bLastCol, bool bStripedRows, bool bStripedCols, bool bShowFilters):
+    SfxPoolItem(SCITEM_DATABASE_SETTING),
+    mbHeaderRow(bHeaderRow),
+    mbTotalRow(bTotalRow),
+    mbFirstCol(bFirstCol),
+    mbLastCol(bLastCol),
+    mbStripedRows(bStripedRows),
+    mbStripedCols(bStripedCols),
+    mbShowFilters(bShowFilters)
+{
+}
+
+ScDatabaseSettingItem::ScDatabaseSettingItem(const ScDatabaseSettingItem& rItem):
+    SfxPoolItem(SCITEM_DATABASE_SETTING),
+    mbHeaderRow(rItem.mbHeaderRow),
+    mbTotalRow(rItem.mbTotalRow),
+    mbFirstCol(rItem.mbFirstCol),
+    mbLastCol(rItem.mbLastCol),
+    mbStripedRows(rItem.mbStripedRows),
+    mbStripedCols(rItem.mbStripedCols),
+    mbShowFilters(rItem.mbShowFilters)
+{
+}
+
+ScDatabaseSettingItem::~ScDatabaseSettingItem()
+{
+}
+
+bool ScDatabaseSettingItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId ) const
+{
+    switch (nMemberId)
+    {
+        case 0:
+            rVal <<= mbHeaderRow;
+            break;
+        case 1:
+            rVal <<= mbTotalRow;
+            break;
+        case 2:
+            rVal <<= mbFirstCol;
+            break;
+        case 3:
+            rVal <<= mbLastCol;
+            break;
+        case 4:
+            rVal <<= mbStripedRows;
+            break;
+        case 5:
+            rVal <<= mbStripedCols;
+            break;
+        case 6:
+            rVal <<= mbShowFilters;
+            break;
+        default:
+            return false;
+    }
+
+    return true;
+}
+
+bool ScDatabaseSettingItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId )
+{
+    bool bVal = false;
+
+    bool bRet = (rVal >>= bVal);
+
+    if(!bRet)
+        return false;
+
+    switch (nMemberId)
+    {
+        case 0:
+            mbHeaderRow = bVal;
+            break;
+        case 1:
+            mbTotalRow = bVal;
+            break;
+        case 2:
+            mbFirstCol = bVal;
+            break;
+        case 3:
+            mbLastCol = bVal;
+            break;
+        case 4:
+            mbStripedRows = bVal;
+            break;
+        case 5:
+            mbStripedCols = bVal;
+            break;
+        case 6:
+            mbShowFilters = bVal;
+            break;
+        default:
+            return false;
+    }
+
+    return true;
+}
+
+ScDatabaseSettingItem* ScDatabaseSettingItem::Clone(SfxItemPool* ) const
+{
+    return new ScDatabaseSettingItem(*this);
+}
+
+SfxPoolItem* ScDatabaseSettingItem::CreateDefault()
+{
+    return new ScDatabaseSettingItem;
+}
+
+ScDatabaseSettingItem& ScDatabaseSettingItem::operator=(const ScDatabaseSettingItem& rItem)
+{
+    mbHeaderRow = rItem.mbHeaderRow;
+    mbTotalRow = rItem.mbTotalRow;
+    mbFirstCol = rItem.mbFirstCol;
+    mbLastCol = rItem.mbLastCol;
+    mbStripedRows = rItem.mbStripedRows;
+    mbStripedCols = rItem.mbStripedCols;
+    mbShowFilters = rItem.mbShowFilters;
+
+    return *this;
+}
+
+bool ScDatabaseSettingItem::operator==(const SfxPoolItem& rItem) const
+{
+    bool bSameBase = SfxPoolItem::operator==(rItem);
+    if (!bSameBase)
+        return false;
+
+    const ScDatabaseSettingItem& rDBItem = static_cast<const ScDatabaseSettingItem&>(rItem);
+    return mbHeaderRow == rDBItem.mbHeaderRow && mbTotalRow == rDBItem.mbTotalRow && mbFirstCol == rDBItem.mbFirstCol && mbLastCol == rDBItem.mbLastCol && mbStripedRows == rDBItem.mbStripedRows && mbStripedCols == rDBItem.mbStripedCols && mbShowFilters == rDBItem.mbShowFilters;
+}
+
+bool ScDatabaseSettingItem::HasHeaderRow() const
+{
+    return mbHeaderRow;
+}
+
+bool ScDatabaseSettingItem::HasTotalRow() const
+{
+    return mbTotalRow;
+}
+
+bool ScDatabaseSettingItem::HasFirstCol() const
+{
+    return mbFirstCol;
+}
+
+bool ScDatabaseSettingItem::HasLastCol() const
+{
+    return mbLastCol;
+}
+
+bool ScDatabaseSettingItem::HasStripedRows() const
+{
+    return mbStripedRows;
+}
+
+bool ScDatabaseSettingItem::HasStripedCols() const
+{
+    return mbStripedCols;
+}
+
+bool ScDatabaseSettingItem::HasShowFilters() const
+{
+    return mbShowFilters;
+}
+
 ScTableStyleParam::ScTableStyleParam():
     mbRowStripes(true),
     mbColumnStripes(false),
