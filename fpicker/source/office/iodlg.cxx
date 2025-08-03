@@ -71,6 +71,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include "fpinteraction.hxx"
 #include <osl/process.h>
+#include <o3tl/deleter.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -450,7 +451,7 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     m_xImpl->m_xEdFileName->grab_focus();
 }
 
-SvtFileDialog::~SvtFileDialog()
+void SvtFileDialog::ImplDestroy()
 {
     if (!m_xImpl->m_aIniKey.isEmpty())
     {
@@ -487,6 +488,11 @@ SvtFileDialog::~SvtFileDialog()
     officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
     officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
     batch->commit();
+}
+
+SvtFileDialog::~SvtFileDialog()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 IMPL_LINK_NOARG(SvtFileDialog, NewFolderHdl_Impl, weld::Button&, void)

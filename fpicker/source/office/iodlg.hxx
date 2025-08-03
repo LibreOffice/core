@@ -147,6 +147,8 @@ private:
     void                        EnableControl(weld::Widget* pControl, bool bEnable);
     virtual bool                PrepareExecute() override;
 
+    void ImplDestroy();
+
 public:
                                 SvtFileDialog( weld::Window* pParent, PickerFlags nBits );
                                 virtual ~SvtFileDialog() override;
