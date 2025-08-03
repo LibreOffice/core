@@ -22,6 +22,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QTreeView>
 
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
@@ -84,6 +85,8 @@ public:
 
 private:
     static void deleteObject(QObject* pObject);
+    static QTreeView* enableTreeViewColumnDataRole(QWidget* pParentWidget,
+                                                   Qt::ItemDataRole eDataRole);
     // remove pOldWidget from the widget hierarchy and set (child widget) pNewWidget in its place
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
     void setButtonProperties(QAbstractButton& rButton, stringmap& rProps, QWidget* pParentWidget);

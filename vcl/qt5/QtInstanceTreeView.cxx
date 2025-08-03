@@ -17,6 +17,9 @@
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
 
+// Property used to store the supported roles for each of the columns
+const char* const PROPERTY_COLUMN_ROLES = "column-roles";
+
 QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     : QtInstanceWidget(pTreeView)
     , m_pTreeView(pTreeView)
@@ -31,6 +34,9 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
 
     m_pSelectionModel = m_pTreeView->selectionModel();
     assert(m_pSelectionModel);
+
+    m_pColumnRoles = columnRoles(*pTreeView);
+    assert(m_pColumnRoles.size() == m_pModel->columnCount() && "column count doesn't match");
 
     connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
     connect(m_pSelectionModel, &QItemSelectionModel::selectionChanged, this,
@@ -1008,6 +1014,24 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
     }
 }
 
+QList<QList<Qt::ItemDataRole>> QtInstanceTreeView::columnRoles(QTreeView& rTreeView)
+{
+    QVariant aVariant = rTreeView.property(PROPERTY_COLUMN_ROLES);
+    if (aVariant.isValid())
+    {
+        assert(aVariant.canConvert<QList<QList<Qt::ItemDataRole>>>());
+        return aVariant.value<QList<QList<Qt::ItemDataRole>>>();
+    }
+
+    return {};
+}
+
+void QtInstanceTreeView::setColumnRoles(QTreeView& rTreeView,
+                                        const QList<QList<Qt::ItemDataRole>>& rDataRoles)
+{
+    rTreeView.setProperty(PROPERTY_COLUMN_ROLES, QVariant::fromValue(rDataRoles));
+}
+
 QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
                                            const QModelIndex& rParentIndex) const
 {
@@ -1042,12 +1066,10 @@ QModelIndex QtInstanceTreeView::toggleButtonModelIndex(const weld::TreeIter& rIt
 
 QModelIndex QtInstanceTreeView::firstTextColumnModelIndex(const weld::TreeIter& rIter) const
 {
-    for (int i = 0; i < m_pModel->columnCount(); i++)
+    for (qsizetype i = 0; i < m_pColumnRoles.size(); i++)
     {
-        const QModelIndex aIndex = modelIndex(rIter, i);
-        QVariant data = m_pModel->data(aIndex, Qt::DisplayRole);
-        if (data.canConvert<QString>())
-            return aIndex;
+        if (m_pColumnRoles.at(i).contains(Qt::DisplayRole))
+            return modelIndex(rIter, i);
     }
 
     assert(false && "No text column found");

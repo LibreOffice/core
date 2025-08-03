@@ -31,6 +31,9 @@ class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeVie
 
     QItemSelectionModel* m_pSelectionModel;
 
+    /** List containing a list of item data roles supported by each column. */
+    QList<QList<Qt::ItemDataRole>> m_pColumnRoles;
+
     bool m_bExtraToggleButtonsEnabled = false;
 
 public:
@@ -199,6 +202,12 @@ public:
 
     using QtInstanceWidget::set_sensitive;
     using QtInstanceWidget::get_sensitive;
+
+    // methods to get/set which roles are supported by the individual columns
+    // based on the underlying GtkTreeViewColumns and their GtkCellRenderers
+    static QList<QList<Qt::ItemDataRole>> columnRoles(QTreeView& rTreeView);
+    static void setColumnRoles(QTreeView& rTreeView,
+                               const QList<QList<Qt::ItemDataRole>>& rDataRoles);
 
 private:
     QModelIndex modelIndex(int nRow, int nCol = 0,

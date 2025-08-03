@@ -14,6 +14,7 @@
 #include <QtInstanceMenu.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
+#include <QtInstanceTreeView.hxx>
 #include <QtHyperlinkLabel.hxx>
 
 #include <vcl/qt/QtUtils.hxx>
@@ -47,7 +48,6 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
-#include <QtWidgets/QTreeView>
 #include <QtWidgets/QWizard>
 
 namespace
@@ -123,9 +123,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     if (sName.empty())
         return nullptr;
 
-    // nothing to do for these
-    if (sName == u"GtkCellRendererPixbuf" || sName == u"GtkCellRendererText"
-        || sName == u"GtkCellRendererToggle" || sName == u"GtkTreeSelection")
+    // nothing to do for this one
+    if (sName == u"GtkTreeSelection")
         return nullptr;
 
     QWidget* pParentWidget = qobject_cast<QWidget*>(pParent);
@@ -202,6 +201,18 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkCalendar")
     {
         pObject = new QCalendarWidget(pParentWidget);
+    }
+    else if (sName == u"GtkCellRendererPixbuf")
+    {
+        enableTreeViewColumnDataRole(pParentWidget, Qt::DecorationRole);
+    }
+    else if (sName == u"GtkCellRendererText")
+    {
+        enableTreeViewColumnDataRole(pParentWidget, Qt::DisplayRole);
+    }
+    else if (sName == u"GtkCellRendererToggle")
+    {
+        enableTreeViewColumnDataRole(pParentWidget, Qt::CheckStateRole);
     }
     else if (sName == u"GtkCheckButton")
     {
@@ -415,6 +426,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         const int nCol = pModel->columnCount();
         pModel->insertColumn(nCol);
         pModel->setHeaderData(nCol, Qt::Horizontal, toQString(extractTitle(rMap)));
+
+        // add initially empty list of supported roles for the new column that will
+        // be extended based on the GtkCellRenderer children of the column
+        QList<QList<Qt::ItemDataRole>> aColumnRoles = QtInstanceTreeView::columnRoles(*pTreeView);
+        aColumnRoles.push_back({});
+        QtInstanceTreeView::setColumnRoles(*pTreeView, aColumnRoles);
 
         // nothing else to do, return tree view parent for the widget
         return pTreeView;
@@ -824,6 +841,24 @@ void QtBuilder::deleteObject(QObject* pObject)
     if (pObject->isWidgetType())
         static_cast<QWidget*>(pObject)->hide();
     pObject->deleteLater();
+}
+
+QTreeView* QtBuilder::enableTreeViewColumnDataRole(QWidget* pParentWidget,
+                                                   Qt::ItemDataRole eDataRole)
+{
+    QTreeView* pTreeView = qobject_cast<QTreeView*>(pParentWidget);
+    assert(pTreeView && "No tree view for cell renderer");
+
+    // Mark support for the new role for the tree view's last inserted column
+    // (the GtkCellRenderer is a child object of the GtkTreeViewColumn)
+    QList<QList<Qt::ItemDataRole>> aColumnRoles = QtInstanceTreeView::columnRoles(*pTreeView);
+    assert(!aColumnRoles.empty() && "Missing list of column data roles");
+    assert(!aColumnRoles.back().contains(eDataRole)
+           && "Using the same role multiple times in one column is not supported");
+    aColumnRoles.back().push_back(eDataRole);
+    QtInstanceTreeView::setColumnRoles(*pTreeView, aColumnRoles);
+
+    return pTreeView;
 }
 
 void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
