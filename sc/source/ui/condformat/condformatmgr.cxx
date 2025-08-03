@@ -124,7 +124,7 @@ std::unique_ptr<ScConditionalFormatList> ScCondFormatManagerDlg::GetConditionalF
 
 void ScCondFormatManagerDlg::UpdateButtonSensitivity()
 {
-    bool bNewSensitivity = !m_xFormatList->empty();
+    bool bNewSensitivity = m_xFormatList && !m_xFormatList->empty();
     m_xBtnRemove->set_sensitive(bNewSensitivity);
     m_xBtnEdit->set_sensitive(bNewSensitivity);
 }
