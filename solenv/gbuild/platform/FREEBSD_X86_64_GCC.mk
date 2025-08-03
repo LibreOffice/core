@@ -11,4 +11,6 @@
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
+USE_LD += -Wl,--undefined-version
+
 # vim: set noet sw=4:

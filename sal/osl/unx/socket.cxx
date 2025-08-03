@@ -39,6 +39,9 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netdb.h>
+#ifdef FREEBSD
+#include <netinet/ip.h>
+#endif
 #include <netinet/tcp.h>
 #include <poll.h>
 #include <unistd.h>
