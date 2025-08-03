@@ -663,9 +663,17 @@ void QtInstanceTreeView::set_image(const weld::TreeIter& rIter,
     setImage(rIter, toQPixmap(rImage), nCol);
 }
 
-void QtInstanceTreeView::set_font_color(const weld::TreeIter&, const Color&)
+void QtInstanceTreeView::set_font_color(const weld::TreeIter& rIter, const Color& rColor)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        for (int nCol = 0; nCol < m_pModel->columnCount(); nCol++)
+        {
+            QModelIndex aIndex = modelIndex(rIter, nCol);
+            m_pModel->setData(aIndex, QBrush(toQColor(rColor)), Qt::ForegroundRole);
+        }
+    });
 }
 
 void QtInstanceTreeView::scroll_to_row(const weld::TreeIter& rIter)
