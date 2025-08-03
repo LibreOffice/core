@@ -22,6 +22,7 @@
 #include <sc.hrc>
 #include <docpool.hxx>
 #include <msgpool.hxx>
+#include <dbdata.hxx>
 
 static ItemInfoPackage& getItemInfoPackageScMessage()
 {
@@ -38,7 +39,8 @@ static ItemInfoPackage& getItemInfoPackageScMessage()
             { SCITEM_CONSOLIDATEDATA, new ScConsolidateItem(SCITEM_CONSOLIDATEDATA, nullptr ), SID_CONSOLIDATE, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_PIVOTDATA, new ScPivotItem(SCITEM_PIVOTDATA, nullptr, nullptr, false ), SID_PIVOT_TABLE, SFX_ITEMINFOFLAG_NONE },
             { SCITEM_SOLVEDATA, new ScSolveItem(SCITEM_SOLVEDATA, nullptr ), SID_SOLVE, SFX_ITEMINFOFLAG_NONE },
-            { SCITEM_USERLIST, new ScUserListItem(SCITEM_USERLIST ), SID_SCUSERLISTS, SFX_ITEMINFOFLAG_NONE }
+            { SCITEM_USERLIST, new ScUserListItem(SCITEM_USERLIST ), SID_SCUSERLISTS, SFX_ITEMINFOFLAG_NONE },
+            { SCITEM_DATABASE_SETTING, new ScDatabaseSettingItem(), SID_DATABASE_SETTINGS, SFX_ITEMINFOFLAG_NONE }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
