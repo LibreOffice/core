@@ -249,7 +249,6 @@ struct ImplEnumInfo
     HDC                 mhDC;
     vcl::font::PhysicalFontCollection* mpList;
     OUString*           mpName;
-    LOGFONTW*           mpLogFont;
     bool                mbPrinter;
     int                 mnFontCount;
 };
@@ -847,48 +846,44 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
                                   const TEXTMETRICW* lpntme,
                                   DWORD nFontType, LPARAM lParam )
 {
-    ENUMLOGFONTEXW const * pLogFont
-        = reinterpret_cast<ENUMLOGFONTEXW const *>(lpelfe);
-    NEWTEXTMETRICEXW const * pMetric
-        = reinterpret_cast<NEWTEXTMETRICEXW const *>(lpntme);
     ImplEnumInfo* pInfo = reinterpret_cast<ImplEnumInfo*>(lParam);
     if ( !pInfo->mpName )
     {
         // Ignore vertical fonts
-        if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
+        if (lpelfe->lfFaceName[0] != '@')
         {
-            OUString aName(o3tl::toU(pLogFont->elfLogFont.lfFaceName));
+            OUString aName(o3tl::toU(lpelfe->lfFaceName));
             pInfo->mpName = &aName;
-            memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
-            pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;
-            EnumFontFamiliesExW(pInfo->mhDC, pInfo->mpLogFont, SalEnumFontsProcExW,
+            LOGFONTW aLogFont{ .lfCharSet = lpelfe->lfCharSet };
+            std::copy_n(lpelfe->lfFaceName, std::size(lpelfe->lfFaceName), aLogFont.lfFaceName);
+            EnumFontFamiliesExW(pInfo->mhDC, &aLogFont, SalEnumFontsProcExW,
                                 reinterpret_cast<LPARAM>(pInfo), 0);
-            pInfo->mpLogFont->lfFaceName[0] = '\0';
-            pInfo->mpLogFont->lfCharSet = DEFAULT_CHARSET;
             pInfo->mpName = nullptr;
         }
     }
     else
     {
+        NEWTEXTMETRICW const* pMetric = reinterpret_cast<NEWTEXTMETRICW const*>(lpntme);
         // Ignore non-device fonts on printers.
         if (pInfo->mbPrinter)
         {
             if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
             {
-                SAL_INFO("vcl.fonts", "Unsupported printer font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
+                SAL_INFO("vcl.fonts", "Unsupported printer font ignored: " << OUString(o3tl::toU(lpelfe->lfFaceName)));
                 return 1;
             }
         }
         // Only SFNT fonts are supported, ignore anything else.
         else if (!(nFontType & TRUETYPE_FONTTYPE) &&
-                 !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
-                 !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
+                 !(pMetric->ntmFlags & NTM_PS_OPENTYPE) &&
+                 !(pMetric->ntmFlags & NTM_TT_OPENTYPE))
         {
-            SAL_INFO("vcl.fonts", "Unsupported font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
+            SAL_INFO("vcl.fonts", "Unsupported font ignored: " << OUString(o3tl::toU(lpelfe->lfFaceName)));
             return 1;
         }
 
-        rtl::Reference<WinFontFace> pData = new WinFontFace(*pLogFont, pMetric->ntmTm);
+        rtl::Reference<WinFontFace> pData
+            = new WinFontFace(*reinterpret_cast<ENUMLOGFONTEXW const*>(lpelfe), *pMetric);
         pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 
         pInfo->mpList->Add( pData.get() );
@@ -1021,17 +1016,14 @@ bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontColl
     if (nFonts <= 0)
         return false;
 
-    ImplEnumInfo aInfo;
-    aInfo.mhDC = getHDC();
-    aInfo.mpList = pFontCollection;
-    aInfo.mpName = &aFontFamily;
-    aInfo.mbPrinter = mbPrinter;
-    aInfo.mnFontCount = pFontCollection->Count();
+    ImplEnumInfo aInfo{ .mhDC = getHDC(),
+                        .mpList = pFontCollection,
+                        .mpName = &aFontFamily,
+                        .mbPrinter = mbPrinter,
+                        .mnFontCount = pFontCollection->Count() };
     const int nExpectedFontCount = aInfo.mnFontCount + nFonts;
 
-    LOGFONTW aLogFont = {};
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-    aInfo.mpLogFont = &aLogFont;
+    LOGFONTW aLogFont = { .lfCharSet = DEFAULT_CHARSET };
 
     // add the font to the PhysicalFontCollection
     EnumFontFamiliesExW(getHDC(), &aLogFont,
@@ -1085,16 +1077,13 @@ void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCol
         return true;
     });
 
-    ImplEnumInfo aInfo;
-    aInfo.mhDC          = getHDC();
-    aInfo.mpList        = pFontCollection;
-    aInfo.mpName        = nullptr;
-    aInfo.mbPrinter     = mbPrinter;
-    aInfo.mnFontCount   = 0;
+    ImplEnumInfo aInfo{ .mhDC = getHDC(),
+                        .mpList = pFontCollection,
+                        .mpName = nullptr,
+                        .mbPrinter = mbPrinter,
+                        .mnFontCount = 0 };
 
-    LOGFONTW aLogFont = {};
-    aLogFont.lfCharSet = DEFAULT_CHARSET;
-    aInfo.mpLogFont = &aLogFont;
+    LOGFONTW aLogFont = { .lfCharSet = DEFAULT_CHARSET };
 
     // fill the PhysicalFontCollection
     EnumFontFamiliesExW( getHDC(), &aLogFont,
