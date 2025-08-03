@@ -71,7 +71,7 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const O
         const QModelIndex aIndex = modelIndex(nPos, 0, aParentIndex);
         QStandardItem* pItem = itemFromIndex(aIndex);
         if (pStr)
-            pItem->setText(toQString(*pStr));
+            set_text(treeIter(nPos), *pStr);
         if (pId)
             pItem->setData(toQString(*pId), ROLE_ID);
 
