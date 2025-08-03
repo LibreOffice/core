@@ -31,7 +31,7 @@ namespace {
 
 extern "C" void getUnoScriptUrls(std::vector<std::u16string> * urls) {
     assert(urls != nullptr);
-    OUString const base(emscripten::val::global("document")["baseURI"].as<std::u16string>());
+    OUString const base(emscripten::val::global("location")["href"].as<std::u16string>());
     auto const val = emscripten::val::module_property("uno_scripts");
     if (!val.isUndefined()) {
         auto const len = val["length"].as<std::uint32_t>();
