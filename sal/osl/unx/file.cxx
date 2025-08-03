@@ -1428,7 +1428,10 @@ oslFileError SAL_CALL osl_mapFile(
     *ppAddr = nullptr;
 
     if (uLength > SAL_MAX_SIZE)
+    {
+        // coverity[dead_error_line] - suppress warning, 32bit platforms still
         return osl_File_E_OVERFLOW;
+    }
 
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 
@@ -1504,7 +1507,10 @@ static oslFileError unmapFile(void* pAddr, sal_uInt64 uLength)
         return osl_File_E_INVAL;
 
     if (uLength > SAL_MAX_SIZE)
+    {
+        // coverity[dead_error_line] - suppress warning, 32bit platforms still
         return osl_File_E_OVERFLOW;
+    }
 
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 

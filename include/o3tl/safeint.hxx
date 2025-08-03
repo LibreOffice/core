@@ -36,6 +36,7 @@ template <typename T> inline constexpr T saturating_add(T a, T b)
             return std::numeric_limits<T>::max();
         }
     } else {
+        // coverity[dead_error_line] - suppress warning for template
         if (a >= std::numeric_limits<T>::min() - b) {
             return a + b;
         } else {
