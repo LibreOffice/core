@@ -363,6 +363,7 @@ namespace svgio::svgreader
             if(basegfx::fTools::equalZero(fBasegfxPathLength))
                 return;
 
+            assert(fBasegfxPathLength != 0 && "help coverity see it's not zero");
             double fUserToBasegfx(1.0); // multiply: user->basegfx, divide: basegfx->user
 
             if(pSvgPathNode->getPathLength().isSet())
