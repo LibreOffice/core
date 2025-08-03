@@ -732,7 +732,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 ))
 endif
 
-ifeq ($(OS),LINUX)
+ifneq (,$(filter LINUX FREEBSD OPENBSD,$(OS)))
 # fxge
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/linux/fx_linux_impl \
