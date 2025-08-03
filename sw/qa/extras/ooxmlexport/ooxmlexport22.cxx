@@ -113,6 +113,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167770_marginInsideOutside, "tdf167770_marginIns
     // When laying out that document:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
+    // Note: emulation has decided to remove the mirrored gap completely.
+    // It works well for this document, but obviously wouldn't work for one that depends on margins.
+    // This part of the test is just documenting the historical decision
+    // (which is now expanded to more consistently cover shapes as well as the OUTSIDE case).
     const SwTwips nPageLeft = getXPath(pXmlDoc, "//page[1]/infos/bounds", "left").toInt32();
     const SwTwips nPicture1Left
         = getXPath(pXmlDoc, "//page[1]//fly/infos/bounds", "left").toInt32();

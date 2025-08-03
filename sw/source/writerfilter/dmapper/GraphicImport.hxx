@@ -226,6 +226,7 @@ public:
     void handleWrapTextValue(sal_uInt32 nVal);
     void lcl_expandRectangleByEffectExtent(css::awt::Point& rLeftTop, css::awt::Size& rSize);
     void lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle);
+    void lcl_adjustMarginsAndOrientation();
 
     void setXSize(sal_Int32 _nXSize);
     sal_uInt32 getXSize() const;

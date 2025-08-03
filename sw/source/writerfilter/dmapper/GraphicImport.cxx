@@ -482,6 +482,54 @@ void GraphicImport::lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle)
         *m_oEffectExtentBottom -= nDiff;
 }
 
+void GraphicImport::lcl_adjustMarginsAndOrientation()
+{
+    if (m_nHoriRelation != text::RelOrientation::CHAR)
+    {
+        const bool bRightSide = m_nHoriRelation == text::RelOrientation::PAGE_RIGHT;
+        const bool bLeftSide = m_nHoriRelation == text::RelOrientation::PAGE_LEFT;
+        const bool bPageOrMargin
+            = m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA // margin
+                || m_nHoriRelation == text::RelOrientation::PAGE_FRAME; // page
+
+        assert(bRightSide || bLeftSide || bPageOrMargin
+            || m_nHoriRelation == text::RelOrientation::PRINT_AREA // column
+            || m_nHoriRelation == text::RelOrientation::FRAME /*column*/ );
+
+        // emulation: when impossible to wrap text on a side, remove the margin gap
+        if (m_nHoriOrient == text::HoriOrientation::LEFT && !bRightSide)
+            m_nLeftMargin = 0;
+        else if (m_nHoriOrient == text::HoriOrientation::RIGHT && !bLeftSide)
+            m_nRightMargin = 0;
+        else if (m_nHoriOrient == text::HoriOrientation::INSIDE)
+        {
+            if (bPageOrMargin)
+            {
+                m_bPageToggle = true;
+                m_nHoriOrient = text::HoriOrientation::LEFT;
+                // LO currently has to emulate removing the gap on the non-text side,
+                // so for these mirrored situations where the shape could be on either side,
+                // either we have to keep the gap (wrong position, but proper text margin)
+                // or else remove the gap on both sides (losing potentially important text margin).
+                // Historically both gaps were removed, so I've kept that logic intact
+                // as I expanded the scope to include non-graphic shapes.
+                m_nLeftMargin = 0;
+                m_nRightMargin = 0;
+            }
+        }
+        else if (m_nHoriOrient == text::HoriOrientation::OUTSIDE)
+        {
+            if (bPageOrMargin)
+            {
+                m_bPageToggle = true;
+                m_nHoriOrient = text::HoriOrientation::RIGHT;
+                m_nLeftMargin = 0;
+                m_nRightMargin = 0;
+            }
+        }
+    }
+}
+
 static void lcl_doMSOWidthHeightSwap(awt::Point& rLeftTop, awt::Size& rSize,
                                        const sal_Int32 nMSOAngle)
 {
@@ -1218,49 +1266,7 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
                                 m_nHoriRelation = text::RelOrientation::PRINT_AREA;
                         }
 
-                        // adjust margins
-                        // when impossible to wrap text on a side, remove the margin gap
-                        if (m_nHoriRelation != text::RelOrientation::CHAR)
-                        {
-                            const bool bRightSide
-                                = m_nHoriRelation == text::RelOrientation::PAGE_RIGHT
-                                    || m_nHoriRelation == text::RelOrientation::FRAME_RIGHT;
-                            const bool bLeftSide
-                                = m_nHoriRelation == text::RelOrientation::PAGE_LEFT
-                                    || m_nHoriRelation == text::RelOrientation::FRAME_LEFT;
-                            const bool bPageOrMargin
-                                = m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA // margin
-                                    || m_nHoriRelation == text::RelOrientation::PAGE_FRAME; // page
-
-                            assert(bRightSide || bLeftSide || bPageOrMargin
-                                || m_nHoriRelation == text::RelOrientation::PRINT_AREA // column
-                                || m_nHoriRelation == text::RelOrientation::FRAME /*column*/ );
-
-                            if (m_nHoriOrient == text::HoriOrientation::LEFT && !bRightSide)
-                                m_nLeftMargin = 0;
-                            else if (m_nHoriOrient == text::HoriOrientation::RIGHT && !bLeftSide)
-                                m_nRightMargin = 0;
-                            else if (m_nHoriOrient == text::HoriOrientation::INSIDE)
-                            {
-                                if (bPageOrMargin)
-                                {
-                                    m_bPageToggle = true;
-                                    m_nHoriOrient = text::HoriOrientation::LEFT;
-                                    m_nLeftMargin = 0;
-                                    m_nRightMargin = 0;
-                                }
-                            }
-                            else if (m_nHoriOrient == text::HoriOrientation::OUTSIDE)
-                            {
-                                if (bPageOrMargin)
-                                {
-                                    m_bPageToggle = true;
-                                    m_nHoriOrient = text::HoriOrientation::RIGHT;
-                                    m_nLeftMargin = 0;
-                                    m_nRightMargin = 0;
-                                }
-                            }
-                        }
+                        lcl_adjustMarginsAndOrientation();
 
                         // Anchored: Word only supports at-char in that case.
                         text::TextContentAnchorType eAnchorType = text::TextContentAnchorType_AT_CHARACTER;
@@ -1815,49 +1821,8 @@ rtl::Reference<SwXTextGraphicObject> GraphicImport::createGraphicObject(uno::Ref
                         m_nHoriRelation = text::RelOrientation::PRINT_AREA;
                 }
 
-                //adjust margins
-                // when impossible to wrap text on a side, remove the margin gap
-                if (m_nHoriRelation != text::RelOrientation::CHAR)
-                {
-                    const bool bRightSide
-                        = m_nHoriRelation == text::RelOrientation::PAGE_RIGHT
-                            || m_nHoriRelation == text::RelOrientation::FRAME_RIGHT;
-                    const bool bLeftSide
-                        = m_nHoriRelation == text::RelOrientation::PAGE_LEFT
-                            || m_nHoriRelation == text::RelOrientation::FRAME_LEFT;
-                    const bool bPageOrMargin
-                        = m_nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA // margin
-                            || m_nHoriRelation == text::RelOrientation::PAGE_FRAME; // page
+                lcl_adjustMarginsAndOrientation();
 
-                    assert(bRightSide || bLeftSide || bPageOrMargin
-                           || m_nHoriRelation == text::RelOrientation::PRINT_AREA // column
-                           || m_nHoriRelation == text::RelOrientation::FRAME /*column*/ );
-
-                    if (m_nHoriOrient == text::HoriOrientation::LEFT && !bRightSide)
-                        m_nLeftMargin = 0;
-                    else if (m_nHoriOrient == text::HoriOrientation::RIGHT && !bLeftSide)
-                        m_nRightMargin = 0;
-                    else if (m_nHoriOrient == text::HoriOrientation::INSIDE)
-                    {
-                        if (bPageOrMargin)
-                        {
-                            m_bPageToggle = true;
-                            m_nHoriOrient = text::HoriOrientation::LEFT;
-                            m_nLeftMargin = 0;
-                            m_nRightMargin = 0;
-                        }
-                    }
-                    else if (m_nHoriOrient == text::HoriOrientation::OUTSIDE)
-                    {
-                        if (bPageOrMargin)
-                        {
-                            m_bPageToggle = true;
-                            m_nHoriOrient = text::HoriOrientation::RIGHT;
-                            m_nLeftMargin = 0;
-                            m_nRightMargin = 0;
-                        }
-                    }
-                }
                 // adjust top/bottom margins
                 if( m_nVertOrient == text::VertOrientation::TOP &&
                     ( m_nVertRelation == text::RelOrientation::PAGE_PRINT_AREA ||
