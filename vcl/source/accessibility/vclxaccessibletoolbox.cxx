@@ -258,10 +258,14 @@ void VCLXAccessibleToolBox::UpdateCustomPopupItemp_Impl( vcl::Window* pWindow, b
         // Moreover, calling GetItemPos with 0 will find a separator if there is any.
         return;
 
+    ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos(nDownItem);
+    if (nIndex == ToolBox::ITEM_NOTFOUND)
+        return; // not found
+
     rtl::Reference<comphelper::OAccessible> pChild = pWindow->GetAccessible();
     if (pChild.is())
     {
-        Reference< XAccessible > xChildItem( getAccessibleChild(pToolBox->GetItemPos(nDownItem)));
+        Reference< XAccessible > xChildItem(getAccessibleChild(nIndex));
         VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xChildItem.get() );
 
         pItem->SetChild(pChild);
@@ -299,7 +303,10 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
         // Moreover, calling GetItemPos with 0 will find a separator if there is any.
         return;
 
-    ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos( nCurItemId );
+    ToolBox::ImplToolItems::size_type nIndex = pToolBox->GetItemPos(nCurItemId);
+    if (nIndex == ToolBox::ITEM_NOTFOUND)
+        return; // not found
+
     Reference< XAccessible > xItem = getAccessibleChild( nIndex );
     if ( xItem.is() )
     {
