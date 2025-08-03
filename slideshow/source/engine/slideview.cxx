@@ -841,7 +841,8 @@ bool SlideView::updateScreen() const
     ENSURE_OR_RETURN_FALSE( mpCanvas,
                        "SlideView::updateScreen(): Disposed" );
 
-    return mpCanvas->updateScreen( false );
+    return getSpriteCanvas()->updateScreen(false);
+    // return mpCanvas->updateScreen( false );
 }
 
 bool SlideView::paintScreen() const
@@ -851,7 +852,8 @@ bool SlideView::paintScreen() const
     ENSURE_OR_RETURN_FALSE( mpCanvas,
                        "SlideView::paintScreen(): Disposed" );
 
-    return mpCanvas->updateScreen( true );
+    return getSpriteCanvas()->updateScreen(true);
+    // return mpCanvas->updateScreen( true );
 }
 
 void SlideView::clear() const
