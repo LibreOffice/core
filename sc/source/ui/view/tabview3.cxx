@@ -674,8 +674,15 @@ void ScTabView::CursorPosChanged()
 
     if (!bDataPilot)
     {
-        bool bSparkline = rDocument.HasSparkline(aViewData.GetCurPos());
+        const ScAddress rAddr = aViewData.GetCurPos();
+        bool bSparkline = rDocument.HasSparkline(rAddr);
         aViewData.GetViewShell()->SetSparklineShell(bSparkline);
+        if (!bSparkline)
+        {
+            const ScDBData* pDbData = rDocument.GetDBAtCursor(rAddr.Col(), rAddr.Row(), rAddr.Tab(), ScDBDataPortion::AREA);
+            bool bHasDBTableStyle = pDbData && pDbData->GetTableStyleInfo();
+            aViewData.GetViewShell()->SetTableShell(bHasDBTableStyle);
+        }
     }
 
     //  UpdateInputHandler now in CellContentChanged

@@ -450,6 +450,7 @@
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible                    ;
             Calc,             Sparkline,          visible                    ;
+            Calc,             Table,              visible                    ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -486,6 +487,7 @@
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible,  .uno:CellTextDlg ;
             Calc,             Sparkline,          visible                    ;
+            Calc,             Table,              visible                    ;
             DrawImpress,      Draw,               hidden                     ;
             DrawImpress,      DrawFontwork,       hidden                     ;
             DrawImpress,      DrawText,           visible                    ;
@@ -1476,6 +1478,7 @@
             Calc,  EditCell, visible ;
             Calc,  Pivot,    visible ;
             Calc,  Sparkline, visible ;
+            Calc,  Table,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -1510,6 +1513,7 @@
             Calc,  default,  visible ;
             Calc,  Pivot,    visible ;
             Calc,  Sparkline, visible ;
+            Calc,  Table,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -1517,6 +1521,35 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
+      <node oor:name="ScDatabasePropertyPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Database Range</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ScDatabasePropertyPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:FormatCellDialog</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Calc,  Table,    visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ScPanelFactory/DatabasePropertyPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>500</value>
         </prop>
         <prop oor:name="WantsAWT" oor:type="xs:boolean">
           <value>false</value>
@@ -1544,6 +1577,7 @@
             Calc,  default,  visible ;
             Calc,  Pivot,    visible ;
             Calc,  Sparkline, visible ;
+            Calc,  Table,    visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">

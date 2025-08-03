@@ -6458,6 +6458,23 @@ SfxBoolItem CellProtection SID_SCATTR_CELLPROTECTION
     GroupId = SfxGroupId::Format;
 ]
 
+ScDatabaseSettingItem DatabaseSettings SID_DATABASE_SETTINGS
+
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
 
 SfxVoidItem SelectArrayFormula SID_MARKARRAYFORMULA
 ()

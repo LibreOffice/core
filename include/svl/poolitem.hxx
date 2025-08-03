@@ -134,6 +134,7 @@ enum class SfxItemType : sal_uInt16
     SbxItemType,
     ScCondFormatItemType,
     ScConsolidateItemType,
+    ScDatabaseSettingItemType,
     ScHyphenateCellType,
     ScIndentItemType,
     ScInputStatusItemType,
