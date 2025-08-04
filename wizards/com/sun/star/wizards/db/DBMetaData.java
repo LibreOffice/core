@@ -719,7 +719,7 @@ public class DBMetaData
         try
         {
             ensureDataSourceSettings();
-            Any primaryKeySupport = (Any)m_dataSourceSettings.getPropertyValue( "PrimaryKeySupport" );
+            Object primaryKeySupport = m_dataSourceSettings.getPropertyValue( "PrimaryKeySupport" );
             if ( AnyConverter.isVoid( primaryKeySupport ) )
                 supportsPrimaryKeys = supportsCoreSQLGrammar();
             else
