@@ -200,11 +200,16 @@ std::ofstream * getLogFile() {
 
         if (logFile)
         {
+            std::ostringstream pathname;
+            pathname << logFile;
+            if (pathname.str().ends_with('-')) {
+                pathname << OSL_DETAIL_GETPID;
+            }
             std::filesystem::create_directories(
                 std::filesystem::path(logFile).remove_filename(),
                 o3tl::temporary(std::error_code()));
             // stays until process exits
-            static std::ofstream file(logFile, std::ios::app | std::ios::out);
+            static std::ofstream file(pathname.str().c_str(), std::ios::app | std::ios::out);
             pResult = &file;
         }
 
