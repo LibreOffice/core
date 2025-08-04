@@ -129,10 +129,7 @@ std::vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
             current_pointer++;
         if(guess_list[current_pointer] != '\0')
         {
-            Guess g(guess_list + current_pointer);
-
-            guesses.push_back(g);
-
+            guesses.emplace_back(guess_list + current_pointer);
             current_pointer++;
         }
     }

@@ -132,7 +132,7 @@ static void NotebookbarAddonValues(
                     aImage = Image(aAddonsItems.GetImageFromURL(sImage, isBigImage));
                 }
             }
-            aImageValues.push_back(aImage);
+            aImageValues.push_back(std::move(aImage));
         }
         aExtensionValues.push_back(aExtension);
     }

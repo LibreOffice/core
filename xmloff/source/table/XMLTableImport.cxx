@@ -384,7 +384,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( const Reference< XFas
 
         if( nRepeated <= 1 )
         {
-            maColumnInfos.push_back( xInfo );
+            maColumnInfos.push_back(std::move(xInfo));
         }
         else
         {

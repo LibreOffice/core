@@ -476,7 +476,7 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
         }
 
-        m_aSignatureInfos.push_back(aInfo);
+        m_aSignatureInfos.push_back(std::move(aInfo));
     }
 
     return true;

@@ -1863,8 +1863,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             tAnimationMap::iterator aFound = maAnimations.find( pObj );
             if( aFound != maAnimations.end() )
             {
-                std::pair< SdrObject*, Ppt97AnimationPtr > aPair( (*aFound).first, (*aFound).second );
-                aAnimationsOnThisPage.push_back( aPair );
+                aAnimationsOnThisPage.emplace_back((*aFound).first, (*aFound).second);
             }
         }
 

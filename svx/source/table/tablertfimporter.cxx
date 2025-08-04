@@ -251,7 +251,7 @@ void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
                 xCellInfo->mxVMergeCell->mnRowSpan++;
         }
 
-        xColumn->push_back( xCellInfo );
+        xColumn->push_back(std::move(xCellInfo));
     }
 
     mnStartPara = pInfo->aSelection.end.nPara - 1;

@@ -940,8 +940,7 @@ void ScColumnStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields
     if (nTable > nSize)
         for (sal_Int32 i = nSize; i < nTable; ++i)
         {
-            ScMyColumnStyleVec aFieldsVec(nFields + 1, ScColumnStyle());
-            aTables.push_back(aFieldsVec);
+            aTables.emplace_back(nFields + 1, ScColumnStyle());
         }
 }
 

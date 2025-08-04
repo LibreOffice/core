@@ -373,7 +373,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
         // generic service
         tmpAccess->getByName(u"MigrationService"_ustr) >>= tmpStep.service;
 
-        vrMigrations->push_back(tmpStep);
+        vrMigrations->push_back(std::move(tmpStep));
     }
     return vrMigrations;
 }

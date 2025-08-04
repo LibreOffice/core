@@ -1185,7 +1185,7 @@ namespace
                                         if (aEntry.read_header(aSourceFile))
                                         {
                                             // add to local data
-                                            maPackedFileEntryVector.push_back(aEntry);
+                                            maPackedFileEntryVector.push_back(std::move(aEntry));
                                         }
                                         else
                                         {
