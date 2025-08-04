@@ -535,6 +535,8 @@ class JSToggleButton final : public JSWidget<SalInstanceToggleButton, ::PushButt
 public:
     JSToggleButton(JSDialogSender* pSender, ::PushButton* pButton, SalInstanceBuilder* pBuilder,
                    bool bTakeOwnership);
+
+    virtual void do_set_active(bool active) override;
 };
 
 class JSEntry final : public JSWidget<SalInstanceEntry, ::Edit>

@@ -1213,6 +1213,12 @@ JSToggleButton::JSToggleButton(JSDialogSender* pSender, ::PushButton* pButton,
 {
 }
 
+void JSToggleButton::do_set_active(bool active)
+{
+    SalInstanceToggleButton::do_set_active(active);
+    sendUpdate();
+}
+
 JSEntry::JSEntry(JSDialogSender* pSender, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
     : JSWidget<SalInstanceEntry, ::Edit>(pSender, pEntry, pBuilder, bTakeOwnership)
