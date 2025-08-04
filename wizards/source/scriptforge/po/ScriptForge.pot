@@ -7,14 +7,14 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #  
-#  ScriptForge Release 25.8
+#  ScriptForge Release 26.2
 #  -----------------------
 #  
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2025-01-11 13:09:17\n"
+"POT-Creation-Date: 2025-08-04 11:05:34\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
