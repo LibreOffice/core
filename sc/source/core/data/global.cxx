@@ -164,11 +164,6 @@ sal_uInt32 ScGlobal::GetStandardFormat( ScInterpreterContext& rContext,
     return rContext.NFGetStandardFormat( nType, eLnge );
 }
 
-sal_uInt16 ScGlobal::GetStandardRowHeight()
-{
-    return nStdRowHeight;
-}
-
 SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 {
     assert(!bThreadedGroupCalcInProgress);

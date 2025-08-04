@@ -2454,7 +2454,6 @@ ScGlobal::FindUnquoted(char16_t const*, char16_t)
 ScGlobal::FindUnquoted(rtl::OUString const&, char16_t, int)
 ScGlobal::GetAutoFormat()
 ScGlobal::GetStandardFormat(ScInterpreterContext&, unsigned int, SvNumFormatType)
-ScGlobal::GetStandardRowHeight()
 ScGlobal::IsQuoted(std::basic_string_view<char16_t, std::char_traits<char16_t> >, char16_t)
 ScImportOptions::BuildString() const
 ScImportOptions::ScImportOptions(std::basic_string_view<char16_t, std::char_traits<char16_t> >)

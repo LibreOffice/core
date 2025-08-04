@@ -644,7 +644,7 @@ void ScModelTestBase::miscRowHeightsTest( TestParam const * aTestValues, unsigne
             SCTAB nTab = aTestValues[ index ].pData[ i ].nTab;
             int nExpectedHeight = aTestValues[ index ].pData[ i ].nExpectedHeight;
             if ( nExpectedHeight == -1 )
-                nExpectedHeight = convertTwipToMm100(ScGlobal::GetStandardRowHeight());
+                nExpectedHeight = convertTwipToMm100(ScGlobal::nStdRowHeight);
             bool bCheckOpt = ( ( aTestValues[ index ].pData[ i ].nCheck & CHECK_OPTIMAL ) == CHECK_OPTIMAL );
             for ( ; nRow <= nEndRow; ++nRow )
             {

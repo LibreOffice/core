@@ -587,7 +587,6 @@ public:
                                                 std::u16string_view rTabName );
     SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( ScInterpreterContext&, sal_uInt32 nFormat, SvNumFormatType nType );
 
-    SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     /// Horizontal pixel per twips factor.
     SC_DLLPUBLIC static double              nScreenPPTX;
     /// Vertical pixel per twips factor.
