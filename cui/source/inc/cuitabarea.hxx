@@ -582,27 +582,38 @@ private:
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
+    OUString            sLastItemIdent;
+    Size                aIconSize;
 
     SvxXRectPreview m_aCtlPreview;
     std::unique_ptr<SvxPixelCtl> m_xCtlPixel;
     std::unique_ptr<ColorListBox> m_xLbColor;
     std::unique_ptr<ColorListBox> m_xLbBackgroundColor;
-    std::unique_ptr<SvxPresetListBox> m_xPatternLB;
+    std::unique_ptr<weld::IconView> m_xPatternLB;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnModify;
     std::unique_ptr<weld::CustomWeld> m_xCtlPixelWin;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
-    std::unique_ptr<weld::CustomWeld> m_xPatternLBWin;
     std::unique_ptr<SvxBitmapCtl> m_xBitmapCtl;
 
     DECL_LINK( ClickAddHdl_Impl, weld::Button&, void );
     DECL_LINK( ClickModifyHdl_Impl, weld::Button&, void );
-    DECL_LINK( ChangePatternHdl_Impl, ValueSet*, void );
+    DECL_LINK( ChangePatternHdl_Impl,  weld::IconView&, void );
     DECL_LINK( ChangeColorHdl_Impl, ColorListBox&, void );
-    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     sal_Int32 SearchPatternList(std::u16string_view rPatternName);
+
+    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    void FillPresetListBox();
+    void ShowContextMenu(const Point& pPos);
+    void MenuSelect(const OUString& rIdent);
+    void HandleMenuSelect(std::u16string_view rIdent);
+    void ClickRenameHdl();
+    void ClickDeleteHdl();
 
 public:
     SvxPatternTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
