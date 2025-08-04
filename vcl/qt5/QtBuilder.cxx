@@ -204,15 +204,15 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkCellRendererPixbuf")
     {
-        enableTreeViewColumnDataRole(pParentWidget, Qt::DecorationRole);
+        return enableTreeViewColumnDataRole(pParentWidget, Qt::DecorationRole);
     }
     else if (sName == u"GtkCellRendererText")
     {
-        enableTreeViewColumnDataRole(pParentWidget, Qt::DisplayRole);
+        return enableTreeViewColumnDataRole(pParentWidget, Qt::DisplayRole);
     }
     else if (sName == u"GtkCellRendererToggle")
     {
-        enableTreeViewColumnDataRole(pParentWidget, Qt::CheckStateRole);
+        return enableTreeViewColumnDataRole(pParentWidget, Qt::CheckStateRole);
     }
     else if (sName == u"GtkCheckButton")
     {
@@ -847,7 +847,8 @@ QTreeView* QtBuilder::enableTreeViewColumnDataRole(QWidget* pParentWidget,
                                                    Qt::ItemDataRole eDataRole)
 {
     QTreeView* pTreeView = qobject_cast<QTreeView*>(pParentWidget);
-    assert(pTreeView && "No tree view for cell renderer");
+    if (!pTreeView)
+        return nullptr;
 
     // Mark support for the new role for the tree view's last inserted column
     // (the GtkCellRenderer is a child object of the GtkTreeViewColumn)
