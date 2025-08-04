@@ -21,6 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <memory>
+#include <vector>
 
 class AccessibleObject;
 
