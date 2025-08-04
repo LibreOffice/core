@@ -516,9 +516,11 @@ private:
     Size                       rBitmapSize;
     Size                       rFilledSize;
     Size                       rZoomedSize;
+    OUString                   sLastItemIdent;
+    Size                       aIconSize;
 
     SvxXRectPreview m_aCtlBitmapPreview;
-    std::unique_ptr<SvxPresetListBox>   m_xBitmapLB;
+    std::unique_ptr<weld::IconView> m_xBitmapLB;
     std::unique_ptr<weld::ComboBox> m_xBitmapStyleLB;
     std::unique_ptr<weld::Container> m_xSizeBox;
     std::unique_ptr<weld::CheckButton> m_xTsbScale;
@@ -534,22 +536,28 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xTileOffset;
     std::unique_ptr<weld::Button> m_xBtnImport;
     std::unique_ptr<weld::CustomWeld> m_xCtlBitmapPreview;
-    std::unique_ptr<weld::CustomWeld> m_xBitmapLBWin;
 
-    DECL_LINK( ModifyBitmapHdl, ValueSet*, void );
+    DECL_LINK( ModifyBitmapHdl, weld::IconView&, void );
     DECL_LINK( ClickScaleHdl, weld::Toggleable&, void );
     DECL_LINK( ModifyBitmapStyleHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyBitmapSizeHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyBitmapPositionHdl, weld::ComboBox&, void );
     DECL_LINK( ModifyPositionOffsetHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyTileOffsetHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ClickRenameHdl, SvxPresetListBox*, void );
-    DECL_LINK( ClickDeleteHdl, SvxPresetListBox*, void );
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK( ClickImportHdl, weld::Button&, void );
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     void ClickBitmapHdl_Impl();
     void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(std::u16string_view rBitmapName);
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
+    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    void FillPresetListBox();
+    void ShowContextMenu(const Point& pPos);
+    void ClickRenameHdl();
+    void ClickDeleteHdl();
 
 public:
     SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

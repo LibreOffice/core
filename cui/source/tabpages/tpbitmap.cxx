@@ -78,7 +78,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window(u"imagewin"_ustr, true)))
+    , aIconSize(60, 64)
+    , m_xBitmapLB(m_xBuilder->weld_icon_view(u"image_iconview"_ustr))
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box(u"imagestyle"_ustr))
     , m_xSizeBox(m_xBuilder->weld_container(u"sizebox"_ustr))
     , m_xTsbScale(m_xBuilder->weld_check_button(u"scaletsb"_ustr))
@@ -94,16 +95,16 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xTileOffset(m_xBuilder->weld_metric_spin_button(u"tileoffmtr"_ustr, FieldUnit::PERCENT))
     , m_xBtnImport(m_xBuilder->weld_button(u"BTN_IMPORT"_ustr))
     , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, u"CTL_IMAGE_PREVIEW"_ustr, m_aCtlBitmapPreview))
-    , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, u"IMAGE"_ustr, *m_xBitmapLB))
 {
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
     m_rXFSet.Put( XFillBitmapItem(OUString(), Graphic()) );
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
 
-    m_xBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );
-    m_xBitmapLB->SetRenameHdl( LINK(this, SvxBitmapTabPage, ClickRenameHdl) );
-    m_xBitmapLB->SetDeleteHdl( LINK(this, SvxBitmapTabPage, ClickDeleteHdl) );
+    m_xBitmapLB->connect_selection_changed(LINK(this, SvxBitmapTabPage, ModifyBitmapHdl));
+    m_xBitmapLB->connect_mouse_press(LINK(this, SvxBitmapTabPage, MousePressHdl));
+    m_xBitmapLB->connect_query_tooltip(LINK(this, SvxBitmapTabPage, QueryTooltipHdl));
+
     m_xBitmapStyleLB->connect_changed( LINK(this, SvxBitmapTabPage, ModifyBitmapStyleHdl) );
     Link<weld::MetricSpinButton&, void> aLink1( LINK(this, SvxBitmapTabPage, ModifyBitmapSizeHdl) );
     m_xBitmapWidth->connect_value_changed( aLink1 );
@@ -120,7 +121,6 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
 
     // Calculate size of display boxes
     Size aSize = getDrawPreviewOptimalSize(m_aCtlBitmapPreview.GetDrawingArea()->get_ref_device());
-    m_xBitmapLB->set_size_request(aSize.Width(), aSize.Height());
     m_xCtlBitmapPreview->set_size_request(aSize.Width(), aSize.Height());
 
     SfxItemPool* pPool = m_rXFSet.GetPool();
@@ -128,8 +128,6 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     meFieldUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( *m_xBitmapWidth, meFieldUnit, true );
     SetFieldUnit( *m_xBitmapHeight, meFieldUnit, true );
-
-    m_xBitmapLB->SetStyle(WB_FLATVALUESET | WB_NO_DIRECTSELECT | WB_TABSTOP);
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if( pViewShell )
@@ -139,7 +137,6 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
 {
-    m_xBitmapLBWin.reset();
     m_xBitmapLB.reset();
     m_xCtlBitmapPreview.reset();
 
@@ -157,7 +154,36 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
 
 void SvxBitmapTabPage::Construct()
 {
-    m_xBitmapLB->FillPresetListBox( *m_pBitmapList );
+    FillPresetListBox();
+}
+
+void SvxBitmapTabPage::FillPresetListBox()
+{
+    m_xBitmapLB->clear();
+
+    m_xBitmapLB->freeze();
+    for (tools::Long nId = 0; nId < m_pBitmapList->Count(); nId++)
+    {
+        const XBitmapEntry* pEntry = m_pBitmapList->GetBitmap(nId);
+
+        OUString sId = OUString::number(nId);
+        BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview(nId, aIconSize);
+        VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aBitmap);
+        OUString sImageName = pEntry->GetName();
+
+        if (!m_xBitmapLB->get_id(nId).isEmpty())
+        {
+            m_xBitmapLB->set_image(nId, aVDev);
+            m_xBitmapLB->set_id(nId, sId);
+            m_xBitmapLB->set_text(nId, sImageName);
+        }
+        else
+        {
+            m_xBitmapLB->insert(-1, &sImageName, &sId, aVDev, nullptr);
+        }
+    }
+
+    m_xBitmapLB->thaw();
 }
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -179,8 +205,9 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
         const_cast<SfxItemSet&>(rSet).Put( XFillBmpSizeYItem( GetCoreValue( *m_xBitmapHeight, mePoolUnit ) ) );
     }
 
-    sal_uInt16 nId = m_xBitmapLB->GetItemId( static_cast<size_t>( nPos ) );
-    m_xBitmapLB->SelectItem( nId );
+    OUString sId = m_xBitmapLB->get_id( static_cast<size_t>( nPos ) );
+    sal_uInt32 nId = !sId.isEmpty() ? sId.toInt32() : 0;
+    m_xBitmapLB->select( nId );
 }
 
 DeactivateRC SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -195,11 +222,12 @@ DeactivateRC SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet )
 bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-    size_t nPos = m_xBitmapLB->GetSelectItemPos();
-    if(VALUESET_ITEM_NOTFOUND != nPos)
+    OUString sId = m_xBitmapLB->get_selected_id();
+    sal_Int32 nPos = !sId.isEmpty() ? sId.toInt32() : -1;
+    if(nPos != -1)
     {
         const XBitmapEntry* pXBitmapEntry = m_pBitmapList->GetBitmap(nPos);
-        const OUString aString(m_xBitmapLB->GetItemText( m_xBitmapLB->GetSelectedItemId() ));
+        const OUString aString(pXBitmapEntry->GetName());
         rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
 
@@ -432,10 +460,9 @@ std::unique_ptr<SfxTabPage> SvxBitmapTabPage::Create(weld::Container* pPage, wel
 
 void SvxBitmapTabPage::ClickBitmapHdl_Impl()
 {
-    m_xBitmapLBWin->set_sensitive(true);
     m_xCtlBitmapPreview->set_sensitive(true);
 
-    ModifyBitmapHdl(m_xBitmapLB.get());
+    ModifyBitmapHdl(*m_xBitmapLB);
 }
 
 void SvxBitmapTabPage::CalculateBitmapPresetSize()
@@ -462,12 +489,13 @@ void SvxBitmapTabPage::CalculateBitmapPresetSize()
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, weld::IconView&, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
-    size_t nPos = m_xBitmapLB->GetSelectItemPos();
+    OUString sId = m_xBitmapLB->get_selected_id();
+    sal_Int32 nPos = !sId.isEmpty() ? sId.toInt32() : -1;
 
-    if( nPos != VALUESET_ITEM_NOTFOUND )
+    if( nPos != -1 )
     {
         pGraphicObject.reset(new GraphicObject(m_pBitmapList->GetBitmap( static_cast<sal_uInt16>(nPos) )->GetGraphicObject()));
     }
@@ -484,15 +512,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
             }
         }
 
-        if(!pGraphicObject)
+        if(!pGraphicObject && m_xBitmapLB->n_children() > 0)
         {
-            sal_uInt16 nId = m_xBitmapLB->GetItemId(0);
-            m_xBitmapLB->SelectItem(nId);
-
-            if(0 != nId)
-            {
-                pGraphicObject.reset(new GraphicObject(m_pBitmapList->GetBitmap(0)->GetGraphicObject()));
-            }
+            m_xBitmapLB->select(0);
+            pGraphicObject.reset(new GraphicObject(m_pBitmapList->GetBitmap(0)->GetGraphicObject()));
         }
     }
 
@@ -523,12 +546,78 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
+IMPL_LINK(SvxBitmapTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
 {
-    const sal_uInt16 nId = m_xBitmapLB->GetContextMenuItemId();
-    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
+    OUString sId = m_xBitmapLB->get_id(rIter);
+    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
 
-    if( nPos == VALUESET_ITEM_NOTFOUND )
+    if (nId >= 0)
+    {
+        const XBitmapEntry* pEntry = m_pBitmapList->GetBitmap(nId);
+        return pEntry->GetName();
+    }
+    return OUString();
+}
+
+IMPL_LINK(SvxBitmapTabPage, MousePressHdl, const MouseEvent&, rMEvt, bool)
+{
+    if (!rMEvt.IsRight())
+        return false;
+
+    // Disable context menu for LibreOfficeKit mode
+    if (comphelper::LibreOfficeKit::isActive())
+        return false;
+
+    const Point& pPos = rMEvt.GetPosPixel();
+    for (int i = 0; i < m_xBitmapLB->n_children(); i++)
+    {
+        const ::tools::Rectangle aRect = m_xBitmapLB->get_rect(i);
+        if (aRect.Contains(pPos))
+        {
+            ShowContextMenu(pPos);
+            break;
+        }
+    }
+    return false;
+}
+
+void SvxBitmapTabPage::ShowContextMenu(const Point& pPos)
+{
+    ::tools::Rectangle aRect(pPos, Size(1, 1));
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(m_xBitmapLB.get(), u"svx/ui/presetmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
+
+    xMenu->connect_activate(LINK(this, SvxBitmapTabPage, OnPopupEnd));
+    xMenu->popup_at_rect(m_xBitmapLB.get(), aRect);
+}
+
+IMPL_LINK(SvxBitmapTabPage, OnPopupEnd, const OUString&, sCommand, void)
+{
+    sLastItemIdent = sCommand;
+    if (sLastItemIdent.isEmpty())
+        return;
+
+    Application::PostUserEvent(LINK(this, SvxBitmapTabPage, MenuSelectAsyncHdl));
+}
+
+IMPL_LINK_NOARG(SvxBitmapTabPage, MenuSelectAsyncHdl, void*, void)
+{
+    if (sLastItemIdent == u"rename")
+    {
+        ClickRenameHdl();
+    }
+    else if (sLastItemIdent == u"delete")
+    {
+        ClickDeleteHdl();
+    }
+}
+
+void SvxBitmapTabPage::ClickRenameHdl()
+{
+    const OUString sId = m_xBitmapLB->get_selected_id();
+    const sal_Int32 nPos = !sId.isEmpty() ? sId.toInt32() : -1;
+    if( nPos == -1 )
         return;
 
     OUString aDesc( CuiResId( RID_CUISTR_DESC_NEW_BITMAP ) );
@@ -542,14 +631,14 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     {
         aName = pDlg->GetName();
         sal_Int32 nBitmapPos = SearchBitmapList( aName );
-        bool bValidBitmapName = (nBitmapPos == static_cast<sal_Int32>(nPos) ) || (nBitmapPos == -1);
+        bool bValidBitmapName = (nBitmapPos == nPos ) || (nBitmapPos == -1);
 
         if(bValidBitmapName)
         {
             bLoop = false;
             m_pBitmapList->GetBitmap(nPos)->SetName(aName);
 
-            m_xBitmapLB->SetItemText(nId, aName);
+            m_xBitmapLB->set_text(nPos, aName);
 
             m_nBitmapListState |= ChangeType::MODIFIED;
         }
@@ -562,12 +651,12 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
+void SvxBitmapTabPage::ClickDeleteHdl()
 {
-    const sal_uInt16 nId = m_xBitmapLB->GetContextMenuItemId();
-    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
+    const OUString sId = m_xBitmapLB->get_selected_id();
+    const sal_Int32 nPos = !sId.isEmpty() ? sId.toInt32() : -1;
 
-    if( nPos == VALUESET_ITEM_NOTFOUND )
+    if( nPos == -1 )
         return;
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), u"cui/ui/querydeletebitmapdialog.ui"_ustr));
@@ -576,24 +665,20 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     if (xQueryBox->run() != RET_YES)
         return;
 
-    sal_uInt16 nNextId = m_xBitmapLB->GetSelectedItemId();
-    const bool bDeletingSelectedItem(nId == nNextId);
-    if (bDeletingSelectedItem)
-    {
-        nNextId = m_xBitmapLB->GetItemId(nPos + 1);
-        if (!nNextId)
-            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
-    }
-
     m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
-    m_xBitmapLB->RemoveItem( nId );
+    m_xBitmapLB->remove( nPos );
 
-    if (bDeletingSelectedItem)
-    {
-        m_xBitmapLB->SelectItem(nNextId);
-        m_aCtlBitmapPreview.Invalidate();
-    }
-    ModifyBitmapHdl(m_xBitmapLB.get());
+    FillPresetListBox();
+
+    sal_Int32 nNextId = nPos;
+    if (nPos >= m_xBitmapLB->n_children())
+        nNextId = m_xBitmapLB->n_children() - 1;
+
+    if(m_xBitmapLB->n_children() > 0)
+        m_xBitmapLB->select(nNextId);
+
+    m_aCtlBitmapPreview.Invalidate();
+    ModifyBitmapHdl(*m_xBitmapLB);
     m_nBitmapListState |= ChangeType::MODIFIED;
 }
 
@@ -784,14 +869,18 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         {
             m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
 
-            sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
-            BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
+            OUString sId = nCount > 0 ? m_xBitmapLB->get_id( nCount - 1 ) : OUString();
+            sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+            BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, aIconSize );
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aBitmap);
 
-            m_xBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
-            m_xBitmapLB->SelectItem( nId + 1 );
+            m_xBitmapLB->insert( nId + 1, &aName, &sId, pVDev, nullptr);
+            FillPresetListBox();
+
+            m_xBitmapLB->select( nId + 1 );
             m_nBitmapListState |= ChangeType::MODIFIED;
 
-            ModifyBitmapHdl(m_xBitmapLB.get());
+            ModifyBitmapHdl(*m_xBitmapLB);
         }
     }
     else
@@ -801,6 +890,19 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"NoLoadedFileDialog"_ustr));
         xBox->run();
     }
+}
+
+VclPtr<VirtualDevice> SvxBitmapTabPage::GetVirtualDevice(BitmapEx aBitmap)
+{
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Point aNull(0, 0);
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+    const Size aSize(aBitmap.GetSizePixel());
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawBitmapEx(aNull, aBitmap);
+
+    return pVDev;
 }
 
 sal_Int32 SvxBitmapTabPage::SearchBitmapList(const GraphicObject& rGraphicObject)
