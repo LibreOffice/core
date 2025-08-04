@@ -168,10 +168,15 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     m_xFindAndReplaceToolbar->connect_clicked(
         LINK(this, QuickFindPanel, FindAndReplaceToolbarClickedHandler));
 
-    m_xSearchFindsList->connect_custom_get_size(
-        LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
-    m_xSearchFindsList->connect_custom_render(LINK(this, QuickFindPanel, SearchFindsListRender));
-    m_xSearchFindsList->set_column_custom_renderer(1, true);
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        m_xSearchFindsList->connect_custom_get_size(
+            LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
+        m_xSearchFindsList->connect_custom_render(
+            LINK(this, QuickFindPanel, SearchFindsListRender));
+        m_xSearchFindsList->set_column_custom_renderer(1, true);
+    }
+
     m_xSearchFindsList->connect_changed(
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
