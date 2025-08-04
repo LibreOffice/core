@@ -76,6 +76,9 @@ public:
     const UINT32  GetVideoWidth() const { return mnFrameWidth; }
     const UINT32  GetVideoHeight() const { return mnFrameHeight; }
 
+    // Error handling
+    void    ShowErrorMessage(PCWSTR format, HRESULT hr);
+
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();

@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <avmedia/mediaitem.hxx>
-#include <avmedia/mediawindow.hxx>
 
 #include "window.hxx"
 #include "player.hxx"
@@ -251,10 +250,6 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
                 }
                 meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
                 ImplLayoutVideoWindow();
-            }
-            else
-            {
-                ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
             }
         }
     }

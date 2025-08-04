@@ -22,13 +22,14 @@
 #include <evcode.h>
 #include <propvarutil.h>
 #include <propkey.h>
+#include <strsafe.h>
+
 // Media Foundation headers
 #include <mfapi.h>
 #include <mfidl.h>
 #include <mfreadwrite.h>
 
 #include <avmedia/mediaitem.hxx>
-#include <avmedia/mediawindow.hxx>
 
 #include "player.hxx"
 #include "framegrabber.hxx"
@@ -135,7 +136,7 @@ void Player::OnMediaPlayerEvent(MFP_EVENT_HEADER* pEventHeader)
         SAL_WARN("avmedia.win",
             "Player::OnMediaPlayerEvent failed with error code: " << pEventHeader->hrEvent);
 
-        ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
+        ShowErrorMessage(L"MediaPlayerEvent error", pEventHeader->hrEvent);
 
         return;
     }
@@ -301,7 +302,7 @@ void Player::OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT* pEvent)
             SAL_WARN("avmedia.win",
                 "Player::OnMediaItemCreated failed with error code: " << hr);
 
-            ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
+            ShowErrorMessage(L"IMFPMediaPlayer::SetMediaItem failed.", hr);
             m_state = Closed;
         }
     }
@@ -328,7 +329,7 @@ void Player::OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT* /*pEvent*/)
         SAL_WARN("avmedia.win",
             "Player::OnMediaItemSet failed with error code: " << hr);
 
-        ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
+        ShowErrorMessage(L"IMFPMediaPlayer::Play failed.", hr);
     }
 }
 
@@ -344,6 +345,18 @@ void Player::OnMediaItemEnded(MFP_PLAYBACK_ENDED_EVENT* /*pEvent*/)
         start();
     else
         m_state = Stopped;
+}
+
+void Player::ShowErrorMessage(PCWSTR format, HRESULT hrErr)
+{
+    HRESULT hr = S_OK;
+    TCHAR pszDest[MAX_PATH];
+    LPCTSTR pszFormat = TEXT("%s (hr=0x%X)");
+    hr = StringCbPrintf(pszDest, sizeof(pszDest), pszFormat, format, hrErr);
+    if (SUCCEEDED(hr))
+    {
+        MessageBox(mnFrameWnd, pszDest, TEXT("Error"), MB_ICONERROR);
+    }
 }
 
 HRESULT Player::InitializeWindow(bool bAddSoundWindow)
@@ -430,7 +443,7 @@ void SAL_CALL Player::start(  )
             SAL_WARN("avmedia.win",
                 "Player::start failed with error code: " << hr);
 
-            ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
+            ShowErrorMessage(L"Error playing this file.", hr);
         }
     }
 }
@@ -562,7 +575,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if (g_pPlayer && (g_bHasVideo || g_bHasAudio) &&
+    if (g_pPlayer && g_bHasAudio &&
         (mbMuted != static_cast<BOOL>(bSet)))
     {
         mbMuted = bSet;
@@ -579,7 +592,7 @@ sal_Bool SAL_CALL Player::isMute(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if (g_pPlayer && (g_bHasVideo || g_bHasAudio))
+    if (g_pPlayer && g_bHasAudio)
     {
         HRESULT hr = g_pPlayer->GetMute(&mbMuted);
         if (FAILED(hr))
@@ -598,7 +611,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 
     mnUnmutedVolume = static_cast< float >( (nVolumeDB / AVMEDIA_DB_RANGE) + 1.0 );
 
-    if ( g_pPlayer && (g_bHasVideo || g_bHasAudio))
+    if (g_pPlayer && g_bHasAudio)
     {
         HRESULT hr = g_pPlayer->SetVolume(mnUnmutedVolume);
         if (FAILED(hr))
@@ -613,7 +626,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if (g_pPlayer && (g_bHasVideo || g_bHasAudio))
+    if (g_pPlayer && g_bHasAudio)
     {
         HRESULT hr = g_pPlayer->GetVolume(&mnUnmutedVolume);
         if (FAILED(hr))
@@ -662,10 +675,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
                     setAutoPlayBack(true);
                 }
             }
-        }
-        else
-        {
-            ::avmedia::MediaWindow::executeFormatErrorBox(nullptr);
         }
     }
 
