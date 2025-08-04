@@ -264,7 +264,8 @@ static rtl_TextEncoding ImplCharSetToSal( BYTE nCharSet )
         switch ( nCP )
         {
             // It is unclear why these two (undefined?) code page numbers are
-            // handled specially here:
+            // handled specially here. They are mentioned briefly in
+            // https://github.com/osfree-project/osfree/blob/165b89a685030c2b875aa0c7c5db420afc8db5f6/docs/dos/dos.txt
             case 1004:  eTextEncoding = RTL_TEXTENCODING_MS_1252; break;
             case 65400: eTextEncoding = RTL_TEXTENCODING_SYMBOL; break;
             default:
