@@ -24,6 +24,8 @@
 #include <rtl/ref.hxx>
 #include <memory>
 #include <optional>
+#include <utility>
+#include <vector>
 
 class SwXTextDocument;
 namespace com::sun::star::lang
