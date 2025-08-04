@@ -301,230 +301,230 @@ namespace slideshow::internal
                                       double                                nPrio,
                                       bool                                  bIsVisible ) const
         {
-//            // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
-//            // in that all the common setup steps here are refactored to Shape (would then
-//            // have to be performed only _once_ per Shape paint).
-//
-//            if( !bIsVisible ||
-//                rUnitBounds.isEmpty() ||
-//                rOrigBounds.isEmpty() ||
-//                rBounds.isEmpty() )
-//            {
-//                // shape is invisible or has zero size, no need to
-//                // update anything.
-//                if( mpCustomSprite )
-//                    mpCustomSprite->hide();
-//
-//                return true;
-//            }
-//
-//
-//            // calc sprite position, size and content transformation
-//            // =====================================================
-//
-//            // the shape transformation for a sprite is always a
-//            // simple scale-up to the nominal shape size. Everything
-//            // else is handled via the sprite transformation
-//            ::basegfx::B2DHomMatrix aNonTranslationalShapeTransformation;
-//            aNonTranslationalShapeTransformation.scale( rOrigBounds.getWidth(),
-//                                                        rOrigBounds.getHeight() );
-//            ::basegfx::B2DHomMatrix aShapeTransformation( aNonTranslationalShapeTransformation );
-//            aShapeTransformation.translate( rOrigBounds.getMinX(),
-//                                            rOrigBounds.getMinY() );
-//
-//            const ::basegfx::B2DHomMatrix aCanvasTransform(
-//                rViewLayer->getSpriteTransformation() );
-//
-//            // area actually needed for the sprite
-//            const ::basegfx::B2DRectangle aSpriteBoundsPixel(
-//                calcUpdateAreaPixel( rUnitBounds,
-//                                     aShapeTransformation,
-//                                     aCanvasTransform,
-//                                     pAttr ) );
-//
-//            // actual area for the shape (without subsetting, but
-//            // including char scaling)
-//            const ::basegfx::B2DRectangle aShapeBoundsPixel(
-//                calcUpdateAreaPixel( ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
-//                                     aShapeTransformation,
-//                                     aCanvasTransform,
-//                                     pAttr ) );
-//
-//            // nominal area for the shape (without subsetting, without
-//            // char scaling). NOTE: to cancel the shape translation,
-//            // contained in rSpriteBoundsPixel, this is _without_ any
-//            // translational component.
-//            const ::basegfx::B2DRectangle aNominalShapeBoundsPixel(
-//                shapeArea2AreaPixel( aCanvasTransform,
-//                                     ::canvas::tools::calcTransformedRectBounds(
-//                                         ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
-//                                         aNonTranslationalShapeTransformation ) ) );
-//
-//            // create (or resize) sprite with sprite's pixel size, if
-//            // not done already
-//            auto aRange = aSpriteBoundsPixel.getRange();
-//            basegfx::B2DSize rSpriteSizePixel(aRange.getX(), aRange.getY());
-//            if( !mpCustomSprite )
-//            {
-//                /* mpSprite = std::make_shared<AnimatedSprite>( mpViewLayer,
-//                                        rSpriteSizePixel,
-//                                        nPrio ); */
-//                vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
-//                mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel));
-//            }
-//            else
-//            {
-//                // TODO(F2): when the sprite _actually_ gets resized,
-//                // content needs a repaint!
-//                mpCustomSprite->resize( rSpriteSizePixel );
-//            }
-//
-//            ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
-//
-//            SAL_INFO("slideshow", "ViewShape::renderSprite(): Rendering sprite " <<
-//                           mpSprite.get() );
-//
-//
-//            // always show the sprite (might have been hidden before)
-//            mpSprite->show();
-//
-//            // determine center of sprite output position in pixel
-//            // (assumption here: all shape transformations have the
-//            // shape center as the pivot point). From that, subtract
-//            // distance of rSpriteBoundsPixel's left, top edge from
-//            // rShapeBoundsPixel's center. This moves the sprite at
-//            // the appropriate output position within the virtual
-//            // rShapeBoundsPixel area.
-//            ::basegfx::B2DPoint aSpritePosPixel( rBounds.getCenter() );
-//            aSpritePosPixel *= aCanvasTransform;
-//            aSpritePosPixel -= aShapeBoundsPixel.getCenter() - aSpriteBoundsPixel.getMinimum();
-//
-//            // the difference between rShapeBoundsPixel and
-//            // rSpriteBoundsPixel upper, left corner is: the offset we
-//            // have to move sprite output to the right, top (to make
-//            // the desired subset content visible at all)
-//            auto aDifference = aSpriteBoundsPixel.getMinimum() - aNominalShapeBoundsPixel.getMinimum();
-//            const basegfx::B2DSize rSpriteCorrectionOffset(aDifference.getX(), aDifference.getY());
-//
-//            // offset added top, left for anti-aliasing (otherwise,
-//            // shapes fully filling the sprite will have anti-aliased
-//            // pixel cut off)
-//            const ::basegfx::B2DSize aAAOffset(
-//                ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
-//                ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE );
-//
-//            // set pixel output offset to sprite: we always leave
-//            // ANTIALIASING_EXTRA_SIZE room atop and to the left, and,
-//            // what's more, for subsetted shapes, we _have_ to cancel
-//            // the effect of the shape renderer outputting the subset
-//            // at its absolute position inside the shape, instead of
-//            // at the origin.
-//            // NOTE: As for now, sprites are always positioned on
-//            // integer pixel positions on screen, have to round to
-//            // nearest integer here, too
-//            mpSprite->setPixelOffset(
-//                aAAOffset - ::basegfx::B2DSize(
-//                    ::basegfx::fround( rSpriteCorrectionOffset.getWidth() ),
-//                    ::basegfx::fround( rSpriteCorrectionOffset.getHeight() ) ) );
-//
-//            // always set sprite position and transformation, since
-//            // they do not relate directly to the update flags
-//            // (e.g. sprite position changes when sprite size changes)
-//            mpSprite->movePixel( aSpritePosPixel );
-//            mpSprite->transform( getSpriteTransformation( basegfx::B2DVector(rSpriteSizePixel.getWidth(), rSpriteSizePixel.getHeight()),
-//                                                          rOrigBounds.getRange(),
-//                                                          pAttr ) );
-//
-//
-//            // process flags
-//            // =============
-//
-//            bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & UpdateFlags::Force) );
-//
-//            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
-//            {
-//                mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-//                                    std::clamp(pAttr->getAlpha(),
-//                                                     0.0,
-//                                                     1.0) :
-//                                    1.0 );
-//            }
-//            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Clip) )
-//            {
-//                if( pAttr && pAttr->isClipValid() )
-//                {
-//                    ::basegfx::B2DPolyPolygon aClipPoly( pAttr->getClip() );
-//
-//                    // extract linear part of canvas view transformation
-//                    // (linear means: without translational components)
-//                    ::basegfx::B2DHomMatrix aViewTransform(
-//                        mpViewLayer->getTransformation() );
-//                    aViewTransform.set( 0, 2, 0.0 );
-//                    aViewTransform.set( 1, 2, 0.0 );
-//
-//                    // make the clip 2*ANTIALIASING_EXTRA_SIZE larger
-//                    // such that it's again centered over the sprite.
-//                    aViewTransform.scale(rSpriteSizePixel.getWidth()/
-//                                         (rSpriteSizePixel.getWidth()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
-//                                         rSpriteSizePixel.getHeight()/
-//                                         (rSpriteSizePixel.getHeight()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
-//
-//                    // transform clip polygon from view to device
-//                    // coordinate space
-//                    aClipPoly.transform( aViewTransform );
-//
-//                    mpSprite->clip( aClipPoly );
-//                }
-//                else
-//                    mpSprite->clip();
-//            }
-//            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Content) )
-//            {
-//                bRedrawRequired = true;
-//
-//                // TODO(P1): maybe provide some appearance change methods at
-//                // the Renderer interface
-//
-//                // force the renderer to be regenerated below, for the
-//                // different attributes to take effect
-//                invalidateRenderer();
-//            }
-//
-//            mbForceUpdate = false;
-//
-//            if( !bRedrawRequired )
-//                return true;
-//
-//
-//            // sprite needs repaint - output to sprite canvas
-//            // ==============================================
-//
-//            ::cppcanvas::CanvasSharedPtr pContentCanvas(mpSprite->getContentCanvas());
-//            cairocanvas::CanvasCustomSprite* pCanvasCustomSprite
-//                = static_cast<cairocanvas::CanvasCustomSprite*>(
-//                    pContentCanvas->getUNOCanvas().get());
-//            cairo::SurfaceSharedPtr pSurface = pCanvasCustomSprite->getSurface();
-//            pSurface = pCanvasCustomSprite->getSurface();
-//
-//            /* return draw( pContentCanvas,
-//                         rMtf,
-//                         pAttr,
-//                         aShapeTransformation,
-//                         nullptr, // clipping is done via Sprite::clip()
-//                         rSubsets ); */
-//
-//            drawinglayer::geometry::ViewInformation2D aViewInformation;
-//            basegfx::B2DHomMatrix aMatrix(rViewLayer->getTransformation());
-//            const ::basegfx::B2DPoint aAAGap(::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
-//                                             ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE);
-//            // Bring the renderable area of the shape to the origin
-//            aMatrix.translate(-aSpriteBoundsPixel.getMinimum() + aAAGap);
-//            aViewInformation.setViewTransformation(aMatrix);
-//            drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
-//                aViewInformation, pSurface->getCairoSurface().get());
-//            aProcessor.process(rContainer);
-//
-//            return true;
+            // TODO(P1): For multiple views, it might pay off to reorg Shape and ViewShape,
+            // in that all the common setup steps here are refactored to Shape (would then
+            // have to be performed only _once_ per Shape paint).
+
+            if( !bIsVisible ||
+                rUnitBounds.isEmpty() ||
+                rOrigBounds.isEmpty() ||
+                rBounds.isEmpty() )
+            {
+                // shape is invisible or has zero size, no need to
+                // update anything.
+                if( mpCustomSprite )
+                    mpCustomSprite->hide();
+
+                return true;
+            }
+
+
+            // calc sprite position, size and content transformation
+            // =====================================================
+
+            // the shape transformation for a sprite is always a
+            // simple scale-up to the nominal shape size. Everything
+            // else is handled via the sprite transformation
+            ::basegfx::B2DHomMatrix aNonTranslationalShapeTransformation;
+            aNonTranslationalShapeTransformation.scale( rOrigBounds.getWidth(),
+                                                        rOrigBounds.getHeight() );
+            ::basegfx::B2DHomMatrix aShapeTransformation( aNonTranslationalShapeTransformation );
+            aShapeTransformation.translate( rOrigBounds.getMinX(),
+                                            rOrigBounds.getMinY() );
+
+            const ::basegfx::B2DHomMatrix aCanvasTransform(
+                rViewLayer->getSpriteTransformation() );
+
+            // area actually needed for the sprite
+            const ::basegfx::B2DRectangle aSpriteBoundsPixel(
+                calcUpdateAreaPixel( rUnitBounds,
+                                     aShapeTransformation,
+                                     aCanvasTransform,
+                                     pAttr ) );
+
+            // actual area for the shape (without subsetting, but
+            // including char scaling)
+            const ::basegfx::B2DRectangle aShapeBoundsPixel(
+                calcUpdateAreaPixel( ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
+                                     aShapeTransformation,
+                                     aCanvasTransform,
+                                     pAttr ) );
+
+            // nominal area for the shape (without subsetting, without
+            // char scaling). NOTE: to cancel the shape translation,
+            // contained in rSpriteBoundsPixel, this is _without_ any
+            // translational component.
+            const ::basegfx::B2DRectangle aNominalShapeBoundsPixel(
+                shapeArea2AreaPixel( aCanvasTransform,
+                                     ::canvas::tools::calcTransformedRectBounds(
+                                         ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
+                                         aNonTranslationalShapeTransformation ) ) );
+
+            // create (or resize) sprite with sprite's pixel size, if
+            // not done already
+            auto aRange = aSpriteBoundsPixel.getRange();
+            basegfx::B2DSize rSpriteSizePixel(aRange.getX(), aRange.getY());
+            if( !mpCustomSprite )
+            {
+                /* mpSprite = std::make_shared<AnimatedSprite>( mpViewLayer,
+                                        rSpriteSizePixel,
+                                        nPrio ); */
+                vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
+                mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel));
+            }
+            else
+            {
+                // TODO(F2): when the sprite _actually_ gets resized,
+                // content needs a repaint!
+                mpCustomSprite->resize( rSpriteSizePixel );
+            }
+
+            ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
+
+            SAL_INFO("slideshow", "ViewShape::renderSprite(): Rendering sprite " <<
+                           mpSprite.get() );
+
+
+            // always show the sprite (might have been hidden before)
+            mpSprite->show();
+
+            // determine center of sprite output position in pixel
+            // (assumption here: all shape transformations have the
+            // shape center as the pivot point). From that, subtract
+            // distance of rSpriteBoundsPixel's left, top edge from
+            // rShapeBoundsPixel's center. This moves the sprite at
+            // the appropriate output position within the virtual
+            // rShapeBoundsPixel area.
+            ::basegfx::B2DPoint aSpritePosPixel( rBounds.getCenter() );
+            aSpritePosPixel *= aCanvasTransform;
+            aSpritePosPixel -= aShapeBoundsPixel.getCenter() - aSpriteBoundsPixel.getMinimum();
+
+            // the difference between rShapeBoundsPixel and
+            // rSpriteBoundsPixel upper, left corner is: the offset we
+            // have to move sprite output to the right, top (to make
+            // the desired subset content visible at all)
+            auto aDifference = aSpriteBoundsPixel.getMinimum() - aNominalShapeBoundsPixel.getMinimum();
+            const basegfx::B2DSize rSpriteCorrectionOffset(aDifference.getX(), aDifference.getY());
+
+            // offset added top, left for anti-aliasing (otherwise,
+            // shapes fully filling the sprite will have anti-aliased
+            // pixel cut off)
+            const ::basegfx::B2DSize aAAOffset(
+                ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
+                ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE );
+
+            // set pixel output offset to sprite: we always leave
+            // ANTIALIASING_EXTRA_SIZE room atop and to the left, and,
+            // what's more, for subsetted shapes, we _have_ to cancel
+            // the effect of the shape renderer outputting the subset
+            // at its absolute position inside the shape, instead of
+            // at the origin.
+            // NOTE: As for now, sprites are always positioned on
+            // integer pixel positions on screen, have to round to
+            // nearest integer here, too
+            mpSprite->setPixelOffset(
+                aAAOffset - ::basegfx::B2DSize(
+                    ::basegfx::fround( rSpriteCorrectionOffset.getWidth() ),
+                    ::basegfx::fround( rSpriteCorrectionOffset.getHeight() ) ) );
+
+            // always set sprite position and transformation, since
+            // they do not relate directly to the update flags
+            // (e.g. sprite position changes when sprite size changes)
+            mpSprite->movePixel( aSpritePosPixel );
+            mpSprite->transform( getSpriteTransformation( basegfx::B2DVector(rSpriteSizePixel.getWidth(), rSpriteSizePixel.getHeight()),
+                                                          rOrigBounds.getRange(),
+                                                          pAttr ) );
+
+
+            // process flags
+            // =============
+
+            bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & UpdateFlags::Force) );
+
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
+            {
+                mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
+                                    std::clamp(pAttr->getAlpha(),
+                                                     0.0,
+                                                     1.0) :
+                                    1.0 );
+            }
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Clip) )
+            {
+                if( pAttr && pAttr->isClipValid() )
+                {
+                    ::basegfx::B2DPolyPolygon aClipPoly( pAttr->getClip() );
+
+                    // extract linear part of canvas view transformation
+                    // (linear means: without translational components)
+                    ::basegfx::B2DHomMatrix aViewTransform(
+                        mpViewLayer->getTransformation() );
+                    aViewTransform.set( 0, 2, 0.0 );
+                    aViewTransform.set( 1, 2, 0.0 );
+
+                    // make the clip 2*ANTIALIASING_EXTRA_SIZE larger
+                    // such that it's again centered over the sprite.
+                    aViewTransform.scale(rSpriteSizePixel.getWidth()/
+                                         (rSpriteSizePixel.getWidth()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE),
+                                         rSpriteSizePixel.getHeight()/
+                                         (rSpriteSizePixel.getHeight()-2*::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE));
+
+                    // transform clip polygon from view to device
+                    // coordinate space
+                    aClipPoly.transform( aViewTransform );
+
+                    mpSprite->clip( aClipPoly );
+                }
+                else
+                    mpSprite->clip();
+            }
+            if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Content) )
+            {
+                bRedrawRequired = true;
+
+                // TODO(P1): maybe provide some appearance change methods at
+                // the Renderer interface
+
+                // force the renderer to be regenerated below, for the
+                // different attributes to take effect
+                invalidateRenderer();
+            }
+
+            mbForceUpdate = false;
+
+            if( !bRedrawRequired )
+                return true;
+
+
+            // sprite needs repaint - output to sprite canvas
+            // ==============================================
+
+            ::cppcanvas::CanvasSharedPtr pContentCanvas(mpSprite->getContentCanvas());
+            cairocanvas::CanvasCustomSprite* pCanvasCustomSprite
+                = static_cast<cairocanvas::CanvasCustomSprite*>(
+                    pContentCanvas->getUNOCanvas().get());
+            cairo::SurfaceSharedPtr pSurface = pCanvasCustomSprite->getSurface();
+            pSurface = pCanvasCustomSprite->getSurface();
+
+            /* return draw( pContentCanvas,
+                         rMtf,
+                         pAttr,
+                         aShapeTransformation,
+                         nullptr, // clipping is done via Sprite::clip()
+                         rSubsets ); */
+
+            drawinglayer::geometry::ViewInformation2D aViewInformation;
+            basegfx::B2DHomMatrix aMatrix(rViewLayer->getTransformation());
+            const ::basegfx::B2DPoint aAAGap(::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE,
+                                             ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE);
+            // Bring the renderable area of the shape to the origin
+            aMatrix.translate(-aSpriteBoundsPixel.getMinimum() + aAAGap);
+            aViewInformation.setViewTransformation(aMatrix);
+            drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
+                aViewInformation, pSurface->getCairoSurface().get());
+            aProcessor.process(rContainer);
+
+            return true;
         }
 
         bool ViewShape::render( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
