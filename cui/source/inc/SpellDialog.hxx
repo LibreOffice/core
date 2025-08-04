@@ -125,7 +125,6 @@ public:
     void            SetDocumentColor(weld::DrawingArea* pDrawingArea);
 };
 
-// class SvxSpellDialog ---------------------------------------------
 class SpellDialogChildWindow;
 
 class SpellDialog : public SfxModelessDialogController
