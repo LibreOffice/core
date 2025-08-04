@@ -323,7 +323,8 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     On some systems, log output can be redirected to other log sinks,
     notably a file provided as a system path and filename via
-    environment variable SAL_LOG_FILE; or to a syslog facility if
+    environment variable SAL_LOG_FILE (appending the process ID if that value ends in a hyphen);
+    or to a syslog facility if
     LibreOffice is suitably built, by setting environment variable
     SAL_LOG_SYSLOG.
 
