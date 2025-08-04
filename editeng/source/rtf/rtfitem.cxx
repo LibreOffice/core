@@ -1829,7 +1829,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             // Calculate the ratio of default TabWidth / Tabs and
             // calculate the corresponding new number.
             // ?? how did one come up with 13 ??
-            sal_uInt16 nTabCount = (SVX_TAB_DEFDIST * 13 ) / sal_uInt16(nValue);
+            int nTabCount = (SVX_TAB_DEFDIST * 13 ) / nValue;
             /*
              cmc, make sure we have at least one, or all hell breaks loose in
              everybody exporters, #i8247#
@@ -1839,7 +1839,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
             // we want Defaulttabs
             SvxTabStopItem aNewTab(nTabCount, sal_uInt16(nValue), SvxTabAdjust::Default, wid);
-            while( nTabCount )
+            while (nTabCount > 0)
                 const_cast<SvxTabStop&>(aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
 
             pAttrPool->SetUserDefaultItem( aNewTab );
