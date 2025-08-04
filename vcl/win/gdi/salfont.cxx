@@ -1033,8 +1033,9 @@ bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontColl
     EnumFontFamiliesExW(getHDC(), &aLogFont,
         SalEnumFontsProcExW, reinterpret_cast<LPARAM>(&aInfo), 0);
 
-    SAL_WARN_IF(nExpectedFontCount != pFontCollection->Count(), "vcl.fonts",
-        "temp font was registered but is not in enumeration: " << rFontFileURL);
+    SAL_WARN_IF(nExpectedFontCount != pFontCollection->Count() && !pFontCollection->FindFontFamily(aFontFamily),
+                "vcl.fonts",
+                "temp font was registered but is not in enumeration: " << rFontFileURL);
 
     return true;
 }
