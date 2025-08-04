@@ -460,13 +460,13 @@ void Parser::handleList(xmlreader::XmlReader& rReader)
             {
                 DriverInfo aDriver;
                 handleEntry(aDriver, rReader);
-                mrDriverList.push_back(aDriver);
+                mrDriverList.push_back(std::move(aDriver));
             }
             else if (name == "entryRange")
             {
                 DriverInfo aDriver;
                 handleEntry(aDriver, rReader);
-                mrDriverList.push_back(aDriver);
+                mrDriverList.push_back(std::move(aDriver));
             }
             else
             {

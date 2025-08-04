@@ -846,7 +846,7 @@ void PaneStyleContainer::ProcessPaneStyle(
             rReadContext.mxCanvas);
     }
 
-    mStyles.push_back(pStyle);
+    mStyles.push_back(std::move(pStyle));
 }
 
 SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) const

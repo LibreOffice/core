@@ -1826,7 +1826,7 @@ void MSWordExportBase::WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd,
 {
     sal_uInt8 nOldTyp = m_nTextTyp;
     m_nTextTyp = nTTyp;
-    auto const pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
+    auto pOldPam = m_pCurPam;       //!! Simply shifting the PaM without restoring should do the job too
     SwNodeOffset nOldStart = m_nCurStart;
     SwNodeOffset nOldEnd = m_nCurEnd;
     SwPaM* pOldEnd = m_pOrigPam;
@@ -1852,7 +1852,7 @@ void MSWordExportBase::WriteSpecialText( SwNodeOffset nStart, SwNodeOffset nEnd,
     m_pTableInfo = std::move(xOldTableInfo);
 
     m_bOutPageDescs = bOldPageDescs;
-    m_pCurPam = pOldPam; // delete Pam
+    m_pCurPam = std::move(pOldPam); // delete Pam
     m_nCurStart = nOldStart;
     m_nCurEnd = nOldEnd;
     m_pOrigPam = pOldEnd;

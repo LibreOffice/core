@@ -609,7 +609,7 @@ void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
         mbReadText = false;
     }
 
-    mrTable.aData[ mrTable.nRowIndex ].push_back( aCell );
+    mrTable.aData[ mrTable.nRowIndex ].push_back(std::move(aCell));
     mrTable.nColumnIndex++;
     if( mrTable.nMaxColumnIndex < mrTable.nColumnIndex )
         mrTable.nMaxColumnIndex = mrTable.nColumnIndex;

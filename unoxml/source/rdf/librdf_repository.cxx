@@ -1382,7 +1382,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
     std::scoped_lock g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
-    const std::shared_ptr<librdf_query> pQuery(
+    std::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, nullptr,
             reinterpret_cast<const unsigned char*> (query.getStr()), nullptr),
         safe_librdf_free_query);
@@ -1391,7 +1391,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
             u"librdf_Repository::querySelect: "
             "librdf_new_query failed"_ustr, *this);
     }
-    const std::shared_ptr<librdf_query_results> pResults(
+    std::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_bindings(pResults.get())) {
@@ -1420,7 +1420,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
     }
 
     return new librdf_QuerySelectResult(this, m_aMutex,
-        pQuery, pResults, names);
+        std::move(pQuery), std::move(pResults), names);
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

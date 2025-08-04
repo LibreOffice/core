@@ -503,7 +503,7 @@ Found findEntity(
                                     }
                                     break;
                                 }
-                                args.push_back(argType);
+                                args.push_back(std::move(argType));
                             }
                             i = j;
                         } while (i != typeNucleus.getLength()

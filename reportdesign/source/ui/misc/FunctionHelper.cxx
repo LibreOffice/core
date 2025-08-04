@@ -135,8 +135,7 @@ const formula::IFunctionDescription* FunctionCategory::getFunction(sal_uInt32 _n
     if ( _nPos >= m_aFunctions.size() && _nPos < m_nFunctionCount )
     {
         uno::Reference< report::meta::XFunctionDescription> xFunctionDescription = m_xCategory->getFunction(_nPos);
-        std::shared_ptr< FunctionDescription > pFunction = m_pFunctionManager->get(xFunctionDescription);
-        m_aFunctions.push_back( pFunction );
+        m_aFunctions.push_back(m_pFunctionManager->get(xFunctionDescription));
     }
     return m_aFunctions[_nPos].get();
 }

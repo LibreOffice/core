@@ -492,9 +492,8 @@ struct NewDonutSeries
     {
         ::std::vector< DataRowPointStyle > aRet;
 
-        DataRowPointStyle aSeriesStyle( DataRowPointStyle::DATA_SERIES
-            , m_xSeries, -1, 1, msStyleName, mnAttachedAxis );
-        aRet.push_back( aSeriesStyle );
+        aRet.emplace_back(DataRowPointStyle::DATA_SERIES
+            , m_xSeries, -1, 1, msStyleName, mnAttachedAxis);
 
         sal_Int32 nPointIndex=0;
         for (auto const& pointStyle : m_aPointStyles)
