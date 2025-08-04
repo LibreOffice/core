@@ -290,7 +290,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
     sal_uInt16 nSaveMaxSize = m_nMaxSize;
 
     m_nMaxSize = cMAXSTACKSIZE - 5;
-    sal_uInt16 nCnt = 0;
+    int nCnt = 0;
     SwTableBoxes aStackOverflows;
     do {
         SwTableBox* pBox = const_cast<SwTableBox*>(m_pLastTableBox);
@@ -309,7 +309,7 @@ bool SwTableCalcPara::CalcWithStackOverflow()
     m_rCalc.SetCalcError( SwCalcError::NONE );
     m_pBoxStack->clear();
 
-    while( !m_rCalc.IsCalcError() && nCnt )
+    while (!m_rCalc.IsCalcError() && nCnt > 0)
     {
         aStackOverflows[ --nCnt ]->GetValue( *this );
         if( IsStackOverflow() && !CalcWithStackOverflow() )
