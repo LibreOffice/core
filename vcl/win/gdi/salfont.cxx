@@ -250,7 +250,6 @@ struct ImplEnumInfo
     vcl::font::PhysicalFontCollection* mpList;
     OUString*           mpName;
     bool                mbPrinter;
-    int                 mnFontCount;
 };
 
 }
@@ -504,9 +503,15 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         rFont.SetStrikeout( STRIKEOUT_NONE );
 }
 
+static sal_IntPtr getNextFontId()
+{
+    static sal_IntPtr id;
+    return ++id;
+}
+
 WinFontFace::WinFontFace(const ENUMLOGFONTEXW& rEnumFont, const NEWTEXTMETRICW& rMetric)
 :   vcl::font::PhysicalFontFace(WinFont2DevFontAttributes(rEnumFont, rMetric)),
-    mnId( 0 ),
+    mnId(getNextFontId()),
     meWinCharSet(rEnumFont.elfLogFont.lfCharSet),
     mnPitchAndFamily(rMetric.tmPitchAndFamily),
     maLogFont(rEnumFont.elfLogFont)
@@ -884,7 +889,6 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
 
         rtl::Reference<WinFontFace> pData
             = new WinFontFace(*reinterpret_cast<ENUMLOGFONTEXW const*>(lpelfe), *pMetric);
-        pData->SetFontId( sal_IntPtr( pInfo->mnFontCount++ ) );
 
         pInfo->mpList->Add( pData.get() );
         SAL_INFO("vcl.fonts", "SalEnumFontsProcExW: font added: " << pData->GetFamilyName() << " " << pData->GetStyleName());
@@ -1019,9 +1023,8 @@ bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontColl
     ImplEnumInfo aInfo{ .mhDC = getHDC(),
                         .mpList = pFontCollection,
                         .mpName = &aFontFamily,
-                        .mbPrinter = mbPrinter,
-                        .mnFontCount = pFontCollection->Count() };
-    const int nExpectedFontCount = aInfo.mnFontCount + nFonts;
+                        .mbPrinter = mbPrinter };
+    const int nExpectedFontCount = pFontCollection->Count() + nFonts;
 
     LOGFONTW aLogFont = { .lfCharSet = DEFAULT_CHARSET };
 
@@ -1080,8 +1083,7 @@ void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCol
     ImplEnumInfo aInfo{ .mhDC = getHDC(),
                         .mpList = pFontCollection,
                         .mpName = nullptr,
-                        .mbPrinter = mbPrinter,
-                        .mnFontCount = 0 };
+                        .mbPrinter = mbPrinter };
 
     LOGFONTW aLogFont = { .lfCharSet = DEFAULT_CHARSET };
 

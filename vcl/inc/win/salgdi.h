@@ -67,7 +67,6 @@ public:
 
     rtl::Reference<LogicalFontInstance> CreateFontInstance( const vcl::font::FontSelectPattern& ) const override;
     sal_IntPtr              GetFontId() const override;
-    void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
 
     BYTE                    GetCharSet() const          { return meWinCharSet; }
     BYTE                    GetPitchAndFamily() const   { return mnPitchAndFamily; }
