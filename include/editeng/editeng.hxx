@@ -489,7 +489,7 @@ public:
     SAL_DLLPRIVATE void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     SAL_DLLPRIVATE void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper);
+    virtual void    ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
     virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );

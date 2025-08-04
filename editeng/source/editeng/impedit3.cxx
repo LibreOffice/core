@@ -96,6 +96,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/color/bcolormodifier.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 #include <unicode/uchar.h>
 
@@ -105,8 +107,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 constexpr OUString CH_HYPH = u"-"_ustr;
-
-constexpr tools::Long WRONG_SHOW_MIN = 5;
 
 #if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
 bool ImpEditEngine::bDebugPaint = false;
@@ -157,92 +157,6 @@ AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar )
         {
             return ( ( 0x3040 <= cChar ) && ( 0x3100 > cChar ) ) ? AsianCompressionFlags::Kana : AsianCompressionFlags::Normal;
         }
-    }
-}
-
-static void lcl_DrawRedLines( OutputDevice& rOutDev,
-                              tools::Long nFontHeight,
-                              const Point& rPoint,
-                              size_t nIndex,
-                              size_t nMaxEnd,
-                              KernArraySpan pDXArray,
-                              WrongList const * pWrongs,
-                              Degree10 nOrientation,
-                              const Point& rOrigin,
-                              bool bVertical,
-                              bool bIsRightToLeft )
-{
-    // But only if font is not too small...
-    tools::Long nHeight = rOutDev.LogicToPixel(Size(0, nFontHeight)).Height();
-    if (WRONG_SHOW_MIN >= nHeight)
-        return;
-
-    size_t nEnd, nStart = nIndex;
-    bool bWrong = pWrongs->NextWrong(nStart, nEnd);
-
-    while (bWrong)
-    {
-        if (nStart >= nMaxEnd)
-            break;
-
-        if (nStart < nIndex)  // Corrected
-            nStart = nIndex;
-
-        if (nEnd > nMaxEnd)
-            nEnd = nMaxEnd;
-
-        Point aPoint1(rPoint);
-        if (bVertical)
-        {
-            // VCL doesn't know that the text is vertical, and is manipulating
-            // the positions a little bit in y direction...
-            tools::Long nOnePixel = rOutDev.PixelToLogic(Size(0, 1)).Height();
-            tools::Long nCorrect = 2 * nOnePixel;
-            aPoint1.AdjustY(-nCorrect);
-            aPoint1.AdjustX(-nCorrect);
-        }
-        if (nStart > nIndex)
-        {
-            if (!bVertical)
-            {
-                // since for RTL portions rPoint is on the visual right end of the portion
-                // (i.e. at the start of the first RTL char) we need to subtract the offset
-                // for RTL portions...
-                aPoint1.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[nStart - nIndex - 1]);
-            }
-            else
-                aPoint1.AdjustY(pDXArray[nStart - nIndex - 1]);
-        }
-        Point aPoint2(rPoint);
-        assert(nEnd > nIndex && "RedLine: aPnt2?");
-        if (!bVertical)
-        {
-            // since for RTL portions rPoint is on the visual right end of the portion
-            // (i.e. at the start of the first RTL char) we need to subtract the offset
-            // for RTL portions...
-            aPoint2.AdjustX((bIsRightToLeft ? -1 : 1) * pDXArray[nEnd - nIndex - 1]);
-        }
-        else
-        {
-            aPoint2.AdjustY(pDXArray[nEnd - nIndex - 1]);
-        }
-
-        if (nOrientation)
-        {
-            rOrigin.RotateAround(aPoint1, nOrientation);
-            rOrigin.RotateAround(aPoint2, nOrientation);
-        }
-
-        {
-            vcl::ScopedAntialiasing a(rOutDev, true);
-            rOutDev.DrawWaveLine(aPoint1, aPoint2);
-        }
-
-        nStart = nEnd + 1;
-        if (nEnd < nMaxEnd)
-            bWrong = pWrongs->NextWrong(nStart, nEnd);
-        else
-            bWrong = false;
     }
 }
 
@@ -3361,65 +3275,75 @@ Point ImpEditEngine::MoveToNextLine(
     return rMovePos - aOld;
 }
 
-void ImpEditEngine::DrawText_ToPosition( OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
+void ImpEditEngine::DrawText_ToPosition(
+    OutputDevice& rOutDev, const Point& rStartPos, Degree10 nOrientation )
 {
-    if( rOutDev.GetConnectMetaFile() )
-        rOutDev.Push();
-
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
-    tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
-    Point aStartPos( rStartPos );
+    const tools::Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
 
+    // extract Primitives
+    TextHierarchyBreakup aHelper;
+    StripAllPortions(rOutDev, aBigRect, Point(), aHelper);
+
+    if (aHelper.getTextPortionPrimitives().empty())
+        // no Primitives, done
+        return;
+
+    // get content
+    drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
+
+    // calculate StartPos
+    Point aStartPos( rStartPos );
     if ( IsEffectivelyVertical() )
     {
         aStartPos.AdjustX(GetPaperSize().Width() );
         rStartPos.RotateAround(aStartPos, nOrientation);
     }
 
-    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
+    basegfx::B2DHomMatrix aTransform;
 
-    if (bUsePrimitives)
+    if (0_deg10 != nOrientation)
     {
-        // extract Primitives.
-        // Do not use Orientation, that will be added below as transformation
-        TextHierarchyBreakup aHelper;
-        PaintOrStrip(rOutDev, aBigRect, aStartPos, 0_deg10, &aHelper);
-
-        if (aHelper.getTextPortionPrimitives().empty())
-            // no Primitives, done
-            return;
-
-        // create ViewInformation2D based on target OutputDevice
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
-
-        // get content
-        drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
-
-        if (0_deg10 != nOrientation)
-        {
-            // if we have an Orientation, add rotation. Note that input value is
-            // 10th degree and wrong oriented for a right-hand coordinate system (sigh)
-            const double fAngle(-toRadians(nOrientation));
-            aContent = drawinglayer::primitive2d::Primitive2DContainer{
-                new drawinglayer::primitive2d::TransformPrimitive2D(
-                    basegfx::utils::createRotateAroundPoint(aStartPos.X(), aStartPos.Y(), fAngle),
-                    std::move(aContent))};
-        }
-
-        // create PrimitiveProcessor and render to target
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
-        xProcessor->process(aContent);
-    }
-    else
-    {
-        PaintOrStrip(rOutDev, aBigRect, aStartPos, nOrientation);
+        // if we have an Orientation, add rotation. Note that input value is
+        // 10th degree and wrong oriented for a right-hand coordinate system (sigh)
+        // add rotation around (0, 0) before translation to StartPos
+        const double fAngle(-toRadians(nOrientation));
+        aTransform = basegfx::utils::createRotateB2DHomMatrix(fAngle);
     }
 
-    if (rOutDev.GetConnectMetaFile())
-        rOutDev.Pop();
+    if (0 != aStartPos.X() || 0 != aStartPos.Y())
+    {
+        // translate by aStartPos
+        aTransform *= basegfx::utils::createTranslateB2DHomMatrix(aStartPos.X(), aStartPos.Y());
+    }
+
+    if (!aTransform.isIdentity())
+    {
+        // embed to transformation
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                aTransform,
+                std::move(aContent))};
+    }
+
+    static bool bBlendForTest(false);
+    if(bBlendForTest)
+    {
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(aContent),
+                std::make_shared<basegfx::BColorModifier_interpolate>(COL_LIGHTRED.getBColor(), 0.5)) };
+    }
+
+    // create ViewInformation2D based on target OutputDevice
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
+
+    // create PrimitiveProcessor and render to target
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
+    xProcessor->process(aContent);
 }
 
 void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bHardClip )
@@ -3429,11 +3353,43 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
         DumpData(false);
 #endif
 
-    // Align to the pixel boundary, so that it becomes exactly the same
-    // as Paint ()
-    tools::Rectangle aOutRect( rOutDev.LogicToPixel( rOutRect ) );
-    aOutRect = rOutDev.PixelToLogic( aOutRect );
+    // get aOutRect and align to the pixel boundary, so that it
+    // becomes exactly the same as Paint()
+    const tools::Rectangle aOutRect(rOutDev.PixelToLogic(rOutDev.LogicToPixel(rOutRect)));
+    const tools::Rectangle aClipRect(0, 0, aOutRect.GetWidth(), aOutRect.GetHeight());
 
+    // extract Primitives
+    TextHierarchyBreakup aHelper;
+    StripAllPortions(rOutDev, aClipRect, Point(), aHelper);
+
+    if (aHelper.getTextPortionPrimitives().empty())
+        // no Primitives, done
+        return;
+
+    // create ViewInformation2D based on target OutputDevice
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
+
+    // get content and it's range, plus ClipRange
+    drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
+    const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
+    const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aClipRect));
+
+    if (!aContentRange.overlaps(aClipRange))
+        // no overlap, nothing visible
+        return;
+
+    if (bHardClip && !aClipRange.isInside(aContentRange))
+    {
+        // not completely inside aClipRange and clipping requested
+        // Embed to MaskPrimitive2D
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
+                std::move(aContent))};
+    }
+
+    // calculate StartPos
     Point aStartPos;
     if ( !IsEffectivelyVertical() )
     {
@@ -3446,127 +3402,51 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
         aStartPos.setY( aOutRect.Top() - rStartDocPos.X() );
     }
 
-    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
-
-    if (bUsePrimitives)
+    if (0 != aStartPos.X() || 0 != aStartPos.Y())
     {
-        // extract Primitives
-        TextHierarchyBreakup aHelper;
-        PaintOrStrip(rOutDev, aOutRect, aStartPos, 0_deg10, &aHelper);
-
-        if (aHelper.getTextPortionPrimitives().empty())
-            // no Primitives, done
-            return;
-
-        // create ViewInformation2D based on target OutputDevice
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        aViewInformation2D.setViewTransformation(rOutDev.GetViewTransformation());
-        const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aOutRect));
-        aViewInformation2D.setViewport(aClipRange);
-
-        // get content and it's range
-        drawinglayer::primitive2d::Primitive2DContainer aContent(aHelper.getTextPortionPrimitives());
-        const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
-
-        if (!aContentRange.overlaps(aClipRange))
-            // no overlap, nothing visible
-            return;
-
-        if (bHardClip && !aClipRange.isInside(aContentRange))
-        {
-            // not completely inside aClipRange and clipping requested
-            // Embed to MaskPrimitive2D
-            aContent = drawinglayer::primitive2d::Primitive2DContainer{
-                new drawinglayer::primitive2d::MaskPrimitive2D(
-                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
-                    std::move(aContent))};
-        }
-
-        // create PrimitiveProcessor and render to target
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
-        xProcessor->process(aContent);
+        // embed to StartPos translation
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createTranslateB2DHomMatrix(aStartPos.X(), aStartPos.Y()),
+                std::move(aContent))};
     }
-    else
+
+    static bool bBlendForTest(false);
+    if(bBlendForTest)
     {
-        bool bClipRegion = rOutDev.IsClipRegion();
-        bool bMetafile = rOutDev.GetConnectMetaFile();
-        vcl::Region aOldRegion = rOutDev.GetClipRegion();
-
-        // If one existed => intersection!
-        // Use Push/pop for creating the Meta file
-        if ( bMetafile )
-            rOutDev.Push();
-
-        // Always use the Intersect method, it is a must for Metafile!
-        if ( bHardClip )
-        {
-            // Clip only if necessary...
-            if (!IsFormatted())
-                FormatDoc();
-            tools::Long nTextWidth = !IsEffectivelyVertical() ? CalcTextWidth(true) : GetTextHeight();
-            if ( rStartDocPos.X() || rStartDocPos.Y() ||
-                ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
-                ( rOutRect.GetWidth() < nTextWidth ) )
-            {
-                // Some printer drivers cause problems if characters graze the
-                // ClipRegion, therefore rather add a pixel more ...
-                tools::Rectangle aClipRect( aOutRect );
-                if ( rOutDev.GetOutDevType() == OUTDEV_PRINTER )
-                {
-                    Size aPixSz( 1, 0 );
-                    aPixSz = rOutDev.PixelToLogic( aPixSz );
-                    aClipRect.AdjustRight(aPixSz.Width() );
-                    aClipRect.AdjustBottom(aPixSz.Width() );
-                }
-                rOutDev.IntersectClipRegion( aClipRect );
-            }
-        }
-
-        PaintOrStrip(rOutDev, aOutRect, aStartPos);
-
-        if ( bMetafile )
-            rOutDev.Pop();
-        else if ( bClipRegion )
-            rOutDev.SetClipRegion( aOldRegion );
-        else
-            rOutDev.SetClipRegion();
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(aContent),
+                std::make_shared<basegfx::BColorModifier_interpolate>(COL_LIGHTRED.getBColor(), 0.5)) };
     }
+
+    // create PrimitiveProcessor and render to target
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(rOutDev, aViewInformation2D));
+    xProcessor->process(aContent);
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
-void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, Degree10 nOrientation, StripPortionsHelper* pStripPortionsHelper)
+void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, StripPortionsHelper& rStripPortionsHelper)
 {
-    if ( !IsUpdateLayout() && !pStripPortionsHelper )
+    if ( !IsUpdateLayout() )
         return;
 
     if ( !IsFormatted() )
         FormatDoc();
 
-    tools::Long nFirstVisXPos = - rOutDev.GetMapMode().GetOrigin().X();
-    tools::Long nFirstVisYPos = - rOutDev.GetMapMode().GetOrigin().Y();
-
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont = GetParaPortions().getRef(0).GetNode()->GetCharAttribs().GetDefFont();
-    vcl::PDFExtOutDevData* const pPDFExtOutDevData = dynamic_cast< vcl::PDFExtOutDevData* >( rOutDev.GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
     // other information is missing, and since the whole object is shown anyway
     // un-scrolled.
     // The rectangle is infinite.
     const Point aOrigin( aStartPos );
-
-    // #110496# Added some more optional metafile comments. This
-    // change: factored out some duplicated code.
-    GDIMetaFile* pMtf = rOutDev.GetConnectMetaFile();
-    const bool bMetafileValid( pMtf != nullptr );
-
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
-
     sal_Int16 nColumn = 0;
 
     // Over all the paragraphs...
-
     for (sal_Int32 nParaPortion = 0; nParaPortion < GetParaPortions().Count(); nParaPortion++)
     {
         ParaPortion const& rParaPortion = GetParaPortions().getRef(nParaPortion);
@@ -3574,9 +3454,6 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
         // Invisible Portions may be invalid.
         if (rParaPortion.IsVisible() && rParaPortion.IsInvalid())
             return;
-
-        if ( pPDFExtOutDevData )
-            pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
 
         const tools::Long nParaHeight = rParaPortion.GetHeight();
         if (rParaPortion.IsVisible() && (
@@ -3621,13 +3498,13 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
 
                     // Why not just also call when stripping portions? This will give the correct values
                     // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
-                    // PaintOrStripBullet correctly; exactly what GetEditEnginePtr()->ProcessFirstLineOfParagraph
+                    // StripBullet correctly; exactly what GetEditEnginePtr()->ProcessFirstLineOfParagraph
                     // does, too. No change for not-layouting (painting).
                     if(0 == nLine) // && !bStripOnly)
                     {
                         Point aLineStart(aStartPos);
                         adjustYDirectionAware(aLineStart, -nLineHeight);
-                        GetEditEnginePtr()->ProcessFirstLineOfParagraph(nParaPortion, aLineStart, aOrigin, nOrientation, rOutDev, pStripPortionsHelper);//, rDrawPortion, rDrawBullet);
+                        GetEditEnginePtr()->ProcessFirstLineOfParagraph(nParaPortion, aLineStart, /*aOrigin, nOrientation,*/ rOutDev, rStripPortionsHelper);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib(nParaPortion, EE_PARA_BULLETSTATE);
@@ -3670,29 +3547,26 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                 SeekCursor(rParaPortion.GetNode(), nIndex, aTmpFont, &rOutDev);
 
                                 const auto* pRuby = static_cast<const SvxRubyItem*>(pRubyAttr->GetItem());
-                                if (pStripPortionsHelper)
-                                {
-                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
-                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+                                const bool bEndOfLine(nPortion == pLine->GetEndPortion());
+                                const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
-                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
-                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
+                                const Color aOverlineColor(rOutDev.GetOverlineColor());
+                                const Color aTextLineColor(rOutDev.GetTextLineColor());
 
-                                    Point aRubyPos = aTmpPos;
-                                    aRubyPos.AdjustX(pRubyInfo->nXOffset);
-                                    aRubyPos.AdjustY(-pRubyInfo->nYOffset);
+                                Point aRubyPos = aTmpPos;
+                                aRubyPos.AdjustX(pRubyInfo->nXOffset);
+                                aRubyPos.AdjustY(-pRubyInfo->nYOffset);
 
-                                    auto nPrevSz = aTmpFont.GetFontSize();
-                                    aTmpFont.SetFontSize(nPrevSz / 2);
+                                auto nPrevSz = aTmpFont.GetFontSize();
+                                aTmpFont.SetFontSize(nPrevSz / 2);
 
-                                    const DrawPortionInfo aInfo(
-                                        aRubyPos, pRuby->GetText(), 0, pRuby->GetText().getLength(),
-                                        {}, {}, aTmpFont, nParaPortion, 0, nullptr, nullptr,
-                                        bEndOfLine, bEndOfParagraph, false, nullptr, aOverlineColor,
-                                        aTextLineColor);
-                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
-                                    aTmpFont.SetFontSize(nPrevSz);
-                                }
+                                const DrawPortionInfo aInfo(
+                                    aRubyPos, pRuby->GetText(), 0, pRuby->GetText().getLength(),
+                                    {}, {}, aTmpFont, nParaPortion, 0, nullptr, nullptr,
+                                    bEndOfLine, bEndOfParagraph, false, nullptr, aOverlineColor,
+                                    aTextLineColor);
+                                rStripPortionsHelper.processDrawPortionInfo(aInfo);
+                                aTmpFont.SetFontSize(nPrevSz);
                             }
                         }
 
@@ -3704,8 +3578,6 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                             {
                                 SeekCursor(rParaPortion.GetNode(), nIndex + 1, aTmpFont, &rOutDev);
 
-                                bool bDrawFrame = false;
-
                                 if ( ( rTextPortion.GetKind() == PortionKind::FIELD ) && !aTmpFont.IsTransparent() &&
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
                                      ( IsAutoColorEnabled() && ( rOutDev.GetOutDevType() != OUTDEV_PRINTER ) ) )
@@ -3713,7 +3585,6 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     aTmpFont.SetTransparent( true );
                                     rOutDev.SetFillColor();
                                     rOutDev.SetLineColor( GetAutoColor() );
-                                    bDrawFrame = true;
                                 }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -3850,7 +3721,7 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     //It is not perfect, it still use lineBreaksList, so it won’t seek
                                     //word ends to wrap text there, but it would be difficult to change
                                     //this due to needed adaptations in EditEngine
-                                    if (pStripPortionsHelper && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
+                                    if (!bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty())
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
@@ -3916,19 +3787,6 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen,
                                         &aTmpDXArray );
                                     pDXArray = KernArraySpan(aTmpDXArray);
-
-                                    // add a meta file comment if we record to a metafile
-                                    if( !pStripPortionsHelper && bMetafileValid )
-                                    {
-                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
-                                        if( pFieldItem )
-                                        {
-                                            const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                            if( pFieldData )
-                                                pMtf->AddAction( pFieldData->createBeginComment() );
-                                        }
-                                    }
-
                                 }
                                 else if ( rTextPortion.GetKind() == PortionKind::HYPHENATOR )
                                 {
@@ -3945,8 +3803,6 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     pDXArray = aTmpDXArray;
                                 }
 
-                                tools::Long nTxtWidth = rTextPortion.GetSize().Width();
-
                                 Point aOutPos( aTmpPos );
                                 Point aRedLineTmpPos = aTmpPos;
                                 // In RTL portions spell markup pos should be at the start of the
@@ -3954,298 +3810,104 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                 if (rTextPortion.IsRightToLeft())
                                     aRedLineTmpPos.AdjustX(rTextPortion.GetSize().Width() );
 
-                                if (pStripPortionsHelper)
+                                EEngineData::WrongSpellVector aWrongSpellVector;
+
+                                if(GetStatus().DoOnlineSpelling() && rTextPortion.GetLen())
                                 {
-                                    EEngineData::WrongSpellVector aWrongSpellVector;
+                                    WrongList* pWrongs = rParaPortion.GetNode()->GetWrongList();
 
-                                    if(GetStatus().DoOnlineSpelling() && rTextPortion.GetLen())
+                                    if(pWrongs && !pWrongs->empty())
                                     {
-                                        WrongList* pWrongs = rParaPortion.GetNode()->GetWrongList();
+                                        size_t nStart = nIndex, nEnd = 0;
+                                        bool bWrong = pWrongs->NextWrong(nStart, nEnd);
+                                        const size_t nMaxEnd(nIndex + rTextPortion.GetLen());
 
-                                        if(pWrongs && !pWrongs->empty())
+                                        while(bWrong)
                                         {
-                                            size_t nStart = nIndex, nEnd = 0;
-                                            bool bWrong = pWrongs->NextWrong(nStart, nEnd);
-                                            const size_t nMaxEnd(nIndex + rTextPortion.GetLen());
-
-                                            while(bWrong)
+                                            if(nStart >= nMaxEnd)
                                             {
-                                                if(nStart >= nMaxEnd)
-                                                {
-                                                    break;
-                                                }
+                                                break;
+                                            }
 
-                                                if(nStart < o3tl::make_unsigned(nIndex))
-                                                {
-                                                    nStart = nIndex;
-                                                }
+                                            if(nStart < o3tl::make_unsigned(nIndex))
+                                            {
+                                                nStart = nIndex;
+                                            }
 
-                                                if(nEnd > nMaxEnd)
-                                                {
-                                                    nEnd = nMaxEnd;
-                                                }
+                                            if(nEnd > nMaxEnd)
+                                            {
+                                                nEnd = nMaxEnd;
+                                            }
 
-                                                // add to vector
-                                                aWrongSpellVector.emplace_back(nStart, nEnd);
+                                            // add to vector
+                                            aWrongSpellVector.emplace_back(nStart, nEnd);
 
-                                                // goto next index
-                                                nStart = nEnd + 1;
+                                            // goto next index
+                                            nStart = nEnd + 1;
 
-                                                if(nEnd < nMaxEnd)
-                                                {
-                                                    bWrong = pWrongs->NextWrong(nStart, nEnd);
-                                                }
-                                                else
-                                                {
-                                                    bWrong = false;
-                                                }
+                                            if(nEnd < nMaxEnd)
+                                            {
+                                                bWrong = pWrongs->NextWrong(nStart, nEnd);
+                                            }
+                                            else
+                                            {
+                                                bWrong = false;
                                             }
                                         }
-                                    }
-
-                                    const SvxFieldData* pFieldData = nullptr;
-
-                                    if(PortionKind::FIELD == rTextPortion.GetKind())
-                                    {
-                                        const EditCharAttrib* pAttr = rParaPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
-
-                                        if(pFieldItem)
-                                        {
-                                            pFieldData = pFieldItem->GetField();
-                                        }
-                                    }
-
-                                    // support for EOC, EOW, EOS TEXT comments. To support that,
-                                    // the locale is needed. With the locale and a XBreakIterator it is
-                                    // possible to re-create the text marking info on primitive level
-                                    const lang::Locale aLocale(GetLocale(EditPaM(rParaPortion.GetNode(), nIndex + 1)));
-
-                                    // create EOL and EOP bools
-                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
-                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
-
-                                    // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
-                                    // consequence, but also already set at rOutDev)
-                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
-
-                                    // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
-                                    // consequence, but also already set at rOutDev)
-                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
-
-                                    // Unicode code points conversion according to ctl text numeral setting
-                                    aText = convertDigits(aText, nTextStart, nTextLen,
-                                        ImplCalcDigitLang(aTmpFont.GetLanguage()));
-
-                                    // StripPortions() data callback
-                                    const DrawPortionInfo aInfo(
-                                        aOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray,
-                                        aTmpFont, nParaPortion, rTextPortion.GetRightToLeftLevel(),
-                                        !aWrongSpellVector.empty() ? &aWrongSpellVector : nullptr,
-                                        pFieldData,
-                                        bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
-                                        &aLocale,
-                                        aOverlineColor,
-                                        aTextLineColor);
-                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
-
-                                    // #108052# remember that EOP is written already for this ParaPortion
-                                    if(bEndOfParagraph)
-                                    {
-                                        bEndOfParagraphWritten = true;
-                                    }
-                                }
-                                else
-                                {
-                                    short nEsc = aTmpFont.GetEscapement();
-                                    if ( nOrientation )
-                                    {
-                                        // In case of high/low do it yourself:
-                                        if ( aTmpFont.GetEscapement() )
-                                        {
-                                            tools::Long nDiff = aTmpFont.GetFontSize().Height() * aTmpFont.GetEscapement() / 100L;
-                                            adjustYDirectionAware(aOutPos, -nDiff);
-                                            aRedLineTmpPos = aOutPos;
-                                            aTmpFont.SetEscapement( 0 );
-                                        }
-
-                                        aOrigin.RotateAround(aOutPos, nOrientation);
-                                        aTmpFont.SetOrientation( aTmpFont.GetOrientation()+nOrientation );
-                                        aTmpFont.SetPhysFont(rOutDev);
-
-                                    }
-
-                                    // Take only what begins in the visible range:
-                                    // Important, because of a bug in some graphic cards
-                                    // when transparent font, output when negative
-                                    if ( nOrientation || ( !IsEffectivelyVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
-                                            || ( IsEffectivelyVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
-                                    {
-                                        if ( nEsc && ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) )
-                                        {
-                                            // Paint the high/low without underline,
-                                            // Display the Underline on the
-                                            // base line of the original font height...
-                                            // But only if there was something underlined before!
-                                            bool bSpecialUnderline = false;
-                                            EditCharAttrib* pPrev = rParaPortion.GetNode()->GetCharAttribs().FindAttrib( EE_CHAR_ESCAPEMENT, nIndex );
-                                            if ( pPrev )
-                                            {
-                                                SvxFont aDummy;
-                                                // Underscore in front?
-                                                if ( pPrev->GetStart() )
-                                                {
-                                                    SeekCursor( rParaPortion.GetNode(), pPrev->GetStart(), aDummy );
-                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
-                                                        bSpecialUnderline = true;
-                                                }
-                                                if ( !bSpecialUnderline && ( pPrev->GetEnd() < rParaPortion.GetNode()->Len() ) )
-                                                {
-                                                    SeekCursor( rParaPortion.GetNode(), pPrev->GetEnd()+1, aDummy );
-                                                    if ( aDummy.GetUnderline() != LINESTYLE_NONE )
-                                                        bSpecialUnderline = true;
-                                                }
-                                            }
-                                            if ( bSpecialUnderline )
-                                            {
-                                                Size aSz = aTmpFont.GetPhysTxtSize( &rOutDev, aText, nTextStart, nTextLen );
-                                                sal_uInt8 nProp = aTmpFont.GetPropr();
-                                                aTmpFont.SetEscapement( 0 );
-                                                aTmpFont.SetPropr( 100 );
-                                                aTmpFont.SetPhysFont(rOutDev);
-                                                OUStringBuffer aBlanks(nTextLen);
-                                                comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
-                                                Point aUnderlinePos( aOutPos );
-                                                if ( nOrientation )
-                                                {
-                                                    aUnderlinePos = aTmpPos;
-                                                    aOrigin.RotateAround(aUnderlinePos, nOrientation);
-                                                }
-                                                rOutDev.DrawStretchText( aUnderlinePos, aSz.Width(), aBlanks.makeStringAndClear(), 0, nTextLen );
-
-                                                aTmpFont.SetUnderline( LINESTYLE_NONE );
-                                                if ( !nOrientation )
-                                                    aTmpFont.SetEscapement( nEsc );
-                                                aTmpFont.SetPropr( nProp );
-                                                aTmpFont.SetPhysFont(rOutDev);
-                                            }
-                                        }
-                                        Point aRealOutPos( aOutPos );
-                                        if ( ( rTextPortion.GetKind() == PortionKind::TEXT )
-                                               && rTextPortion.GetExtraInfos() && rTextPortion.GetExtraInfos()->bCompressed
-                                               && rTextPortion.GetExtraInfos()->bFirstCharIsRightPunctuation )
-                                        {
-                                            aRealOutPos.AdjustX(rTextPortion.GetExtraInfos()->nPortionOffsetX );
-                                        }
-
-                                        // RTL portions with (#i37132#)
-                                        // compressed blank should not paint this blank:
-                                        if ( rTextPortion.IsRightToLeft() && nTextLen >= 2 &&
-                                             pDXArray[ nTextLen - 1 ] ==
-                                             pDXArray[ nTextLen - 2 ] &&
-                                             ' ' == aText[nTextStart + nTextLen - 1] )
-                                            --nTextLen;
-
-                                        // PDF export:
-                                        const SvxFieldData* pFieldData = nullptr;
-                                        if (pPDFExtOutDevData)
-                                        {
-                                            if (rTextPortion.GetKind() == PortionKind::FIELD)
-                                            {
-                                                const EditCharAttrib* pAttr = rParaPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                                const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
-                                                if (pFieldItem)
-                                                {
-                                                    pFieldData = pFieldItem->GetField();
-                                                    auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData);
-                                                    if (pUrlField)
-                                                        if (pPDFExtOutDevData->GetIsExportTaggedPDF())
-                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Link, u"Link"_ustr);
-                                                }
-                                            }
-                                        }
-
-                                        // output directly
-                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray );
-
-                                        if ( bDrawFrame )
-                                        {
-                                            Point aTopLeft( aTmpPos );
-                                            aTopLeft.AdjustY( -(pLine->GetMaxAscent()) );
-                                            if ( nOrientation )
-                                                aOrigin.RotateAround(aTopLeft, nOrientation);
-                                            tools::Rectangle aRect( aTopLeft, rTextPortion.GetSize() );
-                                            rOutDev.DrawRect( aRect );
-                                        }
-
-                                        // PDF export:
-                                        if (pPDFExtOutDevData)
-                                        {
-                                            if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData))
-                                            {
-                                                Point aTopLeft(aTmpPos);
-                                                aTopLeft.AdjustY(-(pLine->GetMaxAscent()));
-
-                                                tools::Rectangle aRect(aTopLeft, rTextPortion.GetSize());
-                                                vcl::PDFExtOutDevBookmarkEntry aBookmark;
-                                                aBookmark.nLinkId = pPDFExtOutDevData->CreateLink(aRect, pUrlField->GetName());
-                                                aBookmark.aBookmark = pUrlField->GetURL();
-                                                std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
-                                                rBookmarks.push_back(aBookmark);
-
-                                                if (pPDFExtOutDevData->GetIsExportTaggedPDF())
-                                                {
-                                                    pPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::LinkAnnotation, aBookmark.nLinkId);
-                                                    pPDFExtOutDevData->EndStructureElement();
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    const WrongList* const pWrongList = rParaPortion.GetNode()->GetWrongList();
-                                    if ( GetStatus().DoOnlineSpelling() && pWrongList && !pWrongList->empty() && rTextPortion.GetLen() )
-                                    {
-                                        {//#105750# adjust LinePos for superscript or subscript text
-                                            short _nEsc = aTmpFont.GetEscapement();
-                                            if( _nEsc )
-                                            {
-                                                tools::Long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100L;
-                                                adjustYDirectionAware(aRedLineTmpPos, -nShift);
-                                            }
-                                        }
-                                        rOutDev.Push(vcl::PushFlags::LINECOLOR);
-                                        rOutDev.SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
-                                        lcl_DrawRedLines(rOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos,
-                                                         static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(),
-                                                         pDXArray, rParaPortion.GetNode()->GetWrongList(), nOrientation,
-                                                         aOrigin, IsEffectivelyVertical(), rTextPortion.IsRightToLeft());
-                                        rOutDev.Pop();
                                     }
                                 }
 
-                                rOutDev.Pop();
+                                const SvxFieldData* pFieldData = nullptr;
 
-                                if ( rTextPortion.GetKind() == PortionKind::FIELD )
+                                if(PortionKind::FIELD == rTextPortion.GetKind())
                                 {
-                                    // add a meta file comment if we record to a metafile
-                                    if( !pStripPortionsHelper && bMetafileValid )
+                                    const EditCharAttrib* pAttr = rParaPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                    const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
+
+                                    if(pFieldItem)
                                     {
-                                        const EditCharAttrib* pAttr = rParaPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                        assert( pAttr && "Field not found" );
-
-                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
-                                        DBG_ASSERT( pFieldItem !=  nullptr, "Wrong type of field!" );
-
-                                        if( pFieldItem )
-                                        {
-                                            const SvxFieldData* pFieldData = pFieldItem->GetField();
-                                            if( pFieldData )
-                                                pMtf->AddAction( SvxFieldData::createEndComment() );
-                                        }
+                                        pFieldData = pFieldItem->GetField();
                                     }
-
                                 }
 
+                                // support for EOC, EOW, EOS TEXT comments. To support that,
+                                // the locale is needed. With the locale and a XBreakIterator it is
+                                // possible to re-create the text marking info on primitive level
+                                const lang::Locale aLocale(GetLocale(EditPaM(rParaPortion.GetNode(), nIndex + 1)));
+
+                                // create EOL and EOP bools
+                                const bool bEndOfLine(nPortion == pLine->GetEndPortion());
+                                const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+
+                                // get Overline color (from ((const SvxOverlineItem*)GetItem())->GetColor() in
+                                // consequence, but also already set at rOutDev)
+                                const Color aOverlineColor(rOutDev.GetOverlineColor());
+
+                                // get TextLine color (from ((const SvxUnderlineItem*)GetItem())->GetColor() in
+                                // consequence, but also already set at rOutDev)
+                                const Color aTextLineColor(rOutDev.GetTextLineColor());
+
+                                // Unicode code points conversion according to ctl text numeral setting
+                                aText = convertDigits(aText, nTextStart, nTextLen,
+                                    ImplCalcDigitLang(aTmpFont.GetLanguage()));
+
+                                // StripPortions() data callback
+                                const DrawPortionInfo aInfo(
+                                    aOutPos, aText, nTextStart, nTextLen, pDXArray, pKashidaArray,
+                                    aTmpFont, nParaPortion, rTextPortion.GetRightToLeftLevel(),
+                                    !aWrongSpellVector.empty() ? &aWrongSpellVector : nullptr,
+                                    pFieldData,
+                                    bEndOfLine, bEndOfParagraph, false, // support for EOL/EOP TEXT comments
+                                    &aLocale,
+                                    aOverlineColor,
+                                    aTextLineColor);
+                                rStripPortionsHelper.processDrawPortionInfo(aInfo);
+
+                                // #108052# remember that EOP is written already for this ParaPortion
+                                if(bEndOfParagraph)
+                                {
+                                    bEndOfParagraphWritten = true;
+                                }
                             }
                             break;
                             case PortionKind::TAB:
@@ -4272,35 +3934,26 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
 
-                                    if (pStripPortionsHelper)
-                                    {
-                                        // create EOL and EOP bools
-                                        const bool bEndOfLine(nPortion == pLine->GetEndPortion());
-                                        const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
+                                    // create EOL and EOP bools
+                                    const bool bEndOfLine(nPortion == pLine->GetEndPortion());
+                                    const bool bEndOfParagraph(bEndOfLine && nLine + 1 == nLines);
 
-                                        const Color aOverlineColor(rOutDev.GetOverlineColor());
-                                        const Color aTextLineColor(rOutDev.GetTextLineColor());
+                                    const Color aOverlineColor(rOutDev.GetOverlineColor());
+                                    const Color aTextLineColor(rOutDev.GetTextLineColor());
 
-                                        // StripPortions() data callback
-                                        const DrawPortionInfo aInfo(
-                                            aTmpPos, aText, 0, aText.getLength(), {}, {},
-                                            aTmpFont, nParaPortion, 0,
-                                            nullptr,
-                                            nullptr,
-                                            bEndOfLine, bEndOfParagraph, false,
-                                            nullptr,
-                                            aOverlineColor,
-                                            aTextLineColor);
-                                        pStripPortionsHelper->processDrawPortionInfo(aInfo);
-                                    }
-                                    else
-                                    {
-                                        // direct paint needed
-                                        aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength(), {} );
-                                        rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
-                                    }
+                                    // StripPortions() data callback
+                                    const DrawPortionInfo aInfo(
+                                        aTmpPos, aText, 0, aText.getLength(), {}, {},
+                                        aTmpFont, nParaPortion, 0,
+                                        nullptr,
+                                        nullptr,
+                                        bEndOfLine, bEndOfParagraph, false,
+                                        nullptr,
+                                        aOverlineColor,
+                                        aTextLineColor);
+                                    rStripPortionsHelper.processDrawPortionInfo(aInfo);
                                 }
-                                else if (pStripPortionsHelper)
+                                else
                                 {
                                     // #i108052# When stripping, a callback for _empty_ paragraphs is also needed.
                                     // This was optimized away (by not rendering the space-only tab portion), so do
@@ -4320,7 +3973,7 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                                         nullptr,
                                         aOverlineColor,
                                         aTextLineColor);
-                                    pStripPortionsHelper->processDrawPortionInfo(aInfo);
+                                    rStripPortionsHelper.processDrawPortionInfo(aInfo);
                                 }
                             }
                             break;
@@ -4356,7 +4009,7 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
             // that the reason for #i108052# was fixed/removed again, so this is a try to fix
             // the number of paragraphs (and counting empty ones) now independent from the
             // changes in EditEngine behaviour.
-            if(!bEndOfParagraphWritten && !bPaintBullet && pStripPortionsHelper)
+            if(!bEndOfParagraphWritten && !bPaintBullet)
             {
                 const Color aOverlineColor(rOutDev.GetOverlineColor());
                 const Color aTextLineColor(rOutDev.GetTextLineColor());
@@ -4370,16 +4023,13 @@ void ImpEditEngine::PaintOrStrip( OutputDevice& rOutDev, tools::Rectangle aClipR
                     nullptr,
                     aOverlineColor,
                     aTextLineColor);
-                pStripPortionsHelper->processDrawPortionInfo(aInfo);
+                rStripPortionsHelper.processDrawPortionInfo(aInfo);
             }
         }
         else
         {
             adjustYDirectionAware(aStartPos, nParaHeight);
         }
-
-        if ( pPDFExtOutDevData )
-            pPDFExtOutDevData->EndStructureElement();
 
         // no more visible actions?
         if (getYOverflowDirectionAware(aStartPos, aClipRect))
@@ -4418,9 +4068,9 @@ void ImpEditEngine::DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditV
     tools::Rectangle aClipRect( pView->GetOutputArea() );
     aClipRect.Intersection( rRect );
 
-    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
-
-    const Point aStartPos(CalculateTextPaintStartPosition(*pView));
+    if (aClipRect.IsEmpty())
+        // no area, no paint
+        return;
 
     // If Doc-width < Output Area,Width and not wrapped fields,
     // the fields usually protrude if > line.
@@ -4435,59 +4085,54 @@ void ImpEditEngine::DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditV
             aClipRect.SetRight( nMaxX );
     }
 
-    static bool bUsePrimitives(nullptr == std::getenv("DISBALE_EDITENGINE_ON_PRIMITIVES"));
+    // extract Primitives
+    OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
+    const Point aStartPos(CalculateTextPaintStartPosition(*pView));
+    StripAllPortions(rTarget, aClipRect, aStartPos, rHelper);
 
-    if (bUsePrimitives)
+    if (rHelper.getTextPortionPrimitives().empty())
+        // no Primitives, done
+        return;
+
+    // create ViewInformation2D based on target OutputDevice
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    aViewInformation2D.setViewTransformation(rTarget.GetViewTransformation());
+
+    // get content and it's range
+    drawinglayer::primitive2d::Primitive2DContainer aContent(rHelper.getTextPortionPrimitives());
+    const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
+    const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aClipRect));
+
+    if (!aContentRange.overlaps(aClipRange))
+        // no overlap, nothing visible
+        return;
+
+    if (!aClipRange.isInside(aContentRange))
     {
-        // extract Primitives
-        PaintOrStrip(rTarget, aClipRect, aStartPos, 0_deg10, &rHelper);
-
-        if (rHelper.getTextPortionPrimitives().empty())
-            // no Primitives, done
-            return;
-
-        // create ViewInformation2D based on target OutputDevice
-        drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        aViewInformation2D.setViewTransformation(rTarget.GetViewTransformation());
-        const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aClipRect));
-        aViewInformation2D.setViewport(aClipRange);
-
-        // get content and it's range
-        drawinglayer::primitive2d::Primitive2DContainer aContent(rHelper.getTextPortionPrimitives());
-        const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
-
-        if (!aContentRange.overlaps(aClipRange))
-            // no overlap, nothing visible
-            return;
-
-        if (!aClipRange.isInside(aContentRange))
-        {
-            // not completely inside aClipRange, clipping needed.
-            // Embed to MaskPrimitive2D
-            aContent = drawinglayer::primitive2d::Primitive2DContainer{
-                new drawinglayer::primitive2d::MaskPrimitive2D(
-                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
-                    std::move(aContent))};
-        }
-
-        // create PrimitiveProcessor and render to target
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
-            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rTarget, aViewInformation2D));
-        xProcessor->process(aContent);
+        // not completely inside aClipRange, clipping needed.
+        // Embed to MaskPrimitive2D
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange)),
+                std::move(aContent))};
     }
-    else
+
+    static bool bBlendForTest(false);
+    if(bBlendForTest)
     {
-        bool bClipRegion = rTarget.IsClipRegion();
-        vcl::Region aOldRegion = rTarget.GetClipRegion();
-        rTarget.IntersectClipRegion( aClipRect );
-
-        PaintOrStrip(rTarget, aClipRect, aStartPos);
-
-        if ( bClipRegion )
-            rTarget.SetClipRegion( aOldRegion );
-        else
-            rTarget.SetClipRegion();
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(aContent),
+                std::make_shared<basegfx::BColorModifier_interpolate>(COL_LIGHTRED.getBColor(), 0.5)) };
     }
+
+    // create PrimitiveProcessor and render to target
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(rTarget, aViewInformation2D));
+    xProcessor->process(aContent);
+    // It is NECESSARY to destruct the PrimitiveProcessor here get the paint
+    // updated, else XOR may be out of sync here, e.g. in OutlinerView in Presentation (!)
+    xProcessor.reset();
 
     pView->DrawSelectionXOR(pView->GetEditSelection(), nullptr, &rTarget);
 }

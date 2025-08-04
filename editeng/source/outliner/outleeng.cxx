@@ -39,15 +39,15 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin, Degree10 nOrientation, OutputDevice& rOutDev, StripPortionsHelper* pStripPortionsHelper)
+void OutlinerEditEng::ProcessFirstLineOfParagraph(sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper)
 {
     if( GetControlWord() & EEControlBits::OUTLINER )
     {
-        PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev, pStripPortionsHelper);
+        PaintFirstLineInfo aInfo(nPara, rStartPos, &rOutDev, rStripPortionsHelper);
         pOwner->maPaintFirstLineHdl.Call( &aInfo );
     }
 
-    pOwner->PaintOrStripBullet(nPara, rStartPos, rOrigin, nOrientation, rOutDev, pStripPortionsHelper);
+    pOwner->StripBullet(nPara, rStartPos, rOutDev, rStripPortionsHelper);
 }
 
 const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( sal_Int32 nPara ) const

@@ -870,10 +870,8 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     return aBulletFont;
 }
 
-void Outliner::PaintOrStripBullet(
-    sal_Int32 nPara, const Point& rStartPos, const Point& rOrigin,
-    Degree10 nOrientation, OutputDevice& rOutDev,
-    StripPortionsHelper* pStripPortionsHelper)
+void Outliner::StripBullet(
+    sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper)
 {
 
     bool bDrawBullet = false;
@@ -939,17 +937,6 @@ void Outliner::PaintOrStripBullet(
                 }
             }
 
-            if ( nOrientation )
-            {
-                // Both TopLeft and bottom left is not quite correct,
-                // since in EditEngine baseline ...
-                rOrigin.RotateAround(aTextPos, nOrientation);
-
-                vcl::Font aRotatedFont( std::move(aBulletFont) );
-                aRotatedFont.SetOrientation( nOrientation );
-                rOutDev.SetFont( aRotatedFont );
-            }
-
             // VCL will take care of brackets and so on...
             vcl::text::ComplexTextLayoutFlags nLayoutMode = rOutDev.GetLayoutMode();
             nLayoutMode &= ~vcl::text::ComplexTextLayoutFlags(vcl::text::ComplexTextLayoutFlags::BiDiRtl|vcl::text::ComplexTextLayoutFlags::BiDiStrong);
@@ -957,28 +944,21 @@ void Outliner::PaintOrStripBullet(
                 nLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl | vcl::text::ComplexTextLayoutFlags::TextOriginLeft | vcl::text::ComplexTextLayoutFlags::BiDiStrong;
             rOutDev.SetLayoutMode( nLayoutMode );
 
-            if (pStripPortionsHelper)
-            {
-                const SvxFont aSvxFont(rOutDev.GetFont());
-                KernArray aBuf;
-                rOutDev.GetTextArray( pPara->GetText(), &aBuf );
+            const SvxFont aSvxFont(rOutDev.GetFont());
+            KernArray aBuf;
+            rOutDev.GetTextArray( pPara->GetText(), &aBuf );
 
-                if(bSymbol)
-                {
-                    // aTextPos is Bottom, go to Baseline
-                    FontMetric aMetric(rOutDev.GetFontMetric());
-                    aTextPos.AdjustY( -(aMetric.GetDescent()) );
-                }
-
-                const DrawPortionInfo aInfo(
-                    aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
-                    aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
-                pStripPortionsHelper->processDrawPortionInfo(aInfo);
-            }
-            else
+            if(bSymbol)
             {
-                rOutDev.DrawText( aTextPos, pPara->GetText() );
+                // aTextPos is Bottom, go to Baseline
+                FontMetric aMetric(rOutDev.GetFontMetric());
+                aTextPos.AdjustY( -(aMetric.GetDescent()) );
             }
+
+            const DrawPortionInfo aInfo(
+                aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
+                aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
+            rStripPortionsHelper.processDrawPortionInfo(aInfo);
 
             rOutDev.SetFont( aOldFont );
         }
@@ -1009,55 +989,18 @@ void Outliner::PaintOrStripBullet(
                     }
                 }
 
-                if (pStripPortionsHelper)
-                {
-                    // call something analog to aDrawPortionHdl (if set) and feed it something
-                    // analog to DrawPortionInfo...
-                    // created aDrawBulletHdl, Set/GetDrawBulletHdl.
-                    // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
-                    DrawBulletInfo aDrawBulletInfo(
-                        *pFmt->GetBrush()->GetGraphicObject(),
-                        aBulletPos,
-                        pPara->aBulSize);
-                    pStripPortionsHelper->processDrawBulletInfo(aDrawBulletInfo);
-                }
-                else
-                {
-                    pFmt->GetBrush()->GetGraphicObject()->Draw(rOutDev, aBulletPos, pPara->aBulSize);
-                }
+                // call something analog to aDrawPortionHdl (if set) and feed it something
+                // analog to DrawPortionInfo...
+                // created aDrawBulletHdl, Set/GetDrawBulletHdl.
+                // created DrawBulletInfo and added handling to sdrtextdecomposition.cxx
+                DrawBulletInfo aDrawBulletInfo(
+                    *pFmt->GetBrush()->GetGraphicObject(),
+                    aBulletPos,
+                    pPara->aBulSize);
+                rStripPortionsHelper.processDrawBulletInfo(aDrawBulletInfo);
             }
         }
     }
-
-    // In case of collapsed subparagraphs paint a line before the text.
-    if( !pParaList->HasChildren(pPara) || pParaList->HasVisibleChildren(pPara) || pStripPortionsHelper || nOrientation )
-        return;
-
-    tools::Long nWidth = rOutDev.PixelToLogic( Size( 10, 0 ) ).Width();
-
-    Point aStartPos, aEndPos;
-    if ( !bVertical )
-    {
-        aStartPos.setY( rStartPos.Y() + aBulletArea.Bottom() );
-        if ( !bRightToLeftPara )
-            aStartPos.setX( rStartPos.X() + aBulletArea.Right() );
-        else
-            aStartPos.setX( rStartPos.X() + GetPaperSize().Width() - aBulletArea.Left() );
-        aEndPos = aStartPos;
-        aEndPos.AdjustX(nWidth );
-    }
-    else
-    {
-        aStartPos.setX( rStartPos.X() - aBulletArea.Bottom() );
-        aStartPos.setY( rStartPos.Y() + aBulletArea.Right() );
-        aEndPos = aStartPos;
-        aEndPos.AdjustY(nWidth );
-    }
-
-    const Color& rOldLineColor = rOutDev.GetLineColor();
-    rOutDev.SetLineColor( COL_BLACK );
-    rOutDev.DrawLine( aStartPos, aEndPos );
-    rOutDev.SetLineColor( rOldLineColor );
 }
 
 void Outliner::InvalidateBullet(sal_Int32 nPara)
@@ -1513,7 +1456,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         ParagraphInfos aInfos = pEditEngine->GetParagraphInfos( nPara );
         if ( aInfos.bValid )
         {
-            aTopLeft.setY( /* aInfos.nFirstLineOffset + */ // nFirstLineOffset is already added to the StartPos (PaintOrStripBullet) from the EditEngine
+            aTopLeft.setY( /* aInfos.nFirstLineOffset + */ // nFirstLineOffset is already added to the StartPos (StripBullet) from the EditEngine
                             aInfos.nFirstLineHeight - aInfos.nFirstLineTextHeight
                             + aInfos.nFirstLineTextHeight / 2
                             - aBulletSize.Height() / 2 );

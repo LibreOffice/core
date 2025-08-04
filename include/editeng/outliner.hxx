@@ -407,10 +407,10 @@ struct EDITENG_DLLPUBLIC PaintFirstLineInfo
     sal_Int32 mnPara;
     const Point& mrStartPos;
     VclPtr<OutputDevice> mpOutDev;
-    StripPortionsHelper* mpStripPortionsHelper;
+    StripPortionsHelper& mrStripPortionsHelper;
 
-    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, OutputDevice* pOutDev, StripPortionsHelper* pStripPortionsHelper )
-        : mnPara( nPara ), mrStartPos( rStartPos ), mpOutDev( pOutDev ), mpStripPortionsHelper( pStripPortionsHelper )
+    PaintFirstLineInfo( sal_Int32 nPara, const Point& rStartPos, OutputDevice* pOutDev, StripPortionsHelper& rStripPortionsHelper )
+        : mnPara( nPara ), mrStartPos( rStartPos ), mpOutDev( pOutDev ), mrStripPortionsHelper( rStripPortionsHelper )
     {}
 };
 
@@ -579,11 +579,8 @@ protected:
     SAL_DLLPRIVATE void            StyleSheetChanged( SfxStyleSheet const * pStyle );
 
     SAL_DLLPRIVATE void            InvalidateBullet(sal_Int32 nPara);
-    SAL_DLLPRIVATE void            PaintOrStripBullet(
-        sal_Int32 nPara, const Point& rStartPos,
-        const Point& rOrigin, Degree10 nOrientation,
-        OutputDevice& rOutDev,
-        StripPortionsHelper* pStripPortionsHelper);
+    SAL_DLLPRIVATE void            StripBullet(
+        sal_Int32 nPara, const Point& rStartPos, OutputDevice& rOutDev, StripPortionsHelper& rStripPortionsHelper);
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.

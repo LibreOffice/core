@@ -1079,7 +1079,7 @@ void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper)
         }
     }
 
-    getImpl().PaintOrStrip(*aTmpDev, aBigRect, Point(), 0_deg10, &rStripPortionsHelper);
+    getImpl().StripAllPortions(*aTmpDev, aBigRect, Point(), rStripPortionsHelper);
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
@@ -1569,7 +1569,7 @@ EditEngine::CreateTransferable(const ESelection& rSelection)
 
 // ======================    Virtual Methods    ========================
 
-void EditEngine::ProcessFirstLineOfParagraph(sal_Int32, const Point&, const Point&, Degree10, OutputDevice&, StripPortionsHelper*)
+void EditEngine::ProcessFirstLineOfParagraph(sal_Int32, const Point&, OutputDevice&, StripPortionsHelper&)
 {
 }
 
