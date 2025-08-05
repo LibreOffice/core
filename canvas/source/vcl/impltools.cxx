@@ -240,7 +240,7 @@ namespace vclcanvas::tools
                                                         aSrcRect,
                                                         rTransform );
 
-            return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
+            return BitmapEx(vcl::bitmap::CanvasTransformBitmap(Bitmap(rBitmap), rTransform, aDestRect, aLocalTransform));
         }
 
         void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice )

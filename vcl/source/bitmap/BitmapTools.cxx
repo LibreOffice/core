@@ -393,7 +393,7 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
 }
 #endif
 
-BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
+Bitmap CanvasTransformBitmap( const Bitmap&                 rSrcBitmap,
                                 const ::basegfx::B2DHomMatrix&  rTransform,
                                 ::basegfx::B2DRectangle const & rDestRect,
                                 ::basegfx::B2DHomMatrix const & rLocalTransform )
@@ -402,25 +402,16 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                              ::basegfx::fround<tools::Long>( rDestRect.getHeight() ) );
 
     if( aDestBmpSize.IsEmpty() )
-        return BitmapEx();
+        return Bitmap();
 
-    const Size aBmpSize( rBitmap.GetSizePixel() );
-    const Bitmap& aSrcBitmap( rBitmap.GetBitmap() );
-    Bitmap aSrcAlpha;
+    const Size aBmpSize( rSrcBitmap.GetSizePixel() );
 
     // differentiate mask and alpha channel (on-off
     // vs. multi-level transparency)
-    if( rBitmap.IsAlpha() )
-    {
-        aSrcAlpha = rBitmap.GetAlphaMask().GetBitmap();
-    }
 
-    BitmapScopedReadAccess pReadAccess( aSrcBitmap );
-    BitmapScopedReadAccess pAlphaReadAccess;
-    if (rBitmap.IsAlpha())
-        pAlphaReadAccess = aSrcAlpha;
+    BitmapScopedReadAccess pReadAccess( rSrcBitmap );
 
-    if( !pReadAccess || (!pAlphaReadAccess && rBitmap.IsAlpha()) )
+    if( !pReadAccess )
     {
         // TODO(E2): Error handling!
         ENSURE_OR_THROW( false,
@@ -432,7 +423,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     // paletted 1-bit masks).
     sal_uInt8 aAlphaMap[256];
 
-    if( rBitmap.IsAlpha() )
+    if( rSrcBitmap.HasAlpha() )
     {
         // source already has alpha channel - 1:1 mapping,
         // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
@@ -444,8 +435,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
     }
     // else: mapping table is not used
 
-    Bitmap aDstBitmap(aDestBmpSize, aSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
-    Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
+    Bitmap aDstBitmap(aDestBmpSize, rSrcBitmap.getPixelFormat(), &pReadAccess->GetPalette());
 
     {
         // just to be on the safe side: let the
@@ -454,11 +444,8 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
         // rule out the possibility that cached accessor data
         // is not yet written back.
         BitmapScopedWriteAccess pWriteAccess( aDstBitmap );
-        BitmapScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
-
 
         if( pWriteAccess.get() != nullptr &&
-            pAlphaWriteAccess.get() != nullptr &&
             rTransform.isInvertible() )
         {
             // we're doing inverse mapping here, i.e. mapping
@@ -472,10 +459,9 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
             {
                 // differentiate mask and alpha channel (on-off
                 // vs. multi-level transparency)
-                if( rBitmap.IsAlpha() )
+                if( rSrcBitmap.HasAlpha() )
                 {
                     Scanline pScan = pWriteAccess->GetScanline( y );
-                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
                     // Handling alpha and mask just the same...
                     for( tools::Long x=0; x<aDestBmpSize.Width(); ++x )
                     {
@@ -487,20 +473,20 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor(ColorAlpha, 0, 0, 0, 0) );
                         }
                         else
                         {
-                            const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(aAlphaMap[ cAlphaIdx ]) );
-                            pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
+                            BitmapColor aCol = pReadAccess->GetPixel( nSrcY, nSrcX );
+                            const sal_uInt8 cAlphaIdx = aCol.GetAlpha();
+                            aCol.SetAlpha(aAlphaMap[ cAlphaIdx ]);
+                            pWriteAccess->SetPixelOnData( pScan, x, aCol );
                         }
                     }
                 }
                 else
                 {
                     Scanline pScan = pWriteAccess->GetScanline( y );
-                    Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
                     for( tools::Long x=0; x<aDestBmpSize.Width(); ++x )
                     {
                         ::basegfx::B2DPoint aPoint(x,y);
@@ -511,13 +497,13 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                         if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                             nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(0) );
+                            pWriteAccess->SetPixelOnData( pScan, x, BitmapColor(ColorAlpha, 0, 0, 0, 0) );
                         }
                         else
                         {
-                            pAlphaWriteAccess->SetPixelOnData( pScanAlpha, x, BitmapColor(255) );
-                            pWriteAccess->SetPixelOnData( pScan, x, pReadAccess->GetPixel( nSrcY,
-                                                                                 nSrcX ) );
+                            BitmapColor aCol = pReadAccess->GetPixel( nSrcY, nSrcX );
+                            aCol.SetAlpha(255);
+                            pWriteAccess->SetPixelOnData( pScan, x, aCol );
                         }
                     }
                 }
@@ -531,7 +517,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
         }
     }
 
-    return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
+    return aDstBitmap;
 }
 
 void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, const AlphaMask & rNewMask)

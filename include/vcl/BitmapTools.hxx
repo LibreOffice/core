@@ -63,7 +63,7 @@ Bitmap VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 VCL_DLLPUBLIC BitmapEx* CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
 #endif
 
-VCL_DLLPUBLIC BitmapEx CanvasTransformBitmap( const BitmapEx& rBitmap,
+VCL_DLLPUBLIC ::Bitmap CanvasTransformBitmap( const ::Bitmap& rBitmap,
                                   const ::basegfx::B2DHomMatrix&  rTransform,
                                   ::basegfx::B2DRectangle const & rDestRect,
                                   ::basegfx::B2DHomMatrix const & rLocalTransform );
