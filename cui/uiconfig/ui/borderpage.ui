@@ -131,22 +131,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="presets_scrolled_window">
+              <object class="GtkIconView" id="presets">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkIconView" id="presets">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="model">presets_liststore</property>
-                    <property name="pixbuf-column">0</property>
-                    <property name="columns">5</property>
-                    <property name="activate-on-single-click">True</property>
-                  </object>
-                </child>
+                <property name="model">presets_liststore</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">5</property>
+                <property name="activate-on-single-click">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -548,22 +539,13 @@
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow" id="shadows_scrolled_window">
+              <object class="GtkIconView" id="shadows">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkIconView" id="shadows">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="model">shadows_liststore</property>
-                    <property name="pixbuf-column">0</property>
-                    <property name="columns">5</property>
-                    <property name="activate-on-single-click">True</property>
-                  </object>
-                </child>
+                <property name="model">shadows_liststore</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">5</property>
+                <property name="activate-on-single-click">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
