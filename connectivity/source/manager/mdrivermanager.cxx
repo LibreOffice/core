@@ -20,11 +20,9 @@
 #include <config_fuzzers.h>
 
 #include "mdrivermanager.hxx"
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
 
 #include <comphelper/diagnose_ex.hxx>

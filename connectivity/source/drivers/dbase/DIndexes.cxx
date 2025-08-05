@@ -19,7 +19,6 @@
 
 #include <dbase/DIndexes.hxx>
 #include <dbase/DIndex.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <strings.hrc>

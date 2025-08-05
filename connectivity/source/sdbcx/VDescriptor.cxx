@@ -19,8 +19,6 @@
 
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <comphelper/servicehelper.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>

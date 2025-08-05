@@ -23,7 +23,6 @@
 #include <calc/CTables.hxx>
 #include <calc/CTable.hxx>
 #include <file/FCatalog.hxx>
-#include <file/FConnection.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;

@@ -21,7 +21,6 @@
 #if defined(HAVE_CONFIG_H) && HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <hsqldb/HStorageAccess.hxx>
 #include <hsqldb/HStorageMap.hxx>

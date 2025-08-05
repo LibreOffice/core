@@ -21,7 +21,6 @@
 #include "mysqlc_general.hxx"
 
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <o3tl/safeint.hxx>
 
 using namespace connectivity::mysqlc;

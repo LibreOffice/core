@@ -18,7 +18,6 @@
  */
 
 #include <hsqldb/HStorageAccess.hxx>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <hsqldb/HStorageMap.hxx>
 #include "accesslog.hxx"
 #include <osl/diagnose.h>

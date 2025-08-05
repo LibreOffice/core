@@ -32,7 +32,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/types.hxx>
-#include <rtl/strbuf.hxx>
 #include <algorithm>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
@@ -49,7 +48,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::container;
 using namespace com::sun::star::util;
 
 OStatement_Base::OStatement_Base(OConnection* _pConnection )

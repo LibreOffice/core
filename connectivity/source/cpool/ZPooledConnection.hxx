@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
+
+#include "ZConnectionWrapper.hxx"
+
 #include <rtl/ref.hxx>
 
 namespace connectivity
 {
-    class OConnectionWeakWrapper;
-
     // OPooledConnection -
     // allows to pool a real connection
 

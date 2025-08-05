@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <salhelper/timer.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/digest.h>

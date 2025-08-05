@@ -38,7 +38,6 @@
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/property.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/configuration.hxx>
@@ -46,7 +45,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbconversion.hxx>

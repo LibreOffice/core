@@ -31,7 +31,6 @@
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>
 #include <connectivity/dbexception.hxx>
-#include <sal/macros.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

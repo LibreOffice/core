@@ -32,7 +32,6 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>

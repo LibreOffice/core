@@ -19,10 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <comphelper/uno3.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 
 namespace connectivity

@@ -21,7 +21,6 @@
 #include <dbase/DResultSet.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexIter.hxx>

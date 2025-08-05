@@ -24,7 +24,6 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::lang;
 
 OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>& _rxMeta
                                            , const Any& catalog

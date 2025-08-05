@@ -21,12 +21,8 @@
 #include <config.h>
 #endif
 
-#include <cppuhelper/bootstrap.hxx>
 #include <osl/diagnose.h>
 #include "accesslog.hxx"
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <hsqldb/HStorageAccess.hxx>
 #include <hsqldb/HStorageMap.hxx>
 

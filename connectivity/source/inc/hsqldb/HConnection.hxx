@@ -23,9 +23,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
-#include <cppuhelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
-#include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
 namespace connectivity::hsqldb

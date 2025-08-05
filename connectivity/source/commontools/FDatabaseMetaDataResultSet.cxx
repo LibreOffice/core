@@ -18,7 +18,6 @@
  */
 
 
-#include <ParameterSubstitution.hxx>
 #include <FDatabaseMetaDataResultSet.hxx>
 #include <FDatabaseMetaDataResultSetMetaData.hxx>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
@@ -28,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/unreachable.hxx>
 #include <TConnection.hxx>
 
 using namespace connectivity;

@@ -29,8 +29,6 @@
 
 #include <sal/log.hxx>
 
-#include <string.h>
-
 using namespace connectivity::odbc;
 using namespace connectivity;
 using namespace dbtools;

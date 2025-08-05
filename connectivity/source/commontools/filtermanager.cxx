@@ -19,7 +19,6 @@
 
 #include <connectivity/filtermanager.hxx>
 
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <TConnection.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>

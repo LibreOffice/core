@@ -29,7 +29,6 @@
 #include <file/FDriver.hxx>
 #include <file/FTable.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <ucbhelper/content.hxx>
 

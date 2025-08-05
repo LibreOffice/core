@@ -22,7 +22,6 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <map>
-#include <vector>
 #include "OColumn.hxx"
 
 namespace connectivity

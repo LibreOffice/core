@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <utility>
-
 #include "mysqlc_user.hxx"
 #include "mysqlc_users.hxx"
 #include <comphelper/types.hxx>

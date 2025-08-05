@@ -15,7 +15,6 @@
 #include <TConnection.hxx>
 
 #include <sal/log.hxx>
-#include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>

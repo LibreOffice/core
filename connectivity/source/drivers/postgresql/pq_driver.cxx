@@ -36,7 +36,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 #include "pq_driver.hxx"
 

@@ -31,7 +31,6 @@
 #include <TConnection.hxx>
 #include <hsqldb/HStorageMap.hxx>
 #include <jvmfwk/framework.hxx>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XFlushable.hpp>

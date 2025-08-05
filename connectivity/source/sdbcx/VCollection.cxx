@@ -28,9 +28,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <o3tl/unreachable.hxx>
 #include <TConnection.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>

@@ -22,6 +22,7 @@
 #include "mysqlc_connection.hxx"
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultset.hxx"
+#include "mysqlc_resultsetmetadata.hxx"
 #include "mysqlc_statement.hxx"
 #include "mysqlc_general.hxx"
 
@@ -34,7 +35,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::container;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 

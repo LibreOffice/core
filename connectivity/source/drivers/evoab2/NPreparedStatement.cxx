@@ -30,9 +30,6 @@ using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::container;
-using namespace com::sun::star::io;
-using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OEvoabPreparedStatement,u"com.sun.star.sdbcx.evoab.PreparedStatement"_ustr,u"com.sun.star.sdbc.PreparedStatement"_ustr);
 

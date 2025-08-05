@@ -40,7 +40,6 @@
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <tools/time.hxx>
-#include <comphelper/servicehelper.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;

@@ -28,9 +28,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>

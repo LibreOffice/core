@@ -21,7 +21,6 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtools.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
 #if HAVE_FEATURE_JAVA
 #include <jvmaccess/virtualmachine.hxx>

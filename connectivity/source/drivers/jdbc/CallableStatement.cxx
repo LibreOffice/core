@@ -25,7 +25,6 @@
 #include <java/sql/Connection.hxx>
 #include <java/sql/Ref.hxx>
 #include <java/sql/Timestamp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -34,7 +33,6 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 

@@ -27,7 +27,6 @@
 #include <comphelper/stl_types.hxx>
 #include <odbc/OResultSetMetaData.hxx>
 #include <odbc/OTools.hxx>
-#include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

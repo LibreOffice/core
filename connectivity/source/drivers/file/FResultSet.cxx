@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/propshlp.hxx>

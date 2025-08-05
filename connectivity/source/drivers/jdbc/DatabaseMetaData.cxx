@@ -21,7 +21,6 @@
 
 #include <string_view>
 
-#include <sal/macros.h>
 #include <java/sql/DatabaseMetaData.hxx>
 #include <java/sql/Connection.hxx>
 #include <java/sql/ResultSet.hxx>

@@ -12,6 +12,8 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 
+#include <comphelper/sequence.hxx>
+
 namespace connectivity::firebird
 {
 View::View(const css::uno::Reference<css::sdbc::XConnection>& _rxConnection, bool _bCaseSensitive,

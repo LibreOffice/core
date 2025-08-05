@@ -19,7 +19,6 @@
 
 #include <component/CTable.hxx>
 #include <component/CColumns.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 using namespace connectivity;
 using namespace connectivity::component;

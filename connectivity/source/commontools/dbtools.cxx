@@ -39,7 +39,6 @@
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>

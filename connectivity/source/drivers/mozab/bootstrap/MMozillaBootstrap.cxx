@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include "MMozillaBootstrap.hxx"

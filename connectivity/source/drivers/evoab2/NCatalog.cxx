@@ -27,7 +27,6 @@
 using namespace connectivity::evoab;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
 
 OEvoabCatalog::OEvoabCatalog(OEvoabConnection* _pCon) :
     connectivity::sdbcx::OCatalog(_pCon)

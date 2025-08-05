@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <propertyids.hxx>
 #include "NStatement.hxx"

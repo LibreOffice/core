@@ -20,7 +20,6 @@
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <o3tl/unreachable.hxx>
 
 using namespace connectivity;
 using namespace dbtools;

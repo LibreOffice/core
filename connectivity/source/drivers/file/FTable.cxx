@@ -22,7 +22,6 @@
 #include <file/FColumns.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace connectivity;

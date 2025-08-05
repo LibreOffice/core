@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <dbase/DResultSet.hxx>

@@ -22,7 +22,6 @@
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
-#include <o3tl/unreachable.hxx>
 
 
 using namespace connectivity;

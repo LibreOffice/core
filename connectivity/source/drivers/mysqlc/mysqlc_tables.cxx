@@ -11,12 +11,9 @@
 #include "mysqlc_tables.hxx"
 #include "mysqlc_catalog.hxx"
 
-#include <TConnection.hxx>
-
 #include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/types.hxx>
 
 //----- OCollection -----------------------------------------------------------

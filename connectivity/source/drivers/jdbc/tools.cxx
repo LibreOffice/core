@@ -21,7 +21,6 @@
 #include <string.h>
 #include <java/tools.hxx>
 #include <java/util/Property.hxx>
-#include <com/sun/star/sdbc/DriverPropertyInfo.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <connectivity/dbexception.hxx>

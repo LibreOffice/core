@@ -13,7 +13,6 @@
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 namespace connectivity::firebird

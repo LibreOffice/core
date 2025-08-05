@@ -18,7 +18,6 @@
  */
 
 #include <connectivity/dbconversion.hxx>
-#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>

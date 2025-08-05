@@ -55,7 +55,6 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(java_sql_ResultSet,u"com.sun.star.sdbcx.JResultSet"_ustr,u"com.sun.star.sdbc.ResultSet"_ustr);

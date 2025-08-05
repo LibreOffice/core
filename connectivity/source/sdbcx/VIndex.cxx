@@ -19,7 +19,6 @@
 
 #include <sdbcx/VIndex.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <cppuhelper/supportsservice.hxx>

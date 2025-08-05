@@ -29,7 +29,6 @@
 #include <dbase/DIndex.hxx>
 #include <connectivity/FValue.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
 

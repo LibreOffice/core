@@ -31,7 +31,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>

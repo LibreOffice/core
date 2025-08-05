@@ -36,7 +36,6 @@
 #if (OSL_DEBUG_LEVEL > 0)
 #include <iostream>
 #endif
-#include <algorithm>
 #include <stack>
 #include <utility>
 

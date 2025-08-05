@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
-#include <vector>
 #include <map>
 
 using namespace com::sun::star::mozilla;

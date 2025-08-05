@@ -21,7 +21,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <comphelper/property.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/TKeys.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/ucb/XContentAccess.hpp>
 #include <rtl/ref.hxx>
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
@@ -30,7 +29,6 @@
 using namespace osl;
 using namespace connectivity::evoab;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
