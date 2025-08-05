@@ -631,6 +631,7 @@ namespace drawinglayer::primitive3d
 
                 if(!basegfx::fTools::equalZero(fTexHeight))
                 {
+                    assert(fTexHeight != 0 && "help coverity see it's not zero");
                     fInvTexHeight = 1.0 / fTexHeight;
                 }
             }
