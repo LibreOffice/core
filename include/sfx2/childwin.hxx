@@ -113,6 +113,9 @@ protected:
 
 public:
     virtual             ~SfxChildWindow();
+    // subclasses can override this in case any initialization needs to happen after
+    // the constructor was called (e.g. to avoid calling virtual methods in the constructor)
+    virtual             void Initialize() {}
     void                Destroy();
     vcl::Window*        GetWindow() const
                         { return pWindow; }

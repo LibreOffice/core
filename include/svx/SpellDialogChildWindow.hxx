@@ -49,6 +49,8 @@ public:
     SpellDialogChildWindow(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings);
     virtual ~SpellDialogChildWindow() override;
 
+    virtual void Initialize() override;
+
 protected:
     /** This abstract method has to be defined by a derived class.  It
         returns the next wrong sentence.

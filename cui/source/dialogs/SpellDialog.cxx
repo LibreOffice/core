@@ -162,7 +162,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     : SfxModelessDialogController (_pBindings, pChildWindow,
         pParent, u"cui/ui/spellingdialog.ui"_ustr, u"SpellingDialog"_ustr)
     , aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
-    , m_pInitHdlEvent(nullptr)
     , bFocusLocked(true)
     , rParent(*pChildWindow)
     , pImpl( new SpellDialog_Impl )
@@ -197,11 +196,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
     m_sTitleSpellingGrammar = m_xDialog->get_title();
     m_sTitleSpelling = m_xAltTitle->get_label();
-
-    // fdo#68794 set initial title for cases where no text has been processed
-    // yet to show its language attributes
-    OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;
-    m_xDialog->set_title(m_xDialog->strip_mnemonic(sTitle.replaceFirst("$LANGUAGE ($LOCATION)", "")));
 
     m_sResumeST = m_xResumeFT->get_label();
     m_sNoSuggestionsST = m_xNoSuggestionsFT->strip_mnemonic(m_xNoSuggestionsFT->get_label());
@@ -244,10 +238,8 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     // disable controls if service is missing
     m_xDialog->set_sensitive(xSpell.is());
 
-    //InitHdl wants to use virtual methods, so it
-    //can't be called during the ctor, so init
-    //it on next event cycle post-ctor
-    m_pInitHdlEvent = Application::PostUserEvent(LINK(this, SpellDialog, InitHdl));
+    // further initialization happens in Initialize() to prevent virtual
+    // calls from the constructor
 }
 
 SpellDialog::~SpellDialog()
@@ -258,8 +250,6 @@ SpellDialog::~SpellDialog()
         m_xOptionsDlg.reset();
     }
 
-    if (m_pInitHdlEvent)
-        Application::RemoveUserEvent(m_pInitHdlEvent);
     if (pImpl)
     {
         // save possibly modified user-dictionaries
@@ -376,12 +366,9 @@ void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGua
         m_xUndoPB->set_sensitive(false);
     }
 }
-/* Initialize, asynchronous to prevent virtual calls
-   from a constructor
- */
-IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
+
+void SpellDialog::Initialize()
 {
-    m_pInitHdlEvent = nullptr;
     m_xDialog->freeze();
     //show or hide AutoCorrect depending on the modules abilities
     m_xAutoCorrPB->set_visible(rParent.HasAutoCorrection());

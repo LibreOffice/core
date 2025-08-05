@@ -450,6 +450,7 @@ class AbstractSpellDialog_Impl final
 {
 public:
     using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    void Initialize() override { m_pDlg->Initialize(); }
     void InvalidateDialog() override { m_pDlg->InvalidateDialog(); }
     std::shared_ptr<SfxDialogController> GetController() override { return m_pDlg; }
     SfxBindings& GetBindings() override { return m_pDlg->GetBindings(); }

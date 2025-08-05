@@ -139,7 +139,6 @@ private:
     OUString        m_sTitleSpellingGrammar;
 
     Link<SpellUndoAction_Impl&,void> aDialogUndoLink;
-    ImplSVEvent *   m_pInitHdlEvent;
     bool            bFocusLocked;
 
     svx::SpellDialogChildWindow& rParent;
@@ -193,8 +192,6 @@ private:
     DECL_LINK(LanguageSelectHdl, weld::ComboBox&, void);
     DECL_LINK(DialogUndoHdl, SpellUndoAction_Impl&, void);
 
-    DECL_LINK(InitHdl, void*, void);
-
     void            AddToDictionaryExecute(const OUString& rItemId);
     void            StartSpellOptDlg_Impl();
     int             InitUserDicts();
@@ -224,6 +221,10 @@ public:
         weld::Window * pParent,
         SfxBindings* pBindings);
     virtual ~SpellDialog() override;
+
+    /* Initialize, to be called after the constructor to prevent virtual calls
+       from a constructor. */
+    void Initialize();
 
     virtual void    Activate() override;
     virtual void    Deactivate() override;

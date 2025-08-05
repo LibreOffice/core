@@ -44,6 +44,11 @@ SpellDialogChildWindow::~SpellDialogChildWindow()
     m_xAbstractSpellDialog.disposeAndClear();
 }
 
+void SpellDialogChildWindow::Initialize()
+{
+    m_xAbstractSpellDialog->Initialize();
+}
+
 SfxBindings& SpellDialogChildWindow::GetBindings() const
 {
     assert(m_xAbstractSpellDialog);
