@@ -556,6 +556,20 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
 
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN,
                                                  uno::Any(nParaLeftMargin));
+
+                // w:left is overridden by w:leftChars - even if leftChars is only inherited.
+                PropertyIds eId = PROP_PARA_LEFT_MARGIN_UNIT;
+                const css::beans::Pair<double, sal_Int16> stZero{
+                    0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                auto stCh = stZero;
+
+                m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= stCh;
+                if (stCh != stZero) // zero means leftChars is disabled
+                {
+                    // Insert inherited leftChars in case none is provided by this style/paragraph
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(stCh), /*Overwrite*/ false);
+                }
             }
             break;
         case NS_ooxml::LN_CT_Ind_startChars:
@@ -584,6 +598,17 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
 
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_RIGHT_MARGIN, uno::Any( ConversionHelper::convertTwipToMm100_Limited(nIntValue ) ));
+
+                // Insert inherited rightChars in case none is provided by this style/paragraph
+                PropertyIds eId = PROP_PARA_RIGHT_MARGIN_UNIT;
+                const css::beans::Pair<double, sal_Int16> stZero{
+                    0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                auto stCh = stZero;
+
+                m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= stCh;
+                if (stCh != stZero)
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(stCh), /*Overwrite*/ false);
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"right"_ustr, OUString::number(nIntValue));
             break;
@@ -606,6 +631,17 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_FIRST_LINE_INDENT, uno::Any( - nValue ));
 
+                // Insert inherited hangingChars in case none is provided by this style/paragraph
+                PropertyIds eId = PROP_PARA_FIRST_LINE_INDENT_UNIT;
+                const css::beans::Pair<double, sal_Int16> stZero{
+                    0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                };
+                auto stCh = stZero;
+
+                m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= stCh;
+                if (stCh != stZero)
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(stCh), /*Overwrite*/ false);
+
                 // See above, need to inherit left margin from list style when first is set.
                 sal_Int32 nParaLeftMargin = m_pImpl->getCurrentNumberingProperty(u"IndentAt"_ustr);
                 if (nParaLeftMargin != 0)
@@ -626,6 +662,22 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
         case NS_ooxml::LN_CT_Ind_firstLine:
             if (m_pImpl->GetTopContext())
             {
+                // TODO: firstLine is supposed to be overridden by hanging - if both are defined.
+
+                // w:firstLineChars overrides w:firstLine - even if firstLineChars is inherited.
+                // Insert inherited firstLineChars in case none is provided by this style/paragraph
+                {
+                    PropertyIds eId = PROP_PARA_FIRST_LINE_INDENT_UNIT;
+                    const css::beans::Pair<double, sal_Int16> stZero{
+                        0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                    };
+                    auto stCh = stZero;
+
+                    m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= stCh;
+                    if (stCh != stZero)
+                        m_pImpl->GetTopContext()->Insert(eId, uno::Any(stCh), /*Overwrite*/ false);
+                }
+
                 sal_Int32 nFirstLineIndent
                     = m_pImpl->getCurrentNumberingProperty(u"FirstLineIndent"_ustr);
                 sal_Int32 nParaFirstLineIndent = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
