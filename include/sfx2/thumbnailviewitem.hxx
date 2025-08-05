@@ -71,7 +71,7 @@ public:
     bool mbBorder;
     bool mbSelected;
     bool mbHover;
-    BitmapEx maPreview1;
+    Bitmap maPreview;
     OUString maTitle;
     OUString maHelpText;
     rtl::Reference< ThumbnailViewItemAcc > mxAcc;

@@ -152,7 +152,7 @@ public:
 
     static Bitmap scaleImg (const Bitmap &rImg, tools::Long width, tools::Long height);
 
-    static BitmapEx getDefaultThumbnail( std::u16string_view rPath );
+    static Bitmap getDefaultThumbnail( std::u16string_view rPath );
 
     static Bitmap fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
 

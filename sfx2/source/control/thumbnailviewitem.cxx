@@ -133,7 +133,7 @@ void ThumbnailViewItem::calculateItemsPosition (const tools::Long nThumbnailHeig
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                               css::lang::Locale() );
 
-    Size aImageSize = maPreview1.GetSizePixel();
+    Size aImageSize = maPreview.GetSizePixel();
 
     // Calculate thumbnail position
     const Point aPos = maDrawArea.TopCenter();
@@ -173,11 +173,11 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     // Draw thumbnail
     Point aPos = maPrev1Pos;
-    Size aImageSize = maPreview1.GetSizePixel();
+    Size aImageSize = maPreview.GetSizePixel();
 
     aSeq[nPrimitive++] = new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
-                                        FillGraphicAttribute(Graphic(maPreview1),
+                                        FillGraphicAttribute(Graphic(maPreview),
                                                             B2DRange(
                                                                 B2DPoint(0,0),
                                                                 B2DPoint(aImageSize.Width(),aImageSize.Height())),

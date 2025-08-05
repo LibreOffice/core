@@ -21,7 +21,7 @@ struct TemplateItemProperties
     OUString aName;
     OUString aPath;
     OUString aRegionName;
-    BitmapEx aThumbnail;
+    Bitmap aThumbnail;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEPROPERTIES_HXX

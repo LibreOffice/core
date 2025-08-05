@@ -77,7 +77,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                                  true);
 
     // Draw thumbnail
-    Size aImageSize = maPreview1.GetSizePixel();
+    Size aImageSize = maPreview.GetSizePixel();
 
     float fWidth = aImageSize.Width();
     float fHeight = aImageSize.Height();
@@ -96,7 +96,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 
     aSeq[2] = new FillGraphicPrimitive2D(
                     createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
-                    FillGraphicAttribute(Graphic(maPreview1),
+                    FillGraphicAttribute(Graphic(maPreview),
                                         B2DRange(
                                             B2DPoint(0,0),
                                             B2DPoint(aImageSize.Width(),aImageSize.Height())),

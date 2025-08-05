@@ -491,7 +491,7 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             aTemplateItem.aName = pViewItem->maTitle;
             aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
             aTemplateItem.aRegionName = pViewItem->maHelpText;
-            aTemplateItem.aThumbnail = pViewItem->maPreview1;
+            aTemplateItem.aThumbnail = pViewItem->maPreview;
 
             pTarget->maTemplates.push_back(aTemplateItem);
 
@@ -672,7 +672,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
             pChild->setHelpText(sHelpText);
         }
 
-        pChild->maPreview1 = pCur->aThumbnail;
+        pChild->maPreview = pCur->aThumbnail;
 
         if(IsDefaultTemplate(pCur->aPath))
             pChild->showDefaultIcon(true);
@@ -680,7 +680,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
         if ( pCur->aThumbnail.IsEmpty() )
         {
             // Use the default thumbnail if we have nothing else
-            pChild->maPreview1 = TemplateLocalView::getDefaultThumbnail(pCur->aPath);
+            pChild->maPreview = TemplateLocalView::getDefaultThumbnail(pCur->aPath);
         }
 
         aItems[i] = std::move(pChild);
@@ -865,20 +865,20 @@ void TemplateLocalView::RemoveDefaultTemplateIcon(std::u16string_view rPath)
     }
 }
 
-BitmapEx TemplateLocalView::getDefaultThumbnail( std::u16string_view rPath )
+Bitmap TemplateLocalView::getDefaultThumbnail( std::u16string_view rPath )
 {
-    BitmapEx aImg;
+    Bitmap aImg;
     INetURLObject aUrl(rPath);
     OUString aExt = aUrl.getExtension();
 
     if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
-        aImg = BitmapEx(SFX_THUMBNAIL_TEXT);
+        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_TEXT));
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
-        aImg = BitmapEx(SFX_THUMBNAIL_SHEET);
+        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_SHEET));
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
-        aImg = BitmapEx(SFX_THUMBNAIL_PRESENTATION);
+        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_PRESENTATION));
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
-        aImg = BitmapEx(SFX_THUMBNAIL_DRAWING);
+        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_DRAWING));
 
     return aImg;
 }

@@ -84,10 +84,10 @@ void OApplicationIconControl::Fill()
         // E_TABLE is 0, but 0 means void so use id of enum + 1
         std::unique_ptr<ThumbnailViewItem> xItem(new ThumbnailViewItem(*this, aCategory.eType + 1));
         xItem->mbBorder = false;
-        xItem->maPreview1 = BitmapEx(aCategory.aImageResId);
-        const Size& rSize = xItem->maPreview1.GetSizePixel();
-        m_nMaxWidth = std::max(m_nMaxWidth, rSize.Width());
-        m_nMaxHeight = std::max(m_nMaxHeight, rSize.Height());
+        xItem->maPreview = Bitmap(BitmapEx(aCategory.aImageResId));
+        const Size aSize = xItem->maPreview.GetSizePixel();
+        m_nMaxWidth = std::max(m_nMaxWidth, aSize.Width());
+        m_nMaxHeight = std::max(m_nMaxHeight, aSize.Height());
         xItem->maTitle = DBA_RES(aCategory.pLabelResId);
         m_nMaxWidth = std::max<tools::Long>(m_nMaxWidth, GetTextWidth(xItem->maTitle));
         AppendItem(std::move(xItem));
