@@ -31,10 +31,10 @@
 namespace com::sun::star::graphic { class XPrimitive2D; }
 
 
-// helper to convert any Primitive2DSequence to a good quality BitmapEx,
+// helper to convert any Primitive2DSequence to a good quality Bitmap,
 // using default parameters and graphic::XPrimitive2DRenderer
 
-BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
+Bitmap VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmap(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000,

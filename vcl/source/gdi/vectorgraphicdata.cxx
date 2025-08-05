@@ -48,14 +48,14 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx convertPrimitive2DSequenceToBitmapEx(
+Bitmap convertPrimitive2DSequenceToBitmap(
     const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels,
     const o3tl::Length eTargetUnit,
     const std::optional<Size>& rTargetDPI)
 {
-    BitmapEx aRetval;
+    Bitmap aRetval;
 
     if(!rSequence.empty())
     {
@@ -95,7 +95,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
             if(xBitmap.is())
             {
                 const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-                aRetval = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+                aRetval = vcl::unotools::bitmapFromXBitmap(xIntBmp);
             }
         }
         catch (const uno::Exception&)
@@ -179,7 +179,7 @@ void VectorGraphicData::ensureReplacement()
 
     if (!maSequence.empty())
     {
-        maReplacement = Bitmap(convertPrimitive2DSequenceToBitmapEx(maSequence, getRange()));
+        maReplacement = convertPrimitive2DSequenceToBitmap(maSequence, getRange());
     }
 }
 
@@ -209,7 +209,7 @@ Bitmap VectorGraphicData::getBitmap(const Size& pixelSize) const
     Size dpi(
         std::round(pixelSize.Width() / o3tl::convert(maRange.getWidth(), o3tl::Length::mm100, o3tl::Length::in)),
         std::round(pixelSize.Height() / o3tl::convert(maRange.getHeight(), o3tl::Length::mm100, o3tl::Length::in)));
-    return Bitmap(convertPrimitive2DSequenceToBitmapEx(maSequence, maRange, 4096 * 4096, o3tl::Length::mm100, dpi));
+    return convertPrimitive2DSequenceToBitmap(maSequence, maRange, 4096 * 4096, o3tl::Length::mm100, dpi);
 }
 
 void VectorGraphicData::ensureSequenceAndRange()
