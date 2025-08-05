@@ -125,7 +125,7 @@ static bool FileExists( const INetURLObject& rURL )
     return bRet;
 }
 
-bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
+bool SfxApplication::loadBrandSvg(const char *pName, Bitmap &rBitmap, int nWidth)
 {
     // Load from disk
 
@@ -197,7 +197,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
         if(xBitmap.is())
         {
             const uno::Reference< rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-            rBitmap = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+            rBitmap = vcl::unotools::bitmapFromXBitmap(xIntBmp);
             return true;
         }
     }
@@ -209,9 +209,9 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 }
 
 /** loads the application logo as used in the impress slideshow pause screen */
-BitmapEx SfxApplication::GetApplicationLogo(tools::Long nWidth)
+Bitmap SfxApplication::GetApplicationLogo(tools::Long nWidth)
 {
-    BitmapEx aBitmap;
+    Bitmap aBitmap;
     SfxApplication::loadBrandSvg("shell/about", aBitmap, nWidth);
     return aBitmap;
 }

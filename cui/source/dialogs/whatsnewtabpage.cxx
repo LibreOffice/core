@@ -50,7 +50,7 @@ void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
 BrandGraphic::BrandGraphic()
     : m_bIsFirstStart(false)
 {
-    BitmapEx aBackgroundBitmap;
+    Bitmap aBackgroundBitmap;
     SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, 250);
     m_aGraphic = aBackgroundBitmap;
     m_aGraphicSize = m_aGraphic.GetSizePixel();

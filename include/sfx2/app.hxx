@@ -218,10 +218,10 @@ public:
     static void                 SetModule(SfxToolsModule nSharedLib, std::unique_ptr<SfxModule> pModule);
     static SfxModule*           GetModule(SfxToolsModule nSharedLib);
 
-    static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth);
+    static bool loadBrandSvg(const char *pName, Bitmap& rBitmap, int nWidth);
 
     /** loads the application logo as used in the impress slideshow pause screen */
-    static BitmapEx GetApplicationLogo(tools::Long nWidth);
+    static Bitmap GetApplicationLogo(tools::Long nWidth);
 
     /** if true then dialog/infobar notifications like the tip of the day or
         version change infobar should be suppressed */

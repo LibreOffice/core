@@ -96,7 +96,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
 
   // Images
   const tools::Long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
-  BitmapEx aBackgroundBitmap;
+  Bitmap aBackgroundBitmap;
 
   if (SfxApplication::loadBrandSvg(Application::GetSettings()
                                            .GetStyleSettings()

@@ -69,7 +69,7 @@ using namespace ::com::sun::star::document;
 class BrandImage final : public weld::CustomWidgetController
 {
 private:
-    BitmapEx maBrandImage;
+    Bitmap maBrandImage;
     bool mbIsDark = false;
     Size m_BmpSize;
 
