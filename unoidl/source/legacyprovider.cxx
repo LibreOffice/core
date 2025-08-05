@@ -508,17 +508,17 @@ rtl::Reference< Entity > readEntity(
                     case RTReferenceType::EXPORTS:
                         if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
-                            mandServs.push_back(base);
+                            mandServs.push_back(std::move(base));
                         } else {
-                            optServs.push_back(base);
+                            optServs.push_back(std::move(base));
                         }
                         break;
                     case RTReferenceType::SUPPORTS:
                         if (!(reader.getReferenceFlags(j) & RTFieldAccess::OPTIONAL))
                         {
-                            mandIfcs.push_back(base);
+                            mandIfcs.push_back(std::move(base));
                         } else {
-                            optIfcs.push_back(base);
+                            optIfcs.push_back(std::move(base));
                         }
                         break;
                     default:

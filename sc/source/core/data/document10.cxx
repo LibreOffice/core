@@ -225,9 +225,9 @@ void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
     if (!rRange.IsValid())
         return;
 
-    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
-    sc::StartListeningContext aStartCxt(*this, pPosSet);
-    sc::EndListeningContext aEndCxt(*this, pPosSet);
+    auto xPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+    sc::StartListeningContext aStartCxt(*this, xPosSet);
+    sc::EndListeningContext aEndCxt(*this, std::move(xPosSet));
 
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
     {
@@ -563,9 +563,9 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
     if (IsClipOrUndo() || GetNoListening())
         return;
 
-    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
-    sc::StartListeningContext aStartCxt(*this, pPosSet);
-    sc::EndListeningContext aEndCxt(*this, pPosSet);
+    auto xPosSet = std::make_shared<sc::ColumnBlockPositionSet>(*this);
+    sc::StartListeningContext aStartCxt(*this, xPosSet);
+    sc::EndListeningContext aEndCxt(*this, std::move(xPosSet));
 
     for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
     {

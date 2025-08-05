@@ -248,7 +248,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
     EntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
-        return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
+        return EntryDescriptor(std::move(aDocument), eLocation, aLibName, aLibSubName, aName, aMethodName, eType);
 
     std::vector<std::pair<Entry*, OUString>> aEntries;
 

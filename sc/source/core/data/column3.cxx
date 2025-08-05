@@ -437,9 +437,9 @@ void ScColumn::StartListeningUnshared( const std::vector<SCROW>& rNewSharedRows 
     if (rNewSharedRows.empty() || rDoc.IsDelayedFormulaGrouping())
         return;
 
-    const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDoc);
-    sc::StartListeningContext aStartCxt(rDoc, pPosSet);
-    sc::EndListeningContext aEndCxt(rDoc, pPosSet);
+    auto xPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDoc);
+    sc::StartListeningContext aStartCxt(rDoc, xPosSet);
+    sc::EndListeningContext aEndCxt(rDoc, std::move(xPosSet));
     if (rNewSharedRows.size() >= 2)
     {
         if(!rDoc.CanDelayStartListeningFormulaCells( this, rNewSharedRows[0], rNewSharedRows[1]))
@@ -711,9 +711,9 @@ void ScColumn::AttachNewFormulaCell(
     {
         case sc::ConvertToGroupListening:
         {
-            const auto pPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
-            sc::StartListeningContext aStartCxt(rDocument, pPosSet);
-            sc::EndListeningContext aEndCxt(rDocument, pPosSet);
+            auto xPosSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
+            sc::StartListeningContext aStartCxt(rDocument, xPosSet);
+            sc::EndListeningContext aEndCxt(rDocument, std::move(xPosSet));
             SCROW nStartRow, nEndRow;
             nStartRow = nEndRow = aPos.first->position + aPos.second;
             for (const SCROW nR : rNewSharedRows)

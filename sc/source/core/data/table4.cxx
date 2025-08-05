@@ -1807,9 +1807,9 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].DeleteRanges(aSpans, InsertDeleteFlags::VALUE | InsertDeleteFlags::DATETIME | InsertDeleteFlags::STRING | InsertDeleteFlags::FORMULA | InsertDeleteFlags::OUTLINE);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans);
 
-    const auto pSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
-    sc::StartListeningContext aStartCxt(rDocument, pSet);
-    sc::EndListeningContext aEndCxt(rDocument, pSet);
+    auto xSet = std::make_shared<sc::ColumnBlockPositionSet>(rDocument);
+    sc::StartListeningContext aStartCxt(rDocument, xSet);
+    sc::EndListeningContext aEndCxt(rDocument, std::move(xSet));
 
     SCROW nStartRow = aSpans.front().mnRow1;
     SCROW nEndRow = aSpans.back().mnRow2;

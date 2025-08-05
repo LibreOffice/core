@@ -2953,7 +2953,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         if ( !xDocRecover->wasModifiedSinceLastSave() )
         {
             aInfo.DocumentState |= DocState::Handled;
-            *pIt = aInfo;
+            *pIt = std::move(aInfo);
             continue;
         }
 

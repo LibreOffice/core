@@ -1329,7 +1329,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             }
         }
 
-        rArgs = aSequ;
+        rArgs = std::move(aSequ);
         return;
     }
 
