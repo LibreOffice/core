@@ -699,9 +699,17 @@ void QtInstanceTreeView::move_subtree(weld::TreeIter&, const weld::TreeIter*, in
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::all_foreach(const std::function<bool(weld::TreeIter&)>&)
+void QtInstanceTreeView::all_foreach(const std::function<bool(weld::TreeIter&)>& func)
 {
-    assert(false && "Not implemented yet");
+    QtInstanceTreeIter aIter({});
+    if (get_iter_first(aIter))
+    {
+        do
+        {
+            if (func(aIter))
+                return;
+        } while (iter_next(aIter));
+    }
 }
 
 void QtInstanceTreeView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)
