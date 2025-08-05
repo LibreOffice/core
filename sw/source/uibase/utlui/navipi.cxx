@@ -1302,7 +1302,7 @@ void SwNavigatorWin::StateChanged(StateChangedType nStateChange)
         m_xNavi->UpdateInitShow();
 }
 
-SFX_IMPL_DOCKINGWINDOW(SwNavigatorWrapper, SID_NAVIGATOR);
+SFX_IMPL_DOCKINGWINDOW_WITHID(SwNavigatorWrapper, SID_NAVIGATOR);
 
 SwNavigatorWrapper::SwNavigatorWrapper(vcl::Window *_pParent, sal_uInt16 nId,
                                        SfxBindings* pBindings, SfxChildWinInfo* pInfo)

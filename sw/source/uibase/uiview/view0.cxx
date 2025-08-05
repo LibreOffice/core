@@ -21,6 +21,7 @@
 #include <config_wasm_strip.h>
 
 #include <SwSpellDialogChildWindow.hxx>
+#include <navipi.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
@@ -90,7 +91,7 @@ SFX_IMPL_INTERFACE(SwView, SfxViewShell)
 
 void SwView::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
+    GetStaticInterface()->RegisterChildWindow(SwNavigatorWrapper::GetChildWindowId(), true); // SID_NAVIGATOR
 
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 
