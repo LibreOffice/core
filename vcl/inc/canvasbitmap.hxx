@@ -35,13 +35,9 @@ namespace vcl::unotools
                                      css::rendering::XIntegerBitmapColorSpace >
     {
     private:
-        BitmapEx                                       m_aBmpEx;
-        ::Bitmap                                       m_aBitmap;
-        ::Bitmap                                       m_aAlpha;
+        ::Bitmap                                       m_aBmp;
         BitmapScopedInfoAccess                         m_pBmpAcc;
-        BitmapScopedInfoAccess                         m_pAlphaAcc;
         std::optional<BitmapScopedReadAccess>          m_pBmpReadAcc;
-        std::optional<BitmapScopedReadAccess>          m_pAlphaReadAcc;
         css::uno::Sequence<sal_Int8>                   m_aComponentTags;
         css::uno::Sequence<sal_Int32>                  m_aComponentBitCounts;
         css::rendering::IntegerBitmapLayout            m_aLayout;
@@ -56,7 +52,6 @@ namespace vcl::unotools
 
         void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
         BitmapScopedReadAccess& getBitmapReadAccess();
-        BitmapScopedReadAccess& getAlphaReadAccess();
 
         virtual ~VclCanvasBitmap() override;
 
@@ -103,16 +98,16 @@ namespace vcl::unotools
         VCL_DLLPUBLIC virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
 
-        /** Create API wrapper for given BitmapEx
+        /** Create API wrapper for given Bitmap
 
             @param rBitmap
             Bitmap to wrap. As usual, changes to the original bitmap
             are not reflected in this object (copy on write).
          */
-        VCL_DLLPUBLIC  explicit VclCanvasBitmap( const BitmapEx& rBitmap );
+        VCL_DLLPUBLIC  explicit VclCanvasBitmap( const Bitmap& rBitmap );
 
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
-        const BitmapEx& getBitmapEx() const { return m_aBmpEx; }
+        const Bitmap& getBitmap() const { return m_aBmp; }
    };
 
 }

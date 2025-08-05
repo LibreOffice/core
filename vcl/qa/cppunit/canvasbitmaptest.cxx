@@ -81,14 +81,13 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 {
     SAL_INFO("vcl", "Testing " << msg << ", with depth " << nOriginalDepth);
 
-    BitmapEx aContainedBmpEx( xBmp->getBitmapEx() );
-    Bitmap   aContainedBmp( aContainedBmpEx.GetBitmap() );
-    int      nDepth = nOriginalDepth;
-    int      extraBpp = 0;
-
+    Bitmap   aContainedBmp( xBmp->getBitmap() );
+    int      nDepth;
+    bool     bHasPalette;
     {
         BitmapScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
+        bHasPalette = pAcc->HasPalette();
     }
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Original bitmap size not (200,200)",
@@ -100,7 +99,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             sal_Int32(200), xBmp->getSize().Height);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "alpha state mismatch",
-                            aContainedBmpEx.IsAlpha(), bool(xBmp->hasAlpha()));
+                            aContainedBmp.HasAlpha(), bool(xBmp->hasAlpha()));
 
     CPPUNIT_ASSERT_MESSAGE( "getScaledBitmap() failed",
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
@@ -108,8 +107,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     rendering::IntegerBitmapLayout aLayout;
     uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
 
-    const sal_Int32 nExpectedBitsPerPixel(
-        (aContainedBmpEx.IsAlpha() ? std::max(8,nDepth)+8 : nDepth) + extraBpp);
+    const sal_Int32 nExpectedBitsPerPixel(bHasPalette ? 8 : (aContainedBmp.HasAlpha() ? 32 : 24));
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1",
                             static_cast<sal_Int32>(1), aLayout.ScanLines);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch",
@@ -131,7 +129,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "getData and getPixel did not return same amount of data",
                             aPixelData.getLength(), aPixelData2.getLength());
 
-    aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,200,1));
+    aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,/*X2*/200,/*Y2*/1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1 for getPixel",
                             static_cast<sal_Int32>(1), aLayout.ScanLines);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanline bytes mismatch for getPixel",
@@ -154,18 +152,30 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_MESSAGE( "rgb colors are not within [0,1] range",
                             std::none_of(pRGBStart,pRGBEnd,&rangeCheck));
 
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "First pixel is not white", 1.0, pRGBStart[0].Red, 1E-12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "First pixel is not white", 1.0, pRGBStart[0].Green, 1E-12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "First pixel is not white", 1.0, pRGBStart[0].Blue, 1E-12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
-    if( aContainedBmpEx.IsAlpha() )
+    if( !aContainedBmp.HasAlpha() )
     {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not white", 1.0, pRGBStart[0].Red, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not white", 1.0, pRGBStart[0].Green, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not white", 1.0, pRGBStart[0].Blue, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
+    }
+    else
+    {
+        // with premultipled alpha, the white becomes black
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not black", 0.0, pRGBStart[0].Red, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not black", 0.0, pRGBStart[0].Green, 1E-12);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "First pixel is not black", 0.0, pRGBStart[0].Blue, 1E-12);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "First pixel is not fully transparent",
                                 0.0, pARGBStart[0].Alpha);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+            "Second pixel is not opaque", 1.0, pARGBStart[1].Alpha, 1E-12);
     }
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
@@ -175,7 +185,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Second pixel is not black",
                             0.0, pRGBStart[1].Blue);
 
-    if( nOriginalDepth > 8 )
+    if( !bHasPalette )
     {
         const Color aCol(COL_GREEN);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -188,7 +198,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
             "Sixth pixel is not green (blue component)",
             vcl::unotools::toDoubleColor(aCol.GetBlue()), pRGBStart[5].Blue);
     }
-    else if( nDepth <= 8 )
+    else
     {
         uno::Reference<rendering::XBitmapPalette> xPal = xBmp->getPalette();
         CPPUNIT_ASSERT_MESSAGE( "8bit or less: missing palette",
@@ -203,13 +213,6 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         CPPUNIT_ASSERT_MESSAGE( "Palette has no valid color space",
                                 xPal->getColorSpace().is());
     }
-
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "150th pixel is not white", 1.0, pRGBStart[150].Red, 1E-12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "150th pixel is not white", 1.0, pRGBStart[150].Green, 1E-12);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "150th pixel is not white", 1.0, pRGBStart[150].Blue, 1E-12);
 
     if( nOriginalDepth <= 8 )
         return;
@@ -227,22 +230,21 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         }
     };
 
-    uno::Sequence<rendering::RGBColor>  aRGBColor
-    {
-        {
-            vcl::unotools::toDoubleColor(aCol.GetRed()),
-            vcl::unotools::toDoubleColor(aCol.GetGreen()),
-            vcl::unotools::toDoubleColor(aCol.GetBlue())
-        }
-    };
-
     aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
     aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
     CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually converted green pixel",
                             bool(aPixel3 == aPixel4));
 
-    if( !aContainedBmpEx.IsAlpha() )
+    if( !aContainedBmp.HasAlpha() )
     {
+        uno::Sequence<rendering::RGBColor>  aRGBColor
+        {
+            {
+                vcl::unotools::toDoubleColor(aCol.GetRed()),
+                vcl::unotools::toDoubleColor(aCol.GetGreen()),
+                vcl::unotools::toDoubleColor(aCol.GetBlue())
+            }
+        };
         aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
         CPPUNIT_ASSERT_MESSAGE( "Green pixel from bitmap mismatch with manually RGB-converted green pixel",
                                 bool(aPixel3 == aPixel4));
@@ -305,7 +307,7 @@ private:
                     pOut[ y*nScanlineLen + 4*x     ] = sal_Int8(rect.X1);
                     pOut[ y*nScanlineLen + 4*x + 1 ] = sal_Int8(rect.Y2);
                     pOut[ y*nScanlineLen + 4*x + 2 ] = sal_Int8(x);
-                    pOut[ y*nScanlineLen + 4*x + 3 ] = sal_Int8(rect.Y1);
+                    pOut[ y*nScanlineLen + 4*x + 3 ] = -1; // alpha, fully opaque
                 }
             }
         }
@@ -666,7 +668,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(BitmapEx(aBitmap)) );
+        rtl::Reference<VclCanvasBitmap> xBmp( new VclCanvasBitmap(aBitmap) );
 
         checkCanvasBitmap( xBmp, "single bitmap", nDepth );
 
@@ -684,7 +686,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aMask)) );
+        xBmp.set( new VclCanvasBitmap(Bitmap(BitmapEx(aBitmap,aMask))) );
 
         checkCanvasBitmap( xBmp, "masked bitmap", nDepth );
 
@@ -702,7 +704,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        xBmp.set( new VclCanvasBitmap(BitmapEx(aBitmap,aAlpha)) );
+        xBmp.set( new VclCanvasBitmap(Bitmap(BitmapEx(aBitmap,aAlpha))) );
 
         checkCanvasBitmap( xBmp, "alpha bitmap", nDepth );
     }
@@ -712,16 +714,15 @@ void CanvasBitmapTest::runTest()
     uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
         new TestBitmap( geometry::IntegerSize2D(10,10), true ));
 
-    BitmapEx aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
+    Bitmap aBmp = vcl::unotools::bitmapFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap is alpha",
-                            !aBmp.IsAlpha());
+                            !aBmp.HasAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
                             vcl::PixelFormat::N8_BPP,  aBmp.getPixelFormat());
     {
-        Bitmap aBitmap = aBmp.GetBitmap();
-        BitmapScopedReadAccess pBmpAcc(aBitmap);
+        BitmapScopedReadAccess pBmpAcc(aBmp);
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc );
@@ -736,36 +737,25 @@ void CanvasBitmapTest::runTest()
 
     xTestBmp.set( new TestBitmap( geometry::IntegerSize2D(10,10), false ));
 
-    aBmp = vcl::unotools::bitmapExFromXBitmap(xTestBmp);
+    aBmp = vcl::unotools::bitmapFromXBitmap(xTestBmp);
     CPPUNIT_ASSERT_MESSAGE( "Palette bitmap has no alpha",
-                            aBmp.IsAlpha());
+                            aBmp.HasAlpha());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have size (10,10)",
                             Size(10,10), aBmp.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bitmap does not have the expected pixel format",
-                            vcl::PixelFormat::N24_BPP,  aBmp.getPixelFormat());
+                            vcl::PixelFormat::N32_BPP,  aBmp.getPixelFormat());
     {
-        Bitmap aBitmap = aBmp.GetBitmap();
-        BitmapScopedReadAccess pBmpAcc(aBitmap);
-        AlphaMask aBitmapAlpha = aBmp.GetAlphaMask();
-        BitmapScopedReadAccess pAlphaAcc(aBitmapAlpha);
+        BitmapScopedReadAccess pBmpAcc(aBmp);
 
         CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid BitmapReadAccess",
                                 pBmpAcc);
-        CPPUNIT_ASSERT_MESSAGE( "Bitmap has invalid alpha BitmapReadAccess",
-                                pAlphaAcc);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect content",
                                BitmapColor(0,1,0), pBmpAcc->GetPixel(0,0));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) incorrect alpha content",
-                               BitmapColor(0), pAlphaAcc->GetPixel(0,0));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect content",
                                BitmapColor(0,3,2), pBmpAcc->GetPixel(2,2));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(2,2) incorrect alpha content",
-                               BitmapColor(2), pAlphaAcc->GetPixel(2,2));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) incorrect content",
                                BitmapColor(0,3,9), pBmpAcc->GetPixel(2,9));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,2) correct alpha content",
-                               BitmapColor(2), pAlphaAcc->GetPixel(2,9));
     }
 }
 

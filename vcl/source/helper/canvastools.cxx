@@ -53,6 +53,13 @@ namespace vcl::unotools
         {
             SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
 
+            return new vcl::unotools::VclCanvasBitmap( Bitmap(inputBitmap) );
+        }
+
+        uno::Reference< rendering::XBitmap > xBitmapFromBitmap(const ::Bitmap& inputBitmap )
+        {
+            SAL_INFO( "vcl.helper", "vcl::unotools::xBitmapFromBitmapEx()" );
+
             return new vcl::unotools::VclCanvasBitmap( inputBitmap );
         }
 
@@ -74,7 +81,7 @@ namespace vcl::unotools
                           const rendering::IntegerBitmapLayout&                      rLayout,
                           const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap,
                           BitmapScopedWriteAccess&                                   rWriteAcc,
-                          BitmapScopedWriteAccess&                                   rAlphaAcc )
+                          bool bHasAlpha )
             {
                 rendering::IntegerBitmapLayout      aCurrLayout;
                 geometry::IntegerRectangle2D        aRect;
@@ -98,38 +105,21 @@ namespace vcl::unotools
                         return false; // re-read bmp from the start
 
                     Scanline pScanline = rWriteAcc->GetScanline( aRect.Y1 );
-                    if( rAlphaAcc.get() )
+                    if( bHasAlpha )
                     {
-                        Scanline pScanlineAlpha = rAlphaAcc->GetScanline( aRect.Y1 );
                         // read ARGB color
                         aARGBColors = rLayout.ColorSpace->convertIntegerToARGB(aPixelData);
 
-                        if( rWriteAcc->HasPalette() )
+                        assert( !rWriteAcc->HasPalette() );
+                        for( sal_Int32 x=0; x<nWidth; ++x )
                         {
-                            for( sal_Int32 x=0; x<nWidth; ++x )
-                            {
-                                const rendering::ARGBColor& rColor=aARGBColors[x];
-                                rWriteAcc->SetPixelOnData( pScanline, x,
-                                                     BitmapColor(static_cast<sal_uInt8>(rWriteAcc->GetBestPaletteIndex(
-                                                         BitmapColor( toByteColor(rColor.Red),
-                                                                      toByteColor(rColor.Green),
-                                                                      toByteColor(rColor.Blue))))) );
-                                rAlphaAcc->SetPixelOnData( pScanlineAlpha, x,
-                                                     BitmapColor( toByteColor(rColor.Alpha) ));
-                            }
-                        }
-                        else
-                        {
-                            for( sal_Int32 x=0; x<nWidth; ++x )
-                            {
-                                const rendering::ARGBColor& rColor=aARGBColors[x];
-                                rWriteAcc->SetPixelOnData( pScanline, x,
-                                                     BitmapColor( toByteColor(rColor.Red),
-                                                                  toByteColor(rColor.Green),
-                                                                  toByteColor(rColor.Blue) ));
-                                rAlphaAcc->SetPixelOnData( pScanlineAlpha, x,
-                                                     BitmapColor( toByteColor(rColor.Alpha) ));
-                            }
+                            const rendering::ARGBColor& rColor=aARGBColors[x];
+                            rWriteAcc->SetPixelOnData( pScanline, x,
+                                                 BitmapColor( ColorAlpha,
+                                                              toByteColor(rColor.Red),
+                                                              toByteColor(rColor.Green),
+                                                              toByteColor(rColor.Blue),
+                                                              toByteColor(rColor.Alpha) ));
                         }
                     }
                     else
@@ -168,15 +158,20 @@ namespace vcl::unotools
 
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
         {
+            return BitmapEx(bitmapFromXBitmap(xInputBitmap));
+        }
+
+        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
+        {
             SAL_INFO( "vcl.helper", "vcl::unotools::bitmapExFromXBitmap()" );
 
             if( !xInputBitmap.is() )
-                return ::BitmapEx();
+                return ::Bitmap();
 
             // tunnel directly for known implementation
             VclCanvasBitmap* pImplBitmap = dynamic_cast<VclCanvasBitmap*>(xInputBitmap.get());
             if( pImplBitmap )
-                return pImplBitmap->getBitmapEx();
+                return pImplBitmap->getBitmap();
 
             // retrieve data via UNO interface
 
@@ -187,14 +182,14 @@ namespace vcl::unotools
             for( int i=0; i<10; ++i )
             {
                 sal_Int32 nDepth=0;
-                sal_Int32 nAlphaDepth=0;
+                bool bHasAlpha = false;
                 const rendering::IntegerBitmapLayout aLayout(
                     xInputBitmap->getMemoryLayout());
 
                 OSL_ENSURE(aLayout.ColorSpace.is(),
                            "Cannot convert image without color space!");
                 if( !aLayout.ColorSpace.is() )
-                    return ::BitmapEx();
+                    return ::Bitmap();
 
                 nDepth = aLayout.ColorSpace->getBitsPerPixel();
 
@@ -211,16 +206,18 @@ namespace vcl::unotools
                         std::find(pStart,pEnd,
                                   rendering::ColorComponentTag::ALPHA) - pStart;
 
-                    if( nAlphaIndex < sal::static_int_cast<std::ptrdiff_t>(nLen) )
-                    {
-                        nAlphaDepth = aLayout.ColorSpace->getComponentBitCounts()[nAlphaIndex] > 1 ? 8 : 1;
-                        nDepth -= nAlphaDepth;
-                    }
+                    ENSURE_OR_THROW( nAlphaIndex < sal::static_int_cast<std::ptrdiff_t>(nLen),
+                        "bitmap has alpha, but alphaindex not valid");
+                    auto nAlphaBitCount = aLayout.ColorSpace->getComponentBitCounts()[nAlphaIndex];
+                    ENSURE_OR_THROW(nAlphaBitCount == 8, "unsupported alpha bit count");
+                    bHasAlpha = true;
+                    nDepth -= nAlphaBitCount;
                 }
 
                 BitmapPalette aPalette;
                 if( aLayout.Palette.is() )
                 {
+                    ENSURE_OR_THROW(!bHasAlpha, "unsupported");
                     uno::Reference< rendering::XColorSpace > xPaletteColorSpace(
                         aLayout.Palette->getColorSpace());
                     ENSURE_OR_THROW(xPaletteColorSpace.is(),
@@ -246,11 +243,8 @@ namespace vcl::unotools
                         uno::Sequence<double> aPaletteEntry;
                         for( sal_uInt16 j=0; j<nPaletteEntries; ++j )
                         {
-                            if( !xPalette->getIndex(aPaletteEntry,j) &&
-                                nAlphaDepth == 0 )
-                            {
-                                nAlphaDepth = 1;
-                            }
+                            bool b = xPalette->getIndex(aPaletteEntry,j);
+                            ENSURE_OR_THROW(b, "transparent entry in palette unsupported");
                             uno::Sequence<rendering::RGBColor> aColors=xPalColorSpace->convertToRGB(aPaletteEntry);
                             ENSURE_OR_THROW(aColors.getLength() == 1,
                                             "Palette returned more or less than one entry");
@@ -266,47 +260,35 @@ namespace vcl::unotools
                     sizeFromIntegerSize2D(xInputBitmap->getSize()));
 
                 // normalize bitcount
-                auto ePixelFormat =
-                    ( nDepth <= 8 ) ? vcl::PixelFormat::N8_BPP :
-                                      vcl::PixelFormat::N24_BPP;
-                auto eAlphaPixelFormat = vcl::PixelFormat::N8_BPP;
+                vcl::PixelFormat ePixelFormat;
+                if (bHasAlpha)
+                    ePixelFormat = vcl::PixelFormat::N32_BPP;
+                else if ( nDepth <= 8 )
+                    ePixelFormat = vcl::PixelFormat::N8_BPP;
+                else
+                    ePixelFormat = vcl::PixelFormat::N24_BPP;
 
                 ::Bitmap aBitmap( aPixelSize,
                                   ePixelFormat,
                                   aLayout.Palette.is() ? &aPalette : nullptr );
-                ::Bitmap aAlpha;
-                if( nAlphaDepth )
-                    aAlpha = Bitmap(aPixelSize,
-                                      eAlphaPixelFormat,
-                                       &Bitmap::GetGreyPalette(
-                                           sal::static_int_cast<sal_uInt16>(1 << nAlphaDepth)) );
 
                 { // limit scoped access
                     BitmapScopedWriteAccess pWriteAccess( aBitmap );
-                    BitmapScopedWriteAccess pAlphaWriteAccess;
-                    if (nAlphaDepth)
-                        pAlphaWriteAccess = aAlpha;
-
                     ENSURE_OR_THROW(pWriteAccess.get() != nullptr,
                                     "Cannot get write access to bitmap");
 
                     const sal_Int32 nWidth(aPixelSize.Width());
                     const sal_Int32 nHeight(aPixelSize.Height());
 
-                    if( !readBmp(nWidth,nHeight,aLayout,xInputBitmap,
-                                 pWriteAccess,pAlphaWriteAccess) )
+                    if( !readBmp(nWidth,nHeight,aLayout,xInputBitmap,pWriteAccess,bHasAlpha) )
                         continue;
                 } // limit scoped access
 
-                if( nAlphaDepth )
-                    return ::BitmapEx( aBitmap,
-                                       AlphaMask( aAlpha ) );
-                else
-                    return ::BitmapEx( aBitmap );
+                return aBitmap;
             }
 
             // failed to read data 10 times - bail out
-            return ::BitmapEx();
+            return ::Bitmap();
         }
 
         geometry::RealSize2D size2DFromSize( const Size& rSize )
