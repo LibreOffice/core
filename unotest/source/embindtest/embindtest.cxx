@@ -37,6 +37,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
+#include <tools/debug.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/environment.h>
 #include <uno/environment.hxx>
@@ -918,6 +919,7 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 
     sal_Bool SAL_CALL testSolarMutex() override
     {
+        DBG_TESTNOTSOLARMUTEX();
         rtl::Reference t(new TestThread);
         t->launch();
         t->join();
