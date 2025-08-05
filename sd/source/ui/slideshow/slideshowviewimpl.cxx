@@ -187,21 +187,16 @@ void SlideShowView::disposingImpl(std::unique_lock<std::mutex>& rGuard)
         }
         rGuard.lock();
     }
+    assert(rGuard.owns_lock());
     if (maPaintListeners.getLength(rGuard))
-    {
         maPaintListeners.disposeAndClear( rGuard, evt );
-        rGuard.lock();
-    }
+    assert(rGuard.owns_lock());
     if (maMouseListeners.getLength(rGuard))
-    {
         maMouseListeners.disposeAndClear( rGuard, evt );
-        rGuard.lock();
-    }
+    assert(rGuard.owns_lock());
     if (maMouseMotionListeners.getLength(rGuard))
-    {
         maMouseMotionListeners.disposeAndClear( rGuard, evt );
-        rGuard.lock();
-    }
+    assert(rGuard.owns_lock());
 }
 
 void SlideShowView::paint( const awt::PaintEvent& e )
