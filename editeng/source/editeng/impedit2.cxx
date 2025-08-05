@@ -3250,8 +3250,7 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, CursorFlags aFlag
 
 void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eOptions)
 {
-    const Point aOrigin(0, 0);
-    Point aLineStart(aOrigin);
+    Point aLineStart(0, 0);
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
     const tools::Long nColumnWidth = GetColumnWidth(maPaperSize);
     sal_Int16 nColumn = 0;
@@ -3296,7 +3295,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                 tools::Long nLineHeight = rLine.GetHeight();
                 if (nLine != nLines - 1)
                     nLineHeight += nVertLineSpacing;
-                MoveToNextLine(aLineStart, nLineHeight, nColumn, aOrigin,
+                MoveToNextLine(aLineStart, nLineHeight, nColumn,
                                &aInfo.nHeightNeededToNotWrap);
                 const bool bInclILS = eOptions & IterFlag::inclILS;
                 if (bInclILS && (nLine != nLines - 1) && !maStatus.IsOutliner())

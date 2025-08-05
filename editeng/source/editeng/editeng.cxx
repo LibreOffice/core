@@ -1079,7 +1079,7 @@ void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper)
         }
     }
 
-    getImpl().StripAllPortions(*aTmpDev, aBigRect, Point(), rStripPortionsHelper);
+    getImpl().StripAllPortions(*aTmpDev, aBigRect, rStripPortionsHelper);
 }
 
 void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )

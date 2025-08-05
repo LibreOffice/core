@@ -3179,12 +3179,12 @@ void ImpEditEngine::setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) co
         ptDest.setY(ptSrc.Y());
 }
 
-void ImpEditEngine::setYDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const
+void ImpEditEngine::setYDirectionAwareFrom(Point& ptDest) const
 {
     if (!IsEffectivelyVertical())
-        ptDest.setY(ptSrc.Y());
+        ptDest.setY(0);
     else
-        ptDest.setX(ptSrc.Y());
+        ptDest.setX(0);
 }
 
 tools::Long ImpEditEngine::getYOverflowDirectionAware(const Point& pt,
@@ -3238,7 +3238,6 @@ Point ImpEditEngine::MoveToNextLine(
     Point& rMovePos, // [in, out] Point that will move to the next line
     tools::Long nLineHeight, // [in] Y-direction move distance (direction-aware)
     sal_Int16& rColumn, // [in, out] current column number
-    Point aOrigin, // [in] Origin point to calculate limits and initial Y position in a new column
     tools::Long* pnHeightNeededToNotWrap // On column wrap, returns how much more height is needed
 ) const
 {
@@ -3249,11 +3248,11 @@ Point ImpEditEngine::MoveToNextLine(
     // Check if the resulting position has moved beyond the limits, and more columns left.
     // The limits are defined by a rectangle starting from aOrigin with width of maPaperSize
     // and height of mnCurTextHeight
-    Point aOtherCorner = aOrigin;
+    Point aOtherCorner(0, 0);
     adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(maPaperSize));
     adjustYDirectionAware(aOtherCorner, mnCurTextHeight);
     tools::Long nNeeded
-        = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(aOrigin, aOtherCorner));
+        = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(Point(0, 0), aOtherCorner));
     if (pnHeightNeededToNotWrap)
         *pnHeightNeededToNotWrap = nNeeded;
     if (nNeeded && rColumn < mnColumns)
@@ -3264,7 +3263,7 @@ Point ImpEditEngine::MoveToNextLine(
         if (rColumn < mnColumns)
         {
             // Set Y position of the point to that of aOrigin
-            setYDirectionAwareFrom(rMovePos, aOrigin);
+            setYDirectionAwareFrom(rMovePos);
             // Move the point by the requested distance in Y direction
             adjustYDirectionAware(rMovePos, nLineHeight);
             // Move the point by the column+spacing distance in X direction
@@ -3284,7 +3283,7 @@ void ImpEditEngine::DrawText_ToPosition(
 
     // extract Primitives
     TextHierarchyBreakup aHelper;
-    StripAllPortions(rOutDev, aBigRect, Point(), aHelper);
+    StripAllPortions(rOutDev, aBigRect, aHelper);
 
     if (aHelper.getTextPortionPrimitives().empty())
         // no Primitives, done
@@ -3360,7 +3359,7 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
 
     // extract Primitives
     TextHierarchyBreakup aHelper;
-    StripAllPortions(rOutDev, aClipRect, Point(), aHelper);
+    StripAllPortions(rOutDev, aClipRect, aHelper);
 
     if (aHelper.getTextPortionPrimitives().empty())
         // no Primitives, done
@@ -3427,7 +3426,7 @@ void ImpEditEngine::DrawText_ToRectangle( OutputDevice& rOutDev, const tools::Re
 }
 
 // TODO: use IterateLineAreas in ImpEditEngine::Paint, to avoid algorithm duplication
-void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, StripPortionsHelper& rStripPortionsHelper)
+void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, StripPortionsHelper& rStripPortionsHelper)
 {
     if ( !IsUpdateLayout() )
         return;
@@ -3438,11 +3437,8 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont = GetParaPortions().getRef(0).GetNode()->GetCharAttribs().GetDefFont();
 
-    // In the case of rotated text is aStartPos considered TopLeft because
-    // other information is missing, and since the whole object is shown anyway
-    // un-scrolled.
-    // The rectangle is infinite.
-    const Point aOrigin( aStartPos );
+    // always strip at Origin(0, 0), use as StartPos
+    Point aStartPos(0, 0);
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
     sal_Int16 nColumn = 0;
 
@@ -3485,7 +3481,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                 tools::Long nLineHeight = pLine->GetHeight();
                 if (nLine != nLastLine)
                     nLineHeight += nVertLineSpacing;
-                MoveToNextLine(aStartPos, nLineHeight, nColumn, aOrigin);
+                MoveToNextLine(aStartPos, nLineHeight, nColumn);
                 aTmpPos = aStartPos;
                 adjustXDirectionAware(aTmpPos, pLine->GetStartPosX());
                 adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
@@ -3504,7 +3500,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                     {
                         Point aLineStart(aStartPos);
                         adjustYDirectionAware(aLineStart, -nLineHeight);
-                        GetEditEnginePtr()->ProcessFirstLineOfParagraph(nParaPortion, aLineStart, /*aOrigin, nOrientation,*/ rOutDev, rStripPortionsHelper);
+                        GetEditEnginePtr()->ProcessFirstLineOfParagraph(nParaPortion, aLineStart, rOutDev, rStripPortionsHelper);
 
                         // Remember whether a bullet was painted.
                         const SfxBoolItem& rBulletState = mpEditEngine->GetParaAttrib(nParaPortion, EE_PARA_BULLETSTATE);
@@ -3736,8 +3732,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                             // what will lead to a compressed look with multiple lines
                                             const sal_uInt16 nMaxAscent(pLine->GetMaxAscent());
 
-                                            aTmpPos += MoveToNextLine(aStartPos, nMaxAscent,
-                                                                      nColumn, aOrigin);
+                                            aTmpPos += MoveToNextLine(aStartPos, nMaxAscent, nColumn);
                                             adjustXDirectionAware(aTmpPos, -pLine->GetNextLinePosXDiff());
                                         }
                                         std::vector< sal_Int32 >::iterator curIt = itSubLines;
@@ -4088,7 +4083,8 @@ void ImpEditEngine::DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditV
     // extract Primitives
     OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
     const Point aStartPos(CalculateTextPaintStartPosition(*pView));
-    StripAllPortions(rTarget, aClipRect, aStartPos, rHelper);
+    const bool bStartPos(0 != aStartPos.getX() || 0 != aStartPos.getY());
+    StripAllPortions(rTarget, bStartPos ? aClipRect - aStartPos : aClipRect, rHelper);
 
     if (rHelper.getTextPortionPrimitives().empty())
         // no Primitives, done
@@ -4098,8 +4094,19 @@ void ImpEditEngine::DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditV
     drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     aViewInformation2D.setViewTransformation(rTarget.GetViewTransformation());
 
-    // get content and it's range
+    // get content
     drawinglayer::primitive2d::Primitive2DContainer aContent(rHelper.getTextPortionPrimitives());
+
+    if (bStartPos)
+    {
+        // embed to transformation
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createTranslateB2DHomMatrix(aStartPos.X(), aStartPos.Y()),
+                std::move(aContent))};
+    }
+
+    // get content range
     const basegfx::B2DRange aContentRange(aContent.getB2DRange(aViewInformation2D));
     const basegfx::B2DRange aClipRange(vcl::unotools::b2DRectangleFromRectangle(aClipRect));
 

@@ -1003,7 +1003,7 @@ public:
     void                    UpdateViews( EditView* pCurView = nullptr );
     Point CalculateTextPaintStartPosition(ImpEditView& rView) const;
     void                    DrawText_ToEditView( TextHierarchyBreakup& rHelper, ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
-    void StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, Point aStartPos, StripPortionsHelper& rStripPortionsHelper);
+    void StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aClipRect, StripPortionsHelper& rStripPortionsHelper);
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
@@ -1366,14 +1366,14 @@ public:
 
     tools::Long GetColumnWidth(const Size& rPaperSize) const;
     Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int16& nColumn,
-                         Point aOrigin, tools::Long* pnHeightNeededToNotWrap = nullptr) const;
+                         tools::Long* pnHeightNeededToNotWrap = nullptr) const;
 
     tools::Long getWidthDirectionAware(const Size& sz) const;
     tools::Long getHeightDirectionAware(const Size& sz) const;
     void adjustXDirectionAware(Point& pt, tools::Long x) const;
     void adjustYDirectionAware(Point& pt, tools::Long y) const;
     void setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const;
-    void setYDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const;
+    void setYDirectionAwareFrom(Point& ptDest) const;
     tools::Long getYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
     bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
     // Offset of the rectangle's direction-aware corners in document coordinates
