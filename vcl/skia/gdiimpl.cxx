@@ -965,7 +965,7 @@ void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& 
     }
     if (moFillColor)
     {
-        SkPaint aPaint = makeFillPaint(fTransparency);
+        SkPaint aPaint = makeFillPaint(fTransparency, /*bSrcATop*/ true);
         aPaint.setAntiAlias(useAA);
         // HACK: If the polygon is just a line, it still should be drawn. But when filling
         // Skia doesn't draw empty polygons, so in that case ensure the line is drawn.

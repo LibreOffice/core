@@ -305,11 +305,11 @@ protected:
     // Create SkPaint to use when drawing to the surface. It is not to be used
     // when doing internal drawing such as when merging two bitmaps together.
     // This may apply some default settings to the paint as necessary.
-    SkPaint makePaintInternal() const;
+    SkPaint makePaintInternal(bool bSrcATop = false) const;
     // Create SkPaint set up for drawing lines (using mLineColor etc.).
     SkPaint makeLinePaint(double transparency = 0) const;
     // Create SkPaint set up for filling (using mFillColor etc.).
-    SkPaint makeFillPaint(double transparency = 0) const;
+    SkPaint makeFillPaint(double transparency = 0, bool bSrcATop = false) const;
     // Create SkPaint set up for bitmap drawing.
     SkPaint makeBitmapPaint() const;
     // Create SkPaint set up for gradient drawing.
@@ -370,7 +370,7 @@ protected:
     bool mInWindowBackingPropertiesChanged;
 };
 
-inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const
+inline SkPaint SkiaSalGraphicsImpl::makePaintInternal(bool bSrcATop) const
 {
     SkPaint paint;
     // Invert could be done using a blend mode like invert() does, but
@@ -381,6 +381,8 @@ inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const
         SkiaHelper::setBlenderInvert(&paint);
     else if (mXorMode == XorMode::Xor)
         SkiaHelper::setBlenderXor(&paint);
+    else if (bSrcATop)
+        paint.setBlendMode(SkBlendMode::kSrcATop);
     else
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     return paint;
@@ -397,10 +399,10 @@ inline SkPaint SkiaSalGraphicsImpl::makeLinePaint(double transparency) const
     return paint;
 }
 
-inline SkPaint SkiaSalGraphicsImpl::makeFillPaint(double transparency) const
+inline SkPaint SkiaSalGraphicsImpl::makeFillPaint(double transparency, bool bSrcATop) const
 {
     assert(moFillColor.has_value());
-    SkPaint paint = makePaintInternal();
+    SkPaint paint = makePaintInternal(bSrcATop);
     paint.setColor(transparency == 0
                        ? SkiaHelper::toSkColor(*moFillColor)
                        : SkiaHelper::toSkColorWithTransparency(*moFillColor, transparency));
