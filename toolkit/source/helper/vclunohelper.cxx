@@ -62,7 +62,7 @@ uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 Bitmap VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap )
 {
     if (VCLXBitmap* pVCLBitmap = dynamic_cast<VCLXBitmap*>(rxBitmap.get()))
-        return Bitmap(pVCLBitmap->GetBitmap());
+        return pVCLBitmap->GetBitmap();
 
     return Bitmap(vcl::GetBitmap(rxBitmap));
 }

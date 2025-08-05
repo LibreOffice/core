@@ -39,7 +39,7 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
     std::scoped_lock aGuard( GetMutex() );
 
     SvMemoryStream aMem;
-    WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
+    WriteDIB(BitmapEx(maBitmap).GetBitmap(), aMem, false, true);
     return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
@@ -47,7 +47,7 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
 {
     std::scoped_lock aGuard( GetMutex() );
 
-    return vcl::bitmap::GetMaskDIB(maBitmap);
+    return vcl::bitmap::GetMaskDIB(BitmapEx(maBitmap));
 }
 
 sal_Int64 SAL_CALL VCLXBitmap::estimateUsage()

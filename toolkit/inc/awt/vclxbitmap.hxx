@@ -25,7 +25,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 
 
@@ -36,7 +36,7 @@ class VCLXBitmap final : public cppu::WeakImplHelper<
                             css::util::XAccounting>
 {
     std::mutex    maMutex;
-    BitmapEx        maBitmap;
+    Bitmap        maBitmap;
 
     std::mutex&   GetMutex() { return maMutex; }
 
@@ -44,10 +44,10 @@ class VCLXBitmap final : public cppu::WeakImplHelper<
 public:
     // inline constructors
     VCLXBitmap() : maMutex(), maBitmap() {}
-    VCLXBitmap(const BitmapEx& rBitmapEx) : maMutex(), maBitmap(rBitmapEx) {}
+    VCLXBitmap(const Bitmap& rBitmap) : maMutex(), maBitmap(rBitmap) {}
 
-    void            SetBitmap( const BitmapEx& rBmp )   { maBitmap = rBmp; }
-    const BitmapEx& GetBitmap() const                   { return maBitmap; }
+    void          SetBitmap( const Bitmap& rBmp )   { maBitmap = rBmp; }
+    const Bitmap& GetBitmap() const                 { return maBitmap; }
 
     // css::awt::XBitmap
     css::awt::Size                 SAL_CALL getSize() override;
