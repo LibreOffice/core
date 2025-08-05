@@ -128,6 +128,64 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
+              <!-- n-columns=2 n-rows=1 -->
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="languageft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes" context="spellingdialog|languageft">Text languag_e:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">languagelb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="languagelb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="model">liststore6</property>
+                    <property name="entry-text-column">0</property>
+                    <property name="id-column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
+                      <attributes>
+                        <attribute name="pixbuf">2</attribute>
+                      </attributes>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="languagelb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|languagelb">Specifies the language to use to check the spelling.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="explain">
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
@@ -151,115 +209,6 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="border-width">0</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="errorsentence">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="errorsentence-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the text box below.</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="suggestionsft">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="spellingdialog|suggestionsft">_Suggestions</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">suggestionslb</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="suggestionslb">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="headers-visible">False</property>
-                    <property name="show-expanders">False</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                        <property name="spacing">6</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="suggestionslb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|suggestionslb">Lists suggested words to replace the misspelled word. Select the word that you want to use, and then click Correct or Correct All.</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkgrammar">
-                <property name="label" translatable="yes" context="spellingdialog|checkgrammar">Chec_k grammar</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="checkgrammar-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|checkgrammar">Enable Check grammar to work first on all spelling errors, then on all grammar errors.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
-                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -326,184 +275,34 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid">
+              <object class="GtkScrolledWindow" id="scrolledwindow">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="column-spacing">12</property>
+                <property name="can-focus">True</property>
+                <property name="border-width">0</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkLabel" id="languageft">
+                  <object class="GtkViewport">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="spellingdialog|languageft">Text languag_e:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">languagelb</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="languagelb">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="model">liststore6</property>
-                    <property name="entry-text-column">0</property>
-                    <property name="id-column">1</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext9"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="cellrenderertext6"/>
-                      <attributes>
-                        <attribute name="pixbuf">2</attribute>
-                      </attributes>
-                    </child>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="languagelb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|languagelb">Specifies the language to use to check the spelling.</property>
+                      <object class="GtkDrawingArea" id="errorsentence">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="errorsentence-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the text box below.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=3 n-rows=1 -->
-              <object class="GtkGrid">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <object class="GtkLabel" id="resumeft">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="label" translatable="yes" context="spellingdialog|resumeft">Res_ume</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="nosuggestionsft">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="label" translatable="yes" context="spellingdialog|nosuggestionsft">(no suggestions)</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="alttitleft">
-                    <property name="can-focus">False</property>
-                    <property name="no-show-all">True</property>
-                    <property name="label" translatable="yes" context="spellingdialog|alttitleft">Spelling: $LANGUAGE ($LOCATION)</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">7</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
-              <!-- n-columns=1 n-rows=3 -->
-              <object class="GtkGrid">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="row-spacing">6</property>
-                <child>
-                  <object class="GtkButton" id="change">
-                    <property name="label" translatable="yes" context="spellingdialog|change">Co_rrect</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="change-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|change">Replaces the unknown word with the current suggestion. If you changed more than just the misspelled word, the entire sentence is replaced.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="changeall">
-                    <property name="label" translatable="yes" context="spellingdialog|changeall">Correct A_ll</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="changeall-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|changeall">Replaces all occurrences of the unknown word with the current suggestion.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="autocorrect">
-                    <property name="label" translatable="yes" context="spellingdialog|autocorrect">Add to _AutoCorrect</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes" context="spellingdialog|autocorrect|tooltip_text">Add selected suggestion as replacement for incorrect word in AutoCorrect replacement table.</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="use-underline">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="autocorrect-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|autocorrect">Adds the current combination of the incorrect word and the replacement word to the AutoCorrect replacement table.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -623,6 +422,207 @@
               <packing>
                 <property name="left-attach">1</property>
                 <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="suggestionsft">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="spellingdialog|suggestionsft">_Suggestions</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">suggestionslb</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="suggestionslb">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers-visible">False</property>
+                    <property name="show-expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="suggestionslb-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|suggestionslb">Lists suggested words to replace the misspelled word. Select the word that you want to use, and then click Correct or Correct All.</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=1 n-rows=3 -->
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="row-spacing">6</property>
+                <child>
+                  <object class="GtkButton" id="change">
+                    <property name="label" translatable="yes" context="spellingdialog|change">Co_rrect</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="change-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|change">Replaces the unknown word with the current suggestion. If you changed more than just the misspelled word, the entire sentence is replaced.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="changeall">
+                    <property name="label" translatable="yes" context="spellingdialog|changeall">Correct A_ll</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="changeall-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|changeall">Replaces all occurrences of the unknown word with the current suggestion.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="autocorrect">
+                    <property name="label" translatable="yes" context="spellingdialog|autocorrect">Add to _AutoCorrect</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="spellingdialog|autocorrect|tooltip_text">Add selected suggestion as replacement for incorrect word in AutoCorrect replacement table.</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autocorrect-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|autocorrect">Adds the current combination of the incorrect word and the replacement word to the AutoCorrect replacement table.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkgrammar">
+                <property name="label" translatable="yes" context="spellingdialog|checkgrammar">Chec_k grammar</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="checkgrammar-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|checkgrammar">Enable Check grammar to work first on all spelling errors, then on all grammar errors.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <!-- n-columns=3 n-rows=1 -->
+              <object class="GtkGrid">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="column-spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="resumeft">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="label" translatable="yes" context="spellingdialog|resumeft">Res_ume</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="nosuggestionsft">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="label" translatable="yes" context="spellingdialog|nosuggestionsft">(no suggestions)</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="alttitleft">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="label" translatable="yes" context="spellingdialog|alttitleft">Spelling: $LANGUAGE ($LOCATION)</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
