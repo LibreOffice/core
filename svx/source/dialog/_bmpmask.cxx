@@ -596,7 +596,7 @@ sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uI
     return nCount;
 }
 
-void SvxBmpMask::ImpMask( BitmapEx& rBitmap )
+void SvxBmpMask::ImpMask( Bitmap& rBitmap )
 {
     Color           pSrcCols[4];
     Color           pDstCols[4];
@@ -608,20 +608,19 @@ void SvxBmpMask::ImpMask( BitmapEx& rBitmap )
     LeaveWait();
 }
 
-BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color& rColor, const sal_uInt8 nTol )
+Bitmap SvxBmpMask::ImpMaskTransparent( const Bitmap& rBitmap, const Color& rColor, const sal_uInt8 nTol )
 {
     EnterWait();
 
-    BitmapEx    aBmpEx;
-    AlphaMask   aMask( rBitmapEx.GetBitmap().CreateAlphaMask( rColor, nTol ) );
+    AlphaMask   aMask( BitmapEx(rBitmap).GetBitmap().CreateAlphaMask( rColor, nTol ) );
 
-    if( rBitmapEx.IsAlpha() )
-        aMask.AlphaCombineOr( rBitmapEx.GetAlphaMask() );
+    if( rBitmap.HasAlpha() )
+        aMask.AlphaCombineOr( BitmapEx(rBitmap).GetAlphaMask() );
 
-    aBmpEx = BitmapEx( rBitmapEx.GetBitmap(), aMask );
+    Bitmap aBmp(BitmapEx( BitmapEx(rBitmap).GetBitmap(), aMask ));
     LeaveWait();
 
-    return aBmpEx;
+    return aBmp;
 }
 
 
@@ -981,21 +980,21 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                             // Do we have a transparent color?
                             if (pDstCols[i] == COL_TRANSPARENT)
                             {
-                                BitmapEx    aBmpEx( ImpMaskTransparent( aGraphic.GetBitmapEx(),
+                                Bitmap    aBmp( ImpMaskTransparent( Bitmap(aGraphic.GetBitmapEx()),
                                                                         pSrcCols[ i ], pTols[ i ] ) );
-                                const Size  aSize( aBmpEx.GetSizePixel() );
+                                const Size  aSize( aBmp.GetSizePixel() );
 
                                 if( aSize.Width() && aSize.Height() )
-                                    aGraphic = aBmpEx;
+                                    aGraphic = aBmp;
                             }
                         }
 
                         // now replace it again with the normal colors
-                        BitmapEx  aBitmapEx( aGraphic.GetBitmapEx() );
-                        if ( aBitmapEx.GetSizePixel().Width() && aBitmapEx.GetSizePixel().Height() )
+                        Bitmap  aBitmap( aGraphic.GetBitmapEx() );
+                        if ( aBitmap.GetSizePixel().Width() && aBitmap.GetSizePixel().Height() )
                         {
-                            ImpMask( aBitmapEx );
-                            aGraphic = Graphic( aBitmapEx );
+                            ImpMask( aBitmap );
+                            aGraphic = Graphic( aBitmap );
                         }
                     }
                 }
