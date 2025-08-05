@@ -215,7 +215,7 @@ namespace comphelper
     std::shared_ptr<AsyncEventNotifierAutoJoin>
     AsyncEventNotifierAutoJoin::newAsyncEventNotifierAutoJoin(char const* name)
     {
-        std::shared_ptr<AsyncEventNotifierAutoJoin> const ret(
+        std::shared_ptr<AsyncEventNotifierAutoJoin> ret(
                 new AsyncEventNotifierAutoJoin(name));
         std::scoped_lock g(GetTheNotifiersMutex());
         g_Notifiers.push_back(ret);

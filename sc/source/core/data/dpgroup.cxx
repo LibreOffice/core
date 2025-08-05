@@ -715,7 +715,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                     std::make_shared<ScDPGroupDateFilter>(
                         std::move(aMatchValues), pDoc->GetFormatTable()->GetNullDate(), *pNumInfo);
 
-                aNewCriteria.push_back(aCri);
+                aNewCriteria.push_back(std::move(aCri));
             }
             else
             {

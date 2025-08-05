@@ -158,10 +158,10 @@ Primitive2DReference TextEffectPrimitive2D::create2DDecomposition(
                 new TransformPrimitive2D(aTransform, Primitive2DContainer(getTextContent())));
 
             // at last, place original over it, but force to white
-            const basegfx::BColorModifierSharedPtr aBColorModifierToWhite
+            basegfx::BColorModifierSharedPtr aBColorModifierToWhite
                 = std::make_shared<basegfx::BColorModifier_replace>(basegfx::BColor(1.0, 1.0, 1.0));
             aContainer.push_back(new ModifiedColorPrimitive2D(
-                Primitive2DContainer(getTextContent()), aBColorModifierToWhite));
+                Primitive2DContainer(getTextContent()), std::move(aBColorModifierToWhite)));
 
             break;
         }

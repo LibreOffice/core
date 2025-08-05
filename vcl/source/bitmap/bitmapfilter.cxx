@@ -36,7 +36,7 @@ bool BitmapFilter::Filter(Bitmap& rBmp, BitmapFilter const& rFilter)
         return false;
     }
 
-    rBmp = aTmpBmp;
+    rBmp = std::move(aTmpBmp);
     return true;
 }
 
