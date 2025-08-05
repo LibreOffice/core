@@ -260,6 +260,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QListView* pListView = new QListView(pParentWidget);
         pListView->setModel(new QStandardItemModel(pListView));
         pListView->setViewMode(QListView::IconMode);
+        pListView->setMovement(QListView::Static);
         pObject = pListView;
     }
     else if (sName == u"GtkImage")
