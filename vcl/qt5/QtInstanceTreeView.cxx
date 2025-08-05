@@ -725,10 +725,32 @@ void QtInstanceTreeView::visible_foreach(const std::function<bool(weld::TreeIter
 }
 
 void QtInstanceTreeView::bulk_insert_for_each(
-    int, const std::function<void(weld::TreeIter&, int nSourceIndex)>&, const weld::TreeIter*,
-    const std::vector<int>*, bool)
+    int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
+    const weld::TreeIter* pParent, const std::vector<int>* pFixedWidths, bool)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        // clear existing children
+        const QModelIndex aParentIndex = pParent ? modelIndex(*pParent) : QModelIndex();
+        const int nRows = m_pModel->rowCount(aParentIndex);
+        if (nRows > 0)
+            m_pModel->removeRows(0, nRows, aParentIndex);
+
+        // insert new rows
+        m_pModel->insertRows(0, nSourceCount, aParentIndex);
+
+        // call function for each row
+        for (int nRow = 0; nRow < nSourceCount; nRow++)
+        {
+            QtInstanceTreeIter aIter = treeIter(nRow, aParentIndex);
+            func(aIter, nRow);
+        }
+
+        // set column widths
+        if (pFixedWidths)
+            set_column_fixed_widths(*pFixedWidths);
+    });
 }
 
 bool QtInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
