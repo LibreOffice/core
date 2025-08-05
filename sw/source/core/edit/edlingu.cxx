@@ -1541,7 +1541,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
     SwPaM *pCursor = GetSh()->GetCursor();
     aPosition.nLeft = pCursor->Start()->GetContentIndex();
     aPosition.nRight = pCursor->End()->GetContentIndex();
-    m_aLastPortions.push_back(aPortion);
+    m_aLastPortions.push_back(std::move(aPortion));
     m_aLastPositions.push_back(aPosition);
 }
 

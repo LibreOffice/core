@@ -144,8 +144,7 @@ GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComm
 std::string GtvHelpers::getDirPath(const std::string& filePath)
 {
     int position = filePath.find_last_of('/');
-    const std::string dirPath = filePath.substr(0, position + 1);
-    return dirPath;
+    return filePath.substr(0, position + 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

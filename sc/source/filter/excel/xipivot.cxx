@@ -353,16 +353,16 @@ void XclImpPCField::ReadItem( XclImpStream& rStrm )
     {
         // there are 3 items after SXNUMGROUP that contain grouping limits and step count
         if( maNumGroupItems.size() < 3 )
-            maNumGroupItems.push_back( xItem );
+            maNumGroupItems.push_back(std::move(xItem));
         else
-            maOrigItems.push_back( xItem );
+            maOrigItems.push_back(std::move(xItem));
     }
     else if( HasInlineItems() || HasPostponedItems() )
     {
         maItems.push_back( xItem );
         // visible item is original item in standard fields
         if( IsStandardField() )
-            maOrigItems.push_back( xItem );
+            maOrigItems.push_back(std::move(xItem));
     }
 }
 

@@ -1906,7 +1906,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
 
                 SingleRowColumnWindowData aRowColumnWindowData;
                 aRowColumnWindowData.nRowColumn = nCurrPos;
-                rRowColumnsWindowData.push_back( aRowColumnWindowData );
+                rRowColumnsWindowData.push_back(std::move(aRowColumnWindowData));
             }
 
             sal_Int32 nSpace( 0 );
@@ -1921,7 +1921,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
                 nCurrPos = rElement.m_aDockedData.m_aPos.Y;
                 SingleRowColumnWindowData aRowColumnWindowData;
                 aRowColumnWindowData.nRowColumn = nCurrPos;
-                rRowColumnsWindowData.push_back( aRowColumnWindowData );
+                rRowColumnsWindowData.push_back(std::move(aRowColumnWindowData));
             }
 
             // Calc space before an element and store it

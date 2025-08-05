@@ -282,7 +282,7 @@ namespace dbaui
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
         OIndex aNewIndex((OUString()));  // the empty string indicates the index is a new one
         aNewIndex.sName = _rName;
-        m_aIndexes.push_back(aNewIndex);
+        m_aIndexes.push_back(std::move(aNewIndex));
         return m_aIndexes.end() - 1;    // the last element is the new one ...
     }
 

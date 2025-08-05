@@ -384,7 +384,7 @@ ScCTBWrapper::Read( SvStream &rS)
         ScCTB aCTB( ctbSet.ctbViews );
         if ( !aCTB.Read( rS ) )
             return false;
-        rCTB.push_back( aCTB );
+        rCTB.push_back(std::move(aCTB));
     }
     return true;
 }

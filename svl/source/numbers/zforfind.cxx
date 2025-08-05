@@ -1331,7 +1331,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             assert(mpFormat->GetLanguage() == aSaveLocale.getLanguageType());   // prerequisite
             // Obtain formatter's locale's (e.g. system) patterns.
             xLocaleData.changeLocale( LanguageTag( mrCurrentLanguageData.GetIniLanguage()));
-            const css::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
+            css::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
             // Reset to format's locale.
             xLocaleData.changeLocale( aSaveLocale);
             // When concatenating don't care about duplicates, combining
@@ -1343,7 +1343,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                     assert(!"shouldn't reach here");
                 break;
                 case NfEvalDateFormat::International:
-                    sDateAcceptancePatterns = aLocalePatterns;
+                    sDateAcceptancePatterns = std::move(aLocalePatterns);
                 break;
                 case NfEvalDateFormat::InternationalThenFormat:
                     sDateAcceptancePatterns = comphelper::concatSequences(

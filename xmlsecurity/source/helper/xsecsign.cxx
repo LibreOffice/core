@@ -293,7 +293,7 @@ void XSecController::setDescription(sal_Int32 nSecurityId, const OUString& rDesc
     {
         InternalSignatureInformation aInformation(nSecurityId, nullptr);
         aInformation.signatureInfor.ouDescription = rDescription;
-        m_vInternalSignatureInformations.push_back(aInformation);
+        m_vInternalSignatureInformations.push_back(std::move(aInformation));
     }
     else
     {

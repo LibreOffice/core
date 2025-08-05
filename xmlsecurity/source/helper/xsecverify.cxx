@@ -289,7 +289,7 @@ void XSecController::setX509Data(
     }
     if (!data.empty())
     {
-        isi.signatureInfor.X509Datas.push_back(data);
+        isi.signatureInfor.X509Datas.push_back(std::move(data));
     }
 }
 
