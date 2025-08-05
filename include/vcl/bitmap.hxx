@@ -216,9 +216,7 @@ public:
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    SAL_DLLPRIVATE bool Expand(
-                                sal_Int32 nDX, sal_Int32 nDY,
-                                const Color* pInitColor = nullptr );
+    bool Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor = nullptr );
 
     /** Copy a rectangular area from another bitmap
 

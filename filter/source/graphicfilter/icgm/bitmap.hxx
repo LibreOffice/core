@@ -20,7 +20,7 @@
 #pragma once
 
 #include "cgm.hxx"
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vector>
 
 class CGM;
@@ -30,7 +30,7 @@ class CGMBitmapDescriptor
     public:
         sal_uInt8*              mpBuf;
         sal_uInt8*              mpEndBuf;
-        BitmapEx                mxBitmap;
+        Bitmap                  mxBitmap;
         bool                    mbStatus;
         bool                    mbVMirror;
         sal_uInt32              mnDstBitsPerPixel;
