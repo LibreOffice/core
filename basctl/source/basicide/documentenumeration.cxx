@@ -124,7 +124,7 @@ namespace basctl::docs {
                     if ( _pFilter && !_pFilter->includeDocument( aDescriptor ) )
                         continue;
 
-                    _out_rDocuments.push_back( aDescriptor );
+                    _out_rDocuments.push_back(std::move(aDescriptor));
                 }
                 catch( const Exception& )
                 {

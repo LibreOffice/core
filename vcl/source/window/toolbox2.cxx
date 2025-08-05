@@ -587,7 +587,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, ToolBoxItemId nItemId )
     aNewItem.mpWindow      = nullptr;
     aNewItem.mbShowWindow = false;
 
-    mpData->m_aItems.push_back( aNewItem );
+    mpData->m_aItems.push_back(std::move(aNewItem));
     mpData->ImplClearLayoutData();
     // redraw ToolBox
     ImplInvalidate();

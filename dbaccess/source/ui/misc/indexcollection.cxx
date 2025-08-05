@@ -309,7 +309,7 @@ namespace dbaui
             // fill the OIndex structure
             OIndex aCurrentIndex(name);
             implFillIndexInfo(aCurrentIndex, xIndex);
-            m_aIndexes.push_back(aCurrentIndex);
+            m_aIndexes.push_back(std::move(aCurrentIndex));
         }
     }
 

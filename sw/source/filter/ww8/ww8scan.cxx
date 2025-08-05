@@ -4250,7 +4250,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     {
                         ww::bytes extraData(nExtraLen);
                         rStrm.ReadBytes(extraData.data(), nExtraLen);
-                        pExtraArray->push_back(extraData);
+                        pExtraArray->push_back(std::move(extraData));
                     }
                     else
                         rStrm.SeekRel( nExtraLen );

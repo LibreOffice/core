@@ -8726,7 +8726,7 @@ void DocxAttributeOutput::WriteField_Impl(const SwField *const pField,
     infos.bClose = bool(FieldFlags::Close & nMode);
     infos.bSep = bool(FieldFlags::CmdEnd & nMode);
     infos.bOpen = bool(FieldFlags::Start & nMode);
-    m_Fields.push_back( infos );
+    m_Fields.push_back(std::move(infos));
 
     if (pBookmarkName)
     {

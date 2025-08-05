@@ -83,7 +83,7 @@ void ScRetypePassDlg::SetDataFromDocument(const ScDocument& rDoc)
         if (pTabProtect && pTabProtect->isProtected())
             aTabItem.mpProtect = std::make_shared<ScTableProtection>(*pTabProtect);
 
-        maTableItems.push_back(aTabItem);
+        maTableItems.push_back(std::move(aTabItem));
         maSheets.emplace_back(new PassFragment(mxSheetsBox.get()));
         maSheets.back()->m_xButton->connect_clicked(LINK(this, ScRetypePassDlg, RetypeBtnHdl));
     }
