@@ -360,6 +360,8 @@ private:
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
+    OUString            sLastItemIdent;
+    Size                aIconSize;
 
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops m_aColorStops;
@@ -378,20 +380,21 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrColorFrom;
     std::unique_ptr<ColorListBox> m_xLbColorTo;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrColorTo;
-    std::unique_ptr<SvxPresetListBox> m_xGradientLB;
+    std::unique_ptr<weld::IconView> m_xGradientLB;
     std::unique_ptr<weld::SpinButton> m_xMtrIncrement;
     std::unique_ptr<weld::CheckButton> m_xCbIncrement;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnModify;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
-    std::unique_ptr<weld::CustomWeld> m_xGradientLBWin;
 
     DECL_LINK( ClickAddHdl_Impl, weld::Button&, void );
     DECL_LINK( ClickModifyHdl_Impl, weld::Button&, void );
-    DECL_LINK( ChangeGradientHdl, ValueSet*, void );
+    DECL_LINK( ChangeGradientHdl, weld::IconView&, void );
     void ChangeGradientHdl_Impl();
-    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK( ModifiedEditHdl_Impl, weld::SpinButton&, void );
     DECL_LINK( ModifiedMetricHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
@@ -405,6 +408,14 @@ private:
 
     // MCGR: Preserve ColorStops until we have a UI to edit these
     basegfx::BColorStops createColorStops();
+
+    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    void FillPresetListBox();
+    void ShowContextMenu(const Point& pPos);
+    void MenuSelect(const OUString& rIdent);
+    void HandleMenuSelect(std::u16string_view rIdent);
+    void ClickRenameHdl();
+    void ClickDeleteHdl();
 
 public:
     SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
