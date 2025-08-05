@@ -213,7 +213,33 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     m_xAddToDictMB->set_help_id(m_xAddToDictPB->get_help_id());
     xSpell = LinguMgr::GetSpellChecker();
 
-    Init_Impl();
+    // initialize handler
+    m_xClosePB->connect_clicked(LINK( this, SpellDialog, CancelHdl ) );
+    m_xChangePB->connect_clicked(LINK( this, SpellDialog, ChangeHdl ) );
+    m_xChangeAllPB->connect_clicked(LINK( this, SpellDialog, ChangeAllHdl ) );
+    m_xIgnorePB->connect_clicked(LINK( this, SpellDialog, IgnoreHdl ) );
+    m_xIgnoreAllPB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
+    m_xIgnoreRulePB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
+    m_xUndoPB->connect_clicked(LINK( this, SpellDialog, UndoHdl ) );
+
+    m_xAutoCorrPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
+    m_xCheckGrammarCB->connect_toggled( LINK( this, SpellDialog, CheckGrammarHdl ));
+    m_xOptionsPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
+
+    m_xSuggestionLB->connect_row_activated( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
+
+    m_xSentenceED->SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
+
+    m_xAddToDictMB->connect_selected(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
+    m_xAddToDictPB->connect_clicked(LINK ( this, SpellDialog, AddToDictClickHdl ) );
+
+    m_xLanguageLB->connect_changed(LINK( this, SpellDialog, LanguageSelectHdl ) );
+
+    // initialize language ListBox
+    m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::SPELL_USED, false, false, true);
+
+    m_xSentenceED->ClearModifyFlag();
+    LinguMgr::GetChangeAllList()->clear();
 
     // disable controls if service is missing
     m_xDialog->set_sensitive(xSpell.is());
@@ -243,37 +269,6 @@ SpellDialog::~SpellDialog()
 
         pImpl.reset();
     }
-}
-
-void SpellDialog::Init_Impl()
-{
-    // initialize handler
-    m_xClosePB->connect_clicked(LINK( this, SpellDialog, CancelHdl ) );
-    m_xChangePB->connect_clicked(LINK( this, SpellDialog, ChangeHdl ) );
-    m_xChangeAllPB->connect_clicked(LINK( this, SpellDialog, ChangeAllHdl ) );
-    m_xIgnorePB->connect_clicked(LINK( this, SpellDialog, IgnoreHdl ) );
-    m_xIgnoreAllPB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
-    m_xIgnoreRulePB->connect_clicked(LINK( this, SpellDialog, IgnoreAllHdl ) );
-    m_xUndoPB->connect_clicked(LINK( this, SpellDialog, UndoHdl ) );
-
-    m_xAutoCorrPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
-    m_xCheckGrammarCB->connect_toggled( LINK( this, SpellDialog, CheckGrammarHdl ));
-    m_xOptionsPB->connect_clicked( LINK( this, SpellDialog, ExtClickHdl ) );
-
-    m_xSuggestionLB->connect_row_activated( LINK( this, SpellDialog, DoubleClickChangeHdl ) );
-
-    m_xSentenceED->SetModifyHdl(LINK ( this, SpellDialog, ModifyHdl) );
-
-    m_xAddToDictMB->connect_selected(LINK ( this, SpellDialog, AddToDictSelectHdl ) );
-    m_xAddToDictPB->connect_clicked(LINK ( this, SpellDialog, AddToDictClickHdl ) );
-
-    m_xLanguageLB->connect_changed(LINK( this, SpellDialog, LanguageSelectHdl ) );
-
-    // initialize language ListBox
-    m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::SPELL_USED, false, false, true);
-
-    m_xSentenceED->ClearModifyFlag();
-    LinguMgr::GetChangeAllList()->clear();
 }
 
 void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
