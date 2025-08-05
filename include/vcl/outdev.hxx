@@ -1402,6 +1402,10 @@ public:
                                     const basegfx::B2DHomMatrix& rTransformation,
                                     const BitmapEx& rBitmapEx,
                                     double fAlpha = 1.0);
+    void                        DrawTransformedBitmapEx(
+                                    const basegfx::B2DHomMatrix& rTransformation,
+                                    const Bitmap& rBitmap,
+                                    double fAlpha = 1.0);
 
     /** Return true if DrawTransformedBitmapEx() is fast.
 

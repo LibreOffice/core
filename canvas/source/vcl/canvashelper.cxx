@@ -653,7 +653,7 @@ namespace vclcanvas
             ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
             aOutputPos *= aMatrix;
 
-            BitmapEx aBmpEx( tools::bitmapExFromXBitmap(xBitmap) );
+            ::Bitmap aBmp( tools::bitmapFromXBitmap(xBitmap) );
 
             // TODO(F2): Implement modulation again for other color
             // channels (currently, works only for alpha). Note: this
@@ -681,7 +681,7 @@ namespace vclcanvas
                 // optimized case: identity matrix, or only
                 // translational components.
                 mpOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                    aBmpEx );
+                                                    aBmp );
 
                 if( mp2ndOutDevProvider )
                 {
@@ -689,13 +689,13 @@ namespace vclcanvas
                     // actually what mp2ndOutDev is...  well, here we do &
                     // assume a 1bpp target - everything beyond 97%
                     // transparency is fully transparent
-                    if( aBmpEx.IsAlpha() && !SkiaHelper::isVCLSkiaEnabled())
+                    if( aBmp.HasAlpha() && !SkiaHelper::isVCLSkiaEnabled())
                     {
-                        BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                        BitmapFilter::Filter(aBmp, BitmapAlphaClampFilter(253));
                     }
 
                     mp2ndOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
-                                                           aBmpEx );
+                                                           aBmp );
                 }
 
                 // Returning a cache object is not useful, the XBitmap
@@ -705,23 +705,23 @@ namespace vclcanvas
             else if( mpOutDevProvider->getOutDev().HasFastDrawTransformedBitmap())
             {
                 ::basegfx::B2DHomMatrix aSizeTransform;
-                aSizeTransform.scale( aBmpEx.GetSizePixel().Width(), aBmpEx.GetSizePixel().Height() );
+                aSizeTransform.scale( aBmp.GetSizePixel().Width(), aBmp.GetSizePixel().Height() );
                 aMatrix = aMatrix * aSizeTransform;
                 const double fAlpha = bModulateColors ? renderState.DeviceColor[3] : 1.0;
 
-                mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx, fAlpha );
+                mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmp, fAlpha );
                 if( mp2ndOutDevProvider )
                 {
-                    if( aBmpEx.IsAlpha() )
+                    if( aBmp.HasAlpha() )
                     {
                         // tdf#157790 invert alpha mask
                         // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
                         // the alpha mask needs to be inverted. Note: when
                         // testing tdf#157790, this code only gets executed
                         // when Skia is enabled.
-                        AlphaMask aAlpha( aBmpEx.GetAlphaMask() );
+                        AlphaMask aAlpha( BitmapEx(aBmp).GetAlphaMask() );
                         aAlpha.Invert();
-                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aAlpha );
+                        aBmp = Bitmap(BitmapEx( BitmapEx(aBmp).GetBitmap(), aAlpha ));
 
                         // HACK. Normally, CanvasHelper does not care about
                         // actually what mp2ndOutDev is...  well, here we do &
@@ -729,11 +729,11 @@ namespace vclcanvas
                         // transparency is fully transparent
                         if( !SkiaHelper::isVCLSkiaEnabled())
                         {
-                            BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                            BitmapFilter::Filter(aBmp, BitmapAlphaClampFilter(253));
                         }
                     }
 
-                    mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx );
+                    mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmp );
                 }
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr);
             }
@@ -750,7 +750,7 @@ namespace vclcanvas
                 GraphicAttr             aGrfAttr;
                 GraphicObjectSharedPtr  pGrfObj;
 
-                ::Size aBmpSize( aBmpEx.GetSizePixel() );
+                ::Size aBmpSize( aBmp.GetSizePixel() );
 
                 // setup alpha modulation
                 if( bModulateColors )
@@ -788,7 +788,7 @@ namespace vclcanvas
                     const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
                     aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
-                    pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
+                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
                 }
                 else
                 {
@@ -807,17 +807,16 @@ namespace vclcanvas
 
                     // complex transformation, use generic affine bitmap
                     // transformation
-                    aBmpEx = tools::transformBitmap( aBmpEx,
-                                                     aMatrix );
+                    aBmp = tools::transformBitmap( aBmp, aMatrix );
 
-                    pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
+                    pGrfObj = std::make_shared<GraphicObject>( aBmp );
 
                     // clear scale values, generated bitmap already
                     // contains scaling
                     aScale.setX( 1.0 ); aScale.setY( 1.0 );
 
                     // update bitmap size, bitmap has changed above.
-                    aBmpSize = aBmpEx.GetSizePixel();
+                    aBmpSize = aBmp.GetSizePixel();
                 }
 
                 // output GraphicObject
@@ -833,16 +832,16 @@ namespace vclcanvas
                 if( mp2ndOutDevProvider )
                 {
                     GraphicObjectSharedPtr p2ndGrfObj = pGrfObj;
-                    if( aBmpEx.IsAlpha() )
+                    if( aBmp.HasAlpha() )
                     {
                         // tdf#157790 invert alpha mask
                         // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
                         // the alpha mask needs to be inverted. Note: when
                         // testing tdf#157790, this code only gets executed
                         // when Skia is disabled.
-                        AlphaMask aAlpha( aBmpEx.GetAlphaMask() );
+                        AlphaMask aAlpha( BitmapEx(aBmp).GetAlphaMask() );
                         aAlpha.Invert();
-                        BitmapEx a2ndBmpEx( aBmpEx.GetBitmap(), aAlpha );
+                        BitmapEx a2ndBmpEx( BitmapEx(aBmp).GetBitmap(), aAlpha );
                         p2ndGrfObj = std::make_shared<GraphicObject>( a2ndBmpEx );
                     }
 
@@ -922,7 +921,7 @@ namespace vclcanvas
         const Point aEmptyPoint(0,0);
         const Size  aBmpSize( rOutDev.GetOutputSizePixel() );
 
-        BitmapEx aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
+        ::Bitmap aBitmap( rOutDev.GetBitmap(aEmptyPoint, aBmpSize) );
 
         aBitmap.Scale( vcl::unotools::sizeFromRealSize2D(newSize),
                        beFast ? BmpScaleFlag::Default : BmpScaleFlag::BestQuality );

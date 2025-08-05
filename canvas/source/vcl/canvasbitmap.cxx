@@ -49,19 +49,19 @@ namespace vclcanvas
         {
             AlphaMask   aAlpha ( rSize );
 
-            maCanvasHelper.init( BitmapEx( aBitmap, aAlpha ),
+            maCanvasHelper.init( Bitmap(BitmapEx( aBitmap, aAlpha )),
                                  rDevice,
                                  rOutDevProvider );
         }
         else
         {
-            maCanvasHelper.init( BitmapEx( aBitmap ),
+            maCanvasHelper.init( aBitmap,
                                  rDevice,
                                  rOutDevProvider );
         }
     }
 
-    CanvasBitmap::CanvasBitmap( const BitmapEx&                rBitmap,
+    CanvasBitmap::CanvasBitmap( const ::Bitmap&                rBitmap,
                                 rendering::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
     {
@@ -84,7 +84,7 @@ namespace vclcanvas
         return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
     }
 
-    BitmapEx CanvasBitmap::getBitmap() const
+    Bitmap CanvasBitmap::getBitmap() const
     {
         SolarMutexGuard aGuard;
 

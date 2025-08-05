@@ -748,7 +748,7 @@ namespace vclcanvas
                     // texturing parameters
                     // ===========================================
 
-                    BitmapEx aBmpEx( tools::bitmapExFromXBitmap( textures[0].Bitmap ) );
+                    ::Bitmap aBmp( tools::bitmapFromXBitmap( textures[0].Bitmap ) );
 
                     // scale down bitmap to [0,1]x[0,1] rect, as required
                     // from the XCanvas interface.
@@ -797,7 +797,7 @@ namespace vclcanvas
                         const double nAngleInTenthOfDegrees (3600.0 - basegfx::rad2deg<10>(nRotate));
                         aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
-                        pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
+                        pGrfObj = std::make_shared<GraphicObject>( aBmp );
                     }
                     else
                     {
@@ -816,17 +816,16 @@ namespace vclcanvas
 
                         // complex transformation, use generic affine bitmap
                         // transformation
-                        aBmpEx = tools::transformBitmap( aBmpEx,
-                                                         aTotalTransform);
+                        aBmp = tools::transformBitmap( aBmp, aTotalTransform);
 
-                        pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
+                        pGrfObj = std::make_shared<GraphicObject>( aBmp );
 
                         // clear scale values, generated bitmap already
                         // contains scaling
                         aScale.setX( 1.0 ); aScale.setY( 1.0 );
 
                         // update bitmap size, bitmap has changed above.
-                        aBmpSize = vcl::unotools::integerSize2DFromSize(aBmpEx.GetSizePixel());
+                        aBmpSize = vcl::unotools::integerSize2DFromSize(aBmp.GetSizePixel());
                     }
 
 

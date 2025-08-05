@@ -442,6 +442,14 @@ struct LocalTimeTest
 
 void OutputDevice::DrawTransformedBitmapEx(
     const basegfx::B2DHomMatrix& rTransformation,
+    const Bitmap& rBitmap,
+    double fAlpha)
+{
+    DrawTransformedBitmapEx(rTransformation, BitmapEx(rBitmap), fAlpha);
+}
+
+void OutputDevice::DrawTransformedBitmapEx(
+    const basegfx::B2DHomMatrix& rTransformation,
     const BitmapEx& rBitmapEx,
     double fAlpha)
 {

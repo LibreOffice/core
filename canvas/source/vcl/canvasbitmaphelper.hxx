@@ -65,7 +65,7 @@ namespace vclcanvas
             @param rOutDevProvider
             Reference output device. Used to create matching bitmap.
          */
-        void init( const BitmapEx&                              rBitmap,
+        void init( const ::Bitmap&                              rBitmap,
                    css::rendering::XGraphicDevice&              rDevice,
                    const OutDevProviderSharedPtr&               rOutDevProvider );
 
@@ -94,7 +94,7 @@ namespace vclcanvas
         css::rendering::IntegerBitmapLayout getMemoryLayout() const;
 
         /// @internal
-        BitmapEx getBitmap() const;
+        ::Bitmap getBitmap() const;
 
     private:
 

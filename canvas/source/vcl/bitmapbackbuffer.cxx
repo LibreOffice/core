@@ -28,7 +28,7 @@
 
 namespace vclcanvas
 {
-    BitmapBackBuffer::BitmapBackBuffer( const BitmapEx&         rBitmap,
+    BitmapBackBuffer::BitmapBackBuffer( const ::Bitmap&         rBitmap,
                                         const OutputDevice&     rRefDevice ) :
         maBitmap( rBitmap ),
         mpVDev( nullptr ),
@@ -67,7 +67,7 @@ namespace vclcanvas
         getBitmapReference().Erase(COL_TRANSPARENT);
     }
 
-    BitmapEx& BitmapBackBuffer::getBitmapReference()
+    ::Bitmap& BitmapBackBuffer::getBitmapReference()
     {
         OSL_ENSURE( !mbBitmapContentIsCurrent || !mbVDevContentIsCurrent,
                     "BitmapBackBuffer::getBitmapReference(): Both bitmap and VDev are valid?!" );
@@ -111,7 +111,7 @@ namespace vclcanvas
 
         // VDev not yet created, do it now. Create an alpha-VDev,
         // if bitmap has transparency.
-        mpVDev = maBitmap->IsAlpha() ?
+        mpVDev = maBitmap->HasAlpha() ?
             VclPtr<VirtualDevice>::Create( mrRefDevice, DeviceFormat::WITH_ALPHA ) :
             VclPtr<VirtualDevice>::Create( mrRefDevice );
 

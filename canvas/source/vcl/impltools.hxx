@@ -51,8 +51,8 @@ namespace vclcanvas
 {
     namespace tools
     {
-        ::BitmapEx
-        bitmapExFromXBitmap( const css::uno::Reference<
+        ::Bitmap
+        bitmapFromXBitmap( const css::uno::Reference<
                              css::rendering::XBitmap >& );
 
         /** Setup VCL font and output position
@@ -149,8 +149,8 @@ namespace vclcanvas
                                       const css::rendering::ViewState&     rViewState,
                                       const css::rendering::RenderState&   rRenderState );
 
-        ::BitmapEx transformBitmap( const BitmapEx&                                     rBitmap,
-                                    const ::basegfx::B2DHomMatrix&                      rTransform );
+        ::Bitmap transformBitmap( const ::Bitmap&                                   rBitmap,
+                                  const ::basegfx::B2DHomMatrix&                    rTransform );
 
         void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice );
     }

@@ -73,7 +73,7 @@ namespace vclcanvas
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         /// Must be called with locked Solar mutex
-        CanvasBitmap( const BitmapEx&                              rBitmap,
+        CanvasBitmap( const ::Bitmap&                              rBitmap,
                       css::rendering::XGraphicDevice&              rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
@@ -91,7 +91,7 @@ namespace vclcanvas
                               const GraphicAttr&                              rAttr ) const override;
 
         /// Not threadsafe! Returned object is shared!
-        BitmapEx getBitmap() const;
+        ::Bitmap getBitmap() const;
 
         // XFastPropertySet
         // used to retrieve BitmapEx pointer or X Pixmap handles for this bitmap

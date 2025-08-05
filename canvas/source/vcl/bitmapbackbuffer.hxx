@@ -40,7 +40,7 @@ namespace vclcanvas
     public:
         /** Create a backbuffer for given reference device
          */
-        BitmapBackBuffer( const BitmapEx&       rBitmap,
+        BitmapBackBuffer( const ::Bitmap&       rBitmap,
                           const OutputDevice&   rRefDevice );
 
         virtual ~BitmapBackBuffer() override;
@@ -56,14 +56,14 @@ namespace vclcanvas
 
             @internal
         */
-        BitmapEx&                   getBitmapReference();
+        ::Bitmap&                   getBitmapReference();
         Size                        getBitmapSizePixel() const;
 
     private:
         void createVDev() const;
         void updateVDev() const;
 
-        ::canvas::vcltools::VCLObject<BitmapEx> maBitmap;
+        ::canvas::vcltools::VCLObject<::Bitmap> maBitmap;
         mutable VclPtr<VirtualDevice>           mpVDev; // created only on demand
 
         const OutputDevice&                     mrRefDevice;

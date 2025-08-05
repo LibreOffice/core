@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas::tools
 {
-        ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
+        ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
             // TODO(F3): CanvasCustomSprite should also be tunnelled
             // through (also implements XIntegerBitmap interface)
@@ -64,24 +64,23 @@ namespace vclcanvas::tools
                     // TODO(F3): mind the plain Canvas impl. Consolidate with CWS canvas05
                     const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
                     const ::Point aEmptyPoint;
-                    return BitmapEx(rDev.GetBitmap( aEmptyPoint,
-                                             rDev.GetOutputSizePixel() ));
+                    return rDev.GetBitmap( aEmptyPoint, rDev.GetOutputSizePixel() );
                 }
 
                 // TODO(F2): add support for floating point bitmap formats
                 uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                     xBitmap, uno::UNO_QUERY_THROW );
 
-                ::BitmapEx aBmpEx = vcl::unotools::bitmapExFromXBitmap( xIntBmp );
-                if( !aBmpEx.IsEmpty() )
-                    return aBmpEx;
+                ::Bitmap aBmp = vcl::unotools::bitmapFromXBitmap( xIntBmp );
+                if( !aBmp.IsEmpty() )
+                    return aBmp;
 
                 // TODO(F1): extract pixel from XBitmap interface
                 ENSURE_OR_THROW( false,
                                   "bitmapExFromXBitmap(): could not extract bitmap" );
             }
 
-            return ::BitmapEx();
+            return ::Bitmap();
         }
 
         bool setupFontTransform( ::Point&                       o_rPoint,
@@ -212,8 +211,8 @@ namespace vclcanvas::tools
             return ::tools::PolyPolygon( aTemp );
         }
 
-        ::BitmapEx transformBitmap( const BitmapEx&                 rBitmap,
-                                    const ::basegfx::B2DHomMatrix&  rTransform )
+        ::Bitmap transformBitmap( const ::Bitmap&                 rBitmap,
+                                  const ::basegfx::B2DHomMatrix&  rTransform )
         {
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap()" );
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap: 0x" << std::hex << &rBitmap );
@@ -240,7 +239,7 @@ namespace vclcanvas::tools
                                                         aSrcRect,
                                                         rTransform );
 
-            return BitmapEx(vcl::bitmap::CanvasTransformBitmap(Bitmap(rBitmap), rTransform, aDestRect, aLocalTransform));
+            return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
         }
 
         void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice )
