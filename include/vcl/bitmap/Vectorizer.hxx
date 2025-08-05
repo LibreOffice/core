@@ -22,7 +22,7 @@
 #include <vcl/dllapi.h>
 
 class GDIMetaFile;
-class BitmapEx;
+class Bitmap;
 
 template <typename Arg, typename Ret> class Link;
 
@@ -52,7 +52,7 @@ public:
         : mnReduce(nReduce)
     {}
 
-    bool vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile);
+    bool vectorize(Bitmap const& rBitmap, GDIMetaFile& rMetafile);
 
     void setProgressCallback(const Link<tools::Long,void>* pProgress)
     {

@@ -644,14 +644,13 @@ void Vectorizer::updateProgress(tools::Long nProgress)
        mpProgress->Call(nProgress);
 }
 
-bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
+bool Vectorizer::vectorize(Bitmap const& rBitmap, GDIMetaFile& rMetafile)
 {
     bool bRet = false;
 
     updateProgress(0);
 
-    std::optional<Bitmap> xBmp(std::in_place, rBitmap.GetBitmap());
-    BitmapScopedReadAccess pRAcc(*xBmp);
+    BitmapScopedReadAccess pRAcc(rBitmap);
 
     if( pRAcc )
     {
@@ -741,7 +740,6 @@ bool Vectorizer::vectorize(BitmapEx const& rBitmap, GDIMetaFile& rMetafile)
     }
 
     pRAcc.reset();
-    xBmp.reset();
     updateProgress(100);
 
     return bRet;

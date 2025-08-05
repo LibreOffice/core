@@ -131,20 +131,20 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
     m_xPrgs->set_percentage(0);
 
     Fraction aScale;
-    BitmapEx aBitmapEx(GetPreparedBitmap(rBmp, aScale));
+    Bitmap aBitmap(GetPreparedBitmap(rBmp, aScale));
 
-    if (!aBitmapEx.IsEmpty())
+    if (!aBitmap.IsEmpty())
     {
         const Link<::tools::Long,void> aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
         sal_uInt8 nReduce = sal_uInt8(m_xMtReduce->get_value(FieldUnit::NONE));
         vcl::Vectorizer aVecotrizer(nReduce);
-        aVecotrizer.vectorize(aBitmapEx, rMtf);
+        aVecotrizer.vectorize(aBitmap, rMtf);
         aVecotrizer.setProgressCallback(&aPrgsHdl);
 
         if (m_xCbFillHoles->get_active())
         {
             GDIMetaFile aNewMtf;
-            BitmapScopedReadAccess pRAcc(aBitmapEx.GetBitmap());
+            BitmapScopedReadAccess pRAcc(aBitmap);
 
             if( pRAcc )
             {
