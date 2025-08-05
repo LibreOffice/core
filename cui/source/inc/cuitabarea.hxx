@@ -453,6 +453,8 @@ private:
     SfxItemSet&         m_rXFSet;
 
     MapUnit             m_ePoolUnit;
+    OUString            sLastItemIdent;
+    Size                aIconSize;
 
     SvxXRectPreview m_aCtlPreview;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrDistance;
@@ -462,14 +464,18 @@ private:
     std::unique_ptr<ColorListBox> m_xLbLineColor;
     std::unique_ptr<weld::CheckButton> m_xCbBackgroundColor;
     std::unique_ptr<ColorListBox> m_xLbBackgroundColor;
-    std::unique_ptr<SvxPresetListBox> m_xHatchLB;
+    std::unique_ptr<weld::IconView> m_xHatchLB;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnModify;
     std::unique_ptr<weld::CustomWeld> m_xHatchLBWin;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
 
-    DECL_LINK(ChangeHatchHdl, ValueSet*, void);
+    DECL_LINK(ChangeHatchHdl, weld::IconView&, void);
     void ChangeHatchHdl_Impl();
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
+    DECL_LINK(MenuSelectAsyncHdl, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK( ModifiedEditHdl_Impl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifiedListBoxHdl_Impl, weld::ComboBox&, void );
     DECL_LINK( ModifiedColorListBoxHdl_Impl, ColorListBox&, void );
@@ -479,10 +485,16 @@ private:
     void ModifiedHdl_Impl(void const *);
     DECL_LINK( ClickAddHdl_Impl, weld::Button&, void );
     DECL_LINK( ClickModifyHdl_Impl, weld::Button&, void );
-    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
     sal_Int32 SearchHatchList(std::u16string_view rHatchName);
+
+    static VclPtr<VirtualDevice> GetVirtualDevice(BitmapEx aBitmap);
+    void FillPresetListBox();
+    void ShowContextMenu(const Point& pPos);
+    void MenuSelect(const OUString& rIdent);
+    void HandleMenuSelect(std::u16string_view rIdent);
+    void ClickRenameHdl();
+    void ClickDeleteHdl();
 
 public:
     SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
