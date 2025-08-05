@@ -165,7 +165,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     }
     else
     {
-        // with premultipled alpha, the white becomes black
+        // with premultiplied alpha, the white becomes black
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
             "First pixel is not black", 0.0, pRGBStart[0].Red, 1E-12);
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
