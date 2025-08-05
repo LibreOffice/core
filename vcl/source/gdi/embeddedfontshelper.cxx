@@ -412,6 +412,7 @@ bool EmbeddedFontsHelper::isCommonFont(std::u16string_view aFontName)
         u"Liberation Mono",
         u"Caladea",
         u"Carlito",
+        u"OpenSymbol",
         // MSO
         u"Times New Roman",
         u"Arial",
@@ -419,6 +420,13 @@ bool EmbeddedFontsHelper::isCommonFont(std::u16string_view aFontName)
         u"Courier New",
         u"Cambria",
         u"Calibri",
+        u"Mangal",
+        u"Microsoft YaHei",
+        u"NSimSun",
+        u"Segoe UI",
+        u"SimSun",
+        u"Symbol",
+        u"Tahoma",
     });
 
     return aCommonFontsList.contains(aFontName);
