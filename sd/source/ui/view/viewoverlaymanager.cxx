@@ -86,14 +86,14 @@ constexpr OUString aBigPlaceHolders[] =
     BMP_PLACEHOLDER_MOVIE_LARGE_HOVER
 };
 
-static BitmapEx& getButtonImage( int index, bool large )
+static Bitmap& getButtonImage( int index, bool large )
 {
-    static ::tools::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = {
+    static ::tools::DeleteOnDeinit< Bitmap > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = {
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty };
-    static ::tools::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = {
+    static ::tools::DeleteOnDeinit< Bitmap > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = {
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
             ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
@@ -105,8 +105,8 @@ static BitmapEx& getButtonImage( int index, bool large )
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(aSmallPlaceHolders[i]);
-            gLargeButtonImages[i].set(aBigPlaceHolders[i]);
+            gSmallButtonImages[i].set(BitmapEx(aSmallPlaceHolders[i]));
+            gLargeButtonImages[i].set(BitmapEx(aBigPlaceHolders[i]));
         }
     }
 
@@ -136,7 +136,7 @@ public:
     /** returns true if the SmartTag consumes this event. */
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
-    BitmapEx createOverlayImage( int nHighlight );
+    Bitmap createOverlayImage( int nHighlight );
 
 protected:
     virtual void addCustomHandles( SdrHdlList& rHandlerList ) override;
@@ -262,8 +262,8 @@ void ImageButtonHdl::CreateB2dIAObject()
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-    BitmapEx aBitmapEx( mxChangePlaceholderTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
-    maImageSize = aBitmapEx.GetSizePixel();
+    Bitmap aBitmap( mxChangePlaceholderTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
+    maImageSize = aBitmap.GetSizePixel();
     maImageSize.setWidth( maImageSize.Width() >> 1 );
     maImageSize.setHeight( maImageSize.Height() >> 1 );
 
@@ -289,7 +289,7 @@ void ImageButtonHdl::CreateB2dIAObject()
         if(rPaintWindow.OutputToWindow() && xManager.is() )
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
-                new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
+                new sdr::overlay::OverlayBitmapEx( aPosition, aBitmap, 0, 0 ));
 
             // OVERLAYMANAGER
             insertNewlyCreatedOverlayObjectForSdrHdl(
@@ -360,9 +360,9 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
+Bitmap ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
-    BitmapEx aRet;
+    Bitmap aRet;
     if( auto pPlaceholder = mxPlaceholderObj.get() )
     {
         SmartTagReference xThis( this );

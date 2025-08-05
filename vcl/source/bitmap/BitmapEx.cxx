@@ -386,7 +386,7 @@ void BitmapEx::Expand(sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent)
     if (maBitmap.IsEmpty())
         return;
 
-    bool bRet = maBitmap.Expand( nDX, nDY );
+    bool bRet = maBitmap.Expand( nDX, nDY, nullptr );
 
     if ( bRet && !maAlphaMask.IsEmpty() )
     {

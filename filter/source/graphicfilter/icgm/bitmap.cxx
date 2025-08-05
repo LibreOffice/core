@@ -394,7 +394,7 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor const & rSource, CGMBitmapDescri
             return;
         }
     }
-    rDest.mxBitmap.Expand( 0, rSource.mnY );
+    rDest.mxBitmap.Expand( 0, rSource.mnY, nullptr );
     rDest.mxBitmap.CopyPixel( tools::Rectangle( Point( 0, rDest.mnY ), Size( rSource.mnX, rSource.mnY ) ),
         tools::Rectangle( Point( 0, 0 ), Size( rSource.mnX, rSource.mnY ) ), rSource.mxBitmap );
 

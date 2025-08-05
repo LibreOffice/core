@@ -28,7 +28,7 @@ namespace sdr::overlay
         {
             drawinglayer::primitive2d::Primitive2DReference aReference(
                 new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                    maBitmapEx,
+                    BitmapEx(maBitmap),
                     getBasePosition(),
                     mnCenterX,
                     mnCenterY,
@@ -46,14 +46,14 @@ namespace sdr::overlay
 
         OverlayBitmapEx::OverlayBitmapEx(
             const basegfx::B2DPoint& rBasePos,
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             sal_uInt16 nCenX,
             sal_uInt16 nCenY,
             double fAlpha,
             double fShearX,
             double fRotation)
         :   OverlayObjectWithBasePosition(rBasePos, COL_WHITE),
-            maBitmapEx(rBitmapEx),
+            maBitmap(rBitmap),
             mnCenterX(nCenX),
             mnCenterY(nCenY),
             mfAlpha(fAlpha),

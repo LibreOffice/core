@@ -883,7 +883,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, eColIndex);
+        Bitmap aBmp(ImpGetBitmapEx(eKindOfMarker, eColIndex));
 
         // When the image with handles is not found, the bitmap returned is
         // empty. This is a problem when we use LibreOffice as a library
@@ -892,27 +892,27 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         //
         // This HACK replaces the empty bitmap with a black 13x13 bitmap handle
         // so that the hit test works for this case.
-        if (aBmpEx.IsEmpty())
+        if (aBmp.IsEmpty())
         {
-            aBmpEx = BitmapEx(Size(13, 13), vcl::PixelFormat::N24_BPP);
-            aBmpEx.Erase(COL_BLACK);
+            aBmp = Bitmap(Size(13, 13), vcl::PixelFormat::N24_BPP);
+            aBmp.Erase(COL_BLACK);
         }
 
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // upper left as reference point inside the handle for AnchorPressed, too
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx));
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
-                static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1), 0));
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp,
+                static_cast<sal_uInt16>(aBmp.GetSizePixel().Width() - 1), 0));
         }
         else
         {
-            sal_uInt16 nCenX(static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1) >> 1);
-            sal_uInt16 nCenY(static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Height() - 1) >> 1);
+            sal_uInt16 nCenX(static_cast<sal_uInt16>(aBmp.GetSizePixel().Width() - 1) >> 1);
+            sal_uInt16 nCenY(static_cast<sal_uInt16>(aBmp.GetSizePixel().Height() - 1) >> 1);
 
             if(aMoveOutsideOffset.X() > 0)
             {
@@ -920,7 +920,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
             }
             else if(aMoveOutsideOffset.X() < 0)
             {
-                nCenX = static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Width() - 1);
+                nCenX = static_cast<sal_uInt16>(aBmp.GetSizePixel().Width() - 1);
             }
 
             if(aMoveOutsideOffset.Y() > 0)
@@ -929,11 +929,11 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
             }
             else if(aMoveOutsideOffset.Y() < 0)
             {
-                nCenY = static_cast<sal_uInt16>(aBmpEx.GetSizePixel().Height() - 1);
+                nCenY = static_cast<sal_uInt16>(aBmp.GetSizePixel().Height() - 1);
             }
 
             // create centered handle as default
-            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmpEx, nCenX, nCenY));
+            pRetval.reset(new sdr::overlay::OverlayBitmapEx(rPos, aBmp, nCenX, nCenY));
         }
     }
 
@@ -1149,7 +1149,7 @@ void SdrHdlColor::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                BitmapEx aBmpCol(CreateColorDropper(m_aMarkerColor));
+                Bitmap aBmpCol(CreateColorDropper(m_aMarkerColor));
                 basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
                     sdr::overlay::OverlayBitmapEx(
@@ -2440,7 +2440,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     // create centered handle as default
                     pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx(
                         aPosition,
-                        BitmapEx(aBmp1),
+                        aBmp1,
                         static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
                         static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,
                         0.0,

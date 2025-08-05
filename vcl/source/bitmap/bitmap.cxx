@@ -1832,4 +1832,12 @@ Color Bitmap::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
     return aColor;
 }
 
+void Bitmap::Expand(sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent)
+{
+    BitmapEx aTmpEx(*this);
+    aTmpEx.Expand(nDX, nDY, bExpandTransparent);
+    operator=(Bitmap(aTmpEx));
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

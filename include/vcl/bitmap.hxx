@@ -209,6 +209,19 @@ public:
         @param nDY
         Number of scanlines to pad at the bottom border of the bitmap
 
+        @param bExpandTransparent
+        Whether to expand the transparency color or not.
+     */
+    void Expand( sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent = false );
+
+    /** Expand the bitmap by pixel padding
+
+        @param nDX
+        Number of pixel to pad at the right border of the bitmap
+
+        @param nDY
+        Number of scanlines to pad at the bottom border of the bitmap
+
         @param pInitColor
         Color to use for padded pixel
 
