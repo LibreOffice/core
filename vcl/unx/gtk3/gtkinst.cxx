@@ -14614,49 +14614,6 @@ private:
         return false;
     }
 
-    bool iter_next(weld::TreeIter& rIter, bool bOnlyExpanded) const
-    {
-        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
-        GtkTreeIter tmp;
-        GtkTreeIter iter = rGtkIter.iter;
-
-        bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &iter);
-        if (ret && bOnlyExpanded && !get_row_expanded(rGtkIter))
-            ret = false;
-        rGtkIter.iter = tmp;
-        if (ret)
-        {
-            //on-demand dummy entry doesn't count
-            if (get_text(rGtkIter, -1) == "<dummy>")
-                return iter_next(rGtkIter, bOnlyExpanded);
-            return true;
-        }
-
-        tmp = iter;
-        if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
-        {
-            rGtkIter.iter = tmp;
-            //on-demand dummy entry doesn't count
-            if (get_text(rGtkIter, -1) == "<dummy>")
-                return iter_next(rGtkIter, bOnlyExpanded);
-            return true;
-        }
-        // Move up level(s) until we find the level where the next node exists.
-        while (gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &iter))
-        {
-            iter = tmp;
-            if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
-            {
-                rGtkIter.iter = tmp;
-                //on-demand dummy entry doesn't count
-                if (get_text(rGtkIter, -1) == "<dummy>")
-                    return iter_next(rGtkIter, bOnlyExpanded);
-                return true;
-            }
-        }
-        return false;
-    }
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
     // tdf#154565 ignore the crossing event if it was triggered ultimately by a
     // key stroke which is likely from exiting the search box. This way we can
@@ -15925,7 +15882,43 @@ public:
 
     virtual bool iter_next(weld::TreeIter& rIter) const override
     {
-        return iter_next(rIter, false);
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeIter tmp;
+        GtkTreeIter iter = rGtkIter.iter;
+
+        bool ret = gtk_tree_model_iter_children(m_pTreeModel, &tmp, &iter);
+        rGtkIter.iter = tmp;
+        if (ret)
+        {
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter);
+            return true;
+        }
+
+        tmp = iter;
+        if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
+        {
+            rGtkIter.iter = tmp;
+            //on-demand dummy entry doesn't count
+            if (get_text(rGtkIter, -1) == "<dummy>")
+                return iter_next(rGtkIter);
+            return true;
+        }
+        // Move up level(s) until we find the level where the next node exists.
+        while (gtk_tree_model_iter_parent(m_pTreeModel, &tmp, &iter))
+        {
+            iter = tmp;
+            if (gtk_tree_model_iter_next(m_pTreeModel, &tmp))
+            {
+                rGtkIter.iter = tmp;
+                //on-demand dummy entry doesn't count
+                if (get_text(rGtkIter, -1) == "<dummy>")
+                    return iter_next(rGtkIter);
+                return true;
+            }
+        }
+        return false;
     }
 
     virtual bool iter_previous(weld::TreeIter& rIter) const override
