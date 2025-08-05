@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 
 #include <comphelper/configuration.hxx>
@@ -271,6 +272,161 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166553_paraStyleAfterBreak)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaTopMargin"_ustr));
     xPara.set(getRun(getParagraph(3), 1));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, u"CharWeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
+{
+    // given a document that specifies some margins using Ch-based Left/Right indentation
+    // where w:rightChars is inherited from the parent styles - so it overrides w:right
+    // where w:firstLineChars is specified as a direct property
+    // and w:leftChars is disabled (0), so it inherits the style's w:left
+
+    // direct formatting (of the paragraph) in document.xml
+    //     <w:ind w:right="1134"(2 cm)  w:hangingChars="100" (1 ic) w:leftChars="0"/>
+    // inherited formatting from the style chain in styles.xml
+    //     <w:ind w:rightChars="200" (2 ic) w:hangingChars=400 (4 ic)
+    //            w:leftChars="300" (3 ic) w:left="2834"/> (5 cm)
+    createSwDoc("tdf167721_chUnits.docx");
+    // saveAndReload(mpFilter);
+
+    // Test the style #############################################################################
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+        uno::UNO_QUERY);
+
+    auto aFirstCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(-4), aFirstCh.First);
+
+    // This first patchset fixes this line. It instead matched ParaLeftMargin 5001.
+    auto aLeftCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaLeftMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(3), aLeftCh.First);
+
+    auto aRightCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+
+    // Test the paragraph #########################################################################
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    aFirstCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaFirstLineIndentUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(-1), aFirstCh.First);
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+
+    // temporary test
+    // a "zero" leftChars disables a chars margin.
+    // This was being adjusted by ParaFirstLineIndentUnit (0 - -1) to become "1 ic"
+    // aLeftCh = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaLeftMarginUnit"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(double(0), aLeftCh.First);
+
+    // This first patchset also fixes this inheritance. This was zero'd out...
+    aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
+{
+    // given a nasty edge-case document
+    // Style "List Paragraph": left = (2 inch minus 1 Ch), right = 2 Ch, hanging indent = +1 Ch
+    //     <w:ind w:left="2880" w:rightChars="200" w:hangingChars="100" w:firstLineChars="200"/>
+    // Style "Inherited List Paragraph": left = -1 inch, right = 2 Ch, hanging indent = -2 Ch
+    //     <w:ind w:leftChars="0" w:right="1134" w:firstLineChars="200" w:hanging="1440" w:firstLine="2880"/>
+    // Paragraph: left = -1 inch, right = 2 Ch, hanging indent = +1 inch
+    //     <w:ind w:firstLineChars="0"/>
+
+    createSwDoc("tdf167721_chUnits2.docx");
+    saveAndReload(mpFilter);
+
+    // Test the parent style ######################################################################
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+
+    // auto aFirstCh
+    //     = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(double(-1), aFirstCh.First);
+
+    // 5 cm - 1 Ch  (1Ch == 100 TWIP == 0.176 cm), so 4825???  It was 5080
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(5001-176), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
+
+    // This first patchset also fixes this inheritance. This was zero'd out...
+    auto aRightCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+
+    // Test the style #############################################################################
+    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+               uno::UNO_QUERY);
+
+    auto aFirstCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aFirstCh.First);
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
+
+    // This first patchset also fixes this inheritance. This was ParaRightMargin 2000...
+    aRightCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+
+    // Test the paragraph #########################################################################
+    // uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+
+    // aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
+    // CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits3)
+{
+    // given a nasty edge-case document
+    // Style "List Paragraph": left = 2 inch, right = 2 cm, first line = none
+    //     <w:ind w:left="2880" w:right="1134" w:hangingChars="0" w:firstLine="2880"/>
+    // Style "Inherited List Paragraph": left = -1 inch, right = 2 Ch, hanging indent = +1 inch
+    //     <w:ind w:leftChars="0" left="2880" w:rightChars="200" w:hangingChars="0" w:hanging="1440"/>
+    // Paragraph: left = 0, right = 0.14 inch, first line = +2 inch
+    //     <w:ind w:rightChars="0" w:hangingChars="0" w:firstLine="2880" />
+
+    createSwDoc("tdf167721_chUnits3.docx");
+    saveAndReload(mpFilter);
+
+    // Test the parent style ######################################################################
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"List Paragraph"_ustr), uno::UNO_QUERY);
+
+    auto aFirstCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(0), aFirstCh.First);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xStyle, u"ParaRightMargin"_ustr));
+
+    // Test the style #############################################################################
+    xStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+               uno::UNO_QUERY);
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xStyle, u"ParaFirstLineIndent"_ustr));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
+
+    auto aRightCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+
+    // Test the paragraph #########################################################################
+    // uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+
+    // CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
