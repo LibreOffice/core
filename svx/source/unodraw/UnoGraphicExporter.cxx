@@ -1271,7 +1271,7 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  )
 
 /** creates a bitmap that is optionally transparent from a metafile
     */
-BitmapEx GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize)
+Bitmap GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize)
 {
     // use new primitive conversion tooling
     basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
@@ -1302,7 +1302,7 @@ BitmapEx GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize)
         nMaximumQuadraticPixels = 2048 * 2048;
     }
 
-    return convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
+    return convertMetafileToBitmap(rMtf, aRange, nMaximumQuadraticPixels);
 }
 
 Graphic SvxGetGraphicForShape( SdrObject& rShape )

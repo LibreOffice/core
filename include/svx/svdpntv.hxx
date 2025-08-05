@@ -65,10 +65,10 @@ public:
 class SdrPaintWindow;
 
 /**
- * Helper to convert any GDIMetaFile to a good quality BitmapEx,
+ * Helper to convert any GDIMetaFile to a good quality Bitmap,
  * using default parameters and graphic::XPrimitive2DRenderer
  */
-BitmapEx convertMetafileToBitmapEx(
+Bitmap convertMetafileToBitmap(
     const GDIMetaFile& rMtf,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels);

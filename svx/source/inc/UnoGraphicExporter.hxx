@@ -21,14 +21,14 @@
 
 #include <sal/config.h>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 
 class Size;
 class GDIMetaFile;
 class SdrObject;
 
-BitmapEx GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize);
+Bitmap GetBitmapFromMetaFile(const GDIMetaFile& rMtf, const Size* pSize);
 Graphic SvxGetGraphicForShape(SdrObject& rShape);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

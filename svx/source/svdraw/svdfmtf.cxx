@@ -1513,9 +1513,9 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 
     const tools::Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
 
-    // convert metafile sub-content to BitmapEx
-    BitmapEx aBitmapEx(
-        convertMetafileToBitmapEx(
+    // convert metafile sub-content to Bitmap
+    Bitmap aBitmap(
+        convertMetafileToBitmap(
             rMtf,
             vcl::unotools::b2DRectangleFromRectangle(aRect),
             125000));
@@ -1569,7 +1569,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
         // gradient transparence
         ScopedVclPtrInstance< VirtualDevice > pVDev;
 
-        pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
+        pVDev->SetOutputSizePixel(aBitmap.GetSizePixel());
         pVDev->DrawGradient(tools::Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
         aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
@@ -1582,28 +1582,28 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
 
     if(bHasNewMask || bFixedTransparence)
     {
-        if(!aBitmapEx.IsAlpha())
+        if(!aBitmap.HasAlpha())
         {
             // no transparence yet, apply new one
             if(bFixedTransparence)
             {
                 sal_uInt8 nTransparence(basegfx::fround(fTransparence * 255.0));
 
-                aNewMask = AlphaMask(aBitmapEx.GetBitmap().GetSizePixel(), &nTransparence);
+                aNewMask = AlphaMask(aBitmap.GetSizePixel(), &nTransparence);
             }
 
-            aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aNewMask);
+            aBitmap = Bitmap(BitmapEx(BitmapEx(aBitmap).GetBitmap(), aNewMask));
         }
         else
         {
-            vcl::bitmap::DrawAlphaBitmapAndAlphaGradient(aBitmapEx, bFixedTransparence, fTransparence, aNewMask);
+            vcl::bitmap::DrawAlphaBitmapAndAlphaGradient(aBitmap, bFixedTransparence, fTransparence, aNewMask);
         }
     }
 
     // create and add object
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        aBitmap,
         aRect);
 
     // for MetaFloatTransparentAction, do not use SetAttributes(...)

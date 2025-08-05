@@ -104,12 +104,12 @@ SvxViewChangedHint::SvxViewChangedHint() : SfxHint(SfxHintId::SvxViewChanged)
 }
 
 
-BitmapEx convertMetafileToBitmapEx(
+Bitmap convertMetafileToBitmap(
     const GDIMetaFile& rMtf,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels)
 {
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
 
     if(rMtf.GetActionSize())
     {
@@ -119,13 +119,13 @@ BitmapEx convertMetafileToBitmapEx(
                     rTargetRange.getRange(),
                     rTargetRange.getMinimum()),
                 rMtf));
-        aBitmapEx = drawinglayer::convertPrimitive2DContainerToBitmapEx(
+        aBitmap = Bitmap(drawinglayer::convertPrimitive2DContainerToBitmapEx(
             drawinglayer::primitive2d::Primitive2DContainer { aMtf },
             rTargetRange,
-            nMaximumQuadraticPixels);
+            nMaximumQuadraticPixels));
     }
 
-    return aBitmapEx;
+    return aBitmap;
 }
 
 SdrPaintView::SdrPaintView(SdrModel& rSdrModel, OutputDevice* pOut)

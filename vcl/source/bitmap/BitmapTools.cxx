@@ -520,67 +520,52 @@ Bitmap CanvasTransformBitmap( const Bitmap&                 rSrcBitmap,
     return aDstBitmap;
 }
 
-void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparence, float fTransparence, const AlphaMask & rNewMask)
+// mix existing and new alpha mask
+void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixedTransparence, float fTransparence, const AlphaMask & rNewMask)
 {
-    // mix existing and new alpha mask
-    AlphaMask aOldMask;
+    const double fFactor(1.0 / 255.0);
+    BitmapScopedWriteAccess pOld(rBitmap);
+    assert(pOld && "Got no access to old alpha mask (!)");
 
-    if(rBitmapEx.IsAlpha())
+    if(bFixedTransparence)
     {
-        aOldMask = rBitmapEx.GetAlphaMask();
-    }
+        const double fOpNew(1.0 - fTransparence);
 
-    {
-
-        BitmapScopedWriteAccess pOld(aOldMask);
-
-        assert(pOld && "Got no access to old alpha mask (!)");
-
-        const double fFactor(1.0 / 255.0);
-
-        if(bFixedTransparence)
+        for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
         {
-            const double fOpNew(1.0 - fTransparence);
-
-            for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
+            Scanline pScanline = pOld->GetScanline( y );
+            for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
             {
-                Scanline pScanline = pOld->GetScanline( y );
-                for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
-                {
-                    const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
-                    const sal_uInt8 aCol(basegfx::fround((fOpOld * fOpNew) * 255.0));
+                BitmapColor aCol = pOld->GetPixelFromData(pScanline, x);
+                const double fOpOld(aCol.GetAlpha() * fFactor);
+                aCol.SetAlpha(basegfx::fround((fOpOld * fOpNew) * 255.0));
 
-                    pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
-                }
+                pOld->SetPixelOnData(pScanline, x, aCol);
             }
         }
-        else
+    }
+    else
+    {
+        BitmapScopedReadAccess pNew(rNewMask);
+        assert(pNew && "Got no access to new alpha mask (!)");
+
+        assert(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height() &&
+                "Alpha masks have different sizes (!)");
+
+        for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
         {
-            BitmapScopedReadAccess pNew(rNewMask);
-
-            assert(pNew && "Got no access to new alpha mask (!)");
-
-            assert(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height() &&
-                    "Alpha masks have different sizes (!)");
-
-            for(tools::Long y(0),nHeight(pOld->Height()); y < nHeight; y++)
+            Scanline pScanline = pOld->GetScanline( y );
+            for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
             {
-                Scanline pScanline = pOld->GetScanline( y );
-                for(tools::Long x(0),nWidth(pOld->Width()); x < nWidth; x++)
-                {
-                    const double fOpOld(pOld->GetIndexFromData(pScanline, x) * fFactor);
-                    const double fOpNew(pNew->GetIndexFromData(pScanline, x) * fFactor);
-                    const sal_uInt8 aCol(basegfx::fround((fOpOld * fOpNew) * 255.0));
+                BitmapColor aCol = pOld->GetPixelFromData(pScanline, x);
+                const double fOpOld(aCol.GetAlpha() * fFactor);
+                const double fOpNew(pNew->GetIndexFromData(pScanline, x) * fFactor);
+                aCol.SetAlpha(basegfx::fround((fOpOld * fOpNew) * 255.0));
 
-                    pOld->SetPixelOnData(pScanline, x, BitmapColor(aCol));
-                }
+                pOld->SetPixelOnData(pScanline, x, aCol);
             }
         }
-
     }
-
-    // apply combined bitmap as mask
-    rBitmapEx = BitmapEx(rBitmapEx.GetBitmap(), aOldMask);
 }
 
 
