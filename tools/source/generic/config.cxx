@@ -102,8 +102,8 @@ static std::unique_ptr<sal_uInt8[]> ImplSysReadConfig( const OUString& rFileName
         sal_uInt64 nPos = 0;
         if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
+            // coverity[dead_error_condition] - suppress warning, 32bit platforms still
             if (nPos > SAL_MAX_SIZE) {
-                // coverity[dead_error_line] - suppress warning, 32bit platforms still
                 aFile.close();
                 return nullptr;
             }
