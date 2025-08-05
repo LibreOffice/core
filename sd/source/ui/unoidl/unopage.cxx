@@ -1093,7 +1093,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_LDBITMAP:
         {
-            Reference< awt::XBitmap > xBitmap(VCLUnoHelper::CreateBitmap(BitmapEx(BMP_PAGE)));
+            Reference< awt::XBitmap > xBitmap(VCLUnoHelper::CreateBitmap(Bitmap(BitmapEx(BMP_PAGE))));
             aAny <<= xBitmap;
         }
         break;

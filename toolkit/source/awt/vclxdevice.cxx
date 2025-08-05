@@ -133,9 +133,9 @@ css::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap(
 {
     SolarMutexGuard aGuard;
 
-    BitmapEx aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
+    Bitmap aBmp = VCLUnoHelper::GetBitmap( rxBitmap );
     rtl::Reference<VCLXBitmap> pBmp = new VCLXBitmap;
-    pBmp->SetBitmap( aBmp );
+    pBmp->SetBitmap( BitmapEx(aBmp) );
     return pBmp;
 }
 

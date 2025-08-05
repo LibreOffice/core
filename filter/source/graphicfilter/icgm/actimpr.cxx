@@ -600,7 +600,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
         ImplSetOrientation( aOrigin, pBmpDesc->mnOrientation );
     }
 
-    uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( pBmpDesc->mxBitmap ) );
+    uno::Reference< awt::XBitmap > xBitmap( VCLUnoHelper::CreateBitmap( Bitmap(pBmpDesc->mxBitmap) ) );
     maXPropSet->setPropertyValue( u"GraphicObjectFillBitmap"_ustr, uno::Any(xBitmap) );
 }
 

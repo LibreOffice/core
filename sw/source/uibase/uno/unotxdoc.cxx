@@ -4681,7 +4681,7 @@ static Any lcl_GetDisplayBitmap(std::u16string_view sLinkSuffix)
 
     if (!sImgId.isEmpty())
     {
-        aRet <<= VCLUnoHelper::CreateBitmap(BitmapEx(sImgId));
+        aRet <<= VCLUnoHelper::CreateBitmap(Bitmap(BitmapEx(sImgId)));
     }
     return aRet;
 }

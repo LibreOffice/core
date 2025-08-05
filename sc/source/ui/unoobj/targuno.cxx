@@ -230,7 +230,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     if (nImgId != ScContentId::ROOT)
     {
         BitmapEx aBitmapEx { aContentBmps[static_cast<int>(nImgId) -1 ] };
-        rRet <<= VCLUnoHelper::CreateBitmap(aBitmapEx);
+        rRet <<= VCLUnoHelper::CreateBitmap(Bitmap(aBitmapEx));
     }
 }
 

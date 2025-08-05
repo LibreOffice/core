@@ -59,15 +59,15 @@ uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
     return xToolkit;
 }
 
-BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap )
+Bitmap VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap )
 {
     if (VCLXBitmap* pVCLBitmap = dynamic_cast<VCLXBitmap*>(rxBitmap.get()))
-        return pVCLBitmap->GetBitmap();
+        return Bitmap(pVCLBitmap->GetBitmap());
 
-    return vcl::GetBitmap(rxBitmap);
+    return Bitmap(vcl::GetBitmap(rxBitmap));
 }
 
-css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )
+css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const Bitmap& rBitmap )
 {
     return Graphic(rBitmap).GetXGraphic().query<css::awt::XBitmap>();
 }

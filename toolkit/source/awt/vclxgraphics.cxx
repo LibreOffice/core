@@ -276,10 +276,10 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
 
     InitOutputDevice( InitOutDevFlags::NONE);
     uno::Reference< awt::XBitmap > xBitmap( rxBitmapHandle, uno::UNO_QUERY );
-    BitmapEx aBmpEx = VCLUnoHelper::GetBitmap( xBitmap );
+    Bitmap aBmp = VCLUnoHelper::GetBitmap( xBitmap );
 
     Point aPos(nDestX - nSourceX, nDestY - nSourceY);
-    Size aSz = aBmpEx.GetSizePixel();
+    Size aSz = aBmp.GetSizePixel();
 
     if(nDestWidth != nSourceWidth)
     {
@@ -296,7 +296,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
     if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)
         mpOutputDevice->IntersectClipRegion(vcl::Region(tools::Rectangle(nDestX, nDestY, nDestX + nDestWidth - 1, nDestY + nDestHeight - 1)));
 
-    mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmpEx );
+    mpOutputDevice->DrawBitmapEx( aPos, aSz, aBmp );
 }
 
 void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y )
