@@ -38,7 +38,7 @@ class tdf125449(UITestCase):
             self.assertEqual(
               hex(document.DrawPages[0].Background.FillGradient.StartColor), '0xdde8cb')
             self.assertEqual(
-              document.DrawPages[0].Background.FillGradient.Angle, 450)
+              document.DrawPages[0].Background.FillGradient.Angle, 300)
             self.assertEqual(
               document.DrawPages[0].Background.FillGradient.Border, 0)
             self.assertEqual(
@@ -50,10 +50,9 @@ class tdf125449(UITestCase):
             self.assertEqual(
               document.DrawPages[0].Background.FillGradient.EndIntensity, 100)
 
-            # Without the patch in place, this test would have failed with
-            # AssertionError: '' != 'gradient'
+            # FillGradientName to match the first(default) preset's name
             self.assertEqual(
-              document.DrawPages[0].Background.FillGradientName, 'gradient')
+              document.DrawPages[0].Background.FillGradientName, 'Pastel Bouquet')
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
