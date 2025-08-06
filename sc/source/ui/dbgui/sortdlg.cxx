@@ -24,11 +24,15 @@
 #include <sortdlg.hxx>
 #include <unotools/viewoptions.hxx>
 
+#include <vcl/tabs.hrc>
+
 ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/sortdialog.ui"_ustr, u"SortDialog"_ustr, pArgSet)
 {
-    AddTabPage(u"criteria"_ustr, ScTabPageSortFields::Create, nullptr);
-    AddTabPage(u"options"_ustr, ScTabPageSortOptions::Create, nullptr);
+    AddTabPage(u"criteria"_ustr, TabResId(RID_TAB_SORT.aLabel), ScTabPageSortFields::Create,
+               RID_L + RID_TAB_SORT.sIconName);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SORTOPTIONS.aLabel), ScTabPageSortOptions::Create,
+               RID_L + RID_TAB_SORTOPTIONS.sIconName);
 
     // restore dialog size
     SvtViewOptions aDlgOpt(EViewType::Dialog, u"SortDialog"_ustr);
