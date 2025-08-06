@@ -23,15 +23,21 @@
 #include <subtdlg.hxx>
 #include <scui_def.hxx>
 
+#include <vcl/tabs.hrc>
+
 ScSubTotalDlg::ScSubTotalDlg(weld::Window* pParent, const SfxItemSet& rArgSet)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/subtotaldialog.ui"_ustr, u"SubTotalDialog"_ustr, &rArgSet)
     , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
 {
-    AddTabPage(u"1stgroup"_ustr,  ScTpSubTotalGroup1::Create, nullptr);
-    AddTabPage(u"2ndgroup"_ustr,  ScTpSubTotalGroup2::Create, nullptr);
-    AddTabPage(u"3rdgroup"_ustr,  ScTpSubTotalGroup3::Create, nullptr);
-    AddTabPage(u"options"_ustr, ScTpSubTotalOptions::Create, nullptr);
-    m_xBtnRemove->connect_clicked( LINK( this, ScSubTotalDlg, RemoveHdl ) );
+    AddTabPage(u"1stgroup"_ustr, TabResId(RID_TAB_SUBTOTAL_1ST.aLabel), ScTpSubTotalGroup1::Create,
+               RID_L + RID_TAB_SUBTOTAL_1ST.sIconName);
+    AddTabPage(u"2ndgroup"_ustr, TabResId(RID_TAB_SUBTOTAL_2ND.aLabel), ScTpSubTotalGroup2::Create,
+               RID_L + RID_TAB_SUBTOTAL_2ND.sIconName);
+    AddTabPage(u"3rdgroup"_ustr, TabResId(RID_TAB_SUBTOTAL_3RD.aLabel), ScTpSubTotalGroup3::Create,
+               RID_L + RID_TAB_SUBTOTAL_3RD.sIconName);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SUBTOTAL_OPTIONS.aLabel),
+               ScTpSubTotalOptions::Create, RID_L + RID_TAB_SUBTOTAL_OPTIONS.sIconName);
+    m_xBtnRemove->connect_clicked(LINK(this, ScSubTotalDlg, RemoveHdl));
 }
 
 ScSubTotalDlg::~ScSubTotalDlg()
