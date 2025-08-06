@@ -683,13 +683,65 @@ bool CachedContentResultSet
 
     rGuard.unlock();
 
-    if( bAfterLastApplied || nLastAppliedPos != nRow )
-    {
-        if( nForwardOnly == 1 )
-        {
-            if( bAfterLastApplied || bAfterLast || !nRow || nRow < nLastAppliedPos )
-                throw SQLException();
+    if (!bAfterLastApplied && nLastAppliedPos == nRow)
+        return true;
 
+    if( nForwardOnly == 1 )
+    {
+        if( bAfterLastApplied || bAfterLast || !nRow || nRow < nLastAppliedPos )
+            throw SQLException();
+
+        sal_Int32 nN = nRow - nLastAppliedPos;
+        sal_Int32 nM;
+        for( nM = 0; nN--; nM++ )
+        {
+            if( !m_xResultSetOrigin->next() )
+                break;
+        }
+
+        rGuard.lock();
+        m_nLastAppliedPos += nM;
+        m_bAfterLastApplied = nRow != m_nLastAppliedPos;
+        return nRow == m_nLastAppliedPos;
+    }
+
+    if( !nRow ) //absolute( 0 ) will throw exception
+    {
+        m_xResultSetOrigin->beforeFirst();
+
+        rGuard.lock();
+        m_nLastAppliedPos = 0;
+        m_bAfterLastApplied = false;
+        return false;
+    }
+    try
+    {
+        //move absolute, if !nLastAppliedPos
+        //because move relative would throw exception
+        if( !nLastAppliedPos || bAfterLast || bAfterLastApplied )
+        {
+            bool bValid = m_xResultSetOrigin->absolute( nRow );
+
+            rGuard.lock();
+            m_nLastAppliedPos = nRow;
+            m_bAfterLastApplied = !bValid;
+            return bValid;
+        }
+        else
+        {
+            bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
+
+            rGuard.lock();
+            m_nLastAppliedPos += ( nRow - nLastAppliedPos );
+            m_bAfterLastApplied = !bValid;
+            return bValid;
+        }
+    }
+    catch (const SQLException&)
+    {
+        rGuard.lock();
+        if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly(rGuard) )
+        {
             sal_Int32 nN = nRow - nLastAppliedPos;
             sal_Int32 nM;
             for( nM = 0; nN--; nM++ )
@@ -698,68 +750,14 @@ bool CachedContentResultSet
                     break;
             }
 
-            rGuard.lock();
             m_nLastAppliedPos += nM;
             m_bAfterLastApplied = nRow != m_nLastAppliedPos;
-            return nRow == m_nLastAppliedPos;
         }
-
-        if( !nRow ) //absolute( 0 ) will throw exception
-        {
-            m_xResultSetOrigin->beforeFirst();
-
-            rGuard.lock();
-            m_nLastAppliedPos = 0;
-            m_bAfterLastApplied = false;
-            return false;
-        }
-        try
-        {
-            //move absolute, if !nLastAppliedPos
-            //because move relative would throw exception
-            if( !nLastAppliedPos || bAfterLast || bAfterLastApplied )
-            {
-                bool bValid = m_xResultSetOrigin->absolute( nRow );
-
-                rGuard.lock();
-                m_nLastAppliedPos = nRow;
-                m_bAfterLastApplied = !bValid;
-                return bValid;
-            }
-            else
-            {
-                bool bValid = m_xResultSetOrigin->relative( nRow - nLastAppliedPos );
-
-                rGuard.lock();
-                m_nLastAppliedPos += ( nRow - nLastAppliedPos );
-                m_bAfterLastApplied = !bValid;
-                return bValid;
-            }
-        }
-        catch (const SQLException&)
-        {
-            rGuard.lock();
-            if( !bAfterLastApplied && !bAfterLast && nRow > nLastAppliedPos && impl_isForwardOnly(rGuard) )
-            {
-                sal_Int32 nN = nRow - nLastAppliedPos;
-                sal_Int32 nM;
-                for( nM = 0; nN--; nM++ )
-                {
-                    if( !m_xResultSetOrigin->next() )
-                        break;
-                }
-
-                m_nLastAppliedPos += nM;
-                m_bAfterLastApplied = nRow != m_nLastAppliedPos;
-            }
-            else
-                throw;
-            return nRow == m_nLastAppliedPos;
-        }
+        else
+            throw;
+        return nRow == m_nLastAppliedPos;
     }
-    return true;
-};
-
+}
 
 //define for fetching data
 
