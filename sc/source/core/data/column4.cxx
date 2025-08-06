@@ -134,7 +134,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
             if (rCxt.isTableProtected())
             {
                 ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-                aPattern.GetItemSet().Put(ScProtectionAttr(false));
+                aPattern.ItemSetPut(ScProtectionAttr(false));
                 ApplyPatternArea(aRange.mnRow1, aRange.mnRow2, aPattern);
             }
 
@@ -229,7 +229,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
             if (rCxt.isTableProtected())
             {
                 ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-                aPattern.GetItemSet().Put(ScProtectionAttr(false));
+                aPattern.ItemSetPut(ScProtectionAttr(false));
                 ApplyPatternArea(nRow1, nRow2, aPattern);
             }
 

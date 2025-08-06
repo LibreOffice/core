@@ -1099,7 +1099,6 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                 {
                     // transpose borders and merge values, remove merge flags (refreshed after pasting)
                     ScPatternAttr aNewPattern( *pPattern );
-                    SfxItemSet& rNewSet = aNewPattern.GetItemSet();
 
                     const SvxBoxItem& rOldBox = rSet.Get(ATTR_BORDER);
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
@@ -1113,12 +1112,12 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::LEFT ), SvxBoxItemLine::TOP );
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::RIGHT );
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::BOTTOM );
-                        rNewSet.Put( aNew );
+                        aNewPattern.ItemSetPut(aNew);
                     }
 
                     const ScMergeAttr& rOldMerge = rSet.Get(ATTR_MERGE);
                     if (rOldMerge.IsMerged())
-                        rNewSet.Put( ScMergeAttr( std::min(
+                        aNewPattern.ItemSetPut( ScMergeAttr( std::min(
                                         static_cast<SCCOL>(rOldMerge.GetRowMerge()),
                                         static_cast<SCCOL>(rDocument.MaxCol()+1 - (nAttrRow2-nRow1))),
                                     std::min(
@@ -1129,9 +1128,9 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                     {
                         ScMF nNewFlags = rOldFlag.GetValue() & ~ScMF( ScMF::Hor | ScMF::Ver );
                         if ( nNewFlags != ScMF::NONE )
-                            rNewSet.Put( ScMergeFlagAttr( nNewFlags ) );
+                            aNewPattern.ItemSetPut(ScMergeFlagAttr(nNewFlags));
                         else
-                            rNewSet.ClearItem( ATTR_MERGE_FLAG );
+                            aNewPattern.ItemSetClearItem(ATTR_MERGE_FLAG);
                     }
 
                     // Set pattern in cells from nAttrRow1 to nAttrRow2

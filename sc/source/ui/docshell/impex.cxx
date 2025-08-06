@@ -1026,8 +1026,7 @@ static bool lcl_PutString(
                 // ScDocument::SetTextCell() forces it by ScSetStringParam.
                 sal_uInt32 nFormat = rDoc.GetFormatTable()->GetStandardFormat(SvNumFormatType::TEXT);
                 ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
-                SfxItemSet& rSet = aNewAttrs.GetItemSet();
-                rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
+                aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
                 rDoc.ApplyPattern(nCol, nRow, nTab, aNewAttrs);
             }
             if (ScStringUtil::isMultiline(rStr))

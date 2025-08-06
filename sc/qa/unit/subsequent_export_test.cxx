@@ -1610,7 +1610,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
         CPPUNIT_ASSERT_MESSAGE("Incorrect B9 value.", aCheckFunc.checkB9(pEditText));
 
         ScPatternAttr aCellFontColor(pDoc->getCellAttributeHelper());
-        aCellFontColor.GetItemSet().Put(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
+        aCellFontColor.ItemSetPut(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
         // Set font color of B10 to blue.
         pDoc->ApplyPattern(1, 9, 0, aCellFontColor);
         pEE->Clear();

@@ -958,7 +958,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         // MarkData was already MarkToSimple'ed in PasteFromClip
         const ScRange& aRange = rMark.GetMarkArea();
         ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-        aPattern.GetItemSet().Put( *pItem );
+        aPattern.ItemSetPut(*pItem);
         SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
         rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
             aPattern, nNewType );
@@ -2390,8 +2390,8 @@ void ScViewFunc::ExtendScenario()
 
     ScDocument& rDoc = GetViewData().GetDocument();
     ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
-    aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
+    aPattern.ItemSetPut(ScMergeFlagAttr(ScMF::Scenario));
+    aPattern.ItemSetPut(ScProtectionAttr(true));
     ApplySelectionPattern(aPattern);
 }
 

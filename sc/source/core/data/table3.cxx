@@ -1927,9 +1927,8 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
             == SfxItemState::SET )
     {
         ScPatternAttr* pNewPattern(new ScPatternAttr( *pPattern ));
-        SfxItemSet& rSet = pNewPattern->GetItemSet();
-        rSet.ClearItem( ATTR_VALUE_FORMAT );
-        rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
+        pNewPattern->ItemSetClearItem(ATTR_VALUE_FORMAT);
+        pNewPattern->ItemSetClearItem(ATTR_LANGUAGE_FORMAT);
         pTab->SetPattern( nCol, nRow, CellAttributeHolder(pNewPattern, true) );
     }
 }

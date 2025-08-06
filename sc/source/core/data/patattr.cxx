@@ -418,7 +418,9 @@ ScPatternAttr::ScPatternAttr(CellAttributeHelper& rHelper, const SfxItemSet* pIt
 ScPatternAttr::ScPatternAttr(const ScPatternAttr& rPatternAttr)
 : maLocalSfxItemSet(rPatternAttr.maLocalSfxItemSet)
 , moName(rPatternAttr.moName)
-, mxVisible()
+, mxVisible(rPatternAttr.mxVisible)
+, mxNumberFormatKey(rPatternAttr.mxNumberFormatKey)
+, mxLanguageType(rPatternAttr.mxLanguageType)
 , pStyle(rPatternAttr.pStyle)
 , pCellAttributeHelper(rPatternAttr.pCellAttributeHelper)
 , mnPAKey(rPatternAttr.mnPAKey)
@@ -1286,7 +1288,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 {
     if( !pEditSet )
         return;
-    GetFromEditItemSet( GetItemSet(), *pEditSet );
+    GetFromEditItemSet(maLocalSfxItemSet, *pEditSet);
     InvalidateCaches();
 }
 
@@ -1312,7 +1314,6 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
 void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 {
-    SfxItemSet& rThisSet = GetItemSet();
     const SfxItemSet& rOldSet = pOldAttrs->GetItemSet();
 
     const SfxPoolItem* pThisItem;
@@ -1321,7 +1322,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
     for ( sal_uInt16 nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
         //  only items that are set are interesting
-        if ( rThisSet.GetItemState( nSubWhich, false, &pThisItem ) == SfxItemState::SET )
+        if ( maLocalSfxItemSet.GetItemState( nSubWhich, false, &pThisItem ) == SfxItemState::SET )
         {
             SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, true, &pOldItem );
             if ( eOldState == SfxItemState::SET )
@@ -1329,16 +1330,16 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
                 //  item is set in OldAttrs (or its parent) -> compare pointers
                 if (SfxPoolItem::areSame( pThisItem, pOldItem ))
                 {
-                    rThisSet.ClearItem( nSubWhich );
+                    maLocalSfxItemSet.ClearItem( nSubWhich );
                     InvalidateCaches();
                 }
             }
             else if ( eOldState != SfxItemState::INVALID )
             {
                 //  not set in OldAttrs -> compare item value to default item
-                if ( *pThisItem == rThisSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )
+                if ( *pThisItem == maLocalSfxItemSet.GetPool()->GetUserOrPoolDefaultItem( nSubWhich ) )
                 {
-                    rThisSet.ClearItem( nSubWhich );
+                    maLocalSfxItemSet.ClearItem( nSubWhich );
                     InvalidateCaches();
                 }
             }
@@ -1348,18 +1349,16 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 
 bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
 {
-    const SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        if ( rSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
+        if ( maLocalSfxItemSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
             return true;
     return false;
 }
 
 void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
 {
-    SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        rSet.ClearItem(pWhich[i]);
+        maLocalSfxItemSet.ClearItem(pWhich[i]);
     InvalidateCaches();
 }
 
@@ -1426,7 +1425,7 @@ CellAttributeHolder ScPatternAttr::MigrateToDocument( ScDocument* pDestDoc, ScDo
 {
     const SfxItemSet* pSrcSet = &GetItemSet();
     ScPatternAttr* pDestPattern(new ScPatternAttr(pDestDoc->getCellAttributeHelper()));
-    SfxItemSet* pDestSet(&pDestPattern->GetItemSet());
+    SfxItemSet* pDestSet(&pDestPattern->GetItemSetWritable());
 
     // Copy cell pattern style to other document:
     if ( pDestDoc != pSrcDoc )
@@ -1559,7 +1558,6 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
 {
     if (pNewStyle)
     {
-        SfxItemSet&       rPatternSet = GetItemSet();
         const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
 
         if (bClearDirectFormat)
@@ -1567,17 +1565,17 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
             for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
             {
                 if (rStyleSet.GetItemState(i) == SfxItemState::SET)
-                    rPatternSet.ClearItem(i);
+                    maLocalSfxItemSet.ClearItem(i);
             }
         }
-        rPatternSet.SetParent(&pNewStyle->GetItemSet());
+        maLocalSfxItemSet.SetParent(&pNewStyle->GetItemSet());
         pStyle = pNewStyle;
         moName.reset();
     }
     else
     {
         OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
-        GetItemSet().SetParent(nullptr);
+        maLocalSfxItemSet.SetParent(nullptr);
         pStyle = nullptr;
     }
     InvalidateCaches();
@@ -1601,7 +1599,7 @@ bool ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 
         if (pStyle)
         {
-            GetItemSet().SetParent(&pStyle->GetItemSet());
+            maLocalSfxItemSet.SetParent(&pStyle->GetItemSet());
             moName.reset();
         }
     }
@@ -1622,7 +1620,7 @@ void ScPatternAttr::StyleToName()
     {
         moName = pStyle->GetName();
         pStyle = nullptr;
-        GetItemSet().SetParent( nullptr );
+        maLocalSfxItemSet.SetParent( nullptr );
         InvalidateCaches();
     }
 }
@@ -1799,6 +1797,52 @@ void ScPatternAttr::InvalidateCaches()
     mxVisible.reset();
     mxNumberFormatKey.reset();
     mxLanguageType.reset();
+}
+
+SfxItemSet& ScPatternAttr::GetItemSetWritable()
+{
+    // Generally have to assume that caches are invalid
+    // after this is used.
+    InvalidateCaches();
+    return maLocalSfxItemSet;
+}
+
+void ScPatternAttr::InvalidateCacheFor(sal_uInt16 nWhich)
+{
+    switch (nWhich)
+    {
+        case ATTR_LANGUAGE_FORMAT:
+            mxLanguageType.reset();
+            break;
+        case ATTR_VALUE_FORMAT:
+            mxNumberFormatKey.reset();
+            break;
+        case ATTR_BACKGROUND:
+        case ATTR_BORDER:
+        case ATTR_BORDER_TLBR:
+        case ATTR_BORDER_BLTR:
+        case ATTR_SHADOW:
+            mxVisible.reset();
+            break;
+    }
+}
+
+void ScPatternAttr::ItemSetPut(const SfxPoolItem& rItem)
+{
+    InvalidateCacheFor(rItem.Which());
+    maLocalSfxItemSet.Put(rItem);
+}
+
+void ScPatternAttr::ItemSetPut(std::unique_ptr<SfxPoolItem> xItem)
+{
+    InvalidateCacheFor(xItem->Which());
+    maLocalSfxItemSet.Put(std::move(xItem));
+}
+
+void ScPatternAttr::ItemSetClearItem(sal_uInt16 nWhich)
+{
+    InvalidateCacheFor(nWhich);
+    maLocalSfxItemSet.ClearItem(nWhich);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

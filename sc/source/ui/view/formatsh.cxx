@@ -180,7 +180,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             SfxItemSet aItemSet( GetPool() );
 
             ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
-            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+            SfxItemSet& rNewSet = aNewAttrs.GetItemSetWritable();
             rNewSet.Put( aItemSet, false );
 
             rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
@@ -203,7 +203,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             SfxItemSet aItemSet( GetPool() );
 
             ScPatternAttr aNewAttrs(GetViewData().GetDocument().getCellAttributeHelper());
-            SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
+            SfxItemSet& rNewSet = aNewAttrs.GetItemSetWritable();
             rNewSet.Put( aItemSet, false );
             rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
             pTabViewShell->UpdateSelectionArea(aPreviewMark, &aAttr, /*adjustHeight*/ false);
@@ -333,11 +333,10 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     {
                         const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
                         ScPatternAttr aNewAttrs(rDoc.getCellAttributeHelper());
-                        SfxItemSet& rSet = aNewAttrs.GetItemSet();
                         LanguageType eNewLang = pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
                         if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
-                            rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
-                        rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                            aNewAttrs.ItemSetPut(SvxLanguageItem(eNewLang, ATTR_LANGUAGE_FORMAT));
+                        aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat));
                         pTabViewShell->ApplySelectionPattern( aNewAttrs );
                     }
                     else
@@ -1913,9 +1912,8 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
         {
             bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
             ScPatternAttr aAttr(GetViewData().GetDocument().getCellAttributeHelper());
-            SfxItemSet& rItemSet = aAttr.GetItemSet();
-            rItemSet.Put( ScVerticalStackCell( bVert ) );
-            rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
+            aAttr.ItemSetPut(ScVerticalStackCell(bVert));
+            aAttr.ItemSetPut(SfxBoolItem(ATTR_VERTICAL_ASIAN, bVert));
             pTabViewShell->ApplySelectionPattern( aAttr );
             pTabViewShell->AdjustBlockHeight();
         }

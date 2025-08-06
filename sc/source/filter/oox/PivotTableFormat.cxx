@@ -79,7 +79,9 @@ void PivotTableFormat::finalizeImport()
     auto pPattern = std::make_shared<ScPatternAttr>(getScDocument().getCellAttributeHelper());
 
     if (DxfRef pDxf = getStyles().getDxf(mnDxfId))
-        pDxf->fillToItemSet(pPattern->GetItemSet());
+    {
+        pDxf->fillToItemSet(pPattern->GetItemSetWritable());
+    }
 
     ScDPObject* pDPObj = mrPivotTable.getDPObject();
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();

@@ -837,12 +837,12 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             //!     test for filter / buttons / merging
 
             ScPatternAttr aProtPattern(m_pDocument->getCellAttributeHelper());
-            aProtPattern.GetItemSet().Put( ScProtectionAttr( true ) );
+            aProtPattern.ItemSetPut(ScProtectionAttr(true));
             m_pDocument->ApplyPatternAreaTab( 0,0, m_pDocument->MaxCol(),m_pDocument->MaxRow(), nNewTab, aProtPattern );
 
             ScPatternAttr aPattern(m_pDocument->getCellAttributeHelper());
-            aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
-            aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
+            aPattern.ItemSetPut(ScMergeFlagAttr(ScMF::Scenario));
+            aPattern.ItemSetPut(ScProtectionAttr(true));
             m_pDocument->ApplySelectionPattern( aPattern, aDestMark );
 
             if (!bCopyAll)

@@ -58,13 +58,13 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
         model::ComplexColor aComplexColor;
         aComplexColor.setThemeColor(eBackgroundThemeType);
         Color aColor = pTheme->getColorSet()->resolveColor(aComplexColor);
-        aNewPattern.GetItemSet().Put(SvxBrushItem(aColor, aComplexColor, ATTR_BACKGROUND));
+        aNewPattern.ItemSetPut(SvxBrushItem(aColor, aComplexColor, ATTR_BACKGROUND));
     }
     {
         model::ComplexColor aComplexColor;
         aComplexColor.setThemeColor(eCellTextThemeType);
         Color aColor = pTheme->getColorSet()->resolveColor(aComplexColor);
-        aNewPattern.GetItemSet().Put(SvxColorItem(aColor, aComplexColor, ATTR_FONT_COLOR));
+        aNewPattern.ItemSetPut(SvxColorItem(aColor, aComplexColor, ATTR_FONT_COLOR));
     }
 
     // Apply the pattern to cells C3:E5 (2,2 - 4,4) on the first sheet

@@ -64,11 +64,11 @@ const CellAttributeHolder& ScItemPoolCache::ApplyTo(const CellAttributeHolder& r
 
     if (nullptr != aItemToPut.getItem())
     {
-        pNewItem->GetItemSet().Put(*aItemToPut.getItem());
+        pNewItem->ItemSetPut(*aItemToPut.getItem());
     }
     else
     {
-        pNewItem->GetItemSet().Put(*pSetToPut);
+        pNewItem->GetItemSetWritable().Put(*pSetToPut);
     }
 
     m_aCache.emplace_back(rOrigItem, CellAttributeHolder(pNewItem, true));

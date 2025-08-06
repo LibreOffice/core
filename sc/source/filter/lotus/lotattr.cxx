@@ -88,7 +88,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     // generate new Pattern Attribute
     ScPatternAttr*  pNewPatt = new ScPatternAttr(mrContext.rDoc.getCellAttributeHelper());
 
-    SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
+    SfxItemSet&     rItemSet = pNewPatt->GetItemSetWritable();
     ENTRY *pCurrent = new ENTRY( std::unique_ptr<ScPatternAttr>(pNewPatt) );
 
     pCurrent->nHash0 = nRefHash;

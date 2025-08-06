@@ -230,8 +230,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf143979)
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
         ScPatternAttr aNewAttrs(pDoc->getCellAttributeHelper());
-        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
         pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
         pDoc->SetString(ScAddress(0, 0, 0), u"08/30/2021"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"2021-08Aug-30Mon"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
@@ -1455,7 +1454,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testWholeRowBold)
 
         // Make entire second row bold.
         ScPatternAttr boldAttr(pDoc->getCellAttributeHelper());
-        boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+        boldAttr.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
         pDoc->ApplyPatternAreaTab(0, 1, pDoc->MaxCol(), 1, 0, boldAttr);
     }
 

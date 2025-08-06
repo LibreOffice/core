@@ -3171,7 +3171,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                 if (!rFormat.pPattern)
                     continue;
 
-                SfxItemSet& rItemSet = rFormat.pPattern->GetItemSet();
+                SfxItemSet& rItemSet = rFormat.pPattern->GetItemSetWritable();
                 fillDxfFrom(rItemSet, xFormatter);
                 maPatternToDxfId.emplace(rFormat.pPattern.get(), nDxfId);
                 nDxfId++;

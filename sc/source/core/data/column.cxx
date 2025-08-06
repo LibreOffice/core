@@ -559,7 +559,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 
     const ScPatternAttr* pOldPattern(pAttrArray->GetPattern(nRow));
     ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
-    pNewPattern->GetItemSet().Put(rAttr);
+    pNewPattern->ItemSetPut(rAttr);
 
     if (!ScPatternAttr::areSame( pNewPattern, pOldPattern ))
         pAttrArray->SetPattern( nRow, CellAttributeHolder(pNewPattern, true) );

@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColorInsertRow)
 
     // Add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
-    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBlueColor.ItemSetPut(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(0, 3, m_pDoc->MaxCol(), 3, 0, aCellBlueColor);
 
     // Insert a new row at row 3
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUndoBackgroundColorInsertColumn)
 
     // Add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
-    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBlueColor.ItemSetPut(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(3, 0, 3, m_pDoc->MaxRow(), 0, aCellBlueColor);
 
     // Insert a new column at column 3
@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBackgroundColorDeleteColumn)
 
     // Add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
-    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBlueColor.ItemSetPut(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(3, 0, 3, m_pDoc->MaxRow(), 0, aCellBlueColor);
 
     // Delete column 10
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBackgroundColorDeleteRow)
 
     // Add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->getCellAttributeHelper());
-    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBlueColor.ItemSetPut(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(0, 3, m_pDoc->MaxCol(), 3, 0, aCellBlueColor);
 
     // Delete row 10
@@ -1379,7 +1379,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalAttrIterator)
 
     // Set the background color of B2:C3,D2,E3,C4:D4,B5:D5 to blue
     ScPatternAttr aCellBackColor(m_pDoc->getCellAttributeHelper());
-    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBackColor.ItemSetPut(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 1, 2, 2, 0, aCellBackColor);
     m_pDoc->ApplyPatternAreaTab(3, 1, 3, 1, 0, aCellBackColor);
     m_pDoc->ApplyPatternAreaTab(4, 2, 4, 2, 0, aCellBackColor);
@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIteratorsUnallocatedColumnsAttributes)
 
     // Make entire second row and third row bold.
     ScPatternAttr boldAttr(m_pDoc->getCellAttributeHelper());
-    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    boldAttr.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
     m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 2, 0, boldAttr);
 
     // That shouldn't need allocating more columns, just changing the default attribute.
@@ -1485,7 +1485,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIteratorsDefPattern)
     SCCOL firstCol = 100;
     SCCOL lastCol = 103;
     ScPatternAttr boldAttr(m_pDoc->getCellAttributeHelper());
-    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    boldAttr.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
     m_pDoc->ApplyPattern(100, 0, 0, boldAttr);
     m_pDoc->ApplyPattern(102, 0, 0, boldAttr);
 
@@ -3697,8 +3697,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFilterTimeValue)
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_TIME_HH_MMSS, LANGUAGE_ENGLISH_US);
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
 
     m_pDoc->ApplyPatternAreaTab(0, 1, 0, 2, 0, aNewAttrs); // apply it to A2:A3.
 
@@ -3850,8 +3849,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76441)
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     {
         // First insert the string, then the format
         m_pDoc->SetString(ScAddress(0,0,0), u"01:20"_ustr);
@@ -3888,8 +3886,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf76836)
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
 
     m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
     m_pDoc->SetValue(0,0,0, 10.0);
@@ -3935,8 +3932,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142186)
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     {
         // First insert the string, then the format
         m_pDoc->SetString(ScAddress(0,0,0), u"123.45"_ustr);
@@ -3989,8 +3985,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164124)
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
 
     m_pDoc->SetString(ScAddress(0,0,0), u"2021-6/1"_ustr);
@@ -4015,8 +4010,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126342)
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
 
     m_pDoc->SetString(ScAddress(0,0,0), u"11/7/19"_ustr);
@@ -4148,8 +4142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFilterContains)
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_DIN_YYMMDD, LANGUAGE_ENGLISH_US);
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     m_pDoc->ApplyPatternAreaTab(0, 1, 0, 5, 0, aNewAttrs); // apply it to A1:A6
 
     ScDBData* pDBData = new ScDBData(u"NONAME"_ustr, 0, 0, 0, nCols, nRows);
@@ -6917,7 +6910,7 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectedSheetEditByRow)
     {
         // Remove protected flags from rows 2-5.
         ScPatternAttr aAttr(m_pDoc->getCellAttributeHelper());
-        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        aAttr.ItemSetPut(ScProtectionAttr(false));
         m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 4, 0, aAttr);
 
         // Protect the sheet without any options.
@@ -6993,7 +6986,7 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectedSheetEditByColumn)
     {
         // Remove protected flags from columns B to E.
         ScPatternAttr aAttr(m_pDoc->getCellAttributeHelper());
-        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        aAttr.ItemSetPut(ScProtectionAttr(false));
         m_pDoc->ApplyPatternAreaTab(1, 0, 4, m_pDoc->MaxRow(), 0, aAttr);
 
         // Protect the sheet without any options.
@@ -7127,8 +7120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
         CPPUNIT_ASSERT_EQUAL(SvNumFormatType::CURRENCY, eType);
 
         ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
         m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs); // A1.
 
         CPPUNIT_ASSERT_EQUAL(u"2,00€"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
@@ -7157,8 +7149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentModelAccessor_getDocumentCurrencies)
         CPPUNIT_ASSERT_EQUAL(SvNumFormatType::CURRENCY, eType);
 
         ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-        rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
         m_pDoc->ApplyPattern(1, 1, 0, aNewAttrs); // B2.
         m_pDoc->ApplyPattern(2, 2, 0, aNewAttrs); // C3.
 

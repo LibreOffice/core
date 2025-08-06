@@ -4258,7 +4258,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
     SfxUInt32Item aItem(ATTR_VALIDDATA, nIndex);
 
     ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
-    aNewAttrs.GetItemSet().Put(aItem);
+    aNewAttrs.ItemSetPut(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
 

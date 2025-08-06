@@ -219,7 +219,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             // Set attributes
             ScPatternAttr* pAttr(new ScPatternAttr(mrDoc.getCellAttributeHelper()));
             pAttr->GetFromEditItemSet( &aSet );
-            SfxItemSet* pAttrItemSet = &pAttr->GetItemSet();
+            SfxItemSet* pAttrItemSet = &pAttr->GetItemSetWritable();
             if (!aNumStr.isEmpty())
             {
                 pAttrItemSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );

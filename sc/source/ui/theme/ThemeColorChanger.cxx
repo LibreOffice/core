@@ -172,7 +172,7 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
                     continue;
 
                 ScPatternAttr aNewPattern(*pPattern);
-                auto& rItemSet = aNewPattern.GetItemSet();
+                auto& rItemSet = aNewPattern.GetItemSetWritable();
                 bool bItemChanged = changeCellItems(rItemSet, rColorSet);
                 bChanged = bChanged || bItemChanged;
 

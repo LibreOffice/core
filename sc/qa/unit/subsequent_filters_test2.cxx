@@ -1719,10 +1719,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testBackColorFilter)
     ScDocument* pDoc = getScDoc();
 
     ScPatternAttr aPattern1(pDoc->getCellAttributeHelper());
-    aPattern1.GetItemSet().Put(SvxBrushItem(aBackColor1, ATTR_BACKGROUND));
+    aPattern1.ItemSetPut(SvxBrushItem(aBackColor1, ATTR_BACKGROUND));
 
     ScPatternAttr aPattern2(pDoc->getCellAttributeHelper());
-    aPattern2.GetItemSet().Put(SvxBrushItem(aBackColor2, ATTR_BACKGROUND));
+    aPattern2.ItemSetPut(SvxBrushItem(aBackColor2, ATTR_BACKGROUND));
 
     // Apply the pattern to cell A1:A2
     pDoc->ApplyPatternAreaTab(0, 0, 0, 1, 0, aPattern1);

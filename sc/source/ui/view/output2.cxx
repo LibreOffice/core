@@ -1742,11 +1742,11 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
             else if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, mnTab ) )
             {
                 if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_FONT ) )
-                    pAltPattern->GetItemSet().Put( *pItem );
+                    pAltPattern->ItemSetPut( *pItem );
                 if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_CJK_FONT ) )
-                    pAltPattern->GetItemSet().Put( *pItem );
+                    pAltPattern->ItemSetPut( *pItem );
                 if ( const SvxFontItem* pItem = pFontSet->GetItemIfSet( ATTR_CTL_FONT ) )
-                    pAltPattern->GetItemSet().Put( *pItem );
+                    pAltPattern->ItemSetPut( *pItem );
             }
             pPattern = pAltPattern;
         }
@@ -1758,7 +1758,7 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
             aAltPatterns.push_back(std::make_unique<ScPatternAttr>(*pPattern));
             ScPatternAttr* pAltPattern = aAltPatterns.back().get();
             ScLineBreakCell aLineBreak(false);
-            pAltPattern->GetItemSet().Put(aLineBreak);
+            pAltPattern->ItemSetPut(aLineBreak);
             pPattern = pAltPattern;
         }
 

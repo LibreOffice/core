@@ -987,11 +987,10 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( nOldValue != nOldValueMerge )
                         {
                             pNewPattern.reset(new ScPatternAttr(*pSrcPattern));
-                            SfxItemSet& rNewSet = pNewPattern->GetItemSet();
-                            if ( nOldValueMerge == ScMF::NONE )
-                                rNewSet.ClearItem(ATTR_MERGE_FLAG);
+                            if (nOldValueMerge == ScMF::NONE)
+                                pNewPattern->ItemSetClearItem(ATTR_MERGE_FLAG);
                             else
-                                rNewSet.Put(ScMergeFlagAttr(nOldValueMerge));
+                                pNewPattern->ItemSetPut(ScMergeFlagAttr(nOldValueMerge));
                         }
                         else
                             pNewPattern.reset();
@@ -2698,7 +2697,7 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
     for (sal_uInt8 i = 0; i < 16; ++i)
     {
         pPatternAttrs[i].reset(new ScPatternAttr(rDocument.getCellAttributeHelper()));
-        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), rDocument);
+        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSetWritable(), rDocument);
     }
 
     // Important special case: when the whole rows are selected. Then applying autoformat to right

@@ -246,11 +246,11 @@ void AddressWalkerWriter::formatAsColumnHeader(SCCOL nCols)
     aBorderOuter.SetLine(&aLine, SvxBoxItemLine::TOP);
     aBorderOuter.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
-    aPattern.GetItemSet().Put(aHJustify);
-    aPattern.GetItemSet().Put(aVJustify);
-    aPattern.GetItemSet().Put(aWeight);
-    aPattern.GetItemSet().Put(aWrap);
-    aPattern.GetItemSet().Put(aBorderOuter);
+    aPattern.ItemSetPut(aHJustify);
+    aPattern.ItemSetPut(aVJustify);
+    aPattern.ItemSetPut(aWeight);
+    aPattern.ItemSetPut(aWrap);
+    aPattern.ItemSetPut(aBorderOuter);
 
     mrDocument.ApplyPatternAreaTab(mCurrentAddress.Col(), mCurrentAddress.Row(),
                                    mCurrentAddress.Col() + nCols - 1, mCurrentAddress.Row(),
@@ -266,7 +266,7 @@ void AddressWalkerWriter::formatTableBottom(SCCOL nCols)
     SvxBorderLine aLine;
     aLine.GuessLinesWidths(aLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
     aBorderOuter.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
-    aPattern.GetItemSet().Put(aBorderOuter);
+    aPattern.ItemSetPut(aBorderOuter);
     mrDocument.ApplyPatternAreaTab(mCurrentAddress.Col(), mCurrentAddress.Row(),
                                    mCurrentAddress.Col() + nCols - 1, mCurrentAddress.Row(),
                                    mCurrentAddress.Tab(), aPattern);

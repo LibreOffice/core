@@ -247,7 +247,7 @@ void ScUndoEnterData::Undo()
         else
         {
             ScPatternAttr* pPattern(new ScPatternAttr(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab)));
-            pPattern->GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+            pPattern->ItemSetClearItem(ATTR_VALUE_FORMAT);
             rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, CellAttributeHolder(pPattern, true));
         }
         rDocShell.PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);

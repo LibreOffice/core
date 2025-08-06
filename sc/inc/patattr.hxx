@@ -157,7 +157,10 @@ public:
     CellAttributeHelper& getCellAttributeHelper() const { return *pCellAttributeHelper; }
 
     const SfxItemSet& GetItemSet() const { return maLocalSfxItemSet; }
-    SfxItemSet& GetItemSet() { return maLocalSfxItemSet; }
+    SC_DLLPUBLIC SfxItemSet& GetItemSetWritable();
+    SC_DLLPUBLIC void ItemSetPut(const SfxPoolItem& rItem);
+    void ItemSetPut(std::unique_ptr<SfxPoolItem> xItem);
+    void ItemSetClearItem(sal_uInt16 nWhich);
 
     const SfxPoolItem& GetItem(sal_uInt16 nWhichP) const
     {
@@ -281,6 +284,7 @@ private:
     sal_uInt32              GetNumberFormatKey() const;
     LanguageType            GetLanguageType() const;
     void                    InvalidateCaches();
+    void                    InvalidateCacheFor(sal_uInt16 nWhich);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

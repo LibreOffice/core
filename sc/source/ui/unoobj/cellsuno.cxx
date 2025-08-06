@@ -1975,7 +1975,7 @@ static void lcl_SetCellProperty( const SfxItemPropertyMapEntry& rEntry, const un
     rFirstItemId = rEntry.nWID;
     rSecondItemId = 0;
 
-    SfxItemSet& rSet = rPattern.GetItemSet();
+    SfxItemSet& rSet = rPattern.GetItemSetWritable();
     switch ( rEntry.nWID )
     {
         case ATTR_VALUE_FORMAT:
@@ -2112,7 +2112,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
             //  ClearInvalidItems, so that in any case we have an item with the correct type
 
             ScPatternAttr aPattern( *GetCurrentAttrsDeep() );
-            SfxItemSet& rSet = aPattern.GetItemSet();
+            SfxItemSet& rSet = aPattern.GetItemSetWritable();
             rSet.ClearInvalidItems();
 
             sal_uInt16 nFirstItem, nSecondItem;
@@ -2279,7 +2279,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
                             pNewData.reset();
 
                             ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-                            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
+                            aPattern.ItemSetPut(SfxUInt32Item(ATTR_VALIDDATA, nIndex));
                             pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true );
                         }
                     }
@@ -2501,7 +2501,7 @@ void ScCellRangesBase::setValidation(const rtl::Reference<ScTableValidationObj>&
     pNewData.reset();
 
     ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
+    aPattern.ItemSetPut(SfxUInt32Item(ATTR_VALIDDATA, nIndex));
     pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, true );
 }
 
@@ -2598,7 +2598,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
                 if ( !pOldPattern )
                 {
                     pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
-                    pOldPattern->GetItemSet().ClearInvalidItems();
+                    pOldPattern->GetItemSetWritable().ClearInvalidItems();
                     pNewPattern.reset(new ScPatternAttr(rDoc.getCellAttributeHelper()));
                 }
 
@@ -2609,9 +2609,9 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
 
                 //  put only affected items into new set
                 if ( nFirstItem )
-                    pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nFirstItem ) );
+                    pNewPattern->ItemSetPut(pOldPattern->GetItemSet().Get(nFirstItem));
                 if ( nSecondItem )
-                    pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nSecondItem ) );
+                    pNewPattern->ItemSetPut(pOldPattern->GetItemSet().Get(nSecondItem));
             }
             else if ( pEntry->nWID != SC_WID_UNO_CELLSTYL )   // CellStyle is handled above
             {
@@ -2734,7 +2734,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                     if ( !pOldPattern )
                     {
                         pOldPattern.reset(new ScPatternAttr( *GetCurrentAttrsDeep() ));
-                        pOldPattern->GetItemSet().ClearInvalidItems();
+                        pOldPattern->GetItemSetWritable().ClearInvalidItems();
                         pNewPattern.reset(new ScPatternAttr(rDoc.getCellAttributeHelper()));
                     }
 
@@ -2746,9 +2746,9 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 
                         //  put only affected items into new set
                         if ( nFirstItem )
-                            pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nFirstItem ) );
+                            pNewPattern->ItemSetPut(pOldPattern->GetItemSet().Get(nFirstItem));
                         if ( nSecondItem )
-                            pNewPattern->GetItemSet().Put( pOldPattern->GetItemSet().Get( nSecondItem ) );
+                            pNewPattern->ItemSetPut(pOldPattern->GetItemSet().Get(nSecondItem));
                     }
                     catch ( lang::IllegalArgumentException& )
                     {
@@ -5828,7 +5828,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
             if (nNewFormat != nOldFormat)
             {
                 ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-                aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                aPattern.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat));
                 // ATTR_LANGUAGE_FORMAT remains unchanged
                 rFunc.ApplyAttributes( *GetMarkData(), aPattern, true );
             }
@@ -7519,8 +7519,8 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
 
     //  Scenario ranges are tagged with attribute
     ScPatternAttr aPattern(rDoc.getCellAttributeHelper());
-    aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
-    aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
+    aPattern.ItemSetPut(ScMergeFlagAttr(ScMF::Scenario));
+    aPattern.ItemSetPut(ScProtectionAttr(true));
     pDocSh->GetDocFunc().ApplyAttributes( aMarkData, aPattern, true );
 }
 

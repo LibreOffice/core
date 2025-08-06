@@ -641,8 +641,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
     CPPUNIT_ASSERT(pPat);
     {
         ScPatternAttr aNewPat(*pPat);
-        SfxItemSet& rSet = aNewPat.GetItemSet();
-        rSet.Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+        aNewPat.ItemSetPut(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
         m_pDoc->ApplyPattern(0, 2, 0, aNewPat);
 
         // Make sure it's really in.
@@ -654,8 +653,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testSortWithCellFormats)
     CPPUNIT_ASSERT(pPat);
     {
         ScPatternAttr aNewPat(*pPat);
-        SfxItemSet& rSet = aNewPat.GetItemSet();
-        rSet.Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
+        aNewPat.ItemSetPut(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
         m_pDoc->ApplyPattern(0, 3, 0, aNewPat);
 
         bool bGood = aCheck.isItalic(m_pDoc->GetPattern(ScAddress(0,3,0)));

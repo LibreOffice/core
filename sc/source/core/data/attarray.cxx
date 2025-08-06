@@ -309,21 +309,21 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
                     aNewCondFormatData.insert(nIndex);
                     ScCondFormatItem aItem( std::move(aNewCondFormatData) );
                     pNewPattern.reset( new ScPatternAttr(*pPattern) );
-                    pNewPattern->GetItemSet().Put( aItem );
+                    pNewPattern->ItemSetPut(aItem);
                 }
             }
             else
             {
                 ScCondFormatItem aItem(nIndex);
                 pNewPattern.reset( new ScPatternAttr(*pPattern) );
-                pNewPattern->GetItemSet().Put( aItem );
+                pNewPattern->ItemSetPut(aItem);
             }
         }
         else
         {
             pNewPattern.reset( new ScPatternAttr( rDocument.getCellAttributeHelper() ) );
             ScCondFormatItem aItem(nIndex);
-            pNewPattern->GetItemSet().Put( aItem );
+            pNewPattern->ItemSetPut(aItem);
             nTempEndRow = nEndRow;
         }
 
@@ -366,7 +366,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                 {
                     ScCondFormatItem aItem;
                     ScPatternAttr* pTemp(new ScPatternAttr(*pPattern));
-                    pTemp->GetItemSet().Put( aItem );
+                    pTemp->ItemSetPut(aItem);
                     SetPatternArea( nTempStartRow, nTempEndRow, CellAttributeHolder(pTemp, true) );
                 }
                 else
@@ -379,7 +379,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                         aNewCondFormatData.erase_at(std::distance(rCondFormatData.begin(), itr));
                         ScCondFormatItem aItem( std::move(aNewCondFormatData) );
                         ScPatternAttr* pTemp(new ScPatternAttr(*pPattern));
-                        pTemp->GetItemSet().Put( aItem );
+                        pTemp->ItemSetPut(aItem);
                         SetPatternArea( nTempStartRow, nTempEndRow, CellAttributeHolder(pTemp, true) );
                     }
                 }
@@ -736,7 +736,6 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         if ( pBoxItem || pTLBRItem || pBLTRItem )
         {
             std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
-            SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
             SCROW           nY1 = nStart;
             SCROW           nY2 = mvData[nPos].nEndRow;
 
@@ -792,9 +791,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                         SetLine( pNewBLTRItem->GetLine(), pLine );
                 }
             }
-            if( pNewBoxItem )   rNewSet.Put( std::move(pNewBoxItem) );
-            if( pNewTLBRItem )  rNewSet.Put( std::move(pNewTLBRItem) );
-            if( pNewBLTRItem )  rNewSet.Put( std::move(pNewBLTRItem) );
+            if (pNewBoxItem) pNewPattern->ItemSetPut(std::move(pNewBoxItem));
+            if (pNewTLBRItem) pNewPattern->ItemSetPut(std::move(pNewTLBRItem));
+            if (pNewBLTRItem) pNewPattern->ItemSetPut(std::move(pNewBLTRItem));
 
             nStart = mvData[nPos].nEndRow + 1;
 
@@ -1536,8 +1535,7 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
                 rDocument.ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
             ScPatternAttr aNewPattern( rDocument.getCellAttributeHelper() );
-            SfxItemSet*     pSet = &aNewPattern.GetItemSet();
-            pSet->Put( *pFlagAttr );
+            aNewPattern.ItemSetPut(*pFlagAttr);
             rDocument.ApplyPatternAreaTab( nThisCol, nThisStart, nMergeEndCol, nMergeEndRow,
                                                 nTab, aNewPattern );
 
@@ -1580,7 +1578,7 @@ void ScAttrArray::SetPatternAreaSafe(SCROW nStartRow, SCROW nEndRow, const CellA
                 //  Instead, the document's getCellAttributeHelper().getDefaultCellAttribute() is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.
                 ScPatternAttr* pNewPattern(new ScPatternAttr(*rWantedPattern.getScPatternAttr()));
-                pNewPattern->GetItemSet().Put( *pItem );
+                pNewPattern->ItemSetPut(*pItem);
                 SetPatternArea( nThisRow, nAttrRow, CellAttributeHolder(pNewPattern, true) );
             }
             else
@@ -1620,7 +1618,7 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
             ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
-            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue | nFlags ) );
+            pNewPattern->ItemSetPut(ScMergeFlagAttr(nOldValue | nFlags));
             SetPatternArea( nThisRow, nAttrRow, CellAttributeHolder(pNewPattern, true) );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
@@ -1657,7 +1655,7 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
             ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
-            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
+            pNewPattern->ItemSetPut(ScMergeFlagAttr(nOldValue & ~nFlags));
             SetPatternArea( nThisRow, nAttrRow, CellAttributeHolder(pNewPattern, true) );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
@@ -1747,9 +1745,9 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
             SCROW nThisEnd = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nThisEnd, nEndRow );
             ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
-            pNewPattern->GetItemSet().Put( ScIndentItem( nNewValue ) );
+            pNewPattern->ItemSetPut(ScIndentItem(nNewValue));
             if ( bNeedJust )
-                pNewPattern->GetItemSet().Put(
+                pNewPattern->ItemSetPut(
                                 SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
             SetPatternArea( nThisStart, nAttrRow, CellAttributeHolder(pNewPattern, true) );
 
@@ -2349,10 +2347,9 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
             SCROW nAttrRow = std::min( nRow, nEndRow );
 
             ScPatternAttr* pNewPattern(new ScPatternAttr(*pOldPattern));
-            SfxItemSet& rSet = pNewPattern->GetItemSet();
             for (sal_uInt16 nId = ATTR_PATTERN_START; nId <= ATTR_PATTERN_END; nId++)
                 if (nId != ATTR_MERGE && nId != ATTR_MERGE_FLAG)
-                    rSet.ClearItem(nId);
+                    pNewPattern->ItemSetClearItem(nId);
 
             if ( *pNewPattern == *aDefHolder.getScPatternAttr() )
             {
@@ -2432,9 +2429,9 @@ void ScAttrArray::CopyArea(
                     nNewFlags = pTmpPattern->GetItem(ATTR_MERGE_FLAG).GetValue() & ~nStripFlags;
 
                 if ( nNewFlags != ScMF::NONE )
-                    pTmpPattern->GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );
+                    pTmpPattern->ItemSetPut(ScMergeFlagAttr(nNewFlags));
                 else
-                    pTmpPattern->GetItemSet().ClearItem( ATTR_MERGE_FLAG );
+                    pTmpPattern->ItemSetClearItem(ATTR_MERGE_FLAG);
 
                 if (bSameCellAttributeHelper)
                     aNewPattern.setScPatternAttr(pTmpPattern, true);
