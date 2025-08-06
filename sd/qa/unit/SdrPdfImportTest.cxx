@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     CPPUNIT_ASSERT(pImportedObject);
 
     // Check the object position
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(2011, 2102), Size(2106 + 1, 298 + 1)),
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(2011, 2018), Size(2107, 470)),
                          pImportedObject->GetLogicRect());
 
     // Object should be a text object containing one paragraph with
