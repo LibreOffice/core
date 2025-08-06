@@ -238,8 +238,9 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         pUndoColl.reset( new ScDBCollection( *pDocColl ) );
 
     *pData = rNewData;
-    if (bAreaChanged) {
-        rDoc.CompileDBFormula();
+    if (bAreaChanged || bOldAutoFilter != bNewAutoFilter) {
+        if (bAreaChanged)
+            rDoc.CompileDBFormula();
         if (bOldAutoFilter && !bNewAutoFilter)
         {
             rDoc.RemoveFlagsTab(aOldRange.aStart.Col(), aOldRange.aStart.Row(), aOldRange.aEnd.Col(), aOldRange.aEnd.Row(), aOldRange.aStart.Tab(), ScMF::Auto);
@@ -253,8 +254,10 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         {
             rDoc.ApplyFlagsTab(aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aStart.Row(), aNewRange.aStart.Tab(), ScMF::Auto);
         }
-        rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid);
+
     }
+
+    rDocShell.PostPaint(aOldRange, PaintPartFlags::Grid);
 
     if (bUndo)
     {
