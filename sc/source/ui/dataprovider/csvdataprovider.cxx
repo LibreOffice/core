@@ -152,7 +152,8 @@ void CSVDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(), std::bind(&CSVDataProvider::ImportFinished, this), std::vector(mrDataSource.getDataTransformation()));
+    mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(),
+        [this]() { this->ImportFinished(); }, std::vector(mrDataSource.getDataTransformation()));
     mxCSVFetchThread->launch();
 
     if (mbDeterministic)
