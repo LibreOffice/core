@@ -200,7 +200,7 @@ struct ReferenceXObjectEmit
 struct BitmapEmit
 {
     BitmapID    m_aID;
-    BitmapEx    m_aBitmap;
+    Bitmap      m_aBitmap;
     sal_Int32   m_nObject;
     ReferenceXObjectEmit m_aReferenceXObject;
 
@@ -900,8 +900,8 @@ private:
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
-    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
-    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, const Graphic& rGraphic );
+    const BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams );
+    const BitmapEmit& createBitmapEmit( const Bitmap& rBitmap, const Graphic& rGraphic );
 
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
@@ -1250,7 +1250,7 @@ public:
     void drawArc( const tools::Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWidthChord );
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic );
-    void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
+    void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const tools::Rectangle& rTargetArea, const AlphaMask& rAlphaMask, const Graphic& rGraphic );
     /// Stores the original PDF data from rGraphic as an embedded file.
     void createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);

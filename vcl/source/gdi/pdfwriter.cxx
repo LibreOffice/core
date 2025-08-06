@@ -181,7 +181,7 @@ void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const B
     xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap, rGraphic );
 }
 
-void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const BitmapEx& rBitmap )
+void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
     xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
 }

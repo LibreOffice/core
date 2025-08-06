@@ -876,7 +876,7 @@ public:
                                     const Bitmap& rBitmap, const Graphic& rGraphic );
 
     void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                      const BitmapEx& rBitmapEx );
+                                      const Bitmap& rBitmap );
 
     void                DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
     void                DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
