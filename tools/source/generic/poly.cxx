@@ -44,6 +44,10 @@
 #include <limits.h>
 #include <cmath>
 
+// Best approximation of circle with Bazier curve.
+// Euclidean error between two curves is 0.00735
+constexpr double fKappa = 4.0 / 3.0 * (M_SQRT2 - 1);
+
 constexpr int EDGE_LEFT   = 1;
 constexpr int EDGE_TOP    = 2;
 constexpr int EDGE_RIGHT  = 4;
@@ -194,46 +198,45 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rRect, sal_uInt32 nHorzRound,
         mnPoints = 0;
 }
 
-ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
+ImplPolygon::ImplPolygon(const Point& rCenter, tools::Long nRadX, tools::Long nRadY)
 {
-    if( nRadX && nRadY )
+    if(nRadX && nRadY)
     {
-        // Compute default (depends on size)
-        sal_uInt16 nPoints = std::clamp(
-            ( M_PI * ( 1.5 * ( nRadX + nRadY ) - sqrt( std::fabs(double(nRadX) * nRadY) ) ) ),
-            32.0, 256.0 );
+        ImplInitSize(13, true);
 
-        if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
-            nPoints >>= 1;
+        mxPointAry[0] = Point(rCenter.X() - nRadX, rCenter.Y());
 
-        // Ceil number of points until divisible by four
-        nPoints = (nPoints + 3) & ~3;
-        ImplInitSize(nPoints);
+        mxPointAry[1] = Point(rCenter.X() - nRadX, rCenter.Y() + fKappa * nRadY);
+        mxFlagAry[1] = PolyFlags::Control;
 
-        sal_uInt16 i;
-        sal_uInt16 nPoints2 = nPoints >> 1;
-        sal_uInt16 nPoints4 = nPoints >> 2;
-        double nAngle;
-        double nAngleStep = M_PI_2 / ( nPoints4 - 1 );
+        mxPointAry[2] = Point(rCenter.X() - fKappa * nRadX, rCenter.Y() + nRadY);
+        mxFlagAry[2] = PolyFlags::Control;
 
-        for( i=0, nAngle = 0.0; i < nPoints4; i++, nAngle += nAngleStep )
-        {
-            tools::Long nX = basegfx::fround<tools::Long>(nRadX * cos(nAngle));
-            tools::Long nY = basegfx::fround<tools::Long>(nRadY * -sin(nAngle));
+        mxPointAry[3] = Point(rCenter.X(), rCenter.Y() + nRadY);
 
-            Point* pPt = &(mxPointAry[i]);
-            pPt->setX(  nX + rCenter.X() );
-            pPt->setY(  nY + rCenter.Y() );
-            pPt = &(mxPointAry[nPoints2-i-1]);
-            pPt->setX( -nX + rCenter.X() );
-            pPt->setY(  nY + rCenter.Y() );
-            pPt = &(mxPointAry[i+nPoints2]);
-            pPt->setX( -nX + rCenter.X() );
-            pPt->setY( -nY + rCenter.Y() );
-            pPt = &(mxPointAry[nPoints-i-1]);
-            pPt->setX(  nX + rCenter.X() );
-            pPt->setY( -nY + rCenter.Y() );
-        }
+        mxPointAry[4] = Point(rCenter.X() + fKappa * nRadX, rCenter.Y() + nRadY);
+        mxFlagAry[4] = PolyFlags::Control;
+
+        mxPointAry[5] = Point(rCenter.X() + nRadX, rCenter.Y() + fKappa * nRadY);
+        mxFlagAry[5] = PolyFlags::Control;
+
+        mxPointAry[6] = Point(rCenter.X() + nRadX, rCenter.Y());
+
+        mxPointAry[7] = Point(rCenter.X() + nRadX, rCenter.Y() - fKappa * nRadY);
+        mxFlagAry[7] = PolyFlags::Control;
+
+        mxPointAry[8] = Point(rCenter.X() + fKappa * nRadX, rCenter.Y() - nRadY);
+        mxFlagAry[8] = PolyFlags::Control;
+
+        mxPointAry[9] = Point(rCenter.X(), rCenter.Y() - nRadY);
+
+        mxPointAry[10] = Point(rCenter.X() - fKappa * nRadX, rCenter.Y() - nRadY);
+        mxFlagAry[10] = PolyFlags::Control;
+
+        mxPointAry[11] = Point(rCenter.X() - nRadX, rCenter.Y() - fKappa * nRadY);
+        mxFlagAry[11] = PolyFlags::Control;
+
+        mxPointAry[12] = mxPointAry[0];
     }
     else
         mnPoints = 0;
