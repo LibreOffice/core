@@ -1571,6 +1571,9 @@ class SFScriptForge:
         def ExecutePythonScript(cls, scope = '', script = '', *args):
             return cls.SIMPLEEXEC(scope + '#' + script, *args)
 
+        def GetRangeFromCalc(self, filename, range):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRangeFromCalc', filename, range)
+
         def GetPDFExportOptions(self):
             return self.ExecMethod(self.vbMethod, 'GetPDFExportOptions')
 

@@ -808,6 +808,10 @@ Try:
 					vReturn = vBasicObject.Properties()
 				Else
 					Select Case sServiceName
+						Case &quot;ScriptForge.SF_Session&quot;
+							Select Case Script
+								Case &quot;GetRangeFromCalc&quot;	:	vReturn = vBasicObject.GetRangeFromCalc(vArgs(0), vArgs(1))
+							End Select
 						Case &quot;SFDatabases.Database&quot;
 							If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
 						Case &quot;SFDatabases.Dataset&quot;

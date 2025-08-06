@@ -1872,6 +1872,30 @@ class SFScriptForge:
                 """
             ...
 
+        def GetRangeFromCalc(self, filename: FILE, range: RANGE):
+	        """
+	            Extract the content of a range of adjacent cells stored in a Calc file. The file may be open
+	            or closed. If the file is open in the actual LibreOffice session, its actual content will be read.
+	            Otherwise, the content will be read from the file on disk.
+	                Args
+	                    ``filename``: the full file name, given in ``FileSystem.FileNaming`` notation.
+
+	                    ``range``: either
+	                        - "sheet.cells", where "sheet" is the mandatory sheet name, eventually surrounded with
+	                        single quotes when it contains special characters, and "cells" is the single cell
+	                        or the range of cells to be considered, in A1 notation with or without dollar signs
+
+	                        - a defined name at document-global level.
+	                Note
+	                    Current selection shortcuts ("~") are forbidden in this context.
+	                Returns
+	                    Either a scalar, or a tuple when the range is located in a single row or column,
+	                    or a tuple of tuples. The returned values are either strings or numbers. No dates, booleans, ...
+	                    To convert doubles to dates, use the ``basic.CDate()`` method.
+	                    Empty cells are returned as empty strings.
+	            """
+	        ...
+
         def GetPDFExportOptions(self) -> DICTIONARY:
             """
                 Returns the current PDF export settings defined in the ``PDF Options`` dialog, which can be accessed
@@ -5938,7 +5962,7 @@ class SFDocuments:
                         or quotes to improve its readability.
 
                         ``directsql``: when ``True``, the SQL command is sent to the database engine without
-                        pre-analysis. Default is ``False``. The argument is ignored for tables.For queries,
+                        pre-analysis. Default is ``False``. The argument is ignored for tables. For queries,
                         the applied option is the one set when the query was defined.
                 """
             ...

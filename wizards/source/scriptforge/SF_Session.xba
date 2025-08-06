@@ -19,6 +19,7 @@ Option Explicit
 &apos;&apos;&apos;			- UNO introspection utilities
 &apos;&apos;&apos;			- clipboard management
 &apos;&apos;&apos;			- invocation of external scripts or programs
+&apos;&apos;&apos;			- access to the content of Calc files
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service invocation example:
 &apos;&apos;&apos;			Dim session As Variant
@@ -31,6 +32,7 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Const CALCFUNCERROR				=	&quot;CALCFUNCERROR&quot;		&apos;	Calc function execution failed
+Const CALCADDRESSERROR			=	&quot;CALCADDRESSERROR&quot;	&apos;	Invalid Calc range
 Const NOSCRIPTERROR				=	&quot;NOSCRIPTERROR&quot;		&apos;	Script could not be located
 Const SCRIPTEXECERROR			=	&quot;SCRIPTEXECERROR&quot;	&apos;	Exception during script execution
 Const WRONGEMAILERROR			=	&quot;WRONGEMAILERROR&quot;	&apos;	Wrong email address
@@ -327,6 +329,88 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Session.ExecutePythonScript
 
 REM -----------------------------------------------------------------------------
+Public Function GetRangeFromCalc(Optional ByVal FileName As Variant _
+								, Optional ByVal Range As Variant _
+								) As Variant
+&apos;&apos;&apos;	Extract the content of a range of adjacent cells stored in a Calc file.
+&apos;&apos;&apos;	The file may be open or closed. If the file is open in the actual LibreOffice
+&apos;&apos;&apos;	session, its actual content will be read. Otherwise the content will be
+&apos;&apos;&apos;	read from the file on disk.
+&apos;&apos;&apos;	Inspired by https://bugs.documentfoundation.org/show_bug.cgi?id=148040
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FileName: the full file name, given in FileSystem.FileNaming notation.
+&apos;&apos;&apos;			The file must exist.
+&apos;&apos;&apos;		Range: either
+&apos;&apos;&apos;			&quot;sheet.cells&quot;, where &quot;sheet&quot; is the mandatory sheet name, eventually
+&apos;&apos;&apos;				surrounded with single wuotes when it contains special characters,
+&apos;&apos;&apos;				and &quot;cells&quot; is the single cell or the range of cells
+&apos;&apos;&apos;				to be considered, in A1 notation with or without dollar signs
+&apos;&apos;&apos;			a defined name at document-global level.
+&apos;&apos;&apos;			Current selection shortcuts (&quot;~&quot;) are forbidden in this context.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		Either a scalar, or a 1D array when the range is located in a single row or column,
+&apos;&apos;&apos;		or a 2D array.
+&apos;&apos;&apos;		The returned values are either strings or numbers. No dates, booleans, ...
+&apos;&apos;&apos;		To convert doubles to dates, use the CDate builtin function.
+&apos;&apos;&apos;		Empty cells are returned as empty strings.
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		UNKNOWNFILEERROR		The Calc file does not exist
+&apos;&apos;&apos;		CALCADDRESSERROR		Invalid Calc range
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		value = session.GetFromFileName(&quot;C:\myFile.ods&quot;, &quot;Sheet1.A1:J10&quot;)
+
+Dim vReturn As Variant			&apos;	Returned value
+Dim oCalc As Object				&apos;	Give access to the com.sun.star.sheet.FunctionAccess service
+Dim sArgument As String			&apos;	The argument given to the &quot;Indirect&quot; Calc function
+
+Const cstThisSub = &quot;Session.GetRangeFromCalc&quot;
+Const cstSubArgs = &quot;FileName, Range&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vReturn = Empty
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+		If Not SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+	End If
+
+	If Not SF_FileSystem.FileExists(FileName) Then GoTo CatchNotExists
+
+Try:
+	&apos;	The execution results from the com.sun.star.sheet.FunctionAccess service
+	Set oCalc = SF_Utils._GetUNOService(&quot;FunctionAccess&quot;)
+
+	&apos;	Error trapping, execution, error reset
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo CatchCall
+	sArgument = &quot;&apos;&quot; &amp; SF_FileSystem._ConvertToUrl(FileName) &amp; &quot;&apos;#&quot; &amp; Range
+	vReturn = oCalc.callFunction(&quot;INDIRECT&quot;, Array(sArgument))
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+	&apos;	Transform the arrays of subarrays =&gt; 2D arrays, only in Basic
+	Select Case SF_Array.CountDims(vReturn)
+		Case -1, 0, 2
+			&apos;	Do nothing: scalar or empty array or 2D array (should not happen)
+		Case 1
+			If IsArray(vReturn(0)) And Not _SF_.TriggeredByPython Then vReturn = SF_Array.ConvertFromDataArray(vReturn, IsRange := True)
+		Case Else
+	End Select
+
+Finally:
+	GetRangeFromCalc = vReturn
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchNotExists:
+	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;FileName&quot;, FileName)
+	GoTo Finally
+CatchCall:
+	ScriptForge.SF_Exception.RaiseFatal(CALCADDRESSERROR, &quot;Range&quot;, Range, &quot;FileName&quot;, FileName)
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Session.GetRangeFromCalc
+
+REM -----------------------------------------------------------------------------
 Public Function GetPDFExportOptions() As Variant
 &apos;&apos;&apos;	Return the actual values of the PDF export options
 &apos;&apos;&apos;	The PDF options are described on https://wiki.openoffice.org/wiki/API/Tutorials/PDF_export
@@ -506,6 +590,7 @@ Public Function Methods() As Variant
 					&quot;ExecuteBasicScript&quot; _
 					, &quot;ExecuteCalcFunction&quot; _
 					, &quot;ExecutePythonScript&quot; _
+					, &quot;GetRangeFromCalc&quot; _
 					, &quot;HasUnoMethod&quot; _
 					, &quot;HasUnoProperty&quot; _
 					, &quot;OpenURLInBrowser&quot; _
