@@ -109,7 +109,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     if (rImpGraphic.mpAnimationContainer)
     {
         mpAnimationContainer = std::make_shared<AnimationContainer>(rImpGraphic.mpAnimationContainer->maAnimation);
-        maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmapEx();
+        maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
     }
 }
 
@@ -160,10 +160,10 @@ ImpGraphic::ImpGraphic(GraphicExternalLink aGraphicExternalLink)
     ensureCurrentSizeInBytes();
 }
 
-ImpGraphic::ImpGraphic(const BitmapEx& rBitmapEx)
-    : MemoryManaged(!rBitmapEx.IsEmpty())
-    , mpBitmapContainer(new BitmapContainer(rBitmapEx))
-    , meType(rBitmapEx.IsEmpty() ? GraphicType::NONE : GraphicType::Bitmap)
+ImpGraphic::ImpGraphic(const Bitmap& rBitmap)
+    : MemoryManaged(!rBitmap.IsEmpty())
+    , mpBitmapContainer(new BitmapContainer(rBitmap))
+    , meType(rBitmap.IsEmpty() ? GraphicType::NONE : GraphicType::Bitmap)
 {
     ensureCurrentSizeInBytes();
 }
@@ -214,7 +214,7 @@ ImpGraphic& ImpGraphic::operator=(const ImpGraphic& rImpGraphic)
         if (rImpGraphic.mpAnimationContainer)
         {
             mpAnimationContainer = std::make_shared<AnimationContainer>(*rImpGraphic.mpAnimationContainer);
-            maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmapEx();
+            maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
         }
         else
         {
@@ -328,7 +328,7 @@ const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() con
 
 void BitmapContainer::createSwapInfo(SwapInfo& rSwapInfo)
 {
-    rSwapInfo.maSizePixel = maBitmapEx.GetSizePixel();
+    rSwapInfo.maSizePixel = maBitmap.GetSizePixel();
 
     rSwapInfo.maPrefMapMode = getPrefMapMode();
     rSwapInfo.maPrefSize = getPrefSize();
@@ -385,7 +385,7 @@ void ImpGraphic::createSwapInfo()
 
 void ImpGraphic::clearGraphics()
 {
-    maCachedBitmap.Clear();
+    maCachedBitmap = Bitmap();
     mpBitmapContainer.reset();
     maMetaFile.Clear();
     mpAnimationContainer.reset();
@@ -569,11 +569,15 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
         if (!mpAnimationContainer && maVectorGraphicData)
             updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
-        const BitmapEx& rRetBmpEx = mpAnimationContainer
-            ? mpAnimationContainer->maAnimation.GetBitmapEx()
-            : (mpBitmapContainer ? mpBitmapContainer->maBitmapEx : maCachedBitmap);
+        BitmapEx aRetBmpEx;
+        if (mpAnimationContainer)
+            aRetBmpEx = mpAnimationContainer->maAnimation.GetBitmapEx();
+        else if (mpBitmapContainer)
+            aRetBmpEx = mpBitmapContainer->maBitmap;
+        else
+            aRetBmpEx = maCachedBitmap;
 
-        aRetBmp = rRetBmpEx.GetBitmap(COL_WHITE);
+        aRetBmp = aRetBmpEx.GetBitmap(COL_WHITE);
 
         if (rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
             aRetBmp.Scale(rParameters.getSizePixel());
@@ -647,7 +651,7 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
             }
         }
 
-        aRetBmp = maCachedBitmap.GetBitmap();
+        aRetBmp = maCachedBitmap;
     }
 
     if( !aRetBmp.IsEmpty() )
@@ -670,9 +674,12 @@ BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters)
         if (maVectorGraphicData)
             updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
-        aBitmapEx = mpAnimationContainer
-                        ? mpAnimationContainer->maAnimation.GetBitmapEx()
-                        : (mpBitmapContainer ? mpBitmapContainer->maBitmapEx : maCachedBitmap);
+        if (mpAnimationContainer)
+            aBitmapEx = mpAnimationContainer->maAnimation.GetBitmapEx();
+        else if (mpBitmapContainer)
+            aBitmapEx = mpBitmapContainer->maBitmap;
+        else
+            aBitmapEx = maCachedBitmap;
 
         if (rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
             aBitmapEx.Scale(rParameters.getSizePixel(), BmpScaleFlag::Fast);
@@ -684,7 +691,7 @@ BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters)
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
             // use maBitmapEx as local buffer for rendered metafile
-            const_cast<ImpGraphic*>(this)->maCachedBitmap = BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters));
+            const_cast<ImpGraphic*>(this)->maCachedBitmap = Bitmap(BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters)));
         }
 
         aBitmapEx = maCachedBitmap;
@@ -705,12 +712,12 @@ Animation ImpGraphic::getAnimation() const
     return aAnimation;
 }
 
-const BitmapEx& ImpGraphic::getBitmapExRef() const
+const Bitmap& ImpGraphic::getBitmapRef() const
 {
     ensureAvailable();
 
     if (mpBitmapContainer)
-        return mpBitmapContainer->getBitmapExRef();
+        return mpBitmapContainer->getBitmapRef();
     else
         return maCachedBitmap;
 }
@@ -761,23 +768,23 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
-        BitmapEx aBitmapEx = mpBitmapContainer ? mpBitmapContainer->maBitmapEx : maCachedBitmap;
+        Bitmap aBitmap = mpBitmapContainer ? mpBitmapContainer->maBitmap : maCachedBitmap;
 
         // #123983# directly create a metafile with the same PrefSize and PrefMapMode
         // the bitmap has, this will be an always correct metafile
-        if (aBitmapEx.IsAlpha())
+        if (aBitmap.HasAlpha())
         {
-            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), aBitmapEx.GetPrefSize(), aBitmapEx));
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), aBitmap.GetPrefSize(), BitmapEx(aBitmap)));
         }
         else
         {
-            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), aBitmapEx.GetPrefSize(), aBitmapEx.GetBitmap()));
+            pThat->maMetaFile.AddAction(new MetaBmpScaleAction(Point(), aBitmap.GetPrefSize(), aBitmap));
         }
 
         pThat->maMetaFile.Stop();
         pThat->maMetaFile.WindStart();
-        pThat->maMetaFile.SetPrefSize(aBitmapEx.GetPrefSize());
-        pThat->maMetaFile.SetPrefMapMode(aBitmapEx.GetPrefMapMode());
+        pThat->maMetaFile.SetPrefSize(aBitmap.GetPrefSize());
+        pThat->maMetaFile.SetPrefMapMode(aBitmap.GetPrefMapMode());
     }
 
     return maMetaFile;
@@ -892,7 +899,7 @@ void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
             }
             else if (mpBitmapContainer)
             {
-                mpBitmapContainer->maBitmapEx.SetPrefSize(rPrefSize);
+                mpBitmapContainer->maBitmap.SetPrefSize(rPrefSize);
             }
         }
         break;
@@ -991,7 +998,7 @@ void ImpGraphic::setValuesForPrefMapMod(const MapMode& rPrefMapMode)
             }
             else if (mpBitmapContainer)
             {
-                mpBitmapContainer->maBitmapEx.SetPrefMapMode(rPrefMapMode);
+                mpBitmapContainer->maBitmap.SetPrefMapMode(rPrefMapMode);
             }
         }
         break;
@@ -1085,12 +1092,12 @@ void ImpGraphic::draw(OutputDevice& rOutDev,
             }
             else if (mpBitmapContainer)
             {
-                mpBitmapContainer->getBitmapExRef().Draw(&rOutDev, rDestPt, rDestSize);
+                mpBitmapContainer->getBitmapRef().Draw(&rOutDev, rDestPt, rDestSize);
             }
             else if (maVectorGraphicData)
             {
                 updateBitmapFromVectorGraphic(rOutDev.LogicToPixel(rDestSize));
-                getBitmapExRef().Draw(&rOutDev, rDestPt, rDestSize);
+                getBitmapRef().Draw(&rOutDev, rDestPt, rDestSize);
             }
         }
         break;
@@ -1258,7 +1265,7 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
             else if (mpBitmapContainer)
             {
                 rStream.WriteInt32(sal_Int32(GraphicContentType::Bitmap));
-                WriteDIBBitmapEx(mpBitmapContainer->maBitmapEx, rStream);
+                WriteDIBBitmapEx(mpBitmapContainer->maBitmap, rStream);
             }
         }
         break;
@@ -1421,7 +1428,7 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
         if (pGraphic->mpAnimationContainer)
         {
             mpAnimationContainer = std::make_shared<AnimationContainer>(*pGraphic->mpAnimationContainer);
-            maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmapEx();
+            maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
         }
         else if (pGraphic->mpBitmapContainer)
         {
@@ -1639,7 +1646,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
                 ReadDIBBitmapEx(aBitmapEx, rStream);
                 if (!rStream.GetError())
                 {
-                    mpBitmapContainer = std::make_shared<BitmapContainer>(aBitmapEx);
+                    mpBitmapContainer = std::make_shared<BitmapContainer>(Bitmap(aBitmapEx));
                     bReturn = true;
                 }
             }
@@ -1652,7 +1659,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
                 if (!rStream.GetError())
                 {
                     mpAnimationContainer = std::make_shared<AnimationContainer>(aAnimation);
-                    maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmapEx();
+                    maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
                     bReturn = true;
                 }
             }

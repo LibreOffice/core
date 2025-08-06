@@ -174,8 +174,7 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
 {
     Bitmap aBitmap(Size(10, 10), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTGRAYBLUE);
-    BitmapEx aBitmapEx(aBitmap);
-    Graphic aGraphic(aBitmapEx);
+    Graphic aGraphic(aBitmap);
 
     // Test TypeSerializer
     {
@@ -204,7 +203,7 @@ void TypeSerializerTest::testGraphic_Bitmap_NoGfxLink()
             aSerializer.readGraphic(aNewGraphic);
         }
         CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aNewGraphic.GetType());
-        CPPUNIT_ASSERT_EQUAL(aBitmapEx.GetChecksum(), aNewGraphic.GetBitmapExRef().GetChecksum());
+        CPPUNIT_ASSERT_EQUAL(aBitmap.GetChecksum(), aNewGraphic.GetBitmapRef().GetChecksum());
     }
 }
 

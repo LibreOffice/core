@@ -190,12 +190,12 @@ Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
 }
 
 Graphic::Graphic(const BitmapEx& rBitmapEx)
-    : mxImpGraphic(new ImpGraphic(rBitmapEx))
+    : mxImpGraphic(new ImpGraphic(Bitmap(rBitmapEx)))
 {
 }
 
 Graphic::Graphic(const Bitmap& rBitmap)
-    : mxImpGraphic(new ImpGraphic(BitmapEx(rBitmap)))
+    : mxImpGraphic(new ImpGraphic(rBitmap))
 {
 }
 
@@ -203,7 +203,7 @@ Graphic::Graphic(const Bitmap& rBitmap)
 // and we need to be able to see and preserve 'stock' images too.
 Graphic::Graphic(const Image& rImage)
     // FIXME: should really defer the BitmapEx load.
-    : mxImpGraphic(new ImpGraphic(BitmapEx(rImage.GetBitmap())))
+    : mxImpGraphic(new ImpGraphic(rImage.GetBitmap()))
 {
     const OUString& aStock = rImage.GetStock();
     if (aStock.getLength())
@@ -348,9 +348,9 @@ const GDIMetaFile& Graphic::GetGDIMetaFile() const
     return mxImpGraphic->getGDIMetaFile();
 }
 
-const BitmapEx& Graphic::GetBitmapExRef() const
+const Bitmap& Graphic::GetBitmapRef() const
 {
-    return mxImpGraphic->getBitmapExRef();
+    return mxImpGraphic->getBitmapRef();
 }
 
 uno::Reference<css::graphic::XGraphic> Graphic::GetXGraphic() const

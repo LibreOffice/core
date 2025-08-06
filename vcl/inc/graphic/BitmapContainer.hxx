@@ -10,49 +10,49 @@
 #pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 struct SwapInfo;
 
 class SAL_DLLPUBLIC_RTTI BitmapContainer final
 {
 public:
-    BitmapEx maBitmapEx;
+    Bitmap maBitmap;
 
     BitmapContainer() = default;
 
-    BitmapContainer(BitmapEx const& rBitmapEx)
-        : maBitmapEx(rBitmapEx)
+    BitmapContainer(Bitmap const& rBitmap)
+        : maBitmap(rBitmap)
     {
     }
 
-    bool operator==(const BitmapContainer& rOther) const { return maBitmapEx == rOther.maBitmapEx; }
+    bool operator==(const BitmapContainer& rOther) const { return maBitmap == rOther.maBitmap; }
 
     void createSwapInfo(SwapInfo& rSwapInfo);
 
-    bool isAlpha() { return maBitmapEx.IsAlpha(); }
+    bool isAlpha() { return maBitmap.HasAlpha(); }
 
-    const BitmapEx& getBitmapExRef() const { return maBitmapEx; }
+    const Bitmap& getBitmapRef() const { return maBitmap; }
 
     Size getPrefSize() const
     {
-        Size aSize = maBitmapEx.GetPrefSize();
+        Size aSize = maBitmap.GetPrefSize();
         if (!aSize.Width() || !aSize.Height())
-            aSize = maBitmapEx.GetSizePixel();
+            aSize = maBitmap.GetSizePixel();
         return aSize;
     }
 
     MapMode getPrefMapMode() const
     {
-        const Size aSize = maBitmapEx.GetPrefSize();
+        const Size aSize = maBitmap.GetPrefSize();
         if (aSize.Width() && aSize.Height())
-            return maBitmapEx.GetPrefMapMode();
+            return maBitmap.GetPrefMapMode();
         return {};
     }
 
-    sal_uInt64 getSizeBytes() { return maBitmapEx.GetSizeBytes(); }
+    sal_uInt64 getSizeBytes() { return maBitmap.GetSizeBytes(); }
 
-    BitmapChecksum getChecksum() const { return maBitmapEx.GetChecksum(); }
+    BitmapChecksum getChecksum() const { return maBitmap.GetChecksum(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

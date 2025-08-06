@@ -1318,18 +1318,21 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testColorChangeToTransparent)
     ::Color nColorTo{ ColorTransparency, 0xFF, 0xFF, 0x00, 0x00 };
     sal_uInt8 nTolerance{ 15 };
 
+    const Bitmap& rBitmapBefore = aGraphic.GetBitmapRef();
+    CPPUNIT_ASSERT_EQUAL(::Color(ColorTransparency, 0x00, 0xF0, 0x00, 0x00),
+                         rBitmapBefore.GetPixelColor(386, 140));
+
     auto xGraphicAfter = xGraphicTransformer->colorChange(
         xGraphic, static_cast<sal_Int32>(nColorFrom), nTolerance, static_cast<sal_Int32>(nColorTo),
         static_cast<sal_Int8>(nColorTo.GetAlpha()));
 
     Graphic aGraphicAfter{ xGraphicAfter };
-    const BitmapEx& rBitmapAfter = aGraphicAfter.GetBitmapExRef();
-    const BitmapEx& rBitmapBefore = aGraphic.GetBitmapExRef();
+    const Bitmap& rBitmapAfter = aGraphicAfter.GetBitmapRef();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: rgba[ff000000]
     // - Actual  : rgba[f00000ff]
     // i.e. the color change to transparent didn't apply correctly
-    CPPUNIT_ASSERT_EQUAL(nColorTo, rBitmapAfter.GetPixelColor(386, 140));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), rBitmapAfter.GetPixelColor(386, 140).GetAlpha());
 
     // Test if color stayed same on 410,140
     // colorChange with nTolerance 15 shouldn't change this pixel.

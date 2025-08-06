@@ -2102,4 +2102,15 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
     return aChangedBitmap;
 }
 
+void Bitmap::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
+{
+    pOutDev->DrawBitmapEx( rDestPt, *this );
+}
+
+void Bitmap::Draw( OutputDevice* pOutDev,
+                     const Point& rDestPt, const Size& rDestSize ) const
+{
+    pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

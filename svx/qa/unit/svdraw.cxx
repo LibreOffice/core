@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
     Graphic aSnapshot(pSdrMediaObj->getSnapshot());
 
     // Then make sure the color is correct:
-    const BitmapEx& rBitmap = aSnapshot.GetBitmapExRef();
+    const Bitmap& rBitmap = aSnapshot.GetBitmapRef();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: rgba[ff0000ff]
     // - Actual  : rgba[000000ff]

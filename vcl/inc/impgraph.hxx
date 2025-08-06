@@ -48,7 +48,7 @@ class SAL_DLLPUBLIC_RTTI ImpGraphic final : public vcl::graphic::MemoryManaged
     friend class GraphicID;
 
 private:
-    BitmapEx maCachedBitmap;
+    Bitmap maCachedBitmap;
     GDIMetaFile maMetaFile;
     std::shared_ptr<BitmapContainer> mpBitmapContainer;
 
@@ -80,7 +80,7 @@ public:
     ImpGraphic( ImpGraphic&& rImpGraphic ) noexcept;
     ImpGraphic( GraphicExternalLink aExternalLink);
     ImpGraphic(std::shared_ptr<GfxLink> xGfxLink, sal_Int32 nPageIndex = 0);
-    ImpGraphic( const BitmapEx& rBmpEx );
+    ImpGraphic( const Bitmap& rBmp );
     ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr);
     ImpGraphic( const Animation& rAnimation );
     ImpGraphic( const GDIMetaFile& rMtf );
@@ -131,7 +131,7 @@ private:
 
     BitmapEx            getBitmapEx(const GraphicConversionParameters& rParameters) const;
     /// Gives direct access to the contained BitmapEx.
-    const BitmapEx&     getBitmapExRef() const;
+    const Bitmap&       getBitmapRef() const;
     Animation           getAnimation() const;
     const GDIMetaFile&  getGDIMetaFile() const;
 

@@ -1298,7 +1298,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
     int numNonTransparent = 0;
     for (tools::Long y = 0; y < size.Height(); ++y)
         for (tools::Long x = 0; x < size.Width(); ++x)
-            if (bitmap.GetPixelColor(x, y) != COL_TRANSPARENT)
+            if (bitmap.GetPixelColor(x, y).GetAlpha() != 0)
                 ++numNonTransparent;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.04, numNonTransparent / double(size.Height() * size.Width()),
                                  0.01);
@@ -1318,7 +1318,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
     numNonTransparent = 0;
     for (tools::Long y = 0; y < size.Height(); ++y)
         for (tools::Long x = 0; x < size.Width(); ++x)
-            if (bitmap.GetPixelColor(x, y) != COL_TRANSPARENT)
+            if (bitmap.GetPixelColor(x, y).GetAlpha() != 0)
                 ++numNonTransparent;
     CPPUNIT_ASSERT(numNonTransparent > 0);
     CPPUNIT_ASSERT(numNonTransparent < size.Height() * size.Width());

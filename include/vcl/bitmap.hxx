@@ -607,7 +607,11 @@ public:
     [[nodiscard]]
     Bitmap            Modify( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
-public:
+    SAL_DLLPRIVATE void Draw( OutputDevice* pOutDev,
+                              const Point& rDestPt ) const;
+    void                Draw( OutputDevice* pOutDev,
+                              const Point& rDestPt, const Size& rDestSize ) const;
+
     /** ReassignWithSize and recalculate bitmap.
 
       ReassignWithSizes the bitmap, and recalculates the bitmap size based on the new bitmap.

@@ -2979,8 +2979,8 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         GetGraphicFromXShape(pShape, aGraphic);
         if (aGraphic.GetType() == GraphicType::Bitmap)
         {
-            const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
-            if (rGraphicBitmap == rBmpEx)
+            const Bitmap& rGraphicBitmap = aGraphic.GetBitmapRef();
+            if (rGraphicBitmap == Bitmap(rBmpEx))
             {
                 bool bPNG = false;
                 GfxLink aGfxLink = aGraphic.GetGfxLink();
