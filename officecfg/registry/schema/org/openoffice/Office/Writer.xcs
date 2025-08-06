@@ -2175,6 +2175,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="SelectPastedAnchoredObject" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies if pasted anchored objects will be selected; otherwise, the text cursor will remain at the location of the paste.</desc>
+            <label>Select pasted anchored objects</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
     </group>
     <group oor:name="FmtAidsAutocomplete">

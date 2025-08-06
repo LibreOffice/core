@@ -40,7 +40,10 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
+#include <officecfg/Office/Writer.hxx>
+
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -971,6 +974,17 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
 {
+    comphelper::ScopeGuard g([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::set(true, pBatch);
+    pBatch->commit();
+
     createSwDoc();
 
     // Insert initial string.

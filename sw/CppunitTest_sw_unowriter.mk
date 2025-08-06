@@ -65,6 +65,10 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_unowriter))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_unowriter,services))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_unowriter,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_unowriter))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_unowriter, \
