@@ -754,9 +754,8 @@ bool CachedContentResultSet
             }
             else
                 throw;
+            return nRow == m_nLastAppliedPos;
         }
-
-        return nRow == m_nLastAppliedPos;
     }
     return true;
 };
