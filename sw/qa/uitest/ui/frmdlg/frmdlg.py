@@ -116,7 +116,8 @@ class Test(UITestCase):
             self.assertTrue(to_char_enabled)
 
     def test_floattable_in_shape_text(self):
-        with self.ui_test.load_file(get_url_for_data_file("floattable-in-shape-text.docx")) as xComponent:
+        with self.ui_test.set_config('/org.openoffice.Office.Writer/Cursor/Option/SelectPastedAnchoredObject', True):
+          with self.ui_test.load_file(get_url_for_data_file("floattable-in-shape-text.docx")) as xComponent:
             # Given a table in a frame, anchored in shape text (TextBox case):
             self.xUITest.executeCommand(".uno:SelectAll")
             # Insert frame around the selected table:
