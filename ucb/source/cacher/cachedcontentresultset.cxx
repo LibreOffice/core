@@ -676,15 +676,15 @@ bool CachedContentResultSet
     }
 //  OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
 
+    if (!m_bAfterLastApplied && m_nLastAppliedPos == nRow)
+        return true;
+
     sal_Int32 nLastAppliedPos = m_nLastAppliedPos;
     bool bAfterLastApplied = m_bAfterLastApplied;
     bool bAfterLast = m_bAfterLast;
     sal_Int32 nForwardOnly = m_nForwardOnly;
 
     rGuard.unlock();
-
-    if (!bAfterLastApplied && nLastAppliedPos == nRow)
-        return true;
 
     if( nForwardOnly == 1 )
     {
