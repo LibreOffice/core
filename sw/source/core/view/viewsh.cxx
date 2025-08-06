@@ -1863,12 +1863,12 @@ bool SwViewShell::DrawAppBackgroundBitmap(vcl::RenderContext* rRenderContext, co
     if (Application::IsHeadlessModeEnabled() || !ThemeColors::UseBmpForAppBack())
         return false;
 
-    const BitmapEx& aAppBackImg
+    const Bitmap& aAppBackImg
         = Application::GetSettings().GetStyleSettings().GetAppBackgroundBitmap();
     if (aAppBackImg.IsEmpty())
         return false;
 
-    Wallpaper aWallpaper(aAppBackImg);
+    Wallpaper aWallpaper((BitmapEx(aAppBackImg)));
     if (ThemeColors::GetAppBackBmpDrawType() == u"Tiled"_ustr)
         aWallpaper.SetStyle(WallpaperStyle::Tile);
     else if (ThemeColors::GetAppBackBmpDrawType() == u"Stretched"_ustr)

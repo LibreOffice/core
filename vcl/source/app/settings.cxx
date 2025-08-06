@@ -250,7 +250,7 @@ struct ImplStyleData
     Size                            maListBoxPreviewDefaultLogicSize = getInitListBoxPreviewDefaultLogicSize();
     // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
     Size                    mutable maListBoxPreviewDefaultPixelSize;
-    BitmapEx                mutable maAppBackgroundBitmap; // cache AppBackground bitmap
+    Bitmap                  mutable maAppBackgroundBitmap; // cache AppBackground bitmap
     OUString                mutable maAppBackgroundBitmapFileName; // cache AppBackground bitmap file name
 
     bool operator==(const ImplStyleData& rSet) const;
@@ -1953,7 +1953,7 @@ StyleSettings::GetDialogStyle() const
     return mxData->maDialogStyle;
 }
 
-static BitmapEx readBitmapEx(const OUString& rPath)
+static Bitmap readBitmap(const OUString& rPath)
 {
     OUString aPath(rPath);
     rtl::Bootstrap::expandMacros(aPath);
@@ -1961,11 +1961,11 @@ static BitmapEx readBitmapEx(const OUString& rPath)
     // import the image
     Graphic aGraphic;
     if (GraphicFilter::LoadGraphic(aPath, OUString(), aGraphic) != ERRCODE_NONE)
-        return BitmapEx();
-    return aGraphic.GetBitmapEx();
+        return Bitmap();
+    return Bitmap(aGraphic.GetBitmapEx());
 }
 
-static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, BitmapEx& rAppBackBitmap)
+static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, Bitmap& rAppBackBitmap)
 {
     if (Application::IsHeadlessModeEnabled() || !ThemeColors::UseBmpForAppBack())
         return;
@@ -1978,7 +1978,7 @@ static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, BitmapEx&
 
     if (!rAppBackBitmapFileName.isEmpty())
     {
-        rAppBackBitmap = readBitmapEx("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/backgrounds/"
+        rAppBackBitmap = readBitmap("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/backgrounds/"
                                       + rAppBackBitmapFileName);
     }
 
@@ -1989,7 +1989,7 @@ static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, BitmapEx&
     }
 }
 
-BitmapEx const& StyleSettings::GetAppBackgroundBitmap() const
+Bitmap const& StyleSettings::GetAppBackgroundBitmap() const
 {
     setupAppBackgroundBitmap(mxData->maAppBackgroundBitmapFileName, mxData->maAppBackgroundBitmap);
     return mxData->maAppBackgroundBitmap;
