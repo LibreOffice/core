@@ -2298,9 +2298,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 1']", 6);
-    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
-                           "Liberation Serif", "Liberation Serif1" })
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 1']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 1']");
@@ -2311,9 +2311,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 1']", 6);
-    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
-                           "Liberation Serif", "Liberation Serif1" })
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 1']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 1']");
@@ -2352,9 +2352,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 2']", 6);
-    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
-                           "Liberation Serif", "Liberation Serif1" })
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 2']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 2']");
@@ -2365,9 +2365,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 2']", 6);
-    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1",
-                           "Liberation Serif", "Liberation Serif1" })
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 2']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 2']");
@@ -2405,37 +2405,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
         pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']",
         u"true");
 
-    // Check styles - font-face-src should be present only for "Liberation Serif" fonts
+    // Check styles - font-face-src should be present only for "DejaVu Serif"
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 3']", 6);
-    for (auto fontName : { "Caladea", "Carlito", "Liberation Sans", "Liberation Sans1" })
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 3']", 5);
+    for (auto fontName :
+         { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
     }
-    for (auto fontName : { "Liberation Serif", "Liberation Serif1" })
+    for (auto fontName : { "DejaVu Serif" })
     {
         OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
     }
 
-    // Check content - font-face-src should be present only for Carlito and Liberation Serif fonts
+    // Check content - font-face-src should be present only for DejaVu Sans Mono and DejaVu Serif
     // Note that the used sets of fonts are different for styles.xml and content.xml
     pXmlDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 6);
-    for (auto fontName : { "Caladea", "Liberation Sans", "Liberation Sans1" })
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");
         assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
     }
-    for (auto fontName : { "Carlito", "Liberation Serif", "Liberation Serif1" })
+    for (auto fontName : { "DejaVu Sans Mono", "DejaVu Serif" })
     {
         OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
         assertXPath(pXmlDoc, prefix + "['CASE 3']");

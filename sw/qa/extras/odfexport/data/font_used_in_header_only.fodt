@@ -11,7 +11,7 @@
   </config:config-item-set>
  </office:settings>
  <office:font-face-decls>
-  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
   <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
  </office:font-face-decls>
  <office:styles>
@@ -22,7 +22,7 @@
  </office:styles>
  <office:automatic-styles>
   <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
-   <style:text-properties style:font-name="Liberation Sans"/>
+   <style:text-properties style:font-name="DejaVu Sans"/>
   </style:style>
   <style:page-layout style:name="pm1">
    <style:header-style>
@@ -33,7 +33,7 @@
  <office:master-styles>
   <style:master-page style:name="Standard" style:page-layout-name="pm1">
    <style:header>
-    <text:p text:style-name="P1">Header: Liberation Sans</text:p>
+    <text:p text:style-name="P1">Header: DejaVu Sans</text:p>
    </style:header>
   </style:master-page>
  </office:master-styles>

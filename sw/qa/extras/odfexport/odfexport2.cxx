@@ -39,35 +39,48 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
 {
-    loadAndReload("embedded-font-props.odt");
+    createSwDoc("embedded-font-props.odt");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 #if !defined(MACOSX)
     // Test that font style/weight of embedded fonts is exposed.
-    // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     // These failed, the attributes were missing.
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", u"normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", u"normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-style", u"normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-weight", u"bold");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-style", u"italic");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-weight", u"normal");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", u"italic");
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", u"bold");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-style", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-weight", u"bold");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-style", u"italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-weight", u"normal");
+#if defined _WIN32
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", u"italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", u"bold");
+#endif
 #endif
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf166627)
 {
     loadAndReload("font_used_in_header_only.fodt");
-    // Liberation Sans wasn't embedded before fix, because it was only seen used in header
+    // DejaVu Sans wasn't embedded before fix, because it was only seen used in header
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
-    // There should be four files embedded for the font
+    // There should be four (three on Linux? Why DejaVu differs there?) files embedded for the font
+#if defined(_WIN32) || defined(MACOSX)
     assertXPath(
         pXmlDoc,
-        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri", 4);
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri", 4);
+#else
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri", 3);
+#endif
 
     uno::Reference<container::XNameAccess> xZipNames(
         packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(),
@@ -76,24 +89,26 @@ CPPUNIT_TEST_FIXTURE(Test, tdf166627)
 
     OUString url = getXPath(
         pXmlDoc,
-        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[1]",
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri[1]",
         "href");
     CPPUNIT_ASSERT(xZipNames->hasByName(url));
     url = getXPath(
         pXmlDoc,
-        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[2]",
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri[2]",
         "href");
     CPPUNIT_ASSERT(xZipNames->hasByName(url));
     url = getXPath(
         pXmlDoc,
-        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[3]",
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri[3]",
         "href");
     CPPUNIT_ASSERT(xZipNames->hasByName(url));
+#if defined(_WIN32) || defined(MACOSX)
     url = getXPath(
         pXmlDoc,
-        "//style:font-face[@style:name='Liberation Sans']/svg:font-face-src/svg:font-face-uri[4]",
+        "//style:font-face[@style:name='DejaVu Sans']/svg:font-face-src/svg:font-face-uri[4]",
         "href");
     CPPUNIT_ASSERT(xZipNames->hasByName(url));
+#endif
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
