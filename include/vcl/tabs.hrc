@@ -91,13 +91,14 @@ inline constexpr TabData RID_TAB_PRIVATE{ NC_("RID_TAB_PRIVATE", "Private"), u"s
 inline constexpr TabData RID_TAB_BUSINESS{ NC_("RID_TAB_BUSINESS", "Business"), u"symbolshapes.sun.png"_ustr };
 inline constexpr TabData RID_TAB_FORMAT{ NC_("RID_TAB_FORMAT", "Format"), u"pagemargin.png"_ustr };
 inline constexpr TabData RID_TAB_LABEL_OPTIONS{ NC_("RID_TAB_LABEL_OPTIONS", "Options"), u"printlayout.png"_ustr };
-
 // draw
 inline constexpr TabData RID_TAB_SHADOW{ NC_("RID_TAB_SHADOW", "Shadowing"), u"fillshadow.png"_ustr };
 inline constexpr TabData RID_TAB_TEXT{ NC_("RID_TAB_TEXT", "Text"), u"text_marquee.png"_ustr };
 inline constexpr TabData RID_TAB_TEXTANIMATION{ NC_("RID_TAB_TEXTANIMATION", "Text Animation"), u"animationeffects.png"_ustr };
 inline constexpr TabData RID_TAB_DIMENSIONING{ NC_("RID_TAB_DIMENSIONING", "Dimensioning"), u"measureline.png"_ustr };
 inline constexpr TabData RID_TAB_CONNECTOR{ NC_("RID_TAB_CONNECTOR", "Connector"), u"connectorcurve.png"_ustr };
+inline constexpr TabData RID_TAB_NUMBERING{ NC_("RID_TAB_NUMBERING", "Numbering"), u"defaultnumbering.png"_ustr };
+inline constexpr TabData RID_TAB_BULLETS{ NC_("RID_TAB_BULLETS", "Bullets"), u"defaultbullet.png"_ustr };
 // calc
 inline constexpr TabData RID_TAB_SHEET{ NC_("RID_TAB_SHEET", "Sheet"), u"printersetup.png"_ustr };
 inline constexpr TabData RID_TAB_PROTECTION{ NC_("RID_TAB_PROTECTION", "Cell Protection"), u"protect.png"_ustr };
@@ -106,7 +107,7 @@ inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and S
 inline constexpr TabData RID_TAB_HYPERLINK{ NC_("RID_TAB_HYPERLINK", "Hyperlink"), u"inserthyperlink.png"_ustr };
 inline constexpr TabData RID_TAB_CROP{ NC_("RID_TAB_CROP", "Crop"), u"crop.png"_ustr };
 inline constexpr TabData RID_TAB_ROTATION{ NC_("RID_TAB_ROTATION", "Rotation"), u"toggleobjectrotatemode.png"_ustr };
-
+// chart
 inline constexpr TabData RID_TAB_CHART_OPTIONS{ NC_("RID_TAB_CHART_OPTIONS", "Options"), u"diagramtype.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ERROR_X{ NC_("RID_TAB_CHART_ERROR_X", "X Error Bars"), u"arrowshapes.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ERROR_Y{ NC_("RID_TAB_CHART_ERROR_Y", "Y Error Bars"), u"arrowshapes.up-down-arrow.png"_ustr };

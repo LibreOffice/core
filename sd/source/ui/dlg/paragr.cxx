@@ -29,6 +29,8 @@
 #include <paragr.hxx>
 #include <sdattr.hrc>
 
+#include <vcl/tabs.hrc>
+
 namespace {
 
 class SdParagraphNumTabPage : public SfxTabPage
@@ -139,22 +141,24 @@ SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawparadialog.ui"_ustr,
                              u"DrawParagraphPropertiesDialog"_ustr, pAttr)
 {
-    AddTabPage( u"indents"_ustr, RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), RID_SVXPAGE_STD_PARAGRAPH,
+               RID_L + RID_TAB_INDENTS.sIconName);
 
-    if( SvtCJKOptions::IsAsianTypographyEnabled() )
-        AddTabPage( u"asiantypo"_ustr, RID_SVXPAGE_PARA_ASIAN);
-    else
-        RemoveTabPage( u"asiantypo"_ustr );
+    if (SvtCJKOptions::IsAsianTypographyEnabled())
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
+                   RID_L + RID_TAB_ASIANTYPO.sIconName);
 
-    AddTabPage( u"alignment"_ustr, RID_SVXPAGE_ALIGN_PARAGRAPH);
+    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel), RID_SVXPAGE_TABULATOR,
+               RID_L + RID_TAB_TABS.sIconName);
 
-    static const bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != nullptr );
-    if( bShowParaNumbering )
-        AddTabPage( u"numbering"_ustr, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
-    else
-        RemoveTabPage( u"numbering"_ustr );
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), RID_SVXPAGE_ALIGN_PARAGRAPH,
+               RID_L + RID_TAB_ALIGNMENT.sIconName);
 
-    AddTabPage(u"tabs"_ustr, RID_SVXPAGE_TABULATOR);
+    static const bool bShowParaNumbering = (getenv("SD_SHOW_NUMBERING_PAGE") != nullptr);
+    if (bShowParaNumbering)
+        AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
+                   SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges,
+                   RID_L + RID_TAB_NUMBERING.sIconName);
 }
 
 void SdParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

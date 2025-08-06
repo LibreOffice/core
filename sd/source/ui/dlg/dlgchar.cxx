@@ -27,6 +27,8 @@
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
 
+#include <vcl/tabs.hrc>
+
 /**
  * Constructor of tab dialog: append pages to dialog
  */
@@ -38,10 +40,17 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
-    AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
-    AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
-    AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), nullptr);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), RID_L + RID_TAB_FONT.sIconName);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS),
+               RID_L + RID_TAB_FONTEFFECTS.sIconName);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION),
+               RID_L + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
+               RID_L + RID_TAB_HIGHLIGHTING.sIconName);
 }
 
 void SdCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
