@@ -296,9 +296,9 @@ do_init_modules()
     done
     for module in $SUBMODULES_CONFIGURED ; do
         if [ -n "$REFERENCED_GIT" ] ; then
-            git submodule update --reference "$REFERENCED_GIT/.git/modules/$module" --progress "$module" || return $?
+            git submodule update --depth 1 --reference "$REFERENCED_GIT/.git/modules/$module" --progress "$module" || return $?
         else
-            git submodule update --progress "$module" || return $?
+            git submodule update --depth 1 --progress "$module" || return $?
         fi
     done
     return 0
