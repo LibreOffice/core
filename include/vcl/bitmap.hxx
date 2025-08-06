@@ -110,6 +110,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final
 public:
 
                             Bitmap();
+                            Bitmap( const OUString& rIconName );
                             Bitmap( const Bitmap& rBitmap );
     explicit                Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
@@ -616,6 +617,7 @@ public:
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
     SAL_DLLPRIVATE bool ImplConvertDown8BPP(Color const* pExtColor = nullptr);
+    SAL_DLLPRIVATE void loadFromIconTheme( const OUString& rIconName );
 
 private:
     std::shared_ptr<SalBitmap> mxSalBmp;

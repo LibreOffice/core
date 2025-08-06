@@ -48,7 +48,7 @@ namespace com::sun::star::io {
 }
 
 class ImplImageTree;
-class BitmapEx;
+class Bitmap;
 class SvMemoryStream;
 
 class ImageTree
@@ -72,12 +72,12 @@ public:
 
     VCL_DLLPUBLIC bool loadImage(
         OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized,
+        Bitmap & bitmap, bool localized,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
     VCL_DLLPUBLIC bool loadImage(
         OUString const & name, OUString const & style,
-        BitmapEx & bitmap, bool localized,
+        Bitmap & bitmap, bool localized,
         sal_Int32 nScalePercentage,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 

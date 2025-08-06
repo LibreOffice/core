@@ -25,7 +25,7 @@
 
 namespace vcl
 {
-    bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage )
+    bool ImageRepository::loadImage( const OUString& _rName, Bitmap& _out_rImage )
     {
         OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 

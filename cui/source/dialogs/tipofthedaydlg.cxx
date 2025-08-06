@@ -233,10 +233,10 @@ void TipOfTheDayDialog::UpdateTip()
                 RID_SVXBMP_TOTD_IMPRESS, RID_SVXBMP_TOTD_SOFFICE };
         const OUString aIconTheme
             = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        BitmapEx aBmpEx;
-        ImageTree::get().loadImage(sModuleImage[nType], aIconTheme, aBmpEx, true,
+        Bitmap aBmp;
+        ImageTree::get().loadImage(sModuleImage[nType], aIconTheme, aBmp, true,
                                    ImageLoadFlags::IgnoreDarkTheme);
-        aGraphic = aBmpEx;
+        aGraphic = aBmp;
     }
 
     if (!aGraphic.IsAnimated())

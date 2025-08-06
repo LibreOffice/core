@@ -6371,8 +6371,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *_pViewShell->GetOut() );
 
     static tools::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow> shadowMaskObj(
-            vcl::bitmap::loadFromName(BMP_PAGE_SHADOW_MASK,
-                                      ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor));
+            BitmapEx(vcl::bitmap::loadFromName(BMP_PAGE_SHADOW_MASK,
+                                      ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor)));
 
     drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
     static tools::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj {};

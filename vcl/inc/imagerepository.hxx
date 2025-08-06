@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
-class BitmapEx;
+class Bitmap;
 
 
 namespace vcl
@@ -44,7 +44,7 @@ namespace vcl
         */
         static bool loadImage(
             const OUString& _rName,
-            BitmapEx& _out_rImage
+            Bitmap& _out_rImage
         );
     };
 

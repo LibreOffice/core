@@ -40,7 +40,7 @@ css::uno::Reference<css::io::XInputStream> ImageTree::getImageXInputStream(OUStr
 }
 
 bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
-                          BitmapEx & rBitmap, bool bLocalized,
+                          Bitmap & rBitmap, bool bLocalized,
                           sal_Int32 nScalePercentage,
                           const ImageLoadFlags eFlags)
 {
@@ -48,7 +48,7 @@ bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
 }
 
 bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
-                          BitmapEx & rBitmap, bool bLocalized,
+                          Bitmap & rBitmap, bool bLocalized,
                           const ImageLoadFlags eFlags)
 {
     return loadImage(rName, rStyle, rBitmap, bLocalized, -1, eFlags);

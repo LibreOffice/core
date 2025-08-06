@@ -35,6 +35,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #endif
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
+#include <vcl/ImageTree.hxx>
 
 #include <bitmap/BitmapScaleSuperFilter.hxx>
 #include <bitmap/BitmapScaleConvolutionFilter.hxx>
@@ -146,6 +147,29 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
         xDev->DrawBitmapEx(Point(0, 0), aPixelSize, rBitmapEx);
         mxSalBmp = xDev->GetBitmap(Point(0,0), aPixelSize).mxSalBmp;
     }
+}
+
+Bitmap::Bitmap( const OUString& rIconName )
+{
+    loadFromIconTheme( rIconName );
+}
+
+void Bitmap::loadFromIconTheme( const OUString& rIconName )
+{
+    bool bSuccess;
+    OUString aIconTheme;
+
+    try
+    {
+        aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        bSuccess = ImageTree::get().loadImage(rIconName, aIconTheme, *this, true);
+    }
+    catch (...)
+    {
+        bSuccess = false;
+    }
+
+    SAL_WARN_IF( !bSuccess, "vcl", "BitmapEx::BitmapEx(): could not load image " << rIconName << " via icon theme " << aIconTheme);
 }
 
 #ifdef DBG_UTIL

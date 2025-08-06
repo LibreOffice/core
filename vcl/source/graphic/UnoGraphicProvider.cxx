@@ -200,7 +200,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
     std::u16string_view sPathName;
     if( o3tl::starts_with(rResourceURL, u"private:graphicrepository/", &sPathName) )
     {
-        BitmapEx aBitmap;
+        Bitmap aBitmap;
         if ( vcl::ImageRepository::loadImage( OUString(sPathName), aBitmap ) )
         {
             Graphic aGraphic(aBitmap);

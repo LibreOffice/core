@@ -352,7 +352,7 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
     return sResult;
 }
 
-bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized,
+bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, Bitmap & rBitmap, bool localized,
                               const ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
 {
     OUString aCurrentStyle(rStyle);

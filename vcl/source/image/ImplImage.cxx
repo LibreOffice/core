@@ -57,7 +57,7 @@ ImplImage::ImplImage(const GDIMetaFile& rMetaFile)
 
 bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
 {
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
 
     ImageLoadFlags eScalingFlags = ImageLoadFlags::NONE;
     sal_Int32 nScalePercentage = -1;
@@ -77,7 +77,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
     }
 #endif
 
-    if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmapEx, true,
+    if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmap, true,
                                     nScalePercentage, eScalingFlags))
     {
         /* If the uno command has parameters, passed in from a toolbar,
@@ -89,7 +89,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
             sal_Int32 nEnd = maStockName.lastIndexOf(".");
 
             OUString aFileName = maStockName.replaceAt(nStart, nEnd - nStart, u"");
-            if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true,
+            if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmap, true,
                                             nScalePercentage, eScalingFlags))
             {
                 SAL_WARN_IF(!bOptional, "vcl",
@@ -105,7 +105,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
             return false;
         }
     }
-    rBitmap = Bitmap(aBitmapEx);
+    rBitmap = aBitmap;
     return true;
 }
 

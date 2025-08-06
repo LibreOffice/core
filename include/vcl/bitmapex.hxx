@@ -468,8 +468,6 @@ private:
                                     const int nHeight,
                                     const int nStride);
 
-    SAL_DLLPRIVATE void  loadFromIconTheme( const OUString& rIconName );
-
     Bitmap              maBitmap;
     AlphaMask           maAlphaMask;
     Size                maBitmapSize;

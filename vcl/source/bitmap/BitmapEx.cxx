@@ -82,25 +82,7 @@ BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
 
 BitmapEx::BitmapEx( const OUString& rIconName )
 {
-    loadFromIconTheme( rIconName );
-}
-
-void BitmapEx::loadFromIconTheme( const OUString& rIconName )
-{
-    bool bSuccess;
-    OUString aIconTheme;
-
-    try
-    {
-        aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        bSuccess = ImageTree::get().loadImage(rIconName, aIconTheme, *this, true);
-    }
-    catch (...)
-    {
-        bSuccess = false;
-    }
-
-    SAL_WARN_IF( !bSuccess, "vcl", "BitmapEx::BitmapEx(): could not load image " << rIconName << " via icon theme " << aIconTheme);
+    operator=(Bitmap(rIconName));
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :

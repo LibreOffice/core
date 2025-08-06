@@ -263,23 +263,18 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
         else
             sIcon = SV_ICON_SIZE16[nIcon];
 
-        BitmapEx aIcon = vcl::bitmap::loadFromName(sIcon, ImageLoadFlags::IgnoreScalingFactor);
+        Bitmap aIcon = vcl::bitmap::loadFromName(sIcon, ImageLoadFlags::IgnoreScalingFactor);
 
         if( aIcon.IsEmpty())
             continue;
-        vcl::bitmap::convertBitmap32To24Plus8(aIcon, aIcon);
-        Bitmap icon = aIcon.GetBitmap();
-        AlphaMask mask = aIcon.GetAlphaMask();
-        BitmapScopedReadAccess iconData(icon);
-        BitmapScopedReadAccess maskData(mask);
+        BitmapScopedReadAccess iconData(aIcon);
         netwm_icon[ pos++ ] = size; // width
         netwm_icon[ pos++ ] = size; // height
         for( int y = 0; y < size; ++y )
             for( int x = 0; x < size; ++x )
             {
                 BitmapColor col = iconData->GetColor( y, x );
-                BitmapColor alpha = maskData->GetColor( y, x );
-                netwm_icon[ pos++ ] = (((( 255 - alpha.GetBlue()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
+                netwm_icon[ pos++ ] = (((( 255 - col.GetAlpha()) * 256U ) + col.GetRed()) * 256 + col.GetGreen()) * 256 + col.GetBlue();
             }
     }
     netwm_icon.resize( pos );
