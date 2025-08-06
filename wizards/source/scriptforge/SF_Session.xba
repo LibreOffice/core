@@ -342,7 +342,7 @@ Public Function GetRangeFromCalc(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;			The file must exist.
 &apos;&apos;&apos;		Range: either
 &apos;&apos;&apos;			&quot;sheet.cells&quot;, where &quot;sheet&quot; is the mandatory sheet name, eventually
-&apos;&apos;&apos;				surrounded with single wuotes when it contains special characters,
+&apos;&apos;&apos;				surrounded with single quotes when it contains special characters,
 &apos;&apos;&apos;				and &quot;cells&quot; is the single cell or the range of cells
 &apos;&apos;&apos;				to be considered, in A1 notation with or without dollar signs
 &apos;&apos;&apos;			a defined name at document-global level.
