@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
 
                 aContainer.push_back(
                     new BitmapPrimitive2D(
-                        getMarker(),
+                        BitmapEx(getMarker()),
                         aTransform));
             }
             return new GroupPrimitive2D(std::move(aContainer));
@@ -73,7 +73,7 @@ namespace drawinglayer::primitive2d
 
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             std::vector< basegfx::B2DPoint >&& rPositions,
-            const BitmapEx& rMarker)
+            const Bitmap& rMarker)
         :   maPositions(std::move(rPositions)),
             maMarker(rMarker)
         {

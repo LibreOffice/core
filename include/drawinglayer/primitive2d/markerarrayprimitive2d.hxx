@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 
 // MarkerArrayPrimitive2D class
@@ -49,7 +49,7 @@ namespace drawinglayer::primitive2d
             std::vector< basegfx::B2DPoint >                maPositions;
 
             /// the marker definition to visualize
-            BitmapEx                                        maMarker;
+            Bitmap                                          maMarker;
 
             /// create local decomposition
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
@@ -58,11 +58,11 @@ namespace drawinglayer::primitive2d
             /// constructor
             MarkerArrayPrimitive2D(
                 std::vector< basegfx::B2DPoint >&& rPositions,
-                const BitmapEx& rMarker);
+                const Bitmap& rMarker);
 
             /// data read access
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }
-            const BitmapEx& getMarker() const { return maMarker; }
+            const Bitmap& getMarker() const { return maMarker; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

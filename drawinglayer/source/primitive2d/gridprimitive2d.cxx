@@ -248,7 +248,7 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
+                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), Bitmap(getCrossMarker())));
             }
             return new GroupPrimitive2D(std::move(aContainer));
         }

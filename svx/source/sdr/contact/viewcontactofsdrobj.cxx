@@ -145,7 +145,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObj::createGlueP
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
-                                std::move(aGluepointVector), BitmapEx(SdrHdl::createGluePointBitmap())));
+                                std::move(aGluepointVector), SdrHdl::createGluePointBitmap()));
                 xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xReference };
             }
         }

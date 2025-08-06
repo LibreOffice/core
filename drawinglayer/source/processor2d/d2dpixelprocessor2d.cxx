@@ -1391,7 +1391,7 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
         return;
     }
 
-    const BitmapEx& rMarker(rMarkerArrayCandidate.getMarker());
+    BitmapEx rMarker(rMarkerArrayCandidate.getMarker());
 
     if (rMarker.IsEmpty())
     {

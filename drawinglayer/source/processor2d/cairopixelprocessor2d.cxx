@@ -2104,7 +2104,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
         return;
     }
 
-    const BitmapEx& rMarker(rMarkerArrayCandidate.getMarker());
+    const Bitmap& rMarker(rMarkerArrayCandidate.getMarker());
 
     if (rMarker.IsEmpty())
     {
@@ -2150,8 +2150,8 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
             Bitmap aBitmap(rMarker.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBitmap.Erase(Color(aReplacementColor));
 
-            if (rMarker.IsAlpha())
-                aBitmapEx = BitmapEx(aBitmap, rMarker.GetAlphaMask());
+            if (rMarker.HasAlpha())
+                aBitmapEx = BitmapEx(aBitmap, BitmapEx(rMarker).GetAlphaMask());
             else
                 aBitmapEx = BitmapEx(aBitmap);
         }

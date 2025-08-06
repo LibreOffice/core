@@ -1094,7 +1094,7 @@ void VclProcessor2D::RenderMarkerArrayPrimitive2D(
         return;
 
     // get pixel size
-    const BitmapEx& rMarker(rMarkArrayCandidate.getMarker());
+    const Bitmap& rMarker(rMarkArrayCandidate.getMarker());
     const Size aBitmapSize(rMarker.GetSizePixel());
 
     if (!(aBitmapSize.Width() && aBitmapSize.Height()))
