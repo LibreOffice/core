@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 
-class BitmapEx;
+class Bitmap;
 namespace weld
 {
     class Builder;
@@ -931,11 +931,11 @@ public:
     /** Load a localized branding PNG file as a bitmap.
 
      @param     pName           Name of the bitmap to load.
-     @param     rBitmap         Reference to BitmapEx object to load PNG into
+     @param     rBitmap         Reference to Bitmap object to load PNG into
 
      @returns true if the PNG could be loaded, otherwise returns false.
     */
-    static bool                 LoadBrandBitmap (std::u16string_view pName, BitmapEx &rBitmap);
+    static bool                 LoadBrandBitmap (std::u16string_view pName, Bitmap& rBitmap);
 
     ///@}
 

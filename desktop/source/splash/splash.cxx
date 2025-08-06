@@ -72,10 +72,10 @@ private:
     virtual ~SplashScreen() override;
     void loadConfig();
     void updateStatus();
-    void SetScreenBitmap(BitmapEx &rBitmap);
+    void SetScreenBitmap(Bitmap& rBitmap);
     static void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
-    BitmapEx        _aIntroBmp;
+    Bitmap          _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
     Color           _cProgressTextColor;
@@ -454,7 +454,7 @@ void SplashScreen::loadConfig()
     }
 }
 
-void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
+void SplashScreen::SetScreenBitmap(Bitmap& rBitmap)
 {
     sal_Int32 nWidth( 0 );
     sal_Int32 nHeight( 0 );

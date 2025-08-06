@@ -75,8 +75,7 @@ enum RenderStyle {
 
 class DemoRenderer
 {
-    Bitmap   maIntroBW;
-    BitmapEx maIntro;
+    Bitmap   maIntro;
 
     int mnSegmentsX;
     int mnSegmentsY;
@@ -133,9 +132,7 @@ public:
         if (!Application::LoadBrandBitmap(u"intro", maIntro))
             Application::Abort(u"Failed to load intro image"_ustr);
 
-        maIntroBW = maIntro.GetBitmap();
-
-        BitmapFilter::Filter(maIntroBW, BitmapEmbossGreyFilter(0_deg100, 0_deg100));
+        BitmapFilter::Filter(maIntro, BitmapEmbossGreyFilter(0_deg100, 0_deg100));
 
         InitRenderers();
         mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,
@@ -865,7 +862,7 @@ public:
         virtual void RenderRegion(OutputDevice &rDev, tools::Rectangle r,
                                   const RenderContext &rCtx) override
         {
-            Bitmap aBitmap(rCtx.mpDemoRenderer->maIntroBW);
+            Bitmap aBitmap(rCtx.mpDemoRenderer->maIntro);
             aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             rDev.DrawBitmap(r.TopLeft(), aBitmap);
 

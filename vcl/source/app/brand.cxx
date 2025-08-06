@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 
 namespace {
-    bool loadPng( std::u16string_view rPath, BitmapEx &rBitmap)
+    bool loadPng( std::u16string_view rPath, Bitmap& rBitmap)
     {
         INetURLObject aObj( rPath );
         SvFileStream aStrm( aObj.PathToFileName(), StreamMode::STD_READ );
@@ -46,13 +46,13 @@ namespace {
         else
             return false;
     }
-    bool tryLoadPng( std::u16string_view rBaseDir, std::u16string_view rName, BitmapEx& rBitmap )
+    bool tryLoadPng( std::u16string_view rBaseDir, std::u16string_view rName, Bitmap& rBitmap )
     {
         return loadPng( rtl::Concat2View(OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName), rBitmap);
     }
 }
 
-bool Application::LoadBrandBitmap (std::u16string_view pName, BitmapEx &rBitmap)
+bool Application::LoadBrandBitmap (std::u16string_view pName, Bitmap& rBitmap)
 {
     // TODO - if we want more flexibility we could add a branding path
     // in an rc file perhaps fallback to "about.bmp"
