@@ -47,6 +47,8 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <names.hxx>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -162,8 +164,10 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
         SetActNumLevel(nTmp < 0 ? USHRT_MAX : (1 << nTmp));
     }
 
-    AddTabPage(u"position"_ustr, &SwNumPositionTabPage::Create, nullptr);
-    AddTabPage(u"numbering"_ustr, &SwOutlineSettingsTabPage::Create, nullptr);
+    AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
+               &SwOutlineSettingsTabPage::Create, RID_L + RID_TAB_NUMBERING.sIconName);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), &SwNumPositionTabPage::Create,
+               RID_L + RID_TAB_POSITION.sIconName);
 
     UIName sHeadline;
     sal_uInt16 i;

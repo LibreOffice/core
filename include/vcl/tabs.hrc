@@ -55,6 +55,7 @@ inline constexpr TabData RID_TAB_FOOTER{ NC_("RID_TAB_FOOTER", "Footer"), u"inse
 inline constexpr TabData RID_TAB_PAGE{ NC_("RID_TAB_PAGE", "Page"), u"attributepagesize.png"_ustr };
 inline constexpr TabData RID_TAB_COLUMNS{ NC_("RID_TAB_COLUMNS", "Columns"), u"pagecolumntype.png"_ustr };
 inline constexpr TabData RID_TAB_FOOTNOTES{ NC_("RID_TAB_FOOTNOTES", "Footnote"), u"footnotedialog.png"_ustr };
+inline constexpr TabData RID_TAB_ENDNOTES{ NC_("RID_TAB_ENDNOTES", "Endnote"), u"insertendnote.png"_ustr };
 inline constexpr TabData RID_TAB_TEXTGRID{ NC_("RID_TAB_TEXTGRID", "Text Grid"), u"gridvisible.png"_ustr };
 //  list
 inline constexpr TabData RID_TAB_UNOORDERED{ NC_("RID_TAB_UNOORDERED", "Unordered"), u"defaultbullet.png"_ustr };
@@ -129,6 +130,10 @@ inline constexpr TabData RID_TAB_NOTEBOOKBARS{ NC_("RID_TAB_NOTEBOOKBARS", "Note
 inline constexpr TabData RID_TAB_CONTEXTMENUS{ NC_("RID_TAB_CONTEXTMENUS", "Context Menus"), u"listbox.png"_ustr };
 inline constexpr TabData RID_TAB_KEYBOARD{ NC_("RID_TAB_KEYBOARD", "Keyboard"), u"underline.png"_ustr };
 inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"closedoc.png"_ustr };
+// envelope
+inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
+inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };
+inline constexpr TabData RID_TAB_PRINTER{ NC_("RID_TAB_PRINTER", "Printer"), u"printlayout.png"_ustr };
 
 static OUString TabResId(TranslateId aId)
 {

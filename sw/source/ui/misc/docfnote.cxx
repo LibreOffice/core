@@ -36,6 +36,8 @@
 #include <names.hxx>
 #include <memory>
 
+#include <vcl/tabs.hrc>
+
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/footendnotedialog.ui"_ustr, u"FootEndnoteDialog"_ustr)
     , m_rSh( rS )
@@ -44,8 +46,10 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
 
     GetOKButton().connect_clicked(LINK(this, SwFootNoteOptionDlg, OkHdl));
 
-    AddTabPage(u"footnotes"_ustr, SwFootNoteOptionPage::Create, nullptr);
-    AddTabPage(u"endnotes"_ustr,  SwEndNoteOptionPage::Create, nullptr);
+    AddTabPage(u"footnotes"_ustr, TabResId(RID_TAB_FOOTNOTES.aLabel), SwFootNoteOptionPage::Create,
+               RID_L + RID_TAB_FOOTNOTES.sIconName);
+    AddTabPage(u"endnotes"_ustr, TabResId(RID_TAB_ENDNOTES.aLabel), SwEndNoteOptionPage::Create,
+               RID_L + RID_TAB_ENDNOTES.sIconName);
 }
 
 void SwFootNoteOptionDlg::PageCreated(const OUString& /*rId*/, SfxTabPage &rPage)

@@ -36,6 +36,8 @@
 
 #include <comphelper/string.hxx>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
@@ -127,9 +129,12 @@ SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
         GetUserButton()->set_label(m_xModify->get_label());
     }
 
-    AddTabPage(u"envelope"_ustr, SwEnvPage::Create, nullptr);
-    AddTabPage(u"format"_ustr, SwEnvFormatPage::Create, nullptr);
-    AddTabPage(u"printer"_ustr, SwEnvPrtPage::Create, nullptr);
+    AddTabPage(u"envelope"_ustr, TabResId(RID_TAB_ENVELOPE.aLabel), SwEnvPage::Create,
+               RID_L + RID_TAB_ENVELOPE.sIconName);
+    AddTabPage(u"format"_ustr, TabResId(RID_TAB_ENV_FORMAT.aLabel), SwEnvFormatPage::Create,
+               RID_L + RID_TAB_ENV_FORMAT.sIconName);
+    AddTabPage(u"printer"_ustr, TabResId(RID_TAB_PRINTER.aLabel), SwEnvPrtPage::Create,
+               RID_L + RID_TAB_PRINTER.sIconName);
 }
 
 SwEnvDlg::~SwEnvDlg()
