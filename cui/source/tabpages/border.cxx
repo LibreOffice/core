@@ -46,6 +46,7 @@
 #include <comphelper/lok.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/image.hxx>
 
 using namespace ::editeng;
 using ::com::sun::star::uno::Reference;

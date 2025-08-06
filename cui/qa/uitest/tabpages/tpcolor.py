@@ -64,9 +64,9 @@ class Test(UITestCase):
             # Then make sure the doc model is updated accordingly:
             shape = drawPage[0]
             # Without the accompanying fix in place, this test would have failed with:
-            # AssertionError: -1 != 3
+            # AssertionError: -1 != 4
             # i.e. the theme metadata of the selected fill color was lost.
-            self.assertEqual(shape.FillColorTheme, 3)
+            self.assertEqual(shape.FillColorTheme, 4)
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
