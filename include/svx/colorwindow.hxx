@@ -21,7 +21,7 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <rtl/ustring.hxx>
-#include <svx/SvxColorValueSet.hxx>
+#include <svx/SvxColorIconView.hxx>
 #include <svx/Palette.hxx>
 #include <vcl/toolboxid.hxx>
 
@@ -88,25 +88,31 @@ private:
     TopLevelParentFunction maTopLevelParentFunction;
     ColorSelectFunction maColorSelectFunction;
 
-    std::unique_ptr<SvxColorValueSet> mxColorSet;
-    std::unique_ptr<SvxColorValueSet> mxRecentColorSet;
+    std::unique_ptr<weld::IconView> mxColorIconView;
+    std::unique_ptr<weld::IconView> mxRecentColorIconView;
     std::unique_ptr<weld::ComboBox> mxPaletteListBox;
     std::unique_ptr<weld::Button> mxButtonAutoColor;
     std::unique_ptr<weld::Button> mxButtonNoneColor;
     std::unique_ptr<weld::Button> mxButtonPicker;
     std::unique_ptr<weld::Widget> mxAutomaticSeparator;
-    std::unique_ptr<weld::CustomWeld> mxColorSetWin;
-    std::unique_ptr<weld::CustomWeld> mxRecentColorSetWin;
     weld::Button* mpDefaultButton;
 
-    DECL_DLLPRIVATE_LINK(SelectHdl, ValueSet*, void);
+    std::vector<NamedColor> vColors;
+    std::vector<NamedColor> vRecentColors;
+
+    DECL_DLLPRIVATE_LINK(SelectionChangedHdl, weld::IconView&, void);
+    DECL_DLLPRIVATE_LINK(ItemActivatedHdl, weld::IconView&, bool);
     DECL_DLLPRIVATE_LINK(SelectPaletteHdl, weld::ComboBox&, void);
     DECL_DLLPRIVATE_LINK(AutoColorClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(OpenPickerClickHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(QueryColorIVTooltipHdl, const weld::TreeIter&, OUString);
+    DECL_DLLPRIVATE_LINK(QueryRecentIVTooltipHdl, const weld::TreeIter&, OUString);
+    OUString QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16string_view);
 
-    static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
-    static NamedColor GetSelectEntryColor(ValueSet const * pColorSet);
+    bool SelectIconViewEntry(weld::IconView* pIconView, const Color& rColor);
+    NamedColor GetSelectEntryColor(weld::IconView* pIconView);
     NamedColor GetAutoColor() const;
+    std::vector<NamedColor> GetColors(weld::IconView* pIconView);
 
 public:
     ColorWindow(OUString  rCommand,
@@ -123,7 +129,7 @@ public:
     bool                IsNoSelection() const;
     void                SelectEntry(const NamedColor& rColor);
     void                SelectEntry(const Color& rColor);
-    NamedColor          GetSelectEntryColor() const;
+    NamedColor          GetSelectEntryColor();
 
     virtual void        statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 

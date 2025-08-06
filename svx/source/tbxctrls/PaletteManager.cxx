@@ -177,10 +177,6 @@ bool PaletteManager::IsThemePaletteSelected() const
 
 bool PaletteManager::GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex)
 {
-    // tdf#157034, nItemId begins with 1 but list of themes begin with 0
-    // so decrement nItemId
-    --nItemId;
-
     // Each column is the same color with different effects.
     rThemeIndex = nItemId % 12;
 
@@ -332,24 +328,6 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
     {
         m_Palettes[mnCurrentPalette - 1]->LoadColorSet( pIconView );
         mnColorCount = pIconView.n_children();
-    }
-}
-
-void PaletteManager::ReloadRecentColorSet(SvxColorValueSet& rColorSet)
-{
-    maRecentColors.clear();
-    rColorSet.Clear();
-    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
-    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
-    int nIx = 1;
-    const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
-    for (int i = 0; i < Colorlist.getLength(); ++i)
-    {
-        Color aColor(ColorTransparency, Colorlist[i]);
-        OUString sColorName = bHasColorNames ? ColorNamelist[i] : ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
-        maRecentColors.emplace_back(aColor, sColorName);
-        rColorSet.InsertItem(nIx, aColor, sColorName);
-        ++nIx;
     }
 }
 

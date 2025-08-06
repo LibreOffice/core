@@ -68,7 +68,6 @@ public:
     void        LoadPalettes();
     void        ReloadColorSet(SvxColorValueSet& rColorSet);
     void        ReloadColorSet(weld::IconView& pIconView);
-    void        ReloadRecentColorSet(SvxColorValueSet& rColorSet);
     void        ReloadRecentColorSet(weld::IconView& pIconView);
     std::vector<OUString> GetPaletteList();
     void        SetPalette( sal_Int32 nPos );

@@ -2071,19 +2071,15 @@ ColorWindow::ColorWindow(OUString  rCommand,
     , mrColorStatus(rColorStatus)
     , maTopLevelParentFunction(std::move(aTopLevelParentFunction))
     , maColorSelectFunction(std::move(aColorSelectFunction))
-    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window(u"colorsetwin"_ustr, true)))
-    , mxRecentColorSet(new SvxColorValueSet(nullptr))
+    , mxColorIconView(m_xBuilder->weld_icon_view(u"colorwindow_iv_colors"_ustr))
+    , mxRecentColorIconView(m_xBuilder->weld_icon_view(u"colorwindow_iv_recentcolors"_ustr))
     , mxPaletteListBox(m_xBuilder->weld_combo_box(u"palette_listbox"_ustr))
     , mxButtonAutoColor(m_xBuilder->weld_button(u"auto_color_button"_ustr))
     , mxButtonNoneColor(m_xBuilder->weld_button(u"none_color_button"_ustr))
     , mxButtonPicker(m_xBuilder->weld_button(u"color_picker_button"_ustr))
     , mxAutomaticSeparator(m_xBuilder->weld_widget(u"separator4"_ustr))
-    , mxColorSetWin(new weld::CustomWeld(*m_xBuilder, u"colorset"_ustr, *mxColorSet))
-    , mxRecentColorSetWin(new weld::CustomWeld(*m_xBuilder, u"recent_colorset"_ustr, *mxRecentColorSet))
     , mpDefaultButton(nullptr)
 {
-    mxColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
-    mxRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 
     switch ( theSlotId )
     {
@@ -2149,19 +2145,28 @@ ColorWindow::ColorWindow(OUString  rCommand,
     mxButtonNoneColor->connect_clicked(LINK(this, ColorWindow, AutoColorClickHdl));
     mxButtonPicker->connect_clicked(LINK(this, ColorWindow, OpenPickerClickHdl));
 
-    mxColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
-    mxRecentColorSet->SetSelectHdl(LINK( this, ColorWindow, SelectHdl));
+    mxColorIconView->connect_selection_changed(LINK(this, ColorWindow, SelectionChangedHdl));
+    mxColorIconView->connect_item_activated(LINK(this, ColorWindow, ItemActivatedHdl));
+
+    mxRecentColorIconView->connect_selection_changed(LINK(this, ColorWindow, SelectionChangedHdl));
+    mxRecentColorIconView->connect_item_activated(LINK(this, ColorWindow, ItemActivatedHdl));
+
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        mxColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryColorIVTooltipHdl));
+        mxRecentColorIconView->connect_query_tooltip(LINK(this, ColorWindow, QueryRecentIVTooltipHdl));
+    }
+
     m_xTopLevel->set_help_id(HID_POPUP_COLOR);
-    mxColorSet->SetHelpId(HID_POPUP_COLOR_CTRL);
+    mxColorIconView->set_help_id(HID_POPUP_COLOR_CTRL);
 
-    mxPaletteManager->ReloadColorSet(*mxColorSet);
-    const sal_uInt32 nMaxItems(SvxColorValueSet::getMaxRowCount() * SvxColorValueSet::getColumnCount());
-    Size aSize = mxColorSet->layoutAllVisible(nMaxItems);
-    mxColorSet->set_size_request(aSize.Width(), aSize.Height());
-
-    mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
-    aSize = mxRecentColorSet->layoutAllVisible(mxPaletteManager->GetRecentColorCount());
-    mxRecentColorSet->set_size_request(aSize.Width(), aSize.Height());
+    mxPaletteManager->ReloadColorSet(*mxColorIconView);
+    mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
+    vColors = mxPaletteManager->GetColors();
+    vRecentColors = mxPaletteManager->GetRecentColors();
 
     AddStatusListener( u".uno:ColorTableState"_ustr );
     AddStatusListener( maCommand );
@@ -2174,10 +2179,10 @@ ColorWindow::ColorWindow(OUString  rCommand,
 
 void ColorWindow::GrabFocus()
 {
-    if (mxColorSet->IsNoSelection() && mpDefaultButton)
+    if (mxColorIconView->get_selected_id().isEmpty() && mpDefaultButton)
         mpDefaultButton->grab_focus();
     else
-        mxColorSet->GrabFocus();
+        mxColorIconView->grab_focus();
 }
 
 void ColorWindow::ShowNoneButton()
@@ -2189,11 +2194,18 @@ ColorWindow::~ColorWindow()
 {
 }
 
-NamedColor ColorWindow::GetSelectEntryColor(ValueSet const * pColorSet)
+NamedColor ColorWindow::GetSelectEntryColor(weld::IconView* pIconView)
 {
-    Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectedItemId());
-    const OUString& sColorName = pColorSet->GetItemText(pColorSet->GetSelectedItemId());
-    return { aColor, sColorName };
+    NamedColor aColor(COL_BLACK, SvxResId(RID_SVXSTR_COLOR_BLACK)); //default black color
+
+    OUString sId = pIconView->get_selected_id();
+    sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : -1;
+
+    std::vector<NamedColor> vColorList = GetColors(pIconView);
+    if(nId > -1 && o3tl::make_unsigned(nId) < vColorList.size())
+        aColor = vColorList[nId];
+
+    return aColor;
 }
 
 namespace
@@ -2244,27 +2256,35 @@ namespace
     }
 }
 
-NamedColor ColorWindow::GetSelectEntryColor() const
+NamedColor ColorWindow::GetSelectEntryColor()
 {
-    if (!mxColorSet->IsNoSelection())
-        return GetSelectEntryColor(mxColorSet.get());
-    if (!mxRecentColorSet->IsNoSelection())
-        return GetSelectEntryColor(mxRecentColorSet.get());
+    if (!mxColorIconView->get_selected_id().isEmpty())
+        return GetSelectEntryColor(mxColorIconView.get());
+    if (!mxRecentColorIconView->get_selected_id().isEmpty())
+        return GetSelectEntryColor(mxRecentColorIconView.get());
     if (mxButtonNoneColor.get() == mpDefaultButton)
         return GetNoneColor();
     return GetAutoColor();
 }
 
-IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
+IMPL_LINK(ColorWindow, SelectionChangedHdl, weld::IconView&, rIconView, void)
 {
-    NamedColor aNamedColor = GetSelectEntryColor(pColorSet);
+    NamedColor aNamedColor = GetSelectEntryColor(&rIconView);
 
-    if (pColorSet != mxRecentColorSet.get())
+    if (&rIconView != mxRecentColorIconView.get())
     {
-         mxPaletteManager->AddRecentColor(aNamedColor.m_aColor, aNamedColor.m_aName);
-         if (!maMenuButton.get_active())
-            mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
+        mxPaletteManager->AddRecentColor(aNamedColor.m_aColor, aNamedColor.m_aName);
+        if (!maMenuButton.get_active())
+        {
+            mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
+            vRecentColors = mxPaletteManager->GetRecentColors();
+        }
     }
+}
+
+IMPL_LINK(ColorWindow, ItemActivatedHdl, weld::IconView&, rIconView, bool)
+{
+    NamedColor aNamedColor = GetSelectEntryColor(&rIconView);
 
     mxPaletteManager->SetSplitButtonColor(aNamedColor);
 
@@ -2274,13 +2294,14 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
     OUString sCommand(maCommand);
     // Same for querying IsTheme early.
     bool bThemePaletteSelected = mxPaletteManager->IsThemePaletteSelected();
-    sal_uInt16 nSelectedItemId = pColorSet->GetSelectedItemId();
+    OUString sId = rIconView.get_selected_id();
 
     if (bThemePaletteSelected)
     {
+        sal_Int32 nId = !sId.isEmpty() ? sId.toInt32() : 0;
         sal_uInt16 nThemeIndex;
         sal_uInt16 nEffectIndex;
-        if (PaletteManager::GetThemeAndEffectIndex(nSelectedItemId, nThemeIndex, nEffectIndex))
+        if (PaletteManager::GetThemeAndEffectIndex(nId, nThemeIndex, nEffectIndex))
         {
             aNamedColor.m_nThemeIndex = nThemeIndex;
             mxPaletteManager->GetLumModOff(nThemeIndex, nEffectIndex, aNamedColor.m_nLumMod, aNamedColor.m_nLumOff);
@@ -2289,14 +2310,16 @@ IMPL_LINK(ColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 
     maMenuButton.set_inactive();
     aColorSelectFunction(sCommand, aNamedColor);
+
+    return true;
 }
 
 IMPL_LINK_NOARG(ColorWindow, SelectPaletteHdl, weld::ComboBox&, void)
 {
     int nPos = mxPaletteListBox->get_active();
     mxPaletteManager->SetPalette( nPos );
-    mxPaletteManager->ReloadColorSet(*mxColorSet);
-    mxColorSet->layoutToGivenHeight(mxColorSet->GetOutputSizePixel().Height(), mxPaletteManager->GetColorCount());
+    mxPaletteManager->ReloadColorSet(*mxColorIconView);
+    vColors = mxPaletteManager->GetColors();
 }
 
 NamedColor ColorWindow::GetAutoColor() const
@@ -2308,8 +2331,8 @@ IMPL_LINK(ColorWindow, AutoColorClickHdl, weld::Button&, rButton, void)
 {
     NamedColor aNamedColor = &rButton == mxButtonAutoColor.get() ? GetAutoColor() : GetNoneColor();
 
-    mxColorSet->SetNoSelection();
-    mxRecentColorSet->SetNoSelection();
+    mxColorIconView->unselect_all();
+    mxRecentColorIconView->unselect_all();
     mpDefaultButton = &rButton;
 
     mxPaletteManager->SetSplitButtonColor(aNamedColor);
@@ -2337,18 +2360,57 @@ IMPL_LINK_NOARG(ColorWindow, OpenPickerClickHdl, weld::Button&, void)
     xPaletteManager->PopupColorPicker(pParentWindow, sCommand, nColor);
 }
 
+IMPL_LINK(ColorWindow, QueryColorIVTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = mxColorIconView->get_id(rIter);
+    return QueryTooltipHdl_Impl(mxColorIconView.get(), sId);
+}
+
+IMPL_LINK(ColorWindow, QueryRecentIVTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = mxRecentColorIconView->get_id(rIter);
+    return QueryTooltipHdl_Impl(mxRecentColorIconView.get(), sId);
+}
+
+OUString ColorWindow::QueryTooltipHdl_Impl(weld::IconView* pIconView, std::u16string_view sId)
+{
+    if (sId.empty())
+        return OUString();
+
+    const rtl::OUString aOUString(sId.data(), sId.length());
+    const sal_Int32 nPos = aOUString.toInt32();
+
+    // Return the name of the color at position nPos, if valid.
+    const auto colorList = GetColors(pIconView);
+    if (o3tl::make_unsigned(nPos) < colorList.size())
+        return colorList[nPos].m_aName;
+
+    return OUString();
+}
+
+std::vector<NamedColor> ColorWindow::GetColors(weld::IconView* pIconView)
+{
+    if(mxRecentColorIconView.get() == pIconView) {
+        vRecentColors = vRecentColors.size() > 0 ? vRecentColors : mxPaletteManager->GetRecentColors();
+        return vRecentColors;
+    }
+
+    vColors = vColors.size() > 0 ? vColors : mxPaletteManager->GetColors();
+    return vColors;
+}
+
 void ColorWindow::SetNoSelection()
 {
-    mxColorSet->SetNoSelection();
-    mxRecentColorSet->SetNoSelection();
+    mxColorIconView->unselect_all();
+    mxRecentColorIconView->unselect_all();
     mpDefaultButton = nullptr;
 }
 
 bool ColorWindow::IsNoSelection() const
 {
-    if (!mxColorSet->IsNoSelection())
+    if (!mxColorIconView->get_selected_id().isEmpty())
         return false;
-    if (!mxRecentColorSet->IsNoSelection())
+    if (!mxRecentColorIconView->get_selected_id().isEmpty())
         return false;
     return !mxButtonAutoColor->get_visible() && !mxButtonNoneColor->get_visible();
 }
@@ -2359,8 +2421,8 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     {
         if (rEvent.IsEnabled && mxPaletteManager->GetPalette() == 0)
         {
-            mxPaletteManager->ReloadColorSet(*mxColorSet);
-            mxColorSet->layoutToGivenHeight(mxColorSet->GetOutputSizePixel().Height(), mxPaletteManager->GetColorCount());
+            mxPaletteManager->ReloadColorSet(*mxColorIconView);
+            vColors = mxPaletteManager->GetColors();
         }
     }
     else
@@ -2370,13 +2432,15 @@ void ColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     }
 }
 
-bool ColorWindow::SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor)
+bool ColorWindow::SelectIconViewEntry(weld::IconView* pIconView, const Color& rColor)
 {
-    for (size_t i = 1; i <= pColorSet->GetItemCount(); ++i)
+    std::vector<NamedColor> vNamedColors = GetColors(pIconView);
+
+    for (size_t i = 0; i < vNamedColors.size(); ++i)
     {
-        if (rColor == pColorSet->GetItemColor(i))
+        if (rColor == vNamedColors[i].m_aColor)
         {
-            pColorSet->SelectItem(i);
+            pIconView->select(i);
             return true;
         }
     }
@@ -2402,10 +2466,10 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
     }
 
     // try current palette
-    bool bFoundColor = SelectValueSetEntry(mxColorSet.get(), rColor);
+    bool bFoundColor = SelectIconViewEntry(mxColorIconView.get(), rColor);
     // try recently used
     if (!bFoundColor)
-        bFoundColor = SelectValueSetEntry(mxRecentColorSet.get(), rColor);
+        bFoundColor = SelectIconViewEntry(mxRecentColorIconView.get(), rColor);
     // if it's not there, add it there now to the end of the recently used
     // so its available somewhere handy, but not without trashing the
     // whole recently used
@@ -2413,8 +2477,9 @@ void ColorWindow::SelectEntry(const NamedColor& rNamedColor)
     {
         const OUString& rColorName = rNamedColor.m_aName;
         mxPaletteManager->AddRecentColor(rColor, rColorName, false);
-        mxPaletteManager->ReloadRecentColorSet(*mxRecentColorSet);
-        SelectValueSetEntry(mxRecentColorSet.get(), rColor);
+        mxPaletteManager->ReloadRecentColorSet(*mxRecentColorIconView);
+        vRecentColors = mxPaletteManager->GetRecentColors();
+        SelectIconViewEntry(mxRecentColorIconView.get(), rColor);
     }
 }
 
