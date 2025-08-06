@@ -94,6 +94,8 @@
 #include <comphelper/processfactory.hxx>
 #include <config_features.h>
 
+#include <vcl/tabs.hrc>
+
 namespace uno = css::uno;
 namespace frame = css::frame;
 namespace lang = css::lang;
@@ -210,12 +212,18 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 {
     SvxConfigPageHelper::InitImageType();
 
-    AddTabPage(u"menus"_ustr, CreateSvxMenuConfigPage, nullptr);
-    AddTabPage(u"toolbars"_ustr, CreateSvxToolbarConfigPage, nullptr);
-    AddTabPage(u"notebookbar"_ustr, CreateSvxNotebookbarConfigPage, nullptr);
-    AddTabPage(u"contextmenus"_ustr, CreateSvxContextMenuConfigPage, nullptr);
-    AddTabPage(u"keyboard"_ustr, CreateKeyboardConfigPage, nullptr);
-    AddTabPage(u"events"_ustr, CreateSvxEventConfigPage, nullptr);
+    AddTabPage(u"menus"_ustr, TabResId(RID_TAB_MENUS.aLabel), CreateSvxMenuConfigPage,
+               RID_L + RID_TAB_MENUS.sIconName);
+    AddTabPage(u"toolbars"_ustr, TabResId(RID_TAB_TOOLBARS.aLabel), CreateSvxToolbarConfigPage,
+               RID_L + RID_TAB_TOOLBARS.sIconName);
+    AddTabPage(u"notebookbar"_ustr, TabResId(RID_TAB_NOTEBOOKBARS.aLabel),
+               CreateSvxNotebookbarConfigPage, RID_L + RID_TAB_NOTEBOOKBARS.sIconName);
+    AddTabPage(u"contextmenus"_ustr, TabResId(RID_TAB_CONTEXTMENUS.aLabel),
+               CreateSvxContextMenuConfigPage, RID_L + RID_TAB_CONTEXTMENUS.sIconName);
+    AddTabPage(u"keyboard"_ustr, TabResId(RID_TAB_KEYBOARD.aLabel), CreateKeyboardConfigPage,
+               RID_L + RID_TAB_KEYBOARD.sIconName);
+    AddTabPage(u"events"_ustr, TabResId(RID_TAB_EVENTS.aLabel), CreateSvxEventConfigPage,
+               RID_L + RID_TAB_EVENTS.sIconName);
 
     if (const SfxPoolItem* pItem = pInSet->GetItem(SID_CONFIG))
     {

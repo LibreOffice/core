@@ -122,6 +122,13 @@ inline constexpr TabData RID_TAB_CHART_LAYOUT{ NC_("RID_TAB_CHART_LAYOUT", "Layo
 inline constexpr TabData RID_TAB_CHART_PERSPECTIVE{ NC_("RID_TAB_CHART_PERSPECTIVE", "Perspective"), u"window3d.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_APPEARANCE{ NC_("RID_TAB_CHART_APPEARANCE", "Appearance"), u"shell3d.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ILLUMINATION{ NC_("RID_TAB_CHART_ILLUMINATION", "Illumination"), u"grafluminance.png"_ustr };
+// customization
+inline constexpr TabData RID_TAB_MENUS{ NC_("RID_TAB_MENUS", "Menus"), u"menubar.png"_ustr };
+inline constexpr TabData RID_TAB_TOOLBARS{ NC_("RID_TAB_TOOLBARS", "Toolbars"), u"showtoolbar.png"_ustr };
+inline constexpr TabData RID_TAB_NOTEBOOKBARS{ NC_("RID_TAB_NOTEBOOKBARS", "Notebookbars"), u"toggletabbarvisibility.png"_ustr };
+inline constexpr TabData RID_TAB_CONTEXTMENUS{ NC_("RID_TAB_CONTEXTMENUS", "Context Menus"), u"listbox.png"_ustr };
+inline constexpr TabData RID_TAB_KEYBOARD{ NC_("RID_TAB_KEYBOARD", "Keyboard"), u"underline.png"_ustr };
+inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"closedoc.png"_ustr };
 
 static OUString TabResId(TranslateId aId)
 {
