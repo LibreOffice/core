@@ -30,7 +30,7 @@ namespace sdr::overlay
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        maBitmapEx1,
+                        BitmapEx(maBitmap1),
                         getBasePosition(),
                         mnCenterX1,
                         mnCenterY1,
@@ -43,7 +43,7 @@ namespace sdr::overlay
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        maBitmapEx2,
+                        BitmapEx(maBitmap2),
                         getBasePosition(),
                         mnCenterX2,
                         mnCenterY2,
@@ -56,8 +56,8 @@ namespace sdr::overlay
 
         OverlayAnimatedBitmapEx::OverlayAnimatedBitmapEx(
             const basegfx::B2DPoint& rBasePos,
-            const BitmapEx& rBitmapEx1,
-            const BitmapEx& rBitmapEx2,
+            const Bitmap& rBitmap1,
+            const Bitmap& rBitmap2,
             sal_uInt64 nBlinkTime,
             sal_uInt16 nCenX1,
             sal_uInt16 nCenY1,
@@ -66,8 +66,8 @@ namespace sdr::overlay
             double fShearX,
             double fRotation)
         :   OverlayObjectWithBasePosition(rBasePos, COL_WHITE),
-            maBitmapEx1(rBitmapEx1),
-            maBitmapEx2(rBitmapEx2),
+            maBitmap1(rBitmap1),
+            maBitmap2(rBitmap2),
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),
             mnCenterX2(nCenX2), mnCenterY2(nCenY2),
             mnBlinkTime(impCheckBlinkTimeValueRange(nBlinkTime)),

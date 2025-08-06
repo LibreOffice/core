@@ -861,19 +861,19 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime));
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1), 0));
         }
         else
         {
             // create centered handle as default
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
@@ -2425,8 +2425,8 @@ void SdrCropHdl::CreateB2dIAObject()
 
                     pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(
                         aPosition,
-                        BitmapEx(aBmp1),
-                        BitmapEx(aBmp2),
+                        aBmp1,
+                        aBmp2,
                         nBlinkTime,
                         static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
                         static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,

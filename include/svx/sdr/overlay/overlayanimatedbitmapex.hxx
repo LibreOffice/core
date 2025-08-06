@@ -29,8 +29,8 @@ namespace sdr::overlay
         class SVXCORE_DLLPUBLIC OverlayAnimatedBitmapEx final : public OverlayObjectWithBasePosition
         {
             // the Bitmaps
-            BitmapEx                                maBitmapEx1;
-            BitmapEx                                maBitmapEx2;
+            Bitmap                                  maBitmap1;
+            Bitmap                                  maBitmap2;
 
             // position of the basePosition inside the Bitmaps, in pixels
             sal_uInt16                              mnCenterX1;
@@ -54,8 +54,8 @@ namespace sdr::overlay
         public:
             OverlayAnimatedBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
-                const BitmapEx& rBitmapEx1,
-                const BitmapEx& rBitmapEx2,
+                const Bitmap& rBitmap1,
+                const Bitmap& rBitmap2,
                 sal_uInt64 nBlinkTime,
                 sal_uInt16 nCenX1 = 0,
                 sal_uInt16 nCenY1 = 0,
