@@ -204,7 +204,7 @@ void PlaceEditDialog::InitDetails( )
 
         std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
         xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-        m_aDetailsContainers.push_back(xCmisDetails);
+        m_aDetailsContainers.push_back(std::move(xCmisDetails));
 
         ++nPos;
     }

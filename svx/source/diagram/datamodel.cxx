@@ -272,8 +272,8 @@ OUString DiagramData::addNode(const OUString& rText)
     addConnection(svx::diagram::TypeConstant::XML_presOf, aDataPoint.msModelId, aPresPoint.msModelId);
 
     // adding at the end, so that references are not invalidated in between
-    maPoints.push_back(aDataPoint);
-    maPoints.push_back(aPresPoint);
+    maPoints.push_back(std::move(aDataPoint));
+    maPoints.push_back(std::move(aPresPoint));
 
     return sNewNodeId;
 }

@@ -419,7 +419,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                         aRow[6] = ODatabaseMetaDataResultSet::getAlterValue();
                         aRows.push_back(aRow);
                         aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
-                        aRows.push_back(aRow);
+                        aRows.push_back(std::move(aRow));
                     }
                 }
             }

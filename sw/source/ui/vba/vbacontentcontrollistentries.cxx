@@ -98,7 +98,7 @@ SwVbaContentControlListEntries::SwVbaContentControlListEntries(
           xParent, xContext,
           uno::Reference<container::XIndexAccess>(
               new ContentControlListEntryCollectionHelper(xParent, xContext, pCC)))
-    , m_pCC(pCC)
+    , m_pCC(std::move(pCC))
 {
 }
 

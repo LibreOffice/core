@@ -597,7 +597,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             // And actually replace the shape.
             mpShapePtr = pShape;
             mpMasterShapePtr->getChildren().pop_back();
-            mpMasterShapePtr->getChildren().push_back(pShape);
+            mpMasterShapePtr->getChildren().push_back(std::move(pShape));
             return new oox::drawingml::ConnectorShapePropertiesContext(
                 *this, mpShapePtr, mpShapePtr->getConnectorShapeProperties());
         }
