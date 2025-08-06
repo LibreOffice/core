@@ -123,17 +123,19 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect )
         mnPoints = 0;
 }
 
-ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound )
+ImplPolygon::ImplPolygon(const tools::Rectangle& rRect, sal_uInt32 nHorzRound,
+                         sal_uInt32 nVertRound)
 {
-    if ( !rRect.IsEmpty() )
+    if (!rRect.IsEmpty())
     {
-        tools::Rectangle aRect( rRect );
-        aRect.Normalize();            // SJ: i9140
+        tools::Rectangle aRect(rRect);
+        aRect.Normalize(); // SJ: i9140
 
-        nHorzRound = std::min( nHorzRound, static_cast<sal_uInt32>(std::abs( aRect.GetWidth() >> 1 )) );
-        nVertRound = std::min( nVertRound, static_cast<sal_uInt32>(std::abs( aRect.GetHeight() >> 1 )) );
+        nHorzRound = std::min(nHorzRound, static_cast<sal_uInt32>(std::abs(aRect.GetWidth() >> 1)));
+        nVertRound
+            = std::min(nVertRound, static_cast<sal_uInt32>(std::abs(aRect.GetHeight() >> 1)));
 
-        if( !nHorzRound && !nVertRound )
+        if (!nHorzRound || !nVertRound)
         {
             ImplInitSize(5);
             mxPointAry[0] = aRect.TopLeft();
@@ -144,31 +146,49 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
         }
         else
         {
-            const Point     aTL( aRect.Left() + nHorzRound, aRect.Top() + nVertRound );
-            const Point     aTR( aRect.Right() - nHorzRound, aRect.Top() + nVertRound );
-            const Point     aBR( aRect.Right() - nHorzRound, aRect.Bottom() - nVertRound );
-            const Point     aBL( aRect.Left() + nHorzRound, aRect.Bottom() - nVertRound );
-            tools::Polygon aEllipsePoly( Point(), nHorzRound, nVertRound );
-            sal_uInt16 i, nEnd, nSize4 = aEllipsePoly.GetSize() >> 2;
+            ImplInitSize(17, true);
 
-            ImplInitSize(aEllipsePoly.GetSize() + 1);
+            mxPointAry[0] = Point(aRect.Left(), aRect.Top() + nVertRound);
 
-            const Point* pSrcAry = aEllipsePoly.GetConstPointAry();
-            Point* pDstAry = mxPointAry.get();
+            mxPointAry[1] = Point(aRect.Left(), aRect.Top() + 0.5 * nVertRound);
+            mxFlagAry[1] = PolyFlags::Control;
 
-            for( i = 0, nEnd = nSize4; i < nEnd; i++ )
-                pDstAry[ i ] = pSrcAry[ i ] + aTR;
+            mxPointAry[2] = Point(aRect.Left() + 0.5 * nHorzRound, aRect.Top());
+            mxFlagAry[2] = PolyFlags::Control;
 
-            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                pDstAry[ i ] = pSrcAry[ i ] + aTL;
+            mxPointAry[3] = Point(aRect.Left() + nHorzRound, aRect.Top());
 
-            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                pDstAry[ i ] = pSrcAry[ i ] + aBL;
+            mxPointAry[4] = Point(aRect.Right() - nHorzRound, aRect.Top());
 
-            for( nEnd = nEnd + nSize4; i < nEnd; i++ )
-                pDstAry[ i ] = pSrcAry[ i ] + aBR;
+            mxPointAry[5] = Point(aRect.Right() - 0.5 * nHorzRound, aRect.Top());
+            mxFlagAry[5] = PolyFlags::Control;
 
-            pDstAry[ nEnd ] = pDstAry[ 0 ];
+            mxPointAry[6] = Point(aRect.Right(), aRect.Top() + 0.5 * nVertRound);
+            mxFlagAry[6] = PolyFlags::Control;
+
+            mxPointAry[7] = Point(aRect.Right(), aRect.Top() + nVertRound);
+
+            mxPointAry[8] = Point(aRect.Right(), aRect.Bottom() - nVertRound);
+
+            mxPointAry[9] = Point(aRect.Right(), aRect.Bottom() - 0.5 * nVertRound);
+            mxFlagAry[9] = PolyFlags::Control;
+
+            mxPointAry[10] = Point(aRect.Right() - 0.5 * nHorzRound, aRect.Bottom());
+            mxFlagAry[10] = PolyFlags::Control;
+
+            mxPointAry[11] = Point(aRect.Right() - nHorzRound, aRect.Bottom());
+
+            mxPointAry[12] = Point(aRect.Left() + nHorzRound, aRect.Bottom());
+
+            mxPointAry[13] = Point(aRect.Left() + 0.5 * nHorzRound, aRect.Bottom());
+            mxFlagAry[13] = PolyFlags::Control;
+
+            mxPointAry[14] = Point(aRect.Left(), aRect.Bottom() - 0.5 * nVertRound);
+            mxFlagAry[14] = PolyFlags::Control;
+
+            mxPointAry[15] = Point(aRect.Left(), aRect.Bottom() - nVertRound);
+
+            mxPointAry[16] = mxPointAry[0];
         }
     }
     else

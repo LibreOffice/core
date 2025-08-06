@@ -1348,11 +1348,13 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_ROUNDRECT :
+                    case EMR_ROUNDRECT:
                     {
-                        mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 ).ReadUInt32( nW ).ReadUInt32( nH );
-                        tools::Polygon aRoundRectPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), nW, nH );
-                        DrawPolygon( std::move(aRoundRectPoly), mbRecordPath );
+                        mpInputStream->ReadInt32(nX32).ReadInt32(nY32).ReadInt32(nx32).ReadInt32(ny32).ReadUInt32(nW).ReadUInt32(nH);
+                        SAL_INFO("emfio", "\t\t Rectangle position: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32);
+                        SAL_INFO("emfio", "\t\t Ellipse Width: " << nW << ", Height" << nH);
+                        tools::Polygon aRoundRectPoly(ReadRectangle(nX32, nY32, nx32, ny32), nW, nH);
+                        DrawPolygon(std::move(aRoundRectPoly), mbRecordPath);
                     }
                     break;
 
