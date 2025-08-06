@@ -122,75 +122,75 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     const basegfx::B2DRange aBaseRange(0, 0, std::max(aRange.getMaxX(), aRange2.getMaxX()),
                                        std::max(aRange.getMaxY(), aRange2.getMaxY()));
 
-    BitmapEx aBmpEx, aBmpEx2;
+    Bitmap aBmp, aBmp2;
 
     if (pSource)
     {
         drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource);
-        aBmpEx = drawinglayer::convertToBitmapEx(std::move(aSource), aViewInformation2D,
-                                                 aBaseRange.getWidth(), aBaseRange.getHeight(),
-                                                 aBaseRange.getWidth() * aBaseRange.getHeight());
+        aBmp = Bitmap(drawinglayer::convertToBitmapEx(
+            std::move(aSource), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
+            aBaseRange.getWidth() * aBaseRange.getHeight()));
     }
     else
     {
-        aBmpEx = drawinglayer::convertToBitmapEx(std::move(rTarget), aViewInformation2D,
-                                                 aBaseRange.getWidth(), aBaseRange.getHeight(),
-                                                 aBaseRange.getWidth() * aBaseRange.getHeight());
+        aBmp = Bitmap(drawinglayer::convertToBitmapEx(
+            std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
+            aBaseRange.getWidth() * aBaseRange.getHeight()));
     }
 
     if (pSource2)
     {
         drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource2);
-        aBmpEx2 = drawinglayer::convertToBitmapEx(std::move(aSource), aViewInformation2D,
-                                                  aBaseRange.getWidth(), aBaseRange.getHeight(),
-                                                  aBaseRange.getWidth() * aBaseRange.getHeight());
+        aBmp2 = Bitmap(drawinglayer::convertToBitmapEx(
+            std::move(aSource), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
+            aBaseRange.getWidth() * aBaseRange.getHeight()));
     }
     else
     {
-        aBmpEx2 = drawinglayer::convertToBitmapEx(std::move(rTarget), aViewInformation2D,
-                                                  aBaseRange.getWidth(), aBaseRange.getHeight(),
-                                                  aBaseRange.getWidth() * aBaseRange.getHeight());
+        aBmp2 = Bitmap(drawinglayer::convertToBitmapEx(
+            std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
+            aBaseRange.getWidth() * aBaseRange.getHeight()));
     }
 
-    BitmapEx aResBmpEx;
+    Bitmap aResBmp;
     switch (maMode)
     {
         case Mode::Screen:
         {
-            BitmapScreenBlendFilter aScreenBlendFilter(aBmpEx, aBmpEx2);
-            aResBmpEx = aScreenBlendFilter.execute();
+            BitmapScreenBlendFilter aScreenBlendFilter(aBmp, aBmp2);
+            aResBmp = aScreenBlendFilter.execute();
             break;
         }
         case Mode::Multiply:
         {
-            BitmapMultiplyBlendFilter aMultiplyBlendFilter(aBmpEx, aBmpEx2);
-            aResBmpEx = aMultiplyBlendFilter.execute();
+            BitmapMultiplyBlendFilter aMultiplyBlendFilter(aBmp, aBmp2);
+            aResBmp = aMultiplyBlendFilter.execute();
             break;
         }
         case Mode::Darken:
         {
-            BitmapDarkenBlendFilter aDarkenBlendFilter((Bitmap(aBmpEx2)));
-            aResBmpEx = aDarkenBlendFilter.execute(Bitmap(aBmpEx));
+            BitmapDarkenBlendFilter aDarkenBlendFilter(aBmp2);
+            aResBmp = aDarkenBlendFilter.execute(aBmp);
             break;
         }
         case Mode::Lighten:
         {
-            BitmapLightenBlendFilter aLightenBlendFilter(aBmpEx, aBmpEx2);
-            aResBmpEx = aLightenBlendFilter.execute();
+            BitmapLightenBlendFilter aLightenBlendFilter(aBmp, aBmp2);
+            aResBmp = aLightenBlendFilter.execute();
             break;
         }
         case Mode::Normal:
         {
-            BitmapNormalBlendFilter aNormalBlendFilter(aBmpEx, aBmpEx2);
-            aResBmpEx = aNormalBlendFilter.execute();
+            BitmapNormalBlendFilter aNormalBlendFilter(aBmp, aBmp2);
+            aResBmp = aNormalBlendFilter.execute();
             break;
         }
     }
 
     const drawinglayer::primitive2d::Primitive2DReference xRef(
         new drawinglayer::primitive2d::BitmapPrimitive2D(
-            aResBmpEx, basegfx::utils::createScaleTranslateB2DHomMatrix(aBaseRange.getRange(),
-                                                                        aBaseRange.getMinimum())));
+            BitmapEx(aResBmp), basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                   aBaseRange.getRange(), aBaseRange.getMinimum())));
     rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
 
     pParent->addGraphicSourceToMapper(maResult, rTarget);

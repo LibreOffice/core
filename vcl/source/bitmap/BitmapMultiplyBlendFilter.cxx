@@ -14,10 +14,9 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 
-BitmapMultiplyBlendFilter::BitmapMultiplyBlendFilter(BitmapEx const& rBitmapEx,
-                                                     BitmapEx const& rBitmapEx2)
-    : maBitmapEx(rBitmapEx)
-    , maBitmapEx2(rBitmapEx2)
+BitmapMultiplyBlendFilter::BitmapMultiplyBlendFilter(Bitmap const& rBitmap, Bitmap const& rBitmap2)
+    : maBitmap(rBitmap)
+    , maBitmap2(rBitmap2)
 {
 }
 
@@ -34,30 +33,27 @@ static sal_uInt8 lcl_calculate(const sal_uInt8 aColor, const sal_uInt8 aAlpha,
     return result * 255.0;
 }
 
-BitmapEx BitmapMultiplyBlendFilter::execute()
+Bitmap BitmapMultiplyBlendFilter::execute()
 {
-    if (maBitmapEx.IsEmpty() || maBitmapEx2.IsEmpty())
-        return BitmapEx();
+    if (maBitmap.IsEmpty() || maBitmap2.IsEmpty())
+        return Bitmap();
 
-    Size aSize = maBitmapEx.GetBitmap().GetSizePixel();
-    Size aSize2 = maBitmapEx2.GetBitmap().GetSizePixel();
+    Size aSize = maBitmap.GetSizePixel();
+    Size aSize2 = maBitmap2.GetSizePixel();
     sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
     sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
 
-    Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
-    Bitmap aDstAlpha(AlphaMask(Size(nWidth, nHeight)).GetBitmap());
+    Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N32_BPP);
 
     BitmapScopedWriteAccess pWriteAccess(aDstBitmap);
-    BitmapScopedWriteAccess pAlphaWriteAccess(aDstAlpha);
 
     for (tools::Long y(0); y < nHeight; ++y)
     {
         Scanline pScanline = pWriteAccess->GetScanline(y);
-        Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
         for (tools::Long x(0); x < nWidth; ++x)
         {
-            BitmapColor i1 = vcl::bitmap::premultiply(maBitmapEx.GetPixelColor(x, y));
-            BitmapColor i2 = vcl::bitmap::premultiply(maBitmapEx2.GetPixelColor(x, y));
+            BitmapColor i1 = vcl::bitmap::premultiply(maBitmap.GetPixelColor(x, y));
+            BitmapColor i2 = vcl::bitmap::premultiply(maBitmap2.GetPixelColor(x, y));
             sal_uInt8 r(lcl_calculate(i1.GetRed(), i1.GetAlpha(), i2.GetRed(), i2.GetAlpha()));
             sal_uInt8 g(lcl_calculate(i1.GetGreen(), i1.GetAlpha(), i2.GetGreen(), i2.GetAlpha()));
             sal_uInt8 b(lcl_calculate(i1.GetBlue(), i1.GetAlpha(), i2.GetBlue(), i2.GetAlpha()));
@@ -65,13 +61,11 @@ BitmapEx BitmapMultiplyBlendFilter::execute()
 
             pWriteAccess->SetPixelOnData(
                 pScanline, x, vcl::bitmap::unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
-            pAlphaWriteAccess->SetPixelOnData(pScanAlpha, x, BitmapColor(a));
         }
     }
 
     pWriteAccess.reset();
-    pAlphaWriteAccess.reset();
 
-    return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
+    return aDstBitmap;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

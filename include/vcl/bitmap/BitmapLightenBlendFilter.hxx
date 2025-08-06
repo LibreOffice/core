@@ -10,19 +10,19 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 class VCL_DLLPUBLIC BitmapLightenBlendFilter
 {
 private:
-    BitmapEx maBitmapEx;
-    BitmapEx maBitmapEx2;
+    Bitmap maBitmap;
+    Bitmap maBitmap2;
 
 public:
-    BitmapLightenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+    BitmapLightenBlendFilter(Bitmap const& rBmp, Bitmap const& rBmp2);
 
     ~BitmapLightenBlendFilter();
-    BitmapEx execute();
+    Bitmap execute();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
