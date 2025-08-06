@@ -243,7 +243,7 @@ public:
         visualisation during mouse over it must override this method and call Touch(). */
     virtual void onMouseLeave();
 
-    SAL_DLLPRIVATE static BitmapEx createGluePointBitmap();
+    SAL_DLLPRIVATE static Bitmap createGluePointBitmap();
 };
 
 

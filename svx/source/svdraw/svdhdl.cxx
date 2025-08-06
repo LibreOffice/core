@@ -81,18 +81,18 @@ namespace {
 class SdrHdlBitmapSet
 {
     // the bitmap holding all information
-    BitmapEx                    maMarkersBitmap;
+    Bitmap                      maMarkersBitmap;
 
     // the cropped Bitmaps for reusage
-    ::std::vector< BitmapEx >   maRealMarkers;
+    ::std::vector< Bitmap >     maRealMarkers;
 
     // helpers
-    BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle);
+    Bitmap& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle);
 
 public:
     explicit SdrHdlBitmapSet();
 
-    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
+    const Bitmap& GetBitmap(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
 };
 
 }
@@ -102,15 +102,15 @@ public:
 #define INDIVIDUAL_COUNT    (5)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet()
-    :   maMarkersBitmap(SIP_SA_MARKERS),
+    :   maMarkersBitmap(BitmapEx(SIP_SA_MARKERS)),
         // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
 }
 
-BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle)
+Bitmap& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const tools::Rectangle& rRectangle)
 {
-    BitmapEx& rTargetBitmap = maRealMarkers[nIndex];
+    Bitmap& rTargetBitmap = maRealMarkers[nIndex];
 
     if(rTargetBitmap.IsEmpty())
     {
@@ -122,7 +122,7 @@ BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const t
 }
 
 // change getting of bitmap to use the big resource bitmap
-const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
+const Bitmap& SdrHdlBitmapSet::GetBitmap(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
     // fill in size and source position in maMarkersBitmap
     const sal_uInt16 nYPos(nInd * 11);
@@ -743,7 +743,7 @@ OUString appendMarkerColor(BitmapColorIndex eIndex)
     return OUString();
 }
 
-BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
+Bitmap ImpGetBitmap(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
 {
     // use this code path only when we use HiDPI (for now)
     if (Application::GetDefaultDevice()->GetDPIScalePercentage() > 100)
@@ -770,14 +770,14 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
             }
 
             if (!aBitmapEx.IsEmpty())
-                return aBitmapEx;
+                return Bitmap(aBitmapEx);
         }
     }
 
     // if we can't load the marker...
 
     static tools::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet {};
-    return aModernSet.get()->GetBitmapEx(eKindOfMarker, sal_uInt16(eIndex));
+    return aModernSet.get()->GetBitmap(eKindOfMarker, sal_uInt16(eIndex));
 }
 
 } // end anonymous namespace
@@ -851,8 +851,8 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         }
 
         // create animated handle
-        BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, eColIndex);
-        BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger,   eColIndex);
+        Bitmap aBmp1 = ImpGetBitmap(eKindOfMarker, eColIndex);
+        Bitmap aBmp2 = ImpGetBitmap(eNextBigger,   eColIndex);
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -861,29 +861,29 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
         if(eKindOfMarker == BitmapMarkerKind::Anchor || eKindOfMarker == BitmapMarkerKind::AnchorPressed)
         {
             // when anchor is used take upper left as reference point inside the handle
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime));
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime));
         }
         else if(eKindOfMarker == BitmapMarkerKind::AnchorTR || eKindOfMarker == BitmapMarkerKind::AnchorPressedTR)
         {
             // AnchorTR for SW, take top right as (0,0)
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime,
-                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1), 0,
-                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1), 0));
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime,
+                static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1), 0,
+                static_cast<sal_uInt16>(aBmp2.GetSizePixel().Width() - 1), 0));
         }
         else
         {
             // create centered handle as default
-            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, Bitmap(aBmpEx1), Bitmap(aBmpEx2), nBlinkTime,
-                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                static_cast<sal_uInt16>(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                static_cast<sal_uInt16>(aBmpEx2.GetSizePixel().Height() - 1) >> 1));
+            pRetval.reset(new sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmp1, aBmp2, nBlinkTime,
+                static_cast<sal_uInt16>(aBmp1.GetSizePixel().Width() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmp1.GetSizePixel().Height() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmp2.GetSizePixel().Width() - 1) >> 1,
+                static_cast<sal_uInt16>(aBmp2.GetSizePixel().Height() - 1) >> 1));
         }
     }
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
-        Bitmap aBmp(ImpGetBitmapEx(eKindOfMarker, eColIndex));
+        Bitmap aBmp(ImpGetBitmap(eKindOfMarker, eColIndex));
 
         // When the image with handles is not found, the bitmap returned is
         // empty. This is a problem when we use LibreOffice as a library
@@ -1068,9 +1068,9 @@ void SdrHdl::onMouseLeave()
 {
 }
 
-BitmapEx SdrHdl::createGluePointBitmap()
+Bitmap SdrHdl::createGluePointBitmap()
 {
-    return ImpGetBitmapEx(BitmapMarkerKind::Glue_Deselected, BitmapColorIndex::LightGreen);
+    return ImpGetBitmap(BitmapMarkerKind::Glue_Deselected, BitmapColorIndex::LightGreen);
 }
 
 void SdrHdl::insertNewlyCreatedOverlayObjectForSdrHdl(

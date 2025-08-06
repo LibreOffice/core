@@ -264,7 +264,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
         {
             aRetval = drawinglayer::primitive2d::Primitive2DContainer {
                     new drawinglayer::primitive2d::MarkerArrayPrimitive2D(std::move(aTransformedPositions),
-                                                                          SdrHdl::createGluePointBitmap())
+                                                                          BitmapEx(SdrHdl::createGluePointBitmap()))
              };
         }
     }
