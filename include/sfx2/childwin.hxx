@@ -98,7 +98,7 @@ extern SFX2_DLLPUBLIC bool ParentIsFloatingWindow(const vcl::Window *pParent);
 
 class SFX2_DLLPUBLIC SfxChildWindow
 {
-    VclPtr<vcl::Window>        pParent;         // parent window ( Topwindow )
+    VclPtr<vcl::Window>        m_pParent;       // parent window (Topwindow)
     VclPtr<vcl::Window>        pWindow;         // actual contents
     std::unique_ptr< SfxChildWindow_Impl>       pImpl;            // Implementation data
     std::shared_ptr<SfxDialogController> xController;     // actual contents
@@ -124,7 +124,7 @@ public:
     std::shared_ptr<SfxDialogController>& GetController() { return xController; }
     const std::shared_ptr<SfxDialogController>& GetController() const { return xController; }
     vcl::Window*        GetParent() const
-                        { return pParent; }
+                        { return m_pParent; }
     SfxChildAlignment   GetAlignment() const
                         { return eChildAlignment; }
     void                SetAlignment(SfxChildAlignment eAlign);

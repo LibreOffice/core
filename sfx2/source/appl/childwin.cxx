@@ -144,8 +144,8 @@ bool GetSplitSizeFromString( std::u16string_view rStr, Size& rSize )
     return false;
 }
 
-SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
-    : pParent(pParentWindow)
+SfxChildWindow::SfxChildWindow(vcl::Window *const pParent, sal_uInt16 nId)
+    : m_pParent(pParent)
     , pImpl(new SfxChildWindow_Impl)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
     , nType(nId)
