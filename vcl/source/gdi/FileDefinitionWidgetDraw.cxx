@@ -466,7 +466,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 OUString rCacheKey = rWidgetDraw.msSource + "@" + OUString::number(nScaleFactor);
                 auto aIterator = rCacheImages.find(rCacheKey);
 
-                BitmapEx aBitmap;
+                Bitmap aBitmap;
                 if (aIterator == rCacheImages.end())
                 {
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
@@ -474,7 +474,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     vcl::bitmap::loadFromSvg(aFileStream, u""_ustr, aBitmap, nScaleFactor);
                     if (!aBitmap.IsEmpty())
                     {
-                        rCacheImages.insert(std::make_pair(rCacheKey, Bitmap(aBitmap)));
+                        rCacheImages.insert(std::make_pair(rCacheKey, aBitmap));
                     }
                 }
                 else
@@ -488,17 +488,19 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                                nImageHeight / nScaleFactor);
                 if (!aBitmap.IsEmpty())
                 {
-                    const std::shared_ptr<SalBitmap> pSalBitmap
-                        = aBitmap.GetBitmap().ImplGetSalBitmap();
-                    if (aBitmap.IsAlpha())
+                    if (aBitmap.HasAlpha())
                     {
+                        BitmapEx aTmp(aBitmap);
+                        const std::shared_ptr<SalBitmap> pSalBitmap
+                            = aTmp.GetBitmap().ImplGetSalBitmap();
                         const std::shared_ptr<SalBitmap> pSalBitmapAlpha
-                            = aBitmap.GetAlphaMask().GetBitmap().ImplGetSalBitmap();
+                            = aTmp.GetAlphaMask().GetBitmap().ImplGetSalBitmap();
                         FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap,
                                                              *pSalBitmapAlpha);
                     }
                     else
                     {
+                        const std::shared_ptr<SalBitmap> pSalBitmap = aBitmap.ImplGetSalBitmap();
                         FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap);
                     }
                 }

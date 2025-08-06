@@ -69,7 +69,7 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
     return aBitmapEx;
 }
 
-void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
+void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, double fScalingFactor)
 {
     const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
@@ -114,7 +114,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     if (xBitmap.is())
     {
         const css::uno::Reference<css::rendering::XIntegerReadOnlyBitmap> xIntBmp(xBitmap, uno::UNO_QUERY_THROW);
-        rBitmapEx = vcl::unotools::bitmapExFromXBitmap(xIntBmp);
+        rBitmap = Bitmap(vcl::unotools::bitmapExFromXBitmap(xIntBmp));
     }
 
 }

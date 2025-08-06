@@ -40,7 +40,7 @@ VCL_DLLPUBLIC sal_uInt8 premultiply(sal_uInt8 c, sal_uInt8 a);
 
 BitmapEx VCL_DLLPUBLIC loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
-void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScaleFactor);
+void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, double fScaleFactor);
 
 /** Copy block of image data into the bitmap.
     Assumes that the Bitmap has been constructed with the desired size.
