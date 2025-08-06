@@ -3903,6 +3903,8 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 {
                                     bEndOfParagraphWritten = true;
                                 }
+
+                                rOutDev.Pop();
                             }
                             break;
                             case PortionKind::TAB:
