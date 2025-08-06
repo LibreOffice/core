@@ -441,7 +441,7 @@ void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /
 
         rVisitor.visit(new drawinglayer::primitive2d::GridPrimitive2D(
             aGridMatrix, fWidthX, fWidthY, 10.0, 3.0, nSubdivisionsX, nSubdivisionsY, aRGBGridColor,
-            BitmapEx(drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor))));
+            drawinglayer::primitive2d::createDefaultCross_3x3(aRGBGridColor)));
     }
 }
 

@@ -248,7 +248,7 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), Bitmap(getCrossMarker())));
+                aContainer.push_back(new MarkerArrayPrimitive2D(std::move(aPositionsCross), getCrossMarker()));
             }
             return new GroupPrimitive2D(std::move(aContainer));
         }
@@ -262,7 +262,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32 nSubdivisionsX,
             sal_uInt32 nSubdivisionsY,
             const basegfx::BColor& rBColor,
-            const BitmapEx& rCrossMarker)
+            const Bitmap& rCrossMarker)
         :   maTransform(std::move(aTransform)),
             mfWidth(fWidth),
             mfHeight(fHeight),

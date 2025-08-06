@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 
 // GridPrimitive2D class
@@ -58,7 +58,7 @@ namespace drawinglayer::primitive2d
             basegfx::BColor                                 maBColor;
 
             /// The Bitmap (with transparence) for grid cross points
-            BitmapEx                                        maCrossMarker;
+            Bitmap                                          maCrossMarker;
 
             /** the last used object to view transformtion and the last Viewport,
                 used from getDecomposition for decide buffering
@@ -80,7 +80,7 @@ namespace drawinglayer::primitive2d
                 sal_uInt32 nSubdivisionsX,
                 sal_uInt32 nSubdivisionsY,
                 const basegfx::BColor& rBColor,
-                const BitmapEx& rCrossMarker);
+                const Bitmap& rCrossMarker);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -91,7 +91,7 @@ namespace drawinglayer::primitive2d
             sal_uInt32 getSubdivisionsX() const { return mnSubdivisionsX; }
             sal_uInt32 getSubdivisionsY() const { return mnSubdivisionsY; }
             const basegfx::BColor& getBColor() const { return maBColor; }
-            const BitmapEx& getCrossMarker() const { return maCrossMarker; }
+            const Bitmap& getCrossMarker() const { return maCrossMarker; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
