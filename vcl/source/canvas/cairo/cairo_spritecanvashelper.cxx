@@ -131,7 +131,7 @@ namespace vcl_cairocanvas
 
     ::vcl_canvas::CustomSpriteSharedPtr SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
-        if( !mpRedrawManager || mpOwningSpriteCanvas.lock())
+        if( !mpRedrawManager || !mpOwningSpriteCanvas.lock())
             return nullptr; // we're disposed
 
         return std::make_shared<CanvasCustomSprite>( spriteSize,

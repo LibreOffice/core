@@ -549,6 +549,7 @@ private:
 
     virtual void clearAll() const override
     {
+        getSpriteCanvas()->clear();
         // grab canvas - that also lazy-initializes maLayerBoundsPixel
         ::cppcanvas::CanvasSharedPtr pCanvas( getCanvas()->clone() );
 

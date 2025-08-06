@@ -51,6 +51,7 @@
 #include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
 #include "sal/types.h"
 #include "vcl/outdev.hxx"
+#include "vcl_canvas/customsprite.hxx"
 #include "vcl_canvas/spritecanvas.hxx"
 #include <basegfx/utils/canvastools.hxx>
 #include <tools.hxx>
@@ -370,23 +371,24 @@ namespace slideshow::internal
                                         rSpriteSizePixel,
                                         nPrio ); */
                 vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
-                mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel));
+                auto xSpriteSizePixel = ::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel);
+                mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(xSpriteSizePixel);
             }
             else
             {
                 // TODO(F2): when the sprite _actually_ gets resized,
                 // content needs a repaint!
-                mpCustomSprite->resize( rSpriteSizePixel );
+//                mpCustomSprite->resize( rSpriteSizePixel );
             }
 
-            ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
+            ENSURE_OR_RETURN_FALSE( mpCustomSprite, "ViewShape::renderSprite(): No sprite" );
 
             SAL_INFO("slideshow", "ViewShape::renderSprite(): Rendering sprite " <<
-                           mpSprite.get() );
+                           mpCustomSprite.get() );
 
 
             // always show the sprite (might have been hidden before)
-            mpSprite->show();
+            mpCustomSprite->show();
 
             // determine center of sprite output position in pixel
             // (assumption here: all shape transformations have the
@@ -422,28 +424,37 @@ namespace slideshow::internal
             // NOTE: As for now, sprites are always positioned on
             // integer pixel positions on screen, have to round to
             // nearest integer here, too
-            mpSprite->setPixelOffset(
-                aAAOffset - ::basegfx::B2DSize(
-                    ::basegfx::fround( rSpriteCorrectionOffset.getWidth() ),
-                    ::basegfx::fround( rSpriteCorrectionOffset.getHeight() ) ) );
 
-            // always set sprite position and transformation, since
-            // they do not relate directly to the update flags
-            // (e.g. sprite position changes when sprite size changes)
-            mpSprite->movePixel( aSpritePosPixel );
-            mpSprite->transform( getSpriteTransformation( basegfx::B2DVector(rSpriteSizePixel.getWidth(), rSpriteSizePixel.getHeight()),
-                                                          rOrigBounds.getRange(),
-                                                          pAttr ) );
+//            mpSprite->setPixelOffset(
+//                aAAOffset - ::basegfx::B2DSize(
+//                    ::basegfx::fround( rSpriteCorrectionOffset.getWidth() ),
+//                    ::basegfx::fround( rSpriteCorrectionOffset.getHeight() ) ) );
 
-
+            {
+                // always set sprite position and transformation, since
+                // they do not relate directly to the update flags
+                // (e.g. sprite position changes when sprite size changes)
+                rendering::ViewState aViewState;
+                rendering::RenderState aRenderState;
+                ::canvas::tools::initViewState(aViewState);
+                ::canvas::tools::initRenderState(aRenderState);
+                mpCustomSprite->move(::basegfx::unotools::point2DFromB2DPoint(aSpritePosPixel),
+                                     aViewState, aRenderState);
+                geometry::AffineMatrix2D aMatrix;
+                mpCustomSprite->transform(::basegfx::unotools::affineMatrixFromHomMatrix(
+                    aMatrix,
+                    getSpriteTransformation(basegfx::B2DVector(rSpriteSizePixel.getWidth(),
+                                                               rSpriteSizePixel.getHeight()),
+                                            rOrigBounds.getRange(), pAttr)));
+            }
             // process flags
             // =============
 
-            bool bRedrawRequired( mbForceUpdate || (nUpdateFlags & UpdateFlags::Force) );
+            bool bRedrawRequired(mbForceUpdate || (nUpdateFlags & UpdateFlags::Force));
 
             if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Alpha) )
             {
-                mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
+                mpCustomSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
                                     std::clamp(pAttr->getAlpha(),
                                                      0.0,
                                                      1.0) :
@@ -473,10 +484,10 @@ namespace slideshow::internal
                     // coordinate space
                     aClipPoly.transform( aViewTransform );
 
-                    mpSprite->clip( aClipPoly );
+//                    mpSprite->clip( aClipPoly );
                 }
-                else
-                    mpSprite->clip();
+//                else
+//                    mpSprite->clip();
             }
             if( mbForceUpdate || (nUpdateFlags & UpdateFlags::Content) )
             {
@@ -499,12 +510,10 @@ namespace slideshow::internal
             // sprite needs repaint - output to sprite canvas
             // ==============================================
 
-            ::cppcanvas::CanvasSharedPtr pContentCanvas(mpSprite->getContentCanvas());
-            cairocanvas::CanvasCustomSprite* pCanvasCustomSprite
-                = static_cast<cairocanvas::CanvasCustomSprite*>(
-                    pContentCanvas->getUNOCanvas().get());
+            ::vcl_canvas::CanvasSharedPtr pContentCanvas(mpCustomSprite->getContentCanvas());
+            auto pCanvasCustomSprite
+                = std::static_pointer_cast<::vcl_cairocanvas::CanvasCustomSprite>(pContentCanvas);
             cairo::SurfaceSharedPtr pSurface = pCanvasCustomSprite->getSurface();
-            pSurface = pCanvasCustomSprite->getSurface();
 
             /* return draw( pContentCanvas,
                          rMtf,
@@ -742,7 +751,7 @@ namespace slideshow::internal
         ViewShape::ViewShape( ViewLayerSharedPtr xViewLayer ) :
             mpViewLayer(std::move( xViewLayer )),
             maRenderers(),
-            mpSprite(),
+            /* mpSprite(), */
             mbAnimationMode( false ),
             mbForceUpdate( true )
         {
@@ -850,7 +859,7 @@ namespace slideshow::internal
 
         void ViewShape::leaveAnimationMode()
         {
-            mpSprite.reset();
+            mpCustomSprite.reset();
             mbAnimationMode = false;
             mbForceUpdate   = true;
         }

@@ -312,13 +312,14 @@ namespace slideshow::internal
             mutable RendererCacheVector                 maRenderers;
 
             /// The sprite object
-            mutable AnimatedSpriteSharedPtr             mpSprite;
+//            mutable AnimatedSpriteSharedPtr             mpSprite;
 
             /// If true, render() calls go to the sprite
             mutable bool                                mbAnimationMode;
 
             /// If true, shape needs full repaint (and the sprite a setup, if any)
             mutable bool                                mbForceUpdate;
+            mutable ::vcl_canvas::CustomSpriteSharedPtr         mpCustomSprite;
         };
 
         typedef ::std::shared_ptr< ViewShape > ViewShapeSharedPtr;
