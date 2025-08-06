@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 
+#include <officecfg/Office/Writer.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <svx/xfillit0.hxx>
@@ -801,7 +802,8 @@ namespace {
         return pNew;
     }
 
-    void lcl_SelectFlyFormat(SwFrameFormat *const pNew, SwFEShell& rSh)
+    void lcl_InitSelectFlyOrDrawFormat(SwFrameFormat *const pNew,
+            SwFEShell & rSh, bool const isSelect)
     {
         if(!pNew)
             return;
@@ -810,21 +812,27 @@ namespace {
             case RES_FLYFRMFMT:
             {
                 assert(dynamic_cast<SwFlyFrameFormat*>(pNew));
-                const Point aPt(rSh.GetCursorDocPos());
-                SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->GetFrame(&aPt);
-                if(pFlyFrame)
-                    rSh.SelectFlyFrame(*pFlyFrame);
+                if (isSelect)
+                {
+                    const Point aPt(rSh.GetCursorDocPos());
+                    SwFlyFrame* pFlyFrame = static_cast<SwFlyFrameFormat*>(pNew)->GetFrame(&aPt);
+                    if (pFlyFrame)
+                        rSh.SelectFlyFrame(*pFlyFrame);
+                }
                 break;
             }
             case RES_DRAWFRMFMT:
             {
-                auto& rDrawView = *rSh.Imp()->GetDrawView();
                 assert(dynamic_cast<SwDrawFrameFormat*>(pNew));
                 SwDrawFrameFormat* pDrawFormat = static_cast<SwDrawFrameFormat*>(pNew);
                 // #i52780# - drawing object has to be made visible on paste.
                 pDrawFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
-                SdrObject* pObj = pDrawFormat->FindSdrObject();
-                rDrawView.MarkObj(pObj, rDrawView.GetSdrPageView());
+                if (isSelect)
+                {
+                    auto& rDrawView = *rSh.Imp()->GetDrawView();
+                    SdrObject* pObj = pDrawFormat->FindSdrObject();
+                    rDrawView.MarkObj(pObj, rDrawView.GetSdrPageView());
+                }
                 // #i47455# - notify draw frame format
                 // that position attributes are already set.
                 pDrawFormat->PosAttrSet();
@@ -1063,9 +1071,10 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                             lcl_PasteFlyOrDrawFormat(rPaM, pFlyFormat, *this));
                     }
                 }
+                bool const isSelect{officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::get()};
                 for (auto const pFlyFormat : inserted)
                 {
-                    lcl_SelectFlyFormat(pFlyFormat, *this);
+                    lcl_InitSelectFlyOrDrawFormat(pFlyFormat, *this, isSelect);
                 }
             }
             else
