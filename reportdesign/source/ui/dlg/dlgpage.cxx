@@ -24,6 +24,8 @@
 #include <svl/cjkoptions.hxx>
 #include <osl/diagnose.h>
 
+#include <vcl/tabs.hrc>
+
 namespace rptui
 {
 /*************************************************************************
@@ -40,27 +42,42 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
 
     if (rDialog == "BackgroundDialog")
     {
-        AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
     }
     else if (rDialog == "PageDialog")
     {
-        AddTabPage(u"page"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), nullptr );
-        AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
+        AddTabPage(u"page"_ustr, TabResId(RID_TAB_PAGE.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
     }
     else if (rDialog == "CharDialog")
     {
-        AddTabPage(u"font"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
-        AddTabPage(u"fonteffects"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
-        AddTabPage(u"position"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
-        AddTabPage(u"asianlayout"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-        AddTabPage(u"background"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr );
-        AddTabPage(u"alignment"_ustr, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), nullptr );
+        AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME),
+                   RID_L + RID_TAB_FONT.sIconName);
+        AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS),
+                   RID_L + RID_TAB_FONTEFFECTS.sIconName);
+        AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION),
+                   RID_L + RID_TAB_POSITION.sIconName);
+        if (SvtCJKOptions::IsDoubleLinesEnabled())
+            AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_ASIANLAYOUT.aLabel),
+                       pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_TWOLINES),
+                       RID_L + RID_TAB_ASIANLAYOUT.sIconName);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
+        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGNMENT),
+                   RID_L + RID_TAB_ALIGNMENT.sIconName);
     }
     else
         OSL_FAIL("Unknown page id");
-
-    if ( !SvtCJKOptions::IsDoubleLinesEnabled() )
-        RemoveTabPage(u"asianlayout"_ustr);
 }
 
 void ORptPageDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
