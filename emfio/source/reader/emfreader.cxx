@@ -1314,9 +1314,9 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_ELLIPSE :
+                    case EMR_ELLIPSE:
                     {
-                        mpInputStream->ReadInt32( nX32 ).ReadInt32( nY32 ).ReadInt32( nx32 ).ReadInt32( ny32 );
+                        mpInputStream->ReadInt32(nX32).ReadInt32(nY32).ReadInt32(nx32).ReadInt32(ny32);
                         SAL_INFO("emfio", "\t\t Rectangle, left: " << nX32 << ", top: " << nY32 << ", right: " << nx32 << ", bottom: " << ny32);
 
                         sal_Int32 w(0), h(0);
@@ -1326,9 +1326,9 @@ namespace emfio
                         {
                             tools::Long dw = w / 2;
                             tools::Long dh = h / 2;
-                            Point aCenter( nX32 + dw, nY32 + dh );
-                            tools::Polygon aPoly( aCenter, dw, dh );
-                            DrawPolygon( std::move(aPoly), mbRecordPath );
+                            Point aCenter(nX32 + dw, nY32 + dh);
+                            tools::Polygon aPoly(aCenter, dw, dh);
+                            DrawPolygon(std::move(aPoly), mbRecordPath);
                         }
                     }
                     break;
