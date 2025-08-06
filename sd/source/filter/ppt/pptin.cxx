@@ -74,8 +74,6 @@
 #include <editeng/editstat.hxx>
 #include <unotools/pathoptions.hxx>
 
-#define MAX_USER_MOVE       2
-
 #include "pptanimations.hxx"
 #include "pptinanimations.hxx"
 #include "ppt97animations.hxx"
@@ -2471,6 +2469,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             }
                             ::tools::Rectangle aLogicRect( pPresObj->GetLogicRect() );
                             Size      aLogicSize( aLogicRect.GetSize() );
+                            constexpr auto MAX_USER_MOVE = 2;
 
                             switch ( nPlacementId )
                             {
