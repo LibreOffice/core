@@ -428,6 +428,9 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
         // When embedding is requested, and embedded only is not set or font is used
         if (bEmbedFonts && (!bEmbedUsedOnly || aUsedFontNames.contains(pEntry->GetFamilyName())))
         {
+            if (EmbeddedFontsHelper::isCommonFont(pEntry->GetFamilyName()))
+                continue;
+
             const bool bExportFlat(getExportFlags() & SvXMLExportFlags::EMBEDDED);
 
             /// Contains information about a single variant of an embedded font.
