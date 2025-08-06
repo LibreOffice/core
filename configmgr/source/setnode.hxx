@@ -23,7 +23,6 @@
 
 #include <vector>
 
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 #include "node.hxx"

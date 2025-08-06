@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <rtl/ref.hxx>
 
 #include "node.hxx"
 

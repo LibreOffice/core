@@ -55,10 +55,6 @@
 #include <utility>
 #include <sal/types.h>
 
-namespace com::sun::star::util {
-    class XFlushListener;
-}
-
 namespace configmgr::configuration_registry {
 
 namespace {

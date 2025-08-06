@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>

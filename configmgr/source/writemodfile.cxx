@@ -55,8 +55,6 @@
 
 namespace configmgr {
 
-class Components;
-
 namespace {
 
 OString convertToUtf8(std::u16string_view text) {

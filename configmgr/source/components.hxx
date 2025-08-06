@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <string_view>
 
 #include <com/sun/star/beans/Optional.hpp>

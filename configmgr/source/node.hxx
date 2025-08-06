@@ -23,9 +23,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <xmlreader/span.hxx>
 
 namespace configmgr {
 

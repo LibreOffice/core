@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <set>
 
 #include <com/sun/star/configuration/XUpdate.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

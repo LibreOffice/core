@@ -21,9 +21,9 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <boost/unordered_map.hpp>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 namespace configmgr {

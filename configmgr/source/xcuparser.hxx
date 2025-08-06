@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <stack>
 #include <string_view>
 

@@ -38,7 +38,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <cppu/unotype.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>

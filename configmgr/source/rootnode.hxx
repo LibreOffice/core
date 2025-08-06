@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 
-#include <rtl/ref.hxx>
-
 #include "node.hxx"
 #include "nodemap.hxx"
 

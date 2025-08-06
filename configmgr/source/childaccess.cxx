@@ -34,7 +34,6 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
 #include <cstdlib>
 #include <utility>
 #include <vector>
@@ -69,7 +68,6 @@
 #include <com/sun/star/util/ElementChange.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
 #include <i18nlangtag/languagetag.hxx>

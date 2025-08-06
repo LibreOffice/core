@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
 #include "config_map.hxx"
@@ -36,7 +35,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/XDocumentation.hpp>
 #include <com/sun/star/container/XHierarchicalNameReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -46,7 +44,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/interlck.h>
 #include <rtl/ref.hxx>

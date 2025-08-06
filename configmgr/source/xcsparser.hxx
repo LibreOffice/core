@@ -21,11 +21,11 @@
 
 #include <sal/config.h>
 
-#include <set>
 #include <stack>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <utility>
 #include <xmlreader/xmlreader.hxx>
 
