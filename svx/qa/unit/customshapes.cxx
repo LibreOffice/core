@@ -95,7 +95,7 @@ Color CustomshapesTest::getColor(const uno::Reference<drawing::XShape>& xShape, 
                                             maTempFile.GetURL());
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    Bitmap aBMP = aPNGReader.read().GetBitmap();
+    Bitmap aBMP = aPNGReader.read();
     Size aSize = aBMP.GetSizePixel();
     BitmapScopedReadAccess pRead(aBMP);
     return pRead->GetColor(aSize.Height() * fY, aSize.Width() * fX);
@@ -203,8 +203,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
     // Without the changed methods the colors were in range RGB(17,11,17) to RGB(87,55,89).
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap aBMP = aPNGReader.read();
     BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
@@ -240,8 +239,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FrontLightDim)
     // Without the changed methods the nColorDistance was 476 and 173 respectively.
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap aBMP = aPNGReader.read();
     BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
@@ -268,8 +266,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_FirstLightHarsh)
     // Read bitmap and test color in center
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap aBMP = aPNGReader.read();
     BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
     // GetColor(Y,X)
@@ -1235,8 +1232,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
     // So we test segments top, right and bottom-right.
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap aBMP = aPNGReader.read();
     BitmapScopedReadAccess pRead(aBMP);
     Size aSize = aBMP.GetSizePixel();
 

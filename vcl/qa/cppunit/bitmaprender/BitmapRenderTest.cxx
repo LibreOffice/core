@@ -145,22 +145,21 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     SvFileStream aFileStream(getFullUrl(u"ImageRGBA.png"), StreamMode::READ);
 
     vcl::PngImageReader aPngReader(aFileStream);
-    BitmapEx aBitmapEx;
-    aPngReader.read(aBitmapEx);
+    Bitmap aBitmap;
+    aPngReader.read(aBitmap);
 
-    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmapEx.GetBitmap().getPixelFormat());
-    CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
-    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlphaMask().getPixelFormat());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aBitmap.getPixelFormat());
+    CPPUNIT_ASSERT_EQUAL(true, aBitmap.HasAlpha());
 
     // Check the bitmap has pixels we expect
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFF, 0x00, 0x00, 0x00),
-                         aBitmapEx.GetPixelColor(0, 0));
+                         aBitmap.GetPixelColor(0, 0));
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00, 0xFF, 0xFF, 0x00),
-                         aBitmapEx.GetPixelColor(1, 1));
+                         aBitmap.GetPixelColor(1, 1));
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x7F, 0x00, 0xFF, 0x00),
-                         aBitmapEx.GetPixelColor(2, 2));
+                         aBitmap.GetPixelColor(2, 2));
 
-    pVDev->DrawBitmapEx(Point(), aBitmapEx);
+    pVDev->DrawBitmapEx(Point(), aBitmap);
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetPixel(Point(0, 0)));
     CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pVDev->GetPixel(Point(1, 1)));

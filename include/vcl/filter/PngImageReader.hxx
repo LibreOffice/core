@@ -40,7 +40,7 @@ namespace com::sun::star::task
 class XStatusIndicator;
 }
 
-class BitmapEx;
+class Bitmap;
 class SvStream;
 
 namespace vcl
@@ -55,10 +55,10 @@ public:
 
     // Returns true if image was successfully read without errors.
     // A usable bitmap may be returned even if there were errors (e.g. incomplete image).
-    bool read(BitmapEx& rBitmap);
+    bool read(Bitmap& rBitmap);
     bool read(ImportOutput& rImportOutput);
     // Returns a bitmap without indicating if there were errors.
-    BitmapEx read();
+    Bitmap read();
 
     // Returns the contents of the msOG chunk (containing a Gif image), if it exists.
     // Does not change position in the stream.

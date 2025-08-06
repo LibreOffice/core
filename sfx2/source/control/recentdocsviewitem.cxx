@@ -159,7 +159,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
             SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
             vcl::PngImageReader aReader(aStream);
-            aThumbnail = Bitmap(aReader.read());
+            aThumbnail = aReader.read();
         }
         else if (sfx2::RecentDocsView::typeMatchesExtension(sfx2::ApplicationType::TYPE_DATABASE,
                                                             aURLObj.getExtension()))

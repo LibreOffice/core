@@ -812,28 +812,28 @@ PngImageReader::PngImageReader(SvStream& rStream)
 {
 }
 
-bool PngImageReader::read(BitmapEx& rBitmapEx)
+bool PngImageReader::read(Bitmap& rBitmap)
 {
     ImportOutput aImportOutput;
     bool bRet = reader(mrStream, aImportOutput);
     if (bRet)
-        rBitmapEx = *aImportOutput.moBitmap;
+        rBitmap = Bitmap(*aImportOutput.moBitmap);
     return bRet;
 }
 
 bool PngImageReader::read(ImportOutput& rImportOutput) { return reader(mrStream, rImportOutput); }
 
-BitmapEx PngImageReader::read()
+Bitmap PngImageReader::read()
 {
     ImportOutput aImportOutput;
     if (read(aImportOutput))
     {
         if (!aImportOutput.mbIsAnimated)
-            return *aImportOutput.moBitmap;
+            return Bitmap(*aImportOutput.moBitmap);
         else
-            return aImportOutput.moAnimation->GetBitmapEx();
+            return Bitmap(aImportOutput.moAnimation->GetBitmapEx());
     }
-    return BitmapEx();
+    return Bitmap();
 }
 
 BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)

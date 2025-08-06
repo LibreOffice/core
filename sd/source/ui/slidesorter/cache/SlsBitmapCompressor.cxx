@@ -35,19 +35,19 @@ class NoBitmapCompression::DummyReplacement
     : public BitmapReplacement
 {
 public:
-    BitmapEx maPreview;
+    Bitmap maPreview;
 
-    explicit DummyReplacement (const BitmapEx& rPreview) : maPreview(rPreview)  { }
+    explicit DummyReplacement (const Bitmap& rPreview) : maPreview(rPreview)  { }
     virtual ~DummyReplacement() {}
     virtual sal_Int32 GetMemorySize() const override { return maPreview.GetSizeBytes(); }
 };
 
-std::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const BitmapEx& rBitmap) const
+std::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
 {
     return std::make_shared<DummyReplacement>(rBitmap);
 }
 
-BitmapEx NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) const
+Bitmap NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) const
 {
     return dynamic_cast<const DummyReplacement&>(rBitmapData).maPreview;
 }
@@ -59,16 +59,16 @@ bool NoBitmapCompression::IsLossless() const
 
 //===== CompressionByDeletion =================================================
 
-std::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (const BitmapEx& ) const
+std::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (const Bitmap& ) const
 {
     return std::shared_ptr<BitmapReplacement>();
 }
 
-BitmapEx CompressionByDeletion::Decompress (const BitmapReplacement& ) const
+Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
 {
     // Return a NULL pointer.  This will eventually lead to a request for
     // the creation of a new one.
-    return BitmapEx();
+    return Bitmap();
 }
 
 bool CompressionByDeletion::IsLossless() const
@@ -83,7 +83,7 @@ bool CompressionByDeletion::IsLossless() const
 class ResolutionReduction::ResolutionReducedReplacement : public BitmapReplacement
 {
 public:
-    BitmapEx maPreview;
+    Bitmap maPreview;
     Size maOriginalSize;
 
     virtual ~ResolutionReducedReplacement();
@@ -100,7 +100,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() con
 }
 
 std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
-    const BitmapEx& rBitmap) const
+    const Bitmap& rBitmap) const
 {
     auto pResult = std::make_shared<ResolutionReducedReplacement>();
     pResult->maPreview = rBitmap;
@@ -115,9 +115,9 @@ std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
     return pResult;
 }
 
-BitmapEx ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) const
+Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) const
 {
-    BitmapEx aResult;
+    Bitmap aResult;
 
     const ResolutionReducedReplacement* pData (
         dynamic_cast<const ResolutionReducedReplacement*>(&rBitmapData));
@@ -158,7 +158,7 @@ public:
     }
 };
 
-std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBitmap) const
+std::shared_ptr<BitmapReplacement> PngCompression::Compress (const Bitmap& rBitmap) const
 {
     SvMemoryStream aStream (32768, 32768);
     vcl::PngImageWriter aWriter(aStream);
@@ -172,16 +172,16 @@ std::shared_ptr<BitmapReplacement> PngCompression::Compress (const BitmapEx& rBi
     return pResult;
 }
 
-BitmapEx PngCompression::Decompress (
+Bitmap PngCompression::Decompress (
     const BitmapReplacement& rBitmapData) const
 {
-    BitmapEx aResult;
+    Bitmap aResult;
     const PngReplacement* pData (dynamic_cast<const PngReplacement*>(&rBitmapData));
     if (pData != nullptr)
     {
         SvMemoryStream aStream (pData->mpData, pData->mnDataSize, StreamMode::READ);
         vcl::PngImageReader aReader (aStream);
-        aResult = aReader.read().GetBitmap();
+        aResult = aReader.read();
     }
 
     return aResult;

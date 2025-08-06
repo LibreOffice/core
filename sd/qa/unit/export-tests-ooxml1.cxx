@@ -1567,12 +1567,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
     CPPUNIT_ASSERT(aImageAbsName.startsWith("file:///", &aImageRelName));
     std::unique_ptr<SvStream> pImageStream = parseExportStream(maTempFile.GetURL(), aImageRelName);
     vcl::PngImageReader aReader(*pImageStream);
-    BitmapEx aBitmapEx = aReader.read();
+    Bitmap aBitmap = aReader.read();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 256
     // - Actual  : 120
     // i.e. the bitmap of the narration was lost, some default placeholder was exported instead.
-    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(256), aBitmapEx.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(256), aBitmap.GetSizePixel().Height());
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

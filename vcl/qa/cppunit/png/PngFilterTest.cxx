@@ -50,8 +50,8 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
 {
     SvFileStream aFileStream(sFilePath, StreamMode::READ);
     SvMemoryStream aExportStream;
-    BitmapEx aImportedBitmapEx;
-    BitmapEx aExportedImportedBitmapEx;
+    Bitmap aImportedBitmap;
+    Bitmap aExportedImportedBitmap;
 
     bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
     CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFilePath.toUtf8()).getStr(), bOpenOk);
@@ -59,16 +59,15 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
     // Read the png from the file
     {
         vcl::PngImageReader aPngReader(aFileStream);
-        bool bReadOk = aPngReader.read(aImportedBitmapEx);
+        bool bReadOk = aPngReader.read(aImportedBitmap);
         CPPUNIT_ASSERT_MESSAGE(OString("Failed to read png from: " + sFilePath.toUtf8()).getStr(),
                                bReadOk);
-        Bitmap aImportedBitmap = aImportedBitmapEx.GetBitmap();
         BitmapScopedInfoAccess pAccess(aImportedBitmap);
-        auto nActualWidth = aImportedBitmapEx.GetSizePixel().Width();
-        auto nActualHeight = aImportedBitmapEx.GetSizePixel().Height();
-        auto nActualBpp = vcl::pixelFormatBitCount(aImportedBitmapEx.GetBitmap().getPixelFormat());
+        auto nActualWidth = aImportedBitmap.GetSizePixel().Width();
+        auto nActualHeight = aImportedBitmap.GetSizePixel().Height();
+        auto nActualBpp = vcl::pixelFormatBitCount(aImportedBitmap.getPixelFormat());
         auto bActualHasPalette = pAccess->HasPalette();
-        auto bActualIsAlpha = aImportedBitmapEx.IsAlpha();
+        auto bActualIsAlpha = aImportedBitmap.HasAlpha();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OString("Width comparison failed for exported png:" + sFilePath.toUtf8()).getStr(),
             aCase.mnWidth, nActualWidth);
@@ -89,7 +88,7 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
     // Write the imported png to a stream
     {
         vcl::PngImageWriter aPngWriter(aExportStream);
-        bool bWriteOk = aPngWriter.write(aImportedBitmapEx);
+        bool bWriteOk = aPngWriter.write(aImportedBitmap);
         CPPUNIT_ASSERT_MESSAGE(OString("Failed to write png: " + sFilePath.toUtf8()).getStr(),
                                bWriteOk);
         aExportStream.Seek(0);
@@ -98,17 +97,15 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
     // Read the png again from the exported stream
     {
         vcl::PngImageReader aPngReader(aExportStream);
-        bool bReadOk = aPngReader.read(aExportedImportedBitmapEx);
+        bool bReadOk = aPngReader.read(aExportedImportedBitmap);
         CPPUNIT_ASSERT_MESSAGE(
             OString("Failed to read exported png: " + sFilePath.toUtf8()).getStr(), bReadOk);
-        Bitmap aExportedImportedBitmap = aExportedImportedBitmapEx.GetBitmap();
         BitmapScopedInfoAccess pAccess(aExportedImportedBitmap);
-        auto nActualWidth = aExportedImportedBitmapEx.GetSizePixel().Width();
-        auto nActualHeight = aExportedImportedBitmapEx.GetSizePixel().Height();
-        auto nActualBpp
-            = vcl::pixelFormatBitCount(aExportedImportedBitmapEx.GetBitmap().getPixelFormat());
+        auto nActualWidth = aExportedImportedBitmap.GetSizePixel().Width();
+        auto nActualHeight = aExportedImportedBitmap.GetSizePixel().Height();
+        auto nActualBpp = vcl::pixelFormatBitCount(aExportedImportedBitmap.getPixelFormat());
         auto bActualHasPalette = pAccess->HasPalette();
-        auto bActualIsAlpha = aExportedImportedBitmapEx.IsAlpha();
+        auto bActualIsAlpha = aExportedImportedBitmap.HasAlpha();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OString("Width comparison failed for exported png:" + sFilePath.toUtf8()).getStr(),
             aCase.mnWidth, nActualWidth);
@@ -126,9 +123,9 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
             aCase.mbIsAlpha, bActualIsAlpha);
     }
 
-    // Compare imported and exported BitmapEx
+    // Compare imported and exported Bitmap
     // This compares size, inner bitmap and alpha mask
-    bool bIsSame = (aExportedImportedBitmapEx == aImportedBitmapEx);
+    bool bIsSame = (aExportedImportedBitmap == aImportedBitmap);
     CPPUNIT_ASSERT_MESSAGE(
         OString("Import->Export png test failed for png: " + sFilePath.toUtf8()).getStr(), bIsSame);
 }
@@ -137,12 +134,12 @@ void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
 void checkImportCorruptedPng(const OUString& sFilePath)
 {
     SvFileStream aFileStream(sFilePath, StreamMode::READ);
-    BitmapEx aImportedBitmapEx;
+    Bitmap aImportedBitmap;
 
     bool bOpenOk = !aFileStream.GetError() && aFileStream.GetBufferSize() > 0;
     CPPUNIT_ASSERT_MESSAGE(OString("Failed to open file: " + sFilePath.toUtf8()).getStr(), bOpenOk);
     vcl::PngImageReader aPngReader(aFileStream);
-    bool bReadOk = aPngReader.read(aImportedBitmapEx);
+    bool bReadOk = aPngReader.read(aImportedBitmap);
     // Make sure this file was not read successfully
     CPPUNIT_ASSERT_MESSAGE(
         OString("Corrupted png should not be opened: " + sFilePath.toUtf8()).getStr(), !bReadOk);
@@ -202,10 +199,9 @@ void PngFilterTest::testPng()
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
         vcl::PngImageReader aPngReader(aFileStream);
-        BitmapEx aBitmapEx;
-        aPngReader.read(aBitmapEx);
+        Bitmap aBitmap;
+        aPngReader.read(aBitmap);
 
-        Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
@@ -249,10 +245,9 @@ void PngFilterTest::testPng()
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
         vcl::PngImageReader aPngReader(aFileStream);
-        BitmapEx aBitmapEx;
-        aPngReader.read(aBitmapEx);
+        Bitmap aBitmap;
+        aPngReader.read(aBitmap);
 
-        Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
@@ -288,85 +283,33 @@ void PngFilterTest::testPng()
         SvFileStream aFileStream(getFullUrl(aFileName), StreamMode::READ);
 
         vcl::PngImageReader aPngReader(aFileStream);
-        BitmapEx aBitmapEx;
-        aPngReader.read(aBitmapEx);
+        Bitmap aBitmap;
+        aPngReader.read(aBitmap);
 
-        Bitmap aBitmap = aBitmapEx.GetBitmap();
         {
             BitmapScopedReadAccess pAccess(aBitmap);
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Width());
             CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAccess->Height());
 
-            if (pAccess->GetBitCount() == 24)
-            {
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x00),
-                                     pAccess->GetPixel(0, 0));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x00),
-                                     pAccess->GetPixel(3, 3));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x00),
-                                     pAccess->GetPixel(3, 0));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x00),
-                                     pAccess->GetPixel(0, 3));
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(32), pAccess->GetBitCount());
 
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0x00, 0x00, 0x00),
-                                     pAccess->GetPixel(1, 1));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0xFF, 0x00, 0x00),
-                                     pAccess->GetPixel(1, 2));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xFF, 0x00),
-                                     pAccess->GetPixel(2, 1));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0x00, 0x00),
-                                     pAccess->GetPixel(2, 2));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
+                                 pAccess->GetPixel(0, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
+                                 pAccess->GetPixel(3, 3));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
+                                 pAccess->GetPixel(3, 0));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
+                                 pAccess->GetPixel(0, 3));
 
-                AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                {
-                    BitmapScopedReadAccess pAlphaAccess(aAlpha);
-                    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pAlphaAccess->GetBitCount());
-                    CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Width());
-                    CPPUNIT_ASSERT_EQUAL(tools::Long(4), pAlphaAccess->Height());
-
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
-                                         pAlphaAccess->GetPixel(0, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
-                                         pAlphaAccess->GetPixel(3, 3));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
-                                         pAlphaAccess->GetPixel(3, 0));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x7F, 0x00),
-                                         pAlphaAccess->GetPixel(0, 3));
-
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
-                                         pAlphaAccess->GetPixel(1, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
-                                         pAlphaAccess->GetPixel(1, 2));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0x3F, 0x00),
-                                         pAlphaAccess->GetPixel(2, 1));
-                    CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xBF, 0x00),
-                                         pAlphaAccess->GetPixel(2, 2));
-                }
-            }
-            else if (pAccess->GetBitCount() == 32)
-            {
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
-                                     pAccess->GetPixel(0, 0));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
-                                     pAccess->GetPixel(3, 3));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
-                                     pAccess->GetPixel(3, 0));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x80),
-                                     pAccess->GetPixel(0, 3));
-
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0x00, 0x00, 0x40),
-                                     pAccess->GetPixel(1, 1));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0xFF, 0x00, 0xC0),
-                                     pAccess->GetPixel(1, 2));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xFF, 0xC0),
-                                     pAccess->GetPixel(2, 1));
-                CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0x00, 0x40),
-                                     pAccess->GetPixel(2, 2));
-            }
-            else
-            {
-                CPPUNIT_ASSERT_MESSAGE("Bitmap is not 24 or 32 bit.", false);
-            }
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0x00, 0x00, 0x40),
+                                 pAccess->GetPixel(1, 1));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0xFF, 0x00, 0xC0),
+                                 pAccess->GetPixel(1, 2));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0x00, 0x00, 0xFF, 0xC0),
+                                 pAccess->GetPixel(2, 1));
+            CPPUNIT_ASSERT_EQUAL(BitmapColor(ColorTransparency, 0xFF, 0xFF, 0x00, 0x40),
+                                 pAccess->GetPixel(2, 2));
         }
     }
 }
@@ -542,7 +485,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit grayscale + 8 bit alpha
@@ -550,7 +493,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit grayscale + 16 bit alpha
@@ -558,7 +501,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit rgba
@@ -566,7 +509,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit rgba
@@ -663,7 +606,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit grayscale + 8 bit alpha
@@ -671,7 +614,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit grayscale + 16 bit alpha
@@ -679,7 +622,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit rgba
@@ -687,7 +630,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit rgba
@@ -986,7 +929,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit grayscale alpha no background chunk, interlaced
@@ -994,7 +937,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit grayscale alpha no background chunk, interlaced
@@ -1002,7 +945,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 3 * 8 bits rgb color alpha, no background chunk
@@ -1010,7 +953,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 3 * 16 bits rgb color alpha, no background chunk
@@ -1018,7 +961,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 8 bit grayscale alpha, black background chunk
@@ -1026,7 +969,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 16 bit grayscale alpha, gray background chunk
@@ -1034,7 +977,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 3 * 8 bits rgb color alpha, white background chunk
@@ -1042,7 +985,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // 3 * 16 bits rgb color alpha, yellow background chunk
@@ -1051,7 +994,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, black background chunk
@@ -1059,7 +1002,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, blue background chunk
@@ -1067,7 +1010,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, black background chunk
@@ -1075,7 +1018,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, green background chunk
@@ -1083,7 +1026,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, light-gray background chunk
@@ -1091,7 +1034,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, red background chunk
@@ -1099,7 +1042,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, white background chunk
@@ -1107,7 +1050,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, white background chunk
@@ -1115,7 +1058,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, yellow background chunk
@@ -1123,7 +1066,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // transparent, but no background chunk
@@ -1131,7 +1074,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // multiple levels of transparency, 3 entries
@@ -1382,7 +1325,7 @@ void PngFilterTest::testPngSuite()
           {
               32,
               32,
-              24,
+              32,
               false,
               true,
           } }, // six-cube palette-chunk in true-color+alpha image
@@ -1853,15 +1796,15 @@ void PngFilterTest::testPngRoundtrip8BitGrey()
         SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
 
         vcl::PngImageReader aPngReader(rStream);
-        BitmapEx aBitmapEx;
-        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+        Bitmap aBitmap;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmap));
 
-        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmap.GetSizePixel());
 
-        CPPUNIT_ASSERT_EQUAL(COL_GRAY, aBitmapEx.GetPixelColor(0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGRAY, aBitmapEx.GetPixelColor(15, 15));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmapEx.GetPixelColor(15, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmapEx.GetPixelColor(0, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_GRAY, aBitmap.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTGRAY, aBitmap.GetPixelColor(15, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(15, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(0, 15));
     }
 }
 
@@ -1901,15 +1844,15 @@ void PngFilterTest::testPngRoundtrip24()
         rStream.Seek(0);
 
         vcl::PngImageReader aPngReader(rStream);
-        BitmapEx aBitmapEx;
-        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+        Bitmap aBitmap;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmap));
 
-        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmap.GetSizePixel());
 
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmapEx.GetPixelColor(0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmapEx.GetPixelColor(15, 15));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmapEx.GetPixelColor(15, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmapEx.GetPixelColor(0, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aBitmap.GetPixelColor(0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, aBitmap.GetPixelColor(15, 15));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(15, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aBitmap.GetPixelColor(0, 15));
     }
 }
 
@@ -1953,19 +1896,19 @@ void PngFilterTest::testPngRoundtrip24_8()
         rStream.Seek(0);
 
         vcl::PngImageReader aPngReader(rStream);
-        BitmapEx aBitmapEx;
-        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+        Bitmap aBitmap;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmap));
 
-        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmap.GetSizePixel());
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xBB, 0xFF, 0x00, 0x00),
-                             aBitmapEx.GetPixelColor(0, 0));
+                             aBitmap.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xCC, 0x00, 0x00, 0xFF),
-                             aBitmapEx.GetPixelColor(15, 15));
+                             aBitmap.GetPixelColor(15, 15));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0x00, 0x00),
-                             aBitmapEx.GetPixelColor(15, 0));
+                             aBitmap.GetPixelColor(15, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0x00, 0x00),
-                             aBitmapEx.GetPixelColor(0, 15));
+                             aBitmap.GetPixelColor(0, 15));
     }
 }
 
@@ -2001,17 +1944,17 @@ void PngFilterTest::testPngWrite8BitRGBPalette()
     aExportStream.Seek(0);
     {
         vcl::PngImageReader aPngReader(aExportStream);
-        BitmapEx aBitmapEx;
-        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmapEx));
+        Bitmap aBitmap;
+        CPPUNIT_ASSERT_EQUAL(true, aPngReader.read(aBitmap));
 
-        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmapEx.GetSizePixel());
+        CPPUNIT_ASSERT_EQUAL(Size(16, 16), aBitmap.GetSizePixel());
 
         for (int i = 0; i < 16; i++)
         {
             for (int j = 0; j < 16; j++)
             {
                 CPPUNIT_ASSERT_EQUAL(aRedPalette[i * 16 + j].GetRGBColor(),
-                                     aBitmapEx.GetPixelColor(j, i));
+                                     aBitmap.GetPixelColor(j, i));
             }
         }
     }

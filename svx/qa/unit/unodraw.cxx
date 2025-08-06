@@ -208,9 +208,9 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)
     // Then make sure that the size request is handled:
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
     vcl::PngImageReader aPngReader(aStream);
-    BitmapEx aBitmapEx;
-    aPngReader.read(aBitmapEx);
-    Size aSize = aBitmapEx.GetSizePixel();
+    Bitmap aBitmap;
+    aPngReader.read(aBitmap);
+    Size aSize = aBitmap.GetSizePixel();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 192
     // - Actual  : 595

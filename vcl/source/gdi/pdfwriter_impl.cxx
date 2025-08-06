@@ -2627,8 +2627,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                                        StreamMode::READ);
                 vcl::PngImageReader aReader(aStream);
 
-                BitmapEx aBitmapEx = aReader.read();
-                const BitmapEmit& rBitmapEmit = createBitmapEmit(aBitmapEx, Graphic(),
+                Bitmap aBitmap = aReader.read();
+                const BitmapEmit& rBitmapEmit = createBitmapEmit(BitmapEx(aBitmap), Graphic(),
                                                                  aUsedBitmaps, aResourceDict,
                                                                  aOutputStreams);
 

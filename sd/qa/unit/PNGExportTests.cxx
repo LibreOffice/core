@@ -62,10 +62,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure only the shape is exported
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     const auto[scalingX, scalingY] = getDPIScaling();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(193 * scalingX, aSize.getWidth(), 1.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(193 * scalingY, aSize.getHeight(), 1.5);
@@ -74,7 +74,6 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
     // Check all borders are red
     // use assertColorsAreSimilar since the color might differ a little bit on mac
-    Bitmap aBMP = aBMPEx.GetBitmap();
     {
         BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -123,10 +122,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure only the shape is exported
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     const auto[scalingX, scalingY] = getDPIScaling();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(295 * scalingX, aSize.getWidth(), 1.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(134 * scalingY, aSize.getHeight(), 1.5);
@@ -134,7 +133,6 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
         return;
 
     // Check all borders are red or similar. Ignore the corners
-    Bitmap aBMP = aBMPEx.GetBitmap();
     {
         BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 2; nX < aSize.Width() - 2; ++nX)
@@ -194,12 +192,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
-    AlphaMask aAlpha = aBMPEx.GetAlphaMask();
-    BitmapScopedReadAccess pReadAccess(aAlpha);
+    Bitmap aBMP = aPNGReader.read();
 
     // Without the fix in place, this test would have failed here
-    CPPUNIT_ASSERT(!pReadAccess);
+    CPPUNIT_ASSERT(!aBMP.HasAlpha());
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
@@ -229,12 +225,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -277,12 +272,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -329,19 +323,14 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
 
-    // read RGB
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    // read RGBA
     BitmapScopedReadAccess pReadAccess(aBMP);
-
-    // read Alpha
-    Bitmap aAlpha = aBMPEx.GetAlphaMask().GetBitmap();
-    BitmapScopedReadAccess pReadAccessAlpha(aAlpha);
 
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -349,13 +338,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColor = pReadAccess->GetColor(nY, nX);
-            const Color aTrans = pReadAccessAlpha->GetColor(nY, nX);
 
             // only count as black when *not* transparent, else
-            // the color is random/luck. Note that when accessing
-            // AlphaMask like this alpha is actually in R, G and B,
-            // *not* in GetAlpha() (sigh...)
-            if (0 != aTrans.GetRed() && aColor == COL_BLACK)
+            // the color is random/luck.
+            if (aColor == COL_BLACK)
                 ++nBlackCount;
         }
     }
@@ -394,12 +380,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -443,12 +428,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
@@ -491,12 +475,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -542,12 +525,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     int nWhiteCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -593,12 +575,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -644,12 +625,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     {
         BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -695,13 +675,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    AlphaMask aAlpha = aBMPEx.GetAlphaMask();
     {
-        BitmapScopedReadAccess pReadAccess(aAlpha);
+        BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
             for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -709,8 +688,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
                 // Without the fix in place, this test would have failed with
                 // - Expected: Color: R:255 G:255 B:255 A:0
                 // - Actual  : Color: R:0 G:0 B:0 A:0
-                const Color aColor = pReadAccess->GetColor(nY, nX);
-                CPPUNIT_ASSERT_EQUAL(COL_ALPHA_TRANSPARENT, aColor);
+                sal_uInt8 nAlpha = pReadAccess->GetColor(nY, nX).GetAlpha();
+                CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), nAlpha);
             }
         }
     }
@@ -743,12 +722,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    Size aSize = aBMPEx.GetSizePixel();
+    Size aSize = aBMP.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
-    Bitmap aBMP = aBMPEx.GetBitmap();
     {
         BitmapScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
@@ -794,11 +772,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
 
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
     vcl::PngImageReader aPNGReader(aFileStream);
-    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aPNGReader.read();
 
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
-    CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMPEx.GetSizePixel());
-    Bitmap aBMP = aBMPEx.GetBitmap();
+    CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMP.GetSizePixel());
     {
         BitmapScopedReadAccess pReadAccess(aBMP);
         int nNonWhiteCount = 0;
@@ -853,8 +830,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
 
         SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
         vcl::PngImageReader aPNGReader(aFileStream);
-        BitmapEx aBMPEx = aPNGReader.read();
-        Bitmap aBMP = aBMPEx.GetBitmap();
+        Bitmap aBMP = aPNGReader.read();
         BitmapScopedReadAccess pRead(aBMP);
         for (tools::Long nX = 154; nX < (154 + 12); ++nX)
         {
@@ -914,7 +890,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
 
         xGraphicExporter->filter(aDescriptor);
 
-        BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+        Bitmap bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
         std::set<Color> foundColors;
         for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
             for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
@@ -942,7 +918,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
 
         xGraphicExporter->filter(aDescriptor);
 
-        BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+        Bitmap bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
         std::set<Color> foundColors;
         for (tools::Long x = 0; x < bmp.GetSizePixel().Width(); ++x)
             for (tools::Long y = 0; y < bmp.GetSizePixel().Height(); ++y)
@@ -985,7 +961,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testNoAntiAliasExport)
     };
 
     xGraphicExporter->filter(aDescriptor);
-    BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+    Bitmap bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
 
     std::set<Color> colors;
 
@@ -1026,7 +1002,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     };
 
     xGraphicExporter->filter(aDescriptor);
-    BitmapEx bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
+    Bitmap bmp = vcl::PngImageReader(*maTempFile.GetStream(StreamMode::READ)).read();
 
     tools::Rectangle topX(12, 21, 37, 60);
     int topNonWhites = 0;
