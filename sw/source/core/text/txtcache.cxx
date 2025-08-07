@@ -25,9 +25,9 @@
 #include <osl/diagnose.h>
 #include <view.hxx>
 
-SwTextLine::SwTextLine( SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> pNew ) :
-    SwCacheObj( static_cast<void const *>(pFrame) ),
-    m_pLine( std::move(pNew) )
+SwTextLine::SwTextLine(SwTextFrame const *pFrame, std::unique_ptr<SwParaPortion> xNew)
+    : SwCacheObj(static_cast<void const *>(pFrame))
+    , m_xLine(std::move(xNew) )
 {
 }
 
@@ -58,7 +58,7 @@ SwParaPortion *SwTextLineAccess::GetPara()
         const_cast<SwTextFrame *>(static_cast<SwTextFrame const *>(m_pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
-        pRet->SetPara( new SwParaPortion, true/*bDelete*/ );
+        pRet->SetPara(std::make_unique<SwParaPortion>());
     return pRet->GetPara();
 }
 
@@ -110,7 +110,7 @@ void SwTextFrame::ClearPara()
                                         Get( this, GetCacheIdx(), false ));
         if ( pTextLine )
         {
-            pTextLine->SetPara( nullptr, true/*bDelete*/ );
+            pTextLine->SetPara(nullptr);
         }
         else
             mnCacheIndex = USHRT_MAX;
@@ -126,8 +126,10 @@ void SwTextFrame::RemoveFromCache()
     }
 }
 
-void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
+std::unique_ptr<SwParaPortion> SwTextFrame::SetPara(std::unique_ptr<SwParaPortion> xNew)
 {
+    std::unique_ptr<SwParaPortion> xOld;
+
     if ( GetCacheIdx() != USHRT_MAX )
     {
         // Only change the information, the CacheObj stays there
@@ -135,17 +137,17 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
                                         Get( this, GetCacheIdx(), false ));
         if ( pTextLine )
         {
-            pTextLine->SetPara( pNew, bDelete );
+            xOld = pTextLine->SetPara(std::move(xNew));
         }
         else
         {
-            OSL_ENSURE( !pNew, "+SetPara: Losing SwParaPortion" );
+            OSL_ENSURE( !xNew, "+SetPara: Losing SwParaPortion" );
             mnCacheIndex = USHRT_MAX;
         }
     }
-    else if ( pNew )
+    else if (xNew)
     {   // Insert a new one
-        SwTextLine *pTextLine = new SwTextLine( this, std::unique_ptr<SwParaPortion>(pNew) );
+        SwTextLine *pTextLine = new SwTextLine(this, std::move(xNew));
         if (SwTextFrame::GetTextCache()->Insert(pTextLine, false))
             mnCacheIndex = pTextLine->GetCachePos();
         else
@@ -153,6 +155,8 @@ void SwTextFrame::SetPara( SwParaPortion *pNew, bool bDelete )
             OSL_FAIL( "+SetPara: InsertCache failed." );
         }
     }
+
+    return xOld;
 }
 
 /** Prevent the SwParaPortions of the *visible* paragraphs from being deleted;
