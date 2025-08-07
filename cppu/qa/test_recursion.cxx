@@ -19,9 +19,7 @@
 
 #include <sal/types.h>
 
-#include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 

@@ -25,7 +25,6 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 
 #include <rtl/process.h>

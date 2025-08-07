@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 

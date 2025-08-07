@@ -41,8 +41,6 @@
 
 #include "macro_expander.hxx"
 
-namespace com :: sun :: star :: uno { class XComponentContext; }
-
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

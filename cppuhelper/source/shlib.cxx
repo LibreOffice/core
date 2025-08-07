@@ -37,7 +37,6 @@
 #include <o3tl/environment.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/module.hxx>
-#include <osl/process.h>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>

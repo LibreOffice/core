@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/byteseq.h>
-#include <osl/mutex.hxx>
 
 #include <uno/current_context.h>
 #include <uno/environment.hxx>

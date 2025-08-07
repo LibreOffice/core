@@ -25,7 +25,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/unload.h>
 

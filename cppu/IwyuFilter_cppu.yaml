@@ -10,6 +10,11 @@ excludelist:
     - Interface2a.hpp
     - Interface2b.hpp
     - Interface3.hpp
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    cppu/qa/cppumaker/test_cppumaker.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
     cppu/source/cppu/cppu_opt.cxx:
     # Unit test fails without uno/Any.hxx
     - com/sun/star/uno/Any.hxx

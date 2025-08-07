@@ -20,15 +20,12 @@
 #include <unordered_map>
 
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 
 #include <sal/log.hxx>
 
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <compbase2.hxx>

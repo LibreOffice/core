@@ -43,7 +43,6 @@
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <osl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>

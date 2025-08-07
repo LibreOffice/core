@@ -15,7 +15,6 @@
 #include "interfacecontainer4.hxx"
 #include "unoimplbase.hxx"
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>

@@ -52,7 +52,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
 #include <o3tl/string_view.hxx>
 

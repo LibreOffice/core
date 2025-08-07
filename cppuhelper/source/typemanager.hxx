@@ -16,10 +16,8 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/reflection/TypeDescriptionSearchDepth.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <compbase2.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
