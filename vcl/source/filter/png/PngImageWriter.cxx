@@ -18,26 +18,20 @@
 
 namespace
 {
-void combineScanlineChannels(Scanline pColorScanline, Scanline pAlphaScanline,
+void combineScanlineChannels(BitmapScopedReadAccess& pAccess, Scanline pScanline,
                              std::vector<std::remove_pointer_t<Scanline>>& pResult,
                              sal_uInt32 nBitmapWidth, int colorType)
 {
-    if (colorType == PNG_COLOR_TYPE_GRAY_ALPHA)
-    {
-        for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
-        {
-            pResult[i * 2] = *pColorScanline++; // Gray
-            pResult[i * 2 + 1] = *pAlphaScanline++; // A
-        }
-        return;
-    }
+    assert(colorType != PNG_COLOR_TYPE_GRAY_ALPHA);
+    (void)colorType;
 
     for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
     {
-        pResult[i * 4] = *pColorScanline++; // R
-        pResult[i * 4 + 1] = *pColorScanline++; // G
-        pResult[i * 4 + 2] = *pColorScanline++; // B
-        pResult[i * 4 + 3] = *pAlphaScanline++; // A
+        BitmapColor aCol = pAccess->GetPixelFromData(pScanline, i);
+        pResult[i * 4] = aCol.GetRed(); // R
+        pResult[i * 4 + 1] = aCol.GetGreen(); // G
+        pResult[i * 4 + 2] = aCol.GetBlue(); // B
+        pResult[i * 4 + 3] = aCol.GetAlpha(); // A
     }
 }
 }
@@ -146,32 +140,19 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     png_set_pHYs(pPng, pInfo, std::round(aPPM.getWidth()), std::round(aPPM.getHeight()),
                  PNG_RESOLUTION_METER);
 
-    BitmapEx aBitmapEx;
-    if (rGraphic.GetBitmapEx().getPixelFormat() == vcl::PixelFormat::N32_BPP)
+    Bitmap aBitmap(rGraphic.GetBitmapEx());
+
+    if (!bTranslucent && aBitmap.HasAlpha())
     {
-        if (!vcl::bitmap::convertBitmap32To24Plus8(rGraphic.GetBitmapExRef(), aBitmapEx))
-            return false;
-    }
-    else
-    {
-        aBitmapEx = rGraphic.GetBitmapExRef();
+        // strip out the alpha layer
+        aBitmap = BitmapEx(aBitmap).GetBitmap();
     }
 
-    if (!bTranslucent)
-    {
-        // Clear alpha channel
-        aBitmapEx.ClearAlpha();
-    }
-
-    Bitmap aBitmap;
-    AlphaMask aAlphaMask;
-    BitmapScopedReadAccess pAccess;
-    BitmapScopedReadAccess pAlphaAccess;
+    BitmapScopedReadAccess pAccess(aBitmap);
 
     if (setjmp(png_jmpbuf(pPng)))
     {
         pAccess.reset();
-        pAlphaAccess.reset();
         png_destroy_read_struct(&pPng, &pInfo, nullptr);
         return false;
     }
@@ -179,16 +160,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     // Set our custom stream writer
     png_set_write_fn(pPng, &rStream, lclWriteStream, nullptr);
 
-    aBitmap = aBitmapEx.GetBitmap();
-    if (bTranslucent)
-        aAlphaMask = aBitmapEx.GetAlphaMask();
-
     {
         bool bCombineChannels = false;
-        pAccess = aBitmap;
-        if (bTranslucent)
-            pAlphaAccess = aAlphaMask;
-        Size aSize = aBitmapEx.GetSizePixel();
+        Size aSize = aBitmap.GetSizePixel();
 
         int bitDepth = -1;
         int colorType = -1;
@@ -207,54 +181,65 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
         {
             case ScanlineFormat::N1BitMsbPal:
             {
+                assert(!aBitmap.HasAlpha());
                 colorType = PNG_COLOR_TYPE_PALETTE;
                 bitDepth = 1;
                 break;
             }
             case ScanlineFormat::N8BitPal:
             {
+                assert(!aBitmap.HasAlpha());
                 // Calling aBitmap.HasGreyPalette8Bit() hits an assert when
                 // using Skia in a debug build so query the palette through
                 // the bitmap read access object.
                 if (!pAccess->HasPalette() || !pAccess->GetPalette().IsGreyPalette8Bit())
                     colorType = PNG_COLOR_TYPE_PALETTE;
                 else
-                {
                     colorType = PNG_COLOR_TYPE_GRAY;
-                    if (pAlphaAccess)
-                    {
-                        colorType = PNG_COLOR_TYPE_GRAY_ALPHA;
-                        bCombineChannels = true;
-                    }
-                }
                 bitDepth = 8;
                 break;
             }
             case ScanlineFormat::N24BitTcBgr:
             {
+                assert(!aBitmap.HasAlpha());
+                colorType = PNG_COLOR_TYPE_RGB;
+                bitDepth = 8;
                 png_set_bgr(pPng);
-                [[fallthrough]];
+                break;
             }
             case ScanlineFormat::N24BitTcRgb:
             {
+                assert(!aBitmap.HasAlpha());
                 colorType = PNG_COLOR_TYPE_RGB;
                 bitDepth = 8;
-                if (pAlphaAccess)
-                {
-                    colorType = PNG_COLOR_TYPE_RGBA;
-                    bCombineChannels = true;
-                }
                 break;
             }
             case ScanlineFormat::N32BitTcBgra:
+            {
+                assert(aBitmap.HasAlpha());
+                colorType = PNG_COLOR_TYPE_RGBA;
+                bitDepth = 8;
+                bCombineChannels = true;
+                break;
+            }
             case ScanlineFormat::N32BitTcBgrx:
             {
-                png_set_bgr(pPng);
-                [[fallthrough]];
+                assert(!aBitmap.HasAlpha());
+                colorType = PNG_COLOR_TYPE_RGBA;
+                bitDepth = 8;
+                break;
             }
             case ScanlineFormat::N32BitTcRgba:
+            {
+                assert(aBitmap.HasAlpha());
+                colorType = PNG_COLOR_TYPE_RGBA;
+                bitDepth = 8;
+                bCombineChannels = true;
+                break;
+            }
             case ScanlineFormat::N32BitTcRgbx:
             {
+                assert(!aBitmap.HasAlpha());
                 colorType = PNG_COLOR_TYPE_RGBA;
                 bitDepth = 8;
                 break;
@@ -265,9 +250,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             }
         }
 
-        if (aBitmapEx.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
+        if (aBitmap.GetPrefMapMode().GetMapUnit() == MapUnit::Map100thMM)
         {
-            Size aPrefSize(aBitmapEx.GetPrefSize());
+            Size aPrefSize(aBitmap.GetPrefSize());
             if (aPrefSize.Width() && aPrefSize.Height())
             {
                 sal_uInt32 nPrefSizeX = o3tl::convert(aSize.Width(), 100000, aPrefSize.Width());
@@ -359,11 +344,8 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                     auto nBitmapWidth = pAccess->Width();
                     // Allocate enough size to fit all channels
                     aCombinedChannels.resize(nBitmapWidth * png_get_channels(pPng, pInfo));
-                    Scanline pAlphaPointer = pAlphaAccess->GetScanline(y);
-                    if (!pSourcePointer || !pAlphaPointer)
-                        return false;
                     // Combine color and alpha channels
-                    combineScanlineChannels(pSourcePointer, pAlphaPointer, aCombinedChannels,
+                    combineScanlineChannels(pAccess, pSourcePointer, aCombinedChannels,
                                             nBitmapWidth, colorType);
                     pFinalPointer = aCombinedChannels.data();
                 }

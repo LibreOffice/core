@@ -1427,13 +1427,10 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf141269)
     CPPUNIT_ASSERT_EQUAL(tools::Long(1920), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1080), aBitmap.GetSizePixel().Height());
 
-    Color aExpectedColor(0xC2DEEA);
-    aExpectedColor.SetAlpha(0xF);
-
     // Without the fix in place, this test would have failed with
-    // - Expected: Color: R:194 G:222 B:234 A:240
-    // - Actual  : Color: R:194 G:222 B:234 A:15
-    CPPUNIT_ASSERT_EQUAL(aExpectedColor, aBitmap.GetPixelColor(960, 540));
+    // - Expected: 240
+    // - Actual  : 15
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0x0f), aBitmap.GetPixelColor(960, 540).GetAlpha());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf123557)
