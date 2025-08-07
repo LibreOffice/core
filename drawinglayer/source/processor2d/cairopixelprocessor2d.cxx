@@ -426,11 +426,9 @@ class CairoSurfaceHelper
     mutable std::unordered_map<sal_uInt64, cairo_surface_t*> maDownscaled;
 
     // create 32bit RGBA data for given BitmapEx
-    void createRGBA(const BitmapEx& rBitmapEx)
+    void createRGBA(const Bitmap& rBitmap)
     {
-        Bitmap aSrcAlpha(rBitmapEx.GetAlphaMask().GetBitmap());
-        BitmapScopedReadAccess pReadAccess(rBitmapEx.GetBitmap());
-        BitmapScopedReadAccess pAlphaReadAccess(aSrcAlpha);
+        BitmapScopedReadAccess pReadAccess(rBitmap);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
@@ -450,8 +448,7 @@ class CairoSurfaceHelper
             for (tools::Long x(0); x < nWidth; ++x)
             {
                 const BitmapColor aColor(pReadAccess->GetColor(y, x));
-                const BitmapColor aAlpha(pAlphaReadAccess->GetColor(y, x));
-                const sal_uInt16 nAlpha(aAlpha.GetRed());
+                const sal_uInt16 nAlpha(aColor.GetAlpha());
 
                 pPixelData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(aColor.GetRed(), nAlpha);
                 pPixelData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(aColor.GetGreen(), nAlpha);
@@ -465,9 +462,9 @@ class CairoSurfaceHelper
     }
 
     // create 32bit RGB data for given BitmapEx
-    void createRGB(const BitmapEx& rBitmapEx)
+    void createRGB(const Bitmap& rBitmap)
     {
-        BitmapScopedReadAccess pReadAccess(rBitmapEx.GetBitmap());
+        BitmapScopedReadAccess pReadAccess(rBitmap);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_RGB24, nWidth, nHeight);
@@ -502,9 +499,9 @@ class CairoSurfaceHelper
 // #define TEST_RGB16
 #ifdef TEST_RGB16
     // experimental: create 16bit RGB data for given BitmapEx
-    void createRGB16(const BitmapEx& rBitmapEx)
+    void createRGB16(const BitmapEx& rBitmap)
     {
-        BitmapScopedReadAccess pReadAccess(rBitmapEx.GetBitmap());
+        BitmapScopedReadAccess pReadAccess(rBitmap);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_RGB16_565, nWidth, nHeight);
@@ -542,17 +539,17 @@ class CairoSurfaceHelper
 #endif
 
 public:
-    CairoSurfaceHelper(const BitmapEx& rBitmapEx)
+    CairoSurfaceHelper(const Bitmap& rBitmap)
         : mpCairoSurface(nullptr)
         , maDownscaled()
     {
-        if (rBitmapEx.IsAlpha())
-            createRGBA(rBitmapEx);
+        if (rBitmap.HasAlpha())
+            createRGBA(rBitmap);
         else
 #ifdef TEST_RGB16
-            createRGB16(rBitmapEx);
+            createRGB16(rBitmap);
 #else
-            createRGB(rBitmapEx);
+            createRGB(rBitmap);
 #endif
     }
 
@@ -665,19 +662,12 @@ class SystemDependentData_CairoSurface : public basegfx::SystemDependentData
     // the CairoSurface holder
     std::shared_ptr<CairoSurfaceHelper> mpCairoSurfaceHelper;
 
-    // need to remember alpha source for combined BitmapEx to detect/
-    // react on that changing
-    std::shared_ptr<SalBitmap> maAssociatedAlpha;
-
 public:
-    SystemDependentData_CairoSurface(const BitmapEx& rBitmapEx)
+    SystemDependentData_CairoSurface(const Bitmap& rBitmap)
         : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
                                        basegfx::SDD_Type::SDDType_CairoSurface)
-        , mpCairoSurfaceHelper(std::make_shared<CairoSurfaceHelper>(rBitmapEx))
-        , maAssociatedAlpha()
+        , mpCairoSurfaceHelper(std::make_shared<CairoSurfaceHelper>(rBitmap))
     {
-        if (rBitmapEx.IsAlpha())
-            maAssociatedAlpha = rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap();
     }
 
     // read access
@@ -685,7 +675,6 @@ public:
     {
         return mpCairoSurfaceHelper;
     }
-    const std::shared_ptr<SalBitmap>& getAssociatedAlpha() const { return maAssociatedAlpha; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
@@ -714,10 +703,9 @@ sal_Int64 SystemDependentData_CairoSurface::estimateUsageInBytes() const
     return nRetval;
 }
 
-std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const BitmapEx& rBitmapEx)
+std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const Bitmap& rBitmap)
 {
-    const basegfx::SystemDependentDataHolder* pHolder(
-        rBitmapEx.GetBitmap().accessSystemDependentDataHolder());
+    const basegfx::SystemDependentDataHolder* pHolder(rBitmap.accessSystemDependentDataHolder());
     std::shared_ptr<SystemDependentData_CairoSurface> pSystemDependentData_CairoSurface;
 
     if (nullptr != pHolder)
@@ -726,22 +714,13 @@ std::shared_ptr<CairoSurfaceHelper> getOrCreateCairoSurfaceHelper(const BitmapEx
         pSystemDependentData_CairoSurface
             = std::static_pointer_cast<SystemDependentData_CairoSurface>(
                 pHolder->getSystemDependentData(basegfx::SDD_Type::SDDType_CairoSurface));
-
-        // check data validity for associated Alpha
-        if (pSystemDependentData_CairoSurface && rBitmapEx.IsAlpha()
-            && pSystemDependentData_CairoSurface->getAssociatedAlpha()
-                   != rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap())
-        {
-            // AssociatedAlpha did change, data invalid
-            pSystemDependentData_CairoSurface.reset();
-        }
     }
 
     if (!pSystemDependentData_CairoSurface)
     {
         // create new SystemDependentData_CairoSurface
         pSystemDependentData_CairoSurface
-            = std::make_shared<SystemDependentData_CairoSurface>(rBitmapEx);
+            = std::make_shared<SystemDependentData_CairoSurface>(rBitmap);
 
         // only add if feasible
         if (nullptr != pHolder
@@ -1301,13 +1280,13 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
         }
     }
 
-    paintBitmapAlpha(rBitmapCandidate.getBitmap(), rBitmapCandidate.getTransform());
+    paintBitmapAlpha(Bitmap(rBitmapCandidate.getBitmap()), rBitmapCandidate.getTransform());
 
     if (bDrawModeFlagsUsed)
         maBColorModifierStack.pop();
 }
 
-void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
+void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
                                              const basegfx::B2DHomMatrix& rTransform,
                                              double fTransparency)
 {
@@ -1335,9 +1314,9 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
         }
     }
 
-    BitmapEx aBitmapEx(rBitmapEx);
+    Bitmap aBitmap(rBitmap);
 
-    if (aBitmapEx.IsEmpty() || aBitmapEx.GetSizePixel().IsEmpty())
+    if (aBitmap.IsEmpty() || aBitmap.GetSizePixel().IsEmpty())
     {
         // no pixel data, done
         return;
@@ -1346,9 +1325,9 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     if (maBColorModifierStack.count())
     {
         // need to apply ColorModifier to Bitmap data
-        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+        aBitmap = aBitmap.Modify(maBColorModifierStack);
 
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
         {
             // color gets completely replaced, get it
             const basegfx::BColor aModifiedColor(
@@ -1367,8 +1346,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     }
 
     // access or create cairo bitmap data
-    std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(
-        getOrCreateCairoSurfaceHelper(aBitmapEx));
+    std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(getOrCreateCairoSurfaceHelper(aBitmap));
     if (!aCairoSurfaceHelper)
     {
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
@@ -2161,7 +2139,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
 
     // access or create cairo bitmap data
     std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(
-        getOrCreateCairoSurfaceHelper(aBitmapEx));
+        getOrCreateCairoSurfaceHelper(Bitmap(aBitmapEx)));
     if (!aCairoSurfaceHelper)
     {
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
@@ -2517,7 +2495,7 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
         return;
     }
 
-    BitmapEx aPreparedBitmap;
+    Bitmap aPreparedBitmap;
     basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
     constexpr double fBigDiscreteArea(300.0 * 300.0);
 
@@ -2568,7 +2546,7 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     if (!aPreparedBitmap.IsEmpty() && maBColorModifierStack.count())
     {
         // apply ColorModifier to Bitmap data
-        aPreparedBitmap = aPreparedBitmap.ModifyBitmapEx(maBColorModifierStack);
+        aPreparedBitmap = aPreparedBitmap.Modify(maBColorModifierStack);
 
         if (aPreparedBitmap.IsEmpty())
         {
@@ -3625,13 +3603,13 @@ void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
     if (!rBitmapAlphaPrimitive2D.hasTransparency())
     {
         // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
-        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
+        paintBitmapAlpha(Bitmap(rBitmapAlphaPrimitive2D.getBitmap()),
                          rBitmapAlphaPrimitive2D.getTransform());
     }
     else
     {
         // draw with alpha directly
-        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
+        paintBitmapAlpha(Bitmap(rBitmapAlphaPrimitive2D.getBitmap()),
                          rBitmapAlphaPrimitive2D.getTransform(),
                          rBitmapAlphaPrimitive2D.getTransparency());
     }

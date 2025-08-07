@@ -36,6 +36,7 @@ namespace basegfx
 class B2DRange;
 }
 
+class Bitmap;
 class BitmapEx;
 
 namespace drawinglayer::processor2d
@@ -82,7 +83,7 @@ namespace drawinglayer::processor2d
     */
 bool prepareBitmapForDirectRender(
     const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D,
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, BitmapEx& rTarget,
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D, Bitmap& rTarget,
     basegfx::B2DRange& rFillUnitRange, double fBigDiscreteArea = 300.0 * 300.0);
 
 /** helper to react/process if OffsetX/OffsetY of the FillGraphicAttribute is used.
@@ -98,7 +99,7 @@ bool prepareBitmapForDirectRender(
     */
 void takeCareOfOffsetXY(
     const drawinglayer::primitive2d::FillGraphicPrimitive2D& rFillGraphicPrimitive2D,
-    BitmapEx& rTarget, basegfx::B2DRange& rFillUnitRange);
+    Bitmap& rTarget, basegfx::B2DRange& rFillUnitRange);
 
 /** helper to calculate a discrete visible range based on a given logic range
     and a current ViewInformation2D. This is used for pixel renderers.

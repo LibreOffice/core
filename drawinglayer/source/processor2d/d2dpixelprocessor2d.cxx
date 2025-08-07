@@ -1817,7 +1817,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
         return;
     }
 
-    BitmapEx aPreparedBitmap;
+    Bitmap aPreparedBitmap;
     basegfx::B2DRange aFillUnitRange(rFillGraphicPrimitive2D.getFillGraphic().getGraphicRange());
     constexpr double fBigDiscreteArea(300.0 * 300.0);
 
@@ -1842,7 +1842,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
     if (maBColorModifierStack.count())
     {
         // need to apply ColorModifier to Bitmap data
-        aPreparedBitmap = aPreparedBitmap.ModifyBitmapEx(maBColorModifierStack);
+        aPreparedBitmap = aPreparedBitmap.Modify(maBColorModifierStack);
 
         if (aPreparedBitmap.IsEmpty())
         {
@@ -1871,7 +1871,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
 
     bool bDone(false);
     sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
-        getOrCreateB2DBitmap(getRenderTarget(), aPreparedBitmap));
+        getOrCreateB2DBitmap(getRenderTarget(), BitmapEx(aPreparedBitmap)));
 
     if (pD2DBitmap)
     {

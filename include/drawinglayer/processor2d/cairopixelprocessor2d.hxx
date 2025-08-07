@@ -61,6 +61,7 @@ namespace basegfx::utils
 class B2DHomMatrixBufferedOnDemandDecompose;
 }
 
+class Bitmap;
 class BitmapEx;
 class OutputDevice;
 class SalLayout;
@@ -134,7 +135,7 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     void processPolyPolygonAlphaGradientPrimitive2D(
         const primitive2d::PolyPolygonAlphaGradientPrimitive2D&
             rPolyPolygonAlphaGradientPrimitive2D);
-    void paintBitmapAlpha(const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform,
+    void paintBitmapAlpha(const Bitmap& rBitmap, const basegfx::B2DHomMatrix& rTransform,
                           double fTransparency = 0.0);
     void processBitmapAlphaPrimitive2D(
         const primitive2d::BitmapAlphaPrimitive2D& rBitmapAlphaPrimitive2D);

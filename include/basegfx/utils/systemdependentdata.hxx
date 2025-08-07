@@ -51,6 +51,7 @@ namespace basegfx
         SDDType_MaskHelper,
         SDDType_CairoPath,
         SDDType_ModifiedBitmapEx,
+        SDDType_ModifiedBitmap,
         SDDType_GraphicsPath,
         SDDType_GdiPlusBitmap
     };

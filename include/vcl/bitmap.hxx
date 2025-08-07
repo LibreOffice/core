@@ -37,6 +37,7 @@
 #include <memory>
 
 class BitmapEx;
+namespace basegfx { class BColorModifierStack; }
 
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 {
@@ -597,6 +598,14 @@ public:
       Can only be called on 32-bit bitmaps. Returns data split into color bitmap and alpha bitmap.
     */
     std::pair<Bitmap, AlphaMask> SplitIntoColorAndAlpha() const;
+
+   /** Create ColorStack-modified version of this BitmapEx
+
+        @param rBColorModifierStack
+        A ColrModifierStack which defines how each pixel has to be modified
+    */
+    [[nodiscard]]
+    Bitmap            Modify( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
 public:
     /** ReassignWithSize and recalculate bitmap.

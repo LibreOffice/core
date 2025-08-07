@@ -38,7 +38,7 @@ namespace drawinglayer::processor2d
 // from there
 void setOffsetXYCreatedBitmap(
     drawinglayer::primitive2d::FillGraphicPrimitive2D&,
-    const BitmapEx&);
+    const Bitmap&);
 }
 
 // FillbitmapPrimitive2D class
@@ -73,7 +73,7 @@ namespace drawinglayer::primitive2d
             attribute::FillGraphicAttribute             maFillGraphic;
 
             /// the evtl. buffered OffsetXYCreatedBitmap
-            BitmapEx                                    maOffsetXYCreatedBitmap;
+            Bitmap                                      maOffsetXYCreatedBitmap;
 
             /// the transparency in range [0.0 .. 1.0]
             double mfTransparency;
@@ -84,10 +84,10 @@ namespace drawinglayer::primitive2d
             // allow this single accessor to change it to set buggered data
             friend void drawinglayer::processor2d::setOffsetXYCreatedBitmap(
                 drawinglayer::primitive2d::FillGraphicPrimitive2D&,
-                const BitmapEx&);
+                const Bitmap&);
 
             // private tooling method to be called by setOffsetXYCreatedBitmap
-            void impSetOffsetXYCreatedBitmap(const BitmapEx& rBitmap)
+            void impSetOffsetXYCreatedBitmap(const Bitmap& rBitmap)
             {
                 maOffsetXYCreatedBitmap = rBitmap;
             }
@@ -102,7 +102,7 @@ namespace drawinglayer::primitive2d
             /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
-            const BitmapEx& getOffsetXYCreatedBitmap() const { return maOffsetXYCreatedBitmap; }
+            const Bitmap& getOffsetXYCreatedBitmap() const { return maOffsetXYCreatedBitmap; }
             double getTransparency() const { return mfTransparency; }
             bool hasTransparency() const { return !basegfx::fTools::equalZero(mfTransparency); }
 
