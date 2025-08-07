@@ -566,7 +566,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">rbHorizontal</property>
                 <accessibility>

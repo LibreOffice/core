@@ -31,7 +31,6 @@
             <property name="show-arrow">False</property>
             <child>
               <object class="GtkToolButton" id="open">
-                <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_open">Open</property>
                 <property name="use-underline">True</property>
@@ -44,7 +43,6 @@
             </child>
             <child>
               <object class="GtkToolButton" id="apply">
-                <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_apply">Apply</property>
                 <property name="use-underline">True</property>
@@ -68,7 +66,6 @@
             <child>
               <object class="GtkToggleToolButton" id="play">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_play">Play</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">avmedia/res/av02049.png</property>
@@ -81,7 +78,6 @@
             <child>
               <object class="GtkToggleToolButton" id="pause">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_pause">Pause</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">avmedia/res/av02050.png</property>
@@ -94,7 +90,6 @@
             <child>
               <object class="GtkToggleToolButton" id="stop">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_stop">Stop</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">avmedia/res/av02051.png</property>
@@ -117,7 +112,6 @@
             <child>
               <object class="GtkToggleToolButton" id="loop">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_loop">Repeat</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">avmedia/res/av02052.png</property>
@@ -202,7 +196,6 @@
             <child>
               <object class="GtkToggleToolButton" id="mute">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="medialine|toolbutton_mute">Mute</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">avmedia/res/av02054.png</property>
