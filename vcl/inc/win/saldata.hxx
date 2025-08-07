@@ -116,8 +116,7 @@ public:
     bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
     DWORD                   mnAppThreadId;          // Id from Application-Thread
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
-    TempFontItem*           mpSharedTempFontItem;   // LibreOffice shared fonts
-    TempFontItem*           mpOtherTempFontItem;    // other temporary fonts (embedded?)
+    TempFontItem*           mpTempFontItem;         // LibreOffice own fonts (shared and embedded)
     bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
     bool                    mbThemeMenuSupport;
 
@@ -146,7 +145,7 @@ void ImplClearHDCCache( SalData* pData );
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = nullptr );
 void ImplReleaseCachedDC( sal_uLong nID );
 
-void ImplReleaseTempFonts(SalData&, bool bAll);
+void ImplReleaseTempFonts(SalData&);
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );

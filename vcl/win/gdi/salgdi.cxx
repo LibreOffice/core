@@ -72,10 +72,6 @@ void ImplInitSalGDI()
     pSalData->mhStockBrushAry[2]        = CreateSolidBrush( pSalData->maStockBrushColorAry[2] );
     pSalData->mhStockBrushAry[3]        = CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
     pSalData->mnStockBrushCount = 4;
-
-    // initialize temporary font lists
-    pSalData->mpSharedTempFontItem = nullptr;
-    pSalData->mpOtherTempFontItem = nullptr;
 }
 
 void ImplFreeSalGDI()
@@ -121,7 +117,7 @@ void ImplFreeSalGDI()
     }
 
     // delete temporary font list
-    ImplReleaseTempFonts(*pSalData, true);
+    ImplReleaseTempFonts(*pSalData);
 
     pSalData->mbResourcesAlreadyFreed = true;
 }
