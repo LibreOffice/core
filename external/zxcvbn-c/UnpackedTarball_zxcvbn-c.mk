@@ -19,8 +19,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zxcvbn-c,2))
 #   <https://github.com/tsyrogit/zxcvbn-c/pull/37> "use const for these arrays":
 $(eval $(call gb_UnpackedTarball_add_patches,zxcvbn-c,\
 	external/zxcvbn-c/zxcvbn-c-2.5-do-not-use-stdafx.patch \
-	external/zxcvbn-c/0001-There-is-no-std-basic_string-int.patch.1 \
-	external/zxcvbn-c/0001-use-const-for-these-arrays.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
