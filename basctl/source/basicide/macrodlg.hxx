@@ -73,8 +73,7 @@ private:
     void                RestoreMacroDescription();
 
     std::unique_ptr<weld::Entry> m_xMacroNameEdit;
-    std::unique_ptr<weld::Label> m_xMacroFromTxT;
-    std::unique_ptr<weld::Label> m_xMacrosSaveInTxt;
+    std::unique_ptr<weld::Frame> m_xMacroLibsFrame;
     std::unique_ptr<SbTreeListBox> m_xBasicBox;
     std::unique_ptr<weld::TreeIter> m_xBasicBoxIter;
     std::unique_ptr<weld::Label> m_xMacrosInTxt;

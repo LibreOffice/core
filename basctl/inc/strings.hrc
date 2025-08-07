@@ -84,6 +84,8 @@
 #define RID_STR_TRANSLATION_DEFAULT         NC_("RID_STR_TRANSLATION_DEFAULT", "[Default Language]")
 #define RID_STR_DOCUMENT_OBJECTS            NC_("RID_STR_DOCUMENT_OBJECTS", "Document Objects")
 #define RID_STR_USERFORMS                   NC_("RID_STR_USERFORMS", "Forms")
+#define RID_STR_MACRO_FROM                  NC_("RID_STR_MACRO_FROM", "Macro From")
+#define RID_STR_SAVE_MACRO_IN               NC_("RID_STR_SAVE_MACRO_IN", "Save Macro In")
 #define RID_STR_NORMAL_MODULES              NC_("RID_STR_NORMAL_MODULES", "Modules")
 #define RID_STR_CLASS_MODULES               NC_("RID_STR_CLASS_MODULES", "Class Modules")
 #define RID_STR_DLGIMP_CLASH_RENAME         NC_("RID_STR_DLGIMP_CLASH_RENAME", "Rename")

@@ -59,8 +59,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     , bForceStoreBasic(false)
     , nMode(All)
     , m_xMacroNameEdit(m_xBuilder->weld_entry(u"macronameedit"_ustr))
-    , m_xMacroFromTxT(m_xBuilder->weld_label(u"macrofromft"_ustr))
-    , m_xMacrosSaveInTxt(m_xBuilder->weld_label(u"macrotoft"_ustr))
+    , m_xMacroLibsFrame(m_xBuilder->weld_frame(u"librariesframe"_ustr))
     , m_xBasicBox(new SbTreeListBox(m_xBuilder->weld_tree_view(u"libraries"_ustr), m_xDialog.get()))
     , m_xBasicBoxIter(m_xBasicBox->make_iterator())
     , m_xMacrosInTxt(m_xBuilder->weld_label(u"existingmacrosft"_ustr))
@@ -94,7 +93,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     m_xNewModButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xNewLibButton->hide();       // default
     m_xNewModButton->hide();       // default
-    m_xMacrosSaveInTxt->hide();    // default
+    m_xMacroLibsFrame->set_label(IDEResId(RID_STR_MACRO_FROM)); // default
 
     m_xMacroNameEdit->connect_changed( LINK( this, MacroChooser, EditModifyHdl ) );
 
@@ -853,11 +852,10 @@ void MacroChooser::SetMode (Mode nM)
             m_xDelButton->hide();
             m_xNewButton->hide();
             m_xOrganizeButton->hide();
-            m_xMacroFromTxT->hide();
 
             m_xNewLibButton->show();
             m_xNewModButton->show();
-            m_xMacrosSaveInTxt->show();
+            m_xMacroLibsFrame->set_label(IDEResId(RID_STR_SAVE_MACRO_IN));
 
             break;
         }
