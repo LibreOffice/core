@@ -5407,6 +5407,7 @@ int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWi
 void SalInstanceIconView::set_item_width(int width)
 {
     m_xIconView->SetEntryWidth(width);
+    m_bFixedItemWidth = true;
     m_xIconView->Resize();
 }
 
@@ -5441,20 +5442,22 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
+    Image aImage;
     if (pIconName)
     {
-        Image aImage(createImage(*pIconName));
+        aImage = createImage(*pIconName);
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     else
     {
-        Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
     m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    if (!m_bFixedItemWidth)
+        m_xIconView->UpdateEntrySize(aImage);
 
     if (pRet)
     {
@@ -5480,22 +5483,24 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pUserData = nullptr;
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
+    Image aImage;
     if (pIcon)
     {
         const Point aNull(0, 0);
         const Size aSize = pIcon->GetOutputSize();
-        Image aImage(pIcon->GetBitmapEx(aNull, aSize));
+        aImage = Image(pIcon->GetBitmapEx(aNull, aSize));
         pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     else
     {
-        Image aDummy;
-        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
     }
     if (pStr)
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
     m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    if (!m_bFixedItemWidth)
+        m_xIconView->UpdateEntrySize(aImage);
 
     if (pRet)
     {
@@ -5722,7 +5727,8 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice* pIcon)
     {
         aItem->SetBitmap1(aImage);
         aItem->SetBitmap2(aImage);
-        m_xIconView->UpdateEntrySize(aImage);
+        if (!m_bFixedItemWidth)
+            m_xIconView->UpdateEntrySize(aImage);
         m_xIconView->ModelHasEntryInvalidated(aEntry);
     }
 }
