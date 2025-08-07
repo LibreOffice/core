@@ -134,6 +134,8 @@
               <object class="GtkIconView" id="presets">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
                 <property name="model">presets_liststore</property>
                 <property name="pixbuf-column">0</property>
                 <property name="columns">5</property>
@@ -542,6 +544,8 @@
               <object class="GtkIconView" id="shadows">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
                 <property name="model">shadows_liststore</property>
                 <property name="pixbuf-column">0</property>
                 <property name="columns">5</property>
