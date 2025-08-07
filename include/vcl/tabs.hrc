@@ -103,23 +103,6 @@ inline constexpr TabData RID_TAB_BULLETS{ NC_("RID_TAB_BULLETS", "Bullets"), u"d
 // calc
 inline constexpr TabData RID_TAB_SHEET{ NC_("RID_TAB_SHEET", "Sheet"), u"printersetup.png"_ustr };
 inline constexpr TabData RID_TAB_PROTECTION{ NC_("RID_TAB_PROTECTION", "Cell Protection"), u"protect.png"_ustr };
-inline constexpr TabData RID_TAB_SORT{ NC_("RID_TAB_SORT", "Sort Criteria"), u"sortascending.png"_ustr };
-inline constexpr TabData RID_TAB_SORTOPTIONS{ NC_("RID_TAB_SORTOPTIONS", "Options"), u"showdependents.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_CRITERIA{ NC_("RID_TAB_VALIDITY_CRITERIA", "Criteria"), u"showinvalid.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_INPUT{ NC_("RID_TAB_VALIDITY_INPUT", "Input Help"), u"calloutshapes.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_ERROR{ NC_("RID_TAB_VALIDITY_ERROR", "Error Alert"), u"showerrors.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_1ST{ NC_("RID_TAB_SUBTOTAL_1ST", "1st Group"), u"starshapes.star4.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_2ND{ NC_("RID_TAB_SUBTOTAL_2ND", "2nd Group"), u"starshapes.star5.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_3RD{ NC_("RID_TAB_SUBTOTAL_3RD", "3rd Group"), u"starshapes.star6.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_OPTIONS{ NC_("RID_TAB_SUBTOTAL_OPTIONS", "Options"), u"sortascending.png"_ustr };
-
-inline constexpr TabData RID_TAB_HEADER_FIRST{ NC_("RID_TAB_HEADER_FIRST", "Header (first)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER_LEFT{ NC_("RID_TAB_HEADER_LEFT", "Header (left)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER_RIGHT{ NC_("RID_TAB_HEADER_RIGHT", "Header (right)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_FIRST{ NC_("RID_TAB_FOOTER_FIRST", "Footer (first)"), u"insertfooter.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_LEFT{ NC_("RID_TAB_FOOTER_LEFT", "Footer (left)"), u"insertfooter.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_RIGHT{ NC_("RID_TAB_FOOTER_RIGHT", "Footer (right)"), u"insertfooter.png"_ustr };
-
 // picture/frame formatting
 inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and Size"), u"transformdialog.png"_ustr };
 inline constexpr TabData RID_TAB_HYPERLINK{ NC_("RID_TAB_HYPERLINK", "Hyperlink"), u"inserthyperlink.png"_ustr };

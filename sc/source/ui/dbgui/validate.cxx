@@ -45,8 +45,6 @@
 #include <reffact.hxx>
 #include <comphelper/lok.hxx>
 
-#include <vcl/tabs.hrc>
-
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to
     change the order of the list box entries. */
@@ -98,12 +96,9 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     , m_bRefInputting(false)
     , m_xHBox(m_xBuilder->weld_container(u"refinputbox"_ustr))
 {
-    AddTabPage(m_sValuePageId, TabResId(RID_TAB_VALIDITY_CRITERIA.aLabel),
-               ScTPValidationValue::Create, RID_L + RID_TAB_VALIDITY_CRITERIA.sIconName);
-    AddTabPage(u"inputhelp"_ustr, TabResId(RID_TAB_VALIDITY_INPUT.aLabel),
-               ScTPValidationHelp::Create, RID_L + RID_TAB_VALIDITY_INPUT.sIconName);
-    AddTabPage(u"erroralert"_ustr, TabResId(RID_TAB_VALIDITY_ERROR.aLabel),
-               ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR.sIconName);
+    AddTabPage(m_sValuePageId, ScTPValidationValue::Create, nullptr);
+    AddTabPage(u"inputhelp"_ustr, ScTPValidationHelp::Create, nullptr);
+    AddTabPage(u"erroralert"_ustr, ScTPValidationError::Create, nullptr);
 
     if (isLOKMobilePhone())
     {
