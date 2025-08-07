@@ -23,6 +23,23 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>
 
+XmlColumnPrModel::XmlColumnPrModel() :
+    mnMapId( 1 ),
+    msXpath( OUString() ),
+    msXmlDataType( OUString() ),
+    mbDenormalized( false )
+{
+}
+
+TableColumnModel::TableColumnModel() {}
+
+XmlColumnPrModel& TableColumnModel::createXmlColumnPr()
+{
+    OSL_ENSURE( !mxXmlColumnPr, "TableColumnModel::createXmlColumnPr - multiple call" );
+    mxXmlColumnPr.reset( new XmlColumnPrModel );
+    return *mxXmlColumnPr;
+}
+
 namespace oox::xls {
 
 TableColumn::TableColumn( const WorkbookHelper& rHelper ) :
@@ -59,15 +76,12 @@ const TableColumnAttributes& TableColumn::getColumnAttributes() const
 
 void TableColumn::importXmlColumnPr(const AttributeList& rAttribs)
 {
-    maXmlColumnPrAttributes.mnMapId = rAttribs.getInteger(XML_mapId, 0);
-    maXmlColumnPrAttributes.msXpath = rAttribs.getXString(XML_xpath, OUString());
-    maXmlColumnPrAttributes.msXmlDataType = rAttribs.getXString(XML_xmlDataType, OUString());
-    maXmlColumnPrAttributes.mbDenormalized = rAttribs.getBool(XML_denormalized, false);
-}
+    XmlColumnPrModel& rXmlColumnPr = maModel.createXmlColumnPr();
 
-const XmlColumnPrAttributes& TableColumn::getXmlColumnPrAttributes() const
-{
-    return maXmlColumnPrAttributes;
+    rXmlColumnPr.mnMapId = rAttribs.getInteger(XML_mapId, 0);
+    rXmlColumnPr.msXpath = rAttribs.getXString(XML_xpath, OUString());
+    rXmlColumnPr.msXmlDataType = rAttribs.getXString(XML_xmlDataType, OUString());
+    rXmlColumnPr.mbDenormalized = rAttribs.getBool(XML_denormalized, false);
 }
 
 TableColumns::TableColumns( const WorkbookHelper& rHelper ) :
@@ -108,7 +122,7 @@ bool TableColumns::finalizeImport( ScDBData* pDBData )
         {
             aNames[i] = rxTableColumn->getName();
             aAttributesVector[i] = rxTableColumn->getColumnAttributes();
-            pDBData->SetXmlColumnPrAttributes( rxTableColumn->getXmlColumnPrAttributes() );
+            pDBData->SetTableColumnModel( rxTableColumn->getModel() );
             ++i;
         }
         pDBData->SetTableColumnNames( std::move(aNames) );

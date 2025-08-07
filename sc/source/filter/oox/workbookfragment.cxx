@@ -408,10 +408,6 @@ void WorkbookFragment::finalizeImport()
         std::string sXmlMapsContent;
         size_t nBufferSize = 4096;
 
-        ucbhelper::Content aContent(aXmlMapsFragmentPath,
-                                    Reference<css::ucb::XCommandEnvironment>(),
-                                    comphelper::getProcessComponentContext());
-
         Reference<XInputStream> xXmlMapsInputStream(
             getBaseFilter().openInputStream(aXmlMapsFragmentPath), UNO_SET_THROW);
 

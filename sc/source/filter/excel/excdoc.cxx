@@ -1279,7 +1279,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         // save xl/xmlMaps.xml relationship into xl/_rels/workbook.xml.rels
         // save xl/xmlMaps.xml reference into [Content_Types].xml and open stream to xl/xmlMaps.xml
         sax_fastparser::FSHelperPtr aXmlMapsXml = rStrm.CreateOutputStream(
-            "xl/xmlMaps.xml", u"/xl/xmlMaps.xml", rStrm.GetCurrentStream()->getOutputStream(),
+            "xl/xmlMaps.xml", u"xmlMaps.xml", rStrm.GetCurrentStream()->getOutputStream(),
             "application/xml", oox::getRelationship(Relationship::XMLMAPS));
 
         // start exporting xl/xmlMaps.xml

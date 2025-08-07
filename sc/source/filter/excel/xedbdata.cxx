@@ -223,7 +223,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
     const std::vector< TableColumnAttributes >& rColAttributes = rData.GetTableColumnAttributes();
-    const std::vector< XmlColumnPrAttributes >& rXmlColPrAttributes = rData.GetXmlColumnPrAttributes();
+    const std::vector< TableColumnModel >& rTableColumnModel = rData.GetTableColumnModel();
     if (!rColNames.empty())
     {
         pTableStrm->startElement(XML_tableColumns,
@@ -252,18 +252,18 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_uniqueName, ...
             );
 
-            if (!rXmlColPrAttributes.empty() && (i < rXmlColPrAttributes.size()))
+            if (i < rTableColumnModel.size() && rTableColumnModel[i].mxXmlColumnPr)
             {
                 // export <xmlColumnPr>
                 rtl::Reference<sax_fastparser::FastAttributeList> pXmlColumnPrAttrList
                     = sax_fastparser::FastSerializerHelper::createAttrList();
 
-                pXmlColumnPrAttrList->add(XML_mapId,
-                                          OUString::number(rXmlColPrAttributes[i].mnMapId));
-                pXmlColumnPrAttrList->add(XML_xpath, rXmlColPrAttributes[i].msXpath);
-                pXmlColumnPrAttrList->add(XML_xmlDataType, rXmlColPrAttributes[i].msXmlDataType);
-                pXmlColumnPrAttrList->add(XML_denormalized,
-                                          ToPsz10(rXmlColPrAttributes[i].mbDenormalized));
+                XmlColumnPrModel* rXmlColRef = rTableColumnModel[i].mxXmlColumnPr.get();
+
+                pXmlColumnPrAttrList->add(XML_mapId, OUString::number(rXmlColRef->mnMapId));
+                pXmlColumnPrAttrList->add(XML_xpath, rXmlColRef->msXpath);
+                pXmlColumnPrAttrList->add(XML_xmlDataType, rXmlColRef->msXmlDataType);
+                pXmlColumnPrAttrList->add(XML_denormalized, ToPsz10(rXmlColRef->mbDenormalized));
 
                 pTableStrm->singleElement(XML_xmlColumnPr, pXmlColumnPrAttrList);
             }
