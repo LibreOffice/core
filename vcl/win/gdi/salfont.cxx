@@ -922,47 +922,31 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
-static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL, bool bShared)
+static int lcl_AddFontResource(SalData& rSalData, const OUString& rFontFileURL)
 {
     OUString aFontSystemPath;
     OSL_VERIFY(!osl::FileBase::getSystemPathFromFileURL(rFontFileURL, aFontSystemPath));
 
     int nRet = AddFontResourceExW(o3tl::toW(aFontSystemPath.getStr()), FR_PRIVATE, nullptr);
     SAL_WARN_IF(nRet <= 0, "vcl.fonts", "AddFontResourceExW failed for " << rFontFileURL);
-    if (nRet > 0)
-    {
-        TempFontItem* pNewItem = new TempFontItem;
-        pNewItem->maFontResourcePath = aFontSystemPath;
-        if (bShared)
-        {
-            pNewItem->mpNextItem = rSalData.mpSharedTempFontItem;
-            rSalData.mpSharedTempFontItem = pNewItem;
-        }
-        else
-        {
-            pNewItem->mpNextItem = rSalData.mpOtherTempFontItem;
-            rSalData.mpOtherTempFontItem = pNewItem;
-        }
-    }
+    if (nRet <= 0)
+        return nRet;
+
+    TempFontItem* pNewItem = new TempFontItem;
+    pNewItem->maFontResourcePath = aFontSystemPath;
+
+    pNewItem->mpNextItem = rSalData.mpTempFontItem;
+    rSalData.mpTempFontItem = pNewItem;
+
     return nRet;
 }
 
-void ImplReleaseTempFonts(SalData& rSalData, bool bAll)
+void ImplReleaseTempFonts(SalData& rSalData)
 {
-    while (TempFontItem* p = rSalData.mpOtherTempFontItem)
+    while (TempFontItem* p = rSalData.mpTempFontItem)
     {
         RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
-        rSalData.mpOtherTempFontItem = p->mpNextItem;
-        delete p;
-    }
-
-    if (!bAll)
-        return;
-
-    while (TempFontItem* p = rSalData.mpSharedTempFontItem)
-    {
-        RemoveFontResourceExW(o3tl::toW(p->maFontResourcePath.getStr()), FR_PRIVATE, nullptr);
-        rSalData.mpSharedTempFontItem = p->mpNextItem;
+        rSalData.mpTempFontItem = p->mpNextItem;
         delete p;
     }
 }
@@ -1035,7 +1019,7 @@ bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontColl
         return false;
     }
 
-    int nFonts = lcl_AddFontResource(*GetSalData(), rFontFileURL, false);
+    int nFonts = lcl_AddFontResource(*GetSalData(), rFontFileURL);
     if (nFonts <= 0)
         return false;
 
@@ -1102,7 +1086,7 @@ void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCol
                     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
                     rcOSL = aDirItem.getFileStatus(aFileStatus);
                     if (rcOSL == osl::FileBase::E_None)
-                        lcl_AddFontResource(*pSalData, aFileStatus.getFileURL(), true);
+                        lcl_AddFontResource(*pSalData, aFileStatus.getFileURL());
                 }
             }
         };
@@ -1148,7 +1132,6 @@ void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCol
 void WinSalGraphics::ClearDevFontCache()
 {
     mWinSalGraphicsImplBase->ClearDevFontCache();
-    ImplReleaseTempFonts(*GetSalData(), false);
 }
 
 bool WinFontInstance::GetGlyphOutline(sal_GlyphId nId, basegfx::B2DPolyPolygon& rB2DPolyPoly, bool) const

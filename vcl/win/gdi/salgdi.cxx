@@ -134,10 +134,6 @@ void ImplInitSalGDI()
     pSalData->mhStockBrushAry[3]        = CreateSolidBrush( pSalData->maStockBrushColorAry[3] );
     pSalData->mnStockBrushCount = 4;
 
-    // initialize temporary font lists
-    pSalData->mpSharedTempFontItem = nullptr;
-    pSalData->mpOtherTempFontItem = nullptr;
-
     // support palettes for 256 color displays
     HDC hDC = GetDC( nullptr );
     int nBitsPixel = GetDeviceCaps( hDC, BITSPIXEL );
@@ -348,7 +344,7 @@ void ImplFreeSalGDI()
     }
 
     // delete temporary font list
-    ImplReleaseTempFonts(*pSalData, true);
+    ImplReleaseTempFonts(*pSalData);
 
     pSalData->mbResourcesAlreadyFreed = true;
 }
