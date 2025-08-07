@@ -110,14 +110,14 @@ void IconViewImpl::SetStartEntry(SvTreeListEntry* entry)
     m_pView->Invalidate(GetVisibleArea());
 }
 
-void IconViewImpl::ScrollTo(SvTreeListEntry* entry)
+void IconViewImpl::ScrollTo(SvTreeListEntry& rEntry)
 {
     if (!m_aVerSBar->IsVisible())
         return;
-    const tools::Long entryRow = GetEntryRow(entry);
+    const tools::Long entryRow = GetEntryRow(&rEntry);
     const tools::Long oldStartRow = m_aVerSBar->GetThumbPos();
     if (entryRow < oldStartRow)
-        IconViewImpl::SetStartEntry(entry);
+        IconViewImpl::SetStartEntry(&rEntry);
     const tools::Long visibleRows = m_aVerSBar->GetVisibleSize();
     const tools::Long posRelativeToBottom = entryRow - (oldStartRow + visibleRows) + 1;
     if (posRelativeToBottom > 0)
@@ -641,7 +641,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
             {
                 m_aSelEng.CursorPosChanging( bShift, bMod1 );
                 SetCursor( pNewCursor, bMod1 );     // no selection, when Ctrl is on
-                ScrollTo(pNewCursor);
+                ScrollTo(*pNewCursor);
             }
             break;
         }
@@ -653,7 +653,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
             if( pNewCursor )
             {
                 m_aSelEng.CursorPosChanging( bShift, bMod1 );
-                ScrollTo(pNewCursor);
+                ScrollTo(*pNewCursor);
                 SetCursor(pNewCursor, bMod1); // no selection, when Ctrl is on
             }
             else
@@ -671,7 +671,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
                 if (pNewCursor)
                 {
                     m_aSelEng.CursorPosChanging(bShift, bMod1);
-                    ScrollTo(pNewCursor);
+                    ScrollTo(*pNewCursor);
                     SetCursor(pNewCursor);
                 }
             }
@@ -688,7 +688,7 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
                 if (pNewCursor)
                 {
                     m_aSelEng.CursorPosChanging(bShift, bMod1);
-                    ScrollTo(pNewCursor);
+                    ScrollTo(*pNewCursor);
                     SetCursor(pNewCursor);
                 }
                 else

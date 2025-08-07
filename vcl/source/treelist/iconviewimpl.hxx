@@ -87,7 +87,7 @@ private:
 
     tools::Long GetEntryRow(const SvTreeListEntry* entry) const;
     void SetStartEntry(SvTreeListEntry* entry);
-    void ScrollTo(SvTreeListEntry* entry);
+    void ScrollTo(SvTreeListEntry& rEntry);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
