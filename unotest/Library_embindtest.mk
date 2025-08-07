@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,embindtest, \
     cppuhelper \
     sal \
     salhelper \
+    tl \
     vcl \
 ))
 
