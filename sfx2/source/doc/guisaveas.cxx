@@ -73,6 +73,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
 
+#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
@@ -937,8 +938,12 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
 
-    const OUString aBaseUrl = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
-    OUString aExportDir = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", aBaseUrl);
+    OUString aExportDir = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", OUString());
+    // Fall back to the document base URL - but only if the document is not based on a template.
+    // Otherwise the template's directory would be used, which is not what we want.
+    SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
+    if (aExportDir.isEmpty() && pDocShell && !pDocShell->IsBasedOnTemplate())
+        aExportDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
     INetURLObject aObj( aExportDir );
     aObj.removeSegment();
     aExportDir = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
