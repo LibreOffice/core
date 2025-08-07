@@ -1554,16 +1554,17 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                     // is the very first item of the document; the command should be hidden otherwise
                     SwContentFrame* curFrame = rSh.GetCurrFrame();
                     SwPageFrame* pageFrame = curFrame->FindPageFrame();
-                    SwFrame* frame = pageFrame->Lower();
-
-                    while(!frame->IsContentFrame())
+                    if (SwFrame* frame = pageFrame->Lower())
                     {
-                        frame = frame->GetLower();
-                    }
+                        while(!frame->IsContentFrame())
+                        {
+                            frame = frame->GetLower();
+                        }
 
-                    if(frame->FindTabFrame() != curFrame->FindTabFrame())
-                    {
-                        rSet.DisableItem(nSlot);
+                        if(frame->FindTabFrame() != curFrame->FindTabFrame())
+                        {
+                            rSet.DisableItem(nSlot);
+                        }
                     }
                 }
                 break;
