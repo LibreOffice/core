@@ -54,11 +54,29 @@ Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
     return { GetEntryWidth(), GetEntryHeight() };
 }
 
+void IconView::SetFixedColumnCount(short nColumnCount)
+{
+    m_nFixedColumnCount = nColumnCount;
+    nColumns = nColumnCount;
+}
+
 void IconView::UpdateEntrySize(const Image& pImage)
 {
     int spacing = nSpacing * 2;
     SetEntryHeight(pImage.GetSizePixel().getHeight() + spacing);
     SetEntryWidth(pImage.GetSizePixel().getWidth() + spacing);
+}
+
+bool IconView::HasSeparatorEntry() const
+{
+    for (sal_uInt32 i = 0; i < GetEntryCount(); i++)
+    {
+        SvTreeListEntry* pEntry = GetEntry(i);
+        if (pEntry && IsSeparator(*pEntry))
+            return true;
+    }
+
+    return false;
 }
 
 bool IconView::IsSeparator(const SvTreeListEntry& rEntry)
@@ -98,9 +116,27 @@ void IconView::Resize()
     if (!aBoxSize.Width())
         return;
 
-    nColumns = nEntryWidth ? aBoxSize.Width() / nEntryWidth : 1;
+    if (m_nFixedColumnCount == -1)
+        nColumns = nEntryWidth ? aBoxSize.Width() / nEntryWidth : 1;
 
     SvTreeListBox::Resize();
+}
+
+Size IconView::GetOptimalSize() const
+{
+    if (m_nFixedColumnCount != -1 && !HasSeparatorEntry())
+    {
+        // if a fixed amount of columns has been set and only icons (no separators) are used,
+        // calculate size needed for those
+        const short nRowCount = std::ceil(double(GetEntryCount()) / GetColumnsCount());
+        Size aSize(GetColumnsCount() * nEntryWidth, nRowCount * nEntryHeight);
+        if (GetStyle() & WB_VSCROLL)
+            aSize.AdjustWidth(GetSettings().GetStyleSettings().GetScrollBarSize());
+
+        return aSize;
+    }
+
+    return SvTreeListBox::GetOptimalSize();
 }
 
 tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry* pEntry, tools::Long)

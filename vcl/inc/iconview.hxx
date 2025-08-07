@@ -26,11 +26,16 @@
 
 class IconView final : public SvTreeListBox
 {
+private:
+    short m_nFixedColumnCount = -1;
+
 public:
     IconView(vcl::Window* pParent, WinBits nBits);
 
     Size GetEntrySize(const SvTreeListEntry&) const;
+    void SetFixedColumnCount(short nColumnCount);
 
+    virtual Size GetOptimalSize() const override;
     virtual void Resize() override;
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long) override;
@@ -70,6 +75,8 @@ private:
     Link<SvTreeListEntry*, OUString> maEntryAccessibleDescriptionHdl;
     Link<const encoded_image_query&, bool> maDumpImageHdl;
     void DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEntry* pEntry);
+
+    bool HasSeparatorEntry() const;
 };
 
 #endif
