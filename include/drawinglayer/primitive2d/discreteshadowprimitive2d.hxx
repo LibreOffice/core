@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
@@ -36,41 +36,41 @@ namespace drawinglayer::primitive2d
         class DRAWINGLAYER_DLLPUBLIC DiscreteShadow
         {
         private:
-            /// the original shadow BitmapEx in a special form
-            BitmapEx                    maBitmapEx;
+            /// the original shadow Bitmap in a special form
+            Bitmap                    maBitmap;
 
             /// buffered extracted parts of CombinedShadow for easier usage
-            BitmapEx                    maTopLeft;
-            BitmapEx                    maTop;
-            BitmapEx                    maTopRight;
-            BitmapEx                    maRight;
-            BitmapEx                    maBottomRight;
-            BitmapEx                    maBottom;
-            BitmapEx                    maBottomLeft;
-            BitmapEx                    maLeft;
+            Bitmap                    maTopLeft;
+            Bitmap                    maTop;
+            Bitmap                    maTopRight;
+            Bitmap                    maRight;
+            Bitmap                    maBottomRight;
+            Bitmap                    maBottom;
+            Bitmap                    maBottomLeft;
+            Bitmap                    maLeft;
 
         public:
             /// constructor
-            explicit DiscreteShadow(const BitmapEx& rBitmapEx);
+            explicit DiscreteShadow(const Bitmap& rBitmap);
 
             /// data read access
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
+            const Bitmap& getBitmap() const { return maBitmap; }
 
             /// compare operator
             bool operator==(const DiscreteShadow& rCompare) const
             {
-                return getBitmapEx() == rCompare.getBitmapEx();
+                return getBitmap() == rCompare.getBitmap();
             }
 
             /// helper accesses which create on-demand needed segments
-            const BitmapEx& getTopLeft() const;
-            const BitmapEx& getTop() const;
-            const BitmapEx& getTopRight() const;
-            const BitmapEx& getRight() const;
-            const BitmapEx& getBottomRight() const;
-            const BitmapEx& getBottom() const;
-            const BitmapEx& getBottomLeft() const;
-            const BitmapEx& getLeft() const;
+            const Bitmap& getTopLeft() const;
+            const Bitmap& getTop() const;
+            const Bitmap& getTopRight() const;
+            const Bitmap& getRight() const;
+            const Bitmap& getBottomRight() const;
+            const Bitmap& getBottom() const;
+            const Bitmap& getBottomLeft() const;
+            const Bitmap& getLeft() const;
         };
 
         /** DiscreteShadowPrimitive2D class

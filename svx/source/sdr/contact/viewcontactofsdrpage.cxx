@@ -137,7 +137,7 @@ void ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence(drawingla
     else
     {
         static tools::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow((
-                BitmapEx(SIP_SA_PAGESHADOW35X35)));
+                Bitmap(BitmapEx(SIP_SA_PAGESHADOW35X35))));
 
         if(aDiscreteShadow.get())
         {
