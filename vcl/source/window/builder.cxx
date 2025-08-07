@@ -1698,6 +1698,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
 
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, xWindowForPackingProps, rMap);
+
+        auto aColumnsIt = rMap.find(u"columns"_ustr);
+        if (aColumnsIt != rMap.end())
+            xBox->SetFixedColumnCount(aColumnsIt->second.toInt32());
     }
     else if (name == "GtkTreeView")
     {
