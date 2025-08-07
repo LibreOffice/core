@@ -46,16 +46,16 @@ Primitive2DReference BitmapAlphaPrimitive2D::create2DDecomposition(
     if (basegfx::fTools::equalZero(getTransparency()))
     {
         // no transparency, use simple BitmapPrimitive2D
-        return Primitive2DReference{ new BitmapPrimitive2D(Bitmap(getBitmap()), getTransform()) };
+        return Primitive2DReference{ new BitmapPrimitive2D(getBitmap(), getTransform()) };
     }
 
     // default: embed to UnifiedTransparencePrimitive2D
-    Primitive2DContainer aContent{ new BitmapPrimitive2D(Bitmap(getBitmap()), getTransform()) };
+    Primitive2DContainer aContent{ new BitmapPrimitive2D(getBitmap(), getTransform()) };
     return Primitive2DReference{ new UnifiedTransparencePrimitive2D(std::move(aContent),
                                                                     getTransparency()) };
 }
 
-BitmapAlphaPrimitive2D::BitmapAlphaPrimitive2D(BitmapEx xXBitmap, basegfx::B2DHomMatrix aTransform,
+BitmapAlphaPrimitive2D::BitmapAlphaPrimitive2D(Bitmap xXBitmap, basegfx::B2DHomMatrix aTransform,
                                                double fTransparency)
     : maBitmap(std::move(xXBitmap))
     , maTransform(std::move(aTransform))

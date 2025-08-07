@@ -466,7 +466,7 @@ namespace drawinglayer::processor2d
                     {
                         checkBitmapHit(
                             rCandidate.getB2DRange(getViewInformation2D()),
-                            rBitmapAlphaCandidate.getBitmap(),
+                            BitmapEx(rBitmapAlphaCandidate.getBitmap()),
                             rBitmapAlphaCandidate.getTransform());
                     }
                     break;

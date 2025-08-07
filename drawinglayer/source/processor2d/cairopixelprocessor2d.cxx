@@ -3617,13 +3617,13 @@ void CairoPixelProcessor2D::processBitmapAlphaPrimitive2D(
     if (!rBitmapAlphaPrimitive2D.hasTransparency())
     {
         // do what CairoPixelProcessor2D::processPolyPolygonColorPrimitive2D does
-        paintBitmapAlpha(Bitmap(rBitmapAlphaPrimitive2D.getBitmap()),
+        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
                          rBitmapAlphaPrimitive2D.getTransform());
     }
     else
     {
         // draw with alpha directly
-        paintBitmapAlpha(Bitmap(rBitmapAlphaPrimitive2D.getBitmap()),
+        paintBitmapAlpha(rBitmapAlphaPrimitive2D.getBitmap(),
                          rBitmapAlphaPrimitive2D.getTransform(),
                          rBitmapAlphaPrimitive2D.getTransparency());
     }

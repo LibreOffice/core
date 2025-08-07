@@ -38,7 +38,7 @@ class DRAWINGLAYER_DLLPUBLIC BitmapAlphaPrimitive2D final : public BufferedDecom
 {
 private:
     /// the Bitmap-data
-    BitmapEx maBitmap;
+    Bitmap maBitmap;
 
     /** the object transformation from unit coordinates, defining
         size, shear, rotate and position
@@ -54,11 +54,11 @@ private:
 
 public:
     /// constructor
-    BitmapAlphaPrimitive2D(BitmapEx xBitmap, basegfx::B2DHomMatrix aTransform,
+    BitmapAlphaPrimitive2D(Bitmap xBitmap, basegfx::B2DHomMatrix aTransform,
                            double fTransparency = 0.0);
 
     /// data read access
-    const BitmapEx& getBitmap() const { return maBitmap; }
+    const Bitmap& getBitmap() const { return maBitmap; }
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
     double getTransparency() const { return mfTransparency; }
     bool hasTransparency() const { return !basegfx::fTools::equalZero(mfTransparency); }

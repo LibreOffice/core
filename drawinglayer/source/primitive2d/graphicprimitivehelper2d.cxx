@@ -225,7 +225,7 @@ namespace drawinglayer::primitive2d
                 if (basegfx::fTools::equal(getTransparency(), 0.0))
                     return new BitmapPrimitive2D(Bitmap(bitmap), getTransform());
 
-                return new BitmapAlphaPrimitive2D(bitmap, getTransform(), getTransparency());
+                return new BitmapAlphaPrimitive2D(Bitmap(bitmap), getTransform(), getTransparency());
             }
 
             void checkSafeToBuffer(sal_uInt32 nIndex)
@@ -673,7 +673,7 @@ namespace drawinglayer::primitive2d
                         {
                             rContainer.append(
                                 new BitmapAlphaPrimitive2D(
-                                    rGraphic.GetBitmapEx(),
+                                    Bitmap(rGraphic.GetBitmapEx()),
                                     rTransform,
                                     fTransparency));
                         }
