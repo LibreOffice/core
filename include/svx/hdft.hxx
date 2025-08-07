@@ -63,7 +63,6 @@ protected:
     bool            mbEnableDrawingLayerFillStyles : 1;
 
     SvxPageWindow m_aBspWin;
-    std::unique_ptr<weld::Label> m_xPageLbl;
     std::unique_ptr<weld::CheckButton> m_xTurnOnBox;
     std::unique_ptr<weld::CheckButton> m_xCntSharedBox;
     std::unique_ptr<weld::CheckButton> m_xCntSharedFirstBox;

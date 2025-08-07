@@ -27,8 +27,10 @@
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
 
+#include <svx/dialmgr.hxx>
 #include <svx/hdft.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/strings.hrc>
 
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -145,8 +147,8 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
         m_xContainer->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
+        m_xFrame->set_label(SvxResId(RID_SVXSTR_FOOTER));
         m_xFrame->set_help_id(u"svx/ui/headfootformatpage/FFormatPage"_ustr);
-        m_xPageLbl = m_xBuilder->weld_label(u"labelFooterFormat"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkFooterOn"_ustr);
 
         /* Set custom HIDs for the Footer help page (shared/01/05040400.xhp)
@@ -165,12 +167,11 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     else //Header
     {
         m_xContainer->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
+        m_xFrame->set_label(SvxResId(RID_SVXSTR_HEADER));
         m_xFrame->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
-        m_xPageLbl = m_xBuilder->weld_label(u"labelHeaderFormat"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
     }
     m_xTurnOnBox->show();
-    m_xPageLbl->show();
 
     InitHandler();
     m_aBspWin.EnableRTL(false);

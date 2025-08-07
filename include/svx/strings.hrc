@@ -1865,6 +1865,10 @@
 #define RID_SVXSTR_MISSING_CHAR                     NC_("RID_SVXSTR_MISSING_CHAR", "Missing character")
 #define RID_SVXSTR_ADD_FAVORITES                    NC_("RID_SVXSTR_ADD_FAVORITES", "Add to Favorites")
 
+// strings for "Header"/"Footer" tab page
+#define RID_SVXSTR_FOOTER                           NC_("RID_SVXSTR_FOOTER", "Footer")
+#define RID_SVXSTR_HEADER                           NC_("RID_SVXSTR_HEADER", "Header")
+
 /*--------------------------------------------------------------------
     Description: GraphicSizeCheck strings
  --------------------------------------------------------------------*/
