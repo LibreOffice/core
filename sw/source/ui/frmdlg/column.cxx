@@ -402,7 +402,7 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xEd3(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"width3mf"_ustr, FieldUnit::CM)))
     , m_xDistEd1(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"spacing1mf"_ustr, FieldUnit::CM)))
     , m_xDistEd2(new SwPercentField(m_xBuilder->weld_metric_spin_button(u"spacing2mf"_ustr, FieldUnit::CM)))
-    , m_xDefaultVS(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, m_aDefaultVS))
+    , m_xDefaultIV(m_xBuilder->weld_icon_view(u"column-iconview"_ustr))
     , m_xPgeExampleWN(new weld::CustomWeld(*m_xBuilder, u"pageexample"_ustr, m_aPgeExampleWN))
     , m_xFrameExampleWN(new weld::CustomWeld(*m_xBuilder, u"frameexample"_ustr, m_aFrameExampleWN))
     , m_xApplyToFT(m_xBuilder->weld_label(u"applytoft"_ustr))
@@ -420,34 +420,11 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
 
     SetExchangeSupport();
 
-    m_aDefaultVS.SetColCount(5);
+    // Initialize column layout items
+    InitColumnLayouts();
 
-    for (int i = 0; i < 5; ++i)
-    //Set accessible name one by one
-    {
-        OUString aItemText;
-        switch( i )
-        {
-            case 0:
-                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM0 ) ;
-                break;
-            case 1:
-                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM1 ) ;
-                break;
-            case 2:
-                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM2 ) ;
-                break;
-            case 3:
-                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM3 );
-                break;
-            default:
-                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM4 );
-                break;
-        }
-        m_aDefaultVS.InsertItem( i + 1, aItemText, i );
-    }
-
-    m_aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
+    m_xDefaultIV->connect_item_activated(LINK(this, SwColumnPage, SetDefaultsHdl));
+    m_xDefaultIV->connect_query_tooltip(LINK(this, SwColumnPage, QueryTooltipHdl));
 
     Link<weld::SpinButton&,void> aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_xCLNrEdt->connect_value_changed(aCLNrLk);
@@ -499,7 +476,7 @@ SwColumnPage::~SwColumnPage()
 {
     m_xFrameExampleWN.reset();
     m_xPgeExampleWN.reset();
-    m_xDefaultVS.reset();
+    m_xDefaultIV.reset();
     m_xDistEd2.reset();
     m_xDistEd1.reset();
     m_xEd3.reset();
@@ -508,6 +485,52 @@ SwColumnPage::~SwColumnPage()
     m_xLineTypeDLB.reset();
     m_xLineColorDLB.reset();
     m_xTextDirectionLB.reset();
+}
+
+void SwColumnPage::InitColumnLayouts()
+{
+    m_xDefaultIV->freeze();
+
+    for (int i = 0; i < 5; ++i)
+    {
+        OUString aItemText = GetColumnLayoutText(i);
+        OUString aItemId = OUString::number(i);
+
+        VclPtr<VirtualDevice> aColumnVDev = CreateColumnLayoutVDev(i + 1);
+        m_xDefaultIV->insert(i, &aItemText, &aItemId, aColumnVDev, nullptr);
+    }
+
+    m_xDefaultIV->thaw();
+}
+
+OUString SwColumnPage::GetColumnLayoutText(sal_Int32 nId) {
+    OUString aItemText;
+    switch( nId )
+    {
+        case 0:
+            aItemText =  SwResId( STR_COLUMN_ICONVIEW_ITEM0 );
+            break;
+        case 1:
+            aItemText =  SwResId( STR_COLUMN_ICONVIEW_ITEM1 );
+            break;
+        case 2:
+            aItemText =  SwResId( STR_COLUMN_ICONVIEW_ITEM2 );
+            break;
+        case 3:
+            aItemText =  SwResId( STR_COLUMN_ICONVIEW_ITEM3 );
+            break;
+        default:
+            aItemText =  SwResId( STR_COLUMN_ICONVIEW_ITEM4 );
+            break;
+    }
+
+    return aItemText;
+}
+
+IMPL_LINK(SwColumnPage, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = m_xDefaultIV->get_id(iter);
+    return !sId.isEmpty() ? GetColumnLayoutText(sId.toInt32()) : OUString();
 }
 
 void SwColumnPage::SetPageWidth(tools::Long nPageWidth)
@@ -916,7 +939,7 @@ void SwColumnPage::ColModify(bool bForceColReset)
         return;
 
     if (!bForceColReset)
-        m_aDefaultVS.SetNoSelection();
+        m_xDefaultIV->unselect_all();
     tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, o3tl::narrowing<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
@@ -1258,12 +1281,16 @@ DeactivateRC SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
+IMPL_LINK(SwColumnPage, SetDefaultsHdl, weld::IconView&, rIconView, bool)
 {
-    const sal_uInt16 nItem = pVS->GetSelectedItemId();
-    if( nItem < 4 )
+    OUString sSelectedId = rIconView.get_selected_id();
+    if (sSelectedId.isEmpty())
+        return false;
+
+    const sal_Int32 nItem = sSelectedId.toInt32();
+    if( nItem < 3 )
     {
-        m_xCLNrEdt->set_value(nItem);
+        m_xCLNrEdt->set_value(nItem + 1);
         m_xAutoWidthBox->set_active(true);
         m_xDistEd1->set_value(50, FieldUnit::CM);
         ColModify(/*bForceColReset=*/true);
@@ -1277,7 +1304,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         ColModify(/*bForceColReset=*/true);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
         const tools::Long nSmall = static_cast< tools::Long >(m_xColMgr->GetActualSize() / 3);
-        if(nItem == 4)
+        if(nItem == 3)
         {
             m_xEd2->set_value(m_xEd2->NormalizePercent(nSmall), FieldUnit::TWIP);
             m_pModifiedField = m_xEd2.get();
@@ -1291,6 +1318,8 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         Timeout();
 
     }
+
+    return true;
 }
 
 void SwColumnPage::SetFrameMode(bool bMod)
@@ -1307,27 +1336,30 @@ void SwColumnPage::SetInSection(bool bSet)
     m_xTextDirectionLB->set_visible(bSet);
 }
 
-void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
+VclPtr<VirtualDevice> SwColumnPage::CreateColumnLayoutVDev(sal_uInt16 nItemId)
 {
-    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Size aSize(30, 30);
+    pVDev->SetOutputSizePixel(aSize);
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    tools::Rectangle aRect = rUDEvt.GetRect();
-    const sal_uInt16 nItemId = rUDEvt.GetItemId();
+    pVDev->SetFillColor(rStyleSettings.GetFieldColor());
+    pVDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+
+    tools::Rectangle aRect(Point(0, 0), aSize);
     tools::Long nRectWidth = aRect.GetWidth();
     tools::Long nRectHeight = aRect.GetHeight();
 
     Point aBLPos = aRect.TopLeft();
-    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
-    pDev->SetFillColor(rStyleSettings.GetFieldColor());
-    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
 
-    tools::Long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
-    tools::Long nTop = (nRectHeight - 11 * nStep ) / 2;
+    tools::Long nStep = std::abs(std::abs(nRectHeight * 95 / 100) / 11);
+    tools::Long nTop = (nRectHeight - 11 * nStep) / 2;
     sal_uInt16 nCols = 0;
     tools::Long nStarts[3];
     tools::Long nEnds[3];
     nStarts[0] = nRectWidth * 10 / 100;
+
     switch( nItemId )
     {
         case 1:
@@ -1357,25 +1389,19 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
             nEnds[1] = nRectWidth * 9 / 10;
         break;
     }
-    for(sal_uInt16 j = 0; j < nCols; j++ )
+
+    for(sal_uInt16 j = 0; j < nCols; j++)
     {
         Point aStart(aBLPos.X() + nStarts[j], 0);
         Point aEnd(aBLPos.X() + nEnds[j], 0);
-        for( sal_uInt16 i = 0; i < 12; i ++)
+        for(sal_uInt16 i = 0; i < 12; i++)
         {
-            aStart.setY( aBLPos.Y() + nTop + i * nStep);
-            aEnd.setY( aStart.Y() );
-            pDev->DrawLine(aStart, aEnd);
+            aStart.setY(aBLPos.Y() + nTop + i * nStep);
+            aEnd.setY(aStart.Y());
+            pVDev->DrawLine(aStart, aEnd);
         }
     }
-    pDev->Pop();
-}
 
-void ColumnValueSet::StyleUpdated()
-{
-    SetFormat();
-    Invalidate();
-    ValueSet::StyleUpdated();
+    return pVDev;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
