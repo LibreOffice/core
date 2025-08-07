@@ -658,6 +658,14 @@
             <property name="shadow-type">none</property>
             <child>
               <!-- n-columns=2 n-rows=2 -->
+              <object class="GtkTreeStore" id="liststore1">
+                <columns>
+                  <!-- column-name pixbuf -->
+                  <column type="GdkPixbuf"/>
+                  <!-- column-name id -->
+                  <column type="gchararray"/>
+                </columns>
+              </object>
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -830,17 +838,36 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkDrawingArea" id="valueset">
+                  <object class="GtkScrolledWindow">
                     <property name="width-request">160</property>
                     <property name="height-request">35</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="valueset-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|valueset">Enter the number of columns that you want in the page, frame, or section.</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkIconView" id="column-iconview">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">False</property>
+                        <property name="vexpand">False</property>
+                        <property name="model">liststore1</property>
+                        <property name="pixbuf-column">0</property>
+                        <property name="selection-mode">single</property>
+                        <property name="columns">5</property>
+                        <property name="item-width">32</property>
+                        <property name="item-padding">2</property>
+                        <property name="spacing">2</property>
+                        <property name="row-spacing">2</property>
+                        <property name="column-spacing">2</property>
+                        <property name="margin">2</property>
+                        <property name="activate-on-single-click">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="column-iconview-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="columnpage|extended_tip|column-iconview">Enter the number of columns that you want in the page, frame, or section.</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

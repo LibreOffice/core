@@ -19,11 +19,11 @@
 #pragma once
 
 #include <svtools/ctrlbox.hxx>
-#include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/frmdirlbox.hxx>
+#include <vcl/virdev.hxx>
 #include <map>
 #include "colex.hxx"
 #include "prcntfld.hxx"
@@ -64,22 +64,6 @@ public:
     virtual ~SwColumnDlg() override;
 };
 
-class ColumnValueSet final : public ValueSet
-{
-public:
-    ColumnValueSet()
-        : ValueSet(nullptr)
-    {
-    }
-    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
-    {
-        ValueSet::SetDrawingArea(pDrawingArea);
-        SetStyle(WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER);
-    }
-    virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
-    virtual void StyleUpdated() override;
-};
-
 // column dialog now as TabPage
 class SwColumnPage final : public SfxTabPage
 {
@@ -98,7 +82,6 @@ class SwColumnPage final : public SfxTabPage
     bool            m_bHtmlMode;
     bool            m_bLockUpdate;
 
-    ColumnValueSet m_aDefaultVS;
     SwColExample m_aPgeExampleWN;
     SwColumnOnlyExample m_aFrameExampleWN;
 
@@ -127,7 +110,7 @@ class SwColumnPage final : public SfxTabPage
     std::unique_ptr<SwPercentField> m_xEd3;
     std::unique_ptr<SwPercentField> m_xDistEd1;
     std::unique_ptr<SwPercentField> m_xDistEd2;
-    std::unique_ptr<weld::CustomWeld> m_xDefaultVS;
+    std::unique_ptr<weld::IconView> m_xDefaultIV;
     // Example
     std::unique_ptr<weld::CustomWeld> m_xPgeExampleWN;
     std::unique_ptr<weld::CustomWeld> m_xFrameExampleWN;
@@ -141,7 +124,8 @@ class SwColumnPage final : public SfxTabPage
     DECL_LINK(GapModify, weld::MetricSpinButton&, void);
     DECL_LINK(EdModify, weld::MetricSpinButton&, void);
     DECL_LINK(AutoWidthHdl, weld::Toggleable&, void );
-    DECL_LINK(SetDefaultsHdl, ValueSet *, void);
+    DECL_LINK(SetDefaultsHdl, weld::IconView&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     DECL_LINK(Up, weld::Button&, void);
     DECL_LINK(Down, weld::Button&, void);
@@ -161,6 +145,11 @@ class SwColumnPage final : public SfxTabPage
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     void connectPercentField(SwPercentField &rWrap);
+
+    void InitColumnLayouts();
+    static OUString GetColumnLayoutText(sal_Int32 nId);
+    static VclPtr<VirtualDevice> CreateColumnLayoutVDev(sal_uInt16 nItemId);
+
 
     bool isLineNotNone() const;
 

@@ -229,11 +229,11 @@
 #define STR_POOLNUMRULE_BUL4                    NC_("STR_POOLNUMRULE_BUL4", "Bullet ➢")
 //Bullet \u2717
 #define STR_POOLNUMRULE_BUL5                    NC_("STR_POOLNUMRULE_BUL5", "Bullet ✗")
-#define STR_COLUMN_VALUESET_ITEM0               NC_("STR_COLUMN_VALUESET_ITEM0", "1 column")
-#define STR_COLUMN_VALUESET_ITEM1               NC_("STR_COLUMN_VALUESET_ITEM1", "2 columns with equal size")
-#define STR_COLUMN_VALUESET_ITEM2               NC_("STR_COLUMN_VALUESET_ITEM2", "3 columns with equal size")
-#define STR_COLUMN_VALUESET_ITEM3               NC_("STR_COLUMN_VALUESET_ITEM3", "2 columns with different size (left > right)")
-#define STR_COLUMN_VALUESET_ITEM4               NC_("STR_COLUMN_VALUESET_ITEM4", "2 columns with different size (left < right)")
+#define STR_COLUMN_ICONVIEW_ITEM0               NC_("STR_COLUMN_ICONVIEW_ITEM0", "1 column")
+#define STR_COLUMN_ICONVIEW_ITEM1               NC_("STR_COLUMN_ICONVIEW_ITEM1", "2 columns with equal size")
+#define STR_COLUMN_ICONVIEW_ITEM2               NC_("STR_COLUMN_ICONVIEW_ITEM2", "3 columns with equal size")
+#define STR_COLUMN_ICONVIEW_ITEM3               NC_("STR_COLUMN_ICONVIEW_ITEM3", "2 columns with different size (left > right)")
+#define STR_COLUMN_ICONVIEW_ITEM4               NC_("STR_COLUMN_ICONVIEW_ITEM4", "2 columns with different size (left < right)")
 // Table styles, Writer internal, others are taken from Svx
 #define STR_TABSTYLE_DEFAULT                    NC_("STR_TABSTYLE_DEFAULT", "Default Table Style")
 
