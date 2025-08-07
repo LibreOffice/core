@@ -567,7 +567,7 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
         aTemplate.aPath = rPath;
         aTemplate.aRegionName = getRegionName(nRegionId);
 
-        pItem->maTemplates.push_back(aTemplate);
+        pItem->maTemplates.push_back(std::move(aTemplate));
 
         CalculateItemPositions();
 

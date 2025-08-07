@@ -119,7 +119,7 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                     pNew->aDBData.sDataSource   = sSourceArg;
                     pNew->aDBData.sCommand      = sCommandArg;
                     pNew->aDBData.nCommandType  = nCommandTypeArg;
-                    pNew->aSelection            = aSelection;
+                    pNew->aSelection            = std::move(aSelection);
                     //if the cursor is NULL, it must be created inside InsertDBTextHdl
                     // because it called via a PostUserEvent
                     pNew->xCursor               = xCursor;

@@ -119,7 +119,7 @@ bool ScCTB::Read( SvStream &rS )
         {
             ScTBC aTBC;
             aTBC.Read( rS );
-            rTBC.push_back( aTBC );
+            rTBC.push_back(std::move(aTBC));
         }
     }
 

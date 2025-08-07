@@ -1932,7 +1932,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
 
             uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
 
-            const uno::Sequence< security::DocumentSignatureInformation > aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
+            uno::Sequence<security::DocumentSignatureInformation> aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
 
             if ( aInfo.hasElements() )
             {
@@ -1951,7 +1951,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
                         task::DocumentMacroConfirmationRequest aRequest;
                         aRequest.DocumentURL = getDocumentLocation();
                         aRequest.DocumentStorage = rDocShell.GetMedium()->GetScriptingStorageToSign_Impl();
-                        aRequest.DocumentSignatureInformation = aInfo;
+                        aRequest.DocumentSignatureInformation = std::move(aInfo);
                         aRequest.DocumentVersion = aVersion;
                         aRequest.Classification = task::InteractionClassification_QUERY;
                         bResult = SfxMedium::CallApproveHandler( _rxInteraction, uno::Any( aRequest ), true );

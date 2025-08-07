@@ -327,7 +327,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
             pAssignValues[nAssign + 2] >>=  aAssignment.aDBData.nCommandType;
             pAssignValues[nAssign + 3] >>=  aAssignment.aDBColumnAssignments;
             aAssignment.sConfigNodeName = pAssignments[nAssign / 4];
-            m_aAddressDataAssignments.push_back(aAssignment);
+            m_aAddressDataAssignments.push_back(std::move(aAssignment));
         }
     }
     //check if the saved documents still exist

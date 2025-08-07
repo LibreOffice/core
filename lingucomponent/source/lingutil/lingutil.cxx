@@ -134,7 +134,7 @@ static void GetOldStyleDicsInDir(
                     };
                 else
                     aDicEntry.aLocaleNames = { aLocaleName };
-                aRes.push_back( aDicEntry );
+                aRes.push_back(std::move(aDicEntry));
             }
         }
     }

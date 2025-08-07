@@ -220,7 +220,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners()
     {
         auto pSaneHolder = std::make_shared<SaneHolder>();
         if( Sane::IsSane() )
-            rSanes.push_back( pSaneHolder );
+            rSanes.push_back(std::move(pSaneHolder));
     }
 
     if( Sane::IsSane() )

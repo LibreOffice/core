@@ -608,7 +608,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
                 if( nCatIndex + 1.0 >= m_aScale.Maximum )
                     break;
             }
-            rAllTickInfos.push_back(aTickInfoVector);
+            rAllTickInfos.push_back(std::move(aTickInfoVector));
         }
     }
     else //bShiftedPosition==false

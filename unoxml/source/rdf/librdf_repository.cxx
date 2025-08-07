@@ -1362,7 +1362,7 @@ librdf_Repository::getStatements(
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const std::shared_ptr<librdf_stream> pStream(
+    std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1371,7 +1371,7 @@ librdf_Repository::getStatements(
             "librdf_model_find_statements failed"_ustr, *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream,
+    return new librdf_GraphResult(this, m_aMutex, std::move(pStream),
         std::shared_ptr<librdf_node>());
 }
 
@@ -1446,7 +1446,7 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
             u"librdf_Repository::queryConstruct: "
             "query result is null or not graph"_ustr, *this);
     }
-    const std::shared_ptr<librdf_stream> pStream(
+    std::shared_ptr<librdf_stream> pStream(
         librdf_query_results_as_stream(pResults.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1455,7 +1455,7 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
             "librdf_query_results_as_stream failed"_ustr, *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream,
+    return new librdf_GraphResult(this, m_aMutex, std::move(pStream),
                                   std::shared_ptr<librdf_node>(), pQuery);
 }
 

@@ -71,7 +71,7 @@ void PresenterPaneContainer::PreparePane (
     pDescriptor->mbIsOpaque = bIsOpaque;
     pDescriptor->mbIsSprite = false;
 
-    maPanes.push_back(pDescriptor);
+    maPanes.push_back(std::move(pDescriptor));
 }
 
 void SAL_CALL PresenterPaneContainer::disposing()

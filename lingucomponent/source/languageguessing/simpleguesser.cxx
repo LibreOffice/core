@@ -161,8 +161,7 @@ std::vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
         {
             std::string langStr = "[";
             langStr += fp_Name(tables->fprint[i]);
-            Guess g(langStr.c_str());
-            lang.push_back(g);
+            lang.emplace_back(langStr.c_str());
         }
     }
 

@@ -2676,7 +2676,7 @@ void BuilderBase::handleRow(xmlreader::XmlReader& reader, const OUString& rID)
             break;
     }
 
-    m_pParserState->m_aModels[rID].m_aEntries.push_back(aRow);
+    m_pParserState->m_aModels[rID].m_aEntries.push_back(std::move(aRow));
 }
 
 void BuilderBase::handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass)

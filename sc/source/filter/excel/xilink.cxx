@@ -567,8 +567,7 @@ XclImpSupbookTab::XclImpSupbookTab( OUString aTabName ) :
 
 void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
 {
-    XclImpCrnRef crnRef = std::make_shared<XclImpCrn>(rStrm, rXclPos);
-    maCrnList.push_back( crnRef );
+    maCrnList.push_back(std::make_shared<XclImpCrn>(rStrm, rXclPos));
 }
 
 void XclImpSupbookTab::LoadCachedValues( const ScExternalRefCache::TableTypeRef& pCacheTable,

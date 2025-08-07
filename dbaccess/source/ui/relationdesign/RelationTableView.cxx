@@ -299,7 +299,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     VclPtr<OTableWindow> pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
-        m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
+        m_pView->getController().getTableWindowData().push_back(std::move(pNewTabWinData));
         // when we already have a table with this name insert the full qualified one instead
         GetTabWinMap()[_rComposedName] = pNewTabWin;
 

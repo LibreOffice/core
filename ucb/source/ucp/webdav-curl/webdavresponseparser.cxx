@@ -820,7 +820,7 @@ namespace
 
                                             aDAVResource.uri = maHref;
                                             aDAVResource.properties = maResponseProperties;
-                                            maResult_PropFind.push_back(aDAVResource);
+                                            maResult_PropFind.push_back(std::move(aDAVResource));
                                         }
                                     }
                                     else

@@ -641,7 +641,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
             OUString columnStringValue = xRow->getString(i);
             aRow.push_back(Any(columnStringValue));
         }
-        rRows.push_back(aRow);
+        rRows.push_back(std::move(aRow));
     }
 
     lcl_setRows_throw(xResultSet, 1, rRows);
@@ -795,7 +795,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         aRow.emplace_back(xRow->getString(12));
         // is nullable
         aRow.emplace_back(sIsNullable);
-        aRows.push_back(aRow);
+        aRows.push_back(std::move(aRow));
     }
     lcl_setRows_throw(xResultSet, 1, aRows);
     return xResultSet;

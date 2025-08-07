@@ -3692,9 +3692,9 @@ void XclImpChAxesSet::ReadChAxis( XclImpStream& rStrm )
 
     switch( xAxis->GetAxisType() )
     {
-        case EXC_CHAXIS_X:  mxXAxis = xAxis;    break;
-        case EXC_CHAXIS_Y:  mxYAxis = xAxis;    break;
-        case EXC_CHAXIS_Z:  mxZAxis = xAxis;    break;
+        case EXC_CHAXIS_X: mxXAxis = std::move(xAxis); break;
+        case EXC_CHAXIS_Y: mxYAxis = std::move(xAxis); break;
+        case EXC_CHAXIS_Z: mxZAxis = std::move(xAxis); break;
     }
 }
 
@@ -3705,9 +3705,9 @@ void XclImpChAxesSet::ReadChText( XclImpStream& rStrm )
 
     switch( xText->GetLinkTarget() )
     {
-        case EXC_CHOBJLINK_XAXIS:   mxXAxisTitle = xText;   break;
-        case EXC_CHOBJLINK_YAXIS:   mxYAxisTitle = xText;   break;
-        case EXC_CHOBJLINK_ZAXIS:   mxZAxisTitle = xText;   break;
+        case EXC_CHOBJLINK_XAXIS: mxXAxisTitle = std::move(xText); break;
+        case EXC_CHOBJLINK_YAXIS: mxYAxisTitle = std::move(xText); break;
+        case EXC_CHOBJLINK_ZAXIS: mxZAxisTitle = std::move(xText); break;
     }
 }
 

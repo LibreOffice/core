@@ -1406,7 +1406,7 @@ void XclImpXF::ApplyPatternToAttrVector(
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
     aEntry.setScPatternAttr(&rPat, false);
-    rAttrs.push_back(aEntry);
+    rAttrs.push_back(std::move(aEntry));
 }
 
 void XclImpXF::ApplyPattern(

@@ -741,7 +741,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                     pGrpItem->FillGroupFilter(*pGrpFilter);
                 }
 
-                aNewCriteria.push_back(aCri);
+                aNewCriteria.push_back(std::move(aCri));
             }
         }
     }

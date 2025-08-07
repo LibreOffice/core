@@ -2789,7 +2789,7 @@ std::shared_ptr<DynamicKernel> DynamicKernel::create( const ScCalcConfig& rConfi
                 {
                     FormulaTreeNodeRef pChildTreeNode =
                         std::make_shared<FormulaTreeNode>(pTempFormula);
-                    pCurNode->Children.push_back(pChildTreeNode);
+                    pCurNode->Children.push_back(std::move(pChildTreeNode));
                 }
             }
             std::reverse(pCurNode->Children.begin(), pCurNode->Children.end());

@@ -949,8 +949,7 @@ SignatureInformations XSecController::getSignatureInformations() const
 
     for (int i=0; i<sigNum; ++i)
     {
-        SignatureInformation si = m_vInternalSignatureInformations[i].signatureInfor;
-        vInfors.push_back(si);
+        vInfors.push_back(m_vInternalSignatureInformations[i].signatureInfor);
     }
 
     return vInfors;

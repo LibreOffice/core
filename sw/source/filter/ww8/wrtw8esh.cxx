@@ -892,7 +892,7 @@ bool PlcDrawObj::Append( WW8Export const & rWrt, WW8_CP nCp, const ww8::Frame& r
     {
         DrawObj aObj(rFormat, nCp, rNdTopLeft, rWrt.TrueFrameDirection(rFrameFormat),
             rWrt.GetHdFtIndex());
-        maDrawObjs.push_back(aObj);
+        maDrawObjs.push_back(std::move(aObj));
     }
     return bRet;
 }

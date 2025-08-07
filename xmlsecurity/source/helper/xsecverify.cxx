@@ -104,7 +104,7 @@ void XSecController::addSignature()
     }
 
     InternalSignatureInformation isi( nSignatureId, xReferenceResolvedListener );
-    m_vInternalSignatureInformations.push_back( isi );
+    m_vInternalSignatureInformations.push_back(std::move(isi));
 }
 
 void XSecController::setSignatureMethod(svl::crypto::SignatureMethodAlgorithm eAlgorithmID)

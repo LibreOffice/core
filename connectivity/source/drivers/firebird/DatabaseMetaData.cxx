@@ -1209,7 +1209,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         aRow[12] = new ORowSetValueDecorator(ORowSetValue(false)); // Autoincrement
         aRow[14] = ODatabaseMetaDataResultSet::get0Value(); // Minimum scale
         aRow[15] = ODatabaseMetaDataResultSet::get0Value(); // Max scale
-        tmp.push_back(aRow);
+        tmp.push_back(std::move(aRow));
         return tmp;
     }();
     // [-loplugin:redundantfcast] false positive:

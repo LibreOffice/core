@@ -3140,7 +3140,7 @@ void MainSequence::createMainSequence()
                 Reference< XTimeContainer > xInteractiveRoot( xChildNode, UNO_QUERY_THROW );
                 InteractiveSequencePtr pIS = std::make_shared<InteractiveSequence>( xInteractiveRoot, this );
                 pIS->addListener( this );
-                maInteractiveSequenceVector.push_back( pIS );
+                maInteractiveSequenceVector.push_back(std::move(pIS));
             }
         }
 

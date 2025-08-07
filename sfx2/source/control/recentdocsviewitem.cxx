@@ -232,7 +232,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     }
 
     maTitle = aTitle;
-    maPreview = aThumbnail;
+    maPreview = std::move(aThumbnail);
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)

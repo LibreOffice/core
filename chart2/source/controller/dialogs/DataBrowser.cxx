@@ -657,7 +657,7 @@ void DataBrowser::RenewTable()
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
-        m_aSeriesHeaders.push_back( spHeader );
+        m_aSeriesHeaders.push_back(std::move(spHeader));
     }
 
     ImplAdjustHeaderControls();
@@ -1282,7 +1282,7 @@ void DataBrowser::RenewSeriesHeaders()
         spHeader->SetRange( elemHeader.m_nStartColumn + 1, elemHeader.m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
-        m_aSeriesHeaders.push_back( spHeader );
+        m_aSeriesHeaders.push_back(std::move(spHeader));
     }
 
     ImplAdjustHeaderControls();

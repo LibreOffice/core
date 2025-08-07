@@ -1979,7 +1979,7 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfos( ui::DockingArea eD
                 nCurrPos = rElement.m_aDockedData.m_aPos.X;
                 SingleRowColumnWindowData aRowColumnWindowData;
                 aRowColumnWindowData.nRowColumn = nCurrPos;
-                rRowColumnsWindowData.push_back( aRowColumnWindowData );
+                rRowColumnsWindowData.push_back(std::move(aRowColumnWindowData));
             }
 
             // Calc space before an element and store it

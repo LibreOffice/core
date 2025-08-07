@@ -55,7 +55,7 @@ CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     CustomShow aCustomShow;
     aCustomShow.maCustomShowName = rxAttribs->getOptionalValue( XML_name );
     aCustomShow.mnId = rxAttribs->getOptionalValue( XML_id );
-    mrCustomShowList.push_back(aCustomShow);
+    mrCustomShowList.push_back(std::move(aCustomShow));
 }
 
 ::oox::core::ContextHandlerRef CustomShowContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )

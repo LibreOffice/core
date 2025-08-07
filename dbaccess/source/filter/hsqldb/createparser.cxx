@@ -275,7 +275,7 @@ void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
                                  lcl_isNullable(sColumnWithoutName), bCaseInsensitive,
                                  OUString(lcl_getDefaultValue(sColumnWithoutName)));
 
-        m_aColumns.push_back(aColDef);
+        m_aColumns.push_back(std::move(aColDef));
     }
 }
 

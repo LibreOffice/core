@@ -454,7 +454,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
             aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::Any(pair.second)));
     }
 
-    rNode.children.push_back(aCurNode);
+    rNode.children.push_back(std::move(aCurNode));
 }
 
 static svx::sidebar::TreeNode

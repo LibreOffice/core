@@ -522,7 +522,7 @@ void ScXMLSourceDlg::OkPressed()
         aRangeLink.maRowGroups.push_back(
             OUStringToOString(aThisEntry, RTL_TEXTENCODING_UTF8));
 
-        aParam.maRangeLinks.push_back(aRangeLink);
+        aParam.maRangeLinks.push_back(std::move(aRangeLink));
     }
 
     // Remove duplicate namespace IDs.

@@ -207,7 +207,7 @@ void FormatOutput::prepare(SCTAB nTab, std::vector<ScDPOutLevelData> const& rCol
                                       rFormat, aNameResolver);
             }
 
-            maFormatOutputEntries.push_back(aEntry);
+            maFormatOutputEntries.push_back(std::move(aEntry));
         }
     }
 }

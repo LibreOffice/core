@@ -53,7 +53,7 @@ namespace GtvHelpers
                 std::stringstream strstream(*ppCoordinate);
                 T item;
                 strstream >> item;
-                aRet.push_back(item);
+                aRet.push_back(std::move(item));
                 ++ppCoordinate;
             }
             g_strfreev(ppCoordinates);

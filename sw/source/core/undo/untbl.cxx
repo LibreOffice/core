@@ -930,7 +930,7 @@ sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
             }
         }
         nRet = m_aSets.size();
-        m_aSets.push_back(pSet);
+        m_aSets.push_back(std::move(pSet));
         m_aFrameFormats.insert(m_aFrameFormats.begin() + nRet, pFormat);
     }
     return o3tl::narrowing<sal_uInt16>(nRet);

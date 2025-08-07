@@ -710,7 +710,7 @@ void PresenterTextParagraph::AddLine (
     aLine.mnLineEndCellIndex = nCellIndex;
     aLine.mnWidth = nWidth;
 
-    maLines.push_back(aLine);
+    maLines.push_back(std::move(aLine));
 
     rCurrentLine.startPos = rCurrentLine.endPos;
 }

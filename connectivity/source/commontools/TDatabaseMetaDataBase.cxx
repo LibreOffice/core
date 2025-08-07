@@ -160,7 +160,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
                     else
                         ++aIter;
                 }
-                aTypeInfoRows.push_back(aRow);
+                aTypeInfoRows.push_back(std::move(aRow));
             }
             m_aTypeInfoRows = std::move(aTypeInfoRows);
         }

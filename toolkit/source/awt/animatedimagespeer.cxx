@@ -458,7 +458,7 @@ namespace toolkit
                     const Sequence< OUString > aImageURLs( i_images->getImageSet( set ) );
                     ::std::vector< CachedImage > aImages;
                     lcl_init( aImageURLs, aImages );
-                    maCachedImageSets.push_back( aImages );
+                    maCachedImageSets.push_back(std::move(aImages));
                 }
 
                 updateImageList_nothrow();

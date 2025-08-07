@@ -241,9 +241,9 @@ namespace slideshow::internal
 
             if( mbDisableAnimationZOrder )
                 putShape2BackgroundLayer(
-                    *maAllShapes.insert(aValue).first );
+                    *maAllShapes.insert(std::move(aValue)).first );
             else
-                maAllShapes.insert(aValue);
+                maAllShapes.insert(std::move(aValue));
 
             // update shape, it's just added and not yet painted
             if( rShape->isVisible() )

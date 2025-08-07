@@ -645,7 +645,7 @@ void VbaFormControl::finalizeEmbeddedControls()
                     aControlGroups.push_back( xDummyGroup );
                     OUString aName = aControlNames.generateDummyName();
                     VbaFormControlRef xDummyControl = std::make_shared<VbaDummyFormControl>( aName );
-                    xDummyGroup->push_back( xDummyControl );
+                    xDummyGroup->push_back(std::move(xDummyControl));
                 }
                 rxOptionGroup = std::make_shared<VbaFormControlVector>();
                 aControlGroups.push_back( rxOptionGroup );

@@ -79,10 +79,10 @@ void ShadowPrimitive2D::getFullyEmbeddedShadowPrimitives(Primitive2DContainer& r
         return;
 
     // create a modifiedColorPrimitive containing the shadow color and the content
-    const basegfx::BColorModifierSharedPtr aBColorModifier
+    basegfx::BColorModifierSharedPtr aBColorModifier
         = std::make_shared<basegfx::BColorModifier_replace>(getShadowColor());
-    const Primitive2DReference xRefA(
-        new ModifiedColorPrimitive2D(Primitive2DContainer(getChildren()), aBColorModifier));
+    Primitive2DReference xRefA(new ModifiedColorPrimitive2D(Primitive2DContainer(getChildren()),
+                                                            std::move(aBColorModifier)));
     Primitive2DContainer aSequenceB{ xRefA };
 
     // build transformed primitiveVector with shadow offset and add to target

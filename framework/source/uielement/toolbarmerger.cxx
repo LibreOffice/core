@@ -464,8 +464,7 @@ void ToolBarMerger::MergeItems(
                 {
                     CommandInfo aCmdInfo;
                     aCmdInfo.nId = rItemId;
-                    const CommandToInfoMap::value_type aValue( rItem.aCommandURL, aCmdInfo );
-                    rCommandMap.insert( aValue );
+                    rCommandMap.emplace(rItem.aCommandURL, aCmdInfo);
                 }
                 else
                 {

@@ -3569,7 +3569,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             aPoint.mCustomLabel = lcl_getCustomLabelField(mrExport, nElement, xSeries);
                         aPoint.mCustomLabelPos = lcl_getCustomLabelPosition(mrExport, nElement, xSeries);
 
-                        aDataPointVector.push_back( aPoint );
+                        aDataPointVector.push_back(std::move(aPoint));
                     }
                     else
                     {

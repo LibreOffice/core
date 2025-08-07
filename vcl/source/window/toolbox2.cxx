@@ -497,7 +497,7 @@ void ToolBox::InsertSpace()
     ImplToolItem aItem;
     aItem.meType     = ToolBoxItemType::SPACE;
     aItem.mbEnabled  = false;
-    mpData->m_aItems.push_back( aItem );
+    mpData->m_aItems.push_back(std::move(aItem));
     mpData->ImplClearLayoutData();
 
     ImplInvalidate();

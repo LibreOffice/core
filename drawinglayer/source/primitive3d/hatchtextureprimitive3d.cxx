@@ -296,8 +296,7 @@ namespace drawinglayer::primitive3d
 
             if(getBuffered3DDecomposition().empty())
             {
-                const Primitive3DContainer aNewSequence(impCreate3DDecomposition());
-                const_cast< HatchTexturePrimitive3D* >(this)->maBuffered3DDecomposition = aNewSequence;
+                const_cast<HatchTexturePrimitive3D*>(this)->maBuffered3DDecomposition = impCreate3DDecomposition();
             }
 
             return getBuffered3DDecomposition();

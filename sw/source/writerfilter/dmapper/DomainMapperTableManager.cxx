@@ -587,8 +587,8 @@ void DomainMapperTableManager::endOfRowAction()
         m_aTableGrid.pop_back();
         m_aCellWidths.pop_back();
         m_nCell.pop_back();
-        m_aTableGrid.push_back(pTmpTableGrid);
-        m_aCellWidths.push_back(pTmpCellWidths);
+        m_aTableGrid.push_back(std::move(pTmpTableGrid));
+        m_aCellWidths.push_back(std::move(pTmpCellWidths));
         m_nCell.push_back(nTmpCell);
         m_aParagraphsToEndTable.pop( );
         m_aParagraphsToEndTable.push( pTableParagraphs );

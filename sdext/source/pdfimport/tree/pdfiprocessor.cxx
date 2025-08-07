@@ -318,7 +318,7 @@ void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
 
     CharGlyph aGlyph(m_pCurElement, getCurrentContext(), charWidth, prevSpaceWidth, rGlyphs);
     aGlyph.getGC().Transformation = totalTextMatrix1;
-    m_GlyphsList.push_back(aGlyph);
+    m_GlyphsList.push_back(std::move(aGlyph));
 
     prevCharWidth = charWidth;
     prevTextMatrix = totalTextMatrix1;

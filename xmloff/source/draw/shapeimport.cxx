@@ -886,9 +886,9 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::
 /** this method must be calling before the first shape is imported for the given page */
 void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
-    const std::shared_ptr<XMLShapeImportPageContextImpl> pOldContext = mpPageContext;
+    std::shared_ptr<XMLShapeImportPageContextImpl> pOldContext = mpPageContext;
     mpPageContext = std::make_shared<XMLShapeImportPageContextImpl>();
-    mpPageContext->mpNext = pOldContext;
+    mpPageContext->mpNext = std::move(pOldContext);
     mpPageContext->mxShapes = rShapes;
 }
 

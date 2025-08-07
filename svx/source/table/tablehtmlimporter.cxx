@@ -254,7 +254,7 @@ void SdrTableHTMLParser::InsertCell(sal_Int32 nStartPara, sal_Int32 nEndPara)
                 xCellInfo->mxVMergeCell->mnRowSpan++;
         }
 
-        xColumn->push_back(xCellInfo);
+        xColumn->push_back(std::move(xCellInfo));
     }
 }
 
@@ -502,7 +502,7 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
             for (sal_Int32 nCol = 0; nCol < nSpan; ++nCol)
             {
                 std::shared_ptr<HTMLCellDefault> pDefault(mpInsDefault.release());
-                maDefaultList.push_back(pDefault);
+                maDefaultList.push_back(std::move(pDefault));
                 const sal_Int32 nSize = lcl_GetWidth(options) + mnLastEdge;
                 if (nSize > mnLastEdge)
                     InsertColumnEdge(nSize);
