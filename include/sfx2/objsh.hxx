@@ -425,6 +425,7 @@ public:
     void                        SetHeaderAttributesForSourceViewHack();
 
     bool                        IsQueryLoadTemplate() const;
+    bool                        IsBasedOnTemplate() const; // Whether the document is based on a template
     bool                        IsUseUserData() const;
     bool                        IsUseThumbnailSave() const;
     bool                        IsLoadReadonly() const;

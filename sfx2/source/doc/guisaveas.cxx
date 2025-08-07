@@ -81,6 +81,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/useroptions.hxx>
 
+#include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
@@ -954,8 +955,14 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
     weld::Window* pFrameWin = SfxStoringHelper::GetModelWindow(m_xModel);
-    OUString sPreselectedDir = GetDocProps().getUnpackedValueOrDefault(
-        "ExportDirectory", GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString()));
+    OUString sPreselectedDir
+        = GetDocProps().getUnpackedValueOrDefault("ExportDirectory", OUString());
+
+    // Fall back to the document base URL - but only if the document is not based on a template.
+    // Otherwise the template's directory would be used, which is not what we want.
+    SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
+    if (sPreselectedDir.isEmpty() && pDocShell && !pDocShell->IsBasedOnTemplate())
+        sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
     INetURLObject aObj(sPreselectedDir);
     aObj.removeSegment(); // remove file name from URL
     sPreselectedDir = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);

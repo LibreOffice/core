@@ -29,6 +29,8 @@
 #include <svl/style.hxx>
 
 #include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/securityoptions.hxx>
@@ -642,6 +644,14 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, std::u16s
 bool SfxObjectShell::IsQueryLoadTemplate() const
 {
     return pImpl->bQueryLoadTemplate;
+}
+
+bool SfxObjectShell::IsBasedOnTemplate() const
+{
+    if (!pMedium)
+        return false;
+    const SfxBoolItem* pTemplateItem = pMedium->GetItemSet().GetItem(SID_TEMPLATE, false);
+    return pTemplateItem && pTemplateItem->GetValue();
 }
 
 bool SfxObjectShell::IsUseUserData() const
