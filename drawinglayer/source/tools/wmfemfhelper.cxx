@@ -625,7 +625,7 @@ namespace wmfemfhelper
 
         rTarget.append(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                rBitmapEx,
+                Bitmap(rBitmapEx),
                 aObjectTransform));
     }
 

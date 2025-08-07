@@ -26,7 +26,7 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
-BitmapPrimitive2D::BitmapPrimitive2D(BitmapEx xXBitmap, basegfx::B2DHomMatrix aTransform)
+BitmapPrimitive2D::BitmapPrimitive2D(Bitmap xXBitmap, basegfx::B2DHomMatrix aTransform)
     : maBitmap(std::move(xXBitmap))
     , maTransform(std::move(aTransform))
 {

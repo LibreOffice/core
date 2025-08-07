@@ -217,7 +217,7 @@ namespace sdr::contact
 
                     xRetval.push_back(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                BitmapEx(aDraftBitmap),
+                                aDraftBitmap,
                                 aBitmapMatrix));
 
                     // consume bitmap size in X

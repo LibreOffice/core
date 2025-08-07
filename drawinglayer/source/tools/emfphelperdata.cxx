@@ -1549,7 +1549,7 @@ namespace emfplushelper
 
                             if (image->type == ImageDataTypeBitmap)
                             {
-                                BitmapEx aBmp(image->graphic.GetBitmapEx());
+                                Bitmap aBmp(image->graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 aSize = aBmp.GetSizePixel();
                                 if (aSize.Width() > 0 && aSize.Height() > 0)

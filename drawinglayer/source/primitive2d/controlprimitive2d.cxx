@@ -190,7 +190,7 @@ namespace drawinglayer::primitive2d
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(
-                                    aContent,
+                                    Bitmap(aContent),
                                     aBitmapTransform);
                             }
                             catch( const uno::Exception& )

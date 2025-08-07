@@ -262,8 +262,8 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                BitmapEx(aResBmp), basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                       aBaseRange.getRange(), aBaseRange.getMinimum())));
+                aResBmp, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                             aBaseRange.getRange(), aBaseRange.getMinimum())));
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }
 }

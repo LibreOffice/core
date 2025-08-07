@@ -477,7 +477,7 @@ namespace drawinglayer::processor2d
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     checkBitmapHit(
                         rCandidate.getB2DRange(getViewInformation2D()),
-                        rBitmapCandidate.getBitmap(),
+                        BitmapEx(rBitmapCandidate.getBitmap()),
                         rBitmapCandidate.getTransform());
                     break;
                 }

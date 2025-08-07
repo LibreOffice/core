@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
 
                 aRetval.set(
                     new BitmapPrimitive2D(
-                        getBitmapEx(),
+                        Bitmap(getBitmapEx()),
                         aObjectTransform));
             }
             else
@@ -154,7 +154,7 @@ namespace drawinglayer::primitive2d
 
                     aRetval.set(
                         new BitmapPrimitive2D(
-                            getBitmapEx(),
+                            Bitmap(getBitmapEx()),
                             aObjectTransform));
 
                     // clip when not completely inside object range

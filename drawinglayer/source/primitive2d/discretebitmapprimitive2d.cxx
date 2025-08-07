@@ -66,7 +66,7 @@ namespace drawinglayer::primitive2d
             // create BitmapPrimitive2D with now object-local coordinate data
             return
                 new BitmapPrimitive2D(
-                    BitmapEx(getBitmap()),
+                    getBitmap(),
                     aObjectTransform);
         }
 

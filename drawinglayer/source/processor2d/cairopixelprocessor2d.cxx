@@ -1280,7 +1280,7 @@ void CairoPixelProcessor2D::processBitmapPrimitive2D(
         }
     }
 
-    paintBitmapAlpha(Bitmap(rBitmapCandidate.getBitmap()), rBitmapCandidate.getTransform());
+    paintBitmapAlpha(rBitmapCandidate.getBitmap(), rBitmapCandidate.getTransform());
 
     if (bDrawModeFlagsUsed)
         maBColorModifierStack.pop();

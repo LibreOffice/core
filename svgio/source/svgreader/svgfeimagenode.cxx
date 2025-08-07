@@ -127,8 +127,8 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
             = rTarget.getB2DRange(drawinglayer::geometry::ViewInformation2D());
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                aBitmapEx, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                               aViewBox.getRange(), aViewBox.getMinimum())));
+                Bitmap(aBitmapEx), basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                       aViewBox.getRange(), aViewBox.getMinimum())));
 
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }

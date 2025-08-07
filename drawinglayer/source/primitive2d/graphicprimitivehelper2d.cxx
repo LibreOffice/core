@@ -223,7 +223,7 @@ namespace drawinglayer::primitive2d
 
                 // need to create BitmapAlphaPrimitive2D/BitmapPrimitive2D
                 if (basegfx::fTools::equal(getTransparency(), 0.0))
-                    return new BitmapPrimitive2D(bitmap, getTransform());
+                    return new BitmapPrimitive2D(Bitmap(bitmap), getTransform());
 
                 return new BitmapAlphaPrimitive2D(bitmap, getTransform(), getTransparency());
             }
@@ -666,7 +666,7 @@ namespace drawinglayer::primitive2d
                         {
                             rContainer.append(
                                 new BitmapPrimitive2D(
-                                    rGraphic.GetBitmapEx(),
+                                    Bitmap(rGraphic.GetBitmapEx()),
                                     rTransform));
                         }
                         else

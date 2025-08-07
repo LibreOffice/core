@@ -175,7 +175,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             // add BasePosition
             aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
-            return new BitmapPrimitive2D(getBitmapEx(), aTransform);
+            return new BitmapPrimitive2D(Bitmap(getBitmapEx()), aTransform);
         }
 
         bool OverlayBitmapExPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const

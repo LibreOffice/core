@@ -233,10 +233,10 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         // Independent from discrete sizes of soft alpha creation, always
         // map and project soft result to geometry range extended by soft
         // radius, but to the eventually clipped instance (ClippedRange)
-        const primitive2d::Primitive2DReference xEmbedRefBitmap(
-            new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                              aClippedRange.getWidth(), aClippedRange.getHeight(),
-                                              aClippedRange.getMinX(), aClippedRange.getMinY())));
+        const primitive2d::Primitive2DReference xEmbedRefBitmap(new BitmapPrimitive2D(
+            Bitmap(result), basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                aClippedRange.getWidth(), aClippedRange.getHeight(),
+                                aClippedRange.getMinX(), aClippedRange.getMinY())));
 
         rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 

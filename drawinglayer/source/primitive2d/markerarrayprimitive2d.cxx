@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
 
                 aContainer.push_back(
                     new BitmapPrimitive2D(
-                        BitmapEx(getMarker()),
+                        getMarker(),
                         aTransform));
             }
             return new GroupPrimitive2D(std::move(aContainer));

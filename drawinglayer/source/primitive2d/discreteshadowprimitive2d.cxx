@@ -172,7 +172,7 @@ namespace drawinglayer::primitive2d
             // TopLeft
             xRetval[0] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getTopLeft()),
+                    getDiscreteShadow().getTopLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
@@ -182,7 +182,7 @@ namespace drawinglayer::primitive2d
             // Top
             xRetval[1] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getTop()),
+                    getDiscreteShadow().getTop(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                         fBorderY,
@@ -192,7 +192,7 @@ namespace drawinglayer::primitive2d
             // TopRight
             xRetval[2] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getTopRight()),
+                    getDiscreteShadow().getTopRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
@@ -202,7 +202,7 @@ namespace drawinglayer::primitive2d
             // Right
             xRetval[3] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getRight()),
+                    getDiscreteShadow().getRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBorderX,
                         1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,
@@ -212,7 +212,7 @@ namespace drawinglayer::primitive2d
             // BottomRight
             xRetval[4] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getBottomRight()),
+                    getDiscreteShadow().getBottomRight(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
@@ -222,7 +222,7 @@ namespace drawinglayer::primitive2d
             // Bottom
             xRetval[5] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getBottom()),
+                    getDiscreteShadow().getBottom(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         1.0 - (2.0 * (fBorderX + fSingleX)) + fSingleX,
                         fBorderY,
@@ -232,7 +232,7 @@ namespace drawinglayer::primitive2d
             // BottomLeft
             xRetval[6] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getBottomLeft()),
+                    getDiscreteShadow().getBottomLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBigLenX,
                         fBigLenY,
@@ -242,7 +242,7 @@ namespace drawinglayer::primitive2d
             // Left
             xRetval[7] =
                 new BitmapPrimitive2D(
-                    BitmapEx(getDiscreteShadow().getLeft()),
+                    getDiscreteShadow().getLeft(),
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fBorderX,
                         1.0 - (2.0 * (fBorderY + fSingleY)) + fSingleY,

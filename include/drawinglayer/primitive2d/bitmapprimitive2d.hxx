@@ -35,7 +35,7 @@ class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D final : public BasePrimitive2D
 {
 private:
     /// the Bitmap-data
-    BitmapEx maBitmap;
+    Bitmap maBitmap;
 
     /** the object transformation from unit coordinates, defining
         size, shear, rotate and position
@@ -44,10 +44,10 @@ private:
 
 public:
     /// constructor
-    BitmapPrimitive2D(BitmapEx xBitmap, basegfx::B2DHomMatrix aTransform);
+    BitmapPrimitive2D(Bitmap xBitmap, basegfx::B2DHomMatrix aTransform);
 
     /// data read access
-    const BitmapEx& getBitmap() const { return maBitmap; }
+    const Bitmap& getBitmap() const { return maBitmap; }
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
     /// compare operator
