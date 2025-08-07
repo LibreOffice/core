@@ -28,9 +28,9 @@ IconViewImpl::IconViewImpl( SvTreeListBox* pTreeListBox, SvTreeList* pTreeList, 
 {
 }
 
-static bool IsSeparator(const SvTreeListEntry* entry)
+static bool IsSeparator(const SvTreeListEntry& rEntry)
 {
-    return entry && entry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR;
+    return bool(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
 }
 
 Size IconViewImpl::GetEntrySize(const SvTreeListEntry& entry) const
@@ -48,7 +48,7 @@ void IconViewImpl::IterateVisibleEntryAreas(const IterateEntriesFunc& f, bool fr
          entry = m_pView->NextVisible(entry))
     {
         const Size s = GetEntrySize(*entry);
-        if (x >= rowWidth || IsSeparator(entry))
+        if (x >= rowWidth || IsSeparator(*entry))
         {
             column = 0;
             x = 0;
@@ -69,7 +69,7 @@ tools::Long IconViewImpl::GetEntryRow(const SvTreeListEntry* entry) const
     tools::Long nEntryRow = -1;
     auto GetRow = [entry, &nEntryRow, row = -1](const EntryAreaInfo& info) mutable
     {
-        if (info.column == 0 && !IsSeparator(&info.entry))
+        if (info.column == 0 && !IsSeparator(info.entry))
             ++row;
         if (&info.entry != entry)
             return CallbackResult::Continue;
@@ -86,7 +86,7 @@ void IconViewImpl::SetStartEntry(SvTreeListEntry* entry)
     tools::Long row = -1;
     auto GetEntryAndRow = [&entry, &row, max, found = entry](const EntryAreaInfo& info) mutable
     {
-        if (info.column == 0 && !IsSeparator(&info.entry))
+        if (info.column == 0 && !IsSeparator(info.entry))
         {
             found = &info.entry;
             ++row;
@@ -125,7 +125,7 @@ SvTreeListEntry* IconViewImpl::GoToPrevRow(SvTreeListEntry* pEntry, int nRows) c
     auto FindPrev = [this, pEntry, nRows, &pPrev,
                      prevs = std::vector<SvTreeListEntry*>()](const EntryAreaInfo& info) mutable
     {
-        if (info.column == 0 && !IsSeparator(&info.entry))
+        if (info.column == 0 && !IsSeparator(info.entry))
             prevs.push_back(&info.entry);
         if (pEntry == &info.entry)
         {
@@ -136,7 +136,7 @@ SvTreeListEntry* IconViewImpl::GoToPrevRow(SvTreeListEntry* pEntry, int nRows) c
                 for (short column = info.column; column; --column)
                 {
                     SvTreeListEntry* pNext = m_pView->NextVisible(pPrev);
-                    if (!pNext || IsSeparator(pNext))
+                    if (!pNext || IsSeparator(*pNext))
                         break;
                     pPrev = pNext;
                 }
@@ -155,7 +155,7 @@ SvTreeListEntry* IconViewImpl::GoToNextRow(SvTreeListEntry* pEntry, int nRows) c
     SvTreeListEntry* pNext = pEntry;
     auto FindNext = [pEntry, nRows, &pNext, column = -1](const EntryAreaInfo& info) mutable
     {
-        if (info.column <= column && !IsSeparator(&info.entry))
+        if (info.column <= column && !IsSeparator(info.entry))
         {
             if (info.column == 0 && --nRows < 0)
                 return CallbackResult::Stop;
@@ -375,7 +375,7 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
     auto CountRowsAndHeight = [&nTotalRows, &totalHeight](const EntryAreaInfo& info)
     {
         totalHeight = std::max(totalHeight, info.area.Bottom());
-        if (info.column == 0 && !IsSeparator(&info.entry))
+        if (info.column == 0 && !IsSeparator(info.entry))
             ++nTotalRows;
         return CallbackResult::Continue;
     };
