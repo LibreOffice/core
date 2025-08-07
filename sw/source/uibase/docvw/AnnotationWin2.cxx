@@ -525,6 +525,9 @@ void SwAnnotationWin::Rescale()
 
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
+    // Avoid re-initialising state unless something has changed to invalidate it. speeds up scrolling.
+    if (aMode == GetMapMode())
+        return;
     SetMapMode( aMode );
     mxSidebarTextControl->SetMapMode( aMode );
 
