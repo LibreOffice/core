@@ -415,6 +415,8 @@ struct BorderModel
     BorderLineModel     maTop;              /// Top line format.
     BorderLineModel     maBottom;           /// Bottom line format.
     BorderLineModel     maDiagonal;         /// Diagonal line format.
+    BorderLineModel     maVertical;         /// Vertical line format.
+    BorderLineModel     maHorizontal;       /// Horizontal line format.
     bool                mbDiagTLtoBR;       /// True = top-left to bottom-right on.
     bool                mbDiagBLtoTR;       /// True = bottom-left to top-right on.
 
@@ -432,13 +434,18 @@ struct ApiBorderData
     ApiBorderLine       maRight;            /// Right line format
     ApiBorderLine       maTop;              /// Top line format
     ApiBorderLine       maBottom;           /// Bottom line format
+    ApiBorderLine       maVertical;         /// Vertical line format
+    ApiBorderLine       maHorizontal;           /// Horizontal line format
     model::ComplexColor maComplexColorLeft;
     model::ComplexColor maComplexColorRight;
     model::ComplexColor maComplexColorTop;
     model::ComplexColor maComplexColorBottom;
+    model::ComplexColor maComplexColorVertical;
+    model::ComplexColor maComplexColorHorizontal;
     ApiBorderLine       maTLtoBR;           /// Diagonal top-left to bottom-right line format.
     ApiBorderLine       maBLtoTR;           /// Diagonal bottom-left to top-right line format.
     bool                mbBorderUsed;       /// True = left/right/top/bottom line format used.
+    bool                mbVertHorz;         /// True = vert/horz line format used.
     bool                mbDiagUsed;         /// True = diagonal line format used.
 
     explicit            ApiBorderData();

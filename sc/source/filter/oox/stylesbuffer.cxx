@@ -1492,6 +1492,8 @@ BorderModel::BorderModel( bool bDxf ) :
     maTop( bDxf ),
     maBottom( bDxf ),
     maDiagonal( bDxf ),
+    maVertical( bDxf ),
+    maHorizontal( bDxf ),
     mbDiagTLtoBR( false ),
     mbDiagBLtoTR( false )
 {
@@ -1499,6 +1501,7 @@ BorderModel::BorderModel( bool bDxf ) :
 
 ApiBorderData::ApiBorderData() :
     mbBorderUsed( false ),
+    mbVertHorz( false ),
     mbDiagUsed( false )
 {
 }
@@ -1599,16 +1602,21 @@ void Border::finalizeImport( bool bRTL )
 
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
+    maApiData.mbVertHorz   = maModel.maVertical.mbUsed || maModel.maHorizontal.mbUsed;
 
     convertBorderLine( maApiData.maLeft,   maModel.maLeft );
     convertBorderLine( maApiData.maRight,  maModel.maRight );
     convertBorderLine( maApiData.maTop,    maModel.maTop );
     convertBorderLine( maApiData.maBottom, maModel.maBottom );
+    convertBorderLine( maApiData.maVertical, maModel.maVertical );
+    convertBorderLine( maApiData.maHorizontal, maModel.maHorizontal );
 
     maApiData.maComplexColorLeft = maModel.maLeft.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
     maApiData.maComplexColorRight = maModel.maRight.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
     maApiData.maComplexColorTop = maModel.maTop.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
     maApiData.maComplexColorBottom = maModel.maBottom.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+    maApiData.maComplexColorVertical = maModel.maVertical.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
+    maApiData.maComplexColorHorizontal = maModel.maHorizontal.maColor.createComplexColor(getBaseFilter().getGraphicHelper(), -1);
 
     if( maModel.mbDiagTLtoBR )
         convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
@@ -1618,6 +1626,25 @@ void Border::finalizeImport( bool bRTL )
 
 void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
+    if (maApiData.mbVertHorz)
+    {
+        SvxBoxInfoItem aBoxInfoItem(ATTR_BORDER_INNER);
+        editeng::SvxBorderLine aLine;
+
+        if (SvxBoxItem::LineToSvxLine(maApiData.maVertical, aLine, false))
+        {
+            aLine.setComplexColor(maApiData.maComplexColorVertical);
+            aBoxInfoItem.SetLine(&aLine, SvxBoxInfoItemLine::VERT);
+        }
+        if (SvxBoxItem::LineToSvxLine(maApiData.maHorizontal, aLine, false))
+        {
+            aLine.setComplexColor(maApiData.maComplexColorHorizontal);
+            aBoxInfoItem.SetLine(&aLine, SvxBoxInfoItemLine::HORI);
+        }
+
+        ScfTools::PutItem( rItemSet, aBoxInfoItem, bSkipPoolDefs );
+
+    }
     if( maApiData.mbBorderUsed )
     {
          SvxBoxItem aBoxItem( ATTR_BORDER );
@@ -1674,6 +1701,8 @@ BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
         case XLS_TOKEN( top ):      return &maModel.maTop;
         case XLS_TOKEN( bottom ):   return &maModel.maBottom;
         case XLS_TOKEN( diagonal ): return &maModel.maDiagonal;
+        case XLS_TOKEN( vertical ): return &maModel.maVertical;
+        case XLS_TOKEN( horizontal ): return &maModel.maHorizontal;
     }
     return nullptr;
 }

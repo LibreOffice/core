@@ -90,6 +90,10 @@ void DefaultOOXMLTableStyles::importBorders()
             importBorderElement(xBorder, XLS_TOKEN(left), rBorderInfo.nLeftId);
         if (rBorderInfo.nRightId >= 0)
             importBorderElement(xBorder, XLS_TOKEN(right), rBorderInfo.nRightId);
+        if (rBorderInfo.nVerticalId >= 0)
+            importBorderElement(xBorder, XLS_TOKEN(vertical), rBorderInfo.nVerticalId);
+        if (rBorderInfo.nHorizontalId >= 0)
+            importBorderElement(xBorder, XLS_TOKEN(horizontal), rBorderInfo.nHorizontalId);
 
         maBorders.push_back(xBorder);
     }
