@@ -105,14 +105,16 @@ void QtInstanceNotebook::remove_page(const OUString& rIdent)
 }
 
 void QtInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos,
-                                     const OUString* /* pIconName */)
+                                     const OUString* pIconName)
 {
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
         QWidget* pPage = new QWidget;
         pPage->setLayout(new QVBoxLayout);
         pPage->setProperty(PROPERTY_TAB_PAGE_ID, toQString(rIdent));
-        m_pTabWidget->insertTab(nPos, pPage, toQString(rLabel));
+        nPos = m_pTabWidget->insertTab(nPos, pPage, toQString(rLabel));
+        if (pIconName && !pIconName->isEmpty())
+            m_pTabWidget->setTabIcon(nPos, loadQPixmapIcon(*pIconName));
     });
 }
 
