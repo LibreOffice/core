@@ -15,6 +15,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/qt/QtUtils.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/svapp.hxx>
 
 #include "QtFrameGrabber.hxx"
 #include <QtFrameGrabber.moc>
@@ -25,6 +26,8 @@ namespace
 {
 uno::Reference<css::graphic::XGraphic> toXGraphic(const QImage& rImage)
 {
+    SolarMutexGuard g;
+
     QByteArray aData;
     QBuffer aBuffer(&aData);
     rImage.save(&aBuffer, "PNG");
