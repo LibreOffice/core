@@ -445,19 +445,15 @@ void ScDocument::FillInfo(
 
                 ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
 
-                const ScPatternAttr* pPattern = pTableStyle->GetPattern(*pDBData, nCol, nRow, nRowIndex);
-                if (!pPattern)
-                    continue;
+                const SvxBrushItem* pBackground = pTableStyle->GetItem(*pDBData, nCol, nRow, nRowIndex, ATTR_BACKGROUND);
 
-                const SfxItemSet& rItemSet = pPattern->GetItemSet();
-                const SvxBrushItem* pBackground = rItemSet.GetItemIfSet(ATTR_BACKGROUND);
                 if (pBackground)
                 {
                     pInfo->maBackground = SfxPoolItemHolder(*pPool, pBackground);
                     pThisRowInfo->bEmptyBack = false;
                 }
 
-                const SvxBoxItem* pLinesAttr = rItemSet.GetItemIfSet(ATTR_BORDER);
+                const SvxBoxItem* pLinesAttr = pTableStyle->GetItem(*pDBData, nCol, nRow, nRowIndex, ATTR_BORDER);
                 if (pLinesAttr)
                 {
                     pInfo->pLinesAttr = pLinesAttr;

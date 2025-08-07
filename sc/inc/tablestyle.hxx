@@ -32,6 +32,11 @@ enum class ScTableStyleElement
     LastHeaderCell,
 };
 
+template <class T> const T* GetItemFromPattern(ScPatternAttr* pPattern, TypedWhichId<T> nWhich)
+{
+    return pPattern->GetItemSet().GetItemIfSet(nWhich);
+}
+
 class SC_DLLPUBLIC ScTableStyle
 {
 private:
@@ -59,8 +64,108 @@ private:
 public:
     ScTableStyle(const OUString& rName, const std::optional<OUString>& rUIName);
 
-    const ScPatternAttr* GetPattern(const ScDBData& rDBData, SCCOL nCol, SCROW nRow,
-                                    SCROW nRowIndex) const;
+    template <class T>
+    const T* GetItem(const ScDBData& rDBData, SCCOL nCol, SCROW nRow, SCROW nRowIndex,
+                     TypedWhichId<T> nWhich) const
+    {
+        const ScTableStyleParam* pParam = rDBData.GetTableStyleInfo();
+        ScRange aRange;
+        rDBData.GetArea(aRange);
+
+        bool bHasHeader = rDBData.HasHeader();
+        bool bHasTotal = rDBData.HasTotals();
+        if (bHasHeader && mpLastHeaderCellPattern && nRow == aRange.aStart.Row()
+            && nCol == aRange.aEnd.Col())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpLastHeaderCellPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (bHasHeader && mpFirstHeaderCellPattern && nRow == aRange.aStart.Row()
+            && nCol == aRange.aStart.Col())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpFirstHeaderCellPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (bHasTotal && mpTotalRowPattern && nRow == aRange.aEnd.Row())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpTotalRowPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (bHasHeader && mpHeaderRowPattern && nRow == aRange.aStart.Row())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpHeaderRowPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (pParam->mbFirstColumn && mpFirstColumnPattern && nCol == aRange.aStart.Col())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpFirstColumnPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (pParam->mbLastColumn && mpLastColumnPattern && nCol == aRange.aEnd.Col())
+        {
+            const T* pPoolItem = GetItemFromPattern(mpLastColumnPattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        if (pParam->mbRowStripes && nRowIndex >= 0)
+        {
+            sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
+            bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
+            if (mpSecondRowStripePattern && !bFirstRowStripe)
+            {
+                const T* pPoolItem = GetItemFromPattern(mpSecondRowStripePattern.get(), nWhich);
+                if (pPoolItem)
+                    return pPoolItem;
+            }
+
+            if (mpFirstRowStripePattern && bFirstRowStripe)
+            {
+                const T* pPoolItem = GetItemFromPattern(mpFirstRowStripePattern.get(), nWhich);
+                if (pPoolItem)
+                    return pPoolItem;
+            }
+        }
+
+        if (pParam->mbColumnStripes)
+        {
+            SCCOL nRelativeCol = nCol - aRange.aStart.Col();
+            sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
+            bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
+            if (mpSecondColumnStripePattern && !bFirstColStripe)
+            {
+                const T* pPoolItem = GetItemFromPattern(mpSecondColumnStripePattern.get(), nWhich);
+                if (pPoolItem)
+                    return pPoolItem;
+            }
+
+            if (mpFirstColumnStripePattern && bFirstColStripe)
+            {
+                const T* pPoolItem = GetItemFromPattern(mpFirstColumnStripePattern.get(), nWhich);
+                if (pPoolItem)
+                    return pPoolItem;
+            }
+        }
+
+        if (mpTablePattern)
+        {
+            const T* pPoolItem = GetItemFromPattern(mpTablePattern.get(), nWhich);
+            if (pPoolItem)
+                return pPoolItem;
+        }
+
+        return nullptr;
+    }
 
     void SetRowStripeSize(sal_Int32 nFirstRowStripeSize, sal_Int32 nSecondRowStripeSize);
     void SetColStripeSize(sal_Int32 nFirstColStripeSize, sal_Int32 nSecondColStripeSize);
