@@ -610,9 +610,8 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     SfxItemSet& rSet = pMedium->GetItemSet();
     if( pImpl->nEventId == SfxEventHintId::NONE )
     {
-        const SfxBoolItem* pTemplateItem = rSet.GetItem(SID_TEMPLATE, false);
         SetActivateEvent_Impl(
-            ( pTemplateItem && pTemplateItem->GetValue() )
+            ( IsBasedOnTemplate() )
             ? SfxEventHintId::CreateDoc : SfxEventHintId::OpenDoc );
     }
 
@@ -713,9 +712,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( bOk )
                 {
                     // the document loaded from template has no name
-                    const SfxBoolItem* pTemplateItem = rSet.GetItem(SID_TEMPLATE, false);
-                    if ( !pTemplateItem || !pTemplateItem->GetValue() )
-                        bHasName = true;
+                    bHasName = !IsBasedOnTemplate();
                 }
                 else
                     SetError(ERRCODE_ABORT);
@@ -2479,12 +2476,9 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
                 {}
             }
 
-            const SfxBoolItem* pTemplateItem = pMedium->GetItemSet().GetItem(SID_TEMPLATE, false);
-            bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-
             // before the title regenerated the document must lose the signatures
             pImpl->nDocumentSignatureState = SignatureState::NOSIGNATURES;
-            if (!bTemplate)
+            if (!IsBasedOnTemplate())
             {
                 pImpl->nScriptingSignatureState = pNewMed->GetCachedSignatureState_Impl();
                 OSL_ENSURE( pImpl->nScriptingSignatureState != SignatureState::BROKEN, "The signature must not be broken at this place" );

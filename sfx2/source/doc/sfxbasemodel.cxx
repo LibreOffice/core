@@ -3866,9 +3866,9 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     // allow to use an interactionhandler (if there is one)
     pMedium->UseInteractionHandler( true );
 
-    const SfxBoolItem* pTemplateItem = aSet.GetItem<SfxBoolItem>(SID_TEMPLATE, false);
-    bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-    m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SfxEventHintId::CreateDoc : SfxEventHintId::OpenDoc );
+    m_pData->m_pObjectShell->SetActivateEvent_Impl(m_pData->m_pObjectShell->IsBasedOnTemplate()
+                                                       ? SfxEventHintId::CreateDoc
+                                                       : SfxEventHintId::OpenDoc);
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = false;
 
     // load document
