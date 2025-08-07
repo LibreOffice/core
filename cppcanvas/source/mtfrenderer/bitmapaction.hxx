@@ -26,7 +26,7 @@ namespace basegfx {
     class B2DPoint;
     class B2DVector;
 }
-class BitmapEx;
+class Bitmap;
 
 /* Definition of internal::BitmapActionFactory */
 

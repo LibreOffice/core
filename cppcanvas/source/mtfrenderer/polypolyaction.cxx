@@ -26,7 +26,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

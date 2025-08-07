@@ -20,8 +20,7 @@
 
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XCachedPrimitive.hpp>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <tools/gen.hxx>
 #include <vcl/canvastools.hxx>
 #include <canvas/canvastools.hxx>

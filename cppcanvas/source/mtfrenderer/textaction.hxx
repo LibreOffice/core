@@ -26,6 +26,7 @@
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>
+#include <vcl/kernarray.hxx>
 
 class VirtualDevice;
 class Point;

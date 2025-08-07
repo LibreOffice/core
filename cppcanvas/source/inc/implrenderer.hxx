@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <tools/stream.hxx>
 #include <utility>
+#include <vcl/kernarray.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -45,7 +46,6 @@ namespace tools { class Rectangle; }
 namespace vcl { class Font; }
 namespace tools { class PolyPolygon; }
 class Point;
-class MetaCommentAction;
 
 namespace basegfx {
     class B2DPolyPolygon;
@@ -54,9 +54,7 @@ namespace basegfx {
 
 namespace cppcanvas::internal
     {
-        struct OutDevState;
         struct ActionFactoryParameters;
-        struct XForm;
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions

@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 #include "implcanvas.hxx"
