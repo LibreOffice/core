@@ -3469,7 +3469,7 @@ SwTestFormat::~SwTestFormat()
         aPrt.setSwRect(aOldPrt);
     }
 
-    pFrame->SetPara( pOldPara );
+    pFrame->SetPara(pOldPara, true);
 }
 
 bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bSplit )
@@ -3721,7 +3721,7 @@ SwTwips SwTextFrame::CalcFitToContent()
         aPrt.Width( nOldPrtWidth );
     }
 
-    SetPara( pOldPara );
+    SetPara(pOldPara, true);
 
     // tdf#164932 handle numbering list offset
     const SwTextNode* pTextNode( GetTextNodeForParaProps() );
@@ -3814,7 +3814,7 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
     }
 
     // restore paragraph portion
-    SetPara( pOldPara );
+    SetPara(pOldPara, true);
 }
 
 /**
