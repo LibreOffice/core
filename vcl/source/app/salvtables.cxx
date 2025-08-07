@@ -5372,6 +5372,7 @@ int SalInstanceIconView::get_item_width() const { return m_xIconView->GetEntryWi
 void SalInstanceIconView::set_item_width(int width)
 {
     m_xIconView->SetEntryWidth(width);
+    m_bFixedItemWidth = true;
     m_xIconView->Resize();
 }
 
@@ -5412,6 +5413,8 @@ void SalInstanceIconView::insert(int pos, const OUString* pStr, const OUString* 
         pEntry->AddItem(std::make_unique<SvLBoxString>(*pStr));
     pEntry->SetUserData(pUserData);
     m_xIconView->Insert(pEntry, nullptr, nInsertPos);
+    if (!m_bFixedItemWidth)
+        m_xIconView->UpdateEntrySize(rImage);
 
     if (pRet)
     {
@@ -5645,7 +5648,8 @@ void SalInstanceIconView::set_image(int pos, VirtualDevice& rIcon)
     {
         aItem->SetBitmap1(aImage);
         aItem->SetBitmap2(aImage);
-        m_xIconView->UpdateEntrySize(aImage);
+        if (!m_bFixedItemWidth)
+            m_xIconView->UpdateEntrySize(aImage);
         m_xIconView->ModelHasEntryInvalidated(aEntry);
     }
 }

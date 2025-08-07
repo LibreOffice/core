@@ -1901,6 +1901,8 @@ protected:
     VclPtr<::IconView> m_xIconView;
 
 private:
+    bool m_bFixedItemWidth = false;
+
     // owner for UserData
     std::vector<std::unique_ptr<OUString>> m_aUserData;
 
