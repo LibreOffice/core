@@ -60,6 +60,11 @@ void IconView::UpdateEntrySize(const Image& pImage)
     SetEntryWidth(pImage.GetSizePixel().getWidth() + spacing);
 }
 
+bool IconView::IsSeparator(const SvTreeListEntry& rEntry)
+{
+    return bool(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
+}
+
 void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
 {
     int nHeight = nSpacing * 2;
