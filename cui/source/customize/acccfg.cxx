@@ -27,12 +27,11 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include <sal/macros.h>
 #include <vcl/event.hxx>
 
 #include <strings.hrc>
 #include <sfx2/strings.hrc>
-#include <svx/svxids.hrc>
+#include <sfx2/sfxsids.hrc>
 
 // include interface declarations
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -63,7 +62,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <config_features.h>
 
-#include <com/sun/star/frame/LayoutManager.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 
 // namespaces
 

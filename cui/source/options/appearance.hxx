@@ -12,14 +12,8 @@
 #include <vcl/weld.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/xflasit.hxx>
-#include <svx/svxdlg.hxx>
 #include <svtools/colorcfg.hxx>
-#include <sfx2/app.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/IconThemeInfo.hxx>
-#include <vcl/ptrstyle.hxx>
-#include <vcl/svapp.hxx>
 
 using namespace svtools;
 class SvxAppearanceTabPage : public SfxTabPage

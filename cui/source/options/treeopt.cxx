@@ -23,7 +23,6 @@
 #include <config_features.h>
 #include <config_feature_opencl.h>
 #include <config_feature_desktop.h>
-#include <config_gpgme.h>
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -109,7 +108,6 @@
 #include <utility>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 

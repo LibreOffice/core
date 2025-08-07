@@ -36,6 +36,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
@@ -47,13 +48,11 @@
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 
 #include <svx/svxdlg.hxx>
 #include <editeng/optitems.hxx>

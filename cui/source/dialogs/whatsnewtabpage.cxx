@@ -9,14 +9,10 @@
 
 #include <whatsnewtabpage.hxx>
 
-#include <config_folders.h>
-#include <rtl/bootstrap.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
-#include <sfx2/viewfrm.hxx>
-#include <svx/dlgctrl.hxx>
-#include <vcl/graphicfilter.hxx>
+#include <vcl/outdev.hxx>
 
 WhatsNewTabPage::WhatsNewTabPage(weld::Container* pPage, weld::DialogController* pController,
                                  const SfxItemSet& rAttr)

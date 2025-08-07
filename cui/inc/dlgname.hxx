@@ -20,7 +20,6 @@
 
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
-#include <sal/log.hxx>
 
 /// Dialog for editing a name
 class SvxNameDialog final : public weld::GenericDialogController

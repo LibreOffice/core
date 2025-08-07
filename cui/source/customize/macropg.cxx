@@ -29,7 +29,7 @@
 #include "macropg_impl.hxx"
 #include <o3tl/safeint.hxx>
 #include <svl/macitem.hxx>
-#include <svx/svxids.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/string_view.hxx>

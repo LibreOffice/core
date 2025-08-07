@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <sfx2/tabdlg.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/inettbc.hxx>

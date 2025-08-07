@@ -22,11 +22,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <config_gpgme.h>
-#if HAVE_FEATURE_GPGME
-# include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
-# include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#endif
-#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <comphelper/xmlsechelper.hxx>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 

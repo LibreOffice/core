@@ -24,10 +24,6 @@
 
 class CanvasSettings;
 
-namespace vcl {
-    class IconThemeInfo;
-}
-
 class OfaMiscTabPage : public SfxTabPage
 {
 private:

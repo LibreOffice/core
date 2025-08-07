@@ -30,7 +30,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <svx/rectenum.hxx>
-#include <sal/macros.h>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

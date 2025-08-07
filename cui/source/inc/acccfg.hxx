@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/keycod.hxx>
 #include <i18nutil/searchopt.hxx>
 #include <config_features.h>

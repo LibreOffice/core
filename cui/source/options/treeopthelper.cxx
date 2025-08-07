@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <fstream>
 #include <treeopt.hxx>
 
-#include <treeopt.hrc>
-#include <helpids.h>
+#include <sfx2/pageids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 

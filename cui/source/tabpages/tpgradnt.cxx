@@ -37,7 +37,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <basegfx/utils/gradienttools.hxx>
 #include <sal/log.hxx>
 
 using namespace com::sun::star;

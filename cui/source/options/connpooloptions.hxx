@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
-#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
 #include "connpoolsettings.hxx"
 

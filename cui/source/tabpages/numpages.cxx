@@ -23,7 +23,6 @@
 #include <dialmgr.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nlangtag/mslangid.hxx>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
@@ -43,8 +42,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/unitconv.hxx>
-#include <svtools/colorcfg.hxx>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>

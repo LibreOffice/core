@@ -23,8 +23,8 @@
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
-#include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
 #include <cfgutil.hxx>

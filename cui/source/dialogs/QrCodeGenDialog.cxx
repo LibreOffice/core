@@ -24,7 +24,6 @@
 #else
 #include <ZXVersion.h>
 #endif
-#include <rtl/strbuf.hxx>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push

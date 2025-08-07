@@ -30,7 +30,6 @@
 #include <securityoptions.hxx>
 #include <AdditionsDialog.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/pageids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>

@@ -21,7 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
-#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
 namespace svx
 {

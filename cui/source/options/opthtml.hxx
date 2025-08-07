@@ -19,7 +19,6 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/txencbox.hxx>
 
 class OfaHtmlTabPage : public SfxTabPage
 {

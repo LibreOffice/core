@@ -22,8 +22,6 @@
 #include <o3tl/test_info.hxx>
 #include <sal/log.hxx>
 
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <osl/file.hxx>

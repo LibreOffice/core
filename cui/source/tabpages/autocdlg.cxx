@@ -50,7 +50,7 @@
 #include <svx/cuicharmap.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
-#include <svx/svxids.hrc>
+#include <sfx2/sfxsids.hrc>
 
 #include <vcl/tabs.hrc>
 

@@ -21,7 +21,6 @@
 
 #include <libxml/parser.h>
 #include <vcl/weld.hxx>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 #include <memory>
 #include <vector>

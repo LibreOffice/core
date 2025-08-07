@@ -11,7 +11,6 @@
 
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
-#include <vcl/weldutils.hxx>
 
 class WidgetTestDialog final : public weld::GenericDialogController
 {

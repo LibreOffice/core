@@ -33,6 +33,7 @@
 
 namespace svx{ class SpellUndoAction_Impl;}
 class UndoChangeGroupGuard;
+struct ImplSVEvent;
 
 // forward ---------------------------------------------------------------
 

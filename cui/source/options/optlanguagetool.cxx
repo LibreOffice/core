@@ -19,7 +19,6 @@
 
 #include "optlanguagetool.hxx"
 #include <officecfg/Office/Linguistic.hxx>
-#include <sal/log.hxx>
 #include <dialmgr.hxx>
 #include <strings.hrc>
 

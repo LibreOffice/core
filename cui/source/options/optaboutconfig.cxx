@@ -14,7 +14,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/configuration/XDocumentation.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -24,7 +23,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -37,7 +35,6 @@
 #include <sal/log.hxx>
 #include <unotools/textsearch.hxx>
 #include <utility>
-#include <vcl/event.hxx>
 
 #include <dialmgr.hxx>
 #include <strings.hrc>

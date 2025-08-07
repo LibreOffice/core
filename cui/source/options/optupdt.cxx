@@ -18,15 +18,17 @@
  */
 
 #include <config_features.h>
+#if HAVE_FEATURE_UPDATE_MAR
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
+#include <comphelper/DirectoryHelper.hxx>
+#endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
 #include <comphelper/processfactory.hxx>
-#include <comphelper/DirectoryHelper.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>

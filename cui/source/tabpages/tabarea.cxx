@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/objsh.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svx/svxids.hrc>
 
 #include <svx/xtable.hxx>

@@ -19,7 +19,6 @@
 
 #include <editeng/unolingu.hxx>
 #include <o3tl/safeint.hxx>
-#include <svx/dialmgr.hxx>
 #include <svx/ehdl.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>

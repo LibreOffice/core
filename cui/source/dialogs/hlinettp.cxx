@@ -18,8 +18,6 @@
  */
 
 #include <o3tl/string_view.hxx>
-#include <unotools/useroptions.hxx>
-#include <svl/adrparse.hxx>
 
 #include <hlinettp.hxx>
 #include <hlmarkwn_def.hxx>

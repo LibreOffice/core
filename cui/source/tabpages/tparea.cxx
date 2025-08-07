@@ -20,7 +20,6 @@
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xfilluseslidebackgrounditem.hxx>
-#include <svx/xflbckit.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>

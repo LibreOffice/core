@@ -22,7 +22,7 @@
 #include <svx/langbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
 namespace com::sun::star{
     namespace linguistic2{

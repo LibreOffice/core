@@ -25,10 +25,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
-#include <unotools/resmgr.hxx>
 
 #include <unordered_map>
-#include <vector>
 
 typedef std::pair<OUString, OUString> EventPair;
 typedef std::unordered_map<OUString, EventPair> EventsHash;

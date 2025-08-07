@@ -29,7 +29,6 @@
 #include <svl/stritem.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <algorithm>
 #include <helpids.h>
 #include <strings.hrc>
 

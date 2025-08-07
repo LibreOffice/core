@@ -19,8 +19,6 @@
 
 #include "optaccessibility.hxx"
 #include <strings.hrc>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <dialmgr.hxx>

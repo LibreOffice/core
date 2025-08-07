@@ -44,7 +44,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/weld.hxx>
 #include <svx/SpellDialogChildWindow.hxx>

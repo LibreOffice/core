@@ -37,7 +37,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <svtools/langtab.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
@@ -62,10 +61,8 @@
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -74,13 +71,11 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <comphelper/dispatchcommand.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
-#include <vcl/IconThemeInfo.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <bitmaps.hlst>
 
@@ -88,7 +83,6 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/restartdialog.hxx>
-#include <svtools/imgdef.hxx>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <vcl/unohelp2.hxx>
 

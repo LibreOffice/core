@@ -19,7 +19,6 @@
 
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
 #include <sfx2/objsh.hxx>
 #include <zoom.hxx>
 #include <sfx2/zoomitem.hxx>

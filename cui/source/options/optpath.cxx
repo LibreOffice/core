@@ -19,7 +19,6 @@
 
 #include <svx/svxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/app.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>

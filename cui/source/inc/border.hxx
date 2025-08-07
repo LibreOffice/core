@@ -26,7 +26,6 @@
 #include <svx/colorbox.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/flagsdef.hxx>
-#include <unotools/resmgr.hxx>
 
 #include <set>
 

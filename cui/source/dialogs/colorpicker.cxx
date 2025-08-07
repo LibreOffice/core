@@ -19,27 +19,12 @@
 
 #include <colorpicker.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/compbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <vcl/ColorDialog.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <cmath>
 #include <o3tl/typed_flags_set.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::beans;
 using namespace ::basegfx;
 
 // color space conversion helpers

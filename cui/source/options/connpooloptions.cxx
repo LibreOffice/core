@@ -27,6 +27,7 @@
 #include <dialmgr.hxx>
 #include <officecfg/Office/DataAccess.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 
 namespace offapp
 {

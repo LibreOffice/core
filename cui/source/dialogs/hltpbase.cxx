@@ -24,16 +24,12 @@
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
-#include <ucbhelper/content.hxx>
 #include <cuihyperdlg.hxx>
 #include <hltpbase.hxx>
 #include <macroass.hxx>
-#include <svx/svxdlg.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <bitmaps.hlst>

@@ -35,7 +35,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 
-#include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -54,7 +53,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
-#include <o3tl/string_view.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Context.hxx>

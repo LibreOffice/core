@@ -21,8 +21,6 @@
 
 #include <vcl/ColorDialog.hxx>
 #include <vcl/customweld.hxx>
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>

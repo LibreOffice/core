@@ -20,7 +20,6 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 #include "cfg.hxx" //for SvxConfigPage and SaveInData
 
