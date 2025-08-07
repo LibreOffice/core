@@ -48,7 +48,7 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 
 Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
 {
-    if (entry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
+    if (IsSeparator(entry))
         return { GetEntryWidth() * GetColumnCount(), separatorHeight };
     return { GetEntryWidth(), GetEntryHeight() };
 }
@@ -308,7 +308,7 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (IsSelected(pEntry))
             rJsonWriter.put("selected", true);
 
-        if (pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR)
+        if (IsSeparator(*pEntry))
             rJsonWriter.put("separator", true);
 
         rJsonWriter.put("row", GetModel()->GetAbsPos(pEntry));
