@@ -78,10 +78,10 @@ namespace drawinglayer::primitive2d
             double                                              mfOldDiscreteSizeY;
             basegfx::B2DRange                                   maOldUnitVisiblePart;
 
-            /** the last created BitmapEx, e.g. for fast HitTest. This does not really need
-                memory since BitmapEx is internally RefCounted
+            /** the last created Bitmap, e.g. for fast HitTest. This does not really need
+                memory since Bitmap is internally RefCounted
              */
-            BitmapEx                                            maOldRenderedBitmap;
+            Bitmap                                              maOldRenderedBitmap;
 
             /// private helpers
             bool impGetShadow3D() const;
@@ -103,7 +103,7 @@ namespace drawinglayer::primitive2d
             Primitive2DContainer getGeometry2D() const;
             Primitive2DContainer getShadow2D() const;
 
-            /** Fast HitTest which uses the last buffered BitmapEx from the last
+            /** Fast HitTest which uses the last buffered Bitmap from the last
                 rendered area if available. The return value describes if the check
                 could be done with the current information, so do NOT use o_rResult
                 when it returns false. o_rResult will be changed on return true and

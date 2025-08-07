@@ -44,9 +44,9 @@ using namespace com::sun::star;
 
 namespace
 {
-    BitmapEx BPixelRasterToBitmapEx(const basegfx::BZPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
+    Bitmap BPixelRasterToBitmap(const basegfx::BZPixelRaster& rRaster, sal_uInt16 mnAntiAlialize)
     {
-        BitmapEx aRetval;
+        Bitmap aRetval;
         const sal_uInt32 nWidth(mnAntiAlialize ? rRaster.getWidth()/mnAntiAlialize : rRaster.getWidth());
         const sal_uInt32 nHeight(mnAntiAlialize ? rRaster.getHeight()/mnAntiAlialize : rRaster.getHeight());
 
@@ -510,7 +510,7 @@ namespace drawinglayer::primitive2d
                 aZBufferProcessor3D.finish();
             }
 
-            const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = BPixelRasterToBitmapEx(aBZPixelRaster, nOversampleValue);
+            const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = BPixelRasterToBitmap(aBZPixelRaster, nOversampleValue);
             const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
             if(!(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight()))
@@ -530,7 +530,7 @@ namespace drawinglayer::primitive2d
             // create bitmap primitive and add
             aContainer.push_back(
                 new BitmapPrimitive2D(
-                    maOldRenderedBitmap,
+                    BitmapEx(maOldRenderedBitmap),
                     aNew2DTransform));
 
             // test: Allow to add an outline in the debugger when tests are needed
@@ -616,7 +616,7 @@ namespace drawinglayer::primitive2d
             const sal_Int32 nY(basegfx::fround(fRelativeY * aBitmapSizePixel.Height()));
 
             // try to get a statement about transparency in that pixel
-            o_rResult = (0 != maOldRenderedBitmap.GetAlpha(nX, nY));
+            o_rResult = (0 != maOldRenderedBitmap.GetPixelColor(nX, nY).GetAlpha());
             return true;
         }
 
