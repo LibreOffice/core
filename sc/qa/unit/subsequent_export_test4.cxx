@@ -1731,6 +1731,28 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTotalsRowFunction)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_xmlMaps_and_xmlColumnPr)
+{
+    createScDoc("xlsx/tdf167689_xmlMaps_and_xmlColumnPr.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+
+    // xl/xmlMaps.xml
+    xmlDocUniquePtr pDocXml = parseExport(u"xl/xmlMaps.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+
+    assertXPath(pDocXml,
+                "/x:MapInfo/Schema/xsd:schema/xsd:element/xsd:complexType/xsd:sequence/xsd:element/"
+                "xsd:complexType/xsd:sequence/xsd:element[3]/xsd:complexType/xsd:sequence/"
+                "xsd:element[1]",
+                "name", u"Code");
+
+    // test <xmlColumnPr> of xl/tables/table1.xml
+    xmlDocUniquePtr pDocXmlTables = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXmlTables);
+    assertXPath(pDocXmlTables, "/x:table/x:tableColumns/x:tableColumn[1]/x:xmlColumnPr", "xpath",
+                u"/DataList/TransactionTypeList/TransactionType/Code");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterHiddenButton)
 {
     createScDoc("xlsx/hiddenButton.xlsx");
