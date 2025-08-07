@@ -300,7 +300,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     bool GetDropRect_( SwRect &rRect ) const;
 
-    void SetPara( SwParaPortion *pNew, bool bDelete = true );
+    void SetPara(SwParaPortion *pNew, bool bDelete);
 
     bool IsFootnoteNumFrame_() const;
 
