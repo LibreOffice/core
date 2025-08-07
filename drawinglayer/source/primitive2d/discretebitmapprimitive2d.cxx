@@ -31,12 +31,12 @@ namespace drawinglayer::primitive2d
             // ObjectAndViewTransformationDependentPrimitive2D to create a BitmapPrimitive2D
             // with the correct mapping
 
-            if(getBitmapEx().IsEmpty())
+            if(getBitmap().IsEmpty())
                 return nullptr;
 
             // get discrete size
-            const Size& rSizePixel = getBitmapEx().GetSizePixel();
-            const basegfx::B2DVector aDiscreteSize(rSizePixel.Width(), rSizePixel.Height());
+            const Size aSizePixel = getBitmap().GetSizePixel();
+            const basegfx::B2DVector aDiscreteSize(aSizePixel.Width(), aSizePixel.Height());
 
             // get inverse ViewTransformation
             basegfx::B2DHomMatrix aInverseViewTransformation(getViewTransformation());
@@ -66,14 +66,14 @@ namespace drawinglayer::primitive2d
             // create BitmapPrimitive2D with now object-local coordinate data
             return
                 new BitmapPrimitive2D(
-                    getBitmapEx(),
+                    BitmapEx(getBitmap()),
                     aObjectTransform);
         }
 
         DiscreteBitmapPrimitive2D::DiscreteBitmapPrimitive2D(
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             const basegfx::B2DPoint& rTopLeft)
-        :   maBitmapEx(rBitmapEx),
+        :   maBitmap(rBitmap),
             maTopLeft(rTopLeft)
         {
         }
@@ -84,7 +84,7 @@ namespace drawinglayer::primitive2d
             {
                 const DiscreteBitmapPrimitive2D& rCompare = static_cast<const DiscreteBitmapPrimitive2D&>(rPrimitive);
 
-                return (getBitmapEx() == rCompare.getBitmapEx()
+                return (getBitmap() == rCompare.getBitmap()
                     && getTopLeft() == rCompare.getTopLeft());
             }
 

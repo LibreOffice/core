@@ -304,13 +304,13 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         Point aIconPos(getRemoveIconArea().TopLeft());
 
         aSeq.push_back(new DiscreteBitmapPrimitive2D(
-                    m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap,
+                    Bitmap(m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap),
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
 
         // tdf#38742 - draw pinned icon
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         aSeq.push_back(new DiscreteBitmapPrimitive2D(
-            m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHighlighted : m_aPinnedDocumentBitmap,
+            Bitmap(m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHighlighted : m_aPinnedDocumentBitmap),
             B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
 
         pProcessor->process(aSeq);
@@ -321,7 +321,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         drawinglayer::primitive2d::Primitive2DContainer aSeq {
             new DiscreteBitmapPrimitive2D(
-                m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
+                Bitmap(m_aPinnedDocumentBitmap), B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
 
         pProcessor->process(aSeq);
     }

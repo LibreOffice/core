@@ -110,7 +110,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     {
         Point aIconPos(getDefaultIconArea().TopLeft());
 
-        aSeq[4] = new DiscreteBitmapPrimitive2D( maDefaultBitmap,
+        aSeq[4] = new DiscreteBitmapPrimitive2D( Bitmap(maDefaultBitmap),
                     B2DPoint(aIconPos.X(), aIconPos.Y()));
     }
 

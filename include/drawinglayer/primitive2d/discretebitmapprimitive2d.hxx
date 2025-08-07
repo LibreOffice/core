@@ -22,7 +22,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 
 // DiscreteBitmapPrimitive2D class
@@ -40,7 +40,7 @@ namespace drawinglayer::primitive2d
         {
         private:
             /// the RGBA Bitmap-data
-            BitmapEx                                    maBitmapEx;
+            Bitmap                                    maBitmap;
 
             /** the top-left object position */
             basegfx::B2DPoint                           maTopLeft;
@@ -51,11 +51,11 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             DiscreteBitmapPrimitive2D(
-                const BitmapEx& rBitmapEx,
+                const Bitmap& rBitmap,
                 const basegfx::B2DPoint& rTopLeft);
 
             /// data read access
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
+            const Bitmap& getBitmap() const { return maBitmap; }
             const basegfx::B2DPoint& getTopLeft() const { return maTopLeft; }
 
             /// compare operator

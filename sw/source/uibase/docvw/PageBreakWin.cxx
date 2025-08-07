@@ -209,7 +209,7 @@ void SwPageBreakWin::PaintButton()
     if (bRtl)
         nImgOfstX = aRect.Right() - aBmpEx.GetSizePixel().Width() - 3.0;
     aSeq.push_back(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
-                                        aBmpEx, B2DPoint(nImgOfstX, 1.0)));
+                                        Bitmap(aBmpEx), B2DPoint(nImgOfstX, 1.0)));
 
     double nTop = double(aRect.getOpenHeight()) / 2.0;
     double nBottom = nTop + 4.0;
