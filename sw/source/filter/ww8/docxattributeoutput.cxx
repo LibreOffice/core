@@ -7550,6 +7550,9 @@ void DocxAttributeOutput::EmbedFont( std::u16string_view name, FontFamily family
 {
     if( !m_rExport.m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
+    if (EmbeddedFontsHelper::isCommonFont(name))
+        return;
+
     bool foundFont
         = EmbedFontStyle(name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch);
     foundFont
