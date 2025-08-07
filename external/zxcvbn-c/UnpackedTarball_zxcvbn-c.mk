@@ -13,10 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxcvbn-c,$(ZXCVBN_C_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zxcvbn-c,2))
 
-# * external/zxcvbn-c/0001-There-is-no-std-basic_string-int.patch.1 sent upstream as
-#   <https://github.com/tsyrogit/zxcvbn-c/pull/31> "There is no std::basic_string<int>":
-# * external/zxcvbn-c/0001-use-const-for-these-arrays.patch.1 sent upstream as
-#   <https://github.com/tsyrogit/zxcvbn-c/pull/37> "use const for these arrays":
 $(eval $(call gb_UnpackedTarball_add_patches,zxcvbn-c,\
 	external/zxcvbn-c/zxcvbn-c-2.5-do-not-use-stdafx.patch \
 ))
