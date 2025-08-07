@@ -69,7 +69,7 @@ private:
     };
     struct EntryAreaInfo
     {
-        SvTreeListEntry* entry;
+        SvTreeListEntry& entry;
         short column;
         tools::Rectangle area; // The area for the entry
     };
