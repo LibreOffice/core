@@ -1322,6 +1322,17 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
         return;
     }
 
+    // work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
+    const tools::Long nDestWidth((aLocalTransform * basegfx::B2DVector(1.0, 0.0)).getLength());
+    const tools::Long nDestHeight((aLocalTransform * basegfx::B2DVector(0.0, 1.0)).getLength());
+
+    // tdf#167831 check for output size, may have zero discrete dimension in X and/or Y
+    if (0 == nDestWidth || 0 == nDestHeight)
+    {
+        // it has and is thus invisible
+        return;
+    }
+
     if (maBColorModifierStack.count())
     {
         // need to apply ColorModifier to Bitmap data
@@ -1352,10 +1363,6 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
         return;
     }
-
-    // work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
-    const tools::Long nDestWidth((aLocalTransform * basegfx::B2DVector(1.0, 0.0)).getLength());
-    const tools::Long nDestHeight((aLocalTransform * basegfx::B2DVector(0.0, 1.0)).getLength());
 
     cairo_surface_t* pTarget(aCairoSurfaceHelper->getCairoSurface(nDestWidth, nDestHeight));
     if (nullptr == pTarget)
@@ -2517,6 +2524,22 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
         return;
     }
 
+    // work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
+    const basegfx::B2DHomMatrix aLocalTransform(
+        getViewInformation2D().getObjectToViewTransformation()
+        * rFillGraphicPrimitive2D.getTransformation());
+    const tools::Long nDestWidth(
+        (aLocalTransform * basegfx::B2DVector(aFillUnitRange.getWidth(), 0.0)).getLength());
+    const tools::Long nDestHeight(
+        (aLocalTransform * basegfx::B2DVector(0.0, aFillUnitRange.getHeight())).getLength());
+
+    // tdf#167831 check for output size, may have zero discrete dimension in X and/or Y
+    if (0 == nDestWidth || 0 == nDestHeight)
+    {
+        // it has and is thus invisible
+        return;
+    }
+
     constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
                                    | DrawModeFlags::GrayBitmap);
     basegfx::BColor aReplacementColor(0, 0, 0);
@@ -2586,15 +2609,6 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
         return;
     }
-
-    // work with dimensions in discrete target pixels to use evtl. MipMap pre-scale
-    const basegfx::B2DHomMatrix aLocalTransform(
-        getViewInformation2D().getObjectToViewTransformation()
-        * rFillGraphicPrimitive2D.getTransformation());
-    const tools::Long nDestWidth(
-        (aLocalTransform * basegfx::B2DVector(aFillUnitRange.getWidth(), 0.0)).getLength());
-    const tools::Long nDestHeight(
-        (aLocalTransform * basegfx::B2DVector(0.0, aFillUnitRange.getHeight())).getLength());
 
     cairo_surface_t* pTarget(aCairoSurfaceHelper->getCairoSurface(nDestWidth, nDestHeight));
     if (nullptr == pTarget)
