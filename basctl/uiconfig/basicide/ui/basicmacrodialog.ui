@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="basctl">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="liststore1">
@@ -21,32 +21,32 @@
     </columns>
   </object>
   <object class="GtkDialog" id="BasicMacroDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="basicmacrodialog|BasicMacroDialog">BASIC Macros</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="homogeneous">True</property>
-            <property name="layout_style">end</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="basicmacrodialog|run">Run</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="ok-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|ok">Runs or saves the current macro.</property>
@@ -63,8 +63,8 @@
               <object class="GtkButton" id="close">
                 <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -77,8 +77,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -92,52 +92,52 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">12</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
+              <!-- n-columns=3 n-rows=2 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="can-focus">True</property>
                         <property name="margin-start">12</property>
                         <property name="margin-top">6</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="macros">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
-                            <property name="headers_visible">False</property>
-                            <property name="search_column">0</property>
-                            <property name="show_expanders">False</property>
+                            <property name="headers-visible">False</property>
+                            <property name="search-column">0</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Tree List-selection1"/>
                             </child>
@@ -163,7 +163,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="existingmacrosft">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="basicmacrodialog|existingmacrosft">Existing Macros In:</property>
                         <property name="ellipsize">end</property>
                         <attributes>
@@ -173,38 +173,38 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkFrame" id="frame2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="can-focus">True</property>
                         <property name="margin-start">12</property>
                         <property name="margin-top">6</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="libraries">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore1</property>
-                            <property name="headers_visible">False</property>
-                            <property name="search_column">1</property>
-                            <property name="enable_tree_lines">True</property>
+                            <property name="headers-visible">False</property>
+                            <property name="search-column">1</property>
+                            <property name="enable-tree-lines">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                             </child>
@@ -237,12 +237,12 @@
                     <child type="label">
                       <object class="GtkBox" id="box2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkLabel" id="macrofromft">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="basicmacrodialog|macrofromft">Macro From</property>
                             <property name="xalign">0</property>
                             <attributes>
@@ -258,7 +258,7 @@
                         <child>
                           <object class="GtkLabel" id="macrotoft">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can-focus">False</property>
                             <property name="label" translatable="yes" context="basicmacrodialog|macrotoft">Save Macro In</property>
                             <property name="xalign">0</property>
                             <attributes>
@@ -275,24 +275,24 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
+                    <property name="can-focus">False</property>
+                    <property name="label-xalign">0</property>
+                    <property name="shadow-type">none</property>
                     <child>
                       <object class="GtkEntry" id="macronameedit">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="activates_default">True</property>
+                        <property name="can-focus">True</property>
                         <property name="margin-start">12</property>
                         <property name="margin-top">6</property>
+                        <property name="hexpand">True</property>
+                        <property name="activates-default">True</property>
                         <property name="truncate-multiline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="macronameedit-atkobject">
@@ -304,7 +304,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="libraryft1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="basicmacrodialog|libraryft1">Macro Name</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
@@ -313,25 +313,25 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">5</property>
                     <property name="homogeneous">True</property>
-                    <property name="layout_style">start</property>
+                    <property name="layout-style">start</property>
                     <child>
                       <object class="GtkButton" id="assign">
                         <property name="label" translatable="yes" context="basicmacrodialog|assign">Assign...</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assign-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|assign">Opens the Customize dialog, where you can assign the selected macro to a menu command, a toolbar, or an event.</property>
@@ -348,9 +348,9 @@
                       <object class="GtkButton" id="edit">
                         <property name="label" translatable="yes" context="basicmacrodialog|edit">Edit</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|edit">Starts the Basic editor and opens the selected macro or dialog for editing.</property>
@@ -367,9 +367,9 @@
                       <object class="GtkButton" id="delete">
                         <property name="label" translatable="yes" context="basicmacrodialog|delete">_Delete</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="delete-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|delete">Creates a new macro, creates a new module or deletes the selected macro or selected module.</property>
@@ -385,10 +385,10 @@
                     <child>
                       <object class="GtkButton" id="new">
                         <property name="label" translatable="yes" context="basicmacrodialog|new">_New</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="new-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|new">Creates a new library.</property>
@@ -405,9 +405,9 @@
                       <object class="GtkButton" id="organize">
                         <property name="label" translatable="yes" context="basicmacrodialog|organize">Organizer...</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="organize-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|organize">Opens the Macro Organizer dialog, where you can add, edit, or delete existing macro modules, dialogs, and libraries.</property>
@@ -423,10 +423,10 @@
                     <child>
                       <object class="GtkButton" id="newlibrary">
                         <property name="label" translatable="yes" context="basicmacrodialog|newlibrary">New Library</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="newlibrary-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newlibrary">Saves the recorded macro in a new library.</property>
@@ -442,10 +442,10 @@
                     <child>
                       <object class="GtkButton" id="newmodule">
                         <property name="label" translatable="yes" context="basicmacrodialog|newmodule">New Module</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="no_show_all">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="newmodule-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newmodule">Saves the recorded macro in a new module.</property>
@@ -460,8 +460,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -491,9 +491,6 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="BasicMacroDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|BasicMacroDialog">Opens a dialog to organize macros.</property>
