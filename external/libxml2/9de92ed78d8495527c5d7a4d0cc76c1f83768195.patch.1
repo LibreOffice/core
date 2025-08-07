@@ -1,0 +1,64 @@
+From 9de92ed78d8495527c5d7a4d0cc76c1f83768195 Mon Sep 17 00:00:00 2001
+From: Nick Wellnhofer <wellnhofer@aevum.de>
+Date: Tue, 5 Aug 2025 22:26:27 +0200
+Subject: [PATCH] tree: Guard against atype corruption
+
+Always remove ids if `id` member is set.
+
+Untested, but this should fix CVE-2025-7425 reported against libxslt:
+
+https://gitlab.gnome.org/GNOME/libxslt/-/issues/140
+---
+ tree.c  | 8 ++++----
+ valid.c | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tree.c b/tree.c
+index 2e8df00b8..ddb8bdb3b 100644
+--- a/tree.c
++++ b/tree.c
+@@ -1892,8 +1892,8 @@ xmlFreeProp(xmlAttrPtr cur) {
+ 	xmlDeregisterNodeDefaultValue((xmlNodePtr)cur);
+ 
+     /* Check for ID removal -> leading to invalid references ! */
+-    if ((cur->doc != NULL) && (cur->atype == XML_ATTRIBUTE_ID)) {
+-	    xmlRemoveID(cur->doc, cur);
++    if (cur->doc != NULL && cur->id != NULL) {
++        xmlRemoveID(cur->doc, cur);
+     }
+     if (cur->children != NULL) xmlFreeNodeList(cur->children);
+     DICT_FREE(cur->name)
+@@ -2736,7 +2736,7 @@ xmlNodeSetDoc(xmlNodePtr node, xmlDocPtr doc) {
+              * TODO: ID attributes should also be added to the new
+              * document, but it's not clear how to handle clashes.
+              */
+-            if (attr->atype == XML_ATTRIBUTE_ID)
++            if (attr->id != NULL)
+                 xmlRemoveID(oldDoc, attr);
+ 
+             break;
+@@ -6919,7 +6919,7 @@ xmlSetNsProp(xmlNodePtr node, xmlNsPtr ns, const xmlChar *name,
+                 return(NULL);
+         }
+ 
+-	if (prop->atype == XML_ATTRIBUTE_ID) {
++	if (prop->id != NULL) {
+ 	    xmlRemoveID(node->doc, prop);
+ 	    prop->atype = XML_ATTRIBUTE_ID;
+ 	}
+diff --git a/valid.c b/valid.c
+index 34b6757cb..e625f0c1b 100644
+--- a/valid.c
++++ b/valid.c
+@@ -4296,7 +4296,7 @@ xmlValidateOneAttribute(xmlValidCtxtPtr ctxt, xmlDocPtr doc,
+ 	       attr->name, elem->name, NULL);
+ 	return(0);
+     }
+-    if (attr->atype == XML_ATTRIBUTE_ID)
++    if (attr->id != NULL)
+         xmlRemoveID(doc, attr);
+     attr->atype = attrDecl->atype;
+ 
+-- 
+GitLab
+
