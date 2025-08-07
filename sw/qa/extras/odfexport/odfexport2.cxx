@@ -127,6 +127,11 @@ CPPUNIT_TEST_FIXTURE(Test, tdf166627)
         "href");
     CPPUNIT_ASSERT(xZipNames->hasByName(url));
 #endif
+
+    // also test that common fonts don't get embedded
+
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src", 0);
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
