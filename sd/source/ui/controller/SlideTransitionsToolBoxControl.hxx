@@ -22,7 +22,6 @@ class SlideTransitionsToolBoxControl final
     : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>
 {
     VclPtr<SlideTransitionsPaneWrapper> m_xVclBox;
-    std::unique_ptr<sd::SlideTransitionPane> m_xTransitionPane;
 
 public:
     SlideTransitionsToolBoxControl();

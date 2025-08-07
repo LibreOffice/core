@@ -21,7 +21,6 @@ SlideTransitionsToolBoxControl::initialize(const css::uno::Sequence<css::uno::An
 void SAL_CALL SlideTransitionsToolBoxControl::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
-    m_xTransitionPane.reset();
     m_xVclBox.disposeAndClear();
     svt::ToolboxController::dispose();
 }

@@ -39,6 +39,11 @@ namespace sd
 class TransitionPreset;
 class ViewShellBase;
 
+namespace tools
+{
+    class EventMultiplexer;
+}
+
 namespace impl
 {
     struct TransitionEffect;
@@ -107,6 +112,7 @@ private:
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
+    std::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
 
     std::unique_ptr<weld::IconView> mxTransitionsIconView;
     std::unique_ptr<weld::ScrolledWindow> mxTransitionsScrollWindow;

@@ -920,14 +920,17 @@ void SlideTransitionPane::playCurrentEffect()
 
 void SlideTransitionPane::addListener()
 {
+    if (!mpEventMultiplexer)
+        mpEventMultiplexer = mrBase.GetEventMultiplexer();
+
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener( aLink );
+    mpEventMultiplexer->AddEventListener( aLink );
 }
 
 void SlideTransitionPane::removeListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
+    mpEventMultiplexer->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
