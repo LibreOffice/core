@@ -27,25 +27,22 @@ class SwTextFrame;
 
 class SwTextLine : public SwCacheObj
 {
-    std::unique_ptr<SwParaPortion> m_pLine;
+    std::unique_ptr<SwParaPortion> m_xLine;
 
     virtual void UpdateCachePos() override;
 
 public:
-    SwTextLine(SwTextFrame const* pFrame, std::unique_ptr<SwParaPortion> pNew = nullptr);
+    SwTextLine(SwTextFrame const* pFrame, std::unique_ptr<SwParaPortion> xNew = nullptr);
     virtual ~SwTextLine() override;
 
-    SwParaPortion* GetPara() { return m_pLine.get(); }
-    const SwParaPortion* GetPara() const { return m_pLine.get(); }
+    SwParaPortion* GetPara() { return m_xLine.get(); }
+    const SwParaPortion* GetPara() const { return m_xLine.get(); }
 
-    void SetPara(SwParaPortion* pNew, bool bDelete)
+    std::unique_ptr<SwParaPortion> SetPara(std::unique_ptr<SwParaPortion> xNew)
     {
-        if (!bDelete)
-        {
-            // coverity[leaked_storage] - intentional, ownership transferred
-            (void)m_pLine.release();
-        }
-        m_pLine.reset(pNew);
+        std::unique_ptr<SwParaPortion> xOld = std::move(m_xLine);
+        m_xLine = std::move(xNew);
+        return xOld;
     }
 };
 

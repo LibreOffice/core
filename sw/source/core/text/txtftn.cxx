@@ -166,7 +166,7 @@ bool SwTextFrame::CalcPrepFootnoteAdjust()
             SwTextFormatInfo aInf( getRootFrame()->GetCurrShell()->GetOut(), this );
             SwTextFormatter aLine( this, &aInf );
             aLine.TruncLines();
-            SetPara(nullptr, true); // May be deleted!
+            SetPara(nullptr); // May be deleted!
             ResetPreps();
             return false;
         }

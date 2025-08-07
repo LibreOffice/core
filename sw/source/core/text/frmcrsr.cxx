@@ -129,7 +129,7 @@ bool sw_ChangeOffset(SwTextFrame* pFrame, TextFrameIndex nNew)
                     nNew = TextFrameIndex(0);
                 }
                 pFrame->SetOffset( nNew );
-                pFrame->SetPara(nullptr, true);
+                pFrame->SetPara(nullptr);
                 pFrame->GetFormatted();
                 if( pFrame->getFrameArea().HasArea() )
                     pFrame->getRootFrame()->GetCurrShell()->InvalidateWindows( pFrame->getFrameArea() );
