@@ -991,16 +991,6 @@ namespace sdr::contact {
         return *pDevice;
     }
 
-
-    namespace
-    {
-        void lcl_resetFlag( bool& rbFlag )
-        {
-            rbFlag = false;
-        }
-    }
-
-
     bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess const & _rPageView, const OutputDevice& _rDevice,
         const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
@@ -1020,7 +1010,7 @@ namespace sdr::contact {
         }
 
         m_bCreatingControl = true;
-        ::comphelper::ScopeGuard aGuard([&] () { lcl_resetFlag(m_bCreatingControl); });
+        ::comphelper::ScopeGuard aGuard([&] () { m_bCreatingControl = false; });
 
         if ( m_aControl.is() )
         {
