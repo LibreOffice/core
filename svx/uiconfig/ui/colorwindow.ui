@@ -125,7 +125,7 @@
             <property name="vscrollbar-policy">always</property>
             <property name="shadow-type">in</property>
             <property name="overlay-scrolling">False</property>
-            <property name="height-request">180</property>
+            <property name="height-request">260</property>
             <child>
               <object class="GtkIconView" id="colorwindow_iv_colors">
                 <property name="visible">True</property>
