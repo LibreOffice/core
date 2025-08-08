@@ -192,10 +192,10 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
                 {
                     xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
                     //show positioning controls only if they make sense
-                    m_bSupportingAxisPositioning = xChartType->isSupportingAxisPositioning(nDimensionCount, nDimensionIndex);
+                    m_bSupportingAxisPositioning = xChartType.is() && xChartType->isSupportingAxisPositioning(nDimensionCount, nDimensionIndex);
 
                     //show axis origin only for secondary y axis
-                    if( nDimensionIndex==1 && nAxisIndex==1 && xChartType->isSupportingBaseValue())
+                    if( nDimensionIndex==1 && nAxisIndex==1 && xChartType.is() && xChartType->isSupportingBaseValue())
                         m_bShowAxisOrigin = true;
 
                     if ( nDimensionIndex == 0 && ( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::DATE ) )
@@ -207,7 +207,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
                         }
 
                         if (!m_bComplexCategoriesAxis)
-                            m_bSupportingCategoryPositioning = xChartType->isSupportingCategoryPositioning(nDimensionCount);
+                            m_bSupportingCategoryPositioning = xChartType.is() && xChartType->isSupportingCategoryPositioning(nDimensionCount);
                     }
                 }
             }
