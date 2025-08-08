@@ -48,7 +48,8 @@ public:
 
     virtual void response(int nResponse) override;
 
-    virtual void add_button(const OUString&, int, const OUString& rHelpId = {}) override;
+    virtual void add_button(const OUString& rText, int nResponse,
+                            const OUString& rHelpId = {}) override;
 
     virtual void set_modal(bool bModal) override;
 

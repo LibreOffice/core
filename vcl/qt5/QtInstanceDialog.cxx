@@ -112,9 +112,17 @@ void QtInstanceDialog::response(int nResponse)
     rQtInstance.RunInMainThread([&] { m_pDialog->done(nResponse); });
 }
 
-void QtInstanceDialog::add_button(const OUString&, int, const OUString&)
+void QtInstanceDialog::add_button(const OUString& rText, int nResponse, const OUString& rHelpId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QDialogButtonBox* pButtonBox = findButtonBox(m_pDialog);
+        assert(pButtonBox && "Dialog has no button box");
+        QPushButton* pButton = pButtonBox->addButton(toQString(rText), QDialogButtonBox::NoRole);
+        pButton->setProperty(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE, nResponse);
+        setHelpId(*pButton, rHelpId);
+    });
 }
 
 void QtInstanceDialog::set_modal(bool bModal)
