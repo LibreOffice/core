@@ -98,7 +98,7 @@ protected:
         CPPUNIT_FAIL( "verify method must be overridden" );
     }
 
-    void calcLayout();
+    void calcLayout(bool bRecalc = false);
 
     /// Get the body text of the whole document.
     OUString getBodyText() const;
