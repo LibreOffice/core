@@ -265,7 +265,6 @@ RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
     : mxEntry(std::move(xControl))
     , maIdle("formula RefEdit Idle")
     , mpAnyRefDlg(nullptr)
-    , mpLabelWidget(nullptr)
     , mpFocusInEvent(nullptr)
     , mpFocusOutEvent(nullptr)
 {
@@ -314,7 +313,10 @@ void RefEdit::StartUpdateData()
 void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
 {
     mpAnyRefDlg = pDlg;
-    mpLabelWidget = pLabel;
+    if (pLabel)
+        maGetLabelTextForShrinkModeFunc = [pLabel] { return pLabel->get_label(); };
+    else
+        maGetLabelTextForShrinkModeFunc = nullptr;
 
     if( pDlg )
     {
@@ -325,6 +327,15 @@ void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
         maIdle.ClearInvokeHandler();
         maIdle.Stop();
     }
+}
+
+
+OUString RefEdit::GetLabelTextForShrinkMode()
+{
+    if (maGetLabelTextForShrinkModeFunc)
+        return maGetLabelTextForShrinkModeFunc();
+
+    return OUString();
 }
 
 IMPL_LINK_NOARG(RefEdit, Modify, weld::Entry&, void)

@@ -41,7 +41,7 @@ protected:
 private:
     Idle maIdle;
     IControlReferenceHandler* mpAnyRefDlg; // parent dialog
-    weld::Label* mpLabelWidget;
+    std::function<OUString()> maGetLabelTextForShrinkModeFunc;
     ImplSVEvent* mpFocusInEvent;
     ImplSVEvent* mpFocusOutEvent;
 
@@ -120,13 +120,7 @@ public:
         return Selection(nStartPos, nEndPos);
     }
 
-    OUString GetLabelTextForShrinkMode()
-    {
-        if (mpLabelWidget)
-            return mpLabelWidget->get_label();
-
-        return OUString();
-    }
+    OUString GetLabelTextForShrinkMode();
 
     void SaveValue()
     {
