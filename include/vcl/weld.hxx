@@ -503,7 +503,6 @@ class VCL_DLLPUBLIC Frame : virtual public Container
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
-    virtual std::unique_ptr<Label> weld_label_widget() const = 0;
 };
 
 class VCL_DLLPUBLIC Notebook : virtual public Widget

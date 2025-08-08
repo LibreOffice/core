@@ -2037,8 +2037,6 @@ public:
     virtual void set_label(const OUString& rText) override;
 
     virtual OUString get_label() const override;
-
-    virtual std::unique_ptr<weld::Label> weld_label_widget() const override;
 };
 
 class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::MenuButton

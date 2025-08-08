@@ -36,10 +36,4 @@ OUString QtInstanceFrame::get_label() const
     return sLabel;
 }
 
-std::unique_ptr<weld::Label> QtInstanceFrame::weld_label_widget() const
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

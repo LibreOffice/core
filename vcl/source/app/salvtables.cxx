@@ -5986,14 +5986,6 @@ void SalInstanceLabel::set_font(const vcl::Font& rFont)
     m_xLabel->Invalidate();
 }
 
-std::unique_ptr<weld::Label> SalInstanceFrame::weld_label_widget() const
-{
-    FixedText* pLabel = dynamic_cast<FixedText*>(m_xFrame->get_label_widget());
-    if (!pLabel)
-        return nullptr;
-    return std::make_unique<SalInstanceLabel>(pLabel, m_pBuilder, false);
-}
-
 SalInstanceTextView::SalInstanceTextView(VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
                                          bool bTakeOwnership)
     : SalInstanceWidget(pTextView, pBuilder, bTakeOwnership)
