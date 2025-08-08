@@ -52,6 +52,8 @@
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>
 
+#include <vcl/tabs.hrc>
+
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
 using namespace ::com::sun::star;
@@ -75,10 +77,20 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
             bOpenSmartTagOptions = true;
     }
 
-    AddTabPage(u"options"_ustr, OfaAutocorrOptionsPage::Create, nullptr);
-    AddTabPage(u"applypage"_ustr, OfaSwAutoFmtOptionsPage::Create, nullptr);
-    AddTabPage(u"wordcompletion"_ustr, OfaAutoCompleteTabPage::Create, nullptr);
-    AddTabPage(u"smarttags"_ustr, OfaSmartTagOptionsTabPage::Create, nullptr);
+    AddTabPage(u"replace"_ustr, TabResId(RID_TAB_OFA_REPLACE.aLabel), OfaAutocorrReplacePage::Create,
+               RID_L + RID_TAB_OFA_REPLACE.sIconName);
+    AddTabPage(u"exceptions"_ustr, TabResId(RID_TAB_OFA_EXCEPTIONS.aLabel), OfaAutocorrExceptPage::Create,
+               RID_L + RID_TAB_OFA_EXCEPTIONS.sIconName);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_OFA_APPLY.aLabel), OfaAutocorrOptionsPage::Create,
+               RID_L + RID_TAB_OFA_APPLY.sIconName);
+    AddTabPage(u"applypage"_ustr, TabResId(RID_TAB_OFA_OPTIONS.aLabel),
+               OfaSwAutoFmtOptionsPage::Create, RID_L + RID_TAB_OFA_OPTIONS.sIconName);
+    AddTabPage(u"localized"_ustr, TabResId(RID_TAB_OFA_LOCALIZED.aLabel), OfaQuoteTabPage::Create,
+               RID_L + RID_TAB_OFA_LOCALIZED.sIconName);
+    AddTabPage(u"wordcompletion"_ustr, TabResId(RID_TAB_OFA_WORDCOMPL.aLabel),
+               OfaAutoCompleteTabPage::Create, RID_L + RID_TAB_OFA_WORDCOMPL.sIconName);
+    AddTabPage(u"smarttags"_ustr, TabResId(RID_TAB_OFA_SMARTTAG.aLabel),
+               OfaSmartTagOptionsTabPage::Create, RID_L + RID_TAB_OFA_SMARTTAG.sIconName);
 
     if (!bShowSWOptions)
     {
@@ -97,9 +109,6 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
         RemoveTabPage(u"options"_ustr);
     }
 
-    AddTabPage(u"replace"_ustr, OfaAutocorrReplacePage::Create, nullptr);
-    AddTabPage(u"exceptions"_ustr,  OfaAutocorrExceptPage::Create, nullptr);
-    AddTabPage(u"localized"_ustr, OfaQuoteTabPage::Create, nullptr);
 
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType

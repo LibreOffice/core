@@ -26,6 +26,8 @@
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
 
+#include <vcl/tabs.hrc>
+
 SvxAreaTabDialog::SvxAreaTabDialog
 (
     weld::Window* pParent,
@@ -49,20 +51,19 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnColorListState(ChangeType::NONE)
 {
     if (bSlideBackground)
-        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, SvxAreaTabPage::CreateWithSlideBackground, nullptr);
+        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, TabResId(RID_TAB_AREA.aLabel),
+                   SvxAreaTabPage::CreateWithSlideBackground, RID_L + RID_TAB_AREA.sIconName);
     else
-        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, SvxAreaTabPage::Create, nullptr);
+        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, TabResId(RID_TAB_AREA.aLabel), SvxAreaTabPage::Create,
+                   RID_L + RID_TAB_AREA.sIconName);
 
     if (bShadow)
     {
-        AddTabPage(u"RID_SVXPAGE_SHADOW"_ustr, SvxShadowTabPage::Create, nullptr);
+        AddTabPage(u"RID_SVXPAGE_SHADOW"_ustr, TabResId(RID_TAB_SHADOW.aLabel),
+                   SvxShadowTabPage::Create, RID_L + RID_TAB_SHADOW.sIconName);
     }
-    else
-    {
-        RemoveTabPage( u"RID_SVXPAGE_SHADOW"_ustr );
-    }
-
-    AddTabPage( u"RID_SVXPAGE_TRANSPARENCE"_ustr, SvxTransparenceTabPage::Create,  nullptr);
+    AddTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+               SvxTransparenceTabPage::Create, RID_L + RID_TAB_TRANSPARENCE.sIconName);
 
     weld::Button& rBtnCancel = GetCancelButton();
     rBtnCancel.connect_clicked(LINK(this, SvxAreaTabDialog, CancelHdlImpl));

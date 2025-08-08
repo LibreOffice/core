@@ -41,6 +41,7 @@
 #include <vcl/fieldvalues.hxx>
 
 #include <bitmaps.hlst>
+#include <vcl/tabs.hrc>
 
 // static ----------------------------------------------------------------
 
@@ -78,21 +79,26 @@ SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxIte
     DBG_ASSERT(pView, "no valid view (!)");
 
     //different positioning page in Writer
-    if(nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
+    if (nAnchorCtrls
+        & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page
+           | SvxAnchorIds::Fly))
     {
-        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
-        RemoveTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr);
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+                   SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges,
+                   RID_L + RID_TAB_POSSIZE.sIconName);
     }
     else
     {
-        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
-        RemoveTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr);
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+                   SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges,
+                   RID_L + RID_TAB_POSSIZE.sIconName);
     }
-
-    AddTabPage(u"RID_SVXPAGE_ANGLE"_ustr, SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
-    AddTabPage(u"RID_SVXPAGE_SLANT"_ustr, SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
+    AddTabPage(u"RID_SVXPAGE_ANGLE"_ustr, TabResId(RID_TAB_ROTATION.aLabel),
+               SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges,
+               RID_L + RID_TAB_ROTATION.sIconName);
+    AddTabPage(u"RID_SVXPAGE_SLANT"_ustr, TabResId(RID_TAB_SLANT.aLabel), SvxSlantTabPage::Create,
+               SvxSlantTabPage::GetRanges, RID_L + RID_TAB_SLANT.sIconName);
 }
-
 
 void SvxTransformTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 {

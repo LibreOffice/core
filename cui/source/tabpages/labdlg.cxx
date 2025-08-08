@@ -31,6 +31,8 @@
 #include <transfrm.hxx>
 #include <bitmaps.hlst>
 
+#include <vcl/tabs.hrc>
+
 // define ----------------------------------------------------------------
 
 #define EXT_OPTIMAL     0
@@ -458,20 +460,25 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* p
     assert(pView); // No valid View transferred!
 
     //different positioning page in Writer
-    if (nAnchorCtrls & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page | SvxAnchorIds::Fly))
+    if (nAnchorCtrls
+        & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page
+           | SvxAnchorIds::Fly))
     {
-        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, SvxSwPosSizeTabPage::Create,
-            SvxSwPosSizeTabPage::GetRanges );
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+                   SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges,
+                   RID_L + RID_TAB_POSSIZE.sIconName);
         RemoveTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr);
     }
     else
     {
-        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, SvxPositionSizeTabPage::Create,
-            SvxPositionSizeTabPage::GetRanges );
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+                   SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges,
+                   RID_L + RID_TAB_POSSIZE.sIconName);
         RemoveTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr);
     }
-    AddTabPage(u"RID_SVXPAGE_CAPTION"_ustr, SvxCaptionTabPage::Create,
-        SvxCaptionTabPage::GetRanges );
+    AddTabPage(u"RID_SVXPAGE_CAPTION"_ustr, TabResId(RID_TAB_CALLOUT.aLabel),
+               SvxCaptionTabPage::Create, SvxCaptionTabPage::GetRanges,
+               RID_L + RID_TAB_CALLOUT.sIconName);
 }
 
 void SvxCaptionTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

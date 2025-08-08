@@ -55,6 +55,8 @@
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::ucbhelper;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -479,10 +481,13 @@ GalleryThemeProperties::GalleryThemeProperties(weld::Widget* pParent,
                              u"GalleryThemeDialog"_ustr, pItemSet)
     , pData(_pData)
 {
-    AddTabPage(u"general"_ustr, TPGalleryThemeGeneral::Create, nullptr);
-    AddTabPage(u"files"_ustr, TPGalleryThemeProperties::Create, nullptr);
-    if (pData->pTheme->IsReadOnly())
-        RemoveTabPage(u"files"_ustr);
+    AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), TPGalleryThemeGeneral::Create,
+               RID_L + RID_TAB_ORGANIZER.sIconName);
+    if (!pData->pTheme->IsReadOnly())
+    {
+        AddTabPage(u"files"_ustr, TabResId(RID_TAB_FILES.aLabel),
+                   TPGalleryThemeProperties::Create, RID_L + RID_TAB_FILES.sIconName);
+    }
 
     OUString aText = m_xDialog->get_title().replaceFirst( "%1",  pData->pTheme->GetName() );
 

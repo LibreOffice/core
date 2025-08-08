@@ -29,6 +29,8 @@
 #include <svx/sdtayitm.hxx>
 #include <svtools/unitconv.hxx>
 
+#include <vcl/tabs.hrc>
+
 const WhichRangesContainer SvxTextAnimationPage::pRanges(
     svl::Items<SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIAMOUNT>);
 
@@ -42,9 +44,12 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
     : SfxTabDialogController(pParent, u"cui/ui/textdialog.ui"_ustr, u"TextDialog"_ustr, pAttr)
     , pView(pSdrView)
 {
-    AddTabPage(u"RID_SVXPAGE_TEXTATTR"_ustr, SvxTextAttrPage::Create, nullptr);
-    AddTabPage(u"RID_SVXPAGE_TEXTANIMATION"_ustr, SvxTextAnimationPage::Create, nullptr);
-    AddTabPage(u"RID_SVXPAGE_TEXTCOLUMNS"_ustr, SvxTextColumnsPage::Create, nullptr);
+    AddTabPage(u"RID_SVXPAGE_TEXTATTR"_ustr, TabResId(RID_TAB_TEXT.aLabel),
+               SvxTextAttrPage::Create, RID_L + RID_TAB_TEXT.sIconName);
+    AddTabPage(u"RID_SVXPAGE_TEXTANIMATION"_ustr, TabResId(RID_TAB_TEXTANIMATION.aLabel),
+               SvxTextAnimationPage::Create, RID_L + RID_TAB_TEXTANIMATION.sIconName);
+    AddTabPage(u"RID_SVXPAGE_TEXTCOLUMNS"_ustr, TabResId(RID_TAB_COLUMNS.aLabel),
+               SvxTextColumnsPage::Create, RID_L + RID_TAB_COLUMNS.sIconName);
 }
 
 /*************************************************************************

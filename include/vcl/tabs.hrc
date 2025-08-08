@@ -31,6 +31,8 @@ inline constexpr OUString RID_L = u"cmd/32/"_ustr;
 
 inline constexpr TabData RID_TAB_BORDER{ NC_("RID_TAB_BORDER", "Border"), u"borderdialog.png"_ustr };
 inline constexpr TabData RID_TAB_LINE{ NC_("RID_TAB_LINE", "Line"), u"formatline.png"_ustr };
+inline constexpr TabData RID_TAB_LINESTYLE{ NC_("RID_TAB_LINE", "Line Style"), u"linestyle.png"_ustr };
+inline constexpr TabData RID_TAB_ARROWSTYLE{ NC_("RID_TAB_ARROWSTYLE", "Arrow Style"), u"lineendstyle.png"_ustr };
 inline constexpr TabData RID_TAB_AREA{ NC_("RID_TAB_AREA", "Area"), u"backgroundcolor.png"_ustr };
 inline constexpr TabData RID_TAB_TRANSPARENCE{ NC_("RID_TAB_TRANSPARENCE", "Transparency"), u"graftransparence.png"_ustr };
 inline constexpr TabData RID_TAB_FONT{ NC_("RID_TAB_FONT", "Font"), u"fontdialog.png"_ustr };
@@ -44,6 +46,7 @@ inline constexpr TabData RID_TAB_NUMBERS{ NC_("RID_TAB_NUMBERS", "Numbers"), u"n
 inline constexpr TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents & Spacing"), u"paraspaceincrease.png"_ustr };
 inline constexpr TabData RID_TAB_TABS{ NC_("RID_TAB_TABS", "Tabs"), u"hangingindent.png"_ustr };
 inline constexpr TabData RID_TAB_ORGANIZER{ NC_("RID_TAB_ORGANIZER", "General"), u"browseview.png"_ustr };
+inline constexpr TabData RID_TAB_FILES{ NC_("RID_TAB_FILES", "Files"), u"open.png"_ustr };
 inline constexpr TabData RID_TAB_BACKGROUND{ NC_("RID_TAB_BACKGROUND", "Background"), u"backgroundcolor.png"_ustr };
 inline constexpr TabData RID_TAB_TEXTFLOW{ NC_("RID_TAB_TEXTFLOW", "Text Flow"), u"hyphenate.png"_ustr };
 inline constexpr TabData RID_TAB_ASIANLAYOUT{ NC_("RID_TAB_ASIANLAYOUT", "Asian Layout"), u"textdirectiontoptobottom.png"_ustr };
@@ -119,10 +122,12 @@ inline constexpr TabData RID_TAB_FOOTER_FIRST{ NC_("RID_TAB_FOOTER_FIRST", "Foot
 inline constexpr TabData RID_TAB_FOOTER_LEFT{ NC_("RID_TAB_FOOTER_LEFT", "Footer (left)"), u"insertfooter.png"_ustr };
 inline constexpr TabData RID_TAB_FOOTER_RIGHT{ NC_("RID_TAB_FOOTER_RIGHT", "Footer (right)"), u"insertfooter.png"_ustr };
 // picture/frame formatting
-inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and Size"), u"transformdialog.png"_ustr };
+inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and Size"), u"attributepagesize.png"_ustr };
 inline constexpr TabData RID_TAB_HYPERLINK{ NC_("RID_TAB_HYPERLINK", "Hyperlink"), u"inserthyperlink.png"_ustr };
 inline constexpr TabData RID_TAB_CROP{ NC_("RID_TAB_CROP", "Crop"), u"crop.png"_ustr };
 inline constexpr TabData RID_TAB_ROTATION{ NC_("RID_TAB_ROTATION", "Rotation"), u"toggleobjectrotatemode.png"_ustr };
+inline constexpr TabData RID_TAB_CALLOUT{ NC_("RID_TAB_CALLOUT", "Callout"), u"calloutshapes.png"_ustr };
+inline constexpr TabData RID_TAB_SLANT{ NC_("RID_TAB_SLANT", "Slant & Corner Radius"), u"crookslant.png"_ustr };
 // chart
 inline constexpr TabData RID_TAB_CHART_OPTIONS{ NC_("RID_TAB_CHART_OPTIONS", "Options"), u"diagramtype.png"_ustr };
 inline constexpr TabData RID_TAB_CHART_ERROR_X{ NC_("RID_TAB_CHART_ERROR_X", "X Error Bars"), u"arrowshapes.png"_ustr };
@@ -149,6 +154,14 @@ inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"clos
 inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
 inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };
 inline constexpr TabData RID_TAB_PRINTER{ NC_("RID_TAB_PRINTER", "Printer"), u"printlayout.png"_ustr };
+// autocorrect
+inline constexpr TabData RID_TAB_OFA_REPLACE{ NC_("RID_TAB_OFA_REPLACE", "Replace"), u"reload.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_EXCEPTIONS{ NC_("RID_TAB_OFA_EXCEPTIONS", "Exceptions"), u"cancel.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_APPLY{ NC_("RID_TAB_OFA_APPLY", "Options"), u"patternfield.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_OPTIONS{ NC_("RID_TAB_OFA_OPTIONS", "Options"), u"patternfield.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_LOCALIZED{ NC_("RID_TAB_OFA_LOCALIZED", "Localized Options"), u"charmapcontrol.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_WORDCOMPL{ NC_("RID_TAB_OFA_WORDCOMPL", "Word Completion"), u"autocorrectdlg.png"_ustr };
+inline constexpr TabData RID_TAB_OFA_SMARTTAG{ NC_("RID_TAB_OFA_SMARTTAG", "Smart Tags"), u"autopilotmenu.png"_ustr };
 
 static OUString TabResId(TranslateId aId)
 {

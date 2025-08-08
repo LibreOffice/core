@@ -24,6 +24,8 @@
 #include <svl/intitem.hxx>
 #include <cuitabarea.hxx>
 
+#include <vcl/tabs.hrc>
+
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
     const SfxItemSet& rCoreSet,
     bool bEnableSelector,
@@ -38,16 +40,20 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
 {
-    AddTabPage(u"borders"_ustr, SvxBorderTabPage::Create, nullptr );
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), SvxBorderTabPage::Create,
+               RID_L + RID_TAB_BORDER.sIconName);
     if (bEnableDrawingLayerFillStyles)
     {
         // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
-        AddTabPage(u"area"_ustr, SvxAreaTabPage::Create, nullptr);
-        AddTabPage(u"transparence"_ustr, SvxTransparenceTabPage::Create, nullptr);
+        AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), SvxAreaTabPage::Create,
+                   RID_L + RID_TAB_AREA.sIconName);
+        AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+                   SvxTransparenceTabPage::Create, RID_L + RID_TAB_TRANSPARENCE.sIconName);
     }
     else
     {
-        AddTabPage(u"background"_ustr, SvxBkgTabPage::Create, nullptr );
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), SvxBkgTabPage::Create,
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
     }
 }
 
