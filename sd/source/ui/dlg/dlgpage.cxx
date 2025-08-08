@@ -32,6 +32,8 @@
 #include <svl/eitem.hxx>
 #include <svx/flagsdef.hxx>
 
+#include <vcl/tabs.hrc>
+
 /**
  * Constructor of tab dialog: appends pages to the dialog
  */
@@ -55,15 +57,16 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), nullptr);
-    AddTabPage(u"RID_SVXPAGE_AREA"_ustr, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
-    AddTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr,
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE), nullptr);
-
-    if (!bAreaPage) // I have to add the page before I remove it !
-    {
-        RemoveTabPage(u"RID_SVXPAGE_AREA"_ustr);
-        RemoveTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr);
+    AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_PAGE.aLabel),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);
+    if (bAreaPage)
+    { // I have to add the page before I remove it !
+        AddTabPage(u"RID_SVXPAGE_AREA"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA),
+                   RID_L + RID_TAB_BACKGROUND.sIconName);
+        AddTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
+                   RID_L + RID_TAB_TRANSPARENCE.sIconName);
     }
 
     if (mbIsImpressDoc)
