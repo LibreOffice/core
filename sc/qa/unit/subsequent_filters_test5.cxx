@@ -91,6 +91,18 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf167134_LOOKUP_extRef)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf122336)
+{
+    createScDoc("xlsx/tdf122336.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    // Without the fix in place, this test would have failed with
+    // - Expected: Uitvoeringsdatum
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(u"Uitvoeringsdatum"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"12/25/2018"_ustr, pDoc->GetString(0, 1, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
