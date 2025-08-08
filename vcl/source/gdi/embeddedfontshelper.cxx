@@ -57,11 +57,8 @@ static void clearDir( const OUString& path )
     osl::Directory dir( path );
     if( dir.reset() == osl::Directory::E_None )
     {
-        for(;;)
+        for (osl::DirectoryItem item; dir.getNextItem(item) == osl::Directory::E_None;)
         {
-            osl::DirectoryItem item;
-            if( dir.getNextItem( item ) != osl::Directory::E_None )
-                break;
             osl::FileStatus status( osl_FileStatus_Mask_FileURL );
             if( item.getFileStatus( status ) == osl::File::E_None )
                 osl::File::remove( status.getFileURL());
