@@ -1926,10 +1926,10 @@ namespace
 SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet)
     : SfxTabPage(pPage, pController, u"modules/swriter/ui/tocentriespage.ui"_ustr, u"TocEntriesPage"_ustr, &rAttrSet)
     , m_sDelimStr(SwResId(STR_DELIM))
+    , m_sAuthTypeStr(SwResId(STR_AUTH_FIELD_AUTHORITY_TYPE))
     , m_sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
     , m_pCurrentForm(nullptr)
     , m_bInLevelHdl(false)
-    , m_xTypeFT(m_xBuilder->weld_label(u"typeft"_ustr))
     , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
     , m_xLevelLB(m_xBuilder->weld_tree_view(u"level"_ustr))
     , m_xAllLevelsPB(m_xBuilder->weld_button(u"all"_ustr))
@@ -1979,7 +1979,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
 {
     const OUString sNoCharSortKey(SwResId(STR_NOSORTKEY));
 
-    m_sAuthTypeStr = m_xTypeFT->get_label();
     m_sLevelStr = m_xLevelFT->get_label();
     m_xAuthFieldsLB->make_sorted();
     m_xTokenWIN->SetTabPage(this);
