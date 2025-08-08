@@ -103,6 +103,18 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf122336)
     CPPUNIT_ASSERT_EQUAL(u"12/25/2018"_ustr, pDoc->GetString(0, 1, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf118668)
+{
+    createScDoc("xlsx/tdf118668.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+    CPPUNIT_ASSERT(pDoc->IsVisible(0));
+
+    //Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(pDoc->IsVisible(1));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
