@@ -40,6 +40,9 @@ public:
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
+    /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR.
+    virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent) const = 0;
+
     /// Debugging
     virtual OString dumpNotifyState() const = 0;
 };

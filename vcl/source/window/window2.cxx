@@ -1045,6 +1045,17 @@ WindowType Window::GetType() const
         return WindowType::NONE;
 }
 
+bool Window::IsFormControl() const
+{
+    return mpWindowImpl ? mpWindowImpl->mbIsFormControl : false;
+}
+
+void Window::SetFormControl(bool bFormControl)
+{
+    if (mpWindowImpl)
+        mpWindowImpl->mbIsFormControl = bFormControl;
+}
+
 Dialog* Window::GetParentDialog() const
 {
     const vcl::Window *pWindow = this;

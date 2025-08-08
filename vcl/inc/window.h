@@ -393,6 +393,7 @@ public:
                         mbSecondary:1,
                         mbNonHomogeneous:1,
                         mbDoubleBufferingRequested:1;
+    bool mbIsFormControl : 1 = false;
 
     rtl::Reference< DNDListenerContainer > mxDNDListenerContainer;
 

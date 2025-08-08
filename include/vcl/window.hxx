@@ -768,6 +768,8 @@ public:
     void                                SetType( WindowType eType );
     WindowType                          GetType() const;
     std::string_view GetTypeName() const;
+    bool IsFormControl() const;
+    void SetFormControl(bool bFormControl);
     bool                                IsSystemWindow() const;
     SAL_DLLPRIVATE bool                 IsDockingWindow() const;
     bool                                IsDialog() const;
