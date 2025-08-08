@@ -1127,7 +1127,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             {
 #ifdef OSL_BIGENDIAN
                 if( bIsAlpha )
-                    nAlpha = data[ nOff++ ];
+                    nAlpha = pReadScan[3];
                 else
                     nAlpha = data[ nOff++ ] = 255;
 #if ENABLE_WASM_STRIP_PREMULTIPLY
@@ -1142,7 +1142,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
                 pReadScan += 4;
 #else
                 if( bIsAlpha )
-                    nAlpha = data[ nOff + 3 ];
+                    nAlpha = pReadScan[3];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
 #if ENABLE_WASM_STRIP_PREMULTIPLY
@@ -1169,7 +1169,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             {
 #ifdef OSL_BIGENDIAN
                 if( bIsAlpha )
-                    nAlpha = data[ nOff ++ ];
+                    nAlpha = pReadScan[3];
                 else
                     nAlpha = data[ nOff ++ ] = 255;
 #if ENABLE_WASM_STRIP_PREMULTIPLY
@@ -1184,7 +1184,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
                 pReadScan++;
 #else
                 if( bIsAlpha )
-                    nAlpha = data[ nOff + 3 ];
+                    nAlpha = pReadScan[3];
                 else
                     nAlpha = data[ nOff + 3 ] = 255;
 #if ENABLE_WASM_STRIP_PREMULTIPLY
