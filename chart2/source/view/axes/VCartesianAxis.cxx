@@ -651,7 +651,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType
                 aTickInfo.fScaledTickValue = m_aScale.Maximum;
                 aTickInfoVector.push_back(aTickInfo);
             }
-            rAllTickInfos.push_back(aTickInfoVector);
+            rAllTickInfos.push_back(std::move(aTickInfoVector));
         }
     }
 }

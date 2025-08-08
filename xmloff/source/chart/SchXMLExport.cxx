@@ -3599,7 +3599,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             {
                 SchXMLDataPointStruct aPoint;
                 aPoint.mnRepeat = nCurrIndex - nLastIndex - 1;
-                aDataPointVector.push_back( aPoint );
+                aDataPointVector.push_back(std::move(aPoint));
             }
 
             uno::Reference< beans::XPropertySet > xPropSet;

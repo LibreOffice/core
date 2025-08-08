@@ -736,7 +736,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
                 aRow.push_back( aValue.getDouble() );
         }
 
-        aDataValues.push_back( aRow );
+        aDataValues.push_back(std::move(aRow));
     }
 
     // insert default data when no rows exist

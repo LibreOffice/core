@@ -105,7 +105,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, Bitmap &rBitmap)
             return false;
         }
     }
-    rBitmap = aBitmap;
+    rBitmap = std::move(aBitmap);
     return true;
 }
 

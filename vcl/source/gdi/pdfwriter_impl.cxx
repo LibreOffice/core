@@ -10055,7 +10055,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const Bitmap& i_rBitmap, const
     {
         rBitmaps.push_front(BitmapEmit());
         rBitmaps.front().m_aID = aID;
-        rBitmaps.front().m_aBitmap = aBitmap;
+        rBitmaps.front().m_aBitmap = std::move(aBitmap);
         if (!rGraphic.getVectorGraphicData() || rGraphic.getVectorGraphicData()->getType() != VectorGraphicDataType::Pdf || m_aContext.UseReferenceXObject)
             rBitmaps.front().m_nObject = createObject();
         createEmbeddedFile(rGraphic, rBitmaps.front().m_aReferenceXObject, rBitmaps.front().m_nObject);

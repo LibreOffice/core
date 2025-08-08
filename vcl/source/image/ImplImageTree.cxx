@@ -176,7 +176,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
         vcl::PngImageReader aPNGReader(*xStream);
         Bitmap aTmp;
         aPNGReader.read(aTmp);
-        rParameters.mrBitmap = aTmp;
+        rParameters.mrBitmap = std::move(aTmp);
     }
     else if (rPath.endsWith(".svg"))
     {
@@ -397,7 +397,7 @@ bool loadDiskCachedVersion(std::u16string_view sVariant, ImageRequestParameters&
     vcl::PngImageReader aPNGReader(aFileStream);
     Bitmap aTmp;
     aPNGReader.read(aTmp);
-    rParameters.mrBitmap = aTmp;
+    rParameters.mrBitmap = std::move(aTmp);
     return true;
 }
 

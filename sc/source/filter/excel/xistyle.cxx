@@ -1400,7 +1400,7 @@ void XclImpXF::ApplyPatternToAttrVector(
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow1 - 1;
         aEntry.setScPatternAttr(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
-        rAttrs.push_back(aEntry);
+        rAttrs.push_back(std::move(aEntry));
     }
 
     ScAttrEntry aEntry;

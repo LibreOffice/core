@@ -483,8 +483,7 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
         break;
         case HtmlTokenId::COL_ON:
         {
-            std::shared_ptr<HTMLCellDefault> pDefault(mpInsDefault.release());
-            maDefaultList.push_back(pDefault);
+            maDefaultList.push_back(std::shared_ptr<HTMLCellDefault>(mpInsDefault.release()));
 
             const sal_Int32 nSize = lcl_GetWidth(options) + mnLastEdge;
             if (nSize > mnLastEdge)

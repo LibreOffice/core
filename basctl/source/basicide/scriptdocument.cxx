@@ -1112,7 +1112,7 @@ namespace basctl
                 if ( !aDoc.isValid() )
                     continue;
 
-                aScriptDocs.push_back( aDoc );
+                aScriptDocs.push_back(std::move(aDoc));
             }
         }
         catch( const Exception& )
