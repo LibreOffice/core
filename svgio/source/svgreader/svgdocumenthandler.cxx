@@ -150,9 +150,11 @@ using CharacterNodeHandlerFunc
                             pLast = walkRecursive(pCandidate, pParentLine, pLast, pHandlerFunc);
                             break;
                         }
+                        case SVGToken::Desc:
+                            break;
                         default:
                         {
-                            OSL_ENSURE(false, "Unexpected token inside SVGTokenText (!)");
+                            SAL_WARN("svgio", "Unexpected token inside SVGTokenText, SVGToken=" << static_cast<int>(pCandidate->getType()));
                             break;
                         }
                     }

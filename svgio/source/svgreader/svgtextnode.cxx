@@ -190,9 +190,11 @@ namespace svgio::svgreader
 
                     break;
                 }
+                case SVGToken::Desc:
+                    break;
                 default:
                 {
-                    OSL_ENSURE(false, "Unexpected node in text token (!)");
+                    SAL_WARN("svgio", "Unexpected child node in SvgTextNode, SVGToken=" << static_cast<int>(rCandidate.getType()));
                     break;
                 }
             }
