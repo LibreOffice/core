@@ -3017,7 +3017,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         if (!(aInfo.DocumentState & DocState::Postponed))
         {
             aInfo.DocumentState |= DocState::Postponed;
-            *pIt = aInfo;
+            *pIt = std::move(aInfo);
             // postponed documents will be saved if this method is called again!
             // That can be done by an outside started timer           => E_POLL_FOR_USER_IDLE (if normal AutoSave is active)
             // or it must be done directly without starting any timer => E_CALL_ME_BACK       (if Emergency- or SessionSave is active and must be finished ASAP!)

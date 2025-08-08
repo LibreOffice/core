@@ -410,7 +410,7 @@ void DigitalSignaturesDialog::canRemove(const std::function<void(bool)>& rCallba
         std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Question, VclButtonsType::YesNo,
                                                   XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE)));
-        xBox->runAsync(xBox, [onFinished](sal_Int32 nDlgRet) {
+        xBox->runAsync(xBox, [onFinished=std::move(onFinished)](sal_Int32 nDlgRet) {
                 onFinished(nDlgRet == RET_YES);
         });
         return;

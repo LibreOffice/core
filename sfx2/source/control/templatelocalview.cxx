@@ -493,7 +493,7 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             aTemplateItem.aRegionName = pViewItem->maHelpText;
             aTemplateItem.aThumbnail = pViewItem->maPreview;
 
-            pTarget->maTemplates.push_back(aTemplateItem);
+            pTarget->maTemplates.push_back(std::move(aTemplateItem));
 
             if (!bCopy)
             {

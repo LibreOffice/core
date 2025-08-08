@@ -134,7 +134,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow[2] = new ORowSetValueDecorator(DataType::NUMERIC);
         aRow[3] = new ORowSetValueDecorator(sal_Int32(20));
         aRow[15] = new ORowSetValueDecorator(sal_Int32(20));
-        tmp.push_back(aRow);
+        tmp.push_back(std::move(aRow));
 
         return tmp;
     }();

@@ -67,8 +67,7 @@ static void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraph
         });
     if ( aIter == rGraphicEntities.end() )
     {
-        GraphicCollector::GraphicEntity aEntity( rUser );
-        rGraphicEntities.push_back( aEntity );
+        rGraphicEntities.emplace_back(rUser);
     }
     else
     {

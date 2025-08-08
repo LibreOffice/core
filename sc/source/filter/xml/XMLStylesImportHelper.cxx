@@ -115,7 +115,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const std::optiona
     ScMyCurrencyStyle aStyle;
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;
-    auto itPair = pCurrencyList->insert(aStyle);
+    auto itPair = pCurrencyList->insert(std::move(aStyle));
     itPair.first->mpRanges->AddAndPartialCombine(rRange);
 }
 

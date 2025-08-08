@@ -177,7 +177,7 @@ void ScDocument::GetChartRanges( std::u16string_view rChartName, ::std::vector< 
         {
             ScRangeList aRanges;
             aRanges.Parse( aRangeString, rSheetNameDoc, rSheetNameDoc.GetAddressConvention() );
-            rRangesVector.push_back(aRanges);
+            rRangesVector.push_back(std::move(aRanges));
         }
     }
 }
