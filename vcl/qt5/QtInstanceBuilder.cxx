@@ -159,6 +159,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/swriter/ui/inserttable.ui"_ustr,
         u"modules/swriter/ui/linenumbering.ui"_ustr,
         u"modules/swriter/ui/numberingnamedialog.ui"_ustr,
+        u"modules/swriter/ui/printmergedialog.ui"_ustr,
         u"modules/swriter/ui/renameautotextdialog.ui"_ustr,
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/rowheight.ui"_ustr,
