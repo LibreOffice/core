@@ -143,11 +143,45 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
         mxSalBmp = rBitmapEx.GetBitmap().mxSalBmp;
     else
     {
-        ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
-        Size aPixelSize = rBitmapEx.GetSizePixel();
-        xDev->SetOutputSizePixel(aPixelSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
-        xDev->DrawBitmapEx(Point(0, 0), aPixelSize, rBitmapEx);
-        mxSalBmp = xDev->GetBitmap(Point(0,0), aPixelSize).mxSalBmp;
+        Size aSize = rBitmapEx.GetSizePixel();
+        static const BitmapPalette aPalEmpty;
+        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+        mxSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
+
+        BitmapScopedReadAccess pReadColorAcc(rBitmapEx.GetBitmap());
+        BitmapScopedReadAccess pReadAlphaAcc(rBitmapEx.GetAlphaMask());
+        BitmapScopedWriteAccess pWriteAcc(*this);
+        auto nHeight = pReadColorAcc->Height();
+        auto nWidth = pReadColorAcc->Width();
+        bool bPalette = pReadColorAcc->HasPalette();
+
+        for ( tools::Long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pScanlineColor = pReadColorAcc->GetScanline( nY );
+            Scanline pScanlineAlpha = pReadAlphaAcc->GetScanline( nY );
+            Scanline pScanlineWrite = pWriteAcc->GetScanline( nY );
+            for (tools::Long nX = 0; nX < nWidth; ++nX)
+            {
+                BitmapColor aCol;
+                if (bPalette)
+                    aCol = pReadColorAcc->GetPaletteColor(pReadColorAcc->GetIndexFromData(pScanlineColor, nX));
+                else
+                    aCol = pReadColorAcc->GetPixelFromData(pScanlineColor, nX);
+                auto nAlpha = pReadAlphaAcc->GetPixelFromData(pScanlineAlpha, nX).GetIndex();
+                aCol.SetAlpha(nAlpha);
+                pWriteAcc->SetPixelOnData(pScanlineWrite, nX, aCol);
+            }
+        }
+
+// So.... in theory the following code should work, and be much more efficient. In practice, the gen/cairo
+// code is doing something weird involving masks that results in alpha not doing the same thing as on the other
+// backends.
+//        ScopedVclPtrInstance<VirtualDevice> xDev(DeviceFormat::WITH_ALPHA);
+//        Size aPixelSize = rBitmapEx.GetSizePixel();
+//        xDev->SetOutputSizePixel(aPixelSize, /*bErase*/true, /*bAlphaMaskTransparent*/true);
+//        xDev->DrawBitmapEx(Point(0, 0), aPixelSize, rBitmapEx);
+//        mxSalBmp = xDev->GetBitmap(Point(0,0), aPixelSize).mxSalBmp;
+
     }
 }
 
