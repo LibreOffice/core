@@ -770,6 +770,7 @@ public:
     WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType eType );
     WindowType                          GetType() const;
+    std::string_view GetTypeName() const;
     bool                                IsSystemWindow() const;
     SAL_DLLPRIVATE bool                 IsDockingWindow() const;
     bool                                IsDialog() const;

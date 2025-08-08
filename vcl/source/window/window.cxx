@@ -3351,13 +3351,17 @@ std::string_view windowTypeName(WindowType nWindowType)
 
 }
 
+std::string_view Window::GetTypeName() const
+{
+    return windowTypeName(GetType());
+}
 void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     if (!mpWindowImpl)
         return;
 
     rJsonWriter.put("id", get_id());  // TODO could be missing - sort out
-    rJsonWriter.put("type", windowTypeName(GetType()));
+    rJsonWriter.put("type", GetTypeName());
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
     if (!IsVisible())
