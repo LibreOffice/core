@@ -1001,6 +1001,8 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
     bool bIsAlpha = false;
 
     data = static_cast<unsigned char*>(malloc( nWidth*nHeight*4 ));
+    if (!data)
+        std::abort();
 
     tools::Long nOff = 0;
     ::Color aColor;
