@@ -605,6 +605,16 @@ def enforce_no_productname_in_accessible_description(current, adjustments):
         if "%PRODUCTNAME" in child.text:
           raise Exception(sys.argv[1] + ': %PRODUCTNAME used in accessible-description:' , child.text)
 
+def enforce_label_child_is_label(current):
+  # Ensure that only GtkLabel is used for a <child type="label">,
+  # which is an assumption that e.g. weld::Frame::set_label implementations make
+  label_children = current.findall(".//child[@type='label']")
+  for label_child in label_children:
+    for child in label_child:
+      classname = child.get('class')
+      if classname and classname != 'GtkLabel':
+        raise Exception(sys.argv[1] + ': <child type="label"> is not a GtkLabel', child.attrib.get("id"))
+
 def enforce_menuitem_id(current):
   # gtk4 VCL plugin requires "id" attribute for menu items
   for child in current:
@@ -644,6 +654,7 @@ remove_label_angle(root)
 remove_expander_label_fill(root)
 remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
+enforce_label_child_is_label(root)
 enforce_menuitem_id(root)
 enforce_active_in_group_consistency(root)
 enforce_entry_text_column_id_column_for_gtkcombobox(root)
