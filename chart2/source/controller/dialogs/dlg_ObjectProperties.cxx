@@ -122,6 +122,8 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     rtl::Reference< ChartType > xChartType = xChartModel->getChartTypeOfSeries( xSeries );
+    if (!xChartType.is())
+        return;
     sal_Int32 nDimensionCount = 0;
     if (xDiagram)
         nDimensionCount = xDiagram->getDimension();
