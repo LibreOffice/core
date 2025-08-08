@@ -125,6 +125,7 @@ CurveName
 CurveStyle
 CustomLabelPosition
 CustomLabelSize
+CustomPromptText
 CustomShapeGeometry
 D3DSceneAmbientColor
 D3DSceneLightColor2

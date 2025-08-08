@@ -815,6 +815,8 @@ public:
 
     void SetEmptyPresObj(bool bEpt);
     bool IsEmptyPresObj() const { return m_bEmptyPresObj;}
+    void SetCustomPromptText(const OUString& aVal);
+    OUString GetCustomPromptText() const { return m_aCustomPromptText; }
     void SetNotVisibleAsMaster(bool bFlg);
     bool IsNotVisibleAsMaster() const { return m_bNotVisibleAsMaster;}
     void SetUserCall(SdrObjUserCall* pUser);
@@ -904,6 +906,8 @@ protected:
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
+    // custom prompt text for empty presentation object
+    OUString                    m_aCustomPromptText;
 
     std::unique_ptr<sdr::annotation::ObjectAnnotationData> mpAnnotationData;
 

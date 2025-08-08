@@ -153,6 +153,7 @@ Shape::Shape()
 , mbWps( false )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
+, mbHasCustomPrompt( false )
 , maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
@@ -186,6 +187,7 @@ Shape::Shape( const OUString& rServiceName, bool bDefaultHeight )
 , mbWps( false )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
+, mbHasCustomPrompt( false )
 , maDiagramDoms( 0 )
 , mpDiagramHelper( nullptr )
 {
@@ -230,6 +232,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbWps( pSourceShape->mbWps )
 , mbTextBox( pSourceShape->mbTextBox )
 , mbHasLinkedTxbx(false)
+, mbHasCustomPrompt( pSourceShape->mbHasCustomPrompt )
 , maDiagramDoms( pSourceShape->maDiagramDoms )
 , mnZOrder(pSourceShape->mnZOrder)
 , mnZOrderOff(pSourceShape->mnZOrderOff)
@@ -394,7 +397,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, false, aMatrix, rShapeOrParentShapeFillProps, pParentGroupShape) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, nullptr, aMatrix, rShapeOrParentShapeFillProps, pParentGroupShape) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -916,7 +919,7 @@ Reference< XShape > const & Shape::createAndInsert(
         const Theme* pTheme,
         const css::uno::Reference< css::drawing::XShapes >& rxShapes,
         bool bClearText,
-        bool bDoNotInsertEmptyTextBody,
+        const oox::drawingml::ShapePtr& pPlaceholder,
         basegfx::B2DHomMatrix& aParentTransformation,
         const FillProperties& rShapeOrParentShapeFillProps,
         const oox::drawingml::ShapePtr& pParentGroupShape)
@@ -1816,6 +1819,16 @@ Reference< XShape > const & Shape::createAndInsert(
                 propertySet->setPropertyValue(u"InteropGrabBag"_ustr,uno::Any(aGrabBag));
             }
 
+            // set custom prompt text if available
+            if (getCustomPrompt() && getTextBody() && !getTextBody()->isEmpty())
+            {
+                aShapeProps.setProperty(PROP_CustomPromptText, getTextBody()->firstParatoString());
+            }
+            else if (pPlaceholder && pPlaceholder->getCustomPrompt() && pPlaceholder->getTextBody() && !pPlaceholder->getTextBody()->isEmpty())
+            {
+                aShapeProps.setProperty(PROP_CustomPromptText, pPlaceholder->getTextBody()->firstParatoString());
+            }
+
             PropertySet( xSet ).setProperties( aShapeProps );
 
             if (mpTablePropertiesPtr && aServiceName == "com.sun.star.drawing.TableShape")
@@ -2132,7 +2145,7 @@ Reference< XShape > const & Shape::createAndInsert(
             mpTextBody.reset();
 
         // in some cases, we don't have any text body.
-        if( mpTextBody && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )
+        if( mpTextBody && ( !pPlaceholder || !mpTextBody->isEmpty() ) )
         {
             Reference < XText > xText( mxShape, UNO_QUERY );
             if ( xText.is() )   // not every shape is supporting an XText interface (e.g. GroupShape)
@@ -2223,7 +2236,7 @@ Reference< XShape > const & Shape::createAndInsert(
         }
 
         // Set text glow effect for shapes
-        if (mpTextBody && (!bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty()))
+        if (mpTextBody && (!pPlaceholder || !mpTextBody->isEmpty()))
         {
             const TextParagraphVector& rParagraphs = mpTextBody->getParagraphs();
             if (!rParagraphs.empty())

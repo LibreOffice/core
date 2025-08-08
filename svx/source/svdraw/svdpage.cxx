@@ -1724,6 +1724,12 @@ void SdrPage::MakePageObjectsNamesUnique()
     }
 }
 
+bool SdrPage::RestoreDefaultText(SdrObject* /*pObj*/, const OUString& /*rStr*/)
+{
+    assert(false);
+    return false;
+}
+
 const SdrPageGridFrameList* SdrPage::GetGridFrameList(const SdrPageView* /*pPV*/, const tools::Rectangle* /*pRect*/) const
 {
     return nullptr;

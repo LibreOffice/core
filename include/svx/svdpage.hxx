@@ -518,6 +518,8 @@ public:
 
     void MakePageObjectsNamesUnique();
 
+    virtual bool RestoreDefaultText(SdrObject* pObj, const OUString& rStr);
+
 protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
 

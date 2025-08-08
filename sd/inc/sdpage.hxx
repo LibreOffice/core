@@ -164,7 +164,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
+    SD_DLLPUBLIC SdrObject* CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt = OUString());
     SD_DLLPUBLIC rtl::Reference<SdrObject> CreateDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC void DestroyDefaultPresObj(PresObjKind eObjKind);
     SD_DLLPUBLIC SdrObject* GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
@@ -174,7 +174,7 @@ public:
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
     void            GetPageInfo(::tools::JsonWriter& jsonWriter);
     void            NotifyPagePropertyChanges();
-    bool            RestoreDefaultText( SdrObject* pObj );
+    bool            RestoreDefaultText( SdrObject* pObj, const OUString& rStr ) override;
 
     /** @return true if the given SdrObject is inside the presentation object list */
     bool            IsPresObj(const SdrObject* pObj);
@@ -188,7 +188,7 @@ public:
     SD_DLLPUBLIC void SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
-    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit);
+    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt, bool bInit);
 
     virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual rtl::Reference<SdrObject> NbcRemoveObject(size_t nObjNum) override;

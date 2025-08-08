@@ -95,6 +95,21 @@ OUString TextBody::toString() const
     return OUString();
 }
 
+OUString TextBody::firstParatoString() const
+{
+    OUStringBuffer aRet;
+    if (!isEmpty())
+    {
+        const TextRunVector& rRuns = maParagraphs.front()->getRuns();
+        for (TextRunVector::const_iterator aRIt = rRuns.begin(), aREnd = rRuns.end(); aRIt != aREnd; ++aRIt)
+        {
+            const TextRun& rTextRun = **aRIt;
+            aRet.append(rTextRun.getText());
+        }
+    }
+    return aRet.makeStringAndClear();
+}
+
 bool TextBody::hasVisualRunProperties() const
 {
     for ( auto& pTextParagraph : getParagraphs() )

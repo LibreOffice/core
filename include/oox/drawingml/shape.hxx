@@ -240,6 +240,8 @@ public:
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
     const LinkedTxbxAttr&     getLinkedTxbxAttributes() const { return maLinkedTxbxAttr; };
     bool                isLinkedTxbx() const { return mbHasLinkedTxbx; };
+    void                setCustomPrompt( bool bValue ) { mbHasCustomPrompt = bValue; }
+    bool                getCustomPrompt() const { return mbHasCustomPrompt; }
 
     void setZOrder(sal_Int32 nZOrder) { mnZOrder = nZOrder; }
 
@@ -294,7 +296,7 @@ protected:
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             bool bClearText,
-                            bool bDoNotInsertEmptyTextBody,
+                            const oox::drawingml::ShapePtr& pPlaceholder,
                             basegfx::B2DHomMatrix& aTransformation,
                             const FillProperties& rShapeOrParentShapeFillProps,
                             const oox::drawingml::ShapePtr& pParentGroupShape = nullptr
@@ -426,6 +428,7 @@ private:
     bool mbTextBox; ///< This shape has a textbox.
     LinkedTxbxAttr                  maLinkedTxbxAttr;
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
+    bool                            mbHasCustomPrompt; // indicates that it's not a generic placeholder
 
     css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
 

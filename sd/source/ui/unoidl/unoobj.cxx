@@ -104,6 +104,8 @@ using ::com::sun::star::drawing::XShape;
 #define WID_PLACEHOLDERTEXT 24
 #define WID_LEGACYFRAGMENT  25
 
+#define WID_CUSTOMPROMPT    26
+
 #define IMPRESS_MAP_ENTRIES \
         { u"" UNO_NAME_OBJ_LEGACYFRAGMENT ""_ustr,WID_LEGACYFRAGMENT, cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
         { u"" UNO_NAME_OBJ_ANIMATIONPATH ""_ustr, WID_ANIMPATH, cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
@@ -128,6 +130,7 @@ using ::com::sun::star::drawing::XShape;
         { u"IsAnimation"_ustr,         WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
         { u"NavigationOrder"_ustr,     WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
         { u"PlaceholderText"_ustr,     WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
+        { u"" UNO_NAME_OBJ_CUSTOMPROMPT ""_ustr, WID_CUSTOMPROMPT, cppu::UnoType<OUString>::get(),                        0, 0},\
 
     static std::span<const SfxItemPropertyMapEntry> lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
     {
@@ -574,6 +577,14 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                 case WID_ISEMPTYPRESOBJ:
                     SetEmptyPresObj( ::cppu::any2bool(aValue) );
                     break;
+                case WID_CUSTOMPROMPT:
+                {
+                    OUString aString;
+                    if (!(aValue >>= aString))
+                        throw lang::IllegalArgumentException();
+                    SetCustomPromptText(aString);
+                    break;
+                }
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
@@ -671,6 +682,9 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
             break;
         case WID_ISEMPTYPRESOBJ:
             aRet <<= IsEmptyPresObj();
+            break;
+        case WID_CUSTOMPROMPT:
+            aRet <<= GetCustomPromptText();
             break;
         case WID_MASTERDEPEND:
             aRet <<= IsMasterDepend();
@@ -946,6 +960,38 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     }
 
     pObj->SetEmptyPresObj(bEmpty);
+}
+
+OUString SdXShape::GetCustomPromptText() const
+{
+    if (!IsPresObj())
+        return OUString();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if (pObj == nullptr)
+        return OUString();
+
+    return pObj->GetCustomPromptText();
+}
+
+void SdXShape::SetCustomPromptText(const OUString& aVal)
+{
+    if (!IsPresObj() || aVal.isEmpty())
+        return;
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if (pObj == nullptr)
+        return;
+
+    if (!pObj->getSdrPageFromSdrObject()->IsMasterPage())
+    {
+        if (pObj->getSdrPageFromSdrObject()->RestoreDefaultText(pObj, aVal))
+            pObj->SetCustomPromptText(aVal);
+    }
+    else
+    {
+        pObj->SetCustomPromptText(aVal);
+    }
 }
 
 bool SdXShape::IsMasterDepend() const noexcept

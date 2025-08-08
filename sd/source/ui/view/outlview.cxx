@@ -915,7 +915,7 @@ SdrTextObj* OutlineView::CreateTitleTextObject(SdPage* pPage)
     {
         // we already have a layout with a title but the title
         // object was deleted, create a new one
-        pPage->InsertAutoLayoutShape( nullptr, PresObjKind::Title, false, pPage->GetTitleRect(), true );
+        pPage->InsertAutoLayoutShape( nullptr, PresObjKind::Title, false, pPage->GetTitleRect(), OUString(), true );
     }
 
     return GetTitleTextObject(pPage);
@@ -951,7 +951,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
         // object was deleted, create a new one
         pPage->InsertAutoLayoutShape( nullptr,
                                       PresObjKind::Outline,
-                                      false, pPage->GetLayoutRect(), true );
+                                      false, pPage->GetLayoutRect(), OUString(), true );
     }
 
     return GetOutlineTextObject(pPage);

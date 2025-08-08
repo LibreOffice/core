@@ -284,7 +284,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect )
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt)
 {
     SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -498,7 +498,15 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             pSdrObj->SetLogicRect(rRect);
         }
 
-        OUString aString = GetPresObjText(eObjKind);
+        OUString aString;
+        if (!rCustomPrompt.isEmpty())
+        {
+            pSdrObj->SetCustomPromptText(rCustomPrompt);
+            aString = rCustomPrompt;
+        }
+        else
+            aString = GetPresObjText(eObjKind);
+
         if(!aString.isEmpty() || bForceText)
             if (auto pTextObj = DynCastSdrTextObj( pSdrObj.get() ) )
             {
@@ -1479,6 +1487,32 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
     }
 }
 
+static void GetAutoLayoutCustomPromptTexts( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::array<OUString, MAX_PRESOBJS>& rCustomPrompts )
+{
+    // init layout shapes with their corresponding prompt text (if they have)
+    // for each presentation shape kind
+    if (rPage.GetPageKind() == PageKind::Handout || !rPage.TRG_HasMasterPage())
+        return;
+
+    SdPage& rMasterPage = static_cast<SdPage&>(rPage.TRG_GetMasterPage());
+
+    o3tl::enumarray<PresObjKind,int> PresObjIndex;
+    PresObjIndex.fill(1);
+
+    // for each entry in the layoutdescriptor, arrange a presentation shape
+    for (int i = 0; (i < MAX_PRESOBJS) && (rDescriptor.meKind[i] != PresObjKind::NONE); i++)
+    {
+        PresObjKind eKind = rDescriptor.meKind[i];
+        SdrObject* pObj = nullptr;
+        while( (pObj = rMasterPage.GetPresObj( eKind, PresObjIndex[eKind], true )) != nullptr )
+        {
+            PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind
+            rCustomPrompts[i] = pObj->GetCustomPromptText();
+            break;
+        }
+    }
+}
+
 static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::array<SdrObject*, MAX_PRESOBJS>& rShapes, bool bInit, bool bSwitchLayout )
 {
     // init list of indexes for each presentation shape kind
@@ -1662,6 +1696,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
     OUString sLayoutName( enumtoString(meAutoLayout) );
     CalcAutoLayoutRectangles( *this, aRectangle, sLayoutName);
 
+    std::array<OUString, MAX_PRESOBJS > aCustomPromptTexts;
+    GetAutoLayoutCustomPromptTexts( *this, aDescriptor, aCustomPromptTexts );
+
     o3tl::sorted_vector< SdrObject* > aUsedPresentationObjects;
 
     std::array<SdrObject*, MAX_PRESOBJS > aLayoutShapes;
@@ -1672,7 +1709,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
     for (int i = 0; (i < MAX_PRESOBJS) && (aDescriptor.meKind[i] != PresObjKind::NONE); i++)
     {
         PresObjKind eKind = aDescriptor.meKind[i];
-        SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], bInit );
+        SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], aCustomPromptTexts[i], bInit );
         if( pObj )
             aUsedPresentationObjects.insert(pObj); // remember that we used this empty shape
     }
@@ -2250,12 +2287,14 @@ static rtl::Reference<SdrObject> convertPresentationObjectImpl(SdPage& rPage, Sd
         If true, the shape is created vertical if bInit is true
     @param  rRect
         The rectangle that should be used to transform the shape
+    @param  rCustomPrompt
+        The custom prompt text for placeholder text in presObj's, if its empty the default is used
     @param  bInit
         If true the shape is created if not found
     @returns
         A presentation shape that was either found or created with the given parameters
 */
-SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj1, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInit)
+SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj1, PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, const OUString& rCustomPrompt, bool bInit)
 {
     rtl::Reference<SdrObject> pObj = pObj1;
     SfxUndoManager* pUndoManager(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetUndoManager());
@@ -2263,7 +2302,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj1, PresObjKind eObjKind,
 
     if (!pObj && bInit)
     {
-        pObj = CreatePresObj(eObjKind, bVertical, rRect);
+        pObj = CreatePresObj(eObjKind, bVertical, rRect, rCustomPrompt);
     }
     else if ( pObj && (pObj->GetUserCall() || bInit) )
     {
@@ -2925,7 +2964,7 @@ bool SdPage::checkVisibility(
     return true;
 }
 
-bool SdPage::RestoreDefaultText( SdrObject* pObj )
+bool SdPage::RestoreDefaultText( SdrObject* pObj, const OUString& rStr )
 {
     bool bRet = false;
 
@@ -2942,7 +2981,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
         {
             sd::ModifyGuard aGuard(static_cast<SdDrawDocument*>(&getSdrModelFromSdrPage()));
 
-            OUString aString( GetPresObjText(ePresObjKind) );
+            OUString aString = rStr.isEmpty() ? GetPresObjText(ePresObjKind) : rStr;
 
             if (!aString.isEmpty())
             {

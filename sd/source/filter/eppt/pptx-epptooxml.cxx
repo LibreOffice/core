@@ -345,6 +345,12 @@ ShapeExport& PowerPointShapeExport::WriteTextShape(const Reference< XShape >& xS
         if (!WritePlaceholder(xShape, Title, mbMaster))
             ShapeExport::WriteTextShape(xShape);
     }
+    /*else if (sShapeType == "com.sun.star.presentation.SubtitleShape")
+    {
+        TODO: handle subtitle shape: see tdf#112557 workaround
+        if (!WritePlaceholder(xShape, Subtitle, mbMaster))
+            ShapeExport::WriteTextShape(xShape);
+    }*/
     else
         SAL_WARN("sd.eppt", "PowerPointShapeExport::WriteTextShape: shape of type '" << sShapeType << "' is ignored");
 
@@ -2394,20 +2400,32 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     const char* pType = getPlaceholderTypeName(ePlaceholder);
 
     SAL_INFO("sd.eppt", "write placeholder " << pType);
+
+    // export Custom Prompt
+    bool bUseCustomPrompt(false);
+    if (xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName(u"CustomPromptText"_ustr))
+    {
+        OUString aCustomPromptText;
+        xProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aCustomPromptText;
+        if (!aCustomPromptText.isEmpty())
+            bUseCustomPrompt = true;
+    }
+
     if (bUsePlaceholderIndex)
     {
         mpFS->singleElementNS(
             XML_p, XML_ph, XML_type, pType, XML_idx,
             OString::number(
-                static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)));
+                static_cast<PowerPointExport*>(GetFB())->CreateNewPlaceholderIndex(xShape)),
+                    XML_hasCustomPrompt, sax_fastparser::UseIf("1", bUseCustomPrompt));
     }
     else
     {
         if ((mePageType == PageType::LAYOUT || mePageType == PageType::NORMAL)
             && ePlaceholder == Outliner)
-            mpFS->singleElementNS(XML_p, XML_ph);
+            mpFS->singleElementNS(XML_p, XML_ph, XML_hasCustomPrompt, sax_fastparser::UseIf("1", bUseCustomPrompt));
         else
-            mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType);
+            mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType, XML_hasCustomPrompt, sax_fastparser::UseIf("1", bUseCustomPrompt));
     }
     mpFS->endElementNS(XML_p, XML_nvPr);
     mpFS->endElementNS(XML_p, XML_nvSpPr);
