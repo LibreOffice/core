@@ -314,6 +314,8 @@ private:
 
     void DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bRenderingModeNatural);
 
+    static OUString getFontFamilyNameFromTTF(const OUString& url);
+
 public:
     // public SalGraphics methods, the interface to the independent vcl part
 
