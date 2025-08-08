@@ -64,7 +64,10 @@ public:
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStyle ) const;
     bool isEmpty() const;
+    /// Returns first run of text
     OUString toString() const;
+    /// Returns first paragraph of text
+    OUString firstParatoString() const;
 
     /** Returns whether the textbody had a rPr tag in it that alters it visually
      *

@@ -853,7 +853,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
 
             if(pPage)
             {
-                bRestored = pPage->RestoreDefaultText( pTextObj );
+                bRestored = pPage->RestoreDefaultText( pTextObj, pTextObj->GetCustomPromptText() );
                 if( bRestored )
                 {
                     SdrOutliner* pOutliner = GetTextEditOutliner();

@@ -195,12 +195,8 @@ void PPTShape::addShape(
                 break;
                 case XML_subTitle :
                 {
-                    if ((meShapeLocation == Master) || (meShapeLocation == Layout))
-                        sServiceName = OUString();
-                    else {
-                        sServiceName = "com.sun.star.presentation.SubtitleShape";
-                        aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
-                    }
+                    sServiceName = "com.sun.star.presentation.SubtitleShape";
+                    aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                 }
                 break;
                    case XML_obj :
@@ -454,7 +450,7 @@ void PPTShape::addShape(
             } else
                 setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, bool(mpPlaceholder), aTransformation, getFillProperties() ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder, aTransformation, getFillProperties() ) );
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())

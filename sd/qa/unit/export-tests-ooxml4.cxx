@@ -797,7 +797,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf140912_PicturePlaceholder)
     CPPUNIT_ASSERT(isEmptyPresentationObject);
 
     // If we supported custom prompt text, here we would also test "String" property,
-    // which would be equal to "Insert Image".
+    // which would be equal to "Insert Image". See first tests: testCustomPromptTexts
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
@@ -1372,6 +1372,70 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf165261HorzAnchor)
     drawing::TextHorizontalAdjust eHori;
     CPPUNIT_ASSERT(xProp->getPropertyValue(u"TextHorizontalAdjust"_ustr) >>= eHori);
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER, eHori);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomPromptTexts)
+{
+    createSdImpressDoc("pptx/tdf163239.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    const SdrPage* pPage1 = GetPage(1);
+    {
+        // subtitle placeholder text
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage1->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong object type!", SdrObjKind::Text,
+                                     pTxtObj->GetObjIdentifier());
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        OUString aText = aEdit.GetText(0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Click to add Text"_ustr);
+        /* TODO: handle subtitle shape: see tdf#112557 workaround
+            - Expected: Click to edit customized Master Subtitle style
+            - Actual : Click to add Text
+            - Wrong placeholder text!
+        */
+
+        auto xShapeProps(getShapeFromPage(0, 0));
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText, u""_ustr);
+        /* TODO: handle subtitle shape: see tdf#112557 workaround
+            - Expected: Click to edit customized Master Subtitle style
+            - Actual :
+            - Wrong placeholder text was set!
+        */
+    }
+
+    {
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage1->GetObj(1));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong object type!", SdrObjKind::TitleText,
+                                     pTxtObj->GetObjIdentifier());
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        OUString aText = aEdit.GetText(0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Custom Title 1"_ustr);
+
+        auto xShapeProps(getShapeFromPage(1, 0));
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText,
+                                     u"Custom Title 1"_ustr);
+    }
+
+    const SdrPage* pPage2 = GetPage(3);
+    {
+        // body placeholder text
+        SdrTextObj* pTxtObj = DynCastSdrTextObj(pPage2->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE("no text object", pTxtObj != nullptr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong object type!", SdrObjKind::OutlineText,
+                                     pTxtObj->GetObjIdentifier());
+        const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+        OUString aText = aEdit.GetText(0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text!", aText, u"Text placeholder"_ustr);
+
+        auto xShapeProps(getShapeFromPage(0, 1));
+        CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"CustomPromptText"_ustr) >>= aText);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText,
+                                     u"Text placeholder"_ustr);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -1779,6 +1779,7 @@ bool SdrObject::Equals(const SdrObject& rOtherObj) const
     return (m_aAnchor.X() == rOtherObj.m_aAnchor.X() && m_aAnchor.Y() == rOtherObj.m_aAnchor.Y() &&
             m_nOrdNum == rOtherObj.m_nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
             mbSupportTextIndentingOnLineWidthChange == rOtherObj.mbSupportTextIndentingOnLineWidthChange &&
+            m_aCustomPromptText == rOtherObj.m_aCustomPromptText &&
             mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && m_bMarkProt == rOtherObj.m_bMarkProt &&
             m_bIs3DObj == rOtherObj.m_bIs3DObj && m_bIsEdge == rOtherObj.m_bIsEdge && m_bClosedObj == rOtherObj.m_bClosedObj &&
             m_bNotVisibleAsMaster == rOtherObj.m_bNotVisibleAsMaster && m_bEmptyPresObj == rOtherObj.m_bEmptyPresObj &&
@@ -2578,6 +2579,10 @@ void SdrObject::SetEmptyPresObj(bool bEpt)
     m_bEmptyPresObj = bEpt;
 }
 
+void SdrObject::SetCustomPromptText(const OUString& rVal)
+{
+    m_aCustomPromptText = rVal;
+}
 
 void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 {

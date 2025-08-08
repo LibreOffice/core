@@ -57,6 +57,9 @@ private:
     bool IsEmptyPresObj() const;
     void SetEmptyPresObj(bool bEmpty);
 
+    OUString GetCustomPromptText() const;
+    void SetCustomPromptText(const OUString& aVal);
+
     bool IsMasterDepend() const noexcept;
     void SetMasterDepend( bool bDepend ) noexcept;
 

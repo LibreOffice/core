@@ -219,7 +219,7 @@ void NotesPanelView::onLoseFocus()
             // if the notes are empty restore the placeholder text and state.
             SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject());
             if (pPage)
-                pPage->RestoreDefaultText(pNotesTextObj);
+                pPage->RestoreDefaultText(pNotesTextObj, pNotesTextObj->GetCustomPromptText());
         }
         else
             setNotesToDoc();

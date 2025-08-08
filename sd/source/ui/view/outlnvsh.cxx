@@ -1620,7 +1620,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
                 // make it empty
                 if( pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
-                pPage->RestoreDefaultText( pTO );
+                pPage->RestoreDefaultText( pTO, pTO->GetCustomPromptText() );
                 pTO->SetEmptyPresObj(true);
                 pTO->ActionChanged();
             }
@@ -1720,7 +1720,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
                 // delete old OutlinerParaObject, too
                 if( pOlView->isRecordingUndo() )
                     pOlView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTO,0));
-                pPage->RestoreDefaultText( pTO );
+                pPage->RestoreDefaultText( pTO, pTO->GetCustomPromptText() );
                 pTO->SetEmptyPresObj(true);
                 pTO->ActionChanged();
             }
