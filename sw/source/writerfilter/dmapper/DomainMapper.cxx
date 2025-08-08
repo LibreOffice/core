@@ -580,6 +580,26 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                     static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
                 };
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_LEFT_MARGIN_UNIT, uno::Any(stVal));
+
+                // w:leftChars=0 disables leftChars, so w:left is used instead.
+                const PropertyIds eId = PROP_PARA_LEFT_MARGIN;
+                sal_Int32 nFallback = 0; // use default value if no w:left is inherited.
+                if (IsStyleSheetImport())
+                {
+                    // Interestingly, styles don't inherit w:left from their parent,
+                    // so force a fall-back of zero when leftChars=0 is disabled in a style.
+                    // Additionally, when no w:left is provided along with a style's w:leftChars,
+                    // a PARAGRAPH that disables leftChar inherits nIntValue as a TWIPS fall-back.
+                    // So for both cases (zero and non-zero), simply give nIntValue as the fallback.
+                    nFallback = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
+                else if (nIntValue == 0) // no need for a fallback if paragraph defines non-zero Ch
+                {
+                    m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= nFallback;
+                    // Insert inherited w:left in case none is provided by this paragraph
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
             }
             break;
         case NS_ooxml::LN_CT_Ind_end:
@@ -620,6 +640,20 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                     static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
                 };
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_RIGHT_MARGIN_UNIT, uno::Any(stVal));
+
+                // Insert fall-back w:right in case none is provided by this style/paragraph
+                const PropertyIds eId = PROP_PARA_RIGHT_MARGIN;
+                sal_Int32 nFallback = 0;
+                if (IsStyleSheetImport())
+                {
+                    nFallback = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
+                else if (nIntValue == 0)
+                {
+                    m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= nFallback;
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"rightChars"_ustr,
                                    OUString::number(nIntValue));
@@ -657,6 +691,20 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                 };
 
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT_UNIT, uno::Any(stVal));
+
+                // Insert fall-back w:hanging in case none is provided by this style/paragraph
+                const PropertyIds eId = PROP_PARA_FIRST_LINE_INDENT;
+                sal_Int32 nFallback = 0;
+                if (IsStyleSheetImport())
+                {
+                    nFallback = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
+                else if (nIntValue == 0)
+                {
+                    m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= nFallback;
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
             }
             break;
         case NS_ooxml::LN_CT_Ind_firstLine:
@@ -696,6 +744,20 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
                     static_cast<double>(nIntValue) / 100.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
                 };
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_FIRST_LINE_INDENT_UNIT, uno::Any(stVal));
+
+                // Insert fall-back w:firstLine in case none is provided by this style/paragraph
+                const PropertyIds eId = PROP_PARA_FIRST_LINE_INDENT;
+                sal_Int32 nFallback = 0;
+                if (IsStyleSheetImport())
+                {
+                    nFallback = ConversionHelper::convertTwipToMm100_Limited(nIntValue);
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
+                else if (nIntValue == 0)
+                {
+                    m_pImpl->GetAnyProperty(eId, m_pImpl->GetTopContext()) >>= nFallback;
+                    m_pImpl->GetTopContext()->Insert(eId, uno::Any(nFallback), /*Overwrite*/ false);
+                }
             }
             break;
 
