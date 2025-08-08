@@ -72,10 +72,11 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     if (width > SAL_MAX_INT32 / 8 || height > SAL_MAX_INT32 / 8)
         return false; // avoid overflows later
 
-    AlphaMask bitmapAlpha;
-    Bitmap bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+    Bitmap bitmap;
     if (has_alpha)
-        bitmapAlpha = AlphaMask(Size(width, height));
+        bitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
+    else
+        bitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
 
     BitmapScopedWriteAccess access(bitmap);
     if (!access)
@@ -195,20 +196,15 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         }
         case PixelMode::Split:
         {
-            // Split to normal and alpha bitmaps.
-            BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
             for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
             {
                 const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
-                unsigned char* dstB = access->GetScanline(y);
-                unsigned char* dstA = accessAlpha->GetScanline(y);
+                unsigned char* dst = access->GetScanline(y);
                 for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
                 {
-                    memcpy(dstB, src, 3);
-                    *dstA = *(src + 3);
+                    memcpy(dst, src, 4);
                     src += 4;
-                    dstB += 3;
-                    dstA += 1;
+                    dst += 4;
                 }
             }
             break;
@@ -228,29 +224,12 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                     src += 4;
                 }
             }
-            if (!bitmapAlpha.IsEmpty())
-            {
-                BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
-                for (tools::Long y = 0, nHeight = accessAlpha->Height(); y < nHeight; ++y)
-                {
-                    const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
-                    for (tools::Long x = 0, nWidth = accessAlpha->Width(); x < nWidth; ++x)
-                    {
-                        sal_uInt8 a = src[3];
-                        accessAlpha->SetPixelIndex(y, x, a);
-                        src += 4;
-                    }
-                }
-            }
             break;
         }
     }
 
     access.reset(); // Flush BitmapScopedWriteAccess.
-    if (has_alpha)
-        graphic = BitmapEx(bitmap, bitmapAlpha);
-    else
-        graphic = BitmapEx(bitmap);
+    graphic = BitmapEx(bitmap);
     return success;
 }
 
