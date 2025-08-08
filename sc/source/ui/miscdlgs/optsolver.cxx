@@ -111,8 +111,8 @@ IMPL_LINK(ScSolverSuccessDialog, ClickHdl, weld::Button&, rBtn, void)
 ScCursorRefEdit::ScCursorRefEdit(std::unique_ptr<weld::Entry> xControl)
     : formula::RefEdit(std::move(xControl))
 {
-    xEntry->connect_key_press(Link<const KeyEvent&, bool>()); //acknowledge we first remove the old one
-    xEntry->connect_key_press(LINK(this, ScCursorRefEdit, KeyInputHdl));
+    mxEntry->connect_key_press(Link<const KeyEvent&, bool>()); //acknowledge we first remove the old one
+    mxEntry->connect_key_press(LINK(this, ScCursorRefEdit, KeyInputHdl));
 }
 
 void ScCursorRefEdit::SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown )

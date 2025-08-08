@@ -262,18 +262,18 @@ IMPL_LINK( ArgInput, EdModifyHdl, RefEdit&, rEdit, void )
 }
 
 RefEdit::RefEdit(std::unique_ptr<weld::Entry> xControl)
-    : xEntry(std::move(xControl))
-    , aIdle("formula RefEdit Idle")
-    , pAnyRefDlg(nullptr)
-    , pLabelWidget(nullptr)
+    : mxEntry(std::move(xControl))
+    , maIdle("formula RefEdit Idle")
+    , mpAnyRefDlg(nullptr)
+    , mpLabelWidget(nullptr)
     , mpFocusInEvent(nullptr)
     , mpFocusOutEvent(nullptr)
 {
-    xEntry->connect_focus_in(LINK(this, RefEdit, GetFocusHdl));
-    xEntry->connect_focus_out(LINK(this, RefEdit, LoseFocusHdl));
-    xEntry->connect_key_press(LINK(this, RefEdit, KeyInputHdl));
-    xEntry->connect_changed(LINK(this, RefEdit, Modify));
-    aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
+    mxEntry->connect_focus_in(LINK(this, RefEdit, GetFocusHdl));
+    mxEntry->connect_focus_out(LINK(this, RefEdit, LoseFocusHdl));
+    mxEntry->connect_key_press(LINK(this, RefEdit, KeyInputHdl));
+    mxEntry->connect_changed(LINK(this, RefEdit, Modify));
+    maIdle.SetInvokeHandler(LINK(this, RefEdit, UpdateHdl));
 }
 
 RefEdit::~RefEdit()
@@ -282,55 +282,56 @@ RefEdit::~RefEdit()
         Application::RemoveUserEvent(mpFocusInEvent);
     if (mpFocusOutEvent)
         Application::RemoveUserEvent(mpFocusOutEvent);
-    aIdle.ClearInvokeHandler();
-    aIdle.Stop();
+    maIdle.ClearInvokeHandler();
+    maIdle.Stop();
 }
 
 void RefEdit::SetRefString( const OUString& rStr )
 {
     // Prevent unwanted side effects by setting only a differing string.
     // See commit message for reasons.
-    if (xEntry->get_text() != rStr)
-        xEntry->set_text(rStr);
+    if (mxEntry->get_text() != rStr)
+        mxEntry->set_text(rStr);
 }
 
 void RefEdit::SetRefValid(bool bValid)
 {
-    xEntry->set_message_type(bValid ? weld::EntryMessageType::Normal : weld::EntryMessageType::Error);
+    mxEntry->set_message_type(bValid ? weld::EntryMessageType::Normal
+                                     : weld::EntryMessageType::Error);
 }
 
 void RefEdit::SetText(const OUString& rStr)
 {
-    xEntry->set_text(rStr);
-    UpdateHdl( &aIdle );
+    mxEntry->set_text(rStr);
+    UpdateHdl(&maIdle);
 }
 
 void RefEdit::StartUpdateData()
 {
-    aIdle.Start();
+    maIdle.Start();
 }
 
 void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
 {
-    pAnyRefDlg = pDlg;
-    pLabelWidget = pLabel;
+    mpAnyRefDlg = pDlg;
+    mpLabelWidget = pLabel;
 
     if( pDlg )
     {
-        aIdle.SetInvokeHandler(LINK(this, RefEdit, UpdateHdl));
+        maIdle.SetInvokeHandler(LINK(this, RefEdit, UpdateHdl));
     }
     else
     {
-        aIdle.ClearInvokeHandler();
-        aIdle.Stop();
+        maIdle.ClearInvokeHandler();
+        maIdle.Stop();
     }
 }
 
 IMPL_LINK_NOARG(RefEdit, Modify, weld::Entry&, void)
 {
     maModifyHdl.Call(*this);
-    if (pAnyRefDlg)
-        pAnyRefDlg->HideReference();
+    if (mpAnyRefDlg)
+        mpAnyRefDlg->HideReference();
 }
 
 IMPL_LINK(RefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -341,9 +342,9 @@ IMPL_LINK(RefEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 bool RefEdit::KeyInput(const KeyEvent& rKEvt)
 {
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if (pAnyRefDlg && !rKeyCode.GetModifier() && rKeyCode.GetCode() == KEY_F2)
+    if (mpAnyRefDlg && !rKeyCode.GetModifier() && rKeyCode.GetCode() == KEY_F2)
     {
-        pAnyRefDlg->ReleaseFocus( this );
+        mpAnyRefDlg->ReleaseFocus(this);
         return true;
     }
 
@@ -366,8 +367,8 @@ void RefEdit::GetFocus()
 void RefEdit::LoseFocus()
 {
     maLoseFocusHdl.Call(*this);
-    if( pAnyRefDlg )
-        pAnyRefDlg->HideReference();
+    if (mpAnyRefDlg)
+        mpAnyRefDlg->HideReference();
 }
 
 IMPL_LINK_NOARG(RefEdit, GetFocusHdl, weld::Widget&, void)
@@ -403,8 +404,8 @@ IMPL_LINK_NOARG(RefEdit, AsyncFocusOutHdl, void*, void)
 
 IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
 {
-    if( pAnyRefDlg )
-        pAnyRefDlg->ShowReference(xEntry->get_text());
+    if (mpAnyRefDlg)
+        mpAnyRefDlg->ShowReference(mxEntry->get_text());
 }
 
 RefButton::RefButton(std::unique_ptr<weld::Button> xControl)
