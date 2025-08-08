@@ -193,6 +193,11 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 else if (!wcscmp(pValueName.get(), L"ExternalBackend"))
                     aExternalBackend = o3tl::toU(pValue.get());
             }
+            SAL_INFO(
+                "configmgr",
+                "winreg \"" << aKeyName << "\": value=\"" << aValue << "\" type=\"" << aType
+                << "\" final=" << bFinal << " nil=" << bNil << " ext=" << bExternal
+                << "\" extback=\"" << aExternalBackend << "\"");
             if (bExternal)
             {
                 // type and external are mutually exclusive
