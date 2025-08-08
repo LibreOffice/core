@@ -3085,14 +3085,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // Left, Right, and Hanging settings are also grouped. Ensure that all or none are set.
                 if (xParaProps)
                 {
-                    // tdf#83844: DOCX ignores non-Ch indentation if any Ch indentation is set
+                    // tdf#83844: DOCX ignores non-Ch indentation if corresponding Ch indent is set
                     bool bLeftChSet = pParaContext->isSet(PROP_PARA_LEFT_MARGIN_UNIT);
                     bool bRightChSet = pParaContext->isSet(PROP_PARA_RIGHT_MARGIN_UNIT);
                     bool bFirstChSet = pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT_UNIT);
                     bool bAnyChSet = bLeftChSet || bRightChSet || bFirstChSet;
                     if (bAnyChSet)
                     {
-                        // Remove all non-Ch indentation from properties
                         css::beans::Pair<double, sal_Int16> stZero{
                             0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
                         };
@@ -3103,9 +3102,26 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         if (bLeftChSet)
                         {
+                            // Both w:leftChars and w:left properties may have been defined,
+                            // and in that case one has cancelled the other out.
+                            // Re-apply the correct property to the actual paragraph.
+
                             pParaContext->getProperty(PROP_PARA_LEFT_MARGIN_UNIT)->second
                                 >>= stLeftCh;
                             bLeftChSet = stLeftCh != stZero;
+
+                            if (!bLeftChSet) // special case - indicates leftCh is disabled
+                            {
+                                // Implementaton note: when leftChars was imported as zero,
+                                // an inherited w:left was force-inserted
+                                // by DomainMapper::lcl_attribute
+                                const PropertyIds eId = PROP_PARA_LEFT_MARGIN;
+                                assert(pParaContext->isSet(eId) && "where is fallback margin?");
+
+                                 // replace "disabled w:leftChars" with direct/inherited w:left
+                                xParaProps->setPropertyValue(getPropertyName(eId),
+                                    pParaContext->getProperty(eId)->second);
+                            }
                         }
 
                         if (bRightChSet)
@@ -3113,6 +3129,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             pParaContext->getProperty(PROP_PARA_RIGHT_MARGIN_UNIT)->second
                                 >>= stRightCh;
                             bRightChSet = stRightCh != stZero;
+
+                            if (!bRightChSet)
+                            {
+                                // replace "disabled w:rightChars" with direct/inherited w:right
+                                const PropertyIds eId = PROP_PARA_RIGHT_MARGIN;
+                                assert(pParaContext->isSet(eId) && "where is fallback margin?");
+                                xParaProps->setPropertyValue(getPropertyName(eId),
+                                    pParaContext->getProperty(eId)->second);
+                            }
                         }
 
                         if (bFirstChSet)
@@ -3120,6 +3145,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             pParaContext->getProperty(PROP_PARA_FIRST_LINE_INDENT_UNIT)->second
                                 >>= stFirstCh;
                             bFirstChSet = stFirstCh != stZero;
+
+                            if (!bFirstChSet)
+                            {
+                                // replace "disabled hangingChars/firstLineChars"
+                                // with direct/inherited first line indent
+                                const PropertyIds eId = PROP_PARA_FIRST_LINE_INDENT;
+                                assert(pParaContext->isSet(eId) && "where is fallback margin?");
+                                xParaProps->setPropertyValue(getPropertyName(eId),
+                                    pParaContext->getProperty(eId)->second);
+                            }
                         }
 
                         // tdf#83844: DOCX stores left and leftChars differently with hanging
@@ -3130,12 +3165,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             stLeftCh.First -= stFirstCh.First;
                         }
 
-                        xParaProps->setPropertyValue(u"ParaLeftMarginUnit"_ustr,
-                                                     uno::Any{ stLeftCh });
-                        xParaProps->setPropertyValue(u"ParaRightMarginUnit"_ustr,
-                                                     uno::Any{ stRightCh });
-                        xParaProps->setPropertyValue(u"ParaFirstLineIndentUnit"_ustr,
-                                                     uno::Any{ stFirstCh });
+                        if (bLeftChSet)
+                            xParaProps->setPropertyValue(u"ParaLeftMarginUnit"_ustr,
+                                                         uno::Any{ stLeftCh });
+                        if (bRightChSet)
+                            xParaProps->setPropertyValue(u"ParaRightMarginUnit"_ustr,
+                                                         uno::Any{ stRightCh });
+                        if (bFirstChSet)
+                            xParaProps->setPropertyValue(u"ParaFirstLineIndentUnit"_ustr,
+                                                         uno::Any{ stFirstCh });
                     }
 
                     const bool bLeftSet  = pParaContext->isSet(PROP_PARA_LEFT_MARGIN);

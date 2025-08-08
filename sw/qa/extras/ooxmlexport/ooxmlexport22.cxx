@@ -313,13 +313,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
         = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaFirstLineIndentUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(-1), aFirstCh.First);
 
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
-
-    // temporary test
-    // a "zero" leftChars disables a chars margin.
-    // This was being adjusted by ParaFirstLineIndentUnit (0 - -1) to become "1 ic"
-    aLeftCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaLeftMarginUnit"_ustr);
-    CPPUNIT_ASSERT_EQUAL(double(0), aLeftCh.First);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
 
     aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
@@ -368,14 +362,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 
     // Test the paragraph #########################################################################
-    // uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
 
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
 
-    // aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
-    // CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+    aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits3)
@@ -416,9 +410,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits3)
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 
     // Test the paragraph #########################################################################
-    // uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    // CPPUNIT_ASSERT_EQUAL(sal_Int32(5080), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5080),
+                         getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
 
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
 
