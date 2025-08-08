@@ -369,13 +369,67 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkFrame" id="frame4">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="margin-start">12</property>
                                 <property name="margin-top">6</property>
-                                <property name="label-xalign">0</property>
-                                <property name="shadow-type">none</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkBox" id="box7">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="singledocument">
+                                        <property name="label" translatable="yes" context="mailmerge|singledocument">S_ave as single document</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="singledocument-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|singledocument">Create one big document containing all data records.</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="individualdocuments">
+                                        <property name="label" translatable="yes" context="mailmerge|individualdocuments">Sa_ve as individual documents</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">singledocument</property>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="individualdocuments-atkobject">
+                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|individualdocuments">Create one document for each data record.</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                                 <child>
                                   <!-- n-columns=3 n-rows=12 -->
                                   <object class="GtkGrid" id="grid1">
@@ -726,56 +780,11 @@
                                       <placeholder/>
                                     </child>
                                   </object>
-                                </child>
-                                <child type="label">
-                                  <object class="GtkBox" id="box7">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <object class="GtkRadioButton" id="singledocument">
-                                        <property name="label" translatable="yes" context="mailmerge|singledocument">S_ave as single document</property>
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="active">True</property>
-                                        <property name="draw-indicator">True</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="singledocument-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|singledocument">Create one big document containing all data records.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkRadioButton" id="individualdocuments">
-                                        <property name="label" translatable="yes" context="mailmerge|individualdocuments">Sa_ve as individual documents</property>
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="draw-indicator">True</property>
-                                        <property name="group">singledocument</property>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="individualdocuments-atkobject">
-                                            <property name="AtkObject::accessible-description" translatable="yes" context="mailmerge|extended_tip|individualdocuments">Create one document for each data record.</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
