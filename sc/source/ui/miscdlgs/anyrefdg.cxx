@@ -375,14 +375,11 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
     // Save and adjust window title
     m_sOldDialogText = m_pDialog->get_title();
-    if (weld::Label *pLabel = m_pRefEdit->GetLabelWidgetForShrinkMode())
+    const OUString sLabel = m_pRefEdit->GetLabelTextForShrinkMode();
+    if (!sLabel.isEmpty())
     {
-        const OUString sLabel = pLabel->get_label();
-        if (!sLabel.isEmpty())
-        {
-            const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
-            m_pDialog->set_title(pLabel->strip_mnemonic(sNewDialogText));
-        }
+        const OUString sNewDialogText = m_sOldDialogText + ": " + comphelper::string::stripEnd(sLabel, ':');
+        m_pDialog->set_title(m_pDialog->strip_mnemonic(sNewDialogText));
     }
 
     m_pDialog->collapse(pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);

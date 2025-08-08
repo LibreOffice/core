@@ -120,9 +120,12 @@ public:
         return Selection(nStartPos, nEndPos);
     }
 
-    weld::Label* GetLabelWidgetForShrinkMode()
+    OUString GetLabelTextForShrinkMode()
     {
-        return pLabelWidget;
+        if (pLabelWidget)
+            return pLabelWidget->get_label();
+
+        return OUString();
     }
 
     void SaveValue()
