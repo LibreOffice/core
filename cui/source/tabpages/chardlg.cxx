@@ -2421,8 +2421,7 @@ SvxCharPositionPage::SvxCharPositionPage(weld::Container* pPage, weld::DialogCon
     , m_xFontSizeFT(m_xBuilder->weld_label(u"relativefontsize"_ustr))
     , m_xFontSizeMF(m_xBuilder->weld_metric_spin_button(u"fontsizesb"_ustr, FieldUnit::PERCENT))
     , m_xRotationContainer(m_xBuilder->weld_widget(u"rotationcontainer"_ustr))
-    , m_xScalingFT(m_xBuilder->weld_label(u"scale"_ustr))
-    , m_xScalingAndRotationFT(m_xBuilder->weld_label(u"rotateandscale"_ustr))
+    , m_xRotationAndScalingFrame(m_xBuilder->weld_frame(u"rotationandscalingframe"_ustr))
     , m_x0degRB(m_xBuilder->weld_radio_button(u"0deg"_ustr))
     , m_x90degRB(m_xBuilder->weld_radio_button(u"90deg"_ustr))
     , m_x270degRB(m_xBuilder->weld_radio_button(u"270deg"_ustr))
@@ -2826,14 +2825,12 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::UNKNOWN == eState )
     {
         m_xRotationContainer->hide();
-        m_xScalingAndRotationFT->hide();
-        m_xScalingFT->show();
+        m_xRotationAndScalingFrame->set_label(CuiResId(RID_CUISTR_SCALING));
     }
     else
     {
         m_xRotationContainer->show();
-        m_xScalingAndRotationFT->show();
-        m_xScalingFT->hide();
+        m_xRotationAndScalingFrame->set_label(CuiResId(RID_CUISTR_ROTATION_SCALING));
 
         if( eState >= SfxItemState::DEFAULT )
         {

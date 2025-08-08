@@ -395,6 +395,9 @@
 #define RID_CUISTR_SAVED                            NC_("RID_CUISTR_SAVED", "The results have been successfully saved in the file 'GraphicTestResults.zip'!")
 #define RID_CUISTR_OPT_READONLY                     NC_("RID_CUISTR_OPT_READONLY", "This property is locked for editing.")
 
+#define RID_CUISTR_ROTATION_SCALING                 NC_("RID_CUISTR_ROTATION_SCALING", "Rotation / Scaling")
+#define RID_CUISTR_SCALING                          NC_("RID_CUISTR_SCALING", "Scaling")
+
 #define RID_LANGUAGETOOL_LEAVE_EMPTY                NC_("RID_LANGUAGETOOL_LEAVE_EMPTY", "Leave this field empty to use the free version")
 #define RID_LANGUAGETOOL_REST_LEAVE_EMPTY           NC_("RID_LANGUAGETOOL_REST_LEAVE_EMPTY", "Leave this field empty to use LanguageTool protocol")
 

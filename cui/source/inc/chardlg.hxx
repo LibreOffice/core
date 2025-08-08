@@ -258,8 +258,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xRotationContainer;
 
-    std::unique_ptr<weld::Label> m_xScalingFT;
-    std::unique_ptr<weld::Label> m_xScalingAndRotationFT;
+    std::unique_ptr<weld::Frame> m_xRotationAndScalingFrame;
     std::unique_ptr<weld::RadioButton> m_x0degRB;
     std::unique_ptr<weld::RadioButton> m_x90degRB;
     std::unique_ptr<weld::RadioButton> m_x270degRB;
