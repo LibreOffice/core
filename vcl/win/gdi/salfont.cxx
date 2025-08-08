@@ -938,62 +938,10 @@ void ImplReleaseTempFonts(SalData& rSalData)
     }
 }
 
-static OUString lcl_GetFontFamilyName(std::u16string_view rFontFileURL)
-{
-    // Create temporary file name
-    OUString aTempFileURL;
-    if (osl::File::E_None != osl::File::createTempFile(nullptr, nullptr, &aTempFileURL))
-        return OUString();
-    osl::File::remove(aTempFileURL);
-    OUString aResSystemPath;
-    osl::FileBase::getSystemPathFromFileURL(aTempFileURL, aResSystemPath);
-
-    // Create font resource file (.fot)
-    // There is a limit of 127 characters for the full path passed via lpszFile, so we have to
-    // split the font URL and pass it as two parameters. As a result we can't use
-    // CreateScalableFontResource for renaming, as it now expects the font in the system path.
-    // But it's still good to use it for family name extraction, we're currently after.
-    // BTW: it doesn't help to prefix the lpszFile with \\?\ to support larger paths.
-    // TODO: use TTLoadEmbeddedFont (needs an EOT as input, so we have to add a header to the TTF)
-    // TODO: forward the EOT from the AddTempDevFont call side, if VCL supports it
-    INetURLObject aTTFUrl(rFontFileURL);
-    // GetBase() strips the extension
-    OUString aFilename = aTTFUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
-    if (!CreateScalableFontResourceW(0, o3tl::toW(aResSystemPath.getStr()),
-            o3tl::toW(aFilename.getStr()), o3tl::toW(aTTFUrl.GetPath().getStr())))
-    {
-        sal_uInt32 nError = GetLastError();
-        SAL_WARN("vcl.fonts", "CreateScalableFontResource failed for " << aResSystemPath << " "
-                              << aFilename << " " << aTTFUrl.GetPath() << " " << nError);
-        return OUString();
-    }
-
-    // Open and read the font resource file
-    osl::File aFotFile(aTempFileURL);
-    if (osl::FileBase::E_None != aFotFile.open(osl_File_OpenFlag_Read))
-        return OUString();
-
-    sal_uInt64  nBytesRead = 0;
-    char        aBuffer[4096];
-    aFotFile.read( aBuffer, sizeof( aBuffer ), nBytesRead );
-    // clean up temporary resource file
-    aFotFile.close();
-    osl::File::remove(aTempFileURL);
-
-    // retrieve font family name from byte offset 0x4F6
-    static const sal_uInt64 nNameOfs = 0x4F6;
-    sal_uInt64 nPos = nNameOfs;
-    for (; (nPos < nBytesRead) && (aBuffer[nPos] != 0); nPos++);
-    if (nPos >= nBytesRead || (nPos == nNameOfs))
-        return OUString();
-
-    return OUString(aBuffer + nNameOfs, nPos - nNameOfs, osl_getThreadTextEncoding());
-}
-
 bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontCollection,
                                     const OUString& rFontFileURL, const OUString& rFontName)
 {
-    OUString aFontFamily = lcl_GetFontFamilyName(rFontFileURL);
+    OUString aFontFamily = getFontFamilyNameFromTTF(rFontFileURL);
     if (aFontFamily.isEmpty())
     {
         SAL_WARN("vcl.fonts", "error extracting font family from " << rFontFileURL);

@@ -290,6 +290,8 @@ private:
     // local helpers
     void DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bRenderingModeNatural);
 
+    static OUString getFontFamilyNameFromTTF(const OUString& url);
+
 protected:
     std::unique_ptr<SalGraphicsImpl> mpImpl;
     WinSalGraphicsImplBase * mWinSalGraphicsImplBase;
