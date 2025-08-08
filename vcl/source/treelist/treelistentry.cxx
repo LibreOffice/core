@@ -201,6 +201,16 @@ bool SvTreeListEntry::HasChildrenOnDemand() const
     return static_cast<bool>(nEntryFlags & SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
+void SvTreeListEntry::SetSeparator()
+{
+    SetFlags(GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+}
+
+bool SvTreeListEntry::IsSeparator() const
+{
+    return bool(GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
+}
+
 void SvTreeListEntry::SetFlags( SvTLEntryFlags nFlags )
 {
     nEntryFlags = nFlags;

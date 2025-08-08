@@ -2613,7 +2613,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     Size aRectSize(0, nTempEntryHeight);
 
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
-    const bool bSeparator(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
+    const bool bSeparator(rEntry.IsSeparator());
 
     const auto nMaxContextBmpWidthBeforeIndentIsNeeded =
             nIndent + GetExpandedNodeBmp().GetSizePixel().Width() / 2;

@@ -3641,7 +3641,7 @@ void SalInstanceTreeView::do_insert(const weld::TreeIter* pParent, int pos, cons
 
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     if (bIsSeparator)
-        pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+        pEntry->SetSeparator();
 
     if (m_xTreeView->nTreeFlags & SvTreeFlags::CHKBTN)
         AddStringItem(pEntry, u""_ustr, -1);
@@ -5444,7 +5444,7 @@ void SalInstanceIconView::insert_separator(int pos, const OUString* /* pId */)
     const auto nInsertPos = pos == -1 ? TREELIST_APPEND : pos;
     const OUString sSep(VclResId(STR_SEPARATOR));
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->SetFlags(pEntry->GetFlags() | SvTLEntryFlags::IS_SEPARATOR);
+    pEntry->SetSeparator();
     const Image aDummy;
     pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
     pEntry->AddItem(std::make_unique<SvLBoxString>(sSep));

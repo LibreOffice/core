@@ -48,7 +48,7 @@ IconView::IconView(vcl::Window* pParent, WinBits nBits)
 
 Size IconView::GetEntrySize(const SvTreeListEntry& entry) const
 {
-    if (IsSeparator(entry))
+    if (entry.IsSeparator())
         return { GetEntryWidth() * GetColumnCount(), separatorHeight };
     return { GetEntryWidth(), GetEntryHeight() };
 }
@@ -71,16 +71,11 @@ bool IconView::HasSeparatorEntry() const
     for (sal_uInt32 i = 0; i < GetEntryCount(); i++)
     {
         SvTreeListEntry* pEntry = GetEntry(i);
-        if (pEntry && IsSeparator(*pEntry))
+        if (pEntry && pEntry->IsSeparator())
             return true;
     }
 
     return false;
-}
-
-bool IconView::IsSeparator(const SvTreeListEntry& rEntry)
-{
-    return bool(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
 }
 
 void IconView::CalcEntryHeight(SvTreeListEntry const* pEntry)
@@ -344,7 +339,7 @@ void IconView::DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter, SvTreeListEn
         if (IsSelected(pEntry))
             rJsonWriter.put("selected", true);
 
-        if (IsSeparator(*pEntry))
+        if (pEntry->IsSeparator())
             rJsonWriter.put("separator", true);
 
         rJsonWriter.put("row", GetModel()->GetAbsPos(pEntry));

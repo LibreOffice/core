@@ -193,7 +193,7 @@ void SvLBoxString::Paint(
     const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
 {
     DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
-    if (bool(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR))
+    if (rEntry.IsSeparator())
     {
         Point aStartPos(0, rPos.Y() - 2);
         tools::Rectangle aRegion(aStartPos, Size(rDev.GetSizePixel().Width(), 4));
@@ -265,7 +265,7 @@ void SvLBoxString::InitViewData(
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    if (bool(pEntry->GetFlags() & SvTLEntryFlags::IS_SEPARATOR))
+    if (pEntry->IsSeparator())
     {
         pViewData->mnWidth = -1;
         pViewData->mnHeight = 0;

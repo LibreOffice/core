@@ -59,8 +59,6 @@ public:
     /// Update entry size based on image size
     void UpdateEntrySize(const Image& pImage);
 
-    static bool IsSeparator(const SvTreeListEntry& rEntry);
-
 protected:
     virtual void CalcEntryHeight(SvTreeListEntry const* pEntry) override;
 

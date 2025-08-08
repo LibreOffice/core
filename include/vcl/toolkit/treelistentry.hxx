@@ -111,6 +111,8 @@ public:
     void        SetUserData( void* pPtr );
     void        EnableChildrenOnDemand( bool bEnable=true );
     bool        HasChildrenOnDemand() const;
+    void        SetSeparator();
+    bool        IsSeparator() const;
 
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
