@@ -20,6 +20,7 @@
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <algorithm>
+#include <cassert>
 
 namespace basegfx
 {
@@ -93,6 +94,10 @@ namespace basegfx
         {
             return 1.0;
         }
+
+        // fDistance is >= fLength. For fLength to be zero, then fDistance has
+        // to be <= 0.0, but we return early in that case.
+        assert(fLength != 0 && "help coverity see it's not zero");
 
         // fDistance is in ]0.0 .. fLength[
 
