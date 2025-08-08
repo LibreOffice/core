@@ -89,8 +89,10 @@ void SwModelTestBase::dumpLayout(SwDoc* pDoc)
     xmlFreeTextWriter(pXmlWriter);
 }
 
-void SwModelTestBase::calcLayout()
+void SwModelTestBase::calcLayout(bool bRecalc)
 {
+    if (bRecalc)
+        getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->Reformat();
     getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 

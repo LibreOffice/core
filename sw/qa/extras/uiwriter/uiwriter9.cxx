@@ -17,6 +17,8 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XFontMappingUse.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
@@ -1159,6 +1161,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167006)
     // attempt to edit the OLE object. This must not crash.
     getSwDocShell()->GetWrtShell()->LaunchOLEObj();
 }
+
+#if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167849)
+{
+    auto assertNoSubstitution = [](const uno::Reference<awt::XFontMappingUse>& xUse, int pass) {
+        const auto trackingData = xUse->finishTrackingFontMappingUse();
+        for (const auto& element : trackingData)
+        {
+            for (const auto& used : element.usedFonts)
+            {
+                OUString message = "Pass " + OUString::number(pass) + ": " + element.originalFont
+                                   + " substituted with " + used;
+                CPPUNIT_ASSERT_MESSAGE(message.toUtf8().getStr(),
+                                       used.startsWith(element.originalFont));
+            }
+        }
+        xUse->startTrackingFontMappingUse();
+    };
+
+    auto xFontMappingUse = awt::Toolkit::create(comphelper::getProcessComponentContext())
+                               .queryThrow<awt::XFontMappingUse>();
+    xFontMappingUse->startTrackingFontMappingUse();
+
+    // Given two documents with embedded fonts, that will not require substitution, if present:
+
+    // Load the first document
+    createSwDoc("embed-unrestricted1.odt");
+    // At this point, 'Manbow Solid' embedded font is loaded
+    std::swap(mxComponent, mxComponent2); // keep it from unloading upon the next load
+
+    assertNoSubstitution(xFontMappingUse, 1);
+
+    // Load the second document
+    createSwDoc("embed-unrestricted2.odt");
+    // At this point, 'Unsteady Oversteer' font is also loaded
+
+    assertNoSubstitution(xFontMappingUse, 2);
+
+    // Re-layout both documents; both fonts must still be loaded
+    calcLayout(true);
+    std::swap(mxComponent, mxComponent2);
+    calcLayout(true);
+
+    // Without the fix, it would fail with
+    // - Pass 3: Manbow Solid substituted with Liberation Serif/Regular
+    // because loading the second document unregistered the embedded font from the first one.
+    assertNoSubstitution(xFontMappingUse, 3);
+    xFontMappingUse->finishTrackingFontMappingUse();
+}
+#endif
 
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
