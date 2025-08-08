@@ -317,7 +317,7 @@ class SwTOXEntryTabPage final : public SfxTabPage
     CurTOXType      m_aLastTOXType;
     bool            m_bInLevelHdl;
 
-    std::unique_ptr<weld::Label> m_xLevelFT;
+    std::unique_ptr<weld::Frame> m_xLevelFrame;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::Button> m_xAllLevelsPB;
     std::unique_ptr<weld::Button> m_xEntryNoPB;

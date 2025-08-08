@@ -1930,7 +1930,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     , m_sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
     , m_pCurrentForm(nullptr)
     , m_bInLevelHdl(false)
-    , m_xLevelFT(m_xBuilder->weld_label(u"levelft"_ustr))
+    , m_xLevelFrame(m_xBuilder->weld_frame(u"levelframe"_ustr))
     , m_xLevelLB(m_xBuilder->weld_tree_view(u"level"_ustr))
     , m_xAllLevelsPB(m_xBuilder->weld_button(u"all"_ustr))
     , m_xEntryNoPB(m_xBuilder->weld_button(u"chapterno"_ustr))
@@ -1979,7 +1979,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
 {
     const OUString sNoCharSortKey(SwResId(STR_NOSORTKEY));
 
-    m_sLevelStr = m_xLevelFT->get_label();
+    m_sLevelStr = m_xLevelFrame->get_label();
     m_xAuthFieldsLB->make_sorted();
     m_xTokenWIN->SetTabPage(this);
 
@@ -2264,10 +2264,10 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                 }
             }
             SortKeyHdl(m_xSortDocPosRB->get_active() ? *m_xSortDocPosRB : *m_xSortContentRB);
-            m_xLevelFT->set_label(m_sAuthTypeStr);
+            m_xLevelFrame->set_label(m_sAuthTypeStr);
         }
         else
-            m_xLevelFT->set_label(m_sLevelStr);
+            m_xLevelFrame->set_label(m_sLevelStr);
 
         // tdf#135266 - remember last used entry level depending on the index type
         m_xLevelLB->select(bToxIsIndex ? pTOXDlg->GetWrtShell().GetViewOptions()->GetIdxEntryLvl()
