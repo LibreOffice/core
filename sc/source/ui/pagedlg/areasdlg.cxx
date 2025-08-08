@@ -114,18 +114,15 @@ ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Win
     , m_xPrintFrame(m_xBuilder->weld_frame(u"printframe"_ustr))
     , m_xRowFrame(m_xBuilder->weld_frame(u"rowframe"_ustr))
     , m_xColFrame(m_xBuilder->weld_frame(u"colframe"_ustr))
-    , m_xPrintFrameFT(m_xPrintFrame->weld_label_widget())
-    , m_xRowFrameFT(m_xRowFrame->weld_label_widget())
-    , m_xColFrameFT(m_xColFrame->weld_label_widget())
 {
-    m_xEdPrintArea->SetReferences(this, m_xPrintFrameFT.get());
+    m_xEdPrintArea->SetReferences(this, m_xPrintFrame.get());
     m_pRefInputEdit = m_xEdPrintArea.get();
     m_xRbPrintArea->SetReferences(this, m_xEdPrintArea.get());
 
-    m_xEdRepeatRow->SetReferences(this, m_xRowFrameFT.get());
+    m_xEdRepeatRow->SetReferences(this, m_xRowFrame.get());
     m_xRbRepeatRow->SetReferences(this, m_xEdRepeatRow.get());
 
-    m_xEdRepeatCol->SetReferences(this, m_xColFrameFT.get());
+    m_xEdRepeatCol->SetReferences(this, m_xColFrame.get());
     m_xRbRepeatCol->SetReferences(this, m_xEdRepeatCol.get());
 
     Impl_Reset();

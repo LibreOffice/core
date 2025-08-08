@@ -107,9 +107,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     , mxBtnOK(m_xBuilder->weld_button(u"ok"_ustr))
     , mxBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
     , mxSourceFrame(m_xBuilder->weld_frame(u"frame2"_ustr))
-    , mxSourceLabel(mxSourceFrame->weld_label_widget())
     , mxDestFrame(m_xBuilder->weld_frame(u"frame1"_ustr))
-    , mxDestLabel(mxDestFrame->weld_label_widget())
     , mxOptions(m_xBuilder->weld_expander(u"options"_ustr))
     , mxMore(m_xBuilder->weld_expander(u"more"_ustr))
 {
@@ -118,7 +116,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxSourceRadioNamedRange->connect_toggled(aLink2);
     mxSourceRadioSelection->connect_toggled(aLink2);
 
-    mxSourceEdit->SetReferences(this, mxSourceLabel.get());
+    mxSourceEdit->SetReferences(this, mxSourceFrame.get());
     mxSourceButton->SetReferences(this, mxSourceEdit.get());
 
     Link<formula::RefEdit&,void> aEditLink = LINK(this, ScPivotLayoutDialog, GetEditFocusHandler);
@@ -138,7 +136,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxDestinationRadioNamedRange->connect_toggled(aLink2);
     mxDestinationRadioSelection->connect_toggled(aLink2);
 
-    mxDestinationEdit->SetReferences(this, mxDestLabel.get());
+    mxDestinationEdit->SetReferences(this, mxDestFrame.get());
     mxDestinationButton->SetReferences(this, mxDestinationEdit.get());
 
     Link<formula::RefButton&,void> aButtonLink = LINK(this, ScPivotLayoutDialog, GetButtonFocusHandler);

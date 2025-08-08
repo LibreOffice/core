@@ -86,7 +86,9 @@ public:
 
     void StartUpdateData();
 
-    void SetReferences( IControlReferenceHandler* pDlg, weld::Label *pLabelWidget );
+    // The label/text set in the Label/Frame is used in shrink mode
+    void SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel = nullptr);
+    void SetReferences(IControlReferenceHandler* pDlg, weld::Frame* pFrame);
 
     void DoModify()
     {

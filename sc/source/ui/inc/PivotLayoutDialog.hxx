@@ -81,9 +81,7 @@ private:
     std::unique_ptr<weld::Button> mxBtnCancel;
 
     std::unique_ptr<weld::Frame> mxSourceFrame;
-    std::unique_ptr<weld::Label> mxSourceLabel;
     std::unique_ptr<weld::Frame> mxDestFrame;
-    std::unique_ptr<weld::Label> mxDestLabel;
 
     std::unique_ptr<weld::Expander> mxOptions;
     std::unique_ptr<weld::Expander> mxMore;

@@ -603,7 +603,7 @@ void ScTPValidationValue::RemoveRefDlg(bool bRestoreModal)
     pValidationDlg->SetRefInputDonePostHdl( nullptr );
 
     if( m_pRefEdit )
-        m_pRefEdit->SetReferences( nullptr, nullptr );
+        m_pRefEdit->SetReferences(nullptr);
     m_pRefEdit = nullptr;
 
     m_xBtnRef->SetReferences( nullptr, nullptr );

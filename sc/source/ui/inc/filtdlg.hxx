@@ -224,7 +224,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnCancel;
 
     std::unique_ptr<weld::Frame> m_xFilterFrame;
-    std::unique_ptr<weld::Label> m_xFilterLabel;
 
 private:
     void            Init( const SfxItemSet& rArgSet );

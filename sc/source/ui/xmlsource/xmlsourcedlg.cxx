@@ -82,7 +82,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mxLbTree->set_size_request(mxLbTree->get_approximate_digit_width() * 40,
                                mxLbTree->get_height_rows(15));
     mxLbTree->set_selection_mode(SelectionMode::Multiple);
-    mxRefEdit->SetReferences(this, nullptr);
+    mxRefEdit->SetReferences(this);
     mxRefBtn->SetReferences(this, mxRefEdit.get());
 
     mpActiveEdit = mxRefEdit.get();

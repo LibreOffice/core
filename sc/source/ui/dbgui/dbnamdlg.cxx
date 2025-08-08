@@ -147,11 +147,10 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xModifyPB(m_xBuilder->weld_button(u"modify"_ustr))
     , m_xInvalidFT(m_xBuilder->weld_label(u"invalid"_ustr))
-    , m_xFrameLabel(m_xAssignFrame->weld_label_widget())
     , m_xExpander(m_xBuilder->weld_expander(u"more"_ustr))
 {
     m_xEdName->set_height_request_by_rows(4);
-    m_xEdAssign->SetReferences(this, m_xFrameLabel.get());
+    m_xEdAssign->SetReferences(this, m_xAssignFrame.get());
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
     aStrAdd = m_xBtnAdd->get_label();
     aStrModify = m_xModifyPB->get_label();

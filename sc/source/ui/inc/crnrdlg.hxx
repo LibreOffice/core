@@ -69,7 +69,6 @@ private:
     std::unique_ptr<weld::Button> m_xBtnRemove;
 
     std::unique_ptr<weld::Frame> m_xRangeFrame;
-    std::unique_ptr<weld::Label> m_xRangeFT;
     std::unique_ptr<weld::Label> m_xDataFT;
 
     void Init               ();

@@ -39,7 +39,7 @@ ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld:
     , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
     , m_xFilterCtr(new SvxTPFilter(m_xBox.get()))
 {
-    m_xEdAssign->SetReferences(this, nullptr);
+    m_xEdAssign->SetReferences(this);
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
 
     m_xOkButton->connect_clicked(LINK( this, ScHighlightChgDlg, OKBtnHdl));

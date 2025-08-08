@@ -329,6 +329,13 @@ void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Label* pLabel)
     }
 }
 
+void RefEdit::SetReferences(IControlReferenceHandler* pDlg, weld::Frame* pFrame)
+{
+    SetReferences(pDlg);
+
+    if (pFrame)
+        maGetLabelTextForShrinkModeFunc = [pFrame] { return pFrame->get_label(); };
+}
 
 OUString RefEdit::GetLabelTextForShrinkMode()
 {

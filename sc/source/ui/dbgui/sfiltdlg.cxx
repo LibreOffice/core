@@ -80,9 +80,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, we
     , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
     , m_xFilterFrame(m_xBuilder->weld_frame(u"filterframe"_ustr))
-    , m_xFilterLabel(m_xFilterFrame->weld_label_widget())
 {
-    m_xEdFilterArea->SetReferences(this, m_xFilterLabel.get());
+    m_xEdFilterArea->SetReferences(this, m_xFilterFrame.get());
     m_xRbFilterArea->SetReferences(this, m_xEdFilterArea.get());
     m_xEdCopyArea->SetReferences(this, m_xFtDbAreaLabel.get());
     m_xRbCopyArea->SetReferences(this, m_xEdCopyArea.get());

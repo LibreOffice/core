@@ -77,11 +77,10 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xRangeFrame(m_xBuilder->weld_frame(u"rangeframe"_ustr))
-    , m_xRangeFT(m_xRangeFrame->weld_label_widget())
     , m_xDataFT(m_xBuilder->weld_label(u"datarange"_ustr))
 {
     m_xRbAssign->SetReferences(this, m_xEdAssign.get());
-    m_xEdAssign->SetReferences(this, m_xRangeFT.get());
+    m_xEdAssign->SetReferences(this, m_xRangeFrame.get());
     m_xRbAssign2->SetReferences(this, m_xEdAssign2.get());
     m_xEdAssign2->SetReferences(this, m_xDataFT.get());
 

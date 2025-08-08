@@ -68,10 +68,6 @@ private:
     std::unique_ptr<weld::Frame> m_xRowFrame;
     std::unique_ptr<weld::Frame> m_xColFrame;
 
-    std::unique_ptr<weld::Label> m_xPrintFrameFT;
-    std::unique_ptr<weld::Label> m_xRowFrameFT;
-    std::unique_ptr<weld::Label> m_xColFrameFT;
-
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
