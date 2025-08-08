@@ -341,6 +341,10 @@ void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
 {
 }
 
+void Application::notifyCursorInvalidation(tools::Rectangle const* /*pRect*/, bool /*bControlEvent*/) const
+{
+}
+
 void Application::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();

@@ -241,7 +241,38 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
     }
 }
 
-void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
+namespace
+{
+
+tools::Rectangle calcualteCursorRect(Point const& rPosition, Size const rSize, vcl::Window* pWindow, vcl::Window* pParent)
+{
+    Point aPositionPixel = pWindow->LogicToPixel(rPosition);
+    const tools::Long nX = pWindow->GetOutOffXPixel() + aPositionPixel.X() - pParent->GetOutOffXPixel();
+    const tools::Long nY = pWindow->GetOutOffYPixel() + aPositionPixel.Y() - pParent->GetOutOffYPixel();
+
+    Size aSizePixel = pWindow->LogicToPixel(rSize);
+    if (!aSizePixel.Width())
+        aSizePixel.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
+
+    Point aPosition(nX, nY);
+
+    if (pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
+        && !pWindow->GetOutDev()->ImplIsAntiparallel())
+        pParent->GetOutDev()->ReMirror(aPosition);
+
+    if (!pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
+        && pWindow->GetOutDev()->ImplIsAntiparallel())
+    {
+        pWindow->GetOutDev()->ReMirror(aPosition);
+        pParent->GetOutDev()->ReMirror(aPosition);
+    }
+
+    return tools::Rectangle(aPosition, aSizePixel);
+}
+
+} // end anonymous namespace
+
+void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
 {
     VclPtr<vcl::Window> pParent = pWindow->GetParentWithLOKNotifier();
     if (!pParent)
@@ -251,39 +282,40 @@ void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
     assert(mpData && "Require ImplCursorData");
     assert(comphelper::LibreOfficeKit::isActive());
 
-    if (comphelper::LibreOfficeKit::isDialogPainting())
-        return;
-
     const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-    std::vector<vcl::LOKPayloadItem> aItems;
-    if (rAction == "cursor_visible")
-        aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
-    else if (rAction == "cursor_invalidate")
+
+    if (pWindow->IsFormControl() || (pWindow->GetParent() && pWindow->GetParent()->IsFormControl()))
     {
-        const tools::Long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X() - pParent->GetOutOffXPixel();
-        const tools::Long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y() - pParent->GetOutOffYPixel();
-        Size aSize = pWindow->LogicToPixel(GetSize());
-        if (!aSize.Width())
-            aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
-
-        Point aPos(nX, nY);
-
-        if (pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
-            && !pWindow->GetOutDev()->ImplIsAntiparallel())
-            pParent->GetOutDev()->ReMirror(aPos);
-
-        if (!pWindow->IsRTLEnabled() && pWindow->GetOutDev() && pParent->GetOutDev()
-            && pWindow->GetOutDev()->ImplIsAntiparallel())
+        if (rAction == "cursor_invalidate")
         {
-            pWindow->GetOutDev()->ReMirror(aPos);
-            pParent->GetOutDev()->ReMirror(aPos);
+            tools::Rectangle aRect;
+            if (pWindow->IsFormControl())
+                aRect = calcualteCursorRect(GetPos(), GetSize(), pWindow, pWindow->GetParent());
+            else
+                aRect = calcualteCursorRect(GetPos(), GetSize(), pWindow, pWindow->GetParent()->GetParent());
+
+            OutputDevice* pDevice = mpData->mpWindow->GetOutDev();
+            const tools::Rectangle aRectTwip = pDevice->PixelToLogic(aRect, MapMode(MapUnit::MapTwip));
+            pNotifier->notifyCursorInvalidation(&aRectTwip, true);
         }
-
-        const tools::Rectangle aRect(aPos, aSize);
-        aItems.emplace_back("rectangle", aRect.toString());
     }
+    else
+    {
+        if (comphelper::LibreOfficeKit::isDialogPainting())
+            return;
 
-    pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+        std::vector<vcl::LOKPayloadItem> aItems;
+        if (rAction == "cursor_visible")
+        {
+            aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
+        }
+        else if (rAction == "cursor_invalidate")
+        {
+            const tools::Rectangle aRect = calcualteCursorRect(GetPos(), GetSize(), pWindow, pParent);
+            aItems.emplace_back("rectangle", aRect.toString());
+        }
+        pNotifier->notifyWindow(pParent->GetLOKWindowId(), rAction, aItems);
+    }
 }
 
 bool vcl::Cursor::ImplDoHide( bool bSuspend )

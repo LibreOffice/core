@@ -3560,6 +3560,11 @@ void SfxViewShell::notifyInvalidation(tools::Rectangle const* pRect) const
     SfxLokHelper::notifyInvalidation(this, pRect);
 }
 
+void SfxViewShell::notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent) const
+{
+    SfxLokHelper::notifyCursorInvalidation(this, pRect, bControlEvent);
+}
+
 void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
 {
     SfxLokHelper::notifyOtherViews(this, nType, rKey, rPayload);

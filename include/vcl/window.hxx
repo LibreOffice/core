@@ -775,6 +775,8 @@ public:
     WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
+    bool IsFormControl() const;
+    void SetFormControl(bool bFormControl);
     bool                                IsSystemWindow() const;
     SAL_DLLPRIVATE bool                 IsDockingWindow() const;
     bool                                IsDialog() const;

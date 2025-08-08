@@ -740,6 +740,16 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s);
 }
 
+void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent)
+{
+    int nViewId = SfxLokHelper::getView(*pThisView);
+    OString sPayload = OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) + "\", \"rectangle\": \"" + pRect->toString();
+    if (bControlEvent)
+        sPayload += "\", \"controlEvent\": true";
+    sPayload += " }";
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
+}
+
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
 {
     // -1 means all parts

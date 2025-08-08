@@ -438,6 +438,9 @@ public:
 
     /// ILibreOfficeKitNotifier. Emits a LOK_CALLBACK_INVALIDATE_TILES.
     virtual void notifyInvalidation(tools::Rectangle const *) const override;
+    /// ILibreOfficeKitNotifier.
+    virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent) const override;
+
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
     /// See OutlinerViewShell::NotifyOtherView().
