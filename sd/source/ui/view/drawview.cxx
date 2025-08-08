@@ -592,7 +592,7 @@ void DrawView::DeleteMarked()
                     SdrTextObj* pTextObj = DynCastSdrTextObj( pObj );
                     bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
                     ::tools::Rectangle aRect( pObj->GetLogicRect() );
-                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape( nullptr, ePresObjKind, bVertical, aRect, true );
+                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape(nullptr, ePresObjKind, bVertical, aRect, OUString(), true);
 
                     // pUndoManager should not be NULL (see assert above)
                     // but since we have defensive code
