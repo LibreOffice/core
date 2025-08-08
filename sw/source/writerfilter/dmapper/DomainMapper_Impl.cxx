@@ -3105,24 +3105,27 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             pParaContext->getProperty(PROP_PARA_LEFT_MARGIN_UNIT)->second
                                 >>= stLeftCh;
+                            bLeftChSet = stLeftCh != stZero;
                         }
 
                         if (bRightChSet)
                         {
                             pParaContext->getProperty(PROP_PARA_RIGHT_MARGIN_UNIT)->second
                                 >>= stRightCh;
+                            bRightChSet = stRightCh != stZero;
                         }
 
                         if (bFirstChSet)
                         {
                             pParaContext->getProperty(PROP_PARA_FIRST_LINE_INDENT_UNIT)->second
                                 >>= stFirstCh;
+                            bFirstChSet = stFirstCh != stZero;
                         }
 
                         // tdf#83844: DOCX stores left and leftChars differently with hanging
                         // indentation. Character-based hanging indentation must be pre-added
                         // to the left margin here.
-                        if (stFirstCh.First < 0.0)
+                        if (bLeftChSet && stFirstCh.First < 0.0)
                         {
                             stLeftCh.First -= stFirstCh.First;
                         }

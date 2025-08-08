@@ -298,7 +298,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaFirstLineIndentUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(-4), aFirstCh.First);
 
-    // This first patchset fixes this line. It instead matched ParaLeftMargin 5001.
     auto aLeftCh
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaLeftMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(3), aLeftCh.First);
@@ -319,10 +318,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
     // temporary test
     // a "zero" leftChars disables a chars margin.
     // This was being adjusted by ParaFirstLineIndentUnit (0 - -1) to become "1 ic"
-    // aLeftCh = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaLeftMarginUnit"_ustr);
-    // CPPUNIT_ASSERT_EQUAL(double(0), aLeftCh.First);
+    aLeftCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaLeftMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(0), aLeftCh.First);
 
-    // This first patchset also fixes this inheritance. This was zero'd out...
     aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 }
@@ -351,7 +349,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
     // 5 cm - 1 Ch  (1Ch == 100 TWIP == 0.176 cm), so 4825???  It was 5080
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(5001-176), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
 
-    // This first patchset also fixes this inheritance. This was zero'd out...
     auto aRightCh
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
@@ -366,7 +363,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
 
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(-2540), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
 
-    // This first patchset also fixes this inheritance. This was ParaRightMargin 2000...
     aRightCh
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
