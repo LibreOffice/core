@@ -70,6 +70,85 @@ void clearDir( const OUString& path )
         }
     }
 }
+
+// Returns a URL for a file where to store contents of a given temporary font.
+// The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
+// Use activateFonts() to actually enable usage of the font.
+OUString fileUrlForTemporaryFont(std::u16string_view name)
+{
+    OUString filename = OUString::Concat(name) + ".ttf"; // TODO is it always ttf?
+
+    if (!comphelper::OStorageHelper::IsValidZipEntryFileName(filename, false))
+    {
+        SAL_WARN("vcl.fonts", "Cannot use filename: " << filename << " for temporary font");
+        static int uniqueCounter = 0;
+        filename = "font" + OUString::number(uniqueCounter++) + ".ttf";
+    }
+
+    OUString path = GetEmbeddedFontsRoot() + "fromdocs/";
+    osl::Directory::createPath(path);
+    return path
+           + rtl::Uri::encode(filename, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
+                              RTL_TEXTENCODING_UTF8);
+}
+
+// Returns true when the file was written, or exactly same data was existing.
+//
+// @param name name of the font file
+// @param url returns URL of a new file, or empty string (when the same file already existed).
+bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view name, OUString& url)
+{
+    url = fileUrlForTemporaryFont(name);
+    std::optional<osl::File> file(url);
+    auto rc = file->open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write);
+
+    // Check if existing file is the same
+    for (int counter = 0; rc == osl::File::E_EXIST;)
+    {
+        if (file->open(osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock) == osl::File::E_None)
+        {
+            if (sal_uInt64 size; file->getSize(size) == osl::File::E_None && size == bytes.size())
+            {
+                std::vector<char> bytes2(bytes.size());
+                sal_uInt64 readTotal = 0;
+                while (readTotal < bytes.size())
+                {
+                    sal_uInt64 read = 0;
+                    rc = file->read(bytes2.data() + readTotal, bytes.size() - readTotal, read);
+                    if (read == 0)
+                        break;
+                    readTotal += read;
+                }
+                if (rc == osl::File::E_None && bytes2 == bytes)
+                {
+                    url.clear();
+                    return true; // OK, it's the same bytes
+                }
+            }
+        }
+        url = fileUrlForTemporaryFont(Concat2View(name + OUString::number(counter++)));
+        file.emplace(url);
+        rc = file->open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write);
+    }
+
+    if (rc != osl::File::E_None)
+        return false;
+
+    sal_uInt64 writtenTotal = 0;
+    while (writtenTotal < bytes.size())
+    {
+        sal_uInt64 written = 0;
+        file->write(bytes.data() + writtenTotal, bytes.size() - writtenTotal, written);
+        if (written == 0)
+        {
+            file->close();
+            osl::File::remove(file->getURL());
+            return false;
+        }
+        writtenTotal += written;
+    }
+    return true;
+}
 }
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
@@ -83,18 +162,6 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     std::u16string_view extra, std::vector< unsigned char > const & key, bool eot,
     bool bSubsetted )
 {
-    OUString fileUrl = EmbeddedFontsHelper::fileUrlForTemporaryFont( fontName, extra );
-    osl::File file( fileUrl );
-    switch( file.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write ))
-    {
-        case osl::File::E_None:
-            break; // ok
-        case osl::File::E_EXIST:
-            return true; // Assume it's already been added correctly.
-        default:
-            SAL_WARN( "vcl.fonts", "Cannot open file for temporary font" );
-            return false;
-    }
     size_t keyPos = 0;
     std::vector< char > fontData;
     fontData.reserve( 1000000 );
@@ -108,16 +175,6 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
              ++pos )
             bufferRange[ pos ] ^= key[ keyPos++ ];
         // if eot, don't write the file out yet, since we need to unpack it first.
-        if( !eot && read > 0 )
-        {
-            sal_uInt64 writtenTotal = 0;
-            while( writtenTotal < read )
-            {
-                sal_uInt64 written;
-                file.write( buffer.getConstArray(), read, written );
-                writtenTotal += written;
-            }
-        }
         fontData.insert( fontData.end(), buffer.getConstArray(), buffer.getConstArray() + read );
         if( read <= 0 )
             break;
@@ -135,32 +192,16 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         if( uncompressError != libeot::EOT_SUCCESS )
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
-            osl::File::remove( fileUrl );
             return false;
         }
-        sal_uInt64 writtenTotal = 0;
-        while( writtenTotal < uncompressedFontSize )
-        {
-            sal_uInt64 written;
-            if( file.write( uncompressedFont.get() + writtenTotal, uncompressedFontSize - writtenTotal, written ) != osl::File::E_None )
-            {
-                SAL_WARN( "vcl.fonts", "Error writing temporary font file" );
-                osl::File::remove( fileUrl );
-                return false;
-            }
-            writtenTotal += written;
-        }
+        fontData.clear();
+        fontData.insert(fontData.end(), reinterpret_cast<char*>(uncompressedFont.get()),
+                        reinterpret_cast<char*>(uncompressedFont.get() + uncompressedFontSize));
         sufficientFontRights = libeot::EOTcanLegallyEdit( &eotMetadata );
         libeot::EOTfreeMetadata( &eotMetadata );
     }
 #endif
 
-    if( file.close() != osl::File::E_None )
-    {
-        SAL_WARN( "vcl.fonts", "Writing temporary font file failed" );
-        osl::File::remove( fileUrl );
-        return false;
-    }
     if( !eot )
     {
         sufficientFontRights = sufficientTTFRights(fontData.data(), fontData.size(), FontRights::EditingAllowed);
@@ -171,7 +212,6 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         // warn the user about this, and provide a button to drop the font(s) in order
         // to switch to editing.
         SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
-        osl::File::remove( fileUrl );
         return false;
     }
 
@@ -200,12 +240,15 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         if (nGlyphs < 26)
         {
             SAL_INFO("vcl.fonts", "Ignoring embedded font that only provides " << nGlyphs << " non-empty glyphs");
-            osl::File::remove(fileUrl);
             return false;
         }
     }
 
-    m_aAccumulatedFonts.emplace_back(std::make_pair(fontName, fileUrl));
+    OUString fileUrl;
+    if (!writeFontBytesToFile(fontData, Concat2View(fontName + extra), fileUrl))
+        return false;
+    if (!fileUrl.isEmpty())
+        m_aAccumulatedFonts.emplace_back(std::make_pair(fontName, fileUrl));
     return true;
 }
 
@@ -234,29 +277,6 @@ void EmbeddedFontsHelper::activateFonts()
     for (const auto& rEntry : m_aAccumulatedFonts)
         pDevice->AddTempDevFont(rEntry.second, rEntry.first);
     m_aAccumulatedFonts.clear();
-}
-
-OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra )
-{
-    OUString filename = fontName;
-    static int uniqueCounter = 0;
-    if( extra == u"?" )
-        filename += OUString::number( uniqueCounter++ );
-    else
-        filename += extra;
-    filename += ".ttf"; // TODO is it always ttf?
-
-    if (!::comphelper::OStorageHelper::IsValidZipEntryFileName(filename, false))
-    {
-        SAL_WARN( "vcl.fonts", "Cannot use filename: " << filename << " for temporary font");
-        filename = "font" + OUString::number(uniqueCounter++) + ".ttf";
-    }
-
-    OUString path = GetEmbeddedFontsRoot() + "fromdocs/";
-    osl::Directory::createPath( path );
-    return path
-           + rtl::Uri::encode(filename, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
-                              RTL_TEXTENCODING_UTF8);
 }
 
 // Check if it's (legally) allowed to embed the font file into a document
