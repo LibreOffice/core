@@ -9413,6 +9413,10 @@ void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rF
         {
             AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_firstLineChars),
                           OString::number(stValue.m_dValue * 100.0));
+
+            // handle special value "zero" which disables firstLineChars
+            if (stValue.m_dValue == 0.0)
+                AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_firstLine), OString::number(0));
         }
         else
         {
@@ -9501,6 +9505,11 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
 
         AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_leftChars : XML_startChars)),
                       OString::number(stValue.m_dValue * 100.0));
+
+        // handle special value "zero" which disables leftChars
+        if (stValue.m_dValue == 0.0)
+            AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
+                  OString::number(0));
         return;
     }
 
@@ -9536,6 +9545,11 @@ void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMarg
     {
         AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_rightChars : XML_endChars)),
                       OString::number(stValue.m_dValue * 100.0));
+
+        // handle special value "zero" which disables rightChars
+        if (stValue.m_dValue == 0.0)
+            AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
+                  OString::number(0));
         return;
     }
 
