@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf166553_paraStyleAfterBreak)
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xPara, u"CharWeight"_ustr));
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
+DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits, "tdf167721_chUnits.docx")
 {
     // given a document that specifies some margins using Ch-based Left/Right indentation
     // where w:rightChars is inherited from the parent styles - so it overrides w:right
@@ -220,8 +220,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
     // inherited formatting from the style chain in styles.xml
     //     <w:ind w:rightChars="200" (2 ic) w:hangingChars=400 (4 ic)
     //            w:leftChars="300" (3 ic) w:left="2834"/> (5 cm)
-    createSwDoc("tdf167721_chUnits.docx");
-    // saveAndReload(mpFilter);
 
     // Test the style #############################################################################
     uno::Reference<beans::XPropertySet> xStyle(
@@ -234,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits)
 
     auto aLeftCh
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaLeftMarginUnit"_ustr);
-    CPPUNIT_ASSERT_EQUAL(double(3), aLeftCh.First);
+    CPPUNIT_ASSERT_EQUAL(double(7), aLeftCh.First);
 
     auto aRightCh
         = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);

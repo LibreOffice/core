@@ -1433,6 +1433,16 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                             == getPropertyName(PROP_PARA_FIRST_LINE_INDENT_UNIT);
                                     });
                                 }
+
+                                // hanging margins need to alter the left margin
+                                if (bLeftChSet && stFirstCh.First < 0.0)
+                                {
+                                    stLeftCh.First -= stFirstCh.First;
+                                    beans::PropertyValue aPV(
+                                        getPropertyName(PROP_PARA_LEFT_MARGIN_UNIT), 0,
+                                        uno::Any(stLeftCh), beans::PropertyState_DIRECT_VALUE);
+                                    aPropValues.push_back(aPV);
+                                }
                             }
 
                             if (bFirstSet && bFirstChSet)
