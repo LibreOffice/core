@@ -239,7 +239,6 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
         break;
     }
 
-    const SvNumberformat* pFormat;
     sal_Int32 i = 0;
     const Color* pCol;
     double fVal = SwNumFormatBase::GetDefValue(nFormatType);
@@ -256,7 +255,8 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
     {
         const sal_uInt32 nFormat = pFormatter->GetFormatIndex(
                         static_cast<NfIndexTableOffset>(nIndex), m_eCurLanguage );
-        pFormat = pFormatter->GetEntry( nFormat );
+        const SvNumberformat* pFormat = pFormatter->GetEntry(nFormat);
+        assert(pFormat && "will exist");
 
         if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,
                                                     m_eCurLanguage )
