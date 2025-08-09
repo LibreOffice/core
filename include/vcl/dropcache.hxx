@@ -16,7 +16,7 @@
 #include <memory_resource>
 #endif
 
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
 #define THREAD_UNSAFE_DUMP_BEGIN                                                                   \
     _Pragma(                                                                                       \
         "coverity compliance block deviate MISSING_LOCK \"Intentionally thread-unsafe dumping\"")
