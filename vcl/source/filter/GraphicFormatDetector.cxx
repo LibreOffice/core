@@ -725,27 +725,33 @@ bool GraphicFormatDetector::checkTIF()
 
                 if (mbExtendedInfo)
                 {
+                    bool bOk = true;
+
                     sal_uInt32 nIfdOffset = 0;
 
                     // Offset of the first IFD
                     mrStream.ReadUInt32(nIfdOffset);
-                    mrStream.SeekRel(nIfdOffset - 8); // read 6 bytes until here
-
-                    sal_uInt16 nNumberOfTags = 0;
-                    mrStream.ReadUInt16(nNumberOfTags);
-
-                    bool bOk = true;
-                    sal_Int32 nCount = 0;
-
-                    // read tags till we find Tag256(Width)
-                    mrStream.ReadUInt16(nTemp16);
-                    while (nTemp16 != 256 && bOk)
+                    if (nIfdOffset < 8)
+                        bOk = false;
+                    else
                     {
-                        mrStream.SeekRel(10);
+                        mrStream.SeekRel(nIfdOffset - 8); // read 6 bytes until here
+
+                        sal_uInt16 nNumberOfTags = 0;
+                        mrStream.ReadUInt16(nNumberOfTags);
+
+                        sal_Int32 nCount = 0;
+
+                        // read tags till we find Tag256(Width)
                         mrStream.ReadUInt16(nTemp16);
-                        nCount++;
-                        if (nCount > nNumberOfTags)
-                            bOk = false;
+                        while (nTemp16 != 256 && bOk)
+                        {
+                            mrStream.SeekRel(10);
+                            mrStream.ReadUInt16(nTemp16);
+                            nCount++;
+                            if (nCount > nNumberOfTags)
+                                bOk = false;
+                        }
                     }
 
                     if (bOk)
