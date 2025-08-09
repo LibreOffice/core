@@ -309,7 +309,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits2)
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits3)
+DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits3, "tdf167721_chUnits3.docx")
 {
     // given a nasty edge-case document
     // Style "List Paragraph": left = 2 inch, right = 2 cm, first line = none
@@ -318,9 +318,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167721_chUnits3)
     //     <w:ind w:leftChars="0" left="2880" w:rightChars="200" w:hangingChars="0" w:hanging="1440"/>
     // Paragraph: left = 0, right = 0.14 inch, first line = +2 inch
     //     <w:ind w:rightChars="0" w:hangingChars="0" w:firstLine="2880" />
-
-    createSwDoc("tdf167721_chUnits3.docx");
-    // saveAndReload(mpFilter);
 
     // Test the parent style ######################################################################
     uno::Reference<beans::XPropertySet> xStyle(

@@ -9422,6 +9422,26 @@ void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rF
     }
 
     sal_Int32 const nFirstLineAdjustment(rFirstLine.ResolveTextFirstLineOffset({}));
+
+    // if the parent style wrote a FONT_CJK_ADVANCE margin (which has inheritance priority)
+    // then hangingChars/firstLineChars (either one) needs to be disabled
+    const SvxFirstLineIndentItem* pInherited = nullptr;
+    if (auto pNd = dynamic_cast<const SwContentNode*>(m_rExport.m_pOutFormatNode)) //paragraph
+        pInherited = &static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetFirstLineIndent();
+    else if (m_rExport.m_bStyDef && m_rExport.m_pCurrentStyle && m_rExport.m_pCurrentStyle->DerivedFrom()) //style
+        pInherited = &m_rExport.m_pCurrentStyle->DerivedFrom()->GetFirstLineIndent();
+    if (pInherited)
+    {
+        stValue = pInherited->GetTextFirstLineOffset();
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            AddToAttrList(m_pLRSpaceAttrList,
+                          FSNS(XML_w,
+                               nFirstLineAdjustment > 0 ? XML_firstLineChars : XML_hangingChars),
+                          OString::number(0));
+        }
+    }
+
     if (nFirstLineAdjustment > 0)
     {
         AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_firstLine),
@@ -9482,6 +9502,24 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
         return;
     }
 
+    // if the parent style wrote a FONT_CJK_ADVANCE margin (which has inheritance priority)
+    // then leftChars needs to be disabled
+    const SvxTextLeftMarginItem* pInherited = nullptr;
+    if (auto pNd = dynamic_cast<const SwContentNode*>(m_rExport.m_pOutFormatNode)) //paragraph
+        pInherited = &static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetTextLeftMargin();
+    else if (m_rExport.m_bStyDef && m_rExport.m_pCurrentStyle && m_rExport.m_pCurrentStyle->DerivedFrom()) //style
+        pInherited = &m_rExport.m_pCurrentStyle->DerivedFrom()->GetTextLeftMargin();
+    if (pInherited)
+    {
+        stValue = pInherited->GetTextLeft();
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            AddToAttrList(m_pLRSpaceAttrList,
+                          FSNS(XML_w, bEcma1st ? XML_leftChars : XML_startChars),
+                          OString::number(0));
+        }
+    }
+
     AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
                   OString::number(pTextLeftMargin->ResolveTextLeft({})));
 }
@@ -9497,6 +9535,23 @@ void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMarg
         AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_rightChars : XML_endChars)),
                       OString::number(stValue.m_dValue * 100.0));
         return;
+    }
+
+    // if the parent style wrote a FONT_CJK_ADVANCE margin (which has inheritance priority)
+    // then rightChars needs to be disabled
+    const SvxRightMarginItem* pInherited = nullptr;
+    if (auto pNd = dynamic_cast<const SwContentNode*>(m_rExport.m_pOutFormatNode)) //paragraph
+        pInherited = &static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet().GetRightMargin();
+    else if (m_rExport.m_bStyDef && m_rExport.m_pCurrentStyle && m_rExport.m_pCurrentStyle->DerivedFrom()) //style
+        pInherited = &m_rExport.m_pCurrentStyle->DerivedFrom()->GetRightMargin();
+    if (pInherited)
+    {
+        stValue = pInherited->GetRight();
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        {
+            AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, bEcma1st ? XML_rightChars : XML_endChars),
+                          OString::number(0));
+        }
     }
 
     AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
