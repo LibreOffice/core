@@ -18,6 +18,7 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -248,7 +249,9 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
 
     OUString path = GetEmbeddedFontsRoot() + "fromdocs/";
     osl::Directory::createPath( path );
-    return path + filename;
+    return path
+           + rtl::Uri::encode(filename, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
+                              RTL_TEXTENCODING_UTF8);
 }
 
 // Check if it's (legally) allowed to embed the font file into a document
