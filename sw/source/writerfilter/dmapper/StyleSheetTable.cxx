@@ -27,6 +27,7 @@
 #include <utility>
 #include <vector>
 #include <iterator>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <map>
 #include <osl/diagnose.h>
@@ -1335,6 +1337,112 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                             xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
                             xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
 
+                        }
+
+                        // w:leftChars overrides w:left - even if leftChars is only inherited.
+                        // NOTE: unlike paragraphs, when a STYLE encounters a disabling leftChars=0,
+                        // it is not supposed to inherit the parent style's w:left.
+                        if (pStyleSheetProperties)
+                        {
+                            bool bLeftChSet = pStyleSheetProperties->isSet(PROP_PARA_LEFT_MARGIN_UNIT);
+                            bool bRightChSet = pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN_UNIT);
+                            bool bFirstChSet = pStyleSheetProperties->isSet(PROP_PARA_FIRST_LINE_INDENT_UNIT);
+
+                            bool bLeftSet = pStyleSheetProperties->isSet(PROP_PARA_LEFT_MARGIN);
+                            bool bRightSet = pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN);
+                            bool bFirstSet = pStyleSheetProperties->isSet(PROP_PARA_FIRST_LINE_INDENT);
+
+                            const css::beans::Pair<double, sal_Int16> stZero{
+                                0.0, css::util::MeasureUnit::FONT_CJK_ADVANCE
+                            };
+
+                            auto stLeftCh = stZero;
+                            auto stRightCh = stZero;
+                            auto stFirstCh = stZero;
+
+                            // Is a leftChars actually provided?
+                            if (bLeftChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN_UNIT)->second
+                                    >>= stLeftCh;
+                                bLeftChSet = stLeftCh != stZero;
+
+                                if (!bLeftChSet) // special case: disables leftChars
+                                {
+                                    // Implementation note: when leftChars was imported as zero,
+                                    // a fall-back w:left=0 was force-inserted
+                                    // by DomainMapper::lcl_attribute
+                                    assert(bLeftSet && "where is the fall-back w:left info?");
+
+                                    // do not write this disabled leftChars margin into the style
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_LEFT_MARGIN_UNIT);
+                                    });
+                                }
+                            }
+
+                            if (bLeftSet && bLeftChSet)
+                            {
+                                // A valid leftChars negates the w:left - so drop it.
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return aItem.Name == getPropertyName(PROP_PARA_LEFT_MARGIN);
+                                });
+                            }
+
+                            if (bRightChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN_UNIT)->second
+                                    >>= stRightCh;
+                                bRightChSet = stRightCh != stZero;
+
+                                if (!bRightChSet) // special case: disables rightChars
+                                {
+                                    assert(bRightSet && "where is the fall-back w:right info?");
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_RIGHT_MARGIN_UNIT);
+                                    });
+                                }
+                            }
+
+                            if (bRightSet && bRightChSet)
+                            {
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return aItem.Name == getPropertyName(PROP_PARA_RIGHT_MARGIN);
+                                });
+                            }
+
+                            if (bFirstChSet)
+                            {
+                                pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT_UNIT)->second
+                                    >>= stFirstCh;
+                                bFirstChSet = stFirstCh != stZero;
+
+                                // special case: zero value disables firstLineChars/hangingChars
+                                if (!bFirstChSet)
+                                {
+                                    assert(bFirstSet && "where is the fall-back firstLine info?");
+                                    std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                    {
+                                        return aItem.Name
+                                            == getPropertyName(PROP_PARA_FIRST_LINE_INDENT_UNIT);
+                                    });
+                                }
+                            }
+
+                            if (bFirstSet && bFirstChSet)
+                            {
+                                std::erase_if(aPropValues, [](const beans::PropertyValue& aItem)
+                                {
+                                    return
+                                        aItem.Name == getPropertyName(PROP_PARA_FIRST_LINE_INDENT);
+                                });
+                            }
                         }
                     }
 
