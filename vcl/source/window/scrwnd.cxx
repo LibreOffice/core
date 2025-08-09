@@ -65,8 +65,8 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
     // create wheel window
     SetTitleType( FloatWinTitleType::NONE );
     ImplCreateImageList();
-    BitmapEx aBmp(SV_RESID_BITMAP_SCROLLMSK);
-    ImplSetRegion(aBmp.GetBitmap());
+    Bitmap aBmp(SV_RESID_BITMAP_SCROLLMSK);
+    ImplSetRegion(aBmp);
 
     // set wheel mode
     if( bHorz && bVert )

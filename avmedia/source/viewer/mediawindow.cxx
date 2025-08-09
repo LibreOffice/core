@@ -390,16 +390,16 @@ MediaWindow::grabFrame(const uno::Reference<media::XPlayer>& xPlayer,
 
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
-                const BitmapEx aBmpEx(AVMEDIA_BMP_AUDIOLOGO);
-                oGraphic.emplace( aBmpEx );
+                const Bitmap aBmp(AVMEDIA_BMP_AUDIOLOGO);
+                oGraphic.emplace( aBmp );
             }
         }
     }
 
     if (!xRet.is() && !oGraphic)
     {
-        const BitmapEx aBmpEx(AVMEDIA_BMP_EMPTYLOGO);
-        oGraphic.emplace( aBmpEx );
+        const Bitmap aBmp(AVMEDIA_BMP_EMPTYLOGO);
+        oGraphic.emplace( aBmp );
     }
 
     if (oGraphic)

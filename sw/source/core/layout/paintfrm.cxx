@@ -2116,9 +2116,9 @@ void DrawGraphic(
 
     if( bReplaceGrfNum )
     {
-        const BitmapEx& rBmp = rSh.GetReplacementBitmap(false);
+        const Bitmap& rBmp = rSh.GetReplacementBitmap(false);
         vcl::Font aTmp( rOutDev.GetFont() );
-        Graphic::DrawEx(rOutDev, OUString(), aTmp, rBmp, rOrg.Pos(), rOrg.SSize());
+        Graphic::DrawEx(rOutDev, OUString(), aTmp, BitmapEx(rBmp), rOrg.Pos(), rOrg.SSize());
     }
 }
 
@@ -4101,9 +4101,9 @@ bool SwFlyFrame::IsBackgroundTransparent() const
 
 static void lcl_PaintReplacement( const SwRect &rRect, const SwViewShell &rSh )
 {
-    const BitmapEx& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(false);
+    const Bitmap& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(false);
     vcl::Font aFont(rSh.GetOut()->GetFont() );
-    Graphic::DrawEx(*rSh.GetOut(), OUString(), aFont, rBmp, rRect.Pos(), rRect.SSize());
+    Graphic::DrawEx(*rSh.GetOut(), OUString(), aFont, BitmapEx(rBmp), rRect.Pos(), rRect.SSize());
 }
 
 bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)

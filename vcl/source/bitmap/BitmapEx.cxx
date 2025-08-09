@@ -80,11 +80,6 @@ BitmapEx::BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat)
     maBitmapSize = aSize;
 }
 
-BitmapEx::BitmapEx( const OUString& rIconName )
-{
-    operator=(Bitmap(rIconName));
-}
-
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :
         maBitmapSize ( rBmp.GetSizePixel() )
 {

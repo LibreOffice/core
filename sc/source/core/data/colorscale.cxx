@@ -1545,16 +1545,16 @@ OUString ScIconSetFormat::getIconName(ScIconSetType const eType, sal_Int32 const
     return sBitmap;
 }
 
-BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
+Bitmap& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
         ScIconSetType const eType, sal_Int32 const nIndex)
 {
     OUString sBitmap(ScIconSetFormat::getIconName(eType, nIndex));
 
-    std::map<OUString, BitmapEx>::iterator itr = rIconSetBitmapMap.find(sBitmap);
+    std::map<OUString, Bitmap>::iterator itr = rIconSetBitmapMap.find(sBitmap);
     if (itr != rIconSetBitmapMap.end())
         return itr->second;
 
-    BitmapEx aBitmap(sBitmap);
+    Bitmap aBitmap(sBitmap);
     auto itrNew = rIconSetBitmapMap.emplace(sBitmap, aBitmap);
     assert(itrNew.second);
 

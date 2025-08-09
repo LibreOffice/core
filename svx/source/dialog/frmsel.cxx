@@ -350,9 +350,9 @@ void FrameSelectorImpl::InitArrowImageList()
     assert(SAL_N_ELEMENTS(aImageIds) == 16);
     for (size_t i = 0; i < SAL_N_ELEMENTS(aImageIds); ++i)
     {
-        BitmapEx aBmpEx { aImageIds[i] };
-        aBmpEx.Replace(pColorAry1, pColorAry2, 3);
-        maArrows.emplace_back(aBmpEx);
+        Bitmap aBmp { aImageIds[i] };
+        aBmp.Replace(pColorAry1, pColorAry2, 3, nullptr);
+        maArrows.emplace_back(aBmp);
     }
     assert(maArrows.size() == 16);
 

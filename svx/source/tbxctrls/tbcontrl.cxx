@@ -492,7 +492,7 @@ private:
     rtl::Reference<SvxFrameToolBoxControl> mxControl;
     std::unique_ptr<SvxFrmValueSet_Impl> mxFrameSet;
     std::unique_ptr<weld::CustomWeld> mxFrameSetWin;
-    std::vector<std::pair<BitmapEx, OUString>> aImgVec;
+    std::vector<std::pair<Bitmap, OUString>> aImgVec;
     bool                        bParagraphMode;
     bool                        m_bIsWriter;
     bool                        m_bIsCalc;
@@ -2790,20 +2790,20 @@ void SvxFrameWindow_Impl::InitImageList()
         // Since they don't have diagonal borders,
         // we have to use 12 border types here.
         aImgVec = {
-            {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
-            {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
-            {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
-            {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
+            {Bitmap(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+            {Bitmap(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
+            {Bitmap(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
+            {Bitmap(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
 
-            {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
-            {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM)},
-            {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
-            {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
+            {Bitmap(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
+            {Bitmap(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM)},
+            {Bitmap(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+            {Bitmap(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
 
-            {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
-            {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
-            {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
-            {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)}
+            {Bitmap(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
+            {Bitmap(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
+            {Bitmap(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
+            {Bitmap(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)}
         };
     }
     else
@@ -2812,23 +2812,23 @@ void SvxFrameWindow_Impl::InitImageList()
         // Therefore use additional 3 diagonal border types,
         // which make border types 15 in total.
         aImgVec = {
-            {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
-            {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
-            {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
-            {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
-            {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
+            {Bitmap(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+            {Bitmap(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
+            {Bitmap(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
+            {Bitmap(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
+            {Bitmap(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
 
-            {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
-            {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM)},
-            {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
-            {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
-            {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
+            {Bitmap(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
+            {Bitmap(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM)},
+            {Bitmap(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+            {Bitmap(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
+            {Bitmap(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
 
-            {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
-            {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
-            {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
-            {BitmapEx(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
-            {BitmapEx(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)} // criss-cross border
+            {Bitmap(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
+            {Bitmap(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
+            {Bitmap(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
+            {Bitmap(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
+            {Bitmap(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)} // criss-cross border
         };
     }
 }

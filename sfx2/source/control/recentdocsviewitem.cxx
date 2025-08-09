@@ -73,16 +73,16 @@ bool IsDocEncrypted(const OUString& rURL)
 }
 
 using Ext2IconMap = std::map<sfx2::ApplicationType, OUString>;
-BitmapEx Url2Icon(std::u16string_view rURL, const Ext2IconMap& rExtToIcon, const OUString& sDefault)
+Bitmap Url2Icon(std::u16string_view rURL, const Ext2IconMap& rExtToIcon, const OUString& sDefault)
 {
     auto it = std::find_if(rExtToIcon.begin(), rExtToIcon.end(),
                            [aExt = INetURLObject(rURL).getExtension()](const auto& r)
                            { return sfx2::RecentDocsView::typeMatchesExtension(r.first, aExt); });
 
-    return BitmapEx(it != rExtToIcon.end() ? it->second : sDefault);
+    return Bitmap(it != rExtToIcon.end() ? it->second : sDefault);
 };
 
-BitmapEx getDefaultThumbnail(const OUString& rURL)
+Bitmap getDefaultThumbnail(const OUString& rURL)
 {
     static const Ext2IconMap BitmapForExtension
         = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_THUMBNAIL_TEXT },
@@ -106,7 +106,7 @@ BitmapEx getDefaultThumbnail(const OUString& rURL)
     return Url2Icon(rURL, rWhichMap, SFX_FILE_THUMBNAIL_DEFAULT);
 }
 
-BitmapEx getModuleOverlay(std::u16string_view rURL)
+Bitmap getModuleOverlay(std::u16string_view rURL)
 {
     static const Ext2IconMap OverlayBitmapForExtension
         = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_OVERLAY_TEXT },
@@ -165,7 +165,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
                                                             aURLObj.getExtension()))
         {
             aThumbnail
-                = Bitmap(BitmapEx(nThumbnailSize > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192));
+                = Bitmap(nThumbnailSize > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
         }
     }
 
@@ -215,7 +215,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         // Pre-scale the thumbnail to the final size before applying the overlay
         aThumbnail = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 
-        BitmapEx aModule = getModuleOverlay(rURL);
+        Bitmap aModule = getModuleOverlay(rURL);
         aModule.Scale(Size(48,48)); //tdf#155200: Thumbnails don't change their size so overlay must not too
         if (!aModule.IsEmpty())
         {
@@ -304,13 +304,13 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         Point aIconPos(getRemoveIconArea().TopLeft());
 
         aSeq.push_back(new DiscreteBitmapPrimitive2D(
-                    Bitmap(m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap),
+                    m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap,
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
 
         // tdf#38742 - draw pinned icon
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         aSeq.push_back(new DiscreteBitmapPrimitive2D(
-            Bitmap(m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHighlighted : m_aPinnedDocumentBitmap),
+            m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHighlighted : m_aPinnedDocumentBitmap,
             B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
 
         pProcessor->process(aSeq);
@@ -321,7 +321,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         drawinglayer::primitive2d::Primitive2DContainer aSeq {
             new DiscreteBitmapPrimitive2D(
-                Bitmap(m_aPinnedDocumentBitmap), B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
+                m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
 
         pProcessor->process(aSeq);
     }

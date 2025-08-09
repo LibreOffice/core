@@ -61,14 +61,14 @@ private:
     /// Is the icon that the user can click to remove the document from the recent documents highlighted?
     bool m_bRemoveIconHighlighted;
 
-    BitmapEx m_aRemoveRecentBitmap;
+    Bitmap m_aRemoveRecentBitmap;
 
-    BitmapEx m_aRemoveRecentBitmapHighlighted;
+    Bitmap m_aRemoveRecentBitmapHighlighted;
 
     bool m_bPinned;
     bool m_bPinnedIconHighlighted;
-    BitmapEx m_aPinnedDocumentBitmap;
-    BitmapEx m_aPinnedDocumentBitmapHighlighted;
+    Bitmap m_aPinnedDocumentBitmap;
+    Bitmap m_aPinnedDocumentBitmapHighlighted;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX

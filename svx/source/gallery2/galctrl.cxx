@@ -233,7 +233,7 @@ bool DialogGalleryPreview::SetGraphic( const INetURLObject& _aURL )
 #if HAVE_FEATURE_AVMEDIA
     if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), u""_ustr ) )
     {
-        aGraphic = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
+        aGraphic = Bitmap(RID_SVXBMP_GALLERY_MEDIA);
     }
     else
 #endif

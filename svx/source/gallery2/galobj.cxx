@@ -63,7 +63,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
     {
         if(SgaObjKind::Sound == GetObjKind())
         {
-            aRetval = BitmapEx(RID_SVXBMP_GALLERY_MEDIA);
+            aRetval = Bitmap(RID_SVXBMP_GALLERY_MEDIA);
         }
         else if(IsThumbBitmap())
         {
@@ -344,9 +344,7 @@ Bitmap SgaObjectSound::GetThumbBmp() const
         break;
     }
 
-    const BitmapEx  aBmpEx(sId);
-
-    return Bitmap(aBmpEx);
+    return Bitmap(sId);
 }
 
 void SgaObjectSound::WriteData( SvStream& rOut, const OUString& rDestDir ) const

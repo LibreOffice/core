@@ -207,6 +207,7 @@ class ScHint;
 class SvtBroadcaster;
 enum class ScDBDataPortion;
 enum class ScSheetEventId;
+class Bitmap;
 class BitmapEx;
 class ScColumnsRange;
 struct ScFilterEntries;
@@ -216,7 +217,7 @@ enum class ScConditionMode;
 
 namespace sc {
 
-typedef std::map<OUString, BitmapEx> IconSetBitmapMap;
+typedef std::map<OUString, Bitmap> IconSetBitmapMap;
 
 }
 

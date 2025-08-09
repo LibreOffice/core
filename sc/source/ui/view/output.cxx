@@ -949,7 +949,7 @@ void drawDataBars(vcl::RenderContext& rRenderContext, const ScDataBarInfo* pOldD
     rRenderContext.SetFillColor();
 }
 
-const BitmapEx& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType eType, sal_Int32 nIndex)
+const Bitmap& getIcon(sc::IconSetBitmapMap & rIconSetBitmapMap, ScIconSetType eType, sal_Int32 nIndex)
 {
     return ScIconSetFormat::getBitmap(rIconSetBitmapMap, eType, nIndex);
 }
@@ -959,7 +959,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
 {
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
-    const BitmapEx& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
+    const Bitmap& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
 
     tools::Long aHeight = o3tl::convert(10, o3tl::Length::pt, o3tl::Length::mm100);
 

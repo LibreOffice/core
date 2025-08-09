@@ -230,37 +230,37 @@ void EditBrowseBox::PaintField( vcl::RenderContext& rDev, const tools::Rectangle
 
 Image EditBrowseBox::GetImage(RowStatus eStatus) const
 {
-    BitmapEx aBitmap;
+    Bitmap aBitmap;
     bool bNeedMirror = IsRTLEnabled();
     switch (eStatus)
     {
         case CURRENT:
-            aBitmap = BitmapEx(BMP_CURRENT);
+            aBitmap = Bitmap(BMP_CURRENT);
             break;
         case CURRENTNEW:
-            aBitmap = BitmapEx(BMP_CURRENTNEW);
+            aBitmap = Bitmap(BMP_CURRENTNEW);
             break;
         case MODIFIED:
-            aBitmap = BitmapEx(BMP_MODIFIED);
+            aBitmap = Bitmap(BMP_MODIFIED);
             bNeedMirror = false;    // the pen is not mirrored
             break;
         case NEW:
-            aBitmap = BitmapEx(BMP_NEW);
+            aBitmap = Bitmap(BMP_NEW);
             break;
         case DELETED:
-            aBitmap = BitmapEx(BMP_DELETED);
+            aBitmap = Bitmap(BMP_DELETED);
             break;
         case PRIMARYKEY:
-            aBitmap = BitmapEx(BMP_PRIMARYKEY);
+            aBitmap = Bitmap(BMP_PRIMARYKEY);
             break;
         case CURRENT_PRIMARYKEY:
-            aBitmap = BitmapEx(BMP_CURRENT_PRIMARYKEY);
+            aBitmap = Bitmap(BMP_CURRENT_PRIMARYKEY);
             break;
         case FILTER:
-            aBitmap = BitmapEx(BMP_FILTER);
+            aBitmap = Bitmap(BMP_FILTER);
             break;
         case HEADERFOOTER:
-            aBitmap = BitmapEx(BMP_HEADERFOOTER);
+            aBitmap = Bitmap(BMP_HEADERFOOTER);
             break;
         case CLEAN:
             break;

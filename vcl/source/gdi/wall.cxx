@@ -136,6 +136,12 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
     meStyle    = WallpaperStyle::Tile;
 }
 
+Wallpaper::Wallpaper( const Bitmap& rBmp )
+{
+    maBitmap   = rBmp;
+    meStyle    = WallpaperStyle::Tile;
+}
+
 Wallpaper::~Wallpaper() = default;
 
 void Wallpaper::ImplSetCachedBitmap( const BitmapEx& rBmp ) const

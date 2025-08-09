@@ -153,7 +153,7 @@ public:
             drawSeparator();
         if (mbProtect)
         {
-            BitmapEx aBitmap(BMP_TAB_LOCK);
+            Bitmap aBitmap(BMP_TAB_LOCK);
             Point aPosition = maRect.TopLeft();
             aPosition.AdjustX(2);
             aPosition.AdjustY((maRect.getOpenHeight() - aBitmap.GetSizePixel().Height()) / 2);

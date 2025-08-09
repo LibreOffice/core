@@ -151,8 +151,8 @@ private:
     rtl::Reference<MediaEventListenersImpl> mxEvents;
     VclPtr<MediaChildWindow> mpChildWindow;
     VclPtr<MediaWindowControl> mpMediaWindowControl;
-    std::unique_ptr<BitmapEx> mpEmptyBmpEx;
-    std::unique_ptr<BitmapEx> mpAudioBmpEx;
+    std::unique_ptr<Bitmap> mpEmptyBmp;
+    std::unique_ptr<Bitmap> mpAudioBmp;
     const MediaItem* mpItem = nullptr;
 };
 

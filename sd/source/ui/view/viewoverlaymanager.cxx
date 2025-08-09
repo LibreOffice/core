@@ -105,8 +105,8 @@ static Bitmap& getButtonImage( int index, bool large )
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(BitmapEx(aSmallPlaceHolders[i]));
-            gLargeButtonImages[i].set(BitmapEx(aBigPlaceHolders[i]));
+            gSmallButtonImages[i].set(Bitmap(aSmallPlaceHolders[i]));
+            gLargeButtonImages[i].set(Bitmap(aBigPlaceHolders[i]));
         }
     }
 

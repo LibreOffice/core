@@ -872,13 +872,13 @@ Bitmap TemplateLocalView::getDefaultThumbnail( std::u16string_view rPath )
     OUString aExt = aUrl.getExtension();
 
     if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
-        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_TEXT));
+        aImg = Bitmap(SFX_THUMBNAIL_TEXT);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
-        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_SHEET));
+        aImg = Bitmap(SFX_THUMBNAIL_SHEET);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
-        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_PRESENTATION));
+        aImg = Bitmap(SFX_THUMBNAIL_PRESENTATION);
     else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
-        aImg = Bitmap(BitmapEx(SFX_THUMBNAIL_DRAWING));
+        aImg = Bitmap(SFX_THUMBNAIL_DRAWING);
 
     return aImg;
 }

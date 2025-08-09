@@ -204,12 +204,12 @@ void SwPageBreakWin::PaintButton()
                                         std::move(aPolygon), aColor));
 
     // Create the primitive for the image
-    BitmapEx aBmpEx(RID_BMP_PAGE_BREAK);
+    Bitmap aBmp(RID_BMP_PAGE_BREAK);
     double nImgOfstX = 3.0;
     if (bRtl)
-        nImgOfstX = aRect.Right() - aBmpEx.GetSizePixel().Width() - 3.0;
+        nImgOfstX = aRect.Right() - aBmp.GetSizePixel().Width() - 3.0;
     aSeq.push_back(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
-                                        Bitmap(aBmpEx), B2DPoint(nImgOfstX, 1.0)));
+                                        aBmp, B2DPoint(nImgOfstX, 1.0)));
 
     double nTop = double(aRect.getOpenHeight()) / 2.0;
     double nBottom = nTop + 4.0;

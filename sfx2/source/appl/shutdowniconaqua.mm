@@ -289,7 +289,7 @@ struct RecentMenuEntry
 
             if ( [NSApp respondsToSelector: @selector(createNSImage:)] )
             {
-                BitmapEx aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
+                Bitmap aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
                 Size aBmpSize = aThumbnail.GetSizePixel();
                 if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
                 {

@@ -67,8 +67,8 @@ inline QPixmap toQPixmap(const OutputDevice& rDevice)
 
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)
 {
-    BitmapEx aIcon(rIconName);
-    return toQPixmap(aIcon);
+    Bitmap aIcon(rIconName);
+    return toQPixmap(BitmapEx(aIcon));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

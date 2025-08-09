@@ -39,7 +39,6 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC BitmapEx
 public:
 
                         BitmapEx();
-    explicit            BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
                         BitmapEx(Size aSize, vcl::PixelFormat ePixelFormat);

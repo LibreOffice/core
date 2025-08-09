@@ -35,7 +35,7 @@ namespace sfx2::sidebar {
 class GripWidget : public weld::CustomWidgetController
 {
 private:
-    BitmapEx maGrip;
+    Bitmap maGrip;
 public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
@@ -45,7 +45,7 @@ public:
 
     virtual void StyleUpdated() override
     {
-        maGrip = BitmapEx(u"sfx2/res/grip.png"_ustr);
+        maGrip = Bitmap(u"sfx2/res/grip.png"_ustr);
         Size aGripSize(maGrip.GetSizePixel());
         set_size_request(aGripSize.Width(), aGripSize.Height());
         weld::CustomWidgetController::StyleUpdated();

@@ -281,7 +281,7 @@ void RecentFilesMenuController::fillPopupMenu(std::unique_lock<std::mutex>& /*rG
             if ( bIsIconsAllowed ) {
                 // tdf#146219: don't use SvFileInformationManager::GetImageId,
                 // which needs to access the URL to detect if it's a directory
-                BitmapEx aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
+                Bitmap aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
                 rPopupMenu->setItemImage(sal_uInt16(i + 1), Graphic(aThumbnail).GetXGraphic(), false);
             }
 

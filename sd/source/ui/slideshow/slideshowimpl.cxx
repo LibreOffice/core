@@ -1256,9 +1256,9 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
             mxView->getCanvas() );
         if (xSpriteCanvas.is())
         {
-            BitmapEx waitSymbolBitmap(BMP_WAIT_ICON);
+            Bitmap waitSymbolBitmap(BMP_WAIT_ICON);
             const Reference<rendering::XBitmap> xBitmap(
-                vcl::unotools::xBitmapFromBitmap( Bitmap(waitSymbolBitmap) ) );
+                vcl::unotools::xBitmapFromBitmap( waitSymbolBitmap ) );
             if (xBitmap.is())
             {
                 mxShow->setProperty(
@@ -1268,9 +1268,9 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         beans::PropertyState_DIRECT_VALUE ) );
             }
 
-            BitmapEx pointerSymbolBitmap(BMP_POINTER_ICON);
+            Bitmap pointerSymbolBitmap(BMP_POINTER_ICON);
             const Reference<rendering::XBitmap> xPointerBitmap(
-                vcl::unotools::xBitmapFromBitmap( Bitmap(pointerSymbolBitmap) ) );
+                vcl::unotools::xBitmapFromBitmap( pointerSymbolBitmap ) );
             if (xPointerBitmap.is())
             {
                 mxShow->setProperty(
@@ -1311,27 +1311,27 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         break;
                     }
                 }
-                BitmapEx prevSlideBm(prevSlidePath);
+                Bitmap prevSlideBm(prevSlidePath);
                 const Reference<rendering::XBitmap> xPrevSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(Bitmap(prevSlideBm)));
+                    vcl::unotools::xBitmapFromBitmap(prevSlideBm));
                 if (xPrevSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlidePrev"_ustr, -1,
                                                              Any(xPrevSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
-                BitmapEx menuSlideBm(menuPath);
+                Bitmap menuSlideBm(menuPath);
                 const Reference<rendering::XBitmap> xMenuSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(Bitmap(menuSlideBm)));
+                    vcl::unotools::xBitmapFromBitmap(menuSlideBm));
                 if (xMenuSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlideMenu"_ustr, -1,
                                                              Any(xMenuSBitmap),
                                                              beans::PropertyState_DIRECT_VALUE));
                 }
-                BitmapEx nextSlideBm(nextSlidePath);
+                Bitmap nextSlideBm(nextSlidePath);
                 const Reference<rendering::XBitmap> xNextSBitmap(
-                    vcl::unotools::xBitmapFromBitmap(Bitmap(nextSlideBm)));
+                    vcl::unotools::xBitmapFromBitmap(nextSlideBm));
                 if (xNextSBitmap.is())
                 {
                     mxShow->setProperty(beans::PropertyValue(u"NavigationSlideNext"_ustr, -1,

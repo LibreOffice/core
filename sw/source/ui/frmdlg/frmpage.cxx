@@ -2506,7 +2506,7 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     // tdf#138843 place holder for the graphic type
     , m_xLabelGraphicType(m_xBuilder->weld_label(u"label-graphic-type"_ustr))
 {
-    m_aBmpWin.SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
+    m_aBmpWin.SetBitmapEx(BitmapEx(Bitmap(RID_BMP_PREVIEW_FALLBACK)));
 
     m_xCtlAngle->SetLinkedField(m_xNfAngle.get(), 2);
 

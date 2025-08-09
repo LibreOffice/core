@@ -102,7 +102,7 @@ public:
 #define INDIVIDUAL_COUNT    (5)
 
 SdrHdlBitmapSet::SdrHdlBitmapSet()
-    :   maMarkersBitmap(BitmapEx(SIP_SA_MARKERS)),
+    :   maMarkersBitmap(SIP_SA_MARKERS),
         // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
@@ -2397,7 +2397,7 @@ void SdrCropHdl::CreateB2dIAObject()
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     int nHdlSize = m_pHdlList->GetHdlSize();
 
-    const Bitmap aHandlesBitmap((BitmapEx(SIP_SA_CROP_MARKERS)));
+    const Bitmap aHandlesBitmap(SIP_SA_CROP_MARKERS);
     Bitmap aBmp1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
     for(sal_uInt32 b(0); b < pPageView->PageWindowCount(); b++)

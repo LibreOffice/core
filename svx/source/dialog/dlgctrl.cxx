@@ -125,7 +125,7 @@ void SvxRectCtl::InitRectBitmap()
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap.reset(new Bitmap(BitmapEx(RID_SVXCTRL_RECTBTNS)));
+    pBitmap.reset(new Bitmap(RID_SVXCTRL_RECTBTNS));
 
     // set bitmap-colors
     Color aColorAry1[7];

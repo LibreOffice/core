@@ -211,7 +211,7 @@ GridDialog::GridDialog(weld::Window* pParent, double* pXValues, double* pYValues
     , m_xGridWindow(new GridWindow)
     , m_xGridWindowWND(new weld::CustomWeld(*m_xBuilder, u"gridwindow"_ustr, *m_xGridWindow))
 {
-    m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, BitmapEx(RID_SCANNER_HANDLE));
+    m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, BitmapEx(Bitmap(RID_SCANNER_HANDLE)));
     m_xResetTypeBox->set_active(0);
     m_xResetButton->connect_clicked( LINK( this, GridDialog, ClickButtonHdl ) );
 }

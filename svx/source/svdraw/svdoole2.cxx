@@ -1985,7 +1985,7 @@ bool SdrOle2Obj::AddOwnLightClient()
 
 Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 {
-    return Graphic(BitmapEx(BMP_SVXOLEOBJ));
+    return Graphic(Bitmap(BMP_SVXOLEOBJ));
 }
 
 void SdrOle2Obj::SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow)

@@ -2665,8 +2665,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             sId = RID_UNODRAW_OBJECTS;
         }
 
-        BitmapEx aBmp(sId);
-        Reference<awt::XBitmap> xBmp(VCLUnoHelper::CreateBitmap(Bitmap(aBmp)));
+        Bitmap aBmp(sId);
+        Reference<awt::XBitmap> xBmp(VCLUnoHelper::CreateBitmap(aBmp));
 
         rValue <<= xBmp;
         break;

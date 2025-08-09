@@ -111,7 +111,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Bitmap final
 public:
 
                             Bitmap();
-                            Bitmap( const OUString& rIconName );
+    explicit                Bitmap( const OUString& rIconName );
                             Bitmap( const Bitmap& rBitmap );
     explicit                Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );

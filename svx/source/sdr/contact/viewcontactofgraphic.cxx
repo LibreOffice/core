@@ -188,7 +188,7 @@ namespace sdr::contact
             aTranslate.setY(aTranslate.getY() + fDistance);
 
             // draw a draft bitmap
-            const BitmapEx aDraftBitmap(BMAP_GrafikEi);
+            const Bitmap aDraftBitmap(BMAP_GrafikEi);
 
             if(!aDraftBitmap.IsEmpty())
             {
@@ -217,7 +217,7 @@ namespace sdr::contact
 
                     xRetval.push_back(
                             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                                aDraftBitmap,
+                                BitmapEx(aDraftBitmap),
                                 aBitmapMatrix));
 
                     // consume bitmap size in X

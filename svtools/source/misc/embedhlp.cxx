@@ -756,7 +756,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             break;
     }
 
-    BitmapEx aBmp(BMP_PLUGIN);
+    Bitmap aBmp(BMP_PLUGIN);
     tools::Long nHeight = rRect.GetHeight() - pOut->GetTextHeight();
     tools::Long nWidth = rRect.GetWidth();
     if(nHeight > 0 && nWidth > 0 && aBmp.GetSizePixel().Width() > 0)

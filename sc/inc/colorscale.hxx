@@ -23,7 +23,7 @@
 class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
-class BitmapEx;
+class Bitmap;
 
 // don't change the order
 // they are also used in the dialog to determine the position
@@ -388,7 +388,7 @@ public:
     SC_DLLPUBLIC static OUString getIconSetName( ScIconSetType eType );
     static sal_Int32 getIconSetElements( ScIconSetType eType );
     static OUString getIconName(ScIconSetType eType, sal_Int32 nIndex);
-    static BitmapEx& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);
+    static Bitmap& getBitmap(sc::IconSetBitmapMap& rBitmapMap, ScIconSetType eType, sal_Int32 nIndex);
 
     typedef ScIconSetFormatData::Entries_t::iterator iterator;
     typedef ScIconSetFormatData::Entries_t::const_iterator const_iterator;

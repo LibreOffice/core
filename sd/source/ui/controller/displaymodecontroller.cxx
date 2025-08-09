@@ -125,7 +125,7 @@ static void fillLayoutValueSet(ValueSet* pValue, const snew_slide_value_info* pI
     for( ; pInfo->mnId; pInfo++ )
     {
         OUString aText(SdResId(pInfo->mpStrResId));
-        BitmapEx aBmp(pInfo->msBmpResId);
+        Bitmap aBmp(pInfo->msBmpResId);
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);
 
@@ -227,7 +227,7 @@ void DisplayModeController::setToolboxItemImage(const OUString& rImage)
     if (!getToolboxId( nId, &pToolBox ))
         return;
 
-    BitmapEx aBmp(rImage);
+    Bitmap aBmp(rImage);
     int targetSize = (pToolBox->GetToolboxButtonSize() == ToolBoxButtonSize::Large) ? 32 : 16;
     double scale = 1.0f;
     Size size = aBmp.GetSizePixel();

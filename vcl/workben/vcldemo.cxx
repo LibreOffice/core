@@ -818,7 +818,7 @@ public:
         // be done with a shader / gradient
         static void SimulateBorderStretch(OutputDevice &rDev, const tools::Rectangle& r)
         {
-            BitmapEx aPageShadowMask(u"sw/res/page-shadow-mask.png"_ustr);
+            Bitmap aPageShadowMask(u"sw/res/page-shadow-mask.png"_ustr);
 
             BitmapEx aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
@@ -844,7 +844,7 @@ public:
                 aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
             }
 
-            AlphaMask aWholeMask(aPageShadowMask.GetBitmap());
+            AlphaMask aWholeMask(BitmapEx(aPageShadowMask).GetBitmap());
             aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_GREEN);
             BitmapEx aWhole(aBlockColor, aWholeMask);
@@ -1138,7 +1138,7 @@ public:
         RENDER_DETAILS(icons,KEY_I,1)
 
         std::vector<OUString> maIconNames;
-        std::vector<BitmapEx> maIcons;
+        std::vector<Bitmap> maIcons;
         bool bHasLoadedAll;
         DrawIcons() : bHasLoadedAll(false)
         {
@@ -1343,7 +1343,7 @@ public:
                 Point aLocation(0,maIcons[0].GetSizePixel().Height() + 8);
                 for (size_t i = 0; i < maIcons.size(); i++)
                 {
-                    BitmapEx aSrc = maIcons[i];
+                    BitmapEx aSrc(maIcons[i]);
 
                     // original above
                     Point aAbove(aLocation);
@@ -1372,8 +1372,7 @@ public:
                     rDev.DrawBitmap(aBelow, aGrey);
 
                     aBelow.Move(aGrey.GetSizePixel().Width(),0);
-                    const BitmapEx& aGreyMask(aSrc);
-                    rDev.DrawBitmapEx(aBelow, aGreyMask);
+                    rDev.DrawBitmapEx(aBelow, aSrc);
 
                     aLocation.Move(aSrc.GetSizePixel().Width()*6,0);
                     if (aLocation.X() > r.Right())
@@ -1880,7 +1879,7 @@ public:
     {
         SetText(u"VCL widget demo"_ustr);
 
-        Wallpaper aWallpaper(BitmapEx(u"sfx2/res/128x128_writer_doc-p.png"_ustr));
+        Wallpaper aWallpaper(Bitmap(u"sfx2/res/128x128_writer_doc-p.png"_ustr));
         aWallpaper.SetStyle(WallpaperStyle::BottomRight);
         aWallpaper.SetColor(COL_RED);
 
