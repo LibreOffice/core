@@ -73,34 +73,28 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         return;
     }
 
-    Bitmap aBmp( rBitmap );
-
-    if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap |
-                             DrawModeFlags::GrayBitmap ) )
+    if (mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
     {
-        if ( mnDrawMode & ( DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap ) )
-        {
-            sal_uInt8 cCmpVal;
+        sal_uInt8 cCmpVal;
 
-            if ( mnDrawMode & DrawModeFlags::BlackBitmap )
-                cCmpVal = 0;
-            else
-                cCmpVal = 255;
+        if (mnDrawMode & DrawModeFlags::BlackBitmap)
+            cCmpVal = 0;
+        else
+            cCmpVal = 255;
 
-            Color aCol( cCmpVal, cCmpVal, cCmpVal );
-            Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
-            SetLineColor( aCol );
-            SetFillColor( aCol );
-            DrawRect( tools::Rectangle( rDestPt, rDestSize ) );
-            Pop();
-            return;
-        }
-        else if( !aBmp.IsEmpty() )
-        {
-            if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                aBmp.Convert( BmpConversion::N8BitGreys );
-        }
+        Color aCol(cCmpVal, cCmpVal, cCmpVal);
+        Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        SetLineColor(aCol);
+        SetFillColor(aCol);
+        DrawRect(tools::Rectangle(rDestPt, rDestSize));
+        Pop();
+        return;
     }
+
+    Bitmap aBmp(rBitmap);
+
+    if (mnDrawMode & DrawModeFlags::GrayBitmap && !aBmp.IsEmpty())
+        aBmp.Convert(BmpConversion::N8BitGreys);
 
     if ( mpMetaFile )
     {
