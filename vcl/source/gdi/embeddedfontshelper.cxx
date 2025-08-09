@@ -49,7 +49,8 @@ OUString GetEmbeddedFontsRoot()
 {
     OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros( path );
-    return path + "/user/temp/embeddedfonts/";
+    osl::FileBase::getAbsoluteFileURL({}, path + "/user/temp/embeddedfonts/", path);
+    return path;
 }
 }
 
