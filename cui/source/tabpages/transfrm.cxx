@@ -1020,18 +1020,23 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
     if ( !mbPageDisabled )
     {
-        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_X );
-        if ( pItem )
+        m_xMtrPosX->set_sensitive(fUIScale != 0.0);
+        m_xMtrPosY->set_sensitive(fUIScale != 0.0);
+        if (fUIScale != 0.0)
         {
-            const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getX()) / fUIScale);
-            SetMetricValue(*m_xMtrPosX, basegfx::fround(fTmp), mePoolUnit);
-        }
+            pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_X );
+            if ( pItem )
+            {
+                const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+                SetMetricValue(*m_xMtrPosX, basegfx::fround(fTmp), mePoolUnit);
+            }
 
-        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_Y );
-        if ( pItem )
-        {
-            const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getY()) / fUIScale);
-            SetMetricValue(*m_xMtrPosY, basegfx::fround(fTmp), mePoolUnit);
+            pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_Y );
+            if ( pItem )
+            {
+                const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+                SetMetricValue(*m_xMtrPosY, basegfx::fround(fTmp), mePoolUnit);
+            }
         }
 
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_POS );
@@ -1052,22 +1057,27 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         ChangePosProtectHdl(*m_xTsbPosProtect);
     }
 
-    { // #i75273# set width
-        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
-        mfOldWidth = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
-        double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
-        if (m_xMtrWidth->get_digits())
-            fTmpWidth *= pow(10.0, m_xMtrWidth->get_digits());
-        m_xMtrWidth->set_value(fTmpWidth, FieldUnit::MM_100TH);
-    }
+    m_xMtrWidth->set_sensitive(fUIScale != 0.0);
+    m_xMtrHeight->set_sensitive(fUIScale != 0.0);
+    if (fUIScale != 0.0)
+    {
+        { // #i75273# set width
+            pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
+            mfOldWidth = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
+            double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
+            if (m_xMtrWidth->get_digits())
+                fTmpWidth *= pow(10.0, m_xMtrWidth->get_digits());
+            m_xMtrWidth->set_value(fTmpWidth, FieldUnit::MM_100TH);
+        }
 
-    { // #i75273# set height
-        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
-        mfOldHeight = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
-        double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
-        if (m_xMtrHeight->get_digits())
-            fTmpHeight *= pow(10.0, m_xMtrHeight->get_digits());
-        m_xMtrHeight->set_value(fTmpHeight, FieldUnit::MM_100TH);
+        { // #i75273# set height
+            pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
+            mfOldHeight = std::max( pItem ? static_cast<double>(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0.0, 1.0 );
+            double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
+            if (m_xMtrHeight->get_digits())
+                fTmpHeight *= pow(10.0, m_xMtrHeight->get_digits());
+            m_xMtrHeight->set_value(fTmpHeight, FieldUnit::MM_100TH);
+        }
     }
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_SIZE );
