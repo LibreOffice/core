@@ -875,7 +875,7 @@ void lcl_tweakLightRig(std::vector<basegfx::B3DVector>& rLightDirVec, PrstLightR
 
 } // end anonymous namespace
 
-void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
                                           const double& rfRotZ, oox::PropertyMap& rPropertyMap)
 {
     if (!p3DProperties || !(*p3DProperties).mnLightRigType.has_value())

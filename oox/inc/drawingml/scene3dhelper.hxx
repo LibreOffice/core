@@ -47,7 +47,7 @@ public:
         @param [in] rRotZ the shape rotation inclusive camera z-rotation as calculated by
             setExtrusionProperties()
         @param [in, out] rPropertyMap the map, that was already filled by setExtrusionProperties()*/
-    void setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    void setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
                                const double& rRotZ, oox::PropertyMap& rPropertyMap);
 
     /** Puts the material properties of the 3D-shape into the property map

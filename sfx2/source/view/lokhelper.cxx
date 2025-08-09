@@ -859,7 +859,7 @@ std::vector<std::string> SfxLokHelper::extractCertificates(const std::string& rC
             break;
         }
 
-        aRet.push_back(aNext);
+        aRet.push_back(std::move(aNext));
     }
     return aRet;
 }

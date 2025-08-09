@@ -160,7 +160,7 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
             aProt.maRangeList = xRangeList.release();
         }
     }
-    maSheetProt.maEnhancedProtections.push_back( aProt);
+    maSheetProt.maEnhancedProtections.push_back(std::move(aProt));
 }
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )

@@ -359,7 +359,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
                         CustomAnimationPresetPtr pEffect = getEffectDescriptor( rEffectName );
                         if( pEffect )
                         {
-                            aEffectsList.push_back( pEffect );
+                            aEffectsList.push_back(std::move(pEffect));
                         }
 #if OSL_DEBUG_LEVEL >= 2
                         else

@@ -512,7 +512,7 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
 
     if ( nErr == ERRCODE_IO_PENDING )
     {
-        rpFilter = pFilter;
+        rpFilter = std::move(pFilter);
         return nErr;
     }
 

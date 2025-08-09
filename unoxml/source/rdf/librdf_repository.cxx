@@ -1429,7 +1429,7 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
     std::scoped_lock g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
-    const std::shared_ptr<librdf_query> pQuery(
+    std::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, nullptr,
             reinterpret_cast<const unsigned char*> (query.getStr()), nullptr),
         safe_librdf_free_query);
@@ -1456,7 +1456,8 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
     }
 
     return new librdf_GraphResult(this, m_aMutex, std::move(pStream),
-                                  std::shared_ptr<librdf_node>(), pQuery);
+                                  std::shared_ptr<librdf_node>(),
+                                  std::move(pQuery));
 }
 
 sal_Bool SAL_CALL
