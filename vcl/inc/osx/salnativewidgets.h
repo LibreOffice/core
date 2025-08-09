@@ -53,7 +53,7 @@
 #define LISTBOX_BORDER_WIDTH 1   // width of listbox border in pixels
 #define LISTBOX_TEXT_MARGIN 1    // left/right margin of text in pixels
 
-#define SPIN_BUTTON_WIDTH 13         // width of spin button without focus ring in pixels
+#define SPIN_BUTTON_WIDTH spinButtonWidth()  // width of spin button without focus ring in pixels
 #define SPIN_UPPER_BUTTON_HEIGHT 11  // height of upper spin button without focus ring in pixels
 #define SPIN_LOWER_BUTTON_HEIGHT 11  // height of lower spin button without focus ring in pixels
 

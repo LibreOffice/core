@@ -450,6 +450,16 @@ static void drawEditableBackground(CGContextRef context, const NSRect& rc)
     CGContextRestoreGState(context);
 }
 
+static constexpr int spinButtonWidth()
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+    if (@available(macOS 26, *))
+        return 23;
+    else
+#endif
+        return 16;
+}
+
 // As seen in macOS 12.3.1. All a bit odd really.
 const int RoundedMargin[4] = { 6, 4, 0, 3 };
 
@@ -614,8 +624,31 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     rc.origin.x -= nMargin;
                     rc.size.width += nMargin * 2;
 
-                    rc.origin.x += FOCUS_RING_WIDTH / 2;
-                    rc.size.width -= FOCUS_RING_WIDTH;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                    {
+                        rc.origin.x += FOCUS_RING_WIDTH * 2;
+                        rc.size.width -= FOCUS_RING_WIDTH * 4;
+                        if (eBezelStyle == NSBezelStyleFlexiblePush)
+                        {
+                            rc.origin.y += 1;
+                            rc.size.height -= FOCUS_RING_WIDTH;
+                        }
+                    }
+                    else
+#endif
+                    {
+                        if (eBezelStyle == NSBezelStyleFlexiblePush)
+                        {
+                            rc.origin.x += FOCUS_RING_WIDTH;
+                            rc.size.width -= FOCUS_RING_WIDTH * 2;
+                        }
+                        else
+                        {
+                            rc.origin.x += FOCUS_RING_WIDTH / 2;
+                            rc.size.width -= FOCUS_RING_WIDTH;
+                        }
+                    }
                 }
 
                 const bool bFocused(nState & ControlState::FOCUSED);
@@ -997,7 +1030,12 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                 {
                     rc.origin.x += 2;
-                    rc.size.width -= 1;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                        rc.size.width -= 4;
+                    else
+#endif
+                        rc.size.width -= 1;
                 }
 
                 drawEditableBackground(context, rc);
@@ -1028,6 +1066,14 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     else
                         [pBtn setKeyEquivalent: @""];
 
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                    {
+                        rc.origin.x += 2;
+                        rc.size.width -= 4;
+                    }
+                    else
+#endif
                     {
                         rc.size.width += 1;
                     }
@@ -1097,9 +1143,14 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                     ControlState nLowerState = pSpinButtonVal->mnLowerState;
 
                     rc.origin.x += rc.size.width + FOCUS_RING_WIDTH + 1;
-                    rc.origin.y -= 1;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                        ;
+                    else
+#endif
+                        rc.origin.y -= 1;
                     rc.size.width = SPIN_BUTTON_WIDTH;
-                    rc.size.height = SPIN_LOWER_BUTTON_HEIGHT + SPIN_LOWER_BUTTON_HEIGHT;
+                    rc.size.height = SPIN_UPPER_BUTTON_HEIGHT + SPIN_LOWER_BUTTON_HEIGHT;
 
                     NSStepperCell* pBtn = pInst->mpStepperCell;
 
@@ -1343,7 +1394,12 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             if (nPart == ControlPart::Entire)
             {
                 w = aCtrlBoundRect.GetWidth();
-                h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                if (@available(macOS 26, *))
+                    h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH + 1;
+                else
+#endif
+                    h = EDITBOX_HEIGHT + 2 * FOCUS_RING_WIDTH;
                 x += SPINBOX_OFFSET;
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
