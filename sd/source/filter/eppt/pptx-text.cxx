@@ -894,7 +894,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                         {
                             rtl_TextEncoding eChrSet = aFontDesc.CharSet;
                             cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eChrSet, aFontDesc.Name);
-                            aFontDesc.CharSet = eChrSet;
+                            aFontDesc.CharSet = static_cast<sal_Int16>(eChrSet);
                         }
 
                         if ( !aFontDesc.Name.isEmpty() )

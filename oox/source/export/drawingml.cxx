@@ -5561,7 +5561,7 @@ sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDe
     {
         rtl_TextEncoding eCharSet = rFontDesc.CharSet;
         cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eCharSet, rFontDesc.Name);
-        rFontDesc.CharSet = eCharSet;
+        rFontDesc.CharSet = static_cast<sal_Int16>(eCharSet);
     }
 
     return cBulletId;
