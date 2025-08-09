@@ -162,7 +162,7 @@ void XMLContentControlContext::startFastElement(
             }
             case XML_ELEMENT(LO_EXT, XML_TAB_INDEX):
             {
-                if (sax::Converter::convertNumber(nTmp, rIter.toView()))
+                if (sax::Converter::convertNumber(nTmp, rIter.toView(), 0, SAL_MAX_INT32))
                 {
                     m_nTabIndex = nTmp;
                 }
