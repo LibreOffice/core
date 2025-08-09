@@ -81,7 +81,7 @@ private:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    std::unique_ptr<Bitmap> pBitmap;
+    Bitmap maBitmap;
     CTL_STATE m_nState;
     bool mbCompleteDisable : 1;
 

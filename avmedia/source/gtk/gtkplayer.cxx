@@ -411,12 +411,12 @@ public:
 
         gsk_render_node_unref(node);
 
-        std::unique_ptr<BitmapEx> xBitmap(
+        BitmapEx aBitmap =
             vcl::bitmap::CreateFromCairoSurface(Size(m_aSize.Width, m_aSize.Height), surface));
 
         cairo_surface_destroy(surface);
 
-        return Graphic(*xBitmap).GetXGraphic();
+        return Graphic(aBitmap).GetXGraphic();
     }
 };
 }

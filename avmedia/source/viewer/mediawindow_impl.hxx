@@ -21,6 +21,7 @@
 
 #include <vcl/transfer.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <mediacontrol.hxx>
 
@@ -32,8 +33,6 @@ namespace com::sun::star::media {
 namespace com::sun::star::uno {
     class XComponentContext;
 }
-
-class BitmapEx;
 
 namespace avmedia
 {
@@ -151,8 +150,8 @@ private:
     rtl::Reference<MediaEventListenersImpl> mxEvents;
     VclPtr<MediaChildWindow> mpChildWindow;
     VclPtr<MediaWindowControl> mpMediaWindowControl;
-    std::unique_ptr<Bitmap> mpEmptyBmp;
-    std::unique_ptr<Bitmap> mpAudioBmp;
+    Bitmap maEmptyBmp;
+    Bitmap maAudioBmp;
     const MediaItem* mpItem = nullptr;
 };
 

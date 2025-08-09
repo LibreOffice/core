@@ -55,10 +55,10 @@ using namespace ::com::sun::star::accessibility;
 
 Bitmap& SvxRectCtl::GetRectBitmap()
 {
-    if( !pBitmap )
+    if( !maBitmap.IsEmpty() )
         InitRectBitmap();
 
-    return *pBitmap;
+    return maBitmap;
 }
 
 SvxRectCtl::SvxRectCtl(SvxTabPage* pPage)
@@ -89,7 +89,6 @@ void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 
 SvxRectCtl::~SvxRectCtl()
 {
-    pBitmap.reset();
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     pAccContext.clear();
 #endif
@@ -120,12 +119,10 @@ void SvxRectCtl::Resize_Impl(const Size &rSize)
 
 void SvxRectCtl::InitRectBitmap()
 {
-    pBitmap.reset();
-
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
 
-    pBitmap.reset(new Bitmap(RID_SVXCTRL_RECTBTNS));
+    maBitmap = Bitmap(RID_SVXCTRL_RECTBTNS);
 
     // set bitmap-colors
     Color aColorAry1[7];
@@ -162,12 +159,12 @@ void SvxRectCtl::InitRectBitmap()
     }
 #endif
 
-    pBitmap->Replace( aColorAry1, aColorAry2, 7, nullptr );
+    maBitmap.Replace( aColorAry1, aColorAry2, 7, nullptr );
 }
 
 void SvxRectCtl::StyleUpdated()
 {
-    pBitmap.reset(); // forces new creating of bitmap
+    maBitmap.SetEmpty(); // forces new creating of bitmap
     CustomWidgetController::StyleUpdated();
 }
 

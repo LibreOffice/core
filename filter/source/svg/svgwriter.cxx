@@ -3002,7 +3002,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
     }
 
     const BitmapEx* pBitmap = &rBmpEx;
-    std::unique_ptr<BitmapEx> pNewBitmap;
+    BitmapEx aNewBitmap;
 
     // for preview we generate downscaled images (1280x720 max)
     if (mbIsPreview)
@@ -3015,9 +3015,9 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         {
             aSize.setWidth(aSize.getWidth() / fFactor);
             aSize.setHeight(aSize.getHeight() / fFactor);
-            pNewBitmap = std::make_unique<BitmapEx>(rBmpEx);
-            pNewBitmap->Scale(aSize);
-            pBitmap = pNewBitmap.get();
+            aNewBitmap = rBmpEx;
+            aNewBitmap.Scale(aSize);
+            pBitmap = &aNewBitmap;
         }
     }
 

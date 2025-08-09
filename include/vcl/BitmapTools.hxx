@@ -60,7 +60,7 @@ void VCL_DLLPUBLIC fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx);
 Bitmap VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 
 #if ENABLE_CAIRO_CANVAS
-VCL_DLLPUBLIC BitmapEx* CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
+VCL_DLLPUBLIC BitmapEx CreateFromCairoSurface(Size size, cairo_surface_t* pSurface);
 #endif
 
 VCL_DLLPUBLIC ::Bitmap CanvasTransformBitmap( const ::Bitmap& rBitmap,

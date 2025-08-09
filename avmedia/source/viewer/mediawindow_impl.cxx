@@ -160,8 +160,8 @@ void MediaWindowImpl::dispose()
 
     mpMediaWindow = nullptr;
 
-    mpEmptyBmp.reset();
-    mpAudioBmp.reset();
+    maEmptyBmp.SetEmpty();
+    maAudioBmp.SetEmpty();
     mpMediaWindowControl.disposeAndClear();
     mpChildWindow.disposeAndClear();
 
@@ -589,17 +589,17 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
     if (!mxPlayer.is())
     {
-        if (!mpEmptyBmp)
-            mpEmptyBmp.reset(new Bitmap(AVMEDIA_BMP_EMPTYLOGO));
+        if (maEmptyBmp.IsEmpty())
+            maEmptyBmp = Bitmap(AVMEDIA_BMP_EMPTYLOGO);
 
-        pLogo = mpEmptyBmp.get();
+        pLogo = &maEmptyBmp;
     }
     else if (!mxPlayerWindow.is())
     {
-        if (!mpAudioBmp)
-            mpAudioBmp.reset(new Bitmap(AVMEDIA_BMP_AUDIOLOGO));
+        if (maAudioBmp.IsEmpty())
+            maAudioBmp = Bitmap(AVMEDIA_BMP_AUDIOLOGO);
 
-        pLogo = mpAudioBmp.get();
+        pLogo = &maAudioBmp;
     }
 
     if (!mpChildWindow)

@@ -129,8 +129,8 @@ class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
     // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( SwViewShell *pSh, const SwRect & );
 
-    std::unique_ptr<Bitmap> m_xReplaceBmp; ///< replaced display of still loaded images
-    std::unique_ptr<Bitmap> m_xErrorBmp;   ///< error display of missed images
+    Bitmap        maReplaceBmp; ///< replaced display of still loaded images
+    Bitmap        maErrorBmp;   ///< error display of missed images
 
     static bool sbLstAct;            // true if EndAction of last Shell
                                      // i.e. if the EndActions of the other

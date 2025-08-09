@@ -2932,20 +2932,20 @@ const Bitmap& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
 {
     if (bIsErrorState)
     {
-        if (!m_xErrorBmp)
-            m_xErrorBmp.reset(new Bitmap(RID_GRAPHIC_ERRORBMP));
-        return *m_xErrorBmp;
+        if (maErrorBmp.IsEmpty())
+            maErrorBmp = Bitmap(RID_GRAPHIC_ERRORBMP);
+        return maErrorBmp;
     }
 
-    if (!m_xReplaceBmp)
-        m_xReplaceBmp.reset(new Bitmap(RID_GRAPHIC_REPLACEBMP));
-    return *m_xReplaceBmp;
+    if (maReplaceBmp.IsEmpty())
+        maReplaceBmp = Bitmap(RID_GRAPHIC_REPLACEBMP);
+    return maReplaceBmp;
 }
 
 void SwViewShell::DeleteReplacementBitmaps()
 {
-    m_xErrorBmp.reset();
-    m_xReplaceBmp.reset();
+    maErrorBmp.SetEmpty();
+    maReplaceBmp.SetEmpty();
 }
 
 SwPostItMgr* SwViewShell::GetPostItMgr()
