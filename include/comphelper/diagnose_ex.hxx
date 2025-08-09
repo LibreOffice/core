@@ -33,22 +33,9 @@ COMPHELPER_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtExcep
         const char* currentFunction, const char* fileAndLineNo,
         const char* area, const char* explanatory = nullptr);
 
-//getCaughtException throws exceptions in never-going-to-happen situations which
-//floods coverity with warnings
 inline css::uno::Any DbgGetCaughtException()
 {
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
-    try
-    {
-        return ::cppu::getCaughtException();
-    }
-    catch (...)
-    {
-        std::abort();
-    }
-#else
     return ::cppu::getCaughtException();
-#endif
 }
 
 /** reports a caught UNO exception via OSL diagnostics

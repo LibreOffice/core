@@ -100,11 +100,9 @@ public:
         typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
         m_value(value)
     {
-#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
         // catch attempts to pass in out-of-range values early
         assert(detail::isInRange<UNDERLYING_TYPE>(value)
                && "out of range");
-#endif
     }
 #endif
     strong_int() : m_value(0) {}

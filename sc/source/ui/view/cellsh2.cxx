@@ -826,7 +826,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_PROVIDER:
         {
-            auto xDoc = o3tl::make_shared<ScDocument>();
+            auto xDoc = std::make_shared<ScDocument>();
             xDoc->InsertTab(0, u"test"_ustr);
             ScDocument& rDoc = GetViewData().GetDocument();
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), std::move(xDoc), &rDoc);

@@ -212,9 +212,6 @@ public:
     SvCompatWeakRef( ) {}
     SvCompatWeakRef( T* pObj )
                          {  if( pObj ) _xHdl = pObj->GetHdl(); }
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
-    ~SvCompatWeakRef() COVERITY_NOEXCEPT_FALSE {}
-#endif
     SvCompatWeakRef& operator = ( T * pObj )
                          {  _xHdl = pObj ? pObj->GetHdl() : nullptr; return *this; }
     bool          is() const

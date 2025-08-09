@@ -433,7 +433,7 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
 {
     PickerFlags nBits = getPickerFlags();
 
-    auto dialog = o3tl::make_shared<SvtFileDialog>(pParent, nBits);
+    auto dialog = std::make_shared<SvtFileDialog>(pParent, nBits);
     dialog->SetDenyList( m_aDenyList );
 
     return dialog;

@@ -1339,7 +1339,7 @@ bool ImpGraphic::swapOut()
     else
     {
         // Create a swap file
-        auto pSwapFile = o3tl::make_shared<ImpSwapFile>(getOriginURL());
+        auto pSwapFile = std::make_shared<ImpSwapFile>(getOriginURL());
 
         // Open a stream to write the swap file to
         {

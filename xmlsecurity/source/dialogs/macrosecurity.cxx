@@ -387,7 +387,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB(const bool bShowWarnings)
             {
                 TOOLS_WARN_EXCEPTION("xmlsecurity.dialogs", "certificate data couldn't be parsed: " << rEntry.RawData);
                 OUString sData = rEntry.RawData;
-                css::uno::Any tools_warn_exception(DbgGetCaughtException());
+                css::uno::Any tools_warn_exception(::cppu::getCaughtException());
                 OUString sException = OStringToOUString(exceptionToString(tools_warn_exception), RTL_TEXTENCODING_UTF8);
                 if (!sException.isEmpty())
                     sData +=  " / " + sException;
