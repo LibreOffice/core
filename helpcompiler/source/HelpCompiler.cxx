@@ -381,7 +381,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                         trim(tmppos);
                         keyword = tmppre + ";" + tmppos;
                     }
-                    ll.push_back(keyword);
+                    ll.push_back(std::move(keyword));
                 }
                 if (!ll.empty())
                     (*keywords)[anchor] = std::move(ll);

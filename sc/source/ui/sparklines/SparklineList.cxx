@@ -86,7 +86,7 @@ SparklineList::getSparklinesFor(std::shared_ptr<SparklineGroup> const& pSparklin
     {
         if (auto aSparkline = iterator->lock())
         {
-            toReturn.push_back(aSparkline);
+            toReturn.push_back(std::move(aSparkline));
             iterator++;
         }
         else

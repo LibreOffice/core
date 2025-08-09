@@ -954,7 +954,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
             SAL_WARN("sfx.doc", "Unsupported property type: " << any.getValueTypeName() );
             continue;
         }
-        attrs.push_back(as);
+        attrs.push_back(std::move(as));
     }
 
     return std::make_pair(comphelper::containerToSequence(values), attrs);

@@ -3670,8 +3670,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             }
 
             // if we get here the property states are empty
-            SchXMLDataPointStruct aPoint;
-            aDataPointVector.push_back( aPoint );
+            aDataPointVector.push_back(SchXMLDataPointStruct());
 
             nLastIndex = nCurrIndex;
         }
@@ -3681,7 +3680,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         {
             SchXMLDataPointStruct aPoint;
             aPoint.mnRepeat = nRepeat;
-            aDataPointVector.push_back( aPoint );
+            aDataPointVector.push_back(std::move(aPoint));
         }
     }
 

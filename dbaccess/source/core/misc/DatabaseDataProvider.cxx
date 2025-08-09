@@ -759,7 +759,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
                     k = 0;
                 aRow.push_back(fDefaultData[k]);
             }
-            aDataValues.push_back(aRow);
+            aDataValues.push_back(std::move(aRow));
         }
     }
 

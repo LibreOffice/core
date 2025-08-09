@@ -158,9 +158,9 @@ namespace slideshow::internal
                 }
 
                 if( bReinsert )
-                    maCurrentActivitiesReinsert.push_back( pActivity );
+                    maCurrentActivitiesReinsert.push_back(std::move(pActivity));
                 else
-                    maDequeuedActivities.push_back( pActivity );
+                    maDequeuedActivities.push_back(std::move(pActivity));
 
                 SAL_INFO("slideshow.verbose", "ActivitiesQueue: inner loop heartbeat" );
             }

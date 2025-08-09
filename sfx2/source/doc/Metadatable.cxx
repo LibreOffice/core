@@ -1455,7 +1455,7 @@ std::shared_ptr<MetadatableUndo> Metadatable::CreateUndo() const
 
 std::shared_ptr<MetadatableUndo> Metadatable::CreateUndoForDelete()
 {
-    std::shared_ptr<MetadatableUndo> const xUndo( CreateUndo() );
+    std::shared_ptr<MetadatableUndo> xUndo(CreateUndo());
     RemoveMetadataReference();
     return xUndo;
 }

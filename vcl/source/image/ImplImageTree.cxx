@@ -189,7 +189,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
            else
         #endif
         vcl::bitmap::loadFromSvg(*xStream, rPath, aTmp, aScalePercentage / 100.0);
-        rParameters.mrBitmap = aTmp;
+        rParameters.mrBitmap = std::move(aTmp);
 
         if (bConvertToDarkTheme)
             BitmapFilter::Filter(rParameters.mrBitmap, BitmapLightenFilter());
