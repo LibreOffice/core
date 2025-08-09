@@ -52,9 +52,8 @@ OUString GetEmbeddedFontsRoot()
     osl::FileBase::getAbsoluteFileURL({}, path + "/user/temp/embeddedfonts/", path);
     return path;
 }
-}
 
-static void clearDir( const OUString& path )
+void clearDir( const OUString& path )
 {
     osl::Directory dir( path );
     if( dir.reset() == osl::Directory::E_None )
@@ -66,6 +65,7 @@ static void clearDir( const OUString& path )
                 osl::File::remove( status.getFileURL());
         }
     }
+}
 }
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
