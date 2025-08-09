@@ -183,6 +183,8 @@ namespace svgio::svgreader
                     frX = frY;
                 }
 
+                assert(fWidth != 0 && fHeight != 0 && "help coverity see it's not zero");
+
                 frX /= fWidth;
                 frY /= fHeight;
 
