@@ -338,7 +338,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     }
     if(pInnermostNode != nullptr)
     {
-        bool bIsProtected = pInnermostNode->IsProtect();
+        bool bCanModify = !pInnermostNode->IsProtect();
 
         //special case - ToxSection
         // - in this case the inner section could be tox header
@@ -354,7 +354,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
                 if (const SwSection* pSectionParent = pSection->GetParent())
                     pInnermostNode = pSectionParent->GetFormat()->GetSectionNode();
             }
-            bIsProtected = static_cast<const SwSectionNode*>(pInnermostNode)->IsInProtectSect();
+            bCanModify = pInnermostNode && !static_cast<const SwSectionNode*>(pInnermostNode)->IsInProtectSect();
         }
 
         // The previous version had a check to skip empty read-only sections. Those
@@ -362,7 +362,7 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // inside a protected area.
 
         // Now, pInnermostNode is NULL or the innermost section or table node.
-        if(!bIsProtected)
+        if (bCanModify)
         {
             OSL_ENSURE( pInnermostNode->IsTableNode() ||
                         pInnermostNode->IsSectionNode(), "wrong node found" );
