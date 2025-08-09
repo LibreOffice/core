@@ -130,50 +130,50 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    if( !aBmp.IsEmpty() )
+    if (aBmp.IsEmpty())
+        return;
+
+    SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                       ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
+
+    if (!aPosAry.mnSrcWidth || !aPosAry.mnSrcHeight || !aPosAry.mnDestWidth || !aPosAry.mnDestHeight)
+        return;
+
+    const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
+
+    if ( nMirrFlags != BmpMirrorFlags::NONE )
+        aBmp.Mirror( nMirrFlags );
+
+    if (!aPosAry.mnSrcWidth || !aPosAry.mnSrcHeight || !aPosAry.mnDestWidth || !aPosAry.mnDestHeight)
+        return;
+
+    if (nAction == MetaActionType::BMPSCALE && CanSubsampleBitmap())
     {
-        SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
-                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
-                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+        double nScaleX = aPosAry.mnDestWidth  / static_cast<double>(aPosAry.mnSrcWidth);
+        double nScaleY = aPosAry.mnDestHeight / static_cast<double>(aPosAry.mnSrcHeight);
 
-        if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+        // If subsampling, use Bitmap::Scale() for subsampling of better quality.
+
+        // but hidpi surfaces like the cairo one have their own scale, so don't downscale
+        // past the surface scaling which can retain the extra detail
+        double fScale(1.0);
+        if (mpGraphics->ShouldDownscaleIconsAtSurface(fScale))
         {
-            const BmpMirrorFlags nMirrFlags = AdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
+            nScaleX *= fScale;
+            nScaleY *= fScale;
+        }
 
-            if ( nMirrFlags != BmpMirrorFlags::NONE )
-                aBmp.Mirror( nMirrFlags );
-
-            if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-            {
-                if (nAction == MetaActionType::BMPSCALE && CanSubsampleBitmap())
-                {
-                    double nScaleX = aPosAry.mnDestWidth  / static_cast<double>(aPosAry.mnSrcWidth);
-                    double nScaleY = aPosAry.mnDestHeight / static_cast<double>(aPosAry.mnSrcHeight);
-
-                    // If subsampling, use Bitmap::Scale() for subsampling of better quality.
-
-                    // but hidpi surfaces like the cairo one have their own scale, so don't downscale
-                    // past the surface scaling which can retain the extra detail
-                    double fScale(1.0);
-                    if (mpGraphics->ShouldDownscaleIconsAtSurface(fScale))
-                    {
-                        nScaleX *= fScale;
-                        nScaleY *= fScale;
-                    }
-
-                    if ( nScaleX < 1.0 || nScaleY < 1.0 )
-                    {
-                        aBmp.Scale(nScaleX, nScaleY);
-                        aPosAry.mnSrcWidth = aPosAry.mnDestWidth * fScale;
-                        aPosAry.mnSrcHeight = aPosAry.mnDestHeight * fScale;
-                    }
-                }
-
-                mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), *this );
-            }
+        if ( nScaleX < 1.0 || nScaleY < 1.0 )
+        {
+            aBmp.Scale(nScaleX, nScaleY);
+            aPosAry.mnSrcWidth = aPosAry.mnDestWidth * fScale;
+            aPosAry.mnSrcHeight = aPosAry.mnDestHeight * fScale;
         }
     }
+
+    mpGraphics->DrawBitmap( aPosAry, *aBmp.ImplGetSalBitmap(), *this );
 }
 
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
