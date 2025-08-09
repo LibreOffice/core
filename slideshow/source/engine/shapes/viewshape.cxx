@@ -378,7 +378,16 @@ namespace slideshow::internal
             {
                 // TODO(F2): when the sprite _actually_ gets resized,
                 // content needs a repaint!
+
+                // probably inefficient see AnimatedSprite::resize for
+                // how it was being done originally
 //                mpCustomSprite->resize( rSpriteSizePixel );
+                mpCustomSprite->hide();
+                vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
+                auto xSpriteSizePixel = ::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel);
+                mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(xSpriteSizePixel);
+                mpCustomSprite->show();
+                mbForceUpdate = true;
             }
 
             ENSURE_OR_RETURN_FALSE( mpCustomSprite, "ViewShape::renderSprite(): No sprite" );
