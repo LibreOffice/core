@@ -215,7 +215,6 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
     }
 
     addr.sun_family = AF_UNIX;
-    // coverity[fixed_size_dest : FALSE] - safe, see check above
     strcpy(addr.sun_path, name.getStr());
 #if defined(FREEBSD)
     len = SUN_LEN(&addr);
@@ -261,11 +260,6 @@ static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Option
         if (listen(pPipe->m_Socket, 5) < 0)
         {
             SAL_WARN("sal.osl.pipe", "listen() failed: " << UnixErrnoString(errno));
-            // cid#1255391 warns about unlink(name) after stat(name, &status)
-            // above, but the intervening call to bind makes those two clearly
-            // unrelated, as it would fail if name existed at that point in
-            // time:
-            // coverity[toctou] - this is bogus
             unlink(name.getStr());   /* remove filesystem entry */
             close(pPipe->m_Socket);
             destroyPipeImpl(pPipe);
@@ -508,7 +502,6 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_writePipe: invalid pipe"); // osl_sendPipe detects invalid pipe
     while (BytesToSend > 0)
     {
-        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         sal_Int32 RetVal = osl_sendPipe(pPipe, pBuffer, BytesToSend);
         /* error occurred? */
         if (RetVal <= 0)
@@ -531,7 +524,6 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_readPipe: invalid pipe"); // osl_receivePipe detects invalid pipe
     while (BytesToRead > 0)
     {
-        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         sal_Int32 RetVal = osl_receivePipe(pPipe, pBuffer, BytesToRead);
         /* error occurred? */
         if (RetVal <= 0)
