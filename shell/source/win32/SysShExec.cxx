@@ -107,9 +107,6 @@ namespace
         {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    }    /* 1816 */
     };
 
-    /* size of the table */
-    #define ERRTABLESIZE (SAL_N_ELEMENTS(errtable))
-
     /* The following two constants must be the minimum and maximum
     values in the (contiguous) range of osl_File_E_xec Failure errors. */
     #define MIN_EXEC_ERROR ERROR_INVALID_STARTING_CODESEG
@@ -125,13 +122,11 @@ namespace
 
     oslFileError _mapError( DWORD dwError )
     {
-        unsigned i;
-
         /* check the table for the OS error code */
-        for ( i = 0; i < ERRTABLESIZE; ++i )
+        for ( const auto& entry : errtable )
         {
-            if ( dwError == errtable[i].oscode )
-                return static_cast<oslFileError>(errtable[i].errnocode);
+            if ( dwError == entry.oscode )
+                return static_cast<oslFileError>(entry.errnocode);
         }
 
         /* The error code wasn't in the table.  We check for a range of */
