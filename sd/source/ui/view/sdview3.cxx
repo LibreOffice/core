@@ -1315,31 +1315,31 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if ((!bLink || pPickObj) && ShouldTry(SotClipboardFormatId::BITMAP))
     {
-        BitmapEx aBmpEx;
+        Bitmap aBmp;
 
         // get basic Bitmap data
-        rDataHelper.GetBitmapEx(SotClipboardFormatId::BITMAP, aBmpEx);
+        rDataHelper.GetBitmapEx(SotClipboardFormatId::BITMAP, aBmp);
 
-        if(aBmpEx.IsEmpty())
+        if(aBmp.IsEmpty())
         {
             // if this did not work, try to get graphic formats and convert these to bitmap
             Graphic aGraphic;
 
             if (rDataHelper.GetGraphic(SotClipboardFormatId::GDIMETAFILE, aGraphic))
             {
-                aBmpEx = aGraphic.GetBitmapEx();
+                aBmp = Bitmap(aGraphic.GetBitmapEx());
             }
             else if (rDataHelper.GetGraphic(SotClipboardFormatId::SVXB, aGraphic))
             {
-                aBmpEx = aGraphic.GetBitmapEx();
+                aBmp = Bitmap(aGraphic.GetBitmapEx());
             }
             else if (rDataHelper.GetGraphic(SotClipboardFormatId::BITMAP, aGraphic))
             {
-                aBmpEx = aGraphic.GetBitmapEx();
+                aBmp = Bitmap(aGraphic.GetBitmapEx());
             }
         }
 
-        if(!aBmpEx.IsEmpty())
+        if(!aBmp.IsEmpty())
         {
             Point aInsertPos( rPos );
 
@@ -1360,10 +1360,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
 
             // restrict movement to WorkArea
-            Size aImageMapSize(aBmpEx.GetPrefSize());
+            Size aImageMapSize(aBmp.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aBmpEx, mnAction, aInsertPos, nullptr, pImageMap.get() );
+            InsertGraphic( aBmp, mnAction, aInsertPos, nullptr, pImageMap.get() );
             return true;
         }
     }

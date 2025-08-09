@@ -709,9 +709,9 @@ bool TransferableHelper::SetString( const OUString& rString )
 }
 
 
-bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavor& rFlavor )
+bool TransferableHelper::SetBitmapEx( const Bitmap& rBitmap, const DataFlavor& rFlavor )
 {
-    if( !rBitmapEx.IsEmpty() )
+    if( !rBitmap.IsEmpty() )
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
@@ -736,12 +736,12 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
 #endif
             vcl::PngImageWriter aPNGWriter(aMemStm);
             aPNGWriter.setParameters(aFilterData);
-            aPNGWriter.write(rBitmapEx);
+            aPNGWriter.write(rBitmap);
         }
         else
         {
             // explicitly use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
-            WriteDIB(rBitmapEx.GetBitmap(), aMemStm, false, true);
+            WriteDIB(rBitmap, aMemStm, false, true);
         }
 
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
@@ -1522,7 +1522,7 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
 }
 
 
-bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmpEx ) const
+bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& rBmp ) const
 {
     if(SotClipboardFormatId::BITMAP == nFormat)
     {
@@ -1531,7 +1531,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
 
         if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor))
         {
-            if(GetBitmapEx(aFlavor, rBmpEx))
+            if(GetBitmapEx(aFlavor, rBmp))
             {
                 return true;
             }
@@ -1540,7 +1540,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
         // then JPEG
         if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor))
         {
-            if(GetBitmapEx(aFlavor, rBmpEx))
+            if(GetBitmapEx(aFlavor, rBmp))
             {
                 return true;
             }
@@ -1548,11 +1548,11 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx
     }
 
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmapEx( aFlavor, rBmpEx ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmapEx( aFlavor, rBmp ) );
 }
 
 
-bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& rBmpEx ) const
+bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, Bitmap& rBmp ) const
 {
     std::unique_ptr<SvStream> xStm = GetSotStorageStream(rFlavor);
     DataFlavor aSubstFlavor;
@@ -1590,7 +1590,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         {
             // it's a PNG, import to BitmapEx
             vcl::PngImageReader aPNGReader(*xStm);
-            rBmpEx = aPNGReader.read();
+            rBmp = aPNGReader.read();
         }
         else if(!bSuppressJPEG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/jpeg"))
         {
@@ -1598,10 +1598,10 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             Graphic aGraphic;
             if (rFilter.ImportGraphic(aGraphic, u"", *xStm) == ERRCODE_NONE)
-                rBmpEx = aGraphic.GetBitmapEx();
+                rBmp = Bitmap(aGraphic.GetBitmapEx());
         }
 
-        if(rBmpEx.IsEmpty())
+        if(rBmp.IsEmpty())
         {
             Bitmap aBitmap;
             AlphaMask aMask;
@@ -1612,15 +1612,15 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
 
             if(aMask.GetBitmap().IsEmpty())
             {
-                rBmpEx = aBitmap;
+                rBmp = aBitmap;
             }
             else
             {
-                rBmpEx = BitmapEx(aBitmap, aMask);
+                rBmp = Bitmap(BitmapEx(aBitmap, aMask));
             }
         }
 
-        bRet = (ERRCODE_NONE == xStm->GetError() && !rBmpEx.IsEmpty());
+        bRet = (ERRCODE_NONE == xStm->GetError() && !rBmp.IsEmpty());
 
         /* SJ: #110748# At the moment we are having problems with DDB inserted as DIB. The
            problem is, that some graphics are inserted much too big because the nXPelsPerMeter
@@ -1633,21 +1633,21 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
         */
         if(bRet)
         {
-            const MapMode aMapMode(rBmpEx.GetPrefMapMode());
+            const MapMode aMapMode(rBmp.GetPrefMapMode());
 
             if(MapUnit::MapPixel != aMapMode.GetMapUnit())
             {
-                const Size aSize(OutputDevice::LogicToLogic(rBmpEx.GetPrefSize(), aMapMode, MapMode(MapUnit::Map100thMM)));
+                const Size aSize(OutputDevice::LogicToLogic(rBmp.GetPrefSize(), aMapMode, MapMode(MapUnit::Map100thMM)));
 
                 // #i122388# This wrongly corrects in the given case; changing from 5000 100th mm to
                 // the described 50 cm (which is 50000 100th mm)
                 if((aSize.Width() > 50000) || (aSize.Height() > 50000))
                 {
-                    rBmpEx.SetPrefMapMode(MapMode(MapUnit::MapPixel));
+                    rBmp.SetPrefMapMode(MapMode(MapUnit::MapPixel));
 
                     // #i122388# also adapt size by applying the mew MapMode
                     const Size aNewSize(o3tl::convert(aSize, o3tl::Length::mm100, o3tl::Length::pt));
-                    rBmpEx.SetPrefSize(aNewSize);
+                    rBmp.SetPrefSize(aNewSize);
                 }
             }
         }
@@ -1741,11 +1741,11 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
         // try to get PNG first
-        BitmapEx aBmpEx;
+        Bitmap aBmp;
 
-        bRet = GetBitmapEx( aFlavor, aBmpEx );
+        bRet = GetBitmapEx( aFlavor, aBmp );
         if( bRet )
-            rGraphic = aBmpEx;
+            rGraphic = aBmp;
     }
     else if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PDF, aFlavor) &&
             TransferableDataHelper::IsEqual(aFlavor, rFlavor))
@@ -1762,20 +1762,20 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     }
     else if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor) && TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
-        BitmapEx aBitmapEx;
+        Bitmap aBitmap;
 
-        bRet = GetBitmapEx(aFlavor, aBitmapEx);
+        bRet = GetBitmapEx(aFlavor, aBitmap);
         if (bRet)
-            rGraphic = aBitmapEx;
+            rGraphic = aBitmap;
     }
     else if(SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
-        BitmapEx aBmpEx;
+        Bitmap aBmp;
 
-        bRet = GetBitmapEx( aFlavor, aBmpEx );
+        bRet = GetBitmapEx( aFlavor, aBmp );
         if( bRet )
-            rGraphic = aBmpEx;
+            rGraphic = aBmp;
     }
     else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavor ) &&
              TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )

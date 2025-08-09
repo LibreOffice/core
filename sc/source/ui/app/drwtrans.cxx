@@ -375,7 +375,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
             if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true) );
             else
-                bOK = SetBitmapEx( BitmapEx(aView.GetMarkedObjBitmap(true)), rFlavor );
+                bOK = SetBitmapEx( aView.GetMarkedObjBitmap(true), rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::SVXB )
         {

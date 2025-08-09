@@ -816,14 +816,14 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
     }
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) || aDataHelper.HasFormat( SotClipboardFormatId::PNG ) )
     {
-        BitmapEx aBmpEx;
+        Bitmap aBmp;
         ScDrawView* pScDrawView = GetScDrawView();
 
-        if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ) )
+        if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmp ) )
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, u""_ustr ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmp), aBeginUndo, u""_ustr ))
             {
                 return true;
             }

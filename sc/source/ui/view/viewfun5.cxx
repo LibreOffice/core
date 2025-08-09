@@ -221,9 +221,9 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     }
     else if (nFormatId == SotClipboardFormatId::BITMAP || nFormatId == SotClipboardFormatId::PNG || nFormatId == SotClipboardFormatId::JPEG)
     {
-        BitmapEx aBmpEx;
-        if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ) )
-            bRet = PasteBitmapEx( aPos, aBmpEx );
+        Bitmap aBmp;
+        if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmp ) )
+            bRet = PasteBitmapEx( aPos, BitmapEx(aBmp) );
     }
     else if (nFormatId == SotClipboardFormatId::GDIMETAFILE)
     {
