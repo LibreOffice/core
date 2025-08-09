@@ -385,7 +385,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( const SwFormat * pFormat, bool bSvDrwPt )
 {
     // Format is valid, otherwise you would not reach this point here
     if( bSvDrwPt ) {
-        if ( RES_DRAWFRMFMT == pFormat->Which() ) {
+        if (pFormat && RES_DRAWFRMFMT == pFormat->Which()) {
             Point aPt( static_cast<const SwFrameFormat*>(pFormat)->FindSdrObject()
                        ->GetRelativePos() );
             // store old value as attribute, to keep SwUndoFormatAttr small
