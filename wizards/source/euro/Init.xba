@@ -493,7 +493,7 @@ Dim i as Integer
 	&apos; real conversion rate
 	CurrValue(9,1) = 13.7603
 	&apos; rounded conversion rate
-	CurrValue(9,2) = 15
+	CurrValue(9,2) = 14
 	CurrValue(9,3) = &quot;öS&quot;
 	CurrValue(9,4) = &quot;S&quot;
 	CurrValue(9,5) = &quot;ATS&quot;
