@@ -45,11 +45,16 @@ using namespace vcl;
 
 namespace
 {
-OUString GetEmbeddedFontsRoot()
+const OUString& GetEmbeddedFontsRoot()
 {
-    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
-    rtl::Bootstrap::expandMacros( path );
-    return path + "/user/temp/embeddedfonts/";
+    static const OUString path = []()
+    {
+        OUString p = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
+        rtl::Bootstrap::expandMacros(p);
+        osl::FileBase::getAbsoluteFileURL({}, p + "/user/temp/embeddedfonts/", p);
+        return p;
+    }();
+    return path;
 }
 }
 
@@ -69,7 +74,7 @@ static void clearDir( const OUString& path )
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
 {
-    OUString path = GetEmbeddedFontsRoot();
+    const OUString& path = GetEmbeddedFontsRoot();
     clearDir( path + "fromdocs/" );
     clearDir( path + "fromsystem/" );
 }
