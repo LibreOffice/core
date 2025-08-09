@@ -1552,19 +1552,18 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 {
                     // exec just moves on top and adds the break, which however makes only sense if the table
                     // is the very first item of the document; the command should be hidden otherwise
-                    SwContentFrame* curFrame = rSh.GetCurrFrame();
-                    SwPageFrame* pageFrame = curFrame->FindPageFrame();
-                    if (SwFrame* frame = pageFrame->Lower())
-                    {
-                        while(!frame->IsContentFrame())
-                        {
-                            frame = frame->GetLower();
-                        }
+                    SwContentFrame* pCurFrame = rSh.GetCurrFrame();
+                    SwPageFrame* pPageFrame = pCurFrame->FindPageFrame();
+                    SwFrame* pFrame = pPageFrame->Lower();
 
-                        if(frame->FindTabFrame() != curFrame->FindTabFrame())
-                        {
-                            rSet.DisableItem(nSlot);
-                        }
+                    while(pFrame && !pFrame->IsContentFrame())
+                    {
+                        pFrame = pFrame->GetLower();
+                    }
+
+                    if(pFrame && pFrame->FindTabFrame() != pCurFrame->FindTabFrame())
+                    {
+                        rSet.DisableItem(nSlot);
                     }
                 }
                 break;
