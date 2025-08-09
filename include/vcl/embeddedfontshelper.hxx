@@ -28,6 +28,22 @@ class VCL_DLLPUBLIC EmbeddedFontsHelper
 private:
     std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
 
+    /**
+      Returns a URL for a file where to store contents of a given temporary font.
+      The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
+      Use activateTemporaryFont() to actually enable usage of the font.
+
+      @param fontName name of the font (e.g. 'Times New Roman')
+      @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
+    */
+    static OUString fileUrlForTemporaryFont(const OUString& fontName, std::u16string_view extra);
+
+    /**
+      Adds the accumulated fonts to the list of known fonts. The fonts are used only until application
+      exit.
+    */
+    void activateFonts();
+
 public:
     /// Specification of what kind of operation is allowed when embedding a font
     enum class FontRights
@@ -56,22 +72,6 @@ public:
         const OUString& fontName, std::u16string_view extra,
         std::vector< unsigned char > const & key, bool eot = false,
         bool bSubsetted = false);
-
-    /**
-      Returns a URL for a file where to store contents of a given temporary font.
-      The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
-      Use activateTemporaryFont() to actually enable usage of the font.
-
-      @param fontName name of the font (e.g. 'Times New Roman')
-      @param extra additional text to use for name (e.g. to distinguish regular from bold, italic,...), "?" for unique
-    */
-    static OUString fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra );
-
-    /**
-      Adds the accumulated fonts to the list of known fonts. The fonts are used only until application
-      exit.
-    */
-    void activateFonts();
 
     /**
       Returns if the restrictions specified in the font (if present) allow embedding
