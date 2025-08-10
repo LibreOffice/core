@@ -471,9 +471,8 @@ void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue>
                             if (nChunkSize)
                             {
                                 const sal_Int8* pSource = aByteSeq.getConstArray();
-                                std::vector<sal_uInt8> aData(pSource, pSource + nChunkSize);
-                                aChunk.data = std::move(aData);
-                                maAdditionalChunks.push_back(aChunk);
+                                aChunk.data = std::vector<sal_uInt8>(pSource, pSource + nChunkSize);
+                                maAdditionalChunks.push_back(std::move(aChunk));
                             }
                         }
                     }

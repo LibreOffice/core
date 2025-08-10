@@ -308,7 +308,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                                 pPreset->maSetLabel = sSet;
                                 SAL_INFO("sd.transitions", aPresetId << ": " << sGroup << "/" << sSet << (sVariant.isEmpty() ? OUString() : OUString("/" + sVariant)));
 
-                                rList.push_back( pPreset );
+                                rList.push_back(std::move(pPreset));
                             }
                             else
                                 SAL_WARN("sd.transitions", "group node " << sGroup << " not found");

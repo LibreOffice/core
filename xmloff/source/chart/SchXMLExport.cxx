@@ -3655,7 +3655,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                             maAutoStyleNameQueue.pop();
                         }
 
-                        aDataPointVector.push_back( aPoint );
+                        aDataPointVector.push_back(std::move(aPoint));
                         nLastIndex = nCurrIndex;
                     }
                     else

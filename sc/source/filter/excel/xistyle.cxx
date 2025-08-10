@@ -2023,7 +2023,7 @@ void XclImpXFRangeBuffer::Finalize()
                 ScAttrEntry aEntry;
                 aEntry.nEndRow = rDoc.MaxRow();
                 aEntry.setScPatternAttr(&rDoc.getCellAttributeHelper().getDefaultCellAttribute());
-                aAttrs.push_back(aEntry);
+                aAttrs.push_back(std::move(aEntry));
             }
 
             aAttrs.shrink_to_fit();

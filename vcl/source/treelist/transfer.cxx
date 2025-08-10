@@ -1612,7 +1612,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, Bitmap& rBm
 
             if(aMask.GetBitmap().IsEmpty())
             {
-                rBmp = aBitmap;
+                rBmp = std::move(aBitmap);
             }
             else
             {

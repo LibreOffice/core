@@ -699,7 +699,7 @@ void ScDPSource::FilterCacheByPageDimensions()
         }
         if (pGrpFilter->getMatchItemCount() < o3tl::make_unsigned(nMemCount))
             // there is at least one invisible item.  Add this filter criterion to the mix.
-            aCriteria.push_back(aFilter);
+            aCriteria.push_back(std::move(aFilter));
 
         if (!pDim->HasSelectedPage())
             continue;
