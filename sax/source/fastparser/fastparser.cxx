@@ -885,8 +885,8 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
         deleteUsedEvents();
 
         // callbacks used inside XML_Parse may have caught an exception
-        // No need to lock maSavedExceptionMutex here because parser
-        // thread is joined.
+        // coverity[missing_lock : SUPPRESS] 2024.6.1 - No need to lock
+        // maSavedExceptionMutex here because parser thread is joined.
         if( rEntity.maSavedException.hasValue() )
             rEntity.throwException( mxDocumentLocator, true );
     }
