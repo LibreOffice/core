@@ -190,7 +190,6 @@ static oslProfile osl_psz_openProfile(const char *pszProfileName, oslProfileOpti
     if (pProfile->m_pFile == nullptr)
         closeFileImpl(pFile,pProfile->m_Flags);
 
-    // coverity[leaked_storage] - pFile is not leaked
     return pProfile;
 }
 

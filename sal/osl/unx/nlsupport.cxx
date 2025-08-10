@@ -635,7 +635,6 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
             }
         }
     }
-    // coverity[overrun-buffer-val : FALSE] - coverity gets this very wrong
     *ppLocale = parse_locale(locale);
 }
 

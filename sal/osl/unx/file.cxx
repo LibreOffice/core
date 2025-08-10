@@ -885,7 +885,6 @@ void setAllowedPaths(
                 return; // too bad
             else
             {
-                // coverity[fixed_size_dest : FALSE] - safe, see check above
                 strcat(resolvedPath, aPath.getStr() + n);
             }
         }
@@ -932,7 +931,6 @@ bool isForbidden(const OString &filePath, sal_uInt32 nFlags)
             return true; // too bad
         else
         {
-            // coverity[fixed_size_dest : FALSE] - safe, see check above
             strcat(resolvedPath, filePath.getStr() + n);
         }
     }
@@ -1403,10 +1401,8 @@ const off_t MAX_OFF_T = std::numeric_limits< off_t >::max();
 
 namespace {
 
-// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMaxOffT(T n) { return n > MAX_OFF_T; }
 
-// coverity[result_independent_of_operands] - crossplatform requirement
 template<typename T> bool exceedsMinOffT(T n)
 { return n < std::numeric_limits<off_t>::min(); }
 
@@ -1429,7 +1425,7 @@ oslFileError SAL_CALL osl_mapFile(
 
     if (uLength > SAL_MAX_SIZE)
     {
-        // coverity[dead_error_line] - suppress warning, 32bit platforms still
+        // coverity[dead_error_line] 2024.6.1 - crossplatform requirement
         return osl_File_E_OVERFLOW;
     }
 
@@ -1508,7 +1504,7 @@ static oslFileError unmapFile(void* pAddr, sal_uInt64 uLength)
 
     if (uLength > SAL_MAX_SIZE)
     {
-        // coverity[dead_error_line] - suppress warning, 32bit platforms still
+        // coverity[dead_error_line] 2024.6.1 - crossplatform requirement
         return osl_File_E_OVERFLOW;
     }
 

@@ -333,7 +333,6 @@ static void ChildStatusProc(void *pData)
                         else
                             pChild->m_status = -1;
 
-                        // coverity[lock_order : FALSE] - incorrect report of lock order error
                         osl_setCondition(pChild->m_terminated);
                     }
 
@@ -739,10 +738,8 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
             pProcImpl->m_status = pChild->m_status;
 
-            // coverity[lock_order : FALSE] - incorrect report of lock order error
             if (osl_checkCondition(pChild->m_terminated))
             {
-                // coverity[lock_order : FALSE] - incorrect report of lock order error
                 osl_setCondition(pProcImpl->m_terminated);
             }
         }

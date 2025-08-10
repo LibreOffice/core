@@ -278,7 +278,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
        units will be no larger than 2 * SAL_MAX_INT32, represented as
        sal_Int32 -2): */
     if (n < 0) {
-        // coverity[dead_error_begin] - assumes wrap around
+        // coverity[dead_error_begin] 2024.6.1 - assumes wrap around
         *newString = nullptr;
         return;
     }
