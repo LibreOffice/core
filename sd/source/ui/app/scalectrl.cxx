@@ -33,6 +33,8 @@
 #include <sdresid.hxx>
 #include <strings.hrc>
 
+#define TABLE_COUNT 9
+
 SFX_IMPL_STATUSBAR_CONTROL(SdScaleControl, SfxStringItem);
 
 // class SdScaleControl ------------------------------------------
@@ -79,12 +81,12 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
         Application::CreateBuilder(nullptr, u"modules/simpress/ui/masterpagemenu.ui"_ustr));
     std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"menu"_ustr));
 
-    sal_uInt16 aTable[12] = { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
+    sal_uInt16 aTable[TABLE_COUNT] = { 1, 2, 5, 10, 12, 24, 48, 50, 100 };
 
-    for (sal_uInt16 i = 11; i > 0; i--)
-        xPopup->append(OUString::number(12 - i), OUString::number(aTable[i]) + ":1");
-    for (sal_uInt16 i = 0; i < 12; i++)
-        xPopup->append(OUString::number(12 + i), "1:" + OUString::number(aTable[i]));
+    for (sal_uInt16 i = TABLE_COUNT - 1; i > 0; i--)
+        xPopup->append(OUString::number(TABLE_COUNT - i), OUString::number(aTable[i]) + ":1");
+    for (sal_uInt16 i = 0; i < TABLE_COUNT; i++)
+        xPopup->append(OUString::number(TABLE_COUNT + i), "1:" + OUString::number(aTable[i]));
 
     ::tools::Rectangle aRect(rCEvt.GetMousePosPixel(), Size(1, 1));
     weld::Window* pParent = weld::GetPopupParent(GetStatusBar(), aRect);
@@ -95,12 +97,12 @@ void SdScaleControl::Command(const CommandEvent& rCEvt)
     sal_Int32 i = sResult.toUInt32();
     sal_Int32 nX;
     sal_Int32 nY;
-    if (i > 11)
+    if (i > TABLE_COUNT - 1)
         nX = 1;
     else
-        nX = aTable[(12 - i) % 12];
-    if (i > 11)
-        nY = aTable[i % 12];
+        nX = aTable[(TABLE_COUNT - i) % TABLE_COUNT];
+    if (i > TABLE_COUNT - 1)
+        nY = aTable[i % TABLE_COUNT];
     else
         nY = 1;
     pDoc->SetUIScale(Fraction(nX, nY));
