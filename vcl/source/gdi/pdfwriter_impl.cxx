@@ -51,6 +51,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
+#include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -161,17 +162,11 @@ void appendObjectReference(sal_Int32 nObjectID, OStringBuffer & aLine)
  * Further limitation: it is advisable to use standard ASCII characters for
  * OOo bookmarks.
 */
-void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
+void appendDestinationName( std::u16string_view rString, OStringBuffer& rBuffer )
 {
-    const sal_Unicode* pStr = rString.getStr();
-    sal_Int32 nLen = rString.getLength();
-    for( int i = 0; i < nLen; i++ )
+    for( auto aChar: rString)
     {
-        sal_Unicode aChar = pStr[i];
-        if( (aChar >= '0' && aChar <= '9' ) ||
-            (aChar >= 'a' && aChar <= 'z' ) ||
-            (aChar >= 'A' && aChar <= 'Z' ) ||
-            aChar == '-' )
+        if( rtl::isAsciiAlphanumeric(aChar) || aChar == '-' )
         {
             rBuffer.append(static_cast<char>(aChar));
         }
