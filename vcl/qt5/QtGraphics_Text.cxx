@@ -135,6 +135,11 @@ bool QtGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*, const OUStri
     return false;
 }
 
+bool QtGraphics::RemoveTempDevFont(const OUString& /*rFileURL*/, const OUString& /*rFontName*/)
+{
+    return true; // No fonts registered - no problem to remove
+}
+
 namespace
 {
 class QtCommonSalLayout : public GenericSalLayout

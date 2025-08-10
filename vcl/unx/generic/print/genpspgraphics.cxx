@@ -118,6 +118,11 @@ bool GenPspGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
     return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
+bool GenPspGraphics::RemoveTempDevFont(const OUString& rFileURL, const OUString& rFontName)
+{
+    return m_aTextRenderImpl.RemoveTempDevFont(rFileURL, rFontName);
+}
+
 void GenPspGraphics::GetDevFontList( vcl::font::PhysicalFontCollection *pFontCollection )
 {
     m_aTextRenderImpl.GetDevFontList(pFontCollection);

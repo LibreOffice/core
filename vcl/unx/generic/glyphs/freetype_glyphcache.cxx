@@ -277,6 +277,13 @@ void FreetypeManager::AddFontFile(const OString& rNormalizedName,
     m_aFontInfoList[ nFontId ].reset(pFontInfo);
 }
 
+void FreetypeManager::RemoveFontFile(sal_IntPtr nFontId)
+{
+    auto it = m_aFontInfoList.find(nFontId);
+    if (it != m_aFontInfoList.end())
+        m_aFontInfoList.erase(it);
+}
+
 void FreetypeManager::AnnounceFonts( vcl::font::PhysicalFontCollection* pToAdd ) const
 {
     for (auto const& font : m_aFontInfoList)

@@ -160,6 +160,10 @@ public:
                                     const OUString& rFileURL,
                                     const OUString& rFontName ) = 0;
 
+    // Returns true, when the font was unregistered, and its file can be safely deleted
+    virtual bool                RemoveTempDevFont(const OUString& rFileURL,
+                                                  const OUString& rFontName) = 0;
+
     virtual std::unique_ptr<GenericSalLayout>
                                 GetTextLayout(int nFallbackLevel) = 0;
     virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;

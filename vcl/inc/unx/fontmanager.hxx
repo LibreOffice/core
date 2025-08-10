@@ -122,6 +122,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     /* register an application specific font file for libfontconfig */
     static void addFontconfigFile(const OString& rFile);
 
+    /* deregister an application specific font file from libfontconfig */
+    static void removeFontconfigFile(std::string_view aFile);
+
     std::set<OString> m_aPreviousLangSupportRequests;
     std::vector<OUString> m_aCurrentRequests;
     Timer m_aFontInstallerTimer;
@@ -134,7 +137,12 @@ public:
     static PrintFontManager& get(); // one instance only
 
     // There may be multiple font ids for font collections
+    std::vector<fontID> findFontFileIDs( std::u16string_view rFileUrl ) const;
+
+    // There may be multiple font ids for font collections
     std::vector<fontID> addFontFile( std::u16string_view rFileUrl );
+
+    void removeFontFile( std::u16string_view rFileUrl );
 
     void initialize();
 

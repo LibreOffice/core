@@ -357,6 +357,7 @@ public:
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() override;
     virtual bool            AddTempDevFont( vcl::font::PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) override;
+    virtual bool            RemoveTempDevFont(const OUString& rFileURL, const OUString& rFontName) override;
 
     virtual std::unique_ptr<GenericSalLayout>
                             GetTextLayout(int nFallbackLevel) override;

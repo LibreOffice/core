@@ -1061,6 +1061,26 @@ bool WinSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection* pFontColl
     return true;
 }
 
+bool WinSalGraphics::RemoveTempDevFont(const OUString& rFileURL, const OUString& /*rFontName*/)
+{
+    OUString path;
+    osl::FileBase::getSystemPathFromFileURL(rFileURL, path);
+    auto pSalData = GetSalData();
+    for (TempFontItem** pp = &pSalData->mpTempFontItem; *pp; pp = &(*pp)->mpNextItem)
+    {
+        if ((*pp)->maFontResourcePath == path)
+        {
+            RemoveFontResourceExW(o3tl::toW(path.getStr()), FR_PRIVATE, nullptr);
+            auto p = *pp;
+            *pp = p->mpNextItem;
+            delete p;
+            return true;
+        }
+    }
+    SAL_WARN("vcl.fonts", "Trying to unregister an embedded font that wasn't registered?");
+    return true; // It's still safe to delete the font file: we don't use it
+}
+
 void WinSalGraphics::GetDevFontList( vcl::font::PhysicalFontCollection* pFontCollection )
 {
     // make sure all LO shared fonts are registered temporarily

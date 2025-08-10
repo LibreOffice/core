@@ -1145,6 +1145,7 @@ public:
     bool                        IsFontAvailable( std::u16string_view rFontName ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
+    bool                        RemoveTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     void                        RefreshFontData( const bool bNewFontLists );
 
     FontMetric                  GetFontMetric() const;

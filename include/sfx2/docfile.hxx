@@ -31,12 +31,12 @@
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
 
-#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <mutex>
 
 namespace com::sun::star::beans { struct PropertyValue; }
+namespace com::sun::star::beans { struct StringPair; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XInputStream; }
@@ -105,6 +105,8 @@ public:
     bool CheckCanGetLockfile() const;
     void SetOriginallyReadOnly(bool val);
     void AddEmbeddedFonts(const css::uno::Sequence<css::beans::StringPair>& fonts);
+    // Transfers the embedded font list to another medium (passing ownership)
+    void TransferEmbeddedFontsTo(SfxMedium& target);
     void AddToCheckEditableWorkerList();
     void SetWorkerReloadEvent(ImplSVEvent* pEvent);
     ImplSVEvent* GetWorkerReloadEvent() const;
@@ -322,6 +324,7 @@ private:
                                             bool bIsLoading, bool bOwnLock, bool bHandleSysLocked);
     enum class MessageDlg { LockFileIgnore, LockFileCorrupt };
     bool                ShowLockFileProblemDialog(MessageDlg nWhichDlg);
+    void ReleaseEmbeddedFonts();
 };
 
 #endif

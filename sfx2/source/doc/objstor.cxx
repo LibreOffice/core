@@ -2375,6 +2375,10 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
     SfxMedium* pOld = pMedium;
     if ( bMedChanged )
     {
+        if (pMedium)
+        {
+            pMedium->TransferEmbeddedFontsTo(*pNewMed);
+        }
         pMedium = pNewMed;
         pMedium->CanDisposeStorage_Impl( true );
     }
