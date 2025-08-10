@@ -66,6 +66,10 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/wintypes.hxx>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 #ifdef MACOSX
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -404,7 +408,8 @@ Size MessBox::GetOptimalSize() const
 }
 
 
-namespace {
+namespace
+{
 
 class Pause : public Idle
 {
@@ -690,13 +695,7 @@ std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, Wi
     return { nWinBits, nStyle };
 }
 
-struct ComponentInfo
-{
-    std::u16string_view sName;
-    WindowType      nWinType;
-};
-
-ComponentInfo const aComponentInfos[] =
+constexpr auto constComponentTypeMapping = frozen::make_unordered_map<std::u16string_view, WindowType>(
 {
     { u"animatedimages",     WindowType::CONTROL },
     { u"buttondialog",       WindowType::BUTTONDIALOG },
@@ -770,41 +769,19 @@ ComponentInfo const aComponentInfos[] =
     { u"warningbox",         WindowType::WARNINGBOX },
     { u"window",             WindowType::WINDOW },
     { u"workwindow",         WindowType::WORKWINDOW }
-};
-
-bool ComponentInfoFindCompare( const ComponentInfo & lhs, const OUString & s)
-{
-    return rtl_ustr_compareIgnoreAsciiCase_WithLength(s.pData->buffer, s.pData->length,
-                lhs.sName.data(), lhs.sName.size()) > 0;
-}
+});
 
 WindowType ImplGetComponentType( const OUString& rServiceName )
 {
-    static bool bSorted = false;
-    if( !bSorted )
-    {
-        assert( std::is_sorted( std::begin(aComponentInfos), std::end(aComponentInfos),
-                    [](const ComponentInfo & lhs, const ComponentInfo & rhs) {
-                        return
-                            rtl_ustr_compare_WithLength(
-                                lhs.sName.data(), lhs.sName.size(), rhs.sName.data(),
-                                rhs.sName.size())
-                            < 0;
-                    } ) );
-        bSorted = true;
-    }
-
     OUString sSearch;
-    if ( !rServiceName.isEmpty() )
-        sSearch = rServiceName;
+    if (!rServiceName.isEmpty())
+        sSearch = rServiceName.toAsciiLowerCase();
     else
         sSearch = "window";
 
-    auto it = std::lower_bound( std::begin(aComponentInfos), std::end(aComponentInfos), sSearch,
-                                ComponentInfoFindCompare );
-    if (it != std::end(aComponentInfos) &&
-        rtl_ustr_compareIgnoreAsciiCase_WithLength(sSearch.pData->buffer, sSearch.pData->length, it->sName.data(), it->sName.size()) == 0)
-        return it->nWinType;
+    auto iterator = constComponentTypeMapping.find(sSearch);
+    if (iterator != constComponentTypeMapping.end())
+        return iterator->second;
     return WindowType::NONE;
 }
 
@@ -904,7 +881,7 @@ static void ToolkitWorkerFunction( void* pArgs )
         // but we can't get the osl_Thread to destroy here so just leak it.
     }
 }
-}
+} // end extern
 
 #endif
 
@@ -2585,7 +2562,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 }
 
 
-}
+} // end anonymous namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
