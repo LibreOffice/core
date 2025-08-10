@@ -32,35 +32,20 @@ ChartColorPaletteTabPage::ChartColorPaletteTabPage(weld::Container* pPage,
                                                    const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "modules/schart/ui/tp_ChartColorPalette.ui",
                  "tp_ChartColorPalette", &rInAttrs)
-    , mxColorfulValueSet(new ChartColorPalettes)
-    , mxColorfulValueSetWin(
-          new weld::CustomWeld(*m_xBuilder, "colorful_palettes", *mxColorfulValueSet))
-    , mxMonoValueSet(new ChartColorPalettes)
-    , mxMonoValueSetWin(
-          new weld::CustomWeld(*m_xBuilder, "monochromatic_palettes", *mxMonoValueSet))
+    , mxColorfulPalettes(new ChartColorPalettes(*m_xBuilder, "colorful_palettes", "colorfulwin"))
+    , mxMonoPalettes(
+          new ChartColorPalettes(*m_xBuilder, "monochromatic_palettes", "monochromaticwin"))
 {
-    mxColorfulValueSet->SetColCount(2);
-    mxColorfulValueSet->SetLineCount(2);
-    mxColorfulValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
+    mxColorfulPalettes->SetSelectHdl(
+        LINK(this, ChartColorPaletteTabPage, SelectColorfulPaletteHdl));
 
-    mxMonoValueSet->SetColCount(2);
-    mxMonoValueSet->SetLineCount(3);
-    mxMonoValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
-
-    mxColorfulValueSet->SetOptimalSize();
-    mxColorfulValueSet->SetSelectHdl(
-        LINK(this, ChartColorPaletteTabPage, SelectColorfulValueSetHdl));
-
-    mxMonoValueSet->SetOptimalSize();
-    mxMonoValueSet->SetSelectHdl(LINK(this, ChartColorPaletteTabPage, SelectMonoValueSetHdl));
+    mxMonoPalettes->SetSelectHdl(LINK(this, ChartColorPaletteTabPage, SelectMonoPaletteHdl));
 }
 
 ChartColorPaletteTabPage::~ChartColorPaletteTabPage()
 {
-    mxColorfulValueSetWin.reset();
-    mxColorfulValueSet.reset();
-    mxMonoValueSetWin.reset();
-    mxMonoValueSet.reset();
+    mxColorfulPalettes.reset();
+    mxMonoPalettes.reset();
 }
 
 std::unique_ptr<SfxTabPage> ChartColorPaletteTabPage::Create(weld::Container* pPage,
@@ -88,10 +73,12 @@ void ChartColorPaletteTabPage::initColorPalettes() const
         return;
     // colorful palettes
     for (size_t i = 0; i < ChartColorPaletteHelper::ColorfulPaletteSize; ++i)
-        mxColorfulValueSet->insert(mxHelper->getColorPalette(ChartColorPaletteType::Colorful, i));
+        mxColorfulPalettes->insert(mxHelper->getColorPalette(ChartColorPaletteType::Colorful, i));
+    mxColorfulPalettes->Fill();
     // monotonic palettes
     for (size_t i = 0; i < ChartColorPaletteHelper::MonotonicPaletteSize; ++i)
-        mxMonoValueSet->insert(mxHelper->getColorPalette(ChartColorPaletteType::Monochromatic, i));
+        mxMonoPalettes->insert(mxHelper->getColorPalette(ChartColorPaletteType::Monochromatic, i));
+    mxMonoPalettes->Fill();
 }
 
 void ChartColorPaletteTabPage::selectItem(const ChartColorPaletteType eType,
@@ -101,16 +88,16 @@ void ChartColorPaletteTabPage::selectItem(const ChartColorPaletteType eType,
     {
         default:
         case ChartColorPaletteType::Unknown:
-            mxColorfulValueSet->SetNoSelection();
-            mxMonoValueSet->SetNoSelection();
+            mxColorfulPalettes->SetNoSelection();
+            mxMonoPalettes->SetNoSelection();
             break;
         case ChartColorPaletteType::Colorful:
-            mxMonoValueSet->SetNoSelection();
-            mxColorfulValueSet->SelectItem(nIndex);
+            mxMonoPalettes->SetNoSelection();
+            mxColorfulPalettes->SelectItem(nIndex);
             break;
         case ChartColorPaletteType::Monochromatic:
-            mxColorfulValueSet->SetNoSelection();
-            mxMonoValueSet->SelectItem(nIndex);
+            mxColorfulPalettes->SetNoSelection();
+            mxMonoPalettes->SelectItem(nIndex);
             break;
     }
 }
@@ -120,15 +107,15 @@ bool ChartColorPaletteTabPage::FillItemSet(SfxItemSet* pOutAttrs)
     ChartColorPaletteType eType = ChartColorPaletteType::Unknown;
     sal_uInt32 nIndex = 0;
 
-    if (!mxColorfulValueSet->IsNoSelection())
+    if (!mxColorfulPalettes->IsNoSelection())
     {
         eType = ChartColorPaletteType::Colorful;
-        nIndex = mxColorfulValueSet->GetSelectedItemId() - 1;
+        nIndex = mxColorfulPalettes->GetSelectedItemId() - 1;
     }
-    else if (!mxMonoValueSet->IsNoSelection())
+    else if (!mxMonoPalettes->IsNoSelection())
     {
         eType = ChartColorPaletteType::Monochromatic;
-        nIndex = mxMonoValueSet->GetSelectedItemId() - 1;
+        nIndex = mxMonoPalettes->GetSelectedItemId() - 1;
     }
 
     pOutAttrs->Put(SvxChartColorPaletteItem(eType, nIndex, SCHATTR_COLOR_PALETTE));
@@ -149,26 +136,28 @@ DeactivateRC ChartColorPaletteTabPage::DeactivatePage(SfxItemSet* pItemSet)
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_NOARG(ChartColorPaletteTabPage, SelectColorfulValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ChartColorPaletteTabPage, SelectColorfulPaletteHdl, weld::IconView&, bool)
 {
-    sal_uInt32 nIndex = SelectValueSetHdl(mxColorfulValueSet);
+    sal_uInt32 nIndex = SelectPaletteHdl(mxColorfulPalettes);
     if (nIndex != static_cast<sal_uInt32>(-1))
     {
-        mxMonoValueSet->SetNoSelection();
+        mxMonoPalettes->SetNoSelection();
     }
+    return true;
 }
 
-IMPL_LINK_NOARG(ChartColorPaletteTabPage, SelectMonoValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ChartColorPaletteTabPage, SelectMonoPaletteHdl, weld::IconView&, bool)
 {
-    sal_uInt32 nIndex = SelectValueSetHdl(mxMonoValueSet);
+    sal_uInt32 nIndex = SelectPaletteHdl(mxMonoPalettes);
     if (nIndex != static_cast<sal_uInt32>(-1))
     {
-        mxColorfulValueSet->SetNoSelection();
+        mxColorfulPalettes->SetNoSelection();
     }
+    return true;
 }
 
 sal_uInt32
-ChartColorPaletteTabPage::SelectValueSetHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet)
+ChartColorPaletteTabPage::SelectPaletteHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet)
 {
     const sal_uInt32 nItemId = xValueSet->GetSelectedItemId();
 
