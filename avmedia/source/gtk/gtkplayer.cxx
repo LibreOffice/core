@@ -411,8 +411,8 @@ public:
 
         gsk_render_node_unref(node);
 
-        BitmapEx aBitmap =
-            vcl::bitmap::CreateFromCairoSurface(Size(m_aSize.Width, m_aSize.Height), surface));
+        BitmapEx aBitmap
+            = vcl::bitmap::CreateFromCairoSurface(Size(m_aSize.Width, m_aSize.Height), surface);
 
         cairo_surface_destroy(surface);
 
