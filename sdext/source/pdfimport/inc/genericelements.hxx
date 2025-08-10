@@ -174,7 +174,11 @@ namespace pdfi
     {
         friend class ElementFactory;
         GroupElement( Element* pParent, sal_Int32 nGCId )
-        : DrawElement( pParent, nGCId ) {}
+        : DrawElement( pParent, nGCId )
+        , isTransparencyGroup(false)
+        , isForSoftMask(false)
+        {
+        }
 
     public:
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
