@@ -118,42 +118,48 @@ public:
                 return pPoolItem;
         }
 
-        if (pParam->mbRowStripes && nRowIndex >= 0)
+        if (!bHasTotal || aRange.aEnd.Row() != nRow)
         {
-            sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
-            bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
-            if (mpSecondRowStripePattern && !bFirstRowStripe)
+            if (pParam->mbRowStripes && nRowIndex >= 0)
             {
-                const T* pPoolItem = GetItemFromPattern(mpSecondRowStripePattern.get(), nWhich);
-                if (pPoolItem)
-                    return pPoolItem;
+                sal_Int32 nTotalRowStripPattern = mnFirstRowStripeSize + mnSecondRowStripeSize;
+                bool bFirstRowStripe = (nRowIndex % nTotalRowStripPattern) < mnFirstRowStripeSize;
+                if (mpSecondRowStripePattern && !bFirstRowStripe)
+                {
+                    const T* pPoolItem = GetItemFromPattern(mpSecondRowStripePattern.get(), nWhich);
+                    if (pPoolItem)
+                        return pPoolItem;
+                }
+
+                if (mpFirstRowStripePattern && bFirstRowStripe)
+                {
+                    const T* pPoolItem = GetItemFromPattern(mpFirstRowStripePattern.get(), nWhich);
+                    if (pPoolItem)
+                        return pPoolItem;
+                }
             }
 
-            if (mpFirstRowStripePattern && bFirstRowStripe)
+            if (pParam->mbColumnStripes)
             {
-                const T* pPoolItem = GetItemFromPattern(mpFirstRowStripePattern.get(), nWhich);
-                if (pPoolItem)
-                    return pPoolItem;
-            }
-        }
+                SCCOL nRelativeCol = nCol - aRange.aStart.Col();
+                sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
+                bool bFirstColStripe
+                    = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
+                if (mpSecondColumnStripePattern && !bFirstColStripe)
+                {
+                    const T* pPoolItem
+                        = GetItemFromPattern(mpSecondColumnStripePattern.get(), nWhich);
+                    if (pPoolItem)
+                        return pPoolItem;
+                }
 
-        if (pParam->mbColumnStripes)
-        {
-            SCCOL nRelativeCol = nCol - aRange.aStart.Col();
-            sal_Int32 nTotalColStripePattern = mnFirstColStripeSize + mnSecondColStripeSize;
-            bool bFirstColStripe = (nRelativeCol % nTotalColStripePattern) < mnFirstColStripeSize;
-            if (mpSecondColumnStripePattern && !bFirstColStripe)
-            {
-                const T* pPoolItem = GetItemFromPattern(mpSecondColumnStripePattern.get(), nWhich);
-                if (pPoolItem)
-                    return pPoolItem;
-            }
-
-            if (mpFirstColumnStripePattern && bFirstColStripe)
-            {
-                const T* pPoolItem = GetItemFromPattern(mpFirstColumnStripePattern.get(), nWhich);
-                if (pPoolItem)
-                    return pPoolItem;
+                if (mpFirstColumnStripePattern && bFirstColStripe)
+                {
+                    const T* pPoolItem
+                        = GetItemFromPattern(mpFirstColumnStripePattern.get(), nWhich);
+                    if (pPoolItem)
+                        return pPoolItem;
+                }
             }
         }
 
