@@ -60,6 +60,11 @@ bool X11SalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
     return mxTextRenderImpl->AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
+bool X11SalGraphics::RemoveTempDevFont(const OUString& rFileURL, const OUString& rFontName)
+{
+    return mxTextRenderImpl->RemoveTempDevFont(rFileURL, rFontName);
+}
+
 void X11SalGraphics::ClearDevFontCache()
 {
     mxTextRenderImpl->ClearDevFontCache();

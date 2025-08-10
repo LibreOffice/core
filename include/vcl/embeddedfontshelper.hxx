@@ -94,6 +94,8 @@ public:
      */
     static bool isCommonFont(std::u16string_view aFontName);
 
+    static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
+
     EmbeddedFontsHelper(const css::uno::Reference<css::frame::XModel>& xModel);
     ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE;
 };

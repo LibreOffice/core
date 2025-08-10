@@ -10,6 +10,8 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <mutex>
+#include <unordered_map>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
@@ -62,6 +64,17 @@ const OUString& GetEmbeddedFontsRoot()
     return path;
 }
 
+struct EmbeddedFontData
+{
+    OUString familyName;
+    int refcount = 0;
+    bool isActivated = false;
+};
+
+std::mutex s_EmbeddedFontsMutex;
+// file URL -> EmbeddedFontData
+std::unordered_map<OUString, EmbeddedFontData> s_EmbeddedFonts;
+
 void clearDir( const OUString& path )
 {
     osl::Directory dir( path );
@@ -97,13 +110,12 @@ OUString fileUrlForTemporaryFont(std::u16string_view name)
                               RTL_TEXTENCODING_UTF8);
 }
 
-// Returns true when the file was written, or exactly same data was existing.
+// Returns actual URL (maybe of an already existing file), or empty string on failure.
 //
 // @param name name of the font file
-// @param url returns URL of a new file, or empty string (when the same file already existed).
-bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view name, OUString& url)
+OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view name)
 {
-    url = fileUrlForTemporaryFont(name);
+    OUString url = fileUrlForTemporaryFont(name);
     std::optional<osl::File> file(url);
     auto rc = file->open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write);
 
@@ -126,8 +138,7 @@ bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view na
                 }
                 if (rc == osl::File::E_None && bytes2 == bytes)
                 {
-                    url.clear();
-                    return true; // OK, it's the same bytes
+                    return url; // OK, it's the same bytes
                 }
             }
         }
@@ -137,7 +148,7 @@ bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view na
     }
 
     if (rc != osl::File::E_None)
-        return false;
+        return {};
 
     sal_uInt64 writtenTotal = 0;
     while (writtenTotal < bytes.size())
@@ -148,11 +159,11 @@ bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view na
         {
             file->close();
             osl::File::remove(file->getURL());
-            return false;
+            return {};
         }
         writtenTotal += written;
     }
-    return true;
+    return url;
 }
 }
 
@@ -185,7 +196,7 @@ EmbeddedFontsHelper::~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
         }
     }
 
-    // Failed to transfer the read-only fonts to the document. Activate them here.
+    // Failed to transfer the fonts to the document. Activate them here.
     activateFonts(m_aAccumulatedFonts);
 }
 
@@ -282,11 +293,21 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         }
     }
 
-    OUString fileUrl;
-    if (!writeFontBytesToFile(fontData, Concat2View(fontName + extra), fileUrl))
+    OUString fileUrl = writeFontBytesToFile(fontData, Concat2View(fontName + extra));
+    if (fileUrl.isEmpty())
         return false;
-    if (!fileUrl.isEmpty())
-        m_aAccumulatedFonts.emplace_back(std::make_pair(fontName, fileUrl));
+
+    // Register it, and increase its refcount in s_EmbeddedFonts
+    {
+        std::unique_lock lock(s_EmbeddedFontsMutex);
+        auto& rData = s_EmbeddedFonts[fileUrl];
+        assert(rData.familyName.isEmpty() || rData.familyName == fontName);
+        rData.familyName = fontName;
+        ++rData.refcount;
+    }
+
+    m_aAccumulatedFonts.emplace_back(fontName, fileUrl);
+
     return true;
 }
 
@@ -310,11 +331,68 @@ void EmbeddedFontsHelper::activateFonts(std::vector<std::pair<OUString, OUString
 {
     if (fonts.empty())
         return;
+    std::vector<std::pair<OUString, OUString>> temp;
+
+    {
+        std::unique_lock lock(s_EmbeddedFontsMutex);
+        // Only activate fonts that need activation.
+        for (const auto& pair : fonts)
+        {
+            auto it = s_EmbeddedFonts.find(pair.second);
+            assert(it != s_EmbeddedFonts.end());
+            if (!it->second.isActivated)
+            {
+                it->second.isActivated = true;
+                temp.push_back(pair);
+            }
+        }
+    }
+
+    if (temp.empty())
+        return;
+
     UpdateFontsGuard aUpdateFontsGuard;
     OutputDevice *pDevice = Application::GetDefaultDevice();
-    for (const auto& [ fontName, fileUrl ] : fonts)
+    for (const auto& [ fontName, fileUrl ] : temp)
         pDevice->AddTempDevFont(fileUrl, fontName);
-    fonts.clear();
+}
+
+void EmbeddedFontsHelper::releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts)
+{
+    std::vector<std::pair<OUString, OUString>> unregister;
+    {
+        std::unique_lock g(s_EmbeddedFontsMutex);
+        for (const auto& pair : fonts)
+        {
+            auto it = s_EmbeddedFonts.find(pair.second);
+            if (it == s_EmbeddedFonts.end())
+            {
+                SAL_WARN("vcl.fonts", "Trying to release a font that wasn't locked?");
+                continue;
+            }
+            assert(it->second.familyName == pair.first);
+
+            --it->second.refcount;
+            if (it->second.refcount == 0)
+            {
+                unregister.emplace_back(pair);
+
+                s_EmbeddedFonts.erase(it);
+            }
+        }
+    }
+
+    if (unregister.empty())
+        return;
+
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    for (const auto& [ family, url ] : unregister)
+    {
+        if (pDevice->RemoveTempDevFont(url, family))
+            osl::File::remove(url);
+    }
+
+    OutputDevice::ImplUpdateAllFontData(true);
 }
 
 // Check if it's (legally) allowed to embed the font file into a document

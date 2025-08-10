@@ -52,6 +52,7 @@
 #include <osl/process.h>
 
 #include <o3tl/hash_combine.hxx>
+#include <set>
 #include <utility>
 #include <algorithm>
 
@@ -787,6 +788,39 @@ void PrintFontManager::addFontconfigFile( const OString& rFileName )
 
     // FIXME: we want to add only the newly added font not re-add the whole
     // application font set.
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    rWrapper.addFontSet( FcSetApplication );
+}
+
+void PrintFontManager::removeFontconfigFile(std::string_view aFileName)
+{
+    FcFontSet* pOrig = FcConfigGetFonts(FcConfigGetCurrent(), FcSetApplication);
+    if (!pOrig)
+        return;
+
+    std::set<OString> restoreList;
+
+    // filter the font sets to remove the file
+    for (int i = 0; i < pOrig->nfont; ++i)
+    {
+        FcChar8* file = nullptr;
+        FcResult eFileRes = FcPatternGetString(pOrig->fonts[i], FC_FILE, 0, &file);
+        if (eFileRes == FcResultMatch)
+        {
+            if (std::string_view curFile(reinterpret_cast<char*>(file)); aFileName != curFile)
+                restoreList.emplace(curFile);
+        }
+    }
+
+    FcConfigAppFontClear(FcConfigGetCurrent());
+
+    // Re-add the rest of files
+    for (const OString& thisFilename : restoreList)
+    {
+        FcConfigAppFontAddFile(FcConfigGetCurrent(),
+                               reinterpret_cast<FcChar8 const*>(thisFilename.getStr()));
+    }
+
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
     rWrapper.addFontSet( FcSetApplication );
 }

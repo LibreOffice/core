@@ -59,6 +59,11 @@ bool SvpSalGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
     return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
+bool SvpSalGraphics::RemoveTempDevFont(const OUString& rFileURL, const OUString& rFontName)
+{
+    return m_aTextRenderImpl.RemoveTempDevFont(rFileURL, rFontName);
+}
+
 std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLevel)
 {
     return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);

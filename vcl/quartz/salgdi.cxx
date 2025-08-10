@@ -243,6 +243,25 @@ static bool AddTempDevFont(const OUString& rFontFileURL)
     return success;
 }
 
+static bool RemoveTempDevFont(const OUString& rFontFileURL)
+{
+    OUString aUSystemPath;
+    OSL_VERIFY(!osl::FileBase::getSystemPathFromFileURL(rFontFileURL, aUSystemPath));
+    OString aCFileName = OUStringToOString(aUSystemPath, RTL_TEXTENCODING_UTF8);
+
+    CFStringRef rFontPath
+        = CFStringCreateWithCString(nullptr, aCFileName.getStr(), kCFStringEncodingUTF8);
+    CFURLRef rFontURL
+        = CFURLCreateWithFileSystemPath(nullptr, rFontPath, kCFURLPOSIXPathStyle, true);
+
+    CTFontManagerUnregisterFontsForURL(rFontURL, kCTFontManagerScopeProcess, nullptr);
+
+    CFRelease(rFontPath);
+    CFRelease(rFontURL);
+
+    return true; // Assume that even errors meant that there was nothing to remove
+}
+
 static void AddTempFontDir( const OUString &rFontDirUrl )
 {
     osl::Directory aFontDir( rFontDirUrl );
@@ -320,6 +339,11 @@ bool AquaSalGraphics::AddTempDevFont(vcl::font::PhysicalFontCollection*,
     const OUString& rFontFileURL, const OUString& /*rFontName*/)
 {
     return ::AddTempDevFont(rFontFileURL);
+}
+
+bool AquaSalGraphics::RemoveTempDevFont(const OUString& rFontFileURL, const OUString& /*rFontName*/)
+{
+    return ::RemoveTempDevFont(rFontFileURL);
 }
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)

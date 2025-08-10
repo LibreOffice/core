@@ -30,6 +30,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
@@ -415,6 +416,7 @@ public:
     bool m_bODFWholesomeEncryption = false;
 
     /// font family, file URL
+    std::vector<std::pair<OUString, OUString>> m_aEmbeddedFonts;
     std::vector<std::pair<OUString, OUString>> m_aEmbeddedFontsToActivate;
 
     OUString m_aName;
@@ -3736,6 +3738,8 @@ SfxMedium::~SfxMedium()
 
     Close(/*bInDestruction*/true);
 
+    ReleaseEmbeddedFonts();
+
     if( !pImpl->bIsTemp || pImpl->m_aName.isEmpty() )
         return;
 
@@ -3750,6 +3754,15 @@ SfxMedium::~SfxMedium()
     {
         SAL_WARN( "sfx.doc", "Couldn't remove temporary file!");
     }
+}
+
+void SfxMedium::ReleaseEmbeddedFonts()
+{
+    std::vector<std::pair<OUString, OUString>> toRelease(std::move(pImpl->m_aEmbeddedFonts));
+    toRelease.insert(toRelease.end(), pImpl->m_aEmbeddedFontsToActivate.begin(),
+                     pImpl->m_aEmbeddedFontsToActivate.end());
+    pImpl->m_aEmbeddedFontsToActivate.clear();
+    EmbeddedFontsHelper::releaseFonts(toRelease);
 }
 
 const OUString& SfxMedium::GetName() const
@@ -4002,6 +4015,18 @@ bool SfxMedium::IsOriginallyLoadedReadOnly() const
     return pImpl->m_bOriginallyLoadedReadOnly;
 }
 
+void SfxMedium::TransferEmbeddedFontsTo(SfxMedium& target)
+{
+    target.pImpl->m_aEmbeddedFonts.insert(target.pImpl->m_aEmbeddedFonts.end(),
+                                          pImpl->m_aEmbeddedFonts.begin(),
+                                          pImpl->m_aEmbeddedFonts.end());
+    pImpl->m_aEmbeddedFonts.clear();
+    target.pImpl->m_aEmbeddedFontsToActivate.insert(target.pImpl->m_aEmbeddedFontsToActivate.end(),
+                                                    pImpl->m_aEmbeddedFontsToActivate.begin(),
+                                                    pImpl->m_aEmbeddedFontsToActivate.end());
+    pImpl->m_aEmbeddedFontsToActivate.clear();
+}
+
 void SfxMedium::AddEmbeddedFonts(
     const css::uno::Sequence<css::beans::StringPair>& fonts)
 {
@@ -4012,6 +4037,10 @@ void SfxMedium::AddEmbeddedFonts(
 void SfxMedium::activateEmbeddedFonts()
 {
     EmbeddedFontsHelper::activateFonts(pImpl->m_aEmbeddedFontsToActivate);
+    pImpl->m_aEmbeddedFonts.insert(pImpl->m_aEmbeddedFonts.end(),
+                                   pImpl->m_aEmbeddedFontsToActivate.begin(),
+                                   pImpl->m_aEmbeddedFontsToActivate.end());
+    pImpl->m_aEmbeddedFontsToActivate.clear();
 }
 
 bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )

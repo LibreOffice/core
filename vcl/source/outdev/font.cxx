@@ -136,6 +136,15 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     return true;
 }
 
+bool OutputDevice::RemoveTempDevFont(const OUString& rFileURL, const OUString& rFontName)
+{
+    if( !mpGraphics && !AcquireGraphics() )
+        return true; // No graphics -> no fonts used
+    assert(mpGraphics);
+
+    return mpGraphics->RemoveTempDevFont(rFileURL, rFontName);
+}
+
 bool OutputDevice::GetFontFeatures(std::vector<vcl::font::Feature>& rFontFeatures) const
 {
     if (!ImplNewFont())

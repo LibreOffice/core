@@ -135,6 +135,21 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
     return nAtom;
 }
 
+std::vector<fontID> PrintFontManager::findFontFileIDs( std::u16string_view rFileUrl ) const
+{
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    INetURLObject aPath( rFileUrl );
+    OString aName(OUStringToOString(aPath.GetLastName(INetURLObject::DecodeMechanism::WithCharset, aEncoding), aEncoding));
+    OString aDir( OUStringToOString(
+        INetURLObject::decode( aPath.GetPath(), INetURLObject::DecodeMechanism::WithCharset, aEncoding ), aEncoding ) );
+
+    auto dirIt = m_aDirToAtom.find(aDir);
+    if (dirIt == m_aDirToAtom.end())
+        return {};
+
+    return findFontFileIDs(dirIt->second, aName);
+}
+
 std::vector<fontID> PrintFontManager::addFontFile( std::u16string_view rFileUrl )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -159,6 +174,25 @@ std::vector<fontID> PrintFontManager::addFontFile( std::u16string_view rFileUrl 
         }
     }
     return aFontIds;
+}
+
+void PrintFontManager::removeFontFile(std::u16string_view rFileUrl)
+{
+    INetURLObject aPath(rFileUrl);
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    if (auto ids = findFontFileIDs(rFileUrl); !ids.empty())
+    {
+        OString aName(OUStringToOString(
+            aPath.GetLastName(INetURLObject::DecodeMechanism::WithCharset, aEncoding), aEncoding));
+
+        for (auto nFontID : ids)
+        {
+            m_aFonts.erase(nFontID);
+            m_aFontFileToFontID[aName].erase(nFontID);
+        }
+    }
+
+    removeFontconfigFile(OUStringToOString(aPath.GetFull(), aEncoding));
 }
 
 std::vector<PrintFontManager::PrintFont> PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile) const

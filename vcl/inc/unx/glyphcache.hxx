@@ -80,6 +80,7 @@ public:
                                 int nFaceNum, int nVariantNum,
                                 sal_IntPtr nFontId,
                                 const FontAttributes&);
+    void                    RemoveFontFile(sal_IntPtr nFontId);
 
     SAL_DLLPRIVATE void     AnnounceFonts( vcl::font::PhysicalFontCollection* ) const;
 
