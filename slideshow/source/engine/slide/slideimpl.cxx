@@ -273,10 +273,10 @@ public:
 void slideRenderer( SlideImpl const * pSlide, const UnoViewSharedPtr& rView )
 {
     // fully clear view content to background color
-    rView->clearAll();
+    // rView->clearAll();
 
-    SlideBitmapSharedPtr         pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
-    ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
+    // SlideBitmapSharedPtr         pBitmap( pSlide->getCurrentSlideBitmap( rView ) );
+    /* ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
     const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
     const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
@@ -292,7 +292,7 @@ void slideRenderer( SlideImpl const * pSlide, const UnoViewSharedPtr& rView )
     // clear clip (might have been changed, e.g. from comb
     // transition)
     pBitmap->clip( ::basegfx::B2DPolyPolygon() );
-    pBitmap->draw( pDevicePixelCanvas );
+    pBitmap->draw( pDevicePixelCanvas ); */
 }
 
 
@@ -453,8 +453,10 @@ void SlideImpl::show( bool bSlideBackgroundPainted )
     // render slide to screen, if requested
     if( !bSlideBackgroundPainted )
     {
-        /* for( const auto& rContext : maContext.mrViewContainer )
-            slideRenderer( this, rContext ); */
+        for( const auto& rContext : maContext.mrViewContainer )
+        {
+            // slideRenderer( this, rContext );
+        }
 
         maContext.mrScreenUpdater.notifyUpdate();
     }

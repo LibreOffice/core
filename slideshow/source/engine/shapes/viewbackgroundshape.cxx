@@ -23,6 +23,8 @@
 #include <sal/log.hxx>
 
 #include "viewbackgroundshape.hxx"
+#include "cairo_spritecanvas.hxx"
+#include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
 #include <tools.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -139,7 +141,9 @@ namespace slideshow::internal
             return mpViewLayer;
         }
 
-        bool ViewBackgroundShape::render( const GDIMetaFileSharedPtr& rMtf ) const
+        bool ViewBackgroundShape::render(
+            const GDIMetaFileSharedPtr& rMtf,
+            drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
         {
             SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 
@@ -179,7 +183,18 @@ namespace slideshow::internal
                 TOOLS_WARN_EXCEPTION( "slideshow", "" );
                 return false;
             }
-
+            cairo::SurfaceSharedPtr pSurface;
+            vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract
+                = mpViewLayer->getSpriteCanvas();
+            std::shared_ptr<::vcl_cairocanvas::SpriteCanvas> pSpriteCanvas
+                = std::static_pointer_cast<::vcl_cairocanvas::SpriteCanvas>(pSpriteCanvasAbstract);
+            pSurface = pSpriteCanvas->getSurface();
+            basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
+            drawinglayer::geometry::ViewInformation2D aViewInormation;
+            aViewInormation.setViewTransformation(aMatrix);
+            drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
+                aViewInormation, pSurface->getCairoSurface().get());
+            aProcessor.process(rContainer);
             return true;
         }
 

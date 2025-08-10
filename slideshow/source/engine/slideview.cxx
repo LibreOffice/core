@@ -861,6 +861,7 @@ void SlideView::clear() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+    getSpriteCanvas()->clear();
     OSL_ENSURE( mxView.is() && mpCanvas,
                 "SlideView::clear(): Disposed" );
     if( !mxView.is() || !mpCanvas )
@@ -879,6 +880,7 @@ void SlideView::clearAll() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+    getSpriteCanvas()->clear();
     OSL_ENSURE( mxView.is() && mpCanvas,
                 "SlideView::clear(): Disposed" );
     if( !mxView.is() || !mpCanvas )

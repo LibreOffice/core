@@ -29,8 +29,19 @@
 #include "backgroundshape.hxx"
 #include <slideshowexceptions.hxx>
 #include <slideshowcontext.hxx>
+#include "basegfx/color/bcolor.hxx"
+#include "com/sun/star/graphic/XPrimitiveFactory2D.hdl"
+#include "drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx"
+#include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "gdimtftools.hxx"
 #include <shape.hxx>
+#include "svx/sdr/contact/viewcontact.hxx"
+#include "svx/svdmodel.hxx"
+#include "svx/svdorect.hxx"
+#include "svx/svdoutl.hxx"
+#include "svx/svdpage.hxx"
+#include "svx/unopage.hxx"
+#include "svx/xlineit0.hxx"
 #include "viewbackgroundshape.hxx"
 
 
@@ -106,6 +117,7 @@ namespace slideshow::internal
             /// the list of active view shapes (one for each registered view layer)
             typedef ::std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
             ViewBackgroundShapeVector   maViewShapes;
+            mutable drawinglayer::primitive2d::Primitive2DContainer mxPrimitive2DContainer;
         };
 
         }
@@ -147,6 +159,28 @@ namespace slideshow::internal
 
             mpMtf = std::move(xMtf);
             maBounds = ::basegfx::B2DRectangle( 0,0,nDocWidth, nDocHeight );
+
+            SvxDrawPage* pUnoPage = comphelper::getFromUnoTunnel<SvxDrawPage>(xDrawPage);
+            SdrModel* pDoc = &pUnoPage->GetSdrPage()->getSdrModelFromSdrPage();
+            SdrPage* pPage = pUnoPage->GetSdrPage();
+            const SdrPageProperties* pCorrectProperties = pPage->getCorrectSdrPageProperties();
+            rtl::Reference<SdrObject> pTempBackgroundShape;
+            if(pCorrectProperties)
+            {
+                pTempBackgroundShape = new SdrRectObj(
+                    *pDoc,
+                    tools::Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
+                pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+                pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
+            }
+            if (pTempBackgroundShape.is())
+            {
+                const sdr::contact::ViewContact& rSource(pTempBackgroundShape->GetViewContact());
+                drawinglayer::primitive2d::Primitive2DContainer aSourceVal;
+                rSource.getViewIndependentPrimitive2DContainer(aSourceVal);
+                mxPrimitive2DContainer = aSourceVal.toSequence();
+            }
         }
 
         uno::Reference< drawing::XShape > BackgroundShape::getXShape() const
@@ -174,7 +208,7 @@ namespace slideshow::internal
 
             // render the Shape on the newly added ViewLayer
             if( bRedrawLayer )
-                maViewShapes.back()->render( mpMtf );
+                maViewShapes.back()->render( mpMtf, mxPrimitive2DContainer );
         }
 
         bool BackgroundShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
@@ -272,7 +306,7 @@ namespace slideshow::internal
             if( o3tl::make_unsigned(::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  [this]( const ViewBackgroundShapeSharedPtr& pBgShape )
-                                 { return pBgShape->render( this->mpMtf ); } ))
+                                 { return pBgShape->render( this->mpMtf, this->mxPrimitive2DContainer ); } ))
                 != maViewShapes.size() )
             {
                 // at least one of the ViewBackgroundShape::render() calls did return

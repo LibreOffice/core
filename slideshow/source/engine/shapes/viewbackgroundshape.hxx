@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SHAPES_VIEWBACKGROUNDSHAPE_HXX
 
+#include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
@@ -63,7 +64,8 @@ namespace slideshow::internal
              */
             const ViewLayerSharedPtr& getViewLayer() const;
 
-            bool render( const GDIMetaFileSharedPtr& rMtf ) const;
+            bool render(const GDIMetaFileSharedPtr& rMtf,
+                        drawinglayer::primitive2d::Primitive2DContainer& rContainer) const;
 
         private:
             /** Prefetch bitmap for given canvas

@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     cppuhelper \
 	drawinglayer \
 	drawinglayercore \
+    editeng \
     sal \
     salhelper \
     svl \
