@@ -172,6 +172,7 @@
               <object class="GtkLabel" id="author">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">3</property>
                 <property name="label">label</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
@@ -186,6 +187,7 @@
               <object class="GtkLabel" id="date">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">3</property>
                 <property name="label">label</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
