@@ -299,7 +299,12 @@ def parse_table_style(style) -> TableStyle:
     tableStyle = tableStyles.find("tableStyle")
     assert tableStyle is not None
 
-    return TableStyle(tableStyle.get("name"), [parse_table_style_element(element, style_defs) for element in list(tableStyle)])
+    table_style_name = tableStyle.get("name")
+    if table_style_name == "TableStyleDark9 2":
+        # this looks like a bug in the OOXML spec documents
+        table_style_name = "TableStyleDark9"
+
+    return TableStyle(table_style_name, [parse_table_style_element(element, style_defs) for element in list(tableStyle)])
 
 def parse_pivot_style(style):
     print("Skipping pivot style definition")
