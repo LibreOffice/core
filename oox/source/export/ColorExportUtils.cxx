@@ -50,8 +50,8 @@ sal_Int32 convertThemeColorTypeToExcelThemeNumber(model::ThemeColorType eType)
     // 0 -> 1, 1 -> 0
     // 2 -> 3, 3 -> 2
     // everything else stays the same
-    static constexpr std::array<sal_Int32, 12> constThemeColorMapToXmlMap
-        = { 1, 0, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11 };
+    static constexpr auto constThemeColorMapToXmlMap
+        = std::to_array<sal_Int32>({ 1, 0, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11 });
 
     return constThemeColorMapToXmlMap[sal_Int32(eType)];
 }

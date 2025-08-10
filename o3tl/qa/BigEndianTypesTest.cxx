@@ -51,7 +51,8 @@ struct BigEndian32
 };
 
 // Test data
-constexpr std::array<sal_uInt8, 8> aDataArray = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+constexpr auto aDataArray
+    = std::to_array<sal_uInt8>({ 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 });
 
 class BigEndianTypesTest : public CppUnit::TestFixture
 {

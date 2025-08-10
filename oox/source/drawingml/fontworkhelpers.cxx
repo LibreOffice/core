@@ -852,14 +852,15 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
                 continue;
 
             // We have found a non-empty run. Collect its simple color properties.
-            const std::array<OUString, 6> aNamesArray
-                = { u"CharColor"_ustr,      u"CharLumMod"_ustr,       u"CharLumOff"_ustr,
-                    u"CharColorTheme"_ustr, u"CharComplexColor"_ustr, u"CharTransparence"_ustr };
-            for (const auto& propName : aNamesArray)
+            static constexpr auto aNamesArray = std::to_array<std::u16string_view>(
+                { u"CharColor", u"CharLumMod", u"CharLumOff", u"CharColorTheme",
+                  u"CharComplexColor", u"CharTransparence" });
+            for (const auto& sName : aNamesArray)
             {
-                if (xRunPropSetInfo->hasPropertyByName(propName))
+                OUString aPropertyName(sName);
+                if (xRunPropSetInfo->hasPropertyByName(aPropertyName))
                     rCharPropVec.push_back(comphelper::makePropertyValue(
-                        propName, xRunPropSet->getPropertyValue(propName)));
+                        aPropertyName, xRunPropSet->getPropertyValue(aPropertyName)));
             }
             return;
         }
@@ -910,15 +911,13 @@ void FontworkHelpers::applyPropsToRuns(const std::vector<beans::PropertyValue>& 
 }
 namespace
 {
-constexpr const std::array<std::u16string_view, 5> aCharPropNames{
-    u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharComplexColor",
-    u"CharTransparence"
-};
+constexpr auto aCharPropNames = std::to_array<std::u16string_view>(
+    { u"CharColorLumMod", u"CharColorLumOff", u"CharColorTheme", u"CharComplexColor",
+      u"CharTransparence" });
 
-constexpr const std::array<std::u16string_view, 5> aShapePropNames{
-    u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillComplexColor",
-    u"FillTransparence"
-};
+constexpr auto aShapePropNames = std::to_array<std::u16string_view>(
+    { u"FillColorLumMod", u"FillColorLumOff", u"FillColorTheme", u"FillComplexColor",
+      u"FillTransparence" });
 }
 
 void FontworkHelpers::createCharFillPropsFromShape(
@@ -1046,15 +1045,13 @@ typedef std::multimap<sal_Int32, GradientStopColor> ColorMapType;
 
 namespace
 {
-constexpr const std::array<std::u16string_view, 12> W14ColorNames{
-    u"tx1",     u"bg1",     u"tx2",     u"bg2",     u"accent1", u"accent2",
-    u"accent3", u"accent4", u"accent5", u"accent6", u"hlink",   u"folHlink"
-};
+constexpr auto W14ColorNames = std::to_array<std::u16string_view>(
+    { u"tx1", u"bg1", u"tx2", u"bg2", u"accent1", u"accent2", u"accent3", u"accent4", u"accent5",
+      u"accent6", u"hlink", u"folHlink" });
 
-constexpr const std::array<std::u16string_view, 12> WColorNames{
-    u"text1",   u"background1", u"text2",   u"background2", u"accent1",   u"accent2",
-    u"accent3", u"accent4",     u"accent5", u"accent6",     u"hyperlink", u"followedHyperlink"
-};
+constexpr auto WColorNames = std::to_array<std::u16string_view>(
+    { u"text1", u"background1", u"text2", u"background2", u"accent1", u"accent2", u"accent3",
+      u"accent4", u"accent5", u"accent6", u"hyperlink", u"followedHyperlink" });
 
 // Returns the string to be used in w14:schemeClr in case of w14:textOutline or w14:textFill
 OUString lcl_getW14MarkupStringForThemeColor(const model::ComplexColor& rComplexColor)

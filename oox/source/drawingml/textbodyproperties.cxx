@@ -72,12 +72,12 @@ void TextBodyProperties::pushTextDistances(Size const& rTextAreaSize)
         rValue.reset();
 
     sal_Int32 nOff = 0;
-    static constexpr const std::array<sal_Int32, 4> aProps {
+    static constexpr auto aProps = std::to_array<sal_Int32>({
         PROP_TextLeftDistance,
         PROP_TextUpperDistance,
         PROP_TextRightDistance,
         PROP_TextLowerDistance
-    };
+    });
 
     switch (moTextPreRotation.value_or(0))
     {

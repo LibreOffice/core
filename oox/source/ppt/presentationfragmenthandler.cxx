@@ -385,10 +385,11 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
             static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
             if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
             {
-                static const constexpr std::array<sal_Int32, 12> constTokenArray
-                    = { XML_bg1,     XML_tx1,     XML_bg2,     XML_tx2,
+                static constexpr auto constTokenArray = std::to_array<sal_Int32>({
+                        XML_bg1,     XML_tx1,     XML_bg2,     XML_tx2,
                         XML_accent1, XML_accent2, XML_accent3, XML_accent4,
-                        XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
+                        XML_accent5, XML_accent6, XML_hlink,   XML_folHlink
+                });
 
                 comphelper::SequenceAsHashMap aClrMapHashMap;
                 comphelper::SequenceAsHashMap aGrabBag(

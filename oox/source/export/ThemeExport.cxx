@@ -872,9 +872,9 @@ bool ThemeExport::writeFormatScheme(model::FormatScheme const& rFormatScheme)
 
 bool ThemeExport::writeColorSet(model::Theme const& rTheme)
 {
-    static const constexpr std::array<sal_Int32, 12> constTokenArray
-        = { XML_dk1,     XML_lt1,     XML_dk2,     XML_lt2,     XML_accent1, XML_accent2,
-            XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink,   XML_folHlink };
+    static constexpr auto constTokenArray = std::to_array<sal_Int32>(
+        { XML_dk1, XML_lt1, XML_dk2, XML_lt2, XML_accent1, XML_accent2, XML_accent3, XML_accent4,
+          XML_accent5, XML_accent6, XML_hlink, XML_folHlink });
 
     const auto& pColorSet = rTheme.getColorSet();
     if (!pColorSet)
