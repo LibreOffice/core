@@ -23,12 +23,17 @@
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/diagnose_ex.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
+
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 
 #if ENABLE_EOT
 extern "C"
@@ -145,6 +150,39 @@ bool writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view na
     }
     return true;
 }
+}
+
+EmbeddedFontsHelper::EmbeddedFontsHelper(const uno::Reference<frame::XModel>& xModel)
+    : m_xDocumentModel(xModel)
+{
+}
+
+EmbeddedFontsHelper::~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
+{
+    if (m_aAccumulatedFonts.empty())
+        return;
+
+    if (auto xModel2 = m_xDocumentModel.query<frame::XModel2>())
+    {
+        // Send embedded fonts list into the document's media descriptor.
+        // This helps to decide if the document is allowed to switch to edit mode.
+        try
+        {
+            uno::Sequence<beans::StringPair> fonts(m_aAccumulatedFonts.size());
+            std::transform(m_aAccumulatedFonts.begin(), m_aAccumulatedFonts.end(), fonts.getArray(),
+                           [](const auto& el) { return beans::StringPair(el.first, el.second); });
+            xModel2->setArgs({ comphelper::makePropertyValue(u"EmbeddedFonts"_ustr, fonts) });
+            // The following will not get executed, it setArgs throws
+            return;
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("xmloff.core");
+        }
+    }
+
+    // Failed to transfer the read-only fonts to the document. Activate them here.
+    activateFonts(m_aAccumulatedFonts);
 }
 
 void EmbeddedFontsHelper::clearTemporaryFontFiles()
@@ -264,15 +302,15 @@ namespace
     };
 }
 
-void EmbeddedFontsHelper::activateFonts()
+void EmbeddedFontsHelper::activateFonts(std::vector<std::pair<OUString, OUString>>& fonts)
 {
-    if (m_aAccumulatedFonts.empty())
+    if (fonts.empty())
         return;
     UpdateFontsGuard aUpdateFontsGuard;
     OutputDevice *pDevice = Application::GetDefaultDevice();
-    for (const auto& rEntry : m_aAccumulatedFonts)
-        pDevice->AddTempDevFont(rEntry.second, rEntry.first);
-    m_aAccumulatedFonts.clear();
+    for (const auto& [ fontName, fileUrl ] : fonts)
+        pDevice->AddTempDevFont(fileUrl, fontName);
+    fonts.clear();
 }
 
 // Check if it's (legally) allowed to embed the font file into a document

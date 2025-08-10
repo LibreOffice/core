@@ -1143,6 +1143,8 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         pImpl->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
         static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
 
+        pMedium->activateEmbeddedFonts();
+
         if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().hasElements() ) && !IsModifyPasswordEntered() )
             SetReadOnly();
 

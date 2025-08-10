@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/document/XStorageChangeListener.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -1188,6 +1189,15 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
             pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
             ok = true;
         }
+        else if (rArg.Name == "EmbeddedFonts")
+        {
+            if (uno::Sequence<beans::StringPair> fonts; rArg.Value >>= fonts)
+            {
+                pMedium->AddEmbeddedFonts(fonts);
+                ok = true;
+            }
+        }
+
         if (!ok)
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,

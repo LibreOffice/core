@@ -23,9 +23,13 @@
 #include <vector>
 #include "LoggedResources.hxx"
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <vcl/embeddedfontshelper.hxx>
 #include <o3tl/deleter.hxx>
+
+namespace rtl { template<class reference_type> class Reference; }
+class SwXTextDocument;
 
 namespace writerfilter::dmapper
 {
@@ -46,13 +50,14 @@ struct FontEntry : public virtual SvRefBase
 class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
+    css::uno::Reference<css::frame::XModel2> m_xModel;
     std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> m_xEmbeddedFontHelper;
     std::vector< FontEntry::Pointer_t > m_aFontEntries;
     FontEntry::Pointer_t m_pCurrentEntry;
     bool m_bReadOnly;
 
  public:
-    FontTable(bool bReadOnly);
+    FontTable(const rtl::Reference<SwXTextDocument>& xModel, bool bReadOnly);
     virtual ~FontTable() override;
 
     sal_uInt32          size();
