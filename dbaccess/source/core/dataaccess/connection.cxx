@@ -315,6 +315,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
                         break;
                     }
                 }
+                Reference<XCloseable> xCloseable(xRes, UNO_QUERY);
+                if (xCloseable.is())
+                    xCloseable->close();
             }
             // tdf#130564: getTableTypes retrieves only the table types of the current database and not all the possible table types
             // provided by the DBMS. JDBC would need a new function, something like "supportsViews()"
