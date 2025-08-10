@@ -30,6 +30,10 @@
 #include <svl/itemset.hxx>
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
+
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
 #include <mutex>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -100,6 +104,7 @@ public:
     DECL_DLLPRIVATE_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, void);
     bool CheckCanGetLockfile() const;
     void SetOriginallyReadOnly(bool val);
+    void AddEmbeddedFonts(const css::uno::Sequence<css::beans::StringPair>& fonts);
     void AddToCheckEditableWorkerList();
     void SetWorkerReloadEvent(ImplSVEvent* pEvent);
     ImplSVEvent* GetWorkerReloadEvent() const;
@@ -201,6 +206,9 @@ public:
     // Whether the medium had originally been requested to be opened r/o,
     // independent of later changes via SetOpenMode; used for SID_RELOAD:
     [[nodiscard]] bool IsOriginallyLoadedReadOnly() const;
+
+    // Activates the collected embedded fonts.
+    void activateEmbeddedFonts();
 
     [[nodiscard]] bool IsRepairPackage() const;
 

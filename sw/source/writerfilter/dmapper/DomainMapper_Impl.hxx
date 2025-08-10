@@ -868,7 +868,7 @@ public:
     FontTablePtr const & GetFontTable()
     {
         if(!m_pFontTable)
-            m_pFontTable = new FontTable(m_bReadOnly);
+            m_pFontTable = new FontTable(m_xTextDocument, m_bReadOnly);
         return m_pFontTable;
     }
     StyleSheetTablePtr const & GetStyleSheetTable()

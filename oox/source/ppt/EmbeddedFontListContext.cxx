@@ -24,6 +24,7 @@ EmbeddedFontListContext::EmbeddedFontListContext(
     FragmentHandler2 const& rParent, bool bEmbedTrueType,
     css::uno::Reference<css::beans::XPropertySet> const& rxDocSettings)
     : FragmentHandler2(rParent)
+    , maEmbeddedFontHelper(getFilter().getModel())
     , mbEmbedTrueType(bEmbedTrueType)
     , mxDocSettings(rxDocSettings)
 {

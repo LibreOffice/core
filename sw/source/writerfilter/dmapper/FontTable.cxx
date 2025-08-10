@@ -25,15 +25,18 @@
 #include <rtl/tencinfo.h>
 #include <unotools/fontdefs.hxx>
 
+#include <unotxdoc.hxx>
+
 using namespace com::sun::star;
 
 namespace writerfilter::dmapper
 {
 
-FontTable::FontTable(bool bReadOnly)
+FontTable::FontTable(const rtl::Reference<SwXTextDocument>& xModel, bool bReadOnly)
 : LoggedProperties("FontTable")
 , LoggedTable("FontTable")
 , LoggedStream("FontTable")
+, m_xModel(xModel)
 , m_bReadOnly(bReadOnly)
 {
 }
@@ -253,7 +256,7 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
                                 bool bSubsetted)
 {
     if (!m_xEmbeddedFontHelper)
-        m_xEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+        m_xEmbeddedFontHelper.reset(new EmbeddedFontsHelper(m_xModel));
     m_xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key,
             /*eot=*/false, bSubsetted);
 }

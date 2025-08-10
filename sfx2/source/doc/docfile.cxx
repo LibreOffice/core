@@ -126,6 +126,7 @@
 #include <openflag.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <vcl/embeddedfontshelper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -412,6 +413,9 @@ public:
     bool m_bNotifyWhenEditable = false;
     /// if true, xStorage is an inner package and not directly from xStream
     bool m_bODFWholesomeEncryption = false;
+
+    /// font family, file URL
+    std::vector<std::pair<OUString, OUString>> m_aEmbeddedFontsToActivate;
 
     OUString m_aName;
     OUString m_aLogicName;
@@ -3996,6 +4000,18 @@ void SfxMedium::SetOriginallyReadOnly(bool val)
 bool SfxMedium::IsOriginallyLoadedReadOnly() const
 {
     return pImpl->m_bOriginallyLoadedReadOnly;
+}
+
+void SfxMedium::AddEmbeddedFonts(
+    const css::uno::Sequence<css::beans::StringPair>& fonts)
+{
+    for (const auto& [ name, url ] : fonts)
+        pImpl->m_aEmbeddedFontsToActivate.emplace_back(name, url);
+}
+
+void SfxMedium::activateEmbeddedFonts()
+{
+    EmbeddedFontsHelper::activateFonts(pImpl->m_aEmbeddedFontsToActivate);
 }
 
 bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )

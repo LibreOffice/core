@@ -19,6 +19,7 @@
 #include <string_view>
 #include <vector>
 
+namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -26,13 +27,8 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 class VCL_DLLPUBLIC EmbeddedFontsHelper
 {
 private:
+    css::uno::Reference<css::frame::XModel> m_xDocumentModel;
     std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
-
-    /**
-      Adds the accumulated fonts to the list of known fonts. The fonts are used only until application
-      exit.
-    */
-    void activateFonts();
 
 public:
     /// Specification of what kind of operation is allowed when embedding a font
@@ -64,6 +60,12 @@ public:
         bool bSubsetted = false);
 
     /**
+      Adds the passed fonts to the list of known fonts. The fonts are used only until application
+      exit.
+    */
+    static void activateFonts(std::vector<std::pair<OUString, OUString>>& fonts);
+
+    /**
       Returns if the restrictions specified in the font (if present) allow embedding
       the font for a particular purpose.
       @param data font data
@@ -92,10 +94,8 @@ public:
      */
     static bool isCommonFont(std::u16string_view aFontName);
 
-    ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
-    {
-        activateFonts();
-    }
+    EmbeddedFontsHelper(const css::uno::Reference<css::frame::XModel>& xModel);
+    ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE;
 };
 
 #endif

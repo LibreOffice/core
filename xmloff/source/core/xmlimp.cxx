@@ -504,7 +504,7 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
                                   std::vector<unsigned char> const & key, bool eot)
 {
     if (!mxEmbeddedFontHelper)
-        mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper);
+        mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper(mxModel));
     return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
 }
 
