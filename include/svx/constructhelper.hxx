@@ -37,6 +37,7 @@ public:
     // set line starts and ends for newly created objects
     static void SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_uInt16 nSlotId,
                             tools::Long nWidth);
+    static void SetAttributes(SfxItemSet& rAttr, sal_uInt16 nSlotId);
 };
 
 //////////////////////////////////////////////////////////////////////////////

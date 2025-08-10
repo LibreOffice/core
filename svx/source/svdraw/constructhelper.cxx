@@ -24,6 +24,7 @@
 #include <svx/strings.hrc>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/sxekitm.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <svx/xlnedit.hxx>
@@ -67,7 +68,21 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
     if (!(nSlotId == SID_LINE_ARROW_START || nSlotId == SID_LINE_ARROW_END
           || nSlotId == SID_LINE_ARROWS || nSlotId == SID_LINE_ARROW_CIRCLE
           || nSlotId == SID_LINE_CIRCLE_ARROW || nSlotId == SID_LINE_ARROW_SQUARE
-          || nSlotId == SID_LINE_SQUARE_ARROW || nSlotId == SID_DRAW_MEASURELINE))
+          || nSlotId == SID_LINE_SQUARE_ARROW || nSlotId == SID_DRAW_MEASURELINE
+          || nSlotId == SID_CONNECTOR_LINE || nSlotId == SID_CONNECTOR_LINE_ARROW_START
+          || nSlotId == SID_CONNECTOR_LINE_ARROW_END || nSlotId == SID_CONNECTOR_LINE_ARROWS
+          || nSlotId == SID_CONNECTOR_LINE_CIRCLE_START || nSlotId == SID_CONNECTOR_LINE_CIRCLE_END
+          || nSlotId == SID_CONNECTOR_LINE_CIRCLES || nSlotId == SID_CONNECTOR_LINES
+          || nSlotId == SID_CONNECTOR_LINES_ARROW_START || nSlotId == SID_CONNECTOR_LINES_ARROW_END
+          || nSlotId == SID_CONNECTOR_LINES_ARROWS || nSlotId == SID_CONNECTOR_LINES_CIRCLE_START
+          || nSlotId == SID_CONNECTOR_LINES_CIRCLE_END || nSlotId == SID_CONNECTOR_LINES_CIRCLES
+          || nSlotId == SID_CONNECTOR_ARROW_START || nSlotId == SID_CONNECTOR_ARROW_END
+          || nSlotId == SID_CONNECTOR_ARROWS || nSlotId == SID_CONNECTOR_CIRCLE_START
+          || nSlotId == SID_CONNECTOR_CIRCLE_END || nSlotId == SID_CONNECTOR_CIRCLES
+          || nSlotId == SID_CONNECTOR_CURVE || nSlotId == SID_CONNECTOR_CURVE_ARROW_START
+          || nSlotId == SID_CONNECTOR_CURVE_ARROW_END || nSlotId == SID_CONNECTOR_CURVE_ARROWS
+          || nSlotId == SID_CONNECTOR_CURVE_CIRCLE_START
+          || nSlotId == SID_CONNECTOR_CURVE_CIRCLE_END || nSlotId == SID_CONNECTOR_CURVE_CIRCLES))
         return;
 
     // set attributes of line start and ends
@@ -119,6 +134,10 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
 
     switch (nSlotId)
     {
+        case SID_CONNECTOR_ARROWS:
+        case SID_CONNECTOR_LINE_ARROWS:
+        case SID_CONNECTOR_LINES_ARROWS:
+        case SID_CONNECTOR_CURVE_ARROWS:
         case SID_LINE_ARROWS:
         case SID_DRAW_MEASURELINE:
         {
@@ -130,6 +149,10 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         }
         break;
 
+        case SID_CONNECTOR_ARROW_START:
+        case SID_CONNECTOR_LINE_ARROW_START:
+        case SID_CONNECTOR_LINES_ARROW_START:
+        case SID_CONNECTOR_CURVE_ARROW_START:
         case SID_LINE_ARROW_START:
         case SID_LINE_ARROW_CIRCLE:
         case SID_LINE_ARROW_SQUARE:
@@ -140,12 +163,51 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
         }
         break;
 
+        case SID_CONNECTOR_ARROW_END:
+        case SID_CONNECTOR_LINE_ARROW_END:
+        case SID_CONNECTOR_LINES_ARROW_END:
+        case SID_CONNECTOR_CURVE_ARROW_END:
         case SID_LINE_ARROW_END:
         case SID_LINE_CIRCLE_ARROW:
         case SID_LINE_SQUARE_ARROW:
         {
             // connector with arrow end
             rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), std::move(aArrow)));
+            rAttr.Put(XLineEndWidthItem(nWidth));
+        }
+        break;
+
+        case SID_CONNECTOR_CIRCLES:
+        case SID_CONNECTOR_LINE_CIRCLES:
+        case SID_CONNECTOR_LINES_CIRCLES:
+        case SID_CONNECTOR_CURVE_CIRCLES:
+        {
+            // connector with circle ends
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineEndWidthItem(nWidth));
+        }
+        break;
+
+        case SID_CONNECTOR_CIRCLE_START:
+        case SID_CONNECTOR_LINE_CIRCLE_START:
+        case SID_CONNECTOR_LINES_CIRCLE_START:
+        case SID_CONNECTOR_CURVE_CIRCLE_START:
+        {
+            // connector with circle start
+            rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
+            rAttr.Put(XLineStartWidthItem(nWidth));
+        }
+        break;
+
+        case SID_CONNECTOR_CIRCLE_END:
+        case SID_CONNECTOR_LINE_CIRCLE_END:
+        case SID_CONNECTOR_LINES_CIRCLE_END:
+        case SID_CONNECTOR_CURVE_CIRCLE_END:
+        {
+            // connector with circle ends
+            rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
             rAttr.Put(XLineEndWidthItem(nWidth));
         }
         break;
@@ -185,6 +247,38 @@ void ConstructHelper::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal_
             rAttr.Put(XLineStartWidthItem(nWidth));
         }
         break;
+    }
+    SetAttributes(rAttr, nSlotId);
+}
+
+/**
+ * set attribute for the object to be created
+ */
+void ConstructHelper::SetAttributes(SfxItemSet& rAttr, sal_uInt16 nSlotId)
+{
+    if (nSlotId == SID_CONNECTOR_LINE || nSlotId == SID_CONNECTOR_LINE_ARROW_START
+        || nSlotId == SID_CONNECTOR_LINE_ARROW_END || nSlotId == SID_CONNECTOR_LINE_ARROWS
+        || nSlotId == SID_CONNECTOR_LINE_CIRCLE_START || nSlotId == SID_CONNECTOR_LINE_CIRCLE_END
+        || nSlotId == SID_CONNECTOR_LINE_CIRCLES)
+    {
+        // direct connector
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::OneLine));
+    }
+    else if (nSlotId == SID_CONNECTOR_LINES || nSlotId == SID_CONNECTOR_LINES_ARROW_START
+             || nSlotId == SID_CONNECTOR_LINES_ARROW_END || nSlotId == SID_CONNECTOR_LINES_ARROWS
+             || nSlotId == SID_CONNECTOR_LINES_CIRCLE_START
+             || nSlotId == SID_CONNECTOR_LINES_CIRCLE_END || nSlotId == SID_CONNECTOR_LINES_CIRCLES)
+    {
+        // line connector
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::ThreeLines));
+    }
+    else if (nSlotId == SID_CONNECTOR_CURVE || nSlotId == SID_CONNECTOR_CURVE_ARROW_START
+             || nSlotId == SID_CONNECTOR_CURVE_ARROW_END || nSlotId == SID_CONNECTOR_CURVE_ARROWS
+             || nSlotId == SID_CONNECTOR_CURVE_CIRCLE_START
+             || nSlotId == SID_CONNECTOR_CURVE_CIRCLE_END || nSlotId == SID_CONNECTOR_CURVE_CIRCLES)
+    {
+        // curve connector
+        rAttr.Put(SdrEdgeKindItem(SdrEdgeKind::Bezier));
     }
 }
 
