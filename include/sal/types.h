@@ -298,7 +298,7 @@ typedef void *                   sal_Handle;
 #ifdef _MSC_VER
 #   define SAL_RET_MAYBENULL _Ret_maybenull_
 #else
-#   define SAL_RET_MAYBENULL
+#   define SAL_RET_MAYBENULL /*coverity[+returnsnull]*/
 #endif
 #endif
 
