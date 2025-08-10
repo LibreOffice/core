@@ -2,6 +2,22 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="tp_ChartColorPalette">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -24,17 +40,22 @@
             <property name="valign">start</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkIconView" id="colorful_palettes">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">start</property>
-                <child>
-                  <object class="GtkDrawingArea" id="colorful_palettes">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                  </object>
-                </child>
+                <property name="can-focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">2</property>
+                <property name="row-spacing">0</property>
+                <property name="column-spacing">0</property>
+                <property name="item-padding">4</property>
+                <property name="activate-on-single-click">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="LBL_COLORFUL"/>
+                </accessibility>
               </object>
             </child>
           </object>
@@ -48,6 +69,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="colorful_palettes"/>
+            </accessibility>
           </object>
         </child>
       </object>
@@ -74,17 +98,22 @@
             <property name="valign">start</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkIconView" id="monochromatic_palettes">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">start</property>
-                <child>
-                  <object class="GtkDrawingArea" id="monochromatic_palettes">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">start</property>
-                  </object>
-                </child>
+                <property name="can-focus">True</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore2</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">2</property>
+                <property name="row-spacing">0</property>
+                <property name="column-spacing">0</property>
+                <property name="item-padding">4</property>
+                <property name="activate-on-single-click">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="LBL_MONOCHROMATIC"/>
+                </accessibility>
               </object>
             </child>
           </object>
@@ -98,6 +127,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="monochromatic_palettes"/>
+            </accessibility>
           </object>
         </child>
       </object>

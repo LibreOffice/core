@@ -77,22 +77,20 @@ private:
 class ChartColorPalettePopup final : public WeldToolbarPopup
 {
     rtl::Reference<ChartColorPaletteControl> mxControl;
-    std::unique_ptr<ChartColorPalettes> mxColorfulValueSet;
-    std::unique_ptr<weld::CustomWeld> mxColorfulValueSetWin;
-    std::unique_ptr<ChartColorPalettes> mxMonoValueSet;
-    std::unique_ptr<weld::CustomWeld> mxMonoValueSetWin;
+    std::unique_ptr<ChartColorPalettes> mxColorfulPalettes;
+    std::unique_ptr<ChartColorPalettes> mxMonoPalettes;
 
     ChartColorPaletteType meHighlightedItemType;
     sal_uInt16 mnHighlightedItemId;
     bool mbItemSelected;
 
-    DECL_LINK(SelectColorfulValueSetHdl, ValueSet*, void);
-    DECL_LINK(SelectMonoValueSetHdl, ValueSet*, void);
-    sal_uInt32 SelectValueSetHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet);
+    DECL_LINK(SelectColorfulPaletteHdl, weld::IconView&, bool);
+    DECL_LINK(SelectMonoPaletteHdl, weld::IconView&, bool);
+    sal_uInt32 SelectPaletteHdl(const std::unique_ptr<ChartColorPalettes>& xPalettes);
 
-    DECL_LINK(ColorfulMouseMoveHdl, const MouseEvent&, void);
-    DECL_LINK(MonoMouseMoveHdl, const MouseEvent&, void);
-    void MouseMoveHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet,
+    DECL_LINK(ColorfulMouseMoveHdl, const MouseEvent&, bool);
+    DECL_LINK(MonoMouseMoveHdl, const MouseEvent&, bool);
+    void MouseMoveHdl(const std::unique_ptr<ChartColorPalettes>& xPalettes,
                       ChartColorPaletteType eHlItemType);
 
     void GrabFocus() override;

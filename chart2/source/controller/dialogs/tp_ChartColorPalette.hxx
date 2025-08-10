@@ -52,14 +52,12 @@ private:
 private:
     rtl::Reference<ChartModel> mxChartModel;
     std::unique_ptr<ChartColorPaletteHelper> mxHelper;
-    std::unique_ptr<ChartColorPalettes> mxColorfulValueSet;
-    std::unique_ptr<weld::CustomWeld> mxColorfulValueSetWin;
-    std::unique_ptr<ChartColorPalettes> mxMonoValueSet;
-    std::unique_ptr<weld::CustomWeld> mxMonoValueSetWin;
+    std::unique_ptr<ChartColorPalettes> mxColorfulPalettes;
+    std::unique_ptr<ChartColorPalettes> mxMonoPalettes;
 
-    DECL_LINK(SelectColorfulValueSetHdl, ValueSet*, void);
-    DECL_LINK(SelectMonoValueSetHdl, ValueSet*, void);
-    static sal_uInt32 SelectValueSetHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet);
+    DECL_LINK(SelectColorfulPaletteHdl, weld::IconView&, bool);
+    DECL_LINK(SelectMonoPaletteHdl, weld::IconView&, bool);
+    static sal_uInt32 SelectPaletteHdl(const std::unique_ptr<ChartColorPalettes>& xValueSet);
 };
 } //namespace chart
 

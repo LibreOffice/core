@@ -2,12 +2,30 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="liststore2">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="ColorPaletteWindow">
     <property name="can-focus">False</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
@@ -16,6 +34,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="border-width">6</property>
             <property name="row-spacing">3</property>
             <property name="column-spacing">6</property>
@@ -41,23 +60,26 @@
               <object class="GtkScrolledWindow" id="colorfulwin">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkIconView" id="colorful_palettes">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="colorful_palettes">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="label1"/>
-                        </accessibility>
-                      </object>
-                    </child>
+                    <property name="can-focus">True</property>
+                    <property name="margin">0</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="columns">2</property>
+                    <property name="row-spacing">0</property>
+                    <property name="column-spacing">0</property>
+                    <property name="item-padding">4</property>
+                    <property name="activate-on-single-click">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="label1"/>
+                    </accessibility>
                   </object>
                 </child>
               </object>
@@ -89,23 +111,26 @@
               <object class="GtkScrolledWindow" id="monochromaticwin">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="shadow-type">in</property>
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkIconView" id="monochromatic_palettes">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="monochromatic_palettes">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="label2"/>
-                        </accessibility>
-                      </object>
-                    </child>
+                    <property name="can-focus">True</property>
+                    <property name="margin">0</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="columns">2</property>
+                    <property name="row-spacing">0</property>
+                    <property name="column-spacing">0</property>
+                    <property name="item-padding">4</property>
+                    <property name="activate-on-single-click">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="label2"/>
+                    </accessibility>
                   </object>
                 </child>
               </object>
