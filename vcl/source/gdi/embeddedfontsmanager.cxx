@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <mutex>
+#include <set>
 #include <unordered_map>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
@@ -18,6 +19,7 @@
 #include <config_folders.h>
 #include <config_eot.h>
 
+#include <o3tl/temporary.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
@@ -26,6 +28,7 @@
 #include <vcl/embeddedfontsmanager.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -35,6 +38,8 @@
 #include <sft.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 
 #if ENABLE_EOT
@@ -68,12 +73,31 @@ struct EmbeddedFontData
 {
     OUString familyName;
     int refcount = 0;
+    bool isRestricted = true; // Has restricted permissions, *and* isn't installed locally
     bool isActivated = false;
 };
 
 std::mutex s_EmbeddedFontsMutex;
 // file URL -> EmbeddedFontData
 std::unordered_map<OUString, EmbeddedFontData> s_EmbeddedFonts;
+
+bool isFontAvailableUnrestricted(std::u16string_view family, const OUString& fileURL)
+{
+    // Check if the font is already installed on system. It is either available and not among
+    // existing embedded files; or it could be listed among embedded, but without restrictions
+    // (because it was checked here before, and restrictions were removed). The idea is, that
+    // you can always edit your files with the restricted fonts taken from your own system.
+
+    if (Application::GetDefaultDevice()->IsFontAvailable(family))
+    {
+        std::unique_lock lock(s_EmbeddedFontsMutex);
+        auto it = s_EmbeddedFonts.find(fileURL);
+        if (it == s_EmbeddedFonts.end() || !it->second.isRestricted)
+            return true;
+    }
+
+    return false;
+}
 
 void clearDir( const OUString& path )
 {
@@ -196,8 +220,9 @@ EmbeddedFontsManager::~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE
         }
     }
 
-    // Failed to transfer the fonts to the document. Activate them here.
-    activateFonts(m_aAccumulatedFonts);
+    // Failed to transfer the fonts to the document. Activate them here, discarding restricted.
+    // They won't be released, so will stay until the application shutdown.
+    activateFonts(m_aAccumulatedFonts, false, {}, o3tl::temporary(bool()));
 }
 
 void EmbeddedFontsManager::clearTemporaryFontFiles()
@@ -255,14 +280,6 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
     {
         sufficientFontRights = sufficientTTFRights(fontData.data(), fontData.size(), FontRights::EditingAllowed);
     }
-    if( !sufficientFontRights )
-    {
-        // It would be actually better to open the document in read-only mode in this case,
-        // warn the user about this, and provide a button to drop the font(s) in order
-        // to switch to editing.
-        SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
-        return false;
-    }
 
     if (bSubsetted)
     {
@@ -297,12 +314,20 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
     if (fileUrl.isEmpty())
         return false;
 
-    // Register it, and increase its refcount in s_EmbeddedFonts
+    // Must not call isFontAvailableUnrestricted under unique_lock: it will deadlock
+    if (!sufficientFontRights && isFontAvailableUnrestricted(fontName, fileUrl))
+        sufficientFontRights = true;
+
+    // Register  it / increase its refcount in s_EmbeddedFonts
     {
         std::unique_lock lock(s_EmbeddedFontsMutex);
         auto& rData = s_EmbeddedFonts[fileUrl];
-        assert(rData.familyName.isEmpty() || rData.familyName == fontName);
-        rData.familyName = fontName;
+        if (rData.refcount == 0)
+        {
+            rData.familyName = fontName;
+            rData.isRestricted = !sufficientFontRights;
+        }
+        assert(rData.familyName == fontName);
         ++rData.refcount;
     }
 
@@ -327,18 +352,83 @@ namespace
     };
 }
 
-void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUString>>& fonts)
+void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUString>>& fonts,
+                                        bool silentlyAllowRestrictedFonts,
+                                        const uno::Reference<task::XInteractionHandler>& xHandler,
+                                        bool& activatedRestrictedFonts)
 {
+    activatedRestrictedFonts = false;
     if (fonts.empty())
         return;
     std::vector<std::pair<OUString, OUString>> temp;
 
     {
         std::unique_lock lock(s_EmbeddedFontsMutex);
-        // Only activate fonts that need activation.
+        // Handle restricted fonts
+        for (auto it1 = fonts.begin(); it1 != fonts.end();)
+        {
+            auto it2 = s_EmbeddedFonts.find(it1->second);
+            if (it2 == s_EmbeddedFonts.end())
+            {
+                SAL_WARN("vcl.fonts", "Trying to activate a font not in s_EmbeddedFonts");
+                it1 = fonts.erase(it1);
+                continue;
+            }
+            assert(it2->second.familyName == it1->first);
+
+            if (!silentlyAllowRestrictedFonts && it2->second.isRestricted)
+            {
+                temp.push_back(*it1);
+                it1 = fonts.erase(it1);
+                continue;
+            }
+
+            ++it1;
+        }
+    }
+
+    if (!temp.empty())
+    {
+        bool allowRestrictedFonts = false;
+        if (xHandler)
+        {
+            std::set<OUString> filteredFamilies; // families can repeat, e.g. for bold/italic
+            for (const auto& pair : temp)
+                filteredFamilies.insert(pair.first);
+            OUString fontlist;
+            for (const auto& family : filteredFamilies)
+                fontlist += "\n" + family;
+            rtl::Reference pRequest(new comphelper::OInteractionRequest(
+                uno::Any(document::FontsDisallowEditingRequest({}, {}, fontlist))));
+            rtl::Reference pApprove(new comphelper::OInteractionApprove);
+            pRequest->addContinuation(pApprove);
+            pRequest->addContinuation(new comphelper::OInteractionDisapprove);
+            xHandler->handle(pRequest);
+            allowRestrictedFonts = pApprove->wasSelected();
+        }
+        if (allowRestrictedFonts)
+        {
+            activatedRestrictedFonts = true;
+            fonts.insert(fonts.end(), temp.begin(), temp.end());
+        }
+        else
+        {
+            releaseFonts(temp);
+        }
+        temp.clear();
+    }
+
+    {
+        std::unique_lock lock(s_EmbeddedFontsMutex);
+        // Only activate fonts that need activation. It goes after restricted fonts handling,
+        // because we must ask user about a second document embedding the same restricted font.
+        // We do not remove from fonts: the unlocking must happen only when the document is closed,
+        // so that necessary fonts are not unregistered.
         for (const auto& pair : fonts)
         {
             auto it = s_EmbeddedFonts.find(pair.second);
+            // At this point, we must find a match: neither releaseFonts above, nor other possible
+            // intermediate changes of s_EmbeddedFonts must not remove our locked entries
             assert(it != s_EmbeddedFonts.end());
             if (!it->second.isActivated)
             {
@@ -426,6 +516,14 @@ bool EmbeddedFontsManager::sufficientTTFRights( const void* data, tools::Long si
 OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, FontRights rights )
 {
+    // Do not embed restricted fonts coming from another document. If a font is among embedded, and
+    // is restricted, it means that it isn't installed locally. See isFontAvailableUnrestricted.
+    for (const auto& pair : s_EmbeddedFonts)
+    {
+        if (pair.second.familyName == familyName && pair.second.isRestricted)
+            return {};
+    }
+
     OUString path = GetEmbeddedFontsRoot() + "fromsystem/";
     osl::Directory::createPath( path );
     OUString filename = OUString::Concat(familyName) + "_" + OUString::number( family ) + "_" + OUString::number( italic )

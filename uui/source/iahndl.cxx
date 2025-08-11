@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/document/ExoticFileLoadException.hpp>
+#include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/java/WrongJavaVersionException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -697,6 +698,9 @@ UUIInteractionHelper::handleRequest_impl(
             return true;
         }
 
+        if (handleFontsDisallowEditingRequest(rRequest))
+            return true;
+
         task::ErrorCodeRequest2 aErrorCodeRequest2;
         if (aAnyRequest >>= aErrorCodeRequest2)
         {
@@ -1149,6 +1153,51 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     default: break;
     }
+}
+
+bool UUIInteractionHelper::handleFontsDisallowEditingRequest(
+    const uno::Reference<task::XInteractionRequest>& rRequest)
+{
+    document::FontsDisallowEditingRequest aRequest;
+    if (!(rRequest->getRequest() >>= aRequest))
+        return false;
+
+    uno::Reference<task::XInteractionApprove> xApprove;
+    uno::Reference<task::XInteractionDisapprove> xDisapprove;
+    getContinuations(rRequest->getContinuations(), &xApprove, &xDisapprove);
+
+    if (xApprove.is() && xDisapprove.is())
+    {
+        std::locale aResLocale = Translate::Create("uui");
+        OUString title(utl::ConfigManager::getProductName());
+
+        OUString title2 = Translate::get(STR_READONLY_FONT_TITLE, aResLocale);
+        if (!title.isEmpty() && !title2.isEmpty())
+            title += " - ";
+        title += title2;
+
+        OUString aMessage = replaceMessageWithArguments(
+            Translate::get(STR_READONLY_FONT_MSG, aResLocale), { aRequest.aFontNames });
+
+        switch (executeMessageBox(Application::GetFrameWeld(getParentXWindow()), title, aMessage,
+                                  VclMessageType::Question))
+        {
+            case DialogMask::ButtonsNo:
+                if (xDisapprove.is())
+                    xDisapprove->select();
+                break;
+
+            case DialogMask::ButtonsYes:
+                if (xApprove.is())
+                    xApprove->select();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return true;
 }
 
 // ErrorResource Implementation

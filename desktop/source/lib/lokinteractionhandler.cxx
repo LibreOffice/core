@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
+#include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -151,6 +152,9 @@ bool ShouldFallbackToStandard(const uno::Reference<task::XInteractionRequest>& x
         return true;
 
     if (document::FilterOptionsRequest aStruct; request >>= aStruct)
+        return true;
+
+    if (document::FontsDisallowEditingRequest aStruct; request >>= aStruct)
         return true;
 
     if (beans::NamedValue aStruct; request >>= aStruct)

@@ -209,7 +209,13 @@ public:
     // independent of later changes via SetOpenMode; used for SID_RELOAD:
     [[nodiscard]] bool IsOriginallyLoadedReadOnly() const;
 
-    // Activates the collected embedded fonts.
+    // Whether the medium has embedded fonts that disallow editing of the document,
+    // meaning that it can't be switched to editing mode at all, without reloading
+    // and discarding these fonts:
+    [[nodiscard]] bool HasRestrictedFonts() const;
+
+    // Activates collected embedded fonts. Here it may ask user to approve use of restricted fonts,
+    // and switch tyo read-only mode.
     void activateEmbeddedFonts();
 
     [[nodiscard]] bool IsRepairPackage() const;

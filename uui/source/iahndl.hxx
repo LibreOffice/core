@@ -196,6 +196,9 @@ private:
         bool & bHasErrorString,
         OUString & rErrorString);
 
+    bool handleFontsDisallowEditingRequest(
+        const css::uno::Reference<css::task::XInteractionRequest>& rRequest);
+
     bool handleLockedDocumentRequest(
         css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 

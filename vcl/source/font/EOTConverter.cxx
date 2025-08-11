@@ -92,7 +92,7 @@ bool EOTConverter::convert(std::vector<sal_uInt8>& rEotOutput)
         pEot->nWeight = pOS2->nWeightClass;
         // FIXME: Should use OS2->fsType, but some TrueType fonts set it to an over-restrictive value.
         // Since ATS does not enforce this on Mac OS X, we do not enforce it either.
-        pEot->nFsType = 0x0000;
+        pEot->nFsType = pOS2->nFsType;
         pEot->nUnicodeRange1 = pOS2->nUnicodeRange1;
         pEot->nUnicodeRange2 = pOS2->nUnicodeRange2;
         pEot->nUnicodeRange3 = pOS2->nUnicodeRange3;

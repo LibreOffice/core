@@ -245,7 +245,7 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
             bOrtho = rMEvt.IsShift() != pFrameView->IsOrtho();
         }
 
-        bool bSnapModPressed = rMEvt.IsMod2();
+        bool bSnapModPressed = mpView->IsDragObj() ? rMEvt.IsMod2() : rMEvt.IsMod1();
         mpView->SetDragWithCopy(rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
         if (mpView->IsOrtho() != bOrtho)
