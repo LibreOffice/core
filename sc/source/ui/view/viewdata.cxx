@@ -1225,18 +1225,18 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
             if ( nRow < 1 || nCol < 1 )
             {
                 // This kind of cells do exist. Not sure if that is intended or a bug.
-                rRange = ScRange(GetCurX(), GetCurY(), CurrentTabForData());
+                rRange = ScRange(GetCurX(), GetCurY(), GetTabNumber());
             }
             else
             {
-                rRange = ScRange(GetCurX(), GetCurY(), CurrentTabForData(),
-                                GetCurX() + nCol - 1, GetCurY() + nRow - 1, CurrentTabForData());
+                rRange = ScRange(GetCurX(), GetCurY(), GetTabNumber(),
+                                GetCurX() + nCol - 1, GetCurY() + nRow - 1, GetTabNumber());
                 if ( ScViewUtil::HasFiltered(rRange, GetDocument()) )
                     eMarkType = SC_MARK_SIMPLE_FILTERED;
             }
         }
         else
-            rRange = ScRange(GetCurX(), GetCurY(), CurrentTabForData());
+            rRange = ScRange(GetCurX(), GetCurY(), GetTabNumber());
     }
     return eMarkType;
 }

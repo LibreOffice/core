@@ -2405,7 +2405,7 @@ public:
     SCTAB GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID);
 
     bool HasSheetViews(SCTAB nTab) const;
-    std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
+    SC_DLLPUBLIC std::shared_ptr<sc::SheetViewManager> GetSheetViewManager(SCTAB nTable);
     bool IsSheetView(SCTAB nTab) const;
     void SetSheetView(SCTAB nTab, bool bSheetView);
 
