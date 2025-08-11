@@ -1334,7 +1334,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     sPrefix = aEntry.GetMainURL( INetURLObject::DecodeMechanism::NONE );
                 }
 
-                OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
+                OUString sExt;
+                if (pStoreToFilter)
+                    sExt = comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*');
                 aTempFile.reset( new utl::TempFileNamed(sLeading, sColumnData.isEmpty(), sExt, &sPrefix, true) );
                 if( !aTempFile->IsValid() )
                 {
