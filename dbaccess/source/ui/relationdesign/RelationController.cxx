@@ -293,10 +293,13 @@ namespace
             try
             {
                 Reference< XResultSet > xResult = m_xMetaData->getImportedKeys(aCatalog, sSchema,sTable);
-                if ( xResult.is() && xResult->next() )
+                if ( xResult.is() )
                 {
-                    ::comphelper::disposeComponent(xResult);
-                    loadTableData(m_xTables->getByName(m_aTableList[i]));
+                    if ( xResult->next() )
+                        loadTableData(m_xTables->getByName(m_aTableList[i]));
+                    Reference<XCloseable> xCloseable(xResult,UNO_QUERY);
+                    if (xCloseable.is())
+                        xCloseable->close();
                 }
             }
             catch( const Exception& )
