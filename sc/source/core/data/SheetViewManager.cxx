@@ -26,6 +26,7 @@ bool SheetViewManager::remove(SheetViewID nID)
     if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
     {
         maViews.erase(maViews.begin() + nID);
+        return true;
     }
     return false;
 }

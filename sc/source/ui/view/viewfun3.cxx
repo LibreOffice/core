@@ -64,6 +64,7 @@
 #include <clipoptions.hxx>
 #include <gridwin.hxx>
 #include <SheetView.hxx>
+#include <uiitems.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 
 using namespace com::sun::star;
@@ -2068,6 +2069,9 @@ void ScViewFunc::MakeNewSheetView()
     SCTAB nSheetViewTab = nTab + 1;
     if (rDocument.CopyTab(nTab, nSheetViewTab))
     {
+        GetViewData().GetDocShell().Broadcast(ScTablesHint(SC_TAB_INSERTED, nSheetViewTab));
+        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
+
         // Add and register the created sheet view
         rDocument.SetSheetView(nSheetViewTab, true);
         sc::SheetViewID nSheetViewID = rDocument.CreateNewSheetView(nTab, nSheetViewTab);
@@ -2076,6 +2080,9 @@ void ScViewFunc::MakeNewSheetView()
         // Update
         GetViewData().SetTabNo(nSheetViewTab); // force add the sheet view tab
         GetViewData().SetTabNo(nTab); // then change back to the current tab
+
+        ScDocShell& rDocSh = GetViewData().GetDocShell();
+        rDocSh.PostPaintGridAll();
         PaintExtras(); // update Tab Control
     }
 }
@@ -2086,18 +2093,19 @@ void ScViewFunc::RemoveCurrentSheetView()
     if (nSheetViewID == sc::DefaultSheetViewID)
         return;
 
-    SCTAB nTab = GetViewData().GetTabNumber();
     ScDocument& rDocument = GetViewData().GetDocument();
-    SCTAB nSheetViewTab = rDocument.GetSheetViewNumber(nTab, nSheetViewID);
-
+    SCTAB nTab = GetViewData().GetTabNumber();
     auto pSheetManager = rDocument.GetSheetViewManager(nTab);
+    if (!pSheetManager)
+        return;
+
+    SCTAB nSheetViewTab = rDocument.GetSheetViewNumber(nTab, nSheetViewID);
     pSheetManager->remove(nSheetViewID);
     GetViewData().SetSheetViewID(sc::DefaultSheetViewID);
     GetViewData().SetTabNo(nTab);
     GetViewData().GetDocFunc().DeleteTable(nSheetViewTab, true);
 
-    ScDocShell& rDocSh = GetViewData().GetDocShell();
-    rDocSh.PostPaintGridAll();
+    GetViewData().GetDocShell().PostPaintGridAll();
     PaintExtras();
 }
 
