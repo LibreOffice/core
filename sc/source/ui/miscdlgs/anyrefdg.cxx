@@ -382,7 +382,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         m_pDialog->set_title(m_pDialog->strip_mnemonic(sNewDialogText));
     }
 
-    m_pDialog->collapse(pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
+    assert(pEdit && pEdit->GetWidget());
+    m_pDialog->collapse(*pEdit->GetWidget(), pButton ? pButton->GetWidget() : nullptr);
 
     // set button image
     if (pButton)

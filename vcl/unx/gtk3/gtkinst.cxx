@@ -7244,14 +7244,13 @@ public:
 #endif
     }
 
-    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override
+    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override
     {
-        GtkInstanceWidget* pVclEdit = dynamic_cast<GtkInstanceWidget*>(pEdit);
-        assert(pVclEdit);
-        GtkInstanceWidget* pVclButton = dynamic_cast<GtkInstanceWidget*>(pButton);
+        GtkInstanceWidget& rGtkEdit = dynamic_cast<GtkInstanceWidget&>(rEdit);
+        GtkInstanceWidget* pGtkButton = dynamic_cast<GtkInstanceWidget*>(pButton);
 
-        GtkWidget* pRefEdit = pVclEdit->getWidget();
-        GtkWidget* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
+        GtkWidget* pRefEdit = rGtkEdit.getWidget();
+        GtkWidget* pRefBtn = pGtkButton ? pGtkButton->getWidget() : nullptr;
 
         m_nOldEditWidth = gtk_widget_get_allocated_width(pRefEdit);
 

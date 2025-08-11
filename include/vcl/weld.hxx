@@ -663,7 +663,7 @@ public:
     virtual inline void set_default_response(int nResponse);
 
     // shrink the dialog down to shown just these widgets
-    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;
+    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) = 0;
     // undo previous dialog collapse
     virtual void undo_collapse() = 0;
 

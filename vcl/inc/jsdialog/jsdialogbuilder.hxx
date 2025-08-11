@@ -414,7 +414,7 @@ public:
     JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilder* pBuilder,
              bool bTakeOwnership);
 
-    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
+    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
     virtual void response(int response) override;
     virtual std::unique_ptr<weld::Button> weld_button_for_response(int response) override;

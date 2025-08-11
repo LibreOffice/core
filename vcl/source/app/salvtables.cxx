@@ -1787,13 +1787,12 @@ bool SalInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return m_xDialog->StartExecuteAsync(aCtx);
 }
 
-void SalInstanceDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
+void SalInstanceDialog::collapse(weld::Widget& rEdit, weld::Widget* pButton)
 {
-    SalInstanceWidget* pVclEdit = dynamic_cast<SalInstanceWidget*>(pEdit);
-    assert(pVclEdit);
+    SalInstanceWidget& rVclEdit = dynamic_cast<SalInstanceWidget&>(rEdit);
     SalInstanceWidget* pVclButton = dynamic_cast<SalInstanceWidget*>(pButton);
 
-    vcl::Window* pRefEdit = pVclEdit->getWidget();
+    vcl::Window* pRefEdit = rVclEdit.getWidget();
     vcl::Window* pRefBtn = pVclButton ? pVclButton->getWidget() : nullptr;
 
     auto nOldEditWidth = pRefEdit->GetSizePixel().Width();

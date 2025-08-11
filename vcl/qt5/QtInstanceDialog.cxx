@@ -80,7 +80,7 @@ bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return true;
 }
 
-void QtInstanceDialog::collapse(weld::Widget*, weld::Widget*)
+void QtInstanceDialog::collapse(weld::Widget&, weld::Widget*)
 {
     assert(false && "Not implemented yet");
 }

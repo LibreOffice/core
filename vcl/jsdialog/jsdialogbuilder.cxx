@@ -959,9 +959,9 @@ JSDialog::JSDialog(JSDialogSender* pSender, ::Dialog* pDialog, SalInstanceBuilde
 {
 }
 
-void JSDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
+void JSDialog::collapse(weld::Widget& rEdit, weld::Widget* pButton)
 {
-    SalInstanceDialog::collapse(pEdit, pButton);
+    SalInstanceDialog::collapse(rEdit, pButton);
     sendFullUpdate();
 }
 

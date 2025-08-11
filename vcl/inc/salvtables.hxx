@@ -518,7 +518,7 @@ public:
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;
 
-    virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
+    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override;
 
     virtual void undo_collapse() override;
 

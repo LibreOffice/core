@@ -37,7 +37,7 @@ public:
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
                           const std::function<void(sal_Int32)>& func) override;
 
-    virtual void collapse(weld::Widget*, weld::Widget*) override;
+    virtual void collapse(weld::Widget&, weld::Widget*) override;
 
     virtual void undo_collapse() override;
 
