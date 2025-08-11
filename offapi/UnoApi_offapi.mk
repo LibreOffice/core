@@ -2210,6 +2210,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	EventObject \
 	ExoticFileLoadException \
 	FilterOptionsRequest \
+	FontsDisallowEditingRequest \
 	LinkUpdateModes \
 	LockFileCorruptRequest \
 	LockFileIgnoreRequest \

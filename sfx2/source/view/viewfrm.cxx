@@ -278,6 +278,9 @@ bool physObjIsOlder(INetURLObject const & aMedObj, INetURLObject const & aPhysOb
 
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
+    // Open as editable?
+    std::optional<bool> oForEdit;
+
     SfxObjectShell* pSh = GetObjectShell();
     switch ( rReq.GetSlot() )
     {
@@ -402,6 +405,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
                 aReadOnlyUIGuard.m_bSetRO = false;
+                if (pMed->HasRestrictedFonts())
+                    bNeedsReload = true; // Let it ask user, reload fonts, etc.
 
                 // if only the view was in the readonly mode then there is no need to do the reload
                 if ( !pSh->IsReadOnlyMedium() )
@@ -609,6 +614,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     || bNeedsReload) );
             rReq.AppendItem( SfxBoolItem( SID_SILENT, true ));
 
+            oForEdit = !aReadOnlyUIGuard.m_bSetRO;
+
             [[fallthrough]]; //TODO ???
         }
 
@@ -637,7 +644,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             m_pImpl->bReloading = true;
             const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
             // Open as editable?
-            bool bForEdit = !pSh->IsReadOnly();
+            if (!oForEdit.has_value())
+                oForEdit = !pSh->IsReadOnly();
 
             // If possible ask the User
             bool bDo = GetViewShell()->PrepareClose();
@@ -825,7 +833,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
                     else if ( rReq.GetSlot() == SID_EDITDOC || rReq.GetSlot() == SID_READONLYDOC )
                     {
-                        xNewObj->SetReadOnlyUI( !bForEdit );
+                        xNewObj->SetReadOnlyUI(!*oForEdit);
                     }
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT

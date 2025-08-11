@@ -414,6 +414,9 @@ public:
     /// if true, xStorage is an inner package and not directly from xStream
     bool m_bODFWholesomeEncryption = false;
 
+    /// If there are such fonts, the document can't be set into editing mode;
+    /// these can't be embedded on save.
+    bool hasRestrictedFonts = false;
     /// font family, file URL
     std::vector<std::pair<OUString, OUString>> m_aEmbeddedFonts;
     std::vector<std::pair<OUString, OUString>> m_aEmbeddedFontsToActivate;
@@ -4000,6 +4003,10 @@ bool SfxMedium::IsReadOnly() const
             bReadOnly = pItem->GetValue();
     }
 
+    // d) Embedded fonts may disallow editing
+    if (!bReadOnly)
+        bReadOnly = HasRestrictedFonts();
+
     return bReadOnly;
 }
 
@@ -4018,8 +4025,11 @@ bool SfxMedium::IsOriginallyLoadedReadOnly() const
     return pImpl->m_bOriginallyLoadedReadOnly;
 }
 
+bool SfxMedium::HasRestrictedFonts() const { return pImpl->hasRestrictedFonts; }
+
 void SfxMedium::TransferEmbeddedFontsTo(SfxMedium& target)
 {
+    target.pImpl->hasRestrictedFonts = target.pImpl->hasRestrictedFonts || pImpl->hasRestrictedFonts;
     target.pImpl->m_aEmbeddedFonts.insert(target.pImpl->m_aEmbeddedFonts.end(),
                                           pImpl->m_aEmbeddedFonts.begin(),
                                           pImpl->m_aEmbeddedFonts.end());
@@ -4039,7 +4049,10 @@ void SfxMedium::AddEmbeddedFonts(
 
 void SfxMedium::activateEmbeddedFonts()
 {
-    EmbeddedFontsManager::activateFonts(pImpl->m_aEmbeddedFontsToActivate);
+    bool bActivatedRestrictedFonts;
+    EmbeddedFontsManager::activateFonts(pImpl->m_aEmbeddedFontsToActivate, IsReadOnly(),
+                                       GetInteractionHandler(), bActivatedRestrictedFonts);
+    pImpl->hasRestrictedFonts = pImpl->hasRestrictedFonts || bActivatedRestrictedFonts;
     pImpl->m_aEmbeddedFonts.insert(pImpl->m_aEmbeddedFonts.end(),
                                    pImpl->m_aEmbeddedFontsToActivate.begin(),
                                    pImpl->m_aEmbeddedFontsToActivate.end());

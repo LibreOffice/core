@@ -20,6 +20,7 @@
 
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
+namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 /** Helper functions for handling embedded fonts in documents. */
@@ -61,8 +62,17 @@ public:
     /**
       Adds the passed fonts to the list of known fonts. The fonts are used only until application
       exit.
+
+      If some fonts are restricted (i.e., block document editing), and 'silentlyAllowRestricted' is
+      false, it checks if interaction handle is set; if it is, then asks user to approve read-only
+      mode. If 'silentlyAllowRestricted' is true; or if user approved switching to read-only mode,
+      then it activates all the fonts (and sets 'activatedRestrictedFonts' to true). Otherwise, it
+      removes these fonts from 'fonts', releases them, and only activates unrestricted fonts.
     */
-    static void activateFonts(std::vector<std::pair<OUString, OUString>>& fonts);
+    static void activateFonts(std::vector<std::pair<OUString, OUString>>& fonts,
+                              bool silentlyAllowRestrictedFonts,
+                              const css::uno::Reference<css::task::XInteractionHandler>& xHandler,
+                              bool& activatedRestrictedFonts);
 
     /**
       Returns if the restrictions specified in the font (if present) allow embedding

@@ -434,7 +434,7 @@ void SfxObjectShell::SetReadOnly()
 
 bool SfxObjectShell::IsReadOnly() const
 {
-    return pImpl->bReadOnlyUI || pMedium == nullptr;
+    return pImpl->bReadOnlyUI || pMedium == nullptr || pMedium->HasRestrictedFonts();
 }
 
 
