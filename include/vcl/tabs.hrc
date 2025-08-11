@@ -150,6 +150,8 @@ inline constexpr TabData RID_TAB_NOTEBOOKBARS{ NC_("RID_TAB_NOTEBOOKBARS", "Note
 inline constexpr TabData RID_TAB_CONTEXTMENUS{ NC_("RID_TAB_CONTEXTMENUS", "Context Menus"), u"listbox.png"_ustr };
 inline constexpr TabData RID_TAB_KEYBOARD{ NC_("RID_TAB_KEYBOARD", "Keyboard"), u"underline.png"_ustr };
 inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"closedoc.png"_ustr };
+// ui mode
+inline constexpr TabData RID_TAB_UIMODE{ NC_("RID_TAB_UIMODE", "UI Mode"), u"toggletabbarvisibility.png"_ustr };
 // envelope
 inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
 inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };

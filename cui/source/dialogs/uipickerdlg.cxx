@@ -18,6 +18,8 @@
 #include <strings.hrc>
 #include <unotools/confignode.hxx>
 
+#include <vcl/tabs.hrc>
+
 UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     : SfxTabDialogController(pParent, u"cui/ui/uipickerdialog.ui"_ustr, u"UIPickerDialog"_ustr)
     , m_xOKBtn(m_xBuilder->weld_button(u"ok"_ustr))
@@ -25,8 +27,10 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // Close
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // Apply to All
 {
-    AddTabPage("uimode", UITabPage::Create, nullptr);
-    AddTabPage("toolbars", ToolbarTabPage::Create, nullptr);
+    AddTabPage("uimode", TabResId(RID_TAB_UIMODE.aLabel), UITabPage::Create,
+               RID_L + RID_TAB_UIMODE.sIconName);
+    AddTabPage("toolbars", TabResId(RID_TAB_TOOLBARS.aLabel), ToolbarTabPage::Create,
+               RID_L + RID_TAB_TOOLBARS.sIconName);
 
     m_xOKBtn->set_visible(false);
     m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"
