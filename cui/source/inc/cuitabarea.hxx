@@ -28,8 +28,6 @@
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
 
-#define NO_BUTTON_SELECTED -1
-
 class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
@@ -38,37 +36,41 @@ class SvxBitmapCtl;
 class ButtonBox
 {
     private:
-        sal_Int32 mnCurrentButton;
+        weld::Toggleable* mpCurrentButton;
         std::vector<weld::ToggleButton*> maButtonList;
         std::map<weld::Toggleable*, sal_Int32 > maButtonToPos;
     public:
         ButtonBox()
-        {
-            mnCurrentButton = NO_BUTTON_SELECTED;
-        };
+            : mpCurrentButton(nullptr) {};
+
         void AddButton(weld::ToggleButton* pButton)
         {
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
-        sal_Int32 GetCurrentButtonPos() const { return mnCurrentButton; }
-        sal_Int32 GetButtonPos(weld::Toggleable& rButton)
+
+        sal_Int32 GetCurrentButtonPos() const
+        {
+            if (mpCurrentButton)
+                return GetButtonPos(*mpCurrentButton);
+
+            return -1;
+        }
+
+        sal_Int32 GetButtonPos(weld::Toggleable& rButton) const
         {
             std::map<weld::Toggleable*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(&rButton);
             assert(aBtnPos != maButtonToPos.end() && "Unknown button");
             return aBtnPos->second;
         }
+
         void SelectButton(weld::Toggleable& rButton)
         {
-            const sal_Int32 nPos = GetButtonPos(rButton);
-            assert(nPos >= 0 && "Invalid button position");
+            if (mpCurrentButton)
+                mpCurrentButton->set_active(false);
 
-            if (mnCurrentButton != NO_BUTTON_SELECTED)
-            {
-                maButtonList[mnCurrentButton]->set_active(false);
-            }
-            mnCurrentButton = nPos;
-            maButtonList[mnCurrentButton]->set_active(true);
+            mpCurrentButton = &rButton;
+            rButton.set_active(true);
         }
 };
 
