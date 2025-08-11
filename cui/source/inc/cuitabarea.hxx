@@ -270,6 +270,8 @@ private:
     template< typename TabPage >
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
+    void CreatePage(FillType eFillType, SfxTabPage& rTab);
+
 public:
     SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,
                    const SfxItemSet& rInAttrs, bool bSlideBackground = false);
@@ -296,7 +298,6 @@ public:
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
     void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
-    void    CreatePage(FillType eFillType, SfxTabPage& rTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
 
