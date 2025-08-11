@@ -33,16 +33,22 @@ class tdf167859(UITestCase):
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "0")
 
-                xReverseBtn = xDialog.getChild("CBX_REVERSE")
-                xReverseBtn.executeAction("CLICK", tuple())
+                xReverse = xDialog.getChild("CBX_REVERSE")
+                self.assertEqual("false", get_state_as_dict(xReverse)["Selected"])
+
+                xLogarithmicScale = xDialog.getChild("CBX_LOGARITHM")
+                self.assertEqual("false", get_state_as_dict(xLogarithmicScale)["Selected"])
 
             with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisB"})) as xDialog:
 
-                #Click on tab "Scale".
+                #Click on tab "Positioning".
                 tabcontrol = xDialog.getChild("tabcontrol")
-                select_pos(tabcontrol, "0")
+                select_pos(tabcontrol, "1")
 
-                xReverseBtn = xDialog.getChild("CBX_REVERSE")
-                xReverseBtn.executeAction("CLICK", tuple())
+                xAxisAt = xDialog.getChild("LB_CROSSES_OTHER_AXIS_AT")
+                self.assertEqual("End", get_state_as_dict(xAxisAt)["DisplayText"])
+
+                xPlaceLabels = xDialog.getChild("LB_PLACE_LABELS")
+                self.assertEqual("Near axis", get_state_as_dict(xPlaceLabels)["DisplayText"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
