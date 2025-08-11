@@ -20,6 +20,7 @@ package com.sun.star.wizards.db;
 import java.util.ArrayList;
 
 import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XCloseable;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.uno.UnoRuntime;
@@ -64,6 +65,11 @@ public class RelationController extends CommandName
                 String sForeignTableName = xRow.getString(FKTABLE_NAME);
                 CommandName oCommandName = new CommandName(getCommandMetaData(), sForeignCatalog, sForeignScheme, sForeignTableName, false);
                 aReferencedTableVector.add(oCommandName.getComposedName());
+            }
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, xResultSet);
+            if (xCloseable != null)
+            {
+                xCloseable.close();
             }
             sReferencedTableNames = new String[aReferencedTableVector.size()];
             aReferencedTableVector.toArray(sReferencedTableNames);
@@ -129,6 +135,11 @@ public class RelationController extends CommandName
                     }
 
                 }
+            }
+            XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, xResultSet);
+            if (xCloseable != null)
+            {
+                xCloseable.close();
             }
             sKeyColumnNames = new String[2][aMasterFieldNamesVector.size()];
             sKeyColumnNames[0] = new String[aSlaveFieldNamesVector.size()];
