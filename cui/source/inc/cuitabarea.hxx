@@ -32,36 +32,45 @@ class ColorListBox;
 class SdrModel;
 class SvxBitmapCtl;
 
-/************************************************************************/
+enum class FillType
+{
+    TRANSPARENT,
+    SOLID,
+    GRADIENT,
+    HATCH,
+    BITMAP,
+    PATTERN,
+    USE_BACKGROUND_FILL,
+    // fallback value if no fill type has been set
+    INVALID,
+};
+
 class ButtonBox
 {
     private:
         weld::Toggleable* mpCurrentButton;
-        std::vector<weld::ToggleButton*> maButtonList;
-        std::map<weld::Toggleable*, sal_Int32 > maButtonToPos;
+        std::map<weld::Toggleable*, FillType > maButtonToFillType;
     public:
         ButtonBox()
             : mpCurrentButton(nullptr) {};
 
-        void AddButton(weld::ToggleButton* pButton)
+        void AddButton(weld::ToggleButton* pButton, FillType eFillType)
         {
-            maButtonList.push_back(pButton);
-            maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
+            maButtonToFillType.insert( std::make_pair(pButton, eFillType) );
         }
 
-        sal_Int32 GetCurrentButtonPos() const
+        FillType GetCurrentFillType() const
         {
             if (mpCurrentButton)
-                return GetButtonPos(*mpCurrentButton);
-
-            return -1;
+                return GetFillType(*mpCurrentButton);
+            return FillType::INVALID;
         }
 
-        sal_Int32 GetButtonPos(weld::Toggleable& rButton) const
+        FillType GetFillType(weld::Toggleable& rButton) const
         {
-            std::map<weld::Toggleable*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(&rButton);
-            assert(aBtnPos != maButtonToPos.end() && "Unknown button");
-            return aBtnPos->second;
+            auto aIt = maButtonToFillType.find(&rButton);
+            assert(aIt != maButtonToFillType.end() && "Unknown button");
+            return aIt->second;
         }
 
         void SelectButton(weld::Toggleable& rButton)
@@ -287,7 +296,7 @@ public:
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
     void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
-    void    CreatePage(sal_Int32 nId, SfxTabPage& rTab);
+    void    CreatePage(FillType eFillType, SfxTabPage& rTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
 
