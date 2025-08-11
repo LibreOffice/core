@@ -230,17 +230,16 @@ void SvxHyperlinkTabPageBase::HideMarkWnd()
 // Fill Dialogfields
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem )
 {
+    // Form
+    OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
+    OUString aStrFormButton = CuiResId( RID_CUISTR_HYPERDLG_FORM_BUTTON );
+
     if (!comphelper::LibreOfficeKit::isActive())
     {
         // Frame
         sal_Int32 nPos = mxCbbFrame->find_text(pHyperlinkItem->GetTargetFrame());
         if (nPos != -1)
             mxCbbFrame->set_active(nPos);
-
-        // Form
-        OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
-
-        OUString aStrFormButton = CuiResId( RID_CUISTR_HYPERDLG_FORM_BUTTON );
 
         if( pHyperlinkItem->GetInsertMode() & HLINK_HTMLMODE )
         {
@@ -259,9 +258,16 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     else
     {
         mxCbbFrame->hide();
-        mxLbForm->hide();
-        mxFormLabel->hide();
         mxFrameLabel->hide();
+
+        mxFormLabel->hide();
+        mxLbForm->hide();
+
+        // Although not visible, give fields so that default value can be used
+        mxLbForm->clear();
+        mxLbForm->append_text( aStrFormText );
+        mxLbForm->append_text( aStrFormButton );
+        mxLbForm->set_active( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
     }
 
     // URL
