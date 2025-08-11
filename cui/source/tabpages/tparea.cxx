@@ -386,12 +386,9 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
     return xRet;
 }
 
-namespace {
-
-std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(FillType eFillType, weld::Container* pPage,
-                                                       weld::DialogController* pController,
-                                                       const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFillType)
 {
+    SfxOkDialogController* pController = GetDialogController();
     CreateTabPage fnCreate = nullptr;
     switch (eFillType)
     {
@@ -404,9 +401,13 @@ std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(FillType eFillType, weld:
         case FillType::USE_BACKGROUND_FILL: fnCreate = nullptr; break;
         default: break;
     }
-    return fnCreate ? (*fnCreate)( pPage, pController, &rSet ) : nullptr;
-}
 
+    if (!fnCreate)
+        return nullptr;
+
+    std::unique_ptr<SfxTabPage> pTabPage = (*fnCreate)(m_xFillTab.get(), pController, &m_rXFSet);
+    pTabPage->SetDialogController(pController);
+    return pTabPage;
 }
 
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::Toggleable&, rButton, void)
@@ -454,12 +455,9 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
 
 std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreatePage(FillType eFillType)
 {
-    std::unique_ptr<SfxTabPage> pTabPage
-        = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
+    std::unique_ptr<SfxTabPage> pTabPage = CreateFillStyleTabPage(eFillType);
     if (!pTabPage)
         return nullptr;
-
-    pTabPage->SetDialogController(GetDialogController());
 
     if (eFillType == FillType::SOLID)
     {

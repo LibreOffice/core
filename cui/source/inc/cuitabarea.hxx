@@ -270,6 +270,7 @@ private:
     template< typename TabPage >
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
+    std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
     std::unique_ptr<SfxTabPage> CreatePage(FillType eFillType);
 
 public:
