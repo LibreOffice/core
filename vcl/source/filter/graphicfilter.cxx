@@ -478,9 +478,6 @@ struct GraphicImportContext
     std::shared_ptr<ImportOutput> m_pImportOutput;
     /// Write pixel data using this access.
     std::unique_ptr<BitmapScopedWriteAccess> m_pAccess;
-    std::unique_ptr<BitmapScopedWriteAccess> m_pAlphaAccess;
-    // Need to have an AlphaMask instance to keep its lifetime.
-    AlphaMask mAlphaMask;
     /// Signals if import finished correctly.
     ErrCode m_nStatus = ERRCODE_GRFILTER_FILTERERROR;
     /// Original graphic format.
@@ -526,7 +523,7 @@ void GraphicImportTask::doImport(GraphicImportContext& rContext)
     {
         vcl::ImportPNG(*rContext.m_pStream, *rContext.m_pImportOutput,
                 rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap,
-                rContext.m_pAccess.get(), rContext.m_pAlphaAccess.get());
+                rContext.m_pAccess.get());
 
         if (!rContext.m_pImportOutput->moBitmap || rContext.m_pImportOutput->moBitmap->IsEmpty())
         {
@@ -587,23 +584,11 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                 else if (aFilterName.equalsIgnoreAsciiCase(IMP_PNG))
                 {
                     rContext.m_eLinkType = GfxLinkType::NativePng;
-                    if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr, nullptr))
+                    if (vcl::ImportPNG( *rContext.m_pStream, *rContext.m_pImportOutput, rContext.m_nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
                     {
                         const BitmapEx& rBitmapEx = *rContext.m_pImportOutput->moBitmap;
                         Bitmap& rBitmap = const_cast<Bitmap&>(rBitmapEx.GetBitmap());
                         rContext.m_pAccess = std::make_unique<BitmapScopedWriteAccess>(rBitmap);
-                        if(rBitmapEx.IsAlpha())
-                        {
-                            // The separate alpha bitmap causes a number of complications. Not only
-                            // we need to have an extra bitmap access for it, but we also need
-                            // to keep an AlphaMask instance in the context. This is because
-                            // BitmapEx internally keeps Bitmap and not AlphaMask (because the Bitmap
-                            // may be also a mask, not alpha). So BitmapEx::GetAlpha() returns
-                            // a temporary, and direct access to the Bitmap wouldn't work
-                            // with AlphaScopedBitmapAccess. *sigh*
-                            rContext.mAlphaMask = rBitmapEx.GetAlphaMask();
-                            rContext.m_pAlphaAccess = std::make_unique<BitmapScopedWriteAccess>(rContext.mAlphaMask);
-                        }
                         rContext.m_pStream->Seek(rContext.m_nStreamBegin);
                         if (bThreads)
                             rSharedPool.pushTask(std::make_unique<GraphicImportTask>(pTag, rContext));
@@ -625,12 +610,6 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     for (auto& rContext : aContexts)
     {
         rContext.m_pAccess.reset();
-        rContext.m_pAlphaAccess.reset();
-        if (!rContext.mAlphaMask.IsEmpty()) // Need to move the AlphaMask back to the BitmapEx.
-        {
-            BitmapEx aBitmapEx(rContext.m_pImportOutput->moBitmap->GetBitmap(), rContext.mAlphaMask);
-            rContext.m_pImportOutput->moBitmap = aBitmapEx;
-        }
 
         std::shared_ptr<Graphic> pGraphic;
 

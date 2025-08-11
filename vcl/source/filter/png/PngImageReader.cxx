@@ -332,8 +332,7 @@ bool fcTLbeforeIDAT(SvStream& rStream)
 
 bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-            BitmapScopedWriteAccess* pAccess = nullptr,
-            BitmapScopedWriteAccess* pAlphaAccess = nullptr)
+            BitmapScopedWriteAccess* pAccess = nullptr)
 {
     if (!isPng(rStream))
         return false;
@@ -359,12 +358,9 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     // All variables holding resources need to be declared here in order to be
     // properly cleaned up in case of an error, otherwise libpng's longjmp()
     // jumps over the destructor calls.
-    BitmapEx aBitmapEx;
     Bitmap aBitmap;
-    AlphaMask aBitmapAlpha;
     Size prefSize;
     BitmapScopedWriteAccess pWriteAccessInstance;
-    BitmapScopedWriteAccess pWriteAccessAlphaInstance;
     const bool bFuzzing = comphelper::IsFuzzing();
     const bool bOnlyCreateBitmap
         = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
@@ -462,9 +458,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                     aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
                     break;
                 case PNG_COLOR_TYPE_RGBA:
-                    aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-                    aBitmapAlpha = AlphaMask(Size(width, height), nullptr);
-                    aBitmapAlpha.Erase(0); // opaque
+                    aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
                     break;
                 case PNG_COLOR_TYPE_GRAY:
                     aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N8_BPP,
@@ -476,28 +470,18 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
 
             if (bOnlyCreateBitmap)
             {
-                if (!aBitmapAlpha.IsEmpty())
-                    aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-                else
-                    aBitmapEx = BitmapEx(aBitmap);
                 if (!prefSize.IsEmpty())
                 {
-                    aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                    aBitmapEx.SetPrefSize(prefSize);
+                    aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                    aBitmap.SetPrefSize(prefSize);
                 }
-                rImportOutput.moBitmap = aBitmapEx;
+                rImportOutput.moBitmap = aBitmap;
                 return true;
             }
 
             pWriteAccessInstance = aBitmap;
             if (!pWriteAccessInstance)
                 return false;
-            if (!aBitmapAlpha.IsEmpty())
-            {
-                pWriteAccessAlphaInstance = aBitmapAlpha;
-                if (!pWriteAccessAlphaInstance)
-                    return false;
-            }
         }
     }
     catch (const std::runtime_error& ex)
@@ -505,13 +489,10 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         std::cerr << "libpng error: " << ex.what() << std::endl;
 
         pWriteAccessInstance.reset();
-        pWriteAccessAlphaInstance.reset();
         return false;
     }
 
     BitmapScopedWriteAccess& pWriteAccess = pAccess ? *pAccess : pWriteAccessInstance;
-    BitmapScopedWriteAccess& pWriteAccessAlpha
-        = pAlphaAccess ? *pAlphaAccess : pWriteAccessAlphaInstance;
 
     try
     {
@@ -533,9 +514,6 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         else if (colorType == PNG_COLOR_TYPE_RGB_ALPHA)
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
-            ScanlineFormat eFormat = pWriteAccess->GetScanlineFormat();
-            if (eFormat == ScanlineFormat::N24BitTcBgr)
-                png_set_bgr(pPng);
 
             if (nNumberOfPasses == 1)
             {
@@ -544,17 +522,12 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 for (png_uint_32 y = 0; y < height; y++)
                 {
                     Scanline pScanline = pWriteAccess->GetScanline(y);
-                    Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
                     png_bytep pRow = aRow.data();
                     png_read_row(pPng, pRow, nullptr);
-                    size_t iAlpha = 0;
-                    size_t iColor = 0;
                     for (size_t i = 0; i < aRowSizeBytes; i += 4)
                     {
-                        pScanline[iColor++] = pRow[i + 0];
-                        pScanline[iColor++] = pRow[i + 1];
-                        pScanline[iColor++] = pRow[i + 2];
-                        pScanAlpha[iAlpha++] = pRow[i + 3];
+                        Color aCol(ColorAlpha, pRow[i + 3], pRow[i + 0], pRow[i + 1], pRow[i + 2]);
+                        pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
                     }
                 }
             }
@@ -567,19 +540,18 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 {
                     for (png_uint_32 y = 0; y < height; y++)
                     {
-                        Scanline pScanline = pWriteAccess->GetScanline(y);
-                        Scanline pScanAlpha = pWriteAccessAlpha->GetScanline(y);
                         png_bytep pRow = aRows[y].data();
                         png_read_row(pPng, pRow, nullptr);
-                        size_t iAlpha = 0;
-                        size_t iColor = 0;
-                        for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                        {
-                            pScanline[iColor++] = pRow[i + 0];
-                            pScanline[iColor++] = pRow[i + 1];
-                            pScanline[iColor++] = pRow[i + 2];
-                            pScanAlpha[iAlpha++] = pRow[i + 3];
-                        }
+                    }
+                }
+                for (png_uint_32 y = 0; y < height; y++)
+                {
+                    Scanline pScanline = pWriteAccess->GetScanline(y);
+                    png_bytep pRow = aRows[y].data();
+                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
+                    {
+                        Color aCol(ColorAlpha, pRow[i + 3], pRow[i + 0], pRow[i + 1], pRow[i + 2]);
+                        pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
                     }
                 }
             }
@@ -595,30 +567,26 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 }
             }
         }
+        else
+            assert(false);
     }
     catch (const std::runtime_error& ex)
     {
         std::cerr << "libpng error: " << ex.what() << std::endl;
 
         pWriteAccessInstance.reset();
-        pWriteAccessAlphaInstance.reset();
 
         if (!bUseExistingBitmap)
         {
             // Set the bitmap if it contains something, even on failure. This allows
             // reading images that are only partially broken.
             pWriteAccessInstance.reset();
-            pWriteAccessAlphaInstance.reset();
-            if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-            else if (!aBitmap.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap);
-            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+            if (!aBitmap.IsEmpty() && !prefSize.IsEmpty())
             {
-                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                aBitmapEx.SetPrefSize(prefSize);
+                aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmap.SetPrefSize(prefSize);
             }
-            rImportOutput.moBitmap = aBitmapEx;
+            rImportOutput.moBitmap = aBitmap;
         }
         return false;
     }
@@ -634,17 +602,12 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         if (!bUseExistingBitmap)
         {
             pWriteAccessInstance.reset();
-            pWriteAccessAlphaInstance.reset();
-            if (!aBitmap.IsEmpty() && !aBitmapAlpha.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-            else if (!aBitmap.IsEmpty())
-                aBitmapEx = BitmapEx(aBitmap);
-            if (!aBitmapEx.IsEmpty() && !prefSize.IsEmpty())
+            if (!aBitmap.IsEmpty() && !prefSize.IsEmpty())
             {
-                aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-                aBitmapEx.SetPrefSize(prefSize);
+                aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+                aBitmap.SetPrefSize(prefSize);
             }
-            rImportOutput.moBitmap = aBitmapEx;
+            rImportOutput.moBitmap = aBitmap;
         }
         // Return true in this case, as we read the bitmap
         return true;
@@ -653,15 +616,10 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     if (!bUseExistingBitmap)
     {
         pWriteAccess.reset();
-        pWriteAccessAlpha.reset();
-        if (!aBitmapAlpha.IsEmpty())
-            aBitmapEx = BitmapEx(aBitmap, aBitmapAlpha);
-        else
-            aBitmapEx = BitmapEx(aBitmap);
         if (!prefSize.IsEmpty())
         {
-            aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-            aBitmapEx.SetPrefSize(prefSize);
+            aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            aBitmap.SetPrefSize(prefSize);
         }
     }
 
@@ -691,7 +649,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 if (aDisposal == Disposal::Previous)
                     aDisposal = Disposal::Back;
                 AnimationFrame aAnimationFrame(
-                    aBitmapEx, aFirstPoint, aCanvasSize,
+                    BitmapEx(aBitmap), aFirstPoint, aCanvasSize,
                     NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
                 aAnimation.Insert(aAnimationFrame);
             }
@@ -746,7 +704,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
     }
     else
     {
-        rImportOutput.moBitmap = aBitmapEx;
+        rImportOutput.moBitmap = aBitmap;
     }
 
     return true;
@@ -848,12 +806,11 @@ BinaryDataContainer PngImageReader::getMicrosoftGifChunk(SvStream& rStream)
 }
 
 bool ImportPNG(SvStream& rInputStream, ImportOutput& rImportOutput,
-               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess,
-               BitmapScopedWriteAccess* pAlphaAccess)
+               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess)
 {
     // Creating empty bitmaps should be practically a no-op, and thus thread-safe.
     ImportOutput aImportOutput;
-    if (reader(rInputStream, aImportOutput, nImportFlags, pAccess, pAlphaAccess))
+    if (reader(rInputStream, aImportOutput, nImportFlags, pAccess))
     {
         if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
             rImportOutput = std::move(aImportOutput);

@@ -26,8 +26,7 @@
 namespace vcl
 {
 bool ImportPNG(SvStream& rInputStream, ImportOutput& rImportOutput,
-               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess,
-               BitmapScopedWriteAccess* pAlphaAccess);
+               GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* pAccess);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
