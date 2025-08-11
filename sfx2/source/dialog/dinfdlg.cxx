@@ -85,6 +85,8 @@
 
 #include <algorithm>
 
+#include <vcl/tabs.hrc>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -1331,20 +1333,21 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog(weld::Window* pParent, const SfxIte
     m_xDialog->set_title(aTitle);
 
     // Property Pages
-    AddTabPage(u"general"_ustr, SfxDocumentPage::Create, nullptr);
-    AddTabPage(u"description"_ustr, SfxDocumentDescPage::Create, nullptr);
+    AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), SfxDocumentPage::Create,
+               RID_L + RID_TAB_ORGANIZER.sIconName);
+    AddTabPage(u"description"_ustr, TabResId(RID_TAB_DESCRIPTION.aLabel), SfxDocumentDescPage::Create,
+               RID_L + RID_TAB_DESCRIPTION.sIconName);
 
-    AddTabPage(u"customprops"_ustr, SfxCustomPropertiesPage::Create, nullptr);
+    AddTabPage(u"customprops"_ustr, TabResId(RID_TAB_CUSTOM.aLabel),
+               SfxCustomPropertiesPage::Create, RID_L + RID_TAB_CUSTOM.sIconName);
 
     if (rInfoItem.isCmisDocument())
-        AddTabPage(u"cmisprops"_ustr, SfxCmisPropertiesPage::Create, nullptr);
-    else
-        RemoveTabPage(u"cmisprops"_ustr);
+        AddTabPage(u"cmisprops"_ustr, TabResId(RID_TAB_CMIS.aLabel),
+                   SfxCmisPropertiesPage::Create, RID_L + RID_TAB_CMIS.sIconName);
     // Disable security page for online as not fully asynced yet
     if (!comphelper::LibreOfficeKit::isActive())
-        AddTabPage(u"security"_ustr, SfxSecurityPage::Create, nullptr);
-    else
-        RemoveTabPage(u"security"_ustr);
+        AddTabPage(u"security"_ustr, TabResId(RID_TAB_SECURITY.aLabel), SfxSecurityPage::Create,
+                   RID_L + RID_TAB_SECURITY.sIconName);
 }
 
 void SfxDocumentInfoDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
@@ -1355,7 +1358,8 @@ void SfxDocumentInfoDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
 
 void SfxDocumentInfoDialog::AddFontTabPage()
 {
-    AddTabPage(u"font"_ustr, SfxResId(STR_FONT_TABPAGE), SfxDocumentFontsPage::Create);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
+               SfxDocumentFontsPage::Create, RID_L + RID_TAB_FONT.sIconName);
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------

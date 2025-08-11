@@ -164,6 +164,12 @@ inline constexpr TabData RID_TAB_OFA_OPTIONS{ NC_("RID_TAB_OFA_OPTIONS", "Option
 inline constexpr TabData RID_TAB_OFA_LOCALIZED{ NC_("RID_TAB_OFA_LOCALIZED", "Localized Options"), u"charmapcontrol.png"_ustr };
 inline constexpr TabData RID_TAB_OFA_WORDCOMPL{ NC_("RID_TAB_OFA_WORDCOMPL", "Word Completion"), u"autocorrectdlg.png"_ustr };
 inline constexpr TabData RID_TAB_OFA_SMARTTAG{ NC_("RID_TAB_OFA_SMARTTAG", "Smart Tags"), u"autopilotmenu.png"_ustr };
+// doc info
+inline constexpr TabData RID_TAB_DESCRIPTION{ NC_("RID_TAB_DESCRIPTION", "Description"), u"objecttitledescription.png"_ustr };
+inline constexpr TabData RID_TAB_CUSTOM{ NC_("RID_TAB_CUSTOM", "Custom Properties"), u"setdocumentproperties.png"_ustr };
+inline constexpr TabData RID_TAB_CMIS{ NC_("RID_TAB_CMIS", "CMIS Properties"), u"browseview.png"_ustr };
+inline constexpr TabData RID_TAB_SECURITY{ NC_("RID_TAB_SECURITY", "Security"), u"protect.png"_ustr };
+inline constexpr TabData RID_TAB_STATISTICS{ NC_("RID_TAB_STATISTICS", "Statistics"), u"autosum.png"_ustr };
 
 static OUString TabResId(TranslateId aId)
 {

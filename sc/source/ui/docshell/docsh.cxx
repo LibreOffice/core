@@ -153,6 +153,8 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>
 
+#include <vcl/tabs.hrc>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -3161,7 +3163,8 @@ std::shared_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld
         ::CreateTabPage ScDocStatPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_STAT);
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         xDlg->AddFontTabPage();
-        xDlg->AddTabPage(u"calcstats"_ustr, ScResId(STR_DOC_STAT), ScDocStatPageCreate);
+        xDlg->AddTabPage(u"calcstats"_ustr, TabResId(RID_TAB_STATISTICS.aLabel),
+                         ScDocStatPageCreate, RID_L + RID_TAB_STATISTICS.sIconName);
     }
     return xDlg;
 }

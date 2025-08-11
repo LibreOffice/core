@@ -122,6 +122,8 @@
 #include <ndtxt.hxx>
 #include <iodetect.hxx>
 
+#include <vcl/tabs.hrc>
+
 #include <memory>
 
 using namespace ::com::sun::star::ui::dialogs;
@@ -144,7 +146,9 @@ std::shared_ptr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(weld
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             xDlg->AddFontTabPage();
-            xDlg->AddTabPage(u"writerstats"_ustr, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT));
+            xDlg->AddTabPage(u"writerstats"_ustr, TabResId(RID_TAB_STATISTICS.aLabel),
+                             pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT),
+                             RID_L + RID_TAB_STATISTICS.sIconName);
         }
     }
     return xDlg;

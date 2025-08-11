@@ -350,7 +350,6 @@
 #define STR_SCATTR_PAGE_SCALE_HEIGHT            NC_("STR_SCATTR_PAGE_SCALE_HEIGHT", "Height")
 #define STR_SCATTR_PAGE_SCALE_PAGES             NNC_("STR_SCATTR_PAGE_SCALE_PAGES", "One page", "%1 pages")
 #define STR_SCATTR_PAGE_SCALE_AUTO              NC_("STR_SCATTR_PAGE_SCALE_AUTO", "automatic")
-#define STR_DOC_STAT                            NC_("STR_DOC_STAT", "Statistics")
 #define STR_LINKERROR                           NC_("STR_LINKERROR", "The link could not be updated.")
 #define STR_LINKERRORFILE                       NC_("STR_LINKERRORFILE", "File:")
 #define STR_LINKERRORTAB                        NC_("STR_LINKERRORTAB", "Sheet:")
