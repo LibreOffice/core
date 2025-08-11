@@ -204,29 +204,35 @@
         <xsl:text>; </xsl:text>
     </xsl:template>
 
-    <!-- FIXME this won't work if *both* underline and overline are set -->
     <xsl:template match="@style:text-overline-style">
-        <xsl:text>text-decoration:</xsl:text>
-        <xsl:choose>
-            <xsl:when test=".='none'">
-                <xsl:text>none ! important</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>overline</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>; </xsl:text>
+        <xsl:if test="not(../@style:text-underline-style)">
+            <xsl:text>text-decoration:</xsl:text>
+            <xsl:choose>
+                <xsl:when test=".='none'">
+                    <xsl:text>none ! important</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>overline</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>; </xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="@style:text-underline-style">
         <xsl:text>text-decoration:</xsl:text>
         <xsl:choose>
-            <!-- changing the distance measure: inch to in -->
-            <xsl:when test=".='none'">
-                <xsl:text>none ! important</xsl:text>
+            <xsl:when test=". != 'none' or
+                    (../@style:text-overline-style and ../@style:text-overline-style != 'none')">
+                <xsl:if test=". != 'none'">
+                    <xsl:text>underline</xsl:text>
+                </xsl:if>
+                <xsl:if test="(../@style:text-overline-style and ../@style:text-overline-style != 'none')">
+                    <xsl:text> overline</xsl:text>
+                </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>underline</xsl:text>
+                <xsl:text>none ! important</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>; </xsl:text>

@@ -71,6 +71,36 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf167910)
+{
+    createSwDoc("tdf167910.fodt");
+    setFilterOptions(u"UTF8"_ustr);
+    save(mpFilter);
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    auto para1{ aStream.indexOf("text-decoration:underline;") };
+    CPPUNIT_ASSERT(para1 != -1);
+    auto para2{ aStream.indexOf("text-decoration:overline;", para1) };
+    CPPUNIT_ASSERT(para2 != -1);
+    auto para3{ aStream.indexOf("text-decoration:underline overline;", para2) };
+    CPPUNIT_ASSERT(para3 != -1);
+    // the paragraph 4 is using commond style not automatic style and these
+    // are exported after all automatic ones...
+    auto para5{ aStream.indexOf("text-decoration:underline;", para3) };
+    CPPUNIT_ASSERT(para5 != -1);
+    auto para6{ aStream.indexOf("text-decoration: overline;", para5) };
+    CPPUNIT_ASSERT(para6 != -1);
+    // this one is style overridden by autostyle
+    auto para7{ aStream.indexOf("text-decoration:none ! important;", para6) };
+    CPPUNIT_ASSERT(para7 != -1);
+    auto para4style{ aStream.indexOf(".paragraph-underover", para7) };
+    CPPUNIT_ASSERT(para4style != -1);
+    auto para4{ aStream.indexOf("text-decoration:underline overline;", para4style) };
+    CPPUNIT_ASSERT(para4 != -1);
+}
+
 CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf118637)
 {
     createSwDoc("tdf118637.odt");
