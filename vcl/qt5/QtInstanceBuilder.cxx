@@ -186,6 +186,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"svx/ui/docrecoverybrokendialog.ui"_ustr,
         u"svx/ui/docrecoveryrecoverdialog.ui"_ustr,
         u"svx/ui/docrecoverysavedialog.ui"_ustr,
+        u"svx/ui/dropdownfielddialog.ui"_ustr,
         u"svx/ui/fontworkgallerydialog.ui"_ustr,
         u"svx/ui/deletefooterdialog.ui"_ustr,
         u"svx/ui/deleteheaderdialog.ui"_ustr,
