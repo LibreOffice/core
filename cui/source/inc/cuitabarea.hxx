@@ -39,7 +39,7 @@ class ButtonBox
 {
     private:
         sal_Int32 mnCurrentButton;
-        std::vector<weld::Toggleable*> maButtonList;
+        std::vector<weld::ToggleButton*> maButtonList;
         std::map<weld::Toggleable*, sal_Int32 > maButtonToPos;
         void SelectButtonImpl( sal_Int32 nPos )
         {
@@ -55,7 +55,7 @@ class ButtonBox
         {
             mnCurrentButton = NO_BUTTON_SELECTED;
         };
-        void AddButton(weld::Toggleable* pButton)
+        void AddButton(weld::ToggleButton* pButton)
         {
             maButtonList.push_back(pButton);
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
@@ -240,13 +240,13 @@ private:
 
 protected:
     std::unique_ptr<weld::Container> m_xFillTab;
-    std::unique_ptr<weld::Toggleable> m_xBtnNone;
-    std::unique_ptr<weld::Toggleable> m_xBtnColor;
-    std::unique_ptr<weld::Toggleable> m_xBtnGradient;
-    std::unique_ptr<weld::Toggleable> m_xBtnHatch;
-    std::unique_ptr<weld::Toggleable> m_xBtnBitmap;
-    std::unique_ptr<weld::Toggleable> m_xBtnPattern;
-    std::unique_ptr<weld::Toggleable> m_xBtnUseBackground;
+    std::unique_ptr<weld::ToggleButton> m_xBtnNone;
+    std::unique_ptr<weld::ToggleButton> m_xBtnColor;
+    std::unique_ptr<weld::ToggleButton> m_xBtnGradient;
+    std::unique_ptr<weld::ToggleButton> m_xBtnHatch;
+    std::unique_ptr<weld::ToggleButton> m_xBtnBitmap;
+    std::unique_ptr<weld::ToggleButton> m_xBtnPattern;
+    std::unique_ptr<weld::ToggleButton> m_xBtnUseBackground;
 
     void SetOptimalSize(weld::DialogController* pController);
 
