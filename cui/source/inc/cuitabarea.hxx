@@ -61,19 +61,17 @@ class ButtonBox
             maButtonToPos.insert( std::make_pair(pButton, maButtonList.size() - 1) );
         }
         sal_Int32 GetCurrentButtonPos() const { return mnCurrentButton; }
-        sal_Int32 GetButtonPos(weld::Toggleable* pButton)
+        sal_Int32 GetButtonPos(weld::Toggleable& rButton)
         {
-            std::map<weld::Toggleable*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(pButton);
-            if(aBtnPos != maButtonToPos.end())
-                return aBtnPos->second;
-            else
-                return -1;
+            std::map<weld::Toggleable*, sal_Int32>::const_iterator aBtnPos = maButtonToPos.find(&rButton);
+            assert(aBtnPos != maButtonToPos.end() && "Unknown button");
+            return aBtnPos->second;
         }
-        void SelectButton(weld::Toggleable* pButton)
+        void SelectButton(weld::Toggleable& rButton)
         {
-            sal_Int32 nPos = GetButtonPos(pButton);
-            if(nPos != -1)
-                SelectButtonImpl(nPos);
+            const sal_Int32 nPos = GetButtonPos(rButton);
+            assert(nPos >= 0 && "Invalid button position");
+            SelectButtonImpl(nPos);
         }
 };
 

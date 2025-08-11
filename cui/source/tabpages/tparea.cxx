@@ -438,10 +438,10 @@ void SvxAreaTabPage::SelectFillType(weld::Toggleable& rButton, const SfxItemSet*
     if (_pSet)
         m_rXFSet.Set(*_pSet);
 
-    sal_Int32 nPos = maBox.GetButtonPos(&rButton);
+    sal_Int32 nPos = maBox.GetButtonPos(rButton);
     if (nPos != -1 && (_pSet || nPos != maBox.GetCurrentButtonPos()))
     {
-        maBox.SelectButton(&rButton);
+        maBox.SelectButton(rButton);
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
         m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
         if (m_xFillTabPage)
