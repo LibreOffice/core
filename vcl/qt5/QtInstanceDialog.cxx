@@ -80,12 +80,62 @@ bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return true;
 }
 
-void QtInstanceDialog::collapse(weld::Widget&, weld::Widget*)
+void QtInstanceDialog::collapse(weld::Widget& rEdit, weld::Widget* pButton)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    assert(m_aVisibleWidgetsBeforeCollapsing.empty() && "Dialog already collapsed?");
+
+    GetQtInstance().RunInMainThread([&] {
+#if QT_VERSION_CHECK(6, 3, 0)
+        const QList<QWidget*> m_pChildren = m_pDialog->findChildren<QWidget*>();
+#else
+        const QList<QWidget*> m_pChildren = m_pDialog->findChildren<QWidget*>(QLatin1String(""));
+#endif
+        // hide all widgets
+        for (QWidget* pChild : m_pChildren)
+        {
+            if (!pChild->isHidden())
+            {
+                m_aVisibleWidgetsBeforeCollapsing.push_back(pChild);
+                pChild->hide();
+            }
+        }
+
+        // make the given widgets (and their ancestors) visible again
+        QtInstanceWidget& rQtEdit = dynamic_cast<QtInstanceWidget&>(rEdit);
+        QWidget* pEditWidget = rQtEdit.getQWidget();
+        assert(pEditWidget);
+        QtInstanceWidget* pQtButton = dynamic_cast<QtInstanceWidget*>(pButton);
+        QWidget* pButtonWidget = pQtButton ? pQtButton->getQWidget() : nullptr;
+
+        for (QWidget* pVisibleWidget : { pEditWidget, pButtonWidget })
+        {
+            QWidget* pWidget = pVisibleWidget;
+            while (pWidget)
+            {
+                pWidget->setVisible(true);
+                pWidget = pWidget->parentWidget();
+            }
+        }
+
+        resize_to_request();
+    });
 }
 
-void QtInstanceDialog::undo_collapse() { assert(false && "Not implemented yet"); }
+void QtInstanceDialog::undo_collapse()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        for (QWidget* pWidget : m_aVisibleWidgetsBeforeCollapsing)
+            pWidget->show();
+
+        m_aVisibleWidgetsBeforeCollapsing.clear();
+
+        resize_to_request();
+    });
+}
 
 void QtInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&)
 {

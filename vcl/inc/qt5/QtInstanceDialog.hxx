@@ -27,6 +27,9 @@ class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
     std::shared_ptr<weld::Dialog> m_xRunAsyncDialog;
     std::function<void(sal_Int32)> m_aRunAsyncFunc;
 
+    // widgets visible before collapse() was called, should be visible again after undo_collapse()
+    std::vector<QWidget*> m_aVisibleWidgetsBeforeCollapsing;
+
 public:
     QtInstanceDialog(QDialog* pDialog);
     ~QtInstanceDialog();
@@ -37,7 +40,7 @@ public:
     virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
                           const std::function<void(sal_Int32)>& func) override;
 
-    virtual void collapse(weld::Widget&, weld::Widget*) override;
+    virtual void collapse(weld::Widget& rEdit, weld::Widget* pButton) override;
 
     virtual void undo_collapse() override;
 
