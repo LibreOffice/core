@@ -978,6 +978,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
 
     Init_Impl();
     m_aFLineIndent.set_min(-9999, FieldUnit::NONE);    // is set to 0 on default
+    m_aFLineIndent.EnableNegativeMode();
     m_aFLineIndent.EnableFontRelativeMode();
 
     m_aLeftIndent.EnableFontRelativeMode();
