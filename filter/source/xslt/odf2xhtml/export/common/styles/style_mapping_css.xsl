@@ -204,6 +204,20 @@
         <xsl:text>; </xsl:text>
     </xsl:template>
 
+    <!-- FIXME this won't work if *both* underline and overline are set -->
+    <xsl:template match="@style:text-overline-style">
+        <xsl:text>text-decoration:</xsl:text>
+        <xsl:choose>
+            <xsl:when test=".='none'">
+                <xsl:text>none ! important</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>overline</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>; </xsl:text>
+    </xsl:template>
+
     <xsl:template match="@style:text-underline-style">
         <xsl:text>text-decoration:</xsl:text>
         <xsl:choose>
