@@ -44,14 +44,15 @@
 
 #include <memory>
 
-ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings)
- : m_pDlg(_pDlg)
- , m_pRefEdit (nullptr)
- , m_pRefBtn (nullptr)
- , m_pDialog(nullptr)
- , m_pBindings(_pBindings)
- , m_nRefTab(0)
- , m_bHighlightRef(false)
+ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg, SfxBindings* _pBindings,
+                                                   weld::Dialog* pDialog)
+    : m_pDlg(_pDlg)
+    , m_pRefEdit(nullptr)
+    , m_pRefBtn(nullptr)
+    , m_pDialog(pDialog)
+    , m_pBindings(_pBindings)
+    , m_nRefTab(0)
+    , m_bHighlightRef(false)
 {
     ScInputOptions aInputOption = ScModule::get()->GetInputOptions();
     m_bEnableColorRef=aInputOption.GetRangeFinder();
@@ -575,11 +576,9 @@ static void lcl_HideAllReferences()
 ScRefHandler::ScRefHandler(SfxDialogController& rController, SfxBindings* pB, bool bBindRef)
     : m_pController(&rController)
     , m_bInRefMode(false)
-    , m_aHelper(this, pB)
+    , m_aHelper(this, pB, rController.getDialog())
     , m_pMyBindings(pB)
 {
-    m_aHelper.SetDialog(rController.getDialog());
-
     if( bBindRef ) EnterRefMode();
 }
 

@@ -48,7 +48,7 @@ class ScFormulaReferenceHelper
     DECL_LINK( ActivateHdl, weld::Widget&, bool );
 
 public:
-    ScFormulaReferenceHelper(IAnyRefDialog* _pDlg, SfxBindings* _pBindings);
+    ScFormulaReferenceHelper(IAnyRefDialog* _pDlg, SfxBindings* _pBindings, weld::Dialog* pDialog);
     ~ScFormulaReferenceHelper();
     void dispose();
 
@@ -64,7 +64,6 @@ public:
     void                RefInputDone( bool bForced );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton );
 
-    void                SetDialog(weld::Dialog* pDialog) { m_pDialog = pDialog; }
     void                DoClose( sal_uInt16 nId );
     void                SetDispatcherLock( bool bLock );
     static void         EnableSpreadsheets( bool bFlag = true );
