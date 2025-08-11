@@ -428,12 +428,7 @@ void SvxAreaTabPage::SelectFillType(weld::Toggleable& rButton, const SfxItemSet*
     {
         maBox.SelectButton(rButton);
         FillType eFillType = maBox.GetCurrentFillType();
-        m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
-        if (m_xFillTabPage)
-        {
-            m_xFillTabPage->SetDialogController(GetDialogController());
-            CreatePage(eFillType, *m_xFillTabPage);
-        }
+        m_xFillTabPage = CreatePage(eFillType);
     }
 }
 
@@ -457,11 +452,18 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetPatternList(pPatternListItem->GetPatternList());
 }
 
-void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
+std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreatePage(FillType eFillType)
 {
+    std::unique_ptr<SfxTabPage> pTabPage
+        = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
+    if (!pTabPage)
+        return nullptr;
+
+    pTabPage->SetDialogController(GetDialogController());
+
     if (eFillType == FillType::SOLID)
     {
-        auto& rColorTab = static_cast<SvxColorTabPage&>(rTab);
+        auto& rColorTab = static_cast<SvxColorTabPage&>(*pTabPage);
         rColorTab.SetColorList(m_pColorList);
         rColorTab.SetColorChgd(m_pnColorListState);
         rColorTab.Construct();
@@ -471,7 +473,7 @@ void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
     }
     else if (eFillType == FillType::GRADIENT)
     {
-        auto& rGradientTab = static_cast<SvxGradientTabPage&>(rTab);
+        auto& rGradientTab = static_cast<SvxGradientTabPage&>(*pTabPage);
         rGradientTab.SetColorList(m_pColorList);
         rGradientTab.SetGradientList(m_pGradientList);
         rGradientTab.SetColorChgd(m_pnColorListState);
@@ -482,7 +484,7 @@ void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
     }
     else if (eFillType == FillType::HATCH)
     {
-        auto& rHatchTab = static_cast<SvxHatchTabPage&>(rTab);
+        auto& rHatchTab = static_cast<SvxHatchTabPage&>(*pTabPage);
         rHatchTab.SetColorList(m_pColorList);
         rHatchTab.SetHatchingList(m_pHatchingList);
         rHatchTab.SetColorChgd(m_pnColorListState);
@@ -493,7 +495,7 @@ void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
     }
     else if (eFillType == FillType::BITMAP)
     {
-        auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(rTab);
+        auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(*pTabPage);
         rBitmapTab.SetBitmapList(m_pBitmapList);
         rBitmapTab.Construct();
         rBitmapTab.ActivatePage(m_rXFSet);
@@ -502,7 +504,7 @@ void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
     }
     else if (eFillType == FillType::PATTERN)
     {
-        auto& rPatternTab = static_cast<SvxPatternTabPage&>(rTab);
+        auto& rPatternTab = static_cast<SvxPatternTabPage&>(*pTabPage);
         rPatternTab.SetColorList(m_pColorList);
         rPatternTab.SetPatternList(m_pPatternList);
         rPatternTab.SetColorChgd(m_pnColorListState);
@@ -511,6 +513,8 @@ void SvxAreaTabPage::CreatePage(FillType eFillType, SfxTabPage& rTab)
         rPatternTab.Reset(&m_rXFSet);
         rPatternTab.set_visible(true);
     }
+
+    return pTabPage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

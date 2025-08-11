@@ -270,7 +270,7 @@ private:
     template< typename TabPage >
     DeactivateRC DeactivatePage_Impl( SfxItemSet* pSet );
 
-    void CreatePage(FillType eFillType, SfxTabPage& rTab);
+    std::unique_ptr<SfxTabPage> CreatePage(FillType eFillType);
 
 public:
     SvxAreaTabPage(weld::Container* pPage, weld::DialogController* pController,
