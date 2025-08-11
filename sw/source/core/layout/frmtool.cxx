@@ -1909,11 +1909,14 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 continue; // skip it
             }
             assert(pActualSection && "Section end without section start?");
-            assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
 
             //Close the section, where appropriate activate the surrounding
             //section again.
-            pActualSection.reset(pActualSection->GetUpper());
+            if (pActualSection)
+            {
+                assert(pActualSection->GetSectionNode() == pNd->StartOfSectionNode());
+                pActualSection.reset(pActualSection->GetUpper());
+            }
             pLay = pLay->FindSctFrame();
             if ( pActualSection )
             {
