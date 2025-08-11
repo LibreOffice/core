@@ -200,7 +200,7 @@ namespace basegfx
 
             // add aNewConnectedComponent as a new entry to
             // maDisjunctAggregatesList
-            maDisjunctAggregatesList.push_back( aNewConnectedComponent );
+            maDisjunctAggregatesList.push_back(std::move(aNewConnectedComponent));
         }
 
         /** Apply a functor to each of the disjunct component

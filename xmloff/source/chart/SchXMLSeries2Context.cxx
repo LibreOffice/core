@@ -637,7 +637,7 @@ void SchXMLSeries2Context::endFastElement(sal_Int32 )
                 -1, 1,
                 msAutoStyleName, mnAttachedAxis );
             aStyle.mbSymbolSizeForSeriesIsMissingInFile=mbSymbolSizeIsMissingInFile;
-            mrStyleVector.push_back( aStyle );
+            mrStyleVector.push_back(std::move(aStyle));
         }
         // And styles for a data-label child element too. In contrast to data-labels as child of data points,
         // an information about absolute position is useless here. We need only style information.

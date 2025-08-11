@@ -124,7 +124,7 @@ void PresenterTextView::SetText (const Reference<text::XText>& rxText)
         pParagraph->SetupCellArray(mpFont);
         pParagraph->SetCharacterOffset(nCharacterCount);
         nCharacterCount += pParagraph->GetCharacterCount();
-        maParagraphs.push_back(pParagraph);
+        maParagraphs.push_back(std::move(pParagraph));
     }
 
     if (mpCaret)

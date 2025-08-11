@@ -301,7 +301,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             aRow.push_back(new ORowSetValueDecorator(aTable));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
 
-            aRows.push_back(aRow);
+            aRows.push_back(std::move(aRow));
         }
     }
 

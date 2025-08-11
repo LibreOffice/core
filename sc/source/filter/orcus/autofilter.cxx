@@ -176,7 +176,7 @@ void ScOrcusAutoFilterNode::append_item(os::col_t field, os::auto_filter_op_t op
     OUString aStr(value.data(), value.size(), mrGlobalSettings.getTextEncoding());
     aEntry.GetQueryItem().maString = mrDoc.GetSharedStringPool().intern(aStr);
 
-    maEntries.push_back(aEntry);
+    maEntries.push_back(std::move(aEntry));
 
     if (regex)
         mbHasRegex = true;

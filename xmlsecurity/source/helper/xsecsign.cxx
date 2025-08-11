@@ -310,7 +310,7 @@ void XSecController::setSignatureLineId(sal_Int32 nSecurityId, const OUString& r
     {
         InternalSignatureInformation aInformation(nSecurityId, nullptr);
         aInformation.signatureInfor.ouSignatureLineId = rSignatureLineId;
-        m_vInternalSignatureInformations.push_back(aInformation);
+        m_vInternalSignatureInformations.push_back(std::move(aInformation));
     }
     else
     {

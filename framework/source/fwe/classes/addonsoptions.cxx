@@ -979,7 +979,7 @@ void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContaine
 
             ReadMergeMenuData( aMergeAddonInstructionBase, aMergeMenuInstruction.aMergeMenu );
 
-            aContainer.push_back( aMergeMenuInstruction );
+            aContainer.push_back(std::move(aMergeMenuInstruction));
         }
     }
 }

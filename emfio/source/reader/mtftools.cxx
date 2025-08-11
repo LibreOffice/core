@@ -2462,7 +2462,7 @@ namespace emfio
         SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
         SAL_INFO("emfio", "\t\t DevWidth/Height: " << mnDevWidth << " x " << mnDevHeight);
         SAL_INFO("emfio", "\t\t LineStyle: " << maLineStyle.aLineColor << " FillStyle: " << maFillStyle.aFillColor );
-        mvSaveStack.push_back( pSave );
+        mvSaveStack.push_back(std::move(pSave));
     }
 
     void MtfTools::Pop( const sal_Int32 nSavedDC )

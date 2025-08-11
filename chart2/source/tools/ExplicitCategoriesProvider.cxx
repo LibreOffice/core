@@ -372,7 +372,7 @@ static Sequence< OUString > lcl_getExplicitSimpleCategories(
             while( nCount-- )
                 aSingleLevel.push_back(elem);
         }
-        aComplexCatsPerIndex.push_back( aSingleLevel );
+        aComplexCatsPerIndex.push_back(std::move(aSingleLevel));
     }
 
     if(nMaxCategoryCount)

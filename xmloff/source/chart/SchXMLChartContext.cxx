@@ -506,7 +506,7 @@ struct NewDonutSeries
             }
             if( !aPointStyle.msSeriesStyleNameForDonuts.isEmpty()
                 || !aPointStyle.msStyleName.isEmpty() )
-                aRet.push_back( aPointStyle );
+                aRet.push_back(std::move(aPointStyle));
             ++nPointIndex;
         }
 

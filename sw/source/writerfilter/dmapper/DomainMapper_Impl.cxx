@@ -2954,7 +2954,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         AnchoredObjectsInfo aInfo;
                         aInfo.m_xParagraph = xTextRange;
                         aInfo.m_aAnchoredObjects = rAppendContext.m_aAnchoredObjects;
-                        m_aAnchoredObjectAnchors.push_back(aInfo);
+                        m_aAnchoredObjectAnchors.push_back(std::move(aInfo));
                         rAppendContext.m_aAnchoredObjects.clear();
                     }
 

@@ -378,11 +378,10 @@ void Scene3DHelper::addProjectionGeometryToMap(
     // shift of the viewpoint in relation to the shapes of the group, for example.
 }
 
-bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
-                                           const sal_Int32& rnMSOShapeRotation,
-                                           oox::PropertyMap& rPropertyMap, double& rRotZ,
-                                           oox::drawingml::Color& rExtrusionColor,
-                                           const bool bBlockExtrusion)
+bool Scene3DHelper::setExtrusionProperties(
+    const oox::drawingml::Shape3DPropertiesPtr& p3DProperties, const sal_Int32& rnMSOShapeRotation,
+    oox::PropertyMap& rPropertyMap, double& rRotZ, oox::drawingml::Color& rExtrusionColor,
+    const bool bBlockExtrusion)
 {
     // We convert rnMSOShapeRotation, so that Shape::createAndInsert() can use rRotZ the same way in
     // all cases.

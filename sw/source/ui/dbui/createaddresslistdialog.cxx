@@ -303,7 +303,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             m_pCSVData->aDBColumnHeaders.push_back(rAddressHeader[nHeader].first);
         std::vector<OUString> aNewData;
         aNewData.insert(aNewData.begin(), nCount, OUString());
-        m_pCSVData->aDBData.push_back(aNewData);
+        m_pCSVData->aDBData.push_back(std::move(aNewData));
     }
     //now fill the address control
     m_xAddressControl->SetData(*m_pCSVData);

@@ -347,7 +347,7 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
         pData->SetPosition(Point(nX,nY));
         pData->SetSize( Size( nWidth, nHeight ) );
         pData->ShowAll(bShowAll);
-        m_vTableData.push_back(pData);
+        m_vTableData.push_back(std::move(pData));
         if ( m_aMinimumTableViewSize.X() < (nX+nWidth) )
             m_aMinimumTableViewSize.setX( nX+nWidth );
         if ( m_aMinimumTableViewSize.Y() < (nY+nHeight) )

@@ -777,7 +777,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
             }
             aRowToSet.push_back(aValue);
         }
-        aRowsToSet.push_back(aRowToSet);
+        aRowsToSet.push_back(std::move(aRowToSet));
     } // for (; pRowsIter != pRowsEnd;++pRowsIter
     setRows(std::move(aRowsToSet));
 }

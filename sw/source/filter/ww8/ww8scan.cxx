@@ -6845,7 +6845,7 @@ void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 l
         MSOPropertyBag aPropertyBag;
         if (!aPropertyBag.Read(rStream))
             break;
-        m_aPropBags.push_back(aPropertyBag);
+        m_aPropBags.push_back(std::move(aPropertyBag));
     }
 
     rStream.Seek(nOldPosition);

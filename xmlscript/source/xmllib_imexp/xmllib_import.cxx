@@ -172,7 +172,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
         getBoolAttr(&aDesc.bReadOnly, u"readonly"_ustr, xAttributes, mxImport->XMLNS_LIBRARY_UID );
         getBoolAttr(&aDesc.bPasswordProtected, u"passwordprotected"_ustr, xAttributes, mxImport->XMLNS_LIBRARY_UID );
 
-        mLibDescriptors.push_back( aDesc );
+        mLibDescriptors.push_back(std::move(aDesc));
         return new LibraryElement( rLocalName, xAttributes, this, mxImport.get() );
     }
     else

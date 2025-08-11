@@ -153,10 +153,10 @@ static bool lcl_ComputeKashidaPositions(SwTextSizeInfo& rInf, SwTextIter& rItr,
     tools::Long nMaxKashidaWidth = 0;
 
     // Parse the text, and apply the kashida insertion rules
-    std::function<LanguageType(sal_Int32, sal_Int32, bool)> const pGetLangOfChar(
+    std::function<LanguageType(sal_Int32, sal_Int32, bool)> pGetLangOfChar(
         [&rInf](sal_Int32 const nBegin, sal_uInt16 const nScript, bool const bNoChar)
         { return rInf.GetTextFrame()->GetLangOfChar(TextFrameIndex{ nBegin }, nScript, bNoChar); });
-    SwScanner aScanner(pGetLangOfChar, rInf.GetText(), nullptr, ModelToViewHelper(),
+    SwScanner aScanner(std::move(pGetLangOfChar), rInf.GetText(), nullptr, ModelToViewHelper(),
                        i18n::WordType::DICTIONARY_WORD, sal_Int32(nIdx), sal_Int32(nEnd));
 
     std::vector<bool> aValidPositions;

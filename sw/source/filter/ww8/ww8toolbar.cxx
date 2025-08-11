@@ -136,7 +136,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
             SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
-            m_rtbdc.push_back( aTBC );
+            m_rtbdc.push_back(std::move(aTBC));
             bytesToRead = m_cbDTBC - ( rS.Tell() - nStart );
         } while ( bytesToRead > 0 );
     }
@@ -163,7 +163,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
             Customization aCust( this );
             if ( !aCust.Read( rS ) )
                 return false;
-            m_rCustomizations.push_back( aCust );
+            m_rCustomizations.push_back(std::move(aCust));
         }
     }
     for ( const auto& rIndex : m_dropDownMenuIndices )

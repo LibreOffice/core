@@ -37,7 +37,7 @@ public:
         @return Returns true if extrusion properties are generated. Returns false if there is no 3D
             or if rendering without 3D is currently better. rPropertyMap is unchanged in such case.
     */
-    bool setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
+    bool setExtrusionProperties(const oox::drawingml::Shape3DPropertiesPtr& p3DProperties,
                                 const sal_Int32& rnMSOShapeRotation, oox::PropertyMap& rPropertyMap,
                                 double& rRotZ, oox::drawingml::Color& rExtrusionColor,
                                 const bool bBlockExtrusion = false);

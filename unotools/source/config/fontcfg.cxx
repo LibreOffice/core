@@ -1032,7 +1032,7 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
         aAttr.Type = getSubstType( xFont, aSubstTypeStr );
 
         // finally insert this entry
-        it->second.aSubstAttributes.push_back( aAttr );
+        it->second.aSubstAttributes.push_back(std::move(aAttr));
     }
     std::sort( it->second.aSubstAttributes.begin(), it->second.aSubstAttributes.end(), StrictStringSort() );
 }
