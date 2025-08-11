@@ -88,7 +88,7 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin, \
     $(foreach i,$(EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS),--pre-js $(i)) \
 ))
 
-ifeq ($(ENABLE_DBGUTIL)-$(gb_SUPPRESS_TESTS),TRUE-)
+ifeq ($(ENABLE_EMBINDTEST_UNO)-$(gb_SUPPRESS_TESTS),TRUE-)
 
 $(call gb_Executable_get_linktarget_target,soffice_bin): \
     $(SRCDIR)/unotest/source/embindtest/embindtest.js

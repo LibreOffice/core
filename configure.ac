@@ -2282,6 +2282,13 @@ else
     enable_emscripten_proxy_posix_sockets=
 fi
 
+AC_ARG_ENABLE(embindtest-uno,
+    AS_HELP_STRING([--enable-embindtest-uno],
+        [Enable the UNO parts (types and servie implementation) of the embindtest framework (which
+         can also be used independently of the Emscripten build).  On by default for
+         --enable-dbgutil Emscripten builds (where the Emscripten-specific embindtest.js counterpart
+         will also be enabled).]))
+
 AC_ARG_ENABLE(xmlhelp,
     AS_HELP_STRING([--disable-xmlhelp],
         [Disable XML help support]),
@@ -5025,6 +5032,20 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+
+AC_MSG_CHECKING([whether to enable (the UNO parts of) embindtest])
+if test -z "$enable_embindtest_uno" && test "$_os" = Emscripten && test "$ENABLE_DBGUTIL" = TRUE
+then
+    enable_embindtest_uno=yes
+fi
+if test "$enable_embindtest_uno" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_EMBINDTEST_UNO=TRUE
+else
+    AC_MSG_RESULT([no])
+    ENABLE_EMBINDTEST_UNO=
+fi
+AC_SUBST(ENABLE_EMBINDTEST_UNO)
 
 dnl ===================================================================
 dnl Select the linker to use (gold/lld/ld.bfd/mold).

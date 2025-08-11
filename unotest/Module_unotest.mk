@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,unotest,\
 endif
 endif
 
-ifeq ($(OS),EMSCRIPTEN)
+ifeq ($(ENABLE_EMBINDTEST_UNO),TRUE)
 $(eval $(call gb_Module_add_targets,unotest, \
     Library_embindtest \
 ))
