@@ -405,10 +405,12 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
 
 namespace {
 
-std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
+std::unique_ptr<SfxTabPage> lcl_CreateFillStyleTabPage(FillType eFillType, weld::Container* pPage,
+                                                       weld::DialogController* pController,
+                                                       const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
-    switch(nId)
+    switch (eFillType)
     {
         case TRANSPARENT: fnCreate = nullptr; break;
         case SOLID: fnCreate = &SvxColorTabPage::Create; break;
