@@ -868,6 +868,7 @@ namespace slideshow::internal
 
         void ViewShape::leaveAnimationMode()
         {
+            mpCustomSprite->hide();
             mpCustomSprite.reset();
             mbAnimationMode = false;
             mbForceUpdate   = true;

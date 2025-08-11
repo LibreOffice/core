@@ -455,6 +455,7 @@ void SlideImpl::show( bool bSlideBackgroundPainted )
     {
         for( const auto& rContext : maContext.mrViewContainer )
         {
+            viewChanged(rContext);
             // slideRenderer( this, rContext );
         }
 
