@@ -137,7 +137,7 @@
 		BEA20DDF216797C10032F67B /* pdffontcache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdffontcache.cxx; path = ../../vcl/source/gdi/pdffontcache.cxx; sourceTree = "<group>"; };
 		BEA20DE0216797C10032F67B /* textlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textlayout.cxx; path = ../../vcl/source/gdi/textlayout.cxx; sourceTree = "<group>"; };
 		BEA20DE1216797C10032F67B /* virdev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
-		BEA20DE2216797C10032F67B /* embeddedfontshelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedfontshelper.cxx; path = ../../vcl/source/gdi/embeddedfontshelper.cxx; sourceTree = "<group>"; };
+		BEA20DE2216797C10032F67B /* embeddedfontsmanager.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedfontsmanager.cxx; path = ../../vcl/source/gdi/embeddedfontsmanager.cxx; sourceTree = "<group>"; };
 		BEA20DE3216797C10032F67B /* salgdiimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiimpl.cxx; path = ../../vcl/source/gdi/salgdiimpl.cxx; sourceTree = "<group>"; };
 		BEA20DE4216797C10032F67B /* gfxlink.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gfxlink.cxx; path = ../../vcl/source/gdi/gfxlink.cxx; sourceTree = "<group>"; };
 		BEA20DE5216797C10032F67B /* alpha.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = alpha.cxx; path = ../../vcl/source/gdi/alpha.cxx; sourceTree = "<group>"; };
@@ -399,7 +399,7 @@
 				BEA20DD7216797C10032F67B /* configsettings.cxx */,
 				BEA20DD1216797C10032F67B /* cvtgrf.cxx */,
 				BEA20DF8216797C20032F67B /* dibtools.cxx */,
-				BEA20DE2216797C10032F67B /* embeddedfontshelper.cxx */,
+				BEA20DE2216797C10032F67B /* embeddedfontsmanager.cxx */,
 				BEA20DD0216797C00032F67B /* extoutdevdata.cxx */,
 				BEA20DD3216797C10032F67B /* gdimetafiletools.cxx */,
 				BEA20DDD216797C10032F67B /* gdimtf.cxx */,

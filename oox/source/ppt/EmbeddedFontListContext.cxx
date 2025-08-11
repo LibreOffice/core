@@ -24,7 +24,7 @@ EmbeddedFontListContext::EmbeddedFontListContext(
     FragmentHandler2 const& rParent, bool bEmbedTrueType,
     css::uno::Reference<css::beans::XPropertySet> const& rxDocSettings)
     : FragmentHandler2(rParent)
-    , maEmbeddedFontHelper(getFilter().getModel())
+    , maEmbeddedFontManager(getFilter().getModel())
     , mbEmbedTrueType(bEmbedTrueType)
     , mxDocSettings(rxDocSettings)
 {
@@ -95,32 +95,32 @@ void EmbeddedFontListContext::onEndElement()
     {
         OUString aFragmentPath = getFragmentPathFromRelId(moCurrentFont->aRegularID);
         uno::Reference<io::XInputStream> xInputStream = getFilter().openInputStream(aFragmentPath);
-        maEmbeddedFontHelper.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"",
-                                             std::vector<unsigned char>(), true, false);
+        maEmbeddedFontManager.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"",
+                                              std::vector<unsigned char>(), true, false);
     }
 
     if (!moCurrentFont->aBoldID.isEmpty())
     {
         OUString aFragmentPath = getFragmentPathFromRelId(moCurrentFont->aBoldID);
         uno::Reference<io::XInputStream> xInputStream = getFilter().openInputStream(aFragmentPath);
-        maEmbeddedFontHelper.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"b",
-                                             std::vector<unsigned char>(), true, false);
+        maEmbeddedFontManager.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"b",
+                                              std::vector<unsigned char>(), true, false);
     }
 
     if (!moCurrentFont->aItalicID.isEmpty())
     {
         OUString aFragmentPath = getFragmentPathFromRelId(moCurrentFont->aItalicID);
         uno::Reference<io::XInputStream> xInputStream = getFilter().openInputStream(aFragmentPath);
-        maEmbeddedFontHelper.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"i",
-                                             std::vector<unsigned char>(), true, false);
+        maEmbeddedFontManager.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"i",
+                                              std::vector<unsigned char>(), true, false);
     }
 
     if (!moCurrentFont->aBoldItalicID.isEmpty())
     {
         OUString aFragmentPath = getFragmentPathFromRelId(moCurrentFont->aBoldItalicID);
         uno::Reference<io::XInputStream> xInputStream = getFilter().openInputStream(aFragmentPath);
-        maEmbeddedFontHelper.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"bi",
-                                             std::vector<unsigned char>(), true, false);
+        maEmbeddedFontManager.addEmbeddedFont(xInputStream, moCurrentFont->aTypeface, u"bi",
+                                              std::vector<unsigned char>(), true, false);
     }
 
     moCurrentFont = std::nullopt;

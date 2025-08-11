@@ -276,7 +276,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/formpdfexport \
     vcl/source/gdi/configsettings \
     vcl/source/gdi/cvtgrf \
-    vcl/source/gdi/embeddedfontshelper \
+    vcl/source/gdi/embeddedfontsmanager \
     vcl/source/gdi/FileDefinitionWidgetDraw \
     vcl/source/gdi/WidgetDefinitionReader \
     vcl/source/gdi/WidgetDefinition \

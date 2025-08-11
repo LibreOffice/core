@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/urlobj.hxx>
 #include <utility>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -495,9 +495,9 @@ bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStre
                                   const OUString& fontName, std::u16string_view extra,
                                   std::vector<unsigned char> const & key, bool eot)
 {
-    if (!mxEmbeddedFontHelper)
-        mxEmbeddedFontHelper.reset(new EmbeddedFontsHelper(mxModel));
-    return mxEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key, eot);
+    if (!mxEmbeddedFontManager)
+        mxEmbeddedFontManager.reset(new EmbeddedFontsManager(mxModel));
+    return mxEmbeddedFontManager->addEmbeddedFont(stream, fontName, extra, key, eot);
 }
 
 namespace

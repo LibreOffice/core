@@ -23,7 +23,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -163,12 +163,12 @@ OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_vie
 }
 }
 
-EmbeddedFontsHelper::EmbeddedFontsHelper(const uno::Reference<frame::XModel>& xModel)
+EmbeddedFontsManager::EmbeddedFontsManager(const uno::Reference<frame::XModel>& xModel)
     : m_xDocumentModel(xModel)
 {
 }
 
-EmbeddedFontsHelper::~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
+EmbeddedFontsManager::~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE
 {
     if (m_aAccumulatedFonts.empty())
         return;
@@ -196,14 +196,14 @@ EmbeddedFontsHelper::~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE
     activateFonts(m_aAccumulatedFonts);
 }
 
-void EmbeddedFontsHelper::clearTemporaryFontFiles()
+void EmbeddedFontsManager::clearTemporaryFontFiles()
 {
     OUString path = GetEmbeddedFontsRoot();
     clearDir( path + "fromdocs/" );
     clearDir( path + "fromsystem/" );
 }
 
-bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
+bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStream >& stream, const OUString& fontName,
     std::u16string_view extra, std::vector< unsigned char > const & key, bool eot,
     bool bSubsetted )
 {
@@ -323,7 +323,7 @@ namespace
     };
 }
 
-void EmbeddedFontsHelper::activateFonts(std::vector<std::pair<OUString, OUString>>& fonts)
+void EmbeddedFontsManager::activateFonts(std::vector<std::pair<OUString, OUString>>& fonts)
 {
     if (fonts.empty())
         return;
@@ -353,7 +353,7 @@ void EmbeddedFontsHelper::activateFonts(std::vector<std::pair<OUString, OUString
         pDevice->AddTempDevFont(fileUrl, fontName);
 }
 
-void EmbeddedFontsHelper::releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts)
+void EmbeddedFontsManager::releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts)
 {
     std::vector<std::pair<OUString, OUString>> unregister;
     {
@@ -396,7 +396,7 @@ void EmbeddedFontsHelper::releaseFonts(const std::vector<std::pair<OUString, OUS
 // to have a different meaning (guessing from code, IsSubsettable() might
 // possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
 // So just try to open the data as ttf and see.
-bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, tools::Long size, FontRights rights )
+bool EmbeddedFontsManager::sufficientTTFRights( const void* data, tools::Long size, FontRights rights )
 {
     TrueTypeFont* font;
     if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SFErrCodes::Ok )
@@ -419,7 +419,7 @@ bool EmbeddedFontsHelper::sufficientTTFRights( const void* data, tools::Long siz
     return true; // no known restriction
 }
 
-OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
+OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
     FontWeight weight, FontPitch pitch, FontRights rights )
 {
     OUString path = GetEmbeddedFontsRoot() + "fromsystem/";
@@ -538,7 +538,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( std::u16string_view familyName, FontF
     return ok ? url : u""_ustr;
 }
 
-bool EmbeddedFontsHelper::isCommonFont(std::u16string_view aFontName)
+bool EmbeddedFontsManager::isCommonFont(std::u16string_view aFontName)
 {
     static constexpr auto aCommonFontsList = frozen::make_unordered_set<std::u16string_view>({
         // LO Common

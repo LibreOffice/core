@@ -1750,9 +1750,9 @@ include/vcl/dibtools.hxx:40
     _Bool ReadDIB(class Bitmap &,class SvStream &,_Bool,_Bool)
     _Bool bMSOFormat
     0
-include/vcl/embeddedfontshelper.hxx:54
-    class rtl::OUString EmbeddedFontsHelper::fontFileUrl(class std::basic_string_view<char16_t>,enum FontFamily,enum FontItalic,enum FontWeight,enum FontPitch,enum EmbeddedFontsHelper::FontRights)
-    enum EmbeddedFontsHelper::FontRights rights
+include/vcl/embeddedfontsmanager.hxx:54
+    class rtl::OUString EmbeddedFontsManager::fontFileUrl(class std::basic_string_view<char16_t>,enum FontFamily,enum FontItalic,enum FontWeight,enum FontPitch,enum EmbeddedFontsManager::FontRights)
+    enum EmbeddedFontsManager::FontRights rights
     0
 include/vcl/fieldvalues.hxx:38
     _Bool TextToValue(const class rtl::OUString &,double &,long,unsigned short,const class LocaleDataWrapper &,enum FieldUnit)

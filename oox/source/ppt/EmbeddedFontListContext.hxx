@@ -14,7 +14,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <optional>
@@ -44,7 +44,7 @@ struct EmbeddedFont
 class EmbeddedFontListContext final : public ::oox::core::FragmentHandler2
 {
     std::optional<EmbeddedFont> moCurrentFont;
-    EmbeddedFontsHelper maEmbeddedFontHelper;
+    EmbeddedFontsManager maEmbeddedFontManager;
     bool mbEmbedTrueType = false;
     css::uno::Reference<css::beans::XPropertySet> mxDocSettings;
 

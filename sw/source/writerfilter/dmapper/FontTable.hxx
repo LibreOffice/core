@@ -25,7 +25,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <o3tl/deleter.hxx>
 
 namespace rtl { template<class reference_type> class Reference; }
@@ -51,7 +51,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
     css::uno::Reference<css::frame::XModel2> m_xModel;
-    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> m_xEmbeddedFontHelper;
+    std::unique_ptr<EmbeddedFontsManager, o3tl::default_delete<EmbeddedFontsManager>> m_xEmbeddedFontManager;
     std::vector< FontEntry::Pointer_t > m_aFontEntries;
     FontEntry::Pointer_t m_pCurrentEntry;
     bool m_bReadOnly;

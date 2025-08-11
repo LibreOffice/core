@@ -11,7 +11,7 @@
 #include <test/unoapi_test.hxx>
 #include <config_eot.h>
 #include <config_fonts.h>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 
 using namespace css;
 
@@ -38,9 +38,9 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
 
     // Expect the font to not be available
     {
-        OUString aUrl = EmbeddedFontsHelper::fontFileUrl(
+        OUString aUrl = EmbeddedFontsManager::fontFileUrl(
             u"Boldonse", FAMILY_ROMAN, ITALIC_NONE, WEIGHT_NORMAL, PITCH_VARIABLE,
-            EmbeddedFontsHelper::FontRights::ViewingAllowed);
+            EmbeddedFontsManager::FontRights::ViewingAllowed);
         CPPUNIT_ASSERT(aUrl.isEmpty());
     }
 
@@ -51,9 +51,9 @@ CPPUNIT_TEST_FIXTURE(FontEmbeddingTest, testRoundtripEmbeddedFontsPPTX)
 #if !defined(MACOSX)
     // Expect the font to be available now, if we imported the embedded fonts correctly
     {
-        OUString aUrl = EmbeddedFontsHelper::fontFileUrl(
+        OUString aUrl = EmbeddedFontsManager::fontFileUrl(
             u"Boldonse", FAMILY_ROMAN, ITALIC_NONE, WEIGHT_NORMAL, PITCH_VARIABLE,
-            EmbeddedFontsHelper::FontRights::ViewingAllowed);
+            EmbeddedFontsManager::FontRights::ViewingAllowed);
 
         CPPUNIT_ASSERT(!aUrl.isEmpty());
     }

@@ -6245,7 +6245,7 @@ include/vcl/dibtools.hxx
 include/vcl/dndhelp.hxx
 include/vcl/dockingarea.hxx
 include/vcl/dockwin.hxx
-include/vcl/embeddedfontshelper.hxx
+include/vcl/embeddedfontsmanager.hxx
 include/vcl/errinf.hxx
 include/vcl/event.hxx
 include/vcl/evntpost.hxx
@@ -14692,7 +14692,7 @@ vcl/source/fontsubset/ttcr.hxx
 vcl/source/gdi/CommonSalLayout.cxx
 vcl/source/gdi/configsettings.cxx
 vcl/source/gdi/cvtgrf.cxx
-vcl/source/gdi/embeddedfontshelper.cxx
+vcl/source/gdi/embeddedfontsmanager.cxx
 vcl/source/gdi/formpdfexport.cxx
 vcl/source/gdi/gdimetafiletools.cxx
 vcl/source/gdi/gdimtf.cxx

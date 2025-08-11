@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 
 using namespace com::sun::star;
 
@@ -35,9 +35,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSubsettedEmbeddedFont)
     loadFromFile(u"subsetted-embedded-font.docx");
 
     // When checking if the font is available:
-    OUString aUrl = EmbeddedFontsHelper::fontFileUrl(
+    OUString aUrl = EmbeddedFontsManager::fontFileUrl(
         u"IBM Plex Serif Light", FAMILY_ROMAN, ITALIC_NONE, WEIGHT_NORMAL, PITCH_VARIABLE,
-        EmbeddedFontsHelper::FontRights::ViewingAllowed);
+        EmbeddedFontsManager::FontRights::ViewingAllowed);
 
     // Then make sure the subsetted font is not available, given that the newly inserted characters
     // during editing may be missing from the subsetted font:
@@ -52,9 +52,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSubsettedFullEmbeddedFont)
     loadFromFile(u"subsetted-full-embedded-font.docx");
 
     // When checking if the font is available:
-    OUString aUrl = EmbeddedFontsHelper::fontFileUrl(
+    OUString aUrl = EmbeddedFontsManager::fontFileUrl(
         u"IBM Plex Serif Light", FAMILY_ROMAN, ITALIC_NONE, WEIGHT_NORMAL, PITCH_VARIABLE,
-        EmbeddedFontsHelper::FontRights::ViewingAllowed);
+        EmbeddedFontsManager::FontRights::ViewingAllowed);
 
     // Then make sure the subsetted font is available, given that it has the reasonable amount of
     // glyphs:
