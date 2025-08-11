@@ -424,12 +424,11 @@ bool SwTabPortion::PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*const pL
             }
             case PortionType::TabLeft:
             {
-                // handle this case in PostFormat
                 if ((bTabOverMargin || bTabOverSpacing) && GetTabPos() > rInf.Width()
                     && (!m_bAutoTabStop || rInf.Width() <= rInf.X()))
                 {
                     if (bTabOverMargin || GetTabPos() < nTextFrameWidth)
-                    {
+                    {   // handle this case in PostFormat
                         rInf.SetLastTab(this);
                         break;
                     }
@@ -471,7 +470,7 @@ bool SwTabPortion::PreFormat(SwTextFormatInfo &rInf, SwTabPortion const*const pL
             // line if there is a fly reducing the line width:
             !rInf.GetFly() )
         {
-            PrtWidth(rInf.Width() - rInf.X());
+            PrtWidth(std::max(SwTwips{0}, rInf.Width() - rInf.X()));
             SetFixWidth( PrtWidth() );
         }
         else
