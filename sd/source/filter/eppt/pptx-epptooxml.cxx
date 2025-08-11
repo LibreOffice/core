@@ -69,7 +69,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/hash.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/export/ThemeExport.hxx>
@@ -725,7 +725,7 @@ void PowerPointExport::WriteEmbeddedFontList()
         aAnySeq[nSeqIndex++] >>= ePitch;
         aAnySeq[nSeqIndex++] >>= eCharSet;
 
-        if (EmbeddedFontsHelper::isCommonFont(sFamilyName))
+        if (EmbeddedFontsManager::isCommonFont(sFamilyName))
             continue;
 
         if (mbEmbedUsedOnly && !aUsedFonts.contains(sFamilyName))
@@ -748,9 +748,9 @@ void PowerPointExport::WriteEmbeddedFontList()
 
         for (auto [eItalic, eWeight] : aFontVariantCombinations)
         {
-            OUString sFontUrl = EmbeddedFontsHelper::fontFileUrl(
+            OUString sFontUrl = EmbeddedFontsManager::fontFileUrl(
                                     sFamilyName, FontFamily(eFamily), eItalic, eWeight, FontPitch(ePitch),
-                                    EmbeddedFontsHelper::FontRights::ViewingAllowed);
+                                    EmbeddedFontsManager::FontRights::ViewingAllowed);
 
             if (sFontUrl.isEmpty())
                 continue;

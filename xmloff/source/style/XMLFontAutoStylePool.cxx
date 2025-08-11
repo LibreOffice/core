@@ -26,7 +26,7 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -428,7 +428,7 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
         // When embedding is requested, and embedded only is not set or font is used
         if (bEmbedFonts && (!bEmbedUsedOnly || aUsedFontNames.contains(pEntry->GetFamilyName())))
         {
-            if (EmbeddedFontsHelper::isCommonFont(pEntry->GetFamilyName()))
+            if (EmbeddedFontsManager::isCommonFont(pEntry->GetFamilyName()))
                 continue;
 
             const bool bExportFlat(getExportFlags() & SvXMLExportFlags::EMBEDDED);
@@ -448,9 +448,9 @@ void SvXMLExport::exportFonts(const std::vector<XMLFontAutoStylePoolEntry_Impl*>
                 {
                     // Embed font if at least viewing is allowed (in which case the opening app must check
                     // the font license rights too and open either read-only or not use the font for editing).
-                    OUString sFileUrl = EmbeddedFontsHelper::fontFileUrl(
+                    OUString sFileUrl = EmbeddedFontsManager::fontFileUrl(
                         pEntry->GetFamilyName(), pEntry->GetFamily(), fontItalic, fontWeight,
-                        pEntry->GetPitch(), EmbeddedFontsHelper::FontRights::ViewingAllowed);
+                        pEntry->GetPitch(), EmbeddedFontsManager::FontRights::ViewingAllowed);
                     if (sFileUrl.isEmpty())
                         continue;
 

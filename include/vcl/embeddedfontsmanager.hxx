@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
-#define INCLUDED_VCL_EMBEDDEDFONTSHELPER_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 
@@ -24,7 +23,7 @@ namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 /** Helper functions for handling embedded fonts in documents. */
-class VCL_DLLPUBLIC EmbeddedFontsHelper
+class VCL_DLLPUBLIC EmbeddedFontsManager
 {
 private:
     css::uno::Reference<css::frame::XModel> m_xDocumentModel;
@@ -96,10 +95,8 @@ public:
 
     static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
 
-    EmbeddedFontsHelper(const css::uno::Reference<css::frame::XModel>& xModel);
-    ~EmbeddedFontsHelper() COVERITY_NOEXCEPT_FALSE;
+    EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
+    ~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

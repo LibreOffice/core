@@ -255,9 +255,9 @@ void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>
                                 std::vector<unsigned char> const & key,
                                 bool bSubsetted)
 {
-    if (!m_xEmbeddedFontHelper)
-        m_xEmbeddedFontHelper.reset(new EmbeddedFontsHelper(m_xModel));
-    m_xEmbeddedFontHelper->addEmbeddedFont(stream, fontName, extra, key,
+    if (!m_xEmbeddedFontManager)
+        m_xEmbeddedFontManager.reset(new EmbeddedFontsManager(m_xModel));
+    m_xEmbeddedFontManager->addEmbeddedFont(stream, fontName, extra, key,
             /*eot=*/false, bSubsetted);
 }
 

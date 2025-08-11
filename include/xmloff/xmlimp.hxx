@@ -76,7 +76,7 @@ namespace xmloff {
 namespace xmloff::token {
     class FastTokenHandler;
 }
-class EmbeddedFontsHelper;
+class EmbeddedFontsManager;
 class ProgressBarHelper;
 class SvXMLImport_Impl;
 class SvXMLUnitConverter;
@@ -246,8 +246,8 @@ private:
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
     // tdf#69060 & tdf#137643 import embedded fonts and activate them in a
-    // batch in EmbeddedFontsHelper's dtor
-    std::unique_ptr<EmbeddedFontsHelper, o3tl::default_delete<EmbeddedFontsHelper>> mxEmbeddedFontHelper;
+    // batch in EmbeddedFontsManager's dtor
+    std::unique_ptr<EmbeddedFontsManager, o3tl::default_delete<EmbeddedFontsManager>> mxEmbeddedFontManager;
 
 protected:
     bool                        mbIsFormsSupported;
@@ -582,7 +582,7 @@ public:
     */
     bool embeddedFontAlreadyProcessed( const OUString& url );
 
-    // see EmbeddedFontsHelper::addEmbeddedFont
+    // see EmbeddedFontsManager::addEmbeddedFont
     bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, std::u16string_view extra,
         std::vector< unsigned char > const & key, bool eot);

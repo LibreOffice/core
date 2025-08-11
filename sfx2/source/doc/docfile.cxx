@@ -127,7 +127,7 @@
 #include <openflag.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <vcl/embeddedfontshelper.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -3762,7 +3762,7 @@ void SfxMedium::ReleaseEmbeddedFonts()
     toRelease.insert(toRelease.end(), pImpl->m_aEmbeddedFontsToActivate.begin(),
                      pImpl->m_aEmbeddedFontsToActivate.end());
     pImpl->m_aEmbeddedFontsToActivate.clear();
-    EmbeddedFontsHelper::releaseFonts(toRelease);
+    EmbeddedFontsManager::releaseFonts(toRelease);
 }
 
 const OUString& SfxMedium::GetName() const
@@ -4036,7 +4036,7 @@ void SfxMedium::AddEmbeddedFonts(
 
 void SfxMedium::activateEmbeddedFonts()
 {
-    EmbeddedFontsHelper::activateFonts(pImpl->m_aEmbeddedFontsToActivate);
+    EmbeddedFontsManager::activateFonts(pImpl->m_aEmbeddedFontsToActivate);
     pImpl->m_aEmbeddedFonts.insert(pImpl->m_aEmbeddedFonts.end(),
                                    pImpl->m_aEmbeddedFontsToActivate.begin(),
                                    pImpl->m_aEmbeddedFontsToActivate.end());
