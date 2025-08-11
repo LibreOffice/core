@@ -97,7 +97,7 @@ void MenuContentHandler::gatherMenuContent(
         if (xIndexContainer.is())
             gatherMenuContent(xIndexContainer, aNewContent);
 
-        rMenuContent.m_aSubMenuContent.push_back(aNewContent);
+        rMenuContent.m_aSubMenuContent.push_back(std::move(aNewContent));
     }
 }
 

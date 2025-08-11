@@ -1164,7 +1164,7 @@ void SwMailMergeConfigItem::SetColumnAssignment( const SwDBData& rDBData,
         aAssignment.aDBData = rDBData;
         aAssignment.aDBColumnAssignments = rList;
         aAssignment.bColumnAssignmentsChanged = true;
-        m_pImpl->m_aAddressDataAssignments.push_back(aAssignment);
+        m_pImpl->m_aAddressDataAssignments.push_back(std::move(aAssignment));
     }
     m_pImpl->SetModified();
 }

@@ -2197,7 +2197,7 @@ void ImpEditEngine::AddPortion(
     rToFill.push_back(aPortion);
 
     //save the spelled portions for later use
-    mpSpellInfo->aLastSpellPortions.push_back(aPortion);
+    mpSpellInfo->aLastSpellPortions.push_back(std::move(aPortion));
     mpSpellInfo->aLastSpellContentSelections.push_back(rSel);
 }
 

@@ -62,7 +62,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
             }
             else
             {
-                std::shared_ptr<CanvasUpdateRequester> const pNew(
+                std::shared_ptr<CanvasUpdateRequester> pNew(
                         new CanvasUpdateRequester(rxSharedCanvas), Deleter());
                 it->second = pNew;
                 return pNew;

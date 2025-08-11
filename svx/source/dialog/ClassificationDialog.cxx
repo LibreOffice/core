@@ -362,7 +362,7 @@ void ClassificationDialog::readRecentlyUsed()
                 aWalker.next();
             }
             aWalker.parent();
-            m_aRecentlyUsedValuesCollection.push_back(aResults);
+            m_aRecentlyUsedValuesCollection.push_back(std::move(aResults));
         }
         aWalker.next();
     }

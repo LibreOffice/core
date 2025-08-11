@@ -747,8 +747,8 @@ using namespace com::sun::star;
 
             if(getLast3DDecomposition().empty())
             {
-                const Primitive3DContainer aNewSequence(impCreate3DDecomposition(rViewInformation));
-                const_cast< PolygonTubePrimitive3D* >(this)->maLast3DDecomposition = aNewSequence;
+                Primitive3DContainer aNewSequence(impCreate3DDecomposition(rViewInformation));
+                const_cast< PolygonTubePrimitive3D* >(this)->maLast3DDecomposition = std::move(aNewSequence);
             }
 
             return getLast3DDecomposition();

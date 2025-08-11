@@ -1130,9 +1130,8 @@ EffectSequence CustomAnimationList::getSelection() const
 
     mxTreeView->selected_foreach([this, &aSelection](weld::TreeIter& rEntry){
         CustomAnimationListEntryItem* pEntry = weld::fromId<CustomAnimationListEntryItem*>(mxTreeView->get_id(rEntry));
-        CustomAnimationEffectPtr pEffect(pEntry->getEffect());
-        if (pEffect)
-            aSelection.push_back(pEffect);
+        if (CustomAnimationEffectPtr pEffect = pEntry->getEffect())
+            aSelection.push_back(std::move(pEffect));
 
         // if the selected effect is not expanded and has children
         // we say that the children are automatically selected

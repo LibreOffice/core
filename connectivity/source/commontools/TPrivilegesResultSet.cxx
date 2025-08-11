@@ -70,7 +70,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
         aRows.push_back(aRow);
         aRow[6] = new ORowSetValueDecorator(u"REFERENCE"_ustr);
-        aRows.push_back(aRow);
+        aRows.push_back(std::move(aRow));
 
         setRows(std::move(aRows));
     }
