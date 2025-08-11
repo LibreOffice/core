@@ -16,6 +16,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>
+#include <SheetView.hxx>
 
 using namespace css;
 
@@ -39,6 +40,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
     SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
 
     ScTestViewCallback aView2;
     ScTabViewShell* pTabView2 = aView2.getTabViewShell();
@@ -66,12 +68,23 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 3));
     CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 4));
 
+    // Check what sheet we currently have selected for view 1 & 2
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
+
     // Create a new sheet view for view 2
     dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
+    // Check what sheet we currently have selected for view 1 & 2
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
+
     // Sort AutoFilter descending
     dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView1->GetViewData().GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), pTabView2->GetViewData().GetTabNumber());
 
     // Check view 2 - sorted
     CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 1));
