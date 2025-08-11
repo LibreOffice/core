@@ -41,15 +41,6 @@ class ButtonBox
         sal_Int32 mnCurrentButton;
         std::vector<weld::ToggleButton*> maButtonList;
         std::map<weld::Toggleable*, sal_Int32 > maButtonToPos;
-        void SelectButtonImpl( sal_Int32 nPos )
-        {
-            if(mnCurrentButton != NO_BUTTON_SELECTED)
-            {
-                maButtonList[mnCurrentButton]->set_active(false);
-            }
-            mnCurrentButton = nPos;
-            maButtonList[mnCurrentButton]->set_active(true);
-        };
     public:
         ButtonBox()
         {
@@ -71,7 +62,13 @@ class ButtonBox
         {
             const sal_Int32 nPos = GetButtonPos(rButton);
             assert(nPos >= 0 && "Invalid button position");
-            SelectButtonImpl(nPos);
+
+            if (mnCurrentButton != NO_BUTTON_SELECTED)
+            {
+                maButtonList[mnCurrentButton]->set_active(false);
+            }
+            mnCurrentButton = nPos;
+            maButtonList[mnCurrentButton]->set_active(true);
         }
 };
 
