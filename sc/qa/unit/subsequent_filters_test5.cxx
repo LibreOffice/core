@@ -204,6 +204,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf151505)
     CPPUNIT_ASSERT(nFlag & ScMF::Auto);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf94627)
+{
+    createScDoc("xlsb/tdf94627.xlsb");
+
+    ScDocument* pDoc = getScDoc();
+
+    ScRangeName* pRangeName = pDoc->GetRangeName();
+    ScRangeData* pRangeData = pRangeName->findByUpperName("NAME1");
+    CPPUNIT_ASSERT(pRangeData);
+
+    OUString aFormula = pRangeData->GetSymbol();
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$A$1"_ustr, aFormula);
+
+    double fVal = pDoc->GetValue(0, 3, 0);
+    ASSERT_DOUBLES_EQUAL(2, fVal);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
