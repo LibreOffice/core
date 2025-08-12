@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf121615)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf141171)
 {
     // Commented out this test, because it doesn't test what it thinks it tests.
-    // It was supposed to test whether or not an image is expored with transparency.
+    // It was supposed to test whether or not an image is exported with transparency.
     // But transparency in PDF is weird, it is stored as a separate image.
     // So checking the color image (as this test does, is not useful).
     //
