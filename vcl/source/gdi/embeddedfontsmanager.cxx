@@ -534,16 +534,24 @@ bool EmbeddedFontsManager::sufficientTTFRights( const void* data, tools::Long si
     return true; // no known restriction
 }
 
-OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
-    FontWeight weight, FontPitch pitch, FontRights rights )
+// static
+bool EmbeddedFontsManager::isEmbeddedAndRestricted(std::u16string_view familyName)
 {
-    // Do not embed restricted fonts coming from another document. If a font is among embedded, and
-    // is restricted, it means that it isn't installed locally. See isFontAvailableUnrestricted.
+    std::unique_lock lock(s_EmbeddedFontsMutex);
     for (const auto& pair : s_EmbeddedFonts)
     {
         if (pair.second.familyName == familyName && pair.second.isRestricted)
-            return {};
+            return true;
     }
+    return false;
+}
+
+OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,
+    FontWeight weight, FontPitch pitch, FontRights rights )
+{
+    // Do not embed restricted fonts not installed locally.
+    if (isEmbeddedAndRestricted(familyName))
+        return {};
 
     OUString path = GetEmbeddedFontsRoot() + "fromsystem/";
     osl::Directory::createPath( path );

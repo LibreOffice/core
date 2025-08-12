@@ -27,6 +27,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <utility>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -265,6 +266,13 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
     {
         FontMetric aFontMetric = pDevice->GetFontMetricFromCollection( i );
         OUString aSearchName(aFontMetric.GetFamilyName());
+
+        // If this font is embedded in a document, is restricted, and is not installed locally
+        // (which is returned from EmbeddedFontsManager::isEmbeddedAndRestricted), we must not
+        // display this family name in the UI.
+        if (EmbeddedFontsManager::isEmbeddedAndRestricted(aSearchName))
+            continue;
+
         ImplFontListNameInfo*   pData;
         sal_uInt32              nIndex;
         aSearchName = ImplMakeSearchString(aSearchName);
