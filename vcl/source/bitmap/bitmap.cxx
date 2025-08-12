@@ -2113,4 +2113,19 @@ void Bitmap::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
 }
 
+AlphaMask Bitmap::CreateAlphaMask() const
+{
+    assert(HasAlpha());
+    if (!HasAlpha())
+        return AlphaMask();
+    return BitmapEx(*this).GetAlphaMask();
+}
+
+Bitmap Bitmap::CreateColorBitmap() const
+{
+    if (!HasAlpha())
+        return *this;
+    return BitmapEx(*this).GetBitmap();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

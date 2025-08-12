@@ -141,6 +141,11 @@ public:
     // does this bitmap have alpha information?
     inline bool             HasAlpha() const { return getPixelFormat() == vcl::PixelFormat::N32_BPP; }
 
+    /** return the alpha data, copied into an AlphaMask. Will assert if this Bitmap has no alpha. */
+    AlphaMask               CreateAlphaMask() const;
+    /** return the color data, copied into a new Bitmap. If this Bitmap does not have alpha, will return a copy of itself. */
+    Bitmap                  CreateColorBitmap() const;
+
     /** get system dependent bitmap data
 
         @param rData

@@ -2136,7 +2136,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
             aBitmap.Erase(Color(aReplacementColor));
 
             if (rMarker.HasAlpha())
-                aBitmapEx = BitmapEx(aBitmap, BitmapEx(rMarker).GetAlphaMask());
+                aBitmapEx = BitmapEx(aBitmap, rMarker.CreateAlphaMask());
             else
                 aBitmapEx = BitmapEx(aBitmap);
         }

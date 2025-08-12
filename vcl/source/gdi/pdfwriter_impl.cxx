@@ -9791,7 +9791,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
     if (!writeBuffer(aLine)) return false;
 
     if( nMaskObject )
-        return writeBitmapMaskObject( nMaskObject, BitmapEx(rObject.m_aBitmap).GetAlphaMask() );
+        return writeBitmapMaskObject( nMaskObject, rObject.m_aBitmap.CreateAlphaMask() );
 
     writeReferenceXObject(rObject.m_aReferenceXObject);
 
@@ -10048,7 +10048,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const Bitmap& i_rBitmap, const
     aID.m_nChecksum         = BitmapEx(aBitmap).GetBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.HasAlpha() )
-        aID.m_nMaskChecksum = BitmapEx(aBitmap).GetAlphaMask().GetChecksum();
+        aID.m_nMaskChecksum = aBitmap.CreateAlphaMask().GetChecksum();
     std::list<BitmapEmit>::const_iterator it = std::find_if(rBitmaps.begin(), rBitmaps.end(),
                                              [&](const BitmapEmit& arg) { return aID == arg.m_aID; });
     if (it == rBitmaps.end())

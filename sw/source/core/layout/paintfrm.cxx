@@ -6401,42 +6401,42 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     {
         aShadowColor = _pViewShell->GetViewOptions()->GetShadowColor();
 
-        AlphaMask aMask( BitmapEx(shadowMask.getBottomRight()).GetBitmap() );
+        AlphaMask aMask( shadowMask.getBottomRight().CreateColorBitmap() );
         Bitmap aFilledSquare(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageBottomRightShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getBottomLeft()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getBottomLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageBottomLeftShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getBottom()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getBottom().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageBottomShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getTop()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getTop().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageTopShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getTopRight()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getTopRight().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageTopRightShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getRight()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getRight().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageRightShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getTopLeft()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getTopLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageTopLeftShadow = BitmapEx( aFilledSquare, aMask );
 
-        aMask = AlphaMask( BitmapEx(shadowMask.getLeft()).GetBitmap() );
+        aMask = AlphaMask( shadowMask.getLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
         aPageLeftShadow = BitmapEx( aFilledSquare, aMask );

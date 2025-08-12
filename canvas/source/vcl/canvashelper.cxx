@@ -719,9 +719,9 @@ namespace vclcanvas
                         // the alpha mask needs to be inverted. Note: when
                         // testing tdf#157790, this code only gets executed
                         // when Skia is enabled.
-                        AlphaMask aAlpha( BitmapEx(aBmp).GetAlphaMask() );
+                        AlphaMask aAlpha( aBmp.CreateAlphaMask() );
                         aAlpha.Invert();
-                        aBmp = Bitmap(BitmapEx( BitmapEx(aBmp).GetBitmap(), aAlpha ));
+                        aBmp = Bitmap(BitmapEx( aBmp.CreateColorBitmap(), aAlpha ));
 
                         // HACK. Normally, CanvasHelper does not care about
                         // actually what mp2ndOutDev is...  well, here we do &
@@ -839,9 +839,9 @@ namespace vclcanvas
                         // the alpha mask needs to be inverted. Note: when
                         // testing tdf#157790, this code only gets executed
                         // when Skia is disabled.
-                        AlphaMask aAlpha( BitmapEx(aBmp).GetAlphaMask() );
+                        AlphaMask aAlpha( aBmp.CreateAlphaMask() );
                         aAlpha.Invert();
-                        BitmapEx a2ndBmpEx( BitmapEx(aBmp).GetBitmap(), aAlpha );
+                        BitmapEx a2ndBmpEx( aBmp.CreateColorBitmap(), aAlpha );
                         p2ndGrfObj = std::make_shared<GraphicObject>( a2ndBmpEx );
                     }
 

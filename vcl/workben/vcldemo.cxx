@@ -844,7 +844,7 @@ public:
                 aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
             }
 
-            AlphaMask aWholeMask(BitmapEx(aPageShadowMask).GetBitmap());
+            AlphaMask aWholeMask(aPageShadowMask.CreateColorBitmap());
             aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_GREEN);
             BitmapEx aWhole(aBlockColor, aWholeMask);
