@@ -2284,7 +2284,7 @@ fi
 
 AC_ARG_ENABLE(embindtest-uno,
     AS_HELP_STRING([--enable-embindtest-uno],
-        [Enable the UNO parts (types and servie implementation) of the embindtest framework (which
+        [Enable the UNO parts (types and service implementation) of the embindtest framework (which
          can also be used independently of the Emscripten build).  On by default for
          --enable-dbgutil Emscripten builds (where the Emscripten-specific embindtest.js counterpart
          will also be enabled).]))
