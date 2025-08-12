@@ -421,7 +421,7 @@ void MenuBarMerger::GetSubMenu(
 
         AddonMenuItem aMenuItem;
         GetMenuEntry( rMenuEntry, aMenuItem );
-        rSubMenu.push_back( aMenuItem );
+        rSubMenu.push_back(std::move(aMenuItem));
     }
 }
 

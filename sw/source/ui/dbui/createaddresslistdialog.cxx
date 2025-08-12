@@ -290,7 +290,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                     else
                         aNewData.push_back(sData);
                 }
-                m_pCSVData->aDBData.push_back( aNewData );
+                m_pCSVData->aDBData.push_back(std::move(aNewData));
             }
         }
     }

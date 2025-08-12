@@ -648,7 +648,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
         InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(),
                      aHiddenCharacterProperties, aFieldsNode);
 
-        aParaNode.children.push_back(aCurrentChild);
+        aParaNode.children.push_back(std::move(aCurrentChild));
         sCurrentParaStyle = aParentParaStyle;
     }
 

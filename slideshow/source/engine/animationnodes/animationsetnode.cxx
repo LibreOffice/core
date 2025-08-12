@@ -50,12 +50,12 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     // AnimationBaseNode::fillCommonParameters() has set up
     // immediate deactivation as default when activity ends, but
     if (! isIndefiniteTiming( xAnimateNode->getDuration() )) {
-        std::shared_ptr<AnimationSetNode> const pSelf(
+        std::shared_ptr<AnimationSetNode> xSelf(
             std::dynamic_pointer_cast<AnimationSetNode>(getSelf()) );
         ENSURE_OR_THROW(
-            pSelf, "cannot cast getSelf() to my type!" );
+            xSelf, "cannot cast getSelf() to my type!" );
         aParms.mpEndEvent = makeEvent(
-            [pSelf] () { pSelf->scheduleDeactivationEvent(); },
+            [xSelf=std::move(xSelf)] () { xSelf->scheduleDeactivationEvent(); },
             u"AnimationSetNode::scheduleDeactivationEvent"_ustr);
     }
 

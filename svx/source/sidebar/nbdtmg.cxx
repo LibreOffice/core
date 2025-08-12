@@ -438,7 +438,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
                 pNumEntry->sDescription = SvxResId(RID_SVXSTR_SINGLENUM_DESCRIPTIONS[i]);
-            maNumberSettingsArr.push_back(pNumEntry);
+            maNumberSettingsArr.push_back(std::move(pNumEntry));
         }
     }
     catch(Exception&)

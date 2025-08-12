@@ -520,8 +520,7 @@ SgaObjectBmp GalleryFileStorage::insertGraphic(const Graphic& rGraphic, const Gf
     }
     if (bRet)
     {
-        const SgaObjectBmp aObjBmp(aURL);
-        return aObjBmp;
+        return SgaObjectBmp(aURL);
     }
     return SgaObjectBmp();
 }

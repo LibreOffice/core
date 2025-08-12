@@ -2268,7 +2268,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                         for( sal_Int32 nMemIdx = 0, nMemCount = rGroup.GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
                             if (const OUString* pMem = rGroup.GetElementByIndex(nMemIdx))
                                 aGroup.maMembers.push_back( *pMem );
-                        aGroups.push_back( aGroup );
+                        aGroups.push_back(std::move(aGroup));
                     }
                     aInfo.Groups = new ScDataPilotFieldGroupsObj( std::move(aGroups) );
                 }

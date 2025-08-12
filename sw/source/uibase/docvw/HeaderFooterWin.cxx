@@ -431,11 +431,11 @@ void SwHeaderFooterWin::PaintButton()
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq;
     double nFadeRate = double(m_nFadeRate) / 100.0;
 
-    const basegfx::BColorModifierSharedPtr aBColorModifier =
+    basegfx::BColorModifierSharedPtr aBColorModifier =
         std::make_shared<basegfx::BColorModifier_interpolate>(COL_WHITE.getBColor(),
                                                 1.0 - nFadeRate);
 
-    aGhostedSeq.push_back(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(aSeq), aBColorModifier));
+    aGhostedSeq.push_back(new drawinglayer::primitive2d::ModifiedColorPrimitive2D(std::move(aSeq), std::move(aBColorModifier)));
 
     pProcessor->process(aGhostedSeq);
 

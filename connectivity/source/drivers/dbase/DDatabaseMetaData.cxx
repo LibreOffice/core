@@ -140,7 +140,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
     aRow[3] = new ORowSetValueDecorator(sal_Int32(16));
     aRow[13] = new ORowSetValueDecorator(u"N"_ustr);
     aRow[15] = new ORowSetValueDecorator(sal_Int32(16));
-    aRows.push_back(aRow);
+    aRows.push_back(std::move(aRow));
 
     pResult->setRows(std::move(aRows));
     return pResult;

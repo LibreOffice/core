@@ -167,7 +167,7 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                         mrDoc.GetSdPageCount(PageKind::Standard));
 
                     rtl::Reference<FuNavigation> xThis( this ); // avoid destruction within async processing
-                    weld::DialogController::runAsync(xDialog, [xDialog, xRequest, xThis](sal_uInt32 nResult) {
+                    weld::DialogController::runAsync(xDialog, [xDialog, xRequest=std::move(xRequest), xThis](sal_uInt32 nResult) {
                         if (nResult == RET_OK)
                         {
                             DrawViewShell& rDrawViewShell2 = dynamic_cast<DrawViewShell&>(xThis->mrViewShell);

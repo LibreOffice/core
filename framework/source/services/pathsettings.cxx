@@ -775,7 +775,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
                     pPathNew = &aPath;
                     impl_notifyPropListener(g, sPath, pPathOld, pPathNew);
                 }
-                m_lPaths[sPath] = aPath;
+                m_lPaths[sPath] = std::move(aPath);
              }
              break;
 

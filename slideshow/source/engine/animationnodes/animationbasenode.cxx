@@ -443,8 +443,8 @@ AnimationBaseNode::fillCommonParameters() const
     // calc accel/decel:
     double nAcceleration = 0.0;
     double nDeceleration = 0.0;
-    BaseNodeSharedPtr const pSelf( getSelf() );
-    for ( std::shared_ptr<BaseNode> pNode( pSelf );
+    BaseNodeSharedPtr xSelf( getSelf() );
+    for ( std::shared_ptr<BaseNode> pNode( xSelf );
           pNode; pNode = pNode->getParentNode() )
     {
         uno::Reference<animations::XAnimationNode> const xAnimationNode(
@@ -456,8 +456,8 @@ AnimationBaseNode::fillCommonParameters() const
     }
 
     EventSharedPtr pEndEvent;
-    if (pSelf) {
-        pEndEvent = makeEvent( [pSelf] () {pSelf->deactivate(); },
+    if (xSelf) {
+        pEndEvent = makeEvent( [xSelf=std::move(xSelf)] () {xSelf->deactivate(); },
             u"AnimationBaseNode::deactivate"_ustr);
     }
 

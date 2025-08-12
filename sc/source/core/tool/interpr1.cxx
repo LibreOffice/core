@@ -9659,7 +9659,7 @@ void ScInterpreter::ScTextSplit()
     {
         std::vector<OUString> aColStrs = lcl_SplitText(rRow, aColDelimiters, bIgnoreEmpty, bMatchMode);
         nCols = std::max(nCols, aColStrs.size());
-        aRes.push_back(aColStrs);
+        aRes.push_back(std::move(aColStrs));
     }
 
     ScMatrixRef pResMat = GetNewMat(nCols, nRows, /*bEmpty*/true);

@@ -1591,7 +1591,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
             row[15] <<= precision;
             row[16] <<= colNum ;
 
-            vec.push_back( row );
+            vec.push_back(std::move(row));
         }
     }
     Reference< XCloseable > closeable( statement, UNO_QUERY );
@@ -2252,7 +2252,7 @@ namespace
             row[MINIMUM_SCALE] <<= u"0"_ustr;      // TODO: what is this ?
             row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
             row[NUM_PREC_RADIX] <<= u"10"_ustr;    // TODO: what is this ?
-            vec.push_back( row );
+            vec.push_back(std::move(row));
         }
     }
 }

@@ -413,7 +413,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
                 rReq.Ignore(); // the 'old' request is not relevant any more
                 pDlg->StartExecuteAsync(
-                    [this, pDlg, xRequest=std::move(xRequest), nEEWhich, aNewAttr2=aNewAttr, pOLV, bRestoreSelection, aOldSelection] (sal_Int32 nResult) mutable ->void
+                    [this, pDlg, xRequest=std::move(xRequest), nEEWhich,
+                     aNewAttr2=std::move(aNewAttr), pOLV, bRestoreSelection, aOldSelection] (sal_Int32 nResult) mutable ->void
                     {
                         if (nResult == RET_OK)
                         {
