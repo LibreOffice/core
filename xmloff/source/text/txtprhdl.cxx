@@ -1173,7 +1173,7 @@ bool XMLNumber8OneBasedHdl::importXML(
         const SvXMLUnitConverter& ) const
 {
     sal_Int32 nValue = 0;
-    bool const bRet = ::sax::Converter::convertNumber(nValue, rStrImpValue);
+    bool const bRet = ::sax::Converter::convertNumber(nValue, rStrImpValue, SAL_MIN_INT8+1, SAL_MAX_INT8);
     if( bRet )
         rValue <<= static_cast<sal_Int8>( nValue - 1 );
     return bRet;
