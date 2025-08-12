@@ -8,8 +8,6 @@
  */
 
 #pragma once
-#include <vector>
-#include "SheetViewTypes.hxx"
 #include "types.hxx"
 
 class ScTable;
@@ -35,26 +33,6 @@ public:
 
     /** A sheet view is valid if the pointer to the table is set */
     bool isValid() const;
-};
-
-/** Manager and the holder of the sheet views for a sheet. */
-class SheetViewManager
-{
-private:
-    std::vector<SheetView> maViews;
-
-public:
-    SheetViewManager();
-
-    /** Creates a new sheet view. */
-    SheetViewID create(ScTable* pSheetViewTable);
-
-    /** Returns a sheet view for the ID. */
-    SheetView get(SheetViewID nID) const;
-    bool isEmpty() const { return maViews.empty(); }
-    bool remove(SheetViewID nID);
-    std::vector<SheetView> const& getSheetViews() const { return maViews; }
-    SheetViewID getNextSheetView(SheetViewID nID);
 };
 }
 

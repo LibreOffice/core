@@ -28,7 +28,7 @@
 #include <docsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
-#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 
 // Add totally brand-new methods to this source file.
 
