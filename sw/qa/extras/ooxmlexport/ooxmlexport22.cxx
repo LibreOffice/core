@@ -311,7 +311,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits, "tdf167721_chUnits.docx")
         = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaFirstLineIndentUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(-1), aFirstCh.First);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+    // oddly, w:left is always ignored by MS Word in special case with hangingChars indent
+    aLeftCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaLeftMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(1), aLeftCh.First);
 
     aRightCh = getProperty<css::beans::Pair<double, sal_Int16>>(xPara, u"ParaRightMarginUnit"_ustr);
     CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
