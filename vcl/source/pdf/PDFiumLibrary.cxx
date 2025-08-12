@@ -415,6 +415,7 @@ public:
     basegfx::B2DRectangle getBounds() override;
     double getFontSize() override;
     OUString getFontName() override;
+    int getFontAngle() override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
     Color getStrokeColor() override;
@@ -1135,6 +1136,14 @@ OUString PDFiumPageObjectImpl::getFontName()
         sFamilyName = OUString::createFromAscii(pFamilyName.get());
     }
     return sFamilyName;
+}
+
+int PDFiumPageObjectImpl::getFontAngle()
+{
+    int nFontAngle(0);
+    FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
+    FPDFFont_GetItalicAngle(pFontObject, &nFontAngle);
+    return nFontAngle;
 }
 
 PDFTextRenderMode PDFiumPageObjectImpl::getTextRenderMode()
