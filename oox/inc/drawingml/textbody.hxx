@@ -31,6 +31,10 @@ namespace com::sun::star::text {
     class XTextCursor;
 }
 
+namespace com::sun::star::style {
+    class XStyle;
+}
+
 namespace oox::core { class XmlFilterBase; }
 
 namespace oox::drawingml {
@@ -89,6 +93,12 @@ public:
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference < css::text::XText > & xText,
+                            const TextCharacterProperties& rTextStyleProperties,
+                            const TextListStylePtr& pMasterTextListStylePtr) const;
+
+    void                ApplyMasterTextStyle(
+                            const ::oox::core::XmlFilterBase& rFilterBase,
+                            const css::uno::Reference< css::style::XStyle > & aXStyle,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStylePtr) const;
 private:
