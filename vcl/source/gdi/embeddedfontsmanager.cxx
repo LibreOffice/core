@@ -145,11 +145,20 @@ bool writeFontBytesToFile(osl::File& file, const void* data, sal_uInt64 size)
             case osl::File::E_INTR:
                 break;
             default:
+                SAL_WARN("vcl.fonts", "Writing temporary font file failed");
                 file.close();
                 osl::File::remove(file.getURL());
                 return false;
         }
     }
+    if (file.close() != osl::File::E_None)
+    {
+        // Something failed in delayed writing?
+        SAL_WARN("vcl.fonts", "Writing temporary font file failed");
+        osl::File::remove(file.getURL());
+        return false;
+    }
+
     return true;
 }
 
