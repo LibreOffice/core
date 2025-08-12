@@ -21,6 +21,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/Scanline.hxx>
@@ -155,6 +156,7 @@ public:
     virtual double getFontSize() = 0;
     virtual OUString getFontName() = 0;
     virtual int getFontAngle() = 0;
+    virtual bool getFontProperties(FontWeight& weight) = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
     virtual Color getFillColor() = 0;
     virtual Color getStrokeColor() = 0;

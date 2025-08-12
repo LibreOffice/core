@@ -38,6 +38,7 @@
 #include <font/PhysicalFontCollection.hxx>
 #include <salgdi.hxx>
 #include <sft.hxx>
+#include <tools/stream.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
@@ -539,6 +540,18 @@ bool EmbeddedFontsManager::isEmbeddedAndRestricted(std::u16string_view familyNam
             return true;
     }
     return false;
+}
+
+bool EmbeddedFontsManager::analyzeTTF(const void* data, tools::Long size, FontWeight& weight)
+{
+    TrueTypeFont* font;
+    if (OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) != SFErrCodes::Ok)
+        return false;
+
+    AnalyzeTTF(font, weight);
+    CloseTTFont(font);
+
+    return true;
 }
 
 OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, FontFamily family, FontItalic italic,

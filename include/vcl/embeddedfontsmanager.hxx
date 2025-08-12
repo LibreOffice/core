@@ -84,6 +84,8 @@ public:
     */
     static bool sufficientTTFRights( const void* data, tools::Long size, FontRights rights );
 
+    static bool analyzeTTF(const void* data, tools::Long size, FontWeight& weight);
+
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
       @internal

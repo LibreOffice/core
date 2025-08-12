@@ -1078,14 +1078,26 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     xmlDocUniquePtr pXml = parseLayout();
-    OUString sItalic = getXPath(pXml, "//font[2]", "italic");
-    // was "none" before
-    CPPUNIT_ASSERT_EQUAL(u"normal"_ustr, sItalic);
-    // check that the others remain as expected
-    OUString sFontName = getXPath(pXml, "//font[2]", "name");
-    CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr, sFontName);
-    sal_Int32 nFontHeight = getXPath(pXml, "//font[2]", "height").toInt32();
-    CPPUNIT_ASSERT_EQUAL(494, nFontHeight);
+    {
+        OUString sItalic = getXPath(pXml, "//font[2]", "italic");
+        // was "none" before
+        CPPUNIT_ASSERT_EQUAL(u"normal"_ustr, sItalic);
+        // check that the others remain as expected
+        OUString sFontName = getXPath(pXml, "//font[2]", "name");
+        CPPUNIT_ASSERT_EQUAL(u"Liberation Serif"_ustr, sFontName);
+        sal_Int32 nFontHeight = getXPath(pXml, "//font[2]", "height").toInt32();
+        CPPUNIT_ASSERT_EQUAL(494, nFontHeight);
+    }
+    {
+        OUString sWeight = getXPath(pXml, "//font[4]", "weight");
+        // was "normal" before
+        CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, sWeight);
+        // check that the others remain as expected
+        OUString sFontName = getXPath(pXml, "//font[4]", "name");
+        CPPUNIT_ASSERT_EQUAL(u"Liberation Sans"_ustr, sFontName);
+        sal_Int32 nFontHeight = getXPath(pXml, "//font[4]", "height").toInt32();
+        CPPUNIT_ASSERT_EQUAL(564, nFontHeight);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
