@@ -34,15 +34,15 @@ namespace drawinglayer::primitive2d
         Primitive2DReference WallpaperBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
 
-            if(getLocalObjectRange().isEmpty() || getBitmapEx().IsEmpty())
+            if(getLocalObjectRange().isEmpty() || getBitmap().IsEmpty())
                 return nullptr;
 
             Primitive2DReference aRetval;
 
             // get bitmap PIXEL size
-            const Size& rPixelSize = getBitmapEx().GetSizePixel();
+            const Size aPixelSize = getBitmap().GetSizePixel();
 
-            if(rPixelSize.Width() <= 0 || rPixelSize.Height() <= 0)
+            if(aPixelSize.Width() <= 0 || aPixelSize.Height() <= 0)
                 return nullptr;
 
             if(WallpaperStyle::Scale == getWallpaperStyle())
@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
 
                 aRetval.set(
                     new BitmapPrimitive2D(
-                        Bitmap(getBitmapEx()),
+                        getBitmap(),
                         aObjectTransform));
             }
             else
@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
                 // transform to logic size
                 basegfx::B2DHomMatrix aInverseViewTransformation(getViewTransformation());
                 aInverseViewTransformation.invert();
-                basegfx::B2DVector aLogicSize(rPixelSize.Width(), rPixelSize.Height());
+                basegfx::B2DVector aLogicSize(aPixelSize.Width(), aPixelSize.Height());
                 aLogicSize = aInverseViewTransformation * aLogicSize;
 
                 // apply layout
@@ -154,7 +154,7 @@ namespace drawinglayer::primitive2d
 
                     aRetval.set(
                         new BitmapPrimitive2D(
-                            Bitmap(getBitmapEx()),
+                            getBitmap(),
                             aObjectTransform));
 
                     // clip when not completely inside object range
@@ -177,7 +177,7 @@ namespace drawinglayer::primitive2d
 
                     // prepare FillGraphicAttribute
                     const attribute::FillGraphicAttribute aFillGraphicAttribute(
-                        Graphic(getBitmapEx()),
+                        Graphic(getBitmap()),
                         basegfx::B2DRange(aRelativeTopLeft, aRelativeTopLeft+ aRelativeSize),
                         true);
 
@@ -215,10 +215,10 @@ namespace drawinglayer::primitive2d
 
         WallpaperBitmapPrimitive2D::WallpaperBitmapPrimitive2D(
             const basegfx::B2DRange& rObjectRange,
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             WallpaperStyle eWallpaperStyle)
         :   maObjectRange(rObjectRange),
-            maBitmapEx(rBitmapEx),
+            maBitmap(rBitmap),
             meWallpaperStyle(eWallpaperStyle)
         {
         }
@@ -230,7 +230,7 @@ namespace drawinglayer::primitive2d
                 const WallpaperBitmapPrimitive2D& rCompare = static_cast<const WallpaperBitmapPrimitive2D&>(rPrimitive);
 
                 return (getLocalObjectRange() == rCompare.getLocalObjectRange()
-                    && getBitmapEx() == rCompare.getBitmapEx()
+                    && getBitmap() == rCompare.getBitmap()
                     && getWallpaperStyle() == rCompare.getWallpaperStyle());
             }
 

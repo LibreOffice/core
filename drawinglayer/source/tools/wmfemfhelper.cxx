@@ -956,7 +956,7 @@ namespace wmfemfhelper
         rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBitmapWallpaperFill =
             new drawinglayer::primitive2d::WallpaperBitmapPrimitive2D(
                 aWallpaperRange,
-                BitmapEx(aBitmap),
+                aBitmap,
                 eWallpaperStyle);
 
         if(rProperty.getTransformation().isIdentity())

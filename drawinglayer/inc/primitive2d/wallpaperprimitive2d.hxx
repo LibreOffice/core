@@ -43,7 +43,7 @@ namespace drawinglayer::primitive2d
         {
         private:
             basegfx::B2DRange                   maObjectRange;
-            BitmapEx                            maBitmapEx;
+            Bitmap                              maBitmap;
             WallpaperStyle                      meWallpaperStyle;
 
             /// create local decomposition
@@ -53,12 +53,12 @@ namespace drawinglayer::primitive2d
             /// constructor
             WallpaperBitmapPrimitive2D(
                 const basegfx::B2DRange& rObjectRange,
-                const BitmapEx& rBitmapEx,
+                const Bitmap& rBitmap,
                 WallpaperStyle eWallpaperStyle);
 
             /// data read access
             const basegfx::B2DRange& getLocalObjectRange() const { return maObjectRange; }
-            const BitmapEx& getBitmapEx() const { return maBitmapEx ; }
+            const Bitmap& getBitmap() const { return maBitmap; }
             WallpaperStyle getWallpaperStyle() const { return meWallpaperStyle; }
 
             /// compare operator
