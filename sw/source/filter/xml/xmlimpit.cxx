@@ -477,10 +477,11 @@ bool SvXMLImportItemMapper::PutXMLValue(
                             }
                         }
 
-                        if( nX < 0 ) nX *= -1;
-                        if( nY < 0 ) nY *= -1;
+                        if( nX < 0 ) nX = o3tl::saturating_toggle_sign(nX);
+                        if( nY < 0 ) nY = o3tl::saturating_toggle_sign(nY);
+                        const sal_Int32 nTotal = o3tl::saturating_add(nX, nY);
 
-                        rShadow.SetWidth( static_cast< sal_uInt16 >( (nX + nY) >> 1 ) );
+                        rShadow.SetWidth( static_cast< sal_uInt16 >( nTotal >> 1 ) );
                     }
                 }
             }
