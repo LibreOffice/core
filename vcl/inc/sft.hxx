@@ -149,6 +149,8 @@ namespace vcl
         std::vector<sal_uInt8> sptr;            /**< string data (not zero-terminated!)          */
     };
 
+    OUString convertSfntName(const NameRecord& rNameRecord);
+
 /** Return value of GetTTGlobalFontInfo() */
 
     typedef struct TTGlobalFontInfo_ {
