@@ -604,7 +604,11 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
 
     // Close the result set/statement.
 
-    ::comphelper::disposeComponent(xRs);
+    Reference<XCloseable> xCloseable(xRs, UNO_QUERY);
+    if (xCloseable.is())
+        xCloseable->close();
+    else
+        ::comphelper::disposeComponent(xRs);
 }
 
 void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
@@ -642,12 +646,20 @@ OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const
                 if ( sCatalog.isEmpty() )
                 {
                     Reference<XResultSet> xRes = _xMetaData->getCatalogs();
-                    Reference<XRow> xRow(xRes,UNO_QUERY);
-                    while(xRes.is() && xRes->next())
+                    if ( xRes.is() )
                     {
-                        sCatalog = xRow->getString(1);
-                        if(!xRow->wasNull())
-                            break;
+                        Reference<XRow> xRow(xRes,UNO_QUERY);
+                        while(xRes->next())
+                        {
+                            sCatalog = xRow->getString(1);
+                            if(!xRow->wasNull())
+                                break;
+                        }
+                        Reference<XCloseable> xCloseable(xRes, UNO_QUERY);
+                        if (xCloseable.is())
+                            xCloseable->close();
+                        else
+                            ::comphelper::disposeComponent(xRes);
                     }
                 }
             }

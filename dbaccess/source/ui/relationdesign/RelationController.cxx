@@ -300,6 +300,8 @@ namespace
                     Reference<XCloseable> xCloseable(xResult,UNO_QUERY);
                     if (xCloseable.is())
                         xCloseable->close();
+                    else
+                        ::comphelper::disposeComponent(xResult);
                 }
             }
             catch( const Exception& )
