@@ -416,7 +416,7 @@ bool FormulaTokenArray::AddFormulaToken(
             {
                 // long is svIndex, used for name / database area, or "byte" for spaces
                 sal_Int32 nValue = rToken.Data.get<sal_Int32>();
-                if ( eOpCode == ocDBArea )
+                if ( eOpCode == ocDBArea || eOpCode == ocName )
                     Add( new formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocSpaces )
                     Add( new formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
