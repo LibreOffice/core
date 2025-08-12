@@ -460,7 +460,7 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
     css::awt::Point                               maPointB;
     css::uno::Reference< css::drawing::XShape >   mXConnectToB;
 
-    sal_uInt32      GetConnectorRule( bool bFirst );
+    sal_Int32       GetConnectorRule( bool bFirst );
 
                     EscherConnectorListEntry( css::uno::Reference< css::drawing::XShape > xC,
                                         const css::awt::Point& rPA,
@@ -473,7 +473,7 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
                                             maPointB    ( rPB ),
                                             mXConnectToB(std::move( xSB )) {}
 
-                    static sal_uInt32 GetClosestPoint( const tools::Polygon& rPoly, const css::awt::Point& rP );
+    static sal_Int32 GetClosestPoint(const tools::Polygon& rPoly, const css::awt::Point& rP);
 };
 
 struct MSFILTER_DLLPUBLIC EscherExContainer

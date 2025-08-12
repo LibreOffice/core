@@ -4390,7 +4390,7 @@ struct EscherShapeListEntry
     {}
 };
 
-sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPoly, const awt::Point& rPoint )
+sal_Int32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPoly, const awt::Point& rPoint )
 {
     sal_uInt16 nCount = rPoly.GetSize();
     sal_uInt16 nClosest = nCount;
@@ -4415,9 +4415,9 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const tools::Polygon& rPol
 //          2 ->Bottom      4 ->Bottom
 //          3 ->Right       6 ->Right
 
-sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
+sal_Int32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
 {
-    sal_uInt32 nRule = 0;
+    sal_Int32 nRule = 0;
 
     uno::Any aAny;
     awt::Point aRefPoint( bFirst ? maPointA : maPointB );
