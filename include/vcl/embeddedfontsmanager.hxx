@@ -11,6 +11,8 @@
 
 #include <vcl/dllapi.h>
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
@@ -21,7 +23,6 @@
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::task { class XInteractionHandler; }
-namespace com::sun::star::uno { template <typename > class Reference; }
 
 /** Helper functions for handling embedded fonts in documents. */
 class VCL_DLLPUBLIC EmbeddedFontsManager
@@ -102,6 +103,14 @@ public:
      * editors.
      */
     static bool isCommonFont(std::u16string_view aFontName);
+
+    /**
+      Returns true, only if the passed font family is among the embedded fonts, and is restricted.
+      Since the "restricted" flag is always set after checking that there was no such family
+      prior to adding the new embedded font file, this flag means that the family is definitely
+      from an opened document, and is not available locally.
+    */
+    static bool isEmbeddedAndRestricted(std::u16string_view familyName);
 
     static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
 
