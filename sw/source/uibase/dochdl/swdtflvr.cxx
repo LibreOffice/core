@@ -2231,7 +2231,8 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
 
                 if(aFormats.size() > 1)
                 {
-                    GenericDropDownFieldDialog aDialog(GetActiveView()->GetFrameWeld(),
+                    const SwView* pView = GetActiveView();
+                    GenericDropDownFieldDialog aDialog(pView ? pView->GetFrameWeld() : nullptr,
                                                        SvxResId(RID_SVXSTR_PASTE_AS_DIALOG_TITLE),
                                                        aFormats);
                     short nRet = aDialog.run();
