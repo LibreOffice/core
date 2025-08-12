@@ -257,7 +257,6 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
              pos < read && keyPos < key.size();
              ++pos )
             bufferRange[ pos ] ^= key[ keyPos++ ];
-        // if eot, don't write the file out yet, since we need to unpack it first.
         fontData.insert( fontData.end(), buffer.getConstArray(), buffer.getConstArray() + read );
         if( read <= 0 )
             break;
