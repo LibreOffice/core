@@ -3261,10 +3261,9 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     // Check presence of any references or column row names.
     bool bHasRefs = pCode->HasReferences();
-    bool bHasColRowNames = false;
+    bool bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
     if (!bHasRefs)
     {
-        bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
         bHasRefs = bHasColRowNames;
     }
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
