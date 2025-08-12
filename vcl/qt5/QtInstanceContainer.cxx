@@ -28,6 +28,7 @@ void QtInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParen
 
     if (!pNewParent)
     {
+        pQWidget->hide();
         pQWidget->deleteLater();
         return;
     }
