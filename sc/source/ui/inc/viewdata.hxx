@@ -290,7 +290,7 @@ private:
     Fraction            aDefZoomY;
     Fraction            aDefPageZoomX;              // zoom in page break preview mode
     Fraction            aDefPageZoomY;
-    // If the actual zoom values are for implemention-only purposes, then provide a value for export
+    // If the actual zoom values are for implementation-only purposes, then provide a value for export
     std::optional<sal_uInt16> oExportZoom; // used for all sheets
 
     ScRefType           eRefType;
