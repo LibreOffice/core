@@ -1,0 +1,54 @@
+From 27e85c3c4c4567efdf8b0179c686b722b4c66cd3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 12 Aug 2025 09:23:49 +0100
+Subject: [PATCH] cid#1660438 Variable copied when it could be moved
+
+and
+
+cid#1660250 Variable copied when it could be moved
+cid#1660081 Variable copied when it could be moved
+---
+ src/DllPlugInTester/CommandLineParser.cpp | 5 ++---
+ src/cppunit/TestSuiteBuilderContext.cpp   | 3 +--
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/src/DllPlugInTester/CommandLineParser.cpp b/src/DllPlugInTester/CommandLineParser.cpp
+index 1ad0245..5f72c53 100644
+--- a/src/DllPlugInTester/CommandLineParser.cpp
++++ b/src/DllPlugInTester/CommandLineParser.cpp
+@@ -14,8 +14,7 @@ CommandLineParser::CommandLineParser( int argc,
+ {
+   for ( int index =1; index < argc; ++index )
+   {
+-    std::string argument( argv[index ] );
+-    m_arguments.push_back( argument );
++    m_arguments.emplace_back(argv[index ]);
+   }
+ }
+ 
+@@ -78,7 +77,7 @@ CommandLineParser::readNonOptionCommands()
+       plugIn.m_parameters = CPPUNIT_NS::PlugInParameters( parameters );
+     }
+     
+-    m_plugIns.push_back( plugIn );
++    m_plugIns.push_back(std::move(plugIn));
+ 
+     getNextArgument();
+   }
+diff --git a/src/cppunit/TestSuiteBuilderContext.cpp b/src/cppunit/TestSuiteBuilderContext.cpp
+index 5e4347e..b826120 100644
+--- a/src/cppunit/TestSuiteBuilderContext.cpp
++++ b/src/cppunit/TestSuiteBuilderContext.cpp
+@@ -66,8 +66,7 @@ TestSuiteBuilderContextBase::addProperty( const std::string &key,
+     }
+   }
+ 
+-  Property property( key, value );
+-  m_properties.push_back( property );
++  m_properties.emplace_back(key, value);
+ }
+ 
+ const std::string 
+-- 
+2.50.1
+

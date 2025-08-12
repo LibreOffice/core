@@ -27,6 +27,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cppunit,2))
 #   Clang":
 # * external/cppunit/0001-cid-1546460-COPY_INSTEAD_OF_MOVE.patch.1 upstreamed at
 #   <https://gerrit.libreoffice.org/c/cppunit/+/161455> "cid#1546460 COPY_INSTEAD_OF_MOVE";
+# * external/cppunit/0001-cid-1660438-Variable-copied-when-it-could-be-moved.patch.1 upstreamed at
+#   <https://gerrit.libreoffice.org/c/cppunit/+/189407> "cid#1660438 Variable copied when it could be moved";
 $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/windows.patch \
 	external/cppunit/unix.patch \
@@ -39,6 +41,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cppunit,\
 	external/cppunit/sprintf.patch.0 \
 	external/cppunit/clang.patch.0 \
 	external/cppunit/0001-cid-1546460-COPY_INSTEAD_OF_MOVE.patch.1 \
+	external/cppunit/0001-cid-1660438-Variable-copied-when-it-could-be-moved.patch.1 \
 	external/cppunit/help-msvc-analyzer.patch \
 ))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
