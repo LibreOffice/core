@@ -55,6 +55,9 @@ class PPTShape final : public oox::drawingml::Shape
 
     bool IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const;
 
+    void setTextMasterStyles(const SlidePersist& rSlidePersist, const oox::core::XmlFilterBase& rFilterBase,
+        const std::u16string_view& sType);
+
 public:
 
     PPTShape( const oox::ppt::ShapeLocation eShapeLocation,
