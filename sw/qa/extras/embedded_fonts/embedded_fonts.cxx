@@ -16,6 +16,7 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XFontMappingUse.hpp>
 #include <com/sun/star/document/FontsDisallowEditingRequest.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -179,6 +180,18 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)
         // The request was disapproved, and the font didn't load; so it was substituted:
         CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
         CPPUNIT_ASSERT(fontMappingData.wasSubstituted(u"Naftalene"));
+
+        // Make sure that saving doesn't somehow embed the font
+        save(u"writer8"_ustr);
+        xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
+        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
+        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
+
+        auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
+            comphelper::getProcessComponentContext(), maTempFile.GetURL());
+        CPPUNIT_ASSERT(xZipFile);
+        for (const OUString& name : xZipFile->getElementNames())
+            CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
     }
 
     {
@@ -201,6 +214,18 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)
         // The request was approved, and the font loaded; no substitution happened:
         CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Naftalene"));
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Naftalene"));
+
+        // Make sure that saving doesn't somehow embed the font
+        save(u"writer8"_ustr);
+        xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
+        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']");
+        assertXPath(pXml, "//style:font-face[@style:name='Naftalene']/svg:font-face-src", 0);
+
+        auto xZipFile = packages::zip::ZipFileAccess::createWithURL(
+            comphelper::getProcessComponentContext(), maTempFile.GetURL());
+        CPPUNIT_ASSERT(xZipFile);
+        for (const OUString& name : xZipFile->getElementNames())
+            CPPUNIT_ASSERT(name.indexOf("Naftalene") < 0);
     }
 }
 
@@ -226,6 +251,15 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         // Unrestricted font was loaded and used without substitution:
         CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+
+        // Make sure that saving doesn't somehow embed the font
+        save(u"Office Open XML Text"_ustr);
+        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
     }
 
     {
@@ -253,6 +287,15 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         // Unrestricted font was loaded and used without substitution:
         CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+
+        // Make sure that saving doesn't somehow embed the font
+        save(u"Office Open XML Text"_ustr);
+        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
     }
 
     {
@@ -280,6 +323,15 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
         // Unrestricted font was loaded and used without substitution:
         CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
         CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+
+        // Make sure that saving doesn't somehow embed the font
+        save(u"Office Open XML Text"_ustr);
+        xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']");
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedRegular", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBold", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedItalic", 0);
+        assertXPath(pXml, "/w:fonts/w:font[@w:name='Naftalene']/w:embedBoldItalic", 0);
     }
 }
 
