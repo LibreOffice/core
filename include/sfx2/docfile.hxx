@@ -215,7 +215,7 @@ public:
     [[nodiscard]] bool HasRestrictedFonts() const;
 
     // Activates collected embedded fonts. Here it may ask user to approve use of restricted fonts,
-    // and switch tyo read-only mode.
+    // and switch to read-only mode.
     void activateEmbeddedFonts();
 
     [[nodiscard]] bool IsRepairPackage() const;
