@@ -130,6 +130,29 @@ OUString fileUrlForTemporaryFont(std::u16string_view name)
                               RTL_TEXTENCODING_UTF8);
 }
 
+bool writeFontBytesToFile(osl::File& file, const void* data, sal_uInt64 size)
+{
+    auto bytes = static_cast<const char*>(data);
+    for (sal_uInt64 writtenTotal = 0; writtenTotal < size;)
+    {
+        sal_uInt64 written = 0;
+        switch (file.write(bytes + writtenTotal, size - writtenTotal, written))
+        {
+            case osl::File::E_None:
+                writtenTotal += written;
+                break;
+            case osl::File::E_AGAIN:
+            case osl::File::E_INTR:
+                break;
+            default:
+                file.close();
+                osl::File::remove(file.getURL());
+                return false;
+        }
+    }
+    return true;
+}
+
 // Returns actual URL (maybe of an already existing file), or empty string on failure.
 //
 // @param name name of the font file
@@ -170,19 +193,9 @@ OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_vie
     if (rc != osl::File::E_None)
         return {};
 
-    sal_uInt64 writtenTotal = 0;
-    while (writtenTotal < bytes.size())
-    {
-        sal_uInt64 written = 0;
-        file->write(bytes.data() + writtenTotal, bytes.size() - writtenTotal, written);
-        if (written == 0)
-        {
-            file->close();
-            osl::File::remove(file->getURL());
-            return {};
-        }
-        writtenTotal += written;
-    }
+    if (!writeFontBytesToFile(*file, bytes.data(), bytes.size()))
+        return {};
+
     return url;
 }
 }
@@ -605,30 +618,7 @@ OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, Font
                 osl::File file( url );
                 if( file.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) == osl::File::E_None )
                 {
-                    sal_uInt64 written = 0;
-                    sal_uInt64 totalSize = size;
-                    bool error = false;
-                    while( written < totalSize && !error)
-                    {
-                        sal_uInt64 nowWritten;
-                        switch( file.write( data + written, size - written, nowWritten ))
-                        {
-                            case osl::File::E_None:
-                                written += nowWritten;
-                                break;
-                            case osl::File::E_AGAIN:
-                            case osl::File::E_INTR:
-                                break;
-                            default:
-                                error = true;
-                                break;
-                        }
-                    }
-                    file.close();
-                    if( error )
-                        osl::File::remove( url );
-                    else
-                        ok = true;
+                    ok = writeFontBytesToFile(file, data, size);
                 }
             }
         }
