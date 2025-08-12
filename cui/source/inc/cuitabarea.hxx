@@ -668,16 +668,16 @@ enum class ColorModel
 class SvxColorTabPage : public SfxTabPage
 {
 private:
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet& m_rOutAttrs;
 
-    XColorListRef         pColorList;
+    XColorListRef m_pColorList;
 
-    ChangeType*         pnColorListState;
+    ChangeType* m_pnColorListState;
 
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
+    XFillAttrSetItem m_aXFillAttr;
+    SfxItemSet& m_rXFSet;
 
-    ColorModel          eCM;
+    ColorModel m_eCM;
 
     Color m_aPreviousColor;
     NamedColor m_aCurrentColor;
@@ -765,8 +765,7 @@ public:
     void    SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
     void    SetColorList( const XColorListRef& pColList );
 
-
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void SetColorChgd(ChangeType* pIn) { m_pnColorListState = pIn; }
 
     virtual void FillUserData() override;
 };
