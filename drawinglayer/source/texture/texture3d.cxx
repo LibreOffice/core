@@ -59,27 +59,14 @@ namespace drawinglayer::texture
 
 
         GeoTexSvxBitmapEx::GeoTexSvxBitmapEx(
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             const basegfx::B2DRange& rRange)
-        :   maBitmapEx(rBitmapEx),
+        :   maBitmap(rBitmap),
             maTopLeft(rRange.getMinimum()),
             maSize(rRange.getRange()),
             mfMulX(0.0),
             mfMulY(0.0)
         {
-            bool bIsAlpha(maBitmapEx.IsAlpha());
-            if(vcl::bitmap::convertBitmap32To24Plus8(maBitmapEx,maBitmapEx))
-                bIsAlpha = maBitmapEx.IsAlpha();
-            // #121194# Todo: use alpha channel, too (for 3d)
-            maBitmap = maBitmapEx.GetBitmap();
-
-            if (bIsAlpha)
-            {
-                maTransparence = rBitmapEx.GetAlphaMask().GetBitmap();
-                mpReadTransparence = maTransparence;
-                OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
-            }
-
             if (!maBitmap.IsEmpty())
                 mpReadBitmap = maBitmap;
             SAL_WARN_IF(!mpReadBitmap, "drawinglayer", "GeoTexSvxBitmapEx: Got no read access to Bitmap");
@@ -143,10 +130,10 @@ namespace drawinglayer::texture
 
                 rBColor = aBSource;
 
-                if (mpReadTransparence)
+                if (maBitmap.HasAlpha())
                 {
                     // when we have alpha, make use of it
-                    const sal_uInt8 aAlpha(impGetAlpha(*mpReadTransparence, nX, nY));
+                    const sal_uInt8 aAlpha(aBMCol.GetAlpha());
 
                     rfOpacity = (static_cast<double>(aAlpha) * (1.0 / 255.0));
                 }
@@ -167,10 +154,11 @@ namespace drawinglayer::texture
 
             if(impIsValid(rUV, nX, nY))
             {
-                if (mpReadTransparence)
+                const BitmapColor aBMCol(mpReadBitmap->GetColor(nY, nX));
+                if (maBitmap.HasAlpha())
                 {
                     // this texture has an alpha part, use it
-                    const sal_uInt8 aAlpha(impGetAlpha(*mpReadTransparence, nX, nY));
+                    const sal_uInt8 aAlpha(aBMCol.GetAlpha());
                     const double fNewOpacity(static_cast<double>(aAlpha) * (1.0 / 255.0));
 
                     rfOpacity = 1.0 - ((1.0 - fNewOpacity) * (1.0 - rfOpacity));
@@ -178,7 +166,6 @@ namespace drawinglayer::texture
                 else
                 {
                     // this texture is a color bitmap used as transparence map
-                    const BitmapColor aBMCol(mpReadBitmap->GetColor(nY, nX));
                     const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
 
                     rfOpacity = (static_cast<double>(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
@@ -232,11 +219,11 @@ namespace drawinglayer::texture
         }
 
         GeoTexSvxBitmapExTiled::GeoTexSvxBitmapExTiled(
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             const basegfx::B2DRange& rRange,
             double fOffsetX,
             double fOffsetY)
-        :   GeoTexSvxBitmapEx(rBitmapEx, rRange),
+        :   GeoTexSvxBitmapEx(rBitmap, rRange),
             mfOffsetX(std::clamp(fOffsetX, 0.0, 1.0)),
             mfOffsetY(std::clamp(fOffsetY, 0.0, 1.0)),
             mbUseOffsetX(!basegfx::fTools::equalZero(mfOffsetX)),

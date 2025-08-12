@@ -246,7 +246,7 @@ namespace drawinglayer::processor3d
             {
                 mpGeoTexSvx =
                     std::make_shared<texture::GeoTexSvxBitmapExTiled>(
-                        aBitmapEx,
+                        Bitmap(aBitmapEx),
                         aGraphicRange,
                         rFillGraphicAttribute.getOffsetX(),
                         rFillGraphicAttribute.getOffsetY());
@@ -255,7 +255,7 @@ namespace drawinglayer::processor3d
             {
                 mpGeoTexSvx =
                     std::make_shared<texture::GeoTexSvxBitmapEx>(
-                        aBitmapEx,
+                        Bitmap(aBitmapEx),
                         aGraphicRange);
             }
 

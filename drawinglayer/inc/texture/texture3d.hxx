@@ -52,11 +52,8 @@ namespace drawinglayer::texture
         class GeoTexSvxBitmapEx : public GeoTexSvx
         {
         protected:
-            BitmapEx                                    maBitmapEx;
-            Bitmap                                      maBitmap;   // Bitmap held within maBitmapEx, to exist during mpReadBitmap scope
+            Bitmap                                      maBitmap;
             BitmapScopedReadAccess                      mpReadBitmap;
-            Bitmap                                      maTransparence;
-            BitmapScopedReadAccess                      mpReadTransparence;
             basegfx::B2DPoint                           maTopLeft;
             basegfx::B2DVector                          maSize;
             double                                      mfMulX;
@@ -68,7 +65,7 @@ namespace drawinglayer::texture
 
         public:
             GeoTexSvxBitmapEx(
-                const BitmapEx& rBitmapEx,
+                const Bitmap& rBitmap,
                 const basegfx::B2DRange& rRange);
             virtual ~GeoTexSvxBitmapEx() override;
 
@@ -93,7 +90,7 @@ namespace drawinglayer::texture
 
         public:
             GeoTexSvxBitmapExTiled(
-                const BitmapEx& rBitmapEx,
+                const Bitmap& rBitmap,
                 const basegfx::B2DRange& rRange,
                 double fOffsetX,
                 double fOffsetY);
