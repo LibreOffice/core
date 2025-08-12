@@ -160,6 +160,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
     m_xNumFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
     m_xNameED->connect_changed(LINK(this, SwFieldVarPage, ModifyHdl));
+    m_xValueED->connect_changed(LINK(this, SwFieldVarPage, ModifyValueHdl));
     m_xNewPB->connect_clicked(LINK(this, SwFieldVarPage, TBClickHdl));
     m_xDelPB->connect_clicked(LINK(this, SwFieldVarPage, TBClickHdl));
     m_xChapterLevelLB->connect_changed(LINK(this, SwFieldVarPage, ChapterHdl));
@@ -840,6 +841,11 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
 }
 
 // Modify
+IMPL_LINK_NOARG(SwFieldVarPage, ModifyValueHdl, weld::TextView&, void)
+{
+    ModifyHdl(*m_xNameED);    // apply/insert/delete status update
+}
+
 IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, weld::Entry&, void)
 {
     OUString sValue(m_xValueED->get_text());
