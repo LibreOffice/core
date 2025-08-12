@@ -733,17 +733,18 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     const Size aFontSize(dFontSizeH, dFontSizeV);
     vcl::Font aFnt = mpVD->GetFont();
-    if (aFontSize != aFnt.GetFontSize())
-    {
-        aFnt.SetFontSize(aFontSize);
-        mpVD->SetFont(aFnt);
-        mbFntDirty = true;
-    }
+    aFnt.SetFontSize(aFontSize);
 
     OUString sFontName = pPageObject->getFontName();
-    if (!sFontName.isEmpty() && sFontName != aFnt.GetFamilyName())
-    {
+    if (!sFontName.isEmpty())
         aFnt.SetFamilyName(sFontName);
+
+    const int italicAngle = pPageObject->getFontAngle();
+    aFnt.SetItalic(italicAngle == 0 ? ITALIC_NONE
+                                    : (italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE));
+
+    if (aFnt != mpVD->GetFont())
+    {
         mpVD->SetFont(aFnt);
         mbFntDirty = true;
     }
