@@ -70,17 +70,23 @@ struct SpellDialog_Impl
     Sequence< Reference< XDictionary >  >   aDics;
 };
 
+namespace
+{
+    constexpr sal_uInt16 SPELLUNDO_START = 200;
 
-#define SPELLUNDO_START                     200
+    enum SpellUndoAction
+    {
+        CHANGE_LANGUAGE          = SPELLUNDO_START + 1,
+        CHANGE_TEXTENGINE        = SPELLUNDO_START + 2,
+        CHANGE_NEXTERROR         = SPELLUNDO_START + 3,
+        CHANGE_ADD_TO_DICTIONARY = SPELLUNDO_START + 4,
+        CHANGE_GROUP             = SPELLUNDO_START + 5, // undo list
+        MOVE_ERROREND            = SPELLUNDO_START + 6,
+        UNDO_EDIT_MODE           = SPELLUNDO_START + 7,
+        ADD_IGNORE_RULE          = SPELLUNDO_START + 9
+    };
+}
 
-#define SPELLUNDO_CHANGE_LANGUAGE           (SPELLUNDO_START + 1)
-#define SPELLUNDO_CHANGE_TEXTENGINE         (SPELLUNDO_START + 2)
-#define SPELLUNDO_CHANGE_NEXTERROR          (SPELLUNDO_START + 3)
-#define SPELLUNDO_CHANGE_ADD_TO_DICTIONARY  (SPELLUNDO_START + 4)
-#define SPELLUNDO_CHANGE_GROUP              (SPELLUNDO_START + 5) //undo list
-#define SPELLUNDO_MOVE_ERROREND             (SPELLUNDO_START + 6)
-#define SPELLUNDO_UNDO_EDIT_MODE            (SPELLUNDO_START + 7)
-#define SPELLUNDO_ADD_IGNORE_RULE           (SPELLUNDO_START + 8)
 
 namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
@@ -508,7 +514,7 @@ public:
     UndoChangeGroupGuard(SentenceEditWindow_Impl& rSentenceED)
         : m_rSentenceED(rSentenceED)
     {
-        m_rSentenceED.UndoActionStart(SPELLUNDO_CHANGE_GROUP);
+        m_rSentenceED.UndoActionStart(SpellUndoAction::CHANGE_GROUP);
     }
     ~UndoChangeGroupGuard()
     {
@@ -550,7 +556,7 @@ IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, weld::Button&, void)
     if(nAdded == DictionaryError::NONE)
     {
         std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-                        SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
+                        SpellUndoAction::CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
         pAction->SetDictionary(aXDictionary);
         pAction->SetAddedWord(aOldWord);
         m_xSentenceED->AddUndoAction(std::move(pAction));
@@ -595,7 +601,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, weld::Button&, rButton, void )
         if (nAdded == DictionaryError::NONE)
         {
             std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-                            SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
+                            SpellUndoAction::CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
             pAction->SetDictionary(aXDictionary);
             pAction->SetAddedWord(sErrorText);
             m_xSentenceED->AddUndoAction(std::move(pAction));
@@ -617,7 +623,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
 {
     switch(rAction.GetId())
     {
-        case SPELLUNDO_CHANGE_TEXTENGINE:
+        case SpellUndoAction::CHANGE_TEXTENGINE:
         {
             if(rAction.IsEnableChangePB())
                 m_xChangePB->set_sensitive(false);
@@ -625,7 +631,7 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
                 m_xChangeAllPB->set_sensitive(false);
         }
         break;
-        case SPELLUNDO_CHANGE_NEXTERROR:
+        case SpellUndoAction::CHANGE_NEXTERROR:
         {
             m_xSentenceED->MoveErrorMarkTo(static_cast<sal_Int32>(rAction.GetOldErrorStart()),
                                            static_cast<sal_Int32>(rAction.GetOldErrorEnd()),
@@ -636,25 +642,25 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
             }
         }
         break;
-        case SPELLUNDO_CHANGE_ADD_TO_DICTIONARY:
+        case SpellUndoAction::CHANGE_ADD_TO_DICTIONARY:
         {
             if(rAction.GetDictionary().is())
                 rAction.GetDictionary()->remove(rAction.GetAddedWord());
         }
         break;
-        case SPELLUNDO_MOVE_ERROREND :
+        case SpellUndoAction::MOVE_ERROREND :
         {
             if(rAction.GetOffset() != 0)
                 m_xSentenceED->MoveErrorEnd(rAction.GetOffset());
         }
         break;
-        case SPELLUNDO_UNDO_EDIT_MODE :
+        case SpellUndoAction::UNDO_EDIT_MODE :
         {
             //refill the dialog with the currently spelled sentence - throw away all changes
             SpellContinue_Impl(nullptr, true);
         }
         break;
-        case SPELLUNDO_ADD_IGNORE_RULE:
+        case SpellUndoAction::ADD_IGNORE_RULE:
             //undo of ignored rules is not supported
         break;
     }
@@ -732,7 +738,7 @@ IMPL_LINK_NOARG(SpellDialog, LanguageSelectHdl, weld::ComboBox&, void)
             SpellContinue_Impl();
         }
 
-        m_xSentenceED->AddUndoAction(std::make_unique<SpellUndoAction_Impl>(SPELLUNDO_CHANGE_LANGUAGE, aDialogUndoLink));
+        m_xSentenceED->AddUndoAction(std::make_unique<SpellUndoAction_Impl>(SpellUndoAction::CHANGE_LANGUAGE, aDialogUndoLink));
     }
     SpellDialog::UpdateBoxes_Impl(true);
 }
@@ -848,7 +854,7 @@ void SpellDialog::AddToDictionaryExecute(const OUString& rItemId)
         if (nAddRes == DictionaryError::NONE)
         {
             std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-                            SPELLUNDO_CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
+                            SpellUndoAction::CHANGE_ADD_TO_DICTIONARY, aDialogUndoLink));
             pAction->SetDictionary( xDic );
             pAction->SetAddedWord( aNewWord );
             m_xSentenceED->AddUndoAction( std::move(pAction) );
@@ -872,7 +878,7 @@ IMPL_LINK_NOARG(SpellDialog, ModifyHdl, LinkParamNone*, void)
     m_xSuggestionLB->unselect_all();
     m_xSuggestionLB->set_sensitive(false);
     m_xAutoCorrPB->set_sensitive(false);
-    std::unique_ptr<SpellUndoAction_Impl> pSpellAction(new SpellUndoAction_Impl(SPELLUNDO_CHANGE_TEXTENGINE, aDialogUndoLink));
+    std::unique_ptr<SpellUndoAction_Impl> pSpellAction(new SpellUndoAction_Impl(SpellUndoAction::CHANGE_TEXTENGINE, aDialogUndoLink));
     if(!m_xChangeAllPB->get_sensitive())
     {
         m_xChangeAllPB->set_sensitive(true);
@@ -1296,20 +1302,29 @@ namespace
     7 - UE
     8 - UE
   -----------------------------------------------------------------------*/
-#define     INVALID     0
-#define     LEFT_NO     1
-#define     INSIDE_NO   2
-#define     RIGHT_NO    3
-#define     FULL        4
-#define     INSIDE_YES  5
-#define     BRACE       6
-#define     OUTSIDE_NO  7
-#define     OUTSIDE_YES 8
+namespace
+{
+    enum SelectionType
+    {
+        INVALID     = 0,
+        LEFT_NO     = 1,
+        INSIDE_NO   = 2,
+        RIGHT_NO    = 3,
+        FULL        = 4,
+        INSIDE_YES  = 5,
+        BRACE       = 6,
+        OUTSIDE_NO  = 7,
+        OUTSIDE_YES = 8
+    };
 
-#define ACTION_UNDOEDIT    0
-#define ACTION_CONTINUE    1
-#define ACTION_SELECTFIELD 2
-#define ACTION_EXPAND      3
+    enum Action
+    {
+        UNDOEDIT    = 0,
+        CONTINUE    = 1,
+        SELECTFIELD = 2,
+        EXPAND      = 3
+    };
+}
 
 bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
 {
@@ -1350,17 +1365,17 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                     pBackAttr->nStart == aCurrentSelection.start.nIndex &&
                     pBackAttr->nEnd == aCurrentSelection.end.nIndex)
             {
-                nSelectionType = FULL;
+                nSelectionType = SelectionType::FULL;
             }
             else if (pErrorAttr &&
                      pErrorAttr->nStart <= aCurrentSelection.start.nIndex &&
                      pErrorAttr->nEnd >= aCurrentSelection.end.nIndex)
             {
-                nSelectionType = INSIDE_YES;
+                nSelectionType = SelectionType::INSIDE_YES;
             }
             else
             {
-                nSelectionType = bHasField||bHasError ? BRACE : OUTSIDE_NO;
+                nSelectionType = bHasField||bHasError ? SelectionType::BRACE : SelectionType::OUTSIDE_NO;
                 while (nCursor < aCurrentSelection.end.nIndex)
                 {
                     ++nCursor;
@@ -1368,7 +1383,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                     const EECharAttrib* pIntErrorAttr = FindCharAttrib(nCursor, EE_CHAR_GRABBAG, aAttribList);
                     //if any attr has been found then BRACE
                     if (pIntBackAttr || pIntErrorAttr)
-                        nSelectionType = BRACE;
+                        nSelectionType = SelectionType::BRACE;
                     //the field has to be selected
                     if (pIntBackAttr && !pBackAttr)
                         pBackAttr = pIntBackAttr;
@@ -1383,10 +1398,10 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             if (pCurAttr)
             {
                 nSelectionType = pCurAttr->nStart == aCurrentSelection.start.nIndex ?
-                        LEFT_NO : pCurAttr->nEnd == aCurrentSelection.end.nIndex ? RIGHT_NO : INSIDE_NO;
+                        SelectionType::LEFT_NO : pCurAttr->nEnd == aCurrentSelection.end.nIndex ? SelectionType::RIGHT_NO : SelectionType::INSIDE_NO;
             }
             else
-                nSelectionType = OUTSIDE_NO;
+                nSelectionType = SelectionType::OUTSIDE_NO;
 
             bHasFieldLeft = pBackAttr && pBackAttr->nEnd == nCursor;
             if(bHasFieldLeft)
@@ -1419,69 +1434,69 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                 (pErrorAttrLeft && pErrorAttrLeft->nStart == m_nErrorStart);
 
         SAL_WARN_IF(
-            nSelectionType == INVALID, "cui.dialogs",
+            nSelectionType == SelectionType::INVALID, "cui.dialogs",
             "selection type not set");
 
         const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
         bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
         bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
 
-        sal_Int8 nAction = ACTION_CONTINUE;
+        sal_Int8 nAction = Action::CONTINUE;
         switch(nSelectionType)
         {
 //    1 - backspace                   delete                      any other
 //        UE                          on field FS on error CO     on field FS on error CO
-            case LEFT_NO    :
+            case SelectionType::LEFT_NO    :
                 if(bBackspace)
                 {
-                    nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
+                    nAction = bHasFieldLeft ? Action::SELECTFIELD : Action::UNDOEDIT;
                     //to force the use of pBackAttrLeft
                     pBackAttr = nullptr;
                 }
                 else if(bDelete)
-                    nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+                    nAction = bHasField ? Action::SELECTFIELD : Action::CONTINUE;
                 else
-                    nAction = bHasError && !nCursor ? ACTION_CONTINUE :
-                        bHasError ? ACTION_EXPAND : bHasErrorLeft ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+                    nAction = bHasError && !nCursor ? Action::CONTINUE :
+                        bHasError ? Action::EXPAND : bHasErrorLeft ? Action::CONTINUE : Action::UNDOEDIT;
             break;
 //    2 - on field FS on error C
-            case INSIDE_NO  :
-                nAction =  bHasField ? ACTION_SELECTFIELD :
-                    bIsErrorActive ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+            case SelectionType::INSIDE_NO  :
+                nAction =  bHasField ? Action::SELECTFIELD :
+                    bIsErrorActive ? Action::CONTINUE : Action::UNDOEDIT;
             break;
 //    3 - backspace                   delete                      any other
 //        on field FS on error CO     UE                          on field UE on error EX
-            case RIGHT_NO   :
+            case SelectionType::RIGHT_NO   :
                 if(bBackspace)
-                    nAction = bHasFieldLeft ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+                    nAction = bHasFieldLeft ? Action::SELECTFIELD : Action::CONTINUE;
                 else if(bDelete)
-                    nAction = bHasFieldLeft && bHasError ? ACTION_CONTINUE : ACTION_UNDOEDIT;
+                    nAction = bHasFieldLeft && bHasError ? Action::CONTINUE : Action::UNDOEDIT;
                 else
-                    nAction = bHasFieldLeft && bHasError ? ACTION_EXPAND :
-                        bHasError ? ACTION_CONTINUE : bHasErrorLeft ? ACTION_EXPAND :ACTION_UNDOEDIT;
+                    nAction = bHasFieldLeft && bHasError ? Action::EXPAND :
+                        bHasError ? Action::CONTINUE : bHasErrorLeft ? Action::EXPAND :Action::UNDOEDIT;
             break;
 //    4 - on field UE and on error CO
-            case FULL       :
-                nAction = ACTION_UNDOEDIT;
+            case SelectionType::FULL       :
+                nAction = Action::UNDOEDIT;
             break;
 //    5 - on field FS and on error CO
-            case INSIDE_YES :
-                nAction = bHasField ? ACTION_SELECTFIELD : ACTION_CONTINUE;
+            case SelectionType::INSIDE_YES :
+                nAction = bHasField ? Action::SELECTFIELD : Action::CONTINUE;
             break;
 //    6 - on field FS and on error UE
-            case BRACE      :
-                nAction = bHasField ? ACTION_SELECTFIELD : ACTION_UNDOEDIT;
+            case SelectionType::BRACE      :
+                nAction = bHasField ? Action::SELECTFIELD : Action::UNDOEDIT;
             break;
 //    7 - UE
 //    8 - UE
-            case OUTSIDE_NO :
-            case OUTSIDE_YES:
-                nAction = ACTION_UNDOEDIT;
+            case SelectionType::OUTSIDE_NO :
+            case SelectionType::OUTSIDE_YES:
+                nAction = Action::UNDOEDIT;
             break;
         }
         //save the current paragraph
         sal_Int32 nCurrentLen = m_xEditEngine->GetText().getLength();
-        if (nAction != ACTION_SELECTFIELD)
+        if (nAction != Action::SELECTFIELD)
         {
             m_xEditView->PostKeyEvent(rKeyEvt);
         }
@@ -1491,7 +1506,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             if (pCharAttr)
                 m_xEditView->SetSelection(ESelection(0, pCharAttr->nStart, 0, pCharAttr->nEnd));
         }
-        if(nAction == ACTION_EXPAND)
+        if(nAction == Action::EXPAND)
         {
             DBG_ASSERT(pErrorAttrLeft || pErrorAttr, "where is the error");
             //text has been added on the right and only the 'error attribute has to be corrected
@@ -1547,7 +1562,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                 }
             }
         }
-        else if(nAction == ACTION_UNDOEDIT)
+        else if(nAction == Action::UNDOEDIT)
         {
             SetUndoEditMode(true);
         }
@@ -1575,7 +1590,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             }
         }
         //this is not a modification anymore
-        if(nAction != ACTION_SELECTFIELD && !m_bIsUndoEditMode)
+        if(nAction != Action::SELECTFIELD && !m_bIsUndoEditMode)
             CallModifyLink();
     }
     else
@@ -1705,7 +1720,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         bRet = true;
         //add an undo action
         std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-                SPELLUNDO_CHANGE_NEXTERROR, GetSpellDialog()->aDialogUndoLink));
+                SpellUndoAction::CHANGE_NEXTERROR, GetSpellDialog()->aDialogUndoLink));
         pAction->SetErrorMove(nOldErrorStart, nOldErrorEnd);
 
         if (GetErrorDescription(aSpellErrorDescription, nOldErrorStart))
@@ -1777,7 +1792,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     //calculate length changes
     auto nDiffLen = rNewWord.getLength() - m_nErrorEnd + m_nErrorStart;
     //Remove spell error attribute
-    m_xEditEngine->UndoActionStart(SPELLUNDO_MOVE_ERROREND);
+    m_xEditEngine->UndoActionStart(SpellUndoAction::MOVE_ERROREND);
     const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
     DBG_ASSERT(pErrorAttrib, "no error attribute found");
     bool bSpellErrorDescription = false;
@@ -1832,7 +1847,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     m_nErrorEnd = static_cast<sal_Int32>(nEndTemp);
 
     std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-                    SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink));
+                    SpellUndoAction::MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink));
     pAction->SetOffset(nDiffLen);
     AddUndoAction(std::move(pAction));
     if (bSpellErrorDescription)
@@ -2077,9 +2092,9 @@ void SentenceEditWindow_Impl::Undo()
     {
         pUndoAction = static_cast<SpellUndoAction_Impl*>(rUndoMgr.GetUndoAction());
         rUndoMgr.Undo();
-    }while(bSaveUndoEdit && SPELLUNDO_UNDO_EDIT_MODE != pUndoAction->GetId() && GetUndoActionCount());
+    }while(bSaveUndoEdit && SpellUndoAction::UNDO_EDIT_MODE != pUndoAction->GetId() && GetUndoActionCount());
 
-    if(bSaveUndoEdit || SPELLUNDO_CHANGE_GROUP == pUndoAction->GetId())
+    if(bSaveUndoEdit || SpellUndoAction::CHANGE_GROUP == pUndoAction->GetId())
         GetSpellDialog()->UpdateBoxes_Impl();
 }
 
@@ -2155,7 +2170,7 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //put the appropriate action on the Undo-stack
     AddUndoAction( std::make_unique<SpellUndoAction_Impl>(
-                        SPELLUNDO_UNDO_EDIT_MODE, GetSpellDialog()->aDialogUndoLink) );
+                        SpellUndoAction::UNDO_EDIT_MODE, GetSpellDialog()->aDialogUndoLink) );
     pSpellDialog->m_xChangePB->set_sensitive(true);
 }
 
