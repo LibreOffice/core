@@ -1061,15 +1061,25 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rIStm.ReadUInt16( nTmp16 );
             rIStm.SeekRel( 8 );
             rIStm.ReadUInt32( nTmp32 );
-            rOffset = nTmp32 - 28;
-            bRet = ( 0x4D42 == nTmp16 );
+            if (nTmp32 < 28)
+                rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+            else
+            {
+                rOffset = nTmp32 - 28;
+                bRet = ( 0x4D42 == nTmp16 );
+            }
         }
         else // 0x4D42 == nTmp16, 'MB' from BITMAPFILEHEADER
         {
             rIStm.SeekRel( 8 );        // we are on bfSize member of BITMAPFILEHEADER, forward to bfOffBits
             rIStm.ReadUInt32( nTmp32 );            // read bfOffBits
-            rOffset = nTmp32 - 14;    // adapt offset by sizeof(BITMAPFILEHEADER)
-            bRet = rIStm.GetError() == ERRCODE_NONE;
+            if (nTmp32 < 14)
+                rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+            else
+            {
+                rOffset = nTmp32 - 14;    // adapt offset by sizeof(BITMAPFILEHEADER)
+                bRet = rIStm.GetError() == ERRCODE_NONE;
+            }
         }
 
         if ( rOffset >= nStreamLength )
