@@ -617,7 +617,7 @@ static void UpdateTree(SwDocShell& rDocSh, const SwEditShell& rEditSh,
         InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, aHiddenCharacterProperties,
                      aFieldsNode);
 
-        aCharNode.children.push_back(aCurrentChild);
+        aCharNode.children.push_back(std::move(aCurrentChild));
     }
 
     // Collect paragraph direct formatting
