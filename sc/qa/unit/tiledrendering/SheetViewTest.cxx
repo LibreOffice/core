@@ -17,6 +17,7 @@
 #include <sctestviewcallback.hxx>
 #include <docuno.hxx>
 #include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 
 using namespace css;
 

@@ -63,7 +63,7 @@
 #include <cliputil.hxx>
 #include <clipoptions.hxx>
 #include <gridwin.hxx>
-#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 #include <uiitems.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
 

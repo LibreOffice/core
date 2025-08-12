@@ -77,7 +77,7 @@
 #include <columnspanset.hxx>
 #include <stringutil.hxx>
 #include <SparklineList.hxx>
-#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 
 #include <memory>
 

@@ -1,0 +1,50 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+#include "SheetViewTypes.hxx"
+#include "SheetView.hxx"
+#include "types.hxx"
+
+#include <vector>
+
+class ScTable;
+
+namespace sc
+{
+/** Manager and the holder of the sheet views for a sheet. */
+class SheetViewManager
+{
+private:
+    std::vector<SheetView> maViews;
+
+public:
+    SheetViewManager();
+
+    /** Creates a new sheet view. */
+    SheetViewID create(ScTable* pSheetViewTable);
+
+    /** Returns a sheet view for the ID. */
+    SheetView get(SheetViewID nID) const;
+
+    /** True if there are no sheet views. */
+    bool isEmpty() const { return maViews.empty(); }
+
+    /** Remove the sheet view with the ID. True if successful. */
+    bool remove(SheetViewID nID);
+
+    /** Return the list of sheet views. */
+    std::vector<SheetView> const& getSheetViews() const { return maViews; }
+
+    /** Calculate the next sheet view ID from the current ID. */
+    SheetViewID getNextSheetView(SheetViewID nID);
+};
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

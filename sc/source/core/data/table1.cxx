@@ -53,7 +53,7 @@
 #include <rowheightcontext.hxx>
 #include <compressedarray.hxx>
 #include <tabvwsh.hxx>
-#include <SheetView.hxx>
+#include <SheetViewManager.hxx>
 #include <vcl/svapp.hxx>
 
 #include <formula/vectortoken.hxx>
