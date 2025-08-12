@@ -41,6 +41,7 @@
 
 #include <config_options.h>
 #include <rtl/ustring.hxx>
+#include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
@@ -609,6 +610,8 @@ void GetTTGlobalFontInfo(const AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
 
 OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const LanguageTag& rPrefLang);
+
+void AnalyzeTTF(const TrueTypeFont* pTTFont, FontWeight& weight);
 
 /*- private definitions */
 

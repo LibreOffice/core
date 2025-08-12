@@ -75,6 +75,8 @@ public:
                               const css::uno::Reference<css::task::XInteractionHandler>& xHandler,
                               bool& activatedRestrictedFonts);
 
+    static bool analyzeTTF(const void* data, tools::Long size, FontWeight& weight);
+
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
       @internal

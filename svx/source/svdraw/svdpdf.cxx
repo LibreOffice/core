@@ -742,6 +742,9 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     const int italicAngle = pPageObject->getFontAngle();
     aFnt.SetItalic(italicAngle == 0 ? ITALIC_NONE
                                     : (italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE));
+    FontWeight eFontWeight(WEIGHT_DONTKNOW);
+    if (pPageObject->getFontProperties(eFontWeight))
+        aFnt.SetWeight(eFontWeight);
 
     if (aFnt != mpVD->GetFont())
     {

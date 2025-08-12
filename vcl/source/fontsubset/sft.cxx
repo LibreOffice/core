@@ -1799,6 +1799,28 @@ bool getTTCoverage(
     return bRet;
 }
 
+static FontWeight ImplWeightToSal( int nWeight )
+{
+    if ( nWeight <= FW_THIN )
+        return WEIGHT_THIN;
+    else if ( nWeight <= FW_EXTRALIGHT )
+        return WEIGHT_ULTRALIGHT;
+    else if ( nWeight <= FW_LIGHT )
+        return WEIGHT_LIGHT;
+    else if ( nWeight < FW_MEDIUM )
+        return WEIGHT_NORMAL;
+    else if ( nWeight == FW_MEDIUM )
+        return WEIGHT_MEDIUM;
+    else if ( nWeight <= FW_SEMIBOLD )
+        return WEIGHT_SEMIBOLD;
+    else if ( nWeight <= FW_BOLD )
+        return WEIGHT_BOLD;
+    else if ( nWeight <= FW_EXTRABOLD )
+        return WEIGHT_ULTRABOLD;
+    else
+        return WEIGHT_BLACK;
+}
+
 /*
  *  static helpers
  */
@@ -1987,6 +2009,48 @@ OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const L
     }
 
     return aResult;
+}
+
+void AnalyzeTTF(const TrueTypeFont* ttf, FontWeight& weight)
+{
+    sal_uInt32 table_size;
+    const sal_uInt8* table = ttf->table(O_OS2, table_size);
+    if (table_size >= 42)
+    {
+        sal_uInt16 weightOS2 = GetUInt16(table, OS2_usWeightClass_offset);
+        weight = ImplWeightToSal(weightOS2);
+        return;
+    }
+
+    // Fallback to inferring from the style name (name ID 2).
+    OUString sStyle = analyzeSfntName(ttf, 2, LanguageTag(LANGUAGE_ENGLISH_US));
+
+    bool bBold(false), bItalic(false);
+    if (o3tl::equalsIgnoreAsciiCase(sStyle, u"Regular"))
+    {
+        bBold = false;
+        bItalic = false;
+    }
+    else if (o3tl::equalsIgnoreAsciiCase(sStyle, u"Bold"))
+        bBold = true;
+    else if (o3tl::equalsIgnoreAsciiCase(sStyle, u"Bold Italic"))
+    {
+        bBold = true;
+        bItalic = true;
+    }
+    else if (o3tl::equalsIgnoreAsciiCase(sStyle, u"Italic"))
+    {
+        bItalic = true;
+    }
+    else
+    {
+        SAL_WARN("vcl.fonts", "Unhandled font style: " << sStyle);
+    }
+
+    if (bBold)
+        weight = WEIGHT_BOLD;
+    (void)bItalic; // we might need to use this in a similar scenario where
+                   // italic cannot be found
 }
 
 } // namespace vcl

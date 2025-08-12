@@ -25,6 +25,8 @@
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
+#include <vcl/font.hxx>
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
@@ -415,6 +417,7 @@ public:
     double getFontSize() override;
     OUString getFontName() override;
     int getFontAngle() override;
+    bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
     Color getStrokeColor() override;
@@ -1157,6 +1160,35 @@ int PDFiumPageObjectImpl::getFontAngle()
     FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
     FPDFFont_GetItalicAngle(pFontObject, &nFontAngle);
     return nFontAngle;
+}
+
+bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
+{
+    // FPDFFont_GetWeight turns out not to be that useful. It seems to just
+    // reports what explicit "FontWeight" feature is mentioned in the PDF font,
+    // which is an optional property.
+    // So pull the font data and analyze it directly. Though the font might not
+    // have an OS/2 table so we may end up eventually inferring the weight from
+    // the style name.
+
+    FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
+    size_t buflen(0);
+    bool bOk = FPDFFont_GetFontData(pFontObject, nullptr, 0, &buflen);
+    if (!bOk)
+    {
+        SAL_WARN("vcl.filter", "PDFiumImpl: failed to get font data");
+        return false;
+    }
+    std::vector<uint8_t> aData(buflen);
+    bOk = FPDFFont_GetFontData(pFontObject, aData.data(), aData.size(), &buflen);
+    assert(bOk && aData.size() == buflen);
+    bOk = EmbeddedFontsManager::analyzeTTF(aData.data(), aData.size(), weight);
+    if (!bOk)
+    {
+        SAL_WARN("vcl.filter", "PDFiumImpl: failed to analyzeTTF");
+        return false;
+    }
+    return true;
 }
 
 PDFTextRenderMode PDFiumPageObjectImpl::getTextRenderMode()
