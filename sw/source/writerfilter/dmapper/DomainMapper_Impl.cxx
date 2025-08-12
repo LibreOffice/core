@@ -3160,9 +3160,15 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // tdf#83844: DOCX stores left and leftChars differently with hanging
                         // indentation. Character-based hanging indentation must be pre-added
                         // to the left margin here.
-                        if (bLeftChSet && stFirstCh.First < 0.0)
+
+                        // tdf#167721: Oddball MS Word implementation:
+                        // Even if LeftChars is disabled/undefined and a w:left is provided,
+                        // when a hangingChars is also provided
+                        // then the w:left is ignored and treated as a zero.
+                        if (stFirstCh.First < 0.0)
                         {
                             stLeftCh.First -= stFirstCh.First;
+                            bLeftChSet = true;
                         }
 
                         if (bLeftChSet)
