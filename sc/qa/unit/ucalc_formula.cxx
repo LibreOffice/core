@@ -5109,6 +5109,41 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncCOUNTIF)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula, testInsertRowColLabel)
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, u"foo"_ustr));
+
+    // Clear the area first.
+    clearRange(m_pDoc, ScRange(0, 0, 0, 1, 20, 0));
+
+    m_pDoc->SetString(0, 2, 0, u"COL1"_ustr);
+    m_pDoc->SetValue(0, 3, 0, 2);
+    m_pDoc->SetValue(0, 4, 0, 3);
+    m_pDoc->SetString(0, 0, 0, u"=AVERAGE('COL1')"_ustr);
+
+    // Calculate and check the results.
+    m_pDoc->CalcAll();
+
+    double result = m_pDoc->GetValue(0, 0, 0);
+
+    ASSERT_DOUBLES_EQUAL(2.5, result);
+
+    m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 3, 2);
+
+    m_pDoc->SetValue(0, 3, 0, 5);
+    m_pDoc->SetValue(0, 4, 0, 6);
+
+    // Calculate and check the results.
+    m_pDoc->CalcAll();
+
+    result = m_pDoc->GetValue(0, 0, 0);
+
+    ASSERT_DOUBLES_EQUAL(4.0, result);
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
