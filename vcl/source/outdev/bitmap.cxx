@@ -572,11 +572,10 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 
     if (!ImplIsRecordLayout())
     {
-        Image& rNonConstImage = const_cast<Image&>(rImage);
         if (bIsSizeValid)
-            rNonConstImage.Draw(this, rPos, nStyle, &rSize);
+            rImage.Draw(this, rPos, nStyle, &rSize);
         else
-            rNonConstImage.Draw(this, rPos, nStyle);
+            rImage.Draw(this, rPos, nStyle);
     }
 }
 
