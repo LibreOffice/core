@@ -75,11 +75,13 @@ class ButtonBox
 
         void SelectButton(weld::Toggleable& rButton)
         {
-            if (mpCurrentButton)
-                mpCurrentButton->set_active(false);
+            weld::Toggleable* pPreviousButton = mpCurrentButton;
 
             mpCurrentButton = &rButton;
             rButton.set_active(true);
+
+            if (pPreviousButton)
+                pPreviousButton->set_active(false);
         }
 };
 

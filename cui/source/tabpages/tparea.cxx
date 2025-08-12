@@ -412,12 +412,16 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFil
 
 IMPL_LINK(SvxAreaTabPage, SelectFillTypeHdl_Impl, weld::Toggleable&, rButton, void)
 {
-    //tdf#124549 - If the button is already active do not toggle it back.
-    if(!rButton.get_active())
+    if (rButton.get_active())
+    {
+        SelectFillType(rButton);
+        m_bBtnClicked = true;
+    }
+    else if (maBox.GetCurrentFillType() == maBox.GetFillType(rButton))
+    {
+        // tdf#124549 - If the button is already active do not toggle it back.
         rButton.set_active(true);
-
-    SelectFillType(rButton);
-    m_bBtnClicked = true;
+    }
 }
 
 void SvxAreaTabPage::SelectFillType(weld::Toggleable& rButton, const SfxItemSet* _pSet)
