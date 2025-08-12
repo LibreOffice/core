@@ -5404,11 +5404,12 @@ void ScXMLExport::IncrementProgressBar(bool bFlush, sal_Int32 nInc)
 
 ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
+    ScDocument* pDoc = GetDocument();
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                              SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         uno::Reference< frame::XModel > xModel = GetModel();
-        if (ScDocument* pDoc = GetDocument())
+        if (pDoc)
         {
             // if source doc was Excel then
             auto pFoundShell = comphelper::getFromUnoTunnel<SfxObjectShell>(xModel);
@@ -5447,6 +5448,10 @@ ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                         XML_NAMESPACE_OFFICE_EXT );
             }
         }
+    }
+    if (pDoc)
+    {
+        pDoc->CreateAllNoteCaptions();
     }
     return SvXMLExport::exportDoc( eClass );
 }

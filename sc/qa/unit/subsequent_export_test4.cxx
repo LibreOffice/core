@@ -2212,6 +2212,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166939_1)
     assertXPath(pXmlDoc, "//table:table/table:table-row[2]", "style-name", u"r_2");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf108244)
+{
+    createScDoc("ods/tdf108244.ods");
+    save(u"OpenDocument Spreadsheet Flat XML"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getXPathContent(pXmlDoc, "count(//office:annotation)"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
