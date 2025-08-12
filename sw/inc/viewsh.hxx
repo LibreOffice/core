@@ -609,7 +609,8 @@ public:
 
     bool IsInConstructor() const { return mbInConstructor; }
 
-    const Bitmap& GetReplacementBitmap(bool bIsErrorState);
+    const Bitmap& GetErrorBitmap();
+    const Bitmap& GetReplacementBitmap();
     void DeleteReplacementBitmaps();
 
     const SwPostItMgr* GetPostItMgr() const { return const_cast<SwViewShell*>(this)->GetPostItMgr(); }

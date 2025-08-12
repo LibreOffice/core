@@ -2927,16 +2927,16 @@ sal_Int32 SwViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const S
     return nRet;
 }
 
-// --> PB 2007-05-30 #146850#
-const Bitmap& SwViewShell::GetReplacementBitmap( bool bIsErrorState )
+const Bitmap& SwViewShell::GetErrorBitmap()
 {
-    if (bIsErrorState)
-    {
-        if (maErrorBmp.IsEmpty())
-            maErrorBmp = Bitmap(RID_GRAPHIC_ERRORBMP);
-        return maErrorBmp;
-    }
+    if (maErrorBmp.IsEmpty())
+        maErrorBmp = Bitmap(RID_GRAPHIC_ERRORBMP);
+    return maErrorBmp;
+}
 
+// --> PB 2007-05-30 #146850#
+const Bitmap& SwViewShell::GetReplacementBitmap()
+{
     if (maReplaceBmp.IsEmpty())
         maReplaceBmp = Bitmap(RID_GRAPHIC_REPLACEBMP);
     return maReplaceBmp;

@@ -143,7 +143,8 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
     aFont.SetUnderline( eUnderline );
     aFont.SetColor( aCol );
 
-    const Bitmap& rBmp = const_cast<SwViewShell&>(rSh).GetReplacementBitmap(bDefect);
+    const Bitmap& rBmp = bDefect ? const_cast<SwViewShell&>(rSh).GetErrorBitmap()
+                                 : const_cast<SwViewShell&>(rSh).GetReplacementBitmap();
     Graphic::DrawEx(*rSh.GetOut(), rText, aFont, BitmapEx(rBmp), rRect.Pos(), rRect.SSize());
 }
 
