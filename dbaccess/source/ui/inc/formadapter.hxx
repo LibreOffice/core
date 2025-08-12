@@ -76,8 +76,7 @@ namespace dbaui
                                   // --- stardiv::one::form::component::DatabaseForm ---
                                   ,   css::sdbc::XParameters
                                   ,   css::sdbcx::XDeleteRows
-                                  >   SbaXFormAdapter_BASE1;
-    typedef ::cppu::ImplHelper12    <   css::sdbc::XWarningsSupplier
+                                  ,   css::sdbc::XWarningsSupplier
                                     ,   css::sdbc::XCloseable
                                     ,   css::form::XLoadable
                                     ,   css::sdb::XSQLErrorBroadcaster
@@ -92,8 +91,7 @@ namespace dbaui
                                             // already present : css::form::XFormComponent (base of css::form::XForm)
                                     ,           css::beans::XMultiPropertySet
                                     ,           css::container::XNamed
-                                    >   SbaXFormAdapter_BASE2;
-    typedef ::cppu::ImplHelper10    <           css::io::XPersistObject
+                                    ,           css::io::XPersistObject
                                     ,           css::beans::XPropertySet
                                         // --- stardiv::one::data::DatabaseCursor ---
                                     ,       css::util::XCancellable
@@ -111,12 +109,10 @@ namespace dbaui
                                     ,   css::container::XEnumerationAccess
                                     // interfaces we need because of other reasons
                                     ,   css::beans::XPropertyChangeListener
-                                    >   SbaXFormAdapter_BASE3;
+                                    >   SbaXFormAdapter_BASE;
 
     class SbaXFormAdapter final
-        :public SbaXFormAdapter_BASE1
-        ,public SbaXFormAdapter_BASE2
-        ,public SbaXFormAdapter_BASE3
+        :public SbaXFormAdapter_BASE
     {
     private:
         css::uno::Reference< css::sdbc::XRowSet >                             m_xMainForm;
@@ -157,14 +153,6 @@ namespace dbaui
     //  css::uno::Sequence<css::uno::Reference< css::reflection::XIdlClass > > getIdlClasses();
 
         void AttachForm(const css::uno::Reference< css::sdbc::XRowSet >& xNewMaster);
-
-        // UNO
-        DECLARE_UNO3_DEFAULTS(SbaXFormAdapter, SbaXFormAdapter_BASE1)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // css::sdbc::XCloseable
         virtual void SAL_CALL close() override;

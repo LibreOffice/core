@@ -59,33 +59,6 @@ SbaXFormAdapter::~SbaXFormAdapter()
 
 }
 
-Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  )
-{
-    return ::comphelper::concatSequences(
-        SbaXFormAdapter_BASE1::getTypes(),
-        SbaXFormAdapter_BASE2::getTypes(),
-        SbaXFormAdapter_BASE3::getTypes()
-    );
-}
-
-Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getImplementationId(  )
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType)
-{
-    Any aReturn = SbaXFormAdapter_BASE1::queryInterface( _rType );
-
-    if (!aReturn.hasValue())
-        aReturn = SbaXFormAdapter_BASE2::queryInterface( _rType );
-
-    if (!aReturn.hasValue())
-        aReturn = SbaXFormAdapter_BASE3::queryInterface( _rType );
-
-    return aReturn;
-}
-
 void SbaXFormAdapter::StopListening()
 {
     // log off all our multiplexers
