@@ -95,12 +95,11 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         // If we found an already open storage ... we must increase
         // its use count. Otherwise it will may be closed too early :-)
         TPath2StorageInfo::iterator pCheck = m_lStorages.find(sCheckPath);
-        TStorageInfo*               pInfo  = nullptr;
         if (pCheck != m_lStorages.end())
         {
-            pInfo = &(pCheck->second);
-            ++(pInfo->UseCount);
-            xChild = pInfo->Storage;
+            TStorageInfo& rInfo = pCheck->second;
+            ++rInfo.UseCount;
+            xChild = rInfo.Storage;
 
             aReadLock.unlock();
             // <- SAFE ------------------------------
@@ -132,9 +131,10 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                 }
 
             std::unique_lock g(m_mutex);
-            pInfo = &(m_lStorages[sCheckPath]);
-            pInfo->Storage  = xChild;
-            pInfo->UseCount = 1;
+            TStorageInfo aInfo;
+            aInfo.Storage  = xChild;
+            aInfo.UseCount = 1;
+            m_lStorages.emplace(sCheckPath, std::move(aInfo));
         }
 
         xParent   = xChild;
