@@ -415,7 +415,6 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
                 return aEncryptionData;
             }
 
-            // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
             pEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
         }
 

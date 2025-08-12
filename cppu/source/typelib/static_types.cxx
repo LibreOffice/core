@@ -280,7 +280,7 @@ void SAL_CALL typelib_static_type_init(
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             ::typelib_typedescriptionreference_new( ppRef, eTypeClass, aTypeName.pData );
 
-            assert(*ppRef && "coverity[var_deref_op] - shouldn't be possible");
+            assert(*ppRef && "shouldn't be possible");
             ++((*ppRef)->nStaticRefCount);
         }
     }
@@ -427,7 +427,6 @@ void SAL_CALL typelib_static_interface_type_init(
     const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType ) noexcept
 {
-    // coverity[callee_ptr_arith] - not a bug
     typelib_static_mi_interface_type_init(
         ppRef, pTypeName, pBaseType == nullptr ? 0 : 1, &pBaseType);
 }

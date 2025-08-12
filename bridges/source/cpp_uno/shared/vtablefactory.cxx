@@ -67,7 +67,6 @@ extern "C" void * allocExec(
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY || defined HAIKU
     pagesize = getpagesize();
 #else
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     pagesize = sysconf(_SC_PAGESIZE);
 #endif
 #elif defined _WIN32
@@ -273,7 +272,6 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
         std::unique_ptr<char[]> tmpfname(new char[aTmpName.getLength()+1]);
         strncpy(tmpfname.get(), aTmpName.getStr(), aTmpName.getLength()+1);
-        // coverity[secure_temp] - https://communities.coverity.com/thread/3179
         if ((block.fd = mkstemp(tmpfname.get())) == -1)
             fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname.get(), strerror(errno));
         if (block.fd == -1)

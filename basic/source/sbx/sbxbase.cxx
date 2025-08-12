@@ -194,7 +194,6 @@ SbxObjectRef SbxBase::CreateObject( const OUString& rClass )
 
 namespace {
 
-// coverity[ -taint_source ]
 [[nodiscard]] SbxFlagBits CorrectFlags(SbxFlagBits nFlags)
 {
     // Correcting a foolishness of mine:

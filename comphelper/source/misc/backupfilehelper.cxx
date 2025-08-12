@@ -707,8 +707,7 @@ namespace
                 return false;
             }
 
-            // coverity#1373663 Untrusted loop bound, check file size
-            // isn't utterly broken
+            // Check that file size isn't utterly broken
             sal_uInt64 nFileSize(0);
             rFile->getSize(nFileSize);
             if (nFileSize < nExtEntries)

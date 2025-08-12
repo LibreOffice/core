@@ -824,7 +824,6 @@ extern "C" void SAL_CALL typelib_typedescription_newInterface(
     sal_Int32 nMembers,
     typelib_TypeDescriptionReference ** ppMembers ) noexcept
 {
-    // coverity[callee_ptr_arith] - not a bug
     typelib_typedescription_newMIInterface(
         ppRet, pTypeName, 0, 0, 0, 0, 0, pBaseInterface == nullptr ? 0 : 1,
         &pBaseInterface, nMembers, ppMembers);
@@ -1540,7 +1539,6 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 {
                     // switch from !OnDemand to OnDemand, so the description must be released
                     assert(pTDR->pType->nRefCount > 1);
-                    // coverity[freed_arg] - pType's nRefCount is > 1 here
                     typelib_typedescription_release( pTDR->pType );
                 }
 
