@@ -340,6 +340,14 @@ OUString convertBitmapExTransparentType(BitmapEx const & rBitmapEx)
         return u"none"_ustr;
 }
 
+OUString convertBitmapTransparentType(Bitmap const & rBitmap)
+{
+    if (rBitmap.HasAlpha())
+        return u"bitmap"_ustr;
+    else
+        return u"none"_ustr;
+}
+
 OUString convertMapUnitToString(MapUnit eUnit)
 {
     switch (eUnit)
@@ -1144,12 +1152,12 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 if (rWallpaper.IsBitmap())
                 {
                     rWriter.startElement("bitmap");
-                    BitmapEx const & rBitmapEx = rWallpaper.GetBitmap();
-                    rWriter.attribute("crc", hex32(rBitmapEx.GetChecksum()));
-                    rWriter.attribute("transparenttype", convertBitmapExTransparentType(rBitmapEx));
-                    rWriter.attribute("pixelformat", convertPixelFormatToString(rBitmapEx.GetBitmap().getPixelFormat()));
-                    rWriter.attribute("width", hex32(rBitmapEx.GetSizePixel().Width()));
-                    rWriter.attribute("height", hex32(rBitmapEx.GetSizePixel().Height()));
+                    Bitmap const & rBitmap = rWallpaper.GetBitmap();
+                    rWriter.attribute("crc", hex32(rBitmap.GetChecksum()));
+                    rWriter.attribute("transparenttype", convertBitmapTransparentType(rBitmap));
+                    rWriter.attribute("pixelformat", convertPixelFormatToString(rBitmap.getPixelFormat()));
+                    rWriter.attribute("width", hex32(rBitmap.GetSizePixel().Width()));
+                    rWriter.attribute("height", hex32(rBitmap.GetSizePixel().Height()));
                     rWriter.endElement();
                 }
 

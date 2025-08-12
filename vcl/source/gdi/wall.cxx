@@ -132,7 +132,7 @@ Wallpaper::Wallpaper( const Color& rColor )
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 {
-    maBitmap   = rBmpEx;
+    maBitmap   = Bitmap(rBmpEx);
     meStyle    = WallpaperStyle::Tile;
 }
 
@@ -144,12 +144,12 @@ Wallpaper::Wallpaper( const Bitmap& rBmp )
 
 Wallpaper::~Wallpaper() = default;
 
-void Wallpaper::ImplSetCachedBitmap( const BitmapEx& rBmp ) const
+void Wallpaper::ImplSetCachedBitmap( const Bitmap& rBmp ) const
 {
     maCache = rBmp;
 }
 
-const BitmapEx* Wallpaper::ImplGetCachedBitmap() const
+const Bitmap* Wallpaper::ImplGetCachedBitmap() const
 {
     return maCache.IsEmpty() ? nullptr : &maCache;
 }
@@ -178,7 +178,7 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
     meStyle = eStyle;
 }
 
-void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
+void Wallpaper::SetBitmap( const Bitmap& rBitmap )
 {
     maCache.SetEmpty();
     maBitmap = rBitmap;
@@ -187,7 +187,7 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
         meStyle = WallpaperStyle::Tile;
 }
 
-const BitmapEx & Wallpaper::GetBitmap() const
+const Bitmap & Wallpaper::GetBitmap() const
 {
     return maBitmap;
 }

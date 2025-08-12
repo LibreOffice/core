@@ -897,7 +897,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                 if ( aWallpaper.IsBitmap() )
                 {
-                    BitmapEx aBitmapEx = aWallpaper.GetBitmap();
+                    BitmapEx aBitmapEx(aWallpaper.GetBitmap());
                     const Bitmap& aBitmap( aBitmapEx.GetBitmap() );
                     if ( aBitmapEx.IsAlpha() )
                     {

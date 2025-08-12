@@ -921,12 +921,12 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
-        const BitmapEx& aBitmapEx(rWallpaper.GetBitmap());
+        const Bitmap& aBitmap(rWallpaper.GetBitmap());
         const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
 
         // if bitmap visualisation is transparent, maybe background
         // needs to be filled. Create background
-        if(aBitmapEx.IsAlpha()
+        if(aBitmap.HasAlpha()
             || (WallpaperStyle::Tile != eWallpaperStyle && WallpaperStyle::Scale != eWallpaperStyle))
         {
             if(rWallpaper.IsGradient())
@@ -956,7 +956,7 @@ namespace wmfemfhelper
         rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pBitmapWallpaperFill =
             new drawinglayer::primitive2d::WallpaperBitmapPrimitive2D(
                 aWallpaperRange,
-                aBitmapEx,
+                BitmapEx(aBitmap),
                 eWallpaperStyle);
 
         if(rProperty.getTransformation().isIdentity())

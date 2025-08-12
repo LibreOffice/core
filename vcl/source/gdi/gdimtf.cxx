@@ -1915,7 +1915,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
                 aWall.SetColor( pFncCol( aWall.GetColor(), pColParam ) );
 
                 if( aWall.IsBitmap() )
-                    aWall.SetBitmap( pFncBmp( aWall.GetBitmap(), pBmpParam ) );
+                    aWall.SetBitmap( Bitmap(pFncBmp( BitmapEx(aWall.GetBitmap()), pBmpParam )) );
 
                 if( aWall.IsGradient() )
                 {

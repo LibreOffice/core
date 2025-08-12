@@ -10199,7 +10199,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
     Size aBmpSize;
     if( rWall.IsBitmap() )
     {
-        aBitmap = Bitmap(rWall.GetBitmap());
+        aBitmap = rWall.GetBitmap();
         aBmpSize = lcl_convert( aBitmap.GetPrefMapMode(),
                                 getMapMode(),
                                 this,
