@@ -1869,6 +1869,7 @@ void SwCursorShell::UpdateCursorPos()
     CurrShell aCurr( this );
     ++mnStartAction;
     SwShellCursor* pShellCursor = getShellCursor( true );
+    assert(pShellCursor && "will exist");
     Size aOldSz( GetDocSize() );
 
     if (isInHiddenFrame(pShellCursor) && !ExtendedSelectedAll())
@@ -2293,6 +2294,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
     SwShellCursor* pShellCursor = isThisShell
         ? static_cast<SwCursorShell&>(rState).getShellCursor(true)
         : rState.m_pCurrentCursor;
+
+    assert(pShellCursor && "will exist");
 
     do {
         bool bAgainst;
