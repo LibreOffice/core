@@ -3112,7 +3112,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                             if (!bLeftChSet) // special case - indicates leftCh is disabled
                             {
-                                // Implementaton note: when leftChars was imported as zero,
+                                // Implementation note: when leftChars was imported as zero,
                                 // an inherited w:left was force-inserted
                                 // by DomainMapper::lcl_attribute
                                 const PropertyIds eId = PROP_PARA_LEFT_MARGIN;
@@ -3161,7 +3161,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         // indentation. Character-based hanging indentation must be pre-added
                         // to the left margin here.
 
-                        // tdf#167721: Oddball MS Word implemenation:
+                        // tdf#167721: Oddball MS Word implementation:
                         // Even if LeftChars is disabled/undefined and a w:left is provided,
                         // when a hangingChars is also provided
                         // then the w:left is ignored and treated as a zero.
