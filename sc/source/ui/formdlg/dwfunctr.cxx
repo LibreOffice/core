@@ -70,7 +70,6 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent, SfxBindings* pBindings)
     InitLRUList();
     UpdateFavouritesList();
 
-    nArgs=0;
     m_aListHelpId = xFuncList->get_help_id();
     m_aSearchHelpId = m_xSearchString->get_help_id();
 
@@ -410,7 +409,6 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
     }
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
-    nArgs=0;
 
     if(!aString.isEmpty())
     {
@@ -420,7 +418,6 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
         {
             pFuncDesc=pDesc;
             UpdateLRUList();
-            nArgs = pDesc->nArgCount;
         }
         InitLRUList();
     }
