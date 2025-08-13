@@ -1327,9 +1327,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             ::std::optional<OUString> oName;
             if (pItem)
-            {
                 oName.emplace(static_cast<const SfxStringItem*>(pItem)->GetValue());
-            }
+
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg(GetView().GetFrameWeld(), rWrtSh, oName ? &*oName : nullptr));
