@@ -90,6 +90,7 @@ interface TableDraw
     SID_ATTRIBUTES_AREA     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; ]
     SID_ATTRIBUTES_LINE     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; ]
     SID_MEASURE_DLG         [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; ]
+    SID_CONNECTION_DLG      [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; ]
     SID_ATTR_TRANSFORM      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
 
     // For the sidebar

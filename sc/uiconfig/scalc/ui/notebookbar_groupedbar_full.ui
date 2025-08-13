@@ -7504,6 +7504,16 @@
                                               </packing>
                                             </child>
                                             <child>
+                                              <object class="GtkToolButton" id="ConnectorToolbox">
+                                                <property name="visible">True</property>
+                                                <property name="action_name">.uno:ConnectorToolbox</property>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="homogeneous">True</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkToolButton" id="ArrowsToolbox">
                                                 <property name="visible">True</property>
                                                 <property name="action_name">.uno:ArrowsToolbox</property>

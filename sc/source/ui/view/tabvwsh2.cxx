@@ -232,6 +232,34 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_MEASURELINE:
+        case SID_TOOL_CONNECTOR:
+        case SID_CONNECTOR_ARROW_START:
+        case SID_CONNECTOR_ARROW_END:
+        case SID_CONNECTOR_ARROWS:
+        case SID_CONNECTOR_CIRCLE_START:
+        case SID_CONNECTOR_CIRCLE_END:
+        case SID_CONNECTOR_CIRCLES:
+        case SID_CONNECTOR_LINE:
+        case SID_CONNECTOR_LINE_ARROW_START:
+        case SID_CONNECTOR_LINE_ARROW_END:
+        case SID_CONNECTOR_LINE_ARROWS:
+        case SID_CONNECTOR_LINE_CIRCLE_START:
+        case SID_CONNECTOR_LINE_CIRCLE_END:
+        case SID_CONNECTOR_LINE_CIRCLES:
+        case SID_CONNECTOR_CURVE:
+        case SID_CONNECTOR_CURVE_ARROW_START:
+        case SID_CONNECTOR_CURVE_ARROW_END:
+        case SID_CONNECTOR_CURVE_ARROWS:
+        case SID_CONNECTOR_CURVE_CIRCLE_START:
+        case SID_CONNECTOR_CURVE_CIRCLE_END:
+        case SID_CONNECTOR_CURVE_CIRCLES:
+        case SID_CONNECTOR_LINES:
+        case SID_CONNECTOR_LINES_ARROW_START:
+        case SID_CONNECTOR_LINES_ARROW_END:
+        case SID_CONNECTOR_LINES_ARROWS:
+        case SID_CONNECTOR_LINES_CIRCLE_START:
+        case SID_CONNECTOR_LINES_CIRCLE_END:
+        case SID_CONNECTOR_LINES_CIRCLES:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(*this, pWin, pView, rModel, aNewReq));
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             break;
@@ -431,6 +459,34 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_DRAW_TEXT:
             case SID_DRAW_TEXT_MARQUEE:
             case SID_DRAW_CAPTION:
+            case SID_TOOL_CONNECTOR:
+            case SID_CONNECTOR_ARROW_START:
+            case SID_CONNECTOR_ARROW_END:
+            case SID_CONNECTOR_ARROWS:
+            case SID_CONNECTOR_CIRCLE_START:
+            case SID_CONNECTOR_CIRCLE_END:
+            case SID_CONNECTOR_CIRCLES:
+            case SID_CONNECTOR_LINE:
+            case SID_CONNECTOR_LINE_ARROW_START:
+            case SID_CONNECTOR_LINE_ARROW_END:
+            case SID_CONNECTOR_LINE_ARROWS:
+            case SID_CONNECTOR_LINE_CIRCLE_START:
+            case SID_CONNECTOR_LINE_CIRCLE_END:
+            case SID_CONNECTOR_LINE_CIRCLES:
+            case SID_CONNECTOR_CURVE:
+            case SID_CONNECTOR_CURVE_ARROW_START:
+            case SID_CONNECTOR_CURVE_ARROW_END:
+            case SID_CONNECTOR_CURVE_ARROWS:
+            case SID_CONNECTOR_CURVE_CIRCLE_START:
+            case SID_CONNECTOR_CURVE_CIRCLE_END:
+            case SID_CONNECTOR_CURVE_CIRCLES:
+            case SID_CONNECTOR_LINES:
+            case SID_CONNECTOR_LINES_ARROW_START:
+            case SID_CONNECTOR_LINES_ARROW_END:
+            case SID_CONNECTOR_LINES_ARROWS:
+            case SID_CONNECTOR_LINES_CIRCLE_START:
+            case SID_CONNECTOR_LINES_CIRCLE_END:
+            case SID_CONNECTOR_LINES_CIRCLES:
                 rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
                 break;
 

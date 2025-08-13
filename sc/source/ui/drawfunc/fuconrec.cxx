@@ -151,6 +151,39 @@ void FuConstRectangle::Activate()
             aObjKind = SdrObjKind::Caption;
             break;
 
+        case SID_TOOL_CONNECTOR:
+        case SID_CONNECTOR_ARROWS:
+        case SID_CONNECTOR_ARROW_START:
+        case SID_CONNECTOR_ARROW_END:
+        case SID_CONNECTOR_CIRCLE_START:
+        case SID_CONNECTOR_CIRCLE_END:
+        case SID_CONNECTOR_CIRCLES:
+        case SID_CONNECTOR_LINE:
+        case SID_CONNECTOR_LINE_ARROW_START:
+        case SID_CONNECTOR_LINE_ARROW_END:
+        case SID_CONNECTOR_LINE_ARROWS:
+        case SID_CONNECTOR_LINE_CIRCLE_START:
+        case SID_CONNECTOR_LINE_CIRCLE_END:
+        case SID_CONNECTOR_LINE_CIRCLES:
+        case SID_CONNECTOR_CURVE:
+        case SID_CONNECTOR_CURVE_ARROW_START:
+        case SID_CONNECTOR_CURVE_ARROW_END:
+        case SID_CONNECTOR_CURVE_ARROWS:
+        case SID_CONNECTOR_CURVE_CIRCLE_START:
+        case SID_CONNECTOR_CURVE_CIRCLE_END:
+        case SID_CONNECTOR_CURVE_CIRCLES:
+        case SID_CONNECTOR_LINES:
+        case SID_CONNECTOR_LINES_ARROW_START:
+        case SID_CONNECTOR_LINES_ARROW_END:
+        case SID_CONNECTOR_LINES_ARROWS:
+        case SID_CONNECTOR_LINES_CIRCLE_START:
+        case SID_CONNECTOR_LINES_CIRCLE_END:
+        case SID_CONNECTOR_LINES_CIRCLES:
+            aNewPointer = PointerStyle::DrawConnect;
+            aObjKind = SdrObjKind::Edge;
+            pView->SetEditMode(SdrViewEditMode::Create);
+            break;
+
         default:
             aNewPointer = PointerStyle::Cross;
             aObjKind = SdrObjKind::Rectangle;
@@ -172,6 +205,38 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal
 
 void FuConstRectangle::Deactivate()
 {
+    sal_uInt16 nSlotId = aSfxRequest.GetSlot();
+    if( nSlotId == SID_TOOL_CONNECTOR               ||
+        nSlotId == SID_CONNECTOR_ARROW_START        ||
+        nSlotId == SID_CONNECTOR_ARROW_END          ||
+        nSlotId == SID_CONNECTOR_ARROWS             ||
+        nSlotId == SID_CONNECTOR_CIRCLE_START       ||
+        nSlotId == SID_CONNECTOR_CIRCLE_END         ||
+        nSlotId == SID_CONNECTOR_CIRCLES            ||
+        nSlotId == SID_CONNECTOR_LINE               ||
+        nSlotId == SID_CONNECTOR_LINE_ARROW_START   ||
+        nSlotId == SID_CONNECTOR_LINE_ARROW_END     ||
+        nSlotId == SID_CONNECTOR_LINE_ARROWS        ||
+        nSlotId == SID_CONNECTOR_LINE_CIRCLE_START  ||
+        nSlotId == SID_CONNECTOR_LINE_CIRCLE_END    ||
+        nSlotId == SID_CONNECTOR_LINE_CIRCLES       ||
+        nSlotId == SID_CONNECTOR_CURVE              ||
+        nSlotId == SID_CONNECTOR_CURVE_ARROW_START  ||
+        nSlotId == SID_CONNECTOR_CURVE_ARROW_END    ||
+        nSlotId == SID_CONNECTOR_CURVE_ARROWS       ||
+        nSlotId == SID_CONNECTOR_CURVE_CIRCLE_START ||
+        nSlotId == SID_CONNECTOR_CURVE_CIRCLE_END   ||
+        nSlotId == SID_CONNECTOR_CURVE_CIRCLES      ||
+        nSlotId == SID_CONNECTOR_LINES              ||
+        nSlotId == SID_CONNECTOR_LINES_ARROW_START  ||
+        nSlotId == SID_CONNECTOR_LINES_ARROW_END    ||
+        nSlotId == SID_CONNECTOR_LINES_ARROWS       ||
+        nSlotId == SID_CONNECTOR_LINES_CIRCLE_START ||
+        nSlotId == SID_CONNECTOR_LINES_CIRCLE_END   ||
+        nSlotId == SID_CONNECTOR_LINES_CIRCLES )
+    {
+        pView->SetEditMode(SdrViewEditMode::Edit);
+    }
     FuConstruct::Deactivate();
     rViewShell.SetActivePointer( aOldPointer );
 }
@@ -258,6 +323,48 @@ rtl::Reference<SdrObject> FuConstRectangle::CreateDefaultObject(const sal_uInt16
                 else
                 {
                     OSL_FAIL("Object is NO caption object");
+                }
+
+                break;
+            }
+
+            case SID_TOOL_CONNECTOR:
+            case SID_CONNECTOR_ARROW_START:
+            case SID_CONNECTOR_ARROW_END:
+            case SID_CONNECTOR_ARROWS:
+            case SID_CONNECTOR_CIRCLE_START:
+            case SID_CONNECTOR_CIRCLE_END:
+            case SID_CONNECTOR_CIRCLES:
+            case SID_CONNECTOR_LINE:
+            case SID_CONNECTOR_LINE_ARROW_START:
+            case SID_CONNECTOR_LINE_ARROW_END:
+            case SID_CONNECTOR_LINE_ARROWS:
+            case SID_CONNECTOR_LINE_CIRCLE_START:
+            case SID_CONNECTOR_LINE_CIRCLE_END:
+            case SID_CONNECTOR_LINE_CIRCLES:
+            case SID_CONNECTOR_CURVE:
+            case SID_CONNECTOR_CURVE_ARROW_START:
+            case SID_CONNECTOR_CURVE_ARROW_END:
+            case SID_CONNECTOR_CURVE_ARROWS:
+            case SID_CONNECTOR_CURVE_CIRCLE_START:
+            case SID_CONNECTOR_CURVE_CIRCLE_END:
+            case SID_CONNECTOR_CURVE_CIRCLES:
+            case SID_CONNECTOR_LINES:
+            case SID_CONNECTOR_LINES_ARROW_START:
+            case SID_CONNECTOR_LINES_ARROW_END:
+            case SID_CONNECTOR_LINES_ARROWS:
+            case SID_CONNECTOR_LINES_CIRCLE_START:
+            case SID_CONNECTOR_LINES_CIRCLE_END:
+            case SID_CONNECTOR_LINES_CIRCLES:
+            {
+                if( auto pEdgeObj = dynamic_cast< SdrEdgeObj *>( pObj.get() ) )
+                {
+                    pEdgeObj->SetTailPoint(false, aStart);
+                    pEdgeObj->SetTailPoint(true, aEnd);
+                }
+                else
+                {
+                    OSL_FAIL("Object is NO connector object");
                 }
 
                 break;
