@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>  
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
  <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
  <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
@@ -26,26 +26,18 @@
  <block-list:block block-list:abbreviated-name="آزوقه" block-list:name="آذوقه"/>
  <block-list:block block-list:abbreviated-name="آماده‌ایی" block-list:name="آماده‌ای"/>
  <block-list:block block-list:abbreviated-name="آن جا" block-list:name="آنجا"/>
- <block-list:block block-list:abbreviated-name="آن جور" block-list:name="آن‌جور"/>
- <block-list:block block-list:abbreviated-name="آن جوری" block-list:name="آن‌جوری"/>
- <block-list:block block-list:abbreviated-name="آن چنان" block-list:name="آن‌چنان"/>
  <block-list:block block-list:abbreviated-name="آن‌چه" block-list:name="آنچه"/>
  <block-list:block block-list:abbreviated-name="آن چه" block-list:name="آنچه"/>
  <block-list:block block-list:abbreviated-name="آن‌را" block-list:name="آن را"/>
  <block-list:block block-list:abbreviated-name="آنرا" block-list:name="آن را"/>
  <block-list:block block-list:abbreviated-name="آنفلوآنزا" block-list:name="آنفولانزا"/>
- <block-list:block block-list:abbreviated-name="آن قدر" block-list:name="آن‌قدر"/>
  <block-list:block block-list:abbreviated-name="آن‌که" block-list:name="آن که"/>
  <block-list:block block-list:abbreviated-name="آن که" block-list:name="آنکه"/>
- <block-list:block block-list:abbreviated-name="آن گونه" block-list:name="آن‌گونه"/>
  <block-list:block block-list:abbreviated-name="آنهائیکه" block-list:name="آن‌هایی که"/>
  <block-list:block block-list:abbreviated-name="آنهاییکه" block-list:name="آن‌هایی که"/>
- <block-list:block block-list:abbreviated-name="آهن فروش" block-list:name="آهن‌فروش"/>
  <block-list:block block-list:abbreviated-name="آواکادو" block-list:name="آووکادو"/>
  <block-list:block block-list:abbreviated-name="آیة الله" block-list:name="آیت‌الله"/>
- <block-list:block block-list:abbreviated-name="آیت الله" block-list:name="آیت‌الله"/>
  <block-list:block block-list:abbreviated-name="آیت‌اله" block-list:name="آیت‌الله"/>
- <block-list:block block-list:abbreviated-name="آینده نگر" block-list:name="آینده‌نگر"/>
  <block-list:block block-list:abbreviated-name="آیه الله" block-list:name="آیت‌الله"/>
  <block-list:block block-list:abbreviated-name="ابدا" block-list:name="ابداً"/>
  <block-list:block block-list:abbreviated-name="ابداغ" block-list:name="ابداع"/>
@@ -83,12 +75,10 @@
  <block-list:block block-list:abbreviated-name="ارکانیسم" block-list:name="ارگانیسم"/>
  <block-list:block block-list:abbreviated-name="ازدهام" block-list:name="ازدحام"/>
  <block-list:block block-list:abbreviated-name="ازعان" block-list:name="اذعان"/>
- <block-list:block block-list:abbreviated-name="اسارت بار" block-list:name="اسارت‌بار"/>
  <block-list:block block-list:abbreviated-name="اساسا" block-list:name="اساساً"/>
  <block-list:block block-list:abbreviated-name="استثنا" block-list:name="استثناء"/>
  <block-list:block block-list:abbreviated-name="استثنائا" block-list:name="استثنائاً"/>
  <block-list:block block-list:abbreviated-name="استحظار" block-list:name="استحضار"/>
- <block-list:block block-list:abbreviated-name="استخوان دار" block-list:name="استخوان‌دار"/>
  <block-list:block block-list:abbreviated-name="استن" block-list:name="است"/>
  <block-list:block block-list:abbreviated-name="استنبات" block-list:name="استنباط"/>
  <block-list:block block-list:abbreviated-name="اسداله" block-list:name="اسدالله "/>
@@ -106,12 +96,12 @@
  <block-list:block block-list:abbreviated-name="اصافه" block-list:name="اضافه"/>
  <block-list:block block-list:abbreviated-name="اصالتا" block-list:name="اصالتاً"/>
  <block-list:block block-list:abbreviated-name="اصراف" block-list:name="اسراف "/>
- <block-list:block block-list:abbreviated-name="اصراف" block-list:name="اسراف"/>
  <block-list:block block-list:abbreviated-name="اصطحکاک" block-list:name="اصطکاک"/>
  <block-list:block block-list:abbreviated-name="اصطرلاب" block-list:name="اسطرلاب"/>
  <block-list:block block-list:abbreviated-name="اصطلاحا" block-list:name="اصطلاحاً"/>
  <block-list:block block-list:abbreviated-name="اصلا" block-list:name="اصلاً"/>
  <block-list:block block-list:abbreviated-name="اصلاخ" block-list:name="اصلاح"/>
+ <block-list:block block-list:abbreviated-name="اصلن" block-list:name="اصلاً"/>
  <block-list:block block-list:abbreviated-name="اصلوب" block-list:name="اسلوب"/>
  <block-list:block block-list:abbreviated-name="اصولا" block-list:name="اصولاً"/>
  <block-list:block block-list:abbreviated-name="اضهار" block-list:name="اظهار"/>
@@ -119,6 +109,7 @@
  <block-list:block block-list:abbreviated-name="اطاق" block-list:name="اتاق"/>
  <block-list:block block-list:abbreviated-name="اطراق" block-list:name="اتراق"/>
  <block-list:block block-list:abbreviated-name="اطریش" block-list:name="اتریش"/>
+<block-list:block block-list:abbreviated-name="اطریشی" block-list:name="اتریشی"/>
  <block-list:block block-list:abbreviated-name="اطو" block-list:name="اتو"/>
  <block-list:block block-list:abbreviated-name="اظافه" block-list:name="اضافه"/>
  <block-list:block block-list:abbreviated-name="اظافی" block-list:name="اضافی"/>
@@ -131,7 +122,6 @@
  <block-list:block block-list:abbreviated-name="اعلا حضرت" block-list:name="اعلی‌حضرت"/>
  <block-list:block block-list:abbreviated-name="اعلاحضرت" block-list:name="اعلی‌حضرت"/>
  <block-list:block block-list:abbreviated-name="اعلمتر" block-list:name="اعلم"/>
- <block-list:block block-list:abbreviated-name="اعلی حضرت" block-list:name="اعلی‌حضرت"/>
  <block-list:block block-list:abbreviated-name="افریقا" block-list:name="آفریقا"/>
  <block-list:block block-list:abbreviated-name="افریقایی" block-list:name="آفریقایی"/>
  <block-list:block block-list:abbreviated-name="افضلتر" block-list:name="افضل"/>
@@ -147,6 +137,8 @@
  <block-list:block block-list:abbreviated-name="القا" block-list:name="القاء"/>
  <block-list:block block-list:abbreviated-name="اللخصوص" block-list:name="علی‌الخصوص"/>
  <block-list:block block-list:abbreviated-name="المانی" block-list:name="آلمانی"/>
+<block-list:block block-list:abbreviated-name="الوات" block-list:name="الواط"/>
+<block-list:block block-list:abbreviated-name="الواتی" block-list:name="الواطی"/>
  <block-list:block block-list:abbreviated-name="الویت" block-list:name="اولویت"/>
  <block-list:block block-list:abbreviated-name="امپراطور" block-list:name="امپراتور"/>
  <block-list:block block-list:abbreviated-name="امپراطوری" block-list:name="امپراتوری"/>
@@ -157,18 +149,12 @@
   <block-list:block block-list:abbreviated-name="انبسات" block-list:name="انبساط"/>
  <block-list:block block-list:abbreviated-name="انبیا" block-list:name="انبیاء"/>
  <block-list:block block-list:abbreviated-name="انتخواب" block-list:name="انتخاب"/>
-  <block-list:block block-list:abbreviated-name="اندیشه مند" block-list:name="اندیشه‌مند"/>
  <block-list:block block-list:abbreviated-name="انرپی" block-list:name="انرژی"/>
- <block-list:block block-list:abbreviated-name="انرژی زا" block-list:name="انرژی‌زا"/>
  <block-list:block block-list:abbreviated-name="انسام" block-list:name="انسان"/>
- <block-list:block block-list:abbreviated-name="ان شاء الله" block-list:name="ان‌شاء‌الله"/>
- <block-list:block block-list:abbreviated-name="ان شاء الله" block-list:name="ان‌شاءالله"/>
  <block-list:block block-list:abbreviated-name="انشاء الله" block-list:name="ان‌شاء‌الله"/>
  <block-list:block block-list:abbreviated-name="انشاءالله" block-list:name="ان‌شاءالله"/>
  <block-list:block block-list:abbreviated-name="انشاالله" block-list:name="ان‌شاء‌الله"/>
- <block-list:block block-list:abbreviated-name="انشاالله" block-list:name="ان‌شاءالله"/>
  <block-list:block block-list:abbreviated-name="انشالله" block-list:name="ان‌شاء‌الله"/>
- <block-list:block block-list:abbreviated-name="انشالله" block-list:name="ان‌شاءالله"/>
  <block-list:block block-list:abbreviated-name="انشان" block-list:name="انسان"/>
  <block-list:block block-list:abbreviated-name="انصافا" block-list:name="انصافاً"/>
  <block-list:block block-list:abbreviated-name="انضجار" block-list:name="انزجار"/>
@@ -194,25 +180,17 @@
  <block-list:block block-list:abbreviated-name="ایده‌آلیسم" block-list:name="ایدئالیسم"/>
  <block-list:block block-list:abbreviated-name="ایده آلیسم" block-list:name="ایدئالیسم"/>
  <block-list:block block-list:abbreviated-name="ایضا" block-list:name="ایضاً"/>
+<block-list:block block-list:abbreviated-name="ایطالیا" block-list:name="ایتالیا"/>
  <block-list:block block-list:abbreviated-name="این جا" block-list:name="اینجا"/>
  <block-list:block block-list:abbreviated-name="اینجانب" block-list:name="این‌جانب"/>
- <block-list:block block-list:abbreviated-name="این جور" block-list:name="این‌جور"/>
- <block-list:block block-list:abbreviated-name="این جوری" block-list:name="این‌جوری"/>
  <block-list:block block-list:abbreviated-name="این حا" block-list:name="این جا"/>
  <block-list:block block-list:abbreviated-name="اینحا" block-list:name="اینجا"/>
  <block-list:block block-list:abbreviated-name="این حور" block-list:name="این‌جور"/>
  <block-list:block block-list:abbreviated-name="این حوری" block-list:name="این‌جوری"/>
  <block-list:block block-list:abbreviated-name="این‌را" block-list:name="این را"/>
  <block-list:block block-list:abbreviated-name="اینست" block-list:name="این است"/>
- <block-list:block block-list:abbreviated-name="این طور" block-list:name="این‌طور"/>
- <block-list:block block-list:abbreviated-name="این طورند" block-list:name="این‌طورند"/>
- <block-list:block block-list:abbreviated-name="این طوری" block-list:name="این‌طوری"/>
- <block-list:block block-list:abbreviated-name="این طوریم" block-list:name="این‌طوریم"/>
- <block-list:block block-list:abbreviated-name="این قدر" block-list:name="این‌قدر"/>
  <block-list:block block-list:abbreviated-name="این‌که" block-list:name="این که"/>
- <block-list:block block-list:abbreviated-name="این گونه" block-list:name="این‌گونه"/>
  <block-list:block block-list:abbreviated-name="اینم" block-list:name="این‌ام"/>
- <block-list:block block-list:abbreviated-name="این همانی" block-list:name="این‌همانی"/>
   <block-list:block block-list:abbreviated-name="باالطبع" block-list:name="بالطبع"/>
  <block-list:block block-list:abbreviated-name="باالعکس" block-list:name="بالعکس"/>
  <block-list:block block-list:abbreviated-name="باالفطره" block-list:name="بالفطره"/>
@@ -231,6 +209,7 @@
  <block-list:block block-list:abbreviated-name="باقوری" block-list:name="باباغوری"/>
  <block-list:block block-list:abbreviated-name="بامعنا" block-list:name="با‌معنا"/>
  <block-list:block block-list:abbreviated-name="ببنید" block-list:name="ببینید"/>
+<block-list:block block-list:abbreviated-name="بتری" block-list:name="بطری"/>
  <block-list:block block-list:abbreviated-name="بته" block-list:name="بوته"/>
  <block-list:block block-list:abbreviated-name="بتون" block-list:name="بتن"/>
  <block-list:block block-list:abbreviated-name="بجای" block-list:name="به‌جای"/>
@@ -261,7 +240,6 @@
  <block-list:block block-list:abbreviated-name="برخواست" block-list:name="برخاست"/>
  <block-list:block block-list:abbreviated-name="برخواستن" block-list:name="برخاستن"/>
  <block-list:block block-list:abbreviated-name="برخواسته" block-list:name="برخاسته"/>
- <block-list:block block-list:abbreviated-name="برده داری" block-list:name="برده‌داری"/>
  <block-list:block block-list:abbreviated-name="برده‌گی" block-list:name="بردگی"/>
  <block-list:block block-list:abbreviated-name="برده گی" block-list:name="بردگی"/>
  <block-list:block block-list:abbreviated-name="برسی" block-list:name="بررسی"/>
@@ -270,9 +248,6 @@
  <block-list:block block-list:abbreviated-name="برعلیه" block-list:name="علیه"/>
  <block-list:block block-list:abbreviated-name="برگذار" block-list:name="برگزار"/>
  <block-list:block block-list:abbreviated-name="برگذاری" block-list:name="برگزاری"/>
- <block-list:block block-list:abbreviated-name="برنامه ریزی" block-list:name="برنامه‌ریزی"/>
- <block-list:block block-list:abbreviated-name="برون ریشگی" block-list:name="برون‌ریشگی"/>
- <block-list:block block-list:abbreviated-name="برون ریشه" block-list:name="برون‌ریشه"/>
  <block-list:block block-list:abbreviated-name="بزار" block-list:name="بذار"/>
  <block-list:block block-list:abbreviated-name="بزرک" block-list:name="بزرگ"/>
  <block-list:block block-list:abbreviated-name="بسادگی" block-list:name="به‌سادگی"/>
@@ -313,50 +288,32 @@
  <block-list:block block-list:abbreviated-name="بمناسبت" block-list:name="به‌مناسبت"/>
  <block-list:block block-list:abbreviated-name="بمنظور" block-list:name="به‌منظور"/>
  <block-list:block block-list:abbreviated-name="بنابر" block-list:name="بنا بر"/>
- <block-list:block block-list:abbreviated-name="بن بست" block-list:name="بن‌بست"/>
  <block-list:block block-list:abbreviated-name="بندرت" block-list:name="به‌ندرت"/>
  <block-list:block block-list:abbreviated-name="بنیانا" block-list:name="بنیاناً"/>
  <block-list:block block-list:abbreviated-name="بنیانگذار" block-list:name="بنیان‌گذار"/>
- <block-list:block block-list:abbreviated-name="بنیان گذاری" block-list:name="بنیان‌گذاری"/>
  <block-list:block block-list:abbreviated-name="بنیانگذاری" block-list:name="بنیان‌گذاری"/>
  <block-list:block block-list:abbreviated-name="بنیان‌گزار" block-list:name="بنیان‌گذار"/>
  <block-list:block block-list:abbreviated-name="بنیانگزار" block-list:name="بنیان‌گذار"/>
- <block-list:block block-list:abbreviated-name="بنیان‌گزار" block-list:name="بنیان‌گذاری"/>
  <block-list:block block-list:abbreviated-name="بنیان‌گزاری" block-list:name="بنیان‌گذاری"/>
- <block-list:block block-list:abbreviated-name="به به" block-list:name="به‌به"/>
  <block-list:block block-list:abbreviated-name="بهبوحه" block-list:name="بحبوحه"/>
  <block-list:block block-list:abbreviated-name="بهبوهه" block-list:name="بحبوحه"/>
  <block-list:block block-list:abbreviated-name="به‌بینم" block-list:name="ببینم"/>
  <block-list:block block-list:abbreviated-name="به‌تر" block-list:name="بهتر"/>
  <block-list:block block-list:abbreviated-name="به‌ترین" block-list:name="بهترین"/>
- <block-list:block block-list:abbreviated-name="به تعبیر" block-list:name="به‌تعبیر"/>
- <block-list:block block-list:abbreviated-name="به خاطر" block-list:name="به‌خاطر"/>
- <block-list:block block-list:abbreviated-name="به خصوص" block-list:name="به‌خصوص"/>
- <block-list:block block-list:abbreviated-name="به خصوصی" block-list:name="به‌خصوصی"/>
  <block-list:block block-list:abbreviated-name="به‌ذاته" block-list:name="بذاته"/>
  <block-list:block block-list:abbreviated-name="به‌رأی‌العین" block-list:name="برأی‌العین"/>
- <block-list:block block-list:abbreviated-name="به راحتی" block-list:name="به‌راحتی"/>
  <block-list:block block-list:abbreviated-name="بهرحال" block-list:name="به‌هرحال"/>
  <block-list:block block-list:abbreviated-name="به‌رفت" block-list:name="برفت"/>
- <block-list:block block-list:abbreviated-name="به سادگی" block-list:name="به‌سادگی"/>
- <block-list:block block-list:abbreviated-name="بهشت گونه" block-list:name="بهشت‌گونه"/>
  <block-list:block block-list:abbreviated-name="به‌شخصه" block-list:name="بشخصه"/>
- <block-list:block block-list:abbreviated-name="به شرطی" block-list:name="به‌شرطی"/>
  <block-list:block block-list:abbreviated-name="بهضی" block-list:name="بعضی"/>
  <block-list:block block-list:abbreviated-name="به طریق اولی" block-list:name="به طریق اولیٰ"/>
  <block-list:block block-list:abbreviated-name="بهع" block-list:name="به"/>
- <block-list:block block-list:abbreviated-name="به علت" block-list:name="به‌علت"/>
  <block-list:block block-list:abbreviated-name="به‌عینه‌" block-list:name="بعینه"/>
  <block-list:block block-list:abbreviated-name="به‌عینه" block-list:name="بعینه"/>
  <block-list:block block-list:abbreviated-name="به عینه" block-list:name="بعینه"/>
- <block-list:block block-list:abbreviated-name="به غایت" block-list:name="به‌غایت"/>
- <block-list:block block-list:abbreviated-name="به قدری" block-list:name="به‌قدری"/>
  <block-list:block block-list:abbreviated-name="به قطع یقین" block-list:name="به قطع و یقین"/>
- <block-list:block block-list:abbreviated-name="به کلی" block-list:name="به‌کلی"/>
  <block-list:block block-list:abbreviated-name="به‌گفت" block-list:name="بگفت"/>
  <block-list:block block-list:abbreviated-name="بهمراه" block-list:name="به‌همراه"/>
- <block-list:block block-list:abbreviated-name="به معنی" block-list:name="به‌معنی"/>
- <block-list:block block-list:abbreviated-name="به موقع" block-list:name="به‌موقع"/>
  <block-list:block block-list:abbreviated-name="به‌نفسه‌" block-list:name="بنفسه"/>
  <block-list:block block-list:abbreviated-name="به‌نویسد" block-list:name="بنویسد"/>
  <block-list:block block-list:abbreviated-name="بهیچ" block-list:name="به‌هیچ"/>
@@ -368,7 +325,6 @@
  <block-list:block block-list:abbreviated-name="بوضوح" block-list:name="به‌وضوح"/>
  <block-list:block block-list:abbreviated-name="بوقت" block-list:name="به‌وقت"/>
  <block-list:block block-list:abbreviated-name="بویژه" block-list:name="به‌ویژه"/>
- <block-list:block block-list:abbreviated-name="بی ابزار" block-list:name="بی‌ابزار"/>  
  <block-list:block block-list:abbreviated-name="بیازار" block-list:name="بی‌آزار"/>
  <block-list:block block-list:abbreviated-name="بیافتاد" block-list:name="بیفتاد"/>
  <block-list:block block-list:abbreviated-name="بیافتد" block-list:name="بیفتد"/>
@@ -387,8 +343,6 @@
  <block-list:block block-list:abbreviated-name="بیاندازیم" block-list:name="بیندازیم"/>
  <block-list:block block-list:abbreviated-name="بیاندوخت" block-list:name="بیندوخت"/>
  <block-list:block block-list:abbreviated-name="بیاندیشد" block-list:name="بیندیشد"/>
- <block-list:block block-list:abbreviated-name="بی انضباط" block-list:name="بی‌انضباط"/>
- <block-list:block block-list:abbreviated-name="بی انضباطی" block-list:name="بی‌انضباطی"/>
  <block-list:block block-list:abbreviated-name="بی انظباطی" block-list:name="بی‌انضباطی"/>
  <block-list:block block-list:abbreviated-name="بیان که" block-list:name="بی‌آن‌که"/>
  <block-list:block block-list:abbreviated-name="بیانگارد" block-list:name="بینگارد"/>
@@ -422,7 +376,6 @@
  <block-list:block block-list:abbreviated-name="بیمه‌گزار" block-list:name="بیمه‌گذار"/>
  <block-list:block block-list:abbreviated-name="بیمه‌گزاری" block-list:name="بیمه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="بیموقع" block-list:name="بی‌موقع"/>
- <block-list:block block-list:abbreviated-name="بین المللی" block-list:name="بین‌المللی"/>
  <block-list:block block-list:abbreviated-name="بی‌نوا" block-list:name="بینوا"/>
  <block-list:block block-list:abbreviated-name="بیواسطه" block-list:name="بی‌واسطه"/>
  <block-list:block block-list:abbreviated-name="بیوطن" block-list:name="بی‌وطن"/>
@@ -441,48 +394,26 @@
  <block-list:block block-list:abbreviated-name="پاچه خواری" block-list:name="پاچه‌خاری"/>
  <block-list:block block-list:abbreviated-name="پاراالمپیک" block-list:name="پارالمپیک"/>
  <block-list:block block-list:abbreviated-name="پاسح" block-list:name="پاسخ"/>
- <block-list:block block-list:abbreviated-name="پاسخ گو" block-list:name="پاسخ‌گو"/>
- <block-list:block block-list:abbreviated-name="پاسخ گویی" block-list:name="پاسخ‌گویی"/>
- <block-list:block block-list:abbreviated-name="پاک باخته" block-list:name="پاک‌باخته"/>
  <block-list:block block-list:abbreviated-name="پاناروما" block-list:name="پانوراما"/>
  <block-list:block block-list:abbreviated-name="پایات" block-list:name="پایان"/>
- <block-list:block block-list:abbreviated-name="پای بست" block-list:name="پای‌بست"/>
  <block-list:block block-list:abbreviated-name="پایتن" block-list:name="پایتون"/>
  <block-list:block block-list:abbreviated-name="پایه‌گزار" block-list:name="پایه‌گذار"/>
  <block-list:block block-list:abbreviated-name="پایه‌گزاری" block-list:name="پایه‌گذاری"/>
- <block-list:block block-list:abbreviated-name="پچ پچ" block-list:name="پچ‌پچ"/>
- <block-list:block block-list:abbreviated-name="پدر سوخته" block-list:name="پدر‌سوخته"/>
- <block-list:block block-list:abbreviated-name="پر رنگ" block-list:name="پر‌رنگ"/>
- <block-list:block block-list:abbreviated-name="پرسش نامه" block-list:name="پرسش‌نامه"/>
- <block-list:block block-list:abbreviated-name="پرسه زنی" block-list:name="پرسه‌زنی"/>
  <block-list:block block-list:abbreviated-name="پرفسور" block-list:name="پروفسور"/>
- <block-list:block block-list:abbreviated-name="پست فطرت" block-list:name="پست‌فطرت"/>
  <block-list:block block-list:abbreviated-name="پست‌گزاری" block-list:name="پست‌گذاری"/>
- <block-list:block block-list:abbreviated-name="پشت بام" block-list:name="پشت‌بام"/>
  <block-list:block block-list:abbreviated-name="پلمپ" block-list:name="پلمب"/>
  <block-list:block block-list:abbreviated-name="پنجشنبه" block-list:name="پنج‌شنبه"/>
- <block-list:block block-list:abbreviated-name="پنج گانه" block-list:name="پنج‌گانه"/>
  <block-list:block block-list:abbreviated-name="پنح" block-list:name="پنج"/>
  <block-list:block block-list:abbreviated-name="پهباد" block-list:name="پهپاد"/>
  <block-list:block block-list:abbreviated-name="پوج" block-list:name="پوچ"/>
  <block-list:block block-list:abbreviated-name="پولدار" block-list:name="پول‌دار"/>
- <block-list:block block-list:abbreviated-name="پیاده سازی" block-list:name="پیاده‌سازی"/>
  <block-list:block block-list:abbreviated-name="پیارسال" block-list:name="پیرارسال"/>
  <block-list:block block-list:abbreviated-name="پیام اور" block-list:name="پیام‌آور"/>
  <block-list:block block-list:abbreviated-name="پیش‌خوان" block-list:name="پیش‌خان"/>
- <block-list:block block-list:abbreviated-name="پیش خور" block-list:name="پیش‌خور"/>
- <block-list:block block-list:abbreviated-name="پیش داوری" block-list:name="پیش‌داوری"/>
- <block-list:block block-list:abbreviated-name="پیش زمینه" block-list:name="پیش‌زمینه"/>
- <block-list:block block-list:abbreviated-name="پیش فرض" block-list:name="پیش‌فرض"/>
- <block-list:block block-list:abbreviated-name="پیش نماز" block-list:name="پیش‌نماز"/>
  <block-list:block block-list:abbreviated-name="پیغام‌گذاری" block-list:name="پیغام‌گزاری"/>
- <block-list:block block-list:abbreviated-name="پی گیری" block-list:name="پی‌گیری"/>
- <block-list:block block-list:abbreviated-name="پینه دوز" block-list:name="پینه‌دوز"/>
  <block-list:block block-list:abbreviated-name="تآتر" block-list:name="تئاتر"/>
  <block-list:block block-list:abbreviated-name="تأئید" block-list:name="تأیید"/>
  <block-list:block block-list:abbreviated-name="تأئیدی" block-list:name="تأییدی"/>
- <block-list:block block-list:abbreviated-name="تأثیر پذیر" block-list:name="تأثیر‌پذیر"/>
- <block-list:block block-list:abbreviated-name="تأثیر پذیری" block-list:name="تأثیر‌پذیری"/>
  <block-list:block block-list:abbreviated-name="تأثیرگزاری" block-list:name="تأثیرگذاری"/>
  <block-list:block block-list:abbreviated-name="تائید" block-list:name="تأیید"/>
  <block-list:block block-list:abbreviated-name="تاتر" block-list:name="تئاتر"/>
@@ -498,33 +429,29 @@
  <block-list:block block-list:abbreviated-name="تاسف" block-list:name="تأسف"/>
  <block-list:block block-list:abbreviated-name="تاسی" block-list:name="تأسی"/>
  <block-list:block block-list:abbreviated-name="تاسیسات" block-list:name="تأسیسات"/>
+<block-list:block block-list:abbreviated-name="تاق" block-list:name="طاق"/>
  <block-list:block block-list:abbreviated-name="تاقچه" block-list:name="طاقچه"/>
+<block-list:block block-list:abbreviated-name="تاق‌چه" block-list:name="طاقچه"/>
+<block-list:block block-list:abbreviated-name="تاقچه" block-list:name="طاقچه"/>
  <block-list:block block-list:abbreviated-name="تاکنیم" block-list:name="تاکتیک"/>
  <block-list:block block-list:abbreviated-name="تاکید" block-list:name="تأکید"/>
  <block-list:block block-list:abbreviated-name="تاکیدات" block-list:name="تأکیدات"/>
  <block-list:block block-list:abbreviated-name="تالیف" block-list:name="تألیف"/>
  <block-list:block block-list:abbreviated-name="تالیفات" block-list:name="تألیفات"/>
- <block-list:block block-list:abbreviated-name="تام الترکیب" block-list:name="تام‌الترکیب"/>
  <block-list:block block-list:abbreviated-name="تامل" block-list:name="تأمل"/>
  <block-list:block block-list:abbreviated-name="تامه" block-list:name="تامّه"/>
  <block-list:block block-list:abbreviated-name="تامین" block-list:name="تأمین"/>
  <block-list:block block-list:abbreviated-name="تایید" block-list:name="تأیید"/>
  <block-list:block block-list:abbreviated-name="تبئات" block-list:name="تبعات"/>
- <block-list:block block-list:abbreviated-name="تباه کننده" block-list:name="تباه‌کننده"/>
  <block-list:block block-list:abbreviated-name="تجربیان" block-list:name="تجربیات"/>
  <block-list:block block-list:abbreviated-name="تچربه" block-list:name="تجربه"/>
  <block-list:block block-list:abbreviated-name="تحت‌الفظی" block-list:name="تحت‌اللفظی"/>
  <block-list:block block-list:abbreviated-name="تحت الفظی" block-list:name="تحت‌اللفظی"/>
  <block-list:block block-list:abbreviated-name="تحربه" block-list:name="تجربه"/>
- <block-list:block block-list:abbreviated-name="تحریک کننده" block-list:name="تحریک‌کننده"/>
- <block-list:block block-list:abbreviated-name="تحقیر آمیز" block-list:name="تحقیر‌آمیز"/>
- <block-list:block block-list:abbreviated-name="تخدیر کنندگی" block-list:name="تخدیر‌کنندگی"/>
- <block-list:block block-list:abbreviated-name="تخدیر کننده" block-list:name="تخدیر‌کننده"/>
  <block-list:block block-list:abbreviated-name="تخذیر" block-list:name="تخدیر"/>
  <block-list:block block-list:abbreviated-name="تخریف" block-list:name="تحریف"/>
  <block-list:block block-list:abbreviated-name="تخمک‌گزاری" block-list:name="تخمک‌گذاری"/>
  <block-list:block block-list:abbreviated-name="تخم‌گزاری" block-list:name="تخم‌گذاری"/>
- <block-list:block block-list:abbreviated-name="تخم مرغ" block-list:name="تخم‌مرغ"/>
  <block-list:block block-list:abbreviated-name="تذکره الولیا" block-list:name="تذکره‌الولیاء"/>
  <block-list:block block-list:abbreviated-name="تربین" block-list:name="تربیت"/>
  <block-list:block block-list:abbreviated-name="ترجیحا" block-list:name="ترجیحاً"/>
@@ -534,23 +461,18 @@
  <block-list:block block-list:abbreviated-name="ترسشان" block-list:name="ترس‌شان"/>
  <block-list:block block-list:abbreviated-name="ترشخ" block-list:name="ترشح"/>
  <block-list:block block-list:abbreviated-name="ترقیب" block-list:name="ترغیب"/>
- <block-list:block block-list:abbreviated-name="تریاک کشیدگی" block-list:name="تریاک‌کشیدگی"/>
  <block-list:block block-list:abbreviated-name="تزئین" block-list:name="تزیین"/>
  <block-list:block block-list:abbreviated-name="تشریخ" block-list:name="تشریح"/>
- <block-list:block block-list:abbreviated-name="تشکیل دهنده" block-list:name="تشکیل‌دهنده"/>
  <block-list:block block-list:abbreviated-name="تصادفا" block-list:name="تصادفاً"/>
  <block-list:block block-list:abbreviated-name="تضاهر" block-list:name="تظاهر"/>
- <block-list:block block-list:abbreviated-name="تعجب آور" block-list:name="تعجب‌آور"/>
  <block-list:block block-list:abbreviated-name="تعجب اور" block-list:name="تعجب‌آور"/>
  <block-list:block block-list:abbreviated-name="تعلقان" block-list:name="تعلقات"/>
  <block-list:block block-list:abbreviated-name="تغزیه" block-list:name="تغذیه"/>
  <block-list:block block-list:abbreviated-name="تغییران" block-list:name="تغییرات"/>
  <block-list:block block-list:abbreviated-name="تقاوتی" block-list:name="تفاوتی"/>
  <block-list:block block-list:abbreviated-name="تقریبا" block-list:name="تقریباً"/>
- <block-list:block block-list:abbreviated-name="تقسیم بندی" block-list:name="تقسیم‌بندی"/>
- <block-list:block block-list:abbreviated-name="تکمیل کننده" block-list:name="تکمیل‌کننده"/>
+ <block-list:block block-list:abbreviated-name="تقریبن" block-list:name="تقریباً"/>
  <block-list:block block-list:abbreviated-name="تکنسین" block-list:name="تکنیسین"/>
- <block-list:block block-list:abbreviated-name="تکه تکه" block-list:name="تکه‌تکه"/>
  <block-list:block block-list:abbreviated-name="تکه‌کلام" block-list:name="تکیه‌کلام"/>
  <block-list:block block-list:abbreviated-name="تکه کلام" block-list:name="تکیه‌کلام"/>
  <block-list:block block-list:abbreviated-name="تکون" block-list:name="تکوّن"/>
@@ -564,22 +486,20 @@
  <block-list:block block-list:abbreviated-name="تلوزیونی" block-list:name="تلویزیونی"/>
  <block-list:block block-list:abbreviated-name="تمأنینه" block-list:name="طمأنینه"/>
  <block-list:block block-list:abbreviated-name="تماما" block-list:name="تماماً"/>
- <block-list:block block-list:abbreviated-name="تمام عیار" block-list:name="تمام‌عیار"/>
  <block-list:block block-list:abbreviated-name="تمانینه" block-list:name="طمأنینه"/>
+<block-list:block block-list:abbreviated-name="تمبر هندی" block-list:name="تمر هندی"/>
+<block-list:block block-list:abbreviated-name="تناب" block-list:name="طناب"/>
  <block-list:block block-list:abbreviated-name="تنفیض" block-list:name="تنفیذ"/>
  <block-list:block block-list:abbreviated-name="تهئیه" block-list:name="تهیه"/>
  <block-list:block block-list:abbreviated-name="تهجی" block-list:name="تهجّی"/>
- <block-list:block block-list:abbreviated-name="تهدید کننده" block-list:name="تهدید‌کننده"/>
  <block-list:block block-list:abbreviated-name="تهکم" block-list:name="تحکم"/>
  <block-list:block block-list:abbreviated-name="تهییه" block-list:name="تهیه"/>
  <block-list:block block-list:abbreviated-name="توام" block-list:name="توأم"/>
  <block-list:block block-list:abbreviated-name="تواما" block-list:name="توأماً"/>
+<block-list:block block-list:abbreviated-name="توتی" block-list:name="طوطی"/>
  <block-list:block block-list:abbreviated-name="توجیح" block-list:name="توجیه"/>
  <block-list:block block-list:abbreviated-name="توحه" block-list:name="توجه"/>
  <block-list:block block-list:abbreviated-name="تورک" block-list:name="ترک"/>
- <block-list:block block-list:abbreviated-name="توسری خور" block-list:name="توسری‌خور"/>
- <block-list:block block-list:abbreviated-name="توسری خوری" block-list:name="توسری‌خوری"/>
- <block-list:block block-list:abbreviated-name="توسعه دهنده" block-list:name="توسعه‌دهنده"/>
  <block-list:block block-list:abbreviated-name="توسوت" block-list:name="توسط"/>
  <block-list:block block-list:abbreviated-name="توصعه" block-list:name="توسعه"/>
  <block-list:block block-list:abbreviated-name="توضیخ" block-list:name="توضیح"/>
@@ -589,14 +509,13 @@
  <block-list:block block-list:abbreviated-name="تولّای" block-list:name="تولّا"/>
  <block-list:block block-list:abbreviated-name="تولذ" block-list:name="تولد"/>
  <block-list:block block-list:abbreviated-name="تولّی" block-list:name="تولّا"/>
+<block-list:block block-list:abbreviated-name="تومار" block-list:name="طومار"/>
  <block-list:block block-list:abbreviated-name="توهمان" block-list:name="توهمات"/>
- <block-list:block block-list:abbreviated-name="توهم زدایی" block-list:name="توهم‌زدایی"/>
- <block-list:block block-list:abbreviated-name="توهم مندی" block-list:name="توهم‌مندی"/>
  <block-list:block block-list:abbreviated-name="تووی" block-list:name="توی"/>
  <block-list:block block-list:abbreviated-name="تیهه" block-list:name="تهیه"/>
+ <block-list:block block-list:abbreviated-name="تیوپ" block-list:name="تیوب"/>
  <block-list:block block-list:abbreviated-name="ثالثا" block-list:name="ثالثاً"/>
  <block-list:block block-list:abbreviated-name="ثانیا" block-list:name="ثانیاً"/>
- <block-list:block block-list:abbreviated-name="ثروت مند" block-list:name="ثروت‌مند"/>
  <block-list:block block-list:abbreviated-name="ثقور" block-list:name="ثغور"/>
  <block-list:block block-list:abbreviated-name="جائی" block-list:name="جایی"/>
  <block-list:block block-list:abbreviated-name="جائیکه" block-list:name="جایی که"/>
@@ -613,25 +532,17 @@
  <block-list:block block-list:abbreviated-name="جرات" block-list:name="جرئت"/>
  <block-list:block block-list:abbreviated-name="جراتی" block-list:name="جرئتی"/>
  <block-list:block block-list:abbreviated-name="جرعت" block-list:name="جرئت"/>
- <block-list:block block-list:abbreviated-name="جزئی کاری" block-list:name="جزئی‌کاری"/>
  <block-list:block block-list:abbreviated-name="جزام" block-list:name="جذام"/>
  <block-list:block block-list:abbreviated-name="جزب" block-list:name="جذب"/>
- <block-list:block block-list:abbreviated-name="جزیره العرب" block-list:name="جزیره‌العرب"/>
  <block-list:block block-list:abbreviated-name="جزیی" block-list:name="جزئی"/>
  <block-list:block block-list:abbreviated-name="جزییات" block-list:name="جزئیات"/>
  <block-list:block block-list:abbreviated-name="جسارتا" block-list:name="جسارتاً"/>
- <block-list:block block-list:abbreviated-name="جست و جو" block-list:name="جست‌و‌جو"/>
  <block-list:block block-list:abbreviated-name="جستوجو" block-list:name="جست‌وجو"/>
- <block-list:block block-list:abbreviated-name="جست و جوی" block-list:name="جست‌و‌جوی"/>
- <block-list:block block-list:abbreviated-name="جست و جویی" block-list:name="جست‌و‌جویی"/>
  <block-list:block block-list:abbreviated-name="جسین" block-list:name="حسین"/>
- <block-list:block block-list:abbreviated-name="جفا کار" block-list:name="جفا‌کار"/>
  <block-list:block block-list:abbreviated-name="جفاکار" block-list:name="جفا‌کار"/>
  <block-list:block block-list:abbreviated-name="جفاکاری" block-list:name="جفا‌کاری"/>
  <block-list:block block-list:abbreviated-name="جمع اوری" block-list:name="جمع‌آوری"/>
- <block-list:block block-list:abbreviated-name="جمع بندی" block-list:name="جمع‌بندی"/>
  <block-list:block block-list:abbreviated-name="جمه" block-list:name="جمع"/>
- <block-list:block block-list:abbreviated-name="جناب عالی" block-list:name="جناب‌عالی"/>
  <block-list:block block-list:abbreviated-name="جناغ سینه" block-list:name="جناق سینه"/>
  <block-list:block block-list:abbreviated-name="جنال" block-list:name="جناب"/>
  <block-list:block block-list:abbreviated-name="جید" block-list:name="جیّد"/>
@@ -640,29 +551,20 @@
  <block-list:block block-list:abbreviated-name="جیست" block-list:name="چیست"/>
  <block-list:block block-list:abbreviated-name="جیه" block-list:name="چیه"/>
  <block-list:block block-list:abbreviated-name="چابش" block-list:name="چالش"/>
- <block-list:block block-list:abbreviated-name="چاره جویی" block-list:name="چاره‌جویی"/>
  <block-list:block block-list:abbreviated-name="چجوری" block-list:name="چه‌جوری"/>
  <block-list:block block-list:abbreviated-name="چرخ و فلک" block-list:name="چرخ‌فلک"/>
- <block-list:block block-list:abbreviated-name="چرخ و فلک" block-list:name="چرخِ‌فلک"/>
- <block-list:block block-list:abbreviated-name="چشم بند" block-list:name="چشم‌بند"/>
- <block-list:block block-list:abbreviated-name="چشم پوشی" block-list:name="چشم‌پوشی"/>
  <block-list:block block-list:abbreviated-name="چقک" block-list:name="چغک"/>
  <block-list:block block-list:abbreviated-name="چک‌نویس" block-list:name="چرک‌نویس"/>
  <block-list:block block-list:abbreviated-name="چنان‌چه" block-list:name="چنانچه"/>
- <block-list:block block-list:abbreviated-name="چه جور" block-list:name="چه‌جور"/>
- <block-list:block block-list:abbreviated-name="چه جوری" block-list:name="چه‌جوری"/>
- <block-list:block block-list:abbreviated-name="چه چه" block-list:name="چه‌چه"/>
  <block-list:block block-list:abbreviated-name="چه سان" block-list:name="چسان"/>
  <block-list:block block-list:abbreviated-name="چه طور" block-list:name="چطور"/>
  <block-list:block block-list:abbreviated-name="چه طوری" block-list:name="چطوری"/>
  <block-list:block block-list:abbreviated-name="چه‌قدر" block-list:name="چقدر"/>
  <block-list:block block-list:abbreviated-name="چه قدر" block-list:name="چقدر"/>
- <block-list:block block-list:abbreviated-name="چهل تکه" block-list:name="چهل‌تکه"/>
  <block-list:block block-list:abbreviated-name="حاده" block-list:name="حادّه"/>
  <block-list:block block-list:abbreviated-name="حار" block-list:name="حارّ"/>
  <block-list:block block-list:abbreviated-name="حاره" block-list:name="حارّه"/>
  <block-list:block block-list:abbreviated-name="حاشیح" block-list:name="حاشیه"/>
- <block-list:block block-list:abbreviated-name="حاصل خیز" block-list:name="حاصل‌خیز"/>
  <block-list:block block-list:abbreviated-name="حاصلخیز" block-list:name="حاصل‌خیز"/>
  <block-list:block block-list:abbreviated-name="حاصی" block-list:name="خاصی"/>
  <block-list:block block-list:abbreviated-name="حاظر" block-list:name="حاضر"/>
@@ -690,22 +592,14 @@
  <block-list:block block-list:abbreviated-name="حدود و صغور" block-list:name="حدود و ثغور"/>
  <block-list:block block-list:abbreviated-name="حدود و صقور" block-list:name="حدود و ثغور"/>
  <block-list:block block-list:abbreviated-name="حراس" block-list:name="هراس"/>
- <block-list:block block-list:abbreviated-name="حرکت دهنده" block-list:name="حرکت‌دهنده"/>
  <block-list:block block-list:abbreviated-name="حرکت‌گزاری" block-list:name="حرکت‌گذاری"/>
- <block-list:block block-list:abbreviated-name="حرکت مند" block-list:name="حرکت‌مند"/>
  <block-list:block block-list:abbreviated-name="حرکن" block-list:name="حرکت"/>
  <block-list:block block-list:abbreviated-name="حسادن" block-list:name="حسادت"/>
- <block-list:block block-list:abbreviated-name="حشره کش" block-list:name="حشره‌کش"/>
- <block-list:block block-list:abbreviated-name="حشره کشی" block-list:name="حشره‌کشی"/>
- <block-list:block block-list:abbreviated-name="حضرت عالی" block-list:name="حضرت‌عالی"/>
- <block-list:block block-list:abbreviated-name="حضرت عباسی" block-list:name="حضرت‌عباسی"/>
  <block-list:block block-list:abbreviated-name="حضورا" block-list:name="حضوراً"/>
  <block-list:block block-list:abbreviated-name="حظرات" block-list:name="حضرات"/>
  <block-list:block block-list:abbreviated-name="حظرت" block-list:name="حضرت"/>
  <block-list:block block-list:abbreviated-name="حظور" block-list:name="حضور"/>
- <block-list:block block-list:abbreviated-name="حقه بازی" block-list:name="حقه‌بازی"/>
  <block-list:block block-list:abbreviated-name="حقیقتا" block-list:name="حقیقتاً"/>
- <block-list:block block-list:abbreviated-name="حقیقت گونه" block-list:name="حقیقت‌گونه"/>
  <block-list:block block-list:abbreviated-name="حلیم" block-list:name="هلیم"/>
  <block-list:block block-list:abbreviated-name="حواب" block-list:name="جواب"/>
  <block-list:block block-list:abbreviated-name="حواشیح" block-list:name="حواشی"/>
@@ -720,22 +614,16 @@
  <block-list:block block-list:abbreviated-name="حیلی" block-list:name="خیلی"/>
  <block-list:block block-list:abbreviated-name="خابیدن" block-list:name="خوابیدن"/>
  <block-list:block block-list:abbreviated-name="خاربار" block-list:name="خواربار"/>
- <block-list:block block-list:abbreviated-name="خارق العاده" block-list:name="خارق‌العاده"/>
  <block-list:block block-list:abbreviated-name="خار و بار" block-list:name="خواربار"/>
  <block-list:block block-list:abbreviated-name="خاروبار" block-list:name="خواربار"/>
  <block-list:block block-list:abbreviated-name="خاروذلیل" block-list:name="خواروذلیل"/>
  <block-list:block block-list:abbreviated-name="خاستار" block-list:name="خواستار"/>
  <block-list:block block-list:abbreviated-name="خاستگار" block-list:name="خواستگار"/>
  <block-list:block block-list:abbreviated-name="خاستگاری" block-list:name="خواستگاری"/>
- <block-list:block block-list:abbreviated-name="خاطر جمع" block-list:name="خاطر‌جمع"/>
- <block-list:block block-list:abbreviated-name="خاطر جمعم" block-list:name="خاطر‌جمعم"/>
  <block-list:block block-list:abbreviated-name="خانند" block-list:name="خوانند"/>
- <block-list:block block-list:abbreviated-name="خانواده دار" block-list:name="خانواده‌دار"/>
  <block-list:block block-list:abbreviated-name="خانواده گی" block-list:name="خانوادگی"/>
  <block-list:block block-list:abbreviated-name="خبرگذاری" block-list:name="خبرگزاری"/>
- <block-list:block block-list:abbreviated-name="خجالت آور" block-list:name="خجالت‌آور"/>
  <block-list:block block-list:abbreviated-name="خجالت اور" block-list:name="خجالت‌آور"/>
- <block-list:block block-list:abbreviated-name="خدا گونه" block-list:name="خدا‌گونه"/>
  <block-list:block block-list:abbreviated-name="خدمتگذار" block-list:name="خدمتگزار"/>
  <block-list:block block-list:abbreviated-name="خدمت‌گذاری" block-list:name="خدمت‌گزاری"/>
  <block-list:block block-list:abbreviated-name="خدمتگذاری" block-list:name="خدمتگزاری"/>
@@ -745,11 +633,7 @@
  <block-list:block block-list:abbreviated-name="خرکت" block-list:name="حرکت"/>
  <block-list:block block-list:abbreviated-name="خرکوش" block-list:name="خرگوش"/>
  <block-list:block block-list:abbreviated-name="خروح" block-list:name="خروج"/>
- <block-list:block block-list:abbreviated-name="خسته دل" block-list:name="خسته‌دل"/>
- <block-list:block block-list:abbreviated-name="خسته کننده" block-list:name="خسته‌کننده"/>
  <block-list:block block-list:abbreviated-name="خسین" block-list:name="حسین"/>
- <block-list:block block-list:abbreviated-name="خشم آگین" block-list:name="خشم‌آگین"/>
- <block-list:block block-list:abbreviated-name="خشم آگینی" block-list:name="خشم‌آگینی"/>
  <block-list:block block-list:abbreviated-name="خشم اگین" block-list:name="خشم‌آگین"/>
  <block-list:block block-list:abbreviated-name="خشم اگینی" block-list:name="خشم‌آگینی"/>
  <block-list:block block-list:abbreviated-name="خشمکین" block-list:name="خشمگین"/>
@@ -758,7 +642,6 @@
  <block-list:block block-list:abbreviated-name="خلا" block-list:name="خلاء"/>
  <block-list:block block-list:abbreviated-name="خلاء" block-list:name="خلأ"/>
  <block-list:block block-list:abbreviated-name="خلاثه" block-list:name="خلاصه"/>
- <block-list:block block-list:abbreviated-name="خلاصه برداری" block-list:name="خلاصه‌برداری"/>
  <block-list:block block-list:abbreviated-name="خلصه" block-list:name="خلسه"/>
  <block-list:block block-list:abbreviated-name="خلع" block-list:name="خلأ"/>
  <block-list:block block-list:abbreviated-name="خلفت" block-list:name="خلقت"/>
@@ -773,7 +656,6 @@
  <block-list:block block-list:abbreviated-name="خوانوادگی" block-list:name="خانوادگی"/>
  <block-list:block block-list:abbreviated-name="خوانواده" block-list:name="خانواده"/>
  <block-list:block block-list:abbreviated-name="خودازاری" block-list:name="خودآزاری"/>
- <block-list:block block-list:abbreviated-name="خود باختگی" block-list:name="خود‌باختگی"/>
  <block-list:block block-list:abbreviated-name="خوردسال" block-list:name="خردسال"/>
  <block-list:block block-list:abbreviated-name="خوشحال" block-list:name="خوش‌حال"/>
  <block-list:block block-list:abbreviated-name="دائما" block-list:name="دائماً"/>
@@ -790,66 +672,33 @@
  <block-list:block block-list:abbreviated-name="دراوردیم" block-list:name="درآوردیم"/>
  <block-list:block block-list:abbreviated-name="دراوری" block-list:name="درآوری"/>
  <block-list:block block-list:abbreviated-name="دراورید" block-list:name="در‌آورید"/>
- <block-list:block block-list:abbreviated-name="درجه بندی" block-list:name="درجه‌بندی"/>
  <block-list:block block-list:abbreviated-name="در حالیکه" block-list:name="درحالی‌که"/>
  <block-list:block block-list:abbreviated-name="درحالیکه" block-list:name="درحالی‌که"/>
  <block-list:block block-list:abbreviated-name="دردودل" block-list:name="درددل"/>
  <block-list:block block-list:abbreviated-name="درد و دل" block-list:name="دردِدل"/>
- <block-list:block block-list:abbreviated-name="درس نخوانده" block-list:name="درس‌نخوانده"/>
  <block-list:block block-list:abbreviated-name="در صورتیکه" block-list:name="در صورتی که"/>
  <block-list:block block-list:abbreviated-name="درصورتی‌که" block-list:name="در صورتی که"/>
  <block-list:block block-list:abbreviated-name="درصورتی که" block-list:name="در صورتی که"/>
  <block-list:block block-list:abbreviated-name="درمام" block-list:name="درمان"/>
  <block-list:block block-list:abbreviated-name="دروع" block-list:name="دروغ"/>
- <block-list:block block-list:abbreviated-name="دروغ گو" block-list:name="دروغ‌گو"/>
  <block-list:block block-list:abbreviated-name="دروغگو" block-list:name="دروغ‌گو"/>
- <block-list:block block-list:abbreviated-name="دروغ گوی" block-list:name="دروغ‌گوی"/>
- <block-list:block block-list:abbreviated-name="دروغ گویند" block-list:name="دروغ‌گویند"/>
- <block-list:block block-list:abbreviated-name="دروغ گویی" block-list:name="دروغ‌گویی"/>
- <block-list:block block-list:abbreviated-name="دروغ یابی" block-list:name="دروغ‌یابی"/>
- <block-list:block block-list:abbreviated-name="درون ذاتی" block-list:name="درون‌ذاتی"/>
- <block-list:block block-list:abbreviated-name="درون ریشه" block-list:name="درون‌ریشه"/>
- <block-list:block block-list:abbreviated-name="درون فکنی" block-list:name="درون‌فکنی"/>
- <block-list:block block-list:abbreviated-name="دریافت کنندگی" block-list:name="دریافت‌کنندگی"/>
- <block-list:block block-list:abbreviated-name="دریافت کننده" block-list:name="دریافت‌کننده"/>
  <block-list:block block-list:abbreviated-name="دست اویز" block-list:name="دست‌آویز"/>
- <block-list:block block-list:abbreviated-name="دست نایافتنی" block-list:name="دست‌نایافتنی"/>
- <block-list:block block-list:abbreviated-name="دست نیافتنی" block-list:name="دست‌نیافتنی"/>
- <block-list:block block-list:abbreviated-name="دسته جمعی" block-list:name="دسته‌جمعی"/>
  <block-list:block block-list:abbreviated-name="دسن" block-list:name="دست"/>
  <block-list:block block-list:abbreviated-name="دغدقه" block-list:name="دغدغه"/>
  <block-list:block block-list:abbreviated-name="دق‌ودلی" block-list:name="دق‌دلی"/>
  <block-list:block block-list:abbreviated-name="دق و دلی" block-list:name="دق‌دلی"/>
  <block-list:block block-list:abbreviated-name="دقیقا" block-list:name="دقیقاً"/>
- <block-list:block block-list:abbreviated-name="دقیق نگر" block-list:name="دقیق‌نگر"/>
- <block-list:block block-list:abbreviated-name="دل رحم" block-list:name="دل‌رحم"/>
  <block-list:block block-list:abbreviated-name="دلرحم" block-list:name="دل‌رحم"/>
  <block-list:block block-list:abbreviated-name="دلرحمم" block-list:name="دل‌رحمم"/>
- <block-list:block block-list:abbreviated-name="دل رحمی" block-list:name="دل‌رحمی"/>
  <block-list:block block-list:abbreviated-name="دلرحمی" block-list:name="دل‌رحمی"/>
- <block-list:block block-list:abbreviated-name="دلقک منشی" block-list:name="دلقک‌منشی"/>
- <block-list:block block-list:abbreviated-name="دل نشین" block-list:name="دل‌نشین"/>
- <block-list:block block-list:abbreviated-name="دل نشینی" block-list:name="دل‌نشینی"/>
  <block-list:block block-list:abbreviated-name="دلهره اور" block-list:name="دلهره‌آور"/>
  <block-list:block block-list:abbreviated-name="دمبه" block-list:name="دنبه"/>
  <block-list:block block-list:abbreviated-name="دمق" block-list:name="دمغ"/>
- <block-list:block block-list:abbreviated-name="دنباله دار" block-list:name="دنباله‌دار"/>
- <block-list:block block-list:abbreviated-name="دندان پزشک" block-list:name="دندان‌پزشک"/>
- <block-list:block block-list:abbreviated-name="دندان پزشکم" block-list:name="دندان‌پزشکم"/>
- <block-list:block block-list:abbreviated-name="دندان پزشکی" block-list:name="دندان‌پزشکی"/>
- <block-list:block block-list:abbreviated-name="دندان پزشکید" block-list:name="دندان‌پزشکید"/>
- <block-list:block block-list:abbreviated-name="دندان پزشکیم" block-list:name="دندان‌پزشکیم"/>
- <block-list:block block-list:abbreviated-name="دندان درد" block-list:name="دندان‌درد"/>
- <block-list:block block-list:abbreviated-name="دندان شکن" block-list:name="دندان‌شکن"/>
- <block-list:block block-list:abbreviated-name="دندان شکنی" block-list:name="دندان‌شکنی"/>
  <block-list:block block-list:abbreviated-name="دهوا" block-list:name="دعوا"/>
  <block-list:block block-list:abbreviated-name="دوئیت" block-list:name="دوگانگی"/>
+ <block-list:block block-list:abbreviated-name="دوبلکس" block-list:name="دوپلکس"/>
  <block-list:block block-list:abbreviated-name="دوبی" block-list:name="دبی"/>
- <block-list:block block-list:abbreviated-name="دو جانبه" block-list:name="دو‌جانبه"/>
  <block-list:block block-list:abbreviated-name="دوروزمانه" block-list:name="دور زمانه"/>
- <block-list:block block-list:abbreviated-name="دوست داشتنی" block-list:name="دوست‌داشتنی"/>
- <block-list:block block-list:abbreviated-name="دوست یابی" block-list:name="دوست‌یابی"/>
- <block-list:block block-list:abbreviated-name="دو طرفه" block-list:name="دو‌طرفه"/>
  <block-list:block block-list:abbreviated-name="دوکتور" block-list:name="دکتر"/>
  <block-list:block block-list:abbreviated-name="دوما" block-list:name="دوماً"/>
  <block-list:block block-list:abbreviated-name="دومیدانی" block-list:name="دوومیدانی"/>
@@ -859,6 +708,7 @@
  <block-list:block block-list:abbreviated-name="دیه‌گو" block-list:name="دیِگو"/>
  <block-list:block block-list:abbreviated-name="دیوس" block-list:name="دیوث"/>
  <block-list:block block-list:abbreviated-name="ذاتا" block-list:name="ذاتاً"/>
+ <block-list:block block-list:abbreviated-name="ذباله" block-list:name="زباله"/>
  <block-list:block block-list:abbreviated-name="ذخامت" block-list:name="ضخامت"/>
  <block-list:block block-list:abbreviated-name="ذخیم" block-list:name="ضخیم"/>
  <block-list:block block-list:abbreviated-name="ذعن" block-list:name="ذهن"/>
@@ -867,83 +717,49 @@
  <block-list:block block-list:abbreviated-name="ذغال سنگ" block-list:name="زغال‌سنگ"/>
  <block-list:block block-list:abbreviated-name="ذکام" block-list:name="زکام"/>
  <block-list:block block-list:abbreviated-name="ذوذنقه" block-list:name="ذوزنقه"/>
- <block-list:block block-list:abbreviated-name="ذوق زده" block-list:name="ذوق‌زده"/>
  <block-list:block block-list:abbreviated-name="راجب" block-list:name="راجع به"/>
  <block-list:block block-list:abbreviated-name="راجبه" block-list:name="راجع‌به"/>
- <block-list:block block-list:abbreviated-name="راجبه" block-list:name="راجع به"/>
  <block-list:block block-list:abbreviated-name="راجه" block-list:name="راجع"/>
- <block-list:block block-list:abbreviated-name="راست گو" block-list:name="راست‌گو"/>
  <block-list:block block-list:abbreviated-name="راستگو" block-list:name="راست‌گو"/>
- <block-list:block block-list:abbreviated-name="راست گویی" block-list:name="راست‌گویی"/>
  <block-list:block block-list:abbreviated-name="رافت" block-list:name="رأفت"/>
  <block-list:block block-list:abbreviated-name="راکتور" block-list:name="رآکتور"/>
- <block-list:block block-list:abbreviated-name="راه برنده" block-list:name="راه‌برنده"/>
  <block-list:block block-list:abbreviated-name="راهت" block-list:name="راحت"/>
  <block-list:block block-list:abbreviated-name="راهتی" block-list:name="راحتی"/>
- <block-list:block block-list:abbreviated-name="راه کار" block-list:name="راه‌کار"/>
- <block-list:block block-list:abbreviated-name="راه کاری" block-list:name="راه‌کاری"/>
  <block-list:block block-list:abbreviated-name="رای" block-list:name="رأی"/>
  <block-list:block block-list:abbreviated-name="ردی الجوهر" block-list:name="ردی‌ءالجوهر"/>
  <block-list:block block-list:abbreviated-name="ردی الکیموس" block-list:name="ردی‌ءالکیموس"/>
  <block-list:block block-list:abbreviated-name="رزالت" block-list:name="رذالت"/>
  <block-list:block block-list:abbreviated-name="رزل" block-list:name="رذل"/>
  <block-list:block block-list:abbreviated-name="رزیلانه" block-list:name="رذیلانه"/>
- <block-list:block block-list:abbreviated-name="رسم دار" block-list:name="رسم‌دار"/>
  <block-list:block block-list:abbreviated-name="رشگ" block-list:name="رشک"/>
  <block-list:block block-list:abbreviated-name="رطوبت الماء" block-list:name="رطوبت‌المّاء"/>
  <block-list:block block-list:abbreviated-name="رطوبت المائی" block-list:name="رطوبت‌المّائی"/>
  <block-list:block block-list:abbreviated-name="رطیل" block-list:name="رتیل"/>
  <block-list:block block-list:abbreviated-name="رعاین" block-list:name="رعایت"/>
- <block-list:block block-list:abbreviated-name="رفته رفته" block-list:name="رفته‌رفته"/>
  <block-list:block block-list:abbreviated-name="رفنار" block-list:name="رفتار"/>
  <block-list:block block-list:abbreviated-name="رقبت" block-list:name="رغبت"/>
  <block-list:block block-list:abbreviated-name="رقت" block-list:name="رقّت"/>
- <block-list:block block-list:abbreviated-name="رقت انگیز" block-list:name="رقت‌انگیز"/>
  <block-list:block block-list:abbreviated-name="رمادیت" block-list:name="رمادیّت"/>
  <block-list:block block-list:abbreviated-name="رمزگزاری" block-list:name="رمزگذاری"/>
- <block-list:block block-list:abbreviated-name="رنج آور" block-list:name="رنج‌آور"/>
  <block-list:block block-list:abbreviated-name="رنج اور" block-list:name="رنج‌آور"/>
- <block-list:block block-list:abbreviated-name="رنج بار" block-list:name="رنج‌بار"/>
  <block-list:block block-list:abbreviated-name="رنح" block-list:name="رنج"/>
- <block-list:block block-list:abbreviated-name="رنگ آمیزی" block-list:name="رنگ‌آمیزی"/>
  <block-list:block block-list:abbreviated-name="رنگ‌‌و‌رو" block-list:name="رنگ رو"/>
  <block-list:block block-list:abbreviated-name="ره اورد" block-list:name="ره آورد"/>
  <block-list:block block-list:abbreviated-name="رهبریت" block-list:name="رهبری"/>
  <block-list:block block-list:abbreviated-name="رواح" block-list:name="رواج"/>
- <block-list:block block-list:abbreviated-name="روان تنی" block-list:name="روان‌تنی"/>
- <block-list:block block-list:abbreviated-name="روان شناس" block-list:name="روان‌شناس"/>
- <block-list:block block-list:abbreviated-name="روان شناسی" block-list:name="روان‌شناسی"/>
  <block-list:block block-list:abbreviated-name="روانشناسی‏" block-list:name="روان‌شناسی"/>
- <block-list:block block-list:abbreviated-name="روایت کردنی" block-list:name="روایت‌کردنی"/>
  <block-list:block block-list:abbreviated-name="روبات" block-list:name="ربات"/>
- <block-list:block block-list:abbreviated-name="روباه گونه" block-list:name="روباه‌گونه"/>
  <block-list:block block-list:abbreviated-name="روبوت" block-list:name="ربات"/>
- <block-list:block block-list:abbreviated-name="روده بر" block-list:name="روده‌بر"/>
  <block-list:block block-list:abbreviated-name="روزمره‌گی" block-list:name="روزمرگی"/>
- <block-list:block block-list:abbreviated-name="روزنامه نگار" block-list:name="روزنامه‌نگار"/>
- <block-list:block block-list:abbreviated-name="روزنامه نگاری" block-list:name="روزنامه‌نگاری"/>
  <block-list:block block-list:abbreviated-name="روسا" block-list:name="رؤسا"/>
  <block-list:block block-list:abbreviated-name="روشنفکر" block-list:name="روشن‌فکر"/>
  <block-list:block block-list:abbreviated-name="رووسا" block-list:name="رؤسا"/>
  <block-list:block block-list:abbreviated-name="رویا" block-list:name="رؤیا"/>
  <block-list:block block-list:abbreviated-name="رویای" block-list:name="رؤیای"/>
- <block-list:block block-list:abbreviated-name="ریاضی دان" block-list:name="ریاضی‌دان"/>
- <block-list:block block-list:abbreviated-name="ریشه دار" block-list:name="ریشه‌دار"/>
- <block-list:block block-list:abbreviated-name="ریشه دارتر" block-list:name="ریشه‌دارتر"/>
- <block-list:block block-list:abbreviated-name="ریشه دارترین" block-list:name="ریشه‌دارترین"/>
- <block-list:block block-list:abbreviated-name="ریشه کن" block-list:name="ریشه‌کن"/>
- <block-list:block block-list:abbreviated-name="ریشه کنی" block-list:name="ریشه‌کنی"/>
- <block-list:block block-list:abbreviated-name="ریشه یابی" block-list:name="ریشه‌یابی"/>
  <block-list:block block-list:abbreviated-name="ریل‌گزاری" block-list:name="ریل‌گذاری"/>
  <block-list:block block-list:abbreviated-name="رییس" block-list:name="رئیس"/>
  <block-list:block block-list:abbreviated-name="زادوبوم" block-list:name="زادبوم"/>
- <block-list:block block-list:abbreviated-name="زباله" block-list:name="ذباله"/>
  <block-list:block block-list:abbreviated-name="زباله‌گزاری" block-list:name="زباله‌گذاری"/>
- <block-list:block block-list:abbreviated-name="زبان باز" block-list:name="زبان‌باز"/>
- <block-list:block block-list:abbreviated-name="زبان بازی" block-list:name="زبان‌بازی"/>
- <block-list:block block-list:abbreviated-name="زبان بسته" block-list:name="زبان‌بسته"/>
- <block-list:block block-list:abbreviated-name="زبان شناس" block-list:name="زبان‌شناس"/>
- <block-list:block block-list:abbreviated-name="زبان شناسی" block-list:name="زبان‌شناسی"/>
  <block-list:block block-list:abbreviated-name="زجه" block-list:name="ضجه"/>
  <block-list:block block-list:abbreviated-name="زخامت" block-list:name="ضخامت"/>
  <block-list:block block-list:abbreviated-name="زخم‌وزبان" block-list:name="زخم‌زبان"/>
@@ -955,31 +771,23 @@
  <block-list:block block-list:abbreviated-name="زرس قاطع" block-list:name="ضرس قاطع"/>
  <block-list:block block-list:abbreviated-name="زرص قاطع" block-list:name="ضرس قاطع"/>
  <block-list:block block-list:abbreviated-name="زرنک" block-list:name="زرنگ"/>
- <block-list:block block-list:abbreviated-name="زمان مندی" block-list:name="زمان‌مندی"/>
  <block-list:block block-list:abbreviated-name="زمدگی" block-list:name="زندگی"/>
- <block-list:block block-list:abbreviated-name="زمین لرزه" block-list:name="زمین‌لرزه"/>
- <block-list:block block-list:abbreviated-name="زمینه ساز" block-list:name="زمینه‌ساز"/>
  <block-list:block block-list:abbreviated-name="زندکی" block-list:name="زندگی"/>
  <block-list:block block-list:abbreviated-name="زنده‌ایی" block-list:name="زنده‌ای"/>
  <block-list:block block-list:abbreviated-name="زنده‌گی" block-list:name="زندگی"/>
- <block-list:block block-list:abbreviated-name="زن ذلیل" block-list:name="زن‌ذلیل"/>
- <block-list:block block-list:abbreviated-name="زن ذلیلم" block-list:name="زن‌ذلیلم"/>
  <block-list:block block-list:abbreviated-name="زنیت" block-list:name="زنانگی"/>
  <block-list:block block-list:abbreviated-name="زوار" block-list:name="زایران"/>
  <block-list:block block-list:abbreviated-name="زوذنقه" block-list:name="ذوزنقه"/>
  <block-list:block block-list:abbreviated-name="زوزنقه" block-list:name="ذوزنفه"/>
- <block-list:block block-list:abbreviated-name="زوزنقه" block-list:name="ذوزنقه"/>
- <block-list:block block-list:abbreviated-name="زیاده خواه" block-list:name="زیاده‌خواه"/>
- <block-list:block block-list:abbreviated-name="زیان بار" block-list:name="زیان‌بار"/>
  <block-list:block block-list:abbreviated-name="زیباشناسی" block-list:name="زیبایی‌شناسی"/>
  <block-list:block block-list:abbreviated-name="زیراب" block-list:name="زیرآب"/>
  <block-list:block block-list:abbreviated-name="زیمباوه" block-list:name="زیمبابوه"/>
  <block-list:block block-list:abbreviated-name="ژولای" block-list:name="جولای"/>
  <block-list:block block-list:abbreviated-name="سؤالاتتان" block-list:name="سؤالات‌تان"/>
- <block-list:block block-list:abbreviated-name="سؤال کننده" block-list:name="سؤال‌کننده"/>
  <block-list:block block-list:abbreviated-name="سئوال" block-list:name="سؤال"/>
  <block-list:block block-list:abbreviated-name="سابقا" block-list:name="سابقاً"/>
  <block-list:block block-list:abbreviated-name="ساتع" block-list:name="ساطع"/>
+<block-list:block block-list:abbreviated-name="ساتور" block-list:name="ساطور"/>
  <block-list:block block-list:abbreviated-name="سالیانه" block-list:name="سالانه"/>
  <block-list:block block-list:abbreviated-name="سانتریفیوژ" block-list:name="سانتریفوژ"/>
  <block-list:block block-list:abbreviated-name="سانتیمتر" block-list:name="سانتی‌متر"/>
@@ -991,29 +799,22 @@
  <block-list:block block-list:abbreviated-name="سپاسگذاری" block-list:name="سپاسگزاری"/>
  <block-list:block block-list:abbreviated-name="سپرده‌گزار" block-list:name="سپرده‌گذار"/>
  <block-list:block block-list:abbreviated-name="سپرده‌گزاری" block-list:name="سپرده‌گذاری"/>
- <block-list:block block-list:abbreviated-name="سجده گاه" block-list:name="سجده‌گاه"/>
+<block-list:block block-list:abbreviated-name="ستل" block-list:name="سطل"/>
  <block-list:block block-list:abbreviated-name="سجده‌گذاری" block-list:name="سجده‌گزاری"/>
- <block-list:block block-list:abbreviated-name="سخاوت مند" block-list:name="سخاوت‌مند"/>
- <block-list:block block-list:abbreviated-name="سخاوت مندی" block-list:name="سخاوت‌مندی"/>
- <block-list:block block-list:abbreviated-name="سخت افزار" block-list:name="سخت‌افزار"/>
- <block-list:block block-list:abbreviated-name="سخت گیر" block-list:name="سخت‌گیر"/>
- <block-list:block block-list:abbreviated-name="سخت گیری" block-list:name="سخت‌گیری"/>
  <block-list:block block-list:abbreviated-name="سرزنش‌گر" block-list:name="سرزنشگر"/>
  <block-list:block block-list:abbreviated-name="سرزنش گر" block-list:name="سرزنشگر"/>
  <block-list:block block-list:abbreviated-name="سرکرده‌گی" block-list:name="سرکردگی"/>
  <block-list:block block-list:abbreviated-name="سرکرده گی" block-list:name="سرکردگی"/>
  <block-list:block block-list:abbreviated-name="سرلشگر" block-list:name="سرلشکر"/>
- <block-list:block block-list:abbreviated-name="سرمایه گذاری" block-list:name="سرمایه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="سرمایه‌گزاری" block-list:name="سرمایه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="سریعا" block-list:name="سریعاً"/>
  <block-list:block block-list:abbreviated-name="سطبر" block-list:name="ستبر"/>
+<block-list:block block-list:abbreviated-name="سطبر" block-list:name="ستبر"/>
  <block-list:block block-list:abbreviated-name="سعی‌ای" block-list:name="سعیی"/>
  <block-list:block block-list:abbreviated-name="سمیت" block-list:name="سمیّت"/>
  <block-list:block block-list:abbreviated-name="سنحش" block-list:name="سنجش"/>
- <block-list:block block-list:abbreviated-name="سنگ پرست" block-list:name="سنگ‌پرست"/>
  <block-list:block block-list:abbreviated-name="سهوا" block-list:name="سهواً"/>
  <block-list:block block-list:abbreviated-name="سهی" block-list:name="سعی"/>
- <block-list:block block-list:abbreviated-name="سوء استفاده" block-list:name="سوء‌استفاده"/>
  <block-list:block block-list:abbreviated-name="سوآل" block-list:name="سؤال"/>
  <block-list:block block-list:abbreviated-name="سوال" block-list:name="سؤال"/>
  <block-list:block block-list:abbreviated-name="سوالات" block-list:name="سؤالات"/>
@@ -1034,28 +835,16 @@
  <block-list:block block-list:abbreviated-name="سیاستگزار" block-list:name="سیاست‌گذار"/>
  <block-list:block block-list:abbreviated-name="سیاست‌گزاری" block-list:name="سیاست‌گذاری"/>
  <block-list:block block-list:abbreviated-name="شئ" block-list:name="شی‌ء"/>
- <block-list:block block-list:abbreviated-name="شئ" block-list:name="شیء"/>
  <block-list:block block-list:abbreviated-name="شئون" block-list:name="شؤون"/>
  <block-list:block block-list:abbreviated-name="شاعبه" block-list:name="شائبه"/>
  <block-list:block block-list:abbreviated-name="شاقول" block-list:name="شاغول"/>
  <block-list:block block-list:abbreviated-name="شانزده‌امین" block-list:name="شانزدهمین"/>
- <block-list:block block-list:abbreviated-name="شاه کلید" block-list:name="شاه‌کلید"/>
- <block-list:block block-list:abbreviated-name="شاهین شهر" block-list:name="شاهین‌شهر"/>
- <block-list:block block-list:abbreviated-name="شبانه روز" block-list:name="شبانه‌روز"/>
- <block-list:block block-list:abbreviated-name="شتاب زدگی" block-list:name="شتاب‌زدگی"/>
- <block-list:block block-list:abbreviated-name="شتاب زده" block-list:name="شتاب‌زده"/>
  <block-list:block block-list:abbreviated-name="شخصا" block-list:name="شخصاً"/>
- <block-list:block block-list:abbreviated-name="شخصیت طلب" block-list:name="شخصیت‌طلب"/>
- <block-list:block block-list:abbreviated-name="شخصیت طلبی" block-list:name="شخصیت‌طلبی"/>
  <block-list:block block-list:abbreviated-name="شدیدا" block-list:name="شدیداً"/>
- <block-list:block block-list:abbreviated-name="شرافت مند" block-list:name="شرافت‌مند"/>
- <block-list:block block-list:abbreviated-name="شرافت مندانه" block-list:name="شرافت‌مندانه"/>
- <block-list:block block-list:abbreviated-name="شرافت مندی" block-list:name="شرافت‌مندی"/>
- <block-list:block block-list:abbreviated-name="شرطی شدگی" block-list:name="شرطی‌شدگی"/>
- <block-list:block block-list:abbreviated-name="شسته رفته" block-list:name="شسته‌رفته"/>
  <block-list:block block-list:abbreviated-name="شکرگذاری" block-list:name="شکرگزاری"/>
  <block-list:block block-list:abbreviated-name="شماره‌گزاری" block-list:name="شماره‌گذاری"/>
  <block-list:block block-list:abbreviated-name="شماره گزاری" block-list:name="شماره‌گذاری"/>
+<block-list:block block-list:abbreviated-name="شماطه‌دار" block-list:name="شماته‌دار"/>
  <block-list:block block-list:abbreviated-name="شیئ" block-list:name="شیء"/>
  <block-list:block block-list:abbreviated-name="شیش" block-list:name="شش"/>
  <block-list:block block-list:abbreviated-name="صده" block-list:name="سده"/>
@@ -1065,6 +854,7 @@
  <block-list:block block-list:abbreviated-name="صلاه" block-list:name="صلاة"/>
  <block-list:block block-list:abbreviated-name="صورتیکه" block-list:name="صورتی که"/>
  <block-list:block block-list:abbreviated-name="صیغل" block-list:name="صیقل"/>
+ <block-list:block block-list:abbreviated-name="ضجر" block-list:name="زجر"/>
  <block-list:block block-list:abbreviated-name="ضرادخانه" block-list:name="زرادخانه"/>
  <block-list:block block-list:abbreviated-name="ضرب‌العجل" block-list:name="ضرب‌الاجل"/>
  <block-list:block block-list:abbreviated-name="ضرته" block-list:name="ضرطه"/>
@@ -1075,11 +865,9 @@
  <block-list:block block-list:abbreviated-name="طایر" block-list:name="تایر"/>
  <block-list:block block-list:abbreviated-name="طبعا" block-list:name="طبعاً"/>
  <block-list:block block-list:abbreviated-name="طبیعتا" block-list:name="طبیعتاً"/>
- <block-list:block block-list:abbreviated-name="طبیعی دان" block-list:name="طبیعی‌دان"/>
- <block-list:block block-list:abbreviated-name="طبیعی دانی" block-list:name="طبیعی‌دانی"/>
- <block-list:block block-list:abbreviated-name="طبیعی دانیم" block-list:name="طبیعی‌دانیم"/>
  <block-list:block block-list:abbreviated-name="طپانچه" block-list:name="تپانچه"/>
  <block-list:block block-list:abbreviated-name="طپش" block-list:name="تپش"/>
+<block-list:block block-list:abbreviated-name="طپنده" block-list:name="تپنده"/>
  <block-list:block block-list:abbreviated-name="طپیدن" block-list:name="تپیدن"/>
  <block-list:block block-list:abbreviated-name="طراز" block-list:name="تراز"/>
  <block-list:block block-list:abbreviated-name="طشت" block-list:name="تشت"/>
@@ -1087,8 +875,8 @@
  <block-list:block block-list:abbreviated-name="طهران" block-list:name="تهران"/>
  <block-list:block block-list:abbreviated-name="طهماسب" block-list:name="تهماسب"/>
  <block-list:block block-list:abbreviated-name="طهمورث" block-list:name="تهمورث"/>
+<block-list:block block-list:abbreviated-name="طوتی" block-list:name="طوطی"/>
  <block-list:block block-list:abbreviated-name="طوس" block-list:name="توس"/>
- <block-list:block block-list:abbreviated-name="طوطی وار" block-list:name="طوطی‌وار"/>
  <block-list:block block-list:abbreviated-name="طوفان" block-list:name="توفان"/>
  <block-list:block block-list:abbreviated-name="طوله" block-list:name="توله"/>
  <block-list:block block-list:abbreviated-name="طیمچه" block-list:name="تیمچه"/>
@@ -1096,66 +884,42 @@
  <block-list:block block-list:abbreviated-name="ظبط" block-list:name="ضبط"/>
  <block-list:block block-list:abbreviated-name="ظرورتا" block-list:name="ضرورتاً"/>
  <block-list:block block-list:abbreviated-name="ظل آفتاب" block-list:name="زل آفتاب"/>
- <block-list:block block-list:abbreviated-name="عارف مسلک" block-list:name="عارف‌مسلک"/>
  <block-list:block block-list:abbreviated-name="عافل" block-list:name="غافل"/>
- <block-list:block block-list:abbreviated-name="عالی قدر" block-list:name="عالی‌قدر"/>
- <block-list:block block-list:abbreviated-name="عالی مقام" block-list:name="عالی‌مقام"/>
  <block-list:block block-list:abbreviated-name="عاماج" block-list:name="آماج"/>
  <block-list:block block-list:abbreviated-name="عبداله" block-list:name="عبدالله"/>
  <block-list:block block-list:abbreviated-name="عبدالهی" block-list:name="عبداللهی"/>
  <block-list:block block-list:abbreviated-name="عجالتا" block-list:name="عجالتاً"/>
  <block-list:block block-list:abbreviated-name="عرابه" block-list:name="ارابه"/>
- <block-list:block block-list:abbreviated-name="عرق النساء" block-list:name="عرق‌النساء"/>
  <block-list:block block-list:abbreviated-name="عروح" block-list:name="عروج"/>
- <block-list:block block-list:abbreviated-name="عزلت طلب" block-list:name="عزلت‌طلب"/>
- <block-list:block block-list:abbreviated-name="عزلت طلبی" block-list:name="عزلت‌طلبی"/>
- <block-list:block block-list:abbreviated-name="عصب شناسی" block-list:name="عصب‌شناسی"/>
- <block-list:block block-list:abbreviated-name="عصب کشی" block-list:name="عصب‌کشی"/>
  <block-list:block block-list:abbreviated-name="عصه" block-list:name="غصه"/>
  <block-list:block block-list:abbreviated-name="عضق" block-list:name="عشق"/>
  <block-list:block block-list:abbreviated-name="عقلا" block-list:name="عقلاً"/>
- <block-list:block block-list:abbreviated-name="عکس العمل" block-list:name="عکس‌العمل"/>
- <block-list:block block-list:abbreviated-name="عکس العملی" block-list:name="عکس‌العملی"/>
- <block-list:block block-list:abbreviated-name="عکس العملیم" block-list:name="عکس‌العملیم"/>
  <block-list:block block-list:abbreviated-name="علائم" block-list:name="علایم"/>
  <block-list:block block-list:abbreviated-name="علارغم" block-list:name="علی‌رغم"/>
  <block-list:block block-list:abbreviated-name="علارقم" block-list:name="علی‌رغم"/>
  <block-list:block block-list:abbreviated-name="علاقمند" block-list:name="علاقه‌مند"/>
- <block-list:block block-list:abbreviated-name="علاقه مند" block-list:name="علاقه‌مند"/>
- <block-list:block block-list:abbreviated-name="علاقه مندان" block-list:name="علاقه‌مندان"/>
- <block-list:block block-list:abbreviated-name="علاقه مندی" block-list:name="علاقه‌مندی"/>
  <block-list:block block-list:abbreviated-name="علامت‌گزاری" block-list:name="علامت‌گذاری"/>
- <block-list:block block-list:abbreviated-name="علت العلل" block-list:name="علت‌العلل"/>
- <block-list:block block-list:abbreviated-name="علم آموزی" block-list:name="علم‌آموزی"/>
  <block-list:block block-list:abbreviated-name="علما" block-list:name="عالمان"/>
- <block-list:block block-list:abbreviated-name="علم الادویه" block-list:name="علم‌الادویه"/>
  <block-list:block block-list:abbreviated-name="علم‌شنگه" block-list:name="الم‌شنگه"/>
  <block-list:block block-list:abbreviated-name="علنا" block-list:name="علناً"/>
  <block-list:block block-list:abbreviated-name="علی اللخصوص" block-list:name="علی‌الخصوص"/>
- <block-list:block block-list:abbreviated-name="علی رغم" block-list:name="علی‌رغم"/>
  <block-list:block block-list:abbreviated-name="علی‌رقم" block-list:name="علی‌رغم"/>
  <block-list:block block-list:abbreviated-name="علیرقم" block-list:name="علی‌رغم"/>
- <block-list:block block-list:abbreviated-name="علی گونه" block-list:name="علی‌گونه"/>
- <block-list:block block-list:abbreviated-name="علیه الرحمه" block-list:name="علیه‌الرحمه"/>
  <block-list:block block-list:abbreviated-name="علیه السلام" block-list:name="(علیه‌السلام)"/>
- <block-list:block block-list:abbreviated-name="علی هذا" block-list:name="علی‌هذا"/>
  <block-list:block block-list:abbreviated-name="علیهذا" block-list:name="علی‌هذا"/>
  <block-list:block block-list:abbreviated-name="عماق" block-list:name="اعماق"/>
  <block-list:block block-list:abbreviated-name="عمامه‌گزاری" block-list:name="عمامه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="عمدا" block-list:name="عمداً"/>
  <block-list:block block-list:abbreviated-name="عمدتا" block-list:name="عمدتاً"/>
- <block-list:block block-list:abbreviated-name="عمده العطار" block-list:name="عمده‌العطار"/>
  <block-list:block block-list:abbreviated-name="عملا" block-list:name="عملاً"/>
  <block-list:block block-list:abbreviated-name="عملکردی" block-list:name="عمل‌کردی"/>
  <block-list:block block-list:abbreviated-name="عمیقا" block-list:name="عمیقاً"/>
  <block-list:block block-list:abbreviated-name="عیاق" block-list:name="ایاق"/>
- <block-list:block block-list:abbreviated-name="عیب جویی" block-list:name="عیب‌جویی"/>
  <block-list:block block-list:abbreviated-name="عیره" block-list:name="غیره"/>
  <block-list:block block-list:abbreviated-name="عیرو" block-list:name="غیرو"/>
  <block-list:block block-list:abbreviated-name="عینا" block-list:name="عیناً"/>
  <block-list:block block-list:abbreviated-name="غافل‌گیر" block-list:name="غافلگیر"/>
  <block-list:block block-list:abbreviated-name="غالبا" block-list:name="غالباً"/>
- <block-list:block block-list:abbreviated-name="غبار روبی" block-list:name="غبار‌روبی"/>
  <block-list:block block-list:abbreviated-name="غراضه" block-list:name="قراضه"/>
  <block-list:block block-list:abbreviated-name="غرمساق" block-list:name="قرمساق"/>
  <block-list:block block-list:abbreviated-name="غرنتینه" block-list:name="قرنطینه"/>
@@ -1164,25 +928,22 @@
  <block-list:block block-list:abbreviated-name="غریضه" block-list:name="غریزه"/>
  <block-list:block block-list:abbreviated-name="غضه" block-list:name="غصه"/>
  <block-list:block block-list:abbreviated-name="غفلتا" block-list:name="غفلتاً"/>
- <block-list:block block-list:abbreviated-name="غلام حسن" block-list:name="غلام‌حسن"/>
  <block-list:block block-list:abbreviated-name="غلدر" block-list:name="قلدر"/>
  <block-list:block block-list:abbreviated-name="غلطان" block-list:name="غلتان"/>
  <block-list:block block-list:abbreviated-name="غلطاندن" block-list:name="غلتاندن"/>
+<block-list:block block-list:abbreviated-name="غلط زدن" block-list:name="غلت زدن"/>
  <block-list:block block-list:abbreviated-name="غلطک" block-list:name="غلتک"/>
  <block-list:block block-list:abbreviated-name="غلطنده" block-list:name="غلتنده"/>
  <block-list:block block-list:abbreviated-name="غلطید" block-list:name="غلتید"/>
  <block-list:block block-list:abbreviated-name="غلطیدن" block-list:name="غلتیدن"/>
  <block-list:block block-list:abbreviated-name="غلطیده" block-list:name="غلتیده"/>
- <block-list:block block-list:abbreviated-name="غم پیشه" block-list:name="غم‌پیشه"/>
  <block-list:block block-list:abbreviated-name="غم‌ناک" block-list:name="غمناک"/>
  <block-list:block block-list:abbreviated-name="غورباغه" block-list:name="قورباغه"/>
  <block-list:block block-list:abbreviated-name="غورباقه" block-list:name="قورباغه"/>
  <block-list:block block-list:abbreviated-name="غیره‌وذلک" block-list:name="غیرذلک"/>
  <block-list:block block-list:abbreviated-name="غیض" block-list:name="غیظ"/>
- <block-list:block block-list:abbreviated-name="فاتحه الکتاب" block-list:name="فاتحه‌الکتاب"/>
  <block-list:block block-list:abbreviated-name="فارق از" block-list:name="فارغ از"/>
  <block-list:block block-list:abbreviated-name="فارق‌التحصیل" block-list:name="فارغ‌التحصیل "/>
- <block-list:block block-list:abbreviated-name="فارق‌التحصیل" block-list:name="فارغ‌التحصیل"/>
  <block-list:block block-list:abbreviated-name="فاصله‌گزار" block-list:name="فاصله‌گذار"/>
  <block-list:block block-list:abbreviated-name="فاصله‌گزاری" block-list:name="فاصله‌گذاری"/>
  <block-list:block block-list:abbreviated-name="فاظل" block-list:name="فاضل"/>
@@ -1192,29 +953,20 @@
  <block-list:block block-list:abbreviated-name="فدارسیون" block-list:name="فدراسیون"/>
  <block-list:block block-list:abbreviated-name="فراقت" block-list:name="فراغت"/>
  <block-list:block block-list:abbreviated-name="فراماسوتر" block-list:name="فراماسونر"/>
+ <block-list:block block-list:abbreviated-name="فربگی" block-list:name="فربهی"/>
+ <block-list:block block-list:abbreviated-name="فربه‌گی" block-list:name="فربهی"/>
  <block-list:block block-list:abbreviated-name="فرسته‌گزاری" block-list:name="فرسته‌گذاری"/>
- <block-list:block block-list:abbreviated-name="فرشته صفت" block-list:name="فرشته‌صفت"/>
  <block-list:block block-list:abbreviated-name="فرضا" block-list:name="فرضاً"/>
  <block-list:block block-list:abbreviated-name="فرفوژه" block-list:name="فرفورژه"/>
  <block-list:block block-list:abbreviated-name="فرمایشان" block-list:name="فرمایشات"/>
- <block-list:block block-list:abbreviated-name="فرهنگ سرا" block-list:name="فرهنگ‌سرا"/>
- <block-list:block block-list:abbreviated-name="فرهنگ سرای" block-list:name="فرهنگ‌سرای"/>
- <block-list:block block-list:abbreviated-name="فریب پذیر" block-list:name="فریب‌پذیر"/>
- <block-list:block block-list:abbreviated-name="فریب پذیرم" block-list:name="فریب‌پذیرم"/>
- <block-list:block block-list:abbreviated-name="فریب پذیری" block-list:name="فریب‌پذیری"/>
- <block-list:block block-list:abbreviated-name="فریب خوردگی" block-list:name="فریب‌خوردگی"/>
- <block-list:block block-list:abbreviated-name="فریب کار" block-list:name="فریب‌کار"/>
- <block-list:block block-list:abbreviated-name="فشرده سازی" block-list:name="فشرده‌سازی"/>
  <block-list:block block-list:abbreviated-name="فشنگ‌گزاری" block-list:name="فشنگ‌گذاری"/>
  <block-list:block block-list:abbreviated-name="فصار" block-list:name="قصار"/>
  <block-list:block block-list:abbreviated-name="فطرتا" block-list:name="فطرتاً"/>
- <block-list:block block-list:abbreviated-name="فطرت محور" block-list:name="فطرت‌محور"/>
  <block-list:block block-list:abbreviated-name="فظیلت" block-list:name="فضیلت"/>
  <block-list:block block-list:abbreviated-name="فعلا" block-list:name="فعلاً"/>
- <block-list:block block-list:abbreviated-name="فقاهت گونه" block-list:name="فقاهت‌گونه"/>
+ <block-list:block block-list:abbreviated-name="فعلن" block-list:name="فعلاً"/>
  <block-list:block block-list:abbreviated-name="فقظ" block-list:name="فقط"/>
  <block-list:block block-list:abbreviated-name="فلاتونی" block-list:name="فلاطونی"/>
- <block-list:block block-list:abbreviated-name="فلک زده" block-list:name="فلک‌زده"/>
  <block-list:block block-list:abbreviated-name="فمنیزم" block-list:name="فمینیزم"/>
  <block-list:block block-list:abbreviated-name="فمنیست" block-list:name="فمینیست"/>
  <block-list:block block-list:abbreviated-name="فمنیستی" block-list:name="فمینیستی"/>
@@ -1224,24 +976,17 @@
  <block-list:block block-list:abbreviated-name="فورا" block-list:name="فوراً"/>
  <block-list:block block-list:abbreviated-name="فورم" block-list:name="فرم"/>
  <block-list:block block-list:abbreviated-name="فوش" block-list:name="فحش"/>
- <block-list:block block-list:abbreviated-name="فوق العاده" block-list:name="فوق‌العاده"/>
  <block-list:block block-list:abbreviated-name="فیبرشی" block-list:name="فیپرشی"/>
  <block-list:block block-list:abbreviated-name="فیثاغورث" block-list:name="فیثاغورس"/>
- <block-list:block block-list:abbreviated-name="فیزیک دان" block-list:name="فیزیک‌دان"/>
- <block-list:block block-list:abbreviated-name="فیزیک دانی" block-list:name="فیزیک‌دانی"/>
- <block-list:block block-list:abbreviated-name="فیلم برداری" block-list:name="فیلم‌برداری"/>
- <block-list:block block-list:abbreviated-name="فی نفسه" block-list:name="فی‌نفسه"/>
  <block-list:block block-list:abbreviated-name="قائده" block-list:name="قاعده"/>
  <block-list:block block-list:abbreviated-name="قائله" block-list:name="غائله"/>
  <block-list:block block-list:abbreviated-name="قاطی" block-list:name="قاتی"/>
+<block-list:block block-list:abbreviated-name="قاطی‌پاطی" block-list:name="قاتی‌پاتی"/>
  <block-list:block block-list:abbreviated-name="قاعدتا" block-list:name="قاعدتاً"/>
  <block-list:block block-list:abbreviated-name="قاعل" block-list:name="قائل"/>
  <block-list:block block-list:abbreviated-name="قانونا" block-list:name="قانوناً"/>
  <block-list:block block-list:abbreviated-name="قانون‌گزار" block-list:name="قانون‌گذار"/>
  <block-list:block block-list:abbreviated-name="قانون‌گزاری" block-list:name="قانون‌گذاری "/>
- <block-list:block block-list:abbreviated-name="قانون‌گزاری" block-list:name="قانون‌گذاری"/>
- <block-list:block block-list:abbreviated-name="قانون مند" block-list:name="قانون‌مند"/>
- <block-list:block block-list:abbreviated-name="قانون مندی" block-list:name="قانون‌مندی"/>
  <block-list:block block-list:abbreviated-name="قبلا" block-list:name="قبلاً"/>
  <block-list:block block-list:abbreviated-name="قتل‌وعام" block-list:name="قتل‌عام"/>
  <block-list:block block-list:abbreviated-name="قدقن" block-list:name="قدغن"/>
@@ -1256,17 +1001,15 @@
  <block-list:block block-list:abbreviated-name="قریذه" block-list:name="غریزه"/>
  <block-list:block block-list:abbreviated-name="قریزه" block-list:name="غریزه"/>
  <block-list:block block-list:abbreviated-name="قریضه" block-list:name="غریزه"/>
- <block-list:block block-list:abbreviated-name="قسی القلب" block-list:name="قسی‌القلب"/>
  <block-list:block block-list:abbreviated-name="قطعا" block-list:name="قطعاً"/>
  <block-list:block block-list:abbreviated-name="قطع به یقین" block-list:name="به قطع و یقین"/>
  <block-list:block block-list:abbreviated-name="قلبا" block-list:name="قلباً"/>
  <block-list:block block-list:abbreviated-name="قلت" block-list:name="قلّت"/>
  <block-list:block block-list:abbreviated-name="قلف" block-list:name="قفل"/>
  <block-list:block block-list:abbreviated-name="قل‌و‌زنجیر" block-list:name="غل‌و‌زنجیر"/>
- <block-list:block block-list:abbreviated-name="قمار باز" block-list:name="قمار‌باز"/>
- <block-list:block block-list:abbreviated-name="قمار بازی" block-list:name="قمار‌بازی"/>
  <block-list:block block-list:abbreviated-name="قوائد" block-list:name="قواعد"/>
  <block-list:block block-list:abbreviated-name="قوت" block-list:name="قوّت"/>
+<block-list:block block-list:abbreviated-name="قوتی" block-list:name="قوطی"/>
  <block-list:block block-list:abbreviated-name="قورباقه" block-list:name="قورباغه"/>
  <block-list:block block-list:abbreviated-name="قوه" block-list:name="قوّه"/>
  <block-list:block block-list:abbreviated-name="قوهٔ" block-list:name="قوّهٔ"/>
@@ -1276,9 +1019,8 @@
  <block-list:block block-list:abbreviated-name="کارامد" block-list:name="کارآمد"/>
  <block-list:block block-list:abbreviated-name="کاغدی" block-list:name="کاغذی"/>
  <block-list:block block-list:abbreviated-name="کاملا" block-list:name="کاملاً"/>
+ <block-list:block block-list:abbreviated-name="کاملن" block-list:name="کاملاً"/>
  <block-list:block block-list:abbreviated-name="کپن" block-list:name="کوپن"/>
- <block-list:block block-list:abbreviated-name="کپی بردار" block-list:name="کپی‌بردار"/>
- <block-list:block block-list:abbreviated-name="کپی برداری" block-list:name="کپی‌برداری"/>
  <block-list:block block-list:abbreviated-name="کتابدار" block-list:name="کتاب‌دار"/>
  <block-list:block block-list:abbreviated-name="کتابیکه" block-list:name="کتابی که"/>
  <block-list:block block-list:abbreviated-name="کجاست" block-list:name="کجا است"/>
@@ -1291,81 +1033,38 @@
  <block-list:block block-list:abbreviated-name="کع" block-list:name="که"/>
  <block-list:block block-list:abbreviated-name="کفته" block-list:name="گفته"/>
  <block-list:block block-list:abbreviated-name="کلا" block-list:name="کلاً"/>
- <block-list:block block-list:abbreviated-name="کلاه بردار" block-list:name="کلاه‌بردار"/>
- <block-list:block block-list:abbreviated-name="کلاه بردارم" block-list:name="کلاه‌بردارم"/>
- <block-list:block block-list:abbreviated-name="کلاه برداری" block-list:name="کلاه‌برداری"/>
  <block-list:block block-list:abbreviated-name="کلمان" block-list:name="کلمات"/>
- <block-list:block block-list:abbreviated-name="کله گنده" block-list:name="کله‌گنده"/>
- <block-list:block block-list:abbreviated-name="کم رنگ" block-list:name="کم‌رنگ"/>
- <block-list:block block-list:abbreviated-name="کمنک" block-list:name="کمک"/>
- <block-list:block block-list:abbreviated-name="کم هویت" block-list:name="کم‌هویت"/>
- <block-list:block block-list:abbreviated-name="کم هویتی" block-list:name="کم‌هویتی"/>
+ <block-list:block block-list:abbreviated-name="کلوپ" block-list:name="کلوب"/>
  <block-list:block block-list:abbreviated-name="کهخ" block-list:name="که"/>
  <block-list:block block-list:abbreviated-name="کهع" block-list:name="که"/>
  <block-list:block block-list:abbreviated-name="کوچگ" block-list:name="کوچک"/>
  <block-list:block block-list:abbreviated-name="کورد" block-list:name="کرد"/>
- <block-list:block block-list:abbreviated-name="کوله باری" block-list:name="کوله‌باری"/>
  <block-list:block block-list:abbreviated-name="کوله‌بر" block-list:name="کول‌بر"/>
  <block-list:block block-list:abbreviated-name="کوهر" block-list:name="گوهر"/>
- <block-list:block block-list:abbreviated-name="کوه کن" block-list:name="کوه‌کن"/>
- <block-list:block block-list:abbreviated-name="کوه کنم" block-list:name="کوه‌کنم"/>
- <block-list:block block-list:abbreviated-name="کوه کنی" block-list:name="کوه‌کنی"/>
- <block-list:block block-list:abbreviated-name="کوه کنید" block-list:name="کوه‌کنید"/>
- <block-list:block block-list:abbreviated-name="کوه کنیم" block-list:name="کوه‌کنیم"/>
- <block-list:block block-list:abbreviated-name="کوه نوردی" block-list:name="کوه‌نوردی"/>
  <block-list:block block-list:abbreviated-name="کیفا" block-list:name="کیفاً"/>
  <block-list:block block-list:abbreviated-name="کیلید" block-list:name="کلید"/>
- <block-list:block block-list:abbreviated-name="کینه ورزی" block-list:name="کینه‌ورزی"/>
  <block-list:block block-list:abbreviated-name="کی‌یف" block-list:name="کیِف"/>
  <block-list:block block-list:abbreviated-name="گار" block-list:name="کار"/>
  <block-list:block block-list:abbreviated-name="گاها" block-list:name="گاهاً"/>
- <block-list:block block-list:abbreviated-name="گاو پرست" block-list:name="گاو‌پرست"/>
- <block-list:block block-list:abbreviated-name="گاو پرستی" block-list:name="گاو‌پرستی"/>
- <block-list:block block-list:abbreviated-name="گداشتند" block-list:name="گذاشتند"/>
  <block-list:block block-list:abbreviated-name="گذارش" block-list:name="گزارش"/>
  <block-list:block block-list:abbreviated-name="گذارشات" block-list:name="گزارشات "/>
- <block-list:block block-list:abbreviated-name="گرستگی" block-list:name="گرسنگی"/>
- <block-list:block block-list:abbreviated-name="گرسته" block-list:name="گرسنه"/>
- <block-list:block block-list:abbreviated-name="گرفنار" block-list:name="گرفتار"/>
  <block-list:block block-list:abbreviated-name="گرک" block-list:name="گرگ"/>
  <block-list:block block-list:abbreviated-name="گروگزاری" block-list:name="گروگذاری"/>
- <block-list:block block-list:abbreviated-name="گریبان گیر" block-list:name="گریبان‌گیر"/>
- <block-list:block block-list:abbreviated-name="گریبان گیرم" block-list:name="گریبان‌گیرم"/>
- <block-list:block block-list:abbreviated-name="گریبان گیری" block-list:name="گریبان‌گیری"/>
- <block-list:block block-list:abbreviated-name="گزافه گو" block-list:name="گزافه‌گو"/>
- <block-list:block block-list:abbreviated-name="گزافه گوی" block-list:name="گزافه‌گوی"/>
- <block-list:block block-list:abbreviated-name="گزافه گویی" block-list:name="گزافه‌گویی"/>
- <block-list:block block-list:abbreviated-name="گل خواری" block-list:name="گل‌خواری"/>
  <block-list:block block-list:abbreviated-name="گله‌گذاری" block-list:name="گله‌گزاری"/>
- <block-list:block block-list:abbreviated-name="گلید" block-list:name="کلید"/>
- <block-list:block block-list:abbreviated-name="گمراه کننده" block-list:name="گمراه‌کننده"/>
- <block-list:block block-list:abbreviated-name="گم کرده" block-list:name="گم‌کرده"/>
- <block-list:block block-list:abbreviated-name="گنده منده" block-list:name="گنده‌منده"/>
- <block-list:block block-list:abbreviated-name="گنیم" block-list:name="کنیم"/>
- <block-list:block block-list:abbreviated-name="گه گداری" block-list:name="گه‌گداری"/>
  <block-list:block block-list:abbreviated-name="گوئی" block-list:name="گویی"/>
- <block-list:block block-list:abbreviated-name="گوجه فرنگی" block-list:name="گوجه‌فرنگی"/>
- <block-list:block block-list:abbreviated-name="گوساله پرستی" block-list:name="گوساله‌پرستی"/>
- <block-list:block block-list:abbreviated-name="گوشه گیر" block-list:name="گوشه‌گیر"/>
- <block-list:block block-list:abbreviated-name="گیج کننده" block-list:name="گیج‌کننده"/>
- <block-list:block block-list:abbreviated-name="لارم" block-list:name="لازم"/>
- <block-list:block block-list:abbreviated-name="لاله زار" block-list:name="لاله‌زار"/>
  <block-list:block block-list:abbreviated-name="لایتجزی" block-list:name="لایتجزا"/>
  <block-list:block block-list:abbreviated-name="لایت نوول" block-list:name="لایت ناول"/>
- <block-list:block block-list:abbreviated-name="لاید" block-list:name="لابد"/>
  <block-list:block block-list:abbreviated-name="لب‌تاب" block-list:name="لپ‌تاپ"/>
+ <block-list:block block-list:abbreviated-name="لب‌تاپ" block-list:name="لپ‌تاپ"/>
+ <block-list:block block-list:abbreviated-name="لب تاپ" block-list:name="لپ‌تاپ"/>
  <block-list:block block-list:abbreviated-name="لپ‌تاب" block-list:name="لپ‌تاپ"/>
  <block-list:block block-list:abbreviated-name="لپ تاب" block-list:name="لپ‌تاپ"/>
  <block-list:block block-list:abbreviated-name="لپ‌کلام" block-list:name="لب‌کلام"/>
  <block-list:block block-list:abbreviated-name="لپ کلام" block-list:name="لب‌کلام"/>
- <block-list:block block-list:abbreviated-name="لج باز" block-list:name="لج‌باز"/>
- <block-list:block block-list:abbreviated-name="لج بازی" block-list:name="لج‌بازی"/>
  <block-list:block block-list:abbreviated-name="لجیستیک" block-list:name="لجستیک"/>
  <block-list:block block-list:abbreviated-name="لحاض" block-list:name="لحاظ"/>
  <block-list:block block-list:abbreviated-name="لحجه" block-list:name="لهجه"/>
  <block-list:block block-list:abbreviated-name="لحضه" block-list:name="لحظه"/>
- <block-list:block block-list:abbreviated-name="لدت" block-list:name="لذت"/>
- <block-list:block block-list:abbreviated-name="لذت جویی" block-list:name="لذت‌جویی"/>
  <block-list:block block-list:abbreviated-name="لزا" block-list:name="لذا"/>
  <block-list:block block-list:abbreviated-name="لزوما" block-list:name="لزوماً"/>
  <block-list:block block-list:abbreviated-name="لشگر" block-list:name="لشکر"/>
@@ -1374,12 +1073,11 @@
  <block-list:block block-list:abbreviated-name="لطفا" block-list:name="لطفاً"/>
  <block-list:block block-list:abbreviated-name="لظا" block-list:name="لذا"/>
  <block-list:block block-list:abbreviated-name="لغب" block-list:name="لقب"/>
- <block-list:block block-list:abbreviated-name="لغت نامه" block-list:name="لغت‌نامه"/>
  <block-list:block block-list:abbreviated-name="لفظا" block-list:name="لفظاً"/>
  <block-list:block block-list:abbreviated-name="لقو" block-list:name="لغو"/>
  <block-list:block block-list:abbreviated-name="للاندا" block-list:name="لامبدا"/>
+<block-list:block block-list:abbreviated-name="لوتی" block-list:name="لوطی"/>
  <block-list:block block-list:abbreviated-name="لوجستیک" block-list:name="لجستیک"/>
- <block-list:block block-list:abbreviated-name="لیبره آفیس" block-list:name="لیبره‌آفیس"/>
  <block-list:block block-list:abbreviated-name="مآزار" block-list:name="میازار"/>
  <block-list:block block-list:abbreviated-name="مؤذب" block-list:name="معذب"/>
  <block-list:block block-list:abbreviated-name="مؤفق" block-list:name="موفق"/>
@@ -1393,9 +1091,6 @@
  <block-list:block block-list:abbreviated-name="مادرقهوه" block-list:name="مادرقحبه"/>
  <block-list:block block-list:abbreviated-name="مادیان" block-list:name="مادیات"/>
  <block-list:block block-list:abbreviated-name="مارموز" block-list:name="مارموذ"/>
- <block-list:block block-list:abbreviated-name="ماست مالی" block-list:name="ماست‌مالی"/>
- <block-list:block block-list:abbreviated-name="ماشیتی" block-list:name="ماشینی"/>
- <block-list:block block-list:abbreviated-name="ماشین نویسی" block-list:name="ماشین‌نویسی"/>
  <block-list:block block-list:abbreviated-name="ماکارانی" block-list:name="ماکارونی"/>
  <block-list:block block-list:abbreviated-name="ماکول" block-list:name="مأکول"/>
  <block-list:block block-list:abbreviated-name="مام" block-list:name="نام"/>
@@ -1443,12 +1138,10 @@
  <block-list:block block-list:abbreviated-name="محصوب" block-list:name="محسوب"/>
  <block-list:block block-list:abbreviated-name="محظر" block-list:name="محضر"/>
  <block-list:block block-list:abbreviated-name="محلل" block-list:name="محلّل"/>
- <block-list:block block-list:abbreviated-name="محمد گونه" block-list:name="محمد‌گونه"/>
  <block-list:block block-list:abbreviated-name="محیا" block-list:name="مهیا"/>
  <block-list:block block-list:abbreviated-name="محی‌الدین" block-list:name="محیی‌الدین"/>
  <block-list:block block-list:abbreviated-name="محیز" block-list:name="محیط"/>
  <block-list:block block-list:abbreviated-name="مخالق" block-list:name="مخالف"/>
- <block-list:block block-list:abbreviated-name="مخزن الادویه" block-list:name="مخزن‌الادویه"/>
  <block-list:block block-list:abbreviated-name="مخصوصا" block-list:name="مخصوصاً"/>
  <block-list:block block-list:abbreviated-name="مخمسه" block-list:name="مخمصه"/>
  <block-list:block block-list:abbreviated-name="مدرنیزم" block-list:name="مدرنیسم"/>
@@ -1459,8 +1152,6 @@
  <block-list:block block-list:abbreviated-name="مرسد" block-list:name="مرشد"/>
  <block-list:block block-list:abbreviated-name="مرطول" block-list:name="مرطوب"/>
  <block-list:block block-list:abbreviated-name="مرفح" block-list:name="مرفهن"/>
- <block-list:block block-list:abbreviated-name="مرکب القوی" block-list:name="مرکب‌القویٰ"/>
- <block-list:block block-list:abbreviated-name="مرکّب القوی" block-list:name="مرّکب‌القویٰ"/>
  <block-list:block block-list:abbreviated-name="مرکبه" block-list:name="مرکّبه"/>
  <block-list:block block-list:abbreviated-name="مرگز" block-list:name="مرکز"/>
  <block-list:block block-list:abbreviated-name="مرهمت" block-list:name="مرحمت"/>
@@ -1470,10 +1161,6 @@
  <block-list:block block-list:abbreviated-name="مزمت" block-list:name="مذمت"/>
  <block-list:block block-list:abbreviated-name="مسأله" block-list:name="مسئله"/>
  <block-list:block block-list:abbreviated-name="مسؤل" block-list:name="مسئول"/>
- <block-list:block block-list:abbreviated-name="مسئله سازی" block-list:name="مسئله‌سازی"/>
- <block-list:block block-list:abbreviated-name="مسئله مند" block-list:name="مسئله‌مند"/>
- <block-list:block block-list:abbreviated-name="مسئله مندم" block-list:name="مسئله‌مندم"/>
- <block-list:block block-list:abbreviated-name="مسئله مندی" block-list:name="مسئله‌مندی"/>
  <block-list:block block-list:abbreviated-name="مساپل" block-list:name="مسایل"/>
  <block-list:block block-list:abbreviated-name="مستاصل" block-list:name="مستأصل"/>
  <block-list:block block-list:abbreviated-name="مستحظر" block-list:name="مستحضر"/>
@@ -1481,12 +1168,9 @@
  <block-list:block block-list:abbreviated-name="مستقیما" block-list:name="مستقیماً"/>
  <block-list:block block-list:abbreviated-name="مسدد" block-list:name="مسدّد"/>
  <block-list:block block-list:abbreviated-name="مسلما" block-list:name="مسلماً"/>
- <block-list:block block-list:abbreviated-name="مشاهده شونده" block-list:name="مشاهده‌شونده"/>
- <block-list:block block-list:abbreviated-name="مشاهده کننده" block-list:name="مشاهده‌کننده"/>
  <block-list:block block-list:abbreviated-name="مشخصا" block-list:name="مشخصاً"/>
  <block-list:block block-list:abbreviated-name="مشکلان" block-list:name="مشکلات"/>
- <block-list:block block-list:abbreviated-name="مشکل گشا" block-list:name="مشکل‌گشا"/>
- <block-list:block block-list:abbreviated-name="مشکل گشایی" block-list:name="مشکل‌گشایی"/>
+ <block-list:block block-list:abbreviated-name="مشمبا" block-list:name="مشما"/>
  <block-list:block block-list:abbreviated-name="مشمول‌الذمه" block-list:name="مشغول‌الذمه"/>
  <block-list:block block-list:abbreviated-name="مشمول‌ذمه" block-list:name="مشغول‌ذِمه"/>
  <block-list:block block-list:abbreviated-name="مشوش" block-list:name="مشوّش"/>
@@ -1500,24 +1184,20 @@
  <block-list:block block-list:abbreviated-name="مضنونین" block-list:name="مظنونین"/>
  <block-list:block block-list:abbreviated-name="مطرخ" block-list:name="مطرح"/>
  <block-list:block block-list:abbreviated-name="مطلقا" block-list:name="مطلقاً"/>
- <block-list:block block-list:abbreviated-name="مطلقاٌ" block-list:name="مطلقاً"/>
  <block-list:block block-list:abbreviated-name="مطمئنا" block-list:name="مطمئناً"/>
  <block-list:block block-list:abbreviated-name="مطمعن" block-list:name="مطمئن"/>
  <block-list:block block-list:abbreviated-name="مظطرب" block-list:name="مضطرب"/>
  <block-list:block block-list:abbreviated-name="معتدبه" block-list:name="معتدٌبه"/>
- <block-list:block block-list:abbreviated-name="معدن شناسی" block-list:name="معدن‌شناسی"/>
- <block-list:block block-list:abbreviated-name="مع ذلک" block-list:name="مع‌ذلک"/>
  <block-list:block block-list:abbreviated-name="معذلک" block-list:name="مع‌ذلک"/>
  <block-list:block block-list:abbreviated-name="معزل" block-list:name="معضل"/>
  <block-list:block block-list:abbreviated-name="معظل" block-list:name="معضل"/>
  <block-list:block block-list:abbreviated-name="معفن" block-list:name="معفّن"/>
  <block-list:block block-list:abbreviated-name="معمولا" block-list:name="معمولاً"/>
+ <block-list:block block-list:abbreviated-name="معمولن" block-list:name="معمولاً"/>
  <block-list:block block-list:abbreviated-name="مغلته" block-list:name="مغلطه"/>
  <block-list:block block-list:abbreviated-name="مغوله" block-list:name="مقوله"/>
  <block-list:block block-list:abbreviated-name="مغیاس" block-list:name="مقیاس"/>
  <block-list:block block-list:abbreviated-name="مفتح" block-list:name="مفتّح"/>
- <block-list:block block-list:abbreviated-name="مفت خور" block-list:name="مفت‌خور"/>
- <block-list:block block-list:abbreviated-name="مفت خوری" block-list:name="مفت‌خوری"/>
  <block-list:block block-list:abbreviated-name="مفصلا" block-list:name="مفصلاً"/>
  <block-list:block block-list:abbreviated-name="مفیذ" block-list:name="مفید"/>
  <block-list:block block-list:abbreviated-name="مقابسه" block-list:name="مقایسه"/>
@@ -1531,23 +1211,13 @@
  <block-list:block block-list:abbreviated-name="ملاحضات" block-list:name="ملاحظات"/>
  <block-list:block block-list:abbreviated-name="ملاحضه" block-list:name="ملاحظه"/>
  <block-list:block block-list:abbreviated-name="ملاحضه‌ای" block-list:name="ملاحظه‌ای"/>
- <block-list:block block-list:abbreviated-name="ملال اور" block-list:name="ملال‌آور"/>
- <block-list:block block-list:abbreviated-name="ملالت الود" block-list:name="ملالت‌آلود"/>
- <block-list:block block-list:abbreviated-name="ملالت الودی" block-list:name="ملالت‌آلودی"/>
- <block-list:block block-list:abbreviated-name="ملالت اور" block-list:name="ملالت‌آور"/>
- <block-list:block block-list:abbreviated-name="ملامت الود" block-list:name="ملامت‌آلود"/>
- <block-list:block block-list:abbreviated-name="ملامت الودی" block-list:name="ملامت‌آلودی"/>
- <block-list:block block-list:abbreviated-name="ملامت مند" block-list:name="ملامت‌مند"/>
  <block-list:block block-list:abbreviated-name="ملقمه" block-list:name="ملغمه"/>
  <block-list:block block-list:abbreviated-name="ملکول" block-list:name="مولکول"/>
  <block-list:block block-list:abbreviated-name="ملیارد" block-list:name="میلیارد"/>
  <block-list:block block-list:abbreviated-name="ملیون" block-list:name="میلیون"/>
  <block-list:block block-list:abbreviated-name="ممدوده" block-list:name="ممدود"/>
  <block-list:block block-list:abbreviated-name="ممزوح" block-list:name="ممزوج"/>
- <block-list:block block-list:abbreviated-name="مناسبت مند" block-list:name="مناسبت‌مند"/>
- <block-list:block block-list:abbreviated-name="مناسبت مندی" block-list:name="مناسبت‌مندی"/>
  <block-list:block block-list:abbreviated-name="مناضره" block-list:name="مناظره"/>
- <block-list:block block-list:abbreviated-name="من باب" block-list:name="من‌باب"/>
  <block-list:block block-list:abbreviated-name="منبای" block-list:name="مبنای"/>
  <block-list:block block-list:abbreviated-name="منسۀ ظهور" block-list:name="منصۀ ظهور"/>
  <block-list:block block-list:abbreviated-name="منشا" block-list:name="منشأ"/>
@@ -1556,22 +1226,16 @@
  <block-list:block block-list:abbreviated-name="منصوب به" block-list:name="منسوب به"/>
  <block-list:block block-list:abbreviated-name="منصوبین" block-list:name="منسوبین "/>
  <block-list:block block-list:abbreviated-name="منطقا" block-list:name="منطقاً"/>
- <block-list:block block-list:abbreviated-name="منطق الطیر" block-list:name="منطق‌الطیر"/>
  <block-list:block block-list:abbreviated-name="منظبط" block-list:name="منضبط"/>
  <block-list:block block-list:abbreviated-name="مُنقّص" block-list:name="مُنغّص"/>
  <block-list:block block-list:abbreviated-name="مه‌تر" block-list:name="مهتر"/>
  <block-list:block block-list:abbreviated-name="مهراب" block-list:name="محراب"/>
- <block-list:block block-list:abbreviated-name="مهر طلب" block-list:name="مهر‌طلب"/>
  <block-list:block block-list:abbreviated-name="مهزر" block-list:name="محضر"/>
  <block-list:block block-list:abbreviated-name="مه‌شنوید" block-list:name="مشنوید"/>
  <block-list:block block-list:abbreviated-name="مهظر" block-list:name="محضر"/>
  <block-list:block block-list:abbreviated-name="مه‌گوی" block-list:name="مگوی"/>
- <block-list:block block-list:abbreviated-name="مهمان نواز" block-list:name="مهمان‌نواز"/>
  <block-list:block block-list:abbreviated-name="مهماننواز" block-list:name="مهمان‌نواز"/>
- <block-list:block block-list:abbreviated-name="مهمان نوازم" block-list:name="مهمان‌نوازم"/>
  <block-list:block block-list:abbreviated-name="مهماننوازم" block-list:name="مهمان‌نوازم"/>
- <block-list:block block-list:abbreviated-name="مهمان نوازند" block-list:name="مهمان‌نوازند"/>
- <block-list:block block-list:abbreviated-name="مهمان نوازی" block-list:name="مهمان‌نوازی"/>
  <block-list:block block-list:abbreviated-name="مهندش" block-list:name="مهندس"/>
  <block-list:block block-list:abbreviated-name="مهنوی" block-list:name="معنوی"/>
  <block-list:block block-list:abbreviated-name="مهنویت" block-list:name="معنویت"/>
@@ -1593,11 +1257,9 @@
  <block-list:block block-list:abbreviated-name="موسسات" block-list:name="مؤسسات"/>
  <block-list:block block-list:abbreviated-name="موسسه" block-list:name="مؤسسه"/>
  <block-list:block block-list:abbreviated-name="موسسین" block-list:name="مؤسسین"/>
- <block-list:block block-list:abbreviated-name="موس موس" block-list:name="موس‌موس"/>
  <block-list:block block-list:abbreviated-name="موسیغی" block-list:name="موسیقی"/>
  <block-list:block block-list:abbreviated-name="موسیفی" block-list:name="موسیقی"/>
  <block-list:block block-list:abbreviated-name="موسیقیایی" block-list:name="موسیقایی"/>
- <block-list:block block-list:abbreviated-name="موش مردگی" block-list:name="موش‌مردگی"/>
  <block-list:block block-list:abbreviated-name="موضف" block-list:name="موظف"/>
  <block-list:block block-list:abbreviated-name="موضوه" block-list:name="موضوع"/>
  <block-list:block block-list:abbreviated-name="موطف" block-list:name="موظف"/>
@@ -1606,20 +1268,16 @@
  <block-list:block block-list:abbreviated-name="موقیت" block-list:name="موقعیت"/>
  <block-list:block block-list:abbreviated-name="موکد" block-list:name="مؤکد"/>
  <block-list:block block-list:abbreviated-name="موکدا" block-list:name="مؤکداً"/>
- <block-list:block block-list:abbreviated-name="مولاتا" block-list:name="مولانا"/>
  <block-list:block block-list:abbreviated-name="مولف" block-list:name="مؤلف"/>
  <block-list:block block-list:abbreviated-name="مومن" block-list:name="مؤمن"/>
  <block-list:block block-list:abbreviated-name="مومنی" block-list:name="مؤمنی"/>
  <block-list:block block-list:abbreviated-name="مومنین" block-list:name="مؤمنین"/>
  <block-list:block block-list:abbreviated-name="موید" block-list:name="مؤید"/>
  <block-list:block block-list:abbreviated-name="میابد" block-list:name="می‌یابد"/>
- <block-list:block block-list:abbreviated-name="میان بر" block-list:name="میان‌بر"/>
- <block-list:block block-list:abbreviated-name="میان بری" block-list:name="میان‌بری"/>
  <block-list:block block-list:abbreviated-name="میبینم" block-list:name="می‌بینم"/>
  <block-list:block block-list:abbreviated-name="میبینند" block-list:name="می‌بینند"/>
  <block-list:block block-list:abbreviated-name="میبینی" block-list:name="می‌بینی"/>
  <block-list:block block-list:abbreviated-name="میخواسته" block-list:name="می‌خواسته"/>
- <block-list:block block-list:abbreviated-name="میدان دار" block-list:name="میدان‌دار"/>
  <block-list:block block-list:abbreviated-name="میرود" block-list:name="می‌رود"/>
  <block-list:block block-list:abbreviated-name="میروم" block-list:name="می‌روم"/>
  <block-list:block block-list:abbreviated-name="میروند" block-list:name="می‌روند"/>
@@ -1645,9 +1303,7 @@
  <block-list:block block-list:abbreviated-name="میوفتی" block-list:name="می‌افتی"/>
  <block-list:block block-list:abbreviated-name="میوفتید" block-list:name="می‌افتید"/>
  <block-list:block block-list:abbreviated-name="میوفتیم" block-list:name="می‌افتیم"/>
- <block-list:block block-list:abbreviated-name="میوه جات" block-list:name="میوه‌جات"/>
  <block-list:block block-list:abbreviated-name="نئشه" block-list:name="نشئه"/>
- <block-list:block block-list:abbreviated-name="نا آرامی" block-list:name="نا‌آرامی"/>
  <block-list:block block-list:abbreviated-name="ناارام" block-list:name="ناآرام"/>
  <block-list:block block-list:abbreviated-name="ناارامم" block-list:name="ناآرامم"/>
  <block-list:block block-list:abbreviated-name="نا ارامی" block-list:name="نا‌آرامی"/>
@@ -1656,32 +1312,25 @@
  <block-list:block block-list:abbreviated-name="نااگاهم" block-list:name="ناآگاهم"/>
  <block-list:block block-list:abbreviated-name="نااگاهی" block-list:name="ناآگاهی"/>
  <block-list:block block-list:abbreviated-name="ناتور" block-list:name="ناطور"/>
- <block-list:block block-list:abbreviated-name="ناتور" block-list:name="ناطور"/>
  <block-list:block block-list:abbreviated-name="ناتور دشت" block-list:name="ناطور دشت"/>
  <block-list:block block-list:abbreviated-name="ناچارا" block-list:name="ناچاراً"/>
  <block-list:block block-list:abbreviated-name="ناخوداگاه" block-list:name="ناخودآگاه"/>
- <block-list:block block-list:abbreviated-name="ناراحت کننده" block-list:name="ناراحت‌کننده"/>
  <block-list:block block-list:abbreviated-name="ناگاهم" block-list:name="ناآگاهم"/>
  <block-list:block block-list:abbreviated-name="نام‌گزاری" block-list:name="نام‌گذاری"/>
- <block-list:block block-list:abbreviated-name="نان خور" block-list:name="نان‌خور"/>
  <block-list:block block-list:abbreviated-name="ناهنچار" block-list:name="ناهنجار"/>
  <block-list:block block-list:abbreviated-name="نتی" block-list:name="نمی‌چینید"/>
  <block-list:block block-list:abbreviated-name="نتیجتا" block-list:name="نتیجتاً"/>
- <block-list:block block-list:abbreviated-name="نتیجه گیری" block-list:name="نتیجه‌گیری"/>
  <block-list:block block-list:abbreviated-name="نتیحه" block-list:name="نتیجه"/>
- <block-list:block block-list:abbreviated-name="نجف آباد" block-list:name="نجف‌آباد"/>
  <block-list:block block-list:abbreviated-name="نحات" block-list:name="نجات"/>
  <block-list:block block-list:abbreviated-name="نخواخد" block-list:name="نخواهد"/>
  <block-list:block block-list:abbreviated-name="ندراد" block-list:name="ندارد"/>
  <block-list:block block-list:abbreviated-name="ندرتا" block-list:name="ندرتاً"/>
- <block-list:block block-list:abbreviated-name="نرم افزار" block-list:name="نرم‌افزار"/>
  <block-list:block block-list:abbreviated-name="نزار" block-list:name="نذار"/>
  <block-list:block block-list:abbreviated-name="نسبتا" block-list:name="نسبتاً"/>
  <block-list:block block-list:abbreviated-name="نسیب" block-list:name="نصیب"/>
  <block-list:block block-list:abbreviated-name="نشات" block-list:name="نشأت"/>
  <block-list:block block-list:abbreviated-name="نشانه‌گزاری" block-list:name="نشانه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="نشعه" block-list:name="نشئه"/>
- <block-list:block block-list:abbreviated-name="نصفه نیمه" block-list:name="نصفه‌نیمه"/>
  <block-list:block block-list:abbreviated-name="نعشه" block-list:name="نشئه"/>
  <block-list:block block-list:abbreviated-name="نغض" block-list:name="نقض"/>
  <block-list:block block-list:abbreviated-name="نفش" block-list:name="نقش"/>
@@ -1690,11 +1339,8 @@
  <block-list:block block-list:abbreviated-name="نقطه‌گزاری" block-list:name="نقطه‌گذاری"/>
  <block-list:block block-list:abbreviated-name="نکاه" block-list:name="نگاه"/>
  <block-list:block block-list:abbreviated-name="نکه" block-list:name="نگه"/>
- <block-list:block block-list:abbreviated-name="نگه دارند" block-list:name="نگه‌دارند"/>
  <block-list:block block-list:abbreviated-name="نمازگذاری" block-list:name="نمازگزاری"/>
- <block-list:block block-list:abbreviated-name="نمایش مند" block-list:name="نمایش‌مند"/>
- <block-list:block block-list:abbreviated-name="نمره گذاری" block-list:name="نمره‌گذاری"/>
- <block-list:block block-list:abbreviated-name="نهج البلاغه" block-list:name="نهج‌البلاغه"/>
+<block-list:block block-list:abbreviated-name="نهار" block-list:name="ناهار"/>
  <block-list:block block-list:abbreviated-name="نه‌رفت" block-list:name="نرفت"/>
  <block-list:block block-list:abbreviated-name="نه‌گفت" block-list:name="نگفت"/>
  <block-list:block block-list:abbreviated-name="نه‌نشستم" block-list:name="ننشستم"/>
@@ -1703,9 +1349,7 @@
  <block-list:block block-list:abbreviated-name="نیاکان" block-list:name="نیاگان"/>
  <block-list:block block-list:abbreviated-name="نیانداخت" block-list:name="نینداخت"/>
  <block-list:block block-list:abbreviated-name="نیاندازد" block-list:name="نیندازد "/>
- <block-list:block block-list:abbreviated-name="نیاندازد" block-list:name="نیندازد"/>
  <block-list:block block-list:abbreviated-name="نیاندازم" block-list:name="نیندازم "/>
- <block-list:block block-list:abbreviated-name="نیاندازم" block-list:name="نیندازم"/>
  <block-list:block block-list:abbreviated-name="نیاندازند" block-list:name="نیندازند"/>
  <block-list:block block-list:abbreviated-name="نیاندازی" block-list:name="نیندازی "/>
  <block-list:block block-list:abbreviated-name="نیاندازید" block-list:name="نیندازید "/>
@@ -1718,12 +1362,9 @@
  <block-list:block block-list:abbreviated-name="هاشیه" block-list:name="حاشیه"/>
  <block-list:block block-list:abbreviated-name="هاوی" block-list:name="حاوی"/>
  <block-list:block block-list:abbreviated-name="ـه‌ایی" block-list:name="ـه‌ای"/>
- <block-list:block block-list:abbreviated-name="هدایت کننده" block-list:name="هدایت‌کننده"/>
  <block-list:block block-list:abbreviated-name="هدف‌گزار" block-list:name="هدف‌گذار"/>
  <block-list:block block-list:abbreviated-name="هدف‌گزاری" block-list:name="هدف‌گذاری"/>
  <block-list:block block-list:abbreviated-name="هر کدام" block-list:name="هرکدام"/>
- <block-list:block block-list:abbreviated-name="هست مند" block-list:name="هست‌مند"/>
- <block-list:block block-list:abbreviated-name="هست مندی" block-list:name="هست‌مندی"/>
  <block-list:block block-list:abbreviated-name="هسم" block-list:name="هستم"/>
  <block-list:block block-list:abbreviated-name="هکاکی" block-list:name="حکاکی"/>
  <block-list:block block-list:abbreviated-name="هم‌آهنگ" block-list:name="هماهنگ"/>
@@ -1733,56 +1374,28 @@
  <block-list:block block-list:abbreviated-name="هماحساس" block-list:name="هم‌احساس"/>
  <block-list:block block-list:abbreviated-name="هماعتقاد" block-list:name="هم‌اعتقاد"/>
  <block-list:block block-list:abbreviated-name="همافق" block-list:name="هم‌افق"/>
- <block-list:block block-list:abbreviated-name="هم اکنون" block-list:name="هم‌اکنون"/>
- <block-list:block block-list:abbreviated-name="همان جور" block-list:name="همان‌جور"/>
  <block-list:block block-list:abbreviated-name="هماندازه" block-list:name="هم‌اندازه"/>
- <block-list:block block-list:abbreviated-name="همان طور" block-list:name="همان‌طور"/>
- <block-list:block block-list:abbreviated-name="همان گونه" block-list:name="همان‌گونه"/>
- <block-list:block block-list:abbreviated-name="همانند سازی" block-list:name="همانند‌سازی"/>
- <block-list:block block-list:abbreviated-name="هم بازی" block-list:name="هم‌بازی"/>
  <block-list:block block-list:abbreviated-name="هم‌چنان" block-list:name="همچنان"/>
  <block-list:block block-list:abbreviated-name="هم‌چنین" block-list:name="همچنین"/>
  <block-list:block block-list:abbreviated-name="هم‌چون" block-list:name="همچون"/>
  <block-list:block block-list:abbreviated-name="هم‌داستان" block-list:name="همداستان"/>
- <block-list:block block-list:abbreviated-name="هم درد" block-list:name="هم‌درد"/>
- <block-list:block block-list:abbreviated-name="هم دردیم" block-list:name="هم‌دردیم"/>
  <block-list:block block-list:abbreviated-name="هم‌دل" block-list:name="همدل"/>
  <block-list:block block-list:abbreviated-name="هم‌دم" block-list:name="همدم"/>
  <block-list:block block-list:abbreviated-name="هم‌راه" block-list:name="همراه"/>
  <block-list:block block-list:abbreviated-name="هم‌رزم" block-list:name="همرزم"/>
  <block-list:block block-list:abbreviated-name="هم‌زبان" block-list:name="همزبان"/>
- <block-list:block block-list:abbreviated-name="هم زمان" block-list:name="هم‌زمان"/>
  <block-list:block block-list:abbreviated-name="هم‌سر" block-list:name="همسر"/>
- <block-list:block block-list:abbreviated-name="هم سطح" block-list:name="هم‌سطح"/>
  <block-list:block block-list:abbreviated-name="هم‌سنگ" block-list:name="همسنگ"/>
  <block-list:block block-list:abbreviated-name="هم‌شیره" block-list:name="همشیره"/>
  <block-list:block block-list:abbreviated-name="هم‌فکر" block-list:name="همفکر"/>
- <block-list:block block-list:abbreviated-name="هم کلاس" block-list:name="هم‌کلاس"/>
- <block-list:block block-list:abbreviated-name="هم کلاسی" block-list:name="هم‌کلاسی"/>
- <block-list:block block-list:abbreviated-name="همگون سازی" block-list:name="همگون‌سازی"/>
- <block-list:block block-list:abbreviated-name="هم محله" block-list:name="هم‌محله"/>
  <block-list:block block-list:abbreviated-name="هممرز" block-list:name="هم‌مرز"/>
  <block-list:block block-list:abbreviated-name="هممسلک" block-list:name="هم‌مسلک"/>
  <block-list:block block-list:abbreviated-name="هممشرب" block-list:name="هم‌مشرب"/>
  <block-list:block block-list:abbreviated-name="هممنزل" block-list:name="هم‌منزل"/>
- <block-list:block block-list:abbreviated-name="هم مهمان" block-list:name="هم‌مهمان"/>
- <block-list:block block-list:abbreviated-name="هم مهمانی" block-list:name="هم‌مهمانی"/>
  <block-list:block block-list:abbreviated-name="هم‌نشین" block-list:name="همنشین"/>
- <block-list:block block-list:abbreviated-name="هم نشین" block-list:name="هم‌نشین"/>
- <block-list:block block-list:abbreviated-name="هم نشینش" block-list:name="هم‌نشینش"/>
  <block-list:block block-list:abbreviated-name="هم‌نوع" block-list:name="همنوع"/>
- <block-list:block block-list:abbreviated-name="هم نوع" block-list:name="هم‌نوع"/>
- <block-list:block block-list:abbreviated-name="هم نوعان" block-list:name="هم‌نوعان"/>
- <block-list:block block-list:abbreviated-name="همه پرسی" block-list:name="همه‌پرسی"/>
- <block-list:block block-list:abbreviated-name="همه کس" block-list:name="همه‌کس"/>
- <block-list:block block-list:abbreviated-name="هم هویت" block-list:name="هم‌هویت"/>
  <block-list:block block-list:abbreviated-name="هم هویت سازی‏" block-list:name="هم‌هویت‌سازی"/>
  <block-list:block block-list:abbreviated-name="هم‌وزن" block-list:name="هموزن"/>
- <block-list:block block-list:abbreviated-name="همین جور" block-list:name="همین‌جور"/>
- <block-list:block block-list:abbreviated-name="همین جوری" block-list:name="همین‌جوری"/>
- <block-list:block block-list:abbreviated-name="همین طور" block-list:name="همین‌طور"/>
- <block-list:block block-list:abbreviated-name="همین طوری" block-list:name="همین‌طوری"/>
- <block-list:block block-list:abbreviated-name="همین طوریم" block-list:name="همین‌طوریم"/>
  <block-list:block block-list:abbreviated-name="هنوان" block-list:name="عنوان"/>
  <block-list:block block-list:abbreviated-name="هنور" block-list:name="هنوز"/>
  <block-list:block block-list:abbreviated-name="هواشی" block-list:name="حواشی"/>
@@ -1793,65 +1406,42 @@
  <block-list:block block-list:abbreviated-name="هوین" block-list:name="هویت"/>
  <block-list:block block-list:abbreviated-name="هیات" block-list:name="هیئت"/>
  <block-list:block block-list:abbreviated-name="هیج" block-list:name="هیچ"/>
- <block-list:block block-list:abbreviated-name="هیجان زده" block-list:name="هیجان‌زده"/>
- <block-list:block block-list:abbreviated-name="هیچ کس" block-list:name="هیچ‌کس"/>
  <block-list:block block-list:abbreviated-name="هیچکس" block-list:name="هیچ‌کس"/>
  <block-list:block block-list:abbreviated-name="هیچگاه" block-list:name="هیچ‌گاه"/>
  <block-list:block block-list:abbreviated-name="هیچوقت" block-list:name="هیچ‌وقت"/>
- <block-list:block block-list:abbreviated-name="هیچی ندار" block-list:name="هیچی‌ندار"/>
  <block-list:block block-list:abbreviated-name="واشنگتن" block-list:name="واشینگتن"/>
  <block-list:block block-list:abbreviated-name="واشنگتون" block-list:name="واشینگتن"/>
  <block-list:block block-list:abbreviated-name="واشینگتون" block-list:name="واشینگتن"/>
  <block-list:block block-list:abbreviated-name="واضخ" block-list:name="واضح"/>
  <block-list:block block-list:abbreviated-name="واقعا" block-list:name="واقعاً"/>
- <block-list:block block-list:abbreviated-name="واقع نگر" block-list:name="واقع‌نگر"/>
- <block-list:block block-list:abbreviated-name="واقع نگرانه" block-list:name="واقع‌نگرانه"/>
- <block-list:block block-list:abbreviated-name="واقع نگری" block-list:name="واقع‌نگری"/>
  <block-list:block block-list:abbreviated-name="واقغی" block-list:name="واقعی"/>
- <block-list:block block-list:abbreviated-name="واکس زن" block-list:name="واکس‌زن"/>
  <block-list:block block-list:abbreviated-name="واگزاری" block-list:name="واگذاری"/>
  <block-list:block block-list:abbreviated-name="و الا" block-list:name="و اِلّا"/>
  <block-list:block block-list:abbreviated-name="وبلاک" block-list:name="وبلاگ"/>
- <block-list:block block-list:abbreviated-name="وبلاگ نویس" block-list:name="وبلاگ‌نویس"/>
- <block-list:block block-list:abbreviated-name="وحشت انگیز" block-list:name="وحشت‌انگیز"/>
  <block-list:block block-list:abbreviated-name="وحله" block-list:name="وهله"/>
  <block-list:block block-list:abbreviated-name="وحه" block-list:name="وجه"/>
  <block-list:block block-list:abbreviated-name="وحود" block-list:name="وجود"/>
  <block-list:block block-list:abbreviated-name="وحودش" block-list:name="وجودش"/>
  <block-list:block block-list:abbreviated-name="وحودم" block-list:name="وجودم"/>
  <block-list:block block-list:abbreviated-name="وحودی" block-list:name="وجودی"/>
- <block-list:block block-list:abbreviated-name="وخامت آمیز" block-list:name="وخامت‌آمیز"/>
- <block-list:block block-list:abbreviated-name="وخامت بار" block-list:name="وخامت‌بار"/>
  <block-list:block block-list:abbreviated-name="وسیغ" block-list:name="وسیع"/>
  <block-list:block block-list:abbreviated-name="وسیغی" block-list:name="وسیعی"/>
- <block-list:block block-list:abbreviated-name="وصیت نامه" block-list:name="وصیت‌نامه"/>
- <block-list:block block-list:abbreviated-name="وطن پرستی" block-list:name="وطن‌پرستی"/>
- <block-list:block block-list:abbreviated-name="وطن دوستی" block-list:name="وطن‌دوستی"/>
  <block-list:block block-list:abbreviated-name="وقتمان" block-list:name="وقت‌مان"/>
  <block-list:block block-list:abbreviated-name="وقتیکه" block-list:name="وقتی که"/>
- <block-list:block block-list:abbreviated-name="وهم آور" block-list:name="وهم‌آور"/>
  <block-list:block block-list:abbreviated-name="وهم اور" block-list:name="وهم‌آور"/>
  <block-list:block block-list:abbreviated-name="ویالون" block-list:name="ویولن"/>
- <block-list:block block-list:abbreviated-name="ویروس یاب" block-list:name="ویروس‌یاب"/>
- <block-list:block block-list:abbreviated-name="ویروس یابی" block-list:name="ویروس‌یابی"/>
  <block-list:block block-list:abbreviated-name="ویژ‌ه‌گی" block-list:name="ویژگی"/>
  <block-list:block block-list:abbreviated-name="یأس اور" block-list:name="یأس‌آور"/>
  <block-list:block block-list:abbreviated-name="یا ابوالفضل" block-list:name="یا اباالفضل"/>
  <block-list:block block-list:abbreviated-name="یاداوری" block-list:name="یادآوری"/>
- <block-list:block block-list:abbreviated-name="یاد گیری" block-list:name="یاد‌گیری"/>
  <block-list:block block-list:abbreviated-name="یاروغار" block-list:name="یار غار"/>
  <block-list:block block-list:abbreviated-name="یاس" block-list:name="یأس"/>
  <block-list:block block-list:abbreviated-name="یخه" block-list:name="یقه"/>
  <block-list:block block-list:abbreviated-name="یقینا" block-list:name="یقیناً"/>
- <block-list:block block-list:abbreviated-name="یک باره" block-list:name="یک‌باره"/>
  <block-list:block block-list:abbreviated-name="یک پارچه" block-list:name="یکپارچه"/>
  <block-list:block block-list:abbreviated-name="یکجا" block-list:name="یک‌جا"/>
- <block-list:block block-list:abbreviated-name="یک جانبه" block-list:name="یک‌جانبه"/>
- <block-list:block block-list:abbreviated-name="یک جور" block-list:name="یک‌جور"/>
- <block-list:block block-list:abbreviated-name="یک خورده" block-list:name="یک‌خورده"/>
  <block-list:block block-list:abbreviated-name="یکدست" block-list:name="یک‌دست"/>
  <block-list:block block-list:abbreviated-name="یکدل" block-list:name="یک‌دل"/>
- <block-list:block block-list:abbreviated-name="یک دنده" block-list:name="یک‌دنده"/>
  <block-list:block block-list:abbreviated-name="یکدهم" block-list:name="یک‌دهم"/>
  <block-list:block block-list:abbreviated-name="یکرنگی" block-list:name="یک‌رنگی"/>
  <block-list:block block-list:abbreviated-name="یکروز" block-list:name="یک روز"/>
@@ -1861,8 +1451,6 @@
  <block-list:block block-list:abbreviated-name="یکشنبه" block-list:name="یک‌شنبه"/>
  <block-list:block block-list:abbreviated-name="یکصد" block-list:name="یک‌صد"/>
  <block-list:block block-list:abbreviated-name="یکصدم" block-list:name="یک‌صدم"/>
- <block-list:block block-list:abbreviated-name="یک طرفه" block-list:name="یک‌طرفه"/>
- <block-list:block block-list:abbreviated-name="یک کاسه" block-list:name="یک‌کاسه"/>
  <block-list:block block-list:abbreviated-name="یهو" block-list:name="یه‌هو"/>
  <block-list:block block-list:abbreviated-name="یوگوسلاوی" block-list:name="یوگسلاوی"/>
 </block-list:block-list>
