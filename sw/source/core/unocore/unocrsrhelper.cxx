@@ -93,6 +93,7 @@
 #include <poolfmt.hxx>
 #include <paratr.hxx>
 #include <sal/log.hxx>
+#include <istyleaccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1391,8 +1392,10 @@ void makeRedline( SwPaM const & rPaM,
                 // tdf#149747 Get UI style name from programmatic style name
                 SwStyleNameMapper::FillUIName(sParaStyleName, sUIStyle,
                                               SwGetPoolIdFromName::TxtColl);
+                IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
+                std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aItemSet, IStyleAccess::AUTO_STYLE_CHAR);
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl(
-                    sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, &aItemSet));
+                    sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, pAutoStyle));
             }
             else if (eType == RedlineType::ParagraphFormat)
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( u""_ustr, RES_POOLCOLL_STANDARD, nullptr ));

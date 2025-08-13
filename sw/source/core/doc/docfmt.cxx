@@ -80,6 +80,7 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
+#include <istyleaccess.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
@@ -1834,7 +1835,9 @@ void SwDoc::SetTextFormatCollByAutoFormat( const SwPosition& rPos, sal_uInt16 nP
             if( SfxItemState::SET == pTNd->GetpSwAttrSet()->GetItemState(
                     RES_PARATR_ADJUST, false, &pItem ))
                 aTmp.Put( *pItem );
-            aExtraData.SetItemSet( aTmp );
+            IStyleAccess& rStyleAccess = pTNd->GetDoc().GetIStyleAccess();
+            std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aTmp, IStyleAccess::AUTO_STYLE_CHAR);
+            aExtraData.SetItemSet( pAutoStyle );
         }
         pRedl->SetExtraData( &aExtraData );
 
