@@ -481,10 +481,10 @@ int QtInstanceTreeView::iter_compare(const weld::TreeIter&, const weld::TreeIter
     return 0;
 }
 
-bool QtInstanceTreeView::iter_has_child(const weld::TreeIter&) const
+bool QtInstanceTreeView::iter_has_child(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    const QtInstanceTreeIter& rQtIter = static_cast<const QtInstanceTreeIter&>(rIter);
+    return m_pModel->hasChildren(rQtIter.modelIndex());
 }
 
 int QtInstanceTreeView::iter_n_children(const weld::TreeIter&) const
