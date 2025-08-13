@@ -63,7 +63,7 @@ const OUString& GetEmbeddedFontsRoot()
     {
         OUString p = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
         rtl::Bootstrap::expandMacros(p);
-        osl::FileBase::getAbsoluteFileURL({}, p + "/user/temp/embeddedfonts/", p);
+        (void)osl::FileBase::getAbsoluteFileURL({}, p + "/user/temp/embeddedfonts/", p);
         return p;
     }();
     return path;
