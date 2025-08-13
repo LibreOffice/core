@@ -145,7 +145,10 @@ public:
                 std::u16string_view rest;
                 if (!used.startsWith(element.originalFont, &rest)
                     || (!rest.empty() && !rest.starts_with('/')))
+                {
+                    SAL_INFO("test", element.originalFont << " substituted with " << used);
                     return true;
+                }
             }
         }
         return false;
