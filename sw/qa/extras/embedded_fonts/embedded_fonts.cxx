@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <config_features.h>
+#include <config_fonts.h>
 
 #include <swmodeltestbase.hxx>
 
@@ -377,6 +378,289 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167849)
 }
 #endif
 
+CPPUNIT_TEST_FIXTURE(Test, tdf166627)
+{
+    createSwDoc("font_used_in_header_only.fodt");
+    saveAndReload(u"writer8"_ustr);
+    // DejaVu Serif wasn't embedded before fix, because it was only seen used in header
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+
+    // There should be four files embedded for the font
+    assertXPath(pXmlDoc,
+                "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri",
+                4);
+
+    auto xZipNames = packages::zip::ZipFileAccess::createWithURL(
+        comphelper::getProcessComponentContext(), maTempFile.GetURL());
+
+    OUString url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[1]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[2]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[3]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+    url = getXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[4]",
+        "href");
+    CPPUNIT_ASSERT(xZipNames->hasByName(url));
+
+    // also test that common fonts don't get embedded
+
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFontEmbedding)
+{
+#if HAVE_MORE_FONTS && !defined(MACOSX)
+    createSwDoc("testFontEmbedding.odt");
+
+    OString aContentBaseXpath("/office:document-content/office:font-face-decls"_ostr);
+    OString aStylesBaseXpath("/office:document-styles/office:font-face-decls"_ostr);
+    OString aSettingsBaseXpath(
+        "/office:document-settings/office:settings/config:config-item-set"_ostr);
+
+    xmlDocUniquePtr pXmlDoc;
+
+    // Get document settings
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+
+    // Check font embedding state
+    CPPUNIT_ASSERT_EQUAL(false, xProps->getPropertyValue(u"EmbedFonts"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(false, xProps->getPropertyValue(u"EmbedOnlyUsedFonts"_ustr).get<bool>());
+    // Font scripts should be enabled by default, however this has no effect unless "EmbedOnlyUsedFonts" is enabled
+    CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue(u"EmbedLatinScriptFonts"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true, xProps->getPropertyValue(u"EmbedAsianScriptFonts"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(true,
+                         xProps->getPropertyValue(u"EmbedComplexScriptFonts"_ustr).get<bool>());
+
+    // CASE 1 - no font embedding enabled
+
+    // Save the document
+    save(u"writer8"_ustr);
+    CPPUNIT_ASSERT(maTempFile.IsValid());
+
+    // Check setting - No font embedding should be enabled
+    pXmlDoc = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", u"false");
+
+    // Check styles - No font-face-src nodes should be present
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 1']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 1']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 1']", 0);
+    }
+
+    // Check content - No font-face-src nodes should be present
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 1']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 1']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 1']", 0);
+    }
+
+    // CASE 2 - font embedding enabled, but embed used fonts disabled
+
+    // Enable font embedding, disable embedding used font only
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(false));
+
+    // Save the document again
+    save(u"writer8"_ustr);
+    CPPUNIT_ASSERT(maTempFile.IsValid());
+
+    // Check setting - font embedding should be enabled
+    pXmlDoc = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedOnlyUsedFonts']",
+        u"false");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedLatinScriptFonts']",
+        u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedAsianScriptFonts']",
+        u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']",
+        u"true");
+
+    // Check styles - font-face-src should be present for all fonts
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 2']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 2']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 1);
+    }
+
+    // Check content - font-face-src should be present for all fonts
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 2']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif",
+                           "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 2']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 2']", 1);
+    }
+
+    // CASE 3 - font embedding enabled, embed only used fonts enabled
+
+    // Enable font embedding and setting to embed used fonts only
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedOnlyUsedFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedLatinScriptFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedAsianScriptFonts"_ustr, uno::Any(true));
+    xProps->setPropertyValue(u"EmbedComplexScriptFonts"_ustr, uno::Any(true));
+
+    // Save the document again
+    save(u"writer8"_ustr);
+    CPPUNIT_ASSERT(maTempFile.IsValid());
+
+    // Check setting - font embedding should be enabled + embed only used fonts and scripts
+    pXmlDoc = parseExport(u"settings.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedFonts']", u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedOnlyUsedFonts']",
+        u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedLatinScriptFonts']",
+        u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedAsianScriptFonts']",
+        u"true");
+    assertXPathContent(
+        pXmlDoc, aSettingsBaseXpath + "/config:config-item[@config:name='EmbedComplexScriptFonts']",
+        u"true");
+
+    // Check styles - font-face-src should be present only for "DejaVu Serif"
+    pXmlDoc = parseExport(u"styles.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aStylesBaseXpath + "/style:font-face['CASE 3']", 5);
+    for (auto fontName :
+         { "DejaVu Sans", "DejaVu Sans Mono", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
+    }
+    for (auto fontName : { "DejaVu Serif" })
+    {
+        OString prefix = aStylesBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
+    }
+
+    // Check content - font-face-src should be present only for DejaVu Sans Mono and DejaVu Serif
+    // Note that the used sets of fonts are different for styles.xml and content.xml
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, aContentBaseXpath + "/style:font-face['CASE 3']", 5);
+    for (auto fontName : { "DejaVu Sans", "DejaVu Serif Condensed", "DejaVu Serif Condensed1" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 0);
+    }
+    for (auto fontName : { "DejaVu Sans Mono", "DejaVu Serif" })
+    {
+        OString prefix = aContentBaseXpath + "/style:font-face[@style:name='" + fontName + "']";
+        assertXPath(pXmlDoc, prefix + "['CASE 3']");
+        assertXPath(pXmlDoc, prefix + "/svg:font-face-src['CASE 3']", 1);
+    }
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
+{
+    createSwDoc("embedded-font-props.odt");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"EmbedFonts"_ustr, uno::Any(true));
+
+    saveAndReload(u"writer8"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+#if !defined(MACOSX)
+    // Test that font style/weight of embedded fonts is exposed.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+    // These failed, the attributes were missing.
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[1]",
+        "font-style", u"normal");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[1]",
+        "font-weight", u"normal");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[2]",
+        "font-style", u"normal");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[2]",
+        "font-weight", u"bold");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[3]",
+        "font-style", u"italic");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[3]",
+        "font-weight", u"normal");
+#if defined _WIN32
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[4]",
+        "font-style", u"italic");
+    assertXPath(
+        pXmlDoc,
+        "//style:font-face[@style:name='DejaVu Serif']/svg:font-face-src/svg:font-face-uri[4]",
+        "font-weight", u"bold");
+#endif
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
 {
     createSwDoc("font_used_in_header_only.fodt");
@@ -389,14 +673,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
 
     xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
 
-    // Test that DejaVu Sans is embedded
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedRegular");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBold");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedItalic");
-// It is strange that DejaVu is different on Linux: see e.g. tdf166627 in odfexport2.cxx
-#if defined(_WIN32) || defined(MACOSX)
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBoldItalic");
-#endif
+    // Test that DejaVu Serif is embedded
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Serif']/w:embedRegular");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Serif']/w:embedBold");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Serif']/w:embedItalic");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Serif']/w:embedBoldItalic");
 
     // Test that common fonts (here: Liberation Serif, Liberation Sans) are not embedded
     assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']");
