@@ -617,7 +617,7 @@ OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, Font
 
     for (vcl::font::PhysicalFontFace* f : fontsToAdd)
     {
-        if (!selected) { // recalculate file not for "not perfect match"
+        if (!selected) { // recalculate file name for "not perfect match"
             filename = OUString::Concat(familyName) + "_" + OUString::number(f->GetFamilyType()) + "_" +
                 OUString::number(f->GetItalic()) + "_" + OUString::number(f->GetWeight()) + "_" +
                 OUString::number(f->GetPitch()) + ".ttf"; // TODO is it always ttf?
