@@ -487,10 +487,10 @@ bool QtInstanceTreeView::iter_has_child(const weld::TreeIter& rIter) const
     return m_pModel->hasChildren(rQtIter.modelIndex());
 }
 
-int QtInstanceTreeView::iter_n_children(const weld::TreeIter&) const
+int QtInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    const QtInstanceTreeIter& rQtIter = static_cast<const QtInstanceTreeIter&>(rIter);
+    return m_pModel->rowCount(rQtIter.modelIndex());
 }
 
 void QtInstanceTreeView::remove(const weld::TreeIter& rIter)
