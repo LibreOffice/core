@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pdf, \
     cppuhelper \
     sal \
     subsequenttest \
+    sw \
     test \
     tl \
     unotest \
@@ -34,6 +35,11 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_pdf, \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,filter_pdf))
+
+$(eval $(call gb_CppunitTest_set_include,filter_pdf,\
+    -I$(SRCDIR)/sw/inc \
+    $$(INCLUDE) \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,filter_pdf))
 $(eval $(call gb_CppunitTest_use_vcl,filter_pdf))

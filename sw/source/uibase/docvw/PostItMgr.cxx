@@ -1026,10 +1026,18 @@ void SwPostItMgr::LayoutPostIts()
 
                             tools::Long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
 
-                            aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
-                                              ? pPostIt->GetMinimumSizeWithoutMeta()
-                                              : pPostIt->GetPostItTextHeight() )
-                                            + pPostIt->GetMetaHeight();
+                            tools::Long postItPixelTextHeight
+                                = (comphelper::LibreOfficeKit::isActive()
+                                       ? mpEditWin
+                                             ->LogicToPixel(
+                                                 Point(0, pPostIt->GetPostItTextHeight()))
+                                             .Y()
+                                       : pPostIt->GetPostItTextHeight());
+                            aPostItHeight
+                                = (postItPixelTextHeight < pPostIt->GetMinimumSizeWithoutMeta()
+                                       ? pPostIt->GetMinimumSizeWithoutMeta()
+                                       : postItPixelTextHeight)
+                                  + pPostIt->GetMetaHeight();
                             pPostIt->SetPosSizePixelRect( mlPageBorder ,
                                                           Y - GetInitialAnchorDistance(),
                                                           GetSidebarWidth(true),
@@ -1063,7 +1071,7 @@ void SwPostItMgr::LayoutPostIts()
                     this->Broadcast(SwFormatFieldHint(pFormatField, nWhich, mpView));
                 }
 
-                if (!aVisiblePostItList.empty() && ShowNotes())
+                if (!aVisiblePostItList.empty() && bShowNotes)
                 {
                     bool bOldScrollbar = pPage->bScrollbar;
                     pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
@@ -1243,6 +1251,10 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     assert(nPage < mPages.size());
     if (nPage >= mPages.size())
         return;
+    const bool bEnableMapMode
+        = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
+    if (bEnableMapMode)
+        mpEditWin->EnableMapMode();
     for (auto const& pItem : mPages[nPage]->mvSidebarItems)
     {
         SwAnnotationWin* pPostIt = pItem->mpPostIt;
@@ -1251,6 +1263,8 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
         Point aPoint(mpEditWin->PixelToLogic(pPostIt->GetPosPixel()));
         pPostIt->DrawForPage(pOutDev, aPoint);
     }
+    if (bEnableMapMode)
+        mpEditWin->EnableMapMode(false);
 }
 
 void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
@@ -2354,7 +2368,7 @@ void SwPostItMgr::CorrectPositions()
 bool SwPostItMgr::ShowNotes() const
 {
     // we only want to see notes if Options - Writer - View - Notes is ticked
-    return mpWrtShell->GetViewOptions()->IsPostIts();
+    return mbForceShow || mpWrtShell->GetViewOptions()->IsPostIts();
 }
 
 bool SwPostItMgr::HasNotes() const

@@ -172,6 +172,26 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement, OUString());
     }
 
+    auto lclSizePixelToLogic = [this](Size szs) {
+        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // right conversion when printing to PDF but mxSidebarTextControl does
+        if (comphelper::LibreOfficeKit::isActive()
+            && !comphelper::LibreOfficeKit::isTiledAnnotations())
+            return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(szs);
+        else
+            return PixelToLogic(szs);
+    };
+
+    auto lclPointPixelToLogic = [this](Point pnt) {
+        // In LOK without tiled annotations, SwAnnotationWin desn't have the
+        // right conversion when printing to PDF but mxSidebarTextControl does
+        if (comphelper::LibreOfficeKit::isActive()
+            && !comphelper::LibreOfficeKit::isTiledAnnotations())
+            return mxSidebarTextControl->GetDrawingArea()->get_ref_device().PixelToLogic(pnt);
+        else
+            return PixelToLogic(pnt);
+    };
+
     pDev->Push();
 
     pDev->SetFillColor(mColorDark);
@@ -182,7 +202,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     aFont.SetFontHeight(aFont.GetFontHeight() * 20);
     pDev->SetFont(aFont);
 
-    Size aSz = PixelToLogic(GetSizePixel());
+    Size aSz = lclSizePixelToLogic(GetSizePixel());
 
     pDev->DrawRect(tools::Rectangle(rPt, aSz));
 
@@ -190,8 +210,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataAuthor->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + PixelToLogic(Point(x, y)));
-        Size aSize(PixelToLogic(Size(width, height)));
+        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
+        Size aSize(lclSizePixelToLogic(Size(width, height)));
 
         pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -203,8 +223,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataDate->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + PixelToLogic(Point(x, y)));
-        Size aSize(PixelToLogic(Size(width, height)));
+        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
+        Size aSize(lclSizePixelToLogic(Size(width, height)));
 
         pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -216,8 +236,8 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
     {
         int x, y, width, height;
         mxMetadataResolved->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + PixelToLogic(Point(x, y)));
-        Size aSize(PixelToLogic(Size(width, height)));
+        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
+        Size aSize(lclSizePixelToLogic(Size(width, height)));
 
         pDev->Push(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
@@ -244,7 +264,7 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         // completely shown
         int x, y, width, height;
         mxMenuButton->get_extents_relative_to(*m_xContainer, x, y, width, height);
-        Point aPos(rPt + PixelToLogic(Point(x, y)));
+        Point aPos(rPt + lclPointPixelToLogic(Point(x, y)));
         pDev->DrawText(aPos, u"..."_ustr);
     }
 
@@ -833,9 +853,6 @@ void SwAnnotationWin::DoResize()
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        return;
-
     InterimItemWindow::SetSizePixel(rNewSize);
 
     if (mpShadow)
