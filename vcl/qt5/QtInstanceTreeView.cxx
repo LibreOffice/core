@@ -356,10 +356,20 @@ bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
     return bHasSelection;
 }
 
-bool QtInstanceTreeView::get_cursor(weld::TreeIter*) const
+bool QtInstanceTreeView::get_cursor(weld::TreeIter* pIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bRet = false;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aCurrentIndex = m_pTreeView->currentIndex();
+        QtInstanceTreeIter* pQtIter = static_cast<QtInstanceTreeIter*>(pIter);
+        if (pQtIter)
+            pQtIter->setModelIndex(aCurrentIndex);
+        bRet = aCurrentIndex.isValid();
+    });
+
+    return bRet;
 }
 
 void QtInstanceTreeView::set_cursor(const weld::TreeIter& rIter)
