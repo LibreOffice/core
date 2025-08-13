@@ -65,6 +65,18 @@ class OutlineView final
     : public SimpleOutlinerView
 {
     friend class OutlineViewModelChangeGuard;
+
+    // EditViewCallbacks
+    // NOTE: We are already derived from EditViewCallbacks in SdrObjEditView
+    virtual void EditViewInvalidate(const ::tools::Rectangle& rRect) override;
+    virtual void EditViewSelectionChange() override;
+    virtual OutputDevice& EditViewOutputDevice() const override;
+    virtual Point EditViewPointerPosPixel() const override;
+    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+    virtual void EditViewInputContext(const InputContext& rInputContext) override;
+    virtual void EditViewCursorRect(const ::tools::Rectangle& rRect, int nExtTextInputWidth) override;
+
 public:
     OutlineView (DrawDocShell& rDocSh,
         vcl::Window* pWindow,
@@ -214,6 +226,12 @@ private:
 
     SvxLRSpaceItem maLRSpaceItem;
     Image maSlideImage;
+
+    // remember last selection rectangle vector
+    std::vector<::tools::Rectangle> maLastSelection;
+
+    // last current stripped portions
+    drawinglayer::primitive2d::Primitive2DContainer maTextContent;
 };
 
 // calls IgnoreCurrentPageChangesLevel with true in ctor and with false in dtor

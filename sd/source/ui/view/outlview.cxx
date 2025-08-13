@@ -50,6 +50,15 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/metric.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <vcl/dndlistenercontainer.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
@@ -77,6 +86,214 @@ namespace sd {
 // PROCESS_WITH_PROGRESS_THRESHOLD pages are concerned
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
 
+namespace {
+::tools::Rectangle lcl_negateRectX(const ::tools::Rectangle& rRect)
+{
+    return ::tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
+}
+
+void expandSelection(std::vector<::tools::Rectangle>& rVector, const ::OutputDevice& rTarget)
+{
+    if (rVector.empty())
+        return;
+
+    const Size aLogicPixel(rTarget.PixelToLogic(Size(1, 1)));
+
+    for (auto& aRect : rVector)
+    {
+        aRect.SetLeft(aRect.Left() - aLogicPixel.Width());
+        aRect.SetTop(aRect.Top() - aLogicPixel.Height());
+        aRect.SetRight(aRect.Right() + aLogicPixel.Width());
+        aRect.SetBottom(aRect.Bottom() + aLogicPixel.Height());
+    }
+}
+}
+
+void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pWin)
+{
+    OutlinerView* pOlView(GetViewByWindow(pWin));
+
+    if (nullptr == pOlView)
+        // no view, no paint
+        return;
+
+    if (maTextContent.empty())
+    {
+        // For the first Paint/KeyInput/Drop an empty Outliner is turned into
+        // an Outliner with exactly one paragraph.
+        if(GetOutliner().getFirstParaIsEmpty())
+            GetOutliner().Insert(OUString());
+
+        // use TextHierarchyBreakupOutliner to get all geometry (text,
+        // Icons at LineStart for OutlinerView) embedded to the
+        // TextHierarchy.*Primitive2D groupings for better processing, plus
+        // the correct paragraph countings
+        TextHierarchyBreakupOutliner aHelper(GetOutliner());
+        GetOutliner().StripPortions(aHelper);
+        maTextContent = aHelper.getTextPortionPrimitives();
+    }
+
+    if (maTextContent.empty())
+        // no text, done
+        return;
+
+    // prepare paint
+    pOlView->HideCursor();
+
+    drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    ::OutputDevice* pTarget(pOlView->GetEditView().GetWindow()->GetOutDev());
+    aViewInformation2D.setViewTransformation(pTarget->GetViewTransformation());
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
+        drawinglayer::processor2d::createProcessor2DFromOutputDevice(*pTarget, aViewInformation2D));
+    drawinglayer::primitive2d::Primitive2DContainer aContent(maTextContent);
+
+    // get and apply StartPos
+    const Point aStartPos(pOlView->GetEditView().CalculateTextPaintStartPosition());
+    const bool bStartPos(0 != aStartPos.getX() || 0 != aStartPos.getY());
+
+    if (bStartPos)
+    {
+        // embed to StartPos translation
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createTranslateB2DHomMatrix(aStartPos.X(), aStartPos.Y()),
+                std::move(aContent))};
+    }
+
+    if (!rRect.IsEmpty())
+    {
+        // clipping requested, embed to MaskPrimitive2D
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(
+                    basegfx::B2DRange(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()))),
+                std::move(aContent))};
+    }
+
+    static bool bBlendForTest(false);
+    if(bBlendForTest)
+    {
+        aContent = drawinglayer::primitive2d::Primitive2DContainer{
+            new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
+                std::move(aContent),
+                std::make_shared<basegfx::BColorModifier_interpolate>(COL_YELLOW.getBColor(), 0.5)) };
+    }
+
+    // render text
+    xProcessor->process(aContent);
+
+    // check for selection
+    pOlView->GetSelectionRectangles(maLastSelection);
+
+    if (!maLastSelection.empty())
+    {
+        // selection re-fetched, adapt extended state
+        expandSelection(maLastSelection, *pTarget);
+
+        // transfer to Ranges
+        std::vector<basegfx::B2DRange> aLogicRanges;
+        aLogicRanges.reserve(maLastSelection.size());
+        for (const auto& aRect : maLastSelection)
+            aLogicRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+
+        // get HilightColor & create temp OverlaySelection for primitive creation
+        const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
+        const sdr::overlay::OverlaySelection aCursorOverlay(
+            sdr::overlay::OverlayType::Transparent, aHighlight, std::move(aLogicRanges), true);
+
+        // render selection
+        xProcessor->process(aCursorOverlay.getOverlayObjectPrimitive2DSequence());
+    }
+
+    pOlView->ShowCursor(mbFirstPaint);
+    mbFirstPaint = false;
+}
+
+void OutlineView::EditViewInvalidate(const ::tools::Rectangle& rRect)
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    pActiveWin->Invalidate(IsNegativeX() ? lcl_negateRectX(rRect) : rRect);
+
+    // on all changes: flush TextContent to request re-creation at next paint
+    maTextContent.clear();
+}
+
+void OutlineView::EditViewSelectionChange()
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+
+    if (!maLastSelection.empty())
+    {
+        // invalidate last state
+        for (const auto& aRect : maLastSelection)
+        {
+            // invalidate full lines: Due to multiple strange callbacks to
+            // this method (MoveCursor sends in-between states when changing
+            // line up/down) it is necessary for correct text repaint to
+            // invalidate the whole line
+            ::tools::Rectangle aR(IsNegativeX() ? lcl_negateRectX(aRect) : aRect);
+            const ::tools::Rectangle& rFull(mpOutlinerViews[0]->GetOutputArea());
+            aR.SetLeft(rFull.Left());
+            aR.SetRight(rFull.Right());
+            pActiveWin->Invalidate(aR);
+        }
+    }
+
+    // update state
+    mpOutlinerViews[0]->GetSelectionRectangles(maLastSelection);
+
+    if (!maLastSelection.empty())
+    {
+        // extend ranges & invalidate new state
+        expandSelection(maLastSelection, *pActiveWin->GetOutDev());
+
+        for (const auto& aRect : maLastSelection)
+        {
+            ::tools::Rectangle aR(IsNegativeX() ? lcl_negateRectX(aRect) : aRect);
+            const ::tools::Rectangle& rFull(mpOutlinerViews[0]->GetOutputArea());
+            aR.SetLeft(rFull.Left());
+            aR.SetRight(rFull.Right());
+            pActiveWin->Invalidate(aR);
+        }
+    }
+}
+
+OutputDevice& OutlineView::EditViewOutputDevice() const
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    return *pActiveWin->GetOutDev();
+}
+
+Point OutlineView::EditViewPointerPosPixel() const
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    return pActiveWin->GetPointerPosPixel();
+}
+
+css::uno::Reference<css::datatransfer::clipboard::XClipboard> OutlineView::GetClipboard() const
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    return pActiveWin->GetClipboard();
+}
+
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> OutlineView::GetDropTarget()
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    return pActiveWin->GetDropTarget();
+}
+
+void OutlineView::EditViewInputContext(const InputContext& rInputContext)
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    pActiveWin->SetInputContext(rInputContext);
+}
+
+void OutlineView::EditViewCursorRect(const ::tools::Rectangle& rRect, int nExtTextInputWidth)
+{
+    vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
+    pActiveWin->SetCursorRect(&rRect, nExtTextInputWidth);
+}
+
 OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
                          OutlineViewShell& rOutlineViewShell)
     : ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
@@ -88,6 +305,9 @@ OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     , maDocColor(COL_WHITE)
     , maLRSpaceItem(SvxIndentValue::twips(2000), SvxIndentValue::zero(), SvxIndentValue::zero(),
                     EE_PARA_OUTLLRSPACE)
+    , maSlideImage()
+    , maLastSelection()
+    , maTextContent()
 {
     bool bInitOutliner = false;
 
@@ -133,6 +353,9 @@ OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     if (pDocUndoMgr != nullptr)
         pDocUndoMgr->SetLinkedUndoManager(&mrOutliner.GetUndoManager());
+
+    // use EditViewCallbacks to allow showing non-XOR selection
+    mpOutlinerViews[0]->GetEditView().setEditViewCallbacks(this);
 }
 
 /**
@@ -154,6 +377,7 @@ OutlineView::~OutlineView()
     {
         if (rpView)
         {
+            rpView->GetEditView().setEditViewCallbacks(nullptr);
             mrOutliner.RemoveView( rpView.get() );
             rpView.reset();
         }
@@ -188,21 +412,6 @@ void OutlineView::ConnectToApplication()
 void OutlineView::DisconnectFromApplication()
 {
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
-}
-
-void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pWin)
-{
-    OutlinerView* pOlView = GetViewByWindow(pWin);
-
-    if (pOlView)
-    {
-        pOlView->HideCursor();
-        pOlView->DrawText_ToEditView(rRect);
-
-        pOlView->ShowCursor(mbFirstPaint);
-
-        mbFirstPaint = false;
-    }
 }
 
 void OutlineView::AddDeviceToPaintView(OutputDevice& rDev, vcl::Window* pWindow)

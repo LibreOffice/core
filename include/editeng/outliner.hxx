@@ -901,6 +901,9 @@ public:
 
     // overridden in SdrOutliner
     SAL_DLLPRIVATE virtual std::optional<bool> GetCompatFlag(SdrCompatibilityFlag /*eFlag*/) const { return {}; };
+
+    // return FirstParaIsEmpty state
+    bool getFirstParaIsEmpty() const { return bFirstParaIsEmpty; }
 };
 
 #endif
