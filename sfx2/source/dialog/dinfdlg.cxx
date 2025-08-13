@@ -1694,11 +1694,8 @@ void CustomPropertiesWindow::AddLine(const OUString& sName, Any const & rAny)
 void CustomPropertiesWindow::CreateNewLine()
 {
     CustomPropertyLine* pNewLine = new CustomPropertyLine(this, &m_rBody);
-    pNewLine->m_xNameBox->set_accessible_relation_labeled_by(&m_rHeaderAccName);
     pNewLine->m_xNameBox->set_accessible_name(m_rHeaderAccName.get_label());
-    pNewLine->m_xTypeBox->set_accessible_relation_labeled_by(&m_rHeaderAccType);
     pNewLine->m_xTypeBox->set_accessible_name(m_rHeaderAccType.get_label());
-    pNewLine->m_xValueEdit->set_accessible_relation_labeled_by(&m_rHeaderAccValue);
     pNewLine->m_xValueEdit->set_accessible_name(m_rHeaderAccValue.get_label());
 
     m_aCustomPropertiesLines.emplace_back( pNewLine );
