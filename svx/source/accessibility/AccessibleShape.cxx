@@ -920,17 +920,17 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
 
     //If the new produced name if not the same with last,notify name changed
     //Event
-    if (aAccName != sName && !aAccName.isEmpty())
+    if (m_aAccName != sName && !m_aAccName.isEmpty())
     {
         uno::Any aOldValue, aNewValue;
-        aOldValue <<= aAccName;
+        aOldValue <<= m_aAccName;
         aNewValue <<= sName;
         CommitChange(
             AccessibleEventId::NAME_CHANGED,
             aNewValue,
             aOldValue, -1);
     }
-    aAccName = sName;
+    m_aAccName = sName;
     return sName;
 }
 

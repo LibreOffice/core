@@ -404,7 +404,7 @@ private:
     AccessibleShape (const AccessibleShape&) = delete;
     AccessibleShape& operator= (const AccessibleShape&) = delete;
     //Old accessible name
-    OUString aAccName;
+    OUString m_aAccName;
 
     /** Call this method when the title, name, or description of the mxShape
         member (may) have been changed.
