@@ -122,7 +122,7 @@ public class UITools {
      }
 
     /**
-      * Helper method: returns the entry manes of a List-Box
+      * Helper method: returns the entry names of a List-Box
       * @param ListBoxName the name of the listbox
       * @return the listbox entry names
       * @throws java.lang.Exception if something fail

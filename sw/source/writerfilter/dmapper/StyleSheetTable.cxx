@@ -1618,7 +1618,7 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
     OUString sRet(rWWName);
 
     // create a map only once
-    // This maps Word's special style manes to Writer's (the opposite to what MSWordStyles::GetWWId
+    // This maps Word's special style names to Writer's (the opposite to what MSWordStyles::GetWWId
     // and ww::GetEnglishNameFromSti do on export). The mapping gives a Writer's style name, which
     // will point to a style with specific RES_POOL* in its m_nPoolFormatId. Then on export, the
     // pool format id will map to a ww::sti enum value, and finally to a Word style name. Keep this
