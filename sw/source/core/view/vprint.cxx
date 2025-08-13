@@ -520,10 +520,12 @@ bool SwViewShell::PrintOrPDFExport(
 
         if (pPostItManager)
         {
+            pPostItManager->SetForceShow(true);
             pPostItManager->CalcRects();
             pPostItManager->LayoutPostIts();
             pPostItManager->DrawNotesForPage(pOutDev, nPage-1);
             oOrigHeight.emplace(pStPage->getFrameArea().Height());
+            pPostItManager->SetForceShow(false);
         }
     }
 
