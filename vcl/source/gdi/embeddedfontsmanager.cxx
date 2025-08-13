@@ -233,7 +233,7 @@ EmbeddedFontsManager::~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE
             std::transform(m_aAccumulatedFonts.begin(), m_aAccumulatedFonts.end(), fonts.getArray(),
                            [](const auto& el) { return beans::StringPair(el.first, el.second); });
             xModel2->setArgs({ comphelper::makePropertyValue(u"EmbeddedFonts"_ustr, fonts) });
-            // The following will not get executed, it setArgs throws
+            // The following will not get executed, if setArgs throws
             return;
         }
         catch (const uno::Exception&)
