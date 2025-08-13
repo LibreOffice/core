@@ -327,7 +327,7 @@ SwSpellPopup::SwSpellPopup(
         for (const uno::Reference<linguistic2::XDictionary>& rDic : m_aDics)
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp = rDic;
-            if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
+            if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList()->getName() == xDicTmp->getName())
                 continue;
 
             uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
