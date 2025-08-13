@@ -244,7 +244,7 @@ void QtInstanceComboBox::set_entry_width_chars(int)
 {
     // see also QtInstanceEntry::set_width_chars, might be able to reuse logic once
     // that is implemented
-    SAL_WARN("vcl.qt", "QtInstanceComboBox::set_width_chars not implemented yet");
+    SAL_WARN("vcl.qt", "QtInstanceComboBox::set_entry_width_chars not implemented yet");
 }
 
 void QtInstanceComboBox::set_entry_max_length(int) { assert(false && "Not implemented yet"); }
