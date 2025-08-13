@@ -16,9 +16,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotxdoc.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <tools/helpers.hxx>
 
@@ -36,6 +38,7 @@ public:
     }
 
     void setUp() override;
+    void tearDown() override;
     void doTestCommentsInMargin(bool commentsInMarginEnabled);
 };
 
@@ -44,6 +47,14 @@ void Test::setUp()
     UnoApiTest::setUp();
 
     MacrosTest::setUpX509(m_directories, u"filter_pdf"_ustr);
+}
+
+void Test::tearDown()
+{
+    UnoApiTest::tearDown();
+
+    if (comphelper::LibreOfficeKit::isActive())
+        comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
@@ -144,6 +155,11 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
         return;
 
     loadFromFile(u"commentsInMargin.odt");
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    }
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
         xFactory->createInstance(u"com.sun.star.document.PDFFilter"_ustr), uno::UNO_QUERY);
@@ -168,7 +184,19 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     {
         // Unfortunately, the comment box is DPI dependent, and the lines there may split
         // at higher DPIs, creating additional objects on import, hence the "_GREATER"
-        CPPUNIT_ASSERT_GREATER(8, pPdfDocument->openPage(0)->getObjectCount());
+        auto pPage = pPdfDocument->openPage(0);
+        int nObjs = pPage->getObjectCount();
+        CPPUNIT_ASSERT_GREATER(8, nObjs);
+        bool bFound = false;
+        int i = 0;
+        for (; i < nObjs && !bFound; ++i)
+        {
+            auto pObj = pPage->getObject(i);
+            if (pObj->getText(pPage->getTextPage()) == "Nice comment over here.")
+                bFound = true;
+        }
+        CPPUNIT_ASSERT_MESSAGE("The comment text was not found.", bFound);
+        CPPUNIT_ASSERT_GREATER(400., pPage->getObject(i - 1)->getBounds().getMinX());
     }
     else
         CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->openPage(0)->getObjectCount());
@@ -177,6 +205,13 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
 CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
 {
     // Test that setting/unsetting the "ExportNotesInMargin" property works correctly
+    doTestCommentsInMargin(true);
+    doTestCommentsInMargin(false);
+    comphelper::LibreOfficeKit::setActive(true);
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    doTestCommentsInMargin(true);
+    doTestCommentsInMargin(false);
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
 }
