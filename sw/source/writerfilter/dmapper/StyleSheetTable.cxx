@@ -1317,7 +1317,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
 
                                 if (!bLeftChSet) // special case: disables leftChars
                                 {
-                                    // Implementaton note: when leftChars was imported as zero,
+                                    // Implementation note: when leftChars was imported as zero,
                                     // a fall-back w:left=0 was force-inserted
                                     // by DomainMapper::lcl_attribute
                                     assert(bLeftSet && "where is the fall-back w:left info?");
