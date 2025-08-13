@@ -76,6 +76,7 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ChartThemeType.hxx>
+#include <docmodel/uno/UnoChartStyle.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -127,6 +128,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
     , m_xXMLNamespaceMap( new NameContainer() )
     , m_eColorPaletteType(ChartColorPaletteType::Unknown)
     , m_nColorPaletteIndex(0)
+    , m_aStyles(new UnoChartStyle)
     , mnStart(0)
     , mnEnd(0)
 {
@@ -141,6 +143,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > xContext)
 
     {
         m_xPageBackground->addModifyListener( this );
+#if 0 // TODO
+        m_aStyles->addModifyListener( this );
+#endif
         m_xChartTypeManager = new ::chart::ChartTypeManager( m_xContext );
     }
     osl_atomic_decrement(&m_refCount);
@@ -190,6 +195,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         if (rOther.m_xDiagram.is())
             xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         rtl::Reference< ::chart::PageBackground > xNewPageBackground = new PageBackground( *rOther.m_xPageBackground );
+        rtl::Reference<UnoChartStyle> xNewChartStyle = new UnoChartStyle(*rOther.m_aStyles);
 
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
@@ -201,6 +207,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
                 m_xTitle = xNewTitle;
                 m_xDiagram = xNewDiagram;
                 m_xPageBackground = xNewPageBackground;
+                m_aStyles = xNewChartStyle;
                 m_xChartTypeManager = std::move(xChartTypeManager);
                 m_xXMLNamespaceMap = std::move(xXMLNamespaceMap);
             }
@@ -211,6 +218,11 @@ ChartModel::ChartModel( const ChartModel & rOther )
             xNewDiagram->addModifyListener( xListener );
         if( xNewPageBackground && xListener)
             xNewPageBackground->addModifyListener( xListener );
+#if 0 // TODO
+        if( xNewChartStyle && xListener) {
+            xNewChartStyle->addModifyListener( xListener );
+        }
+#endif
         xListener.clear();
     }
     osl_atomic_decrement(&m_refCount);
@@ -590,6 +602,7 @@ void SAL_CALL ChartModel::dispose()
     m_xTitle.clear();
     m_xPageBackground.clear();
     m_xXMLNamespaceMap.clear();
+    m_aStyles.clear();
 
     m_xStorage.clear();
         // just clear, don't dispose - we're not the owner
@@ -815,6 +828,12 @@ uno::Reference< chart2::data::XDataProvider > SAL_CALL ChartModel::getDataProvid
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xDataProvider;
+}
+
+uno::Reference< chart2::XChartStyle > SAL_CALL ChartModel::getStyles()
+{
+    MutexGuard aGuard( m_aModelMutex );
+    return m_aStyles;
 }
 
 // ____ XDataReceiver ____

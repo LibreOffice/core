@@ -20,6 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
 
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/chart/modelbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -29,6 +31,7 @@ namespace com::sun::star {
     namespace awt { struct Size; }
     namespace drawing { class XShapes; }
     namespace chart2 { class XChartDocument; }
+    namespace chart2 { class XChartStyle; }
     namespace chart2::data { class XDataProvider; }
     namespace chart2::data { class XDataSequence; }
 }
@@ -39,7 +42,9 @@ namespace oox::drawingml::chart {
 
 struct ChartSpaceModel;
 struct DataSequenceModel;
-
+struct StyleModel;
+struct StyleEntryModel;
+typedef ModelRef< StyleEntryModel >      StyleEntryRef;
 
 class OOX_DLLPUBLIC ChartConverter
 {
@@ -72,12 +77,13 @@ public:
                             const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
                             const css::awt::Point& rChartPos,
-                            const css::awt::Size& rChartSize );
+                            const css::awt::Size& rChartSize ) const;
 
     /** Creates an internal data provider. Derived classes may override this
         function to create an external data provider. */
     virtual void        createDataProvider(
-                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc );
+                            const css::uno::Reference<
+                            css::chart2::XChartDocument >& rxChartDoc ) const;
 
     /** Creates a data sequence from a formula. Dummy implementation. Derived
         classes have to override this function to actually parse the formula. */
@@ -85,11 +91,34 @@ public:
         createDataSequence(
             const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
             const DataSequenceModel& rDataSeq, const OUString& rRole,
-            const OUString& aRoleQualifier );
+            const OUString& aRoleQualifier ) const;
 
 private:
                         ChartConverter( const ChartConverter& ) = delete;
     ChartConverter&     operator=( const ChartConverter& ) = delete;
+};
+
+class OOX_DLLPUBLIC ChartStyleConverter
+{
+public:
+    explicit    ChartStyleConverter() = default;
+    virtual     ~ChartStyleConverter() = default;
+
+    /** Converts the passed ChartStyleModel to the passed chart2 XChartStyle.
+
+        @param rChartStyleModel  The filled chart style model structure.
+
+        @param rxChartStyle  The UNO chart style structure to be initialized.
+
+     */
+    static void convertFromModel(
+                    oox::core::XmlFilterBase& rFilter,
+                    StyleModel& rChartStyleModel,
+                    const css::uno::Reference< css::chart2::XChartStyle >& rxChartStyle);
+
+private:
+    ChartStyleConverter( const ChartStyleConverter& ) = delete;
+    ChartStyleConverter&     operator=( const ChartStyleConverter& ) = delete;
 };
 
 

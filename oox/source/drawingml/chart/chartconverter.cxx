@@ -17,16 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <oox/drawingml/chart/chartconverter.hxx>
-
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <drawingml/chart/chartspaceconverter.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
+#include <drawingml/chart/stylemodel.hxx>
+#include <docmodel/uno/UnoChartStyle.hxx>
+#include <docmodel/styles/ChartStyle.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <osl/diagnose.h>
+
+#include <oox/drawingml/chart/chartconverter.hxx>
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;
@@ -78,7 +81,8 @@ ChartConverter::~ChartConverter()
 
 void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
         ChartSpaceModel& rChartModel, const Reference< XChartDocument >& rxChartDoc,
-        const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos, const awt::Size& rChartSize )
+        const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos,
+        const awt::Size& rChartSize ) const
 {
     OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )
@@ -94,7 +98,8 @@ void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
     }
 }
 
-void ChartConverter::createDataProvider( const Reference< XChartDocument >& rxChartDoc )
+void ChartConverter::createDataProvider( const Reference< XChartDocument >&
+        rxChartDoc ) const
 {
     try
     {
@@ -108,7 +113,7 @@ void ChartConverter::createDataProvider( const Reference< XChartDocument >& rxCh
 
 Reference< XDataSequence > ChartConverter::createDataSequence(
     const Reference< XDataProvider >& rxDataProvider, const DataSequenceModel& rDataSeq,
-    const OUString& rRole, const OUString& rRoleQualifier )
+    const OUString& rRole, const OUString& rRoleQualifier ) const
 {
     Reference< XDataSequence > xDataSeq;
     if( rxDataProvider.is() )
@@ -143,6 +148,32 @@ Reference< XDataSequence > ChartConverter::createDataSequence(
 
     return nullptr;
 }
+
+// ===========
+// ChartStyleConverter
+// ===========
+void ChartStyleConverter::convertFromModel(XmlFilterBase& rFilter,
+        StyleModel& rChartStyleModel,
+        const Reference< XChartStyle >& rxChartStyle)
+{
+    OSL_ENSURE( rxChartStyle.is(), "ChartStyleConverter::convertFromModel - missing chart style" );
+    if (!rxChartStyle.is()) return;
+
+    UnoChartStyle *pUnoCS = static_cast<UnoChartStyle*>(rxChartStyle.get());
+    assert(pUnoCS);
+
+    model::StyleSet& aStyles = pUnoCS->getChartStyle();
+
+    if (rChartStyleModel.mxAxisTitle) {
+        aStyles.addEntry(model::StyleSet::StyleEntryType::AXISTITLE,
+                rChartStyleModel.mxAxisTitle->toStyleEntry(rFilter));
+    }
+    // etc.
+    // TODO: fill in all the stuff
+
+    aStyles.mnId = rChartStyleModel.mnId;
+}
+
 
 } // namespace oox::drawingml::chart
 
