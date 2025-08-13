@@ -7106,6 +7106,44 @@ void SwContentTree::OverlayObject(std::vector<basegfx::B2DRange>&& aRanges)
     }
 }
 
+void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
+{
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xIter))
+        return;
+    do
+    {
+        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xIter));
+        if (pCntType && pCntType->GetType() == ContentTypeId::POSTIT)
+        {
+            m_xTreeView->set_cursor(*xIter);
+            m_xTreeView->select(*xIter);
+            m_xTreeView->expand_row(*xIter);
+            UpdateContentFunctionsToolbar();
+
+            int nCount = m_xTreeView->iter_n_children(*xIter);
+            m_xTreeView->iter_children(*xIter);
+            for (int i = 0; i < nCount; ++i)
+            {
+                if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
+                {
+                    if (nCommentId == pPostIt->GetPostItField()->GetPostItId())
+                    {
+                        GotoContent(weld::fromId<SwContent*>(m_xTreeView->get_id(*xIter)));
+                        m_xTreeView->grab_focus();
+                        break;
+                    }
+                }
+                m_xTreeView->iter_next(*xIter);
+            }
+            break;
+        }
+        else
+            m_xTreeView->collapse_row(*xIter);
+
+    } while (m_xTreeView->iter_next_sibling(*xIter));
+}
+
 void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
 {
     if (lcl_IsContent(rEntry, *m_xTreeView)) // content entry

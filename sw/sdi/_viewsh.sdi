@@ -1014,6 +1014,11 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
+    SID_NAVIGATOR_SELECT_COMMENT
+    [
+        ExecMethod = ExecNavigatorWin ;
+    ]
+
     FN_VLINEAL // status()
     [
         ExecMethod = ExecViewOptions ;

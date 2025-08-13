@@ -2537,6 +2537,24 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
     GroupId = SfxGroupId::Navigator;
 ]
 
+SfxVoidItem NavigatorSelectComment SID_NAVIGATOR_SELECT_COMMENT
+(SfxUInt16Item CommentId FN_PARAM_1)
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxVoidItem InsertAnnotation FN_POSTIT
 (SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
  SvxPostItTextItem Html SID_ATTR_POSTIT_HTML,
