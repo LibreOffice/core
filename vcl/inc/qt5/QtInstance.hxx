@@ -90,9 +90,6 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
 
     DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
-
-    static QWidget* GetNativeParentFromWeldParent(weld::Widget* pParent);
-
     void EmscriptenLightweightRunInMainThread_(std::function<void()> func);
 
 private Q_SLOTS:
@@ -234,6 +231,8 @@ public:
 
     bool DoExecute(int& nExitCode) override;
     void DoQuit() override;
+
+    static QWidget* GetNativeParentFromWeldParent(weld::Widget* pParent);
 
     QtFrame* activePopup() const { return m_pActivePopup; }
     void setActivePopup(QtFrame*);

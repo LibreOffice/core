@@ -15,12 +15,32 @@ QtInstancePopover::QtInstancePopover(QWidget* pWidget)
 {
 }
 
-void QtInstancePopover::popup_at_rect(weld::Widget*, const tools::Rectangle&, weld::Placement)
+void QtInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                      weld::Placement ePlace)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    assert(ePlace == weld::Placement::Under && "placement type not supported yet");
+    (void)ePlace;
+
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pPopoverWidget = getQWidget();
+        pPopoverWidget->adjustSize();
+        QWidget* pParentWidget = QtInstance::GetNativeParentFromWeldParent(pParent);
+        QPoint aPos = pParentWidget->mapToGlobal(toQPoint(rRect.BottomLeft()));
+        aPos.setX(aPos.x() + rRect.GetWidth() - pPopoverWidget->width() / 2);
+
+        pPopoverWidget->move(aPos);
+        pPopoverWidget->show();
+    });
 }
 
-void QtInstancePopover::popdown() { assert(false && "Not implemented yet"); }
+void QtInstancePopover::popdown()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getQWidget()->hide(); });
+}
 
 void QtInstancePopover::resize_to_request() { assert(false && "Not implemented yet"); }
 
