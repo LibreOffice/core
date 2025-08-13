@@ -2288,7 +2288,7 @@ static rtl::Reference<SdrObject> convertPresentationObjectImpl(SdPage& rPage, Sd
     @param  rRect
         The rectangle that should be used to transform the shape
     @param  rCustomPrompt
-        The custom prompt text for placeholder text in presObj's, if its empty the default is used
+        The custom prompt text for placeholder text in presObj's, if it's empty the default is used
     @param  bInit
         If true the shape is created if not found
     @returns
