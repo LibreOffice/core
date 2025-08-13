@@ -109,7 +109,7 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     if (rImpGraphic.mpAnimationContainer)
     {
         mpAnimationContainer = std::make_shared<AnimationContainer>(rImpGraphic.mpAnimationContainer->maAnimation);
-        maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
+        maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmap();
     }
 }
 
@@ -178,7 +178,7 @@ ImpGraphic::ImpGraphic(const std::shared_ptr<VectorGraphicData>& rVectorGraphicD
 
 ImpGraphic::ImpGraphic(const Animation& rAnimation)
     : MemoryManaged(true)
-    , maCachedBitmap(rAnimation.GetBitmapEx())
+    , maCachedBitmap(rAnimation.GetBitmap())
     , mpAnimationContainer(std::make_shared<AnimationContainer>(rAnimation))
     , meType(GraphicType::Bitmap)
 {
@@ -214,7 +214,7 @@ ImpGraphic& ImpGraphic::operator=(const ImpGraphic& rImpGraphic)
         if (rImpGraphic.mpAnimationContainer)
         {
             mpAnimationContainer = std::make_shared<AnimationContainer>(*rImpGraphic.mpAnimationContainer);
-            maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
+            maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmap();
         }
         else
         {
@@ -342,7 +342,7 @@ void BitmapContainer::createSwapInfo(SwapInfo& rSwapInfo)
 
 void AnimationContainer::createSwapInfo(SwapInfo& rSwapInfo)
 {
-    rSwapInfo.maSizePixel = maAnimation.GetBitmapEx().GetSizePixel();
+    rSwapInfo.maSizePixel = maAnimation.GetBitmap().GetSizePixel();
 
     rSwapInfo.maPrefMapMode = getPrefMapMode();
     rSwapInfo.maPrefSize = getPrefSize();
@@ -570,7 +570,7 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
             updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
         if (mpAnimationContainer)
-            aRetBmp = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
+            aRetBmp = mpAnimationContainer->maAnimation.GetBitmap();
         else if (mpBitmapContainer)
             aRetBmp = mpBitmapContainer->maBitmap;
         else
@@ -854,7 +854,7 @@ void ImpGraphic::setValuesForPrefSize(const Size& rPrefSize)
             // will be lost on copy otherwise
             else if (mpAnimationContainer)
             {
-                const_cast<BitmapEx&>(mpAnimationContainer->maAnimation.GetBitmapEx()).SetPrefSize(rPrefSize);
+                const_cast<Bitmap&>(mpAnimationContainer->maAnimation.GetBitmap()).SetPrefSize(rPrefSize);
                 maCachedBitmap.SetPrefSize(rPrefSize);
             }
             else if (mpBitmapContainer)
@@ -953,7 +953,7 @@ void ImpGraphic::setValuesForPrefMapMod(const MapMode& rPrefMapMode)
             // will be lost on copy otherwise
             else if (mpAnimationContainer)
             {
-                const_cast<BitmapEx&>(mpAnimationContainer->maAnimation.GetBitmapEx()).SetPrefMapMode(rPrefMapMode);
+                const_cast<Bitmap&>(mpAnimationContainer->maAnimation.GetBitmap()).SetPrefMapMode(rPrefMapMode);
                 maCachedBitmap.SetPrefMapMode(rPrefMapMode);
             }
             else if (mpBitmapContainer)
@@ -1388,7 +1388,7 @@ void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
         if (pGraphic->mpAnimationContainer)
         {
             mpAnimationContainer = std::make_shared<AnimationContainer>(*pGraphic->mpAnimationContainer);
-            maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
+            maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmap();
         }
         else if (pGraphic->mpBitmapContainer)
         {
@@ -1619,7 +1619,7 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
                 if (!rStream.GetError())
                 {
                     mpAnimationContainer = std::make_shared<AnimationContainer>(aAnimation);
-                    maCachedBitmap = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
+                    maCachedBitmap = mpAnimationContainer->maAnimation.GetBitmap();
                     bReturn = true;
                 }
             }

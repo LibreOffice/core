@@ -46,7 +46,7 @@ Animation::Animation()
 }
 
 Animation::Animation(const Animation& rAnimation)
-    : maBitmapEx(rAnimation.maBitmapEx)
+    : maBitmap(rAnimation.maBitmap)
     , maTimer("vcl::Animation")
     , maGlobalSize(rAnimation.maGlobalSize)
     , mnLoopCount(rAnimation.mnLoopCount)
@@ -77,7 +77,7 @@ Animation& Animation::operator=(const Animation& rAnimation)
             maFrames.emplace_back(new AnimationFrame(*i));
 
         maGlobalSize = rAnimation.maGlobalSize;
-        maBitmapEx = rAnimation.maBitmapEx;
+        maBitmap = rAnimation.maBitmap;
         mnLoopCount = rAnimation.mnLoopCount;
         mnFrameIndex = rAnimation.mnFrameIndex;
         mbLoopTerminated = rAnimation.mbLoopTerminated;
@@ -88,7 +88,7 @@ Animation& Animation::operator=(const Animation& rAnimation)
 
 bool Animation::operator==(const Animation& rAnimation) const
 {
-    return maFrames.size() == rAnimation.maFrames.size() && maBitmapEx == rAnimation.maBitmapEx
+    return maFrames.size() == rAnimation.maFrames.size() && maBitmap == rAnimation.maBitmap
            && maGlobalSize == rAnimation.maGlobalSize
            && std::equal(maFrames.begin(), maFrames.end(), rAnimation.maFrames.begin(),
                          [](const std::unique_ptr<AnimationFrame>& pAnim1,
@@ -102,7 +102,7 @@ void Animation::Clear()
     maTimer.Stop();
     mbIsInAnimation = false;
     maGlobalSize = Size();
-    maBitmapEx.SetEmpty();
+    maBitmap.SetEmpty();
     maFrames.clear();
     maRenderers.clear();
 }
@@ -116,7 +116,7 @@ bool Animation::IsTransparent() const
     // as the application (?) does not invalidate on non-transparent
     // graphics due to performance reasons.
 
-    return maBitmapEx.IsAlpha()
+    return maBitmap.HasAlpha()
            || std::any_of(maFrames.begin(), maFrames.end(),
                           [&aRect](const std::unique_ptr<AnimationFrame>& pAnim) -> bool {
                               return pAnim->meDisposal == Disposal::Back
@@ -128,7 +128,7 @@ bool Animation::IsTransparent() const
 
 sal_uLong Animation::GetSizeBytes() const
 {
-    return std::accumulate(maFrames.begin(), maFrames.end(), GetBitmapEx().GetSizeBytes(),
+    return std::accumulate(maFrames.begin(), maFrames.end(), GetBitmap().GetSizeBytes(),
                            [](sal_Int64 nSize, const std::unique_ptr<AnimationFrame>& pFrame) {
                                return nSize + pFrame->maBitmap.GetSizeBytes();
                            });
@@ -138,7 +138,7 @@ BitmapChecksum Animation::GetChecksum() const
 {
     SVBT32 aBT32;
     BitmapChecksumOctetArray aBCOA;
-    BitmapChecksum nCrc = GetBitmapEx().GetChecksum();
+    BitmapChecksum nCrc = GetBitmap().GetChecksum();
 
     UInt32ToSVBT32(maFrames.size(), aBT32);
     nCrc = rtl_crc32(nCrc, aBT32, 4);
@@ -321,7 +321,7 @@ void Animation::RenderNextFrameInAllRenderers()
             Stop();
             mbLoopTerminated = true;
             mnFrameIndex = maFrames.size() - 1;
-            maBitmapEx = maFrames[mnFrameIndex]->maBitmap;
+            maBitmap = maFrames[mnFrameIndex]->maBitmap;
             return;
         }
         else
@@ -409,7 +409,7 @@ bool Animation::Insert(const AnimationFrame& rStepBmp)
 
     // As a start, we make the first BitmapEx the replacement BitmapEx
     if (maFrames.size() == 1)
-        maBitmapEx = rStepBmp.maBitmap;
+        maBitmap = rStepBmp.maBitmap;
 
     return true;
 }
@@ -431,7 +431,7 @@ void Animation::Replace(const AnimationFrame& rNewAnimationFrame, sal_uInt16 nAn
     if ((!nAnimation && (!mbLoopTerminated || (maFrames.size() == 1)))
         || ((nAnimation == maFrames.size() - 1) && mbLoopTerminated))
     {
-        maBitmapEx = rNewAnimationFrame.maBitmap;
+        maBitmap = rNewAnimationFrame.maBitmap;
     }
 }
 
@@ -461,7 +461,7 @@ void Animation::Convert(BmpConversion eConversion)
         bRet = maFrames[i]->maBitmap.Convert(eConversion);
     }
 
-    maBitmapEx.Convert(eConversion);
+    maBitmap.Convert(eConversion);
 }
 
 bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
@@ -479,7 +479,7 @@ bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
                                     BitmapColorQuantizationFilter(nNewColorCount));
     }
 
-    BitmapFilter::Filter(maBitmapEx, BitmapColorQuantizationFilter(nNewColorCount));
+    BitmapFilter::Filter(maBitmap, BitmapColorQuantizationFilter(nNewColorCount));
 
     return bRet;
 }
@@ -491,7 +491,7 @@ bool Animation::Invert()
     if (IsInAnimation() || maFrames.empty())
         return false;
 
-    maBitmapEx.Invert();
+    maBitmap.Invert();
 
     for (auto& pFrame : maFrames)
     {
@@ -532,7 +532,7 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
         }
     }
 
-    maBitmapEx.Mirror(nMirrorFlags);
+    maBitmap.Mirror(nMirrorFlags);
 }
 
 void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nChannelRPercent,
@@ -551,8 +551,8 @@ void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nC
                                             nChannelGPercent, nChannelBPercent, fGamma, bInvert);
     }
 
-    maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
-                      nChannelBPercent, fGamma, bInvert);
+    maBitmap.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
+                    nChannelBPercent, fGamma, bInvert);
 }
 
 SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
@@ -566,10 +566,10 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 
     // If no BitmapEx was set we write the first Bitmap of
     // the Animation
-    if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
+    if (rAnimation.GetBitmap().IsEmpty())
         WriteDIBBitmapEx(rAnimation.Get(0).maBitmap, rOStm);
     else
-        WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
+        WriteDIBBitmapEx(rAnimation.GetBitmap(), rOStm);
 
     // Write identifier ( SDANIMA1 )
     rOStm.WriteUInt32(0x5344414e).WriteUInt32(0x494d4931);
@@ -624,7 +624,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
     else
     {
         rIStm.Seek(nStmPos);
-        ReadDIBBitmapEx(rAnimation.maBitmapEx, rIStm);
+        ReadDIBBitmapEx(rAnimation.maBitmap, rIStm);
         nStmPos = rIStm.Tell();
         rIStm.ReadUInt32(nAnimMagic1).ReadUInt32(nAnimMagic2);
 

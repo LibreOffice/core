@@ -235,7 +235,7 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
                     // #108077# manually set loaded BmpEx to Animation
                     // (which skips loading its BmpEx if already done)
-                    aAnimation.SetBitmapEx(BitmapEx(aBitmap));
+                    aAnimation.SetBitmap(aBitmap);
                     rGraphic = Graphic(aAnimation);
                 }
                 else

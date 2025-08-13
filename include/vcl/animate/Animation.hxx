@@ -59,8 +59,8 @@ public:
     const Size& GetDisplaySizePixel() const { return maGlobalSize; }
     void SetDisplaySizePixel(const Size& rSize) { maGlobalSize = rSize; }
 
-    const BitmapEx& GetBitmapEx() const { return maBitmapEx; }
-    void SetBitmapEx(const BitmapEx& rBmpEx) { maBitmapEx = rBmpEx; }
+    const Bitmap& GetBitmap() const { return maBitmap; }
+    void SetBitmap(const Bitmap& rBmp) { maBitmap = rBmp; }
 
     sal_uInt32 GetLoopCount() const { return mnLoopCount; }
     void SetLoopCount(const sal_uInt32 nLoopCount);
@@ -103,7 +103,7 @@ private:
     std::vector<std::unique_ptr<AnimationRenderer>> maRenderers;
 
     Link<Animation*, void> maNotifyLink;
-    BitmapEx maBitmapEx;
+    Bitmap maBitmap;
     Timer maTimer;
     Size maGlobalSize;
     sal_uInt32 mnLoopCount;

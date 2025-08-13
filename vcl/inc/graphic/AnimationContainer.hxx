@@ -39,17 +39,17 @@ public:
 
     Size getPrefSize() const
     {
-        Size aSize = maAnimation.GetBitmapEx().GetPrefSize();
+        Size aSize = maAnimation.GetBitmap().GetPrefSize();
         if (!aSize.Width() || !aSize.Height())
-            aSize = maAnimation.GetBitmapEx().GetSizePixel();
+            aSize = maAnimation.GetBitmap().GetSizePixel();
         return aSize;
     }
 
     MapMode getPrefMapMode() const
     {
-        const Size aSize = maAnimation.GetBitmapEx().GetPrefSize();
+        const Size aSize = maAnimation.GetBitmap().GetPrefSize();
         if (aSize.Width() && aSize.Height())
-            return maAnimation.GetBitmapEx().GetPrefMapMode();
+            return maAnimation.GetBitmap().GetPrefMapMode();
         return {};
     }
 

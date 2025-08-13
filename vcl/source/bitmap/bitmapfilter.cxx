@@ -56,9 +56,9 @@ bool BitmapFilter::Filter(Animation& rAnimation, BitmapFilter const& rFilter)
             bRet = BitmapFilter::Filter(aList[i]->maBitmap, rFilter);
         }
 
-        BitmapEx aBmpEx(rAnimation.GetBitmapEx());
-        BitmapFilter::Filter(aBmpEx, rFilter);
-        rAnimation.SetBitmapEx(aBmpEx);
+        Bitmap aBmp(rAnimation.GetBitmap());
+        BitmapFilter::Filter(aBmp, rFilter);
+        rAnimation.SetBitmap(aBmp);
     }
 
     return bRet;

@@ -940,7 +940,7 @@ ReadState GIFReader::ReadGIF(ImportOutput& rImportOutput)
 
         if (aPrefSize.Width() && aPrefSize.Height())
         {
-            BitmapEx& rBitmap = const_cast<BitmapEx&>(rImportOutput.moAnimation->GetBitmapEx());
+            Bitmap& rBitmap = const_cast<Bitmap&>(rImportOutput.moAnimation->GetBitmap());
             rBitmap.SetPrefSize(aPrefSize);
             rBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
         }

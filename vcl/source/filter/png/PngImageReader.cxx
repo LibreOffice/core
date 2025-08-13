@@ -789,7 +789,7 @@ Bitmap PngImageReader::read()
         if (!aImportOutput.mbIsAnimated)
             return *aImportOutput.moBitmap;
         else
-            return Bitmap(aImportOutput.moAnimation->GetBitmapEx());
+            return aImportOutput.moAnimation->GetBitmap();
     }
     return Bitmap();
 }

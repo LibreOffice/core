@@ -303,9 +303,8 @@ namespace drawinglayer::primitive2d
                         case Disposal::Not:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
-                            AlphaMask aAlphaMask = rAnimationFrame.maBitmap.CreateAlphaMask();
 
-                            if (aAlphaMask.IsEmpty())
+                            if (!rAnimationFrame.maBitmap.HasAlpha())
                             {
                                 const Point aEmpty;
                                 const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
@@ -314,6 +313,7 @@ namespace drawinglayer::primitive2d
                             }
                             else
                             {
+                                AlphaMask aAlphaMask = rAnimationFrame.maBitmap.CreateAlphaMask();
                                 BitmapEx aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
@@ -346,7 +346,7 @@ namespace drawinglayer::primitive2d
                         case Disposal::Previous:
                         {
                             maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
-                            BitmapEx aExpandVisibilityMask(rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap(), rAnimationFrame.maBitmap.CreateAlphaMask());
+                            Bitmap aExpandVisibilityMask(rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap(), rAnimationFrame.maBitmap.CreateAlphaMask());
                             maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }

@@ -342,7 +342,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
     if (nImages)
     {
         if (nImages == 1)
-            rGraphic = Bitmap(aAnimation.GetBitmapEx());
+            rGraphic = aAnimation.GetBitmap();
         else
             rGraphic = aAnimation;
 
