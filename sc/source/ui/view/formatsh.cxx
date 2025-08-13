@@ -1060,9 +1060,32 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_FRAME_LINESTYLE:
                 {
                     // Update default line
-                    const ::editeng::SvxBorderLine* pLine =
-                                pNewAttrs->Get( SID_FRAME_LINESTYLE ).
-                                GetLine();
+                    const ::editeng::SvxBorderLine* pLine = new ::editeng::SvxBorderLine();
+                    const SfxInt16Item* lineStyleItem = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+
+                    if (lineStyleItem)
+                    {
+                        const SfxInt16Item* InnerLineWidthItem
+                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_2);
+                        const SfxInt16Item* OuterLineWidthItem
+                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_3);
+                        const SfxInt16Item* LineDistanceItem
+                            = rReq.GetArg<SfxInt16Item>(FN_PARAM_4);
+
+                        sal_uInt16 InnerLineWidth, OuterLineWidth, LineDistance;
+                        SvxBorderLineStyle lineStyle
+                            = static_cast<SvxBorderLineStyle>(lineStyleItem->GetValue());
+                        InnerLineWidth = InnerLineWidthItem ? InnerLineWidthItem->GetValue() : 0;
+                        OuterLineWidth = OuterLineWidthItem ? OuterLineWidthItem->GetValue() : 0;
+                        LineDistance = LineDistanceItem ? LineDistanceItem->GetValue() : 0;
+
+                        const_cast<::editeng::SvxBorderLine*>(pLine)->GuessLinesWidths(
+                            lineStyle, InnerLineWidth, OuterLineWidth, LineDistance);
+                    }
+                    else
+                    {
+                        pLine = pNewAttrs->Get(SID_FRAME_LINESTYLE).GetLine();
+                    }
 
                     if ( pLine )
                     {
@@ -1090,6 +1113,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         pTabViewShell->SetDefaultFrameLine( &aDefLine );
                         pTabViewShell->SetSelectionFrameLines( nullptr, false );
                     }
+                    rReq.Done();
                 }
                 break;
 
