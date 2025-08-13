@@ -423,6 +423,39 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits3, "tdf167721_chUnits3.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits4, "tdf167721_chUnits4.docx")
+{
+    // given an edge-case document
+    // Style "List Paragraph": left = 5cm, right = 2 ic
+    //     <w:ind w:left="2835" w:rightChars="200"/>
+    // Style "Inherited List Paragraph": left = 5cmm right = 2 Ch
+    //    <w:ind w:right="2268" />
+    // Paragraph: left = 5cm, right = 4cm
+    //     <w:ind w:rightChars="0" />
+
+    // Test the style #############################################################################
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"ParagraphStyles"_ustr)->getByName(u"Inherited List Paragraph"_ustr),
+        uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xStyle, u"ParaLeftMargin"_ustr));
+
+    auto aRightCh
+        = getProperty<css::beans::Pair<double, sal_Int16>>(xStyle, u"ParaRightMarginUnit"_ustr);
+    CPPUNIT_ASSERT_EQUAL(double(2), aRightCh.First);
+
+    // Test the paragraph #########################################################################
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara, u"ParaFirstLineIndent"_ustr));
+
+    // the left margin is inherited from the style, though it is never written as a direct property
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(xPara, u"ParaLeftMargin"_ustr));
+
+    // the unused w:right in the style is what gets inherited (and written as a direct property)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
