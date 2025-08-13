@@ -43,6 +43,7 @@
 #include <editeng/prntitem.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/itemiter.hxx>
+#include <istyleaccess.hxx>
 
 using namespace com::sun::star;
 
@@ -454,7 +455,11 @@ namespace
             if (bCopy && !bSameSet)
                 rDoc.getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
             else if (!bCopy && (!bSameSet || pFromColl != pToColl))
-                return std::make_unique<SwRedlineExtraData_FormatColl>( pFromColl->GetName(), USHRT_MAX, &aTmp2 );
+            {
+                IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
+                std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aTmp2, IStyleAccess::AUTO_STYLE_CHAR);
+                return std::make_unique<SwRedlineExtraData_FormatColl>( pFromColl->GetName(), USHRT_MAX, pAutoStyle );
+            }
         }
         return nullptr;
     }

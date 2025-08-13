@@ -4209,7 +4209,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
             if (pFormattingChanges)
             {
                  // Get the item set that holds all the changes properties
-                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                std::shared_ptr<SfxItemSet> pChangesSet = pFormattingChanges->GetItemSet();
                 if (pChangesSet)
                 {
                     m_pSerializer->mark(Tag_Redline_1);
@@ -4252,7 +4252,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
             if (pFormattingChanges)
             {
                 // Get the item set that holds all the changes properties
-                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                std::shared_ptr<SfxItemSet> pChangesSet = pFormattingChanges->GetItemSet();
                 const UIName & sParaStyleName = pFormattingChanges->GetFormatName();
                 if (pChangesSet || !sParaStyleName.isEmpty())
                 {

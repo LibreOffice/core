@@ -1281,7 +1281,7 @@ namespace //local functions originally from docfmt.cxx
                         if (pFormattingChanges)
                         {
                             // Get the item set that holds all the changes properties
-                            const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                            std::shared_ptr<SfxItemSet> pChangesSet = pFormattingChanges->GetItemSet();
                             xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, pChangesSet));
                             break;
                         }
@@ -1318,7 +1318,9 @@ namespace //local functions originally from docfmt.cxx
             // which doesn't handle invalid/dontcare items so clear them here
             aSet.ClearInvalidItems();
 
-            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, &aSet));
+            IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
+            std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getAutomaticStyle(aSet, IStyleAccess::AUTO_STYLE_CHAR);
+            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, pAutoStyle));
         }
 
         pRedline->SetExtraData(xExtra.get() );

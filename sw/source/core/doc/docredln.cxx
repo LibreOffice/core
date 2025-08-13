@@ -1121,12 +1121,12 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( UIName aColl,
                                                 sal_uInt16 nPoolFormatId,
-                                                const SfxItemSet* pItemSet,
+                                                const std::shared_ptr<SfxItemSet>& pItemSet,
                                                 bool bFormatAll )
     : m_sFormatNm(std::move(aColl)), m_nPoolId(nPoolFormatId), m_bFormatAll(bFormatAll)
 {
     if( pItemSet && pItemSet->Count() )
-        m_pSet.reset( new SfxItemSet( *pItemSet ) );
+        m_pSet = pItemSet;
 }
 
 SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
@@ -1135,7 +1135,7 @@ SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
 
 SwRedlineExtraData* SwRedlineExtraData_FormatColl::CreateNew() const
 {
-    return new SwRedlineExtraData_FormatColl( m_sFormatNm, m_nPoolId, m_pSet.get(), m_bFormatAll );
+    return new SwRedlineExtraData_FormatColl( m_sFormatNm, m_nPoolId, m_pSet, m_bFormatAll );
 }
 
 void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
@@ -1193,10 +1193,10 @@ bool SwRedlineExtraData_FormatColl::operator == ( const SwRedlineExtraData& r) c
                ( m_pSet && rCmp.m_pSet && *m_pSet == *rCmp.m_pSet ) );
 }
 
-void SwRedlineExtraData_FormatColl::SetItemSet( const SfxItemSet& rSet )
+void SwRedlineExtraData_FormatColl::SetItemSet( const std::shared_ptr<SfxItemSet>& pSet )
 {
-    if( rSet.Count() )
-        m_pSet.reset( new SfxItemSet( rSet ) );
+    if( pSet && pSet->Count() )
+        m_pSet = pSet;
     else
         m_pSet.reset();
 }
