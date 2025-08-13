@@ -1469,6 +1469,15 @@ bool Ruler::ImplDoHitTest( const Point& rPos, RulerSelection* pHitTest,
     else
         nXExtraOff = 0;
 
+    // tdf#84949 - check if the mouse is moved over the extra field
+    // to show a tooltip for left, center, right, and decimal tab
+    if (maExtraRect.Contains(Point(nX, nY)))
+    {
+        pHitTest->nPos = nX;
+        pHitTest->eType = RulerType::TabAlign;
+        return true;
+    }
+
     // test if outside
     nX -= mnVirOff;
     if ( (nX < mpData->nRulVirOff - nXExtraOff) ||

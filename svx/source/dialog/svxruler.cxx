@@ -523,6 +523,10 @@ void SvxRuler::UpdateFrame()
     }
 }
 
+const TranslateId RID_SVXSTR_RULER_TAB_POS[]
+    = { RID_SVXSTR_RULER_TAB_POS_LEFT, RID_SVXSTR_RULER_TAB_POS_RIGHT,
+        RID_SVXSTR_RULER_TAB_POS_CENTER, RID_SVXSTR_RULER_TAB_POS_DECIMAL };
+
 void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 {
     if( bActive )
@@ -627,6 +631,12 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             fValue = rtl::math::round(fValue / aUnitData.nTickUnit, aNoDecimalPlaces);
             SetQuickHelpText(OUString::number(fValue) + " " + sUnit);
 
+            break;
+        }
+        // tdf#84949 - show tooltip for left, center, right, and decimal tab
+        case RulerType::TabAlign:
+        {
+            SetQuickHelpText(SvxResId(RID_SVXSTR_RULER_TAB_POS[nDefTabType]));
             break;
         }
         default:

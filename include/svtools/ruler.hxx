@@ -460,10 +460,10 @@ constexpr WinBits WB_EXTRAFIELD = 0x00004000;
 constexpr WinBits WB_RIGHT_ALIGNED = 0x00008000;
 constexpr auto WB_STDRULER = WB_HORZ;
 
-
+// tdf#84949 - TabAlign is used to identify the current tabulator alignment
 enum class RulerType { DontKnow, Outside,
                  Margin1, Margin2,
-                 Border, Indent, Tab };
+                 Border, Indent, Tab, TabAlign };
 
 enum class RulerExtra { DontKnow, NullOffset, Tab };
 
