@@ -531,6 +531,7 @@ public:
     DECL_DLLPRIVATE_LINK( ExecRulerClick, Ruler *, void );
     void            ExecSearch(SfxRequest&);
     void            ExecViewOptions(SfxRequest &);
+    void            ExecNavigatorWin(SfxRequest &);
 
     virtual bool    IsConditionalFastCall( const SfxRequest &rReq ) override;
 

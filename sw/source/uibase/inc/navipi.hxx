@@ -46,6 +46,7 @@ class SwNavigationPI final : public PanelLayout
     friend class SwNavigatorWin;
     friend class SwContentTree;
     friend class SwGlobalTree;
+    friend class SwView;
 
     ::sfx2::sidebar::ControllerItem m_aDocFullName;
     ::sfx2::sidebar::ControllerItem m_aPageStats;
@@ -164,6 +165,26 @@ public:
     virtual weld::Window* GetFrameWeld() const override;
 
     void SelectNavigateByContentType(const OUString& rContentTypeName);
+};
+
+class SwNavigatorWin : public SfxNavigator
+{
+    friend class SwView;
+private:
+    std::unique_ptr<SwNavigationPI> m_xNavi;
+public:
+    SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
+                   vcl::Window* pParent, SfxChildWinInfo* pInfo);
+    virtual void StateChanged(StateChangedType nStateChange) override;
+    virtual void dispose() override
+    {
+        m_xNavi.reset();
+        SfxNavigator::dispose();
+    }
+    virtual ~SwNavigatorWin() override
+    {
+        disposeOnce();
+    }
 };
 
 class SwNavigatorWrapper final : public SfxNavigatorWrapper

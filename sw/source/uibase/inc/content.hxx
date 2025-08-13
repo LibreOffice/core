@@ -22,6 +22,7 @@
 #include "swcont.hxx"
 
 #include <ndarr.hxx>
+#include <docufld.hxx>
 #include <tools/long.hxx>
 #include <utility>
 
@@ -140,6 +141,7 @@ public:
 
     const SwFormatField* GetPostIt() const  { return m_pField; }
     virtual bool    IsProtect()     const override;
+    SwPostItField const* GetPostItField() const;
 };
 
 class SwGraphicContent final : public SwContent

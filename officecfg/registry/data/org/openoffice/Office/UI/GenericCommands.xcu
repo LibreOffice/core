@@ -4437,6 +4437,14 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:NavigatorSelectComment" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Nav~igator select comment.</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Select Comment In The Navigator Window/Sidebar</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Notebookbar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Notebookbar</value>

@@ -1262,25 +1262,6 @@ SwView*  SwNavigationPI::GetCreateView() const
     return m_pCreateView;
 }
 
-class SwNavigatorWin : public SfxNavigator
-{
-private:
-    std::unique_ptr<SwNavigationPI> m_xNavi;
-public:
-    SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
-                   vcl::Window* pParent, SfxChildWinInfo* pInfo);
-    virtual void StateChanged(StateChangedType nStateChange) override;
-    virtual void dispose() override
-    {
-        m_xNavi.reset();
-        SfxNavigator::dispose();
-    }
-    virtual ~SwNavigatorWin() override
-    {
-        disposeOnce();
-    }
-};
-
 SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                vcl::Window* pParent, SfxChildWinInfo* pInfo)
     : SfxNavigator(_pBindings, _pMgr, pParent, pInfo)

@@ -46,6 +46,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
+#include <navicfg.hxx>
+#include <navipi.hxx>
 #include <sfx2/objface.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
@@ -815,6 +817,38 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
             pDlg->disposeOnce();
         }
     );
+}
+
+void SwView::ExecNavigatorWin(SfxRequest& rReq)
+{
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    sal_uInt16 nSlot = rReq.GetSlot();
+
+    switch (nSlot)
+    {
+        case SID_NAVIGATOR_SELECT_COMMENT:
+        {
+            const SfxPoolItem* pItem;
+            if (pArgs && pArgs->HasItem(FN_PARAM_1, &pItem))
+            {
+                sal_uInt16 aCommentId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                if (SfxChildWindow* pWin = GetViewFrame().GetChildWindow(SID_NAVIGATOR))
+                {
+                    SwNavigatorWin* pNavWin = static_cast<SwNavigatorWin*>(pWin->GetWindow());
+                    if (pNavWin->m_xNavi && pNavWin->m_xNavi->m_xContentTree)
+                        pNavWin->m_xNavi->m_xContentTree->BringCommentToAttention(aCommentId);
+                }
+                else
+                    SAL_WARN("sw.ui", "GetChildWindow(SID_NAVIGATOR) == nullptr");
+            }
+            else
+                SAL_WARN("sw.ui", "failed to extract FN_PARAM_1 i.e. CommentNumber");
+        }
+        break;
+        default:
+            assert(false && "invalid slot!");
+            break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
