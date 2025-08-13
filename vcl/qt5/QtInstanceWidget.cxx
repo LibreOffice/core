@@ -17,6 +17,7 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QMouseEvent>
+#include <QtWidgets/QTabWidget>
 
 /** Name of QObject property used for the help ID. */
 const char* const PROPERTY_HELP_ID = "help-id";
@@ -755,7 +756,16 @@ void QtInstanceWidget::get_property_tree(tools::JsonWriter&)
 
 void QtInstanceWidget::call_attention_to() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_stack_background() { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_stack_background()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QTabWidget aTabWidget;
+        const QColor aColor = aTabWidget.palette().color(aTabWidget.backgroundRole());
+        set_background(toColor(aColor));
+    });
+}
 
 void QtInstanceWidget::set_title_background() { assert(false && "Not implemented yet"); }
 
