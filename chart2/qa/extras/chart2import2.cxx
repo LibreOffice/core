@@ -1007,6 +1007,48 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136754)
                                  drawing::FillStyle_SOLID, eStyle);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
+{
+    loadFromFile(u"xls/testRotatedAxisTitlePositions.xls");
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+        CPPUNIT_ASSERT(xAxis.is());
+        lcl_assertAngles(xAxis, 0, 90);
+        Reference<chart2::XTitle> xAxisTitle
+            = css::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
+        Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
+
+        chart2::RelativePosition aRelPos;
+        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue("RelativePosition") >>= aRelPos);
+
+        // old value with my setup 0.0327998, new value: 0.822488
+        CPPUNIT_ASSERT_GREATER(0.1, aRelPos.Secondary);
+        SAL_WARN("chart2", "Primary: " << aRelPos.Primary << ", " << aRelPos.Secondary);
+    }
+    {
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(1);
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 1, 0);
+        CPPUNIT_ASSERT(xAxis.is());
+        lcl_assertAngles(xAxis, 0, 270);
+
+        Reference<chart2::XTitle> xAxisTitle
+            = css::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
+        Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
+
+        chart2::RelativePosition aRelPos;
+        CPPUNIT_ASSERT(xAxisTitleProps->getPropertyValue("RelativePosition") >>= aRelPos);
+
+        SAL_WARN("chart2", "Primary: " << aRelPos.Primary << ", " << aRelPos.Secondary);
+        // old value with my setup 0.0330348, new value: 0.0987283
+        CPPUNIT_ASSERT_GREATER(0.05, aRelPos.Primary);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
