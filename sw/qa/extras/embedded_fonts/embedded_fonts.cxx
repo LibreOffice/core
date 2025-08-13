@@ -335,6 +335,80 @@ CPPUNIT_TEST_FIXTURE(Test, testOpenDOCXWithRestrictedEmbeddedFont)
     }
 }
 
+#if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(Test, testTdf167849)
+{
+    // Given two documents with embedded fonts, that will not require substitution, if present:
+
+    FontMappingUseListener fontMappingData;
+
+    // Load the first document
+    createSwDoc("embed-unrestricted1.odt");
+    // At this point, 'Manbow Solid' embedded font is loaded
+    std::swap(mxComponent, mxComponent2); // keep it from unloading upon the next load
+
+    fontMappingData.checkpoint();
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Manbow Solid"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Manbow Solid"));
+
+    // Load the second document
+    createSwDoc("embed-unrestricted2.odt");
+    // At this point, 'Unsteady Oversteer' font is also loaded
+
+    fontMappingData.checkpoint();
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+
+    // Re-layout both documents; both fonts must still be loaded
+    calcLayout(true);
+    std::swap(mxComponent, mxComponent2);
+    calcLayout(true);
+
+    fontMappingData.checkpoint();
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Manbow Solid"));
+    // Without the fix, it would fail, because loading the second document unregistered
+    // the embedded font from the first one.
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Manbow Solid"));
+    CPPUNIT_ASSERT(fontMappingData.wasUsed(u"Unsteady Oversteer"));
+    CPPUNIT_ASSERT(!fontMappingData.wasSubstituted(u"Unsteady Oversteer"));
+}
+#endif
+
+CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
+{
+    createSwDoc("font_used_in_header_only.fodt");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(
+        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xProps->getPropertyValue(u"EmbedFonts"_ustr));
+
+    save(u"Office Open XML Text"_ustr);
+
+    xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
+
+    // Test that DejaVu Sans is embedded
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedRegular");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBold");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedItalic");
+// It is strange that DejaVu is different on Linux: see e.g. tdf166627 in odfexport2.cxx
+#if defined(_WIN32) || defined(MACOSX)
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBoldItalic");
+#endif
+
+    // Test that common fonts (here: Liberation Serif, Liberation Sans) are not embedded
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedRegular", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedBold", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedItalic", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedBoldItalic", 0);
+
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']");
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedRegular", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedBold", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedItalic", 0);
+    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedBoldItalic", 0);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

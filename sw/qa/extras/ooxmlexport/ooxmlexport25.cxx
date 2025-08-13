@@ -274,41 +274,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150822)
     fnVerify();
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testFontEmbeddingDOCX)
-{
-    createSwDoc("font_used_in_header_only.fodt");
-    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySet> xProps(
-        xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xProps->getPropertyValue(u"EmbedFonts"_ustr));
-
-    save(mpFilter);
-
-    xmlDocUniquePtr pXml = parseExport(u"word/fontTable.xml"_ustr);
-
-    // Test that DejaVu Sans is embedded
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedRegular");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBold");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedItalic");
-// It is strange that DejaVu is different on Linux: see e.g. tdf166627 in odfexport2.cxx
-#if defined(_WIN32) || defined(MACOSX)
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='DejaVu Sans']/w:embedBoldItalic");
-#endif
-
-    // Test that common fonts (here: Liberation Serif, Liberation Sans) are not embedded
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedRegular", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedBold", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedItalic", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Serif']/w:embedBoldItalic", 0);
-
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']");
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedRegular", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedBold", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedItalic", 0);
-    assertXPath(pXml, "/w:fonts/w:font[@w:name='Liberation Sans']/w:embedBoldItalic", 0);
-}
-
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
