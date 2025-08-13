@@ -398,7 +398,7 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
                 }
                 else
                 {
-                    WriteDIBBitmapEx(aGraphic.GetBitmapEx(), mrStream);
+                    WriteDIBBitmapEx(aGraphic.GetBitmap(), mrStream);
                 }
             }
             break;

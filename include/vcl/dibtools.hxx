@@ -85,6 +85,10 @@ bool VCL_DLLPUBLIC WriteDIB(
     const BitmapEx& rSource,
     SvStream& rOStm,
     bool bCompressed = true);
+bool VCL_DLLPUBLIC WriteDIB(
+    const Bitmap& rSource,
+    SvStream& rOStm,
+    bool bCompressed = true);
 
 bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const BitmapEx& rSource,

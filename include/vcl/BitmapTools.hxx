@@ -73,6 +73,7 @@ VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixed
 VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap, BitmapEx & aBmpEx, basegfx::B2DPolyPolygon const & rClipPath);
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx);
+VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
 
 /**
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image

@@ -9936,12 +9936,12 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         GraphicConverter::Import( rDCTData, aGraphic, ConvertDataFormat::JPG );
         if( !rAlphaMask.IsEmpty() && rAlphaMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
-            Bitmap aBmp( aGraphic.GetBitmapEx().GetBitmap() );
+            Bitmap aBmp( aGraphic.GetBitmap().CreateColorBitmap() );
             BitmapEx aBmpEx( aBmp, rAlphaMask );
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), Bitmap(aBmpEx) );
         }
         else
-            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), Bitmap(aGraphic.GetBitmapEx()) );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aGraphic.GetBitmap() );
         return;
     }
 

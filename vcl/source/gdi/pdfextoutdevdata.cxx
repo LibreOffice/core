@@ -501,7 +501,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 aOutputRect.SetSize(pA->GetSize());
                             }
                         }
-                        auto ePixelFormat = aGraphic.GetBitmapEx().getPixelFormat();
+                        auto ePixelFormat = aGraphic.GetBitmap().getPixelFormat();
                         rWriter.DrawJPGBitmap(aTmp, ePixelFormat > vcl::PixelFormat::N8_BPP, aGraphic.GetSizePixel(), aOutputRect, aAlphaMask, aGraphic);
                     }
 

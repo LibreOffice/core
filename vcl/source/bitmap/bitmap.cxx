@@ -2128,4 +2128,68 @@ Bitmap Bitmap::CreateColorBitmap() const
     return BitmapEx(*this).GetBitmap();
 }
 
+void Bitmap::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
+{
+    assert(HasAlpha());
+    if (!HasAlpha())
+        return;
+
+    BitmapScopedWriteAccess pAccess(*this);
+    assert( pAccess );
+    if ( !pAccess )
+        return;
+
+    for ( tools::Long nY = 0, nHeight = pAccess->Height(); nY < nHeight; nY++ )
+    {
+        Scanline pScanline = pAccess->GetScanline( nY );
+        for ( tools::Long nX = 0, nWidth = pAccess->Width(); nX < nWidth; nX++ )
+        {
+            BitmapColor aCol = pAccess->GetPixelFromData( pScanline, nX );
+            const sal_uInt8 cIndex = aCol.GetAlpha();
+            if ( cIndex == cIndexFrom )
+            {
+                aCol.SetAlpha(nAlphaTo);
+                pAccess->SetPixelOnData( pScanline, nX, aCol );
+            }
+        }
+    }
+}
+
+void Bitmap::AdjustTransparency(sal_uInt8 cTrans)
+{
+    if (!HasAlpha())
+    {
+        AlphaMask aAlpha(GetSizePixel(), &cTrans);
+        BitmapEx aNew( *this, aAlpha );
+        *this = Bitmap(aNew);
+    }
+    else
+    {
+        BitmapScopedWriteAccess pA(*this);
+        assert(pA);
+        if( !pA )
+            return;
+
+        sal_uLong nTrans = cTrans;
+        const tools::Long  nWidth = pA->Width(), nHeight = pA->Height();
+
+        BitmapColor aAlphaValue( 0 );
+
+        for( tools::Long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pScanline = pA->GetScanline( nY );
+            for( tools::Long nX = 0; nX < nWidth; nX++ )
+            {
+                BitmapColor aCol = pA->GetPixelFromData( pScanline, nX );
+                sal_uLong nNewTrans = nTrans + (255 - aCol.GetAlpha());
+                // clamp to 255
+                nNewTrans = ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans;
+                // convert back to alpha
+                aCol.SetAlpha( static_cast<sal_uInt8>(255 - nNewTrans) );
+                pA->SetPixelOnData( pScanline, nX, aCol );
+            }
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

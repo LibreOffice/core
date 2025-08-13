@@ -651,6 +651,11 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     return css::uno::Sequence< sal_Int8 >();
 }
 
+css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & rBmp)
+{
+    return GetMaskDIB(BitmapEx(rBmp));
+}
+
 static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, const tools::Long nWidth, unsigned char* data, tools::Long nOff )
 {
     bool bIsAlpha = false;

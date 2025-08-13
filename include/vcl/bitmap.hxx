@@ -572,6 +572,13 @@ public:
                                 bool bInvert = false,
                                 bool msoBrightness = false );
 
+    SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
+
+    /**
+     * Adds a constant value to the alpha layer
+     */
+    SAL_DLLPRIVATE void AdjustTransparency( sal_uInt8 cTrans );
+
     /** Remove existing blending against COL_WHITE based on given AlphaMask
 
         Inside convertToBitmapEx the content gets rendered to RGB target (no 'A'),

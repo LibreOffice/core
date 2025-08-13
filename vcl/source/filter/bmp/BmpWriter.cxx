@@ -22,17 +22,17 @@
 
 bool BmpWriter(SvStream& rStream, const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
-    BitmapEx aBitmap = rGraphic.GetBitmapEx();
+    Bitmap aBitmap = rGraphic.GetBitmap();
     sal_Int32 nColor = pFilterConfigItem->ReadInt32(u"Color"_ustr, 0);
 
     auto nColorRes = static_cast<BmpConversion>(nColor);
     if (nColorRes != BmpConversion::NNONE && nColorRes <= BmpConversion::N24Bit)
     {
         if (!aBitmap.Convert(nColorRes))
-            aBitmap = rGraphic.GetBitmapEx();
+            aBitmap = rGraphic.GetBitmap();
     }
     bool bRleCoding = pFilterConfigItem->ReadBool(u"RLE_Coding"_ustr, true);
-    WriteDIB(aBitmap, rStream, bRleCoding);
+    WriteDIB(BitmapEx(aBitmap), rStream, bRleCoding);
 
     return rStream.good();
 }

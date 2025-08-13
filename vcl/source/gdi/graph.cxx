@@ -338,6 +338,11 @@ BitmapEx Graphic::GetBitmapEx(const GraphicConversionParameters& rParameters) co
     return mxImpGraphic->getBitmapEx(rParameters);
 }
 
+Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
+{
+    return mxImpGraphic->getBitmap(rParameters);
+}
+
 Animation Graphic::GetAnimation() const
 {
     return mxImpGraphic->getAnimation();

@@ -1962,7 +1962,7 @@ static Bitmap readBitmap(const OUString& rPath)
     Graphic aGraphic;
     if (GraphicFilter::LoadGraphic(aPath, OUString(), aGraphic) != ERRCODE_NONE)
         return Bitmap();
-    return Bitmap(aGraphic.GetBitmapEx());
+    return aGraphic.GetBitmap();
 }
 
 static void setupAppBackgroundBitmap(OUString& rAppBackBitmapFileName, Bitmap& rAppBackBitmap)
