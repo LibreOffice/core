@@ -211,6 +211,17 @@ OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_vie
 
     return url;
 }
+
+OUString getFilenameForExport(std::u16string_view familyName, FontFamily family, FontItalic italic,
+                              FontWeight weight, FontPitch pitch)
+{
+    OUString filename = OUString::Concat(familyName) + "_" + OUString::number(family) + "_"
+                        + OUString::number(italic) + "_" + OUString::number(weight) + "_"
+                        + OUString::number(pitch) + ".ttf";
+    return rtl::Uri::encode(filename, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8);
+}
+
 }
 
 EmbeddedFontsManager::EmbeddedFontsManager(const uno::Reference<frame::XModel>& xModel)
@@ -555,10 +566,7 @@ OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, Font
 
     OUString path = GetEmbeddedFontsRoot() + "fromsystem/";
     osl::Directory::createPath( path );
-    OUString filename = OUString::Concat(familyName) + "_" + OUString::number( family ) + "_" + OUString::number( italic )
-        + "_" + OUString::number( weight ) + "_" + OUString::number( pitch )
-        + ".ttf"; // TODO is it always ttf?
-    OUString url = path + filename;
+    OUString url = path + getFilenameForExport(familyName, family, italic, weight, pitch);
     if( osl::File( url ).open( osl_File_OpenFlag_Read ) == osl::File::E_None ) // = exists()
     {
         // File with contents of the font file already exists, assume it's been created by a previous call.
@@ -618,10 +626,8 @@ OUString EmbeddedFontsManager::fontFileUrl( std::u16string_view familyName, Font
     for (vcl::font::PhysicalFontFace* f : fontsToAdd)
     {
         if (!selected) { // recalculate file name for "not perfect match"
-            filename = OUString::Concat(familyName) + "_" + OUString::number(f->GetFamilyType()) + "_" +
-                OUString::number(f->GetItalic()) + "_" + OUString::number(f->GetWeight()) + "_" +
-                OUString::number(f->GetPitch()) + ".ttf"; // TODO is it always ttf?
-            url = path + filename;
+            url = path + getFilenameForExport(familyName, f->GetFamilyType(), f->GetItalic(),
+                                              f->GetWeight(), f->GetPitch());
             if (osl::File(url).open(osl_File_OpenFlag_Read) == osl::File::E_None) // = exists()
             {
                 // File with contents of the font file already exists, assume it's been created by a previous call.
