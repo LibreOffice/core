@@ -50,20 +50,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="remove">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes" context="linefragment|STR_SFX_REMOVE_PROPERTY">Remove Property</property>
-        <property name="image">image1</property>
-        <property name="always-show-image">True</property>
-      </object>
-      <packing>
-        <property name="left-attach">3</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -229,6 +215,20 @@
       </object>
       <packing>
         <property name="left-attach">2</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+        <child>
+      <object class="GtkButton" id="remove">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes" context="linefragment|STR_SFX_REMOVE_PROPERTY">Remove Property</property>
+        <property name="image">image1</property>
+        <property name="always-show-image">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">3</property>
         <property name="top-attach">0</property>
       </packing>
     </child>
