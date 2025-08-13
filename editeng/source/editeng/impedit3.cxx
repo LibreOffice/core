@@ -4859,7 +4859,6 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                             }
                             else
                             {
-                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunctuation = true;
                                 pTextPortion->GetExtraInfos()->nPortionOffsetX = -nCompress;
                             }
                         }
