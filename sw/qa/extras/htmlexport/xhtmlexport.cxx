@@ -86,7 +86,7 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf167910)
     CPPUNIT_ASSERT(para2 != -1);
     auto para3{ aStream.indexOf("text-decoration:underline overline;", para2) };
     CPPUNIT_ASSERT(para3 != -1);
-    // the paragraph 4 is using commond style not automatic style and these
+    // the paragraph 4 is using common style not automatic style and these
     // are exported after all automatic ones...
     auto para5{ aStream.indexOf("text-decoration:underline;", para3) };
     CPPUNIT_ASSERT(para5 != -1);
