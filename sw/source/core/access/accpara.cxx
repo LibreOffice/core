@@ -421,10 +421,9 @@ rtl::Reference<SwXTextPortion> SwAccessibleParagraph::CreateUnoPortion(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex )
 {
-    OSL_ENSURE( (IsValidChar(nStartIndex, GetString().getLength()) &&
-                 (nEndIndex == -1)) ||
-                IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
-                "please check parameters before calling this method" );
+    OSL_ENSURE((IsValidChar(nStartIndex, GetString().getLength()) && (nEndIndex == -1))
+                   || IsValidRange(nStartIndex, nEndIndex),
+               "please check parameters before calling this method");
 
     const TextFrameIndex nStart = GetPortionData().GetCoreViewPosition(nStartIndex);
     const TextFrameIndex nEnd = (nEndIndex == -1)
@@ -457,9 +456,9 @@ bool SwAccessibleParagraph::IsValidPosition(
     return (nPos >= 0) && (nPos <= nLength);
 }
 
-bool SwAccessibleParagraph::IsValidRange(
-    sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength)
+bool SwAccessibleParagraph::IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd)
 {
+    const sal_Int32 nLength = GetString().getLength();
     return IsValidPosition(nBegin, nLength) && IsValidPosition(nEnd, nLength);
 }
 
@@ -2014,8 +2013,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     ThrowIfDisposed();
 
     // parameter checking
-    sal_Int32 nLength = GetString().getLength();
-    if ( ! IsValidRange( nStartIndex, nEndIndex, nLength ) )
+    if (!IsValidRange(nStartIndex, nEndIndex))
     {
         throw lang::IndexOutOfBoundsException();
     }
@@ -2057,13 +2055,11 @@ OUString SwAccessibleParagraph::getTextRange(
 
     ThrowIfDisposed();
 
-    OUString sText( GetString() );
-
-    if ( !IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
+    if (!IsValidRange(nStartIndex, nEndIndex))
         throw lang::IndexOutOfBoundsException();
 
     OrderRange( nStartIndex, nEndIndex );
-    return sText.copy(nStartIndex, nEndIndex-nStartIndex );
+    return GetString().copy(nStartIndex, nEndIndex - nStartIndex);
 }
 
 TextSegment SwAccessibleParagraph::getTextAtIndex(sal_Int32 nIndex, sal_Int16 nTextType)
@@ -2292,8 +2288,7 @@ sal_Bool SwAccessibleParagraph::scrollSubstringTo( sal_Int32 nStartIndex,
     ThrowIfDisposed();
 
     // parameter checking
-    sal_Int32 nLength = GetString().getLength();
-    if ( ! IsValidRange( nStartIndex, nEndIndex, nLength ) )
+    if (!IsValidRange(nStartIndex, nEndIndex))
         throw lang::IndexOutOfBoundsException();
 
     vcl::Window *pWin = GetWindow();
@@ -2398,9 +2393,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
     ThrowIfDisposed();
 
-    const OUString& rText = GetString();
-
-    if( !IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
+    if (!IsValidRange(nStartIndex, nEndIndex))
         throw lang::IndexOutOfBoundsException();
 
     if( !IsEditableState() )
@@ -2445,9 +2438,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
 
     ThrowIfDisposed();
 
-    const OUString& rText = GetString();
-
-    if( ! IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
+    if (!IsValidRange(nStartIndex, nEndIndex))
         throw lang::IndexOutOfBoundsException();
 
     if( !IsEditableState() )
@@ -2887,8 +2878,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection(sal_Int32 startOffset, sa
     ThrowIfDisposed();
 
     // parameter checking
-    sal_Int32 nLength = GetString().getLength();
-    if ( ! IsValidRange( startOffset, endOffset, nLength ) )
+    if (!IsValidRange(startOffset, endOffset))
     {
         throw lang::IndexOutOfBoundsException();
     }
