@@ -257,7 +257,7 @@ void Window::SetAccessibleParent(const rtl::Reference<comphelper::OAccessible>& 
     mpWindowImpl->mpAccessibleInfos->pAccessibleParent = rpParent;
 }
 
-css::uno::Reference<css::accessibility::XAccessible> Window::GetAccessibleParent() const
+rtl::Reference<comphelper::OAccessible> Window::GetAccessibleParent() const
 {
     if (!mpWindowImpl)
         return nullptr;

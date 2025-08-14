@@ -66,9 +66,6 @@ enum class VclEventId;
 enum class PointerStyle;
 
 namespace com::sun::star {
-    namespace accessibility {
-        class XAccessible;
-    }
     namespace awt {
         class XVclWindowPeer;
     }
@@ -1132,7 +1129,7 @@ public:
     sal_uInt16                          GetAccessibleChildWindowCount();
     vcl::Window*                        GetAccessibleChildWindow( sal_uInt16 n );
 
-    css::uno::Reference<css::accessibility::XAccessible> GetAccessibleParent() const;
+    rtl::Reference<comphelper::OAccessible> GetAccessibleParent() const;
     // Explicitly set an accessible parent (usually not needed)
     void SetAccessibleParent(const rtl::Reference<comphelper::OAccessible>& rpParent);
 
