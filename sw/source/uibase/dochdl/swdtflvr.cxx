@@ -26,6 +26,8 @@
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 #include <com/sun/star/text/XPasteListener.hpp>
 
+#include <officecfg/Office/Writer.hxx>
+
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
@@ -2514,11 +2516,24 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
             }
             //End of Hack!
 
+            rSh.Push();
             rSh.InsertOleObject( xObjRef );
             bRet = true;
 
             if( bRet && ( nActionFlags & SotExchangeActionFlags::InsertTargetUrl) )
                 SwTransferable::PasteTargetURL( rData, rSh, SwPasteSdr::NONE, nullptr, false );
+
+            if (!officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::get())
+            {
+                SwTransferable::SetSelInShell(rSh, false, nullptr);
+                // shell cursor was put at the end of the document because the
+                // fly was not yet positioned; restore stack cursor
+                rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            }
+            else
+            {
+                rSh.Pop(SwCursorShell::PopMode::DeleteStack);
+            }
 
             // let the object be unloaded if possible
             SwOLEObj::UnloadObject( xObj, rSh.GetDoc(), embed::Aspects::MSOLE_CONTENT );
@@ -2824,11 +2839,17 @@ bool SwTransferable::PasteSdrFormat(  const TransferableDataHelper& rData,
             SwTransferable::SetSelInShell( rSh, true, pPt );
         }
 
-        rSh.Paste( *xStrm, nAction, pPt );
+        nAction = rSh.PasteStream(*xStrm, nAction, pPt);
         bRet = true;
 
         if( bRet && ( nActionFlags & SotExchangeActionFlags::InsertTargetUrl ))
             SwTransferable::PasteTargetURL( rData, rSh, SwPasteSdr::NONE, nullptr, false );
+
+        if (nAction == SwPasteSdr::Insert &&
+            !officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::get())
+        {
+            SwTransferable::SetSelInShell(rSh, false, pPt);
+        }
     }
     return bRet;
 }
@@ -2967,6 +2988,8 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
         {
             case SwPasteSdr::Insert:
             {
+                rSh.Push();
+
                 SwTransferable::SetSelInShell( rSh, false, pPt );
                 rSh.InsertGraphic(sURL, OUString(), aGraphic, nullptr, nAnchorType);
                 break;
@@ -3043,6 +3066,19 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
         if( nActionFlags & SotExchangeActionFlags::InsertTargetUrl )
             SwTransferable::PasteTargetURL( rData, rSh, SwPasteSdr::NONE, nullptr, false );
+
+        if (nAction == SwPasteSdr::Insert)
+        {
+            if (!officecfg::Office::Writer::Cursor::Option::SelectPastedAnchoredObject::get())
+            {
+                SwTransferable::SetSelInShell(rSh, false, pPt);
+                rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            }
+            else
+            {
+                rSh.Pop(SwCursorShell::PopMode::DeleteStack);
+            }
+        }
     }
     else if( bCheckForImageMap )
     {

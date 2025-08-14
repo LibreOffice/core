@@ -570,7 +570,7 @@ public:
      Return value indicates if it was converted. */
     bool GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf ) const;
 
-    void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt );
+    SwPasteSdr PasteStream(SvStream& rStm, SwPasteSdr nAction, const Point* pPt);
     bool Paste( const Graphic &rGrf, const OUString& rURL );
 
     comphelper::OInterfaceContainerHelper3<css::text::XPasteListener>& GetPasteListeners();
