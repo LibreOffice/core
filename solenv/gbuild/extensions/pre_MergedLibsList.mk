@@ -157,7 +157,6 @@ gb_MERGE_LIBRARY_LIST += \
 	$(if $(ENABLE_LWP),lwpft) \
 	$(if $(filter $(OS),MACOSX), \
 		macab1 \
-		macabdrv1 \
 	) \
 	mozbootstrap \
 	msforms \
