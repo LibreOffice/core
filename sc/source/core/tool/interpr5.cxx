@@ -2121,7 +2121,7 @@ void lcl_ApplyHouseholderTransformation(const ScMatrixRef& pMatA, SCSIZE nC,
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_GetColumnSumProduct(pMatA, nC, pMatA, nC, nC, nN);
     double fNumerator = lcl_GetColumnSumProduct(pMatA, nC, pMatY, 0, nC, nN);
-    double fFactor = 2.0 * (fNumerator/fDenominator);
+    double fFactor = 2.0 * o3tl::div_allow_zero(fNumerator, fDenominator);
     for (SCSIZE row = nC; row < nN; row++)
         pMatY->PutDouble(
             pMatY->GetDouble(row) - fFactor * pMatA->GetDouble(nC,row), row);
@@ -2134,7 +2134,7 @@ void lcl_TApplyHouseholderTransformation(const ScMatrixRef& pMatA, SCSIZE nR,
     // ScMatrix matrices are zero based, index access (column,row)
     double fDenominator = lcl_TGetColumnSumProduct(pMatA, nR, pMatA, nR, nR, nN);
     double fNumerator = lcl_TGetColumnSumProduct(pMatA, nR, pMatY, 0, nR, nN);
-    double fFactor = 2.0 * (fNumerator/fDenominator);
+    double fFactor = 2.0 * o3tl::div_allow_zero(fNumerator, fDenominator);
     for (SCSIZE col = nR; col < nN; col++)
         pMatY->PutDouble(
           pMatY->GetDouble(col) - fFactor * pMatA->GetDouble(col,nR), col);

@@ -521,7 +521,7 @@ void ScETSForecastCalculation::calcAccuracyIndicators()
 
     int nCalcCount = mnCount - 1;
     mfMAE   = fSumAbsErr.get() / nCalcCount;
-    mfMASE  = fSumAbsErr.get() / ( nCalcCount * fSumDivisor.get() / ( nCalcCount - 1 ) );
+    mfMASE  = o3tl::div_allow_zero(fSumAbsErr.get(), nCalcCount * fSumDivisor.get() / ( nCalcCount - 1 ));
     mfMSE   = fSumErrSq.get() / nCalcCount;
     mfRMSE  = sqrt( mfMSE );
     mfSMAPE = fSumAbsPercErr.get() * 2.0 / nCalcCount;

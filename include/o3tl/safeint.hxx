@@ -234,6 +234,15 @@ template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
     return std::min(a, b);
 }
 
+// For use when std::inf is an acceptable result
+[[nodiscard]] inline double div_allow_zero(double a, double b)
+{
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
+    assert(b != 0 && "suppress floating point divide_by_zero");
+#endif
+    return a / b;
+}
+
 // To sanitize in/de-crementing value where the result is known by the caller to be guaranteed to fit in
 // the source type range without over/under-flow
 [[nodiscard]] inline unsigned short sanitizing_inc(unsigned short value)

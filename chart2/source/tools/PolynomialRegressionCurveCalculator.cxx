@@ -151,7 +151,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         double fSumXY = lcl_GetDotProduct(xVector, yVector);
         double fSumX2 = lcl_GetDotProduct(xVector, xVector);
 
-        double fSlope = fSumXY / fSumX2;
+        double fSlope = o3tl::div_allow_zero(fSumXY, fSumX2);
 
         if (!mForceIntercept)
         {

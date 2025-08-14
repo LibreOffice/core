@@ -1506,7 +1506,7 @@ void ScInterpreter::ScIRR()
             }
             SetError(nIterError);
         }
-        double xNew = x - fNom.get() / fDenom.get();  // x(i+1) = x(i)-f(x(i))/f'(x(i))
+        double xNew = x - o3tl::div_allow_zero(fNom.get(), fDenom.get());  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
         fEps = std::abs(xNew - x);
         x = xNew;
@@ -1636,7 +1636,7 @@ void ScInterpreter::ScMIRR()
             PushError( nGlobalError );
         else
         {
-            double fResult = -fNPV_reinvest.get() / fNPV_invest.get();
+            double fResult = -o3tl::div_allow_zero(fNPV_reinvest.get(), fNPV_invest.get());
             fResult *= pow( fRate1_reinvest, static_cast<double>( nCount - 1 ) );
             fResult = pow( fResult, div( 1.0, (nCount - 1)) );
             PushDouble( fResult - 1.0 );
@@ -1656,7 +1656,7 @@ void ScInterpreter::ScISPMT()
         if( nGlobalError != FormulaError::NONE )
             PushError( nGlobalError);
         else
-            PushDouble( fInvest * fRate * (fPeriod / fTotal - 1.0) );
+            PushDouble( fInvest * fRate * (o3tl::div_allow_zero(fPeriod, fTotal) - 1.0) );
     }
 }
 
@@ -1704,8 +1704,8 @@ void ScInterpreter::ScSYD()
         double fLife = GetDouble();
         double fSalvage = GetDouble();
         double fCost = GetDouble();
-        double fSyd = ((fCost - fSalvage) * (fLife - fPer + 1.0)) /
-                      ((fLife * (fLife + 1.0)) / 2.0);
+        double fSyd = o3tl::div_allow_zero((fCost - fSalvage) * (fLife - fPer + 1.0),
+                      (fLife * (fLife + 1.0)) / 2.0);
         PushDouble(fSyd);
     }
 }
@@ -1714,7 +1714,7 @@ double ScInterpreter::ScGetDDB(double fCost, double fSalvage, double fLife,
                 double fPeriod, double fFactor)
 {
     double fDdb, fRate, fOldValue, fNewValue;
-    fRate = fFactor / fLife;
+    fRate = o3tl::div_allow_zero(fFactor, fLife);
     if (fRate >= 1.0)
     {
         fRate = 1.0;
@@ -1941,7 +1941,7 @@ double ScInterpreter::ScGetPMT(double fRate, double fNper, double fPv,
 {
     double fPayment;
     if (fRate == 0.0)
-        fPayment = (fPv + fFv) / fNper;
+        fPayment = o3tl::div_allow_zero(fPv + fFv, fNper);
     else
     {
         if (bPayInAdvance) // payment in advance
@@ -2029,9 +2029,9 @@ void ScInterpreter::ScNper()
     if ( fPV + fFV == 0.0 )
         PushDouble( 0.0 );
     else if (fRate == 0.0)
-        PushDouble(-(fPV + fFV)/fPmt);
+        PushDouble(-o3tl::div_allow_zero(fPV + fFV, fPmt));
     else if (bPayInAdvance)
-        PushDouble(log(-(fRate*fFV-fPmt*(1.0+fRate))/(fRate*fPV+fPmt*(1.0+fRate)))
+        PushDouble(log(-o3tl::div_allow_zero(fRate*fFV-fPmt*(1.0+fRate), (fRate*fPV+fPmt*(1.0+fRate))))
                   / std::log1p(fRate));
     else
         PushDouble(log(-(fRate*fFV-fPmt)/(fRate*fPV+fPmt)) / std::log1p(fRate));

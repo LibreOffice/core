@@ -1065,9 +1065,7 @@ double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
     double      y = 1.0 + fIssMat * fRate;
     y /= fPrice / 100.0 + fIssSet * fRate;
     y--;
-    y /= fSetMat;
-
-    return y;
+    return o3tl::div_allow_zero(y, fSetMat);
 }
 
 
@@ -1195,9 +1193,7 @@ double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     double      y = fRedemp + fDCi * 100.0 * fRate / fFreq;
     y /= fPrice + fAi * 100.0 * fRate / fFreq;
     y--;
-    y *= fFreq / fDSCi;
-
-    return y;
+    return y * o3tl::div_allow_zero(fFreq, fDSCi);
 }
 
 

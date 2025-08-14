@@ -1421,7 +1421,7 @@ void PieChart::createOneBar(
         rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
 
         ///collect data point information (logic coordinates, style ):
-        double fY = pDataSrc->getData(pSeries, nPointIndex, eType) / barSum;
+        double fY = o3tl::div_allow_zero(pDataSrc->getData(pSeries, nPointIndex, eType), barSum);
         if( std::isnan(fY) )
             continue;
         if(fY==0.0)//@todo: continue also if the resolution is too small

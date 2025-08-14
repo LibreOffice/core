@@ -257,7 +257,7 @@ double ScInterpreter::gauss(double x)
     else
     {
         static const double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
-        nVal = 0.5 + phi(xAbs) * taylor(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
+        nVal = 0.5 + phi(xAbs) * o3tl::div_allow_zero(taylor(asympt, 4, o3tl::div_allow_zero(1.0, xAbs * xAbs)), xAbs);
     }
     if (x < 0.0)
         return -nVal;
@@ -812,7 +812,7 @@ double ScInterpreter::GetBeta(double fAlpha, double fBeta)
         fA = fBeta; fB = fAlpha;
     }
     if (fA+fB < fMaxGammaArgument) // simple case
-        return GetGamma(fA)/GetGamma(fA+fB)*GetGamma(fB);
+        return o3tl::div_allow_zero(GetGamma(fA), GetGamma(fA+fB)) * GetGamma(fB);
     // need logarithm
     // GetLogGamma is not accurate enough, back to Lanczos for all three
     // GetGamma and arrange factors newly.
@@ -3019,7 +3019,7 @@ void ScInterpreter::ScHarMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble( nValCount / nVal.get() );
+        PushDouble( o3tl::div_allow_zero(nValCount, nVal.get()) );
     else
         PushError( nGlobalError);
 }
@@ -3191,7 +3191,7 @@ void ScInterpreter::ScGeoMean()
         }
     }
     if (nGlobalError == FormulaError::NONE)
-        PushDouble(exp(nVal.get() / nValCount));
+        PushDouble(exp(o3tl::div_allow_zero(nVal.get(), nValCount)));
     else
         PushError( nGlobalError);
 }

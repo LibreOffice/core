@@ -54,7 +54,7 @@ bool SubTotal::SafeDiv(double& fVal1, double fVal2)
 {
     bool bOk = true;
     SAL_MATH_FPEXCEPTIONS_OFF();
-    fVal1 /= fVal2;
+    fVal1 = o3tl::div_allow_zero(fVal1, fVal2);
     if (!std::isfinite(fVal1))
     {
         bOk = false;

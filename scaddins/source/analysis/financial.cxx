@@ -553,7 +553,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
         do
         {
             fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
-            double fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
+            double fNewRate = fResultRate - o3tl::div_allow_zero(fResultValue, lcl_sca_XirrResult_Deriv1(aValues, aDates, fResultRate));
             double fRateEps = fabs( fNewRate - fResultRate );
             fResultRate = fNewRate;
             bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);

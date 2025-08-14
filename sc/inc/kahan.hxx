@@ -215,7 +215,10 @@ public:
 
     inline KahanSum operator*(double fTimes) const { return get() * fTimes; }
 
-    inline KahanSum operator/(const KahanSum& fDivides) const { return get() / fDivides.get(); }
+    inline KahanSum operator/(const KahanSum& fDivides) const
+    {
+        return o3tl::div_allow_zero(get(), fDivides.get());
+    }
 
     inline KahanSum operator/(double fDivides) const { return get() / fDivides; }
 

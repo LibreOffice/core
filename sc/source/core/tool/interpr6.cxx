@@ -96,7 +96,7 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
 double ScInterpreter::GetGammaSeries( double fA, double fX )
 {
     double fDenomfactor = fA;
-    double fSummand = 1.0/fA;
+    double fSummand = o3tl::div_allow_zero(1.0, fA);
     double fSum = fSummand;
     int nCount=1;
     do
@@ -171,7 +171,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
             const double fLogDblMax = log( ::std::numeric_limits<double>::max());
             if (log(fXr) * (fAlpha-1.0) < fLogDblMax && fAlpha < fMaxGammaArgument)
             {
-                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);
+                return o3tl::div_allow_zero(pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda, GetGamma(fAlpha));
             }
             else
             {
@@ -182,7 +182,7 @@ double ScInterpreter::GetGammaDistPDF( double fX, double fAlpha, double fLambda 
         {
             if (fAlpha<fMaxGammaArgument)
             {
-                return pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda / GetGamma(fAlpha);
+                return o3tl::div_allow_zero(pow( fXr, fAlpha-1.0) * exp(-fXr) / fLambda, GetGamma(fAlpha));
             }
             else
             {
