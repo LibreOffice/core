@@ -1385,6 +1385,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"AnimationEffects", { PayloadType::EnabledPayload, true } },
         { u"ExecuteAnimationEffect", { PayloadType::EnabledPayload, true } },
         { u"PasteSlide", { PayloadType::EnabledPayload, true } },
+        { u"LineStyle", { PayloadType::EnabledPayload, true } },
 
         { u"ParaLeftToRight", { PayloadType::ParaDirectionPayload, true } },
         { u"ParaRightToLeft", { PayloadType::ParaDirectionPayload, true } },

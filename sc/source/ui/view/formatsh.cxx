@@ -1472,6 +1472,8 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                         SvxLineItem aItem(SID_FRAME_LINESTYLE);
                         aItem.SetLine(&aLine);
                         rSet.Put( aItem );
+                        if (!aLine.GetWidth())
+                            rSet.DisableItem(SID_FRAME_LINESTYLE);
                     }
                 }
             }
