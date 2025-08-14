@@ -176,7 +176,7 @@ namespace drawinglayer::primitive2d
                                 xControlView->draw(0, 0);
 
                                 // get bitmap
-                                const BitmapEx aContent(aVirtualDevice->GetBitmap(Point(), aSizePixel));
+                                const Bitmap aContent(aVirtualDevice->GetBitmap(Point(), aSizePixel));
 
                                 // snap translate and scale to discrete position (pixel) to avoid sub-pixel offset and blurring further
                                 basegfx::B2DVector aSnappedTranslate(basegfx::fround(rViewInformation.getObjectToViewTransformation() * aTranslate));
@@ -190,7 +190,7 @@ namespace drawinglayer::primitive2d
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(
-                                    Bitmap(aContent),
+                                    aContent,
                                     aBitmapTransform);
                             }
                             catch( const uno::Exception& )
