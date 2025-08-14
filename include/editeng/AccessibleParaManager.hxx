@@ -32,8 +32,6 @@
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include <editeng/editengdllapi.h>
 
-namespace com::sun::star::accessibility { class XAccessible; }
-
 class SvxEditSourceAdapter;
 
 namespace accessibility
