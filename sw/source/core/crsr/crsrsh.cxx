@@ -161,9 +161,9 @@ void SwCursorShell::DestroyCursor()
         return;
 
     SwCallLink aLk( *this ); // watch Cursor-Moves
-    SwCursor* pNextCursor = static_cast<SwCursor*>(m_pCurrentCursor->GetNext());
+    SwShellCursor* pNextCursor = m_pCurrentCursor->GetNext();
     delete m_pCurrentCursor;
-    m_pCurrentCursor = dynamic_cast<SwShellCursor*>(pNextCursor);
+    m_pCurrentCursor = pNextCursor;
     UpdateCursor();
 }
 
