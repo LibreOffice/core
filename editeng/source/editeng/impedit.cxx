@@ -1648,7 +1648,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
             // Need to invalidate the window, otherwise no tile will be re-painted.
             // NOTE:
             // No invalidate in the sense of repaint needed, so not needed for
-            // all cases. Kepping it here so that for LibreOfficeKit this is still
+            // all cases. Keeping it here so that for LibreOfficeKit this is still
             // done, that may need a repaint. Just doing it will work, but do an
             // extra-primitive extraction at the paint which is usually not needed
             GetEditViewPtr()->Invalidate();
