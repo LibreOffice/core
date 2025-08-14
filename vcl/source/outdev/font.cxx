@@ -309,14 +309,14 @@ void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 
     pSVData->maGDIData.mxScreenFontList->Clear();
     vcl::Window * pFrame = pSVData->maFrameData.mpFirstFrame;
-    if ( pFrame )
+    if (!pFrame)
+        return;
+
+    if ( pFrame->GetOutDev()->AcquireGraphics() )
     {
-        if ( pFrame->GetOutDev()->AcquireGraphics() )
-        {
-            OutputDevice *pDevice = pFrame->GetOutDev();
-            pDevice->mpGraphics->ClearDevFontCache();
-            pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mxFontCollection.get());
-        }
+        OutputDevice *pDevice = pFrame->GetOutDev();
+        pDevice->mpGraphics->ClearDevFontCache();
+        pDevice->mpGraphics->GetDevFontList(pFrame->mpWindowImpl->mpFrameData->mxFontCollection.get());
     }
 }
 
