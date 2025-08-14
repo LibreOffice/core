@@ -198,10 +198,26 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
     }
 
-    if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
+    if (rHatch.GetStyle() != HatchStyle::Double && rHatch.GetStyle() != HatchStyle::Triple)
+        return;
+
+    // Double hatch
+    CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
+    if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+        return;
+
+    do
     {
-        // Double hatch
-        CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
+        DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+        aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+        aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
+    }
+    while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+
+    if( rHatch.GetStyle() == HatchStyle::Triple )
+    {
+        // Triple hatch
+        CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
         if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
             return;
 
@@ -212,22 +228,6 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
         }
         while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
-
-        if( rHatch.GetStyle() == HatchStyle::Triple )
-        {
-            // Triple hatch
-            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
-            if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
-                return;
-
-            do
-            {
-                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-            }
-            while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
-        }
     }
 }
 
