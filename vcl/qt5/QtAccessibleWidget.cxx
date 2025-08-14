@@ -993,9 +993,24 @@ QVariant QtAccessibleWidget::attributeValue(QAccessible::Attribute eAttribute) c
 #endif
 
 // QAccessibleTextInterface
-void QtAccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */)
+void QtAccessibleWidget::addSelection(int startOffset, int endOffset)
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::addSelection");
+    // only single selection supported currently
+    if (selectionCount() > 0)
+        return;
+
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return;
+
+    const sal_Int32 nTextLength = xText->getCharacterCount();
+    if (startOffset < 0 || startOffset > nTextLength || endOffset < 0 || endOffset > nTextLength)
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::addSelection called with invalid offset.");
+        return;
+    }
+
+    xText->setSelection(startOffset, endOffset);
 }
 
 // Text attributes are returned in format specified in IAccessible2 spec, since that
@@ -1089,9 +1104,24 @@ int QtAccessibleWidget::offsetAtPoint(const QPoint& rPoint) const
     return xText->getIndexAtPoint(aPoint);
 }
 
-void QtAccessibleWidget::removeSelection(int /* selectionIndex */)
+void QtAccessibleWidget::removeSelection(int selectionIndex)
 {
-    SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::removeSelection");
+    if (selectionIndex < 0 || selectionIndex >= selectionCount())
+    {
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::removeSelection called with invalid index");
+        return;
+    }
+
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
+    if (!xText.is())
+        return;
+
+    // only single selection supported at the moment (s.a. seleciontCount();
+    // code below needs adjustment if that changes
+    assert(selectionIndex == 0);
+
+    const sal_Int32 nCaretPos = xText->getCaretPosition();
+    xText->setSelection(nCaretPos, nCaretPos);
 }
 
 void QtAccessibleWidget::scrollToSubstring(int startIndex, int endIndex)
