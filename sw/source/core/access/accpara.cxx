@@ -3123,134 +3123,133 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
     // get the selection, and test whether it affects our text node
     SwPaM* pCursor = GetCursor( true );
-    if( pCursor != nullptr )
+    if (!pCursor)
+        return false;
+
+    // get SwPosition for my node
+    const SwTextFrame* const pFrame = GetTextFrame();
+    SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+    SwNodeOffset nLastNode;
+    if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
     {
-        // get SwPosition for my node
-        const SwTextFrame* const pFrame = GetTextFrame();
-        SwNodeOffset nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
-        SwNodeOffset nLastNode;
-        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
-        {
-            nLastNode = pMerged->pLastNode->GetIndex();
-        }
-        else
-        {
-            nLastNode = nFirstNode;
-        }
+        nLastNode = pMerged->pLastNode->GetIndex();
+    }
+    else
+    {
+        nLastNode = nFirstNode;
+    }
 
-        // iterate over ring
-        for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
+    // iterate over ring
+    for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
+    {
+        // ignore, if no mark
+        if( rTmpCursor.HasMark() )
         {
-            // ignore, if no mark
-            if( rTmpCursor.HasMark() )
+            // check whether frame's node(s) are 'inside' pCursor
+            SwPosition* pStart = rTmpCursor.Start();
+            SwNodeOffset nStartIndex = pStart->GetNodeIndex();
+            SwPosition* pEnd = rTmpCursor.End();
+            SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
+            if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
             {
-                // check whether frame's node(s) are 'inside' pCursor
-                SwPosition* pStart = rTmpCursor.Start();
-                SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-                SwPosition* pEnd = rTmpCursor.End();
-                SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
-                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
+                if (!pSelection || *pSelection == 0)
                 {
-                    if (!pSelection || *pSelection == 0)
+                    // translate start and end positions
+
+                    // start position
+                    sal_Int32 nLocalStart = -1;
+                    if (nStartIndex < nFirstNode)
                     {
-                        // translate start and end positions
-
-                        // start position
-                        sal_Int32 nLocalStart = -1;
-                        if (nStartIndex < nFirstNode)
-                        {
-                            // selection starts in previous node:
-                            // then our local selection starts with the paragraph
-                            nLocalStart = 0;
-                        }
-                        else
-                        {
-                            assert(FrameContainsNode(*pFrame, nStartIndex));
-
-                            // selection starts in this node:
-                            // then check whether it's before or inside our part of
-                            // the paragraph, and if so, get the proper position
-                            const TextFrameIndex nCoreStart =
-                                pFrame->MapModelToViewPos(*pStart);
-                            if( nCoreStart <
-                                GetPortionData().GetFirstValidCorePosition() )
-                            {
-                                nLocalStart = 0;
-                            }
-                            else if( nCoreStart <=
-                                     GetPortionData().GetLastValidCorePosition() )
-                            {
-                                SAL_WARN_IF(
-                                    !GetPortionData().IsValidCorePosition(
-                                                                  nCoreStart),
-                                    "sw.a11y",
-                                    "problem determining valid core position");
-
-                                nLocalStart =
-                                    GetPortionData().GetAccessiblePosition(
-                                                                      nCoreStart );
-                            }
-                        }
-
-                        // end position
-                        sal_Int32 nLocalEnd = -1;
-                        if (nLastNode < nEndIndex)
-                        {
-                            // selection ends in following node:
-                            // then our local selection extends to the end
-                            nLocalEnd = GetPortionData().GetAccessibleString().
-                                                                       getLength();
-                        }
-                        else
-                        {
-                            assert(FrameContainsNode(*pFrame, nEndIndex));
-
-                            // selection ends in this node: then select everything
-                            // before our part of the node
-                            const TextFrameIndex nCoreEnd =
-                                pFrame->MapModelToViewPos(*pEnd);
-                            if( nCoreEnd >
-                                    GetPortionData().GetLastValidCorePosition() )
-                            {
-                                // selection extends beyond out part of this para
-                                nLocalEnd = GetPortionData().GetAccessibleString().
-                                                                       getLength();
-                            }
-                            else if( nCoreEnd >=
-                                     GetPortionData().GetFirstValidCorePosition() )
-                            {
-                                // selection is inside our part of this para
-                                SAL_WARN_IF(
-                                    !GetPortionData().IsValidCorePosition(
-                                                                  nCoreEnd),
-                                    "sw.a11y",
-                                    "problem determining valid core position");
-
-                                nLocalEnd = GetPortionData().GetAccessiblePosition(
-                                                                       nCoreEnd );
-                            }
-                        }
-
-                        if( ( nLocalStart != -1 ) && ( nLocalEnd != -1 ) )
-                        {
-                            nStart = nLocalStart;
-                            nEnd = nLocalEnd;
-                            bRet = true;
-                        }
-                    } // if hit the index
+                        // selection starts in previous node:
+                        // then our local selection starts with the paragraph
+                        nLocalStart = 0;
+                    }
                     else
                     {
-                        --*pSelection;
+                        assert(FrameContainsNode(*pFrame, nStartIndex));
+
+                        // selection starts in this node:
+                        // then check whether it's before or inside our part of
+                        // the paragraph, and if so, get the proper position
+                        const TextFrameIndex nCoreStart =
+                            pFrame->MapModelToViewPos(*pStart);
+                        if( nCoreStart <
+                            GetPortionData().GetFirstValidCorePosition() )
+                        {
+                            nLocalStart = 0;
+                        }
+                        else if( nCoreStart <=
+                                 GetPortionData().GetLastValidCorePosition() )
+                        {
+                            SAL_WARN_IF(
+                                !GetPortionData().IsValidCorePosition(
+                                                              nCoreStart),
+                                "sw.a11y",
+                                "problem determining valid core position");
+
+                            nLocalStart =
+                                GetPortionData().GetAccessiblePosition(
+                                                                  nCoreStart );
+                        }
                     }
+
+                    // end position
+                    sal_Int32 nLocalEnd = -1;
+                    if (nLastNode < nEndIndex)
+                    {
+                        // selection ends in following node:
+                        // then our local selection extends to the end
+                        nLocalEnd = GetPortionData().GetAccessibleString().
+                                                                   getLength();
+                    }
+                    else
+                    {
+                        assert(FrameContainsNode(*pFrame, nEndIndex));
+
+                        // selection ends in this node: then select everything
+                        // before our part of the node
+                        const TextFrameIndex nCoreEnd =
+                            pFrame->MapModelToViewPos(*pEnd);
+                        if( nCoreEnd >
+                                GetPortionData().GetLastValidCorePosition() )
+                        {
+                            // selection extends beyond out part of this para
+                            nLocalEnd = GetPortionData().GetAccessibleString().
+                                                                   getLength();
+                        }
+                        else if( nCoreEnd >=
+                                 GetPortionData().GetFirstValidCorePosition() )
+                        {
+                            // selection is inside our part of this para
+                            SAL_WARN_IF(
+                                !GetPortionData().IsValidCorePosition(
+                                                              nCoreEnd),
+                                "sw.a11y",
+                                "problem determining valid core position");
+
+                            nLocalEnd = GetPortionData().GetAccessiblePosition(
+                                                                   nCoreEnd );
+                        }
+                    }
+
+                    if( ( nLocalStart != -1 ) && ( nLocalEnd != -1 ) )
+                    {
+                        nStart = nLocalStart;
+                        nEnd = nLocalEnd;
+                        bRet = true;
+                    }
+                } // if hit the index
+                else
+                {
+                    --*pSelection;
                 }
-                // else: this PaM doesn't point to this paragraph
             }
-            // else: this PaM is collapsed and doesn't select anything
-            if(bRet)
-                break;
+            // else: this PaM doesn't point to this paragraph
         }
+        // else: this PaM is collapsed and doesn't select anything
+        if(bRet)
+            break;
     }
-    // else: nocursor -> no selection
 
     if (pSelection && bRet)
     {
