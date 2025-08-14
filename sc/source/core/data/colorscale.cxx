@@ -613,13 +613,15 @@ double GetPercentile( const std::vector<double>& rArray, double fPercentile )
     SAL_WARN_IF(fPercentile < 0, "sc", "negative percentile");
     if (fPercentile < 0)
         return rArray.front();
-    assert(fPercentile <= 1);
+
+    fPercentile = std::min(1.0, fPercentile);
+
     size_t nSize = rArray.size();
     double fFloor = ::rtl::math::approxFloor(fPercentile * (nSize-1));
     size_t nIndex = static_cast<size_t>(fFloor);
     double fDiff = fPercentile * (nSize-1) - fFloor;
     std::vector<double>::const_iterator iter = rArray.begin() + nIndex;
-    if (fDiff == 0.0)
+    if (fDiff == 0.0 || nIndex == nSize - 1)
         return *iter;
     else
     {
