@@ -347,6 +347,9 @@ ImplPolygon::ImplPolygon(const Point& aCenter, const sal_uInt32 nRadius, const f
 
     ImplInitSize(nPoints);
 
+    if (!nPoints)
+        return;
+
     for (sal_uInt16 i = 0; i < nPoints; i++, fStart += fStep)
     {
         Point& rPt = mxPointAry[i];

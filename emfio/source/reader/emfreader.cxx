@@ -1377,9 +1377,16 @@ namespace emfio
 
                             tools::Polygon aPoly(Point(nCenterX, nCenterY), nRadius, fStartAngle, fSweepAngle, IsArcDirectionClockWise());
 
-                            // Before drawing the arc, AngleArc draws the line segment from the current position to the beginning of the arc
-                            LineTo(aPoly[0], mbRecordPath);
-                            DrawPolyLine(std::move(aPoly), true, mbRecordPath);
+                            if (!aPoly.GetSize())
+                            {
+                                SAL_WARN("emfio", "EMF file error: 0 points");
+                            }
+                            else
+                            {
+                                // Before drawing the arc, AngleArc draws the line segment from the current position to the beginning of the arc
+                                LineTo(aPoly[0], mbRecordPath);
+                                DrawPolyLine(std::move(aPoly), true, mbRecordPath);
+                            }
                         }
                     }
                     break;
