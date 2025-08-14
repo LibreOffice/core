@@ -104,6 +104,8 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
     // cannot make something constexpr if it is also declared in a header file as extern
     if (loplugin::hasExternalLinkage(varDecl))
         return true;
+    if (suppressWarningAt(varDecl->getBeginLoc()))
+        return true;
     report(DiagnosticsEngine::Warning,
            "rather declare this as constexpr",
            varDecl->getLocation())

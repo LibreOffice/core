@@ -29,8 +29,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -57,11 +59,20 @@ using namespace vcl;
 
 namespace
 {
-OUString GetEmbeddedFontsRoot()
+OUString GetStandardEmbeddedFontsRoot()
 {
-    OUString path = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
-    rtl::Bootstrap::expandMacros( path );
-    osl::FileBase::getAbsoluteFileURL({}, path + "/user/temp/embeddedfonts/", path);
+    OUString p = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
+    rtl::Bootstrap::expandMacros(p);
+    (void)osl::FileBase::getAbsoluteFileURL({}, p + "/user/temp/embeddedfonts/", p);
+    return p;
+}
+
+const OUString& GetEmbeddedFontsRoot()
+{
+    // [-loplugin:stringstatic] false positive: the initializer is not a constant expression
+    static const OUString path = comphelper::LibreOfficeKit::isActive()
+                                     ? utl::CreateTempURL(nullptr, true)
+                                     : GetStandardEmbeddedFontsRoot();
     return path;
 }
 
@@ -226,7 +237,7 @@ EmbeddedFontsManager::~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE
 
 void EmbeddedFontsManager::clearTemporaryFontFiles()
 {
-    OUString path = GetEmbeddedFontsRoot();
+    const OUString& path = GetEmbeddedFontsRoot();
     clearDir( path + "fromdocs/" );
     clearDir( path + "fromsystem/" );
 }
