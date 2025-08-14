@@ -45,34 +45,34 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( tools::Rectangle( rPoint, rSize ) ) );
 
+    if (aRect.IsEmpty())
+        return true;
+
     bool bDrawn = true;
 
-    if( !aRect.IsEmpty() )
+    // draw the real EPS graphics
+    if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
     {
-        // draw the real EPS graphics
-        if( rGfxLink.GetData() && rGfxLink.GetDataSize() )
-        {
-            if( !mpGraphics && !AcquireGraphics() )
-                return bDrawn;
-            assert(mpGraphics);
+        if( !mpGraphics && !AcquireGraphics() )
+            return bDrawn;
+        assert(mpGraphics);
 
-            if( mbInitClipRegion )
-                InitClipRegion();
+        if( mbInitClipRegion )
+            InitClipRegion();
 
-            aRect.Normalize();
-            bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                         const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), *this );
-        }
+        aRect.Normalize();
+        bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
+                     const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), *this );
+    }
 
-        // else draw the substitution graphics
-        if( !bDrawn && pSubst )
-        {
-            GDIMetaFile* pOldMetaFile = mpMetaFile;
+    // else draw the substitution graphics
+    if( !bDrawn && pSubst )
+    {
+        GDIMetaFile* pOldMetaFile = mpMetaFile;
 
-            mpMetaFile = nullptr;
-            Graphic(*pSubst).Draw(*this, rPoint, rSize);
-            mpMetaFile = pOldMetaFile;
-        }
+        mpMetaFile = nullptr;
+        Graphic(*pSubst).Draw(*this, rPoint, rSize);
+        mpMetaFile = pOldMetaFile;
     }
 
     return bDrawn;
