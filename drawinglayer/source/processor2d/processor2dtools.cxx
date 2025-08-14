@@ -160,16 +160,16 @@ std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
     }
 }
 
-BitmapEx extractBitmapExFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor)
+Bitmap extractBitmapFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor)
 {
-    BitmapEx aRetval;
+    Bitmap aRetval;
 
 #if USE_HEADLESS_CODE
     // currently only defined for cairo
     CairoPixelProcessor2D* pSource(dynamic_cast<CairoPixelProcessor2D*>(rProcessor.get()));
 
     if (nullptr != pSource)
-        aRetval = pSource->extractBitmapEx();
+        aRetval = pSource->extractBitmap();
 #endif
 
     // avoid unused parameter errors

@@ -177,7 +177,7 @@ Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
         pRGBAProcessor->process(aSequence);
 
         // create final BitmapEx result (content)
-        const Bitmap aRetval(processor2d::extractBitmapExFromBaseProcessor2D(pRGBAProcessor));
+        const Bitmap aRetval(processor2d::extractBitmapFromBaseProcessor2D(pRGBAProcessor));
 
         // check if we have a result and return if so
         if (!aRetval.IsEmpty())

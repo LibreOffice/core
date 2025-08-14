@@ -263,8 +263,8 @@ public:
         maBColorModifierStack = rStack;
     }
 
-    // try to extract current content as BitmapEx
-    BitmapEx extractBitmapEx() const;
+    // try to extract current content as Bitmap
+    Bitmap extractBitmap() const;
 };
 }
 

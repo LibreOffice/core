@@ -87,7 +87,7 @@ namespace drawinglayer::processor2d
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
         /** extract the pixel data from a given BaseProcessor2D to
-            a BitmapEx. This may fail due to maybe system-dependent
+            a Bitmap. This may fail due to maybe system-dependent
 
             @param rProcessor
             A unique_ptr to a BaseProcessor2D from which to extract
@@ -95,7 +95,7 @@ namespace drawinglayer::processor2d
             @return
             a BitmapEx, may be empty, so check result
         */
-        DRAWINGLAYER_DLLPUBLIC BitmapEx extractBitmapExFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor);
+        DRAWINGLAYER_DLLPUBLIC Bitmap extractBitmapFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor);
 
 
 } // end of namespace drawinglayer::processor2d

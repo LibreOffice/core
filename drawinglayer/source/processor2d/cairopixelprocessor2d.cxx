@@ -1127,10 +1127,10 @@ CairoPixelProcessor2D::~CairoPixelProcessor2D()
         cairo_surface_destroy(mpOwnedSurface);
 }
 
-BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
+Bitmap CairoPixelProcessor2D::extractBitmap() const
 {
     // default is empty BitmapEx
-    BitmapEx aRetval;
+    Bitmap aRetval;
 
     if (nullptr == mpRT)
         // no RenderContext, not valid
@@ -1165,20 +1165,9 @@ BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
 
     // prepare VCL/Bitmap stuff
     const Size aBitmapSize(nWidth, nHeight);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
-    BitmapWriteAccess aAccess(aBitmap);
-
-    // prepare VCL/AlphaMask stuff
     const bool bHasAlpha(CAIRO_FORMAT_ARGB32 == aFormat);
-    std::optional<AlphaMask> aAlphaMask;
-    // NOTE: Tried to use std::optional for pAlphaWrite but
-    // BitmapWriteAccess does not have all needed operators
-    BitmapWriteAccess* pAlphaWrite(nullptr);
-    if (bHasAlpha)
-    {
-        aAlphaMask = AlphaMask(aBitmapSize);
-        pAlphaWrite = new BitmapWriteAccess(*aAlphaMask);
-    }
+    Bitmap aBitmap(aBitmapSize, bHasAlpha ? vcl::PixelFormat::N32_BPP : vcl::PixelFormat::N24_BPP);
+    BitmapWriteAccess aAccess(aBitmap);
 
     // prepare cairo stuff
     const sal_uInt32 nStride(cairo_image_surface_get_stride(pReadSource));
@@ -1192,19 +1181,18 @@ BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
         {
             // prepare scanline
             unsigned char* pPixelData(pStartPixelData + (nStride * y));
-            Scanline pWriteRGB = aAccess.GetScanline(y);
-            Scanline pWriteA = pAlphaWrite->GetScanline(y);
+            Scanline pWriteRGBA = aAccess.GetScanline(y);
 
             for (sal_uInt32 x(0); x < nWidth; ++x)
             {
                 // RGBA: Do not forget: it's pre-multiplied
                 sal_uInt8 nAlpha(pPixelData[SVP_CAIRO_ALPHA]);
                 aAccess.SetPixelOnData(
-                    pWriteRGB, x,
-                    BitmapColor(vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_RED], nAlpha),
-                                vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_GREEN], nAlpha),
-                                vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_BLUE], nAlpha)));
-                pAlphaWrite->SetPixelOnData(pWriteA, x, BitmapColor(nAlpha));
+                    pWriteRGBA, x,
+                    BitmapColor(
+                        ColorAlpha, vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_RED], nAlpha),
+                        vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_GREEN], nAlpha),
+                        vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_BLUE], nAlpha), nAlpha));
                 pPixelData += 4;
             }
         }
@@ -1228,16 +1216,8 @@ BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
         }
     }
 
-    // cleanup optional BitmapWriteAccess pAlphaWrite
-    if (nullptr != pAlphaWrite)
-        delete pAlphaWrite;
-
-    if (bHasAlpha)
-        // construct and return BitmapEx
-        aRetval = BitmapEx(aBitmap, *aAlphaMask);
-    else
-        // reset BitmapEx to just Bitmap content
-        aRetval = aBitmap;
+    // construct and return Bitmap
+    aRetval = aBitmap;
 
     if (pReadSource != pSource)
     {
