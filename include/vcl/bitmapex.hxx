@@ -28,9 +28,6 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::rendering {
-    class XBitmapCanvas;
-}
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace basegfx { class BColorModifierStack; }
 
@@ -425,11 +422,6 @@ public:
 
     [[nodiscard]]
     static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const tools::Long aStandardSize );
-
-    /// populate from a canvas implementation
-    bool                Create(
-                            const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
-                            const Size &rSize );
 
     SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 

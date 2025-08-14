@@ -82,7 +82,7 @@ bool QtBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat
 }
 
 bool QtBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& /*rBitmapCanvas*/,
-                      Size& /*rSize*/, bool /*bMask*/)
+                      Size& /*rSize*/)
 {
     return false;
 }

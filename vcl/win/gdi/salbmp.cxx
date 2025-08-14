@@ -580,7 +580,7 @@ bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelF
     return bRet;
 }
 
-bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/, bool bMask )
+bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/ )
 {
     css::uno::Reference< css::beans::XFastPropertySet >
         xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
@@ -590,7 +590,7 @@ bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCan
         return false;
 
     css::uno::Sequence< css::uno::Any > args;
-    if( !(xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args) )
+    if( !(xFastPropertySet->getFastPropertyValue(1) >>= args) )
         return false;
 
     sal_Int64 aHBmp64;

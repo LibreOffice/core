@@ -38,6 +38,9 @@
 
 class BitmapEx;
 namespace basegfx { class BColorModifierStack; }
+namespace com::sun::star::rendering {
+    class XBitmapCanvas;
+}
 
 inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 {
@@ -571,6 +574,11 @@ public:
                                 double fGamma = 1.0,
                                 bool bInvert = false,
                                 bool msoBrightness = false );
+
+    /// populate from a canvas implementation
+    bool                Create(
+                            const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
+                            const Size &rSize );
 
     SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 

@@ -61,8 +61,7 @@ public:
     bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics ) override;
     bool            Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat) override;
     virtual bool    Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                            Size& rSize,
-                            bool bMask = false ) override;
+                            Size& rSize ) override;
 
     void            Destroy() override;
 

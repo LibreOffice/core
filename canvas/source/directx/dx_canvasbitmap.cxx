@@ -92,144 +92,17 @@ namespace dxcanvas
 
             case 1:
             {
-                if(!mpBitmap->hasAlpha())
-                {
-                    HBITMAP aHBmp;
-                    mpBitmap->getBitmap()->GetHBITMAP(Gdiplus::Color(), &aHBmp );
+                HBITMAP aHBmp;
+                mpBitmap->getBitmap()->GetHBITMAP(Gdiplus::Color(), &aHBmp );
 
-                    uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(aHBmp)) };
-                    aRes <<= args;
-                }
-                else
-                {
-                    // need to copy&convert the bitmap, since dx
-                    // canvas uses inline alpha channel
-                    HDC hScreenDC=GetDC(nullptr);
-                    const basegfx::B2ISize aSize = mpBitmap->getSize();
-                    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
-                                                                 aSize.getWidth(),
-                                                                 aSize.getHeight() );
-                    if( !hBmpBitmap )
-                        return aRes;
-
-                    BITMAPINFOHEADER aBIH;
-
-                    aBIH.biSize = sizeof( BITMAPINFOHEADER );
-                    aBIH.biWidth = aSize.getWidth();
-                    aBIH.biHeight = -aSize.getHeight();
-                    aBIH.biPlanes = 1;
-                    aBIH.biBitCount = 32;
-                    aBIH.biCompression = BI_RGB; // expects pixel in
-                                                 // bbggrrxx format
-                                                 // (little endian)
-                    aBIH.biSizeImage = 0;
-                    aBIH.biXPelsPerMeter = 0;
-                    aBIH.biYPelsPerMeter = 0;
-                    aBIH.biClrUsed = 0;
-                    aBIH.biClrImportant = 0;
-
-                    Gdiplus::BitmapData aBmpData;
-                    aBmpData.Width       = aSize.getWidth();
-                    aBmpData.Height      = aSize.getHeight();
-                    aBmpData.Stride      = 4*aBmpData.Width;
-                    aBmpData.PixelFormat = PixelFormat32bppARGB;
-                    aBmpData.Scan0       = nullptr;
-                    const Gdiplus::Rect aRect( 0,0,aSize.getWidth(),aSize.getHeight() );
-                    BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
-                    if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
-                                                                 Gdiplus::ImageLockModeRead,
-                                                                 PixelFormat32bppARGB, // outputs ARGB (big endian)
-                                                                 &aBmpData ) )
-                    {
-                        // failed to lock, bail out
-                        return aRes;
-                    }
-
-                    // now aBmpData.Scan0 contains our bits - push
-                    // them into HBITMAP, ignoring alpha
-                    SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getHeight(), aBmpData.Scan0, reinterpret_cast<PBITMAPINFO>(&aBIH), DIB_RGB_COLORS );
-
-                    pGDIPlusBitmap->UnlockBits( &aBmpData );
-
-                    uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(hBmpBitmap)) };
-                    aRes <<= args;
-                }
+                uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(aHBmp)) };
+                aRes <<= args;
             }
             break;
 
             case 2:
             {
-                if(!mpBitmap->hasAlpha())
-                {
-                    return aRes;
-                }
-                else
-                {
-                    static AlphaDIB aDIB;
-
-                    // need to copy&convert the bitmap, since dx
-                    // canvas uses inline alpha channel
-                    HDC hScreenDC=GetDC(nullptr);
-                    const basegfx::B2ISize aSize = mpBitmap->getSize();
-                    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC, aSize.getWidth(), aSize.getHeight() );
-                    if( !hBmpBitmap )
-                        return aRes;
-
-                    aDIB.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
-                    aDIB.bmiHeader.biWidth = aSize.getWidth();
-                    aDIB.bmiHeader.biHeight = -aSize.getHeight();
-                    aDIB.bmiHeader.biPlanes = 1;
-                    aDIB.bmiHeader.biBitCount = 8;
-                    aDIB.bmiHeader.biCompression = BI_RGB;
-                    aDIB.bmiHeader.biSizeImage = 0;
-                    aDIB.bmiHeader.biXPelsPerMeter = 0;
-                    aDIB.bmiHeader.biYPelsPerMeter = 0;
-                    aDIB.bmiHeader.biClrUsed = 0;
-                    aDIB.bmiHeader.biClrImportant = 0;
-
-                    Gdiplus::BitmapData aBmpData;
-                    aBmpData.Width       = aSize.getWidth();
-                    aBmpData.Height      = aSize.getHeight();
-                    aBmpData.Stride      = 4*aBmpData.Width;
-                    aBmpData.PixelFormat = PixelFormat32bppARGB;
-                    aBmpData.Scan0       = nullptr;
-                    const Gdiplus::Rect aRect( 0,0,aSize.getWidth(),aSize.getHeight() );
-                    BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
-                    if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
-                                                                 Gdiplus::ImageLockModeRead,
-                                                                 PixelFormat32bppARGB, // outputs ARGB (big endian)
-                                                                 &aBmpData ) )
-                    {
-                        // failed to lock, bail out
-                        return aRes;
-                    }
-
-                    // copy only alpha channel to pAlphaBits
-                    const sal_Int32 nScanWidth((aSize.getWidth() + 3) & ~3);
-                    std::unique_ptr<sal_uInt8[]> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getHeight()] );
-                    const sal_uInt8* pInBits=static_cast<sal_uInt8*>(aBmpData.Scan0);
-                    assert(pInBits);
-                    pInBits+=3;
-                    for( sal_Int32 y=0; y<aSize.getHeight(); ++y )
-                    {
-                        sal_uInt8* pOutBits=pAlphaBits.get()+y*nScanWidth;
-                        for( sal_Int32 x=0; x<aSize.getWidth(); ++x )
-                        {
-                            *pOutBits++ = *pInBits;
-                            pInBits += 4;
-                        }
-                    }
-
-                    pGDIPlusBitmap->UnlockBits( &aBmpData );
-
-                    // set bits to newly create HBITMAP
-                    SetDIBits( hScreenDC, hBmpBitmap, 0,
-                               aSize.getHeight(), pAlphaBits.get(),
-                               reinterpret_cast<PBITMAPINFO>(&aDIB), DIB_RGB_COLORS );
-
-                    uno::Sequence< uno::Any > args{ uno::Any(reinterpret_cast<sal_Int64>(hBmpBitmap)) };
-                    aRes <<= args;
-                }
+                assert(false && "should not be calling this anymore since the relevant code in vcl was removed");
             }
             break;
         }

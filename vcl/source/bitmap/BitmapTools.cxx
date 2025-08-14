@@ -310,7 +310,7 @@ void fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx)
 
 
 #if ENABLE_CAIRO_CANVAS
-BitmapEx CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
+Bitmap CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
 {
     // FIXME: if we could teach VCL/ about cairo handles, life could
     // be significantly better here perhaps.
@@ -319,7 +319,7 @@ BitmapEx CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
             CAIRO_FORMAT_ARGB32, aSize.Width(), aSize.Height());
     cairo_t *pCairo = cairo_create( pPixels );
     if( !pPixels || !pCairo || cairo_status(pCairo) != CAIRO_STATUS_SUCCESS )
-        return BitmapEx();
+        return Bitmap();
 
     // suck ourselves from the X server to this buffer so then we can fiddle with
     // Alpha to turn it into the ultra-lame vcl required format and then push it
@@ -328,18 +328,12 @@ BitmapEx CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
     cairo_paint( pCairo );
 
-    Bitmap aRGB(aSize, vcl::PixelFormat::N24_BPP);
-    ::AlphaMask aMask( aSize );
+    Bitmap aRGBA(aSize, vcl::PixelFormat::N32_BPP);
 
-    BitmapScopedWriteAccess pRGBWrite(aRGB);
-    assert(pRGBWrite);
-    if (!pRGBWrite)
-        return BitmapEx();
-
-    BitmapScopedWriteAccess pMaskWrite(aMask);
-    assert(pMaskWrite);
-    if (!pMaskWrite)
-        return BitmapEx();
+    BitmapScopedWriteAccess pRGBAWrite(aRGBA);
+    assert(pRGBAWrite);
+    if (!pRGBAWrite)
+        return Bitmap();
 
     cairo_surface_flush(pPixels);
     unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
@@ -376,20 +370,20 @@ BitmapEx CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
                 nB = unpremultiply_table[nAlpha][nB];
 #endif
             }
-            pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
-            pMaskWrite->SetPixelIndex( y, x, nAlpha );
+            pRGBAWrite->SetPixel( y, x, BitmapColor( ColorAlpha, nR, nG, nB, nAlpha ) );
             pPix++;
         }
     }
 
+    pRGBAWrite.reset();
+
     // ignore potential errors above. will get caller a
     // uniformly white bitmap, but not that there would
     // be error handling in calling code ...
-    ::BitmapEx aBitmapEx( aRGB, aMask );
 
     cairo_destroy( pCairo );
     cairo_surface_destroy( pPixels );
-    return aBitmapEx;
+    return aRGBA;
 }
 #endif
 

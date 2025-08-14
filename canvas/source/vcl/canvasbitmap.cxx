@@ -110,9 +110,9 @@ namespace vclcanvas
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         if( nHandle == 0 ) {
-            BitmapEx* pBitmapEx = new BitmapEx( getBitmap() );
+            Bitmap* pBitmap = new Bitmap( getBitmap() );
 
-            return uno::Any( reinterpret_cast<sal_Int64>( pBitmapEx ) );
+            return uno::Any( reinterpret_cast<sal_Int64>( pBitmap ) );
         }
 
         return uno::Any( sal_Int64(0) );

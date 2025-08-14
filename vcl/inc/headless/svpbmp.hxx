@@ -47,8 +47,7 @@ public:
     SAL_DLLPRIVATE virtual bool            Create(const SalBitmap& rSalBmp,
                                    vcl::PixelFormat eNewPixelFormat) override;
     SAL_DLLPRIVATE virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                                    Size& rSize,
-                                    bool bMask = false ) override;
+                                    Size& rSize ) override;
     SAL_DLLPRIVATE void                    Create(const std::optional<BitmapBuffer> & pBuf);
     const BitmapBuffer*     GetBuffer() const
     {

@@ -118,11 +118,11 @@ namespace cairocanvas
                 if ( !mbHasAlpha )
                     break;
 
-                BitmapEx aBitmapEx = vcl::bitmap::CreateFromCairoSurface(
+                Bitmap aBitmap = vcl::bitmap::CreateFromCairoSurface(
                                           ::Size( maSize.getWidth(), maSize.getHeight() ),
                                           getSurface()->getCairoSurface().get());
-                if (!aBitmapEx.IsEmpty())
-                    aRV <<= reinterpret_cast<sal_Int64>( new BitmapEx(aBitmapEx) );
+                if (!aBitmap.IsEmpty())
+                    aRV <<= reinterpret_cast<sal_Int64>( new Bitmap(aBitmap) );
 
                 break;
             }

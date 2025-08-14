@@ -430,13 +430,13 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
 
                 xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
 
-                BitmapEx aBitmapEx;
-                if( aBitmapEx.Create( xBitmapCanvas, aSize ) )
+                Bitmap aBitmap;
+                if( aBitmap.Create( xBitmapCanvas, aSize ) )
                 {
                     if (rOut.GetMapMode().GetMapUnit() == MapUnit::MapPixel)
-                        rOut.DrawBitmapEx( rPos, aBitmapEx );
+                        rOut.DrawBitmapEx( rPos, aBitmap );
                     else
-                        rOut.DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
+                        rOut.DrawBitmapEx( rPos, rLogicDestSize, aBitmap );
                     return true;
                 }
             }

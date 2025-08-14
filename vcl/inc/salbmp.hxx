@@ -68,8 +68,7 @@ public:
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     vcl::PixelFormat eNewPixelFormat) = 0;
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
-                                    Size& rSize,
-                                    bool bMask = false ) = 0;
+                                    Size& rSize ) = 0;
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     virtual sal_uInt16      GetBitCount() const = 0;

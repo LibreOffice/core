@@ -112,7 +112,7 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPix
 }
 
 bool QuartzSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& /*xBitmapCanvas*/,
-                              Size& /*rSize*/, bool /*bMask*/ )
+                              Size& /*rSize*/ )
 {
     return false;
 }

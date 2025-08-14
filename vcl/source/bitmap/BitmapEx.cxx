@@ -43,11 +43,8 @@
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
 #include <bitmap/BlendFrameCache.hxx>
 
-#include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
-
-#include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <memory>
 
@@ -563,48 +560,6 @@ Color BitmapEx::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
         aColor.SetAlpha(255);
     }
     return aColor;
-}
-
-// Shift alpha transparent pixels between cppcanvas/ implementations
-// and vcl in a generally grotesque and under-performing fashion
-bool BitmapEx::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > &xBitmapCanvas,
-                       const Size &rSize )
-{
-    uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
-    if( xFastPropertySet )
-    {
-        // 0 means get BitmapEx
-        uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-        std::unique_ptr<BitmapEx> xBitmapEx(reinterpret_cast<BitmapEx*>(*o3tl::doAccess<sal_Int64>(aAny)));
-        if( xBitmapEx )
-        {
-            *this = *xBitmapEx;
-            return true;
-        }
-    }
-
-    std::shared_ptr<SalBitmap> pSalBmp;
-    std::shared_ptr<SalBitmap> pSalMask;
-
-    pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-
-    Size aLocalSize(rSize);
-    if( pSalBmp->Create( xBitmapCanvas, aLocalSize ) )
-    {
-        pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-        if ( pSalMask->Create( xBitmapCanvas, aLocalSize, true ) )
-        {
-            *this = BitmapEx(Bitmap(std::move(pSalBmp)), Bitmap(std::move(pSalMask)) );
-            return true;
-        }
-        else
-        {
-            *this = BitmapEx(Bitmap(std::move(pSalBmp)));
-            return true;
-        }
-    }
-
-    return false;
 }
 
 namespace

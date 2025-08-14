@@ -84,13 +84,12 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testComposite)
     uno::Reference<rendering::XBitmapCanvas> xBitmapCanvas(xBitmap, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmapCanvas.is());
 
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
     {
         // clear the canvas and basic sanity check ...
         xBitmapCanvas->clear();
-        CPPUNIT_ASSERT(aBitmapEx.Create(xBitmapCanvas, aSize));
-        CPPUNIT_ASSERT(aBitmapEx.IsAlpha());
-        CPPUNIT_ASSERT(!aBitmapEx.GetAlphaMask().IsEmpty());
+        CPPUNIT_ASSERT(aBitmap.Create(xBitmapCanvas, aSize));
+        CPPUNIT_ASSERT(aBitmap.HasAlpha());
     }
 
     {

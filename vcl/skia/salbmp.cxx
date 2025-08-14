@@ -184,7 +184,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelF
     return true;
 }
 
-bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&, bool)
+bool SkiaSalBitmap::Create(const css::uno::Reference<css::rendering::XBitmapCanvas>&, Size&)
 {
     return false;
 }
