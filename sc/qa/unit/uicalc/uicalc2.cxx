@@ -1654,6 +1654,30 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf154044)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf140027)
+{
+    // testing the correct import of autofilter from XLSB
+    createScDoc("tdf140027.ods");
+
+    goToCell(u"A1"_ustr);
+
+    ScDocShell* pDocSh = getScDocShell();
+    lcl_AssertCurrentCursorPosition(*pDocSh, u"A1");
+
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:InsertRowsBefore"_ustr, {});
+
+    // check we have no any unnecessary flags
+    ScDocument* pDoc = getScDoc();
+    auto nFlag = pDoc->GetAttr(0, 0, 1, ATTR_MERGE_FLAG)->GetValue();
+    CPPUNIT_ASSERT_EQUAL(ScMF::NONE, nFlag);
+
+    const ScPatternAttr* pPattern = pDoc->GetPattern(1, 0, 1);
+    const ScPatternAttr aDefPattern = pPattern->getCellAttributeHelper().getDefaultCellAttribute();
+    // check that the default pattern is not changed
+    CPPUNIT_ASSERT(ScPatternAttr::areSame(pPattern, &aDefPattern));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
