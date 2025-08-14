@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
@@ -105,7 +106,7 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManager(const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    ChildrenManager(const rtl::Reference<comphelper::OAccessible>& rpParent,
                     const css::uno::Reference<css::drawing::XShapes>& rxShapeList,
                     const AccessibleShapeTreeInfo& rShapeTreeInfo, AccessibleContextBase& rContext);
 

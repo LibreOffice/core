@@ -95,10 +95,10 @@ public:
             for new and deleted children, i.e. that holds a list of
             listeners to be informed.
     */
-    ChildrenManagerImpl (css::uno::Reference<css::accessibility::XAccessible> xParent,
-        css::uno::Reference<css::drawing::XShapes> xShapeList,
-        const AccessibleShapeTreeInfo& rShapeTreeInfo,
-        AccessibleContextBase& rContext);
+    ChildrenManagerImpl(rtl::Reference<comphelper::OAccessible> pParent,
+                        css::uno::Reference<css::drawing::XShapes> xShapeList,
+                        const AccessibleShapeTreeInfo& rShapeTreeInfo,
+                        AccessibleContextBase& rContext);
 
     /** If there still are managed children these are disposed and
         released.
@@ -299,7 +299,7 @@ private:
     /** The parent of the shapes.  It is used for creating accessible
         objects for given shapes.
     */
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
     /** Bundle of information passed down the shape tree.
     */

@@ -67,12 +67,12 @@ void adjustIndexInParentOfShapes(ChildDescriptorListType& _rList)
 
 // AccessibleChildrenManager
 ChildrenManagerImpl::ChildrenManagerImpl (
-    uno::Reference<XAccessible> xParent,
+    rtl::Reference<comphelper::OAccessible> pParent,
     uno::Reference<drawing::XShapes> xShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mxShapeList (std::move(xShapeList)),
-      mxParent (std::move(xParent)),
+      mpParent(std::move(pParent)),
       maShapeTreeInfo (rShapeTreeInfo),
       mrContext (rContext),
       mpFocusedShape(nullptr)
@@ -118,9 +118,8 @@ const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildSh
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
-        throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + OUString::number(nIndex),
-            mxParent);
+        throw lang::IndexOutOfBoundsException("no accessible child with index "
+                                              + OUString::number(nIndex));
     return maVisibleChildren[nIndex].mxShape;
 }
 
@@ -131,9 +130,8 @@ rtl::Reference<comphelper::OAccessible> ChildrenManagerImpl::GetChild(sal_Int64 
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
-        throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + OUString::number(nIndex),
-            mxParent);
+        throw lang::IndexOutOfBoundsException("no accessible child with index "
+                                              + OUString::number(nIndex));
 
     return GetChild (maVisibleChildren[nIndex],nIndex);
 }
@@ -152,10 +150,7 @@ ChildrenManagerImpl::GetChild(ChildDescriptor& rChildDescriptor, sal_Int32 _nInd
         // created while locking the global mutex.
         if ( ! rChildDescriptor.mxAccessibleShape.is())
         {
-            AccessibleShapeInfo aShapeInfo(
-                        rChildDescriptor.mxShape,
-                        mxParent,
-                        this);
+            AccessibleShapeInfo aShapeInfo(rChildDescriptor.mxShape, mpParent, this);
             // Create accessible object that corresponds to the descriptor's
             // shape.
             rtl::Reference<AccessibleShape> pShape(
