@@ -168,39 +168,55 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
 
         rPolyPoly.AdaptiveSubdivide(aPolyPoly);
         DrawHatch(aPolyPoly, rHatch, bMtf);
+
+        return;
     }
+
+    tools::Rectangle   aRect( rPolyPoly.GetBoundRect() );
+    const tools::Long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
+    const tools::Long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), tools::Long(3) ) );
+    std::unique_ptr<Point[]> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
+    Point       aPt1, aPt2, aEndPt1;
+    Size        aInc;
+
+    // Single hatch
+    aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
+    CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
+    if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
+        return;
+
+    if (aInc.Width() <= 0 && aInc.Height() <= 0)
+        SAL_WARN("vcl.gdi", "invalid increment");
     else
     {
-        tools::Rectangle   aRect( rPolyPoly.GetBoundRect() );
-        const tools::Long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
-        const tools::Long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), tools::Long(3) ) );
-        std::unique_ptr<Point[]> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
-        Point       aPt1, aPt2, aEndPt1;
-        Size        aInc;
+        do
+        {
+            DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+            aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+            aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
+        }
+        while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+    }
 
-        // Single hatch
-        aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
-        CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
+    if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
+    {
+        // Double hatch
+        CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
         if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
             return;
 
-        if (aInc.Width() <= 0 && aInc.Height() <= 0)
-            SAL_WARN("vcl.gdi", "invalid increment");
-        else
+        do
         {
-            do
-            {
-                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-            }
-            while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
+            DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+            aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+            aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
         }
+        while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
 
-        if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
+        if( rHatch.GetStyle() == HatchStyle::Triple )
         {
-            // Double hatch
-            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900_deg10, aPt1, aPt2, aInc, aEndPt1 );
+            // Triple hatch
+            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
             if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
                 return;
 
@@ -211,22 +227,6 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
                 aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
             }
             while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
-
-            if( rHatch.GetStyle() == HatchStyle::Triple )
-            {
-                // Triple hatch
-                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450_deg10, aPt1, aPt2, aInc, aEndPt1 );
-                if (comphelper::IsFuzzing() && !HasSaneNSteps(aPt1, aEndPt1, aInc))
-                    return;
-
-                do
-                {
-                    DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-                    aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-                    aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
-                }
-                while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
-            }
         }
     }
 }
