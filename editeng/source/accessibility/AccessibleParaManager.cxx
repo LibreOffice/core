@@ -153,7 +153,7 @@ bool AccessibleParaManager::HasCreatedChild( sal_Int32 nParagraphIndex ) const
         return false;
 }
 
-css::uno::Reference<css::accessibility::XAccessible>
+rtl::Reference<comphelper::OAccessible>
 AccessibleParaManager::CreateChild(sal_Int32 nChild,
                                    const rtl::Reference<comphelper::OAccessible>& pFrontEnd,
                                    SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex)

@@ -86,7 +86,7 @@ public:
     static bool IsReferencable(rtl::Reference<AccessibleEditableTextPara> const & aChild);
     bool IsReferencable( sal_Int32 nChild ) const;
 
-    css::uno::Reference<css::accessibility::XAccessible>
+    rtl::Reference<comphelper::OAccessible>
     CreateChild(sal_Int32 nChild, const rtl::Reference<comphelper::OAccessible>& pFrontEnd,
                 SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex);
 

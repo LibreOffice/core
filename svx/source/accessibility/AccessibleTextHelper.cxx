@@ -765,10 +765,11 @@ void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
                 // child not yet created?
                 if (!maParaManager.HasCreatedChild(nCurrPara))
                 {
-                    FireEvent(AccessibleEventId::CHILD,
-                              uno::Any(maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild,
-                                                                 mpFrontEnd, GetEditSource(),
-                                                                 nCurrPara)));
+                    FireEvent(
+                        AccessibleEventId::CHILD,
+                        uno::Any(css::uno::Reference<css::accessibility::XAccessible>(
+                            maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild, mpFrontEnd,
+                                                      GetEditSource(), nCurrPara))));
                 }
             }
         }
