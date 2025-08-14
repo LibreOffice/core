@@ -348,7 +348,7 @@ public:
         @attention Don't call with locked mutexes. You may hold
         the solar mutex, but this method acquires it anyway.
     */
-    css::uno::Reference<css::accessibility::XAccessible> GetChild(sal_Int64 i);
+    rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 i);
 
     // XAccessibleEventBroadcaster child related methods
 

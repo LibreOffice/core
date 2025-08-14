@@ -1713,7 +1713,7 @@ sal_Int64 AccessibleTextHelper::GetChildCount() const
 #endif
 }
 
-uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int64 i )
+rtl::Reference<comphelper::OAccessible> AccessibleTextHelper::GetChild(sal_Int64 i)
 {
     SolarMutexGuard aGuard;
 

@@ -224,7 +224,7 @@ struct ScParaFound
 
 uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
 {
-    uno::Reference<XAccessible> xAccessible;
+    rtl::Reference<comphelper::OAccessible> pAccessible;
 
     if (nIndex < mnParagraphs)
     {
@@ -238,7 +238,7 @@ uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
                 OSL_ENSURE((aItr->maNoteCell == maMarks[nIndex].maNoteCell) && (aItr->mbMarkNote == maMarks[nIndex].mbMarkNote), "wrong note found");
                 if (!aItr->mpTextHelper)
                     aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
-                xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
+                pAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
             }
             else
             {
@@ -255,12 +255,12 @@ uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
             {
                 if (!aItr->mpTextHelper)
                     aItr->mpTextHelper = CreateTextHelper(aItr->maNoteText, aItr->maRect, aItr->maNoteCell, aItr->mbMarkNote, (nIndex - aParaFound.mnIndex) + mnOffset + maMarks.size());
-                xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
+                pAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
             }
         }
     }
 
-    return xAccessible;
+    return pAccessible;
 }
 
 namespace {
