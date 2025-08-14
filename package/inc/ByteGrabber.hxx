@@ -33,6 +33,7 @@ class ByteGrabber final
     css::uno::Reference < css::io::XSeekable > xSeek;
     comphelper::ByteReader* mpByteReader;
     std::array<sal_Int8, 8> maBuffer;
+    css::uno::Sequence < sal_Int8 > aSequence;
 
 public:
     ByteGrabber (css::uno::Reference < css::io::XInputStream > const & xIstream);
