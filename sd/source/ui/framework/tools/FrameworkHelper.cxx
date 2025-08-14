@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-namespace {
+namespace sd::framework {
 
 //----- CallbackCaller --------------------------------------------------------
 
@@ -91,12 +91,18 @@ public:
     // ConfigurationChangeListener
     virtual void notifyConfigurationChange (const sd::framework::ConfigurationChangeEvent& rEvent) override;
 
+    void stop();
+
 private:
     sd::framework::ConfigurationChangeEventType mnEventType;
     rtl::Reference<::sd::framework::ConfigurationController> mxConfigurationController;
     ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter maFilter;
     ::sd::framework::FrameworkHelper::Callback maCallback;
 };
+
+}
+
+namespace {
 
 //----- LifetimeController ----------------------------------------------------
 
@@ -641,7 +647,7 @@ void FrameworkHelper::WaitForEvent (ConfigurationChangeEventType rsEventType) co
 {
     bool bConfigurationUpdateSeen (false);
 
-    RunOnEvent(
+    auto const caller = RunOnEvent(
         rsEventType,
         FrameworkHelperAllPassFilter(),
         FlagUpdater(bConfigurationUpdateSeen));
@@ -654,6 +660,7 @@ void FrameworkHelper::WaitForEvent (ConfigurationChangeEventType rsEventType) co
         if( (osl_getGlobalTimer() - nStartTime) > 60000  )
         {
             OSL_FAIL("FrameworkHelper::WaitForEvent(), no event for a minute? giving up!");
+            caller->stop();
             break;
         }
     }
@@ -664,12 +671,12 @@ void FrameworkHelper::WaitForUpdate() const
     WaitForEvent(ConfigurationChangeEventType::ConfigurationUpdateEnd);
 }
 
-void FrameworkHelper::RunOnEvent(
+rtl::Reference<CallbackCaller> FrameworkHelper::RunOnEvent(
     ConfigurationChangeEventType rsEventType,
     const ConfigurationChangeEventFilter& rFilter,
     const Callback& rCallback) const
 {
-    new CallbackCaller(mrBase,rsEventType,rFilter,rCallback);
+    return new CallbackCaller(mrBase,rsEventType,rFilter,rCallback);
 }
 
 void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
@@ -748,10 +755,6 @@ FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
 {
 }
 
-} // end of namespace sd::framework
-
-namespace {
-
 //===== CallbackCaller ========================================================
 
 CallbackCaller::CallbackCaller (
@@ -825,6 +828,10 @@ void CallbackCaller::notifyConfigurationChange (
         return;
 
     maCallback(true);
+    stop();
+}
+
+void CallbackCaller::stop() {
     if (mxConfigurationController.is())
     {
         // Reset the reference to the configuration controller so that
@@ -837,6 +844,10 @@ void CallbackCaller::notifyConfigurationChange (
         xCC->removeConfigurationChangeListener(this);
     }
 }
+
+} // end of namespace sd::framework
+
+namespace {
 
 //----- LifetimeController -------------------------------------------------
 

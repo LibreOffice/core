@@ -34,6 +34,7 @@ class ViewShellBase;
 
 
 namespace sd::framework {
+class CallbackCaller;
 struct ConfigurationChangeEvent;
 class ConfigurationController;
 class AbstractView;
@@ -288,7 +289,7 @@ private:
         @param rCallback
             The callback functor to be called.
     */
-    void RunOnEvent(
+    rtl::Reference<CallbackCaller> RunOnEvent(
         ConfigurationChangeEventType rsEventType,
         const ConfigurationChangeEventFilter& rFilter,
         const Callback& rCallback) const;
