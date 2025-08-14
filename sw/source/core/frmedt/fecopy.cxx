@@ -1378,7 +1378,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel& _rModel )
     }
 }
 
-void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
+SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Point* pPt)
 {
     CurrShell aCurr( this );
     StartAllAction();
@@ -1568,7 +1568,11 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
         pView->Paste(*pModel, aPos, nullptr, SdrInsertFlags::NONE);
 
         const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
-        if( nCnt )
+        if (nCnt == 0)
+        {
+            nAction = SwPasteSdr::NONE;
+        }
+        else
         {
             const Point aNull( 0, 0 );
             for( size_t i=0; i < nCnt; ++i )
@@ -1599,6 +1603,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
     }
     EndUndo();
     EndAllAction();
+    return nAction;
 }
 
 bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)

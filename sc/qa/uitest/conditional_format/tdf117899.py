@@ -40,7 +40,8 @@ class Tdf117899(UITestCase):
 
             self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("writer"):
+        with self.ui_test.set_config('/org.openoffice.Office.Writer/Cursor/Option/SelectPastedAnchoredObject', True):
+          with self.ui_test.load_empty_file("writer"):
 
             self.xUITest.getTopFocusWindow()
 
