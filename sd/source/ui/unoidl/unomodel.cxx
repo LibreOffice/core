@@ -2893,7 +2893,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
     uno::Any aAny;
     if( nullptr == mpDoc )
-        throw lang::DisposedException({}, getXWeak());
+        throw lang::DisposedException();
 
     const SfxItemPropertyMapEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
