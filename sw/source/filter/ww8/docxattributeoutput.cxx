@@ -9437,7 +9437,7 @@ void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rF
     if (pInherited)
     {
         stValue = pInherited->GetTextFirstLineOffset();
-        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE && stValue.m_dValue != 0.0)
         {
             AddToAttrList(m_pLRSpaceAttrList,
                           FSNS(XML_w,
@@ -9521,7 +9521,7 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
     if (pInherited)
     {
         stValue = pInherited->GetTextLeft();
-        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE && stValue.m_dValue != 0.0)
         {
             AddToAttrList(m_pLRSpaceAttrList,
                           FSNS(XML_w, bEcma1st ? XML_leftChars : XML_startChars),
@@ -9561,7 +9561,7 @@ void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMarg
     if (pInherited)
     {
         stValue = pInherited->GetRight();
-        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE)
+        if (stValue.m_nUnit == css::util::MeasureUnit::FONT_CJK_ADVANCE && stValue.m_dValue != 0.0)
         {
             AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, bEcma1st ? XML_rightChars : XML_endChars),
                           OString::number(0));
