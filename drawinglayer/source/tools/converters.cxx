@@ -309,14 +309,14 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
         return BitmapEx(aRetval);
 }
 
-BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer&& rSequence,
+Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& rSequence,
                                                const basegfx::B2DRange& rTargetRange,
                                                sal_uInt32 nMaximumQuadraticPixels,
                                                const o3tl::Length eTargetUnit,
                                                const std::optional<Size>& rTargetDPI)
 {
     if (rSequence.empty())
-        return BitmapEx();
+        return Bitmap();
 
     try
     {
@@ -341,7 +341,7 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
         const double fHeight(aRange.getHeight());
 
         if (fWidth <= 0.0 || fHeight <= 0.0 || basegfx::fTools::equalZero(fWidth) || basegfx::fTools::equalZero(fHeight))
-            return BitmapEx();
+            return Bitmap();
 
         if (0 == DPI_X)
         {
@@ -373,16 +373,16 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
             new primitive2d::TransformPrimitive2D(aEmbedding, std::move(rSequence)));
         primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
-        BitmapEx aBitmapEx(convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
+        Bitmap aBitmap(convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
                                              nDiscreteWidth, nDiscreteHeight,
                                              nMaximumQuadraticPixels));
 
-        if (aBitmapEx.IsEmpty())
-            return BitmapEx();
-        aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-        aBitmapEx.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
+        if (aBitmap.IsEmpty())
+            return Bitmap();
+        aBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        aBitmap.SetPrefSize(Size(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight)));
 
-        return aBitmapEx;
+        return aBitmap;
     }
     catch (const css::uno::Exception&)
     {
@@ -393,16 +393,7 @@ BitmapEx convertPrimitive2DContainerToBitmapEx(primitive2d::Primitive2DContainer
         SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.what());
     }
 
-    return BitmapEx();
-}
-
-Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& rSequence,
-                                               const basegfx::B2DRange& rTargetRange,
-                                               sal_uInt32 nMaximumQuadraticPixels,
-                                               const o3tl::Length eTargetUnit,
-                                               const std::optional<Size>& rTargetDPI)
-{
-    return Bitmap(convertPrimitive2DContainerToBitmapEx(std::move(rSequence), rTargetRange, nMaximumQuadraticPixels, eTargetUnit, rTargetDPI));
+    return Bitmap();
 }
 
 } // end of namespace drawinglayer

@@ -688,8 +688,8 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
                     aRange.transform(aMapTransform);
                 }
 
-                const BitmapEx aBmp(
-                    drawinglayer::convertPrimitive2DContainerToBitmapEx(
+                const Bitmap aBmp(
+                    drawinglayer::convertPrimitive2DContainerToBitmap(
                         std::move(xPrimitives),
                         aRange));
 

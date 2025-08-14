@@ -119,10 +119,10 @@ Bitmap convertMetafileToBitmap(
                     rTargetRange.getRange(),
                     rTargetRange.getMinimum()),
                 rMtf));
-        aBitmap = Bitmap(drawinglayer::convertPrimitive2DContainerToBitmapEx(
+        aBitmap = drawinglayer::convertPrimitive2DContainerToBitmap(
             drawinglayer::primitive2d::Primitive2DContainer { aMtf },
             rTargetRange,
-            nMaximumQuadraticPixels));
+            nMaximumQuadraticPixels);
     }
 
     return aBitmap;
