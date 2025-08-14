@@ -323,11 +323,9 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
 {
     assert(!is_double_buffered_window());
 
-    bool bIsSizeValid = !rSize.IsEmpty();
-
     if (!ImplIsRecordLayout())
     {
-        if (bIsSizeValid)
+        if (!rSize.IsEmpty())
             rImage.Draw(this, rPos, nStyle, &rSize);
         else
             rImage.Draw(this, rPos, nStyle);
