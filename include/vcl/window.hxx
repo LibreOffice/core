@@ -1134,7 +1134,7 @@ public:
 
     css::uno::Reference<css::accessibility::XAccessible> GetAccessibleParent() const;
     // Explicitly set an accessible parent (usually not needed)
-    void                                SetAccessibleParent(const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+    void SetAccessibleParent(const rtl::Reference<comphelper::OAccessible>& rpParent);
 
     void                                SetAccessibleRole( sal_uInt16 nRole );
     sal_uInt16                          GetAccessibleRole() const;

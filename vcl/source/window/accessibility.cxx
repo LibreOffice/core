@@ -249,12 +249,12 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
     return pChild;
 }
 
-void Window::SetAccessibleParent(const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
+void Window::SetAccessibleParent(const rtl::Reference<comphelper::OAccessible>& rpParent)
 {
     if (!mpWindowImpl->mpAccessibleInfos)
         mpWindowImpl->mpAccessibleInfos.reset(new ImplAccessibleInfos);
 
-    mpWindowImpl->mpAccessibleInfos->xAccessibleParent = rxParent;
+    mpWindowImpl->mpAccessibleInfos->pAccessibleParent = rpParent;
 }
 
 css::uno::Reference<css::accessibility::XAccessible> Window::GetAccessibleParent() const
@@ -262,8 +262,8 @@ css::uno::Reference<css::accessibility::XAccessible> Window::GetAccessibleParent
     if (!mpWindowImpl)
         return nullptr;
 
-    if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->xAccessibleParent.is())
-        return mpWindowImpl->mpAccessibleInfos->xAccessibleParent;
+    if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleParent.is())
+        return mpWindowImpl->mpAccessibleInfos->pAccessibleParent;
 
     if (vcl::Window* pAccessibleParentWin = GetAccessibleParentWindow())
         return pAccessibleParentWin->GetAccessible();
