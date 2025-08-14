@@ -793,10 +793,12 @@ text_wrapper_remove_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
-            = getText( text );
-        if( pText.is() )
-            return pText->setSelection( 0, 0 ); // ?
+        css::uno::Reference<css::accessibility::XAccessibleText> xText = getText(text);
+        if (!xText.is())
+            return false;
+
+        const sal_Int32 nCaretPos = xText->getCaretPosition();
+        return xText->setSelection(nCaretPos, nCaretPos);
     }
     catch(const uno::Exception&) {
         g_warning( "Exception in setSelection()" );
