@@ -456,6 +456,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf167721_chUnits4, "tdf167721_chUnits4.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4001), getProperty<sal_Int32>(xPara, u"ParaRightMargin"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167721_zeroCh)
+{
+    loadAndSave("tdf167721_zeroCh.odt");
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+
+    // only one style should disable the ic-unit right margin with a zero.
+    assertXPath(pXmlStyles, "//w:ind[@w:endChars='0']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf83844)
 {
     createSwDoc("tdf83844.fodt");
