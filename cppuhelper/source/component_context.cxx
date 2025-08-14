@@ -464,23 +464,23 @@ ComponentContext::ComponentContext(
     {
         ContextEntry_Init const & rEntry = pEntries[ nPos ];
 
-        if ( rEntry.name == SMGR_SINGLETON )
+        if ( rEntry.m_sName == SMGR_SINGLETON )
         {
-            rEntry.value >>= m_xSMgr;
+            rEntry.m_aValue >>= m_xSMgr;
         }
 
-        if (rEntry.bLateInitService)
+        if (rEntry.m_bLateInitService)
         {
             // singleton entry
-            m_map.emplace( rEntry.name, ContextEntry( Any(), true ) );
+            m_map.emplace( rEntry.m_sName, ContextEntry( Any(), true ) );
             // service
-            m_map.emplace( rEntry.name + "/service", ContextEntry( rEntry.value, false ) );
+            m_map.emplace( rEntry.m_sName + "/service", ContextEntry( rEntry.m_aValue, false ) );
             // initial-arguments are provided as optional context entry
         }
         else
         {
             // only value, no late init factory nor string
-            m_map.emplace( rEntry.name, ContextEntry( rEntry.value, false ) );
+            m_map.emplace( rEntry.m_sName, ContextEntry( rEntry.m_aValue, false ) );
         }
     }
 
@@ -566,12 +566,12 @@ Reference< XComponentContext > SAL_CALL createComponentContext(
     std::unique_ptr<ContextEntry_Init[]> mapped_entries(new ContextEntry_Init[nEntries]);
     for (sal_Int32 nPos = 0; nPos < nEntries; ++ nPos)
     {
-        mapped_entries[nPos].bLateInitService = pEntries[nPos].bLateInitService;
-        mapped_entries[nPos].name             = pEntries[nPos].name;
+        mapped_entries[nPos].m_bLateInitService = pEntries[nPos].m_bLateInitService;
+        mapped_entries[nPos].m_sName            = pEntries[nPos].m_sName;
 
-        uno_type_any_constructAndConvert(&mapped_entries[nPos].value,
-                                         const_cast<void *>(pEntries[nPos].value.getValue()),
-                                         pEntries[nPos].value.getValueTypeRef(),
+        uno_type_any_constructAndConvert(&mapped_entries[nPos].m_aValue,
+                                         const_cast<void *>(pEntries[nPos].m_aValue.getValue()),
+                                         pEntries[nPos].m_aValue.getValueTypeRef(),
                                          curr2source.get());
     }
 

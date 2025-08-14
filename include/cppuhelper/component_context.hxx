@@ -44,18 +44,18 @@ struct SAL_WARN_UNUSED ContextEntry_Init
         object as value (to instantiate the object) or a string as value for raising
         a service via the used service manager.
     */
-    bool bLateInitService;
+    bool m_bLateInitService;
     /** name of context value
     */
-    ::rtl::OUString name;
+    ::rtl::OUString m_sName;
     /** context value
     */
-    css::uno::Any value;
+    css::uno::Any m_aValue;
 
     /** Default ctor.
     */
     ContextEntry_Init()
-        : bLateInitService( false )
+        : m_bLateInitService( false )
         {}
     /** Ctor.
 
@@ -71,9 +71,9 @@ struct SAL_WARN_UNUSED ContextEntry_Init
         ::rtl::OUString const & name_,
         css::uno::Any const & value_,
         bool bLateInitService_ = false )
-            : bLateInitService( bLateInitService_ ),
-              name( name_ ),
-              value( value_ )
+            : m_bLateInitService( bLateInitService_ ),
+              m_sName( name_ ),
+              m_aValue( value_ )
         {}
 };
 
