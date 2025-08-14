@@ -85,14 +85,14 @@ public:
 
     // XAccessibleContext child handling methods
     sal_Int64 getAccessibleChildCount() const;
-    uno::Reference< XAccessible > getAccessibleChild( sal_Int64 i );
+    rtl::Reference<comphelper::OAccessible> getAccessibleChild(sal_Int64 i);
 
     // XAccessibleEventBroadcaster child related methods
     void addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
     void removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener );
 
     // XAccessibleComponent child related methods
-    uno::Reference< XAccessible > getAccessibleAtPoint( const awt::Point& aPoint );
+    rtl::Reference<comphelper::OAccessible> getAccessibleAtPoint(const awt::Point& aPoint);
 
     SvxEditSourceAdapter& GetEditSource() const;
 
@@ -1049,8 +1049,9 @@ void AccessibleTextHelper_Impl::ProcessQueue()
             // #109864# Enforce creation of this paragraph
             try
             {
-                FireEvent(AccessibleEventId::CHILD, uno::Any(getAccessibleChild(aFunctor.GetParaIndex() -
-                                                                                mnFirstVisibleChild + GetStartIndex())));
+                FireEvent(AccessibleEventId::CHILD,
+                          uno::Any(uno::Reference<XAccessible>(getAccessibleChild(
+                              aFunctor.GetParaIndex() - mnFirstVisibleChild + GetStartIndex()))));
             }
             catch( const uno::Exception& )
             {
@@ -1420,7 +1421,7 @@ sal_Int64 AccessibleTextHelper_Impl::getAccessibleChildCount() const
     return mnLastVisibleChild - mnFirstVisibleChild + 1;
 }
 
-uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleChild( sal_Int64 i )
+rtl::Reference<comphelper::OAccessible> AccessibleTextHelper_Impl::getAccessibleChild(sal_Int64 i)
 {
     i -= GetStartIndex();
 
@@ -1464,7 +1465,8 @@ void AccessibleTextHelper_Impl::removeAccessibleEventListener( const uno::Refere
     }
 }
 
-uno::Reference< XAccessible > AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint )
+rtl::Reference<comphelper::OAccessible>
+AccessibleTextHelper_Impl::getAccessibleAtPoint(const awt::Point& _aPoint)
 {
     // make given position relative
     if (!mpFrontEnd.is())
@@ -1718,11 +1720,11 @@ uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int64 i )
 #ifdef DBG_UTIL
     mpImpl->CheckInvariants();
 
-    uno::Reference< XAccessible > xRet = mpImpl->getAccessibleChild( i );
+    rtl::Reference<comphelper::OAccessible> pRet = mpImpl->getAccessibleChild(i);
 
     mpImpl->CheckInvariants();
 
-    return xRet;
+    return pRet;
 #else
     return mpImpl->getAccessibleChild( i );
 #endif
