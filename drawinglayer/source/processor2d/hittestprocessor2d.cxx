@@ -144,7 +144,7 @@ namespace drawinglayer::processor2d
             return bRetval;
         }
 
-        void HitTestProcessor2D::checkBitmapHit(basegfx::B2DRange aRange, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform)
+        void HitTestProcessor2D::checkBitmapHit(basegfx::B2DRange aRange, const Bitmap& rBitmap, const basegfx::B2DHomMatrix& rTransform)
         {
             if(!getHitTextOnly())
             {
@@ -153,10 +153,10 @@ namespace drawinglayer::processor2d
                 // transparency into account
                 if(!aRange.isEmpty())
                 {
-                    const Size& rSizePixel(rBitmapEx.GetSizePixel());
+                    const Size aSizePixel(rBitmap.GetSizePixel());
 
                     // When tiled rendering, don't bother with the pixel size of the candidate.
-                    if(rSizePixel.Width() && rSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
+                    if(aSizePixel.Width() && aSizePixel.Height() && !comphelper::LibreOfficeKit::isActive())
                     {
                         basegfx::B2DHomMatrix aBackTransform(
                             getViewInformation2D().getObjectToViewTransformation() *
@@ -168,10 +168,10 @@ namespace drawinglayer::processor2d
 
                         if(aUnitRange.isInside(aRelativePoint))
                         {
-                            const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * rSizePixel.Width()));
-                            const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * rSizePixel.Height()));
+                            const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * aSizePixel.Width()));
+                            const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * aSizePixel.Height()));
 
-                            mbHit = (0 != rBitmapEx.GetAlpha(nX, nY));
+                            mbHit = (0 != rBitmap.GetPixelColor(nX, nY).GetAlpha());
                         }
                     }
                     else
@@ -466,7 +466,7 @@ namespace drawinglayer::processor2d
                     {
                         checkBitmapHit(
                             rCandidate.getB2DRange(getViewInformation2D()),
-                            BitmapEx(rBitmapAlphaCandidate.getBitmap()),
+                            rBitmapAlphaCandidate.getBitmap(),
                             rBitmapAlphaCandidate.getTransform());
                     }
                     break;
@@ -477,7 +477,7 @@ namespace drawinglayer::processor2d
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     checkBitmapHit(
                         rCandidate.getB2DRange(getViewInformation2D()),
-                        BitmapEx(rBitmapCandidate.getBitmap()),
+                        rBitmapCandidate.getBitmap(),
                         rBitmapCandidate.getTransform());
                     break;
                 }
