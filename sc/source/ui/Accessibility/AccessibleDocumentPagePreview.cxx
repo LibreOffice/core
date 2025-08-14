@@ -61,7 +61,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-typedef std::vector< uno::Reference< XAccessible > > ScXAccVector;
+typedef std::vector<rtl::Reference<comphelper::OAccessible>> ScOAccVector;
 
 namespace {
 
@@ -110,10 +110,10 @@ private:
     sal_Int32 AddNotes(const ScPreviewLocationData& rData, const tools::Rectangle& rVisRect, bool bMark, ScAccNotes& rNotes);
 
     static sal_Int8 CompareCell(const ScAddress& aCell1, const ScAddress& aCell2);
-    static void CollectChildren(const ScAccNote& rNote, ScXAccVector& rVector);
+    static void CollectChildren(const ScAccNote& rNote, ScOAccVector& rVector);
     sal_Int32 CheckChanges(const ScPreviewLocationData& rData, const tools::Rectangle& rVisRect,
         bool bMark, ScAccNotes& rOldNotes, ScAccNotes& rNewNotes,
-        ScXAccVector& rOldParas, ScXAccVector& rNewParas);
+        ScOAccVector& rOldParas, ScOAccVector& rNewParas);
 
     inline ScDocument* GetDocument() const;
 };
@@ -320,7 +320,7 @@ sal_Int8 ScNotesChildren::CompareCell(const ScAddress& aCell1, const ScAddress& 
     return nResult;
 }
 
-void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScXAccVector& rVector)
+void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScOAccVector& rVector)
 {
     if (rNote.mpTextHelper)
         for (sal_Int32 i = 0; i < rNote.mnParaCount; ++i)
@@ -329,7 +329,7 @@ void ScNotesChildren::CollectChildren(const ScAccNote& rNote, ScXAccVector& rVec
 
 sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
             const tools::Rectangle& rVisRect, bool bMark, ScAccNotes& rOldNotes,
-            ScAccNotes& rNewNotes, ScXAccVector& rOldParas, ScXAccVector& rNewParas)
+            ScAccNotes& rNewNotes, ScOAccVector& rOldParas, ScOAccVector& rNewParas)
 {
     sal_Int32 nCount = rData.GetNoteCountInRange(rVisRect, bMark);
 
@@ -458,8 +458,8 @@ void ScNotesChildren::DataChanged(const tools::Rectangle& rVisRect)
     if (!mpViewShell)
         return;
 
-    ScXAccVector aNewParas;
-    ScXAccVector aOldParas;
+    ScOAccVector aNewParas;
+    ScOAccVector aOldParas;
     {
         ScAccNotes aNewMarks;
         mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, true, maMarks, aNewMarks, aOldParas, aNewParas);
