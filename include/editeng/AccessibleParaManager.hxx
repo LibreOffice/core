@@ -87,8 +87,7 @@ public:
     bool IsReferencable( sal_Int32 nChild ) const;
 
     css::uno::Reference<css::accessibility::XAccessible>
-    CreateChild(sal_Int32 nChild,
-                const css::uno::Reference<css::accessibility::XAccessible>& xFrontEnd,
+    CreateChild(sal_Int32 nChild, const rtl::Reference<comphelper::OAccessible>& pFrontEnd,
                 SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex);
 
     WeakChild GetChild( sal_Int32 nParagraphIndex ) const;

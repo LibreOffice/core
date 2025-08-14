@@ -154,7 +154,8 @@ bool AccessibleParaManager::HasCreatedChild( sal_Int32 nParagraphIndex ) const
 }
 
 css::uno::Reference<css::accessibility::XAccessible>
-AccessibleParaManager::CreateChild(sal_Int32 nChild, const uno::Reference<XAccessible>& xFrontEnd,
+AccessibleParaManager::CreateChild(sal_Int32 nChild,
+                                   const rtl::Reference<comphelper::OAccessible>& pFrontEnd,
                                    SvxEditSourceAdapter& rEditSource, sal_Int32 nParagraphIndex)
 {
     DBG_ASSERT( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex),
@@ -169,7 +170,7 @@ AccessibleParaManager::CreateChild(sal_Int32 nChild, const uno::Reference<XAcces
         {
             // there is no hard reference available, create object then
             // #i27138#
-            xChild = new AccessibleEditableTextPara(xFrontEnd, this);
+            xChild = new AccessibleEditableTextPara(pFrontEnd, this);
 
             InitChild(*xChild, rEditSource, nChild, nParagraphIndex);
 
