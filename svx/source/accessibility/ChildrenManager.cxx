@@ -54,7 +54,7 @@ sal_Int64 ChildrenManager::GetChildCount() const noexcept
     return mpImpl->GetChildCount();
 }
 
-css::uno::Reference<XAccessible> ChildrenManager::GetChild (sal_Int64 nIndex)
+rtl::Reference<comphelper::OAccessible> ChildrenManager::GetChild(sal_Int64 nIndex)
 {
     return mpImpl->GetChild (nIndex);
 }

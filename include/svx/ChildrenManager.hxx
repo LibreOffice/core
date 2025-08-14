@@ -29,10 +29,6 @@
 
 namespace com::sun::star
 {
-namespace accessibility
-{
-class XAccessible;
-}
 namespace drawing
 {
 class XShape;
@@ -134,7 +130,7 @@ public:
         @throws
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
-    css::uno::Reference<css::accessibility::XAccessible> GetChild(sal_Int64 nIndex);
+    rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
     const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);

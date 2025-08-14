@@ -326,28 +326,28 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ensureAlive();
 
-    uno::Reference<XAccessible> xChild;
+    rtl::Reference<comphelper::OAccessible> pChild;
 
     // Depending on the index decide whether to delegate this call to the
     // children manager or the edit engine.
     if ((mpChildrenManager != nullptr)
         && (nIndex < mpChildrenManager->GetChildCount()))
     {
-        xChild = mpChildrenManager->GetChild (nIndex);
+        pChild = mpChildrenManager->GetChild(nIndex);
     }
     else if (mpText != nullptr)
     {
         sal_Int64 nI = nIndex;
         if (mpChildrenManager != nullptr)
             nI -= mpChildrenManager->GetChildCount();
-        xChild = mpText->GetChild (nI);
+        pChild = mpText->GetChild(nI);
     }
     else
         throw lang::IndexOutOfBoundsException (
             "shape has no child with index " + OUString::number(nIndex),
             getXWeak());
 
-    return xChild;
+    return pChild;
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
