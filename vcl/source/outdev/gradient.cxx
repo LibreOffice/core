@@ -88,57 +88,57 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     aRect.Normalize();
 
     // do nothing if the rectangle is empty
-    if ( !aRect.IsEmpty() )
+    if (aRect.IsEmpty())
+        return;
+
+    tools::PolyPolygon aClixPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+    bool bDrawn = false;
+
+    if( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    // secure clip region
+    auto popIt = ScopedPush(vcl::PushFlags::CLIPREGION);
+    IntersectClipRegion( aBoundRect );
+
+    if (mbInitClipRegion)
+        InitClipRegion();
+
+    // try to draw gradient natively
+    if (!mbOutputClipped)
+        bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient, *this );
+
+    if (!bDrawn && !mbOutputClipped)
     {
-        tools::PolyPolygon aClixPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
-        bool bDrawn = false;
-
-        if( !mpGraphics && !AcquireGraphics() )
-            return;
-
-        // secure clip region
-        auto popIt = ScopedPush(vcl::PushFlags::CLIPREGION);
-        IntersectClipRegion( aBoundRect );
-
-        if (mbInitClipRegion)
-            InitClipRegion();
-
-        // try to draw gradient natively
-        if (!mbOutputClipped)
-            bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient, *this );
-
-        if (!bDrawn && !mbOutputClipped)
+        // draw gradients without border
+        if( mbLineColor || mbInitLineColor )
         {
-            // draw gradients without border
-            if( mbLineColor || mbInitLineColor )
-            {
-                mpGraphics->SetLineColor();
-                mbInitLineColor = true;
-            }
-
-            mbInitFillColor = true;
-
-            // calculate step count if necessary
-            if ( !aGradient.GetSteps() )
-                aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
-
-            if ( rPolyPoly.IsRect() )
-            {
-                // because we draw with no border line, we have to expand gradient
-                // rect to avoid missing lines on the right and bottom edge
-                aRect.AdjustLeft( -1 );
-                aRect.AdjustTop( -1 );
-                aRect.AdjustRight( 1 );
-                aRect.AdjustBottom( 1 );
-            }
-
-            // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
-            // polypolygon, so pass in a NULL for the clipping parameter
-            if( aGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
-                DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
-            else
-                DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
+            mpGraphics->SetLineColor();
+            mbInitLineColor = true;
         }
+
+        mbInitFillColor = true;
+
+        // calculate step count if necessary
+        if ( !aGradient.GetSteps() )
+            aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+
+        if ( rPolyPoly.IsRect() )
+        {
+            // because we draw with no border line, we have to expand gradient
+            // rect to avoid missing lines on the right and bottom edge
+            aRect.AdjustLeft( -1 );
+            aRect.AdjustTop( -1 );
+            aRect.AdjustRight( 1 );
+            aRect.AdjustBottom( 1 );
+        }
+
+        // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+        // polypolygon, so pass in a NULL for the clipping parameter
+        if( aGradient.GetStyle() == css::awt::GradientStyle_LINEAR || rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
+            DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
+        else
+            DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
     }
 }
 
