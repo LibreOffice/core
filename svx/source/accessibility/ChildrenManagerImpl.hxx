@@ -132,8 +132,7 @@ public:
         @throws
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
-    css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (sal_Int64 nIndex);
+    rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 nIndex);
 
     /** Return the requested accessible child.
         @param aChildDescriptor
@@ -147,8 +146,8 @@ public:
             accessible object of the corresponding shape.
         @throws css::uno::RuntimeException
     */
-    css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex);
+    rtl::Reference<comphelper::OAccessible> GetChild(ChildDescriptor& aChildDescriptor,
+                                                     sal_Int32 _nIndex);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update

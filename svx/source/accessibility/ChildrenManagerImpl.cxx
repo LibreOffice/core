@@ -127,8 +127,7 @@ const css::uno::Reference<css::drawing::XShape>& ChildrenManagerImpl::GetChildSh
 /** Return the requested accessible child object.  Create it if it is not
     yet in the cache.
 */
-uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (sal_Int64 nIndex)
+rtl::Reference<comphelper::OAccessible> ChildrenManagerImpl::GetChild(sal_Int64 nIndex)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
@@ -143,8 +142,8 @@ uno::Reference<XAccessible>
 /** Return the requested accessible child object.  Create it if it is not
     yet in the cache.
 */
-uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (ChildDescriptor& rChildDescriptor,sal_Int32 _nIndex)
+rtl::Reference<comphelper::OAccessible>
+ChildrenManagerImpl::GetChild(ChildDescriptor& rChildDescriptor, sal_Int32 _nIndex)
 {
     if ( ! rChildDescriptor.mxAccessibleShape.is())
     {
