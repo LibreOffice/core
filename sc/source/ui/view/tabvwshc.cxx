@@ -332,52 +332,55 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         }
         case SID_FILTER:
         {
+            if (ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown))
+            {
+                ScQueryParam    aQueryParam;
+                SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( GetPool() );
 
-            ScQueryParam    aQueryParam;
-            SfxItemSetFixed<SCITEM_QUERYDATA, SCITEM_QUERYDATA> aArgSet( GetPool() );
+                pDBData->ExtendDataArea(rDoc);
+                pDBData->ExtendBackColorArea(rDoc);
+                pDBData->GetQueryParam( aQueryParam );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(rDoc);
-            pDBData->ExtendBackColorArea(rDoc);
-            pDBData->GetQueryParam( aQueryParam );
+                ScRange aArea;
+                pDBData->GetArea(aArea);
+                MarkRange(aArea, false);
 
-            ScRange aArea;
-            pDBData->GetArea(aArea);
-            MarkRange(aArea, false);
+                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
 
-            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &aQueryParam ) );
+                // mark current sheet (due to RefInput in dialog)
+                GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            // mark current sheet (due to RefInput in dialog)
-            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
-
-            xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
+                xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
+            }
             break;
         }
         case SID_SPECIAL_FILTER:
         {
-            ScQueryParam    aQueryParam;
-            SfxItemSetFixed<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA> aArgSet( GetPool() );
+            if (ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown))
+            {
+                ScQueryParam    aQueryParam;
+                SfxItemSetFixed<SCITEM_QUERYDATA,
+                                         SCITEM_QUERYDATA> aArgSet( GetPool() );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
-            pDBData->ExtendDataArea(rDoc);
-            pDBData->GetQueryParam( aQueryParam );
+                pDBData->ExtendDataArea(rDoc);
+                pDBData->GetQueryParam( aQueryParam );
 
-            ScRange aArea;
-            pDBData->GetArea(aArea);
-            MarkRange(aArea, false);
+                ScRange aArea;
+                pDBData->GetArea(aArea);
+                MarkRange(aArea, false);
 
-            ScQueryItem aItem( SCITEM_QUERYDATA, &aQueryParam );
-            ScRange aAdvSource;
-            if (pDBData->GetAdvancedQuerySource(aAdvSource))
-                aItem.SetAdvancedQuerySource( &aAdvSource );
+                ScQueryItem aItem( SCITEM_QUERYDATA, &aQueryParam );
+                ScRange aAdvSource;
+                if (pDBData->GetAdvancedQuerySource(aAdvSource))
+                    aItem.SetAdvancedQuerySource( &aAdvSource );
 
-            aArgSet.Put( aItem );
+                aArgSet.Put( aItem );
 
-            // mark current sheet (due to RefInput in dialog)
-            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
+                // mark current sheet (due to RefInput in dialog)
+                GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
-            xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
+                xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, GetViewData(), aArgSet);
+            }
             break;
         }
         case SID_OPENDLG_OPTSOLVER:

@@ -282,6 +282,9 @@ void ScDBFunc::ToggleAutoFilter()
     ScDocument&     rDoc    = rViewData.GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, ScGetDBSelection::RowDown);
 
+    if (!pDBData)
+        return;
+
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
     pDBData->GetQueryParam( aParam );
 
@@ -419,6 +422,8 @@ void ScDBFunc::HideAutoFilter()
     ScDocument& rDoc = rDocSh.GetDocument();
 
     ScDBData* pDBData = GetDBData( false );
+    if (!pDBData)
+        return;
 
     SCTAB nTab;
     SCCOL nCol1, nCol2;

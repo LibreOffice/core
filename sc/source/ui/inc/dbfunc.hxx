@@ -67,7 +67,7 @@ public:
     void GotoDBArea( const OUString& rDBName );
 
                     // DB range from Cursor
-    ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = ScGetDBSelection::Keep);
+    SAL_RET_MAYBENULL ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = ScGetDBSelection::Keep);
     ScDBData*       GetAnonymousDBData();
 
     void            Consolidate( const ScConsolidateParam& rParam );
