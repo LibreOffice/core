@@ -1266,10 +1266,12 @@ void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
 
-        SCTAB nDummy;
         ScImportParam aNewParam(aImportParam);
-        ScDBData* pDBData = rViewShell.GetDBData();
-        pDBData->GetArea( nDummy, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
+        if (ScDBData* pDBData = rViewShell.GetDBData())
+        {
+            SCTAB nDummy;
+            pDBData->GetArea( nDummy, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
+        }
 
         rViewShell.ImportData( aNewParam );
     }
