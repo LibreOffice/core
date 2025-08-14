@@ -18,7 +18,6 @@
  */
 
 #include <dbaccess/dbaundomanager.hxx>
-#include <dbaccess/dataview.hxx>
 #include <core_resource.hxx>
 #include <singledoccontroller.hxx>
 #include <browserids.hxx>

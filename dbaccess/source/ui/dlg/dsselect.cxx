@@ -19,9 +19,6 @@
 
 #include "dsselect.hxx"
 
-#include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-
 namespace dbaui
 {
 ODatasourceSelectDialog::ODatasourceSelectDialog(weld::Window* _pParent, const std::set<OUString>& _rDatasources)

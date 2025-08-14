@@ -32,8 +32,6 @@
 #include <dsitems.hxx>
 #include <helpids.h>
 #include <sqlmessage.hxx>
-#include <svl/filenotation.hxx>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <o3tl/string_view.hxx>
 

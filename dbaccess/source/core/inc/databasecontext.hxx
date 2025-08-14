@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
 
 #if HAVE_FEATURE_SCRIPTING
 #include <basic/basrdll.hxx>

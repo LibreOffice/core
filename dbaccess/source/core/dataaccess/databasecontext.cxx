@@ -34,10 +34,7 @@
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
@@ -45,13 +42,11 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
 #include <basic/basmgr.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>

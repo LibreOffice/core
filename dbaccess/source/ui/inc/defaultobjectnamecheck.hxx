@@ -23,9 +23,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdb/tools/XConnectionTools.hpp>
-
-#include <memory>
+#include <com/sun/star/sdb/tools/XObjectNames.hpp>
 
 namespace dbaui
 {

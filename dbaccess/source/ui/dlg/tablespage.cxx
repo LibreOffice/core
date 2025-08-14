@@ -19,7 +19,6 @@
 
 #include "tablespage.hxx"
 #include <dsitems.hxx>
-#include <datasourceconnector.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>

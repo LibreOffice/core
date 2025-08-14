@@ -19,7 +19,6 @@
 
 #include <dsmeta.hxx>
 #include <connectivity/DriversConfig.hxx>
-#include <dsntypes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 

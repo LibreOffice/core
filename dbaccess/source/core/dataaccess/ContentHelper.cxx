@@ -31,7 +31,6 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sdbcoretools.hxx>
 #include <stringconstants.hxx>

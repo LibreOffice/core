@@ -20,7 +20,6 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <core_resource.hxx>
-#include <sqlmessage.hxx>
 #include <UITools.hxx>
 #include <WColumnSelect.hxx>
 #include <WCopyTable.hxx>

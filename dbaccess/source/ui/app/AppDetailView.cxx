@@ -26,7 +26,6 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <core_resource.hxx>

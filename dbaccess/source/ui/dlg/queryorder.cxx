@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <connectivity/dbtools.hxx>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace dbaui;

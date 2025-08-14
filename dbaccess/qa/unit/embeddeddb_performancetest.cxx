@@ -11,13 +11,10 @@
 
 #include <memory>
 #include <o3tl/environment.hxx>
-#include <osl/process.h>
 #include <osl/time.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -27,9 +24,6 @@
 #include <com/sun/star/sdbc/XStatement.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;

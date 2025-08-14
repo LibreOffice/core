@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/diagnose_ex.hxx>

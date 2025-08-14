@@ -20,7 +20,6 @@
 
 #include "StaticSet.hxx"
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>

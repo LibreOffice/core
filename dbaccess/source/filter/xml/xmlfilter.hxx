@@ -28,7 +28,6 @@
 #include <xmloff/xmlprmap.hxx>
 
 #include <map>
-#include <memory>
 
 
 namespace dbaxml

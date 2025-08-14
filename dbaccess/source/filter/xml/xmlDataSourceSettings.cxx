@@ -27,7 +27,6 @@
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::xml::sax;
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport ) :
     SvXMLImportContext( rImport )

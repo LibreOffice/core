@@ -32,8 +32,6 @@
 #include "optionalboolitem.hxx"
 #include <stringlistitem.hxx>
 
-#include <unotools/confignode.hxx>
-
 namespace dbaui
 {
 using namespace com::sun::star::uno;

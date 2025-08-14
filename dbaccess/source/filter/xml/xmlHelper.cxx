@@ -25,7 +25,6 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 
-#include <com/sun/star/awt/TextAlign.hpp>
 #include <strings.hxx>
 #include <rtl/ref.hxx>
 

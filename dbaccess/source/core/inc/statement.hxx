@@ -20,7 +20,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>

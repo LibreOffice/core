@@ -35,7 +35,6 @@
 #include <cppuhelper/implbase5.hxx>
 #include "callbacks.hxx"
 #include <utility>
-#include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include "TableCopyHelper.hxx"
 #include "commontypes.hxx"

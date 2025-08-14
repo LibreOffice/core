@@ -30,7 +30,6 @@
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::xml::sax;
 
 OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport) :
     SvXMLImportContext( rImport )

@@ -21,7 +21,6 @@
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <WCopyTable.hxx>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <core_resource.hxx>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 

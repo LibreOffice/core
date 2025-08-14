@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/document/XDocumentEventListener.hpp>
-#include <com/sun/star/document/XEventsSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <unotools/weakref.hxx>

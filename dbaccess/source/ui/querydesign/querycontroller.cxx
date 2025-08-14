@@ -30,7 +30,6 @@
 #include <QueryDesignView.hxx>
 #include <QueryTableView.hxx>
 #include <sqlmessage.hxx>
-#include <TableConnectionData.hxx>
 #include <TableFieldDescription.hxx>
 #include <UITools.hxx>
 #include <QueryPropertiesDialog.hxx>
@@ -49,7 +48,6 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>

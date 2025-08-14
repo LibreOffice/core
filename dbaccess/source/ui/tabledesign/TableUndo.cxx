@@ -24,7 +24,7 @@
 #include <TableController.hxx>
 #include <TableDesignView.hxx>
 #include <FieldDescriptions.hxx>
-#include <svx/svxids.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <utility>
 
 using namespace dbaui;

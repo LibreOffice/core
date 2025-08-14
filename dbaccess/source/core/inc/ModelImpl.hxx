@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "connection.hxx"
 #include "ContentHelper.hxx"
 #include "documentevents.hxx"
 
@@ -26,10 +27,9 @@
 #include <com/sun/star/beans/XPropertyBag.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/reflection/ProxyFactory.hpp>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -51,7 +51,6 @@
 namespace dbaccess
 {
 class OCommandContainer;
-class OConnection;
 
 typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 

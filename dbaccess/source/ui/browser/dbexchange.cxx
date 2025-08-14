@@ -21,7 +21,6 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <TokenWriter.hxx>

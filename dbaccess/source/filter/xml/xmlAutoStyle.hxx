@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
-#include <xmloff/maptype.hxx>
+
 #include <xmloff/xmlaustp.hxx>
 
 namespace dbaxml

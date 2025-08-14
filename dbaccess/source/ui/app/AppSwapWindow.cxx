@@ -27,7 +27,6 @@
 #include "AppController.hxx"
 
 using namespace ::dbaui;
-using namespace ::com::sun::star::uno;
 
 OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent,
                                                OAppBorderWindow& rBorderWindow)

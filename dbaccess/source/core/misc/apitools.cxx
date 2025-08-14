@@ -18,7 +18,6 @@
  */
 
 #include <apitools.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -70,7 +70,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>

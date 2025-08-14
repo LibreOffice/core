@@ -35,7 +35,6 @@
 #include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include "RowSetRow.hxx"
 #include "RowSetCacheIterator.hxx"
 

@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <rtl/ref.hxx>
 

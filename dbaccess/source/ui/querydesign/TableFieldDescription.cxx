@@ -20,7 +20,6 @@
 #include <TableFieldDescription.hxx>
 
 #include <osl/diagnose.h>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;

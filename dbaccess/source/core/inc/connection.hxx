@@ -43,7 +43,6 @@
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 
-#include <cppuhelper/implbase13.hxx>
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>

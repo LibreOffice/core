@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include "unoDirectSql.hxx"
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <directsql.hxx>

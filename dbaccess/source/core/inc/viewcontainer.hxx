@@ -26,7 +26,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 
 #include "FilteredContainer.hxx"

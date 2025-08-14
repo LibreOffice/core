@@ -29,7 +29,6 @@
 #include <com/sun/star/sdb/tools/XTableAlteration.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/TTableHelper.hxx>
 #include <connectivity/dbexception.hxx>

@@ -19,7 +19,7 @@
 
 #include <TableRowExchange.hxx>
 #include <sot/formats.hxx>
-#include <sot/storage.hxx>
+#include <tools/stream.hxx>
 #include <TableRow.hxx>
 
 namespace dbaui

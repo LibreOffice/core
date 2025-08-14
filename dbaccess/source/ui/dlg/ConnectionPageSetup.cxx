@@ -23,8 +23,6 @@
 #include <IItemSetHelper.hxx>
 #include <svl/itemset.hxx>
 #include <dsitems.hxx>
-#include <svl/filenotation.hxx>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
 
 namespace dbaui
 {

@@ -22,7 +22,6 @@
 #include <stringconstants.hxx>
 #include <propertystorage.hxx>
 
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/XTextConnectionSettings.hpp>
 

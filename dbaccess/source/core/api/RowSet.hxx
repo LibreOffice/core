@@ -24,7 +24,6 @@
 #include <atomic>
 #include <cstddef>
 
-#include <apitools.hxx>
 #include "RowSetBase.hxx"
 
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
@@ -42,6 +41,7 @@
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase12.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>

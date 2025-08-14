@@ -23,7 +23,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
-#include <sal/macros.h>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>

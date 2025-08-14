@@ -24,7 +24,6 @@
 #include <TableConnection.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
-#include <math.h>
 #include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>

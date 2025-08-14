@@ -21,7 +21,6 @@
 #include <core_resource.hxx>
 #include "dsnItem.hxx"
 #include "generalpage.hxx"
-#include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 #include <dsitems.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -44,8 +43,6 @@ namespace dbaui
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
     // OGeneralPage

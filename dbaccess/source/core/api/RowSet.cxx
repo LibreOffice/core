@@ -56,7 +56,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/BlobHelper.hxx>
@@ -64,7 +63,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/languagetag.hxx>

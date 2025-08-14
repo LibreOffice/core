@@ -34,7 +34,6 @@ namespace dbaxml
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::xml::sax;
 
 OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport)
     :SvXMLImportContext( rImport )

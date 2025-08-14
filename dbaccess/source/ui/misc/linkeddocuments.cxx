@@ -21,7 +21,6 @@
 #include <linkeddocuments.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
-#include <unotools/confignode.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -34,7 +33,6 @@
 #include <comphelper/types.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <svl/filenotation.hxx>
 #include <browserids.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <comphelper/mimeconfighelper.hxx>

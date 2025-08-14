@@ -32,7 +32,6 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::xml::sax;
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,const Reference< XNameAccess >& _xContainer

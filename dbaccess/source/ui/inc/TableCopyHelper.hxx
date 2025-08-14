@@ -21,7 +21,7 @@
 #include "AppElementType.hxx"
 #include "commontypes.hxx"
 #include <svx/dataaccessdescriptor.hxx>
-#include <sot/storage.hxx>
+#include <tools/stream.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

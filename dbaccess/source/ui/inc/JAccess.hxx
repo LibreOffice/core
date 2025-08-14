@@ -19,7 +19,6 @@
 #pragma once
 
 #include "JoinTableView.hxx"
-#include <cppuhelper/implbase.hxx>
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
 

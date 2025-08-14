@@ -20,7 +20,6 @@
 
 #include <vector>
 #include <vcl/window.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include "TableConnectionData.hxx"
 
 class Point;

@@ -55,7 +55,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/rtfout.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <o3tl/string_view.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <memory>

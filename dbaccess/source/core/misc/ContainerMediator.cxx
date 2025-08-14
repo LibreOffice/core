@@ -22,7 +22,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/diagnose_ex.hxx>

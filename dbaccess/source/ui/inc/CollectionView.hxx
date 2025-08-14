@@ -21,7 +21,6 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace ucbhelper { class CommandEnvironment; }

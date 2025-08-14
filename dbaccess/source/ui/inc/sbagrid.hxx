@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <comphelper/multiinterfacecontainer4.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>

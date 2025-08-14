@@ -18,8 +18,6 @@
  */
 
 #include <queryfilter.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>

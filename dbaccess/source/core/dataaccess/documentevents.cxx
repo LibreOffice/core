@@ -21,7 +21,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>

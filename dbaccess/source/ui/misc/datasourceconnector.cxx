@@ -32,7 +32,6 @@
 #include <UITools.hxx>
 #include <utility>
 #include <vcl/mnemonic.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/diagnose_ex.hxx>

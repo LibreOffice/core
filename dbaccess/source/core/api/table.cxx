@@ -26,7 +26,6 @@
 #include "CIndexes.hxx"
 
 #include <osl/diagnose.h>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdb/tools/XTableRename.hpp>

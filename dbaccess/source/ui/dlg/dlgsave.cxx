@@ -25,7 +25,6 @@
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <objectnamecheck.hxx>
-#include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace dbaui;

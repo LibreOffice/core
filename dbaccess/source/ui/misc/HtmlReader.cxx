@@ -26,7 +26,6 @@
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <core_resource.hxx>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -40,10 +39,7 @@
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
 #define DBAUI_HTML_FONTSIZES    8       // like export, HTML-Options

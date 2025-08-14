@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include "containerapprove.hxx"
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>

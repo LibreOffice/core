@@ -37,7 +37,6 @@
 #include <strings.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <vcl/svapp.hxx>

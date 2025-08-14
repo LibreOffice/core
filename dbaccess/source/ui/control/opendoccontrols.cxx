@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 
 #include <comphelper/processfactory.hxx>

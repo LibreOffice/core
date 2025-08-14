@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 namespace dbaccess

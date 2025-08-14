@@ -24,6 +24,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/tools/XConnectionTools.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
 #include <connectivity/dbexception.hxx>
@@ -34,7 +35,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <memory>
 #include <string_view>
 
 namespace dbaui

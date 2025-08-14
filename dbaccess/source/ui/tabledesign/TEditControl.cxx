@@ -21,7 +21,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <core_resource.hxx>
 #include <strings.hrc>
@@ -37,8 +36,8 @@
 #include <SqlNameEdit.hxx>
 #include <TableRowExchange.hxx>
 #include <o3tl/safeint.hxx>
-#include <sot/storage.hxx>
-#include <svx/svxids.hrc>
+#include <sfx2/sfxsids.hrc>
+#include <tools/stream.hxx>
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>

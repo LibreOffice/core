@@ -20,6 +20,7 @@
 #pragma once
 
 #include "CacheSet.hxx"
+#include "PrivateRow.hxx"
 
 #include <memory>
 #include <map>
@@ -32,8 +33,6 @@
 
 namespace dbaccess
 {
-    class OPrivateRow;
-
     struct SelectColumnDescription
     {
         OUString sRealName;      // may be empty

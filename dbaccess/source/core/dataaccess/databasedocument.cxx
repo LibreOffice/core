@@ -51,7 +51,6 @@
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
@@ -63,7 +62,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/types.hxx>

@@ -23,10 +23,8 @@
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>

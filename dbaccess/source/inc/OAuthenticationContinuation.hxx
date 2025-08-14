@@ -19,11 +19,11 @@
 
 #pragma once
 
+#include <config_options.h>
+
 #include <dbadllapi.hxx>
 
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
-#include <com/sun/star/ucb/RememberAuthentication.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <comphelper/interaction.hxx>

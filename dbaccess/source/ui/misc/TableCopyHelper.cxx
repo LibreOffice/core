@@ -23,7 +23,6 @@
 #include <strings.hxx>
 #include <dbaccess/genericcontroller.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/DataAccessDescriptorFactory.hpp>
@@ -32,6 +31,7 @@
 #include <TokenWriter.hxx>
 #include <UITools.hxx>
 #include <dbaccess/dataview.hxx>
+#include <sot/storage.hxx>
 #include <svx/dbaexchange.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>

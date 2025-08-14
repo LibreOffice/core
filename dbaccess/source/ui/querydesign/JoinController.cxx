@@ -19,8 +19,6 @@
 
 #include <browserids.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <connectivity/dbexception.hxx>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <JoinController.hxx>
 #include <TableWindowData.hxx>
 #include <TableWindow.hxx>

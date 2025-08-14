@@ -30,7 +30,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <comphelper/diagnose_ex.hxx>
@@ -57,7 +56,6 @@
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

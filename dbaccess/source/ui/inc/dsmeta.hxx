@@ -27,8 +27,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <memory>
-
 namespace dbaui
 {
 

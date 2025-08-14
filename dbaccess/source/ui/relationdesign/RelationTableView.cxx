@@ -26,7 +26,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <helpids.h>
@@ -51,7 +50,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 

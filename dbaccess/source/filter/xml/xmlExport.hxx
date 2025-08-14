@@ -19,12 +19,8 @@
 
 #pragma once
 
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <optional>
 #include <utility>
