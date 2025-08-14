@@ -172,7 +172,6 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     if ( nWidth <= 0 || nHeight <= 0 || nX > (mnOutWidth + mnOutOffX) || nY > (mnOutHeight + mnOutOffY))
         return Bitmap();
 
-    Bitmap  aBmp;
     tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
     bool bClipped = false;
 
@@ -208,8 +207,6 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
     if (bClipped)
     {
-        bClipped = false;
-
         // If the visible part has been clipped, we have to create a
         // Bitmap with the correct size in which we copy the clipped
         // Bitmap to the correct position.
@@ -232,27 +229,23 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                     OSL_ENSURE(false, "CopyBits with zero or negative width or height");
                 }
 
-                aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
-
-                bClipped = true;
+                return aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
         }
     }
 
-    if ( !bClipped )
-    {
-        std::shared_ptr<SalBitmap> pSalBmp;
-        // if we are a virtual device, we might need to remove the unused alpha channel
-        bool bWithoutAlpha = false;
-        if (OUTDEV_VIRDEV == GetOutDevType())
-            bWithoutAlpha = static_cast<const VirtualDevice*>(this)->IsWithoutAlpha();
-        pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, *this, bWithoutAlpha );
+    std::shared_ptr<SalBitmap> pSalBmp;
+    // if we are a virtual device, we might need to remove the unused alpha channel
+    bool bWithoutAlpha = false;
+    if (OUTDEV_VIRDEV == GetOutDevType())
+        bWithoutAlpha = static_cast<const VirtualDevice*>(this)->IsWithoutAlpha();
 
-        if( pSalBmp )
-        {
-            aBmp.ImplSetSalBitmap(pSalBmp);
-        }
-    }
+    pSalBmp = mpGraphics->GetBitmap( nX, nY, nWidth, nHeight, *this, bWithoutAlpha );
+
+    Bitmap aBmp;
+
+    if( pSalBmp )
+        aBmp.ImplSetSalBitmap(pSalBmp);
 
     return aBmp;
 }
