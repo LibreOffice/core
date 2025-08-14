@@ -184,7 +184,7 @@ namespace drawinglayer::primitive2d
         }
 
         //  create buffered content in given resolution
-        BitmapEx PatternFillPrimitive2D::createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const
+        Bitmap PatternFillPrimitive2D::createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const
         {
             const geometry::ViewInformation2D aViewInformation2D;
             Primitive2DContainer aContent(createContent(aViewInformation2D));
@@ -194,12 +194,12 @@ namespace drawinglayer::primitive2d
                         std::move(aContent)));
             primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
-            return BitmapEx(convertToBitmap(
+            return convertToBitmap(
                         std::move(xEmbedSeq),
                         aViewInformation2D,
                         nWidth,
                         nHeight,
-                        nWidth * nHeight));
+                        nWidth * nHeight);
         }
 
         Primitive2DReference PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const

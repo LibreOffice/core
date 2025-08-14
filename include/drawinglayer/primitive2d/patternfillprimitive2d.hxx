@@ -89,7 +89,7 @@ namespace drawinglayer::primitive2d
 
             /// helper which creates the content - checks if clipping is needed and eventually
             /// creates buffered content to speed up rendering
-            BitmapEx createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const;
+            Bitmap createTileImage(sal_uInt32 nWidth, sal_uInt32 nHeight) const;
 
             /// helper that is capable to calculate the needed discrete buffer size for
             /// eventually buffered content

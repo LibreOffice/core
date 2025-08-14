@@ -1073,7 +1073,7 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     rPrimitive.getTileSize(nTileWidth, nTileHeight, getViewInformation2D());
     if (nTileWidth == 0 || nTileHeight == 0)
         return;
-    BitmapEx aTileImage = rPrimitive.createTileImage(nTileWidth, nTileHeight);
+    Bitmap aTileImage = rPrimitive.createTileImage(nTileWidth, nTileHeight);
     tools::Rectangle aMaskRect = vcl::unotools::rectangleFromB2DRectangle(aMaskRange);
 
     // Unless smooth edges are needed, simply use clipping.
