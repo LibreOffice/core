@@ -206,8 +206,10 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
         bClipped = true;
     }
 
-    if ( bClipped )
+    if (bClipped)
     {
+        bClipped = false;
+
         // If the visible part has been clipped, we have to create a
         // Bitmap with the correct size in which we copy the clipped
         // Bitmap to the correct position.
@@ -231,12 +233,10 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                 }
 
                 aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
+
+                bClipped = true;
             }
-            else
-                bClipped = false;
         }
-        else
-            bClipped = false;
     }
 
     if ( !bClipped )
