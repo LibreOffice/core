@@ -53,12 +53,12 @@ public:
     };
 
     ScAccessibleEditObject(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const rtl::Reference<comphelper::OAccessible>& rpParent,
         EditView* pEditView, vcl::Window* pWin, const OUString& rName,
         const OUString& rDescription, EditObjectType eObjectType);
 
     void InitAcc(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const rtl::Reference<comphelper::OAccessible>& rpParent,
         EditView* pEditView, const OUString& rName, const OUString& rDescription);
 
 protected:

@@ -54,11 +54,11 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-ScAccessibleEditObject::ScAccessibleEditObject(const uno::Reference<XAccessible>& rxParent,
+ScAccessibleEditObject::ScAccessibleEditObject(const rtl::Reference<comphelper::OAccessible>& rpParent,
                                                EditView* pEditView, vcl::Window* pWin,
                                                const OUString& rName, const OUString& rDescription,
                                                EditObjectType eObjectType)
-    : ImplInheritanceHelper(rxParent, AccessibleRole::TEXT_FRAME)
+    : ImplInheritanceHelper(rpParent, AccessibleRole::TEXT_FRAME)
     , mpEditView(pEditView)
     , mpWindow(pWin)
     , mpTextWnd(nullptr)
@@ -66,7 +66,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(const uno::Reference<XAccessible>
     , mbHasFocus(false)
     , m_pScDoc(nullptr)
 {
-    InitAcc(rxParent, pEditView, rName, rDescription);
+    InitAcc(rpParent, pEditView, rName, rDescription);
 }
 
 ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
@@ -81,12 +81,12 @@ ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
 }
 
 void ScAccessibleEditObject::InitAcc(
-        const uno::Reference<XAccessible>& rxParent,
+        const rtl::Reference<comphelper::OAccessible>& rpParent,
         EditView* pEditView,
         const OUString& rName,
         const OUString& rDescription)
 {
-    SetParent(rxParent);
+    SetParent(rpParent);
     mpEditView = pEditView;
 
     CreateTextHelper();
@@ -94,7 +94,7 @@ void ScAccessibleEditObject::InitAcc(
     SetDescription(rDescription);
     if( meObjectType == CellInEditMode)
     {
-        const ScAccessibleDocument *pAccDoc = static_cast<ScAccessibleDocument*>(rxParent.get());
+        const ScAccessibleDocument* pAccDoc = static_cast<ScAccessibleDocument*>(rpParent.get());
         if (pAccDoc)
         {
             m_pScDoc = pAccDoc->GetDocument();
