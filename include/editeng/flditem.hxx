@@ -57,9 +57,6 @@ public:
     virtual std::unique_ptr<SvxFieldData> Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
-
-    virtual MetaAction*     createBeginComment() const;
-    static MetaAction*      createEndComment();
 };
 
 /**
@@ -133,8 +130,6 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 
@@ -178,8 +173,6 @@ public:
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 class EDITENG_DLLPUBLIC SvxPageField final: public SvxFieldData
@@ -190,8 +183,6 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 class EDITENG_DLLPUBLIC SvxPageTitleField final: public SvxFieldData
@@ -203,8 +194,6 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 class EDITENG_DLLPUBLIC SvxPagesField final: public SvxFieldData
@@ -227,8 +216,6 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 class EDITENG_DLLPUBLIC SvxFileField final: public SvxFieldData
@@ -309,8 +296,6 @@ public:
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
-
-    virtual MetaAction* createBeginComment() const override;
 };
 
 

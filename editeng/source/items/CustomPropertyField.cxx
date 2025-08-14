@@ -43,11 +43,6 @@ bool CustomPropertyField::operator==(const SvxFieldData& rOther) const
             msCurrentPresentation == rOtherField.msCurrentPresentation);
 }
 
-MetaAction* CustomPropertyField::createBeginComment() const
-{
-    return new MetaCommentAction("FIELD_SEQ_BEGIN"_ostr);
-}
-
 const OUString & CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties)
 {
     if (msName.isEmpty())
