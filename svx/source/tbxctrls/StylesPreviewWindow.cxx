@@ -180,12 +180,12 @@ StyleItemController::StyleItemController(std::pair<OUString, OUString> aStyleNam
 {
 }
 
-void StyleItemController::Paint(vcl::RenderContext& rRenderContext, SfxStyleSheetBase* pStyleHint)
+void StyleItemController::Paint(vcl::RenderContext& rRenderContext)
 {
     rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT
                         | vcl::PushFlags::TEXTCOLOR);
 
-    DrawEntry(rRenderContext, pStyleHint);
+    DrawEntry(rRenderContext);
 
     rRenderContext.Pop();
 }
@@ -304,29 +304,25 @@ static SvxFont GetFontFromItems(const SvxFontItem* pFontItem, Size aPixelFontSiz
     return aFont;
 }
 
-void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext,
-                                    SfxStyleSheetBase* pStyleHint)
+void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     if (!pShell)
         return;
 
     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+    SfxStyleSheetBase* pStyle = nullptr;
+
     if (!pPool)
         return;
 
-    SfxStyleSheetBase* pStyle = nullptr;
-    if (pStyleHint)
-        pStyle = pStyleHint;
-    else
-    {
-        pStyle = pPool->First(m_eStyleFamily);
-        while (pStyle && pStyle->GetName() != m_aStyleName.first
-               && pStyle->GetName() != m_aStyleName.second)
-            pStyle = pPool->Next();
-        if (!pStyle)
-            return;
-    }
+    pStyle = pPool->First(m_eStyleFamily);
+    while (pStyle && pStyle->GetName() != m_aStyleName.first
+           && pStyle->GetName() != m_aStyleName.second)
+        pStyle = pPool->Next();
+
+    if (!pStyle)
+        return;
 
     Size aSize(rRenderContext.GetOutputSizePixel());
     tools::Rectangle aFullRect(Point(0, 0), aSize);
@@ -581,8 +577,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
     return true;
 }
 
-BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle,
-                                                    SfxStyleSheetBase* pStyleHint)
+BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OUString>& rStyle)
 {
     auto aFound = StylePreviewCache::Get().find(rStyle.second);
     if (aFound != StylePreviewCache::Get().end())
@@ -594,7 +589,7 @@ BitmapEx StylesPreviewWindow_Base::GetCachedPreview(const std::pair<OUString, OU
         pImg->SetOutputSizePixel(aSize);
 
         StyleItemController aStyleController(rStyle);
-        aStyleController.Paint(*pImg, pStyleHint);
+        aStyleController.Paint(*pImg);
         BitmapEx aBitmap = pImg->GetBitmapEx(Point(0, 0), aSize);
         StylePreviewCache::Get()[rStyle.second] = aBitmap;
 
@@ -620,8 +615,6 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
-    // avoid O(n^2) loop when filling a very large style list
-    std::map<sal_Int32, SfxStyleSheetBase*> aStylesHint;
 
     if (pDocShell)
         pStyleSheetPool = pDocShell->GetStyleSheetPool();
@@ -636,7 +629,6 @@ void StylesPreviewWindow_Base::UpdateStylesList()
         while (pStyle)
         {
             OUString sName(pStyle->GetName());
-            aStylesHint[m_aAllStyles.size()] = pStyle;
             m_aAllStyles.push_back(std::pair<OUString, OUString>(sName, sName));
             pStyle = xIter->Next();
         }
@@ -647,21 +639,15 @@ void StylesPreviewWindow_Base::UpdateStylesList()
     // for online we can skip inserting the preview into the IconView and rely
     // on DoJsonProperty to provide the image to clients
     const bool bNeedInsertPreview = !comphelper::LibreOfficeKit::isActive();
-    sal_Int32 nIndex = 0;
     for (const auto& rStyle : m_aAllStyles)
     {
         if (bNeedInsertPreview)
         {
-            SfxStyleSheetBase* pStyleHint = nullptr;
-            auto it = aStylesHint.find(nIndex);
-            if (it != aStylesHint.end())
-                pStyleHint = it->second;
-            BitmapEx aPreview = GetCachedPreview(rStyle, pStyleHint);
+            BitmapEx aPreview = GetCachedPreview(rStyle);
             m_xStylesView->append(rStyle.first, rStyle.second, &aPreview);
         }
         else
             m_xStylesView->append(rStyle.first, rStyle.second, nullptr);
-        ++nIndex;
     }
     m_xStylesView->thaw();
 }
