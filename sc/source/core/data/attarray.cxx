@@ -2255,7 +2255,13 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     // Don't duplicate the merge flags in the inserted row.
     // #i108488# ScMF::Scenario has to be allowed.
-    RemoveFlags( nStartRow, nStartRow+nSize-1, ScMF::Hor | ScMF::Ver | ScMF::Auto | ScMF::Button );
+    RemoveFlags(nStartRow, nStartRow + nSize - 1, (ScMF::All & ~ScMF::Scenario));
+    // tdf#140027: set new default attributes if we insert very first rows.
+    if (nStartRow == 0)
+    {
+        const CellAttributeHolder aDefHolder(&rDocument.getCellAttributeHelper().getDefaultCellAttribute());
+        SetPatternArea(nStartRow, nStartRow + nSize - 1, aDefHolder);
+    }
 }
 
 void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
