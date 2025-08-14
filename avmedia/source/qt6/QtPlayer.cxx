@@ -9,7 +9,11 @@
 
 #include <sal/config.h>
 
+#include <sal/types.h>
+
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtCore/QCoreApplication>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #include <QtCore/QUrl>
 #include <QtMultimedia/QAudioOutput>
 #include <QtMultimedia/QMediaMetaData>

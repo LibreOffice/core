@@ -28,7 +28,9 @@
 
 #include <osl/conditn.hxx>
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtCore/QObject>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 #include <concepts>
 #include <cstdlib>

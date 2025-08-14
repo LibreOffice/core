@@ -15,7 +15,9 @@
 #include <comphelper/OAccessible.hxx>
 #include <rtl/ref.hxx>
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtCore/QObject>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #include <QtCore/QPair>
 #include <QtCore/QString>
 #include <QtCore/QStringList>

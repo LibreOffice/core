@@ -17,7 +17,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase.hxx>
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 #include <QtCore/QObject>
+SAL_WNODEPRECATED_DECLARATIONS_POP
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDragMoveEvent>
 #include <QtGui/QDropEvent>
