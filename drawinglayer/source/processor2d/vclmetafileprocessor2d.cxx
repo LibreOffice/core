@@ -2714,7 +2714,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
     // limitation to paint the content
     const auto aViewInformation2D(geometry::createViewInformation2D({}));
     const sal_uInt32 nMaximumQuadraticPixels(500000);
-    const BitmapEx aBitmapEx(convertToBitmapEx(
+    const Bitmap aBitmap(convertToBitmap(
         std::move(xEmbedSeq), aViewInformation2D, basegfx::fround(aDiscreteRange.getWidth()),
         basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
@@ -2723,7 +2723,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
                                        basegfx::fround<tools::Long>(aLogicRange.getMinY())),
                                  Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
                                       basegfx::fround<tools::Long>(aLogicRange.getHeight())),
-                                 aBitmapEx);
+                                 aBitmap);
 }
 
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(

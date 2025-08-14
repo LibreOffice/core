@@ -127,29 +127,29 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     if (pSource)
     {
         drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource);
-        aBmp = Bitmap(drawinglayer::convertToBitmapEx(
-            std::move(aSource), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
-            aBaseRange.getWidth() * aBaseRange.getHeight()));
+        aBmp = drawinglayer::convertToBitmap(std::move(aSource), aViewInformation2D,
+                                             aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                             aBaseRange.getWidth() * aBaseRange.getHeight());
     }
     else
     {
-        aBmp = Bitmap(drawinglayer::convertToBitmapEx(
-            std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
-            aBaseRange.getWidth() * aBaseRange.getHeight()));
+        aBmp = drawinglayer::convertToBitmap(std::move(rTarget), aViewInformation2D,
+                                             aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                             aBaseRange.getWidth() * aBaseRange.getHeight());
     }
 
     if (pSource2)
     {
         drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource2);
-        aBmp2 = Bitmap(drawinglayer::convertToBitmapEx(
-            std::move(aSource), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
-            aBaseRange.getWidth() * aBaseRange.getHeight()));
+        aBmp2 = drawinglayer::convertToBitmap(std::move(aSource), aViewInformation2D,
+                                              aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                              aBaseRange.getWidth() * aBaseRange.getHeight());
     }
     else
     {
-        aBmp2 = Bitmap(drawinglayer::convertToBitmapEx(
-            std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(), aBaseRange.getHeight(),
-            aBaseRange.getWidth() * aBaseRange.getHeight()));
+        aBmp2 = drawinglayer::convertToBitmap(std::move(rTarget), aViewInformation2D,
+                                              aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                              aBaseRange.getWidth() * aBaseRange.getHeight());
     }
 
     Bitmap aResBmp;

@@ -144,7 +144,7 @@ namespace drawinglayer::unorenderer
                     primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                     Bitmap aBitmap(
-                        convertToBitmapEx(
+                        convertToBitmap(
                             std::move(xEmbedSeq),
                             aViewInformation2D,
                             nDiscreteWidth,

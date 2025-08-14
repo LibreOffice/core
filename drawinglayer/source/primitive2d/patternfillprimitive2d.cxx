@@ -132,23 +132,23 @@ namespace drawinglayer::primitive2d
                             Primitive2DContainer(getChildren()))
                 };
 
-                const BitmapEx aBitmapEx(
-                    convertToBitmapEx(
+                const Bitmap aBitmap(
+                    convertToBitmap(
                         std::move(xEmbedSeq),
                         aViewInformation2D,
                         mnDiscreteWidth,
                         mnDiscreteHeight,
                         mnDiscreteWidth * mnDiscreteHeight));
 
-                if(!aBitmapEx.IsEmpty())
+                if(!aBitmap.IsEmpty())
                 {
-                    const Size& rBmpPix = aBitmapEx.GetSizePixel();
+                    const Size aBmpPix = aBitmap.GetSizePixel();
 
-                    if(rBmpPix.Width() > 0 && rBmpPix.Height() > 0)
+                    if(aBmpPix.Width() > 0 && aBmpPix.Height() > 0)
                     {
                         const primitive2d::Primitive2DReference xEmbedRefBitmap(
                             new primitive2d::BitmapPrimitive2D(
-                                Bitmap(aBitmapEx),
+                                aBitmap,
                                 basegfx::B2DHomMatrix()));
                         aContent = primitive2d::Primitive2DContainer { xEmbedRefBitmap };
                     }
@@ -194,12 +194,12 @@ namespace drawinglayer::primitive2d
                         std::move(aContent)));
             primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
-            return convertToBitmapEx(
+            return BitmapEx(convertToBitmap(
                         std::move(xEmbedSeq),
                         aViewInformation2D,
                         nWidth,
                         nHeight,
-                        nWidth * nHeight);
+                        nWidth * nHeight));
         }
 
         Primitive2DReference PatternFillPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const

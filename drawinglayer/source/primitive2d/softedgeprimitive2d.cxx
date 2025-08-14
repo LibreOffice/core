@@ -174,7 +174,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         // drawinglayer::primitive2d::ProcessAndBlurAlphaMask() can be called.
         // Otherwise, blurring of edges will fail in cases like running in a
         // slideshow or exporting to PDF.
-        const BitmapEx aBitmapEx(::drawinglayer::convertToBitmapEx(
+        const BitmapEx aBitmapEx(::drawinglayer::convertToBitmap(
             std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
             nMaximumQuadraticPixels, true));
 

@@ -152,7 +152,7 @@ AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq
     return implcreateAlphaMask(aSequence, rViewInformation2D, aSizePixel, bUseLuminance);
 }
 
-BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
+Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                            const geometry::ViewInformation2D& rViewInformation2D,
                            sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
                            sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation)
@@ -161,7 +161,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
 
     if (!implPrepareConversion(aSequence, nDiscreteWidth, nDiscreteHeight, nMaxSquarePixels))
     {
-        return BitmapEx();
+        return Bitmap();
     }
 
 #if USE_HEADLESS_CODE
@@ -177,7 +177,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
         pRGBAProcessor->process(aSequence);
 
         // create final BitmapEx result (content)
-        const BitmapEx aRetval(processor2d::extractBitmapExFromBaseProcessor2D(pRGBAProcessor));
+        const Bitmap aRetval(processor2d::extractBitmapExFromBaseProcessor2D(pRGBAProcessor));
 
         // check if we have a result and return if so
         if (!aRetval.IsEmpty())
@@ -227,7 +227,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     {
         SAL_WARN("vcl", "Cannot set VirtualDevice to size : " << aSizePixel.Width() << "x"
                                                               << aSizePixel.Height());
-        return BitmapEx();
+        return Bitmap();
     }
 
     // We map to pixel, use that MapMode. Init by erasing.
@@ -303,10 +303,10 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
             aAlpha.Invert();
         }
         // return combined result
-        return BitmapEx(aRetval, aAlpha);
+        return Bitmap(BitmapEx(aRetval, aAlpha));
     }
     else
-        return BitmapEx(aRetval);
+        return aRetval;
 }
 
 Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& rSequence,
@@ -373,7 +373,7 @@ Bitmap convertPrimitive2DContainerToBitmap(primitive2d::Primitive2DContainer&& r
             new primitive2d::TransformPrimitive2D(aEmbedding, std::move(rSequence)));
         primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
-        Bitmap aBitmap(convertToBitmapEx(std::move(xEmbedSeq), aViewInformation2D,
+        Bitmap aBitmap(convertToBitmap(std::move(xEmbedSeq), aViewInformation2D,
                                              nDiscreteWidth, nDiscreteHeight,
                                              nMaximumQuadraticPixels));
 

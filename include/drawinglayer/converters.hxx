@@ -38,7 +38,7 @@ AlphaMask DRAWINGLAYER_DLLPUBLIC createAlphaMask(
 
 // Helper for convertPrimitive2DContainerToBitmapEx below, but can be also used
 // directly
-BitmapEx DRAWINGLAYER_DLLPUBLIC convertToBitmapEx(
+Bitmap DRAWINGLAYER_DLLPUBLIC convertToBitmap(
     drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
     const geometry::ViewInformation2D& rViewInformation2D, sal_uInt32 nDiscreteWidth,
     sal_uInt32 nDiscreteHeight, sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation = false);

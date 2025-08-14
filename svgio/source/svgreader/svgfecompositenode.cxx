@@ -225,40 +225,39 @@ void SvgFeCompositeNode::apply(drawinglayer::primitive2d::Primitive2DContainer& 
         const basegfx::B2DRange aBaseRange(0, 0, std::max(aRange.getMaxX(), aRange2.getMaxX()),
                                            std::max(aRange.getMaxY(), aRange2.getMaxY()));
 
-        BitmapEx aBmpEx, aBmpEx2;
+        Bitmap aBmp, aBmp2;
 
         if (pSource)
         {
             drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource);
-            aBmpEx = drawinglayer::convertToBitmapEx(
-                std::move(aSource), aViewInformation2D, aBaseRange.getWidth(),
-                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
+            aBmp = drawinglayer::convertToBitmap(std::move(aSource), aViewInformation2D,
+                                                 aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                                 aBaseRange.getWidth() * aBaseRange.getHeight());
         }
         else
         {
-            aBmpEx = drawinglayer::convertToBitmapEx(
-                std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(),
-                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
+            aBmp = drawinglayer::convertToBitmap(std::move(rTarget), aViewInformation2D,
+                                                 aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                                 aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
         if (pSource2)
         {
             drawinglayer::primitive2d::Primitive2DContainer aSource(*pSource2);
-            aBmpEx2 = drawinglayer::convertToBitmapEx(
-                std::move(aSource), aViewInformation2D, aBaseRange.getWidth(),
-                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
+            aBmp2 = drawinglayer::convertToBitmap(std::move(aSource), aViewInformation2D,
+                                                  aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                                  aBaseRange.getWidth() * aBaseRange.getHeight());
         }
         else
         {
-            aBmpEx2 = drawinglayer::convertToBitmapEx(
-                std::move(rTarget), aViewInformation2D, aBaseRange.getWidth(),
-                aBaseRange.getHeight(), aBaseRange.getWidth() * aBaseRange.getHeight());
+            aBmp2 = drawinglayer::convertToBitmap(std::move(rTarget), aViewInformation2D,
+                                                  aBaseRange.getWidth(), aBaseRange.getHeight(),
+                                                  aBaseRange.getWidth() * aBaseRange.getHeight());
         }
 
-        BitmapArithmeticBlendFilter aArithmeticFilter(Bitmap(aBmpEx2), maK1.getNumber(),
-                                                      maK2.getNumber(), maK3.getNumber(),
-                                                      maK4.getNumber());
-        Bitmap aResBmp = aArithmeticFilter.execute(Bitmap(aBmpEx));
+        BitmapArithmeticBlendFilter aArithmeticFilter(aBmp2, maK1.getNumber(), maK2.getNumber(),
+                                                      maK3.getNumber(), maK4.getNumber());
+        Bitmap aResBmp = aArithmeticFilter.execute(aBmp);
 
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
