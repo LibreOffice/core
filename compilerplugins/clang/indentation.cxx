@@ -191,10 +191,15 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                     locationAfterToken(compiler.getSourceManager().getExpansionLoc(actualPrevEnd)),
                     compiler.getSourceManager().getExpansionLoc(stmt->getBeginLoc()))))
                 continue;
+#if CLANG_VERSION                                                                                  \
+    == 220000 // see <https://github.com/llvm/llvm-project/issues/153540> "Clang getBeginLoc of some CXXConstructExpr has moved past namespace prefix"
+            (void)firstStmt;
+#else
             report(DiagnosticsEngine::Warning, "statement mis-aligned compared to neighbours %0",
                    stmtLoc)
                 << macroName;
             report(DiagnosticsEngine::Note, "measured against this one", firstStmt->getBeginLoc());
+#endif
             //getParentStmt(compoundStmt)->dump();
             //stmt->dump();
         }

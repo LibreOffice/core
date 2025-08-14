@@ -184,19 +184,27 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
                 auto recordType = dyn_cast<RecordType>(type);
                 if (recordType)
                     return recordType;
+#if CLANG_VERSION < 220000
                 auto elaboratedType = dyn_cast<ElaboratedType>(type);
-                if (!elaboratedType)
-                    return static_cast<const clang::RecordType*>(nullptr);
-                return dyn_cast<RecordType>(elaboratedType->desugar());
+                if (elaboratedType)
+                    return dyn_cast<RecordType>(elaboratedType->desugar());
+#endif
+                return static_cast<const clang::RecordType*>(nullptr);
             };
             auto containsTypedefToRecord = [](clang::QualType type, RecordType const* recordType) {
                 TypedefType const* typedefType = type->getAs<TypedefType>();
                 if (!typedefType)
                     return false;
                 auto tmp = typedefType->desugar();
+#if CLANG_VERSION < 220000
                 if (auto elaboratedType = dyn_cast<ElaboratedType>(tmp))
                     tmp = elaboratedType->desugar();
-                return tmp.getTypePtr() == recordType;
+#endif
+                if (auto const rt = dyn_cast<RecordType>(tmp))
+                {
+                    return compat::getDecl(rt) == compat::getDecl(recordType);
+                }
+                return false;
             };
             if (auto recordType = extractRecordType(lhsPointer->getPointeeType()))
                 if (containsTypedefToRecord(rhsPointer->getPointeeType(), recordType))
@@ -207,6 +215,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
         }
     }
 
+#if CLANG_VERSION < 220000
     if (auto lhsElaborated = dyn_cast<ElaboratedType>(lhsType))
     {
         return areTypesEqual(lhsElaborated->getNamedType(), rhs);
@@ -215,6 +224,7 @@ static bool areTypesEqual(QualType lhs, QualType rhs)
     {
         return areTypesEqual(lhs, rhsElaborated->getNamedType());
     }
+#endif
     if (auto lhsTemplate = dyn_cast<TemplateSpecializationType>(lhsType))
     {
         return areTypesEqual(lhsTemplate->desugar(), rhs);

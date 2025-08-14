@@ -9,6 +9,7 @@
 
 #include <cassert>
 
+#include <clang/AST/ASTContext.h>
 #include <clang/AST/DeclCXX.h>
 #include <clang/AST/DeclTemplate.h>
 
@@ -253,9 +254,9 @@ clang::DeclContext const * ContextCheck::lookThroughLinkageSpec() const {
 
 namespace {
 
-bool BaseCheckNotSomethingInterestingSubclass(const clang::CXXRecordDecl *BaseDefinition) {
+bool BaseCheckNotSomethingInterestingSubclass(clang::ASTContext const & context, const clang::CXXRecordDecl *BaseDefinition) {
     if (BaseDefinition) {
-        auto tc = TypeCheck(BaseDefinition);
+        auto tc = TypeCheck(compat::getCanonicalTagType(context, BaseDefinition));
         if (tc.Class("Dialog").GlobalNamespace() || tc.Class("SfxPoolItem").GlobalNamespace()) {
             return false;
         }
@@ -263,10 +264,10 @@ bool BaseCheckNotSomethingInterestingSubclass(const clang::CXXRecordDecl *BaseDe
     return true;
 }
 
-bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
+bool isDerivedFromSomethingInteresting(clang::ASTContext const & context, const clang::CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    auto tc = TypeCheck(decl);
+    auto tc = TypeCheck(compat::getCanonicalTagType(context, decl));
     if (tc.Class("Dialog"))
         return true;
     if (tc.Class("SfxPoolItem"))
@@ -277,7 +278,7 @@ bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSomethingInterestingSubclass)) {
+        !decl->forallBases([&context](clang::CXXRecordDecl const * BaseDefinition) { return BaseCheckNotSomethingInterestingSubclass(context, BaseDefinition); })) {
         return true;
     }
     return false;
@@ -285,12 +286,12 @@ bool isDerivedFromSomethingInteresting(const clang::CXXRecordDecl *decl) {
 
 }
 
-bool isExtraWarnUnusedType(clang::QualType type) {
+bool isExtraWarnUnusedType(clang::ASTContext const & context, clang::QualType type) {
     auto const rec = type->getAsCXXRecordDecl();
     if (rec == nullptr) {
         return false;
     }
-    auto const tc = TypeCheck(rec);
+    auto const tc = TypeCheck(compat::getCanonicalTagType(context, rec));
     // Check some common non-LO types:
     if (tc.Class("basic_string").StdNamespace()
         || tc.Class("deque").StdNamespace()
@@ -306,23 +307,42 @@ bool isExtraWarnUnusedType(clang::QualType type) {
     {
         return true;
     }
-    return isDerivedFromSomethingInteresting(rec);
+    return isDerivedFromSomethingInteresting(context, rec);
 }
-
-namespace {
 
 // Make sure Foo and ::Foo are considered equal:
 bool areSameSugaredType(clang::QualType type1, clang::QualType type2) {
-    auto t1 = type1.getLocalUnqualifiedType();
-    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(t1)) {
-        t1 = et->getNamedType();
+    if (type1.getQualifiers() != type2.getQualifiers()) {
+        return false;
     }
-    auto t2 = type2.getLocalUnqualifiedType();
-    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(t2)) {
-        t2 = et->getNamedType();
+#if CLANG_VERSION >= 220000
+    if (type1->getTypeClass() != type2->getTypeClass()) {
+        return false;
     }
-    return t1 == t2;
+    if (auto const t = llvm::dyn_cast<clang::TagType>(type1)) {
+        return t->getOriginalDecl()->getCanonicalDecl() == llvm::dyn_cast<clang::TagType>(type2)->getOriginalDecl()->getCanonicalDecl();
+    }
+    if (auto const t = llvm::dyn_cast<clang::TypedefType>(type1)) {
+        return t->getDecl() == llvm::dyn_cast<clang::TypedefType>(type2)->getDecl();
+    }
+    if (auto const t = llvm::dyn_cast<clang::UsingType>(type1)) {
+        return t->getDecl() == llvm::dyn_cast<clang::UsingType>(type2)->getDecl();
+    }
+    if (auto const t = type1->getPointeeType(); !t.isNull()) {
+        return areSameSugaredType(t, type2->getPointeeType());
+    }
+#else
+    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(type1)) {
+        type1 = et->getNamedType();
+    }
+    if (auto const et = llvm::dyn_cast<clang::ElaboratedType>(type2)) {
+        type2 = et->getNamedType();
+    }
+#endif
+    return type1 == type2;
 }
+
+namespace {
 
 bool isArithmeticOp(clang::Expr const * expr) {
     expr = expr->IgnoreParenImpCasts();
@@ -362,7 +382,7 @@ bool isOkToRemoveArithmeticCast(
     // suffix like L it could still be either long or long long):
     if ((t1->isIntegralType(context)
          || t1->isRealFloatingType())
-        && ((!areSameSugaredType(t1, t2)
+        && ((!areSameSugaredType(t1.getLocalUnqualifiedType(), t2.getLocalUnqualifiedType())
              && (loplugin::TypeCheck(t1).Typedef()
                  || loplugin::TypeCheck(t2).Typedef()
                  || llvm::isa<clang::DecltypeType>(t1) || llvm::isa<clang::DecltypeType>(t2)))
@@ -394,7 +414,7 @@ bool forAnyBase(
         if (t == nullptr) {
             return false;
         }
-        auto const b = llvm::cast_or_null<clang::CXXRecordDecl>(t->getDecl()->getDefinition());
+        auto const b = llvm::cast_or_null<clang::CXXRecordDecl>(compat::getDecl(t)->getDefinition());
         if (b == nullptr || (b->isDependentContext() && !b->isCurrentInstantiation(decl))) {
             return false;
         }

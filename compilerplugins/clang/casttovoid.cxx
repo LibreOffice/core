@@ -20,20 +20,6 @@
 
 namespace {
 
-bool isWarnUnusedType(QualType type) {
-    if (auto const t = type->getAs<TypedefType>()) {
-        if (t->getDecl()->hasAttr<WarnUnusedAttr>()) {
-            return true;
-        }
-    }
-    if (auto const t = type->getAs<RecordType>()) {
-        if (t->getDecl()->hasAttr<WarnUnusedAttr>()) {
-            return true;
-        }
-    }
-    return loplugin::isExtraWarnUnusedType(type);
-}
-
 Expr const * lookThroughInitListExpr(Expr const * expr) {
     if (auto const ile = dyn_cast<InitListExpr>(expr->IgnoreParenImpCasts())) {
         if (ile->getNumInits() == 1) {
@@ -443,6 +429,20 @@ private:
                 }
             }
         }
+    }
+
+    bool isWarnUnusedType(QualType type) {
+        if (auto const t = type->getAs<TypedefType>()) {
+            if (t->getDecl()->hasAttr<WarnUnusedAttr>()) {
+                return true;
+            }
+        }
+        if (auto const t = type->getAs<RecordType>()) {
+            if (compat::getDefinitionOrSelf(compat::getDecl(t))->hasAttr<WarnUnusedAttr>()) {
+                return true;
+            }
+        }
+        return loplugin::isExtraWarnUnusedType(compiler.getASTContext(), type);
     }
 
     bool isFromCIncludeFile(SourceLocation spellingLocation) const {

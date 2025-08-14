@@ -1007,7 +1007,7 @@ void UnusedFields::checkIfWrittenTo(const FieldDecl* fieldDecl, const Expr* memb
 // return true if this not a collection type, or if it is a collection type, and we might be writing to it
 bool UnusedFields::checkForWriteWhenUsingCollectionType(const CXXMethodDecl * calleeMethodDecl)
 {
-    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+    auto const tc = loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), calleeMethodDecl->getParent()));
     bool listLike = false, setLike = false, mapLike = false, cssSequence = false;
     // Noting that I am deliberately not calling StdNamespace() on these checks, the loplugin::TypeCheck
     // code seems to be unreliable when dealing with ClassTemplateSpecializationDecl.
@@ -1071,7 +1071,7 @@ bool UnusedFields::checkForWriteWhenUsingCollectionType(const CXXMethodDecl * ca
 
 bool UnusedFields::checkForUsingMap(const CXXMethodDecl * calleeMethodDecl)
 {
-    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+    auto const tc = loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), calleeMethodDecl->getParent()));
     if (!(tc.Class("map") || tc.Class("unordered_map")))
         return false;
     if (!calleeMethodDecl->isOverloadedOperator())
@@ -1148,7 +1148,7 @@ bool UnusedFields::VisitInitListExpr( const InitListExpr* initListExpr)
     if (!recordType)
         return true;
 
-    auto recordDecl = recordType->getDecl();
+    auto recordDecl = compat::getDecl(recordType);
     for (auto it = recordDecl->field_begin(); it != recordDecl->field_end(); ++it)
     {
         MyFieldInfo fieldInfo = niceName(*it);

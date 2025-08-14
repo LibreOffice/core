@@ -13,6 +13,7 @@
 #include <rtl/ref.hxx>
 #include <boost/intrusive_ptr.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <config_clang.h>
 #include <cppuhelper/weak.hxx>
 #include <unotools/weakref.hxx>
 
@@ -29,23 +30,33 @@ struct UnoSubObject : public UnoObject
 
 struct Foo
 {
-    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#if CLANG_VERSION < 220000
+// expected-error@+3 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#endif
     // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
     std::unique_ptr<UnoObject> m_foo1;
-    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#if CLANG_VERSION < 220000
+    // expected-error@+3 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#endif
     // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
     std::shared_ptr<UnoObject> m_foo2;
-    // expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#if CLANG_VERSION < 220000
+    // expected-error@+3 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#endif
     // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
     boost::intrusive_ptr<UnoObject> m_foo3;
     rtl::Reference<UnoObject> m_foo4; // no warning expected
 };
 
-// expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#if CLANG_VERSION < 220000
+// expected-error@+3 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#endif
 // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
 std::unique_ptr<UnoObject> foo1();
 rtl::Reference<UnoObject> foo2(); // no warning expected
-// expected-error@+2 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#if CLANG_VERSION < 220000
+// expected-error@+3 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
+#endif
 // expected-error@+1 {{cppu::OWeakObject subclass 'UnoObject' being managed via smart pointer, should be managed via rtl::Reference [loplugin:refcounting]}}
 void foo3(std::unique_ptr<UnoObject> p);
 

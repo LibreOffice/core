@@ -17,6 +17,7 @@
 
 #include "config_clang.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -50,7 +51,7 @@ bool isDerivedFrom(
     bool derived = false;
     for (auto const & i: decl->bases()) {
         auto const bd
-            = (cast<CXXRecordDecl>(i.getType()->getAs<RecordType>()->getDecl())
+            = (cast<CXXRecordDecl>(compat::getDecl(i.getType()->getAs<RecordType>()))
                ->getDefinition());
         assert(bd != nullptr);
         if (bd == base) {
@@ -106,7 +107,7 @@ public:
         if (rtd == nullptr) {
             return true;
         }
-        auto const rdd = cast<CXXRecordDecl>(rtd->getDecl())->getDefinition();
+        auto const rdd = cast<CXXRecordDecl>(compat::getDecl(rtd))->getDefinition();
         if (rdd == nullptr) {
             return true;
         }
@@ -153,7 +154,7 @@ public:
         if (rts == nullptr) { // in case it's a dependent type
             return true;
         }
-        auto const rds = cast<CXXRecordDecl>(rts->getDecl())->getDefinition();
+        auto const rds = cast<CXXRecordDecl>(compat::getDecl(rts))->getDefinition();
         assert(rds != nullptr);
         Bases bs;
         bool hidden = false;

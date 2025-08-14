@@ -18,6 +18,8 @@
 #include <cassert>
 #include <set>
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -38,18 +40,6 @@ bool isTemplated(CXXRecordDecl const* decl)
     return false;
 }
 
-bool isWarnUnusedType(QualType type)
-{
-    if (auto const t = type->getAs<RecordType>())
-    {
-        if (t->getDecl()->hasAttr<WarnUnusedAttr>())
-        {
-            return true;
-        }
-    }
-    return loplugin::isExtraWarnUnusedType(type);
-}
-
 class UnusedMember final : public loplugin::FilteringPlugin<UnusedMember>
 {
 public:
@@ -68,7 +58,7 @@ public:
         // declaration of e clearly references it:
         if (auto const t = decl->getType()->getAs<EnumType>())
         {
-            deferred_.erase(t->getDecl());
+            deferred_.erase(compat::getDecl(t));
         }
         return true;
     }
@@ -229,11 +219,11 @@ public:
         RecordDecl const* d;
         if (auto const t2 = t1->getAs<InjectedClassNameType>())
         {
-            d = t2->getDecl();
+            d = compat::getDecl(t2);
         }
         else
         {
-            d = t1->castAs<RecordType>()->getDecl();
+            d = compat::getDecl(t1->castAs<RecordType>());
         }
         recordRecordDeclAndBases(d);
         return true;
@@ -269,7 +259,7 @@ public:
         }
         if (auto const t1 = t->getAs<RecordType>())
         {
-            recordRecordDeclAndBases(t1->getDecl());
+            recordRecordDeclAndBases(compat::getDecl(t1));
         }
         return true;
     }
@@ -306,6 +296,7 @@ public:
         return true;
     }
 
+#if CLANG_VERSION < 220000
     bool VisitElaboratedTypeLoc(ElaboratedTypeLoc tloc)
     {
         if (ignoreLocation(tloc))
@@ -337,6 +328,7 @@ public:
         }
         return true;
     }
+#endif
 
     void postRun() override
     {
@@ -389,6 +381,18 @@ private:
         }
     }
 
+    bool isWarnUnusedType(QualType type)
+    {
+        if (auto const t = type->getAs<RecordType>())
+        {
+            if (compat::getDefinitionOrSelf(compat::getDecl(t))->hasAttr<WarnUnusedAttr>())
+            {
+                return true;
+            }
+        }
+        return loplugin::isExtraWarnUnusedType(compiler.getASTContext(), type);
+    }
+
     bool isWarnWhenUnusedType(QualType type)
     {
         auto t = type;
@@ -409,7 +413,7 @@ private:
         {
             for (auto i = d2->bases_begin(); i != d2->bases_end(); ++i)
             {
-                recordRecordDeclAndBases(i->getType()->castAs<RecordType>()->getDecl());
+                recordRecordDeclAndBases(compat::getDecl(i->getType()->castAs<RecordType>()));
             }
             //TODO: doesn't iterate vbases, but presence of such would run counter to the layout
             // heuristic anyway
@@ -427,7 +431,7 @@ private:
             }
             if (auto const t1 = t->getAs<RecordType>())
             {
-                recordRecordDeclAndBases(t1->getDecl());
+                recordRecordDeclAndBases(compat::getDecl(t1));
             }
             break;
         }

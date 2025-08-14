@@ -19,6 +19,7 @@
 #include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 /**
 look for methods where all they do is call their superclass method
@@ -180,7 +181,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
                 const RecordType* baseRecordType = baseSpecifier->getType()->getAs<RecordType>();
                 if (baseRecordType)
                 {
-                    const CXXRecordDecl* baseRecordDecl = dyn_cast<CXXRecordDecl>(baseRecordType->getDecl());
+                    const CXXRecordDecl* baseRecordDecl = dyn_cast<CXXRecordDecl>(compat::getDecl(baseRecordType));
                     if (baseRecordDecl && baseRecordDecl->getDestructor()
                         && baseRecordDecl->getDestructor()->isVirtual())
                     {
@@ -452,7 +453,7 @@ const CXXMethodDecl* UnnecessaryOverride::findOverriddenOrSimilarMethodInSupercl
             bool bParamsMatch = true;
             for (unsigned i=0; i<methodDecl->param_size(); ++i)
             {
-                if (methodDecl->parameters()[i]->getType() != baseMethod->parameters()[i]->getType())
+                if (!loplugin::areSameSugaredType(methodDecl->parameters()[i]->getType(), baseMethod->parameters()[i]->getType()))
                 {
                     bParamsMatch = false;
                     break;

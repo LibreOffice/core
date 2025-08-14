@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 
+#include "clang/AST/ASTContext.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/Expr.h"
 #include "clang/AST/ExprCXX.h"
@@ -278,8 +279,55 @@ inline unsigned getBitWidthValue(clang::FieldDecl const * decl, clang::ASTContex
 #endif
 }
 
+inline
+clang::QualType getCanonicalTagType(clang::ASTContext const & context, clang::TagDecl const * decl)
+{
+#if CLANG_VERSION >= 220000
+    return context.getCanonicalTagType(decl);
+#else
+    return context.getTypeDeclType(decl);
+#endif
+}
+
+inline clang::TagDecl const * getDefinitionOrSelf(clang::TagDecl const * decl) {
+#if CLANG_VERSION >= 220000
+    return decl->getDefinitionOrSelf();
+#else
+    if (auto const def = decl->getDefinition()) {
+        return def;
+    }
+    return decl;
+#endif
+}
+
+inline clang::RecordDecl const * getDecl(clang::RecordType const * type) {
+#if CLANG_VERSION >= 220000
+    return llvm::cast<clang::RecordDecl>(type->getOriginalDecl()->getCanonicalDecl());
+#else
+    return type->getDecl();
+#endif
+}
+
+inline clang::EnumDecl const * getDecl(clang::EnumType const * type) {
+#if CLANG_VERSION >= 220000
+    return type->getOriginalDecl()->getCanonicalDecl();
+#else
+    return type->getDecl();
+#endif
+}
+
+inline clang::CXXRecordDecl const * getDecl(clang::InjectedClassNameType const * type) {
+#if CLANG_VERSION >= 220000
+    return type->getOriginalDecl()->getCanonicalDecl();
+#else
+    return type->getDecl();
+#endif
+}
+
 inline clang::Type const * getClass(clang::MemberPointerType const * type) {
-#if CLANG_VERSION >= 210000
+#if CLANG_VERSION >= 220000
+    return type->getQualifier().getAsType();
+#elif CLANG_VERSION >= 210000
     return type->getQualifier()->getAsType();
 #else
     return type->getClass();

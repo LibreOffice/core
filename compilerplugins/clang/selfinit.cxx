@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 // Warn when a variable is referenced from its own initializer.  This is not invalid in general (see
@@ -63,8 +65,24 @@ public:
     bool TraverseCXXNoexceptExpr(CXXNoexceptExpr*) { return true; }
     bool PreTraverseCXXNoexceptExpr(CXXNoexceptExpr*) { return false; }
 
-    bool TraverseDecltypeTypeLoc(DecltypeTypeLoc) { return true; }
-    bool PreTraverseDecltypeTypeLoc(DecltypeTypeLoc) { return false; }
+    bool TraverseDecltypeTypeLoc(DecltypeTypeLoc
+#if CLANG_VERSION >= 220000
+                                 ,
+                                 bool
+#endif
+    )
+    {
+        return true;
+    }
+    bool PreTraverseDecltypeTypeLoc(DecltypeTypeLoc
+#if CLANG_VERSION >= 220000
+                                    ,
+                                    bool
+#endif
+    )
+    {
+        return false;
+    }
 
     bool VisitDeclRefExpr(DeclRefExpr const* expr)
     {

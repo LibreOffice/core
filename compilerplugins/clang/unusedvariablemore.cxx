@@ -46,6 +46,8 @@ public:
     bool VisitFunctionDecl(FunctionDecl const*);
 
 private:
+    bool isWarnUnusedType(QualType type);
+
     bool checkifUnused(Stmt const*, VarDecl const*);
     bool isOkForParameter(const QualType&);
 
@@ -120,7 +122,7 @@ void UnusedVariableMore::run()
     }
 }
 
-bool isWarnUnusedType(QualType type)
+bool UnusedVariableMore::isWarnUnusedType(QualType type)
 {
     if (auto const t = type->getAs<TypedefType>())
     {
@@ -131,12 +133,12 @@ bool isWarnUnusedType(QualType type)
     }
     if (auto const t = type->getAs<RecordType>())
     {
-        if (t->getDecl()->hasAttr<WarnUnusedAttr>())
+        if (compat::getDefinitionOrSelf(compat::getDecl(t))->hasAttr<WarnUnusedAttr>())
         {
             return true;
         }
     }
-    return loplugin::isExtraWarnUnusedType(type);
+    return loplugin::isExtraWarnUnusedType(compiler.getASTContext(), type);
 }
 
 bool UnusedVariableMore::VisitVarDecl(VarDecl const* var)

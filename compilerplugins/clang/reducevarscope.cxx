@@ -18,6 +18,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
@@ -455,7 +456,8 @@ bool ReduceVarScope::isTypeOK(QualType varType)
         return true;
     if (!varType->isRecordType())
         return false;
-    auto recordDecl = dyn_cast_or_null<CXXRecordDecl>(varType->getAs<RecordType>()->getDecl());
+    auto recordDecl
+        = dyn_cast_or_null<CXXRecordDecl>(compat::getDecl(varType->getAs<RecordType>()));
     if (recordDecl && recordDecl->hasTrivialDestructor())
         return true;
     auto const tc = loplugin::TypeCheck(varType);

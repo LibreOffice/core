@@ -25,6 +25,8 @@
 
 #include "clang/Sema/Sema.h"
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -67,9 +69,15 @@ char const * printExprValueKind(ExprValueKind k) {
 }
 
 QualType desugarElaboratedType(QualType type) {
+#if CLANG_VERSION >= 220000
+    if (auto const t = dyn_cast<TagType>(type)) {
+        return t->desugar();
+    }
+#else
     if (auto const t = dyn_cast<ElaboratedType>(type)) {
         return t->desugar();
     }
+#endif
     return type;
 }
 

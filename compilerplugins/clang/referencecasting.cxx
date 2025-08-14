@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include <iostream>
 
@@ -191,8 +192,10 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     if (!argTemplateType)
         return true;
 
-    CXXRecordDecl* templateParamRD = dyn_cast<CXXRecordDecl>(templateParamType->getDecl());
-    CXXRecordDecl* constructorArgRD = dyn_cast<CXXRecordDecl>(argTemplateType->getDecl());
+    CXXRecordDecl const* templateParamRD
+        = dyn_cast<CXXRecordDecl>(compat::getDecl(templateParamType));
+    CXXRecordDecl const* constructorArgRD
+        = dyn_cast<CXXRecordDecl>(compat::getDecl(argTemplateType));
 
     // querying for XInterface (instead of doing an upcast) has special semantics,
     // to check for UNO object equivalence.
@@ -313,8 +316,9 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     if (!argTemplateType)
         return true;
 
-    CXXRecordDecl* templateParamRD = dyn_cast<CXXRecordDecl>(templateParamType->getDecl());
-    CXXRecordDecl* methodArgRD = dyn_cast<CXXRecordDecl>(argTemplateType->getDecl());
+    CXXRecordDecl const* templateParamRD
+        = dyn_cast<CXXRecordDecl>(compat::getDecl(templateParamType));
+    CXXRecordDecl const* methodArgRD = dyn_cast<CXXRecordDecl>(compat::getDecl(argTemplateType));
 
     // querying for XInterface (instead of doing an upcast) has special semantics,
     // to check for UNO object equivalence.
@@ -427,8 +431,9 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
     if (!argTemplateType)
         return true;
 
-    CXXRecordDecl* templateParamRD = dyn_cast<CXXRecordDecl>(templateParamType->getDecl());
-    CXXRecordDecl* methodArgRD = dyn_cast<CXXRecordDecl>(argTemplateType->getDecl());
+    CXXRecordDecl const* templateParamRD
+        = dyn_cast<CXXRecordDecl>(compat::getDecl(templateParamType));
+    CXXRecordDecl const* methodArgRD = dyn_cast<CXXRecordDecl>(compat::getDecl(argTemplateType));
 
     // querying for XInterface (instead of doing an upcast) has special semantics,
     // to check for UNO object equivalence.
@@ -491,8 +496,10 @@ static const RecordType* extractTemplateType(QualType cceType)
     if (cceType->isPointerType())
     {
         auto pointeeType = cceType->getPointeeType();
+#if CLANG_VERSION < 220000
         if (auto elaboratedType = dyn_cast<ElaboratedType>(pointeeType))
             pointeeType = elaboratedType->desugar();
+#endif
         if (auto substTemplateTypeParmType = dyn_cast<SubstTemplateTypeParmType>(pointeeType))
             pointeeType = substTemplateTypeParmType->desugar();
         if (auto recordType = dyn_cast<RecordType>(pointeeType))
@@ -504,7 +511,7 @@ static const RecordType* extractTemplateType(QualType cceType)
     {
         if (auto recType = dyn_cast<RecordType>(subst->desugar()))
         {
-            if (auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(recType->getDecl()))
+            if (auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(compat::getDecl(recType)))
             {
                 auto const& args = ctsd->getTemplateArgs();
                 if (args.size() > 0 && args[0].getKind() == TemplateArgument::ArgKind::Type)
@@ -513,8 +520,10 @@ static const RecordType* extractTemplateType(QualType cceType)
         }
     }
 
+#if CLANG_VERSION < 220000
     if (auto elaboratedType = dyn_cast<ElaboratedType>(cceType))
         cceType = elaboratedType->desugar();
+#endif
     auto cceTST = dyn_cast<TemplateSpecializationType>(cceType);
     if (!cceTST)
         return NULL;
@@ -523,8 +532,10 @@ static const RecordType* extractTemplateType(QualType cceType)
         return NULL;
     const TemplateArgument& cceTA = args[0];
     QualType templateParamType = cceTA.getAsType();
+#if CLANG_VERSION < 220000
     if (auto elaboratedType = dyn_cast<ElaboratedType>(templateParamType))
         templateParamType = elaboratedType->desugar();
+#endif
     return dyn_cast<RecordType>(templateParamType);
 }
 

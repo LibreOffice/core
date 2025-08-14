@@ -12,6 +12,7 @@
 #include "config_clang.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /*
@@ -38,23 +39,25 @@ public:
     bool VisitCXXDependentScopeMemberExpr(const CXXDependentScopeMemberExpr *) { bVisitedThis = true; return true; }
     bool VisitDependentScopeDeclRefExpr(const DependentScopeDeclRefExpr *) { bVisitedThis = true; return true; }
 private:
+    bool isDerivedFromTestFixture(const CXXRecordDecl *decl);
+
     StringRef getFilename(SourceLocation loc);
 };
 
-bool BaseCheckNotTestFixtureSubclass(const CXXRecordDecl *BaseDefinition) {
-    if (loplugin::TypeCheck(BaseDefinition).Class("TestFixture").Namespace("CppUnit").GlobalNamespace()) {
+bool BaseCheckNotTestFixtureSubclass(clang::ASTContext const & context, const CXXRecordDecl *BaseDefinition) {
+    if (loplugin::TypeCheck(compat::getCanonicalTagType(context, BaseDefinition)).Class("TestFixture").Namespace("CppUnit").GlobalNamespace()) {
         return false;
     }
     return true;
 }
 
-bool isDerivedFromTestFixture(const CXXRecordDecl *decl) {
+bool StaticMethods::isDerivedFromTestFixture(const CXXRecordDecl *decl) {
     if (!decl->hasDefinition())
         return false;
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotTestFixtureSubclass)) {
+        !decl->forallBases([this](const CXXRecordDecl *BaseDefinition) { return BaseCheckNotTestFixtureSubclass(compiler.getASTContext(), BaseDefinition); })) {
         return true;
     }
     return false;

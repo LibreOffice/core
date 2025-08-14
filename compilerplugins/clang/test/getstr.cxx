@@ -45,7 +45,7 @@ void f(std::ostream& st, OString const& s1, OStringBuffer const& s2,
        << s3.getStr() // expected-error-re {{suspicious use of 'getStr' on an object of type '{{(rtl::)?}}OUString'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
        << s4.getStr() // expected-error-re {{suspicious use of 'getStr' on an object of type '{{(rtl::)?}}OUStringBuffer'; the result is implicitly cast to a void pointer in a call of 'operator <<' [loplugin:getstr]}}
 #endif
-       << s5.getStr() // expected-error {{directly use object of type 'S' (aka 'rtl::OString') in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
+       << s5.getStr() // expected-error-re {{directly use object of type 'S' (aka '{{(::)?}}rtl::OString') in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
        << p1->getStr() // expected-error {{directly use object of type 'rtl::OString' in a call of 'operator <<', instead of calling 'getStr' first [loplugin:getstr]}}
        << p2->getStr()
 #if !HAVE_DELETED_OPERATORS

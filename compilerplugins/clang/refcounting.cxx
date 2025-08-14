@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
@@ -455,7 +456,7 @@ bool RefCounting::VisitTypeLoc(clang::TypeLoc typeLoc)
             || tc.ClassOrStruct("shared_ptr").StdNamespace()
             || tc.ClassOrStruct("intrusive_ptr").Namespace("boost").GlobalNamespace())
         {
-            auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
+            auto templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(compat::getDecl(recordType));
             if (templateDecl && templateDecl->getTemplateArgs().size() > 0)
                 firstTemplateParamType = templateDecl->getTemplateArgs()[0].getAsType();
         }

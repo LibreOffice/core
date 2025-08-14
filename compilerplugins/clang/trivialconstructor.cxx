@@ -15,6 +15,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
@@ -141,7 +142,7 @@ bool TrivialConstructor::FieldHasTrivialConstructorBody(const FieldDecl* Field)
     if (!RT)
         return true;
 
-    CXXRecordDecl* FieldClassDecl = cast<CXXRecordDecl>(RT->getDecl());
+    CXXRecordDecl const* FieldClassDecl = cast<CXXRecordDecl>(compat::getDecl(RT));
 
     // The constructor for an implicit anonymous union member is never invoked.
     if (FieldClassDecl->isUnion() && FieldClassDecl->isAnonymousStructOrUnion())

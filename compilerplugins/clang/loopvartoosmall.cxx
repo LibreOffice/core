@@ -75,7 +75,7 @@ private:
 
 unsigned LoopVarTooSmall::getIntValueWidth(QualType type) const {
     if (auto const et = type->getAs<EnumType>()) {
-        auto const ed = et->getDecl();
+        auto const ed = compat::getDecl(et);
         if (!ed->isFixed()) {
             unsigned pos = ed->getNumPositiveBits();
             unsigned neg = ed->getNumNegativeBits();

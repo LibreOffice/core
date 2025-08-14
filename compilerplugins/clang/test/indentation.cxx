@@ -7,6 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <config_clang.h>
+
+// See <https://github.com/llvm/llvm-project/issues/153540> "Clang getBeginLoc of some
+// CXXConstructExpr has moved past namespace prefix":
+#if CLANG_VERSION == 220000
+// expected-no-diagnostics
+#else
+
 int foo();
 int foo2(int);
 
@@ -106,5 +116,6 @@ void test5(bool x)
     }
 }
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

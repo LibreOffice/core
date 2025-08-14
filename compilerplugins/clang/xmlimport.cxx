@@ -362,7 +362,7 @@ bool XmlImport::isXmlTokEnum(const Expr* expr)
     expr = expr->IgnoreImplicit();
     // check that we have an unscoped enum type
     auto condEnumType = expr->getType()->getUnqualifiedDesugaredType()->getAs<EnumType>();
-    if (!condEnumType || condEnumType->getDecl()->isScoped())
+    if (!condEnumType || compat::getDecl(condEnumType)->isScoped())
         return false;
     auto declRefExpr = dyn_cast<DeclRefExpr>(expr);
     if (!declRefExpr)

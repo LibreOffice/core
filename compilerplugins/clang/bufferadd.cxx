@@ -366,7 +366,8 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
             {
                 if (callExpr->getNumArgs() > 0)
                 {
-                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(
+                        compiler.getASTContext(), calleeMethodDecl->getParent()));
                     if (tc.Class("OUString") || tc.Class("OString"))
                     {
                         if (isSideEffectFree(callExpr->getArg(0)))
@@ -390,7 +391,8 @@ bool BufferAdd::isSideEffectFree(Expr const* expr)
         // O[U]String::operator std::[u16]string_view:
         if (auto const d = dyn_cast_or_null<CXXConversionDecl>(callExpr->getCalleeDecl()))
         {
-            auto tc = loplugin::TypeCheck(d->getParent());
+            auto tc = loplugin::TypeCheck(
+                compat::getCanonicalTagType(compiler.getASTContext(), d->getParent()));
             if (tc.Class("OString") || tc.Class("OUString"))
             {
                 return true;

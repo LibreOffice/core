@@ -48,10 +48,10 @@ int main()
         s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to '{{(rtl::)?}}OUString' [loplugin:redundantfcast]}}
     using T1 = OUString;
     (void)T1(
-        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T1' (aka '{{(rtl::)?}}OUString') [loplugin:redundantfcast]}}
+        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T1' (aka '{{((::)?rtl::)?}}OUString') [loplugin:redundantfcast]}}
     using T2 = OUString const;
     (void)T2(
-        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T2' (aka 'const {{(rtl::?)}}OUString') [loplugin:redundantfcast]}}
+        s); // expected-error-re@-1 {{redundant functional cast from '{{(rtl::)?}}OUString' to 'T2' (aka 'const {{((::)?rtl::?)}}OUString') [loplugin:redundantfcast]}}
 
     (void)std::unique_ptr<int>(std::unique_ptr<int>(
         new int{})); // expected-error@-1 {{redundant functional cast from 'std::unique_ptr<int>' to 'std::unique_ptr<int>' [loplugin:redundantfcast]}}

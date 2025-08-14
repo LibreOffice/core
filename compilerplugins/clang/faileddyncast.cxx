@@ -13,6 +13,7 @@
 #include "clang/AST/Attr.h"
 #include "clang/AST/CXXInheritance.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -45,7 +46,7 @@ bool isAlwaysNull(CXXDynamicCastExpr const * expr) {
   auto SrcRT = SrcType->getAs<RecordType>();
   if (!SrcRT)
     return false;
-  const CXXRecordDecl *SrcRD = cast<CXXRecordDecl>(SrcRT->getDecl());
+  const CXXRecordDecl *SrcRD = cast<CXXRecordDecl>(compat::getDecl(SrcRT));
 #endif
 
 #if 0
@@ -60,7 +61,7 @@ bool isAlwaysNull(CXXDynamicCastExpr const * expr) {
   auto DestRT = DestType->getAs<RecordType>();
   if (!DestRT)
     return false;
-  const CXXRecordDecl *DestRD = cast<CXXRecordDecl>(DestRT->getDecl());
+  const CXXRecordDecl *DestRD = cast<CXXRecordDecl>(compat::getDecl(DestRT));
 #endif
 
 #if 1

@@ -13,6 +13,8 @@
 #include <set>
 #include <string>
 
+#include "config_clang.h"
+
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -155,14 +157,29 @@ bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
              + int(loc.hasWrittenTypeSpec()))
             == 1;
     }
-    if (isa<TagType>(type) || isa<TemplateTypeParmType>(type) || isa<AutoType>(type)
-        || isa<DecltypeType>(type) || isa<TypedefType>(type))
+    if (isa<TemplateTypeParmType>(type) || isa<AutoType>(type) || isa<DecltypeType>(type))
+    {
+        return true;
+    }
+#if CLANG_VERSION >= 220000
+    if (auto const t = dyn_cast<TagType>(type)) {
+        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+    }
+    if (auto const t = dyn_cast<TypedefType>(type)) {
+        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+    }
+    if (auto const t = dyn_cast<UsingType>(type)) {
+        return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
+    }
+#else
+    if (isa<TagType>(type) || isa<TypedefType>(type))
     {
         return true;
     }
     if (auto const t = dyn_cast<ElaboratedType>(type)) {
         return t->getKeyword() == compat::ElaboratedTypeKeyword::None;
     }
+#endif
     return false;
 }
 

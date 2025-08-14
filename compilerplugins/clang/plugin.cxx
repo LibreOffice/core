@@ -966,9 +966,12 @@ static const CXXRecordDecl* stripTypeSugar(QualType qt)
     const clang::Type* t = qt.getTypePtr();
     do
     {
+#if CLANG_VERSION < 220000
         if (auto elaboratedType = dyn_cast<ElaboratedType>(t))
             t = elaboratedType->desugar().getTypePtr();
-        else if (auto tsType = dyn_cast<TemplateSpecializationType>(t))
+        else
+#endif
+        if (auto tsType = dyn_cast<TemplateSpecializationType>(t))
             t = tsType->desugar().getTypePtr();
         else if (auto sttpType = dyn_cast<SubstTemplateTypeParmType>(t))
             t = sttpType->desugar().getTypePtr();
@@ -980,7 +983,7 @@ static const CXXRecordDecl* stripTypeSugar(QualType qt)
     auto recordType = dyn_cast<RecordType>(t);
     if (!recordType)
         return nullptr;
-    return dyn_cast_or_null<CXXRecordDecl>(recordType->getDecl());
+    return dyn_cast_or_null<CXXRecordDecl>(compat::getDecl(recordType));
 }
 
 int derivedFromCount(const CXXRecordDecl* subclassRecordDecl, const CXXRecordDecl* baseclassRecordDecl)

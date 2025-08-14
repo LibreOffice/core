@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
@@ -94,7 +95,7 @@ bool ImplInheritanceHelper::VisitCXXRecordDecl(const CXXRecordDecl* cxxRecordDec
         auto rt = i.getType()->getAs<RecordType>();
         if (!rt)
             continue;
-        auto const bd = cast<CXXRecordDecl>(rt->getDecl())->getDefinition();
+        auto const bd = cast<CXXRecordDecl>(compat::getDecl(rt))->getDefinition();
         auto ctx = bd->getDeclContext();
         if (!ctx->isNamespace())
             break;

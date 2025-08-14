@@ -38,8 +38,6 @@ public:
 
     explicit TypeCheck(clang::Type const * type): type_(type, 0) {}
 
-    explicit TypeCheck(clang::TypeDecl const * decl): type_(decl->getTypeForDecl(), 0) {}
-
     explicit operator bool() const { return !type_.isNull(); }
 
     TypeCheck NonConst() const;
@@ -192,7 +190,7 @@ ContextCheck TypeCheck::Class(llvm::StringRef id)
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
-            return detail::checkRecordDecl(t->getDecl(), compat::TagTypeKind::Class, id);
+            return detail::checkRecordDecl(compat::getDecl(t), compat::TagTypeKind::Class, id);
         }
     }
     return ContextCheck();
@@ -203,7 +201,7 @@ ContextCheck TypeCheck::Struct(llvm::StringRef id) const
     if (!type_.isNull()) {
         auto const t = type_->getAs<clang::RecordType>();
         if (t != nullptr) {
-            return detail::checkRecordDecl(t->getDecl(), compat::TagTypeKind::Struct, id);
+            return detail::checkRecordDecl(compat::getDecl(t), compat::TagTypeKind::Struct, id);
         }
     }
     return ContextCheck();
@@ -307,7 +305,9 @@ ContextCheck ContextCheck::Struct(llvm::StringRef id) const
         llvm::dyn_cast_or_null<clang::Decl>(context_), compat::TagTypeKind::Struct, id);
 }
 
-bool isExtraWarnUnusedType(clang::QualType type);
+bool isExtraWarnUnusedType(clang::ASTContext const & context, clang::QualType type);
+
+bool areSameSugaredType(clang::QualType type1, clang::QualType type2);
 
 bool isOkToRemoveArithmeticCast(
     clang::ASTContext & context, clang::QualType t1, clang::QualType t2,

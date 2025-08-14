@@ -1002,7 +1002,8 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
 // return true if this not a collection type, or if it is a collection type, and we might be writing to it
 bool WriteOnlyVars::checkForWriteWhenUsingCollectionType(const CXXMethodDecl* calleeMethodDecl)
 {
-    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+    auto const tc = loplugin::TypeCheck(
+        compat::getCanonicalTagType(compiler.getASTContext(), calleeMethodDecl->getParent()));
     bool listLike = false, setLike = false, mapLike = false, cssSequence = false;
     if (tc.Class("deque").StdNamespace() || tc.Class("list").StdNamespace()
         || tc.Class("queue").StdNamespace() || tc.Class("vector").StdNamespace())

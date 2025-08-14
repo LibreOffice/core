@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include <fstream>
 #include <unordered_set>
@@ -65,11 +66,12 @@ public:
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    static bool BaseCheckNotExceptionSubclass(const CXXRecordDecl* BaseDefinition)
+    static bool BaseCheckNotExceptionSubclass(clang::ASTContext const& context,
+                                              const CXXRecordDecl* BaseDefinition)
     {
         if (!BaseDefinition)
             return true;
-        auto tc = loplugin::TypeCheck(BaseDefinition);
+        auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(context, BaseDefinition));
         if (tc.Class("Exception")
                 .Namespace("uno")
                 .Namespace("star")
@@ -84,7 +86,7 @@ public:
     {
         if (!decl || !decl->hasDefinition())
             return false;
-        auto tc = loplugin::TypeCheck(decl);
+        auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), decl));
         if (tc.Class("Exception")
                 .Namespace("uno")
                 .Namespace("star")
@@ -94,7 +96,10 @@ public:
             return true;
         if ( // not sure what hasAnyDependentBases() does,
             // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
-            !decl->hasAnyDependentBases() && !decl->forallBases(BaseCheckNotExceptionSubclass))
+            !decl->hasAnyDependentBases()
+            && !decl->forallBases([this](const CXXRecordDecl* BaseDefinition) {
+                   return BaseCheckNotExceptionSubclass(compiler.getASTContext(), BaseDefinition);
+               }))
         {
             return true;
         }

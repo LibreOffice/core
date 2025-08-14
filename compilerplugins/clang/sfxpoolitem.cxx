@@ -13,6 +13,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 /*
@@ -32,19 +33,24 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCXXRecordDecl( const CXXRecordDecl* );
+
+private:
+    bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl);
+
+    bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl);
 };
 
-bool BaseCheckNotSfxPoolItemSubclass(const CXXRecordDecl *BaseDefinition) {
-    if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SfxPoolItem").GlobalNamespace()) {
+bool BaseCheckNotSfxPoolItemSubclass(clang::ASTContext const & context, const CXXRecordDecl *BaseDefinition) {
+    if (BaseDefinition && loplugin::TypeCheck(compat::getCanonicalTagType(context, BaseDefinition)).Class("SfxPoolItem").GlobalNamespace()) {
         return false;
     }
     return true;
 }
 
-bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
+bool SfxPoolItem::isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (loplugin::TypeCheck(decl).Class("SfxPoolItem").GlobalNamespace())
+    if (loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), decl)).Class("SfxPoolItem").GlobalNamespace())
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -52,24 +58,24 @@ bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSfxPoolItemSubclass)) {
+        !decl->forallBases([this](const CXXRecordDecl *BaseDefinition) { return BaseCheckNotSfxPoolItemSubclass(compiler.getASTContext(), BaseDefinition); })) {
         return true;
     }
     return false;
 }
 
 
-bool BaseCheckNotSwMsgPoolItemSubclass(const CXXRecordDecl *BaseDefinition) {
-    if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SwMsgPoolItem")) {
+bool BaseCheckNotSwMsgPoolItemSubclass(clang::ASTContext const & context, const CXXRecordDecl *BaseDefinition) {
+    if (BaseDefinition && loplugin::TypeCheck(compat::getCanonicalTagType(context, BaseDefinition)).Class("SwMsgPoolItem")) {
         return false;
     }
     return true;
 }
 
-bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
+bool SfxPoolItem::isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (loplugin::TypeCheck(decl).Class("SwMsgPoolItem").GlobalNamespace())
+    if (loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), decl)).Class("SwMsgPoolItem").GlobalNamespace())
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -77,7 +83,7 @@ bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !decl->forallBases(BaseCheckNotSwMsgPoolItemSubclass)) {
+        !decl->forallBases([this](const CXXRecordDecl *BaseDefinition) { return BaseCheckNotSwMsgPoolItemSubclass(compiler.getASTContext(), BaseDefinition); })) {
         return true;
     }
     return false;
@@ -108,7 +114,7 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         return true;
     }
     // the enum types do some weird stuff involving SfxEnumItemInterface
-    auto tc = loplugin::TypeCheck(decl);
+    auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), decl));
     if (tc.Class("SfxEnumItem").GlobalNamespace() || tc.Class("SfxAllEnumItem").GlobalNamespace())
         return true;
 

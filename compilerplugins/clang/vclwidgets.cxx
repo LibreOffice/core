@@ -162,7 +162,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     {
         const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
         if (pFieldRecordType) {
-            if (loplugin::DeclCheck(pFieldRecordType->getDecl())
+            if (loplugin::DeclCheck(compat::getDecl(pFieldRecordType))
                 .Class("VclPtr").GlobalNamespace())
             {
                bFoundVclPtrField = true;
@@ -458,7 +458,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (recordType == nullptr) {
         return true;
     }
-    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(compat::getDecl(recordType));
     if (recordDecl == nullptr) {
         return true;
     }
@@ -638,7 +638,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             {
                 const RecordType* recordType = dyn_cast_or_null<RecordType>((*i)->getType()->getUnqualifiedDesugaredType());
                 if (recordType) {
-                    auto d = dyn_cast<ClassTemplateSpecializationDecl>(recordType->getDecl());
+                    auto d = dyn_cast<ClassTemplateSpecializationDecl>(compat::getDecl(recordType));
                     if (d && d->getTemplateArgs().size()>0) {
                         auto const type = loplugin::TypeCheck(d->getTemplateArgs()[0].getAsType());
                         if (type.Class("VclPtr").GlobalNamespace()) {

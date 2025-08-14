@@ -56,7 +56,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
         return true;
 
     auto type = var->getType();
-    bool check = loplugin::isExtraWarnUnusedType(type);
+    bool check = loplugin::isExtraWarnUnusedType(compiler.getASTContext(), type);
 
     if (!check)
         check = isUnusedSmartPointer(var);

@@ -419,7 +419,7 @@ bool FieldCanBeLocal::VisitInitListExpr(const InitListExpr* initListExpr)
     if (!recordType)
         return true;
 
-    auto recordDecl = recordType->getDecl();
+    auto recordDecl = compat::getDecl(recordType);
     for (auto it = recordDecl->field_begin(); it != recordDecl->field_end(); ++it)
     {
         checkTouched(*it, insideFunctionDecl);

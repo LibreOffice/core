@@ -36,7 +36,8 @@ using namespace loplugin;
 struct TraverseFunctionInfo
 {
     std::string name;
-    std::string argument;
+    std::string argument1;
+    std::string argument2;
     bool hasPre = false;
     bool hasPost = false;
 };
@@ -150,7 +151,17 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
             if( method->getNumParams() == 1 )
             {
                 TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( method->getName());
-                traverseInfo.argument = method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString();
+                traverseInfo.argument1 = method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString();
+                traverseFunctions.insert( std::move( traverseInfo ));
+            }
+            else if( method->getNumParams() == 2 )
+            {
+                TraverseFunctionInfo traverseInfo = findOrCreateTraverseFunctionInfo( method->getName());
+                traverseInfo.argument1 = method->getParamDecl( 0 )->getTypeSourceInfo()->getType().getAsString();
+                traverseInfo.argument2 = method->getParamDecl( 1 )->getTypeSourceInfo()->getType().getAsString();
+                if (traverseInfo.argument2 == "_Bool") {
+                    traverseInfo.argument2 = "bool";
+                }
                 traverseFunctions.insert( std::move( traverseInfo ));
             }
             else
@@ -188,7 +199,8 @@ bool CheckFileVisitor::VisitCXXRecordDecl( CXXRecordDecl* decl )
     {
         std::cout << "TraverseFunctionStart" << std::endl;
         std::cout << "TraverseFunctionName:" << traverseFunction.name << std::endl;
-        std::cout << "TraverseFunctionArgument:" << traverseFunction.argument << std::endl;
+        std::cout << "TraverseFunctionArgument1:" << traverseFunction.argument1 << std::endl;
+        std::cout << "TraverseFunctionArgument2:" << traverseFunction.argument2 << std::endl;
         std::cout << "TraverseFunctionHasPre:" << traverseFunction.hasPre << std::endl;
         std::cout << "TraverseFunctionHasPost:" << traverseFunction.hasPost << std::endl;
         std::cout << "TraverseFunctionEnd" << std::endl;

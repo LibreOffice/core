@@ -29,7 +29,8 @@ struct VisitFunctionInfo
 struct TraverseFunctionInfo
 {
     std::string name;
-    std::string argument;
+    std::string argument1;
+    std::string argument2;
     bool hasPre = false;
     bool hasPost = false;
 };
@@ -251,7 +252,11 @@ void generateVisitor( PluginType type )
             traverseFunctions.insert( traverse );
     for( const TraverseFunctionInfo& traverse : traverseFunctions )
     {
-        output << "    bool " << traverse.name << "(" << traverse.argument << " arg)\n";
+        output << "    bool " << traverse.name << "(" << traverse.argument1 << " arg1";
+        if (!traverse.argument2.empty()) {
+            output << ", " << traverse.argument2 << " arg2";
+        }
+        output << ")\n";
         output << "    {\n";
         for( const PluginInfo& plugin : plugins[ type ] )
         {
@@ -264,7 +269,11 @@ void generateVisitor( PluginType type )
                 output << "        if( " << plugin.variableName << " != nullptr ";
                 output << ")\n";
                 output << "        {\n";
-                output << "            if( !" << plugin.variableName << "->Pre" << traverse.name << "( arg ))\n";
+                output << "            if( !" << plugin.variableName << "->Pre" << traverse.name << "( arg1";
+                if (!traverse.argument2.empty()) {
+                    output << ", arg2";
+                }
+                output << " ))\n";
                 // This will disable the plugin for the time of the traverse, until restored later,
                 // just like directly returning from Traverse* would skip that part.
                 output << "            {\n";
@@ -274,7 +283,11 @@ void generateVisitor( PluginType type )
                 output << "        }\n";
             }
         }
-        output << "        bool ret = RecursiveASTVisitor::" << traverse.name << "( arg );\n";
+        output << "        bool ret = RecursiveASTVisitor::" << traverse.name << "( arg1";
+        if (!traverse.argument2.empty()) {
+            output << ", arg2";
+        }
+        output << " );\n";
         for( const PluginInfo& plugin : plugins[ type ] )
         {
             auto pluginTraverse = plugin.traverseFunctions.find( traverse );
@@ -285,7 +298,11 @@ void generateVisitor( PluginType type )
                 output << "        if( " << plugin.variableName << " != nullptr ";
                 output << ")\n";
                 output << "        {\n";
-                output << "            if( !" << plugin.variableName << "->Post" << traverse.name << "( arg, ret ))\n";
+                output << "            if( !" << plugin.variableName << "->Post" << traverse.name << "( arg1,";
+                if (!traverse.argument2.empty()) {
+                    output << " arg2,";
+                }
+                output << " ret ))\n";
                 // This will disable the plugin for the rest of the run.
                 output << "                save" << plugin.className << " = nullptr;\n";
                 output << "        }\n";
@@ -301,7 +318,11 @@ void generateVisitor( PluginType type )
             auto pluginTraverse = plugin.traverseFunctions.find( traverse );
             if( pluginTraverse == plugin.traverseFunctions.end())
                 continue;
-            output << "            " << plugin.variableName << "->" << pluginTraverse->name << "( arg );\n";
+            output << "            " << plugin.variableName << "->" << pluginTraverse->name << "( arg1";
+            if (!traverse.argument2.empty()) {
+                output << ", arg2";
+            }
+            output << " );\n";
         }
         output << "        }\n";
         output << "        return ret;\n";
@@ -412,7 +433,9 @@ static bool readFile( const std::string& fileName )
             getline( file, line );
             traverseInfo.name = getValue( line, "TraverseFunctionName" );
             getline( file, line );
-            traverseInfo.argument = getValue( line, "TraverseFunctionArgument" );
+            traverseInfo.argument1 = getValue( line, "TraverseFunctionArgument1" );
+            getline( file, line );
+            traverseInfo.argument2 = getValue( line, "TraverseFunctionArgument2" );
             getline( file, line );
             traverseInfo.hasPre = getValue( line, "TraverseFunctionHasPre" ) == "1";
             getline( file, line );

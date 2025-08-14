@@ -416,7 +416,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                     && (name == "number" || name == "unacquired" || name == "boolean"
                         || name == "copy"))
                 {
-                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    auto tc = loplugin::TypeCheck(compat::getCanonicalTagType(
+                        compiler.getASTContext(), calleeMethodDecl->getParent()));
                     if (tc.Class("OUString") || tc.Class("OString"))
                     {
                         if (isSideEffectFree(callExpr->getArg(0)))
@@ -430,7 +431,8 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                         .ClassOrStruct("basic_string_view")
                         .StdNamespace())
                 {
-                    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    auto const tc = loplugin::TypeCheck(compat::getCanonicalTagType(
+                        compiler.getASTContext(), calleeMethodDecl->getParent()));
                     if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
                         || tc.Class("OString").Namespace("rtl").GlobalNamespace())
                     {

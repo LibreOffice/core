@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Check for calls to OutputDevice methods that are not passing through RenderContext
@@ -53,7 +54,7 @@ bool RenderContext::TraverseFunctionDecl(const FunctionDecl * pFunctionDecl)
     // Ignore methods inside the OutputDevice class
     const CXXMethodDecl *pCXXMethodDecl = dyn_cast<CXXMethodDecl>(pFunctionDecl);
     if (pCXXMethodDecl) {
-        if (loplugin::TypeCheck(pCXXMethodDecl->getParent()).Class("OutputDevice").GlobalNamespace())
+        if (loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), pCXXMethodDecl->getParent())).Class("OutputDevice").GlobalNamespace())
             return true;
     }
     // we are only currently interested in methods where the first parameter is RenderContext
@@ -76,7 +77,7 @@ bool RenderContext::VisitCXXMemberCallExpr(const CXXMemberCallExpr* pCXXMemberCa
         return true;
     }
     const CXXRecordDecl *pCXXRecordDecl = pCXXMemberCallExpr->getRecordDecl();
-    if (!loplugin::TypeCheck(pCXXRecordDecl).Class("OutputDevice").GlobalNamespace()) {
+    if (!loplugin::TypeCheck(compat::getCanonicalTagType(compiler.getASTContext(), pCXXRecordDecl)).Class("OutputDevice").GlobalNamespace()) {
         return true;
     }
     // ignore a handful of methods. They will most probably still be present in Window for use during processing outside of the Paint()

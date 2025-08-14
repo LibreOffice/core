@@ -27,7 +27,7 @@ bool derivesFromTestFixture(CXXRecordDecl const* decl)
     static auto const pred = [](CXXBaseSpecifier const& spec) {
         if (auto const t = spec.getType()->getAs<RecordType>())
         { // (may be a template parameter)
-            return derivesFromTestFixture(dyn_cast<CXXRecordDecl>(t->getDecl()));
+            return derivesFromTestFixture(dyn_cast<CXXRecordDecl>(compat::getDecl(t)));
         }
         return false;
     };
@@ -321,7 +321,7 @@ private:
         assert(affected != nullptr);
         if (auto const d = dyn_cast<EnumDecl>(decl))
         {
-            affected->push_back(compiler.getASTContext().getEnumType(d));
+            affected->push_back(compat::getCanonicalTagType(compiler.getASTContext(), d));
         }
         else
         {
@@ -335,7 +335,7 @@ private:
             {
                 rec = cast<CXXRecordDecl>(decl);
             }
-            affected->push_back(compiler.getASTContext().getRecordType(rec));
+            affected->push_back(compat::getCanonicalTagType(compiler.getASTContext(), rec));
             for (auto d = rec->decls_begin(); d != rec->decls_end(); ++d)
             {
                 if (*d != (*d)->getCanonicalDecl())

@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -85,7 +86,7 @@ public:
             std::vector<QualType> copy(rParents);
             copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
             auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
-                pRecordType->getDecl());
+                compat::getDecl(pRecordType));
             assert(ctsd != nullptr);
             auto const & args = ctsd->getTemplateArgs();
             assert(args.size() >= 1);
@@ -99,7 +100,7 @@ public:
             std::vector<QualType> copy(rParents);
             copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
             auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
-                pRecordType->getDecl());
+                compat::getDecl(pRecordType));
             assert(ctsd != nullptr);
             auto const & args = ctsd->getTemplateArgs();
             assert(args.size() >= 2);
@@ -109,7 +110,7 @@ public:
             }
             return isBadStaticType(args.get(1).getAsType(), chain, copy);
         }
-        RecordDecl const*const pDefinition(pRecordType->getDecl()->getDefinition());
+        RecordDecl const*const pDefinition(compat::getDecl(pRecordType)->getDefinition());
         if (!pDefinition) { // maybe no definition if it's a pointer/reference
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
