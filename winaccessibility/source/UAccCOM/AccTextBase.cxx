@@ -616,7 +616,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::removeSelection(long selectionIn
     }
     else
     {
-        pRXText->setSelection(0, 0);
+        const sal_Int32 nCaretPos = pRXText->getCaretPosition();
+        pRXText->setSelection(nCaretPos, nCaretPos);
         return S_OK;
     }
 
