@@ -105,7 +105,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffse
 
     if( pRExtension.is() )
     {
-        pRExtension->addSelection(0, startOffset, endOffset);
+        pRExtension->addSelection(startOffset, endOffset);
         return S_OK;
     }
     else

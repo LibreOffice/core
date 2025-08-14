@@ -29,7 +29,7 @@ interface XAccessibleTextSelection : ::com::sun::star::uno::XInterface
 
     long getSeletedPositionEnd ([in] long nSelectedPortionIndex) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
-    long addSelection( [in] long selectionIndex, [in]long startOffset, [in] long endOffset) raises (::com::sun::star::lang::IndexOutOfBoundsException);
+    long addSelection([in] long startOffset, [in] long endOffset) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 
     boolean removeSelection( [in] long selectionIndex ) raises (::com::sun::star::lang::IndexOutOfBoundsException);
 };

@@ -2880,7 +2880,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
     return true;
 }
 
-sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 startOffset, sal_Int32 endOffset)
+sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection(sal_Int32 startOffset, sal_Int32 endOffset)
 {
     SolarMutexGuard aGuard;
 
