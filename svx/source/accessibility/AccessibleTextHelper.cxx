@@ -1755,18 +1755,18 @@ void AccessibleTextHelper::RemoveEventListener( const uno::Reference< XAccessibl
 }
 
 // XAccessibleComponent
-uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint )
+rtl::Reference<comphelper::OAccessible> AccessibleTextHelper::GetAt(const awt::Point& aPoint)
 {
     SolarMutexGuard aGuard;
 
 #ifdef DBG_UTIL
     mpImpl->CheckInvariants();
 
-    uno::Reference< XAccessible > xChild = mpImpl->getAccessibleAtPoint( aPoint );
+    rtl::Reference<comphelper::OAccessible> pChild = mpImpl->getAccessibleAtPoint(aPoint);
 
     mpImpl->CheckInvariants();
 
-    return xChild;
+    return pChild;
 #else
     return mpImpl->getAccessibleAtPoint( aPoint );
 #endif

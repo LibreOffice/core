@@ -89,7 +89,7 @@ void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtPoint( const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xRet;
+    rtl::Reference<comphelper::OAccessible> pRet;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
@@ -98,10 +98,10 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
         if(!mpTextHelper)
             CreateTextHelper();
 
-        xRet = mpTextHelper->GetAt(rPoint);
+        pRet = mpTextHelper->GetAt(rPoint);
     }
 
-    return xRet;
+    return pRet;
 }
 
 void SAL_CALL ScAccessiblePreviewCell::grabFocus()

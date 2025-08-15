@@ -33,10 +33,6 @@ namespace com::sun::star
 {
 namespace accessibility
 {
-class XAccessible;
-}
-namespace accessibility
-{
 class XAccessibleEventListener;
 }
 namespace awt
@@ -372,7 +368,7 @@ public:
         @attention Don't call with locked mutexes. You may hold
         the solar mutex, but this method acquires it anyway.
     */
-    css::uno::Reference<css::accessibility::XAccessible> GetAt(const css::awt::Point& aPoint);
+    rtl::Reference<comphelper::OAccessible> GetAt(const css::awt::Point& aPoint);
 
 private:
     /// @dyn

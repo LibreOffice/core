@@ -96,7 +96,7 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessibleAtPoint(
         const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xRet;
+    rtl::Reference<comphelper::OAccessible> pRet;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
@@ -105,10 +105,10 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
         if(!mpTextHelper)
             CreateTextHelper();
 
-        xRet = mpTextHelper->GetAt(rPoint);
+        pRet = mpTextHelper->GetAt(rPoint);
     }
 
-    return xRet;
+    return pRet;
 }
 
     //=====  XAccessibleContext  ==============================================

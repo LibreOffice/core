@@ -155,7 +155,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )
 {
-    uno::Reference<XAccessible> xRet;
+    rtl::Reference<comphelper::OAccessible> pRet;
     if (containsPoint(rPoint))
     {
         SolarMutexGuard aGuard;
@@ -164,10 +164,10 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessi
         if(!mxTextHelper)
             CreateTextHelper();
 
-        xRet = mxTextHelper->GetAt(rPoint);
+        pRet = mxTextHelper->GetAt(rPoint);
     }
 
-    return xRet;
+    return pRet;
 }
 
 void SAL_CALL ScAccessiblePreviewHeaderCell::grabFocus()
