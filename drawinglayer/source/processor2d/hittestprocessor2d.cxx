@@ -168,8 +168,16 @@ namespace drawinglayer::processor2d
 
                         if(aUnitRange.isInside(aRelativePoint))
                         {
-                            const sal_Int32 nX(basegfx::fround(aRelativePoint.getX() * aSizePixel.Width()));
-                            const sal_Int32 nY(basegfx::fround(aRelativePoint.getY() * aSizePixel.Height()));
+                            // aRelativePoint.getX() == 0.0 -> 0
+                            // aRelativePoint.getX() == 0.999... -> aSizePixel.Width() - 1
+                            // Since isInside includes upper bound (1.0), force also this:
+                            // aRelativePoint.getX() == 1.0 -> aSizePixel.Width() - 1
+                            sal_Int32 nX(aRelativePoint.getX() * aSizePixel.Width());
+                            if (nX == aSizePixel.Width())
+                                --nX;
+                            sal_Int32 nY(aRelativePoint.getY() * aSizePixel.Height());
+                            if (nY == aSizePixel.Height())
+                                --nY;
 
                             mbHit = (0 != rBitmap.GetPixelColor(nX, nY).GetAlpha());
                         }
