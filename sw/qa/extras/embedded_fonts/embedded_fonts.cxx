@@ -31,6 +31,7 @@
 
 namespace
 {
+// Tests for embedded fonts in Writer documents
 class Test : public SwModelTestBase
 {
 public:
@@ -40,6 +41,8 @@ public:
     }
 };
 
+// A custom interaction handler specifically handling FontsDisallowEditingRequest, allowing to test
+// what was requested, and how many times; and to define the answer in tests
 class FontInteractionHandler : public comphelper::WeakImplHelper<task::XInteractionHandler>
 {
 public:
@@ -107,6 +110,8 @@ private:
     OUString maRequestedFontName;
 };
 
+// A wrapped over XFontMappingUse, simplifying checks if some fonts were actually used in tests,
+// and if their use required a substitution or not
 class FontMappingUseListener
 {
 public:
