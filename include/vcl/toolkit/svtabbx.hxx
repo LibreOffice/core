@@ -164,7 +164,8 @@ public:
     virtual tools::Rectangle calcTableRect() override;
     virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
+    rtl::Reference<comphelper::OAccessible> CreateAccessibleCell(sal_Int32 _nRow,
+                                                                 sal_uInt16 _nColumn) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) override;
 

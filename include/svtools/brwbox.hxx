@@ -711,10 +711,9 @@ public:
     /** Creates the accessible object of a data table cell.
         @param nRow  The row index of the cell.
         @param nColumnId  The column pos of the cell.
-        @return  The XAccessible interface of the specified cell. */
-    virtual css::uno::Reference<
-        css::accessibility::XAccessible >
-    CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos ) override;
+        @return  The accessible object of the specified cell. */
+    virtual rtl::Reference<comphelper::OAccessible>
+    CreateAccessibleCell(sal_Int32 nRow, sal_uInt16 nColumnPos) override;
 
     /** Creates the accessible object of a row header.
         @param nRow  The row index of the header.

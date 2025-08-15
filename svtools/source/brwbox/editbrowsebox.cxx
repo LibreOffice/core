@@ -993,11 +993,10 @@ void EditBrowseBox::ActivateCell(sal_Int32 nRow, sal_uInt16 nCol, bool bCellFocu
         // no controller -> we have a new "active descendant"
         if ( isAccessibleAlive() && HasFocus() )
         {
-            commitTableEvent(
-                AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                Any( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
-                Any()
-            );
+            commitTableEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                             Any(css::uno::Reference<XAccessible>(
+                                 CreateAccessibleCell(nRow, GetColumnPos(nCol - 1)))),
+                             Any());
         }
     }
 }

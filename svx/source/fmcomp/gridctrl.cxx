@@ -3394,7 +3394,8 @@ rtl::Reference<comphelper::OAccessible> DbGridControl::CreateAccessibleControl(s
     return EditBrowseBox::CreateAccessibleControl(_nIndex);
 }
 
-Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible> DbGridControl::CreateAccessibleCell(sal_Int32 _nRow,
+                                                                            sal_uInt16 _nColumnPos)
 {
     sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
     size_t Location = GetModelColumnPos(nColumnId);

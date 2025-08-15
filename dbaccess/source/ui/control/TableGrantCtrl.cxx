@@ -454,7 +454,8 @@ OTableGrantControl::TTablePrivilegeMap::const_iterator OTableGrantControl::findP
     return aFind;
 }
 
-Reference< XAccessible > OTableGrantControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible>
+OTableGrantControl::CreateAccessibleCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos)
 {
     sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
     if(nColumnId != COL_TABLE_NAME)

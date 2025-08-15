@@ -2352,11 +2352,10 @@ void BrowseBox::CursorMoved()
     // before implementing more here, please adjust the EditBrowseBox
 
     if ( isAccessibleAlive() && HasFocus() )
-        commitTableEvent(
-            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-            Any( CreateAccessibleCell( GetCurRow(),GetColumnPos( GetCurColumnId() ) ) ),
-            Any()
-        );
+        commitTableEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                         Any(css::uno::Reference<css::accessibility::XAccessible>(
+                             CreateAccessibleCell(GetCurRow(), GetColumnPos(GetCurColumnId())))),
+                         Any());
 }
 
 void BrowseBox::LoseFocus()

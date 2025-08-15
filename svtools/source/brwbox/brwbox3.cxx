@@ -82,7 +82,8 @@ rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessible()
 
 // Children -------------------------------------------------------------------
 
-Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessibleCell(sal_Int32 _nRow,
+                                                                        sal_uInt16 _nColumnPos)
 {
     // BBINDEX_TABLE must be the table
     OSL_ENSURE(m_xAccessible, "Invalid call: Accessible is null");

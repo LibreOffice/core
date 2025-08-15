@@ -2692,7 +2692,8 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
     }
 }
 
-Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible>
+OSelectionBrowseBox::CreateAccessibleCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos)
 {
     OTableFieldDescRef pEntry;
     if ( _nColumnPos != 0 && _nColumnPos != BROWSER_INVALIDID && _nColumnPos <= getFields().size() )

@@ -830,7 +830,8 @@ tools::Rectangle SvHeaderTabListBox::calcFieldRectPixel(sal_Int32 _nRow, sal_uIn
     return aRect;
 }
 
-Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+rtl::Reference<comphelper::OAccessible>
+SvHeaderTabListBox::CreateAccessibleCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos)
 {
     OSL_ENSURE(m_xAccessible.is(), "Invalid call: Accessible is null");
 

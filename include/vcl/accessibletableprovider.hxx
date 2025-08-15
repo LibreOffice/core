@@ -86,7 +86,9 @@ public:
     virtual tools::Rectangle calcTableRect() = 0;
     virtual tools::Rectangle calcFieldRectPixel(sal_Int32 _nRow, sal_uInt16 _nColumnPos, bool _bIsHeader) = 0;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
+    virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleCell(sal_Int32 _nRow,
+                                                                         sal_uInt16 _nColumnPos)
+        = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
 
