@@ -825,25 +825,19 @@ const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
     { css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
 };
 
-bool lcl_convertMessageBoxType(
-    OUString &sType,
-    css::awt::MessageBoxType eType )
+OUString lcl_convertMessageBoxType(css::awt::MessageBoxType eType)
 {
-    const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
-    css::awt::MessageBoxType eVal = css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE;
-
+    const MessageBoxTypeInfo* pMap = aMessageBoxTypeInfo;
     while ( pMap->pName )
     {
         if ( pMap->eType == eType )
         {
-            eVal = eType;
-            sType = OUString( pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US );
-            break;
+            return OUString(pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US);
         }
         pMap++;
     }
 
-    return ( eVal != css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE );
+    return OUString();
 }
 
 #ifndef IOS
@@ -2036,8 +2030,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
         nAddWinBits |= MessBoxStyle::DefaultIgnore;
 
-    OUString aType;
-    lcl_convertMessageBoxType( aType, eType );
+    OUString aType = lcl_convertMessageBoxType(eType);
 
     aDescriptor.Type              = css::awt::WindowClass_MODALTOP;
     aDescriptor.WindowServiceName = aType;
