@@ -261,6 +261,16 @@ void XMLRedlineExport::ExportChangeAutoStyle(
         // export the auto styles
         rExport.GetTextParagraphExport()->collectTextAutoStyles(xText);
     }
+
+    // See if the format redline has an autostyle for old direct formatting: if so, export that as
+    // an autostyle.
+    aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
+    uno::Reference<beans::XPropertySet> xAutoFormat;
+    aAny >>= xAutoFormat;
+    if (xAutoFormat.is())
+    {
+        rExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xAutoFormat);
+    }
 }
 
 void XMLRedlineExport::ExportChangesListAutoStyles()
@@ -353,6 +363,23 @@ void XMLRedlineExport::ExportChangedRegion(
         aAny = rPropSet->getPropertyValue(u"RedlineType"_ustr);
         OUString sType;
         aAny >>= sType;
+
+        // See if the format redline has an autostyle for old direct formatting: if so, refer to the
+        // already exported autostyle.
+        aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
+        uno::Reference<beans::XPropertySet> xAutoStyle;
+        aAny >>= xAutoStyle;
+        if (xAutoStyle.is())
+        {
+            bool bIsUICharStyle;
+            bool bHasAutoStyle;
+            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(xAutoStyle, bIsUICharStyle, bHasAutoStyle);
+            if (!sStyle.isEmpty())
+            {
+                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, sStyle);
+            }
+        }
+
         SvXMLElementExport aChange(rExport, XML_NAMESPACE_TEXT,
                                    ConvertTypeName(sType), true, true);
 

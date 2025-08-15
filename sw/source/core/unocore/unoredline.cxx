@@ -86,6 +86,170 @@ uno::Sequence<beans::PropertyValue> GetSuccessorProperties(const SwRangeRedline&
     return uno::Sequence<beans::PropertyValue>(5);
 }
 
+/// Presents character properties in an item set as a beans::XPropertySet.
+class SwXRedlineAutoStyle final
+    : public cppu::WeakImplHelper<beans::XPropertySet, beans::XPropertyState>
+{
+    std::shared_ptr<SfxItemSet> m_pItemSet;
+
+public:
+    SwXRedlineAutoStyle(const std::shared_ptr<SfxItemSet>& pItemSet);
+    ~SwXRedlineAutoStyle() override;
+
+    // XPropertySet
+    uno::Reference<beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    void SAL_CALL setPropertyValue(const OUString& rPropertyName,
+            const uno::Any& rValue) override;
+    uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
+    void SAL_CALL addPropertyChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference<beans::XPropertyChangeListener>& xListener) override;
+    void SAL_CALL removePropertyChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference<beans::XPropertyChangeListener>& xListener) override;
+    void SAL_CALL addVetoableChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference<beans::XVetoableChangeListener>& xListener) override;
+    void SAL_CALL removeVetoableChangeListener(
+        const OUString& rPropertyName,
+        const uno::Reference<beans::XVetoableChangeListener>& xListener) override;
+
+    // XPropertyState
+    beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
+    uno::Sequence<beans::PropertyState>
+        SAL_CALL getPropertyStates(const uno::Sequence<OUString>& aPropertyName) override;
+    void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
+    uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
+};
+
+SwXRedlineAutoStyle::SwXRedlineAutoStyle(const std::shared_ptr<SfxItemSet>& pItemSet)
+    : m_pItemSet(pItemSet)
+{
+}
+
+SwXRedlineAutoStyle::~SwXRedlineAutoStyle() = default;
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXRedlineAutoStyle::getPropertySetInfo()
+{
+    SolarMutexGuard aGuard;
+
+    static uno::Reference<beans::XPropertySetInfo> xRet
+        = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE)->getPropertySetInfo();
+    return xRet;
+}
+
+void SAL_CALL SwXRedlineAutoStyle::setPropertyValue(const OUString& rPropertyName,
+        const uno::Any& rValue)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertySet* pPropertySet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
+    pPropertySet->setPropertyValue(rPropertyName, rValue, *m_pItemSet);
+}
+
+uno::Any SAL_CALL SwXRedlineAutoStyle::getPropertyValue(const OUString& rPropertyName)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertySet* pPropertySet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
+    return pPropertySet->getPropertyValue(rPropertyName, *m_pItemSet);
+}
+
+void SAL_CALL SwXRedlineAutoStyle::addPropertyChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::addPropertyChangeListener: not implemented");
+}
+
+void SAL_CALL SwXRedlineAutoStyle::removePropertyChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::removePropertyChangeListener: not implemented");
+}
+
+void SAL_CALL SwXRedlineAutoStyle::addVetoableChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::addVetoableChangeListener: not implemented");
+}
+
+void SAL_CALL SwXRedlineAutoStyle::removeVetoableChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::removeVetoableChangeListener: not implemented");
+}
+
+beans::PropertyState SwXRedlineAutoStyle::getPropertyState(const OUString& rPropertyName)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertySet* pPropertySet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
+    return pPropertySet->getPropertyState(rPropertyName, *m_pItemSet);
+}
+
+uno::Sequence< beans::PropertyState > SwXRedlineAutoStyle::getPropertyStates(
+        const uno::Sequence<OUString>& rPropertyNames)
+{
+    SolarMutexGuard aGuard;
+
+    const SfxItemPropertySet* pPropertySet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
+    const OUString* pNames = rPropertyNames.getConstArray();
+    uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
+    beans::PropertyState* pStates = aRet.getArray();
+    const SfxItemPropertyMap& rMap = pPropertySet->getPropertyMap();
+    for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
+    {
+        const SfxItemPropertyMapEntry* pEntry = rMap.getByName(pNames[i]);
+        if (!pEntry)
+        {
+            throw beans::UnknownPropertyException("Unknown property: " + pNames[i]);
+        }
+
+        pStates[i] = SfxItemPropertySet::getPropertyState(*pEntry, *m_pItemSet);
+    }
+    return aRet;
+}
+
+void SwXRedlineAutoStyle::setPropertyToDefault(const OUString& /*rPropertyName*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::setPropertyToDefault: not implemented");
+}
+
+uno::Any SwXRedlineAutoStyle::getPropertyDefault(const OUString& /*rPropertyName*/)
+{
+    SAL_WARN("sw.uno", "SwXRedlineAutoStyle::getPropertyDefault: not implemented");
+    return uno::Any();
+}
+
+/// If this format redline has old direct formatting, return it as an autostyle.
+uno::Reference<beans::XPropertySet> GetRedlineAutoFormat(const SwRangeRedline& rRedline)
+{
+    if (rRedline.GetType() != RedlineType::Format)
+    {
+        return {};
+    }
+
+    const SwRedlineExtraData* pExtraData = rRedline.GetRedlineData().GetExtraData();
+    auto pFormattingExtraData = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pExtraData);
+    if (!pFormattingExtraData)
+    {
+        return {};
+    }
+
+    std::shared_ptr<SfxItemSet> pItemSet = pFormattingExtraData->GetItemSet();
+    if (!pItemSet)
+    {
+        return {};
+    }
+
+    uno::Reference<beans::XPropertySet> xAutoStyle(new SwXRedlineAutoStyle(pItemSet));
+    return xAutoStyle;
+}
+
 std::optional<uno::Any> GetRedlinePortionPropertyValue(std::u16string_view rPropertyName,
                                                        const SwRangeRedline& rRedline)
 {
@@ -130,6 +294,10 @@ std::optional<uno::Any> GetRedlinePortionPropertyValue(std::u16string_view rProp
     else if (rPropertyName == UNO_NAME_MERGE_LAST_PARA)
     {
         aRet <<= !rRedline.IsDelLastPara();
+    }
+    else if (rPropertyName == UNO_NAME_REDLINE_AUTO_FORMAT)
+    {
+        aRet <<= GetRedlineAutoFormat(rRedline);
     }
     else
     {
