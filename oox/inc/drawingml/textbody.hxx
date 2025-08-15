@@ -96,6 +96,7 @@ public:
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStylePtr) const;
 
+    /// throws exception
     void                ApplyMasterTextStyle(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference< css::style::XStyle > & aXStyle,

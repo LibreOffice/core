@@ -168,49 +168,37 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
     {
         Reference< style::XStyleFamiliesSupplier > aXStyleFamiliesSupplier(rFilterBase.getModel(), UNO_QUERY_THROW);
         Reference< container::XNameAccess > aXNameAccess(aXStyleFamiliesSupplier->getStyleFamilies());
-        Reference< container::XNamed > aXNamed(rSlidePersist.getPage(), UNO_QUERY_THROW);
 
-        if (aXNameAccess.is())
+        if (!aXNameAccess.is())
+            return;
+
+        Reference< container::XNamed > aXNamed(rSlidePersist.getPage(), UNO_QUERY_THROW);
+        OUString aFamily = aXNamed->getName();
+
+        if (!aXNameAccess->hasByName(aFamily))
+            return;
+
+        Reference< container::XNameAccess > xFamilies;
+        if (aXNameAccess->getByName(aFamily) >>= xFamilies)
         {
             OUString aStyle;
-            OUString aFamily;
-
             if (sType == u"com.sun.star.presentation.TitleTextShape") // title style
-            {
                 aStyle = u"title"_ustr;
-                aFamily = aXNamed->getName();
-            }
             else if (sType == u"com.sun.star.presentation.SubtitleShape") // subtitle
-            {
                 aStyle = u"subtitle"_ustr;
-                aFamily = aXNamed->getName();
-            }
             else if (sType == u"com.sun.star.presentation.OutlinerShape") // body style
-            {
                 aStyle = u"outline1"_ustr;
-                aFamily = aXNamed->getName();
-            }
             else if (sType == u"com.sun.star.presentation.NotesShape") // notes style
-            {
                 aStyle = u"title"_ustr;
-                aFamily = aXNamed->getName();
-            }
 
-            Reference< container::XNameAccess > xFamilies;
-            if (aXNameAccess->hasByName(aFamily))
+            if (!xFamilies->hasByName(aStyle))
+                return;
+
+            Reference< style::XStyle > aXStyle;
+            if (xFamilies->getByName(aStyle) >>= aXStyle)
             {
-                if (aXNameAccess->getByName(aFamily) >>= xFamilies)
-                {
-                    if (xFamilies->hasByName(aStyle))
-                    {
-                        Reference< style::XStyle > aXStyle;
-                        if (xFamilies->getByName(aStyle) >>= aXStyle)
-                        {
-                            TextCharacterProperties aCharStyleProperties;
-                            getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleProperties, mpMasterTextListStyle);
-                        }
-                    }
-                }
+                TextCharacterProperties aCharStyleProperties;
+                getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleProperties, mpMasterTextListStyle);
             }
         }
     }
