@@ -105,12 +105,6 @@ void AccessibleParaManager::FireEvent( sal_Int32 nPara,
     }
 }
 
-bool AccessibleParaManager::IsReferencable(
-    rtl::Reference<AccessibleEditableTextPara> const & aChild)
-{
-    return aChild.is();
-}
-
 bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
 {
     assert(0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild)
@@ -119,7 +113,8 @@ bool AccessibleParaManager::IsReferencable( sal_Int32 nChild ) const
     if( 0 <= nChild && maChildren.size() > o3tl::make_unsigned(nChild) )
     {
         // retrieve hard reference from weak one
-        return IsReferencable( GetChild( nChild ).first.get() );
+        rtl::Reference<AccessibleEditableTextPara> pChild = GetChild(nChild).first.get();
+        return pChild.is();
     }
     else
     {
@@ -374,11 +369,11 @@ void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
         std::transform(front, back, front,
                        [](const AccessibleParaManager::WeakChild& rPara)
                        {
-                           auto aChild(rPara.first.get());
-                           if (IsReferencable(aChild))
+                           rtl::Reference<AccessibleEditableTextPara> pChild = rPara.first.get();
+                           if (pChild.is())
                            {
-                               aChild->SetEditSource(nullptr);
-                               aChild->dispose();
+                               pChild->SetEditSource(nullptr);
+                               pChild->dispose();
                            }
 
                            // clear reference
