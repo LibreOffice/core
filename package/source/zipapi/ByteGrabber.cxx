@@ -60,7 +60,14 @@ void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNe
 sal_Int32 ByteGrabber::readBytes( sal_Int8* aData,
                                         sal_Int32 nBytesToRead )
 {
-    return mpByteReader->readSomeBytes(aData, nBytesToRead );
+    if (mpByteReader)
+        return mpByteReader->readSomeBytes(aData, nBytesToRead );
+    else
+    {
+        sal_Int32 nBytesActuallyRead = xStream->readSomeBytes(aSequence, nBytesToRead);
+        memcpy(aData, aSequence.getConstArray(), nBytesActuallyRead);
+        return nBytesActuallyRead;
+    }
 }
 
 // XSeekable chained...

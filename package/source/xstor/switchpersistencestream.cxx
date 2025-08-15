@@ -256,7 +256,15 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     if ( !m_pStreamData->m_xOrigInStream.is() )
         throw uno::RuntimeException();
 
-    return m_pStreamData->m_pByteReader->readSomeBytes( aData, nBytesToRead );
+    if (m_pStreamData->m_pByteReader)
+        return m_pStreamData->m_pByteReader->readSomeBytes( aData, nBytesToRead );
+    else
+    {
+        css::uno::Sequence < sal_Int8 > aSequence;
+        sal_Int32 nBytesActuallyRead = m_pStreamData->m_xOrigInStream->readSomeBytes( aSequence, nBytesToRead );
+        memcpy(aData, aSequence.getConstArray(), nBytesActuallyRead);
+        return nBytesActuallyRead;
+    }
 }
 
 void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
