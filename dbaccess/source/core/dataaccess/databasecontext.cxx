@@ -456,10 +456,17 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
                 &&  ( ( rProperty.Attributes & PropertyAttribute::READONLY) == 0 )
                 )
             {
-                // found such a property
-                aRememberProps.put( rProperty.Name, xSource->getPropertyValue( rProperty.Name ) );
+                // If the connection was opened by a user other than the one registered in the
+                // data source, the password will not be stored and always requested. See tdf#167960
+                if (rProperty.Name != "Password" || !_rModelImpl.m_bAskPassword)
+                {
+                    // found such a property
+                    aRememberProps.put( rProperty.Name, xSource->getPropertyValue( rProperty.Name ) );
+                }
             }
         }
+        // We don't need him anymore, we only come here once for a datasource.
+        _rModelImpl.m_bAskPassword = false;
     }
     catch ( const Exception& )
     {

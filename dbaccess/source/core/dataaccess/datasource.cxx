@@ -1084,12 +1084,18 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
             return Reference< XConnection >();
 
         // get the result
-        sUser = m_pImpl->m_sUser = pAuthenticate->getUser();
-        sPassword = pAuthenticate->getPassword();
 
+        sUser = pAuthenticate->getUser();
+        if (sUser != m_pImpl->m_sUser)
+        {
+            m_pImpl->m_sUser = sUser;
+            m_pImpl->m_bAskPassword = true;
+        }
+
+        sPassword = pAuthenticate->getPassword();
         if (pAuthenticate->getRememberPassword())
         {
-            m_pImpl->m_aPassword = pAuthenticate->getPassword();
+            m_pImpl->m_aPassword = sPassword;
             bNewPasswordGiven = true;
         }
         m_pImpl->m_sFailedPassword.clear();

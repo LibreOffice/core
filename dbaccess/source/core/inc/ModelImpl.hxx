@@ -238,6 +238,7 @@ public:
     bool                                            m_bModified : 1;
     bool                                            m_bDocumentReadOnly : 1;
     bool                                            m_bMacroCallsSeenWhileLoading : 1;
+    bool                                            m_bAskPassword;
     css::uno::Reference< css::beans::XPropertyBag >
                                                         m_xSettings;
     css::uno::Sequence< OUString >                      m_aTableFilter;
