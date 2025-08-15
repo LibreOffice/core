@@ -41,8 +41,6 @@ namespace accessibility
     class AccessibleTextEventQueue
     {
     public:
-        typedef ::std::deque< SfxHint* > EventQueue;
-
         AccessibleTextEventQueue();
         ~AccessibleTextEventQueue();
 
@@ -80,7 +78,7 @@ namespace accessibility
         void Clear();
 
     private:
-        EventQueue maEventQueue;
+        std::deque<SfxHint*> maEventQueue;
     };
 
 } // end of namespace accessibility
