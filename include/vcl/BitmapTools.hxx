@@ -79,7 +79,6 @@ VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
-VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( BitmapEx const & rBmpEx, Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const css::geometry::IntegerRectangle2D& rect);
