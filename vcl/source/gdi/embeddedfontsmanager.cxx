@@ -63,16 +63,20 @@ OUString GetStandardEmbeddedFontsRoot()
 {
     OUString p = u"${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") "::UserInstallation}"_ustr;
     rtl::Bootstrap::expandMacros(p);
-    (void)osl::FileBase::getAbsoluteFileURL({}, p + "/user/temp/embeddedfonts/", p);
+    return p + "/user/temp/embeddedfonts";
+}
+
+OUString GetEmbeddedFontsRootURL(bool bLOK)
+{
+    OUString p = bLOK ? utl::CreateTempURL(nullptr, true) : GetStandardEmbeddedFontsRoot();
+    // Drop things like "//" and "/../"; ensure trailing slash
+    (void)osl::FileBase::getAbsoluteFileURL({}, p + "/", p);
     return p;
 }
 
 const OUString& GetEmbeddedFontsRoot()
 {
-    // [-loplugin:stringstatic] false positive: the initializer is not a constant expression
-    static const OUString path = comphelper::LibreOfficeKit::isActive()
-                                     ? utl::CreateTempURL(nullptr, true)
-                                     : GetStandardEmbeddedFontsRoot();
+    static const OUString path = GetEmbeddedFontsRootURL(comphelper::LibreOfficeKit::isActive());
     return path;
 }
 
