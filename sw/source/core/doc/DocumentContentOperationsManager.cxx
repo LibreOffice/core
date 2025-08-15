@@ -3129,6 +3129,7 @@ void DocumentContentOperationsManager::TransliterateText(
                     pFnd = pFnd2;
                     if ( n == 0 )
                         break;
+                    assert(n > 0 && "coverity 2024.6.1");
                     pFnd2 = rIDRA.GetRedlineTable()[--n];
                 }
 
