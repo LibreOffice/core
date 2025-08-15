@@ -23,7 +23,6 @@
 #include <osl/thread.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
-#include <vcl/idle.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

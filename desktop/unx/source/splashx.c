@@ -19,19 +19,16 @@
 #include <X11/extensions/Xinerama.h>
 
 #include <osl/endian.h>
-#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include <png.h>
 
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
-#include <rtl/ustrbuf.h>
 
 typedef struct {
     unsigned char b, g, r;

@@ -58,7 +58,9 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#if HAVE_FEATURE_UPDATE_MAR
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -170,7 +172,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
+#if HAVE_FEATURE_UPDATE_MAR
 using namespace ::com::sun::star::system;
+#endif
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;

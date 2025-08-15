@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 namespace dp_registry::backend::sfwk

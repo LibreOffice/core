@@ -72,8 +72,6 @@
 #include "dp_gui_updatedialog.hxx"
 #include <dp_shared.hxx>
 
-class KeyEvent;
-class MouseEvent;
 namespace com::sun::star::uno {
     class XComponentContext;
 }

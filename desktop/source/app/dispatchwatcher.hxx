@@ -21,6 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <o3tl/typed_flags_set.hxx>
 #include <optional>
 #include <atomic>
 #include <vector>

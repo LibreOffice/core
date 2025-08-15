@@ -25,8 +25,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 
-#include <mutex>
-
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/implbase.hxx>

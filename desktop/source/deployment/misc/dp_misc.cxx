@@ -23,7 +23,6 @@
 #include <dp_misc.h>
 #include <dp_interact.h>
 #include <dp_shared.hxx>
-#include <o3tl/string_view.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/digest.h>
 #include <rtl/random.h>

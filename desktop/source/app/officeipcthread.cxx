@@ -35,7 +35,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/configmgr.hxx>
 #include <osl/pipe.hxx>
-#include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/conditn.hxx>
 #include <unotools/moduleoptions.hxx>

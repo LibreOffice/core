@@ -21,8 +21,6 @@
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-using namespace ::com::sun::star;
-
 namespace dp_misc
 {
 const LanguageTag& getOfficeLanguageTag()

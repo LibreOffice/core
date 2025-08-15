@@ -213,7 +213,6 @@
 #include <svx/pageitem.hxx>
 
 #include <app.hxx>
-#include <initjsunoscripting.hxx>
 
 #include "../app/cmdlineargs.hxx"
 // We also need to hackily be able to start the main libreoffice thread:

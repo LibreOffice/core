@@ -24,7 +24,6 @@
 #include <dp_misc.h>
 #include <dp_backend.h>
 #include <dp_ucb.h>
-#include <dp_interact.h>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <osl/file.hxx>
 #include <ucbhelper/content.hxx>

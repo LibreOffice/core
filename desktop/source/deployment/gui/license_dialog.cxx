@@ -28,7 +28,6 @@
 
 #include "license_dialog.hxx"
 
-#include <functional>
 #include <string_view>
 
 using namespace ::com::sun::star;

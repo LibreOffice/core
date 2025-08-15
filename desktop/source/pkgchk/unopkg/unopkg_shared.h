@@ -20,7 +20,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
 #include <utility>

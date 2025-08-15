@@ -70,7 +70,6 @@ struct ProcessDocumentsRequest
     bool bScriptCat; // boolean flag indicating whether to dump script content to console
 };
 
-class DispatchWatcher;
 class IpcThread;
 class PipeIpcThread;
 class DbusIpcThread;

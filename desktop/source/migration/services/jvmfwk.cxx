@@ -31,7 +31,6 @@
 #include <com/sun/star/configuration/backend/XLayer.hpp>
 #include <com/sun/star/configuration/backend/XLayerHandler.hpp>
 #include <com/sun/star/configuration/backend/MalformedDataException.hpp>
-#include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
 #include <jvmfwk/framework.hxx>
 #include "jvmfwk.hxx"
 #include <memory>
