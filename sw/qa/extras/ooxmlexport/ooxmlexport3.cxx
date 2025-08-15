@@ -864,10 +864,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
     assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "bidi", u"he-IL");
 
     // check fonts have been applied properly
-    sal_Unicode fontName[2]; //represents the string "宋体"
-    fontName[0] = 0x5b8b;
-    fontName[1] = 0x4f53;
-    CPPUNIT_ASSERT_EQUAL(OUString(fontName, 2), getProperty<OUString>(getParagraph(1), u"CharFontNameAsian"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"宋体"_ustr, getProperty<OUString>(getParagraph(1), u"CharFontNameAsian"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr,
                          getProperty<OUString>(getParagraph(2), u"CharFontNameComplex"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Trebuchet MS"_ustr,
