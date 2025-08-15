@@ -3635,6 +3635,26 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoFilterPosition)
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPivotFilterPosition)
+{
+    ScModelObj* pModelObj = createDoc("pivotTableFilter.ods");
+    ScTestViewCallback aView;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+
+    pView->SetCursor(1, 0); // Go to B1.
+    Scheduler::ProcessEventsToIdle();
+
+    // Use filter button shortcut (ALT + DOWNARROW) to avoid coordinate based click.
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_MOD2);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+
+    // We should have the autofilter position callback.
+    auto it = aView.m_aStateChanges.find("PivotTableFilterInfo");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

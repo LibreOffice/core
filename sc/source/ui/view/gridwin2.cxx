@@ -48,6 +48,9 @@
 #include <memory>
 #include <vector>
 
+#include <tools/json_writer.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 using namespace css;
 using namespace css::sheet;
 
@@ -548,6 +551,24 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
 {
     DataPilotFieldOrientation nOrient;
     tools::Long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // We send the cell position of the filter button to Online side. So the position of the popup can be adjusted near to the cell.
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+        if (pViewShell)
+        {
+            tools::JsonWriter writer;
+            writer.put("commandName", "PivotTableFilterInfo");
+            {
+                const auto aState = writer.startNode("state");
+                writer.put("column", rAddress.Col());
+                writer.put("row", rAddress.Row());
+            }
+            OString info = writer.finishAndGetAsOString();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, info);
+        }
+    }
 
     DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);
 }
