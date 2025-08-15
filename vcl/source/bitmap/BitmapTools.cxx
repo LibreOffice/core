@@ -1208,20 +1208,13 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
     bHasAlpha = bIsAlpha;
 }
 
-    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const geometry::IntegerRectangle2D& rect)
+    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const geometry::IntegerRectangle2D& rect)
     {
-        const Bitmap& aBitmap( rBitmapEx.GetBitmap() );
-        Bitmap aAlpha( rBitmapEx.GetAlphaMask().GetBitmap() );
-
-        BitmapScopedReadAccess pReadAccess( aBitmap );
-        BitmapScopedReadAccess pAlphaReadAccess;
-        if (!aAlpha.IsEmpty())
-            pAlphaReadAccess = aAlpha;
-
+        BitmapScopedReadAccess pReadAccess( rBitmap );
         assert( pReadAccess );
 
         // TODO(F1): Support more formats.
-        const Size aBmpSize( aBitmap.GetSizePixel() );
+        const Size aBmpSize( rBitmap.GetSizePixel() );
 
         // for the time being, always return as BGRA
         uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
@@ -1232,30 +1225,15 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
-            if( pAlphaReadAccess.get() != nullptr )
+            for( tools::Long x=rect.X1;
+                 x<aBmpSize.Width() && x<rect.X2;
+                 ++x )
             {
-                Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
-                for( tools::Long x=rect.X1;
-                     x<aBmpSize.Width() && x<rect.X2;
-                     ++x )
-                {
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = 255 - pAlphaReadAccess->GetIndexFromData( pScanlineReadAlpha, x );
-                }
-            }
-            else
-            {
-                for( tools::Long x=rect.X1;
-                     x<aBmpSize.Width() && x<rect.X2;
-                     ++x )
-                {
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
-                    pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
-                    pRes[ nCurrPos++ ] = sal_uInt8(255);
-                }
+                BitmapColor aCol = pReadAccess->GetColor( y, x );
+                pRes[ nCurrPos++ ] = aCol.GetRed();
+                pRes[ nCurrPos++ ] = aCol.GetGreen();
+                pRes[ nCurrPos++ ] = aCol.GetBlue();
+                pRes[ nCurrPos++ ] = 255 - aCol.GetAlpha();
             }
         }
         return aRes;

@@ -115,7 +115,7 @@ namespace vclcanvas
         rLayout.ScanLineBytes = aBmpSize.Width()*4;
         rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
-        uno::Sequence< sal_Int8 > aRes = vcl::bitmap::CanvasExtractBitmapData(BitmapEx(mpBackBuffer->getBitmapReference()), rect);
+        uno::Sequence< sal_Int8 > aRes = vcl::bitmap::CanvasExtractBitmapData(mpBackBuffer->getBitmapReference(), rect);
         return aRes;
     }
 
