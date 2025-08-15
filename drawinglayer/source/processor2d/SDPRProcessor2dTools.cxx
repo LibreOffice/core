@@ -203,7 +203,7 @@ bool prepareBitmapForDirectRender(
     {
         // bitmap graphic, always handle locally, so get bitmap data independent
         // if it'sie or it's discrete display size
-        rTarget = Bitmap(rGraphic.GetBitmapEx());
+        rTarget = rGraphic.GetBitmap();
     }
     else
     {
@@ -243,7 +243,7 @@ bool prepareBitmapForDirectRender(
             // at BitmapEx is possible, just get the default fallback Bitmap from the
             // vector data to continue. Trust the existing converters for now to
             // do something with good quality.
-            rTarget = Bitmap(rGraphic.GetBitmapEx());
+            rTarget = rGraphic.GetBitmap();
         }
     }
 

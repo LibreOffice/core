@@ -175,7 +175,7 @@ namespace slideshow::internal
                 }
 
                 Graphic aGraphic(xGraphic);
-                const Bitmap aBmp(aGraphic.GetBitmapEx());
+                const Bitmap aBmp(aGraphic.GetBitmap());
 
                 uno::Reference< rendering::XBitmap > xBitmap(vcl::unotools::xBitmapFromBitmap(aBmp));
 

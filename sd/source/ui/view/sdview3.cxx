@@ -1327,15 +1327,15 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if (rDataHelper.GetGraphic(SotClipboardFormatId::GDIMETAFILE, aGraphic))
             {
-                aBmp = Bitmap(aGraphic.GetBitmapEx());
+                aBmp = aGraphic.GetBitmap();
             }
             else if (rDataHelper.GetGraphic(SotClipboardFormatId::SVXB, aGraphic))
             {
-                aBmp = Bitmap(aGraphic.GetBitmapEx());
+                aBmp = aGraphic.GetBitmap();
             }
             else if (rDataHelper.GetGraphic(SotClipboardFormatId::BITMAP, aGraphic))
             {
-                aBmp = Bitmap(aGraphic.GetBitmapEx());
+                aBmp = aGraphic.GetBitmap();
             }
         }
 

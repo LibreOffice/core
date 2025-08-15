@@ -866,7 +866,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                             const Graphic aGraphic(aFillProps.maBlipProps.mxFillGraphic);
                             ::Color nBackColor;
                             ::Color nPixelColor;
-                            bool bIs8x8 = vcl::bitmap::isHistorical8x8(Bitmap(aGraphic.GetBitmapEx()),
+                            bool bIs8x8 = vcl::bitmap::isHistorical8x8(aGraphic.GetBitmap(),
                                                                        nBackColor, nPixelColor);
                             if (bIs8x8)
                             {
@@ -880,7 +880,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                                                                     moOpacity, COL_LIGHTGRAY)
                                           .getColor(rGraphicHelper);
 
-                                XOBitmap aXOB(Bitmap(aGraphic.GetBitmapEx()));
+                                XOBitmap aXOB(aGraphic.GetBitmap());
                                 aXOB.Bitmap2Array();
                                 // LO uses the first pixel's color to represent background pixels
                                 if (aXOB.GetBackgroundColor() == COL_WHITE)

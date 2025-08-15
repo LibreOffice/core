@@ -97,7 +97,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
         else if( nFormat == SotClipboardFormatId::BITMAP )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
-            bResult = SetBitmapEx( Bitmap(aGraphic.GetBitmapEx()), rFlavor );
+            bResult = SetBitmapEx( aGraphic.GetBitmap(), rFlavor );
         }
     }
 

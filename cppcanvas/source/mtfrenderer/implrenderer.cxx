@@ -1682,7 +1682,7 @@ namespace cppcanvas::internal
                                     Graphic aGraphic;
                                     aFill.getGraphic( aGraphic );
 
-                                    Bitmap aBmp( aGraphic.GetBitmapEx() );
+                                    Bitmap aBmp( aGraphic.GetBitmap() );
                                     const ::Size aBmpSize( aBmp.GetSizePixel() );
 
                                     ::SvtGraphicFill::Transform aTransform;
