@@ -208,8 +208,7 @@ class SW_DLLPUBLIC SwFlyFrameFormat final : public sw::SpzFrameFormat
     /// A tooltip has priority over an SwFormatURL and is not persisted to files.
     OUString msTooltip;
 
-    /** Both not existent.
-       it stores the previous position of Prt rectangle from RequestObjectResize
+    /** Stores the previous position of Prt rectangle from RequestObjectResize
        so it can be used to move frames of non-resizable objects to align them correctly
        when they get borders (this is done in SwWrtShell::CalcAndGetScale) */
     Point   m_aLastFlyFramePrtRectPos;
