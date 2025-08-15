@@ -26,68 +26,55 @@
 
 namespace accessibility
 {
+// EventQueue implementation
 
+AccessibleTextEventQueue::AccessibleTextEventQueue() {}
 
-    // EventQueue implementation
+AccessibleTextEventQueue::~AccessibleTextEventQueue() { Clear(); }
 
+void AccessibleTextEventQueue::Append(const SdrHint& rHint)
+{
+    // only enqueue the events we actually care about in
+    // AccessibleTextHelper_Impl::ProcessQueue(), because
+    // the cost of some events adds up.
+    auto eKind = rHint.GetKind();
+    if (eKind == SdrHintKind::BeginEdit || eKind == SdrHintKind::EndEdit)
+        maEventQueue.push_back(new SdrHint(rHint));
+}
 
-    AccessibleTextEventQueue::AccessibleTextEventQueue()
-    {
-    }
+void AccessibleTextEventQueue::Append(const TextHint& rHint)
+{
+    maEventQueue.push_back(new TextHint(rHint));
+}
 
-    AccessibleTextEventQueue::~AccessibleTextEventQueue()
-    {
-        Clear();
-    }
+void AccessibleTextEventQueue::Append(const SvxViewChangedHint& rHint)
+{
+    maEventQueue.push_back(new SvxViewChangedHint(rHint));
+}
 
-    void AccessibleTextEventQueue::Append( const SdrHint& rHint )
-    {
-        // only enqueue the events we actually care about in
-        // AccessibleTextHelper_Impl::ProcessQueue(), because
-        // the cost of some events adds up.
-        auto eKind = rHint.GetKind();
-        if (eKind == SdrHintKind::BeginEdit
-            || eKind == SdrHintKind::EndEdit)
-            maEventQueue.push_back( new SdrHint( rHint ) );
-    }
+void AccessibleTextEventQueue::Append(const SvxEditSourceHint& rHint)
+{
+    maEventQueue.push_back(new SvxEditSourceHint(rHint));
+}
 
-    void AccessibleTextEventQueue::Append( const TextHint& rHint )
-    {
-        maEventQueue.push_back( new TextHint( rHint ) );
-    }
+::std::unique_ptr<SfxHint> AccessibleTextEventQueue::PopFront()
+{
+    assert(!maEventQueue.empty());
+    ::std::unique_ptr<SfxHint> aRes(*(maEventQueue.begin()));
+    maEventQueue.pop_front();
+    return aRes;
+}
 
-    void AccessibleTextEventQueue::Append( const SvxViewChangedHint& rHint )
-    {
-        maEventQueue.push_back( new SvxViewChangedHint( rHint ) );
-    }
+bool AccessibleTextEventQueue::IsEmpty() const { return maEventQueue.empty(); }
 
-    void AccessibleTextEventQueue::Append( const SvxEditSourceHint& rHint )
-    {
-        maEventQueue.push_back( new SvxEditSourceHint( rHint ) );
-    }
-
-    ::std::unique_ptr< SfxHint > AccessibleTextEventQueue::PopFront()
-    {
-        assert(!maEventQueue.empty());
-        ::std::unique_ptr< SfxHint > aRes( *(maEventQueue.begin()) );
-        maEventQueue.pop_front();
-        return aRes;
-    }
-
-    bool AccessibleTextEventQueue::IsEmpty() const
-    {
-        return maEventQueue.empty();
-    }
-
-    void AccessibleTextEventQueue::Clear()
-    {
-        // clear queue
-        for( auto p : maEventQueue)
-            delete p;
-        maEventQueue.clear();
-    }
+void AccessibleTextEventQueue::Clear()
+{
+    // clear queue
+    for (auto p : maEventQueue)
+        delete p;
+    maEventQueue.clear();
+}
 
 } // end of namespace accessibility
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

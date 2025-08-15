@@ -11149,8 +11149,6 @@ svx/source/accessibility/AccessibleOLEShape.cxx
 svx/source/accessibility/AccessibleShape.cxx
 svx/source/accessibility/AccessibleShapeInfo.cxx
 svx/source/accessibility/AccessibleShapeTreeInfo.cxx
-svx/source/accessibility/AccessibleTextEventQueue.cxx
-svx/source/accessibility/AccessibleTextEventQueue.hxx
 svx/source/accessibility/AccessibleTextHelper.cxx
 svx/source/accessibility/ChildrenManager.cxx
 svx/source/accessibility/ChildrenManagerImpl.cxx

@@ -32,54 +32,54 @@ class SvxEditSourceHint;
 
 namespace accessibility
 {
-    /** This class handles the notification events for the
-        AccessibleTextHelper class.
+/** This class handles the notification events for the
+    AccessibleTextHelper class.
 
-        For various reasons, we cannot process EditEngine events as
-        they arrive, but have to queue and handle them in a batch.
-     */
-    class AccessibleTextEventQueue
+    For various reasons, we cannot process EditEngine events as
+    they arrive, but have to queue and handle them in a batch.
+  */
+class AccessibleTextEventQueue
+{
+public:
+    AccessibleTextEventQueue();
+    ~AccessibleTextEventQueue();
+
+    /// Append event to end of queue
+    void Append(const SdrHint& rHint);
+    /// Append event to end of queue
+    void Append(const TextHint& rHint);
+    /// Append event to end of queue
+    void Append(const SvxViewChangedHint& rHint);
+    /// Append event to end of queue
+    void Append(const SvxEditSourceHint& rHint);
+
+    /** Pop first queue element
+
+        return first queue element, ownership transfers to caller
+    */
+    ::std::unique_ptr<SfxHint> PopFront();
+
+    /** Apply functor to every queue member
+
+        @param rFunctor
+        Functor to apply. Functor receives queue element as
+        parameter: void func( const SfxHint* );
+    */
+    template <typename Functor> void ForEach(Functor& rFunctor) const
     {
-    public:
-        AccessibleTextEventQueue();
-        ~AccessibleTextEventQueue();
+        // #109864# Make sure results are put back into rFunctor
+        rFunctor = ::std::for_each(maEventQueue.begin(), maEventQueue.end(), rFunctor);
+    }
 
-        /// Append event to end of queue
-        void Append( const SdrHint& rHint );
-        /// Append event to end of queue
-        void Append( const TextHint& rHint );
-        /// Append event to end of queue
-        void Append( const SvxViewChangedHint& rHint );
-        /// Append event to end of queue
-        void Append( const SvxEditSourceHint& rHint );
+    /// Query whether queue is empty
+    bool IsEmpty() const;
 
-        /** Pop first queue element
+    /// Clear event queue
+    void Clear();
 
-            return first queue element, ownership transfers to caller
-        */
-        ::std::unique_ptr< SfxHint > PopFront();
-
-        /** Apply functor to every queue member
-
-            @param rFunctor
-            Functor to apply. Functor receives queue element as
-            parameter: void func( const SfxHint* );
-        */
-        template < typename Functor > void ForEach( Functor& rFunctor ) const
-        {
-            // #109864# Make sure results are put back into rFunctor
-            rFunctor = ::std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
-        }
-
-        /// Query whether queue is empty
-        bool IsEmpty() const;
-
-        /// Clear event queue
-        void Clear();
-
-    private:
-        std::deque<SfxHint*> maEventQueue;
-    };
+private:
+    std::deque<SfxHint*> maEventQueue;
+};
 
 } // end of namespace accessibility
 
