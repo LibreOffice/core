@@ -1094,7 +1094,9 @@ namespace svt
         virtual void ChildFocusIn() override;
         virtual void ChildFocusOut() override;
 
-        css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        rtl::Reference<comphelper::OAccessible>
+        CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,
+                                     const TriState& eState);
         bool ControlHasFocus() const;
     protected:
         // creates the accessible which wraps the active cell

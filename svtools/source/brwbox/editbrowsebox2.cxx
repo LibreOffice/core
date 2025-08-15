@@ -35,19 +35,16 @@ namespace svt
     using namespace com::sun::star::uno;
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
-
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,const TriState& eState)
+rtl::Reference<comphelper::OAccessible>
+EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _nRow, sal_uInt16 _nColumnPos,
+                                            const TriState& eState)
 {
-    Reference< XAccessible > xAccessible( GetAccessible() );
-    if ( !xAccessible.is() )
-        return nullptr;
+    rtl::Reference<comphelper::OAccessible> pAccessible = GetAccessible();
+    if (!pAccessible.is())
+        return {};
 
-    Reference< XAccessibleContext > xAccContext = xAccessible->getAccessibleContext();
-    if ( !xAccContext.is() )
-        return nullptr;
-
-    return new AccessibleCheckBoxCell(xAccContext->getAccessibleChild(::vcl::BBINDEX_TABLE),
-                                         *this, _nRow, _nColumnPos, eState, true);
+    return new AccessibleCheckBoxCell(pAccessible->getAccessibleChild(::vcl::BBINDEX_TABLE),
+                                      *this, _nRow, _nColumnPos, eState, true);
 }
 
 sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
