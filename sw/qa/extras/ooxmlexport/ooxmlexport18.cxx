@@ -204,6 +204,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf164500_framePrBeforeTable, "tdf164500_framePrBef
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf164500_framePrBeforeTable2, "tdf164500_framePrBeforeTable2.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Everything should fit on one page", 1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.docx")
 {
     // This was only one page b/c the page break was missing.

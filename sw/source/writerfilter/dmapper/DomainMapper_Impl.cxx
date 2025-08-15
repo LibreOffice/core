@@ -2628,8 +2628,14 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                                                              uno::UNO_QUERY);
                             xMPS->setAllPropertiesToDefault();
                             uno::Reference<beans::XPropertySet> xPS(xCursor, uno::UNO_QUERY);
+                            // try to make this additional paragraph inconspicuous
                             xPS->setPropertyValue(u"ParaStyleName"_ustr,
                                                   uno::Any(u"Standard"_ustr));
+                            xPS->setPropertyValue(u"CharHeight"_ustr, uno::Any(float(2.0)));
+                            xPS->setPropertyValue(u"ParaTopMargin"_ustr, uno::Any(sal_Int32(0)));
+                            xPS->setPropertyValue(u"ParaBottomMargin"_ustr, uno::Any(sal_Int32(0)));
+                            const style::LineSpacing aSingle(style::LineSpacingMode::PROP, 100);
+                            xPS->setPropertyValue(u"ParaLineSpacing"_ustr, uno::Any(aSingle));
                         }
 
                         // If different frame properties are set on this paragraph, keep them.
