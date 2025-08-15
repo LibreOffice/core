@@ -34,9 +34,7 @@ std::unique_ptr<SfxTabPage> WhatsNewTabPage::Create(weld::Container* pPage,
     return std::make_unique<WhatsNewTabPage>(pPage, pController, *rAttr);
 }
 
-void WhatsNewTabPage::Reset(const SfxItemSet* rSet) { ActivatePage(*rSet); }
-
-void WhatsNewTabPage::ActivatePage(const SfxItemSet& /* rSet */)
+void WhatsNewTabPage::Reset(const SfxItemSet* /* rSet */)
 {
     const Size aGraphicSize = m_aBrand.GetGraphicSize();
     m_pBrand->set_size_request(aGraphicSize.getWidth(), aGraphicSize.getHeight());

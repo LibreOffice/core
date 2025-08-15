@@ -87,8 +87,6 @@ private:
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();
 
-    virtual void ActivatePage(const SfxItemSet&) override;
-
 public:
     SvxAppearanceTabPage(weld::Container* pPage, weld::DialogController* pController,
                          const SfxItemSet& rSet);

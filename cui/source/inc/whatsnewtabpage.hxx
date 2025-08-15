@@ -33,7 +33,6 @@ private:
     BrandGraphic m_aBrand;
     std::unique_ptr<weld::CustomWeld> m_pBrand;
 
-    virtual void ActivatePage(const SfxItemSet&) override;
     virtual void Reset(const SfxItemSet* rSet) override;
 
 public:
