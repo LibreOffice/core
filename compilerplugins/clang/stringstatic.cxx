@@ -10,6 +10,7 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /** Look for static O*String and O*String[] which can be constepxr.
@@ -74,9 +75,23 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
                         return true;
                     }
                     expr = constructExpr->getArg(0);
-                } else if (isa<CallExpr>(expr)) {
-                    return true;
+                }
+                else if (auto const ile = dyn_cast<InitListExpr>(expr)) {
+                    // This covers the
+                    //     static const OUString A1[1] = { u"xxx"_ustr };
+                    // in compilerplugins/clang/test/stringstatic.cxx, but not sure how useful it is
+                    // in general:
+                    if (ile->getNumInits() != 1) {
+                        return true;
+                    }
+                    expr = ile->getInit(0);
+                    if (isa<UserDefinedLiteral>(compat::IgnoreParenImplicit(expr))) {
+                        break;
+                    }
                 } else {
+                    if (!expr->isConstantInitializer(compiler.getASTContext(), false)) {
+                        return true;
+                    }
                     break;
                 }
             }
