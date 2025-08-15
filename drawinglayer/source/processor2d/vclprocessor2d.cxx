@@ -429,6 +429,9 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                             SAL_WARN("drawinglayer", "skipping invalid scaling");
                         else
                         {
+                            assert(nFontScalingFixX != 0 && nFontScalingFixY != 0
+                                   && "or bValidScaling would be false");
+
                             Point origin = aMapMode.GetOrigin();
 
                             mpOutputDevice->Push(vcl::PushFlags::MAPMODE);
