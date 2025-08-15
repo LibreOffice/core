@@ -197,8 +197,7 @@ ChartThemePopup::~ChartThemePopup()
 
 VclPtr<VirtualDevice> ChartThemePopup::makeImage(int nIndex)
 {
-    ScopedVclPtr<VirtualDevice> device1
-        = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+    VclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device1->SetOutputSizePixel(Size(ChartThemeThumbSizeX, ChartThemeThumbSizeY));
 
     VclPtr<VirtualDevice> pDefaultOut = mxControl->mpHandler->makePictureFromThemedChart(nIndex);
@@ -211,7 +210,7 @@ VclPtr<VirtualDevice> ChartThemePopup::makeImage(int nIndex)
         device1->DrawBitmap(Point(0, 0), aBmp);
         pDefaultOut.disposeAndClear();
     }
-    return std::move(device1);
+    return device1;
 }
 
 void ChartThemePopup::GrabFocus() {}

@@ -10,6 +10,7 @@
 #pragma once
 
 #include <svl/itempool.hxx>
+#include <svx/svxdllapi.h>
 #include <com/sun/star/uno/Any.h>
 
 //#include <vector>
@@ -22,11 +23,6 @@ constexpr int ChartThemeThumbSizeX = 192;
 constexpr int ChartThemeThumbSizeY = 140;
 
 constexpr OUString sUnoChartTheme = u".uno:ChartTheme"_ustr;
-
-// TODO: find a less hacky way to make chart thumnbail render to lower resolution
-// Set this to true only while a thumbnail of a chart is rendered, and set it back to false
-// used in drawinglayer/source/primitive2d/sceneprimitive2d.cxx to save performance.
-static bool bChartThumbnailRendered = false;
 
 // Properties of a chart element, like Title.
 // At first it contained properties only from Font, and Font Effect dialog tab panel.

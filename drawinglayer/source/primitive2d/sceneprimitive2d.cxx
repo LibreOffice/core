@@ -131,6 +131,8 @@ namespace
 
 namespace drawinglayer::primitive2d
 {
+        bool bChartThumbnailRendered = false;
+
         bool ScenePrimitive2D::impGetShadow3D() const
         {
             // create on demand
@@ -249,7 +251,7 @@ namespace drawinglayer::primitive2d
             const double fViewVisibleArea(fViewSizeX * fViewSizeY);
             double fMaximumVisibleArea(officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get());
             // Todo: find a better way, to render lower resolution chart thumbnails.
-            if (chart::bChartThumbnailRendered)
+            if (bChartThumbnailRendered)
             {
                 fMaximumVisibleArea = fMaximumVisibleArea / 100;
             }

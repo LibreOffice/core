@@ -34,6 +34,7 @@
 #include <algorithm>
 
 #include <comphelper/processfactory.hxx>
+#include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <unotools/fcm.hxx>
 
 using namespace css;
@@ -107,8 +108,7 @@ VclPtr<VirtualDevice> ThemeWrapper::makePictureFromThemedChart(sal_uInt32 nIndex
         pController2->setTheme(nIndex);
 
         //make a picture from it
-        ScopedVclPtr<VirtualDevice> device1
-            = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+        VclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
 
         awt::Size aSize = mxModel->getVisualAreaSize(1);
 
@@ -127,12 +127,12 @@ VclPtr<VirtualDevice> ThemeWrapper::makePictureFromThemedChart(sal_uInt32 nIndex
         device1->SetOutputSize(Size(aSize.Width / scale, aSize.Height / scale));
 
         pController2->PrePaint();
-        bChartThumbnailRendered = true;
+        drawinglayer::primitive2d::bChartThumbnailRendered = true;
         pController2->execute_Paint(
             *device1, tools::Rectangle(0, 0, aSize.Width / scale, aSize.Height / scale));
-        bChartThumbnailRendered = false;
+        drawinglayer::primitive2d::bChartThumbnailRendered = false;
 
-        return std::move(device1);
+        return device1;
     }
     return nullptr;
 }
