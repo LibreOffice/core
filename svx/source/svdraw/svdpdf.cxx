@@ -97,6 +97,8 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())
 {
+    // Same as SdModule
+    mpVD->SetReferenceDevice(VirtualDevice::RefDevMode::Dpi600);
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
     mpVD->SetFillColor();
