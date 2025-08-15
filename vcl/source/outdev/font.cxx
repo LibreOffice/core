@@ -815,17 +815,20 @@ bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight)
     const float fStretch = fNumerator / fDenominator;
     const int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
     const int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
-    bool bRet = true;
-    if (nNewWidth != nOrigWidth && nNewWidth != 0)
-    {
-        Size aOrigSize = rFont.GetFontSize();
-        rFont.SetFontSize(Size(nNewWidth, nHeight));
-        mbMap = false;
-        mbNewFont = true;
-        bRet = ImplNewFont();  // recurse once using stretched width
-        mbMap = true;
-        rFont.SetFontSize(aOrigSize);
-    }
+
+    if (nNewWidth == nOrigWidth || nNewWidth == 0)
+        return true;
+
+    Size aOrigSize = rFont.GetFontSize();
+    rFont.SetFontSize(Size(nNewWidth, nHeight));
+    mbMap = false;
+    mbNewFont = true;
+
+    const bool bRet = ImplNewFont();  // recurse once using stretched width
+
+    mbMap = true;
+    rFont.SetFontSize(aOrigSize);
+
     return bRet;
 }
 
