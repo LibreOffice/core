@@ -1291,7 +1291,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDeleteThenFormatOdtExport)
     // Given a document that has a delete redline, and then a format redline on top of it:
     loadFromFile(u"del-then-format.docx");
 
-    // When exporting that to DOCX:
+    // When exporting that to ODT:
     save(u"writer8"_ustr);
 
     // Then make sure <text:changed-region> not only has the <text:format-change> child, but also an
@@ -1305,6 +1305,25 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDeleteThenFormatOdtExport)
     assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region[2]/text:deletion");
     // Also the delete's text was in the body text.
     assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region[2]/text:deletion/text:p");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharProps)
+{
+    // Given a document with a format redline, the redline contains the old char props:
+    loadFromFile(u"redline-format-char-props.docx");
+
+    // When exporting that to ODT:
+    save(u"writer8"_ustr);
+
+    // Then make sure <text:format-change> refers to an autostyle that describes those old char
+    // props:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//text:tracked-changes/text:changed-region/text:format-change' no attribute 'style-name' exist
+    OUString aStyleName = getXPath(
+        pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change", "style-name");
+    CPPUNIT_ASSERT(!aStyleName.isEmpty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

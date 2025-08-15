@@ -607,6 +607,7 @@ inline constexpr OUString UNO_NAME_REDLINE_DESCRIPTION = u"RedlineDescription"_u
 inline constexpr OUString UNO_NAME_REDLINE_TYPE = u"RedlineType"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_SUCCESSOR_DATA = u"RedlineSuccessorData"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_IDENTIFIER = u"RedlineIdentifier"_ustr;
+inline constexpr OUString UNO_NAME_REDLINE_AUTO_FORMAT = u"RedlineAutoFormat"_ustr;
 inline constexpr OUString UNO_NAME_IS_IN_HEADER_FOOTER = u"IsInHeaderFooter"_ustr;
 inline constexpr OUString UNO_NAME_START_REDLINE = u"StartRedline"_ustr;
 inline constexpr OUString UNO_NAME_END_REDLINE = u"EndRedline"_ustr;
