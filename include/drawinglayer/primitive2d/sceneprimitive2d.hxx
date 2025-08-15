@@ -31,6 +31,11 @@
 
 namespace drawinglayer::primitive2d
 {
+        // TODO: find a less hacky way to make chart thumnbail render to lower resolution
+        // Set this to true only while a thumbnail of a chart is rendered, and set it back to false
+        // used in drawinglayer/source/primitive2d/sceneprimitive2d.cxx to save performance.
+        extern DRAWINGLAYER_DLLPUBLIC bool bChartThumbnailRendered;
+
         /** ScenePrimitive2D class
 
             This primitive defines a 3D scene as a 2D primitive and is the anchor point

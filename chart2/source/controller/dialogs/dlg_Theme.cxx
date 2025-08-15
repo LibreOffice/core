@@ -20,6 +20,7 @@
 #include <dlg_Theme.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <unotools/fcm.hxx>
 #include <vcl/virdev.hxx>
 #include <ChartModelHelper.hxx>
@@ -106,10 +107,10 @@ VclPtr<VirtualDevice> SchThemeDlg::makeImage(int nIndex)
 
     pController2->PrePaint();
     //pController2->execute_Paint(*device1, tools::Rectangle(0, 0, aSize.Width, aSize.Height));
-    bChartThumbnailRendered = true;
+    drawinglayer::primitive2d::bChartThumbnailRendered = true;
     pController2->execute_Paint(*device2,
                                 tools::Rectangle(0, 0, aSize.Width / scale, aSize.Height / scale));
-    bChartThumbnailRendered = false;
+    drawinglayer::primitive2d::bChartThumbnailRendered = false;
     aMTF.Stop();
     aMTF.WindStart();
     aMTF.Scale(1 / 64.0, 1 / 64.0);
@@ -117,8 +118,7 @@ VclPtr<VirtualDevice> SchThemeDlg::makeImage(int nIndex)
     aMTF.Play(*device2);
 
     //scale it into a fixed small image
-    ScopedVclPtr<VirtualDevice> device1
-        = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+    VclPtr<VirtualDevice> device1 = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device1->SetOutputSizePixel(Size(ChartThemeThumbSizeX, ChartThemeThumbSizeY));
     device1->SetBackground(Wallpaper(COL_YELLOW));
     device1->Erase();
@@ -129,7 +129,7 @@ VclPtr<VirtualDevice> SchThemeDlg::makeImage(int nIndex)
     device1->DrawBitmapEx(Point(0, 0), aBmpEx);
     device2.disposeAndClear();
 
-    return std::move(device1);
+    return device1;
 }
 
 IMPL_LINK_NOARG(SchThemeDlg, ClickSaveHdl, weld::Button&, void)
