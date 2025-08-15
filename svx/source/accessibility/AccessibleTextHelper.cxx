@@ -1117,170 +1117,168 @@ void AccessibleTextHelper_Impl::ProcessQueue()
     while( !maEventQueue.IsEmpty() )
     {
         ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
-        if (pHint)
+        assert(pHint);
+        const SfxHint& rHint = *pHint;
+
+        // Note, if you add events here, you need to update the AccessibleTextEventQueue::Append
+        // code, because only the events we process here, are actually queued there.
+
+        try
         {
-            const SfxHint& rHint = *pHint;
 
-            // Note, if you add events here, you need to update the AccessibleTextEventQueue::Append
-            // code, because only the events we process here, are actually queued there.
-
-            try
+            if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
             {
+                const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
 
-                if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
+                switch( pSdrHint->GetKind() )
                 {
-                    const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
-
-                    switch( pSdrHint->GetKind() )
+                    case SdrHintKind::BeginEdit:
                     {
-                        case SdrHintKind::BeginEdit:
+                        if(!IsActive())
                         {
-                            if(!IsActive())
-                            {
-                                break;
-                            }
-                            // change children state
-                            maParaManager.SetActive();
-
-                            // per definition, edit mode text has the focus
-                            SetFocus( true );
                             break;
                         }
+                        // change children state
+                        maParaManager.SetActive();
 
-                        case SdrHintKind::EndEdit:
-                        {
-                            // focused child now loses focus
-                            ESelection aSelection;
-                            if( GetEditViewForwarder().GetSelection( aSelection ) )
-                                SetChildFocus(aSelection.end.nPara, false);
-
-                            // change children state
-                            maParaManager.SetActive( false );
-
-                            maLastSelection = ESelection::AtEnd();
-                            break;
-                        }
-                        default:
-                            break;
+                        // per definition, edit mode text has the focus
+                        SetFocus( true );
+                        break;
                     }
-                }
-                else if( const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint ) )
-                {
-                    switch( pEditSourceHint->GetId() )
+
+                    case SdrHintKind::EndEdit:
                     {
-                        case SfxHintId::EditSourceParasMoved:
-                        {
-                            DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
-                                        pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
-                                        "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
+                        // focused child now loses focus
+                        ESelection aSelection;
+                        if( GetEditViewForwarder().GetSelection( aSelection ) )
+                            SetChildFocus(aSelection.end.nPara, false);
 
-                            if( !bEverythingUpdated )
-                            {
-                                ParagraphsMoved(pEditSourceHint->GetStartValue(),
-                                                pEditSourceHint->GetValue(),
-                                                pEditSourceHint->GetEndValue());
+                        // change children state
+                        maParaManager.SetActive( false );
 
-                                // in all cases, check visibility afterwards.
-                                UpdateVisibleChildren();
-                            }
-                            break;
-                        }
-
-                        case SfxHintId::EditSourceSelectionChanged:
-                            // notify listeners
-                            try
-                            {
-                                UpdateSelection();
-                            }
-                            // maybe we're not in edit mode (this is not an error)
-                            catch( const uno::Exception& ) {}
-                            break;
-                        default: break;
+                        maLastSelection = ESelection::AtEnd();
+                        break;
                     }
+                    default:
+                        break;
                 }
-                else if( const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint ) )
+            }
+            else if( const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint ) )
+            {
+                switch( pEditSourceHint->GetId() )
                 {
-                    const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
-
-                    switch( pTextHint->GetId() )
+                    case SfxHintId::EditSourceParasMoved:
                     {
-                        case SfxHintId::TextModified:
+                        DBG_ASSERT( pEditSourceHint->GetStartValue() < GetTextForwarder().GetParagraphCount() &&
+                                    pEditSourceHint->GetEndValue() < GetTextForwarder().GetParagraphCount(),
+                                    "AccessibleTextHelper_Impl::NotifyHdl: Invalid notification");
+
+                        if( !bEverythingUpdated )
                         {
-                            // notify listeners
-                            sal_Int32 nPara( pTextHint->GetValue() );
+                            ParagraphsMoved(pEditSourceHint->GetStartValue(),
+                                            pEditSourceHint->GetValue(),
+                                            pEditSourceHint->GetEndValue());
 
-                            // #108900# Delegate change event to children
-                            AccessibleTextHelper_ChildrenTextChanged aNotifyChildrenFunctor;
+                            // in all cases, check visibility afterwards.
+                            UpdateVisibleChildren();
+                        }
+                        break;
+                    }
 
-                            if (nPara == EE_PARA_MAX)
+                    case SfxHintId::EditSourceSelectionChanged:
+                        // notify listeners
+                        try
+                        {
+                            UpdateSelection();
+                        }
+                        // maybe we're not in edit mode (this is not an error)
+                        catch( const uno::Exception& ) {}
+                        break;
+                    default: break;
+                }
+            }
+            else if( const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint ) )
+            {
+                const sal_Int32 nParas = GetTextForwarder().GetParagraphCount();
+
+                switch( pTextHint->GetId() )
+                {
+                    case SfxHintId::TextModified:
+                    {
+                        // notify listeners
+                        sal_Int32 nPara( pTextHint->GetValue() );
+
+                        // #108900# Delegate change event to children
+                        AccessibleTextHelper_ChildrenTextChanged aNotifyChildrenFunctor;
+
+                        if (nPara == EE_PARA_MAX)
+                        {
+                            // #108900# Call every child
+                            ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                                             AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
+                        }
+                        else
+                            if( nPara < nParas )
                             {
-                                // #108900# Call every child
-                                ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                                // #108900# Call child at index nPara
+                                ::std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
                                                  AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
                             }
-                            else
-                                if( nPara < nParas )
-                                {
-                                    // #108900# Call child at index nPara
-                                    ::std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
-                                                     AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aNotifyChildrenFunctor) );
-                                }
-                            break;
-                        }
-
-                        case SfxHintId::TextParaInserted:
-                            // already happened above
-                            break;
-
-                        case SfxHintId::TextParaRemoved:
-                            // already happened above
-                            break;
-
-                        case SfxHintId::TextHeightChanged:
-                            // visibility changed, done below
-                            break;
-
-                        case SfxHintId::TextViewScrolled:
-                            // visibility changed, done below
-                            break;
-                        default: break;
+                        break;
                     }
 
-                    // in all cases, check visibility afterwards.
-                    if (!bUpdatedBoundRectAndVisibleChildren)
-                    {
-                        UpdateVisibleChildren();
-                        UpdateBoundRect();
-                        bUpdatedBoundRectAndVisibleChildren = true;
-                    }
+                    case SfxHintId::TextParaInserted:
+                        // already happened above
+                        break;
+
+                    case SfxHintId::TextParaRemoved:
+                        // already happened above
+                        break;
+
+                    case SfxHintId::TextHeightChanged:
+                        // visibility changed, done below
+                        break;
+
+                    case SfxHintId::TextViewScrolled:
+                        // visibility changed, done below
+                        break;
+                    default: break;
                 }
-                else if (rHint.GetId() == SfxHintId::SvxViewChanged)
+
+                // in all cases, check visibility afterwards.
+                if (!bUpdatedBoundRectAndVisibleChildren)
                 {
-                    // just check visibility
-                    if (!bUpdatedBoundRectAndVisibleChildren)
-                    {
-                        UpdateVisibleChildren();
-                        UpdateBoundRect();
-                        bUpdatedBoundRectAndVisibleChildren = true;
-                    }
-                }
-                // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
-                else if( rHint.GetId() == SfxHintId::Dying)
-                {
-                    // edit source is dying under us, become defunc then
-                    try
-                    {
-                        // make edit source inaccessible
-                        // Note: cannot destroy it here, since we're called from there!
-                        ShutdownEditSource();
-                    }
-                    catch( const uno::Exception& ) {}
+                    UpdateVisibleChildren();
+                    UpdateBoundRect();
+                    bUpdatedBoundRectAndVisibleChildren = true;
                 }
             }
-            catch( const uno::Exception& )
+            else if (rHint.GetId() == SfxHintId::SvxViewChanged)
             {
-                DBG_UNHANDLED_EXCEPTION("svx");
+                // just check visibility
+                if (!bUpdatedBoundRectAndVisibleChildren)
+                {
+                    UpdateVisibleChildren();
+                    UpdateBoundRect();
+                    bUpdatedBoundRectAndVisibleChildren = true;
+                }
             }
+            // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
+            else if( rHint.GetId() == SfxHintId::Dying)
+            {
+                // edit source is dying under us, become defunc then
+                try
+                {
+                    // make edit source inaccessible
+                    // Note: cannot destroy it here, since we're called from there!
+                    ShutdownEditSource();
+                }
+                catch( const uno::Exception& ) {}
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
         }
     }
 }

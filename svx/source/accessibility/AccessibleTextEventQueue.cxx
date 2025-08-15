@@ -68,6 +68,7 @@ namespace accessibility
 
     ::std::unique_ptr< SfxHint > AccessibleTextEventQueue::PopFront()
     {
+        assert(!maEventQueue.empty());
         ::std::unique_ptr< SfxHint > aRes( *(maEventQueue.begin()) );
         maEventQueue.pop_front();
         return aRes;
