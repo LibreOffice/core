@@ -28,6 +28,8 @@
 class SwPaM;
 class SwTextNode;
 
+/// SwTextAttr subclass for fields, i.e. this is a 'hint' on a dummy character that will be expanded
+/// to a string by the layout. GetFormatField() gives access to the underlying SwFormatField.
 class SAL_DLLPUBLIC_RTTI SwTextField : public virtual SwTextAttr
 {
     mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTextField()>
