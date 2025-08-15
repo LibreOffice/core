@@ -173,17 +173,6 @@ std::unique_ptr<SfxTabPage> SvxAppearanceTabPage::Create(weld::Container* pPage,
     return std::make_unique<SvxAppearanceTabPage>(pPage, pController, *rSet);
 }
 
-void SvxAppearanceTabPage::ActivatePage(const SfxItemSet& /* rSet */)
-{
-    auto& aProperties = getAdditionalProperties();
-    auto aIterator = aProperties.find(u"HideAdvancedControls"_ustr);
-    if (aIterator != aProperties.end())
-    {
-        m_xSizeGrid->set_visible(false);
-        m_xCustomizationFrame->set_visible(false);
-    }
-}
-
 OUString SvxAppearanceTabPage::GetAllStrings()
 {
     OUString sAllStrings;
@@ -208,10 +197,16 @@ bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
     return true;
 }
 
-void SvxAppearanceTabPage::Reset(const SfxItemSet* rSet)
+void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
 {
     // hide advanced controls
-    ActivatePage(*rSet);
+    auto& aProperties = getAdditionalProperties();
+    auto aIterator = aProperties.find(u"HideAdvancedControls"_ustr);
+    if (aIterator != aProperties.end())
+    {
+        m_xSizeGrid->set_visible(false);
+        m_xCustomizationFrame->set_visible(false);
+    }
 
     // reset scheme list
     LoadSchemeList();
