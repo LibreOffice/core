@@ -1,0 +1,42 @@
+From 135488419331644e59091ecc73e682299d3937a4 Mon Sep 17 00:00:00 2001
+From: Devon Loehr <dloehr@google.com>
+Date: Fri, 15 Aug 2025 14:31:27 +0000
+Subject: Change use of removed intrinsic
+
+A recent LLVM change removed the __builtin_ia32_vcvtph2ps256 intrinsic
+because it can be implemented using __builtin_shufflevector and/or
+__builtin_convertvector. This CL changes skia to use convertvector as
+to match.
+
+Bug: chromium:438445382
+Change-Id: I2ed16cd507d7feeafba4c082b3840cbdd6368dd9
+Reviewed-on: https://skia-review.googlesource.com/c/skcms/+/1038217
+Reviewed-by: Ben Wagner <bungeman@google.com>
+Commit-Queue: Ben Wagner <bungeman@google.com>
+Auto-Submit: Devon Loehr <dloehr@google.com>
+---
+ src/Transform_inl.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Transform_inl.h b/src/Transform_inl.h
+index bc10e7d..99faf25 100644
+--- a/modules/skcms/src/Transform_inl.h
++++ b/modules/skcms/src/Transform_inl.h
+@@ -156,8 +156,12 @@ SI F F_from_Half(U16 half) {
+ #elif defined(USING_AVX512F)
+     return (F)_mm512_cvtph_ps((__m256i)half);
+ #elif defined(USING_AVX_F16C)
+-    typedef int16_t __attribute__((vector_size(16))) I16;
+-    return __builtin_ia32_vcvtph2ps256((I16)half);
++#if defined __clang__
++    typedef __fp16 __attribute__((vector_size(16))) F16;
++#else
++    typedef _Float16 __attribute__((vector_size(16))) F16;
++#endif
++    return __builtin_convertvector((F16)half, F);
+ #else
+     U32 wide = cast<U32>(half);
+     // A half is 1-5-10 sign-exponent-mantissa, with 15 exponent bias.
+-- 
+2.50.1
+

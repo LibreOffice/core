@@ -41,6 +41,7 @@ skia_patches := \
     help-msvc-analyzer.patch \
     always_inline_and_multiversioning_conflict.patch.1 \
     windows-define-conflict.patch.1 \
+    modified-skcms-0001-Change-use-of-removed-intrinsic.patch \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
