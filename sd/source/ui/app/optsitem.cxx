@@ -566,22 +566,27 @@ void SdOptionsGrid::GetPropNameArray( const char* const*& ppNames, sal_uLong& rC
     }
 }
 
+static sal_uInt32 getDivisor(const Any& rValue)
+{
+    if (rValue.hasValue())
+    {
+        sal_uInt32 nDiv = basegfx::fround<sal_uInt32>(*o3tl::doAccess<double>(rValue));
+        return nDiv + 1;
+    }
+    return 0;
+}
+
 bool SdOptionsGrid::ReadData( const Any* pValues )
 {
     if( pValues[0].hasValue() ) SetFieldDrawX( *o3tl::doAccess<sal_Int32>(pValues[ 0 ]) );
     if( pValues[1].hasValue() ) SetFieldDrawY( *o3tl::doAccess<sal_Int32>(pValues[ 1 ]) );
 
-    if( pValues[2].hasValue() )
-    {
-        const sal_uInt32 nDivX = basegfx::fround<sal_uInt32>(*o3tl::doAccess<double>(pValues[2]));
-        SetFieldDivisionX( SvxOptionsGrid::GetFieldDrawX() / ( nDivX + 1 ) );
-    }
+    if (const sal_uInt32 nDivX = getDivisor(pValues[2]))
+        SetFieldDivisionX(SvxOptionsGrid::GetFieldDrawX() / nDivX);
 
-    if( pValues[3].hasValue() )
-    {
-        const sal_uInt32 nDivY = basegfx::fround<sal_uInt32>(*o3tl::doAccess<double>(pValues[3]));
-        SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
-    }
+    if (const sal_uInt32 nDivY = getDivisor(pValues[3]))
+        SetFieldDivisionY(SvxOptionsGrid::GetFieldDrawY() / nDivY);
+
     if( pValues[4].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 4 ]) );
     if( pValues[5].hasValue() ) SetSynchronize( *o3tl::doAccess<bool>(pValues[ 5 ]) );
     if( pValues[6].hasValue() ) SetGridVisible( *o3tl::doAccess<bool>(pValues[ 6 ]) );
