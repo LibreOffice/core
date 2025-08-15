@@ -811,30 +811,24 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
 struct MessageBoxTypeInfo
 {
     css::awt::MessageBoxType eType;
-    const char              *pName;
-    sal_Int32                nLen;
+    OUString sName;
 };
 
-const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
+constexpr MessageBoxTypeInfo aMessageBoxTypeInfo[] =
 {
-    { css::awt::MessageBoxType_MESSAGEBOX,      RTL_CONSTASCII_STRINGPARAM("messbox") },
-    { css::awt::MessageBoxType_INFOBOX,         RTL_CONSTASCII_STRINGPARAM("infobox") },
-    { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
-    { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
-    { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
-    { css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
+    { css::awt::MessageBoxType_MESSAGEBOX, u"messbox"_ustr },
+    { css::awt::MessageBoxType_INFOBOX, u"infobox"_ustr },
+    { css::awt::MessageBoxType_WARNINGBOX, u"warningbox"_ustr },
+    { css::awt::MessageBoxType_ERRORBOX, u"errorbox"_ustr },
+    { css::awt::MessageBoxType_QUERYBOX, u"querybox"_ustr }
 };
 
 OUString lcl_convertMessageBoxType(css::awt::MessageBoxType eType)
 {
-    const MessageBoxTypeInfo* pMap = aMessageBoxTypeInfo;
-    while ( pMap->pName )
+    for (const MessageBoxTypeInfo& rInfo : aMessageBoxTypeInfo)
     {
-        if ( pMap->eType == eType )
-        {
-            return OUString(pMap->pName, pMap->nLen, RTL_TEXTENCODING_ASCII_US);
-        }
-        pMap++;
+        if (rInfo.eType == eType)
+            return rInfo.sName;
     }
 
     return OUString();
