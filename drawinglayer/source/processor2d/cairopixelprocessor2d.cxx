@@ -1217,7 +1217,7 @@ Bitmap CairoPixelProcessor2D::extractBitmap() const
     }
 
     // construct and return Bitmap
-    aRetval = aBitmap;
+    aRetval = std::move(aBitmap);
 
     if (pReadSource != pSource)
     {
