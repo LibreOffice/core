@@ -195,10 +195,9 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(vcl::PushFlags::CLIPREGION);
+        auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataAuthor->get_label());
-        pDev->Pop();
     }
 
     if (mxMetadataDate->get_visible())
@@ -208,10 +207,9 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(vcl::PushFlags::CLIPREGION);
+        auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataDate->get_label());
-        pDev->Pop();
     }
 
     if (mxMetadataResolved->get_visible())
@@ -221,10 +219,9 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
         Point aPos(rPt + PixelToLogic(Point(x, y)));
         Size aSize(PixelToLogic(Size(width, height)));
 
-        pDev->Push(vcl::PushFlags::CLIPREGION);
+        auto popIt1 = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
         pDev->IntersectClipRegion(tools::Rectangle(aPos, aSize));
         pDev->DrawText(aPos, mxMetadataResolved->get_label());
-        pDev->Pop();
     }
 
     mxSidebarTextControl->DrawForPage(pDev, rPt);

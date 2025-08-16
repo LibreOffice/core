@@ -2388,13 +2388,12 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     OSL_ENSURE(pOut, "Impossible");
     if (pOut)
     {
-        pOut->Push( vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE );
+        auto popIt = pOut->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
         pOut->SetMapMode( MapMode( MapUnit::Map100thMM ));
         pOut->SetFont( aFont );
         aRet.Width  = pOut->GetTextWidth(rString);
         aRet.Width += 500; //plus size of button, total hack territory
         aRet.Height = pOut->GetTextHeight();
-        pOut->Pop();
     }
     return aRet;
 }

@@ -115,12 +115,11 @@ static void calcFontHeightAnyAscent(vcl::RenderContext& rWin, vcl::Font const & 
 {
     if ( !_nHeight )
     {
-        rWin.Push(vcl::PushFlags::FONT);
+        auto popIt = rWin.ScopedPush(vcl::PushFlags::FONT);
         rWin.SetFont(_rFont);
         FontMetric aMetric(rWin.GetFontMetric());
         _nHeight = aMetric.GetLineHeight();
         _nAscent = aMetric.GetAscent();
-        rWin.Pop();
     }
 }
 

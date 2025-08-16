@@ -668,7 +668,7 @@ sal_Int32 SwSrcView::PrintSource(
     //! But since HTML source code is expected to be just a small number of pages
     //! even this poor algorithm should be enough...
 
-    pOutDev->Push();
+    auto popIt = pOutDev->ScopedPush();
 
     TextEngine* pTextEngine = m_aEditWin->GetTextEngine();
     pOutDev->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -726,8 +726,6 @@ sal_Int32 SwSrcView::PrintSource(
         }
         aPos.AdjustY(nParaSpace );
     }
-
-    pOutDev->Pop();
 
     OSL_ENSURE( bCalcNumPagesOnly || nPage <= nCurPage, "page number out of range" );
     return nCurPage;

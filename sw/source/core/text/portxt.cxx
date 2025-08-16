@@ -1011,11 +1011,10 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
             && !rInf.GetOpt().IsPagePreview())
         {
             OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
-            pOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+            auto popIt = pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             pOut->SetFillColor(rInf.GetOpt().GetFieldShadingsColor());
             pOut->SetLineColor();
             pOut->DrawRect(aIntersect.SVRect());
-            pOut->Pop();
         }
     }
 }

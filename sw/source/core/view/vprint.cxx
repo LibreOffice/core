@@ -587,11 +587,10 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
 
-        rRenderContext.Push( vcl::PushFlags::CLIPREGION );
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::CLIPREGION);
         rRenderContext.IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->PaintSwFrame( rRenderContext, aSwRect );
 
-        rRenderContext.Pop();
         // first the CurrShell object needs to be destroyed!
     }
 }

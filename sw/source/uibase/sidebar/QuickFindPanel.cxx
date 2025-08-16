@@ -331,7 +331,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
         tools::Long aTextWidth = rRenderContext.GetTextWidth(aEntry);
         tools::Long aTextHeight = rRenderContext.GetTextHeight();
 
-        rRenderContext.Push();
+        auto popIt = rRenderContext.ScopedPush();
         svtools::ColorConfig aColorConfig;
         rRenderContext.SetLineColor(aColorConfig.GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
         rRenderContext.DrawLine(
@@ -343,7 +343,6 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
         rRenderContext.DrawLine(
             Point(aRect.Center().AdjustX(aTextWidth / 2) + 5, aRect.Center().getY()),
             aRect.RightCenter());
-        rRenderContext.Pop();
     }
 }
 

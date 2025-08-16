@@ -2321,7 +2321,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
     // Prepare the output device:
 
-    mrOut.Push( vcl::PushFlags::MAPMODE );
+    auto popIt = mrOut.ScopedPush(vcl::PushFlags::MAPMODE);
     MapMode aMapMode( mrOut.GetMapMode() );
     aMapMode.SetMapUnit( MapUnit::MapTwip );
     mrOut.SetMapMode( aMapMode );
@@ -3068,7 +3068,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
     // Restore view, cursor, and outdev:
     mrSh.LockView( bOldLockView );
     mrSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
-    mrOut.Pop();
 }
 
 void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()

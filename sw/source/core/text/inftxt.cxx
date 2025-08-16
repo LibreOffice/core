@@ -1121,13 +1121,12 @@ void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
         if (eClear != SwLineBreakClear::NONE)
         {
             // Paint indicator if this clear is left/right/all.
-            m_pOut->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR);
             m_pOut->SetLineColor(SwViewOption::GetCurrentViewOptions().GetNonPrintingCharacterColor());
             if (eClear != SwLineBreakClear::RIGHT)
                 m_pOut->DrawLine(aRect.BottomLeft(), aRect.TopLeft());
             if (eClear != SwLineBreakClear::LEFT)
                 m_pOut->DrawLine(aRect.BottomRight(), aRect.TopRight());
-            m_pOut->Pop();
         }
     }
 
@@ -1224,18 +1223,17 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
             !GetOpt().IsPagePreview())
     {
         OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-        pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+        auto popIt = pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
         if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
             pOut->SetFillColor(m_pFnt->GetHighlightColor());
         else
             pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
         pOut->SetLineColor();
         pOut->DrawRect( aIntersect.SVRect() );
-        pOut->Pop();
     }
     const int delta = 25;
     tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-    m_pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+    auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     m_pOut->SetLineColor( Color(0, 0, 0));
     m_pOut->SetFillColor();
     m_pOut->DrawRect( r );
@@ -1244,7 +1242,6 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
         m_pOut->DrawLine(r.TopLeft(), r.BottomRight());
         m_pOut->DrawLine(r.TopRight(), r.BottomLeft());
     }
-    m_pOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pColor ) const
@@ -1258,7 +1255,7 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
         return;
 
     OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-    pOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+    auto popIt = pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     if ( pColor )
         pOut->SetFillColor( *pColor );
@@ -1268,7 +1265,6 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
     pOut->SetLineColor();
 
     DrawRect( aIntersect, true );
-    pOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
@@ -1293,11 +1289,10 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = const_cast<OutputDevice*>(GetOut());
-                pOutDev->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+                auto popIt = pOutDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
                 pOutDev->SetFillColor( GetOpt().GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
-                pOutDev->Pop();
             }
         }
     }
@@ -1326,7 +1321,7 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         aFillColor = *m_pFnt->GetBackColor();
     }
 
-    pTmpOut->Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+    auto popIt = pTmpOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     if (aFillColor == COL_TRANSPARENT)
         pTmpOut->SetFillColor();
@@ -1335,8 +1330,6 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     pTmpOut->SetLineColor();
 
     DrawRect( aIntersect, false );
-
-    pTmpOut->Pop();
 }
 
 void SwTextPaintInfo::DrawBorder( const SwLinePortion &rPor ) const
@@ -1498,8 +1491,8 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     if (sCSNumberOrDF)
     {
         OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
-        pTmpOut->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR
-                      | vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::FONT);
+        auto popIt = pTmpOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR
+                                          | vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::FONT);
 
         // draw a filled rectangle at the formatted CS or DF text
         pTmpOut->SetFillColor(aFillColor.value());
@@ -1522,8 +1515,6 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
 
         pTmpOut->SetTextFillColor(aFillColor.value());
         pTmpOut->DrawText(aSVRect, sCSNumberOrDF.value(), DrawTextFlags::NONE);
-
-        pTmpOut->Pop();
     }
 }
 

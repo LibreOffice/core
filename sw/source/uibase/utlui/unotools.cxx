@@ -156,7 +156,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
         double fZoom = 100.0 / nZoom;
 
-        m_xVirDev->Push(vcl::PushFlags::ALL);
+        auto popIt = m_xVirDev->ScopedPush(vcl::PushFlags::ALL);
         m_xVirDev->SetMapMode(MapMode(MapUnit::MapTwip));
         SwDoc *pDoc = m_xCursor->GetDoc();
         SwDocShell* pShell = pDoc->GetDocShell();
@@ -164,7 +164,6 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
         pShell->SetVisArea(tools::Rectangle(Point(), Size(aRect.GetWidth() * fZoom,
                                                           aRect.GetHeight() * fZoom)));
         pShell->DoDraw(m_xVirDev.get(), aRect.TopLeft(), aRect.GetSize(), JobSetup(), ASPECT_CONTENT, true);
-        m_xVirDev->Pop();
     }
 
     rRenderContext.DrawOutDev(Point(), aSize, Point(), aSize, *m_xVirDev);

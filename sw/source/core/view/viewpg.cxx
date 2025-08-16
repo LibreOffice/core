@@ -75,7 +75,7 @@ void SwViewShell::PrintProspect(
 
     // save settings of OutputDevice (should be done always since the
     // output device is now provided by a call from outside the Writer)
-    pPrinter->Push();
+    auto popIt = pPrinter->ScopedPush();
 
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
@@ -207,10 +207,6 @@ void SwViewShell::PrintProspect(
     //!! applying/modifying view options and formatting the document should now only be done in getRendererCount!
 
     pFntCache->Flush();
-
-    // restore settings of OutputDevice (should be done always now since the
-    // output device is now provided by a call from outside the Writer)
-    pPrinter->Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

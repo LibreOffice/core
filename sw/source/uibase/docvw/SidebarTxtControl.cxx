@@ -239,7 +239,7 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
     if ( mrSidebarWin.GetLayoutStatus()!=SwPostItHelper::DELETED )
         return;
 
-    pDev->Push(vcl::PushFlags::LINECOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
 
     pDev->SetLineColor(mrSidebarWin.GetChangeColor());
     Point aBottomRight(rPt);
@@ -253,8 +253,6 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
     aBottomLeft.Move(Size(0, aSize.Height()));
 
     pDev->DrawLine(aTopRight, aBottomLeft);
-
-    pDev->Pop();
 }
 
 void SidebarTextControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)

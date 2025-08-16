@@ -327,7 +327,8 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             SvxBrushItem aBrushItem(
                 maCurrentData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetProps().GetBackground());
 
-            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+            auto popIt
+                = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             if (aBrushItem.GetColor() == COL_TRANSPARENT)
                 rRenderContext.SetFillColor();
@@ -339,7 +340,6 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
                                  basegfx::fround<tools::Long>(aCellRange.getMinY()),
                                  basegfx::fround<tools::Long>(aCellRange.getMaxX()),
                                  basegfx::fround<tools::Long>(aCellRange.getMaxY())));
-            rRenderContext.Pop();
         }
     }
 }
@@ -439,7 +439,7 @@ void AutoFormatPreview::NotifyChange(const SwTableAutoFormat& rNewData)
 
 void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
     const Color& rWinColor
         = SwModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
@@ -470,7 +470,6 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     PaintCells(rRenderContext);
 
     rRenderContext.SetDrawMode(nOldDrawMode);
-    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

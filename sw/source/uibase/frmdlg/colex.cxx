@@ -313,7 +313,7 @@ SwColumnOnlyExample::SwColumnOnlyExample()
 
 void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.Erase();
 
     Fraction aScale(m_aWinSize.Height(), m_aFrameSize.Height());
@@ -401,7 +401,6 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
             }
         }
     }
-    rRenderContext.Pop();
 }
 
 void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)

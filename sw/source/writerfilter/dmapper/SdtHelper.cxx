@@ -55,7 +55,7 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 
     MapMode aMap(MapUnit::Map100thMM);
     OutputDevice* pOut = Application::GetDefaultDevice();
-    pOut->Push(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
+    auto popIt = pOut->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
 
     PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
     vcl::Font aFont(pOut->GetFont());
@@ -72,8 +72,6 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
     pOut->SetFont(aFont);
     pOut->SetMapMode(aMap);
     sal_Int32 nWidth = pOut->GetTextWidth(aLongest);
-
-    pOut->Pop();
 
     // Border: see PDFWriterImpl::drawFieldBorder(), border size is font height / 4,
     // so additional width / height needed is height / 2.

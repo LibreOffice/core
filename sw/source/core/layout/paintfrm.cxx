@@ -870,7 +870,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
-    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+    auto popIt = pOut->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pOut->SetFillColor();
     pOut->SetLineColor();
     ConnectEdges( pOut, properties );
@@ -976,8 +976,6 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties const &prope
         }
     }
     m_nLastCount = nMinCount;
-    pOut->Pop();
-
 }
 
 void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
@@ -1044,7 +1042,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     if (m_aLineRects.empty())
         return;
 
-    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+    auto popIt = pOut->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pOut->SetLineColor();
 
     // Reset draw mode in high contrast mode in order to get fill color
@@ -1083,8 +1081,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     }
 
     pOut->SetDrawMode( nOldDrawMode );
-
-    pOut->Pop();
 }
 
 // Various functions that are use in this file.
@@ -1899,7 +1895,7 @@ void DrawGraphic(
             // area, from which the background brush is determined.
             aGrf.Pos() = rOrg.Pos();
             // setup clipping at output device
-            rOutDev.Push( vcl::PushFlags::CLIPREGION );
+            auto popIt = rOutDev.ScopedPush(vcl::PushFlags::CLIPREGION);
             rOutDev.IntersectClipRegion( rOut.SVRect() );
             // use new method <GraphicObject::DrawTiled(::)>
             {
@@ -1936,8 +1932,6 @@ void DrawGraphic(
                                         Size( aPaintOffset.X(), aPaintOffset.Y() ),
                                         std::max( 128, static_cast<int>( sqrt(sqrt( Abitmap)) + .5 ) ) );
             }
-            // reset clipping at output device
-            rOutDev.Pop();
             // set <bDraw> and <bRetouche> to false, indicating that background
             // graphic and background are already drawn.
             bDraw = bRetouche = false;
@@ -1956,7 +1950,7 @@ void DrawGraphic(
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        rOutDev.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+        auto popIt = rOutDev.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rOutDev.SetLineColor();
 
         // check, if an existing background graphic (not filling the complete
@@ -2107,7 +2101,6 @@ void DrawGraphic(
                 }
             }
         }
-        rOutDev.Pop();
     }
 
     if( bDraw && aGrf.Overlaps( rOut ) )
@@ -4363,7 +4356,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
             //receives the original Rect but PaintSwFrameBackground only the limited
             //one.
 
-            rRenderContext.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+            auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
             rRenderContext.SetLineColor();
 
             pPage = FindPageFrame();
@@ -4387,7 +4380,7 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                 }
                 if ( bContour )
                 {
-                    rRenderContext.Push();
+                    auto popIt2 = rRenderContext.ScopedPush();
                     // #i80822#
                     // apply clip region under the same conditions, which are
                     // used in <SwNoTextFrame::PaintSwFrame(..)> to set the clip region
@@ -4404,8 +4397,6 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
                     {
                         PaintSwFrameBackground( aRegion[i], pPage, rAttrs, false, true );
                     }
-
-                    rRenderContext.Pop();
                 }
                 else
                 {
@@ -4418,8 +4409,6 @@ void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& 
 
             // paint border before painting background
             PaintSwFrameShadowAndBorder(rRect, pPage, rAttrs);
-
-            rRenderContext.Pop();
         }
     }
 
@@ -4603,7 +4592,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
         aFont.SetFamily(FontFamily::FAMILY_MODERN);
         aFont.SetColor(COL_BLACK);
 
-        pRenderContext->Push(vcl::PushFlags::ALL);
+        auto popIt = pRenderContext->ScopedPush(vcl::PushFlags::ALL);
 
         pRenderContext->SetFillColor(nStyleColor);
         pRenderContext->SetLineColor(nStyleColor);
@@ -4625,8 +4614,6 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
         pRenderContext->SetTextFillColor(nStyleColor);
         pRenderContext->DrawText(aRect, OUString::number(nStyleNumber),
                                  DrawTextFlags::Center | DrawTextFlags::VCenter);
-
-        pRenderContext->Pop();
     }
 }
 
@@ -6713,7 +6700,7 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
-    pOut->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+    auto popIt = pOut->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pOut->SetLineColor();
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
@@ -6745,8 +6732,6 @@ void SwFrame::PaintBaBo( const SwRect& rRect, const SwPageFrame *pPage,
 
         PaintSwFrameShadowAndBorder(aRect, pPage, rAttrs);
     }
-
-    pOut->Pop();
 }
 
 static bool lcl_compareFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& pA, const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& pB)

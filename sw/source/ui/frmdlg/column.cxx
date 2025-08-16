@@ -1318,7 +1318,7 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     tools::Long nRectHeight = aRect.GetHeight();
 
     Point aBLPos = aRect.TopLeft();
-    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
     pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
 
@@ -1368,7 +1368,6 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
             pDev->DrawLine(aStart, aEnd);
         }
     }
-    pDev->Pop();
 }
 
 void ColumnValueSet::StyleUpdated()

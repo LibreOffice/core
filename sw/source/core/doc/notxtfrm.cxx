@@ -206,12 +206,11 @@ static void lcl_ClearArea( const SwFrame &rFrame,
     }
     else
     {
-        rOut.Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+        auto popIt = rOut.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rOut.SetFillColor( rFrame.getRootFrame()->GetCurrShell()->Imp()->GetRetoucheColor());
         rOut.SetLineColor();
         for( const auto &rRegion : aRegion )
             rOut.DrawRect( rRegion.SVRect() );
-        rOut.Pop();
     }
 }
 

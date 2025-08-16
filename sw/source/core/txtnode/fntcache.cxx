@@ -650,10 +650,8 @@ static void lcl_DrawLineForWrongListData(
     }
 
     SwForbidden::iterator pIter = rForbidden.begin();
-    if (rInf.GetOut().GetConnectMetaFile())
-        rInf.GetOut().Push();
-    else
-        rInf.GetOut().Push(vcl::PushFlags::LINECOLOR);
+    auto popIt = rInf.GetOut().ScopedPush(
+        rInf.GetOut().GetConnectMetaFile() ? vcl::PushFlags::ALL : vcl::PushFlags::LINECOLOR);
 
     // iterate over all ranges stored in the respective SwWrongList
     do
@@ -742,8 +740,6 @@ static void lcl_DrawLineForWrongListData(
         nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
     }
     while (nWrLen && pWList->Check( nStart, nWrLen ));
-
-    rInf.GetOut().Pop();
 }
 
 static void GetTextArray(const SwDrawTextInfo& rExtraInf, const OutputDevice& rDevice,
@@ -1606,7 +1602,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                               aKashidaArray, nIdx, nLen, rInf.GetLayoutContext());
                 if (bBullet)
                 {
-                    rInf.GetOut().Push();
+                    auto popIt = rInf.GetOut().ScopedPush();
                     Color aPreviousColor = pTmpFont->GetColor();
 
                     FontLineStyle aPreviousUnderline = pTmpFont->GetUnderline();
@@ -1646,7 +1642,6 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetUnderline(aPreviousUnderline);
                     pTmpFont->SetOverline(aPreviousOverline);
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
-                    rInf.GetOut().Pop();
                 }
             }
         }

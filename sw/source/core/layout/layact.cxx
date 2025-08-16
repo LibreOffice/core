@@ -2368,11 +2368,10 @@ void SwLayIdle::ShowIdle( Color eColor )
         tools::Rectangle aRect( 0, 0, 5, 5 );
         aRect = pWin->PixelToLogic( aRect );
         // Depending on if idle layout is in progress or not, draw a "red square" or a "green square".
-        pWin->GetOutDev()->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+        auto popIt = pWin->GetOutDev()->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         pWin->GetOutDev()->SetFillColor( eColor );
         pWin->GetOutDev()->SetLineColor();
         pWin->GetOutDev()->DrawRect( aRect );
-        pWin->GetOutDev()->Pop();
     }
 }
 #define SHOW_IDLE( Color ) ShowIdle( Color )

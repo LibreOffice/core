@@ -1810,7 +1810,7 @@ void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
         return;
 
     // OD 2004-04-23 #116347#
-    GetOut()->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
+    auto popIt = GetOut()->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     GetOut()->SetLineColor();
 
     for ( auto &rRgn : rRegion )
@@ -1854,8 +1854,6 @@ void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 
         DLPostPaint2(false);
     }
-
-    GetOut()->Pop();
 }
 
 bool SwViewShell::DrawAppBackgroundBitmap(vcl::RenderContext* rRenderContext, const SwRect& rRect)
