@@ -136,7 +136,7 @@ private:
             GLX_GREEN_SIZE,         8,
             GLX_BLUE_SIZE,          8,
             GLX_ALPHA_SIZE,         8,
-            GLX_DEPTH_SIZE,         24,
+            GLX_DEPTH_SIZE,         32,
             GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
             None
         };

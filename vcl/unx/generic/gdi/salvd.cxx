@@ -103,13 +103,13 @@ void X11SalGraphics::Init(X11SalVirtualDevice *pDevice, SalColormap* pColormap, 
 
     if (bAlphaMaskTransparent)
     {
-        mxImpl->SetFillColor(COL_TRANSPARENT);
+        mxImpl->SetFillColor(Color(ColorAlpha, 0, 0, 0, 0));
         mxImpl->drawRect(0, 0, pDevice->GetWidth(), pDevice->GetHeight());
     }
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
-                                         DeviceFormat /*eFormat*/,
+                                         DeviceFormat eFormat,
                                          std::unique_ptr<X11SalGraphics> pNewGraphics) :
     pGraphics_(std::move(pNewGraphics)),
     m_nXScreen(0),
@@ -118,9 +118,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
     SalColormap* pColormap = nullptr;
     bool bDeleteColormap = false;
 
-    sal_uInt16 nBitCount = rGraphics.GetBitCount();
+    nDepth_                 = eFormat == DeviceFormat::WITH_ALPHA ? 32 : rGraphics.GetBitCount();
     pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    nDepth_                 = nBitCount;
 
     nDX_ = nDX;
     nDY_ = nDY;
@@ -128,12 +127,12 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, tools::Lo
     hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                      pDisplay_->GetDrawable( m_nXScreen ),
                                      nDX_, nDY_,
-                                     GetDepth() );
+                                     nDepth_ );
     bExternPixmap_ = false;
 
-    if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
+    if( nDepth_ != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
     {
-        pColormap = new SalColormap( nBitCount );
+        pColormap = new SalColormap( nDepth_ );
         bDeleteColormap = true;
     }
 
@@ -238,6 +237,7 @@ void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent )
 {
+    assert((!bAlphaMaskTransparent || nDepth_ == 32) && "alpha requires 32-bit depth");
     if( bExternPixmap_ )
         return false;
 
