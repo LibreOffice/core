@@ -121,13 +121,6 @@ void writeConsoleError(std::u16string_view sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 OUString readConsole();
 
-/** print the text to the console in a debug build.
-    The argument is forwarded to writeConsole. The function does not add new line.
-    The code is only executed if  OSL_DEBUG_LEVEL > 1
-*/
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void TRACE(OUString const & sText);
-
 /** registers or revokes shared or bundled extensions which have been
     recently added or removed.
 */

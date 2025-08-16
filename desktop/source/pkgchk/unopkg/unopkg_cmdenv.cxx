@@ -198,7 +198,7 @@ void CommandEnvironmentImpl::handle(
 {
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
-    dp_misc::TRACE("[unopkg_cmdenv.cxx] incoming request:\n"
+    SAL_INFO("desktop.deployment", "[unopkg_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 
     // selections:

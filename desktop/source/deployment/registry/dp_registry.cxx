@@ -361,13 +361,13 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // dump tables:
     {
         t_registryset allBackends;
-        dp_misc::TRACE(u"> [dp_registry.cxx] media-type detection:\n\n"_ustr );
+        SAL_INFO("desktop.deployment", u"> [dp_registry.cxx] media-type detection:\n\n"_ustr );
         for (auto const& elem : that->m_filter2mediaType)
         {
             const Reference<deployment::XPackageRegistry> xBackend(
                 that->m_mediaType2backend.find( elem.second )->second );
             allBackends.insert( xBackend );
-            dp_misc::TRACE(
+            SAL_INFO("desktop.deployment",
                 "extension \"" + elem.first + "\" maps to media-type \"" + elem.second
                 + "\" maps to backend "
                 + Reference<lang::XServiceInfo>(
@@ -375,7 +375,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                         ->getImplementationName()
                 + "\n");
         }
-        dp_misc::TRACE( u"> [dp_registry.cxx] ambiguous backends:\n\n"_ustr );
+        SAL_INFO("desktop.deployment", u"> [dp_registry.cxx] ambiguous backends:\n\n"_ustr );
         for (auto const& ambiguousBackend : that->m_ambiguousBackends)
         {
             OUStringBuffer buf;
@@ -396,7 +396,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 if (pos < (types.getLength() - 1))
                     buf.append( ", " );
             }
-            dp_misc::TRACE(buf + "\n\n");
+            SAL_INFO("desktop.deployment", buf + "\n\n");
         }
         allBackends.insert( that->m_ambiguousBackends.begin(),
                             that->m_ambiguousBackends.end() );

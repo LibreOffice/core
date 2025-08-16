@@ -637,7 +637,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     }
     catch( const uno::Exception& e )
     {
-        dp_misc::TRACE( "Caught exception: "
+        SAL_INFO("desktop.deployment", "Caught exception: "
             + e.Message + "\n thread terminated.\n\n");
     }
 }

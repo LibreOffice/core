@@ -25,6 +25,7 @@
 #include <dp_ucb.h>
 #include "dp_parceldesc.hxx"
 #include <rtl/uri.hxx>
+#include <sal/log.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -156,7 +157,7 @@ BackendImpl::PackageImpl::PackageImpl(
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     m_name = m_displayName;
 
-    dp_misc::TRACE("PackageImpl displayName is " + m_displayName);
+    SAL_INFO("desktop.deployment", "PackageImpl displayName is " + m_displayName);
 }
 
 
@@ -272,10 +273,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 sal_Int32 startOfReplace = sfwkLibType.indexOf( MACRONAME );
                 sal_Int32 charsToReplace = MACRONAME.getLength();
                 sfwkLibType = sfwkLibType.replaceAt( startOfReplace, charsToReplace, lang );
-                dp_misc::TRACE(u"******************************\n"_ustr);
-                dp_misc::TRACE(" BackEnd detected lang = " + lang + "\n");
-                dp_misc::TRACE(" for url " + sParcelDescURL + "\n");
-                dp_misc::TRACE(u"******************************\n"_ustr);
+                SAL_INFO("desktop.deployment", u"******************************\n"_ustr);
+                SAL_INFO("desktop.deployment", " BackEnd detected lang = " + lang + "\n");
+                SAL_INFO("desktop.deployment", " for url " + sParcelDescURL + "\n");
+                SAL_INFO("desktop.deployment", u"******************************\n"_ustr);
                 return new PackageImpl( this, url, sfwkLibType, bRemoved, identifier);
             }
         }
@@ -350,7 +351,7 @@ void BackendImpl::PackageImpl::processPackage_(
 {
     if ( !m_xNameCntrPkgHandler.is() )
     {
-        dp_misc::TRACE(u"no package handler!!!!\n"_ustr);
+        SAL_INFO("desktop.deployment", u"no package handler!!!!\n"_ustr);
         throw RuntimeException( u"No package Handler "_ustr );
     }
 

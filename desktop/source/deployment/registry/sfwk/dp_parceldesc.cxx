@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dp_misc.h>
+#include <sal/log.hxx>
 #include "dp_parceldesc.hxx"
 
 
@@ -69,7 +69,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
     const Reference< xml::sax::XAttributeList > & xAttribs )
 {
 
-    dp_misc::TRACE("ParcelDescDocHandler::startElement() for " +
+    SAL_INFO("desktop.deployment", "ParcelDescDocHandler::startElement() for " +
         aName + "\n");
     if ( !skipIndex )
     {
@@ -81,7 +81,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
     }
     else
     {
-        dp_misc::TRACE("ParcelDescDocHandler::startElement() skipping for "
+        SAL_INFO("desktop.deployment", "ParcelDescDocHandler::startElement() skipping for "
             + aName + "\n");
     }
 
@@ -92,7 +92,7 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
     if ( skipIndex )
     {
         --skipIndex;
-        dp_misc::TRACE("ParcelDescDocHandler::endElement() skipping for "
+        SAL_INFO("desktop.deployment", "ParcelDescDocHandler::endElement() skipping for "
             + aName + "\n");
     }
 }

@@ -446,11 +446,6 @@ OUString readConsole()
     throw css::uno::RuntimeException(u"reading from stdin failed"_ustr);
 }
 
-void TRACE(OUString const & sText)
-{
-    SAL_INFO("desktop.deployment", sText);
-}
-
 void syncRepositories(
     bool force, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {

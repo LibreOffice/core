@@ -312,7 +312,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-    dp_misc::TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n"
+    SAL_INFO("desktop.deployment", "[dp_gui_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n");
 
     lang::WrappedTargetException wtExc;
