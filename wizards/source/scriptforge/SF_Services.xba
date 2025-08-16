@@ -160,7 +160,7 @@ Try:
 			Case 2			&apos;	Method to call
 				If sLibrary = &quot;ScriptForge&quot; Then	&apos;	Direct call
 					Select Case UCase(sService)
-						Case &quot;DICTIONARY&quot;	:	vScriptService = SF_Services._NewDictionary()
+						Case &quot;DICTIONARY&quot;	:	vScriptService = SF_Services._NewDictionary(pvArgs)
 						Case &quot;L10N&quot;			:	vScriptService = SF_Services._NewL10N(pvArgs)
 						Case &quot;TIMER&quot;		:	vScriptService = SF_Services._NewTimer(pvArgs)
 						Case Else
