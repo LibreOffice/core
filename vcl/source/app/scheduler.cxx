@@ -135,7 +135,9 @@ void Scheduler::ImplDeInitScheduler()
 
     assert( nullptr == rSchedCtx.mpSchedulerStack || (!rSchedCtx.mpSchedulerStack->mpTask && !rSchedCtx.mpSchedulerStack->mpNext) );
 
-    if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
+    if (rSchedCtx.mpSalTimer)
+        rSchedCtx.mpSalTimer->Stop();
+
     delete rSchedCtx.mpSalTimer;
     rSchedCtx.mpSalTimer = nullptr;
 
