@@ -18,9 +18,9 @@
  */
 
 
+#include <sal/log.hxx>
 #include "sunjre.hxx"
 #include "sunversion.hxx"
-#include "diagnostics.h"
 
 namespace jfw_plugin
 {
@@ -95,7 +95,7 @@ int SunInfo::compareVersions(const OUString& sSecond) const
     OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
-    JFW_ENSURE(version1, "[Java framework] sunjavaplugin" SAL_DLLEXTENSION
+    SAL_WARN_IF(!(version1), "jfw", "[Java framework] sunjavaplugin" SAL_DLLEXTENSION
                          " does not know the version: "
                + sFirst + " as valid for a SUN/Oracle JRE.");
     SunVersion version2(sSecond);

@@ -70,7 +70,6 @@
 #include <jvmfwk/framework.hxx>
 #include "util.hxx"
 #include "sunversion.hxx"
-#include "diagnostics.h"
 
 #if defined MACOSX && defined __x86_64__
 #include "util_cocoa.hxx"
@@ -279,8 +278,7 @@ javaPluginError checkJavaVersionRequirements(
         catch (MalformedVersionException&)
         {
             //The minVersion was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
+            SAL_WARN("jfw",
                 "[Java framework]sunjavaplugin does not know version: "
                 + sMinVersion + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check minimum Version." );
@@ -298,8 +296,7 @@ javaPluginError checkJavaVersionRequirements(
         catch (MalformedVersionException&)
         {
             //The maxVersion was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
+            SAL_WARN("jfw",
                 "[Java framework]sunjavaplugin does not know version: "
                 + sMaxVersion + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check maximum Version." );
@@ -316,8 +313,7 @@ javaPluginError checkJavaVersionRequirements(
         catch (MalformedVersionException&)
         {
             //The excluded version was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
+            SAL_WARN("jfw",
                 "[Java framework]sunjavaplugin does not know version: "
                 + sExVer + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check excluded versions." );
@@ -655,7 +651,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if (!moduleRt.load(sRuntimeLib))
 #endif
     {
-        JFW_ENSURE(false,
+        SAL_WARN("jfw",
                    "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                       " could not load Java runtime library: \n"
                    + sRuntimeLib + "\n");

@@ -47,7 +47,6 @@
 
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
-#include "diagnostics.h"
 #if defined MACOSX && defined __x86_64__
 #include "util_cocoa.hxx"
 #endif
@@ -1234,7 +1233,7 @@ void addJavaInfosDirScan(
                             aStatus.getFileURL(), allInfos, addedInfos);
                     }
 
-                    JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
+                    SAL_WARN_IF(errNext != File::E_None && errNext != File::E_NOENT, "jfw",
                                 "[Java framework] sunjavaplugin: "
                                 "Error while iterating over contents of "
                                 + usDir2 + ". Osl file error: "
