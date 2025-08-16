@@ -340,7 +340,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             Bitmap aBmp(BMP_PRESOBJ_GRAPHIC);
             Graphic  aGraphic( aBmp );
             OutputDevice &aOutDev = *Application::GetDefaultDevice();
-            aOutDev.Push();
+            auto popIt = aOutDev.ScopedPush();
 
             aOutDev.SetMapMode( aGraphic.GetPrefMapMode() );
             Size aSizePix = aOutDev.LogicToPixel( aGraphic.GetPrefSize() );
@@ -350,7 +350,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             Point aPnt (0, 0);
             ::tools::Rectangle aRect (aPnt, aSize);
             pSdrObj = new SdrGrafObj(getSdrModelFromSdrPage(), aGraphic, aRect);
-            aOutDev.Pop();
         }
         break;
 

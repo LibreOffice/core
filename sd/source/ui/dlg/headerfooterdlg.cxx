@@ -703,7 +703,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
 
 void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
 
     maOutRect = ::tools::Rectangle(Point(0,0), rRenderContext.GetOutputSize());
 
@@ -756,8 +756,6 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
         if (pNumber)
             Paint(rRenderContext, pNumber, maSettings.mbSlideNumberVisible);
     }
-
-    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

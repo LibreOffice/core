@@ -140,7 +140,7 @@ namespace sd
 
         SfxDockingWindow::Paint(rRenderContext, i_rArea);
 
-        rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         rRenderContext.SetFillColor(rStyleSettings.GetDialogColor());
         rRenderContext.SetLineColor();
@@ -191,9 +191,6 @@ namespace sd
         rRenderContext.DrawText(aTitleBarBox,
                                 !m_sTitle.isEmpty() ? m_sTitle : GetText(),
                                 DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::MultiLine | DrawTextFlags::WordBreak);
-
-        // Restore original values of the output device.
-        rRenderContext.Pop();
     }
 
 

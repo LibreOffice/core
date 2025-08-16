@@ -310,7 +310,7 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
 
     ::tools::Rectangle aOutRect(rRect);
 
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.SetLineColor();
     // fill the background with the dialog bg color
@@ -336,12 +336,11 @@ void CustomAnimationListEntryItem::PaintTrigger(vcl::RenderContext& rRenderConte
     // Draw the text with the dialog text color
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogTextColor());
     rRenderContext.DrawText(aOutRect, rRenderContext.GetEllipsisString(msDescription, aOutRect.GetWidth()));
-    rRenderContext.Pop();
 }
 
 void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)
 {
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -426,7 +425,6 @@ void CustomAnimationListEntryItem::PaintEffect(vcl::RenderContext& rRenderContex
     aPos.AdjustY(nItemHeight / 2);
 
     rRenderContext.DrawText(aPos, rRenderContext.GetEllipsisString(msEffectName, rRect.GetWidth()));
-    rRenderContext.Pop();
 }
 
 void CustomAnimationListEntryItem::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected)

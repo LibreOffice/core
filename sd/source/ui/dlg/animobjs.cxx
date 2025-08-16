@@ -79,7 +79,7 @@ void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
 
 void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
 
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -99,8 +99,6 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
         aPt.setY( ( aSize.Height() - aBmpSize.Height() ) / 2 );
 
     aBitmapEx.Draw(&rRenderContext, aPt, aBmpSize);
-
-    rRenderContext.Pop();
 }
 
 void SdDisplay::SetScale( const Fraction& rFrac )
