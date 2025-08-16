@@ -56,7 +56,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     const FontMetric  aDevFM (rDev.GetFontMetric());
 
-    pGlyphDev->Push(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
+    auto popIt = pGlyphDev->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE);
     vcl::Font aFnt(rDev.GetFont());
     aFnt.SetAlignment(ALIGN_TOP);
 
@@ -101,8 +101,6 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     // (because of different devices)
     tools::Long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
     aResult.Move(0, nDelta);
-
-    pGlyphDev->Pop();
 
     rRect = aResult;
     return bSuccess;
@@ -203,7 +201,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
 
-        pWindow->Push(vcl::PushFlags::MAPMODE | vcl::PushFlags::FONT);
+        auto popIt = pWindow->ScopedPush(vcl::PushFlags::MAPMODE | vcl::PushFlags::FONT);
 
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
@@ -215,8 +213,6 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
             nDelta = nFontHeight * 8 / 43;
         }
         SetTop(GetTop() - nDelta);
-
-        pWindow->Pop();
     }
 
     // get GlyphBoundRect

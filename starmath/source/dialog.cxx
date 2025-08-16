@@ -1094,7 +1094,7 @@ void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     rRenderContext.SetBackground(Wallpaper(aBackgroundColor));
     rRenderContext.SetTextColor(aTextColor);
 
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
@@ -1135,8 +1135,6 @@ void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
         rRenderContext.Invert(tools::Rectangle(OffsetPoint(aPoint), Size(nLen, nLen)));
 
     }
-
-    rRenderContext.Pop();
 }
 
 bool SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)

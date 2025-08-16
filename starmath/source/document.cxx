@@ -262,7 +262,7 @@ void SmDocShell::ArrangeFormula()
     const SmFormat &rFormat = GetFormat();
     mpTree->Prepare(rFormat, *this, 0);
 
-    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
+    auto popIt = pOutDev->ScopedPush(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
 
     // We want the device to always be LTR, we handle RTL formulas ourselves.
     bool bOldRTL = pOutDev->IsRTLEnabled();
@@ -279,7 +279,6 @@ void SmDocShell::ArrangeFormula()
     mpTree->Arrange(*pOutDev, rFormat);
 
     pOutDev->EnableRTL(bOldRTL);
-    pOutDev->Pop();
 
     SetFormulaArranged(true);
 
@@ -1434,7 +1433,7 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
     const sal_uInt16 nZoomFactor
         = static_cast<sal_uInt16>(rPrintUIOptions.getIntValue(PRTUIOPT_PRINT_SCALE, 100));
 
-    rOutDev.Push();
+    auto popIt = rOutDev.ScopedPush();
     rOutDev.SetLineColor(COL_BLACK);
 
     // output text on top
@@ -1564,8 +1563,6 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
     rOutDev.SetClipRegion(vcl::Region(aOutRect));
     DrawFormula(rOutDev, aPos);
     rOutDev.SetClipRegion();
-
-    rOutDev.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

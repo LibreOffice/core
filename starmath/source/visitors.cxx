@@ -169,12 +169,10 @@ void SmCaretLinesVisitor::DoIt()
     if (!maPos.IsValid())
         return;
 
-    //Save device state
-    mrDev.Push( vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTCOLOR );
+    //Save and eventually restore device state
+    auto popIt = mrDev.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::MAPMODE | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTCOLOR);
 
     maPos.pSelectedNode->Accept( this );
-    //Restore device state
-    mrDev.Pop( );
 }
 
 void SmCaretLinesVisitor::Visit( SmTextNode* pNode )
@@ -264,8 +262,8 @@ void SmCaretDrawingVisitor::ProcessUnderline(Point from, Point to)
 
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
-    //Save device state
-    mpDev->Push( vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR );
+    //Save and eventually restore device state
+    auto popIt = mpDev->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     tools::Long i = maPos.nIndex;
 
@@ -277,9 +275,6 @@ void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
     tools::Long height = pNode->GetHeight( );
 
     maLine = SmCaretLine( left, top, height );
-
-    //Restore device state
-    mpDev->Pop( );
 }
 
 void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
@@ -1795,17 +1790,14 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
 
     tools::Rectangle aSelectionArea = GetSelection() + rOffset;
 
-    //Save device state
-    rDevice.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+    //Save and eventually restore device state
+    auto popIt = rDevice.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     //Change colors
     rDevice.SetLineColor( );
     rDevice.SetFillColor( COL_LIGHTGRAY );
 
     //Draw rectangle
     rDevice.DrawRect( aSelectionArea );
-
-    //Restore device state
-    rDevice.Pop( );
 }
 
 // SmSelectionRectanglesVisitor
@@ -1843,7 +1835,7 @@ void SmSelectionRectanglesVisitor::Visit( SmTextNode* pNode )
     if( !pNode->IsSelected())
         return;
 
-    mrDev.Push( vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::FONT );
+    auto popIt = mrDev.ScopedPush(vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::FONT);
 
     mrDev.SetFont( pNode->GetFont( ) );
     Point Position = pNode->GetTopLeft( );
@@ -1854,8 +1846,6 @@ void SmSelectionRectanglesVisitor::Visit( SmTextNode* pNode )
     tools::Rectangle rect( left, top, right, bottom );
 
     ExtendSelectionArea( rect );
-
-    mrDev.Pop( );
 }
 
 // SmNodeToTextVisitor
