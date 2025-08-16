@@ -915,13 +915,12 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     if (!rRenderContext.IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire) &&
         rStyleSettings.GetHighContrastMode())
     {
-        pBuffer->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
+        auto popIt = pBuffer->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
         pBuffer->SetLineColor(COL_WHITE);
         pBuffer->SetMapMode(MapMode(MapUnit::MapPixel));
         Size aSize = GetSizePixel();
         pBuffer->DrawLine(Point(0, aSize.Height() - 1),
                           Point(aSize.Width() - 1, aSize.Height() - 1));
-        pBuffer->Pop();
     }
 }
 

@@ -47,7 +47,7 @@ void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
     bool        bFilled = ( pBitmapEx != nullptr || pFont != nullptr );
     tools::Rectangle   aBorderRect( aPoint, aSize );
 
-    rOutDev.Push();
+    auto popIt = rOutDev.ScopedPush();
 
     rOutDev.SetFillColor();
 
@@ -155,8 +155,6 @@ void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
         rOutDev.DrawLine( aBorderRect.TopLeft(), aBorderRect.BottomRight() );
         rOutDev.DrawLine( aBorderRect.TopRight(), aBorderRect.BottomLeft() );
     }
-
-    rOutDev.Pop();
 }
 
 } // end anonymous namespace

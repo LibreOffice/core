@@ -484,7 +484,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
     if (IsInPaint())
         aPaintRegion.Intersect(GetOutDev()->GetActiveClipRegion());
 
-    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::CLIPREGION);
     rRenderContext.IntersectClipRegion( aPaintRegion );
 
     if (!pWrapper)
@@ -515,9 +515,6 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
                 ImplDrawGradientBackground(rRenderContext);
         }
     }
-
-    // restore clip region
-    rRenderContext.Pop();
 }
 
 void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect, bool bHighlight, bool bHasOpenPopup)
@@ -530,7 +527,7 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
     {
         if (GetStyle() & WB_3DLOOK)
         {
-            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+            auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             if (bHasOpenPopup)
                 // choose the same color as the popup will use
@@ -539,7 +536,6 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
                 rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
 
             rRenderContext.DrawRect(rRect);
-            rRenderContext.Pop();
         }
         else
             ImplDrawBackground(rRenderContext, rRect);
@@ -2368,7 +2364,7 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
 
 static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rDropDownRect, bool bSetColor, bool bRotate )
 {
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     rRenderContext.SetLineColor();
 
     if ( bSetColor )
@@ -2405,8 +2401,6 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
     rRenderContext.DrawPolygon( aPoly );
     rRenderContext.SetAntialiasing(aaflags);
-
-    rRenderContext.Pop();
 }
 
 void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighlight)
@@ -2421,7 +2415,7 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
     // execute pending paint requests
     ImplCheckUpdate();
 
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
     // draw the 'more' indicator / button (>>)
     ImplErase(rRenderContext, mpData->maMenubuttonItem.maRect, bHighlight);
@@ -2434,9 +2428,6 @@ void ToolBox::ImplDrawMenuButton(vcl::RenderContext& rRenderContext, bool bHighl
 
     // store highlight state
     mpData->mbMenubuttonSelected = bHighlight;
-
-    // restore colors
-    rRenderContext.Pop();
 }
 
 void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext)

@@ -339,7 +339,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     Size aSize = GetSizePixel();
     vcl::Font aFont = mpImplLB->GetMainWindow()->GetDrawPixelFont( pDev );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     pDev->SetTextFillColor();
@@ -449,8 +449,6 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
                 pDev->SetTextColor( COL_BLACK );
         }
     }
-
-    pDev->Pop();
 }
 
 void ListBox::GetFocus()

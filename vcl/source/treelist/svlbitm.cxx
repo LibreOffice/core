@@ -177,14 +177,13 @@ namespace
 {
     void drawSeparator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRegion)
     {
-        rRenderContext.Push(vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR);
         const StyleSettings& rStyle = rRenderContext.GetSettings().GetStyleSettings();
         Point aTmpPos = rRegion.TopLeft();
         Size aSize = rRegion.GetSize();
         aTmpPos.AdjustY(aSize.Height() / 2 );
         rRenderContext.SetLineColor(rStyle.GetShadowColor());
         rRenderContext.DrawLine(aTmpPos, Point(aSize.Width() + aTmpPos.X(), aTmpPos.Y()));
-        rRenderContext.Pop();
     }
 }
 

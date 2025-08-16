@@ -1017,7 +1017,7 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
 
     DBG_ASSERT(pFirstDynamicTab,"No Tree!");
 
-    rRenderContext.Push(vcl::PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1062,8 +1062,6 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
         nY += nEntryHeight;
         pEntry = m_pView->NextVisible(pEntry);
     }
-
-    rRenderContext.Pop();
 }
 
 void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )

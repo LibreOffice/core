@@ -213,7 +213,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
     Size        aSize = GetSizePixel();
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & SystemTextColorFlags::Mono )
@@ -239,7 +239,6 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos,
     }
 
     ImplDraw( pDev, nFlags, aPos, aSize );
-    pDev->Pop();
 }
 
 void FixedText::Resize()
@@ -745,7 +744,7 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
     Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
 
     // Border
@@ -756,8 +755,6 @@ void FixedBitmap::Draw( OutputDevice* pDev, const Point& rPos,
     }
     pDev->IntersectClipRegion( aRect );
     ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
-
-    pDev->Pop();
 }
 
 void FixedBitmap::Resize()
@@ -892,7 +889,7 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos,
     Size        aSize = GetSizePixel();
     tools::Rectangle   aRect( aPos, aSize );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
 
     // Border
@@ -902,8 +899,6 @@ void FixedImage::Draw( OutputDevice* pDev, const Point& rPos,
     }
     pDev->IntersectClipRegion( aRect );
     ImplDraw( pDev, aRect.TopLeft(), aRect.GetSize() );
-
-    pDev->Pop();
 }
 
 void FixedImage::Resize()

@@ -883,7 +883,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
     tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & SystemTextColorFlags::Mono )
@@ -925,8 +925,6 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos,
         ImplDrawItem(*pDev, i, false, aItemRect, &aRect );
         pDev->SetClipRegion();
     }
-
-    pDev->Pop();
 }
 
 void HeaderBar::Resize()

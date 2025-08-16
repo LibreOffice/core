@@ -183,7 +183,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,
     Size        aSize = GetSizePixel();
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & SystemTextColorFlags::Mono )
@@ -193,7 +193,6 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos,
     pDev->SetTextFillColor();
 
     ImplDraw( pDev, nFlags, aPos, aSize );
-    pDev->Pop();
 }
 
 void GroupBox::Resize()

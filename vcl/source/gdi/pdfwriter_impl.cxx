@@ -6360,7 +6360,7 @@ bool PDFWriterImpl::emit()
 
 sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 {
-    Push();
+    auto popIt = ScopedPush();
 
     SetFont( i_rFont );
 
@@ -6378,7 +6378,6 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
         m_aSystemFonts[ pFace ].m_nNormalFontID = nFontID;
     }
 
-    Pop();
     return nFontID;
 }
 

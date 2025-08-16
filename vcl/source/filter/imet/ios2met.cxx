@@ -989,10 +989,9 @@ void OS2METReader::ReadBox(bool bGivenPos)
             tools::Polygon aPolygon( aBoxRect, nHRound, nVRound );
             if ( nFlags & 0x40 )
             {
-                pVirDev->Push( vcl::PushFlags::LINECOLOR );
+                auto popIt = pVirDev->ScopedPush(vcl::PushFlags::LINECOLOR);
                 pVirDev->SetLineColor( COL_TRANSPARENT );
                 pVirDev->DrawRect( aBoxRect, nHRound, nVRound );
-                pVirDev->Pop();
             }
             pVirDev->DrawPolyLine( aPolygon, aLineInfo );
         }

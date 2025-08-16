@@ -121,7 +121,7 @@ void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     Point aPos  = pDev->LogicToPixel(rPos);
     Size aSize = GetSizePixel();
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
@@ -156,7 +156,6 @@ void SpinButton::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     ImplDrawSpinButton(*pDev, this, aUpperRect, aLowerRect, false, false,
                        IsEnabled() && ImplIsUpperEnabled(),
                        IsEnabled() && ImplIsLowerEnabled(), mbHorz, true);
-    pDev->Pop();
 }
 
 void SpinButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

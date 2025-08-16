@@ -867,7 +867,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                 if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
                 {
                     Size aPxSize(GetOutputSizePixel());
-                    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
+                    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::CLIPREGION);
                     rRenderContext.IntersectClipRegion(tools::Rectangle(Point(nX, nY), Size(aSz.Width(), pData->aSz.Height())));
                     tools::Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width()-nX, aPxSize.Height()));
                     MenupopupValue aVal(pMenu->nTextPos-GUTTERBORDER, aItemRect);
@@ -887,7 +887,6 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                     }
                     else
                         bDrawItemRect = true;
-                    rRenderContext.Pop();
                 }
                 if (bDrawItemRect)
                 {
@@ -1209,7 +1208,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     // Set the clip before the buffering starts: rPaintRect may be larger than the current clip,
     // this way the buffer -> render context copy happens with this clip.
-    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(rPaintRect));
 
     // Make sure that all actual rendering happens in one go to avoid flicker.
@@ -1238,7 +1237,6 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         RenderHighlightItem(*pBuffer, nHighlightedItem);
 
     pBuffer.Dispose();
-    rRenderContext.Pop();
 }
 
 void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp)

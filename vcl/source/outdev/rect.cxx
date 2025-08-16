@@ -210,7 +210,7 @@ void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt3
     const sal_uInt32 nMaxX(rPos.X() + rSize.Width());
     const sal_uInt32 nMaxY(rPos.Y() + rSize.Height());
 
-    Push(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR);
+    auto popIt = ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     SetLineColor();
 
     for(sal_uInt32 x(0), nX(rPos.X()); nX < nMaxX; x++, nX += nLen)
@@ -225,8 +225,6 @@ void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt3
             DrawRect(tools::Rectangle(nX, nY, nRight, nBottom));
         }
     }
-
-    Pop();
 }
 
 void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, DrawGridFlags nFlags )

@@ -200,7 +200,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 {
     WorkWindow::Paint(rRenderContext, rRect);
 
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
     MapMode aMapMode(MapUnit::Map100thMM);
 
     rRenderContext.SetMapMode(aMapMode);
@@ -315,7 +315,6 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
         aPoint.setY( static_cast<int>((static_cast<double>(aP2.Y())*cosd + static_cast<double>(aP2.X())*sind)*factor) );
         aP2 = aPoint;
     }
-    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

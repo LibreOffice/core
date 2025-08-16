@@ -494,7 +494,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     else
     {
         // save graphics state
-        rRenderContext.Push();
+        auto popIt = rRenderContext.ScopedPush();
         // first calculate highlighted and non highlighted clip regions
         vcl::Region aHighlightClipRegion;
         vcl::Region aNormalClipRegion;
@@ -621,9 +621,6 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                 }
             }
         }
-
-        // restore graphics state
-        rRenderContext.Pop();
     }
 
     if (bVisCursor && (!mpIMEInfos || mpIMEInfos->bCursor))

@@ -119,7 +119,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
 void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
     weld::SetPointFont(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetLabelFont());
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetLabelTextColor());
     rRenderContext.SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetDialogColor()));
@@ -145,7 +145,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
 
     // vertical line
     {
-        rRenderContext.Push(PushFlags::FONT);
+        auto popIt2 = rRenderContext.ScopedPush(PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
         aFont.SetOrientation(900_deg10);
         rRenderContext.SetFont(aFont);
@@ -161,8 +161,6 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         nLeft = aOffset.X() - (nTextHeight / 2);
         aDecoView.DrawSeparator(Point(nLeft, aOffset.Y()), Point(nLeft, nStart - nWidth - 2), true);
         aDecoView.DrawSeparator(Point(nLeft, nStart + 2), Point(nLeft, aOffset.Y() + maPreviewSize.Height()), true);
-
-        rRenderContext.Pop();
     }
 
     if (!maReplacementString.isEmpty())
@@ -188,8 +186,6 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));
     DecorationView aDecorationView(&rRenderContext);
     aDecorationView.DrawFrame(aFrameRect, DrawFrameStyle::Group);
-
-    rRenderContext.Pop();
 }
 
 bool PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )

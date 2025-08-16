@@ -467,6 +467,9 @@ public:
     void                        Pop();
     SAL_DLLPRIVATE void         ClearStack();
 
+    // Pushes the state, and returns a RAII object that pops it in destructor
+    [[nodiscard]] inline auto ScopedPush(vcl::PushFlags nFlags = vcl::PushFlags::ALL);
+
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
     bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
@@ -1914,5 +1917,18 @@ protected:
     SAL_DLLPRIVATE css::awt::DeviceInfo GetCommonDeviceInfo(Size const& aDevSize) const;
 
 };
+
+[[nodiscard]] inline auto OutputDevice::ScopedPush(vcl::PushFlags nFlags)
+{
+    struct OutputDeviceRestoreStateGuard
+    {
+        OutputDevice& m_rDev;
+        ~OutputDeviceRestoreStateGuard() { m_rDev.Pop(); }
+    };
+
+    Push(nFlags);
+    // [-loplugin:redundantfcast]
+    return OutputDeviceRestoreStateGuard{ *this };
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

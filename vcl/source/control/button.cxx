@@ -850,7 +850,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
     if (aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top())
         return;
 
-    pDev->Push(vcl::PushFlags::CLIPREGION);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
     pDev->IntersectClipRegion(aInRect);
 
     if (nSystemTextColorFlags & SystemTextColorFlags::Mono)
@@ -980,8 +980,6 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
         }
     }
-
-    pDev->Pop();  // restore clipregion
 }
 
 void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
@@ -1439,7 +1437,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
     tools::Rectangle   aRect( aPos, aSize );
     vcl::Font   aFont = GetDrawPixelFont( pDev );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
 
@@ -1483,8 +1481,6 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos,
         aSettings.SetStyleSettings(*oOrigDevStyleSettings);
         pDev->OutputDevice::SetSettings( aSettings );
     }
-
-    pDev->Pop();
 }
 
 void PushButton::Resize()
@@ -2184,7 +2180,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemText
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
-    pDev->Push( vcl::PushFlags::CLIPREGION );
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::CLIPREGION);
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     // no image radio button
@@ -2253,8 +2249,6 @@ void RadioButton::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemText
         rMouseRect = aImageRect;
         rStateRect = aImageRect;
     }
-
-    pDev->Pop();
 }
 
 void RadioButton::ImplDrawRadioButton(vcl::RenderContext& rRenderContext)
@@ -2569,7 +2563,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
         if ( !aBrd2Size.Height() )
             aBrd2Size.setHeight( 1 );
 
-        pDev->Push();
+        auto popIt = pDev->ScopedPush();
         pDev->SetMapMode();
         pDev->SetFont( aFont );
         if ( nFlags & SystemTextColorFlags::Mono )
@@ -2603,8 +2597,6 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos,
             pDev->SetFillColor( COL_BLACK );
             pDev->DrawPolygon( tools::Polygon( aCenterPos, nRadX, nRadY ) );
         }
-
-        pDev->Pop();
     }
     else
     {
@@ -2944,7 +2936,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 
 void RadioButton::ImplAdjustNWFSizes()
 {
-    GetOutDev()->Push( vcl::PushFlags::MAPMODE );
+    auto popIt = GetOutDev()->ScopedPush(vcl::PushFlags::MAPMODE);
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
@@ -2965,8 +2957,6 @@ void RadioButton::ImplAdjustNWFSizes()
             SetSizePixel( aCurSize );
         }
     }
-
-    GetOutDev()->Pop();
 }
 
 Size RadioButton::CalcMinimumSize(tools::Long nMaxWidth) const
@@ -3188,7 +3178,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
     WinBits                 nWinStyle = GetStyle();
     OUString                aText( GetText() );
 
-    pDev->Push( vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR );
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::CLIPREGION | vcl::PushFlags::LINECOLOR);
     pDev->IntersectClipRegion( tools::Rectangle( rPos, rSize ) );
 
     if (!aText.isEmpty() || HasImage())
@@ -3217,8 +3207,6 @@ void CheckBox::ImplDraw( OutputDevice* pDev, SystemTextColorFlags nSystemTextCol
 
         ImplSetFocusRect( rStateRect );
     }
-
-    pDev->Pop();
 }
 
 void CheckBox::ImplDrawCheckBox(vcl::RenderContext& rRenderContext)
@@ -3401,7 +3389,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
     if ( !nCheckWidth )
         nCheckWidth = 1;
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if ( nFlags & SystemTextColorFlags::Mono )
@@ -3463,8 +3451,6 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos,
             pDev->DrawLine( aTempPos21, aTempPos22 );
         }
     }
-
-    pDev->Pop();
 }
 
 void CheckBox::Resize()
@@ -3751,7 +3737,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 
 void CheckBox::ImplAdjustNWFSizes()
 {
-    GetOutDev()->Push( vcl::PushFlags::MAPMODE );
+    auto popIt = GetOutDev()->ScopedPush(vcl::PushFlags::MAPMODE);
     SetMapMode(MapMode(MapUnit::MapPixel));
 
     ImplControlValue aControlValue;
@@ -3772,8 +3758,6 @@ void CheckBox::ImplAdjustNWFSizes()
             SetSizePixel( aCurSize );
         }
     }
-
-    GetOutDev()->Pop();
 }
 
 Size CheckBox::CalcMinimumSize( tools::Long nMaxWidth ) const

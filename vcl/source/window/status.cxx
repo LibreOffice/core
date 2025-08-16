@@ -713,7 +713,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if (mbProgressMode)
     {
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aProgressColor = rStyleSettings.GetHighlightColor();
@@ -723,8 +723,6 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         rRenderContext.SetFillColor(aProgressColor);
 
         ImplDrawProgress(rRenderContext, mnPercent);
-
-        rRenderContext.Pop();
     }
     else
     {

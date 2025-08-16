@@ -106,7 +106,7 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
 // Draw the ">>" - more indicator at the coordinates
 void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
     rRenderContext.SetLineColor();
 
     if (rRenderContext.GetSettings().GetStyleSettings().GetFaceColor().IsDark())
@@ -140,7 +140,6 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
         else            x++;
         height--;
     }
-    rRenderContext.Pop();
 }
 
 } // end anonymous namespace
@@ -1568,7 +1567,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     nTitleHeight = 0;
     if (!IsMenuBar() && aTitleText.getLength() > 0) {
         // Set expected font
-        pWin->GetOutDev()->Push(PushFlags::FONT);
+        auto popIt = pWin->GetOutDev()->ScopedPush(PushFlags::FONT);
         vcl::Font aFont = pWin->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
         pWin->SetFont(aFont);
@@ -1582,7 +1581,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         aSz.AdjustHeight(nTitleHeight );
 
         tools::Long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
-        pWin->GetOutDev()->Pop();
         if ( nWidth > nMaxWidth )
             nMaxWidth = nWidth;
     }

@@ -149,8 +149,8 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
     Point aEntryPos(nX, nY);
 
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR
-                        | vcl::PushFlags::FONT);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR
+                                           | vcl::PushFlags::FONT);
     const Color aBackupColor = rRenderContext.GetFillColor();
 
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -262,8 +262,6 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
 
         rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
     }
-
-    rRenderContext.Pop();
 }
 
 FactoryFunction IconView::GetUITestFactory() const { return IconViewUIObject::create; }

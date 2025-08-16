@@ -373,7 +373,7 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
         aRect.AdjustRight(1 );
         aRect.AdjustBottom(1 );
     }
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
     if (bDrawBorder)
         rRenderContext.SetLineColor(bDark ? COL_WHITE : (bBright ? COL_BLACK : aSelectionBorderColor));
@@ -472,8 +472,6 @@ void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vc
             rRenderContext.DrawTransparent(aPolyPoly, nPercent);
         }
     }
-
-    rRenderContext.Pop(); // LINECOLOR | FILLCOLOR
 }
 
 void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderContext)

@@ -369,7 +369,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
     if (!nCount)
         return;
 
-    rRenderContext.Push(vcl::PushFlags::CLIPREGION);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
     std::vector< SvxIconChoiceCtrlEntry* > aNewZOrderList;
@@ -394,8 +394,6 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const too
     }
     maZOrderList = std::move( aNewZOrderList );
     maZOrderList.insert(maZOrderList.end(), aPaintedEntries.begin(), aPaintedEntries.end());
-
-    rRenderContext.Pop();
 }
 
 void SvxIconChoiceCtrl_Impl::RepaintSelectedEntries()
@@ -912,10 +910,9 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const tools::Rectangle& rTextRect,
         return;
 
     // draw text rectangle
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor(rFillColor);
     rRenderContext.DrawRect(rTextRect);
-    rRenderContext.Pop();
 }
 
 
@@ -961,7 +958,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const tools::Rectangle& rRect,
 
 void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     tools::Rectangle aTextRect(CalcTextRect(pEntry, &rPos));
     tools::Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
@@ -1087,7 +1084,6 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 
     PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
 
-    rRenderContext.Pop();
     if (bResetClipRegion)
         rRenderContext.SetClipRegion();
 }

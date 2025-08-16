@@ -1278,7 +1278,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
     vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont(pDev);
     aFont.SetTransparent( true );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     pDev->SetTextFillColor();
@@ -1330,8 +1330,6 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextCo
     aTE.SetFont( aFont );
     aTE.SetTextAlign( pImpVclMEdit->GetTextWindow()->GetTextEngine()->GetTextAlign() );
     aTE.Draw( pDev, Point( aPos.X() + nOffX, aPos.Y() + nOffY ) );
-
-    pDev->Pop();
 }
 
 bool VclMultiLineEdit::EventNotify( NotifyEvent& rNEvt )

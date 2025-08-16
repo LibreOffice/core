@@ -76,10 +76,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             arrow.SetPoint( Point( aCenter.X() + n8, nRect.Bottom()), 4 );
             arrow.SetPoint( Point( aCenter.X() + n8, nRect.Top() + n2 ), 5 );
             arrow.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n2 ), 6 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( arrow );
-            pDev->Pop();
             break;
         }
 
@@ -93,10 +92,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             arrow.SetPoint( Point( aCenter.X() + n8, nRect.Top()), 4 );
             arrow.SetPoint( Point( aCenter.X() + n8, nRect.Bottom() - n2 ), 5 );
             arrow.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n2 ), 6 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( arrow );
-            pDev->Pop();
             break;
         }
 
@@ -110,10 +108,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             arrow.SetPoint( Point( nRect.Right(), aCenter.Y() + n8 ), 4 );
             arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() + n8 ), 5 );
             arrow.SetPoint( Point( nRect.Left() + n2, aCenter.Y() + n2 ), 6 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( arrow );
-            pDev->Pop();
             break;
         }
 
@@ -127,10 +124,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             arrow.SetPoint( Point( nRect.Left(), aCenter.Y() + n8 ), 4 );
             arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() + n8 ), 5 );
             arrow.SetPoint( Point( nRect.Right() - n2, aCenter.Y() + n2 ), 6 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( arrow );
-            pDev->Pop();
             break;
         }
 
@@ -140,10 +136,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             triangle.SetPoint( Point( aCenter.X(), nRect.Top() + n4 ), 0 );
             triangle.SetPoint( Point( aCenter.X() - n2, nRect.Top() + n4 + n2 ), 1 );
             triangle.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n4 + n2 ), 2 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( triangle );
-            pDev->Pop();
             break;
         }
 
@@ -153,10 +148,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             triangle.SetPoint( Point( aCenter.X(), nRect.Bottom() - n4 ), 0 );
             triangle.SetPoint( Point( aCenter.X() - n2, nRect.Bottom() - n4 - n2 ), 1 );
             triangle.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n4 - n2 ), 2 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( triangle );
-            pDev->Pop();
             break;
         }
 
@@ -177,10 +171,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             aTriangle.SetPoint(Point(nRect.Left(), aCenter.Y()), 1);
             aTriangle.SetPoint(Point(nRect.Left() + n2, aCenter.Y() + n2), 2);
 
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon(aTriangle);
-            pDev->Pop();
 
             break;
         }
@@ -203,10 +196,9 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             aTriangle.SetPoint(Point(nRect.Right(), aCenter.Y()), 1);
             aTriangle.SetPoint(Point(nRect.Right() - n2, aCenter.Y() + n2), 2);
 
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon(aTriangle);
-            pDev->Pop();
             break;
         }
 
@@ -216,12 +208,11 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             triangle.SetPoint( Point( aCenter.X(), nRect.Top()), 0 );
             triangle.SetPoint( Point( aCenter.X() - n2, nRect.Top() + n2 ), 1 );
             triangle.SetPoint( Point( aCenter.X() + n2, nRect.Top() + n2 ), 2 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( triangle );
             triangle.Move( 0, n2 );
             pDev->DrawPolygon( triangle );
-            pDev->Pop();
             break;
         }
 
@@ -231,12 +222,11 @@ void ImplDrawSymbol( OutputDevice* pDev, tools::Rectangle nRect, const SymbolTyp
             triangle.SetPoint( Point( aCenter.X(), nRect.Bottom()), 0 );
             triangle.SetPoint( Point( aCenter.X() - n2, nRect.Bottom() - n2 ), 1 );
             triangle.SetPoint( Point( aCenter.X() + n2, nRect.Bottom() - n2 ), 2 );
-            pDev->Push(vcl::PushFlags::LINECOLOR);
+            auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor();
             pDev->DrawPolygon( triangle );
             triangle.Move( 0, -n2 );
             pDev->DrawPolygon( triangle );
-            pDev->Pop();
             break;
         }
 
@@ -770,7 +760,7 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
 {
     const StyleSettings&    rStyleSettings  = mpOutDev->GetSettings().GetStyleSettings();
     const tools::Rectangle         aRect           = mpOutDev->LogicToPixel( rRect );
-    mpOutDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
+    auto popIt = mpOutDev->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
     Color                   nColor(rColor);
     mpOutDev->EnableMapMode( false );
 
@@ -799,9 +789,6 @@ void DecorationView::DrawSymbol( const tools::Rectangle& rRect, SymbolType eType
     mpOutDev->SetLineColor( nColor );
     mpOutDev->SetFillColor( nColor );
     ImplDrawSymbol( mpOutDev, aRect, eType );
-
-    // Restore previous settings
-    mpOutDev->Pop();
 }
 
 void DecorationView::DrawFrame( const tools::Rectangle& rRect,
@@ -869,9 +856,8 @@ tools::Rectangle DecorationView::DrawFrame( const tools::Rectangle& rRect, DrawF
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
         else
         {
-             mpOutDev->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+             auto popIt = mpOutDev->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
              ImplDrawFrame( mpOutDev, aRect, mpOutDev->GetSettings().GetStyleSettings(), nStyle, nFlags );
-             mpOutDev->Pop();
         }
     }
 
@@ -965,15 +951,13 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
             return;
     }
 
-    mpOutDev->Push( vcl::PushFlags::LINECOLOR );
+    auto popIt = mpOutDev->ScopedPush(vcl::PushFlags::LINECOLOR);
     if ( rStyleSettings.GetOptions() & StyleSettingsOptions::Mono )
         mpOutDev->SetLineColor( COL_BLACK );
     else
         mpOutDev->SetLineColor( rStyleSettings.GetSeparatorColor() );
 
     mpOutDev->DrawLine( aStart, aStop );
-
-    mpOutDev->Pop();
 }
 
 void DecorationView::DrawHandle(const tools::Rectangle& rRect)

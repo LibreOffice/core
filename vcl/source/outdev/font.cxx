@@ -886,7 +886,7 @@ void OutputDevice::ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, too
 
 void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
-    Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
+    auto popIt = ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR | vcl::PushFlags::MAPMODE);
     GDIMetaFile*        pOldMetaFile    = mpMetaFile;
     mpMetaFile = nullptr;
     EnableMapMode( false );
@@ -970,7 +970,6 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         }
     }
 
-    Pop();
     mpMetaFile = pOldMetaFile;
 }
 

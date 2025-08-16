@@ -83,11 +83,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
             cCmpVal = 255;
 
         Color aCol(cCmpVal, cCmpVal, cCmpVal);
-        Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        auto popIt = ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
         SetLineColor(aCol);
         SetFillColor(aCol);
         DrawRect(tools::Rectangle(rDestPt, rDestSize));
-        Pop();
         return;
     }
 

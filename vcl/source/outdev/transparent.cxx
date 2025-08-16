@@ -472,10 +472,9 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
                     if( mbLineColor )
                     {
-                        Push( vcl::PushFlags::FILLCOLOR );
+                        auto popIt = ScopedPush(vcl::PushFlags::FILLCOLOR);
                         SetFillColor();
                         DrawPolyPolygon( rPolyPoly );
-                        Pop();
                     }
                 }
             }
@@ -1765,8 +1764,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                 if( !tools::Rectangle( aDstPtPix, aDstSzPix ).Intersection( aBoundRect ).IsEmpty() &&
                                     aPaintVDev->SetOutputSizePixel( aDstSzPix ) )
                                 {
-                                    aPaintVDev->Push();
-                                    aMapVDev->Push();
+                                    auto popIt1 = aPaintVDev->ScopedPush();
+                                    auto popIt2 = aMapVDev->ScopedPush();
 
                                     aMapVDev->mnDPIX = aPaintVDev->mnDPIX = mnDPIX;
                                     aMapVDev->mnDPIY = aPaintVDev->mnDPIY = mnDPIY;
@@ -1837,8 +1836,6 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
                                     aPaintVDev->mbMap = true;
                                     mbMap = bOldMap;
-                                    aMapVDev->Pop();
-                                    aPaintVDev->Pop();
                                 }
 
                                 // overlapping bands to avoid missing lines (e.g. PostScript)

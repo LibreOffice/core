@@ -60,11 +60,10 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     {
         Color aColor = GetSingleColorGradientFill();
 
-        Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+        auto popIt = ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
         SetLineColor( aColor );
         SetFillColor( aColor );
         DrawPolyPolygon( rPolyPoly );
-        Pop();
         return;
     }
 
@@ -97,7 +96,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                 return;
 
             // secure clip region
-            Push( vcl::PushFlags::CLIPREGION );
+            auto popIt = ScopedPush(vcl::PushFlags::CLIPREGION);
             IntersectClipRegion( aBoundRect );
 
             if (mbInitClipRegion)
@@ -139,8 +138,6 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                 else
                     DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? nullptr : &aClixPolyPoly );
             }
-
-            Pop();
         }
     }
 }

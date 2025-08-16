@@ -2010,11 +2010,10 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, tools:
                                         const TextPaM aTextEnd(nPara, nIndex + 1);
                                         if ((aTextStart < *pSelEnd) && (aTextEnd > *pSelStart))
                                         {
-                                            pOutDev->Push(vcl::PushFlags::FILLCOLOR);
+                                            auto popIt = pOutDev->ScopedPush(vcl::PushFlags::FILLCOLOR);
                                             pOutDev->SetFillColor(
                                                 rStyleSettings.GetHighlightColor());
                                             pOutDev->DrawRect(aTabArea);
-                                            pOutDev->Pop();
                                         }
                                         else
                                         {

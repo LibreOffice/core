@@ -1397,7 +1397,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetLineColor();
 
@@ -1419,8 +1419,6 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
 
         aImplWin->Draw( pDev, aPos );
     }
-
-    pDev->Pop();
 }
 
 void Dialog::queue_resize(StateChangedType eReason)

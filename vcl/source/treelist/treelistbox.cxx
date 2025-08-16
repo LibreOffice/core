@@ -2835,7 +2835,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     if (pViewDataEntry->IsDragTarget())
     {
-        rRenderContext.Push();
+        auto popIt = rRenderContext.ScopedPush();
         rRenderContext.SetLineColor(rSettings.GetDeactiveColor());
         rRenderContext.SetFillColor(rSettings.GetDeactiveColor());
 
@@ -2849,8 +2849,6 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         {
             rRenderContext.DrawRect(tools::Rectangle(Point(0, nLine), Size(nWidth, 2)));
         }
-
-        rRenderContext.Pop();
     }
 
     if (bCurFontIsSel || rEntry.GetTextColor())

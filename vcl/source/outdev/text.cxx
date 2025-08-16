@@ -1657,12 +1657,11 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
 
         if ( nStyle & DrawTextFlags::Clip )
         {
-            rTargetDevice.Push( vcl::PushFlags::CLIPREGION );
+            auto popIt = rTargetDevice.ScopedPush(vcl::PushFlags::CLIPREGION);
             rTargetDevice.IntersectClipRegion( rRect );
             _rLayout.DrawText( aPos, aStr, 0, aStr.getLength(), pVector, pDisplayText );
             if ( bDrawMnemonics && nMnemonicPos != -1 )
                 rTargetDevice.ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
-            rTargetDevice.Pop();
         }
         else
         {

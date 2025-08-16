@@ -380,7 +380,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
 {
     Point aPos  = pDev->LogicToPixel( rPos );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     if ( !(nFlags & SystemTextColorFlags::Mono) )
     {
@@ -413,7 +413,6 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
     maPage2Rect+=aPos;
 
     ImplDraw(*pDev);
-    pDev->Pop();
 
     mbCalcSize = true;
 }
@@ -953,13 +952,12 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
     {
         // rMEvt coordinates are in twips.
-        GetOutDev()->Push(vcl::PushFlags::MAPMODE);
+        auto popIt = GetOutDev()->ScopedPush(vcl::PushFlags::MAPMODE);
         EnableMapMode();
         MapMode aMapMode = GetMapMode();
         aMapMode.SetOrigin(Point(0, 0));
         SetMapMode(aMapMode);
         aPosPixel = LogicToPixel(rMEvt.GetPosPixel());
-        GetOutDev()->Pop();
     }
     const Point&        rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rMEvt.GetPosPixel() : aPosPixel);
     StartTrackingFlags  nTrackFlags = StartTrackingFlags::NONE;
@@ -1110,13 +1108,12 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // rTEvt coordinates are in twips.
-            GetOutDev()->Push(vcl::PushFlags::MAPMODE);
+            auto popIt = GetOutDev()->ScopedPush(vcl::PushFlags::MAPMODE);
             EnableMapMode();
             MapMode aMapMode = GetMapMode();
             aMapMode.SetOrigin(Point(0, 0));
             SetMapMode(aMapMode);
             aPosPixel = LogicToPixel(rTEvt.GetMouseEvent().GetPosPixel());
-            GetOutDev()->Pop();
         }
         const Point rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
 

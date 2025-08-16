@@ -1632,10 +1632,9 @@ void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const too
 {
     const tools::Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
-    Push( vcl::PushFlags::CLIPREGION );
+    auto popIt = ScopedPush(vcl::PushFlags::CLIPREGION);
     IntersectClipRegion(vcl::Region(rPolyPoly));
     DrawGradient( aBoundRect, rGradient );
-    Pop();
 }
 
 void Printer::SetFontOrientation( LogicalFontInstance* const pFontEntry ) const

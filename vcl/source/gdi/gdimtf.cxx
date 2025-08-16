@@ -358,7 +358,7 @@ void GDIMetaFile::Play(OutputDevice& rOut, size_t nPos)
     // This is necessary, since old metafiles don't even know of these
     // recent add-ons. Newer metafiles must of course explicitly set
     // those states.
-    rOut.Push(vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE);
+    auto popIt = rOut.ScopedPush(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
     rOut.SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
@@ -383,7 +383,6 @@ void GDIMetaFile::Play(OutputDevice& rOut, size_t nPos)
             pAction = NextAction();
         }
     }
-    rOut.Pop();
 }
 
 bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Size rLogicDestSize)
@@ -518,7 +517,7 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     aDrawMap.SetOrigin(rOut.PixelToLogic(rOut.LogicToPixel(rPos), aDrawMap));
     rOut.SetPixelOffset(aOldOffset);
 
-    rOut.Push();
+    auto popIt = rOut.ScopedPush();
 
     bool bIsRecord = (pMtf && pMtf->IsRecord());
     rOut.SetMetafileMapMode(aDrawMap, bIsRecord);
@@ -531,8 +530,6 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     rOut.SetDigitLanguage(LANGUAGE_SYSTEM);
 
     Play(rOut);
-
-    rOut.Pop();
 }
 
 void GDIMetaFile::Pause( bool _bPause )

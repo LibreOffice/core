@@ -170,7 +170,7 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     if ( !aWallpaper.IsBitmap() )
         ImplInitSettings();
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetLineColor();
 
@@ -184,8 +184,6 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
             pDev->SetFillColor( aWallpaper.GetColor() );
         pDev->DrawRect( tools::Rectangle( aPos, aSize ) );
     }
-
-    pDev->Pop();
 }
 
 Size TabPage::GetOptimalSize() const

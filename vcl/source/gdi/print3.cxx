@@ -863,7 +863,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     setValue( u"Name"_ustr,
               css::uno::Any( i_rPrinter->GetName() ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
-    mpImplData->mxPrinter->Push();
+    auto popIt = mpImplData->mxPrinter->ScopedPush();
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
 
@@ -875,7 +875,6 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 
     mpImplData->mbPapersizeFromUser = false;
     mpImplData->mbOrientationFromUser = false;
-    mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
 }
 
@@ -901,7 +900,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     if( !xPrinter )
         return;
 
-    xPrinter->Push();
+    auto popIt = xPrinter->ScopedPush();
     xPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
 
     // get current data
@@ -956,7 +955,6 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
         if (aPaperSize != aNewPaperSize)
             xPrinter->SetPaperSizeUser(aPaperSize);
     }
-    xPrinter->Pop();
 }
 
 PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
@@ -1037,34 +1035,29 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 //print dialog
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
-    mxPrinter->Push();
+    auto popIt = mxPrinter->ScopedPush();
     mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     Size aCurSize(mxPrinter->GetPaperSize());
     if (aCurSize != maDefaultPageSize)
         mxPrinter->SetPaperSizeUser(maDefaultPageSize);
-    mxPrinter->Pop();
 }
 
 int PrinterController::getPageCountProtected() const
 {
     const MapMode aMapMode( MapUnit::Map100thMM );
 
-    mpImplData->mxPrinter->Push();
+    auto popIt = mpImplData->mxPrinter->ScopedPush();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
-    int nPages = getPageCount();
-    mpImplData->mxPrinter->Pop();
-    return nPages;
+    return getPageCount();
 }
 
 css::uno::Sequence< css::beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
 {
     const MapMode aMapMode( MapUnit::Map100thMM );
 
-    mpImplData->mxPrinter->Push();
+    auto popIt = mpImplData->mxPrinter->ScopedPush();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
-    css::uno::Sequence< css::beans::PropertyValue > aResult( getPageParameters( i_nPage ) );
-    mpImplData->mxPrinter->Pop();
-    return aResult;
+    return getPageParameters(i_nPage);
 }
 
 PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )

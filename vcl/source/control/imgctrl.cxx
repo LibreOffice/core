@@ -133,7 +133,7 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
     tools::Rectangle aRect(Point(0,0), pBorderWindow->GetOutputSizePixel());
-    pBorderWindow->GetOutDev()->Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+    auto popIt = pBorderWindow->GetOutDev()->ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     pBorderWindow->GetOutDev()->SetFillColor();
     pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_WHITE : COL_BLACK);
     pBorderWindow->GetOutDev()->DrawRect(aRect);
@@ -143,7 +143,6 @@ void ImageControl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     aRect.AdjustBottom( -1 );
     pBorderWindow->GetOutDev()->SetLineColor(bFlat ? COL_BLACK : COL_WHITE);
     pBorderWindow->GetOutDev()->DrawRect(aRect);
-    pBorderWindow->GetOutDev()->Pop();
 }
 
 void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
@@ -152,7 +151,7 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorF
     const Size      aSize = GetSizePixel();
     tools::Rectangle aRect( aPos, aSize );
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
 
     // Border
@@ -162,8 +161,6 @@ void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorF
     }
     pDev->IntersectClipRegion( aRect );
     ImplDraw( *pDev, aRect.TopLeft(), aRect.GetSize() );
-
-    pDev->Pop();
 }
 
 void ImageControl::GetFocus()
