@@ -739,7 +739,6 @@ WPXSvInputStream::~WPXSvInputStream() {}
 
 long WPXSvInputStream::tell()
 {
-    // coverity[tainted_data_return : FALSE] retVal is considered safe now
     tools::Long retVal = tellImpl();
     if (retVal < 0)
         return -1;

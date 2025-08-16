@@ -209,7 +209,6 @@ sal_uInt16 Date::GetDayOfYear() const
 sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                                 sal_Int16 nMinimumNumberOfDaysInWeek ) const
 {
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     short n1WDay = static_cast<short>(Date( 1, 1, GetYear() ).GetDayOfWeek());
     short nDayOfYear = static_cast<short>(GetDayOfYear());
 

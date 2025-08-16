@@ -294,9 +294,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
 
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     tools::Long GetXScroll() const { return (m_aVisArea.GetWidth() * nScrollX) / 100; }
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     tools::Long GetYScroll() const { return (m_aVisArea.GetHeight() * nScrollY) / 100; }
 
     SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;

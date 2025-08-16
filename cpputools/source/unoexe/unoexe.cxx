@@ -464,7 +464,6 @@ SAL_IMPLEMENT_MAIN()
                 xContext, aImplName, aLocation, aServiceName, aInitParams,
                 bSingleInstance, aInstanceName ) );
 
-            // coverity[loop_top] - not really an infinite loop, we can be instructed to exit via the connection
             for (;;)
             {
                 // accepting

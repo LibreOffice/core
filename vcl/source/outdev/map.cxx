@@ -277,7 +277,6 @@ tools::Long OutputDevice::ImplLogicXToDevicePixel( tools::Long nX ) const
     if ( !mbMap )
         return nX+mnOutOffX;
 
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     return ImplLogicToPixel( nX + maMapRes.mnMapOfsX, mnDPIX,
                              maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX )+mnOutOffX+mnOutOffOrigX;
 }
@@ -287,7 +286,6 @@ tools::Long OutputDevice::ImplLogicYToDevicePixel( tools::Long nY ) const
     if ( !mbMap )
         return nY+mnOutOffY;
 
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     return ImplLogicToPixel( nY + maMapRes.mnMapOfsY, mnDPIY,
                              maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY )+mnOutOffY+mnOutOffOrigY;
 }

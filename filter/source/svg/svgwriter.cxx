@@ -2643,7 +2643,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             if ( aTextColor == COL_BLACK )
                 aTextColor = COL_WHITE;
 
-            // coverity[copy_paste_error : FALSE] - aReliefColor depending on aTextColor is correct
             if (aTextColor == COL_WHITE)
                 aReliefColor = COL_BLACK;
 

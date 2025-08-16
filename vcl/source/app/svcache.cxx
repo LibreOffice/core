@@ -98,7 +98,6 @@ CacheMemory::CacheMemory()
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY || defined HAIKU
     mnPageSize = getpagesize();
 #else
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     mnPageSize = sysconf(_SC_PAGESIZE);
 #endif
 #elif defined _WIN32

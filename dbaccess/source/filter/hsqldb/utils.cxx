@@ -82,7 +82,7 @@ OUString utils::getTableNameFromStmt(std::u16string_view sSql)
     if (wordIter->indexOf("\"") >= 0)
     {
         size_t nAposBegin = sSql.find('"');
-        assert(nAposBegin != std::u16string_view::npos); // make coverity happy
+        assert(nAposBegin != std::u16string_view::npos);
         size_t nAposEnd = nAposBegin;
         bool bProperEndAposFound = false;
         while (!bProperEndAposFound)

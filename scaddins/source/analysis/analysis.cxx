@@ -407,7 +407,6 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( const uno::Reference< beans::XProp
     DaysToDate( nDate, nDay, nMonth, nYear );
 
     sal_Int32   nFirstInYear = DateToDays( 1, 1, nYear );
-    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     sal_uInt16  nFirstDayInYear = GetDayOfWeek( nFirstInYear );
 
     return ( nDate - nFirstInYear + ( ( nMode == 1 )? ( nFirstDayInYear + 1 ) % 7 : nFirstDayInYear ) ) / 7 + 1;

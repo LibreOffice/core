@@ -186,7 +186,6 @@ bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     aHashData[ u"XOR95EncryptionKey"_ustr ] <<= uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
     aHashData[ u"XOR95BaseKey"_ustr ] <<= static_cast<sal_Int16>(mnKey);
     aHashData[ u"XOR95PasswordHash"_ustr ] <<= static_cast<sal_Int16>(mnHash);

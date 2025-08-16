@@ -580,7 +580,6 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
         {
             nRow1 = std::min( nRow1, rCell.GetSharedTopRow());
             SCROW nCellLen = rCell.GetSharedLength();
-            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             const auto nEndRow = rCell.GetSharedTopRow() + nCellLen;
             if (nRow2 < nEndRow)
             {

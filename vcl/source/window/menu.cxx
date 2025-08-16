@@ -2268,7 +2268,6 @@ tools::Long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) c
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         tools::Long nIndex = mpLayoutData->GetIndexForPoint( rPoint );
         for( size_t i = 0; i < mpLayoutData->m_aLineIndices.size(); i++ )
         {

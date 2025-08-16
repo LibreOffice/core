@@ -937,7 +937,6 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     }
     else
     {
-        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         nScrollAmount = _nWinPagesToScroll * maPaintedPreviewDocRect.GetHeight();
     }
 

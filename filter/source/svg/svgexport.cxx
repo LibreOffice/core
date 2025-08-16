@@ -2789,7 +2789,6 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                                     sDate.append( SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang ) );
                                 }
                                 break;
-                            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                             case SvxDateFormat::StdSmall:
                             case SvxDateFormat::A:       // 13.02.96
                             case SvxDateFormat::B:       // 13.02.1996
