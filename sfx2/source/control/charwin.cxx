@@ -51,11 +51,10 @@ void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     vcl::Font aFont = rStyleSettings.GetLabelFont();
     const Size aFontSize = aFont.GetFontSize();
     aFont.SetFontSize(Size(aFontSize.Width() * 2, aFontSize.Height() * 2));
-    mxVirDev->Push(PUSH_ALLFONT);
+    auto popIt = mxVirDev->ScopedPush(PUSH_ALLFONT);
     weld::SetPointFont(*mxVirDev, aFont);
     pDrawingArea->set_size_request(mxVirDev->approximate_digit_width() * 2,
                                    mxVirDev->GetTextHeight());
-    mxVirDev->Pop();
 }
 
 void SvxCharView::GetFocus()

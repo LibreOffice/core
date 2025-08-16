@@ -154,7 +154,7 @@ public:
         // Resizes the virtual device so to contain the entries context
         rDevice.SetOutputSizePixel(aOutputSize, /*bErase*/ false);
 
-        rDevice.Push(vcl::PushFlags::MAPMODE);
+        auto popIt = rDevice.ScopedPush(vcl::PushFlags::MAPMODE);
         MapMode aDeviceMapMode(rDevice.GetMapMode());
 
         const Fraction scale = conversionFract(o3tl::Length::px, o3tl::Length::twip);
@@ -187,8 +187,6 @@ public:
                 }
             }
         }
-
-        rDevice.Pop();
     }
 };
 

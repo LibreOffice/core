@@ -950,7 +950,7 @@ void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(maFillColor);
@@ -979,8 +979,6 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rec
             continue;
         pItem->Paint(pProcessor.get(), mpItemAttrs.get());
     }
-
-    rRenderContext.Pop();
 }
 
 void ThumbnailView::GetFocus()

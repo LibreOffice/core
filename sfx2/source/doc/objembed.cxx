@@ -175,7 +175,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     aMapMode.SetOrigin( aDelta );
 
     // Secure the Device settings
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
 
     vcl::Region aRegion;
     if( pDev->IsClipRegion() && pDev->GetOutDevType() != OUTDEV_PRINTER )
@@ -202,10 +202,6 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
         pMtf->Record( pDev );
 
     Draw( pDev, rSetup, nAspect, bOutputForScreen );
-
-    // Restore Device settings
-    pDev->Pop();
-
 }
 
 comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer() const

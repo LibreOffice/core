@@ -231,7 +231,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     // Resizes the virtual device so to contain the entries context
     rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight), /*bErase*/false);
 
-    rDevice.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rDevice.ScopedPush(vcl::PushFlags::MAPMODE);
     MapMode aMapMode(rDevice.GetMapMode());
 
     // Scaling. Must convert from pixels to twips. We know
@@ -257,7 +257,6 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
-    rDevice.Pop();
 }
 
 bool LokChartHelper::postMouseEvent(int nType, int nX, int nY,

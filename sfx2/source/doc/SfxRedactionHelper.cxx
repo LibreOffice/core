@@ -431,7 +431,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
 
     OutputDevice* pOutputDevice
         = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
-    pOutputDevice->Push(::vcl::PushFlags::FONT);
+    auto popIt = pOutputDevice->ScopedPush(vcl::PushFlags::FONT);
 
     MetaAction* pCurrAct;
 
@@ -480,8 +480,6 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
             pOutputDevice->SetFont(font);
         }
     }
-
-    pOutputDevice->Pop();
 }
 
 void SfxRedactionHelper::searchImagesInMetaFile(

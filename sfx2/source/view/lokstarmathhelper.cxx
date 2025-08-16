@@ -222,7 +222,7 @@ void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
     // Resizes the virtual device to contain the entries context
     rDevice.SetOutputSizePixel({ nOutputWidth, nOutputHeight });
 
-    rDevice.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rDevice.ScopedPush(vcl::PushFlags::MAPMODE);
     MapMode aMapMode(rDevice.GetMapMode());
 
     // Scaling. Must convert from pixels to twips. We know that VirtualDevices use a DPI of 96.
@@ -240,8 +240,6 @@ void LokStarMathHelper::PaintAllInPlaceOnTile(VirtualDevice& rDevice, int nOutpu
          pViewShell = SfxViewShell::GetNext(*pViewShell))
         if (pViewShell->GetDocId() == nDocId && pViewShell->getPart() == nPartForCurView)
             LokStarMathHelper(pViewShell).PaintTile(rDevice, aTileRect);
-
-    rDevice.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

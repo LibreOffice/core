@@ -260,7 +260,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 
     // No recent files to be shown yet. Show a welcome screen.
-    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
     SetMessageFont(rRenderContext);
     rRenderContext.SetTextColor(maTextColor);
 
@@ -281,8 +281,6 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     rRenderContext.DrawText(tools::Rectangle(0, nY + 2 * nTextHeight, rSize.Width(), rSize.Height()),
                             maWelcomeLine2,
                             DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center);
-
-    rRenderContext.Pop();
 }
 
 void RecentDocsView::LoseFocus()

@@ -433,7 +433,7 @@ IMPL_LINK(IndexTabPage_Impl, CustomRenderHdl, weld::TreeView::render_args, aPayl
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -456,8 +456,6 @@ IMPL_LINK(IndexTabPage_Impl, CustomRenderHdl, weld::TreeView::render_args, aPayl
     }
     else
         rRenderContext.DrawText(aPos, aEntry);
-
-    rRenderContext.Pop();
 }
 
 IMPL_LINK_NOARG(IndexTabPage_Impl, TreeChangeHdl, weld::TreeView&, void)

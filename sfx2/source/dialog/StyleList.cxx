@@ -1783,7 +1783,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -1803,7 +1803,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
 
             if (pStyleSheet)
             {
-                rRenderContext.Push(vcl::PushFlags::ALL);
+                auto popIt2 = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
                 // tdf#119919 - show "hidden" styles as disabled to not move children onto root node
                 if (pStyleSheet->IsHidden() && m_bHierarchical)
                     rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
@@ -1813,15 +1813,12 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
                     pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
                 bSuccess
                     = pStylePreviewRenderer->recalculate() && pStylePreviewRenderer->render(aRect);
-                rRenderContext.Pop();
             }
         }
     }
 
     if (!bSuccess)
         rRenderContext.DrawText(aRect, rId, DrawTextFlags::Left | DrawTextFlags::VCenter);
-
-    rRenderContext.Pop();
 }
 
 // Selection of a template during the Watercan-Status
