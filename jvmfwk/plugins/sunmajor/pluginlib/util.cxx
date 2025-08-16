@@ -401,7 +401,7 @@ bool getJavaProps(const OUString & exePath,
     FileHandleReader stdoutReader(fileOut);
     rtl::Reference< AsynchReader > stderrReader(new AsynchReader(fileErr));
 
-    JFW_TRACE2("Executing: " + exePath);
+    SAL_INFO("jfw.level2", "Executing: " + exePath);
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
@@ -418,7 +418,7 @@ bool getJavaProps(const OUString & exePath,
 
     if( procErr != osl_Process_E_None)
     {
-        JFW_TRACE2("Execution failed");
+        SAL_INFO("jfw.level2", "Execution failed");
         *bProcessRun = false;
         SAL_WARN("jfw",
             "osl_executeProcess failed (" << ret << "): \"" << exePath << "\"");
@@ -426,7 +426,7 @@ bool getJavaProps(const OUString & exePath,
     }
     else
     {
-        JFW_TRACE2("Java executed successfully");
+        SAL_INFO("jfw.level2", "Java executed successfully");
         *bProcessRun = true;
     }
 
@@ -435,7 +435,7 @@ bool getJavaProps(const OUString & exePath,
 
     //Use this thread to read output stream
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
-    JFW_TRACE2("Properties found:");
+    SAL_INFO("jfw.level2", "Properties found:");
     while (true)
     {
         OString aLine;
@@ -445,7 +445,7 @@ bool getJavaProps(const OUString & exePath,
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
-        JFW_TRACE2("  \"" << sLine << "\"");
+        SAL_INFO("jfw.level2", "  \"" << sLine << "\"");
         sLine = sLine.trim();
         if (sLine.isEmpty())
             continue;
@@ -472,7 +472,7 @@ bool getJavaProps(const OUString & exePath,
 
     //process error stream data
     stderrReader->join();
-    JFW_TRACE2("Java wrote to stderr:\" "
+    SAL_INFO("jfw.level2", "Java wrote to stderr:\" "
                << stderrReader->getData() << " \"");
 
     TimeValue waitMax= {5 ,0};
@@ -852,7 +852,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
     {
-        JFW_TRACE2("JRE found again (detected before): " << sResolvedDir);
+        SAL_INFO("jfw.level2", "JRE found again (detected before): " << sResolvedDir);
         return entry2->second;
     }
 
@@ -902,7 +902,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             auto entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
             {
-                JFW_TRACE2("JRE found again (detected before): " << sFilePath);
+                SAL_INFO("jfw.level2", "JRE found again (detected before): " << sFilePath);
 
                 return entry->second;
             }
@@ -1005,7 +1005,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     }
     else
     {
-        JFW_TRACE2("Found JRE: " << sResolvedDir << " at: " << path);
+        SAL_INFO("jfw.level2", "Found JRE: " << sResolvedDir << " at: " << path);
 
         mapJREs.emplace(sResolvedDir, ret);
         mapJREs.emplace(sFilePath, ret);
@@ -1127,7 +1127,7 @@ void addJavaInfosDirScan(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
-    JFW_TRACE2("Checking /usr/jdk/latest");
+    SAL_INFO("jfw.level2", "Checking /usr/jdk/latest");
     getAndAddJREInfoByPath("file:////usr/jdk/latest", allInfos, addedInfos);
 }
 
@@ -1210,10 +1210,10 @@ void addJavaInfosDirScan(
                     case File::E_NOTDIR:
                         continue;
                     case File::E_ACCES:
-                        JFW_TRACE2("Could not read directory " << usDir2 << " because of missing access rights");
+                        SAL_INFO("jfw.level2", "Could not read directory " << usDir2 << " because of missing access rights");
                         continue;
                     default:
-                        JFW_TRACE2("Could not read directory " << usDir2 << ". Osl file error: " << openErr);
+                        SAL_INFO("jfw.level2", "Could not read directory " << usDir2 << ". Osl file error: " << openErr);
                         continue;
                     }
 
@@ -1225,10 +1225,10 @@ void addJavaInfosDirScan(
                         File::RC errStatus = File::E_None;
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
-                            JFW_TRACE2(excMessage + "getFileStatus failed with error " << errStatus);
+                            SAL_INFO("jfw.level2", excMessage + "getFileStatus failed with error " << errStatus);
                             continue;
                         }
-                        JFW_TRACE2("Checking if directory: " << aStatus.getFileURL() << " is a Java");
+                        SAL_INFO("jfw.level2", "Checking if directory: " << aStatus.getFileURL() << " is a Java");
 
                         getAndAddJREInfoByPath(
                             aStatus.getFileURL(), allInfos, addedInfos);

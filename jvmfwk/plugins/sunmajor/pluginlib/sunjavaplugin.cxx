@@ -629,7 +629,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ( !JvmfwkUtil_isLoadableJVM( sRuntimeLib ) )
         return javaPluginError::VmCreationFailed;
 #endif
-    JFW_TRACE2("Using Java runtime library: " << sRuntimeLib);
+    SAL_INFO("jfw.level2", "Using Java runtime library: " << sRuntimeLib);
 
 #ifndef ANDROID
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
@@ -815,7 +815,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     else
     {
         *ppVm = pJavaVM;
-        JFW_TRACE2("JVM created");
+        SAL_INFO("jfw.level2", "JVM created");
     }
 #else
     (void) arOptions;
@@ -860,37 +860,37 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, bool *exist)
     if (ret == javaPluginError::NONE && *exist)
     {
         OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-        JFW_TRACE2("Checking existence of Java runtime library");
+        SAL_INFO("jfw.level2", "Checking existence of Java runtime library");
 
         ::osl::DirectoryItem itemRt;
         ::osl::File::RC rc_itemRt = ::osl::DirectoryItem::get(sRuntimeLib, itemRt);
         if (::osl::File::E_None == rc_itemRt)
         {
             *exist = true;
-            JFW_TRACE2("Java runtime library exist: " << sRuntimeLib);
+            SAL_INFO("jfw.level2", "Java runtime library exist: " << sRuntimeLib);
 
             // Check version
             rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(sLocation);
             if (!aVendorInfo.is())
             {
                 *exist = false;
-                JFW_TRACE2("JRE or supported vendor not accessible at location: " << sLocation);
+                SAL_INFO("jfw.level2", "JRE or supported vendor not accessible at location: " << sLocation);
             }
             else if(pInfo->sVersion!=aVendorInfo->getVersion())
             {
                 *exist = false;
-                JFW_TRACE2("Mismatch between version number in libreoffice settings and installed JRE:  " << pInfo->sVersion <<" != " << aVendorInfo->getVersion());
+                SAL_INFO("jfw.level2", "Mismatch between version number in libreoffice settings and installed JRE:  " << pInfo->sVersion <<" != " << aVendorInfo->getVersion());
             }
         }
         else if (::osl::File::E_NOENT == rc_itemRt)
         {
             *exist = false;
-            JFW_TRACE2("Java runtime library does not exist: " << sRuntimeLib);
+            SAL_INFO("jfw.level2", "Java runtime library does not exist: " << sRuntimeLib);
         }
         else
         {
             ret = javaPluginError::Error;
-            JFW_TRACE2("Error while looking for Java runtime library: " << sRuntimeLib);
+            SAL_INFO("jfw.level2", "Error while looking for Java runtime library: " << sRuntimeLib);
         }
     }
     return ret;
