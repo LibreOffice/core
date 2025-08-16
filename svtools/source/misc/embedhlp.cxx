@@ -722,7 +722,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     aFnt.SetWeight( WEIGHT_BOLD );
     aFnt.SetFamily( FAMILY_SWISS );
 
-    pOut->Push();
+    auto popIt = pOut->ScopedPush();
     pOut->SetBackground();
     pOut->SetFont( aFnt );
 
@@ -791,7 +791,6 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     pOut->IntersectClipRegion( rRect );
     aPt += rRect.TopLeft();
     pOut->DrawText( aPt, rText );
-    pOut->Pop();
 }
 
 void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice *pOut )
@@ -800,7 +799,7 @@ void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice
     if( pMtf && pMtf->IsRecord() )
         return;
 
-    pOut->Push();
+    auto popIt = pOut->ScopedPush();
     pOut->SetLineColor( COL_BLACK );
 
     Size aPixSize = pOut->LogicToPixel( rRect.GetSize() );
@@ -822,9 +821,6 @@ void EmbeddedObjectRef::DrawShading( const tools::Rectangle &rRect, OutputDevice
 
         pOut->DrawLine( pOut->PixelToLogic( a1 ), pOut->PixelToLogic( a2 ) );
     }
-
-    pOut->Pop();
-
 }
 
 bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbeddedObject >& xEmbObj )

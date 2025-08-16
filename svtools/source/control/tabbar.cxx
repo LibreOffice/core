@@ -1158,7 +1158,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     ImplGetColors(rStyleSettings, aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor);
 
-    rRenderContext.Push(vcl::PushFlags::FONT | vcl::PushFlags::CLIPREGION);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(GetPageArea()));
 
     // select font
@@ -1263,7 +1263,6 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
         if (!pItem)
             pItem = pCurItem;
     }
-    rRenderContext.Pop();
 }
 
 void TabBar::Resize()

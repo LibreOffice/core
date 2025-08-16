@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 
 static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, OutputDevice& rDevice, bool bSelected)
 {
-    rDevice.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rDevice.ScopedPush(vcl::PushFlags::TEXTCOLOR);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
@@ -780,7 +780,6 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     }
 
     rDevice.SetFont(aOldFont);
-    rDevice.Pop();
 }
 
 OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
@@ -1648,14 +1647,13 @@ void SvtLineListBox::UpdatePreview()
         Image aImage(m_xLineSet->GetItemImage(m_xLineSet->GetSelectedItemId()));
         m_xControl->set_label(u""_ustr);
         const auto nPos = (aVirDev->GetOutputSizePixel().Height() - aImage.GetSizePixel().Height()) / 2;
-        aVirDev->Push(vcl::PushFlags::MAPMODE);
+        auto popIt = aVirDev->ScopedPush(vcl::PushFlags::MAPMODE);
         aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         aVirDev->SetBackground(rSettings.GetFieldColor());
         aVirDev->Erase();
         aVirDev->DrawImage(Point(0, nPos), aImage);
         m_xControl->set_image(aVirDev.get());
-        aVirDev->Pop();
     }
 }
 

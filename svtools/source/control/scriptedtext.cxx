@@ -104,7 +104,7 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
     maTextSize.setWidth(0);
     maTextSize.setHeight(0);
-    mrOutDevice.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = mrOutDevice.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     // calculate text portion widths and total width
     maWidthVec.clear();
@@ -143,8 +143,6 @@ void SvtScriptedTextHelper_Impl::CalculateSizes()
     maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
     SetOutDevFont( i18n::ScriptType::COMPLEX );
     maTextSize.setHeight( std::max( maTextSize.Height(), mrOutDevice.GetTextHeight() ) );
-
-    mrOutDevice.Pop();
 }
 
 void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XBreakIterator >& _xBreakIter )
@@ -246,7 +244,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid std::vectors" );
     DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid std::vectors" );
 
-    mrOutDevice.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = mrOutDevice.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     Point aCurrPos( _rPos );
     sal_Int32 nThisPos = maPosVec[ 0 ];
@@ -270,8 +268,6 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
         aCurrPos.AdjustX(mrOutDevice.GetTextHeight() / 5 );   // add 20% of font height as portion spacing
         nThisPos = nNextPos;
     }
-
-    mrOutDevice.Pop();
 }
 
 

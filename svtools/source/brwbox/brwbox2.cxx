@@ -610,10 +610,9 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         }
         else
         {
-            rRenderContext.Push(vcl::PushFlags::FILLCOLOR);
+            auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetFillColor(COL_BLACK);
             rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0), Size(pCol->Width(), GetTitleHeight() - 1)));
-            rRenderContext.Pop();
         }
 
         // skip column
@@ -625,24 +624,22 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     {
         const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aColFace(rSettings.GetFaceColor());
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rRenderContext.SetFillColor(aColFace);
         rRenderContext.SetLineColor(aColFace);
         rRenderContext.DrawRect(tools::Rectangle(Point(nX, 0),
                                           Point(rRect.Right(), GetTitleHeight() - 2 )));
-        rRenderContext.Pop();
     }
 
     if (m_nActualCornerWidth)
     {
         const StyleSettings &rSettings = rRenderContext.GetSettings().GetStyleSettings();
         Color aColFace(rSettings.GetFaceColor());
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
         rRenderContext.SetFillColor(aColFace);
         rRenderContext.SetLineColor(aColFace);
         rRenderContext.DrawRect(tools::Rectangle(Point(GetOutputSizePixel().Width() - m_nActualCornerWidth, aHScroll->GetPosPixel().Y()),
                                                  Size(m_nActualCornerWidth, m_nCornerHeight)));
-        rRenderContext.Pop();
     }
 }
 
@@ -660,7 +657,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
         // the 'normal' painting uses always the data window as device to output to, so we have to calc the new font
         // relative to the data wins current settings
 
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     pDev->SetMapMode();
     pDev->SetFont( aFont );
     if (nFlags & SystemTextColorFlags::Mono)
@@ -744,15 +741,13 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
                 pFirstCol->Title(), !IsEnabled());
             aButtonFrame.Draw( *pDev );
 
-            pDev->Push( vcl::PushFlags::LINECOLOR );
+            auto popIt2 = pDev->ScopedPush(vcl::PushFlags::LINECOLOR);
             pDev->SetLineColor( COL_BLACK );
 
             pDev->DrawLine( Point( aRealPos.X(), aRealPos.Y() + nTitleHeight-1 ),
                Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
             pDev->DrawLine( Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() ),
                Point( aRealPos.X() + pFirstCol->Width() - 1, aRealPos.Y() + nTitleHeight-1 ) );
-
-            pDev->Pop();
         }
 
         aRealPos.AdjustY(aHeaderSize.Height() );
@@ -787,8 +782,6 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlag
         if ( pBar )
             pBar->SetItemSize( pCurrent->GetId(), pCurrent->Width() );
     }
-
-    pDev->Pop();
 }
 
 void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRect, bool _bForeignDevice)
@@ -952,7 +945,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         {
             // draw horizontal delimitation lines
             _rOut.SetClipRegion();
-            _rOut.Push( vcl::PushFlags::LINECOLOR );
+            auto popIt = _rOut.ScopedPush(vcl::PushFlags::LINECOLOR);
             _rOut.SetLineColor( aDelimiterLineColor );
             tools::Long nY = aPos.Y() + nDataRowHeight - 1;
             if (nY <= aOverallAreaBRPos.Y())
@@ -961,7 +954,6 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                                         ? std::min(tools::Long(aPos.X() - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
-            _rOut.Pop();
         }
     }
 

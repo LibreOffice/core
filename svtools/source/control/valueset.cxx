@@ -1517,7 +1517,7 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
     tools::Long nTxtWidth = rRenderContext.GetTextWidth(rText);
     tools::Long nTxtOffset = mnTextOffset;
 
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
 
     // delete rectangle and show text
     const bool bFlat(GetStyle() & WB_FLATVALUESET);
@@ -1529,8 +1529,6 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
     // overwrite already rendered text
     rRenderContext.Erase(tools::Rectangle(Point(0, nTxtOffset), Point(aWinSize.Width(), aWinSize.Height())));
     rRenderContext.DrawText(Point((aWinSize.Width() - nTxtWidth) / 2, nTxtOffset + (NAME_OFFSET / 2)), rText);
-
-    rRenderContext.Pop();
 }
 
 void ValueSet::StyleUpdated()
