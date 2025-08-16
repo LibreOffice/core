@@ -919,10 +919,9 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     // Unless smooth edges are needed, simply use clipping.
     if (basegfx::utils::isRectangle(aMask) || !getViewInformation2D().getUseAntiAliasing())
     {
-        mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
+        auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
         process(rMaskCandidate.getChildren());
-        mpOutputDevice->Pop();
         return;
     }
 

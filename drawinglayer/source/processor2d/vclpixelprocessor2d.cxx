@@ -879,7 +879,7 @@ void VclPixelProcessor2D::processInvertPrimitive2D(const primitive2d::BasePrimit
     // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
     // (Not true, also used at least for the drawing of dragged column and row boundaries in SC.)
     // Set OutDev to XOR and switch AA off (XOR does not work with AA)
-    mpOutputDevice->Push();
+    auto popIt = mpOutputDevice->ScopedPush();
     mpOutputDevice->SetRasterOp(RasterOp::Xor);
     const AntialiasingFlags nAntiAliasing(mpOutputDevice->GetAntialiasing());
     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::Enable);
@@ -888,7 +888,6 @@ void VclPixelProcessor2D::processInvertPrimitive2D(const primitive2d::BasePrimit
     process(rCandidate);
 
     // restore OutDev
-    mpOutputDevice->Pop();
     mpOutputDevice->SetAntialiasing(nAntiAliasing);
 }
 
@@ -1048,10 +1047,9 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
         std::floor(aFullRange.getMinX()), std::floor(aFullRange.getMinY()),
         std::ceil(aFullRange.getMaxX()), std::ceil(aFullRange.getMaxY()));
 
-    mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
+    auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::CLIPREGION);
     mpOutputDevice->IntersectClipRegion(aOutputRectangle);
     mpOutputDevice->DrawGradient(aFullRectangle, aGradient);
-    mpOutputDevice->Pop();
 }
 
 void VclPixelProcessor2D::processPatternFillPrimitive2D(
@@ -1079,7 +1077,7 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
     // Unless smooth edges are needed, simply use clipping.
     if (basegfx::utils::isRectangle(aMask) || !getViewInformation2D().getUseAntiAliasing())
     {
-        mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
+        auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
         Wallpaper aWallpaper(aTileImage);
         aWallpaper.SetColor(COL_TRANSPARENT);
@@ -1087,7 +1085,6 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         tools::Rectangle aPaperRect(aPaperPt, aTileImage.GetSizePixel());
         aWallpaper.SetRect(aPaperRect);
         mpOutputDevice->DrawWallpaper(aMaskRect, aWallpaper);
-        mpOutputDevice->Pop();
         return;
     }
 

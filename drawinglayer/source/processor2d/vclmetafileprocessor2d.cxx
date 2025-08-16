@@ -1767,7 +1767,8 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
     }
     else
     {
-        mpOutputDevice->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        auto popIt
+            = mpOutputDevice->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
         // support SvtGraphicStroke MetaCommentAction
         std::unique_ptr<SvtGraphicStroke> pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
@@ -1880,8 +1881,6 @@ void VclMetafileProcessor2D::processPolygonStrokePrimitive2D(
         }
 
         impEndSvtGraphicStroke(pSvtGraphicStroke.get());
-
-        mpOutputDevice->Pop();
     }
 }
 
@@ -2349,7 +2348,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
 void VclMetafileProcessor2D::processPolyPolygonColorPrimitive2D(
     const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate)
 {
-    mpOutputDevice->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
 
     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
@@ -2365,8 +2364,6 @@ void VclMetafileProcessor2D::processPolyPolygonColorPrimitive2D(
     mpOutputDevice->SetLineColor();
 
     mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-
-    mpOutputDevice->Pop();
 }
 
 void VclMetafileProcessor2D::processMaskPrimitive2D(
@@ -2410,16 +2407,13 @@ void VclMetafileProcessor2D::processMaskPrimitive2D(
             // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
             // Removed subdivision and fixed in vcl::Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
             // the ClipRegion is built from the Polygon. An AdaptiveSubdivide on the source polygon was missing there
-            mpOutputDevice->Push(vcl::PushFlags::CLIPREGION);
+            auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::CLIPREGION);
             mpOutputDevice->SetClipRegion(vcl::Region(maClipPolyPolygon));
 
             // recursively paint content
             // #i121267# Only need to process sub-content when clip polygon is *not* empty.
             // If it is empty, the clip is empty and there can be nothing inside.
             process(rMaskCandidate.getChildren());
-
-            // restore VCL clip region
-            mpOutputDevice->Pop();
         }
 
         // restore to rescued clip polygon
@@ -2435,7 +2429,7 @@ void VclMetafileProcessor2D::processMaskPrimitive2D(
 void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate)
 {
-    mpOutputDevice->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = mpOutputDevice->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     // for metafile: Need to examine what the pure vcl version is doing here actually
     // - uses DrawTransparent with metafile for content and a gradient
     // - uses DrawTransparent for single PolyPolygons directly. Can be detected by
@@ -2538,8 +2532,6 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
             }
         }
     }
-
-    mpOutputDevice->Pop();
 }
 
 void VclMetafileProcessor2D::processTransparencePrimitive2D(
