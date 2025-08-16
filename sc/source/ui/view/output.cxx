@@ -980,10 +980,9 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     double fRatio = static_cast<double>(aSize.Width()) / aSize.Height();
     tools::Long aWidth = fRatio * aHeight;
 
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
     rRenderContext.SetClipRegion(vcl::Region(rRect));
     rRenderContext.DrawBitmapEx(Point(rRect.Left() + 2 * nOneX, rRect.Bottom() - 2 * nOneY - aHeight), Size(aWidth, aHeight), rIcon);
-    rRenderContext.Pop();
 }
 
 void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & pColor, const SvxBrushItem* pBackground, std::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,

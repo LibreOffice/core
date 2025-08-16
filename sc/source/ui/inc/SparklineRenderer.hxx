@@ -15,7 +15,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <comphelper/scopeguard.hxx>
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
@@ -494,8 +493,7 @@ public:
                 vcl::RenderContext& rRenderContext, tools::Rectangle const& rRectangle,
                 tools::Long nOneX, tools::Long nOneY, double fScaleX, double fScaleY)
     {
-        rRenderContext.Push();
-        comphelper::ScopeGuard aPushPopGuard([&rRenderContext]() { rRenderContext.Pop(); });
+        auto popIt = rRenderContext.ScopedPush();
 
         rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
         rRenderContext.SetClipRegion(vcl::Region(rRectangle));

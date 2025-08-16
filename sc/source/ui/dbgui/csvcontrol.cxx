@@ -241,12 +241,11 @@ sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
 
 void ScCsvControl::ImplInvertRect( OutputDevice& rOutDev, const tools::Rectangle& rRect )
 {
-    rOutDev.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::RASTEROP );
+    auto popIt = rOutDev.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::RASTEROP);
     rOutDev.SetLineColor( COL_BLACK );
     rOutDev.SetFillColor( COL_BLACK );
     rOutDev.SetRasterOp( RasterOp::Invert );
     rOutDev.DrawRect( rRect );
-    rOutDev.Pop();
 }
 
 ScMoveMode ScCsvControl::GetHorzDirection( sal_uInt16 nCode, bool bHomeEnd )

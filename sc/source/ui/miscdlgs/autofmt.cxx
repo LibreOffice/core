@@ -368,7 +368,7 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             const SvxBrushItem* pItem =
                 pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BACKGROUND );
 
-            rRenderContext.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR );
+            auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             if (pItem->GetColor() == COL_TRANSPARENT)
                 rRenderContext.SetFillColor();
@@ -381,7 +381,6 @@ void ScAutoFmtPreview::DrawBackground(vcl::RenderContext& rRenderContext)
                     basegfx::fround<tools::Long>(aCellRange.getMinX()), basegfx::fround<tools::Long>(aCellRange.getMinY()),
                     basegfx::fround<tools::Long>(aCellRange.getMaxX()), basegfx::fround<tools::Long>(aCellRange.getMaxY())));
 
-            rRenderContext.Pop();
         }
     }
 }
@@ -497,7 +496,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
     Size aWndSize(GetOutputSizePixel());
@@ -523,7 +522,6 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
        aPos.setX( -aPos.X() );
     rRenderContext.DrawOutDev(aPos, aWndSize, Point(), aWndSize, *aVD);
     aVD->SetDrawMode(nOldDrawMode);
-    rRenderContext.Pop();
 }
 
 void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

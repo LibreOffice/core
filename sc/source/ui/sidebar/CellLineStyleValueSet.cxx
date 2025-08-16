@@ -93,7 +93,7 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
-    pDev->Push(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getConfiguredSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     Size aSize = aFont.GetFontSize();
@@ -174,8 +174,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     Invalidate( aRect );
-    pDev->Pop();
-
 }
 
 } // end of namespace sc::sidebar

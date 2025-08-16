@@ -55,7 +55,7 @@ void ScTabSplitter::SetFixed(bool bSet)
 
 void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     if (IsHorizontal())
@@ -120,8 +120,6 @@ void ScTabSplitter::Paint( vcl::RenderContext& rRenderContext, const tools::Rect
                 break;
         }
     }
-
-    rRenderContext.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
