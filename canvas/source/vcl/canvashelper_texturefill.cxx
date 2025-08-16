@@ -1039,7 +1039,7 @@ namespace vclcanvas
                             if( mp2ndOutDevProvider )
                             {
                                 OutputDevice& r2ndOutDev( mp2ndOutDevProvider->getOutDev() );
-                                r2ndOutDev.Push( vcl::PushFlags::CLIPREGION );
+                                auto popIt = r2ndOutDev.ScopedPush(vcl::PushFlags::CLIPREGION);
 
                                 r2ndOutDev.IntersectClipRegion( aPolyClipRegion );
                                 textureFill( r2ndOutDev,
@@ -1051,7 +1051,6 @@ namespace vclcanvas
                                              nTilesY,
                                              aSz,
                                              aGrfAttr );
-                                r2ndOutDev.Pop();
                             }
                         }
                     }

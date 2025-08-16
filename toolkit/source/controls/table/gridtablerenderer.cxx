@@ -218,7 +218,7 @@ namespace svt::table
     {
         OSL_PRECOND(_bIsColHeaderArea || _bIsRowHeaderArea, "GridTableRenderer::PaintHeaderArea: invalid area flags!");
 
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         Color const background = lcl_getEffectiveColor(m_pImpl->rModel.getHeaderBackgroundColor(),
                                                        _rStyle, &StyleSettings::GetDialogColor);
@@ -233,8 +233,6 @@ namespace svt::table
         rRenderContext.SetLineColor(lineColor);
         rRenderContext.DrawLine(_rArea.BottomLeft(), _rArea.BottomRight());
         rRenderContext.DrawLine(_rArea.BottomRight(), _rArea.TopRight());
-
-        rRenderContext.Pop();
     }
 
 
@@ -243,7 +241,7 @@ namespace svt::table
         vcl::RenderContext& rRenderContext,
         const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push(vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR);
 
         OUString sHeaderText;
         PColumnModel const pColumn = m_pImpl->rModel.getColumnModel( _nCol );
@@ -293,8 +291,6 @@ namespace svt::table
                                             aIndicatorBitmap);
             }
         }
-
-        rRenderContext.Pop();
     }
 
 
@@ -304,7 +300,7 @@ namespace svt::table
         // remember the row for subsequent calls to the other ->ITableRenderer methods
         m_pImpl->nCurrentRow = _nRow;
 
-        rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
 
         Color backgroundColor = _rStyle.GetFieldColor();
 
@@ -354,15 +350,13 @@ namespace svt::table
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(backgroundColor);
         rRenderContext.DrawRect(_rRowArea);
-
-        rRenderContext.Pop();
     }
 
 
     void GridTableRenderer::PaintRowHeader(vcl::RenderContext& rRenderContext,
                                            const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push( vcl::PushFlags::LINECOLOR | vcl::PushFlags::TEXTCOLOR );
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::TEXTCOLOR);
 
         std::optional<Color> const aLineColor( m_pImpl->rModel.getLineColor() );
         Color const lineColor = !aLineColor ? _rStyle.GetSeparatorColor() : *aLineColor;
@@ -384,8 +378,6 @@ namespace svt::table
                 // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitrary ..
             rRenderContext.DrawText(aTextRect, rowTitle, nDrawTextFlags);
         }
-
-        rRenderContext.Pop();
     }
 
 
@@ -414,7 +406,7 @@ namespace svt::table
     void GridTableRenderer::PaintCell(ColPos const i_column, bool _bSelected, bool i_hasControlFocus,
                                       vcl::RenderContext& rRenderContext, const tools::Rectangle& _rArea, const StyleSettings& _rStyle)
     {
-        rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
         tools::Rectangle const aContentArea(lcl_getContentArea(*m_pImpl, _rArea));
         CellRenderContext const aCellRenderContext(rRenderContext, aContentArea, _rStyle, i_column, _bSelected, i_hasControlFocus);
@@ -437,8 +429,6 @@ namespace svt::table
             rRenderContext.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
             rRenderContext.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
         }
-
-        rRenderContext.Pop();
     }
 
 

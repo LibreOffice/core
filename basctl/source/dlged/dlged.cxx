@@ -1071,7 +1071,7 @@ namespace Print
 static void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
 {
 
-    pPrinter->Push();
+    auto popIt = pPrinter->ScopedPush();
 
     Size const aSz = pPrinter->GetOutputSize();
 
@@ -1102,8 +1102,6 @@ static void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not 
 
     nY = Print::nTopMargin - Print::nBorder;
     pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
-
-    pPrinter->Pop();
 }
 
 

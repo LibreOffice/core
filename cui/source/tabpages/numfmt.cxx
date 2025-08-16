@@ -141,7 +141,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 
 void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
     svtools::ColorConfig aColorConfig;
     Color aBgColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
@@ -184,7 +184,6 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
     Point aPosText(nX, (aSzWnd.Height() - GetTextHeight()) / 2);
     rRenderContext.DrawText(aPosText, aTmpStr);
-    rRenderContext.Pop();
 }
 
 // class SvxNumberFormatTabPage ------------------------------------------

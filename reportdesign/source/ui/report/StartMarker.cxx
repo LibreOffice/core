@@ -96,7 +96,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
 
     Size aSize(GetOutputSizePixel());
     const tools::Long nCornerWidth = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
@@ -134,20 +134,20 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         rRenderContext.DrawGradient(PixelToLogic(aPoly) ,aGradient);
     }
 
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
-    rRenderContext.SetMapMode();
+    {
+        auto popIt2 = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
+        rRenderContext.SetMapMode();
 
-    rRenderContext.DrawImage(m_aImageRect.TopLeft(), m_aImageRect.GetSize(), m_aImage);
+        rRenderContext.DrawImage(m_aImageRect.TopLeft(), m_aImageRect.GetSize(), m_aImage);
 
-    const Color aColor(m_nColor);
-    Color aTextColor = GetTextColor();
-    if (aColor.GetLuminance() < 128)
-        aTextColor = COL_WHITE;
-    rRenderContext.SetTextColor(aTextColor);
+        const Color aColor(m_nColor);
+        Color aTextColor = GetTextColor();
+        if (aColor.GetLuminance() < 128)
+            aTextColor = COL_WHITE;
+        rRenderContext.SetTextColor(aTextColor);
 
-    rRenderContext.DrawText(m_aTextRect, m_aText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreakHyphenation);
-
-    rRenderContext.Pop();
+        rRenderContext.DrawText(m_aTextRect, m_aText, DrawTextFlags::MultiLine | DrawTextFlags::WordBreakHyphenation);
+    }
 
     if (m_bMarked)
     {
@@ -159,8 +159,6 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         rRenderContext.DrawPolyLine( tools::Polygon(rRenderContext.PixelToLogic(aRect)),
                                     LineInfo(LineStyle::Solid, 2));
     }
-
-    rRenderContext.Pop();
 }
 
 void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )

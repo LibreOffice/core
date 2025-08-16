@@ -300,10 +300,9 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRe
 {
     const OUString aText( GetCellText( m_nCurrentPos, nColumnId ));
 
-    rDev.Push( vcl::PushFlags::CLIPREGION );
+    auto popIt = rDev.ScopedPush(vcl::PushFlags::CLIPREGION);
     rDev.SetClipRegion(vcl::Region(rRect));
     rDev.DrawText( rRect, aText, DrawTextFlags::Left | DrawTextFlags::VCenter );
-    rDev.Pop();
 }
 
 CellController* OTableEditorCtrl::GetController(sal_Int32 nRow, sal_uInt16 nColumnId)

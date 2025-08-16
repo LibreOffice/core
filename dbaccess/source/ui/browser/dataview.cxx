@@ -68,11 +68,10 @@ namespace dbaui
     {
         // draw the background
         {
-            rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+            auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
             rRenderContext.DrawRect(_rRect);
-            rRenderContext.Pop();
         }
 
         // let the base class do anything it needs

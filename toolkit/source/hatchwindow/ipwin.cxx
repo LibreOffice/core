@@ -119,7 +119,7 @@ std::array<tools::Rectangle,4> SvResizeHelper::FillMoveRectsPixel() const
 *************************************************************************/
 void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push();
+    auto popIt = rRenderContext.ScopedPush();
     rRenderContext.SetMapMode( MapMode() );
 
     rRenderContext.SetFillColor( COL_LIGHTGRAY );
@@ -134,7 +134,6 @@ void SvResizeHelper::Draw(vcl::RenderContext& rRenderContext)
     std::array<tools::Rectangle,8> aRects = FillHandleRectsPixel();
     for (i = 0; i < 8; i++)
         rRenderContext.DrawRect( aRects[ i ] );
-    rRenderContext.Pop();
 }
 
 /*************************************************************************

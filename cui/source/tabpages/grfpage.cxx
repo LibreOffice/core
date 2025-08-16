@@ -752,7 +752,7 @@ void SvxCropExample::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
     // Win BG
@@ -803,8 +803,6 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
             rRenderContext.DrawPolyLine(rSnippet);
         },
         2.0 * fLogicDashLength);
-
-    rRenderContext.Pop();
 }
 
 void SvxCropExample::Resize()
