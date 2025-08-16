@@ -659,7 +659,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                    "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                       " could not load Java runtime library: \n"
                    + sRuntimeLib + "\n");
-        JFW_TRACE0("Could not load Java runtime library: " << sRuntimeLib);
+        SAL_INFO("jfw.level1", "Could not load Java runtime library: " << sRuntimeLib);
         return javaPluginError::VmCreationFailed;
     }
 
