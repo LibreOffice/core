@@ -171,7 +171,7 @@ void SwTextInfo::CtorInitTextInfo( SwTextFrame *pFrame )
 }
 
 SwTextInfo::SwTextInfo( const SwTextInfo &rInf )
-    : m_pPara( const_cast<SwTextInfo&>(rInf).GetParaPortion() )
+    : m_pPara( rInf.m_pPara )
     , m_nTextStart( rInf.GetTextStart() )
 { }
 
@@ -232,10 +232,10 @@ SwTextSizeInfo::SwTextSizeInfo()
 SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
     : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
-      m_pVsh(const_cast<SwTextSizeInfo&>(rNew).GetVsh()),
-      m_pOut(const_cast<SwTextSizeInfo&>(rNew).GetOut()),
-      m_pRef(const_cast<SwTextSizeInfo&>(rNew).GetRefDev()),
-      m_pFnt(const_cast<SwTextSizeInfo&>(rNew).GetFont()),
+      m_pVsh(rNew.m_pVsh),
+      m_pOut(rNew.m_pOut),
+      m_pRef(rNew.m_pRef),
+      m_pFnt(rNew.m_pFnt),
       m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrame(rNew.m_pFrame),
       m_pOpt(&rNew.GetOpt()),
@@ -348,10 +348,10 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
               TextFrameIndex const nIndex)
     : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
-      m_pVsh(const_cast<SwTextSizeInfo&>(rNew).GetVsh()),
-      m_pOut(const_cast<SwTextSizeInfo&>(rNew).GetOut()),
-      m_pRef(const_cast<SwTextSizeInfo&>(rNew).GetRefDev()),
-      m_pFnt(const_cast<SwTextSizeInfo&>(rNew).GetFont()),
+      m_pVsh(rNew.m_pVsh),
+      m_pOut(rNew.m_pOut),
+      m_pRef(rNew.m_pRef),
+      m_pFnt(rNew.m_pFnt),
       m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrame( rNew.m_pFrame ),
       m_pOpt(&rNew.GetOpt()),
@@ -426,8 +426,7 @@ SwPositiveSize SwTextSizeInfo::GetTextSize( OutputDevice* pOutDev,
 SwPositiveSize
 SwTextSizeInfo::GetTextSize(std::optional<SwLinePortionLayoutContext> nLayoutContext) const
 {
-    const SwScriptInfo& rSI =
-                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
+    const SwScriptInfo& rSI = GetParaPortion()->GetScriptInfo();
 
     // in some cases, compression is not allowed or suppressed for
     // performance reasons
@@ -472,8 +471,7 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        const sal_uInt16 nComp,
                                        vcl::text::TextLayoutCache const*const pCache) const
 {
-    const SwScriptInfo& rScriptInfo =
-                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
+    const SwScriptInfo& rScriptInfo = GetParaPortion()->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, &rScriptInfo, *m_pText, GetIdx(), nMaxLen,
@@ -493,8 +491,7 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        TextFrameIndex& rExtraCharPos,
                                        vcl::text::TextLayoutCache const*const pCache) const
 {
-    const SwScriptInfo& rScriptInfo =
-                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
+    const SwScriptInfo& rScriptInfo = GetParaPortion()->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTextBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf(m_pVsh, *m_pOut, &rScriptInfo, *m_pText, GetIdx(), nMaxLen,
@@ -1207,7 +1204,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-    GetOpt().PaintPostIts( const_cast<OutputDevice*>(GetOut()), aTmpRect, bScript );
+    GetOpt().PaintPostIts(m_pOut, aTmpRect, bScript);
 
 }
 
@@ -1221,14 +1218,13 @@ void SwTextPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool 
     if (OnWin() && GetOpt().IsFieldShadings() &&
             !GetOpt().IsPagePreview())
     {
-        OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-        auto popIt = pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+        auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
         if( m_pFnt->GetHighlightColor() != COL_TRANSPARENT )
-            pOut->SetFillColor(m_pFnt->GetHighlightColor());
+            m_pOut->SetFillColor(m_pFnt->GetHighlightColor());
         else
-            pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
-        pOut->SetLineColor();
-        pOut->DrawRect( aIntersect.SVRect() );
+            m_pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
+        m_pOut->SetLineColor();
+        m_pOut->DrawRect(aIntersect.SVRect());
     }
     const int delta = 25;
     tools::Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
@@ -1253,15 +1249,14 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion &rPor, const Color *pC
     if ( !aIntersect.HasArea() )
         return;
 
-    OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
-    auto popIt = pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     if ( pColor )
-        pOut->SetFillColor( *pColor );
+        m_pOut->SetFillColor(*pColor);
     else
-        pOut->SetFillColor( GetOpt().GetFieldShadingsColor() );
+        m_pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
 
-    pOut->SetLineColor();
+    m_pOut->SetLineColor();
 
     DrawRect( aIntersect, true );
 }
@@ -1287,11 +1282,10 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     GetOpt().IsFieldShadings() &&
                     !GetOpt().IsPagePreview())
             {
-                OutputDevice* pOutDev = const_cast<OutputDevice*>(GetOut());
-                auto popIt = pOutDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
-                pOutDev->SetFillColor( GetOpt().GetFieldShadingsColor() );
-                pOutDev->SetLineColor( );
-                pOutDev->DrawRect( aIntersect.SVRect() );
+                auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+                m_pOut->SetFillColor(GetOpt().GetFieldShadingsColor());
+                m_pOut->SetLineColor();
+                m_pOut->DrawRect(aIntersect.SVRect());
             }
         }
     }
@@ -1302,10 +1296,8 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     if ( !aIntersect.HasArea() )
         return;
 
-    OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
-
     // #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pTmpOut );
+    SwTaggedPDFHelper aTaggedPDFHelper(nullptr, nullptr, nullptr, *m_pOut);
 
     Color aFillColor;
 
@@ -1320,13 +1312,13 @@ void SwTextPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
         aFillColor = *m_pFnt->GetBackColor();
     }
 
-    auto popIt = pTmpOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     if (aFillColor == COL_TRANSPARENT)
-        pTmpOut->SetFillColor();
+        m_pOut->SetFillColor();
     else
-        pTmpOut->SetFillColor(aFillColor);
-    pTmpOut->SetLineColor();
+        m_pOut->SetFillColor(aFillColor);
+    m_pOut->SetLineColor();
 
     DrawRect( aIntersect, false );
 }
@@ -1489,31 +1481,30 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     }
     if (sCSNumberOrDF)
     {
-        OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
-        auto popIt = pTmpOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR
-                                          | vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::FONT);
+        auto popIt = m_pOut->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR
+                                        | vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::FONT);
 
         // draw a filled rectangle at the formatted CS or DF text
-        pTmpOut->SetFillColor(aFillColor.value());
-        pTmpOut->SetLineColor(aFillColor.value());
+        m_pOut->SetFillColor(aFillColor.value());
+        m_pOut->SetLineColor(aFillColor.value());
         tools::Rectangle aSVRect(aRect.SVRect());
-        pTmpOut->DrawRect(aSVRect);
+        m_pOut->DrawRect(aSVRect);
 
         // calculate size and position for the CS number or "df" text and rectangle
-        tools::Long nWidth = pTmpOut->GetTextWidth(sCSNumberOrDF.value());
-        tools::Long nHeight = pTmpOut->GetTextHeight();
+        tools::Long nWidth = m_pOut->GetTextWidth(sCSNumberOrDF.value());
+        tools::Long nHeight = m_pOut->GetTextHeight();
         aSVRect.SetSize(Size(nWidth, nHeight));
         aSVRect.Move(-(nWidth / 1.5), -(nHeight / 1.5));
 
-        vcl::Font aFont(pTmpOut->GetFont());
+        vcl::Font aFont(m_pOut->GetFont());
         aFont.SetOrientation(Degree10(0));
-        pTmpOut->SetFont(aFont);
+        m_pOut->SetFont(aFont);
 
-        pTmpOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
-        //pTmpOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+        m_pOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::TextOriginLeft);
+        //m_pOut->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::BiDiStrong);
 
-        pTmpOut->SetTextFillColor(aFillColor.value());
-        pTmpOut->DrawText(aSVRect, sCSNumberOrDF.value(), DrawTextFlags::NONE);
+        m_pOut->SetTextFillColor(aFillColor.value());
+        m_pOut->DrawText(aSVRect, sCSNumberOrDF.value(), DrawTextFlags::NONE);
     }
 }
 
