@@ -460,12 +460,12 @@ void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCe
 static OUString findOIDDescription(char const *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
-    for (int i=0; i<nOID; i++)
+    for (const auto& entry : OIDs)
     {
-        OUString item = OUString::createFromAscii( OIDs[i].oid );
+        OUString item = OUString::createFromAscii( entry.oid );
         if (ouOID == item)
         {
-            return OUString::createFromAscii( OIDs[i].desc );
+            return OUString::createFromAscii( entry.desc );
         }
     }
 

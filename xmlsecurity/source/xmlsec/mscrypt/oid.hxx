@@ -148,6 +148,4 @@ OIDItem OIDs[] = {
     {"1.2.643.2.2.36.0", "GOST_R_34.10-2001_Sign_DH_PRO"}
 };
 
-const int nOID = SAL_N_ELEMENTS(OIDs);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
