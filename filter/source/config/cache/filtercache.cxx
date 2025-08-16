@@ -1251,7 +1251,7 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
                                                                      const OUString&                                    sItem)
 {
     bool bExistsInConfigLayer = xSet->hasByName(sItem);
-    bool bExistsInMemory      = (rList.find(sItem) != rList.end());
+    bool bExistsInMemory      = rList.contains(sItem);
 
     EItemFlushState eState( E_ITEM_UNCHANGED );
 
