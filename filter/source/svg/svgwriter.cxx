@@ -1498,7 +1498,7 @@ void SVGTextWriter::implWriteBulletChars()
                 // <path d="...">
                 tools::PolyPolygon aPolyPolygon;
                 OUString aStr(rInfo.cBulletChar);
-                mpVDev->Push(vcl::PushFlags::FONT);
+                auto popIt = mpVDev->ScopedPush(vcl::PushFlags::FONT);
                 mpVDev->SetFont(rInfo.aFont);
                 if (mpVDev->GetTextOutline(aPolyPolygon, aStr))
                 {
@@ -1506,7 +1506,6 @@ void SVGTextWriter::implWriteBulletChars()
                     mrExport.AddAttribute(u"d"_ustr, aPathString);
                     SvXMLElementExport aPath(mrExport, u"path"_ustr, true, true);
                 }
-                mpVDev->Pop();
             }
         } // close aPositioningElem
     }
@@ -2612,9 +2611,8 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
             pElemG.reset(new SvXMLElementExport(mrExport, aXMLElemG, true, true));
         }
 
-        mpVDev->Push();
+        auto popIt = mpVDev->ScopedPush();
         ImplWriteActions( rMtf, nWriteFlags, u""_ustr );
-        mpVDev->Pop();
     }
 
     if (oTextOpacity)
@@ -4150,7 +4148,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     Fraction    aFractionX( aMapMode.GetScaleX() );
     Fraction    aFractionY( aMapMode.GetScaleY() );
 
-    mpVDev->Push();
+    auto popIt = mpVDev->ScopedPush();
 
     Size aSize( OutputDevice::LogicToLogic(rSize100thmm, MapMode(MapUnit::Map100thMM), aMapMode) );
     aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() );
@@ -4176,8 +4174,6 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
         ImplWriteShape( *mapCurShape );
         mapCurShape.reset();
     }
-
-    mpVDev->Pop();
 }
 
 

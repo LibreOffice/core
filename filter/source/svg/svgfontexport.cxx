@@ -87,7 +87,7 @@ void SVGFontExport::implCollectGlyphs()
         {
             const GDIMetaFile& rMtf = elem.GetRepresentation();
 
-            pVDev->Push();
+            auto popIt = pVDev->ScopedPush();
 
             for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; ++i )
             {
@@ -165,8 +165,6 @@ void SVGFontExport::implCollectGlyphs()
                     }
                 }
             }
-
-            pVDev->Pop();
         }
     }
 }
