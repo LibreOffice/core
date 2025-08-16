@@ -743,7 +743,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
     }
 
     // Saving both layout mode and language (since I'm potentially changing both)
-    GetRefDevice()->Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
+    auto popIt = GetRefDevice()->ScopedPush(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
@@ -1811,8 +1811,6 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
 
     bool bHeightChanged = FinishCreateLines(rParaPortion);
 
-    GetRefDevice()->Pop();
-
     return bHeightChanged;
 }
 
@@ -2533,11 +2531,10 @@ sal_Int32 ImpEditEngine::SplitTextPortion(ParaPortion& rParaPortion, sal_Int32 n
             SvxFont aTmpFont = rParaPortion.GetNode()->GetCharAttribs().GetDefFont();
             SeekCursor(rParaPortion.GetNode(), nTxtPortionStart + 1, aTmpFont);
             aTmpFont.SetPhysFont(*GetRefDevice());
-            GetRefDevice()->Push( vcl::PushFlags::TEXTLANGUAGE );
+            auto popIt = GetRefDevice()->ScopedPush(vcl::PushFlags::TEXTLANGUAGE);
             ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
             Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), rParaPortion.GetNode()->GetString(),
                 nTxtPortionStart, pTextPortion->GetLen(), nullptr );
-            GetRefDevice()->Pop();
             pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
         }
     }
@@ -3605,7 +3602,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
 
                                 // #114278# Saving both layout mode and language (since I'm
                                 // potentially changing both)
-                                rOutDev.Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
+                                auto popIt = rOutDev.ScopedPush(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
                                 ImplInitLayoutMode(rOutDev, nParaPortion, nIndex);
                                 ImplInitDigitMode(rOutDev, aTmpFont.GetLanguage());
 
@@ -3665,16 +3662,14 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                                 adjustXDirectionAware(aBottomRightRectPos, 2 * nHalfBlankWidth);
                                                 adjustYDirectionAware(aBottomRightRectPos, pLine->GetHeight());
 
-                                                rOutDev.Push( vcl::PushFlags::FILLCOLOR );
-                                                rOutDev.Push( vcl::PushFlags::LINECOLOR );
-                                                rOutDev.SetFillColor( COL_LIGHTGRAY );
-                                                rOutDev.SetLineColor( COL_LIGHTGRAY );
+                                                {
+                                                    auto popIt2 = rOutDev.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR);
+                                                    rOutDev.SetFillColor( COL_LIGHTGRAY );
+                                                    rOutDev.SetLineColor( COL_LIGHTGRAY );
 
-                                                const tools::Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
-                                                rOutDev.DrawRect( aBackRect );
-
-                                                rOutDev.Pop();
-                                                rOutDev.Pop();
+                                                    const tools::Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
+                                                    rOutDev.DrawRect( aBackRect );
+                                                }
 
                                                 if ( 0x200B == cChar )
                                                 {
@@ -3903,8 +3898,6 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                 {
                                     bEndOfParagraphWritten = true;
                                 }
-
-                                rOutDev.Pop();
                             }
                             break;
                             case PortionKind::TAB:

@@ -3499,7 +3499,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth(ParaPortion const& rPortion, EditLine co
 
     // #114278# Saving both layout mode and language (since I'm
     // potentially changing both)
-    GetRefDevice()->Push( vcl::PushFlags::TEXTLAYOUTMODE|vcl::PushFlags::TEXTLANGUAGE );
+    auto popIt = GetRefDevice()->ScopedPush(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
 
     ImplInitLayoutMode(*GetRefDevice(), nPara, -1);
 
@@ -3541,8 +3541,6 @@ sal_uInt32 ImpEditEngine::CalcLineWidth(ParaPortion const& rPortion, EditLine co
         }
         nPos = nPos + rTextPortion.GetLen();
     }
-
-    GetRefDevice()->Pop();
 
     return nWidth;
 }

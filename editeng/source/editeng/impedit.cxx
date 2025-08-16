@@ -353,7 +353,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
     }
     else if (mpViewShell)
     {
-        mpOutputWindow->GetOutDev()->Push(vcl::PushFlags::MAPMODE);
+        auto popIt = mpOutputWindow->GetOutDev()->ScopedPush(vcl::PushFlags::MAPMODE);
         if (mpOutputWindow->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // Find the parent that is not right
@@ -446,8 +446,6 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
             mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle);
             mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection"_ostr, sRectangle);
         }
-
-        mpOutputWindow->GetOutDev()->Pop();
     }
 }
 
@@ -730,12 +728,11 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
         }
         else
         {
-            rTarget.Push(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR|vcl::PushFlags::RASTEROP);
+            auto popIt = rTarget.ScopedPush(vcl::PushFlags::LINECOLOR|vcl::PushFlags::FILLCOLOR|vcl::PushFlags::RASTEROP);
             rTarget.SetLineColor();
             rTarget.SetFillColor(COL_BLACK);
             rTarget.SetRasterOp(RasterOp::Invert);
             rTarget.DrawRect(aRect);
-            rTarget.Pop();
         }
     }
 }
