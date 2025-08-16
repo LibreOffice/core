@@ -899,7 +899,7 @@ RubyPreview::~RubyPreview() {}
 
 void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
@@ -1038,7 +1038,6 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         default:
             break;
     }
-    rRenderContext.Pop();
 }
 
 void RubyPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)

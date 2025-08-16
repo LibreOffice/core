@@ -1243,7 +1243,7 @@ void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
 
 void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
 
     LocalPrePaint(rRenderContext);
@@ -1269,8 +1269,6 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     aPainter.ProcessDisplay(aDisplayInfo);
 
     LocalPostPaint(rRenderContext);
-
-    rRenderContext.Pop();
 }
 
 void SvxPreviewBase::InitSettings()
@@ -1404,7 +1402,7 @@ void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
 
 void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
     LocalPrePaint(rRenderContext);
 
@@ -1418,7 +1416,6 @@ void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     aPainter.ProcessDisplay(aDisplayInfo);
 
     LocalPostPaint(rRenderContext);
-    rRenderContext.Pop();
 }
 
 void limitWidthForSidebar(weld::SpinButton& rSpinButton)

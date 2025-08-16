@@ -60,7 +60,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const tools::Rectangle aRect = rUDEvt.GetRect();
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
-    pDev->Push();
+    auto popIt = pDev->ScopedPush();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 
     const tools::Long nRectHeight = aRect.GetHeight();
@@ -112,7 +112,6 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     Invalidate( aRect );
-    pDev->Pop();
 }
 
 } // end of namespace svx::sidebar

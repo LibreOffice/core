@@ -579,7 +579,7 @@ void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
 
 void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     ApplySettings(rRenderContext);
@@ -780,7 +780,6 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             pImpl->DrawPrev(rRenderContext, pPrinter, aTmpPoint, rFont);
         }
     }
-    rRenderContext.Pop();
 }
 
 bool SvxFontPrevWindow::IsTwoLines() const

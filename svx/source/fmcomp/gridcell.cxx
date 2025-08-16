@@ -1733,7 +1733,7 @@ void DbCheckBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
             aStateRect.SetRight(aStateRect.Left() + aImageSize.Width() - 1);
             aStateRect.SetBottom(aStateRect.Top() + aImageSize.Height() - 1);
 
-            rDev.Push();
+            auto popIt = rDev.ScopedPush();
             rDev.SetMapMode();
 
             rDev.SetLineColor();
@@ -1787,7 +1787,6 @@ void DbCheckBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
                 }
             }
 
-            rDev.Pop();
             break;
         }
     }

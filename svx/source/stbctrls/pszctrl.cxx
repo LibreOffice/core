@@ -437,7 +437,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     const tools::Rectangle& rRect = rUsrEvt.GetRect();
     StatusBar& rBar = GetStatusBar();
     Point aItemPos = rBar.GetItemTextPos( GetId() );
-    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
@@ -500,7 +500,6 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         // Date/Time are no longer used (#65302#).
         pDev->DrawRect( rRect );
     }
-    pDev->Pop();
 }
 
 void SvxPosSizeStatusBarControl::ImplUpdateItemText()

@@ -1193,7 +1193,7 @@ tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderCont
                              m_oCTLFont :
                              m_oFont);
 
-        rRenderContext.Push(vcl::PushFlags::FONT);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT);
 
         if (oFont)
             rRenderContext.SetFont(*oFont);
@@ -1213,8 +1213,6 @@ tools::Rectangle SvxStyleBox_Base::CalcBoundRect(vcl::RenderContext& rRenderCont
         aTextRect = aTextRect.Union(aRect);
 
         tools::Long nWidth = rRenderContext.GetTextWidth(rStyleName, nStart, nEnd - nStart);
-
-        rRenderContext.Pop();
 
         if (nIdx >= rScriptChanges.size())
             break;
@@ -1277,7 +1275,7 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
                              m_oCTLFont :
                              m_oFont);
 
-        rRenderContext.Push(vcl::PushFlags::FONT);
+        auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT);
 
         if (oFont)
             rRenderContext.SetFont(*oFont);
@@ -1293,8 +1291,6 @@ void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const t
         }
 
         rRenderContext.DrawText(aPos, rStyleName, nStart, nEnd - nStart);
-
-        rRenderContext.Pop();
 
         aPos.AdjustX(rScriptChanges[nIdx++].textWidth * fRatio);
         if (nEnd < rStyleName.getLength() && nIdx < nCnt)
@@ -1550,14 +1546,12 @@ IMPL_LINK(SvxStyleBox_Base, CustomRenderHdl, weld::ComboBox::render_args, aPaylo
 
     OUString aStyleName(m_xWidget->get_text(nIndex));
 
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
 
     SetupEntry(rRenderContext, nIndex, rRect, aStyleName, !bSelected);
     auto aScriptChanges = CheckScript(aStyleName);
     auto aTextRect = CalcBoundRect(rRenderContext, aStyleName, aScriptChanges);
     UserDrawEntry(rRenderContext, rRect, aTextRect, aStyleName, aScriptChanges);
-
-    rRenderContext.Pop();
 }
 
 void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderContext)

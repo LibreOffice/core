@@ -228,7 +228,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         return;
     }
 
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
     pEditView->DrawText_ToEditView(
@@ -249,8 +249,6 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
     // get the system's highlight color
     const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
     PaintSelection(rRenderContext, rRect, aLogicRects, aHighlight);
-
-    rRenderContext.Pop();
 }
 
 bool WeldEditView::MouseMove(const MouseEvent& rMEvt)

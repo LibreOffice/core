@@ -182,12 +182,10 @@ StyleItemController::StyleItemController(std::pair<OUString, OUString> aStyleNam
 
 void StyleItemController::Paint(vcl::RenderContext& rRenderContext)
 {
-    rRenderContext.Push(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT
-                        | vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::FONT
+                                           | vcl::PushFlags::TEXTCOLOR);
 
     DrawEntry(rRenderContext);
-
-    rRenderContext.Pop();
 }
 
 bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)

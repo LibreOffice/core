@@ -960,7 +960,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
     bool bSelected = std::get<2>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    rRenderContext.Push(vcl::PushFlags::TEXTCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::TEXTCOLOR);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     if (bSelected)
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
@@ -996,7 +996,7 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
         const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ].get() == pRow;
         if (bIsCurrentFilter)
         {
-            rRenderContext.Push(vcl::PushFlags::LINECOLOR);
+            auto popIt2 = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR);
             rRenderContext.SetLineColor(rRenderContext.GetTextColor());
 
             Point aFirst(aPos.X(), aRect.Bottom() - 6);
@@ -1010,15 +1010,12 @@ IMPL_STATIC_LINK(FmFilterNavigator, CustomRenderHdl, weld::TreeView::render_args
             aSecond.AdjustY(-5);
 
             rRenderContext.DrawLine(aFirst, aSecond);
-            rRenderContext.Pop();
         }
 
         rRenderContext.DrawText(Point(aPos.X() + nxDBmp, aPos.Y()), sText);
     }
     else
         rRenderContext.DrawText(aPos, sText);
-
-    rRenderContext.Pop();
 }
 
 FmFilterNavigatorDropTarget::FmFilterNavigatorDropTarget(FmFilterNavigator& rTreeView)

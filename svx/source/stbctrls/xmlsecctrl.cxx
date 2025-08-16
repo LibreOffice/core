@@ -128,7 +128,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
 
     tools::Rectangle           aRect = rUsrEvt.GetRect();
-    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
@@ -153,8 +153,6 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     }
     else
         pDev->DrawRect( aRect );
-
-    pDev->Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

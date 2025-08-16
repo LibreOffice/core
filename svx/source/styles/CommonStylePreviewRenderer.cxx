@@ -326,7 +326,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
     const OUString& rText = maStyleName;
 
     // setup the device & draw
-    mrOutputDev.Push(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTFILLCOLOR);
+    auto popIt = mrOutputDev.ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::FILLCOLOR | vcl::PushFlags::TEXTFILLCOLOR);
 
     if (maBackgroundColor != COL_AUTO)
     {
@@ -395,8 +395,6 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
             break;
     }
     while(true);
-
-    mrOutputDev.Pop();
 
     return true;
 }

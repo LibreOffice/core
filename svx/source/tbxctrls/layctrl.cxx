@@ -252,7 +252,7 @@ bool TableWidget::MouseButtonDown(const MouseEvent&)
 
 void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::FONT);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT);
 
     rRenderContext.SetBackground( aBackgroundColor );
     vcl::Font aFont = rRenderContext.GetFont();
@@ -329,8 +329,6 @@ void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         aText = u"\u202D" + aText;
 
     rRenderContext.DrawText(Point(nTextX, nTextY), aText);
-
-    rRenderContext.Pop();
 }
 
 void TableWidget::InsertTable()
@@ -591,7 +589,7 @@ bool ColumnsWidget::MouseButtonUp(const MouseEvent&)
 
 void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::FONT);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FONT);
 
     rRenderContext.SetBackground();
     vcl::Font aFont( rRenderContext.GetFont() );
@@ -647,8 +645,6 @@ void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor();
     rRenderContext.DrawRect(tools::Rectangle( 0, 0, aSize.Width() - 1, aSize.Height() - 1));
-
-    rRenderContext.Pop();
 }
 
 void SvxColumnsToolBoxControl::InsertColumns(const Sequence< PropertyValue >& rArgs)

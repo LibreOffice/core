@@ -193,7 +193,7 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::ALL);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
 
     rRenderContext.SetMapMode(GetMapMode());
 
@@ -221,8 +221,6 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
         // do processing
         aPainter.ProcessDisplay(aDisplayInfo);
     }
-
-    rRenderContext.Pop();
 }
 
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )

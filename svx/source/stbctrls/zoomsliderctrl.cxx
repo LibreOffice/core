@@ -235,7 +235,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     aSlider.AdjustLeft(nSliderXOffset );
     aSlider.AdjustRight( -nSliderXOffset );
 
-    pDev->Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = pDev->ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
@@ -273,8 +273,6 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw increase button
     aImagePoint.setX( aRect.Left() + aControlRect.GetWidth() - mxImpl->maIncreaseButton.GetSizePixel().Width() - (nSliderXOffset - mxImpl->maIncreaseButton.GetSizePixel().Height())/2 );
     pDev->DrawImage( aImagePoint, mxImpl->maIncreaseButton );
-
-    pDev->Pop();
 }
 
 bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )

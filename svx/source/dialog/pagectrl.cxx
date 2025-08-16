@@ -67,7 +67,7 @@ SvxPageWindow::~SvxPageWindow()
 
 void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
     Fraction aXScale(aWinSize.Width(), std::max(aSize.Width() * 2 + aSize.Width() / 8, tools::Long(1)));
@@ -119,7 +119,6 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         DrawPage(rRenderContext, Point(aSize.Width() + aSize.Width() / 8, nYPos), true,
                  eUsage == SvxPageUsage::Right || eUsage == SvxPageUsage::All || eUsage == SvxPageUsage::Mirror);
     }
-    rRenderContext.Pop();
 }
 
 void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOrg, const bool bSecond, const bool bEnabled)
@@ -380,7 +379,7 @@ void SvxPageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     OutputDevice& rRefDevice = pDrawingArea->get_ref_device();
     // Count in Twips by default
-    rRefDevice.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRefDevice.ScopedPush(vcl::PushFlags::MAPMODE);
     rRefDevice.SetMapMode(MapMode(MapUnit::MapTwip));
     aWinSize = rRefDevice.LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
     pDrawingArea->set_size_request(aWinSize.Width(), aWinSize.Height());
@@ -389,7 +388,6 @@ void SvxPageWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     aWinSize.AdjustWidth( -4 );
 
     aWinSize = rRefDevice.PixelToLogic(aWinSize);
-    rRefDevice.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

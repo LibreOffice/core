@@ -307,11 +307,10 @@ IMPL_LINK_NOARG(MaskData, ExecHdl, weld::Button&, void)
 
 void BmpColorWindow::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*Rect*/)
 {
-    rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
     rRenderContext.DrawRect(tools::Rectangle(Point(), GetOutputSizePixel()));
-    rRenderContext.Pop();
 }
 
 SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( SvxBmpMask& rMask,

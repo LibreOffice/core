@@ -51,7 +51,7 @@ void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
 {
     OutputDevice& rRefDevice = GetDrawingArea()->get_ref_device();
-    rRefDevice.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRefDevice.ScopedPush(vcl::PushFlags::MAPMODE);
 
     rRefDevice.SetMapMode(m_aMapMode);
 
@@ -60,8 +60,6 @@ void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
     pMeasureObj->SetPoint(aPt1, 0);
     Point aPt2(aSize.Width() * 4 / 5, static_cast<tools::Long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt2, 1);
-
-    rRefDevice.Pop();
 }
 
 void SvxXMeasurePreview::Resize()
@@ -78,14 +76,12 @@ void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::
     rRenderContext.SetBackground(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.Erase();
 
-    rRenderContext.Push(vcl::PushFlags::MAPMODE);
+    auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::MAPMODE);
     rRenderContext.SetMapMode(m_aMapMode);
 
     bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
     rRenderContext.SetDrawMode(bHighContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
     pMeasureObj->SingleObjectPainter(rRenderContext);
-
-    rRenderContext.Pop();
 }
 
 void SvxXMeasurePreview::SetAttributes(const SfxItemSet& rInAttrs)
