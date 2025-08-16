@@ -620,11 +620,15 @@ namespace pcr
         notifyModifiedValue();
     }
 
+    constexpr int nDefaultWidthDigits = 30;
+
     //= OComboboxControl
     OComboboxControl::OComboboxControl(std::unique_ptr<weld::ComboBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : OComboboxControl_Base(PropertyControlType::ComboBox, std::move(xBuilder), std::move(xWidget), bReadOnly)
     {
-        getTypedControlWindow()->connect_changed( LINK( this, OComboboxControl, OnEntrySelected ) );
+        weld::ComboBox* pComboBox = getTypedControlWindow();
+        pComboBox->connect_changed( LINK( this, OComboboxControl, OnEntrySelected ) );
+        pComboBox->set_entry_width_chars(nDefaultWidthDigits);
     }
 
     void SAL_CALL OComboboxControl::setValue( const Any& _rValue )
@@ -777,7 +781,7 @@ namespace pcr
         , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
     {
         m_xButton->set_popover(m_xPopover.get());
-        m_xTextView->set_size_request(m_xTextView->get_approximate_digit_width() * 30, m_xTextView->get_height_rows(8));
+        m_xTextView->set_size_request(m_xTextView->get_approximate_digit_width() * nDefaultWidthDigits, m_xTextView->get_height_rows(8));
         m_xOk->connect_clicked(LINK(this, OMultilineEditControl, ButtonHandler));
     }
 
