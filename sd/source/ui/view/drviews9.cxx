@@ -791,7 +791,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             ;
     }
 
-    mpDrawView->SetAttributes (const_cast<const SfxItemSet &>(aAttr));
+    mpDrawView->SetAttributes (aAttr);
     rReq.Ignore ();
 }
 

@@ -5129,7 +5129,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
 
     // get the page width without borders !!
 
-    const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc&>(GetExport().m_rDoc).GetPageDesc(0).GetMaster();
+    const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &GetExport().m_rDoc.GetPageDesc(0).GetMaster();
     const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
     SwTwips nPageSize;
     if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )

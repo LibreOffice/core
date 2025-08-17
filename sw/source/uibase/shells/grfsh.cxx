@@ -217,7 +217,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     aCrop.SetBottom( o3tl::toTwips( aScaledCropedRectangle.Bottom(), o3tl::Length::mm100 ));
 
                     Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
-                    rSh.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aCompressedGraphic));
+                    rSh.ReRead(OUString(), OUString(), &aCompressedGraphic);
 
                     rSh.SetAttrItem(aCrop);
                     rSh.SetAttrItem(aMirror);

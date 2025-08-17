@@ -658,8 +658,8 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
                     fDepth = aDlg.getDepth();
 
                     SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
-                    SfxPoolItem* aItems[] = { &aItem, nullptr };
-                    rBindings.Execute( SID_EXTRUSION_DEPTH, const_cast<const SfxPoolItem**>(aItems) );
+                    const SfxPoolItem* aItems[] = { &aItem, nullptr };
+                    rBindings.Execute( SID_EXTRUSION_DEPTH, aItems );
                 }
             }
             break;

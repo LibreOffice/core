@@ -3246,36 +3246,32 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsInGroup)
         rtl::Reference<SdrRectObj> pObj = new SdrRectObj(*pDrawLayer, aOrigRect);
         pPage->InsertObject(pObj.get());
         const tools::Rectangle &rNewRect = pObj->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("must have equal position and size",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("must have equal position and size", aOrigRect, rNewRect);
 
         ScDrawLayer::SetPageAnchored(*pObj);
 
         //Use a range of rows guaranteed to include all of the square
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored", aOrigRect, rNewRect);
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored", aOrigRect, rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, true);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("That shouldn't change size or positioning",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
 
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Hiding should not change the logic rectangle",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
         CPPUNIT_ASSERT_MESSAGE("Hiding should make invisible", !pObj->IsVisible());
 
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when cell anchored",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when cell anchored", aOrigRect, rNewRect);
         CPPUNIT_ASSERT_MESSAGE("Show should make visible", pObj->IsVisible());
     }
 
@@ -3286,11 +3282,11 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsInGroup)
         pPage->InsertObject(pObj.get());
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell anchored. Not good.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
 
         // Insert 2 rows at the top.  This should push the circle object down.
         m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
@@ -3304,7 +3300,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsInGroup)
         m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to move back to its original position.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
     }
 
     {
@@ -3318,19 +3314,18 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicsInGroup)
         pObj->NbcSetLogicRect(aOrigRect);
         pPage->InsertObject(pObj.get());
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Size differ.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Size differ.", aOrigRect, rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0, false);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell-anchored. Not good.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
 
         // Insert 2 rows at the top and delete them immediately.
         m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size of a line object changed after row insertion and removal.",
-                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               aOrigRect, rNewRect);
 
         sal_Int32 n = pObj->GetPointCount();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 2 points in a line object.", static_cast<sal_Int32>(2), n);

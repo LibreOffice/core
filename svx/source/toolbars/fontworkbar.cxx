@@ -482,8 +482,8 @@ void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindin
                 if (nRet != RET_CANCEL)
                 {
                     SfxInt32Item aItem(SID_FONTWORK_CHARACTER_SPACING, aDlg.getScale());
-                    SfxPoolItem* aItems[] = { &aItem, nullptr };
-                    rBindings.Execute( SID_FONTWORK_CHARACTER_SPACING, const_cast<const SfxPoolItem**>(aItems) );
+                    const SfxPoolItem* aItems[] = { &aItem, nullptr };
+                    rBindings.Execute( SID_FONTWORK_CHARACTER_SPACING, aItems );
                 }
             }
         }

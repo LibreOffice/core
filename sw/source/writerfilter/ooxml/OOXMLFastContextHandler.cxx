@@ -277,8 +277,7 @@ OOXMLFastContextHandler::createUnknownChildContext
  const OUString &,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >
-        (new OOXMLFastContextHandler(*const_cast<const OOXMLFastContextHandler *>(this)));
+    return uno::Reference<xml::sax::XFastContextHandler>(new OOXMLFastContextHandler(*this));
 }
 
 void SAL_CALL OOXMLFastContextHandler::characters

@@ -337,7 +337,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
 
     sal_uInt32 aStackAry1[OUTDEV_POLYPOLY_STACKBUF];
     const Point* aStackAry2[OUTDEV_POLYPOLY_STACKBUF];
-    PolyFlags* aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
+    const PolyFlags* aStackAry3[OUTDEV_POLYPOLY_STACKBUF];
     sal_uInt32* pPointAry;
     const Point**    pPointAryAry;
     const PolyFlags**  pFlagAryAry;
@@ -355,7 +355,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
     {
         pPointAry       = aStackAry1;
         pPointAryAry    = aStackAry2;
-        pFlagAryAry     = const_cast<const PolyFlags**>(aStackAry3);
+        pFlagAryAry     = aStackAry3;
     }
 
     do

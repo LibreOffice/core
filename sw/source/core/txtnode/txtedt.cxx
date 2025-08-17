@@ -2392,7 +2392,7 @@ SwWrongList* SwTextNode::GetSmartTags()
 
 SwWrongList const* SwTextNode::GetSmartTags() const
 {
-    return const_cast<SwWrongList const*>(const_cast<SwTextNode*>(this)->GetSmartTags());
+    return const_cast<SwTextNode*>(this)->GetSmartTags();
 }
 
 void SwTextNode::SetWordCountDirty( bool bNew ) const

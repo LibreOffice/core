@@ -70,8 +70,7 @@ public:
     bool IsSimple() const { return bSimple; }
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
-    const tools::Rectangle& GetBoundRect() const
-        { return mxBound ? const_cast< const tools::Rectangle& >(*mxBound) : GetBoundRect_(); }
+    const tools::Rectangle& GetBoundRect() const { return mxBound ? *mxBound : GetBoundRect_(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( bool bNew );
