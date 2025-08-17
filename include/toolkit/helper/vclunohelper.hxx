@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_HELPER_VCLUNOHELPER_HXX
-#define INCLUDED_TOOLKIT_HELPER_VCLUNOHELPER_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/uno/Reference.h>
@@ -140,7 +139,5 @@ public:
     static ::PointerStyle getMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer);
     static void setMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer, ::PointerStyle mousepointer);
 };
-
-#endif // INCLUDED_TOOLKIT_HELPER_VCLUNOHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

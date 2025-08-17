@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROL_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XControl.hpp>
@@ -225,7 +224,5 @@ protected:
     void SAL_CALL propertiesChange( const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) override;
 };
 
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
-#define INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
+#pragma once
 
 #include <toolkit/dllapi.h>
 
@@ -170,7 +169,5 @@ protected:
     css::beans::PropertyState getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
     void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values );
 };
-
-#endif // INCLUDED_TOOLKIT_CONTROLS_UNOCONTROLMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
