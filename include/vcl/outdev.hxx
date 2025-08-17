@@ -61,6 +61,7 @@
 
 #include <unotools/fontdefs.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/deleter.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -1923,7 +1924,7 @@ protected:
     struct OutputDeviceRestoreStateGuard
     {
         OutputDevice& m_rDev;
-        ~OutputDeviceRestoreStateGuard() { m_rDev.Pop(); }
+        ~OutputDeviceRestoreStateGuard() { suppress_fun_call_w_exception(m_rDev.Pop()); }
     };
 
     Push(nFlags);
