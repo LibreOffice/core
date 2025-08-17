@@ -50,15 +50,46 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testFlagRestorationGuard)
 {
     // Test that comphelper::FlagRestorationGuard properly sets and resets the flag
 
-    // initial value "true", change to "false", out-of-scope change to "true"
-
-    bool bFlag = true;
     {
-        comphelper::FlagRestorationGuard aGuard(bFlag, false);
+        // initial value "true", change to "false", out-of-scope change to "true"
+        bool bFlag = true;
+        {
+            comphelper::FlagRestorationGuard aGuard(bFlag, false);
+            CPPUNIT_ASSERT(!bFlag);
+        }
+        // comphelper::FlagRestorationGuard must reset flag to initial state on destruction
+        CPPUNIT_ASSERT(bFlag);
+    }
+
+    {
+        // initial value "false", change to "true", out-of-scope change to "false"
+        bool bFlag = false;
+        {
+            comphelper::FlagRestorationGuard aGuard(bFlag, true);
+            CPPUNIT_ASSERT(bFlag);
+        }
         CPPUNIT_ASSERT(!bFlag);
     }
-    // comphelper::FlagRestorationGuard must reset flag to initial state on destruction
-    CPPUNIT_ASSERT(bFlag);
+
+    {
+        // initial value "false", change to "false", out-of-scope change to "false"
+        bool bFlag = false;
+        {
+            comphelper::FlagRestorationGuard aGuard(bFlag, false);
+            CPPUNIT_ASSERT(!bFlag);
+        }
+        CPPUNIT_ASSERT(!bFlag);
+    }
+
+    {
+        // initial value "true", change to "true", out-of-scope change to "true"
+        bool bFlag = true;
+        {
+            comphelper::FlagRestorationGuard aGuard(bFlag, true);
+            CPPUNIT_ASSERT(bFlag);
+        }
+        CPPUNIT_ASSERT(bFlag);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testValueRestorationGuard)
