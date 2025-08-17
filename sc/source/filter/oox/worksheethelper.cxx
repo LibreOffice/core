@@ -905,12 +905,16 @@ void WorksheetGlobals::initializeWorksheetImport()
     // set default cell style for unused cells
     ScDocumentImport& rDoc = getDocImport();
 
-    ScStyleSheet* pStyleSheet =
-        static_cast<ScStyleSheet*>(rDoc.getDoc().GetStyleSheetPool()->Find(
-            getStyles().getDefaultStyleName(), SfxStyleFamily::Para));
-
-    if (pStyleSheet)
-        rDoc.setCellStyleToSheet(getSheetIndex(), *pStyleSheet);
+    ScStyleSheetPool* pStylePool = rDoc.getDoc().GetStyleSheetPool();
+    SAL_WARN_IF(!pStylePool, "sc.filter", "Unusual lack of style pool");
+    if (pStylePool)
+    {
+        ScStyleSheet* pStyleSheet =
+            static_cast<ScStyleSheet*>(pStylePool->Find(
+                getStyles().getDefaultStyleName(), SfxStyleFamily::Para));
+        if (pStyleSheet)
+            rDoc.setCellStyleToSheet(getSheetIndex(), *pStyleSheet);
+    }
 
     /*  Remember the current sheet index in global data, needed by global
         objects, e.g. the chart converter. */
