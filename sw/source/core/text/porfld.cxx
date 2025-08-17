@@ -991,7 +991,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
         if( !m_nId )
         {
             SetId( reinterpret_cast<sal_IntPtr>( rInf.GetTextFrame() ) );
-            rInf.GetTextFrame()->SetAnimation();
+            const_cast<SwTextFrame*>(rInf.GetTextFrame())->SetAnimation();
         }
         if( aTmp.Overlaps( rInf.GetPaintRect() ) && !bDraw )
         {

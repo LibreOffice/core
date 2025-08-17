@@ -645,7 +645,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
 
 void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode) const
 {
-    ResetRepaint();
+    const_cast<SwTextFrame*>(this)->ResetRepaint();
 
     // #i16816# tagged pdf support
     SwViewShell *pSh = getRootFrame()->GetCurrShell();

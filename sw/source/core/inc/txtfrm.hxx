@@ -551,13 +551,12 @@ public:
     bool IsInFootnoteConnect()const { return mbInFootnoteConnect;}
     bool IsFieldFollow() const { return mbFieldFollow;}
 
-    inline void SetRepaint() const;
-    inline void ResetRepaint() const;
+    inline void SetRepaint() { mbRepaint = true; }
+    inline void ResetRepaint() { mbRepaint = false; }
     bool HasRepaint() const { return mbRepaint; }
     void SetHasRotatedPortions(bool bHasRotatedPortions);
     bool GetHasRotatedPortions() const { return mbHasRotatedPortions; }
-    void SetAnimation() const
-        { const_cast<SwTextFrame*>(this)->mbHasAnimation = true; }
+    void SetAnimation() { mbHasAnimation = true; }
     bool HasAnimation() const { return mbHasAnimation; }
 
     bool IsSwapped() const { return mbIsSwapped; }
@@ -911,15 +910,6 @@ inline void SwTextFrame::SetOffset(TextFrameIndex const nNewOfst)
 {
     if ( mnOffset != nNewOfst )
         SetOffset_( nNewOfst );
-}
-
-inline void SwTextFrame::SetRepaint() const
-{
-    const_cast<SwTextFrame*>(this)->mbRepaint = true;
-}
-inline void SwTextFrame::ResetRepaint() const
-{
-    const_cast<SwTextFrame*>(this)->mbRepaint = false;
 }
 
 class TemporarySwap {
