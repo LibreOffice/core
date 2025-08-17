@@ -103,18 +103,15 @@ class SwTextInfo
 {
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTextInfo *pInf, SwParaPortion *pRoot );
-    SwParaPortion *m_pPara;
-    TextFrameIndex m_nTextStart; // TextOfst for Follows
+    SwParaPortion* m_pPara{ nullptr };
+    TextFrameIndex m_nTextStart{ 0 }; // TextOfst for Follows
 
 protected:
-    SwTextInfo()
-        : m_pPara(nullptr)
-        , m_nTextStart(0)
-    {}
+    SwTextInfo() = default;
 
 public:
     void CtorInitTextInfo( SwTextFrame *pFrame );
-    SwTextInfo( const SwTextInfo &rInf );
+    SwTextInfo( const SwTextInfo &rInf ) = default;
     explicit SwTextInfo( SwTextFrame *pFrame ) { CtorInitTextInfo( pFrame ); }
     SwParaPortion *GetParaPortion() { return m_pPara; }
     const SwParaPortion *GetParaPortion() const { return m_pPara; }

@@ -170,11 +170,6 @@ void SwTextInfo::CtorInitTextInfo( SwTextFrame *pFrame )
     }
 }
 
-SwTextInfo::SwTextInfo( const SwTextInfo &rInf )
-    : m_pPara( rInf.m_pPara )
-    , m_nTextStart( rInf.GetTextStart() )
-{ }
-
 #if OSL_DEBUG_LEVEL > 0
 
 static void ChkOutDev( const SwTextSizeInfo &rInf )
