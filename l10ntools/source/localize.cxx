@@ -74,14 +74,14 @@ bool passesNegativeList(std::u16string_view rUrl) {
          "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
         u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
     };
-    return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
+    return !matchList(rUrl, list, std::size(list));
 }
 
 bool passesPositiveList(std::u16string_view rUrl) {
     static const std::u16string_view list[] = {
         u"/description.xml"
     };
-    return matchList(rUrl, list, SAL_N_ELEMENTS(list));
+    return matchList(rUrl, list, std::size(list));
 }
 
 void handleCommand(
@@ -302,7 +302,7 @@ void handleFilesOfDir(
 }
 
 bool includeProject(std::string_view rProject) {
-    static const char *projects[] = {
+    static constexpr std::string_view projects[] = {
         "include",
         "accessibility",
         "avmedia",
@@ -353,12 +353,7 @@ bool includeProject(std::string_view rProject) {
         "wizards",
         "writerperfect",
         "xmlsecurity" };
-    for (size_t i = 0; i != SAL_N_ELEMENTS(projects); ++i) {
-        if (rProject == projects[i]) {
-            return true;
-        }
-    }
-    return false;
+    return std::find(std::begin(projects), std::end(projects), rProject) != std::end(projects);
 }
 
 /// Handle one directory in the hierarchy.
