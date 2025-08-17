@@ -266,7 +266,7 @@ public:
 
         DrawText() takes over the on optimization!
      */
-    void DrawTextOpaque( SwDrawTextInfo &rInf );
+    void DrawTextOpaque( SwDrawTextInfo &rInf ) const;
 
     /**
         Two subtleties needs to be mentioned:
@@ -276,7 +276,7 @@ public:
         Ensure that the overlapping frames (except the transparent frames)
         won't be scribbled
      */
-    void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect );
+    void DrawFlyRect( OutputDevice* pOut, const SwRect &rRect ) const;
 
     /**
         Used to switch off the SwTextFly when there is no overlapping object (Relax).

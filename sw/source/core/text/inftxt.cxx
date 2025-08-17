@@ -1063,8 +1063,7 @@ void SwTextPaintInfo::DrawRect( const SwRect &rRect, bool bRetouche ) const
     if ( OnWin() || !bRetouche )
     {
         if( m_aTextFly.IsOn() )
-            const_cast<SwTextPaintInfo*>(this)->GetTextFly().
-                DrawFlyRect( m_pOut, rRect );
+            GetTextFly().DrawFlyRect( m_pOut, rRect );
         else
             m_pOut->DrawRect( rRect.SVRect() );
     }

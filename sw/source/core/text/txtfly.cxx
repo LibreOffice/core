@@ -453,7 +453,7 @@ const SwTextFrame* SwTextFly::GetMaster_()
     return m_pMaster;
 }
 
-void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
+void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf ) const
 {
     SwSaveClip aClipSave( rInf.GetpOut() );
     SwRect aRect( rInf.GetPos(), rInf.GetSize() );
@@ -574,7 +574,7 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     rInf.SetPos(aOldPos);
 }
 
-void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
+void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect ) const
 {
     SwRegionRects aRegion( rRect );
     OSL_ENSURE( !m_bTopRule, "DrawFlyRect: Wrong TopRule" );
