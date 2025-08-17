@@ -28,6 +28,8 @@
 
 #include <osl/mutex.hxx>
 
+#include <utility>
+
 using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
@@ -213,15 +215,13 @@ namespace DOM::events {
         // then bubbeling phase listeners are called in target to root
         // order
         // start at the root
-        NodeVector_t::const_reverse_iterator rinode =
-            const_cast<NodeVector_t const&>(captureVector).rbegin();
-        if (rinode == const_cast<NodeVector_t const&>(captureVector).rend())
+        auto rinode = std::as_const(captureVector).rbegin();
+        if (rinode == std::as_const(captureVector).rend())
             return;
 
         // capturing phase:
         pEvent->m_phase = PhaseType_CAPTURING_PHASE;
-        while (rinode !=
-                const_cast<NodeVector_t const&>(captureVector).rend())
+        while (rinode != std::as_const(captureVector).rend())
         {
             pEvent->m_currentTarget = rinode->first;
             callListeners(captureListeners, rinode->second, aType, xEvent);

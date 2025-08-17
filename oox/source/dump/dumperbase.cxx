@@ -188,7 +188,7 @@ OUStringVector ItemFormat::parse( std::u16string_view rFormatStr )
     OUStringVector aFormatVec;
     StringHelper::convertStringToStringList( aFormatVec, rFormatStr, false );
     OUStringVector::const_iterator aIt = parse( aFormatVec );
-    return OUStringVector( aIt, const_cast< const OUStringVector& >( aFormatVec ).end() );
+    return OUStringVector( aIt, std::as_const( aFormatVec ).end() );
 }
 
 // append string to string ----------------------------------------------------

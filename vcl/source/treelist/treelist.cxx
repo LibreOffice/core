@@ -26,6 +26,7 @@
 #include <cassert>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 
 typedef std::unordered_map<SvTreeListEntry*, std::unique_ptr<SvViewDataEntry>> SvDataTable;
@@ -1352,7 +1353,7 @@ const SvViewDataEntry* SvListView::GetViewData( const SvTreeListEntry* pEntry ) 
 
 SvViewDataEntry* SvListView::GetViewData( SvTreeListEntry* pEntry )
 {
-    return const_cast<SvViewDataEntry*>(const_cast<const SvListView*>(this)->GetViewData(pEntry));
+    return const_cast<SvViewDataEntry*>(std::as_const(*this).GetViewData(pEntry));
 }
 
 sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <utility>
 #include <hintids.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
@@ -570,7 +571,7 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(const SdrObject* pSdrOb
 
 SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
 {
-    return const_cast<SwAnchoredObject *>(const_cast<SwFlyDrawContact const*>(this)->GetAnchoredObj(pSdrObj));
+    return const_cast<SwAnchoredObject *>(std::as_const(*this).GetAnchoredObj(pSdrObj));
 }
 
 SdrObject* SwFlyDrawContact::GetMaster()
@@ -786,7 +787,7 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj(const SdrObject* pSdrObj )
 
 SwAnchoredObject* SwDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
 {
-    return const_cast<SwAnchoredObject*>(const_cast<SwDrawContact const*>(this)->GetAnchoredObj(pSdrObj));
+    return const_cast<SwAnchoredObject*>(std::as_const(*this).GetAnchoredObj(pSdrObj));
 }
 
 SdrObject* SwDrawContact::GetMaster()
@@ -817,7 +818,7 @@ const SwFrame* SwDrawContact::GetAnchorFrame( const SdrObject* _pDrawObj ) const
 
 SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
 {
-    return const_cast<SwFrame *>(const_cast<SwDrawContact const*>(this)->GetAnchorFrame(pDrawObj));
+    return const_cast<SwFrame *>(std::as_const(*this).GetAnchorFrame(pDrawObj));
 }
 
 /** add a 'virtual' drawing object to drawing page.

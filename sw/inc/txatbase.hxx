@@ -34,6 +34,8 @@
 #include "tox.hxx"
 #include "ndhints.hxx"
 
+#include <utility>
+
 /**
  * A wrapper around SfxPoolItem to store the start position of (usually) a text portion, with an
  * optional end.
@@ -176,8 +178,7 @@ inline const SfxPoolItem& SwTextAttr::GetAttr() const
 
 inline SfxPoolItem& SwTextAttr::GetAttr()
 {
-    return const_cast<SfxPoolItem&>(
-            const_cast<const SwTextAttr*>(this)->GetAttr());
+    return const_cast<SfxPoolItem&>(std::as_const(*this).GetAttr());
 }
 
 inline void SwTextAttr::SetDontExpand( bool bDontExpand )

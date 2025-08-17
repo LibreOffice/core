@@ -29,6 +29,8 @@
 #include <swdtflvr.hxx>
 #include <strings.hrc>
 
+#include <utility>
+
 RedlineFlags SwEditShell::GetRedlineFlags() const
 {
     return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags(this);
@@ -71,7 +73,7 @@ const SwRangeRedline& SwEditShell::GetRedline( SwRedlineTable::size_type nPos ) 
 
 SwRangeRedline& SwEditShell::GetRedline(SwRedlineTable::size_type nPos)
 {
-    return const_cast<SwRangeRedline&>(const_cast<const SwEditShell*>(this)->GetRedline(nPos));
+    return const_cast<SwRangeRedline&>(std::as_const(*this).GetRedline(nPos));
 }
 
 static void lcl_InvalidateAll( SwViewShell* pSh )

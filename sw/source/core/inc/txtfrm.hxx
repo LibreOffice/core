@@ -478,10 +478,9 @@ public:
     SwTextNode const* GetTextNodeForParaProps() const;
     SwTextNode const* GetTextNodeForFirstText() const;
     SwTextNode      * GetTextNodeFirst()
-        { return const_cast<SwTextNode*>(const_cast<SwTextFrame const*>(this)->GetTextNodeFirst()); };
+        { return const_cast<SwTextNode*>(std::as_const(*this).GetTextNodeFirst()); };
     SwTextNode const* GetTextNodeFirst() const;
-    SwDoc      & GetDoc()
-        { return const_cast<SwDoc &>(const_cast<SwTextFrame const*>(this)->GetDoc()); }
+    SwDoc      & GetDoc() { return const_cast<SwDoc &>(std::as_const(*this).GetDoc()); }
     SwDoc const& GetDoc() const;
 
     SwTextFrame(SwTextNode * const, SwFrame*, sw::FrameMode eMode);

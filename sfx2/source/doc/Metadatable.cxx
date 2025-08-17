@@ -471,8 +471,7 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
         const OUString & i_rIdref)
     {
         return const_cast<XmlIdVector_t*>(
-            const_cast<const XmlIdRegistry_Impl*>(this)
-                ->LookupElementVector(i_rStreamName, i_rIdref));
+            std::as_const(*this).LookupElementVector(i_rStreamName, i_rIdref));
     }
 
     XmlIdMap_t m_XmlIdMap;

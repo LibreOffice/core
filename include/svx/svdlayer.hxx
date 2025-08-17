@@ -24,6 +24,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
+#include <utility>
 #include <vector>
 
 /**
@@ -142,7 +143,7 @@ public:
     SdrLayer*          GetLayer(const OUString& rName);
     const SdrLayer*    GetLayer(const OUString& rName) const;
     SdrLayerID         GetLayerID(const OUString& rName) const;
-    SdrLayer*          GetLayerPerID(SdrLayerID nID) { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
+    SdrLayer*          GetLayerPerID(SdrLayerID nID) { return const_cast<SdrLayer*>(std::as_const(*this).GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(SdrLayerID nID) const;
 
     void               SetControlLayerName(const OUString& rNewName);

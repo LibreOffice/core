@@ -28,6 +28,8 @@
 #include <docary.hxx>
 #include <unocrsr.hxx>
 
+#include <utility>
+
 namespace
 {
     /// find the relevant section in which the SwUnoCursor may wander.
@@ -371,7 +373,7 @@ SwEditShell const * SwDoc::GetEditShell() const
 
 SwEditShell* SwDoc::GetEditShell()
 {
-    return const_cast<SwEditShell*>( const_cast<SwDoc const *>( this )->GetEditShell() );
+    return const_cast<SwEditShell*>( std::as_const( *this ).GetEditShell() );
 }
 
 ::sw::IShellCursorSupplier * SwDoc::GetIShellCursorSupplier()

@@ -1464,7 +1464,7 @@ const vcl::Window *VclBin::get_child() const
 
 vcl::Window *VclBin::get_child()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclBin*>(this)->get_child());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_child());
 }
 
 Size VclBin::calculateRequisition() const
@@ -1569,7 +1569,7 @@ const vcl::Window *VclFrame::get_label_widget() const
 
 vcl::Window *VclFrame::get_label_widget()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_label_widget());
 }
 
 const vcl::Window *VclFrame::get_child() const
@@ -1586,7 +1586,7 @@ const vcl::Window *VclFrame::get_child() const
 
 vcl::Window *VclFrame::get_child()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclFrame*>(this)->get_child());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_child());
 }
 
 void VclFrame::set_label(const OUString &rLabel)
@@ -1741,7 +1741,7 @@ const vcl::Window *VclExpander::get_child() const
 
 vcl::Window *VclExpander::get_child()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_child());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_child());
 }
 
 Size VclExpander::calculateRequisition() const
@@ -1854,7 +1854,7 @@ const vcl::Window *VclExpander::get_label_widget() const
 
 vcl::Window *VclExpander::get_label_widget()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclExpander*>(this)->get_label_widget());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_label_widget());
 }
 
 void VclExpander::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
@@ -1952,7 +1952,7 @@ const vcl::Window *VclScrolledWindow::get_child() const
 
 vcl::Window *VclScrolledWindow::get_child()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclScrolledWindow*>(this)->get_child());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_child());
 }
 
 Size VclScrolledWindow::calculateRequisition() const
@@ -2276,7 +2276,7 @@ const vcl::Window *VclEventBox::get_child() const
 
 vcl::Window *VclEventBox::get_child()
 {
-    return const_cast<vcl::Window*>(const_cast<const VclEventBox*>(this)->get_child());
+    return const_cast<vcl::Window*>(std::as_const(*this).get_child());
 }
 
 void VclEventBox::setAllocation(const Size& rAllocation)

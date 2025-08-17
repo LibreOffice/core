@@ -314,7 +314,7 @@ public:
     const HTMLTableCell& GetCell(sal_uInt16 nCell) const;
     HTMLTableCell& GetCell(sal_uInt16 nCell)
     {
-        return const_cast<HTMLTableCell&>(const_cast<const HTMLTableRow&>(*this).GetCell(nCell));
+        return const_cast<HTMLTableCell&>(std::as_const(*this).GetCell(nCell));
     }
 
     void SetAdjust( SvxAdjust eAdj ) { m_eAdjust = eAdj; }
@@ -550,7 +550,7 @@ public:
     const HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell) const;
     HTMLTableCell& GetCell(sal_uInt16 nRow, sal_uInt16 nCell)
     {
-        return const_cast<HTMLTableCell&>(const_cast<const HTMLTable&>(*this).GetCell(nRow, nCell));
+        return const_cast<HTMLTableCell&>(std::as_const(*this).GetCell(nRow, nCell));
     }
 
     // set/determine caption

@@ -24,6 +24,8 @@
 
 #include <sal/log.hxx>
 
+#include <utility>
+
 typedef unsigned char PIXBYTE;
 
 namespace {
@@ -417,7 +419,7 @@ static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, tools::Lo
 
 static inline Scanline ImplGetScanline( BitmapBuffer& rBuf, tools::Long nY )
 {
-    return const_cast<Scanline>(ImplGetScanline( const_cast<const BitmapBuffer&>(rBuf), nY ));
+    return const_cast<Scanline>(ImplGetScanline( std::as_const(rBuf), nY ));
 }
 
 template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT>

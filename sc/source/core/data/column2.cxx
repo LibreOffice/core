@@ -68,6 +68,7 @@
 #include <limits>
 #include <memory>
 #include <numeric>
+#include <utility>
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
@@ -2226,7 +2227,7 @@ const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, 
 
 ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow )
 {
-    return const_cast<ScPostIt*>(const_cast<const ScColumn*>(this)->GetCellNote( rBlockPos, nRow ));
+    return const_cast<ScPostIt*>(std::as_const(*this).GetCellNote( rBlockPos, nRow ));
 }
 
 void ScColumn::SetCellNote(SCROW nRow, std::unique_ptr<ScPostIt> pNote)
