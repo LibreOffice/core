@@ -1504,7 +1504,6 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_InitCollectedParagraphProperties, comphelper::containerToSequence(aOrder));
 }
 
@@ -3391,7 +3390,6 @@ void DocxAttributeOutput::InitCollectedRunProperties()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_InitCollectedRunProperties, comphelper::containerToSequence(aOrder));
 }
 
@@ -7164,7 +7162,6 @@ void DocxAttributeOutput::StartSection()
 
     // postpone the output so that we can later [in EndParagraphProperties()]
     // prepend the properties before the run
-    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_StartSection, comphelper::containerToSequence(aOrder));
     m_bHadSectPr = true;
 }
@@ -7632,7 +7629,6 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
             }
             if( readSize == 0 )
                 break;
-            // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
             xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
         }
         xOutStream->closeOutput();

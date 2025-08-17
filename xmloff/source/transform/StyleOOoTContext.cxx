@@ -968,7 +968,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             aProtectAttrValue += rSize;
         }
 
-        assert(pProtectContext && "coverity[var_deref_model] - pProtectContext should be assigned in a superset of the enclosing if condition entry logic");
+        assert(pProtectContext && "pProtectContext should be assigned in a superset of the enclosing if condition entry logic");
         pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aProtectAttrValue );
     }
 

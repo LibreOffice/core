@@ -60,7 +60,7 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             continue;
         }
 
-        assert( pNd );  // coverity, should never be nullptr
+        assert(pNd && "should never be nullptr");
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&
@@ -134,7 +134,7 @@ bool GotoNextRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
             continue;
         }
 
-        assert( pNd );  // coverity, should never be nullptr
+        assert(pNd && "should never be nullptr");
         {
             if( pNd->GetSection().IsHiddenFlag() ||
                 ( !bInReadOnly &&

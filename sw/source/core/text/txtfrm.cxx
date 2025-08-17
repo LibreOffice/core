@@ -3874,7 +3874,7 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
             aFont.SetFntChg( true );
             aFont.ChgPhysFnt( pVsh, *pOut );
             mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
-            assert(pLastFont && "coverity[var_deref_model] - pLastFont should be set in SwSubFont::ChgFnt");
+            assert(pLastFont && "pLastFont should be set in SwSubFont::ChgFnt");
             pLastFont->Unlock();
             pLastFont = pOldFont;
             pLastFont->SetDevFont( pVsh, *pOut );
@@ -3885,7 +3885,7 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
             aFont.SetFntChg( true );
             aFont.ChgPhysFnt( pVsh, *pOut );
             mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
-            assert(pLastFont && "coverity[var_deref_model] - pLastFont should be set in SwSubFont::ChgFnt");
+            assert(pLastFont && "pLastFont should be set in SwSubFont::ChgFnt");
             pLastFont->Unlock();
             pLastFont = nullptr;
             pOut->SetFont( aOldFont );

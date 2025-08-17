@@ -1862,7 +1862,6 @@ void SalX11Display::Yield()
 
     XNextEvent( pDisp_, &aEvent );
 
-    // coverity[overrun-buffer-val : FALSE] - coverity has problems with uno::Sequence
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL

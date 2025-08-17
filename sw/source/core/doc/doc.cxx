@@ -1916,7 +1916,7 @@ bool SwDoc::RemoveInvisibleContent()
                         aPam.SetMark();
                         aPam.GetPoint()->Assign( *pSectNd->EndOfSectionNode() );
                         pCNd = SwNodes::GoPrevious( aPam.GetPoint() );
-                        assert(pCNd); // keep coverity happy
+                        assert(pCNd && "won't be null");
                         aPam.GetPoint()->SetContent( pCNd->Len() );
 
                         getIDocumentContentOperations().DeleteRange( aPam );

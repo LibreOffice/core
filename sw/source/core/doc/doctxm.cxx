@@ -945,7 +945,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of content before table-of-content
             SwNodeIndex aIdx( *pSectNd );
             SwContentNode* pTmp = SwNodes::GoPrevious( &aIdx );
-            assert(pTmp); // make coverity happy
+            assert(pTmp && "won't be null");
             pDefaultPageDesc = pTmp->FindPageDesc();
 
         }

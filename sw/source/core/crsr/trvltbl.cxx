@@ -588,7 +588,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
             continue;
         }
 
-        assert( pTableNd );  // coverity, should never be nullptr
+        assert(pTableNd && "should never be nullptr");
 
         if( &fnPosTable == &fnMoveForward ) // at the beginning?
         {

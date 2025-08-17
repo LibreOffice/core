@@ -1638,7 +1638,6 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
 
                                 rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(processID) );
 
-                                // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
                                 css::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
 
                                 css::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);

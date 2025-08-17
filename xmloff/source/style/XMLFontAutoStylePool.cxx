@@ -647,7 +647,6 @@ OUString SvXMLExport::embedFontFile(OUString const& fileUrl, OUString const& rFa
             }
             if( readSize == 0 )
                 break;
-            // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
             outputStream->writeBytes(uno::Sequence<sal_Int8>(buffer, readSize));
         }
         outputStream->closeOutput();

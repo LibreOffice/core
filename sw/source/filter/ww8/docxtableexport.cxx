@@ -181,7 +181,6 @@ void DocxAttributeOutput::TableDefinition(
 
     // postpone the output so that we can later []
     // prepend the properties before the run
-    // coverity[overrun-buffer-arg : FALSE] - coverity has difficulty with css::uno::Sequence
     m_pSerializer->mark(Tag_TableDefinition, comphelper::containerToSequence(aOrder));
 
     tools::Long nPageSize = 0;

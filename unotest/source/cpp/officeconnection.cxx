@@ -74,7 +74,6 @@ void OfficeConnection::setUp() {
         {
             envs = &argEnv.pData;
         }
-        // coverity[callee_ptr_arith] - arith is fine
         CPPUNIT_ASSERT_EQUAL(
             osl_Process_E_None,
             osl_executeProcess(

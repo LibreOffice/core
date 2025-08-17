@@ -1495,7 +1495,6 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
             case PresObjKind::DateTime:
                 aShapeType += "DateTimeShape";
                 break;
-            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case PresObjKind::NONE:
                 break;
             }
