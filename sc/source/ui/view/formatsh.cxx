@@ -1060,7 +1060,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_FRAME_LINESTYLE:
                 {
                     // Update default line
-                    const ::editeng::SvxBorderLine* pLine = new ::editeng::SvxBorderLine();
+                    ::editeng::SvxBorderLine aLine;
+                    const ::editeng::SvxBorderLine* pLine = nullptr;
                     const SfxInt16Item* lineStyleItem = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
 
                     if (lineStyleItem)
@@ -1079,8 +1080,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         OuterLineWidth = OuterLineWidthItem ? OuterLineWidthItem->GetValue() : 0;
                         LineDistance = LineDistanceItem ? LineDistanceItem->GetValue() : 0;
 
-                        const_cast<::editeng::SvxBorderLine*>(pLine)->GuessLinesWidths(
+                        aLine.GuessLinesWidths(
                             lineStyle, InnerLineWidth, OuterLineWidth, LineDistance);
+
+                        pLine = &aLine;
                     }
                     else
                     {
