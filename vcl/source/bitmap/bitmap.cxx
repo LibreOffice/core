@@ -148,8 +148,12 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
         Size aSize = rBitmapEx.GetSizePixel();
         static const BitmapPalette aPalEmpty;
         mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-        mxSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
-
+        const bool bSuccess = mxSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
+        if (!bSuccess)
+        {
+            SAL_WARN("vcl", "Bitmap::Bitmap(): could not create image");
+            return;
+        }
         BitmapScopedReadAccess pReadColorAcc(rBitmapEx.GetBitmap());
         BitmapScopedReadAccess pReadAlphaAcc(rBitmapEx.GetAlphaMask());
         BitmapScopedWriteAccess pWriteAcc(*this);
