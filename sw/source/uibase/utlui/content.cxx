@@ -7121,9 +7121,7 @@ void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
             m_xTreeView->expand_row(*xIter);
             UpdateContentFunctionsToolbar();
 
-            int nCount = m_xTreeView->iter_n_children(*xIter);
-            m_xTreeView->iter_children(*xIter);
-            for (int i = 0; i < nCount; ++i)
+            for (bool bChild = m_xTreeView->iter_children(*xIter); bChild; bChild = m_xTreeView->iter_next(*xIter))
             {
                 if (const SwPostItContent* pPostIt = weld::fromId<SwPostItContent*>(m_xTreeView->get_id(*xIter)))
                 {
@@ -7134,7 +7132,6 @@ void SwContentTree::BringCommentToAttention(sal_uInt16 nCommentId)
                         break;
                     }
                 }
-                m_xTreeView->iter_next(*xIter);
             }
             break;
         }
