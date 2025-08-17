@@ -76,6 +76,7 @@
 #include <globalnames.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/flagguard.hxx>
 #include <config_fuzzers.h>
 #include <memory>
 
@@ -1442,10 +1443,10 @@ void ScDocument::Sort(
 {
     if (ScTable* pTable = FetchTable(nTab))
     {
-        bool bOldEnableIdle = IsIdleEnabled();
-        EnableIdle(false);
+        // Set idle enabled to "false" (if not already)
+        // out-of-scope will reset the value to the initial state
+        comphelper::FlagRestorationGuard aGuard(mbIdleEnabled, false);
         pTable->Sort(rSortParam, bKeepQuery, bUpdateRefs, pProgress, pUndo);
-        EnableIdle(bOldEnableIdle);
     }
 }
 
