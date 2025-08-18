@@ -6477,7 +6477,9 @@ SvxPageItem Orientation SID_ATTR_PAGE_ORIENTATION
 
 
 SvxLongULSpaceItem PageULMargin SID_ATTR_PAGE_ULSPACE
-
+(
+    SvxLongULSpaceItem Page SID_ATTR_PAGE_ULSPACE
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -6496,7 +6498,9 @@ SvxLongULSpaceItem PageULMargin SID_ATTR_PAGE_ULSPACE
 
 
 SvxLongLRSpaceItem PageLRMargin SID_ATTR_PAGE_LRSPACE
-
+(
+    SvxLongLRSpaceItem Page SID_ATTR_PAGE_LRSPACE
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
