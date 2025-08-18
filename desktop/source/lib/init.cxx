@@ -2413,7 +2413,6 @@ void CallbackFlushHandler::enqueueUpdatedTypes()
     assert(m_viewId >= 0);
     SfxViewShell* viewShell = SfxViewShell::GetFirst( false,
         [this](const SfxViewShell& shell) { return shell.GetViewShellId().get() == m_viewId; } );
-    assert(viewShell != nullptr);
 
     // First move data to local structures, so that callbacks don't possibly modify it.
     std::vector<bool> updatedTypes;
