@@ -115,21 +115,18 @@ namespace basegfx::utils
         /** get length of polygon */
         BASEGFX_DLLPUBLIC double getLength(const B2DPolygon& rCandidate);
 
-        // get position on polygon for absolute given distance. If
-        // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
-        // using getLength(...)
-        BASEGFX_DLLPUBLIC B2DPoint getPositionAbsolute(const B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+        // get position on polygon for absolute given distance.
+        // length is the polygon length
+        BASEGFX_DLLPUBLIC B2DPoint getPositionAbsolute(const B2DPolygon& rCandidate, double fDistance, double fLength);
 
-        // get position on polygon for relative given distance in range [0.0 .. 1.0]. If
-        // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
-        // using getLength(...)
-        BASEGFX_DLLPUBLIC B2DPoint getPositionRelative(const B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+        // get position on polygon for relative given distance in range [0.0 .. 1.0].
+        // length is the polygon length
+        BASEGFX_DLLPUBLIC B2DPoint getPositionRelative(const B2DPolygon& rCandidate, double fDistance, double fLength);
 
         // get a snippet from given polygon for absolute distances. The polygon is assumed
         // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. fLength], where
-        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
-        // if 0.0 it is calculated using getLength(...)
-        BASEGFX_DLLPUBLIC B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength = 0.0);
+        // fTo >= fFrom. length is the polygon length.
+        BASEGFX_DLLPUBLIC B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength);
 
         // Continuity check for point with given index
         BASEGFX_DLLPUBLIC B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);

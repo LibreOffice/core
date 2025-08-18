@@ -534,12 +534,6 @@ namespace basegfx::utils
                 sal_uInt32 nIndex(0);
                 bool bIndexDone(false);
 
-                // get length if not given
-                if(fTools::equalZero(fLength))
-                {
-                    fLength = getLength(rCandidate);
-                }
-
                 if (fDistance < 0.0)
                 {
                     // handle fDistance < 0.0
@@ -657,12 +651,6 @@ namespace basegfx::utils
 
         B2DPoint getPositionRelative(const B2DPolygon& rCandidate, double fDistance, double fLength)
         {
-            // get length if not given
-            if(fTools::equalZero(fLength))
-            {
-                fLength = getLength(rCandidate);
-            }
-
             // multiply fDistance with real length to get absolute position and
             // use getPositionAbsolute
             return getPositionAbsolute(rCandidate, fDistance * fLength, fLength);
@@ -674,12 +662,6 @@ namespace basegfx::utils
 
             if(nPointCount)
             {
-                // get length if not given
-                if(fTools::equalZero(fLength))
-                {
-                    fLength = getLength(rCandidate);
-                }
-
                 // test and correct fFrom
                 if (fFrom < 0.0)
                 {

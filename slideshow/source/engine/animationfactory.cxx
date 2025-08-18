@@ -304,8 +304,9 @@ namespace slideshow::internal
                     ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
 
-                    ::basegfx::B2DPoint rOutPos = ::basegfx::utils::getPositionRelative( maPathPoly,
-                                                                                         nValue );
+                    ::basegfx::B2DPoint rOutPos = ::basegfx::utils::getPositionRelative(maPathPoly,
+                                                                                        nValue,
+                                                                                        basegfx::utils::getLength(maPathPoly));
 
                     // TODO(F1): Determine whether the path is
                     // absolute, or shape-relative.
