@@ -679,6 +679,7 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
     //  if the cell at the cursor contains only a link, return that link
 
     SvxHyperlinkItem aHLinkItem;
+    aHLinkItem.SetShowName(false);
     if ( !GetViewData().GetView()->HasBookmarkAtCursor( &aHLinkItem ) )
     {
         // tdf#80043 - put selected text into item

@@ -988,6 +988,8 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     OUString sHyperLink = pObj->getHyperlink();
                     SvxHyperlinkItem aHLinkItem;
+                    aHLinkItem.SetShowName(false);
+                    aHLinkItem.SetShowText(false);
                     aHLinkItem.SetURL(sHyperLink);
                     rSet.Put(aHLinkItem);
                 }

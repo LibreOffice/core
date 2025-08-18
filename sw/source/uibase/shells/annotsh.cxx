@@ -1110,6 +1110,8 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
             case SID_HYPERLINK_GETLINK:
                 {
                     SvxHyperlinkItem aHLinkItem;
+                    aHLinkItem.SetShowName(false);
+                    aHLinkItem.SetShowText(true);
                     aHLinkItem.SetInsertMode(HLINK_FIELD);
 
                     const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();

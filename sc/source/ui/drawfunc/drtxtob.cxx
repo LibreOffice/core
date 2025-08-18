@@ -379,6 +379,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_HYPERLINK_GETLINK ) != SfxItemState::UNKNOWN )
     {
         SvxHyperlinkItem aHLinkItem;
+        aHLinkItem.SetShowName(false);
         SdrView* pView = mrViewData.GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )

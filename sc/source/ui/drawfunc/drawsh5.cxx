@@ -61,6 +61,8 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
         //  Hyperlink
 
     SvxHyperlinkItem aHLinkItem;
+    aHLinkItem.SetShowName(false);
+    aHLinkItem.SetShowText(false);
 
     if ( rMarkList.GetMarkCount() == 1 )              // URL-Button marked ?
     {
