@@ -147,13 +147,13 @@ private:
 
     SvxTabPage* m_pPage;
 
-    Color       aPixelColor;
-    Color       aBackgroundColor;
-    Size        aRectSize;
+    Color       m_aPixelColor;
+    Color       m_aBackgroundColor;
+    Size        m_aRectSize;
     std::array<sal_uInt8,nSquares> maPixelData;
-    bool        bPaintable;
+    bool        m_bPaintable;
     //Add member identifying position
-    Point       aFocusPosition;
+    Point       m_aFocusPosition;
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
 
     SAL_DLLPRIVATE tools::Rectangle   implCalFocusRect( const Point& aPosition );
@@ -177,15 +177,15 @@ public:
 
     void    SetXBitmap( const Bitmap& rBitmap );
 
-    void    SetPixelColor( const Color& rCol ) { aPixelColor = rCol; }
-    void    SetBackgroundColor( const Color& rCol ) { aBackgroundColor = rCol; }
+    void    SetPixelColor( const Color& rCol ) { m_aPixelColor = rCol; }
+    void    SetBackgroundColor( const Color& rCol ) { m_aBackgroundColor = rCol; }
 
     static sal_uInt16 GetLineCount() { return nLines; }
 
     SAL_DLLPRIVATE sal_uInt8  GetBitmapPixel( const sal_uInt16 nPixelNumber ) const;
     std::array<sal_uInt8,64> const & GetBitmapPixelPtr() const { return maPixelData; }
 
-    void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
+    void    SetPaintable( bool bTmp ) { m_bPaintable = bTmp; }
     void    Reset();
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
@@ -193,8 +193,8 @@ public:
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
     static tools::Long GetSquares() { return nSquares ; }
-    tools::Long GetWidth() const { return aRectSize.getWidth() ; }
-    tools::Long GetHeight() const { return aRectSize.getHeight() ; }
+    tools::Long GetWidth() const { return m_aRectSize.getWidth() ; }
+    tools::Long GetHeight() const { return m_aRectSize.getHeight() ; }
 
     //Device Pixel .
     SAL_DLLPRIVATE tools::Long ShowPosition( const Point &pt);

@@ -587,8 +587,8 @@ rtl::Reference<comphelper::OAccessible> SvxPixelCtl::CreateAccessible()
 
 tools::Long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
-    tools::Long nX = aPt.X() * nLines / aRectSize.Width();
-    tools::Long nY = aPt.Y() * nLines / aRectSize.Height();
+    tools::Long nX = aPt.X() * nLines / m_aRectSize.Width();
+    tools::Long nY = aPt.Y() * nLines / m_aRectSize.Height();
 
     return nX + nY * nLines ;
 }
@@ -601,28 +601,28 @@ Point SvxPixelCtl::IndexToPoint(tools::Long nIndex) const
     sal_Int32 nYIndex = nIndex / nLines;
 
     Point aPtTl;
-    aPtTl.setY( aRectSize.Height() * nYIndex / nLines + 1 );
-    aPtTl.setX( aRectSize.Width() * nXIndex / nLines + 1 );
+    aPtTl.setY( m_aRectSize.Height() * nYIndex / nLines + 1 );
+    aPtTl.setX( m_aRectSize.Width() * nXIndex / nLines + 1 );
 
     return aPtTl;
 }
 
 tools::Long SvxPixelCtl::GetFocusPosIndex() const
 {
-    return aFocusPosition.getX() + aFocusPosition.getY() * nLines ;
+    return m_aFocusPosition.getX() + m_aFocusPosition.getY() * nLines ;
 }
 
 tools::Long SvxPixelCtl::ShowPosition( const Point &rPt)
 {
-    sal_Int32 nX = rPt.X() * nLines / aRectSize.Width();
-    sal_Int32 nY = rPt.Y() * nLines / aRectSize.Height();
+    sal_Int32 nX = rPt.X() * nLines / m_aRectSize.Width();
+    sal_Int32 nY = rPt.Y() * nLines / m_aRectSize.Height();
 
     ChangePixel( nX + nY * nLines );
 
     //Solution:Set new focus position and repaint
-    aFocusPosition.setX(nX);
-    aFocusPosition.setY(nY);
-    Invalidate(tools::Rectangle(Point(0,0),aRectSize));
+    m_aFocusPosition.setX(nX);
+    m_aFocusPosition.setY(nY);
+    Invalidate(tools::Rectangle(Point(0,0),m_aRectSize));
 
     if (m_pPage)
         m_pPage->PointChanged(GetDrawingArea(), RectPoint::MM ); // RectPoint is dummy
@@ -633,8 +633,8 @@ tools::Long SvxPixelCtl::ShowPosition( const Point &rPt)
 
 SvxPixelCtl::SvxPixelCtl(SvxTabPage* pPage)
     : m_pPage(pPage)
-    , bPaintable(true)
-    , aFocusPosition(0,0)
+    , m_bPaintable(true)
+    , m_aFocusPosition(0,0)
 {
     maPixelData.fill(0);
 }
@@ -642,7 +642,7 @@ SvxPixelCtl::SvxPixelCtl(SvxTabPage* pPage)
 void SvxPixelCtl::Resize()
 {
     CustomWidgetController::Resize();
-    aRectSize = GetOutputSizePixel();
+    m_aRectSize = GetOutputSizePixel();
 }
 
 void SvxPixelCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
@@ -670,7 +670,7 @@ void SvxPixelCtl::ChangePixel( sal_uInt16 nPixel )
 
 bool SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (!aRectSize.Width() || !aRectSize.Height())
+    if (!m_aRectSize.Width() || !m_aRectSize.Height())
         return true;
 
     //Grab focus when click in window
@@ -698,31 +698,31 @@ tools::Rectangle SvxPixelCtl::GetFocusRect()
     tools::Rectangle aRet;
     //Draw visual focus when has focus
     if (HasFocus())
-        aRet = implCalFocusRect(aFocusPosition);
+        aRet = implCalFocusRect(m_aFocusPosition);
     return aRet;
 }
 
 // Draws the Control (Rectangle with nine circles)
 void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& )
 {
-    if (!aRectSize.Width() || !aRectSize.Height())
+    if (!m_aRectSize.Width() || !m_aRectSize.Height())
         return;
 
     sal_uInt16 i, j, nTmp;
     Point aPtTl, aPtBr;
 
-    if (bPaintable)
+    if (m_bPaintable)
     {
         // Draw lines
         rRenderContext.SetLineColor(Color());
         for (i = 1; i < nLines; i++)
         {
             // horizontal
-            nTmp = static_cast<sal_uInt16>(aRectSize.Height() * i / nLines);
-            rRenderContext.DrawLine(Point(0, nTmp), Point(aRectSize.Width(), nTmp));
+            nTmp = static_cast<sal_uInt16>(m_aRectSize.Height() * i / nLines);
+            rRenderContext.DrawLine(Point(0, nTmp), Point(m_aRectSize.Width(), nTmp));
             // vertically
-            nTmp = static_cast<sal_uInt16>( aRectSize.Width() * i / nLines );
-            rRenderContext.DrawLine(Point(nTmp, 0), Point(nTmp, aRectSize.Height()));
+            nTmp = static_cast<sal_uInt16>( m_aRectSize.Width() * i / nLines );
+            rRenderContext.DrawLine(Point(nTmp, 0), Point(nTmp, m_aRectSize.Height()));
         }
 
         //Draw Rectangles (squares)
@@ -731,19 +731,19 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 
         for (i = 0; i < nLines; i++)
         {
-            aPtTl.setY( aRectSize.Height() * i / nLines + 1 );
-            aPtBr.setY( aRectSize.Height() * (i + 1) / nLines - 1 );
+            aPtTl.setY( m_aRectSize.Height() * i / nLines + 1 );
+            aPtBr.setY( m_aRectSize.Height() * (i + 1) / nLines - 1 );
 
             for (j = 0; j < nLines; j++)
             {
-                aPtTl.setX( aRectSize.Width() * j / nLines + 1 );
-                aPtBr.setX( aRectSize.Width() * (j + 1) / nLines - 1 );
+                aPtTl.setX( m_aRectSize.Width() * j / nLines + 1 );
+                aPtBr.setX( m_aRectSize.Width() * (j + 1) / nLines - 1 );
 
                 if (maPixelData[i * nLines + j] != nLastPixel)
                 {
                     nLastPixel = maPixelData[i * nLines + j];
                     // Change color: 0 -> Background color
-                    rRenderContext.SetFillColor(nLastPixel ? aPixelColor : aBackgroundColor);
+                    rRenderContext.SetFillColor(nLastPixel ? m_aPixelColor : m_aBackgroundColor);
                 }
                 rRenderContext.DrawRect(tools::Rectangle(aPtTl, aPtBr));
             }
@@ -753,8 +753,8 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
     {
         rRenderContext.SetBackground(Wallpaper(COL_LIGHTGRAY));
         rRenderContext.SetLineColor(COL_LIGHTRED);
-        rRenderContext.DrawLine(Point(0, 0), Point(aRectSize.Width(), aRectSize.Height()));
-        rRenderContext.DrawLine(Point(0, aRectSize.Height()), Point(aRectSize.Width(), 0));
+        rRenderContext.DrawLine(Point(0, 0), Point(m_aRectSize.Width(), m_aRectSize.Height()));
+        rRenderContext.DrawLine(Point(0, m_aRectSize.Height()), Point(m_aRectSize.Width(), 0));
     }
 }
 
@@ -765,10 +765,10 @@ tools::Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
     tools::Long i,j;
     i = aPosition.Y();
     j = aPosition.X();
-    nLeft = aRectSize.Width() * j / nLines + 1;
-    nRight = aRectSize.Width() * (j + 1) / nLines - 1;
-    nTop = aRectSize.Height() * i / nLines + 1;
-    nBottom = aRectSize.Height() * (i + 1) / nLines - 1;
+    nLeft = m_aRectSize.Width() * j / nLines + 1;
+    nRight = m_aRectSize.Width() * (j + 1) / nLines - 1;
+    nTop = m_aRectSize.Height() * i / nLines + 1;
+    nBottom = m_aRectSize.Height() * (i + 1) / nLines - 1;
     return tools::Rectangle(nLeft,nTop,nRight,nBottom);
 }
 
@@ -781,49 +781,49 @@ bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 
     if( !bIsMod )
     {
-        Point aRepaintPoint( aRectSize.Width() *( aFocusPosition.getX() - 1)/ nLines - 1,
-                             aRectSize.Height() *( aFocusPosition.getY() - 1)/ nLines -1
+        Point aRepaintPoint( m_aRectSize.Width() *( m_aFocusPosition.getX() - 1)/ nLines - 1,
+                             m_aRectSize.Height() *( m_aFocusPosition.getY() - 1)/ nLines -1
                             );
-        Size  aRepaintSize( aRectSize.Width() *3/ nLines + 2,aRectSize.Height() *3/ nLines + 2);
+        Size  aRepaintSize( m_aRectSize.Width() *3/ nLines + 2,m_aRectSize.Height() *3/ nLines + 2);
         tools::Rectangle aRepaintRect( aRepaintPoint, aRepaintSize );
         bool bFocusPosChanged=false;
         switch(nCode)
         {
             case KEY_LEFT:
-                if(aFocusPosition.getX() >= 1)
+                if(m_aFocusPosition.getX() >= 1)
                 {
-                    aFocusPosition.setX( aFocusPosition.getX() - 1 );
+                    m_aFocusPosition.setX( m_aFocusPosition.getX() - 1 );
                     Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
             case KEY_RIGHT:
-                if( aFocusPosition.getX() < (nLines - 1) )
+                if( m_aFocusPosition.getX() < (nLines - 1) )
                 {
-                    aFocusPosition.setX( aFocusPosition.getX() + 1 );
+                    m_aFocusPosition.setX( m_aFocusPosition.getX() + 1 );
                     Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
             case KEY_UP:
-                if(aFocusPosition.getY() >= 1)
+                if(m_aFocusPosition.getY() >= 1)
                 {
-                    aFocusPosition.setY( aFocusPosition.getY() - 1 );
+                    m_aFocusPosition.setY( m_aFocusPosition.getY() - 1 );
                     Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
             case KEY_DOWN:
-                if( aFocusPosition.getY() < ( nLines - 1 ) )
+                if( m_aFocusPosition.getY() < ( nLines - 1 ) )
                 {
-                    aFocusPosition.setY( aFocusPosition.getY() + 1 );
+                    m_aFocusPosition.setY( m_aFocusPosition.getY() + 1 );
                     Invalidate(aRepaintRect);
                     bFocusPosChanged=true;
                 }
                 break;
             case KEY_SPACE:
-                ChangePixel( sal_uInt16(aFocusPosition.getX() + aFocusPosition.getY() * nLines) );
-                Invalidate( implCalFocusRect(aFocusPosition) );
+                ChangePixel( sal_uInt16(m_aFocusPosition.getX() + m_aFocusPosition.getY() * nLines) );
+                Invalidate( implCalFocusRect(m_aFocusPosition) );
                 break;
             default:
                 return CustomWidgetController::KeyInput( rKEvt );
@@ -864,7 +864,7 @@ bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 //Draw focus when get focus
 void SvxPixelCtl::GetFocus()
 {
-    Invalidate(implCalFocusRect(aFocusPosition));
+    Invalidate(implCalFocusRect(m_aFocusPosition));
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (m_xAccess.is())
@@ -881,12 +881,12 @@ void SvxPixelCtl::LoseFocus()
 
 void SvxPixelCtl::SetXBitmap(const Bitmap& rBitmap)
 {
-    if (vcl::bitmap::isHistorical8x8(rBitmap, aBackgroundColor, aPixelColor))
+    if (vcl::bitmap::isHistorical8x8(rBitmap, m_aBackgroundColor, m_aPixelColor))
     {
         for (sal_uInt16 i = 0; i < nSquares; i++)
         {
             Color aColor = rBitmap.GetPixelColor(i%8, i/8);
-            maPixelData[i] = (aColor == aBackgroundColor) ? 0 : 1;
+            maPixelData[i] = (aColor == m_aBackgroundColor) ? 0 : 1;
         }
     }
 }
