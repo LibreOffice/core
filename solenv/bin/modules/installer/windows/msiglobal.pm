@@ -550,7 +550,9 @@ sub write_summary_into_msi_database
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
 
-    my $msiversion = 200;
+    # schema version needs to be at least 500 to support 64bit packages on Arm64
+    # see https://learn.microsoft.com/en-us/windows/win32/msi/using-64-bit-windows-installer-packages
+    my $msiversion = 500;
     my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
     my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
