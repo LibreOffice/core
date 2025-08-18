@@ -99,6 +99,7 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 {
     // Same as SdModule
     mpVD->SetReferenceDevice(VirtualDevice::RefDevMode::Dpi600);
+    mpVD->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpVD->EnableOutput(false);
     mpVD->SetLineColor();
     mpVD->SetFillColor();
