@@ -43,6 +43,7 @@
 #include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
+#include <istyleaccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -190,6 +191,7 @@ public:
     util::DateTime aDateTime;       // change DateTime
     OUString sMovedID;              // change move id string
     bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
+    OUString m_aAutoStyleName;
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -371,7 +373,8 @@ void XMLRedlineImportHelper::Add(
     const OUString& rComment,
     const util::DateTime& rDateTime,
     const OUString& rMovedID,
-    bool bMergeLastPara)
+    bool bMergeLastPara,
+    const OUString& rAutoStyleName)
 {
     // we need to do the following:
     // 1) parse type string
@@ -410,6 +413,7 @@ void XMLRedlineImportHelper::Add(
     pInfo->aDateTime = rDateTime;
     pInfo->sMovedID = rMovedID;
     pInfo->bMergeLastParagraph = bMergeLastPara;
+    pInfo->m_aAutoStyleName = rAutoStyleName;
 
     //reserve MoveID so it won't be reused by others
     if (!rMovedID.isEmpty())
@@ -787,6 +791,21 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
                 pRedline->SetContentIdx(*pRedlineInfo->pContentIndex);
             else
                 SAL_WARN("sw", "Recursive change tracking");
+        }
+
+        // Create the redline's extra data if we have a matching autostyle.
+        if (!pRedlineInfo->m_aAutoStyleName.isEmpty())
+        {
+            IStyleAccess& rStyleAccess = pDoc->GetIStyleAccess();
+            std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getByName(
+                pRedlineInfo->m_aAutoStyleName, IStyleAccess::AUTO_STYLE_CHAR);
+            if (pAutoStyle)
+            {
+                sal_uInt16 nPoolFormatId = USHRT_MAX;
+                SwRedlineExtraData_FormatColl aExtraData(u""_ustr, nPoolFormatId, pAutoStyle);
+                // aExtraData is copied here.
+                pRedline->SetExtraData(&aExtraData);
+            }
         }
 
         // set redline mode (without doing the associated book-keeping)

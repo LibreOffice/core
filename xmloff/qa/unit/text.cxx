@@ -21,6 +21,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -1307,7 +1308,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDeleteThenFormatOdtExport)
     assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region[2]/text:deletion/text:p");
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharProps)
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsExport)
 {
     // Given a document with a format redline, the redline contains the old char props:
     loadFromFile(u"redline-format-char-props.docx");
@@ -1324,6 +1325,32 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharProps)
     OUString aStyleName = getXPath(
         pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change", "style-name");
     CPPUNIT_ASSERT(!aStyleName.isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsImport)
+{
+    // Given a document with a format redline, the redline contains the old char props:
+    loadFromFile(u"redline-format-char-props.odt");
+
+    // When rejecting the format redline:
+    dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
+
+    // Then make sure the old direct format is restored, not the doc default:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(),
+                                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<beans::XPropertySet> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xViewCursor.is());
+    float fCharheight{};
+    xViewCursor->getPropertyValue(u"CharHeight"_ustr) >>= fCharheight;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 24
+    // - Actual  : 12
+    // i.e. the font size was the doc default, not the old direct format.
+    CPPUNIT_ASSERT_EQUAL(24.f, fCharheight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

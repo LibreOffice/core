@@ -384,7 +384,8 @@ public:
             /// move id, to find other parts (moveFrom/MoveTo)
             const OUString& rMoveId,
             /// merge last paras
-            bool bMergeLastParagraph);
+            bool bMergeLastParagraph,
+            const OUString& rAutoStyleName);
 
     virtual css::uno::Reference< css::text::XTextCursor> RedlineCreateText(
             /// needed to get the document
