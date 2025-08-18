@@ -356,8 +356,6 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
     }
     else
     {
-        MakeVisible();
-
         tools::Long aOldHeight = mrSidebarWin.GetPostItTextHeight();
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
@@ -373,7 +371,10 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
                 mrDocView.GetWrtShell().InfoReadOnlyDialog(false);
         }
         if (bDone)
+        {
+            MakeVisible();
             mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );
+        }
         else
         {
             // write back data first when showing navigator
