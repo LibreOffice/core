@@ -69,11 +69,18 @@ FilterLibs()
     else
         for f in $1; do
             case "$f" in
-                # let's start with Fedora's paths for now
-                -L/lib|-L/lib/|-L/lib64|-L/lib64/|-L/usr/lib|-L/usr/lib/|-L/usr/lib64|-L/usr/lib64/)
-                    # ignore it: on UNIXoids it is searched by default anyway
-                    # but if it's given explicitly then it may override other paths
-                    # (on macOS it would be an error to use it instead of SDK)
+                -L*)
+                    case `realpath "${f#-L}"` in
+                        # let's start with Fedora's paths for now
+                        /lib|/lib/|/lib64|/lib64/|/usr/lib|/usr/lib/|/usr/lib64|/usr/lib64/)
+                        # ignore it: on UNIXoids it is searched by default anyway
+                        # but if it's given explicitly then it may override other paths
+                        # (on macOS it would be an error to use it instead of SDK)
+                            ;;
+                        *)
+                            filteredlibs="$filteredlibs $f"
+                            ;;
+                    esac
                     ;;
                 *)
                     filteredlibs="$filteredlibs $f"
