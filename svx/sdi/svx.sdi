@@ -6417,9 +6417,14 @@ SvxPaperBinItem PagePaperBin SID_ATTR_PAGE_PAPERBIN
     GroupId = SfxGroupId::Format;
 ]
 
-
+// PaperFormat takes page format number from (paper.hxx) enum Paper
+// If AttributePageSize is also specified PaperFormat is ignored
+// AttributePageSize parameter is added to keep backward compatibility of API
 SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
-
+(
+    SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE,
+    SfxUInt16Item PaperFormat FN_PARAM_1
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
