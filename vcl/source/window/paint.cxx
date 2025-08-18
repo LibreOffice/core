@@ -1228,6 +1228,12 @@ void Window::PixelInvalidate(const tools::Rectangle* pRectangle)
 
         pNotifier->notifyWindow(GetLOKWindowId(), u"invalidate"_ustr, aPayload);
     }
+    else if (GetParent() && GetParent()->IsFormControl())
+    {
+        const VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier();
+        if (pParent)
+            pParent->GetLOKNotifier()->notifyInvalidation(pRectangle);
+    }
     // Added for dialog items. Pass invalidation to the parent window.
     else if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
