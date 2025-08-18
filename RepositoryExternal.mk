@@ -659,13 +659,6 @@ endef
 
 gb_ExternalProject__use_boost_iostreams :=
 
-define gb_LinkTarget__use_boost_system
-$(call gb_LinkTarget__use_boost_lib,$(1),$(BOOST_SYSTEM_LIB))
-
-endef
-
-gb_ExternalProject__use_boost_system :=
-
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -716,15 +709,6 @@ endef
 
 define gb_ExternalProject__use_boost_iostreams
 $(call gb_ExternalProject_use_static_libraries,$(1),boost_iostreams)
-endef
-
-define gb_LinkTarget__use_boost_system
-$(call gb_LinkTarget__use_boost_lib,$(1),boost_system)
-
-endef
-
-define gb_ExternalProject__use_boost_system
-$(call gb_ExternalProject_use_static_libraries,$(1),boost_system)
 endef
 
 define gb_LinkTarget__use_boost_headers

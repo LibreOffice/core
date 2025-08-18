@@ -15,7 +15,6 @@ $(eval $(call gb_ExternalProject_use_externals,liborcus, \
     boost_headers \
     boost_filesystem \
     boost_iostreams \
-    boost_system \
 	mdds_headers \
     zlib \
 ))
@@ -41,7 +40,7 @@ endif
 ifneq ($(SYSTEM_BOOST),)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB) $(BOOST_FILESYSTEM_LIB)
 else
-liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_system -lboost_iostreams -lboost_filesystem
+liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_iostreams -lboost_filesystem
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=$(gb_STDLIBS)

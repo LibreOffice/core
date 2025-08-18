@@ -14,7 +14,6 @@ $(eval $(call gb_Library_use_unpacked,orcus-parser,liborcus))
 $(eval $(call gb_Library_use_externals,orcus-parser,\
 	boost_headers \
 	boost_filesystem \
-	boost_system \
 	mdds_headers \
 	zlib \
 ))

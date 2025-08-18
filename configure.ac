@@ -11587,18 +11587,9 @@ dnl ===================================================================
 dnl Orcus
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.20 >= 0.20.2])
-if test "$with_system_orcus" != "yes"; then
-    if test "$SYSTEM_BOOST" = "TRUE"; then
-        dnl Link with Boost.System
-        dnl This seems to be necessary since boost 1.50 (1.48 does not need it,
-        dnl 1.49 is untested). The macro BOOST_THREAD_DONT_USE_SYSTEM mentioned
-        dnl in documentation has no effect.
-        AX_BOOST_SYSTEM
-    fi
-fi
+
 dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
 SYSTEM_LIBORCUS=$SYSTEM_ORCUS
-AC_SUBST([BOOST_SYSTEM_LIB])
 AC_SUBST(SYSTEM_LIBORCUS)
 
 dnl ===================================================================
