@@ -112,7 +112,10 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase(weld::Container* pParent,
   , mxEdText(xBuilder->weld_entry(u"name"_ustr))
   , mxBtScript(xBuilder->weld_button(u"script"_ustr))
   , mxFormLabel(xBuilder->weld_label(u"form_label"_ustr))
+  , mxNameLabel(xBuilder->weld_label(u"name_label"_ustr))
+  , mxIndicationLabel(xBuilder->weld_label(u"indication_label"_ustr))
   , mxFrameLabel(xBuilder->weld_label(u"frame_label"_ustr))
+  , mxFurtherSettings(xBuilder->weld_label(u"label1"_ustr))
   , mbIsCloseDisabled( false )
   , mpDialog( pDlg )
   , mbStdControlsInit( false )
@@ -230,6 +233,9 @@ void SvxHyperlinkTabPageBase::HideMarkWnd()
 // Fill Dialogfields
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem )
 {
+    m_showName = pHyperlinkItem->GetShowName();
+    m_showText = pHyperlinkItem->GetShowText();
+
     // Form
     OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
     OUString aStrFormButton = CuiResId( RID_CUISTR_HYPERDLG_FORM_BUTTON );
@@ -268,9 +274,27 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
         mxLbForm->append_text( aStrFormText );
         mxLbForm->append_text( aStrFormButton );
         mxLbForm->set_active( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
+
+        if (pHyperlinkItem->GetShowName()) {
+            mxNameLabel->show();
+            mxEdText->show();
+            mxFurtherSettings->show();
+        } else {
+            mxNameLabel->hide();
+            mxEdText->hide();
+            mxFurtherSettings->hide();
+        }
+
+        if (pHyperlinkItem->GetShowText()) {
+            mxEdIndication->show();
+            mxIndicationLabel->show();
+        } else {
+            mxEdIndication->hide();
+            mxIndicationLabel->hide();
+        }
     }
 
-    // URL
+    // Text
     mxEdIndication->set_text( pHyperlinkItem->GetName() );
 
     // Name
@@ -479,7 +503,7 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
     SvxMacroTableDtor* pTable = GetMacroTable();
 
     SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
-                            aStrIntName, eMode, nEvents, pTable );
+                            aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
     rOut->Put (aItem);
 
     return true;
@@ -522,7 +546,7 @@ DeactivateRC SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     if( _pSet )
     {
         SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
-                                aStrIntName, eMode, nEvents, pTable );
+                                aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
         _pSet->Put( aItem );
     }
 

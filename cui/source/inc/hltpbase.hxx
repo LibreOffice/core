@@ -52,9 +52,15 @@ private:
     std::unique_ptr<weld::Entry> mxEdText;
     std::unique_ptr<weld::Button> mxBtScript;
     std::unique_ptr<weld::Label> mxFormLabel;
+    std::unique_ptr<weld::Label> mxNameLabel;
+    std::unique_ptr<weld::Label> mxIndicationLabel;
     std::unique_ptr<weld::Label> mxFrameLabel;
+    std::unique_ptr<weld::Label> mxFurtherSettings;
 
     bool                        mbIsCloseDisabled;
+
+    bool m_showName = true;
+    bool m_showText = true;
 
     css::uno::Reference< css::frame::XFrame >
                                 mxDocumentFrame;

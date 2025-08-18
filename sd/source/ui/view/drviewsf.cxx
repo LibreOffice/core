@@ -88,6 +88,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
         if (pOLV)
         {
+            aHLinkItem.SetShowText(true);
+            aHLinkItem.SetShowName(true);
+
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
             if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
@@ -111,6 +114,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if (rMarkList.GetMarkCount() > 0)
             {
+                aHLinkItem.SetShowText(false);
+                aHLinkItem.SetShowName(false);
+
                 bool bFound = false;
 
                 SdrObject* pMarkedObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

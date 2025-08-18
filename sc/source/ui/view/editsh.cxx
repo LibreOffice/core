@@ -784,6 +784,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_HYPERLINK_GETLINK:
                 {
                     SvxHyperlinkItem aHLinkItem;
+                    aHLinkItem.SetShowName(false);
                     bool bCellLinksOnly
                         = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())

@@ -920,6 +920,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
             {
                 SvxHyperlinkItem aHLinkItem;
 
+                aHLinkItem.SetShowName(false);
+                aHLinkItem.SetShowText(false);
+
                 SfxItemSetFixed<RES_URL, RES_URL> aURLSet(GetPool());
                 rSh.GetFlyFrameAttr( aURLSet );
 

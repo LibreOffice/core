@@ -53,6 +53,9 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
     SvxLinkInsertMode eType;
     OUString sReplacementText;
 
+    bool m_showName = true;
+    bool m_showText = true;
+
     OUString sIntName;
     std::unique_ptr<SvxMacroTableDtor>  pMacroTable;
 
@@ -71,6 +74,7 @@ public:
                                     SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents,
                                     SvxMacroTableDtor const *pMacroTbl,
+                                    bool showName = true, bool showText = true,
                                     OUString aReplacementText = OUString());
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -89,6 +93,12 @@ public:
 
     const   OUString& GetTargetFrame() const { return sTarget; }
     void    SetTargetFrame(const OUString& rTarget) { sTarget = rTarget; }
+
+    bool GetShowName() const { return m_showName; }
+    void    SetShowName(const bool show) { m_showName = show; }
+
+    bool GetShowText() const { return m_showText; }
+    void    SetShowText(const bool show) { m_showText = show; }
 
     SvxLinkInsertMode GetInsertMode() const { return eType; }
     void    SetInsertMode( SvxLinkInsertMode eNew ) { eType = eNew; }
