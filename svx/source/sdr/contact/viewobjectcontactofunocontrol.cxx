@@ -49,7 +49,7 @@
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1009,8 +1009,8 @@ namespace sdr::contact {
             return false;
         }
 
-        m_bCreatingControl = true;
-        ::comphelper::ScopeGuard aGuard([&] () { m_bCreatingControl = false; });
+        // We are creating the control from this point on.
+        comphelper::FlagRestorationGuard aControlGuard(m_bCreatingControl, true);
 
         if ( m_aControl.is() )
         {
