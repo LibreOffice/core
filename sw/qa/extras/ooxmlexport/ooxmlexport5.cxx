@@ -339,6 +339,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkContainingPlaceholderField)
 
     // tdf#148380 output unknown field's contents("") instead of field name("Sender" aka e-mail)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getParagraph(1)->getString().indexOf("Sender"));
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("two blank pages: all 'only right' page styles", 5, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTablePreferredWidth)

@@ -1795,7 +1795,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // the change of pages is, but here it's too late for that!
         if ( pPd->GetFollow() && pPd != pPd->GetFollow() &&
              pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
-             pPd->IsHeaderShared() && pPd->IsFooterShared() &&
+             UseOnPage::All == (UseOnPage::All & pPd->ReadUseOn()) &&
              ( !rSepInfo.pPDNd || pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) ) )
         {
             const SwPageDesc *pFollow = pPd->GetFollow();
