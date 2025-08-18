@@ -340,15 +340,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         {
             ::Bitmap aBitmap = bitmapFromXBitmap(xBitmap);
 
-            // there's no pixmap for alpha bitmap. we might still
-            // use rgb pixmap and only access alpha pixels the
-            // slow way. now we just speedup rgb bitmaps
-            if( !aBitmap.HasAlpha() )
-            {
-                pSurface = rSurfaceProvider->createSurface( aBitmap );
-                data = nullptr;
-                bHasAlpha = false;
-            }
+            pSurface = rSurfaceProvider->createSurface( aBitmap );
 
             if( !pSurface )
             {
