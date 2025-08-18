@@ -29,6 +29,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/prstylei.hxx>
 
 
 using namespace ::xmloff::token;
@@ -85,7 +86,7 @@ void XMLChangedRegionImportContext::startFastElement(
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImportContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
@@ -96,6 +97,19 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImport
         nElement == XML_ELEMENT(TEXT, XML_DELETION) ||
         nElement == XML_ELEMENT(TEXT, XML_FORMAT_CHANGE) )
     {
+        // Parse attributes, e.g. <text:format-change loext:style-name="...">.
+        for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
+        {
+            switch (rAttribute.getToken())
+            {
+                case XML_ELEMENT(LO_EXT, XML_STYLE_NAME):
+                    m_aAutoStyleName = rAttribute.toString();
+                    break;
+                default:
+                    XMLOFF_WARN_UNKNOWN("xmloff", rAttribute);
+            }
+        }
+
         // create XMLChangeElementImportContext for all kinds of changes
         xContext = new XMLChangeElementImportContext(
             GetImport(),
@@ -141,11 +155,25 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     std::u16string_view rDate,
     const OUString& rMovedID)
 {
+    // If the format redline has an autostyle, look up the internal 'auto name'.
+    OUString aAutoName;
+    if (!m_aAutoStyleName.isEmpty())
+    {
+        rtl::Reference<XMLTextImportHelper> xHelper = GetImport().GetTextImport();
+        // Map the XML-level automatic style name (e.g. T1) to an 'auto name' that exists in the
+        // char auto style pool (e.g. 3cb7b270).
+        XMLPropStyleContext* pStyle = xHelper->FindAutoCharStyle(m_aAutoStyleName);
+        if (pStyle)
+        {
+            pStyle->GetAutoName() >>= aAutoName;
+        }
+    }
+
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, rMovedID, bMergeLastPara);
+            rType, sID, rAuthor, rComment, aDateTime, rMovedID, bMergeLastPara, aAutoName);
     }
 }
 

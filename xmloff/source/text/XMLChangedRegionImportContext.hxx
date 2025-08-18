@@ -46,6 +46,8 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     /// merge-last-paragraph flag
     bool bMergeLastPara;
 
+    OUString m_aAutoStyleName;
+
 public:
 
 
