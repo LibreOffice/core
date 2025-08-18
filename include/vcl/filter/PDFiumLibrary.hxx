@@ -53,6 +53,7 @@ inline constexpr OString constDictionaryKey_RichContent = "RC"_ostr;
 class PDFiumBitmap;
 class PDFiumDocument;
 class PDFiumPageObject;
+typedef void* PFDiumFont;
 
 class VCL_DLLPUBLIC PDFium
 {
@@ -156,6 +157,7 @@ public:
     virtual double getFontSize() = 0;
     virtual OUString getFontName() = 0;
     virtual int getFontAngle() = 0;
+    virtual bool getFontData(std::vector<uint8_t>& rData) = 0;
     virtual bool getFontProperties(FontWeight& weight) = 0;
     virtual PDFTextRenderMode getTextRenderMode() = 0;
     virtual Color getFillColor() = 0;

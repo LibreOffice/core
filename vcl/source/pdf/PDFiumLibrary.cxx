@@ -417,6 +417,7 @@ public:
     double getFontSize() override;
     OUString getFontName() override;
     int getFontAngle() override;
+    bool getFontData(std::vector<uint8_t>& rData) override;
     bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
@@ -1162,15 +1163,8 @@ int PDFiumPageObjectImpl::getFontAngle()
     return nFontAngle;
 }
 
-bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
+bool PDFiumPageObjectImpl::getFontData(std::vector<uint8_t>& rData)
 {
-    // FPDFFont_GetWeight turns out not to be that useful. It seems to just
-    // reports what explicit "FontWeight" feature is mentioned in the PDF font,
-    // which is an optional property.
-    // So pull the font data and analyze it directly. Though the font might not
-    // have an OS/2 table so we may end up eventually inferring the weight from
-    // the style name.
-
     FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
     size_t buflen(0);
     bool bOk = FPDFFont_GetFontData(pFontObject, nullptr, 0, &buflen);
@@ -1179,11 +1173,24 @@ bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
         SAL_WARN("vcl.filter", "PDFiumImpl: failed to get font data");
         return false;
     }
-    std::vector<uint8_t> aData(buflen);
-    bOk = FPDFFont_GetFontData(pFontObject, aData.data(), aData.size(), &buflen);
-    assert(bOk && aData.size() == buflen);
-    bOk = EmbeddedFontsManager::analyzeTTF(aData.data(), aData.size(), weight);
-    if (!bOk)
+    rData.resize(buflen);
+    bOk = FPDFFont_GetFontData(pFontObject, rData.data(), rData.size(), &buflen);
+    assert(bOk && rData.size() == buflen);
+    return bOk;
+}
+
+bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
+{
+    // FPDFFont_GetWeight turns out not to be that useful. It seems to just
+    // reports what explicit "FontWeight" feature is mentioned in the PDF font,
+    // which is an optional property.
+    // So pull the font data and analyze it directly. Though the font might not
+    // have an OS/2 table so we may end up eventually inferring the weight from
+    // the style name.
+    std::vector<uint8_t> aData;
+    if (!getFontData(aData))
+        return false;
+    if (!EmbeddedFontsManager::analyzeTTF(aData.data(), aData.size(), weight))
     {
         SAL_WARN("vcl.filter", "PDFiumImpl: failed to analyzeTTF");
         return false;
