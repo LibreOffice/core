@@ -26,6 +26,14 @@ class ScFlatBoolRowSegments;
 class ScFlatBoolColSegments;
 class ScTable;
 
+/** Stores and handles which columns and rows are hidden or filtered in a sheet.
+ *
+ * Filtered are the rows or columns that get hidden (filtered) when using the
+ * auto-filter functionality. Hidden is when the user hides the column or row,
+ * manually from the UI or otherwise.
+ *
+ * Note that it is also set as hidden when it is filtered.
+ **/
 class FilterData
 {
 private:
