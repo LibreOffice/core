@@ -70,13 +70,14 @@ void TickerThread::execute()
         if (sleep_duration == std::chrono::milliseconds::max())
         {
             // Wait until a lock is added or shutdown
-            m_rLockStore.m_aCondition.wait(
-                aGuard, [this] { return !m_rLockStore.m_aLockInfoMap.empty() || m_bFinish; });
+            m_rLockStore.m_aCondition.wait(aGuard,
+                [this] { return !m_rLockStore.m_aLockInfoMap.empty() || m_bFinish; });
         }
         else
         {
             // Wait until the next deadline or a notification
-            m_rLockStore.m_aCondition.wait_for(aGuard, sleep_duration);
+            m_rLockStore.m_aCondition.wait_for(aGuard, sleep_duration,
+                [this] { return !m_rLockStore.m_aLockInfoMap.empty() || m_bFinish; });
         }
     }
 
