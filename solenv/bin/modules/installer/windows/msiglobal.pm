@@ -491,16 +491,6 @@ sub create_msi_database
 }
 
 #################################################################
-# Returning the msi version for the Summary Information Stream
-#################################################################
-
-sub get_msiversion_for_sis
-{
-    my $msiversion = "200";
-    return $msiversion;
-}
-
-#################################################################
 # Returning the word count for the Summary Information Stream
 #################################################################
 
@@ -608,7 +598,9 @@ sub write_summary_into_msi_database
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
 
-    my $msiversion = get_msiversion_for_sis();
+    # schema version needs to be at least 500 to support 64bit packages on Arm64
+    # see https://learn.microsoft.com/en-us/windows/win32/msi/using-64-bit-windows-installer-packages
+    my $msiversion = 500;
     my $codepage = 0; # PID_CODEPAGE summary property in a signed short, therefore it is impossible to set 65001 here.
     my $template = get_template_for_sis($language, $allvariableshashref);
     my $guid = get_packagecode_for_sis();
