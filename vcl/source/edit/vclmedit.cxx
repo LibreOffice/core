@@ -44,6 +44,8 @@
 #include <strings.hrc>
 #include <svdata.hxx>
 
+#include <comphelper/lok.hxx>
+
 class ImpVclMEdit : public SfxListener
 {
 private:
@@ -743,6 +745,9 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
 
     if ( !bDone )
         Window::KeyInput( rKEvent );
+
+    if (comphelper::LibreOfficeKit::isActive())
+        LogicInvalidate(nullptr);
 }
 
 void TextWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -852,6 +857,10 @@ void TextWindow::Command( const CommandEvent& rCEvt )
     {
         mpExtTextView->Command( rCEvt );
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+        LogicInvalidate(nullptr);
+
     Window::Command( rCEvt );
 }
 
