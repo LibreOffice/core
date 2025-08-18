@@ -81,7 +81,8 @@ public:
         const OUString& rComment,    // redline comment
         const css::util::DateTime& rDateTime, // date+time
         const OUString& rMovedID,     // redline move id
-        bool bMergeLastParagraph);      // merge last paragraph?
+        bool bMergeLastParagraph, // merge last paragraph?
+        const OUString& rAutoStyleName);
 
     // create a text section for the redline, and return an
     // XText/XTextCursor that may be used to write into it.
