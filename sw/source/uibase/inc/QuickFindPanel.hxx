@@ -63,6 +63,8 @@ private:
     std::unique_ptr<weld::Entry> m_xSearchFindEntry;
     std::unique_ptr<weld::Toolbar> m_xSearchOptionsToolbar;
     std::unique_ptr<weld::Toolbar> m_xFindAndReplaceToolbar;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xFindAndReplaceToolbarDispatch;
+    std::unique_ptr<weld::Box> m_xTopbar;
     std::unique_ptr<weld::TreeView> m_xSearchFindsList;
     std::unique_ptr<weld::Label> m_xSearchFindFoundTimesLabel;
 

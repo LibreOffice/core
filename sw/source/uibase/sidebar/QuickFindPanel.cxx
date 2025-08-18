@@ -144,6 +144,9 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     , m_xSearchFindEntry(m_xBuilder->weld_entry(u"Find"_ustr))
     , m_xSearchOptionsToolbar(m_xBuilder->weld_toolbar(u"searchoptionstoolbar"_ustr))
     , m_xFindAndReplaceToolbar(m_xBuilder->weld_toolbar(u"findandreplacetoolbar"_ustr))
+    , m_xFindAndReplaceToolbarDispatch(
+          new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
+    , m_xTopbar(m_xBuilder->weld_box(u"topbar"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
     , m_pWrtShell(::GetActiveWrtShell())
@@ -159,6 +162,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
 
         // disable search options for online as still tunneled dialog
         m_xSearchOptionsToolbar->set_visible(false);
+        m_xTopbar->set_visible(false);
     }
     m_nMinimumPanelWidth
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
