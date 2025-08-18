@@ -69,6 +69,7 @@
 #include <strings.hrc>
 #include <docmodel/color/ComplexColor.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <editeng/paperinf.hxx>
 
 // 50 cm 28350
 #define MAXHEIGHT 28350
@@ -319,6 +320,14 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         aSize.SetSize(rSizeItem.GetSize());
         rMaster.SetFormatAttr(aSize);
     }
+    else if (rSet.GetItemState(FN_PARAM_1) == SfxItemState::SET)
+    {
+        const sal_uInt16 nSizeItem = rSet.GetItem<SfxUInt16Item>(FN_PARAM_1)->GetValue();
+        SwFormatFrameSize aSize(SwFrameSize::Fixed);
+        aSize.SetSize(SvxPaperInfo::GetPaperSize(static_cast<Paper>(nSizeItem)));
+        rMaster.SetFormatAttr(aSize);
+    }
+
     // Evaluate header attributes
     if( const SvxSetItem* pHeaderSetItem = rSet.GetItemIfSet( SID_ATTR_PAGE_HEADERSET,
             false ) )
