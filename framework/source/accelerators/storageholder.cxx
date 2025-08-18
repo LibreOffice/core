@@ -131,9 +131,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                 }
 
             std::unique_lock g(m_mutex);
-            TStorageInfo aInfo;
-            aInfo.Storage  = xChild;
-            aInfo.UseCount = 1;
+            TStorageInfo aInfo(xChild);
             m_lStorages.emplace(sCheckPath, std::move(aInfo));
         }
 

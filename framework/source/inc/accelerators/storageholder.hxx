@@ -50,8 +50,9 @@ class StorageHolder final
                 sal_Int32 UseCount;
                 TStorageListenerList Listener;
 
-                TStorageInfo()
-                    : UseCount(0)
+                TStorageInfo(css::uno::Reference<css::embed::XStorage> xStorage)
+                    : Storage(std::move(xStorage))
+                    , UseCount(1)
                 {}
         };
 
