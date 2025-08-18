@@ -59,7 +59,6 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
-#include <utility>
 #include <vcl/outdev.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
