@@ -36,6 +36,7 @@
 #include "window.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/test_info.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 
@@ -405,11 +406,16 @@ HRESULT Player::InitializeWindow(bool bAddSoundWindow)
         &g_pPlayer
     );
 
-    // Create a new media item for this URL.
-    // The CreateMediaItemFromURL method completes asynchronously. When it does,
-    // MFPlay sends an MFP_EVENT_TYPE_MEDIAITEM_CREATED event.
+    // synchronous for unit tests (TODO)
+    static const BOOL bSync
+        = o3tl::IsRunningUnitTest() ? TRUE : FALSE;
     if (SUCCEEDED(hr))
-        hr = g_pPlayer->CreateMediaItemFromURL(o3tl::toW(maURL.getStr()), FALSE, 0, nullptr);
+    {
+        // Create a new media item for this URL.
+        // The CreateMediaItemFromURL method completes asynchronously. When it does,
+        // MFPlay sends an MFP_EVENT_TYPE_MEDIAITEM_CREATED event.
+        hr = g_pPlayer->CreateMediaItemFromURL(o3tl::toW(maURL.getStr()), bSync, 0, nullptr);
+    }
 
     if (SUCCEEDED(hr))
         m_state = Stopped;
