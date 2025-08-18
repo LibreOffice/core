@@ -166,7 +166,7 @@ OFormattedControl::~OFormattedControl()
 {
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -264,7 +264,7 @@ void OFormattedModel::implConstruct()
 OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, true, true )
     // use the old control name for compatibility reasons
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
 {
     implConstruct();
     m_nClassId = FormComponentType::TEXTFIELD;
@@ -272,7 +272,7 @@ OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
 }
 OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
 {
     implConstruct();
 }

@@ -350,7 +350,7 @@ protected:
     */
     virtual void clonedFrom( const OControlModel* _pOriginal );
 
-    using OComponentHelper::rBHelper;
+    using OComponentHelper::m_rBHelper;
 
     virtual css::uno::Sequence< css::uno::Type>   _getTypes();
 

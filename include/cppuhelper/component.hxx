@@ -94,7 +94,7 @@ protected:
     virtual void SAL_CALL disposing();
 
     /// @cond INTERNAL
-    OBroadcastHelper    rBHelper;
+    OBroadcastHelper    m_rBHelper;
     /// @endcond
 
 private:

@@ -3230,7 +3230,7 @@ svt::ControlBase* FmXGridCell::getEventWindow() const
 
 FmXGridCell::~FmXGridCell()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -3309,7 +3309,7 @@ Reference< XInterface >  FmXGridCell::getContext()
 
 Reference< css::awt::XControlModel >  FmXGridCell::getModel()
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     return Reference< css::awt::XControlModel > (m_pColumn->getModel(), UNO_QUERY);
 }
 
@@ -3317,14 +3317,14 @@ Reference< css::awt::XControlModel >  FmXGridCell::getModel()
 
 sal_Bool FmXGridCell::getLock()
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     return m_pColumn->isLocked();
 }
 
 
 void FmXGridCell::setLock(sal_Bool _bLock)
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     if (getLock() == _bLock)
         return;
     else
@@ -3372,70 +3372,70 @@ void SAL_CALL FmXGridCell::setFocus(  )
 
 void SAL_CALL FmXGridCell::addWindowListener( const Reference< awt::XWindowListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aWindowListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeWindowListener( const Reference< awt::XWindowListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aWindowListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addFocusListener( const Reference< awt::XFocusListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeFocusListener( const Reference< awt::XFocusListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addKeyListener( const Reference< awt::XKeyListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aKeyListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeKeyListener( const Reference< awt::XKeyListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aKeyListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addMouseListener( const Reference< awt::XMouseListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeMouseListener( const Reference< awt::XMouseListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseMotionListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aMouseMotionListeners.removeInterface( _rxListener );
 }
 
@@ -3451,13 +3451,13 @@ void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintList
 
 void FmXGridCell::onFocusGained( const awt::FocusEvent& _rEvent )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusGained, _rEvent );
 }
 
 void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 {
-    checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    checkDisposed(OComponentHelper::m_rBHelper.bDisposed);
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusLost, _rEvent );
 }
 
@@ -3634,7 +3634,7 @@ FmXEditCell::FmXEditCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
 
 FmXEditCell::~FmXEditCell()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -3848,7 +3848,7 @@ FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellC
 
 FmXCheckBoxCell::~FmXCheckBoxCell()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -3996,7 +3996,7 @@ FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, std::unique_ptr<DbCellCont
 
 FmXListBoxCell::~FmXListBoxCell()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -4320,7 +4320,7 @@ FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, std::unique_ptr<DbCellC
 
 FmXComboBoxCell::~FmXComboBoxCell()
 {
-    if ( !OComponentHelper::rBHelper.bDisposed )
+    if ( !OComponentHelper::m_rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -4492,7 +4492,7 @@ FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, std::unique_ptr<DbFilterFiel
 
 FmXFilterCell::~FmXFilterCell()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

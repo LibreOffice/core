@@ -135,7 +135,7 @@ namespace frm
 
     ONavigationBarModel::~ONavigationBarModel()
     {
-        if ( !OComponentHelper::rBHelper.bDisposed )
+        if ( !OComponentHelper::m_rBHelper.bDisposed )
         {
             acquire();
             dispose();

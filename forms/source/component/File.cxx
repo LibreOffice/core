@@ -86,7 +86,7 @@ OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const
 
 OFileControlModel::~OFileControlModel()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

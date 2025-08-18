@@ -1269,7 +1269,7 @@ OFormComponents::OFormComponents( const OFormComponents& _cloneSource )
 
 OFormComponents::~OFormComponents()
 {
-    if (! ::cppu::OComponentHelper::rBHelper.bDisposed)
+    if (! ::cppu::OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

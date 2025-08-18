@@ -98,7 +98,7 @@ OEditControl::~OEditControl()
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
 
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
@@ -279,7 +279,7 @@ OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponent
 
 OEditModel::~OEditModel()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

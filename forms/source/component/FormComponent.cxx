@@ -481,7 +481,7 @@ OControlModel::OControlModel(
             const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault, const bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
-    ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
+    ,OPropertySetAggregationHelper(OComponentHelper::m_rBHelper)
     ,m_xContext( _rxContext )
     ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
@@ -526,7 +526,7 @@ OControlModel::OControlModel(
 
 OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory, const bool _bCloneAggregate, const bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
-    ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
+    ,OPropertySetAggregationHelper( OComponentHelper::m_rBHelper )
     ,m_xContext( _rxFactory )
     ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
@@ -1200,7 +1200,7 @@ OBoundControlModel::OBoundControlModel(
 
 OBoundControlModel::~OBoundControlModel()
 {
-    if ( !OComponentHelper::rBHelper.bDisposed )
+    if ( !OComponentHelper::m_rBHelper.bDisposed )
     {
         acquire();
         dispose();

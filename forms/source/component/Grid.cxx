@@ -64,7 +64,7 @@ const sal_uInt16 BACKGROUNDCOLOR    =   0x0100;
 OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
     ,OInterfaceContainer(_rxFactory, m_aMutex, cppu::UnoType<XPropertySet>::get())
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
     ,FontControlModel( false )
     ,m_aSelectListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
@@ -87,7 +87,7 @@ OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFact
 OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XPropertySet>::get() )
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
     ,FontControlModel( _pOriginal )
     ,m_aSelectListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
@@ -111,7 +111,7 @@ OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const
 
 OGridControlModel::~OGridControlModel()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

@@ -60,7 +60,7 @@ OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
 
 OFormsCollection::~OFormsCollection()
 {
-    if (!::cppu::OComponentHelper::rBHelper.bDisposed)
+    if (!::cppu::OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();

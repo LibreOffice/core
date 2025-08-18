@@ -149,7 +149,7 @@ namespace frm
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, true, true, true )
         // use the old control name for compatibility reasons
         ,OEntryListHelper( static_cast<OControlModel&>(*this) )
-        ,OErrorBroadcaster( OComponentHelper::rBHelper )
+        ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
         ,m_nConvertedBoundValuesType(0)
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
@@ -167,7 +167,7 @@ namespace frm
     OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, static_cast<OControlModel&>(*this) )
-        ,OErrorBroadcaster( OComponentHelper::rBHelper )
+        ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
         ,m_aListSourceValues( _pOriginal->m_aListSourceValues )
@@ -184,7 +184,7 @@ namespace frm
 
     OListBoxModel::~OListBoxModel()
     {
-        if (!OComponentHelper::rBHelper.bDisposed)
+        if (!OComponentHelper::m_rBHelper.bDisposed)
         {
             acquire();
             dispose();
@@ -1837,7 +1837,7 @@ namespace frm
 
     OListBoxControl::~OListBoxControl()
     {
-        if (!OComponentHelper::rBHelper.bDisposed)
+        if (!OComponentHelper::m_rBHelper.bDisposed)
         {
             acquire();
             dispose();
@@ -2008,7 +2008,7 @@ namespace frm
         Reference< XListBox > xKeepAlive( this );
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if ( OComponentHelper::rBHelper.bDisposed )
+            if ( OComponentHelper::m_rBHelper.bDisposed )
                 return;
         }
         const ItemEventDescription& rItemEvent = static_cast< const ItemEventDescription& >( _rEvent );

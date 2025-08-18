@@ -37,7 +37,7 @@ namespace cppu
 
 
 OComponentHelper::OComponentHelper( Mutex & rMutex )
-    : rBHelper( rMutex )
+    : m_rBHelper( rMutex )
 {
 }
 OComponentHelper::~OComponentHelper()
@@ -74,7 +74,7 @@ void OComponentHelper::release() noexcept
     {
         if (osl_atomic_decrement( &m_refCount ) == 0)
         {
-            if (! rBHelper.bDisposed)
+            if (! m_rBHelper.bDisposed)
             {
                 // *before* again incrementing our ref count, ensure that our weak connection point
                 // will not create references to us anymore (via XAdapter::queryAdapted)
@@ -132,11 +132,11 @@ void OComponentHelper::dispose()
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {
-        MutexGuard aGuard( rBHelper.rMutex );
-        if( !rBHelper.bDisposed && !rBHelper.bInDispose )
+        MutexGuard aGuard( m_rBHelper.rMutex );
+        if( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
         {
             // only one call go into this section
-            rBHelper.bInDispose = true;
+            m_rBHelper.bInDispose = true;
             bDoDispose = true;
         }
     }
@@ -153,22 +153,22 @@ void OComponentHelper::dispose()
                 aEvt.Source = Reference<XInterface >::query( static_cast<XComponent *>(this) );
                 // inform all listeners to release this object
                 // The listener container are automatically cleared
-                rBHelper.aLC.disposeAndClear( aEvt );
+                m_rBHelper.aLC.disposeAndClear( aEvt );
                 // notify subclasses to do their dispose
                 disposing();
             }
             catch (...)
             {
-                MutexGuard aGuard( rBHelper.rMutex );
+                MutexGuard aGuard( m_rBHelper.rMutex );
                 // bDispose and bInDisposing must be set in this order:
-                rBHelper.bDisposed = true;
-                rBHelper.bInDispose = false;
+                m_rBHelper.bDisposed = true;
+                m_rBHelper.bInDispose = false;
                 throw;
             }
-            MutexGuard aGuard( rBHelper.rMutex );
+            MutexGuard aGuard( m_rBHelper.rMutex );
             // bDispose and bInDisposing must be set in this order:
-            rBHelper.bDisposed = true;
-            rBHelper.bInDispose = false;
+            m_rBHelper.bDisposed = true;
+            m_rBHelper.bInDispose = false;
         }
         catch (RuntimeException &)
         {
@@ -195,8 +195,8 @@ void OComponentHelper::dispose()
 void OComponentHelper::addEventListener(
     const Reference<XEventListener > & rxListener )
 {
-    ClearableMutexGuard aGuard( rBHelper.rMutex );
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    ClearableMutexGuard aGuard( m_rBHelper.rMutex );
+    if (m_rBHelper.bDisposed || m_rBHelper.bInDispose)
     {
         aGuard.clear();
         Reference< XInterface > x( static_cast<XComponent *>(this), UNO_QUERY );
@@ -204,7 +204,7 @@ void OComponentHelper::addEventListener(
     }
     else
     {
-        rBHelper.addListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
+        m_rBHelper.addListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
     }
 }
 
@@ -212,7 +212,7 @@ void OComponentHelper::addEventListener(
 void OComponentHelper::removeEventListener(
     const Reference<XEventListener > & rxListener )
 {
-    rBHelper.removeListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
+    m_rBHelper.removeListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
 }
 
 }

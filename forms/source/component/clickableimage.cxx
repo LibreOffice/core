@@ -94,7 +94,7 @@ namespace frm
 
     OClickableImageBaseControl::~OClickableImageBaseControl()
     {
-        if (!OComponentHelper::rBHelper.bDisposed)
+        if (!OComponentHelper::m_rBHelper.bDisposed)
         {
             acquire();
             dispose();
@@ -498,7 +498,7 @@ namespace frm
 
     OClickableImageBaseModel::~OClickableImageBaseModel()
     {
-        if (!OComponentHelper::rBHelper.bDisposed)
+        if (!OComponentHelper::m_rBHelper.bDisposed)
         {
             acquire();
             dispose();

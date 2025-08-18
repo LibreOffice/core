@@ -109,7 +109,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, true, true, true )
      // use the old control name for compatibility reasons
     ,OEntryListHelper( static_cast<OControlModel&>(*this) )
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(true)
 {
@@ -121,7 +121,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
 OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, static_cast<OControlModel&>(*this) )
-    ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,OErrorBroadcaster( OComponentHelper::m_rBHelper )
     ,m_aListSource( _pOriginal->m_aListSource )
     ,m_aDefaultText( _pOriginal->m_aDefaultText )
     ,m_eListSourceType( _pOriginal->m_eListSourceType )
@@ -132,7 +132,7 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
 
 OComboBoxModel::~OComboBoxModel()
 {
-    if (!OComponentHelper::rBHelper.bDisposed)
+    if (!OComponentHelper::m_rBHelper.bDisposed)
     {
         acquire();
         dispose();
