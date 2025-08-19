@@ -5312,19 +5312,9 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-Polygon_Unfilled">
+                                  <object class="GtkToolButton" id="Insert-ConnectorToolbox">
                                     <property name="visible">True</property>
-                                    <property name="action-name">.uno:Polygon_Unfilled</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkToolButton" id="Insert-Bezier_Unfilled">
-                                    <property name="visible">True</property>
-                                    <property name="action-name">.uno:Bezier_Unfilled</property>
+                                    <property name="action_name">.uno:ConnectorToolbox</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>

@@ -281,6 +281,151 @@ interface TextEditView : BaseTextEditView
         ExecMethod = ExecDraw ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_DRAWTBX_CONNECTORS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_TOOL_CONNECTOR
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINE_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_CURVE_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROW_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROW_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_ARROWS
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLE_START
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLE_END
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_CONNECTOR_LINES_CIRCLES
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
 }
 
 shell SwView
