@@ -321,11 +321,13 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
         Color aFaceColor(rStyleSettings.GetFaceColor());
+        if (pTabView->GetViewData().GetSheetViewID() >= 0)
+            aFaceColor.Merge(COL_LIGHTBLUE, 220);
         if (bDark)
             aFaceColor.IncreaseLuminance(20);
         else
             aFaceColor.DecreaseLuminance(20);
-        GetOutDev()->SetFillColor( aFaceColor );
+        GetOutDev()->SetFillColor(aFaceColor);
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nInitScrPos, nBarSize-1, nLineEnd );
         else
@@ -335,7 +337,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
     {
-        GetOutDev()->SetFillColor( mod->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
+        Color aAppBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor;
+        GetOutDev()->SetFillColor(aAppBackgroundColor);
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-1, nPEnd );
         else
