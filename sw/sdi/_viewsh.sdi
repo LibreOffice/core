@@ -528,6 +528,7 @@ interface BaseTextEditView
     ]
     SID_ATTR_PAGE_ORIENTATION // status()
     [
+        ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
     SID_ATTR_PAGE_SIZE // status(final|play)
