@@ -235,7 +235,11 @@ template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
 }
 
 // For use when std::inf is an acceptable result
-[[nodiscard]] inline double div_allow_zero(double a, double b)
+[[nodiscard]]
+#if defined __clang__ || defined __GNUC__
+__attribute__((no_sanitize("float-divide-by-zero")))
+#endif
+inline double div_allow_zero(double a, double b)
 {
 #if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
     assert(b != 0 && "suppress floating point divide_by_zero");
