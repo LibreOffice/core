@@ -39,16 +39,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="all">
-                    <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_All_18x18.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkToolButton" id="outside">
                     <property name="visible">True</property>
                     <property name="icon-name">sc/res/sidebar/CellBorder_FourBorders_18x18.png</property>
@@ -59,9 +49,20 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="thickbox">
+                  <object class="GtkToolButton" id="all">
                     <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_FourBorders_Thick_18x18.png</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_All_18x18.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="crisscross">
+                    <property name="visible">True</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_CrissCross_18x18.png</property>
+                    <property name="label" translatable="yes" context="sc|crisscross">Criss-cross Border</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -72,58 +73,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolbar" id="border4">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <child>
-                  <object class="GtkToolButton" id="thickbottom">
-                    <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_Bottom_Thick_18x18.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="doublebottom">
-                    <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_Bottom_Double_18x18.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="topthickbottom">
-                    <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_TopThin_BottomThick_18x18.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="topdoublebottom">
-                    <property name="visible">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_TopSingle_BottomDouble_18x18.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -185,10 +134,10 @@
                 <property name="toolbar-style">icons</property>
                 <property name="show-arrow">False</property>
                 <child>
-                  <object class="GtkToolButton" id="diagup">
+                  <object class="GtkToolButton" id="diagdown">
                     <property name="visible">True</property>
                     <property name="use-underline">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -196,10 +145,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="diagdown">
+                  <object class="GtkToolButton" id="diagup">
                     <property name="visible">True</property>
                     <property name="use-underline">True</property>
-                    <property name="icon-name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
+                    <property name="icon-name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

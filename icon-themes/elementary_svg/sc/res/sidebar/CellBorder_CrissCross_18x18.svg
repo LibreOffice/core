@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+<linearGradient id="f" x1="9.5333" x2="9.5333" y1="-2.2" y2="18.067" gradientUnits="userSpaceOnUse">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#e9e9e9" offset="1"/>
+</linearGradient>
+<linearGradient id="e" x1="9" x2="9" y1="20" gradientTransform="matrix(.25379 0 0 .30502 19.129 -.68548)" gradientUnits="userSpaceOnUse">
+<stop stop-opacity=".33951" offset="0"/>
+<stop stop-opacity=".24691" offset="1"/>
+</linearGradient>
+<linearGradient id="d" x1="24" x2="24" y1="6.9231" y2="46.769" gradientTransform="matrix(.24324 0 0 .35135 .16216 -.43243)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#fff" stop-opacity=".23529" offset="0"/>
+<stop stop-color="#fff" stop-opacity=".15686" offset="1"/>
+<stop stop-color="#fff" stop-opacity=".39216" offset="1"/>
+</linearGradient>
+<path d="m1 1v16h16v-16z" fill="url(#f)" stroke-width="1.0667"/>
+<g fill="none">
+<path d="m.5.5h17v17h-17z" opacity=".5" stroke="url(#e)" stroke-linecap="square"/>
+<path d="m16.5 16.5h-15v-15h15z" stroke="url(#d)" stroke-linecap="round"/>
+<path transform="matrix(0 1 -1 0 34.002 -.001767)" d="m1.5018 31.502 14-14" stroke="#f37329" stroke-linecap="square" stroke-width="2"/>
+<path d="m15.414 1.4142-14 14" stroke="#f37329" stroke-linecap="square" stroke-width="2"/>
+</g>
+</svg>

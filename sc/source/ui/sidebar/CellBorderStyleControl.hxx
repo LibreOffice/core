@@ -33,7 +33,6 @@ private:
     std::unique_ptr<weld::Toolbar> mxTBBorder1;
     std::unique_ptr<weld::Toolbar> mxTBBorder2;
     std::unique_ptr<weld::Toolbar> mxTBBorder3;
-    std::unique_ptr<weld::Toolbar> mxTBBorder4;
 
     void Initialize();
 

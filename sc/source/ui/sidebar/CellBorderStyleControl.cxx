@@ -48,7 +48,6 @@ CellBorderStylePopup::CellBorderStylePopup(weld::Toolbar* pParent, const OUStrin
     , mxTBBorder1(m_xBuilder->weld_toolbar(u"border1"_ustr))
     , mxTBBorder2(m_xBuilder->weld_toolbar(u"border2"_ustr))
     , mxTBBorder3(m_xBuilder->weld_toolbar(u"border3"_ustr))
-    , mxTBBorder4(m_xBuilder->weld_toolbar(u"border4"_ustr))
 {
     Initialize();
 }
@@ -67,12 +66,12 @@ void CellBorderStylePopup::Initialize()
     mxTBBorder1->connect_clicked ( LINK(this, CellBorderStylePopup, TB1SelectHdl) );
     mxTBBorder1->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_TABLE_PRESET_NONE));
     mxTBBorder1->set_item_accessible_name(0, SvxResId(RID_SVXSTR_TABLE_PRESET_NONE));
-    mxTBBorder1->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
-    mxTBBorder1->set_item_accessible_name(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
-    mxTBBorder1->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER));
-    mxTBBorder1->set_item_accessible_name(2, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER));
-    mxTBBorder1->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_TABLE_PRESET_THICK));
-    mxTBBorder1->set_item_accessible_name(3, SvxResId(RID_SVXSTR_TABLE_PRESET_THICK));
+    mxTBBorder1->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER));
+    mxTBBorder1->set_item_accessible_name(1, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER));
+    mxTBBorder1->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
+    mxTBBorder1->set_item_accessible_name(2, SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL));
+    mxTBBorder1->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS));
+    mxTBBorder1->set_item_accessible_name(3, SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS));
 
     mxTBBorder2->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
     mxTBBorder2->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT));
@@ -85,24 +84,14 @@ void CellBorderStylePopup::Initialize()
     mxTBBorder2->set_item_accessible_name(3, SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM));
 
     mxTBBorder3->connect_clicked ( LINK(this, CellBorderStylePopup, TB2and3SelectHdl) );
-    mxTBBorder3->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP));
-    mxTBBorder3->set_item_accessible_name(0, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP));
-    mxTBBorder3->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN));
-    mxTBBorder3->set_item_accessible_name(1, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN));
+    mxTBBorder3->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN));
+    mxTBBorder3->set_item_accessible_name(0, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN));
+    mxTBBorder3->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP));
+    mxTBBorder3->set_item_accessible_name(1, SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP));
     mxTBBorder3->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM));
     mxTBBorder3->set_item_accessible_name(2, SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM));
     mxTBBorder3->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT));
     mxTBBorder3->set_item_accessible_name(3, SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT));
-
-    mxTBBorder4->connect_clicked ( LINK(this, CellBorderStylePopup, TB4SelectHdl) );
-    mxTBBorder4->set_item_tooltip_text(0, SvxResId(RID_SVXSTR_TABLE_PRESET_THICKBOTTOM));
-    mxTBBorder4->set_item_accessible_name(0, SvxResId(RID_SVXSTR_TABLE_PRESET_THICKBOTTOM));
-    mxTBBorder4->set_item_tooltip_text(1, SvxResId(RID_SVXSTR_TABLE_PRESET_DOUBLEBOTTOM));
-    mxTBBorder4->set_item_accessible_name(1, SvxResId(RID_SVXSTR_TABLE_PRESET_DOUBLEBOTTOM));
-    mxTBBorder4->set_item_tooltip_text(2, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPTHICKBOTTOM));
-    mxTBBorder4->set_item_accessible_name(2, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPTHICKBOTTOM));
-    mxTBBorder4->set_item_tooltip_text(3, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPDOUBLEBOTTOM));
-    mxTBBorder4->set_item_accessible_name(3, SvxResId(RID_SVXSTR_TABLE_PRESET_TOPDOUBLEBOTTOM));
 }
 
 IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
@@ -137,11 +126,16 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
         pLeft = pRight = pTop = pBottom = &theDefLine;
         nValidFlags |= FRM_VALID_OUTER;
     }
-    else if (rId == "thickbox")
+    else if (rId == "crisscross")
     {
-        theDefLine.SetWidth(SvxBorderLineWidth::Thick);
-        pLeft = pRight = pTop = pBottom = &theDefLine;
-        nValidFlags |= FRM_VALID_OUTER;
+        editeng::SvxBorderLine aThinLine(nullptr, SvxBorderLineWidth::Thin);
+        SvxLineItem aDiagUpItem(SID_ATTR_BORDER_DIAG_BLTR);
+        aDiagUpItem.SetLine(&aThinLine);
+        SvxLineItem aDiagDownItem(SID_ATTR_BORDER_DIAG_TLBR);
+        aDiagDownItem.SetLine(&aThinLine);
+        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, { &aDiagUpItem });
+        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD,
+                                  { &aDiagDownItem });
     }
 
     aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
@@ -247,67 +241,6 @@ IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OUString&, rId, void)
         mpDispatcher->ExecuteList(
             SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner});
     }
-
-    maToolButton.set_inactive();
-}
-
-IMPL_LINK(CellBorderStylePopup, TB4SelectHdl, const OUString&, rId, void)
-{
-    SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
-    SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-    std::unique_ptr<editeng::SvxBorderLine> pTop;
-    std::unique_ptr<editeng::SvxBorderLine> pBottom;
-    sal_uInt8               nValidFlags = 0;
-    using namespace ::com::sun::star::table::BorderLineStyle;
-
-    //FIXME: properly adapt to new line border model
-
-    if (rId == "thickbottom")
-    {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thick));
-        nValidFlags |= FRM_VALID_BOTTOM;
-    }
-    else if (rId == "doublebottom")
-    {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline,
-                                  SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
-        nValidFlags |= FRM_VALID_BOTTOM;
-    }
-    else if (rId == "topthickbottom")
-    {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thick));
-        pTop.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thin));
-        nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
-    }
-    else if (rId == "topdoublebottom")
-    {
-        pBottom.reset(new editeng::SvxBorderLine(nullptr));
-        pBottom->GuessLinesWidths(SvxBorderLineStyle::DOUBLE, SvxBorderLineWidth::Hairline,
-                                  SvxBorderLineWidth::Hairline, SvxBorderLineWidth::Thin);
-        pTop.reset(new editeng::SvxBorderLine(nullptr, SvxBorderLineWidth::Thin));
-        nValidFlags |= FRM_VALID_BOTTOM|FRM_VALID_TOP;
-    }
-
-    aBorderOuter.SetLine( pTop.get(), SvxBoxItemLine::TOP );
-    aBorderOuter.SetLine( pBottom.get(), SvxBoxItemLine::BOTTOM );
-    aBorderOuter.SetLine( nullptr, SvxBoxItemLine::LEFT );
-    aBorderOuter.SetLine( nullptr, SvxBoxItemLine::RIGHT );
-
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       0 != (nValidFlags&FRM_VALID_TOP ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    0 != (nValidFlags&FRM_VALID_BOTTOM ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      0 != (nValidFlags&FRM_VALID_LEFT ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     0 != (nValidFlags&FRM_VALID_RIGHT ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      0 != (nValidFlags&FRM_VALID_HINNER ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      0 != (nValidFlags&FRM_VALID_VINNER));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
-
-    mpDispatcher->ExecuteList(
-        SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner });
-
-    pTop.reset();
-    pBottom.reset();
 
     maToolButton.set_inactive();
 }

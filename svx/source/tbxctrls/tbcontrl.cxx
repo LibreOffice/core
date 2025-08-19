@@ -2490,32 +2490,21 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     AddStatusListener(u".uno:BorderReducedMode"_ustr);
     InitImageList();
 
-    /*
-     *  1       2        3         4            5
-     *  ------------------------------------------------------
-     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALDOWN
-     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALUP
-     *  ------------------------------------------------------
-     *  HOR     HORINNER VERINNER   ALL         CRISSCROSS      <- can be switched of via bParagraphMode
-     */
-
     sal_uInt16 i = 0;
 
-    // diagonal borders available only for Calc.
-    // Therefore, Calc uses 10 border types while
-    // Writer uses 8 of them - for a single cell.
-    for ( i=1; i < (m_bIsCalc ? 11 : 9); i++ )
+    // Writer and Calc uses 8 border types - for a single cell.
+    for ( i=1; i < 9; i++ )
         mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         // when multiple cell selected:
-        // Writer has 12 border types and Calc has 15 of them.
-        for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
+        // Writer and Calc have 12 border types.
+        for ( i = 9; i < 13; i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
-    // adjust frame column for Writer
-    sal_uInt16 colCount = m_bIsWriter ? 4 : 5;
+    // adjust frame column for Writer and Calc
+    sal_uInt16 colCount = 4;
     mxFrameSet->SetColCount( colCount );
     mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
     CalcSizeValueSet();
@@ -2574,15 +2563,52 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     // cell border using the border formatting tool in the standard toolbar
     theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
 
-    // nSel has 15 cases which means 15 border
-    // types for Calc. But Writer uses only 12
+    // nSel has 15 cases which means 12 (9 common with writer + 3 unique) unique border
+    // types for Calc. But Writer uses 12 (9 common with calc + 3 unique)
     // of them - when diagonal borders excluded.
-    if (!m_bIsCalc)
+    if (m_bIsCalc)
     {
-        // add appropriate increments
-        // to match the correct borders.
-        if (nSel > 8) { nSel += 2; }
-        else if (nSel > 4) { nSel++; }
+        // This is a lookup table to map the new 1-12 order
+        // to the 'case' values of the switch statement.
+        switch (nSel)
+        {
+            case 1:
+                nSel = 1;
+                break; // None
+            case 2:
+                nSel = 8;
+                break; // Outside
+            case 3:
+                nSel = 12;
+                break; // All
+            case 4:
+                nSel = 15;
+                break; // Criss-cross
+            case 5:
+                nSel = 2;
+                break; // Left
+            case 6:
+                nSel = 3;
+                break; // Right
+            case 7:
+                nSel = 5;
+                break; // Top
+            case 8:
+                nSel = 6;
+                break; // Bottom
+            case 9:
+                nSel = 13;
+                break; // Diagonal down
+            case 10:
+                nSel = 14;
+                break; // Diagonal up
+            case 11:
+                nSel = 7;
+                break; // Top-bottom
+            case 12:
+                nSel = 4;
+                break; // Left-right
+        }
     }
 
     switch ( nSel )
@@ -2603,51 +2629,51 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: dDownLineItem.SetLine(&dDownBorderLine);
+        case 13: dDownLineItem.SetLine(&dDownBorderLine);
                 SetDiagonalDownBorder(dDownLineItem);
                 bIsDiagonalBorder = true;
         break;  // DIAGONAL DOWN
-        case 6: pTop = &theDefLine;
+        case 5: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
-        case 7: pBottom = &theDefLine;
+        case 6: pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom;
         break;  // BOTTOM
-        case 8: pTop =  pBottom = &theDefLine;
+        case 7: pTop =  pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom|FrmValidFlags::Top;
         break;  // TOPBOTTOM
-        case 9: pLeft = pRight = pTop = pBottom = &theDefLine;
+        case 8: pLeft = pRight = pTop = pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
-        case 10:
+        case 14:
                 dUpLineItem.SetLine(&dUpBorderLine);
                 SetDiagonalUpBorder(dUpLineItem);
                 bIsDiagonalBorder = true;
         break;  // DIAGONAL UP
 
         // Inner Table:
-        case 11: // HOR
+        case 9: // HOR
             pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 12: // HORINNER
+        case 10: // HORINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 13: // VERINNER
+        case 11: // VERINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::VInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
         break;
 
-        case 14: // ALL
+        case 12: // ALL
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
@@ -2743,19 +2769,19 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     if(!mxFrameSet->GetItemCount())
         return;
 
-    // set 12 border types for Writer, otherwise 15 for Calc.
-    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(m_bIsCalc ? 15 : 12) );
+    // set 12 border types for Writer and Calc.
+    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(12) );
     bool bResize    = false;
 
     if ( bTableMode && bParagraphMode )
     {
-        for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
+        for ( sal_uInt16 i = 9; i < 13; i++ )
             mxFrameSet->RemoveItem(i);
         bResize = true;
     }
     else if ( !bTableMode && !bParagraphMode )
     {
-        for ( sal_uInt16 i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
+        for ( sal_uInt16 i = 9; i < 13; i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
         bResize = true;
     }
@@ -2804,25 +2830,22 @@ void SvxFrameWindow_Impl::InitImageList()
     {
         // Calc has diagonal borders feature.
         // Therefore use additional 3 diagonal border types,
-        // which make border types 15 in total.
+        // which make border types for Calc 12 in total.
         aImgVec = {
             {Bitmap(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},
+            {Bitmap(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
+            {Bitmap(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
+            {Bitmap(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)}, // criss-cross border
+
             {Bitmap(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
             {Bitmap(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
-            {Bitmap(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
-            {Bitmap(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
-
             {Bitmap(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
             {Bitmap(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYBOTTOM)},
-            {Bitmap(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
-            {Bitmap(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTER)},
-            {Bitmap(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
 
-            {Bitmap(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
-            {Bitmap(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
-            {Bitmap(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
-            {Bitmap(RID_SVXBMP_FRAME12), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERALL)},
-            {Bitmap(RID_SVXBMP_FRAME15), SvxResId(RID_SVXSTR_PARA_PRESET_CRISSCROSS)} // criss-cross border
+            {Bitmap(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALDOWN)}, // diagonal down border
+            {Bitmap(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALUP)}, // diagonal up border
+            {Bitmap(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
+            {Bitmap(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)}
         };
     }
 }
