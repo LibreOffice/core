@@ -25,6 +25,7 @@
 #include <utility>
 #include <array>
 #include <cassert>
+#include <concepts>
 
 namespace o3tl {
 
@@ -57,16 +58,11 @@ public:
 
     static const size_type max_index = static_cast<size_type>(E::LAST);
 
-    // If this ctor only had the args parameter pack, it would erroneously get picked as a better
-    // choice than the (implicit) copy ctor (taking a const lvalue reference) when a copy is made
-    // from a non-const lvalue enumarray; the easiest way to avoid that is the additional arg
-    // parameter; and to keep things simple that parameter is always passed by const lvalue
-    // reference for now even if there could be cases where passing it by rvalue reference might be
-    // beneficial or even necessary if V is a move-only type:
-    template<typename... T> constexpr enumarray(V const & arg, T && ...args):
-        detail_values{arg, std::forward<T>(args)...}
+    template <std::convertible_to<V>... T>
+        requires(sizeof...(T) == max_index + 1)
+    constexpr enumarray(T&&... args)
+        : detail_values{ std::forward<T>(args)... }
     {
-        static_assert(sizeof... (T) == max_index);
     }
 
     // coverity[uninit_ctor] - by design:
