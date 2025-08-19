@@ -1001,7 +1001,17 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.SetFixedCellHeight(rSdrAutofitTextPrimitive.isFixedCellHeight());
 
     // now get back the layouted text size from outliner
-    const Size aOutlinerTextSize(rOutliner.GetPaperSize());
+    Size aOutlinerTextSize(rOutliner.GetPaperSize());
+    if (getSdrModelFromSdrObject().GetCompatibilityFlag(
+            SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout))
+    {
+        // The height of the text may be larger than the box height, because of the trailing
+        // empty paragraphs, ignored when scaling, and normally ignored for layout. PowerPoint
+        // has a different handling: it also ignores the lines when scaling, but uses them for
+        // positioning of the text.
+        if (tools::Long h = rOutliner.GetTextHeight(); h > aOutlinerTextSize.Height())
+            aOutlinerTextSize.setHeight(h);
+    }
     const basegfx::B2DVector aOutlinerScale(aOutlinerTextSize.Width(), aOutlinerTextSize.Height());
     basegfx::B2DVector aAdjustTranslate(0.0, 0.0);
 

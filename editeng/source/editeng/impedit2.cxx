@@ -4431,12 +4431,12 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion, bool bIsScal
     return false;
 }
 
-void ImpEditEngine::CalcHeight(ParaPortion& rPortion, bool bIsScaling)
+void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
 {
     rPortion.mnHeight = 0;
     rPortion.mnFirstLineOffset = 0;
 
-    if (!rPortion.IsVisible() || isInEmptyClusterAtTheEnd(rPortion, bIsScaling))
+    if (!rPortion.IsVisible())
         return;
 
     OSL_ENSURE(rPortion.GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight");
