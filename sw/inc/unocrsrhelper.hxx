@@ -241,6 +241,8 @@ namespace SwUnoCursorHelper
     css::uno::Reference<css::text::XFlatParagraphIterator>
             CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
+    void SetCharStyle(SwDoc& rDoc, const css::uno::Any& rValue, SfxItemSet& rSet);
+
 } // namespace SwUnoCursorHelper
 
 #endif
