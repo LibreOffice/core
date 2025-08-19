@@ -98,6 +98,7 @@ struct SdrModelImpl
             false, // tdf#148000 LegacyFontwork
             false, // tdf#149756 ConnectorUseSnapRect
             false, // tdf#148966 IgnoreBreakAfterMultilineField
+            false, // tdf#168010 UseTrailingEmptyLinesInLayout
           }
         , mpTheme(new model::Theme(u"Office"_ustr))
     {}
@@ -1836,6 +1837,11 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
             SetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField, bBool);
         }
     }
+    else if (pValue->Name == "UseTrailingEmptyLinesInLayout")
+    {
+        if (bool bBool; pValue->Value >>= bBool)
+            SetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout, bBool);
+    }
 }
 
 void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValues)
@@ -1845,7 +1851,8 @@ void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValu
         { "AnchoredTextOverflowLegacy", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy)) },
         { "LegacySingleLineFontwork", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork)) },
         { "ConnectorUseSnapRect", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect)) },
-        { "IgnoreBreakAfterMultilineField", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)) }
+        { "IgnoreBreakAfterMultilineField", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField)) },
+        { "UseTrailingEmptyLinesInLayout", uno::Any(GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout)) },
     };
 
     const sal_Int32 nOldLength = rValues.getLength();

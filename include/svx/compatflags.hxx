@@ -14,7 +14,8 @@ enum class SdrCompatibilityFlag
     LegacyFontwork, ///< for tdf#148000 false == Fontwork works in PowerPoint compat mode
     ConnectorUseSnapRect, ///< for tdf#149756
     IgnoreBreakAfterMultilineField, ///< for tdf#148966
-    LAST = IgnoreBreakAfterMultilineField /// add new items above
+    UseTrailingEmptyLinesInLayout, ///< for tdf#168010
+    LAST = UseTrailingEmptyLinesInLayout /// add new items above
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

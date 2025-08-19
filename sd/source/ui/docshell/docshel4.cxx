@@ -431,6 +431,10 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
 
         // compatibility flag for tdf#148966
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField, true);
+
+        // tdf#168010: PowerPoint ignores empty trailing lines in autoshrink text when scaling font
+        // (same as Impress), but takes into account in layout:
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout, true);
     }
 
     if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
