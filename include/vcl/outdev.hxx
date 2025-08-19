@@ -60,8 +60,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <unotools/fontdefs.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <o3tl/deleter.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -1921,15 +1921,8 @@ protected:
 
 [[nodiscard]] inline auto OutputDevice::ScopedPush(vcl::PushFlags nFlags)
 {
-    struct OutputDeviceRestoreStateGuard
-    {
-        OutputDevice& m_rDev;
-        ~OutputDeviceRestoreStateGuard() { suppress_fun_call_w_exception(m_rDev.Pop()); }
-    };
-
     Push(nFlags);
-    // [-loplugin:redundantfcast]
-    return OutputDeviceRestoreStateGuard{ *this };
+    return comphelper::ScopeGuard([this]() { Pop(); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
