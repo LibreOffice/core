@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <comphelper/string.hxx>
+#include <o3tl/untaint.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>

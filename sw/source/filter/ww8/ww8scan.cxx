@@ -38,7 +38,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/settings.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <dbase/DIndexIter.hxx>
+#include <o3tl/untaint.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 using namespace ::com::sun::star::sdb;

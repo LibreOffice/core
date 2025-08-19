@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <o3tl/untaint.hxx>
 #include <rtl/math.hxx>
 #include <cmath>
 

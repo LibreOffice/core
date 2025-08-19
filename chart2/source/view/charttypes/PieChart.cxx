@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/untaint.hxx>
 #include <tools/helpers.hxx>
 
 #include <limits>

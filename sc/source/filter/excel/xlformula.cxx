@@ -26,6 +26,7 @@
 #include <xlroot.hxx>
 
 #include <comphelper/string.hxx>
+#include <o3tl/untaint.hxx>
 #include <svl/sharedstringpool.hxx>
 
 using namespace ::formula;

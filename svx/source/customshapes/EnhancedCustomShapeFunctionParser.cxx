@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

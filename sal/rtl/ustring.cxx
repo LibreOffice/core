@@ -26,6 +26,7 @@
 
 #include <config_options.h>
 #include <o3tl/string_view.hxx>
+#include <o3tl/untaint.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
@@ -966,7 +967,9 @@ sal_Int32 SAL_CALL rtl_ustr_indexOfChar(const sal_Unicode* pStr, sal_Unicode c) 
 sal_Int32 SAL_CALL rtl_ustr_indexOfChar_WithLength(const sal_Unicode* pStr, sal_Int32 nLen,
                                                    sal_Unicode c) noexcept
 {
-    return rtl::str::indexOfChar_WithLength(pStr, nLen, c);
+    sal_Int32 nRet = rtl::str::indexOfChar_WithLength(pStr, nLen, c);
+    o3tl::untaint_for_overrun(nRet);
+    return nRet;
 }
 
 sal_Int32 SAL_CALL rtl_ustr_lastIndexOfChar(const sal_Unicode* pStr, sal_Unicode c) noexcept
@@ -988,7 +991,9 @@ sal_Int32 SAL_CALL rtl_ustr_indexOfStr(const sal_Unicode* pStr, const sal_Unicod
 sal_Int32 SAL_CALL rtl_ustr_indexOfStr_WithLength(const sal_Unicode* pStr, sal_Int32 nStrLen,
                                                   const sal_Unicode* pSubStr, sal_Int32 nSubLen) noexcept
 {
-    return rtl::str::indexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+    sal_Int32 nRet = rtl::str::indexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+    o3tl::untaint_for_overrun(nRet);
+    return nRet;
 }
 
 sal_Int32 SAL_CALL rtl_ustr_lastIndexOfStr(const sal_Unicode* pStr, const sal_Unicode* pSubStr) noexcept

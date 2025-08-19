@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstdlib>
 
+#include <o3tl/untaint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
@@ -380,7 +381,9 @@ sal_Int32 SAL_CALL rtl_str_indexOfChar(const char* pStr, char c) noexcept
 
 sal_Int32 SAL_CALL rtl_str_indexOfChar_WithLength(const char* pStr, sal_Int32 nLen, char c) noexcept
 {
-    return rtl::str::indexOfChar_WithLength(pStr, nLen, c);
+    sal_Int32 ret = rtl::str::indexOfChar_WithLength(pStr, nLen, c);
+    o3tl::untaint_for_overrun(ret);
+    return ret;
 }
 
 sal_Int32 SAL_CALL rtl_str_lastIndexOfChar(const char* pStr, char c) noexcept
@@ -401,7 +404,9 @@ sal_Int32 SAL_CALL rtl_str_indexOfStr(const char* pStr, const char* pSubStr) noe
 sal_Int32 SAL_CALL rtl_str_indexOfStr_WithLength(const char* pStr, sal_Int32 nStrLen,
                                                  const char* pSubStr, sal_Int32 nSubLen) noexcept
 {
-    return rtl::str::indexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+    sal_Int32 ret = rtl::str::indexOfStr_WithLength(pStr, nStrLen, pSubStr, nSubLen);
+    o3tl::untaint_for_overrun(ret);
+    return ret;
 }
 
 sal_Int32 SAL_CALL rtl_str_lastIndexOfStr(const char* pStr, const char* pSubStr) noexcept

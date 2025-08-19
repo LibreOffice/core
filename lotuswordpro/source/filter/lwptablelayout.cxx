@@ -80,6 +80,7 @@
 #include <xfilter/xfnumberstyle.hxx>
 #include <xfilter/xfparastyle.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/untaint.hxx>
 #include <sal/log.hxx>
 #include <comphelper/configuration.hxx>
 

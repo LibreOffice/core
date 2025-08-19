@@ -21,6 +21,7 @@
 #include "analysis.hxx"
 #include "analysishelper.hxx"
 #include <o3tl/temporary.hxx>
+#include <o3tl/untaint.hxx>
 
 using namespace sca::analysis;
 

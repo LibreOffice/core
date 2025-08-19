@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <osl/endian.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>

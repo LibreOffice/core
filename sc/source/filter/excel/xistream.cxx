@@ -19,7 +19,7 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

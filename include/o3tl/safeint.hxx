@@ -227,62 +227,6 @@ clamp_to_unsigned(T2 value) {
 // tools like -fsanitize=implicit-conversion should still be able to detect truncation:
 template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return value; }
 
-// std::min wrapped to inform coverity that the result is now deemed sanitized
-// coverity[ -taint_source ]
-template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
-{
-    return std::min(a, b);
-}
-
-// For use when std::inf is an acceptable result
-[[nodiscard]]
-#if defined __clang__ || defined __GNUC__
-__attribute__((no_sanitize("float-divide-by-zero")))
-#endif
-inline double div_allow_zero(double a, double b)
-{
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2024
-    assert(b != 0 && "suppress floating point divide_by_zero");
-#endif
-    return a / b;
-}
-
-// To sanitize in/de-crementing value where the result is known by the caller to be guaranteed to fit in
-// the source type range without over/under-flow
-[[nodiscard]] inline unsigned short sanitizing_inc(unsigned short value)
-{
-    int res = value + 1;
-    assert(res <= std::numeric_limits<unsigned short>::max() &&
-           "nValue was supposed to be incrementable without overflow");
-    return static_cast<unsigned short>(res);
-}
-
-[[nodiscard]] inline unsigned short sanitizing_dec(unsigned short value)
-{
-    int res = value - 1;
-    assert(res >= 0 &&
-           "nValue was supposed to be decrementable without underflow");
-    return static_cast<unsigned short>(res);
-}
-
-[[nodiscard]] inline short sanitizing_inc(short value)
-{
-    int res = value + 1;
-    assert(res >= std::numeric_limits<short>::min() &&
-           res <= std::numeric_limits<short>::max() &&
-           "nValue was supposed to be incrementable without overflow");
-    return static_cast<short>(res);
-}
-
-[[nodiscard]] inline short sanitizing_dec(short value)
-{
-    int res = value - 1;
-    assert(res >= std::numeric_limits<short>::min() &&
-           res <= std::numeric_limits<short>::max() &&
-           "nValue was supposed to be decrementable without underflow");
-    return static_cast<short>(res);
-}
-
 // A helper for taking care of signed/unsigned comparisons in constant bounds case
 // Should avoid Coverity warnings like "cid#1618764 Operands don't affect result"
 template <typename I, I Min = std::template numeric_limits<I>::min(),

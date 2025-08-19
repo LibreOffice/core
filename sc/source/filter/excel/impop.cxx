@@ -24,7 +24,7 @@
 
 #include <scitems.hxx>
 
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svxids.hrc>
 #include <svl/numformat.hxx>

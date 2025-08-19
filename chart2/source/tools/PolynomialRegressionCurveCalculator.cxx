@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <limits>
+#include <o3tl/untaint.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 

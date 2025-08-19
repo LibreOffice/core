@@ -19,7 +19,7 @@
 
 #include <dbase/dindexnode.hxx>
 #include <dbase/DIndex.hxx>
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>

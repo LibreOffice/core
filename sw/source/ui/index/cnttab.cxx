@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <sal/log.hxx>
 #include <svl/style.hxx>
 #include <utility>

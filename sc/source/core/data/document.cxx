@@ -21,6 +21,7 @@
 
 #include <editeng/boxitem.hxx>
 #include <editeng/editobj.hxx>
+#include <o3tl/untaint.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/numformat.hxx>

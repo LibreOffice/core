@@ -8,7 +8,7 @@
  */
 #include "xltoolbar.hxx"
 #include <sal/log.hxx>
-#include <o3tl/safeint.hxx>
+#include <o3tl/untaint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>

@@ -24,6 +24,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <o3tl/any.hxx>
+#include <o3tl/untaint.hxx>
 #include <rtl/math.hxx>
 #include <algorithm>
 #include <cmath>

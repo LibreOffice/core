@@ -18,6 +18,7 @@
  */
 
 #include <subtotal.hxx>
+#include <o3tl/untaint.hxx>
 #include <sal/mathconf.h>
 #include <cfloat>
 

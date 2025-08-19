@@ -60,6 +60,7 @@
 #include <vector>
 #include <calbck.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/untaint.hxx>
 #include <svl/numformat.hxx>
 #include <txtfld.hxx>
 #include <rolbck.hxx>
