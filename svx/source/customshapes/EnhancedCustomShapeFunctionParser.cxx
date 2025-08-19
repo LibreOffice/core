@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/safeint.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -467,10 +468,6 @@ public:
         mpSecondArg(std::move( xSecondArg ))
     {
     }
-#if defined(__clang__) || defined (__GNUC__)
-    //GetEquationValueAsDouble calls isFinite on the result
-    __attribute__((no_sanitize("float-divide-by-zero")))
-#endif
     static double getValue( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg )
     {
         double fRet = 0;
@@ -479,7 +476,7 @@ public:
             case ExpressionFunct::BinaryPlus : fRet = (*rFirstArg)() + (*rSecondArg)(); break;
             case ExpressionFunct::BinaryMinus: fRet = (*rFirstArg)() - (*rSecondArg)(); break;
             case ExpressionFunct::BinaryMul :  fRet = (*rFirstArg)() * (*rSecondArg)(); break;
-            case ExpressionFunct::BinaryDiv :  fRet = (*rFirstArg)() / (*rSecondArg)(); break;
+            case ExpressionFunct::BinaryDiv :  fRet = o3tl::div_allow_zero((*rFirstArg)(), (*rSecondArg)()); break;
             case ExpressionFunct::BinaryMin :  fRet = ::std::min( (*rFirstArg)(), (*rSecondArg)() ); break;
             case ExpressionFunct::BinaryMax :  fRet = ::std::max( (*rFirstArg)(), (*rSecondArg)() ); break;
             case ExpressionFunct::BinaryAtan2: fRet = atan2( (*rFirstArg)(), (*rSecondArg)() ); break;
