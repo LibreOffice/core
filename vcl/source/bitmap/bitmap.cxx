@@ -2227,4 +2227,36 @@ bool Bitmap::Create( const css::uno::Reference< css::rendering::XBitmapCanvas > 
     return false;
 }
 
+void Bitmap::BlendAlpha(sal_uInt8 nAlpha)
+{
+    if (!HasAlpha())
+    {
+        sal_uInt8 cTrans = 255 - nAlpha;
+        *this = Bitmap(BitmapEx( *this, AlphaMask(GetSizePixel(), &cTrans) ));
+    }
+    else
+    {
+        BitmapScopedWriteAccess pAccess(*this);
+        assert(pAccess);
+        if( !pAccess )
+            return;
+
+        const tools::Long  nWidth = pAccess->Width(), nHeight = pAccess->Height();
+
+        BitmapColor aAlphaValue( 0 );
+
+        for( tools::Long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pScanline = pAccess->GetScanline( nY );
+            for( tools::Long nX = 0; nX < nWidth; nX++ )
+            {
+                BitmapColor aCol = pAccess->GetPixelFromData( pScanline, nX );
+                sal_uInt8 nNewAlpha = static_cast<sal_Int32>(nAlpha) * aCol.GetAlpha() / 255;
+                aCol.SetAlpha( nNewAlpha );
+                pAccess->SetPixelOnData( pScanline, nX, aCol );
+            }
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

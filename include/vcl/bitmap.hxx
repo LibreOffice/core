@@ -587,6 +587,11 @@ public:
      */
     SAL_DLLPRIVATE void AdjustTransparency( sal_uInt8 cTrans );
 
+    /**
+     * Blends, i.e. multiplies the alpha layer with the new alpha value.
+     */
+    void BlendAlpha( sal_uInt8 nAlpha );
+
     /** Remove existing blending against COL_WHITE based on given AlphaMask
 
         Inside convertToBitmapEx the content gets rendered to RGB target (no 'A'),

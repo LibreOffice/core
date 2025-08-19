@@ -2078,7 +2078,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
     }
 
     // prepare Marker's Bitmap
-    BitmapEx aBitmapEx(rMarkerArrayCandidate.getMarker());
+    Bitmap aBitmap(rMarkerArrayCandidate.getMarker());
 
     constexpr DrawModeFlags BITMAP(DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap
                                    | DrawModeFlags::GrayBitmap);
@@ -2105,28 +2105,27 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
         }
 
         // need to apply ColorModifier to Bitmap data
-        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+        aBitmap = aBitmap.Modify(maBColorModifierStack);
 
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
         {
             // color gets completely replaced, get it
             const basegfx::BColor aReplacementColor(
                 maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-            Bitmap aBitmap(rMarker.GetSizePixel(), vcl::PixelFormat::N24_BPP);
-            aBitmap.Erase(Color(aReplacementColor));
+            Bitmap aBitmap2(rMarker.GetSizePixel(), vcl::PixelFormat::N24_BPP);
+            aBitmap2.Erase(Color(aReplacementColor));
 
             if (rMarker.HasAlpha())
-                aBitmapEx = BitmapEx(aBitmap, rMarker.CreateAlphaMask());
+                aBitmap = Bitmap(BitmapEx(aBitmap2, rMarker.CreateAlphaMask()));
             else
-                aBitmapEx = BitmapEx(aBitmap);
+                aBitmap = aBitmap2;
         }
 
         maBColorModifierStack.pop();
     }
 
     // access or create cairo bitmap data
-    std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(
-        getOrCreateCairoSurfaceHelper(Bitmap(aBitmapEx)));
+    std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(getOrCreateCairoSurfaceHelper(aBitmap));
     if (!aCairoSurfaceHelper)
     {
         SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");

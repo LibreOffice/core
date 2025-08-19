@@ -233,7 +233,7 @@ namespace drawinglayer::processor3d
             const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();
 
             // #121194# For 3D texture we will use the BitmapRex representation
-            const BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+            const Bitmap aBitmap(rFillGraphicAttribute.getGraphic().GetBitmap());
 
             // create range scaled by texture size
             basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
@@ -246,7 +246,7 @@ namespace drawinglayer::processor3d
             {
                 mpGeoTexSvx =
                     std::make_shared<texture::GeoTexSvxBitmapExTiled>(
-                        Bitmap(aBitmapEx),
+                        aBitmap,
                         aGraphicRange,
                         rFillGraphicAttribute.getOffsetX(),
                         rFillGraphicAttribute.getOffsetY());
@@ -255,7 +255,7 @@ namespace drawinglayer::processor3d
             {
                 mpGeoTexSvx =
                     std::make_shared<texture::GeoTexSvxBitmapEx>(
-                        Bitmap(aBitmapEx),
+                        aBitmap,
                         aGraphicRange);
             }
 

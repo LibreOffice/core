@@ -174,37 +174,37 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         // drawinglayer::primitive2d::ProcessAndBlurAlphaMask() can be called.
         // Otherwise, blurring of edges will fail in cases like running in a
         // slideshow or exporting to PDF.
-        const BitmapEx aBitmapEx(::drawinglayer::convertToBitmap(
+        const Bitmap aBitmap(::drawinglayer::convertToBitmap(
             std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
             nMaximumQuadraticPixels, true));
 
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
             break;
 
         // Get BitmapEx and check size. If no content, we are done
-        const Size& rBitmapExSizePixel(aBitmapEx.GetSizePixel());
-        if (!(rBitmapExSizePixel.Width() > 0 && rBitmapExSizePixel.Height() > 0))
+        const Size aBitmapSizePixel(aBitmap.GetSizePixel());
+        if (!(aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0))
             break;
 
         // We may have to take a corrective scaling into account when the
         // MaximumQuadraticPixel limit was used/triggered
         double fScale(1.0);
 
-        if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
-            || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
+        if (static_cast<sal_uInt32>(aBitmapSizePixel.Width()) != nDiscreteClippedWidth
+            || static_cast<sal_uInt32>(aBitmapSizePixel.Height()) != nDiscreteClippedHeight)
         {
             // scale in X and Y should be the same (see fReduceFactor in convertToBitmapEx),
             // so adapt numerically to a single scale value, they are integer rounded values
-            const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
+            const double fScaleX(static_cast<double>(aBitmapSizePixel.Width())
                                  / static_cast<double>(nDiscreteClippedWidth));
-            const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
+            const double fScaleY(static_cast<double>(aBitmapSizePixel.Height())
                                  / static_cast<double>(nDiscreteClippedHeight));
 
             fScale = (fScaleX + fScaleY) * 0.5;
         }
 
         // Get the Alpha and use as base to blur and apply the effect
-        AlphaMask aMask(aBitmapEx.GetAlphaMask());
+        AlphaMask aMask(aBitmap.CreateAlphaMask());
         if (aMask.IsEmpty()) // There is no mask, fully opaque
             break;
         AlphaMask blurMask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
@@ -212,7 +212,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-        BitmapEx result(aBitmapEx.GetBitmap(), aMask);
+        BitmapEx result(aBitmap.CreateColorBitmap(), aMask);
 
 #ifdef DBG_UTIL
         static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
