@@ -1979,20 +1979,21 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
         }
     }
 
-    // have to create modified Bitmap
-    Bitmap aChangedBitmap(*this);
+    // have to create modified Bitmap, but we want to preserve the alpha information
+    Bitmap aChangedBitmap;
 
     if (nullptr != pLastModifierReplace)
     {
         // special case -> we have BColorModifier_replace but Alpha channel
-        if (vcl::isPalettePixelFormat(aChangedBitmap.getPixelFormat()))
+        if (vcl::isPalettePixelFormat(getPixelFormat()))
         {
+            assert(!HasAlpha());
+            aChangedBitmap = *this;
             // For e.g. 8bit Bitmaps, the nearest color to the given erase color is
             // determined and used -> this may be different from what is wanted here.
             // Better create a new bitmap with the needed color explicitly.
             BitmapScopedReadAccess xReadAccess(aChangedBitmap);
-            SAL_WARN_IF(!xReadAccess, "vcl", "Got no Bitmap ReadAccess ?!?");
-
+            assert(xReadAccess);
             if(xReadAccess)
             {
                 BitmapPalette aNewPalette(xReadAccess->GetPalette());
@@ -2003,16 +2004,26 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
                     &aNewPalette);
             }
         }
+        else if (HasAlpha())
+        {
+            // clear bitmap with dest color
+            AlphaMask aAlphaMask(CreateAlphaMask());
+            Bitmap aTmpBitmap(CreateColorBitmap());
+            aTmpBitmap.Erase(Color(pLastModifierReplace->getBColor()));
+            aChangedBitmap = Bitmap(BitmapEx(aTmpBitmap, aAlphaMask));
+        }
         else
         {
             // clear bitmap with dest color
+            aChangedBitmap = *this;
             aChangedBitmap.Erase(Color(pLastModifierReplace->getBColor()));
         }
     }
     else
     {
+        aChangedBitmap = *this;
         BitmapScopedWriteAccess xContent(aChangedBitmap);
-
+        assert(xContent);
         if(xContent)
         {
             const double fConvertColor(1.0 / 255.0);
@@ -2083,8 +2094,10 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
                             static_cast<double>(aBMCol.GetGreen()) * fConvertColor,
                             static_cast<double>(aBMCol.GetBlue()) * fConvertColor);
                         const basegfx::BColor aBDest(rBColorModifierStack.getModifiedColor(aBSource));
-
-                        xContent->SetPixelOnData(pScanline, x, BitmapColor(Color(aBDest)));
+                        // preserve alpha
+                        BitmapColor aDestCol((Color(aBDest)));
+                        aDestCol.SetAlpha(aBMCol.GetAlpha());
+                        xContent->SetPixelOnData(pScanline, x, aDestCol);
                     }
                 }
             }

@@ -515,15 +515,15 @@ void VclProcessor2D::RenderPolygonHairlinePrimitive2D(
 // direct draw of transformed BitmapEx primitive
 void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
-    BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
+    Bitmap aBitmap(rBitmapCandidate.getBitmap());
     const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation
                                                 * rBitmapCandidate.getTransform());
 
     if (maBColorModifierStack.count())
     {
-        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+        aBitmap = aBitmap.Modify(maBColorModifierStack);
 
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
         {
             // color gets completely replaced, get it
             const basegfx::BColor aModifiedColor(
@@ -543,7 +543,7 @@ void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2
     // the own transformer is used (see OutputDevice::DrawTransformedBitmapEx).
 
     // draw using OutputDevice'sDrawTransformedBitmapEx
-    mpOutputDevice->DrawTransformedBitmapEx(aLocalTransform, aBitmapEx);
+    mpOutputDevice->DrawTransformedBitmapEx(aLocalTransform, aBitmap);
 }
 
 void VclProcessor2D::RenderFillGraphicPrimitive2D(
