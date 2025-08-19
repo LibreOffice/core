@@ -367,6 +367,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
             ,m_bMacroCallsSeenWhileLoading(false)
+            ,m_bAskPassword(false)
             ,m_nControllerLockCount(0)
 {
     // some kind of default
@@ -397,6 +398,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_bModified(false)
             ,m_bDocumentReadOnly(false)
             ,m_bMacroCallsSeenWhileLoading(false)
+            ,m_bAskPassword(false)
             ,m_nControllerLockCount(0)
 {
     impl_construct_nothrow();
