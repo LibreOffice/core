@@ -25,20 +25,18 @@
 
 SfxPoolItem* SvxHyperlinkItem::CreateDefault() { return new  SvxHyperlinkItem(TypedWhichId<SvxHyperlinkItem>(0));}
 
-SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
-            SfxPoolItem(rHyperlinkItem)
+SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
+    : SfxPoolItem(rHyperlinkItem),
+    sName(rHyperlinkItem.sName),
+    sURL(rHyperlinkItem.sURL),
+    sTarget(rHyperlinkItem.sTarget),
+    eType(rHyperlinkItem.eType),
+    sReplacementText(rHyperlinkItem.sReplacementText),
+    m_showName(rHyperlinkItem.m_showName),
+    m_showText(rHyperlinkItem.m_showText),
+    sIntName(rHyperlinkItem.sIntName),
+    nMacroEvents(rHyperlinkItem.nMacroEvents)
 {
-    sName   = rHyperlinkItem.sName;
-    sURL    = rHyperlinkItem.sURL;
-    sTarget = rHyperlinkItem.sTarget;
-    eType   = rHyperlinkItem.eType;
-    sIntName = rHyperlinkItem.sIntName;
-    nMacroEvents = rHyperlinkItem.nMacroEvents;
-    sReplacementText = rHyperlinkItem.sReplacementText;
-
-    m_showName = rHyperlinkItem.m_showName;
-    m_showText = rHyperlinkItem.m_showText;
-
     if( rHyperlinkItem.GetMacroTable() )
         pMacroTable.reset( new SvxMacroTableDtor( *rHyperlinkItem.GetMacroTable() ) );
 
