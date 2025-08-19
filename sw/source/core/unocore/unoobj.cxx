@@ -190,10 +190,12 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
 
 }
 
+namespace SwUnoCursorHelper
+{
 /// @throws lang::IllegalArgumentException
 /// @throws uno::RuntimeException
-static void
-lcl_setCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
+void
+SetCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
 {
     SwDocShell *const pDocSh = rDoc.GetDocShell();
     if(!pDocSh)
@@ -216,6 +218,7 @@ lcl_setCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
     const SwFormatCharFormat aFormat(pStyle->GetCharFormat());
     rSet.Put(aFormat);
 };
+}
 
 /// @throws lang::IllegalArgumentException
 static void
@@ -365,7 +368,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aSet(rPam.GetDoc().GetAttrPool());
-        lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet);
+        SwUnoCursorHelper::SetCharStyle(rPam.GetDoc(), aStyle, aSet);
         // the first style should replace the current attributes,
         // all other have to be added
         SwUnoCursorHelper::SetCursorAttr(rPam, aSet, nStyle
@@ -457,7 +460,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
     switch (rEntry.nWID)
     {
         case RES_TXTATR_CHARFMT:
-            lcl_setCharStyle(rPam.GetDoc(), rValue, rItemSet);
+            SwUnoCursorHelper::SetCharStyle(rPam.GetDoc(), rValue, rItemSet);
         break;
         case RES_TXTATR_AUTOFMT:
             lcl_setAutoStyle(rPam.GetDoc().GetIStyleAccess(),
@@ -551,7 +554,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                         }
                         if (prop.Name == "CharStyleName")
                         {
-                            lcl_setCharStyle(rPam.GetDoc(), prop.Value, items);
+                            SwUnoCursorHelper::SetCharStyle(rPam.GetDoc(), prop.Value, items);
                         }
                         else
                         {
