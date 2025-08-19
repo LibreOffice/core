@@ -16,6 +16,9 @@ typedef sal_Int32 SheetViewID;
 
 /** Defines the value to identify the default view of the sheet */
 constexpr SheetViewID DefaultSheetViewID = -1;
+
+/** Invalid sheet view ID */
+constexpr SheetViewID InvalidSheetViewID = SAL_MIN_INT32;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
