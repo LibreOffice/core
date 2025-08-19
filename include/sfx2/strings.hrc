@@ -182,7 +182,7 @@
 #define STR_FILTER_NOT_INSTALLED                NC_("STR_FILTER_NOT_INSTALLED", "The selected filter $(FILTER) has not been installed.\nWould you like to do this now?")
 #define STR_FILTER_CONSULT_SERVICE              NC_("STR_FILTER_CONSULT_SERVICE", "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.")
 
-#define STR_WELCOME_LINE1                       NC_("STR_WELCOME_LINE1", "Welcome to %PRODUCTNAME.")
+#define STR_WELCOME_LINE1                       NC_("STR_WELCOME_LINE1", "Welcome to %PRODUCTNAME!")
 #define STR_WELCOME_LINE2                       NC_("STR_WELCOME_LINE2", "Drop a document here or open an app to create one.")
 
 // Translators: Target types in Auto-redaction dialog
