@@ -4291,10 +4291,25 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 
         if (!m_pImpl->GetFootnoteContext() && !m_pImpl->IsInShape() && !m_pImpl->IsInComments())
         {
-            if (m_pImpl->isBreakDeferred(PAGE_BREAK))
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_PAGE_BEFORE));
-            else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
-                m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
+            const bool bIsPageBreak = m_pImpl->isBreakDeferred(PAGE_BREAK);
+            const bool bIsColumnBreak = m_pImpl->isBreakDeferred(COLUMN_BREAK);
+            if (bIsPageBreak || bIsColumnBreak)
+            {
+                PropertyMapPtr pParaContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+                style::BreakType eBreakType = style::BreakType_NONE;
+                bool bOverwrite = bIsPageBreak;
+                if (!bOverwrite)
+                {
+                    std::optional<PropertyMap::Property> oValue
+                        = pParaContext->getProperty(PROP_BREAK_TYPE);
+                    if (oValue.has_value())
+                        oValue->second >>= eBreakType;
+                    bOverwrite = eBreakType == style::BreakType_NONE;
+                }
+                eBreakType
+                    = bIsPageBreak ? style::BreakType_PAGE_BEFORE : style::BreakType_COLUMN_BEFORE;
+                pParaContext->Insert(PROP_BREAK_TYPE, uno::Any(eBreakType), bOverwrite);
+            }
             m_pImpl->clearDeferredBreaks();
         }
 

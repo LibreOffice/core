@@ -33,6 +33,14 @@ public:
     }
 };
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148057_columnBreak, "tdf148057_columnBreak.docx")
+{
+    // given a document with a linefeed immediately following a column break (in non-column section)
+
+    // don't lose the column break to the paragraph's no-inherited-page-break property.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf166544_noTopMargin_fields, "tdf166544_noTopMargin_fields.docx")
 {
     // given a document with a hyperlink field containing a page break
