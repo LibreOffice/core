@@ -1236,7 +1236,7 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
             do
             {
                 nIndexOf = rEquation.indexOf( '?', nIndexOf );
-                if ( nIndexOf != -1 )
+                if ( nIndexOf >= 0 )
                 {
                     OUString aEquationName;
                     if ( GetEquationName( rEquation, nIndexOf + 1, aEquationName ) )
