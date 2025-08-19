@@ -2068,25 +2068,26 @@ void ScViewFunc::MakeNewSheetView()
     SCTAB nTab = GetViewData().GetTabNumber();
     ScDocument& rDocument = GetViewData().GetDocument();
 
-    SCTAB nSheetViewTab = nTab + 1;
-    if (rDocument.CopyTab(nTab, nSheetViewTab))
+    auto[nSheetViewID, nSheetViewTab] = rDocument.CreateNewSheetView(nTab);
+
+    if (nSheetViewID == sc::InvalidSheetViewID)
     {
-        GetViewData().GetDocShell()->Broadcast(ScTablesHint(SC_TAB_INSERTED, nSheetViewTab));
-        SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
-
-        // Add and register the created sheet view
-        rDocument.SetSheetView(nSheetViewTab, true);
-        sc::SheetViewID nSheetViewID = rDocument.CreateNewSheetView(nTab, nSheetViewTab);
-        GetViewData().SetSheetViewID(nSheetViewID);
-
-        // Update
-        GetViewData().SetTabNo(nSheetViewTab); // force add the sheet view tab
-        GetViewData().SetTabNo(nTab); // then change back to the current tab
-
-        ScDocShell& rDocSh = *GetViewData().GetDocShell();
-        rDocSh.PostPaintGridAll();
-        PaintExtras(); // update Tab Control
+        SAL_WARN("sc", "Sheet view couldn't be created");
+        return;
     }
+
+    GetViewData().SetSheetViewID(nSheetViewID);
+
+    // Update
+    GetViewData().SetTabNo(nSheetViewTab); // force add the sheet view tab
+    GetViewData().SetTabNo(nTab); // then change back to the current tab
+
+    ScDocShell& rDocSh = *GetViewData().GetDocShell();
+    rDocSh.PostPaintGridAll();
+    PaintExtras(); // update Tab Control
+
+    rDocSh.Broadcast(ScTablesHint(SC_TAB_INSERTED, nSheetViewTab));
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScTablesChanged));
 }
 
 void ScViewFunc::RemoveCurrentSheetView()
