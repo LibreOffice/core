@@ -1291,6 +1291,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ATTR_PAGE_PAPERBIN:
         case SID_ATTR_PAGE_EXT1:
         case FN_PARAM_FTN_INFO:
+        case SID_ATTR_PAGE_ORIENTATION:
         {
             if(pArgs)
             {
