@@ -247,18 +247,16 @@ class SvxLineEndWindow final : public WeldToolbarPopup
 private:
     XLineEndListRef mpLineEndList;
     rtl::Reference<SvxLineEndToolBoxControl> mxControl;
-    std::unique_ptr<ValueSet> mxLineEndSet;
-    std::unique_ptr<weld::CustomWeld> mxLineEndSetWin;
-    sal_uInt16 mnLines;
+    std::unique_ptr<weld::IconView> mxLineEndIV;
     Size maBmpSize;
 
-    DECL_LINK( SelectHdl, ValueSet*, void );
-    void FillValueSet();
-    void SetSize();
+    DECL_LINK( ItemActivatedHdl, weld::IconView&, bool );
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+    void FillIconView();
 
     virtual void GrabFocus() override
     {
-        mxLineEndSet->GrabFocus();
+        mxLineEndIV->grab_focus();
     }
 
 public:
@@ -268,17 +266,12 @@ public:
 
 }
 
-constexpr sal_uInt16 gnCols = 2;
-
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatinglineend.ui"_ustr, u"FloatingLineEnd"_ustr)
     , mxControl(pControl)
-    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxLineEndSet))
-    , mnLines(12)
+    , mxLineEndIV(m_xBuilder->weld_icon_view(u"floating_line_end_iconview"_ustr))
 {
-    mxLineEndSet->SetStyle(mxLineEndSet->GetStyle() | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
-    mxLineEndSet->SetHelpId(HID_POPUP_LINEEND_CTRL);
+    mxLineEndIV->set_help_id(HID_POPUP_LINEEND_CTRL);
     m_xTopLevel->set_help_id(HID_POPUP_LINEEND);
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -290,20 +283,32 @@ SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Wid
     }
     DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-    mxLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
-    mxLineEndSet->SetColCount( gnCols );
+    mxLineEndIV->connect_item_activated( LINK( this, SvxLineEndWindow, ItemActivatedHdl ) );
 
-    // ValueSet fill with entries of LineEndList
-    FillValueSet();
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        mxLineEndIV->connect_query_tooltip(LINK(this, SvxLineEndWindow, QueryTooltipHdl));
+    }
+
+    // IconView fill with entries of LineEndList
+    FillIconView();
 
     AddStatusListener( u".uno:LineEndListState"_ustr);
 }
 
-IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxLineEndWindow, ItemActivatedHdl, weld::IconView&, bool)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;
-    sal_uInt16 nId = mxLineEndSet->GetSelectedItemId();
+
+    OUString sId = mxLineEndIV->get_selected_id();
+    if (sId.isEmpty())
+        return false;
+
+    sal_uInt32 nId = sId.toUInt32();
 
     if( nId == 1 )
     {
@@ -342,14 +347,54 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    mxLineEndSet->SetNoSelection();
+    mxLineEndIV->unselect_all();
 
     mxControl->dispatchCommand(mxControl->getCommandURL(), aArgs);
 
     mxControl->EndPopupMode();
+
+    return true;
 }
 
-void SvxLineEndWindow::FillValueSet()
+IMPL_LINK(SvxLineEndWindow, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = mxLineEndIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_uInt16 nId = sId.toUInt32();
+
+    if (nId == 1 || nId == 2)
+    {
+        return SvxResId(RID_SVXSTR_NONE);
+    }
+
+    if (!mpLineEndList.is())
+        return OUString();
+
+    tools::Long nEntryIndex;
+    if (nId % 2) // beginning of line
+    {
+        nEntryIndex = (nId - 1) / 2 - 1;
+    }
+    else // end of line
+    {
+        nEntryIndex = nId / 2 - 2;
+    }
+
+    if (nEntryIndex >= 0 && nEntryIndex < mpLineEndList->Count())
+    {
+        const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nEntryIndex);
+        if (pEntry)
+        {
+            return pEntry->GetName();
+        }
+    }
+
+    return OUString();
+}
+
+void SvxLineEndWindow::FillIconView()
 {
     if( !mpLineEndList.is() )
         return;
@@ -375,8 +420,18 @@ void SvxLineEndWindow::FillValueSet()
     Point aPt1( maBmpSize.Width(), 0 );
 
     pVD->DrawBitmapEx( Point(), aBmp );
-    mxLineEndSet->InsertItem(1, Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
-    mxLineEndSet->InsertItem(2, Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
+
+    // First half (left side)
+    ScopedVclPtrInstance< VirtualDevice > pVD1;
+    pVD1->SetOutputSizePixel( maBmpSize, false );
+    pVD1->DrawBitmapEx( Point(), pVD->GetBitmapEx(aPt0, maBmpSize) );
+    mxLineEndIV->append(u"1"_ustr, pEntry->GetName(), pVD1.get());
+
+    // Second half (right side)
+    ScopedVclPtrInstance< VirtualDevice > pVD2;
+    pVD2->SetOutputSizePixel( maBmpSize, false );
+    pVD2->DrawBitmapEx( Point(), pVD->GetBitmapEx(aPt1, maBmpSize) );
+    mxLineEndIV->append(u"2"_ustr, pEntry->GetName(), pVD2.get());
 
     mpLineEndList->Remove(nCount);
 
@@ -388,15 +443,19 @@ void SvxLineEndWindow::FillValueSet()
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         pVD->DrawBitmapEx( aPt0, aBmp );
-        mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+1)*2L+1),
-                Image(pVD->GetBitmapEx(aPt0, maBmpSize)), pEntry->GetName());
-        mxLineEndSet->InsertItem(static_cast<sal_uInt16>((i+2)*2L),
-                Image(pVD->GetBitmapEx(aPt1, maBmpSize)), pEntry->GetName());
-    }
-    mnLines = std::min( static_cast<sal_uInt16>(nCount + 1), sal_uInt16(MAX_LINES) );
-    mxLineEndSet->SetLineCount( mnLines );
 
-    SetSize();
+        // Left half for line start
+        ScopedVclPtrInstance< VirtualDevice > pVDStart;
+        pVDStart->SetOutputSizePixel( maBmpSize, false );
+        pVDStart->DrawBitmapEx( Point(), pVD->GetBitmapEx(aPt0, maBmpSize) );
+        mxLineEndIV->append(OUString::number((i+1)*2L+1), pEntry->GetName(), pVDStart.get());
+
+        // Right half for line end
+        ScopedVclPtrInstance< VirtualDevice > pVDEnd;
+        pVDEnd->SetOutputSizePixel( maBmpSize, false );
+        pVDEnd->DrawBitmapEx( Point(), pVD->GetBitmapEx(aPt1, maBmpSize) );
+        mxLineEndIV->append(OUString::number((i+2)*2L), pEntry->GetName(), pVDEnd.get());
+    }
 }
 
 void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -411,29 +470,9 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
         mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
         DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
-        mxLineEndSet->Clear();
-        FillValueSet();
+        mxLineEndIV->clear();
+        FillIconView();
     }
-}
-
-void SvxLineEndWindow::SetSize()
-{
-    sal_uInt16 nItemCount = mxLineEndSet->GetItemCount();
-    sal_uInt16 nMaxLines  = nItemCount / gnCols;
-
-    WinBits nBits = mxLineEndSet->GetStyle();
-    if ( mnLines == nMaxLines )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    mxLineEndSet->SetStyle( nBits );
-
-    Size aSize( maBmpSize );
-    aSize.AdjustWidth(6 );
-    aSize.AdjustHeight(6 );
-    aSize = mxLineEndSet->CalcWindowSizePixel( aSize );
-    mxLineEndSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    mxLineEndSet->SetOutputSizePixel(aSize);
 }
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
