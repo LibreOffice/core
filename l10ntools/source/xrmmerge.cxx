@@ -378,10 +378,8 @@ void XRMResMerge::WorkOnDesc(
     if ( pMergeDataFile && pResData ) {
         MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData.get() );
         if ( pEntrys ) {
-            OString sCur;
             OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
-            for( size_t n = 0; n < aLanguages.size(); n++ ){
-                sCur = aLanguages[ n ];
+            for( const OString& sCur : aLanguages ){
                 OString sText;
                 if ( !sCur.equalsIgnoreAsciiCase("en-US")  &&
                     ( pEntrys->GetText( sText, sCur, true )) &&
@@ -459,9 +457,7 @@ void XRMResMerge::EndOfText(
     if ( pMergeDataFile && pResData ) {
         MergeEntrys *pEntrys = pMergeDataFile->GetMergeEntrys( pResData.get() );
         if ( pEntrys ) {
-            OString sCur;
-            for( size_t n = 0; n < aLanguages.size(); n++ ){
-                sCur = aLanguages[ n ];
+            for( const OString& sCur : aLanguages ){
                 OString sContent;
                 if (!sCur.equalsIgnoreAsciiCase("en-US") &&
                     ( pEntrys->GetText( sContent, sCur, true )) &&
