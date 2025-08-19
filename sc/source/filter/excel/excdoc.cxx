@@ -1115,7 +1115,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                             = sax_fastparser::FastSerializerHelper::createAttrList();
 
                         // <tables count="<xsd:unsignedInt>">
-                        if (rModel.mxWebPr->mnCount >= 0)
+                        if (rModel.mxWebPr->mnCount >= 0 && !rModel.mxWebPr->maTables.empty())
                         {
                             pAttrListTables->add(XML_count,
                                                  OUString::number(rModel.mxWebPr->mnCount));
