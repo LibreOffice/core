@@ -323,7 +323,7 @@ void ImpEditEngine::FormatFullDoc()
 tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRepaintParagraphList, bool bIsScaling)
 {
     sal_Int32 nParaCount = GetParaPortions().Count();
-    tools::Long nY = 0;
+    tools::Long nY = 0, nResult = 0;
     bool bGrow = false;
 
     for (sal_Int32 nParagraph = 0; nParagraph < nParaCount; nParagraph++)
@@ -332,7 +332,7 @@ tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRep
         if (rParaPortion.MustRepaint() || (rParaPortion.IsInvalid() && rParaPortion.IsVisible()))
         {
             // No formatting should be necessary for MustRepaint()!
-            if (CreateLines(nParagraph, nY, bIsScaling))
+            if (CreateLines(nParagraph, nY))
             {
                 if (!bGrow && GetTextRanger())
                 {
@@ -361,8 +361,10 @@ tools::Long ImpEditEngine::FormatParagraphs(o3tl::sorted_vector<sal_Int32>& aRep
             aRepaintParagraphList.insert(nParagraph);
         }
         nY += rParaPortion.GetHeight();
+        if (!isInEmptyClusterAtTheEnd(rParaPortion, bIsScaling))
+            nResult = nY; // The total height excluding trailing blank paragraphs
     }
-    return nY;
+    return nResult;
 }
 
 namespace
@@ -595,7 +597,7 @@ tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
     return (nWidth - mnColumnSpacing * (mnColumns - 1)) / mnColumns;
 }
 
-bool ImpEditEngine::createLinesForEmptyParagraph(ParaPortion& rParaPortion, bool bIsScaling)
+bool ImpEditEngine::createLinesForEmptyParagraph(ParaPortion& rParaPortion)
 {
     // fast special treatment...
     if (rParaPortion.GetTextPortions().Count())
@@ -604,7 +606,7 @@ bool ImpEditEngine::createLinesForEmptyParagraph(ParaPortion& rParaPortion, bool
         rParaPortion.GetLines().Reset();
 
     CreateAndInsertEmptyLine(rParaPortion);
-    return FinishCreateLines(rParaPortion, bIsScaling);
+    return FinishCreateLines(rParaPortion);
 }
 
 tools::Long ImpEditEngine::calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem,
@@ -725,7 +727,7 @@ void ImpEditEngine::populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine)
     }
 }
 
-bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bIsScaling )
+bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 {
     assert(GetParaPortions().exists(nPara) && "Portion paragraph index is not valid");
     ParaPortion& rParaPortion = GetParaPortions().getRef(nPara);
@@ -742,7 +744,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
     // Fast special treatment for empty paragraphs...
     bool bEmptyParagraph = rParaPortion.GetNode()->Len() == 0 && !GetTextRanger();
     if (bEmptyParagraph)
-        return createLinesForEmptyParagraph(rParaPortion, bIsScaling);
+        return createLinesForEmptyParagraph(rParaPortion);
 
     sal_Int64 nCurrentPosY = nStartPosY;
     // If we're allowed to skip parts outside and this cannot possibly fit in the given height,
@@ -2040,12 +2042,12 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
     }
 }
 
-bool ImpEditEngine::FinishCreateLines(ParaPortion& rParaPortion, bool bIsScaling)
+bool ImpEditEngine::FinishCreateLines(ParaPortion& rParaPortion)
 {
 //  CalcCharPositions( pParaPortion );
     rParaPortion.SetValid();
     tools::Long nOldHeight = rParaPortion.GetHeight();
-    CalcHeight(rParaPortion, bIsScaling);
+    CalcHeight(rParaPortion);
 
     DBG_ASSERT(rParaPortion.GetTextPortions().Count(), "FinishCreateLines: No Text-Portion?");
     bool bRet = rParaPortion.GetHeight() != nOldHeight;

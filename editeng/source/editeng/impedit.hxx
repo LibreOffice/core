@@ -663,7 +663,7 @@ private:
 
     void                ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreUndoCheck = false );
     void                TextModified();
-    void                CalcHeight(ParaPortion& rParaPortion, bool bIsScaling = false);
+    void                CalcHeight(ParaPortion& rParaPortion);
     bool isInEmptyClusterAtTheEnd(const ParaPortion& rParaPortion, bool bIsScaling);
 
     void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
@@ -695,14 +695,14 @@ private:
     void                Clear();
     EditPaM             RemoveText();
 
-    bool createLinesForEmptyParagraph(ParaPortion& rParaPortion, bool bIsScaling = false);
+    bool createLinesForEmptyParagraph(ParaPortion& rParaPortion);
     tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem,
                                       const SvxFontUnitMetrics& rMetrics);
     void populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine);
-    bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY, bool bIsScaling = false);
+    bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY);
 
     void                CreateAndInsertEmptyLine(ParaPortion& rParaPortion);
-    bool                FinishCreateLines(ParaPortion& rParaPortion, bool bIsScaling = false);
+    bool                FinishCreateLines(ParaPortion& rParaPortion);
     void                CreateTextPortions(ParaPortion& rParaPortion, sal_Int32& rStartPos);
     void                RecalcTextPortion(ParaPortion& rParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars);
     sal_Int32           SplitTextPortion(ParaPortion& rParaPortion, sal_Int32 nPos,  EditLine* pCurLine = nullptr);
@@ -993,6 +993,7 @@ public:
 
     void SetMinColumnWrapHeight(tools::Long nVal) { mnMinColumnWrapHeight = nVal; }
 
+    // Returns the height of the text, excluding empty lines in the end
     tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs, bool bIsScaling);
     void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
     void FormatDoc();

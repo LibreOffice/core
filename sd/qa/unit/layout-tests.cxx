@@ -10,6 +10,10 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <svx/compatflags.hxx>
+
+#include <drawdoc.hxx>
+#include <unomodel.hxx>
 
 class SdLayoutTest : public UnoApiXmlTest
 {
@@ -19,9 +23,8 @@ public:
     {
     }
 
-    xmlDocUniquePtr load(const char* pName)
+    xmlDocUniquePtr parseLayout() const
     {
-        loadFromFile(OUString::createFromAscii(pName));
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
@@ -32,6 +35,21 @@ public:
         CPPUNIT_ASSERT(pXmlDoc);
 
         return pXmlDoc;
+    }
+
+    xmlDocUniquePtr load(const char* pName)
+    {
+        loadFromFile(OUString::createFromAscii(pName));
+        return parseLayout();
+    }
+
+    SdDrawDocument* getDoc()
+    {
+        auto* pImpress = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pImpress);
+        auto* pDoc = pImpress->GetDoc();
+        CPPUNIT_ASSERT(pDoc);
+        return pDoc;
     }
 };
 
@@ -456,6 +474,110 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
                 "x", u"7556");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
                 "y", u"892");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010)
+{
+    // Test UseTrailingEmptyLinesInLayout compatibility option.
+    // The test documents have an auto-shrink text "textbox\n\n"; the box itself is positioned
+    // identically in all cases; the text is aligned to bottom.
+    // When "UseTrailingEmptyLinesInLayout" is set, "textbox" string is placed higher, than when
+    // the setting is not set (y value ~6700 vs. ~8100).
+
+    // The existing ODPs have a standard draw:text-box. It produces three textarray elements,
+    // in order from bottom to top. We need the topmost, third.
+
+    // 1. UseTrailingEmptyLinesInLayout must be enabled in an existing ODP with respective option
+    // in settings.xml
+    loadFromFile(u"odp/trailing-paragraphs-compat.odp");
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['1']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100); // could be 6641 or 6760
+        assertXPathContent(pXml, "/metafile['1']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 2. It must stay enabled after ODP round-trip
+    saveAndReload(u"impress8"_ustr);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['2']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['2']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 3. It must be disabled in an existing ODP without that option in settings.xml
+    loadFromFile(u"odp/trailing-paragraphs.odp");
+    {
+        CPPUNIT_ASSERT(
+            !getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['3']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        assertXPathContent(pXml, "/metafile['3']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // 4. It must stay disabled after ODP round-trip
+    saveAndReload(u"impress8"_ustr);
+    {
+        CPPUNIT_ASSERT(
+            !getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['4']/push/push/textarray[3]", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        assertXPathContent(pXml, "/metafile['4']/push/push/textarray[3]/text", u"textbox");
+    }
+
+    // Now test PPTX and its round-trip. The text there imports as draw:custom-shape; it generates
+    // a single textarray element.
+
+    // 5. It must be enabled for PPTX documents unconditionally
+    loadFromFile(u"pptx/trailing-paragraphs.pptx");
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['5']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['5']/push/push/textarray/text", u"textbox");
+    }
+
+    // 6. Check PPTX round-trip
+    saveAndReload(u"Impress Office Open XML"_ustr);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['6']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['6']/push/push/textarray/text", u"textbox");
+    }
+
+    // For some reason, saving PPTX to ODT in step 7 below produces negative fo:padding-top, which
+    // fails validation; that is unrelated, so disable validation for now.
+    skipValidation();
+
+    // 7. It must round-trip to ODP
+    saveAndReload(u"impress8"_ustr);
+    {
+        CPPUNIT_ASSERT(
+            getDoc()->GetCompatibilityFlag(SdrCompatibilityFlag::UseTrailingEmptyLinesInLayout));
+
+        xmlDocUniquePtr pXml = parseLayout();
+        sal_Int32 y = getXPath(pXml, "/metafile['7']/push/push/textarray", "y").toInt32();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        assertXPathContent(pXml, "/metafile['7']/push/push/textarray/text", u"textbox");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
