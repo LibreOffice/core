@@ -1324,6 +1324,7 @@ void makeRedline( SwPaM const & rPaM,
             std::vector<uno::Any> aValues;
             aEntries.reserve(aRevertProperties.getLength());
             sal_uInt16 nStyleId = USHRT_MAX;
+            sal_uInt16 nCharStyleId = USHRT_MAX;
             sal_uInt16 nNumId = USHRT_MAX;
             for (const auto& rRevertProperty : aRevertProperties)
             {
@@ -1349,6 +1350,10 @@ void makeRedline( SwPaM const & rPaM,
                     aWhichPairs = aWhichPairs.MergeRange(pEntry->nWID, pEntry->nWID);
                     if (rPropertyName == "ParaStyleName")
                         nStyleId = aEntries.size();
+                    else if (rPropertyName == "CharStyleName")
+                    {
+                        nCharStyleId = aEntries.size();
+                    }
                 }
                 aEntries.push_back(pEntry);
                 aValues.push_back(rRevertProperty.Value);
@@ -1377,6 +1382,11 @@ void makeRedline( SwPaM const & rPaM,
                             if (pRule)
                                 pRule->SetUsedByRedline(true);
                         }
+                    }
+                    else if (i == nCharStyleId)
+                    {
+                        // Set this manually, SwFormatCharFormat::PutValue() would fail.
+                        SwUnoCursorHelper::SetCharStyle(rDoc, rValue, aItemSet);
                     }
                     else
                     {
