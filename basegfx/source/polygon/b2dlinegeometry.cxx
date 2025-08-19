@@ -88,12 +88,6 @@ namespace basegfx::utils
                 // move arrow to have docking position centered
                 aArrowTransform.translate(0.0, -fArrowYLength * fDockingPosition + fShift);
 
-                // prepare polygon length
-                if(fTools::equalZero(fCandidateLength))
-                {
-                    fCandidateLength = getLength(rCandidate);
-                }
-
                 // get the polygon vector we want to plant this arrow on
                 const double fConsumedLength(fArrowYLength * (1.0 - fDockingPosition) - fShift);
                 const B2DVector aHead(rCandidate.getB2DPoint(bStart ? 0 : rCandidate.count() - 1));

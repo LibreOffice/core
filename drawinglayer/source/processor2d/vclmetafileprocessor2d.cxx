@@ -360,36 +360,34 @@ std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraph
 
         if (!aLocalPolygon.isClosed())
         {
-            double fPolyLength(0.0);
-            double fStart(0.0);
-            double fEnd(0.0);
-
-            if (pStart && pStart->isActive())
+            const bool bCalcStart = pStart && pStart->isActive();
+            const bool bCalcEnd = pEnd && pEnd->isActive();
+            if (bCalcStart || bCalcEnd)
             {
-                fPolyLength = basegfx::utils::getLength(aLocalPolygon);
+                double fPolyLength = basegfx::utils::getLength(aLocalPolygon);
+                double fStart(0.0);
+                double fEnd(0.0);
 
-                aStartArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
-                    aLocalPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
-                    fPolyLength, pStart->isCentered() ? 0.5 : 0.0, &fStart);
-            }
-
-            if (pEnd && pEnd->isActive())
-            {
-                if (basegfx::fTools::equalZero(fPolyLength))
+                if (bCalcStart)
                 {
-                    fPolyLength = basegfx::utils::getLength(aLocalPolygon);
+                    aStartArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
+                        aLocalPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
+                        fPolyLength, pStart->isCentered() ? 0.5 : 0.0, &fStart);
                 }
 
-                aEndArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
-                    aLocalPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(), fPolyLength,
-                    pEnd->isCentered() ? 0.5 : 0.0, &fEnd);
-            }
+                if (bCalcEnd)
+                {
+                    aEndArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
+                        aLocalPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
+                        fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, &fEnd);
+                }
 
-            if (0.0 != fStart || 0.0 != fEnd)
-            {
-                // build new poly, consume something from old poly
-                aLocalPolygon = basegfx::utils::getSnippetAbsolute(aLocalPolygon, fStart,
-                                                                   fPolyLength - fEnd, fPolyLength);
+                if (0.0 != fStart || 0.0 != fEnd)
+                {
+                    // build new poly, consume something from old poly
+                    aLocalPolygon = basegfx::utils::getSnippetAbsolute(
+                        aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
+                }
             }
         }
 

@@ -54,8 +54,7 @@ namespace basegfx::utils
 
             @param fCandidateLength
             This should contain the length of rCandidate to allow work without
-            again calculating the length (which may be expensive with beziers). If 0.0 is
-            given, the length is calculated on demand.
+            again calculating the length (which may be expensive with beziers).
 
             @param fShift
             When it is necessary to count with the thickness of the line, it
@@ -69,7 +68,7 @@ namespace basegfx::utils
             const B2DPolyPolygon& rArrow,
             bool bStart,
             double fWidth,
-            double fCandidateLength, // 0.0 -> calculate self
+            double fCandidateLength,
             double fDockingPosition, // 0->top, 1->bottom
             double* pConsumedLength = nullptr,
             double fShift = 0.0);
