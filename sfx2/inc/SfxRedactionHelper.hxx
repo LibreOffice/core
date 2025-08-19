@@ -110,8 +110,7 @@ public:
      * areas to be redacted.
      * */
     static void searchImagesInMetaFile(const GDIMetaFile& rMtf,
-                                       std::vector<tools::Rectangle>& aRedactionRectangles,
-                                       const uno::Reference<XComponent>& xComponent);
+                                       std::vector<tools::Rectangle>& aRedactionRectangles);
 
     /*
      * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
