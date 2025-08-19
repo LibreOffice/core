@@ -94,6 +94,9 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/doceventnotifier \
 	basctl/source/basicide/docsignature \
 	basctl/source/basicide/documentenumeration \
+	basctl/source/basicide/idecodecompletiontypes \
+	basctl/source/basicide/idedataprovider \
+	basctl/source/basicide/idetimer \
 	basctl/source/basicide/iderdll \
 	basctl/source/basicide/layout \
 	basctl/source/basicide/linenumberwindow \
@@ -104,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/moduldlg \
 	basctl/source/basicide/BasicColorConfig \
 	basctl/source/basicide/ColorSchemeDialog \
+	basctl/source/basicide/objectbrowser \
 	basctl/source/basicide/ObjectCatalog \
 	basctl/source/basicide/sbxitem \
 	basctl/source/basicide/scriptdocument \
