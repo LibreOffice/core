@@ -70,6 +70,7 @@
 #include <memory>
 #include <libxml/xmlwriter.h>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
@@ -85,20 +86,19 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
-    bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
-    bool mbLegacyFontwork;             // tdf#148000 compatibility flag
-    bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
-    bool mbIgnoreBreakAfterMultilineField; ///< tdf#148966 compatibility flag
+    o3tl::enumarray<SdrCompatibilityFlag, bool> maCompatFlags;
     std::shared_ptr<model::Theme> mpTheme;
     std::shared_ptr<svx::IThemeColorChanger> mpThemeColorChanger;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)
         , mpUndoFactory(nullptr)
-        , mbAnchoredTextOverflowLegacy(false)
-        , mbLegacyFontwork(false)
-        , mbConnectorUseSnapRect(false)
-        , mbIgnoreBreakAfterMultilineField(false)
+        , maCompatFlags{
+            false, // tdf#99729 AnchoredTextOverflowLegacy
+            false, // tdf#148000 LegacyFontwork
+            false, // tdf#149756 ConnectorUseSnapRect
+            false, // tdf#148966 IgnoreBreakAfterMultilineField
+          }
         , mpTheme(new model::Theme(u"Office"_ustr))
     {}
 
@@ -1742,38 +1742,12 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
 
 void SdrModel::SetCompatibilityFlag(SdrCompatibilityFlag eFlag, bool bEnabled)
 {
-    switch (eFlag)
-    {
-        case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
-            mpImpl->mbAnchoredTextOverflowLegacy = bEnabled;
-            break;
-        case SdrCompatibilityFlag::LegacyFontwork:
-            mpImpl->mbLegacyFontwork = bEnabled;
-            break;
-        case SdrCompatibilityFlag::ConnectorUseSnapRect:
-            mpImpl->mbConnectorUseSnapRect = bEnabled;
-            break;
-        case SdrCompatibilityFlag::IgnoreBreakAfterMultilineField:
-            mpImpl->mbIgnoreBreakAfterMultilineField = bEnabled;
-            break;
-    }
+    mpImpl->maCompatFlags[eFlag] = bEnabled;
 }
 
 bool SdrModel::GetCompatibilityFlag(SdrCompatibilityFlag eFlag) const
 {
-    switch (eFlag)
-    {
-        case SdrCompatibilityFlag::AnchoredTextOverflowLegacy:
-            return mpImpl->mbAnchoredTextOverflowLegacy;
-        case SdrCompatibilityFlag::LegacyFontwork:
-            return mpImpl->mbLegacyFontwork;
-        case SdrCompatibilityFlag::ConnectorUseSnapRect:
-            return mpImpl->mbConnectorUseSnapRect;
-        case SdrCompatibilityFlag::IgnoreBreakAfterMultilineField:
-            return mpImpl->mbIgnoreBreakAfterMultilineField;
-        default:
-            return false;
-    }
+    return mpImpl->maCompatFlags[eFlag];
 }
 
 void SdrModel::ReformatAllTextObjects()
@@ -1816,7 +1790,7 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
         bool bBool = false;
         if (pValue->Value >>= bBool)
         {
-            mpImpl->mbAnchoredTextOverflowLegacy = bBool;
+            SetCompatibilityFlag(SdrCompatibilityFlag::AnchoredTextOverflowLegacy, bBool);
         }
     }
     else if (pValue->Name == "ConnectorUseSnapRect")
@@ -1824,15 +1798,16 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
         bool bBool = false;
         if (pValue->Value >>= bBool)
         {
-            mpImpl->mbConnectorUseSnapRect = bBool;
+            SetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect, bBool);
         }
     }
     else if (pValue->Name == "LegacySingleLineFontwork")
     {
         bool bBool = false;
-        if ((pValue->Value >>= bBool) && mpImpl->mbLegacyFontwork != bBool)
+        if ((pValue->Value >>= bBool)
+            && GetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork) != bBool)
         {
-            mpImpl->mbLegacyFontwork = bBool;
+            SetCompatibilityFlag(SdrCompatibilityFlag::LegacyFontwork, bBool);
             // tdf#148000 hack: reset all CustomShape geometry as they may depend on this property
             // Ideally this ReadUserDataSequenceValue should be called before geometry creation
             // Once the calling order will be fixed, this hack will not be needed.
@@ -1858,7 +1833,7 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
         bool bBool = false;
         if (pValue->Value >>= bBool)
         {
-            mpImpl->mbIgnoreBreakAfterMultilineField = bBool;
+            SetCompatibilityFlag(SdrCompatibilityFlag::IgnoreBreakAfterMultilineField, bBool);
         }
     }
 }
