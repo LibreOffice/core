@@ -70,14 +70,15 @@
 #include <svx/svdogrp.hxx>
 #include <vcl/dibtools.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 
 using namespace com::sun::star;
 
 ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools::Rectangle& rRect,
                                  Graphic const& rGraphic)
-    : mpVD(VclPtr<VirtualDevice>::Create())
-    , maScaleRect(rRect)
+    : maScaleRect(rRect)
     , mnMapScalingOfs(0)
     , mpModel(&rModel)
     , mnLayer(nLay)
@@ -98,7 +99,27 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mdPageHeightPts(0)
     , mpPDFium(vcl::pdf::PDFiumLibrary::get())
 {
+    mpLineAttr = std::make_unique<SfxItemSet>(
+        SfxItemSet::makeFixedSfxItemSet<XATTR_LINE_FIRST, XATTR_LINE_LAST>(rModel.GetItemPool()));
+    mpFillAttr = std::make_unique<SfxItemSet>(
+        SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(rModel.GetItemPool()));
+    mpTextAttr = std::make_unique<SfxItemSet>(
+        SfxItemSet::makeFixedSfxItemSet<EE_ITEMS_START, EE_ITEMS_END>(rModel.GetItemPool()));
+
+    // Load the buffer using pdfium.
+    auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
+    auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
+    sal_Int32 nSize = rVectorGraphicData->getBinaryDataContainer().getSize();
+    mpPdfDocument = mpPDFium ? mpPDFium->openDocument(pData, nSize, OString()) : nullptr;
+    if (!mpPdfDocument)
+        return;
+
+    mnPageCount = mpPdfDocument->getPageCount();
+
+    CollectFonts();
+
     // Same as SdModule
+    mpVD = VclPtr<VirtualDevice>::Create();
     mpVD->SetReferenceDevice(VirtualDevice::RefDevMode::Dpi600);
     mpVD->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpVD->EnableOutput(false);
@@ -111,27 +132,174 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     aFnt.SetAlignment(ALIGN_BASELINE);
     mpVD->SetFont(aFnt);
 
-    mpLineAttr = std::make_unique<SfxItemSet>(
-        SfxItemSet::makeFixedSfxItemSet<XATTR_LINE_FIRST, XATTR_LINE_LAST>(rModel.GetItemPool()));
-    mpFillAttr = std::make_unique<SfxItemSet>(
-        SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(rModel.GetItemPool()));
-    mpTextAttr = std::make_unique<SfxItemSet>(
-        SfxItemSet::makeFixedSfxItemSet<EE_ITEMS_START, EE_ITEMS_END>(rModel.GetItemPool()));
-
     checkClip();
-
-    // Load the buffer using pdfium.
-    auto const& rVectorGraphicData = rGraphic.getVectorGraphicData();
-    auto* pData = rVectorGraphicData->getBinaryDataContainer().getData();
-    sal_Int32 nSize = rVectorGraphicData->getBinaryDataContainer().getSize();
-    mpPdfDocument = mpPDFium ? mpPDFium->openDocument(pData, nSize, OString()) : nullptr;
-    if (!mpPdfDocument)
-        return;
-
-    mnPageCount = mpPdfDocument->getPageCount();
 }
 
 ImpSdrPdfImport::~ImpSdrPdfImport() = default;
+
+namespace
+{
+OUString GetPostScriptName(const OUString& rBaseFontName)
+{
+    OUString sPostScriptName = rBaseFontName;
+    /* For a font subset, the PostScript name of the font—the value of the
+         * font’s BaseFont entry and the font descriptor’s FontName entry shall
+         * begin with a tag followed by a plus sign (+). The tag shall consist of
+         * exactly six uppercase letters; the choice of letters is arbitrary, but
+         * different subsets in the same PDF file shall have different tags */
+    if (sPostScriptName.getLength() > 6 && sPostScriptName[6] == '+')
+        sPostScriptName = sPostScriptName.copy(7);
+    return sPostScriptName;
+}
+
+bool writeFontFile(const OUString& fileUrl, const std::vector<uint8_t>& rFontData)
+{
+    SAL_INFO("sd.filter", "dumping to: " << fileUrl);
+
+    osl::File file(fileUrl);
+    switch (file.open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write))
+    {
+        case osl::File::E_None:
+            break; // ok
+        case osl::File::E_EXIST:
+            return true; // Assume it's already been added correctly.
+        default:
+            SAL_WARN("sd.filter", "Cannot open file for temporary font");
+            return false;
+    }
+    sal_uInt64 writtenTotal = 0;
+    while (writtenTotal < rFontData.size())
+    {
+        sal_uInt64 written;
+        if (file.write(rFontData.data() + writtenTotal, rFontData.size() - writtenTotal, written)
+            != osl::File::E_None)
+        {
+            SAL_WARN("sd.filter", "Error writing temporary font file");
+            osl::File::remove(fileUrl);
+            return false;
+        }
+        writtenTotal += written;
+    }
+
+    return true;
+}
+}
+
+// Possibly there is some alternative route to query pdfium for all fonts without
+// iterating through every object to see what font each uses
+void ImpSdrPdfImport::CollectFonts()
+{
+    const int nPageCount = mpPdfDocument->getPageCount();
+
+    for (int nPageIndex = 0; nPageIndex < nPageCount; ++nPageIndex)
+    {
+        auto pPdfPage = mpPdfDocument->openPage(nPageIndex);
+        if (!pPdfPage)
+        {
+            SAL_WARN("sd.filter", "ImpSdrPdfImport missing page: " << nPageIndex);
+            continue;
+        }
+        auto pTextPage = pPdfPage->getTextPage();
+
+        const int nPageObjectCount = pPdfPage->getObjectCount();
+        for (int nPageObjectIndex = 0; nPageObjectIndex < nPageObjectCount; ++nPageObjectIndex)
+        {
+            auto pPageObject = pPdfPage->getObject(nPageObjectIndex);
+            if (!pPageObject)
+            {
+                SAL_WARN("sd.filter", "ImpSdrPdfImport missing object: "
+                                          << nPageObjectIndex << " on page: " << nPageIndex);
+                continue;
+            }
+
+            const vcl::pdf::PDFPageObjectType ePageObjectType = pPageObject->getType();
+            if (ePageObjectType != vcl::pdf::PDFPageObjectType::Text)
+                continue;
+            vcl::pdf::PFDiumFont font = pPageObject->getFont();
+            if (!font)
+                continue;
+
+            auto itImportedFont = maImportedFonts.find(font);
+            if (itImportedFont == maImportedFonts.end())
+            {
+                OUString sFontName = pPageObject->getFontName();
+
+                OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
+
+                SubSetInfo* pSubSetInfo;
+
+                SAL_INFO("sd.filter", "importing font: " << font);
+                auto itFontName = maDifferentSubsetsForFont.find(sPostScriptName);
+                OUString sFontFileName = sPostScriptName;
+                if (itFontName != maDifferentSubsetsForFont.end())
+                {
+                    sFontFileName += OUString::number(itFontName->second.aComponents.size());
+                    itFontName->second.aComponents.emplace_back();
+                    pSubSetInfo = &itFontName->second;
+                }
+                else
+                {
+                    sFontFileName += "0";
+                    SubSetInfo aSubSetInfo;
+                    aSubSetInfo.aComponents.emplace_back();
+                    auto result
+                        = maDifferentSubsetsForFont.emplace(sPostScriptName, aSubSetInfo).first;
+                    pSubSetInfo = &result->second;
+                }
+                std::vector<uint8_t> aFontData;
+                if (!pPageObject->getFontData(font, aFontData))
+                    SAL_WARN("sd.filter", "that's worrying");
+                FontWeight eFontWeight(WEIGHT_DONTKNOW);
+                bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
+                                                             eFontWeight);
+                SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
+                OUString fileUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(
+                    sFontFileName, bTTF ? u".ttf" : u".t1");
+                if (!writeFontFile(fileUrl, aFontData))
+                    SAL_WARN("sd.filter", "ttf not written");
+                else
+                    SAL_INFO("sd.filter", "ttf written to: " << fileUrl);
+                // TODO: Only the PFB case will rename later subsets of the same font name to
+                // separate font names to keep the various subsets from clobbering each other.
+                if (!bTTF)
+                {
+                    std::vector<uint8_t> aToUnicodeData;
+                    if (!pPageObject->getFontToUnicode(font, aToUnicodeData))
+                        SAL_WARN("sd.filter", "that's maybe worrying");
+                    EmbeddedFontInfo fontInfo
+                        = convertToOTF(*pSubSetInfo, fileUrl, sFontName, sPostScriptName,
+                                       sFontFileName, aToUnicodeData);
+                    fileUrl = fontInfo.sFontFile;
+                    sFontName = fontInfo.sFontName;
+                    eFontWeight = fontInfo.eFontWeight;
+                }
+
+                if (fileUrl.getLength())
+                {
+                    maImportedFonts.emplace(font, OfficeFontInfo{ sFontName, eFontWeight });
+                    maEmbeddedFonts[sPostScriptName]
+                        = EmbeddedFontInfo{ sFontName, fileUrl, eFontWeight };
+                }
+            }
+            else
+            {
+                SAL_INFO("sd.filter", "already saw font " << font << " and used "
+                                                          << itImportedFont->second.sFontName
+                                                          << " as name");
+            }
+        }
+    }
+
+    if (!maEmbeddedFonts.empty())
+    {
+        EmbeddedFontsManager aEmbeddedFontsManager(nullptr); //TODO get model we want fonts in
+        for (const auto& fontinfo : maEmbeddedFonts)
+        {
+            aEmbeddedFontsManager.addEmbeddedFont(fontinfo.second.sFontFile,
+                                                  fontinfo.second.sFontName, true);
+        }
+    }
+}
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
@@ -710,6 +878,523 @@ void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     maCurrentMatrix = aOldMatrix;
 }
 
+static bool extractEntry(std::string_view line, std::string_view key, OString& ret)
+{
+    std::string_view result;
+    if (o3tl::starts_with(line, key, &result))
+    {
+        result = o3tl::trim(result);
+        if (result[0] == '"' && result[result.size() - 1] == '"')
+            result = result.substr(1, result.size() - 2);
+        ret = OString(result);
+        return true;
+    }
+    return false;
+}
+
+static bool isSimpleFamilyName(std::string_view Weight)
+{
+    return Weight.empty() || Weight == "Regular" || Weight == "Italic" || Weight == "Bold"
+           || Weight == "BoldItalic";
+}
+
+// https://ccjktype.fonts.adobe.com/2011/12/leveraging-afdko-part-1.html
+// https://ccjktype.fonts.adobe.com/2012/01/leveraging-afdko-part-2.html
+// https://ccjktype.fonts.adobe.com/2012/01/leveraging-afdko-part-3.html
+static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
+                     const OUString& postScriptName, bool& bNameKeyed,
+                     std::map<int, int>& nameIndexToGlyph, OString& FontName, OString& Weight)
+{
+    bNameKeyed = false;
+
+    OUString infoUrl = fileUrl + u".1";
+    OUString cidFontInfoUrl = fileUrl + u".cidfontinfo";
+    OUString nameToCIDMapUrl = fileUrl + u".nametocidmap";
+    OUString toMergedMapUrl = fileUrl + u".tomergedmap";
+
+    OString version, Notice, FullName, FamilyName, srcFontType;
+    FontName = postScriptName.toUtf8();
+    std::map<sal_Int32, OString> glyphIndexToName;
+
+    OUString pfaUrl, pfaCIDUrl;
+
+    rSubSetInfo.aComponents.back().cidFontInfoUrl = cidFontInfoUrl;
+    rSubSetInfo.aComponents.back().toMergedMapUrl = toMergedMapUrl;
+
+    pfaUrl = fileUrl + u".pfa";
+    pfaCIDUrl = pfaUrl + u".cid";
+
+    rSubSetInfo.aComponents.back().pfaCIDUrl = pfaCIDUrl;
+
+    if (!EmbeddedFontsManager::tx_dump(fileUrl, infoUrl))
+    {
+        SAL_WARN("sd.filter", "font file info extraction failed");
+        return false;
+    }
+    SAL_INFO("sd.filter", "dump success");
+    SvFileStream info(infoUrl, StreamMode::READ);
+    OStringBuffer glyphBuffer;
+    OString sLine;
+    while (info.ReadLine(sLine))
+    {
+        if (extractEntry(sLine, "version", version))
+            continue;
+        if (extractEntry(sLine, "Notice", Notice))
+            continue;
+        if (extractEntry(sLine, "FullName", FullName))
+            continue;
+        if (extractEntry(sLine, "FamilyName", FamilyName))
+            continue;
+        if (extractEntry(sLine, "Weight", Weight))
+            continue;
+        if (extractEntry(sLine, "sup.srcFontType", srcFontType))
+            continue;
+        if (extractEntry(sLine, "FontName", FontName))
+        {
+            SAL_WARN_IF(FontName != postScriptName.toUtf8(), "sd.filter",
+                        "expected that these match");
+            continue;
+        }
+        if (sLine.startsWith("glyph["))
+        {
+            sal_Int32 i = 6;
+            while (i < sLine.getLength())
+            {
+                ++i;
+                if (sLine[i - 1] == ']')
+                    break;
+                glyphBuffer.append(sLine[i - 1]);
+            }
+            sal_Int32 nGlyphIndex = glyphBuffer.makeStringAndClear().toInt32();
+            while (i < sLine.getLength())
+            {
+                ++i;
+                if (sLine[i - 1] == '{')
+                    break;
+            }
+            while (i < sLine.getLength())
+            {
+                ++i;
+                if (sLine[i - 1] == ',')
+                    break;
+                glyphBuffer.append(sLine[i - 1]);
+            }
+            SAL_INFO("sd.filter",
+                     "setting index: " << nGlyphIndex << " as: " << glyphBuffer.toString());
+            glyphIndexToName[nGlyphIndex] = glyphBuffer.makeStringAndClear();
+            while (i < sLine.getLength())
+            {
+                ++i;
+                if (sLine[i - 1] == '}')
+                    break;
+                glyphBuffer.append(sLine[i - 1]);
+            }
+            SAL_INFO("sd.filter", "code text: " << glyphBuffer.toString());
+            OString sCode = glyphBuffer.makeStringAndClear();
+            sal_Int32 nCodePoint
+                = sCode.startsWith("0x") ? o3tl::toInt32(sCode.subView(2), 16) : sCode.toInt32();
+            SAL_INFO("sd.filter", "codepoint is: " << nCodePoint);
+            nameIndexToGlyph[nCodePoint] = nGlyphIndex;
+        }
+    }
+    SAL_INFO("sd.filter", "details are: " << version << Notice << FullName << FamilyName << Weight
+                                          << srcFontType << FontName);
+    bNameKeyed = srcFontType.endsWith("(name-keyed)");
+
+    if (bNameKeyed)
+    {
+        OString AdobeCopyright, Trademark;
+        sal_Int32 nSplit = Notice.lastIndexOf('.', Notice.getLength() - 1);
+        if (nSplit != -1)
+        {
+            AdobeCopyright = Notice.copy(0, nSplit + 1);
+            Trademark = Notice.copy(nSplit + 1);
+        }
+        else
+            AdobeCopyright = Notice;
+        SAL_WARN("sd.filter", "convert to cid keyed");
+        SvFileStream cidFontInfo(cidFontInfoUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+        cidFontInfo.WriteLine(Concat2View("FontName\t(" + FontName + ")"));
+        cidFontInfo.WriteLine(Concat2View("FullName\t(" + FullName + ")"));
+        OString OutputFamilyName = FamilyName;
+        if (!isSimpleFamilyName(Weight))
+            OutputFamilyName = OutputFamilyName + " " + Weight;
+        cidFontInfo.WriteLine(Concat2View("FamilyName\t(" + OutputFamilyName + ")"));
+        cidFontInfo.WriteLine(Concat2View("version\t\t(" + version + ")"));
+        cidFontInfo.WriteLine("Registry\t(Adobe)");
+        cidFontInfo.WriteLine("Ordering\t(Identity)");
+        cidFontInfo.WriteLine("Supplement\t0");
+        cidFontInfo.WriteLine("XUID\t\t[1 11 9273828]");
+        cidFontInfo.WriteLine("FSType\t\t4");
+        cidFontInfo.WriteLine(Concat2View("AdobeCopyright\t(" + AdobeCopyright + ")"));
+        cidFontInfo.WriteLine(Concat2View("Trademark\t(" + Trademark + ")"));
+        cidFontInfo.Close();
+
+        SvFileStream nameToCIDMap(nameToCIDMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+        nameToCIDMap.WriteLine(Concat2View("mergefonts " + FontName + " 0"));
+        for (const auto& glyph : glyphIndexToName)
+        {
+            SAL_INFO("sd.filter", "writing index: " << glyph.first << " as: " << glyph.second);
+            nameToCIDMap.WriteLine(Concat2View(OString::number(glyph.first) + "\t" + glyph.second));
+        }
+        nameToCIDMap.Close();
+
+        if (!EmbeddedFontsManager::tx_t1(fileUrl, pfaUrl))
+        {
+            SAL_WARN("sd.filter", "pfa conversion failed");
+            return false;
+        }
+
+        std::vector<std::pair<OUString, OUString>> fonts;
+        fonts.push_back(std::make_pair(nameToCIDMapUrl, pfaUrl));
+        if (!EmbeddedFontsManager::mergefonts(cidFontInfoUrl, pfaCIDUrl, fonts))
+        {
+            SAL_WARN("sd.filter", "conversion 2 failed");
+            return false;
+        }
+    }
+    else
+    {
+        if (!EmbeddedFontsManager::tx_t1(fileUrl, pfaCIDUrl))
+        {
+            SAL_WARN("sd.filter", "pfa conversion failed");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+const char cmapprefix[] = "%!PS-Adobe-3.0 Resource-CMap\n"
+                          "/WMode 0 def\n"
+                          "\n"
+                          "/CIDInit /ProcSet findresource begin\n"
+                          "12 dict begin\n"
+                          "begincmap\n"
+                          "/CIDSystemInfo\n"
+                          "<< /Registry (Adobe)\n"
+                          "   /Ordering (UCS)\n"
+                          "   /Supplement 0\n"
+                          ">> def\n"
+                          "/CMapName /Adobe-Identity-UCS def\n"
+                          "/CMapType 2 def\n"
+                          "1 begincodespacerange\n"
+                          "<0000> <ffff>\n"
+                          "endcodespacerange\n";
+
+const char cmapsuffix[] = "endcmap\n"
+                          "CMapName currentdict /CMap defineresource pop\n"
+                          "end\n"
+                          "end\n";
+
+static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& FeaturesUrl,
+                                 std::string_view FontName,
+                                 const std::vector<uint8_t>& toUnicodeData, bool bNameKeyed,
+                                 std::map<int, int>& nameIndexToGlyph, bool& bFeatures,
+                                 SubSetInfo& rSubSetInfo)
+{
+    bFeatures = false;
+
+    SvFileStream CMap(CMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+
+    CMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
+
+    SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
+                           StreamMode::READ);
+    OString sLine;
+    while (aInCMap.ReadLine(sLine))
+    {
+        if (sLine.endsWith("beginbfchar"))
+            break;
+    }
+
+    std::vector<OString> bfcharlines;
+
+    if (sLine.endsWith("beginbfchar"))
+    {
+        while (aInCMap.ReadLine(sLine))
+        {
+            if (sLine.endsWith("endbfchar"))
+                break;
+            bfcharlines.push_back(sLine);
+        }
+    }
+
+    sal_Int32 mergeOffset = 1; //Leave space for notdef
+    for (const auto& count : rSubSetInfo.aComponents)
+        mergeOffset += count.nGlyphCount;
+
+    std::map<sal_Int32, OString> ligatureGlyphToChars;
+    std::vector<sal_Int32> glyphs;
+
+    if (!bfcharlines.empty())
+    {
+        OString beginline = OString::number(bfcharlines.size()) + " begincidchar";
+        CMap.WriteLine(beginline);
+        for (const auto& charline : bfcharlines)
+        {
+            assert(charline[0] == '<');
+            sal_Int32 nEnd = charline.indexOf('>', 1);
+            assert(charline[nEnd] == '>');
+            sal_Int32 nGlyphIndex = o3tl::toInt32(charline.subView(1, nEnd - 1), 16);
+            OString sChars(o3tl::trim(charline.subView(nEnd + 1)));
+            assert(sChars[0] == '<' && sChars[sChars.getLength() - 1] == '>');
+            OString sContents = sChars.copy(1, sChars.getLength() - 2);
+            assert(sContents.getLength() % 4 == 0);
+            sal_Int32 nCharsPerCode = sContents.getLength() / 4;
+            if (nCharsPerCode > 1)
+                ligatureGlyphToChars[nGlyphIndex] = sContents;
+            if (bNameKeyed)
+                nGlyphIndex = nameIndexToGlyph[nGlyphIndex];
+            OString cidcharline = sChars + " " + OString::number(nGlyphIndex);
+            glyphs.push_back(nGlyphIndex);
+            rSubSetInfo.aComponents.back().glyphToChars[nGlyphIndex] = sContents;
+            rSubSetInfo.aComponents.back().charsToGlyph[sContents] = nGlyphIndex;
+            CMap.WriteLine(cidcharline);
+        }
+        CMap.WriteLine("endcidchar");
+
+        rSubSetInfo.aComponents.back().nGlyphCount = bfcharlines.size();
+    }
+
+    CMap.WriteBytes(cmapsuffix, std::size(cmapsuffix) - 1);
+
+    const OUString& toMergedMapUrl = rSubSetInfo.aComponents.back().toMergedMapUrl;
+    SvFileStream toMergedMap(toMergedMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+    toMergedMap.WriteLine(Concat2View("mergefonts "_ostr + FontName + " 0"_ostr));
+    toMergedMap.WriteLine("0\t0");
+    for (size_t i = 0; i < glyphs.size(); ++i)
+    {
+        OString sMapLine = OString::number(i + mergeOffset) + "\t" + OString::number(glyphs[i]);
+        toMergedMap.WriteLine(sMapLine);
+    }
+    toMergedMap.Close();
+
+    CMap.Close();
+
+    if (!ligatureGlyphToChars.empty())
+    {
+        std::map<OString, sal_Int32>& charsToGlyph = rSubSetInfo.aComponents.back().charsToGlyph;
+
+        SvFileStream Features(FeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+        Features.WriteLine("languagesystem DFLT dflt;");
+        Features.WriteLine("feature dlig {");
+        for (const auto& ligature : ligatureGlyphToChars)
+        {
+            sal_Int32 nLigatureGlyph = ligature.first;
+            OString sLigatureChars = ligature.second;
+            OString ligatureLine = "substitute"_ostr;
+            for (sal_Int32 i = 0; i < sLigatureChars.getLength(); i += 4)
+            {
+                OString sLigatureChar = sLigatureChars.copy(i, 4);
+                sal_Int32 nCharGlyph = charsToGlyph[sLigatureChar];
+                ligatureLine += " \\" + OString::number(nCharGlyph);
+            }
+            ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
+            Features.WriteLine(ligatureLine);
+        }
+        Features.WriteLine("} dlig;");
+        Features.Close();
+
+        bFeatures = true;
+    }
+}
+
+static OUString buildFontMenuName(const OUString& FontMenuNameDBUrl,
+                                  std::u16string_view postScriptName, const OUString& fontName,
+                                  std::string_view Weight)
+{
+    OUString longFontName = fontName;
+
+    // create FontMenuName
+    SvFileStream FontMenuNameDB(FontMenuNameDBUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+    OUString postScriptFontName = u"["_ustr + postScriptName + u"]"_ustr;
+    FontMenuNameDB.WriteByteStringLine(postScriptFontName, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sd.filter",
+             "wrote basefont name: " << postScriptFontName << " to: " << FontMenuNameDBUrl);
+    OUString setFontName = "f=" + fontName;
+    FontMenuNameDB.WriteByteStringLine(setFontName, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sd.filter", "wrote family name: " << setFontName << " to: " << FontMenuNameDBUrl);
+    if (!isSimpleFamilyName(Weight))
+    {
+        longFontName = fontName + " " + OUString::createFromAscii(Weight);
+        OUString setLongFontName = "l=" + fontName + " " + OUString::createFromAscii(Weight);
+        FontMenuNameDB.WriteByteStringLine(setLongFontName, RTL_TEXTENCODING_UTF8);
+        SAL_INFO("sd.filter",
+                 "wrote long family name: " << setLongFontName << " to: " << FontMenuNameDBUrl);
+        OUString styleName = "s=" + OUString::createFromAscii(Weight);
+        FontMenuNameDB.WriteByteStringLine(styleName, RTL_TEXTENCODING_UTF8);
+        SAL_INFO("sd.filter", "wrote style name: " << styleName << " to: " << FontMenuNameDBUrl);
+    }
+    FontMenuNameDB.Close();
+
+    return longFontName;
+}
+
+static FontWeight toOfficeWeight(std::string_view style)
+{
+    if (o3tl::equalsIgnoreAsciiCase(style, "Regular"))
+        return WEIGHT_NORMAL;
+    else if (o3tl::equalsIgnoreAsciiCase(style, "Bold"))
+        return WEIGHT_BOLD;
+    else if (o3tl::equalsIgnoreAsciiCase(style, "BoldItalic"))
+        return WEIGHT_BOLD;
+    return WEIGHT_DONTKNOW;
+}
+
+// https://adobe-type-tools.github.io/font-tech-notes/pdfs/5900.RFMFAH_Tutorial.pdf
+static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
+                                         const OUString& FontMenuNameDBUrl,
+                                         const OUString& postScriptName,
+                                         const OUString& longFontName, std::string_view Weight,
+                                         const SubSetInfo& rSubSetInfo)
+{
+    SAL_WARN("sd.filter", "merging " << rSubSetInfo.aComponents.size() << " font subsets of "
+                                     << postScriptName << " together to create: " << mergedFontUrl);
+    std::vector<std::pair<OUString, OUString>> fonts;
+    for (size_t i = 0; i < rSubSetInfo.aComponents.size(); ++i)
+    {
+        fonts.push_back(std::make_pair(rSubSetInfo.aComponents[i].toMergedMapUrl,
+                                       rSubSetInfo.aComponents[i].pfaCIDUrl));
+    }
+    if (!EmbeddedFontsManager::mergefonts(rSubSetInfo.aComponents[0].cidFontInfoUrl, mergedFontUrl,
+                                          fonts))
+    {
+        SAL_WARN("sd.filter", "conversion failed");
+        return EmbeddedFontInfo();
+    }
+
+    OUString mergedCMapUrl = mergedFontUrl + u".CMap";
+    OUString mergedFeaturesUrl = mergedFontUrl + u".Features";
+
+    SvFileStream mergedCMap(mergedCMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+
+    mergedCMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
+
+    sal_Int32 cidcharcount(0);
+    for (const auto& component : rSubSetInfo.aComponents)
+        cidcharcount += component.glyphToChars.size();
+
+    std::map<sal_Int32, OString> ligatureGlyphToChars;
+    std::map<OString, sal_Int32> charsToGlyph;
+
+    if (cidcharcount)
+    {
+        sal_Int32 glyphoffset(0);
+        OString beginline = OString::number(cidcharcount) + " begincidchar";
+        mergedCMap.WriteLine(beginline);
+
+        for (const auto& component : rSubSetInfo.aComponents)
+        {
+            for (const auto& entry : component.glyphToChars)
+            {
+                sal_Int32 glyph = entry.first + glyphoffset;
+                OString sCharContents = entry.second;
+                OString cidcharline = "<" + sCharContents + "> " + OString::number(glyph);
+
+                sal_Int32 nCharsPerCode = sCharContents.getLength() / 4;
+                if (nCharsPerCode > 1)
+                    ligatureGlyphToChars[glyph] = sCharContents;
+
+                charsToGlyph[entry.second] = glyph;
+                mergedCMap.WriteLine(cidcharline);
+            }
+            glyphoffset += component.nGlyphCount;
+        }
+        mergedCMap.WriteLine("endcidchar");
+    }
+
+    mergedCMap.WriteBytes(cmapsuffix, std::size(cmapsuffix) - 1);
+
+    mergedCMap.Close();
+
+    if (!ligatureGlyphToChars.empty())
+    {
+        SvFileStream Features(mergedFeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+        Features.WriteLine("languagesystem DFLT dflt;");
+        Features.WriteLine("feature dlig {");
+        for (const auto& ligature : ligatureGlyphToChars)
+        {
+            sal_Int32 nLigatureGlyph = ligature.first;
+            OString sLigatureChars = ligature.second;
+            OString ligatureLine = "substitute"_ostr;
+            for (sal_Int32 i = 0; i < sLigatureChars.getLength(); i += 4)
+            {
+                OString sLigatureChar = sLigatureChars.copy(i, 4);
+                sal_Int32 nCharGlyph = charsToGlyph[sLigatureChar];
+                ligatureLine += " \\" + OString::number(nCharGlyph);
+            }
+            ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
+            Features.WriteLine(ligatureLine);
+        }
+        Features.WriteLine("} dlig;");
+        Features.Close();
+    }
+
+    OUString otfUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(postScriptName, u".otf");
+    OUString features = !ligatureGlyphToChars.empty() ? mergedFeaturesUrl : OUString();
+    if (EmbeddedFontsManager::makeotf(mergedFontUrl, otfUrl, FontMenuNameDBUrl, mergedCMapUrl,
+                                      features))
+        return { longFontName, otfUrl, toOfficeWeight(Weight) };
+    SAL_WARN("sd.filter", "conversion failed");
+    return EmbeddedFontInfo();
+}
+
+//static
+EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
+                                               const OUString& fontName,
+                                               const OUString& postScriptName,
+                                               std::u16string_view fontFileName,
+                                               const std::vector<uint8_t>& toUnicodeData)
+{
+    // Convert to Type 1 CID keyed
+    std::map<int, int> nameIndexToGlyph;
+    bool bNameKeyed = false;
+    OString FontName, Weight;
+    if (!toPfaCID(rSubSetInfo, fileUrl, postScriptName, bNameKeyed, nameIndexToGlyph, FontName,
+                  Weight))
+    {
+        return EmbeddedFontInfo();
+    }
+
+    const OUString& pfaCIDUrl = rSubSetInfo.aComponents.back().pfaCIDUrl;
+
+    // Build CMap from pdfium toUnicodeData, etc.
+    OUString CMapUrl = fileUrl + u".CMap";
+    OUString FeaturesUrl = fileUrl + u".Features";
+    bool bFeatures = false;
+    if (!toUnicodeData.empty())
+    {
+        buildCMapAndFeatures(CMapUrl, FeaturesUrl, FontName, toUnicodeData, bNameKeyed,
+                             nameIndexToGlyph, bFeatures, rSubSetInfo);
+    }
+    else
+    {
+        SAL_WARN("sd.filter", "There is no CMap, pdfium is missing unicodedata");
+    }
+
+    // Create FontMenuName
+    OUString FontMenuNameDBUrl = fileUrl + u".FontMenuNameDBUrl";
+    OUString longFontName = buildFontMenuName(FontMenuNameDBUrl, postScriptName, fontName, Weight);
+
+    // Merge multiple font subsets together
+    if (rSubSetInfo.aComponents.size() > 1)
+    {
+        OUString mergedFontUrl
+            = EmbeddedFontsManager::fileUrlForTemporaryFont(postScriptName, u".merged.pfa.cid");
+        return mergeFontSubsets(mergedFontUrl, FontMenuNameDBUrl, postScriptName, longFontName,
+                                Weight, rSubSetInfo);
+    }
+
+    // Otherwise not merged font, just a single subset
+    OUString otfUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(fontFileName, u".otf");
+    OUString features = bFeatures ? FeaturesUrl : OUString();
+    if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, CMapUrl, features))
+        return { longFontName, otfUrl, toOfficeWeight(Weight) };
+    SAL_WARN("sd.filter", "conversion failed");
+    return EmbeddedFontInfo();
+}
+
 void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                  std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
                                  int /*nPageObjectIndex*/)
@@ -725,6 +1410,22 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
 
     OUString sText = pPageObject->getText(pTextPage);
 
+    OUString sFontName;
+    FontWeight eFontWeight(WEIGHT_DONTKNOW);
+    auto itImportedFont = maImportedFonts.find(pPageObject->getFont());
+    if (itImportedFont != maImportedFonts.end())
+    {
+        // We expand a name like "Foo" with non-traditional styles like
+        // "SemiBold" to "Foo SemiBold";
+        sFontName = itImportedFont->second.sFontName;
+        eFontWeight = itImportedFont->second.eFontWeight;
+    }
+    else
+    {
+        sFontName = pPageObject->getFontName();
+        SAL_WARN("sd.filter", "font: " << sFontName << " wasn't collected");
+    }
+
     const double dFontSize = pPageObject->getFontSize();
     double dFontSizeH = fabs(std::hypot(aMatrix.a(), aMatrix.c()) * dFontSize);
     double dFontSizeV = fabs(std::hypot(aMatrix.b(), aMatrix.d()) * dFontSize);
@@ -736,16 +1437,16 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     vcl::Font aFnt = mpVD->GetFont();
     aFnt.SetFontSize(aFontSize);
 
-    OUString sFontName = pPageObject->getFontName();
     if (!sFontName.isEmpty())
-        aFnt.SetFamilyName(sFontName);
+    {
+        //TODO: any way to know if we need to force discretionally ligatures
+        aFnt.SetFamilyName(sFontName + ":dlig");
+    }
 
     const int italicAngle = pPageObject->getFontAngle();
     aFnt.SetItalic(italicAngle == 0 ? ITALIC_NONE
                                     : (italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE));
-    FontWeight eFontWeight(WEIGHT_DONTKNOW);
-    if (pPageObject->getFontProperties(eFontWeight))
-        aFnt.SetWeight(eFontWeight);
+    aFnt.SetWeight(eFontWeight);
 
     if (aFnt != mpVD->GetFont())
     {

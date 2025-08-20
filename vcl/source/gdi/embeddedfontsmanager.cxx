@@ -368,6 +368,12 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
     if (fileUrl.isEmpty())
         return false;
 
+    return addEmbeddedFont(fileUrl, fontName, sufficientFontRights);
+}
+
+bool EmbeddedFontsManager::addEmbeddedFont( const OUString& fileUrl, const OUString& fontName, bool sufficientFontRights )
+{
+
     // Register  it / increase its refcount in s_EmbeddedFonts
     {
         DBG_TESTSOLARMUTEX();
