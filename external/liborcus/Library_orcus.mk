@@ -31,6 +31,7 @@ $(eval $(call gb_Library_set_include,orcus,\
 ))
 
 $(eval $(call gb_Library_add_defs,orcus,\
+	-DHAVE_FILESYSTEM \
 	-DBOOST_ALL_NO_LIB \
 	-D__ORCUS_BUILDING_DLL \
 	-D__ORCUS_GNUMERIC \
@@ -108,10 +109,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_ods \
 	UnpackedTarball/liborcus/src/liborcus/orcus_import_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_json \
+	UnpackedTarball/liborcus/src/liborcus/orcus_json_filter \
 	UnpackedTarball/liborcus/src/liborcus/orcus_ods \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xls_xml \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xlsx \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml \
+	UnpackedTarball/liborcus/src/liborcus/orcus_xml_filter \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml_impl \
 	UnpackedTarball/liborcus/src/liborcus/orcus_xml_map_def \
 	UnpackedTarball/liborcus/src/liborcus/session_context \

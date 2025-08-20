@@ -385,6 +385,8 @@ public:
                           std::string_view value) override;
     virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col,
                             orcus::spreadsheet::string_id_t sindex) override;
+    virtual void set_string(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col,
+                            std::string_view s) override;
     virtual void set_value(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col,
                            double value) override;
     virtual void set_bool(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col,

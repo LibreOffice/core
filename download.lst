@@ -554,8 +554,8 @@ OPENSSL_TARBALL := openssl-3.0.17.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ORCUS_SHA256SUM := ec27f30e8445a2a3f307f7e829fc446fd48193150b7f8f23bb5bfb25ec6e4e27
-ORCUS_TARBALL := liborcus-0.20.1.tar.xz
+ORCUS_SHA256SUM := 85fb0af34042108f2b6aa8e7f3994fe972fd79efe3f1cd01dc7a49b0ffc5ca13
+ORCUS_TARBALL := liborcus-0.20.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

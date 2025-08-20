@@ -9,6 +9,7 @@
 
 #include <orcusfiltersimpl.hxx>
 #include <orcusinterface.hxx>
+#include <orcus_utils.hxx>
 #include <orcusxml.hxx>
 #include <document.hxx>
 #include <tokenarray.hxx>
@@ -216,9 +217,6 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     if (osl::FileBase::getSystemPathFromFileURL(maPath, aSysPath) != osl::FileBase::E_None)
         return;
 
-    OString aOSysPath = OUStringToOString(aSysPath, RTL_TEXTENCODING_UTF8);
-    const char* path = aOSysPath.getStr();
-
     try
     {
         orcus::orcus_xml filter(maNsRepo, &aFactory, nullptr);
@@ -264,7 +262,7 @@ void ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
             filter.commit_range();
         }
 
-        orcus::file_content content(path);
+        orcus::file_content content = toFileContent(aSysPath);
         filter.read_stream(content.str());
 
         aFactory.finalize();

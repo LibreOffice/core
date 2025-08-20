@@ -1108,6 +1108,11 @@ void ScOrcusSheet::set_string(os::row_t row, os::col_t col, os::string_id_t sind
     cellInserted();
 }
 
+void ScOrcusSheet::set_string(os::row_t /*row*/, os::col_t /*col*/, std::string_view /*s*/)
+{
+    SAL_WARN("sc.orcus.sheet", "set_string() with non-indexed string is ignored for now");
+}
+
 void ScOrcusSheet::set_value(os::row_t row, os::col_t col, double value)
 {
     mrFactory.pushCellStoreToken(ScAddress(col, row, mnTab), value);

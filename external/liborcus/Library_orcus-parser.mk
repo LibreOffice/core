@@ -30,6 +30,7 @@ $(eval $(call gb_Library_set_include,orcus-parser,\
 ))
 
 $(eval $(call gb_Library_add_defs,orcus-parser,\
+	-DHAVE_FILESYSTEM \
 	-DBOOST_ALL_NO_LIB \
 	-D__ORCUS_PSR_BUILDING_DLL \
 ))

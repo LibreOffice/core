@@ -9,6 +9,7 @@
 
 #include <orcusfiltersimpl.hxx>
 #include <orcusinterface.hxx>
+#include <orcus_utils.hxx>
 #include <tokenarray.hxx>
 
 #include <osl/thread.hxx>
@@ -58,7 +59,7 @@ public:
         maTemp.CloseStream();
     }
 
-    OString getFileName() const { return maTemp.GetFileName().toUtf8(); }
+    OUString getFileName() const { return maTemp.GetFileName(); }
 };
 
 uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedium)
@@ -81,7 +82,7 @@ bool loadFileContent(SfxMedium& rMedium, orcus::iface::import_filter& filter)
     {
         // memory-map the temp file and start the import
         CopiedTempStream aTemp(*pSrc);
-        orcus::file_content input(aTemp.getFileName());
+        auto input = toFileContent(aTemp.getFileName());
         filter.read_stream(input.str());
     }
     catch (const std::exception& e)
@@ -130,12 +131,7 @@ bool ScOrcusFiltersImpl::importODS_Styles(ScDocument& rDoc, OUString& aPath) con
 {
     try
     {
-#if defined _WIN32
-        OString aPath8 = OUStringToOString(aPath, RTL_TEXTENCODING_UTF8);
-#else
-        OString aPath8 = OUStringToOString(aPath, osl_getThreadTextEncoding());
-#endif
-        orcus::file_content content(aPath8);
+        auto content = toFileContent(aPath);
         ScOrcusFactory aFactory(rDoc);
         ScOrcusStyles aStyles(aFactory);
         orcus::import_ods::read_styles(content.str(), &aStyles);
