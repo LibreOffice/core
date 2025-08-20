@@ -620,7 +620,7 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
         aDocRecovery.saveModifiedSubComponents( xTargetStorage, m_aControllers );
 
         // commit the root storage
-        tools::stor::commitStorageIfWriteable( xTargetStorage );
+        dbaccesstools::commitStorageIfWriteable( xTargetStorage );
     }
     catch( const IOException& )
     {

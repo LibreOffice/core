@@ -243,12 +243,12 @@ namespace dbaccess
                 Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                     SubComponentRecovery::getComponentsStorageName( elem.first ), ElementModes::WRITE | ElementModes::NOCREATE ) );
                 lcl_writeObjectMap_throw( mxContext, xComponentsStor, elem.second );
-                tools::stor::commitStorageIfWriteable( xComponentsStor );
+                dbaccesstools::commitStorageIfWriteable( xComponentsStor );
             }
         }
 
         // commit the recovery storage
-        tools::stor::commitStorageIfWriteable( xRecoveryStorage );
+        dbaccesstools::commitStorageIfWriteable( xRecoveryStorage );
     }
 
     void DatabaseDocumentRecovery::recoverSubDocuments( const Reference< XStorage >& i_rDocumentStorage,

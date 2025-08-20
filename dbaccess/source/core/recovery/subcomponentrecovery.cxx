@@ -402,8 +402,8 @@ namespace dbaccess
         }
 
         // commit the storage(s)
-        tools::stor::commitStorageIfWriteable( xObjectStor );
-        tools::stor::commitStorageIfWriteable( xComponentsStorage );
+        dbaccesstools::commitStorageIfWriteable( xObjectStor );
+        dbaccesstools::commitStorageIfWriteable( xComponentsStorage );
 
         // remember the relationship from the component name to the storage name
         MapStringToCompDesc& rMapCompDescs = io_mapCompDescs[ m_eType ];

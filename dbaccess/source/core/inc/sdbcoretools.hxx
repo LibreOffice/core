@@ -34,10 +34,10 @@ namespace dbaccess
     */
     OUString extractExceptionMessage( const css::uno::Reference< css::uno::XComponentContext >& _rContext, const css::uno::Any& _rError );
 
-    namespace tools
-    {
-        namespace stor
-        {
+}   // namespace dbaccess
+
+namespace dbaccesstools
+{
             bool    storageIsWritable_nothrow(
                         const css::uno::Reference< css::embed::XStorage >& _rxStorage
                     );
@@ -46,10 +46,6 @@ namespace dbaccess
             bool    commitStorageIfWriteable(
                         const css::uno::Reference< css::embed::XStorage >& _rxStorage
                     );
-        }
-
-    }
-
-}   // namespace dbaccess
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

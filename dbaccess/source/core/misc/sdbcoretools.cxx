@@ -99,8 +99,13 @@ namespace dbaccess
 
         return sDisplayMessage;
     }
+}   // namespace dbaccess
 
-    namespace tools::stor {
+namespace dbaccesstools {
+
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::embed;
 
     bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
     {
@@ -134,7 +139,5 @@ namespace dbaccess
     }
 
 }
-
-}   // namespace dbaccess
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

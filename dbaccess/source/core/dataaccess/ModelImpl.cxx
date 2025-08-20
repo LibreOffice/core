@@ -231,7 +231,7 @@ void DocumentStorageAccess::commitStorages()
     {
         for (auto const& exposedStorage : m_aExposedStorages)
         {
-            tools::stor::commitStorageIfWriteable( exposedStorage.second );
+            dbaccesstools::commitStorageIfWriteable( exposedStorage.second );
         }
     }
     catch(const WrappedTargetException&)
@@ -251,7 +251,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     {
         NamedStorages::const_iterator pos = m_aExposedStorages.find( u"database"_ustr );
         if ( pos != m_aExposedStorages.end() )
-            bSuccess = tools::stor::commitStorageIfWriteable( pos->second );
+            bSuccess = dbaccesstools::commitStorageIfWriteable( pos->second );
     }
     catch( Exception& )
     {
@@ -859,7 +859,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
     bool bSuccess = false;
     try
     {
-        bSuccess = tools::stor::commitStorageIfWriteable( _rxStorage );
+        bSuccess = dbaccesstools::commitStorageIfWriteable( _rxStorage );
     }
     catch( const Exception& )
     {
@@ -1247,7 +1247,7 @@ Reference< XStorage > const & ODatabaseModelImpl::impl_switchToStorage_throw( co
     lcl_rebaseScriptStorage_throw( m_xBasicLibraries, m_xDocumentStorage.getTyped() );
     lcl_rebaseScriptStorage_throw( m_xDialogLibraries, m_xDocumentStorage.getTyped() );
 
-    m_bReadOnly = !tools::stor::storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
+    m_bReadOnly = !dbaccesstools::storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
     // TODO: our data source, if it exists, must broadcast the change of its ReadOnly property
 
     return m_xDocumentStorage.getTyped();

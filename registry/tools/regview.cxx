@@ -26,8 +26,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace registry::tools;
-
 #if (defined UNX)
 int main( int argc, char * argv[] )
 #else
@@ -45,7 +43,7 @@ int __cdecl main( int argc, char * argv[] )
             exit(1);
         }
 
-        OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
+        OUString regName( registrytools::convertToFileUrl(argv[1], strlen(argv[1])) );
         if (reg_openRegistry(regName.pData, &hReg) != RegError::NO_ERROR)
         {
             fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);

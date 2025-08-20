@@ -34,7 +34,7 @@
 
 using osl::FileBase;
 
-namespace registry::tools
+namespace registrytools
 {
 OUString convertToFileUrl(char const* filename, sal_Int32 length)
 {
@@ -72,6 +72,6 @@ OUString convertToFileUrl(char const* filename, sal_Int32 length)
     return uFileUrl;
 }
 
-} // namespace registry::tools
+} // namespace registrytools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

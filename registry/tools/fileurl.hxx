@@ -22,11 +22,11 @@
 
 #include <rtl/ustring.hxx>
 
-namespace registry::tools
+namespace registrytools
 {
 OUString convertToFileUrl(char const* filename, sal_Int32 length);
 
-} // namespace registry::tools
+} // namespace registrytools
 
 #endif /* INCLUDED_REGISTRY_TOOLS_FILEURL_HXX */
 
