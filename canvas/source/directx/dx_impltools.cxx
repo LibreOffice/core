@@ -52,7 +52,7 @@
 using namespace ::com::sun::star;
 
 
-namespace dxcanvas::tools
+namespace dxcanvastools
 {
         ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
         {
@@ -464,7 +464,7 @@ namespace dxcanvas::tools
             }
             else
             {
-                return tools::graphicsPathFromB2DPolyPolygon(
+                return graphicsPathFromB2DPolyPolygon(
                     polyPolygonFromXPolyPolygon2D( xPoly ), bNoLineJoin );
             }
         }
@@ -558,7 +558,7 @@ namespace dxcanvas::tools
                 }
 
                 GraphicsSharedPtr pGraphics(createGraphicsFromBitmap(pBitmap));
-                tools::setupGraphics(*pGraphics);
+                setupGraphics(*pGraphics);
                 if( !drawVCLBitmapFromXBitmap(
                         pGraphics,
                         xBitmap) )
@@ -624,6 +624,6 @@ namespace dxcanvas::tools
             o_rAttr.SetColorMatrix( &aColorMatrix );
         }
 
-} // namespace dxcanvas::tools
+} // namespace dxcanvastools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

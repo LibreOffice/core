@@ -228,7 +228,7 @@ namespace dxcanvas
                     maSize.getHeight(),
                     PixelFormat32bppARGB
                     );
-            mpGraphics = tools::createGraphicsFromBitmap(mpGDIPlusBitmap);
+            mpGraphics = dxcanvastools::createGraphicsFromBitmap(mpGDIPlusBitmap);
 
             // create the colorbuffer object, which is basically a simple
             // wrapper around the directx surface. the colorbuffer is the
@@ -420,7 +420,7 @@ namespace dxcanvas
         {
             uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); // TODO(F1): Be format-agnostic here
 
-            const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
+            const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
             Gdiplus::BitmapData aBmpData;
             aBmpData.Width       = rect.X2-rect.X1;
@@ -507,7 +507,7 @@ namespace dxcanvas
     {
         if(hasAlpha())
         {
-            const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
+            const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
             Gdiplus::BitmapData aBmpData;
             aBmpData.Width       = rect.X2-rect.X1;
@@ -578,7 +578,7 @@ namespace dxcanvas
                             "CanvasHelper::setPixel: not enough color components" );
 
             if( Gdiplus::Ok != mpGDIPlusBitmap->SetPixel( pos.X, pos.Y,
-                                                Gdiplus::Color( tools::sequenceToArgb( color ))))
+                                                Gdiplus::Color( dxcanvastools::sequenceToArgb( color ))))
             {
                 throw uno::RuntimeException("Problem with setting the color of bitmap object");
             }
@@ -592,7 +592,7 @@ namespace dxcanvas
             ENSURE_ARG_OR_THROW( color.getLength() > 3,
                             "CanvasHelper::setPixel: not enough color components" );
 
-            Gdiplus::Color aColor(tools::sequenceToArgb(color));
+            Gdiplus::Color aColor(dxcanvastools::sequenceToArgb(color));
 
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
@@ -628,7 +628,7 @@ namespace dxcanvas
             if( Gdiplus::Ok != mpGDIPlusBitmap->GetPixel( pos.X, pos.Y, &aColor ) )
                 return uno::Sequence< sal_Int8 >();
 
-            return tools::argbToIntSequence(aColor.GetValue());
+            return dxcanvastools::argbToIntSequence(aColor.GetValue());
         }
         else
         {
@@ -646,7 +646,7 @@ namespace dxcanvas
             Gdiplus::Color aColor(*pDst);
             mpSurface->UnlockRect();
 
-            return tools::argbToIntSequence(aColor.GetValue());
+            return dxcanvastools::argbToIntSequence(aColor.GetValue());
         }
     }
 }

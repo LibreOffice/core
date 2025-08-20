@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star;
 
-namespace dxcanvas::tools
+namespace dxcanvastools
 {
         namespace
         {
@@ -76,7 +76,7 @@ namespace dxcanvas::tools
 
                     // forward to outsourced GDI+ rendering method
                     // (header clashes)
-                    bRet = tools::drawDIBits( rGraphics, *pBI, pBits );
+                    bRet = dxcanvastools::drawDIBits( rGraphics, *pBI, pBits );
                 }
 
                 return bRet;
@@ -137,7 +137,7 @@ namespace dxcanvas::tools
                 // duplicating the memory used)
 
                 ENSURE_OR_THROW( rBmpEx.IsAlpha(),
-                                  "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
+                                  "::dxcanvastools::bitmapFromVCLBitmapEx(): "
                                   "BmpEx has no alpha" );
 
                 // convert transparent bitmap to 32bit RGBA
@@ -158,7 +158,7 @@ namespace dxcanvas::tools
                 const sal_Int32 nHeight( aBmpSize.Height() );
 
                 ENSURE_OR_THROW( pReadAccess.get() != nullptr,
-                                  "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
+                                  "::dxcanvastools::bitmapFromVCLBitmapEx(): "
                                   "Unable to acquire read access to bitmap" );
 
                 Bitmap aAlpha( rBmpEx.GetAlphaMask().GetBitmap() );
@@ -179,11 +179,11 @@ namespace dxcanvas::tools
                 // buffer
 
                 ENSURE_OR_THROW( pAlphaReadAccess.get() != nullptr,
-                                "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
+                                "::dxcanvastools::bitmapFromVCLBitmapEx(): "
                                 "Unable to acquire read access to alpha" );
 
                 ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
-                                "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
+                                "::dxcanvastools::bitmapFromVCLBitmapEx(): "
                                 "Unsupported alpha scanline format" );
 
                 BitmapColor     aCol;
@@ -260,7 +260,7 @@ namespace dxcanvas::tools
                         case ScanlineFormat::N32BitTcRgbx:
                         default:
                             ENSURE_OR_THROW( false,
-                                            "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
+                                            "::dxcanvastools::bitmapFromVCLBitmapEx(): "
                                             "Unexpected scanline format - has "
                                             "WinSalBitmap::AcquireBuffer() changed?" );
                     }

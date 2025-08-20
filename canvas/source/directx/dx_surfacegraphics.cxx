@@ -61,7 +61,7 @@ namespace dxcanvas
             Gdiplus::Graphics* pGraphics = Gdiplus::Graphics::FromHDC( aHDC );
             if(pGraphics)
             {
-                tools::setupGraphics( *pGraphics );
+                dxcanvastools::setupGraphics( *pGraphics );
                 pRet.reset(pGraphics,
                            GraphicsDeleter(rSurface, aHDC));
                 return pRet;

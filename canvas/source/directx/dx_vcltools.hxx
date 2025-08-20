@@ -26,7 +26,7 @@
 
 namespace Gdiplus { class Graphics; }
 
-namespace dxcanvas::tools
+namespace dxcanvastools
 {
         /** Raw RGBA bitmap data,
             contiguous in memory

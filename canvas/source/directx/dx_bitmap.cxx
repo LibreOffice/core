@@ -42,7 +42,7 @@ namespace dxcanvas
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rBitmap->GetWidth(),rBitmap->GetHeight()),
         mpBitmap(rBitmap),
-        mpGraphics(tools::createGraphicsFromBitmap(mpBitmap)),
+        mpGraphics(dxcanvastools::createGraphicsFromBitmap(mpBitmap)),
         mbAlpha(bWithAlpha)
     {
     }
@@ -71,7 +71,7 @@ namespace dxcanvas
                     PixelFormat24bppRGB);
         }
 
-        mpGraphics = tools::createGraphicsFromBitmap(mpBitmap);
+        mpGraphics = dxcanvastools::createGraphicsFromBitmap(mpBitmap);
     }
 
     BitmapSharedPtr DXBitmap::getBitmap() const
@@ -99,7 +99,7 @@ namespace dxcanvas
     {
         uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); // TODO(F1): Be format-agnostic here
 
-        const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
+        const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
         Gdiplus::BitmapData aBmpData;
         aBmpData.Width       = rect.X2-rect.X1;
@@ -132,7 +132,7 @@ namespace dxcanvas
                             const rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                             const geometry::IntegerRectangle2D&     rect )
     {
-        const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
+        const Gdiplus::Rect aRect( dxcanvastools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
         Gdiplus::BitmapData aBmpData;
         aBmpData.Width       = rect.X2-rect.X1;
@@ -175,7 +175,7 @@ namespace dxcanvas
                              "CanvasHelper::setPixel: not enough color components" );
 
         if( Gdiplus::Ok != mpBitmap->SetPixel( pos.X, pos.Y,
-                                                      Gdiplus::Color( tools::sequenceToArgb( color ))))
+                                                      Gdiplus::Color( dxcanvastools::sequenceToArgb( color ))))
         {
             throw uno::RuntimeException("SetPixel called with invalid x,y points or color");
         }
@@ -196,7 +196,7 @@ namespace dxcanvas
         if( Gdiplus::Ok != mpBitmap->GetPixel( pos.X, pos.Y, &aColor ) )
             return uno::Sequence< sal_Int8 >();
 
-        return tools::argbToIntSequence(aColor.GetValue());
+        return dxcanvastools::argbToIntSequence(aColor.GetValue());
     }
 
 }

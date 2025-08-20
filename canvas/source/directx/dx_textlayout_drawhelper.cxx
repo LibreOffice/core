@@ -129,7 +129,7 @@ namespace dxcanvas
             aFont.SetColor( aColor );
             aFont.SetFillColor( aColor );
 
-            CanvasFont::ImplRef pFont(tools::canvasFontFromXFont(rCanvasFont));
+            CanvasFont::ImplRef pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
             if (pFont.is() && pFont->getEmphasisMark())
                 aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
 
@@ -163,7 +163,7 @@ namespace dxcanvas
             // set ViewState clipping
             if(rViewState.Clip.is())
             {
-                ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rViewState.Clip));
+                ::basegfx::B2DPolyPolygon aClipPoly(dxcanvastools::polyPolygonFromXPolyPolygon2D(rViewState.Clip));
                 ::basegfx::B2DHomMatrix aMatrix;
                 ::basegfx::unotools::homMatrixFromAffineMatrix(aMatrix, rViewState.AffineTransform );
 
@@ -179,7 +179,7 @@ namespace dxcanvas
 
             if(rRenderState.Clip.is())
             {
-                ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rRenderState.Clip));
+                ::basegfx::B2DPolyPolygon aClipPoly(dxcanvastools::polyPolygonFromXPolyPolygon2D(rRenderState.Clip));
                 aClipPoly.transform(aWorldTransform);
                 const vcl::Region& rClipRegion = vcl::Region(::tools::PolyPolygon(aClipPoly));
                 xVirtualDevice->IntersectClipRegion(rClipRegion);
@@ -277,7 +277,7 @@ namespace dxcanvas
             aFont.SetAverageFontWidth( nNewWidth );
         }
 
-        CanvasFont::ImplRef pFont(tools::canvasFontFromXFont(rCanvasFont));
+        CanvasFont::ImplRef pFont(dxcanvastools::canvasFontFromXFont(rCanvasFont));
         if (pFont.is() && pFont->getEmphasisMark())
             aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
 

@@ -109,7 +109,7 @@ namespace dxcanvas
                                                              aLeftBottom,
                                                              aRightTop,
                                                              aRightBottom,
-                                                             tools::b2dRangeFromGdiPlusRectF( aBounds ) );
+                                                             dxcanvastools::b2dRangeFromGdiPlusRectF( aBounds ) );
 
             // calc length of bound rect diagonal
             const double nDiagonalLength(
@@ -177,7 +177,7 @@ namespace dxcanvas
 
             // now, finally, output the gradient
             Gdiplus::Matrix aMatrix;
-            tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
+            dxcanvastools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
                                                     texture.AffineTransform );
             aBrush.SetTransform( &aMatrix );
 
@@ -372,10 +372,10 @@ namespace dxcanvas
                 // one sets both, only the translational components of the
                 // texture is respected.
 
-                tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
+                dxcanvastools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
                                                         texture.AffineTransform );
                 GraphicsPathSharedPtr pGradientPath(
-                    tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ));
+                    dxcanvastools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ));
                 pGradientPath->Transform( &aMatrix );
 
                 pGradientBrush
@@ -485,7 +485,7 @@ namespace dxcanvas
             // layer presents background object bitmap in that
             // way!)
             BitmapSharedPtr pBitmap(
-                tools::bitmapFromXBitmap( xBitmap ) );
+                dxcanvastools::bitmapFromXBitmap( xBitmap ) );
 
             TextureBrushSharedPtr pBrush;
             if( ::rtl::math::approxEqual( rTexture.Alpha,
@@ -499,7 +499,7 @@ namespace dxcanvas
             {
                 Gdiplus::ImageAttributes aImgAttr;
 
-                tools::setModulateImageAttributes( aImgAttr,
+                dxcanvastools::setModulateImageAttributes( aImgAttr,
                                                    1.0,
                                                    1.0,
                                                    1.0,
@@ -518,7 +518,7 @@ namespace dxcanvas
             }
 
             Gdiplus::Matrix aTextureTransform;
-            tools::gdiPlusMatrixFromAffineMatrix2D( aTextureTransform,
+            dxcanvastools::gdiPlusMatrixFromAffineMatrix2D( aTextureTransform,
                                                     rTexture.AffineTransform );
 
             // scale down bitmap to [0,1]x[0,1] rect, as required
@@ -573,7 +573,7 @@ namespace dxcanvas
                     std::transform(&rValues.maColors[0],
                                    &rValues.maColors[0]+rValues.maColors.getLength(),
                                    aColors.begin(),
-                                   [](const uno::Sequence< double >& aDoubleSequence) { return tools::sequenceToArgb(aDoubleSequence); } );
+                                   [](const uno::Sequence< double >& aDoubleSequence) { return dxcanvastools::sequenceToArgb(aDoubleSequence); } );
                     std::vector< Gdiplus::REAL > aStops;
                     comphelper::sequenceToContainer(aStops,rValues.maStops);
 
@@ -583,7 +583,7 @@ namespace dxcanvas
                                   aColors,
                                   aStops,
                                   pGraphics,
-                                  tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
+                                  dxcanvastools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
                                   viewState,
                                   renderState,
                                   textures[0] );
@@ -595,7 +595,7 @@ namespace dxcanvas
                 // TODO(F1): FillRule
                 fillBitmap( textures[0].Bitmap,
                             pGraphics,
-                            tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
+                            dxcanvastools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ),
                             textures[0] );
             }
         }

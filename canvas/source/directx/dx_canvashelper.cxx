@@ -195,7 +195,7 @@ namespace dxcanvas
 
             Gdiplus::SolidBrush aBrush(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)) );
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)) );
 
             // determine size of one-by-one device pixel ellipse
             Gdiplus::Matrix aMatrix;
@@ -231,7 +231,7 @@ namespace dxcanvas
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)),
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
             // #122683# Switched precedence of pixel offset
@@ -270,7 +270,7 @@ namespace dxcanvas
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)),
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
             // #122683# Switched precedence of pixel offset
@@ -316,7 +316,7 @@ namespace dxcanvas
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)),
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)),
                 Gdiplus::REAL(0.0) );
 
             // #122683# Switched precedence of pixel offset
@@ -328,7 +328,7 @@ namespace dxcanvas
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            GraphicsPathSharedPtr pPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
@@ -365,7 +365,7 @@ namespace dxcanvas
 
             Gdiplus::Pen aPen(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)),
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)),
                 static_cast< Gdiplus::REAL >(strokeAttributes.StrokeWidth) );
 
             // #122683# Switched precedence of pixel offset
@@ -397,7 +397,7 @@ namespace dxcanvas
             if(!bIsNone)
                 aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
+            GraphicsPathSharedPtr pPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
@@ -461,9 +461,9 @@ namespace dxcanvas
             setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::SolidBrush aBrush(
-                tools::sequenceToArgb(renderState.DeviceColor));
+                dxcanvastools::sequenceToArgb(renderState.DeviceColor));
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            GraphicsPathSharedPtr pPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(F1): FillRule
             ENSURE_OR_THROW( Gdiplus::Ok == pGraphics->FillPath( &aBrush, pPath.get() ),
@@ -525,10 +525,10 @@ namespace dxcanvas
 
             Gdiplus::SolidBrush aBrush(
                 Gdiplus::Color(
-                    tools::sequenceToArgb(renderState.DeviceColor)));
+                    dxcanvastools::sequenceToArgb(renderState.DeviceColor)));
 
             CanvasFont::ImplRef pFont(
-                tools::canvasFontFromXFont(xFont) );
+                dxcanvastools::canvasFontFromXFont(xFont) );
 
             // Move glyphs up, such that output happens at the font
             // baseline.
@@ -612,9 +612,9 @@ namespace dxcanvas
             setupGraphicsState( pGraphics, viewState, renderState );
 
             if( pGdiBitmap )
-                tools::drawGdiPlusBitmap(pGraphics,pGdiBitmap);
+                dxcanvastools::drawGdiPlusBitmap(pGraphics,pGdiBitmap);
             else
-                tools::drawVCLBitmapFromXBitmap(pGraphics,
+                dxcanvastools::drawVCLBitmapFromXBitmap(pGraphics,
                                                 xBitmap);
         }
 
@@ -640,7 +640,7 @@ namespace dxcanvas
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
-            BitmapSharedPtr pBitmap( tools::bitmapFromXBitmap( xBitmap ) );
+            BitmapSharedPtr pBitmap( dxcanvastools::bitmapFromXBitmap( xBitmap ) );
             Gdiplus::Rect aRect( 0, 0,
                                  pBitmap->GetWidth(),
                                  pBitmap->GetHeight() );
@@ -651,7 +651,7 @@ namespace dxcanvas
                 mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0]);
 
             Gdiplus::ImageAttributes aImgAttr;
-            tools::setModulateImageAttributes( aImgAttr,
+            dxcanvastools::setModulateImageAttributes( aImgAttr,
                                                aARGBColor.Red,
                                                aARGBColor.Green,
                                                aARGBColor.Blue,
@@ -739,7 +739,7 @@ namespace dxcanvas
         }
 
         Gdiplus::Matrix aMatrix;
-        tools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
+        dxcanvastools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
 
         ENSURE_OR_THROW(
             Gdiplus::Ok == rGraphics->SetTransform( &aMatrix ),
@@ -752,7 +752,7 @@ namespace dxcanvas
 
         if( viewState.Clip.is() )
         {
-            GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
+            GraphicsPathSharedPtr aClipPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
 
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
@@ -777,7 +777,7 @@ namespace dxcanvas
             aTransform = aOutputOffset * aTransform;
         }
 
-        tools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
+        dxcanvastools::gdiPlusMatrixFromB2DHomMatrix( aMatrix, aTransform );
 
         ENSURE_OR_THROW(
             Gdiplus::Ok == rGraphics->SetTransform( &aMatrix ),
@@ -785,7 +785,7 @@ namespace dxcanvas
 
         if( renderState.Clip.is() )
         {
-            GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
+            GraphicsPathSharedPtr aClipPath( dxcanvastools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
 
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in

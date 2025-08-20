@@ -81,7 +81,7 @@ namespace dxcanvas
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const
     {
-        return tools::polyPolygonFromXPolyPolygon2D( xPoly );
+        return dxcanvastools::polyPolygonFromXPolyPolygon2D( xPoly );
     }
 
     bool SpriteHelper::needRedraw() const
@@ -141,7 +141,7 @@ namespace dxcanvas
 
             if( xClip.is() )
             {
-                aClipPath = tools::polyPolygonFromXPolyPolygon2D( xClip );
+                aClipPath = dxcanvastools::polyPolygonFromXPolyPolygon2D( xClip );
 
                 const sal_Int32 nNumClipPolygons( aClipPath.count() );
                 if( nNumClipPolygons )

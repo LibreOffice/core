@@ -42,7 +42,7 @@ namespace dxcanvas
         // B2DPolyPolygon).
         if( !mpPath )
         {
-            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe(), bNoLineJoin );
+            mpPath = dxcanvastools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe(), bNoLineJoin );
             mpPath->SetFillMode( const_cast<LinePolyPolygon*>(this)->getFillRule() == rendering::FillRule_EVEN_ODD ?
                                  Gdiplus::FillModeAlternate : Gdiplus::FillModeWinding );
         }

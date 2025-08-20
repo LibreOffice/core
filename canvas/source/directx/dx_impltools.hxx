@@ -53,8 +53,10 @@ namespace com::sun::star::rendering
 }
 
 
-namespace dxcanvas::tools
+namespace dxcanvastools
 {
+using namespace dxcanvas;
+
         struct RawRGBABitmap;
 
         ::basegfx::B2DPolyPolygon
