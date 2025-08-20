@@ -941,7 +941,7 @@ namespace slideshow::internal
                 {
                     return true;
                 }
-                if (xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
+                if (xInfo->getImplementationName().indexOf("VCLCanvas.CanvasBitmap") != -1)
                 {
                     /* return render( mpViewLayer->getCanvas(),
                                    rMtf,
@@ -954,13 +954,23 @@ namespace slideshow::internal
                     vclcanvas::CanvasBitmap* pCanvasBitmap
                         = static_cast<vclcanvas::CanvasBitmap*>(
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
-                    OutputDevice& rOutDev = pCanvasBitmap->mrOutDev;
+                    OutputDevice& rOutDev = pCanvasBitmap->getOutDev();
                     drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
                     /* drawinglayer::primitive2d::Primitive2DContainer rContainer2;
                     rContainer2.push_back(xFillPrim);
                     rContainer2.push_back(xStrokePrim); */
                     // aProcessor.process(rContainer2);
                     aProcessor.process(rContainer);
+                    return true;
+                }
+                else if(xInfo->getImplementationName().indexOf("SpriteCanvas.VCL") != -1)
+                {
+                    vclcanvas::SpriteCanvas* pSpriteCanvas = static_cast<vclcanvas::SpriteCanvas*>(
+                        mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    OutputDevice& rOutDev = *pSpriteCanvas->getOutDev();
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    aProcessor.process(rContainer);
+                    pSpriteCanvas->updateScreen(true);
                     return true;
                 }
                 else if(xInfo->getImplementationName().indexOf("PresenterCanvas") != -1)
@@ -970,19 +980,19 @@ namespace slideshow::internal
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
                     vclcanvas::SpriteCanvas* pSpriteCanvas = static_cast<vclcanvas::SpriteCanvas*>(
                         pPresentationCanvas->mxUpdateCanvas.get());
-                    OutputDevice& rOutDev = *pSpriteCanvas->mpOutDev;
+                    OutputDevice& rOutDev = *pSpriteCanvas->getOutDev();
                     /* drawinglayer::geometry::ViewInformation2D aViewInormation;
                     basegfx::B2DHomMatrix aMatrix;
                     aViewInormation.setViewTransformation(aMatrix); */
                     drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
-                    drawinglayer::primitive2d::Primitive2DContainer rContainer2;
+                    /* drawinglayer::primitive2d::Primitive2DContainer rContainer2;
                     rContainer2.push_back(xFillPrim);
-                    rContainer2.push_back(xStrokePrim);
-                    /* aProcessor.process(rContainer2);
-                    pSpriteCanvas->updateScreen(true); */
+                    rContainer2.push_back(xStrokePrim); */
+                    aProcessor.process(rContainer);
+                    pSpriteCanvas->updateScreen(true);
                     return true;
                 }
-                if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
+                else if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
                 {
                     // SpriteCanvas
                     cairocanvas::SpriteCanvas* pSpriteCanvas

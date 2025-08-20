@@ -36,7 +36,6 @@ namespace vclcanvas
                                 bool                           bAlphaBitmap,
                                 rendering::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
-    : mrOutDev(rOutDevProvider->getOutDev())
     {
         // create bitmap for given reference device
         // ========================================
@@ -65,7 +64,6 @@ namespace vclcanvas
     CanvasBitmap::CanvasBitmap( const BitmapEx&                rBitmap,
                                 rendering::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
-    : mrOutDev(rOutDevProvider->getOutDev())
     {
         maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
     }

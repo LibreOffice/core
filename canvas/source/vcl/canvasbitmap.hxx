@@ -68,7 +68,10 @@ namespace vclcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        OutputDevice& mrOutDev;
+        OutputDevice& getOutDev()
+        {
+            return getBackBuffer()->getOutDev();
+        }
         CanvasBitmap( const ::Size&                                rSize,
                       bool                                         bAlphaBitmap,
                       css::rendering::XGraphicDevice&              rDevice,
@@ -107,6 +110,7 @@ namespace vclcanvas
         //     3rd the pixmap depth
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
+        BitmapBackBufferSharedPtr const & getBackBuffer() const { return maCanvasHelper.getBackBuffer(); }
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
