@@ -1184,7 +1184,7 @@ void ScViewFunc::MergeCells( bool bApi, bool bDoContents, bool bCenter,
 {
     //  Editable- and Being-Nested- test must be at the beginning (in DocFunc too),
     //  so that the Contents-QueryBox won't appear
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -1365,7 +1365,7 @@ static bool lcl_extendMergeRange(ScCellMergeOption& rOption, const ScRange& rRan
 bool ScViewFunc::RemoveMerge()
 {
     ScRange aRange;
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -1699,7 +1699,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
 void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bAsLink )
 {
     //! allow source sheet to be protected
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -2281,7 +2281,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
     SCROW nDestRow = rParam.aRefVariableCell.Row();
     SCTAB nDestTab = rParam.aRefVariableCell.Tab();
 
-    ScEditableTester aTester( rDoc, nDestTab, nDestCol,nDestRow, nDestCol,nDestRow );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nDestTab, nDestCol, nDestRow, nDestCol, nDestRow);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -2379,7 +2379,7 @@ void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
 
 void ScViewFunc::ExtendScenario()
 {
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -3312,7 +3312,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark, SCTAB nTabToSelect )
 
 void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont )
 {
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());

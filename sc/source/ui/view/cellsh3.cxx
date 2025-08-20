@@ -1024,7 +1024,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            ScEditableTester aTester( pTabViewShell );
+                            ScEditableTester aTester = ScEditableTester::CreateAndTestView(pTabViewShell);
                             if ( !aTester.IsEditable() )
                             {
                                 pTabViewShell->ErrorMessage(aTester.GetMessageId());

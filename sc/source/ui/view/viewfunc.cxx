@@ -783,7 +783,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDocFunc &rFunc = GetViewData().GetDocFunc();
     std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(*pDocSh);
 
-    ScEditableTester aTester( rDoc, nCol,nRow, nCol,nRow, aMark );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, aMark);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -858,7 +858,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
     bool bUndo(rDoc.IsUndoEnabled());
     ScDocShellModificator aModificator( *pDocSh );
 
-    ScEditableTester aTester( rDoc, nTab, nCol,nRow, nCol,nRow );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
     if (aTester.IsEditable())
     {
         ScAddress aPos( nCol, nRow, nTab );
@@ -893,7 +893,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    ScEditableTester aTester( rDoc, nTab, nCol,nRow, nCol,nRow );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
     if (aTester.IsEditable())
     {
 
@@ -2126,7 +2126,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
         if (i == 0)
         {
             // test to the end of the sheet
-            ScEditableTester aTester( rDoc, nTab, nStartCol, nStartRow, rDoc.MaxCol(), rDoc.MaxRow() );
+            ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nStartCol, nStartRow, rDoc.MaxCol(), rDoc.MaxRow());
             if (!aTester.IsEditable())
                 pErrorId = aTester.GetMessageId();
         }

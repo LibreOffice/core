@@ -22,65 +22,61 @@
 #include <viewfunc.hxx>
 #include <globstr.hrc>
 
-ScEditableTester::ScEditableTester() :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
+ScEditableTester::ScEditableTester() = default;
+
+ScEditableTester ScEditableTester::CreateAndTestBlock(const ScDocument& rDoc, SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bNoMatrixAtAll)
 {
+    ScEditableTester aTester;
+    aTester.TestBlock(rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, bNoMatrixAtAll);
+    return aTester;
 }
 
-ScEditableTester::ScEditableTester( const ScDocument& rDoc, SCTAB nTab,
-        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bNoMatrixAtAll ) :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
-{
-    TestBlock( rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, bNoMatrixAtAll );
-}
-
-ScEditableTester::ScEditableTester( const ScDocument& rDoc,
+ScEditableTester ScEditableTester::CreateAndTestSelectedBlock(const ScDocument& rDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark ) :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
+                        const ScMarkData& rMark)
 {
-    TestSelectedBlock( rDoc, nStartCol, nStartRow, nEndCol, nEndRow, rMark );
+    ScEditableTester aTester;
+    aTester.TestSelectedBlock(rDoc, nStartCol, nStartRow, nEndCol, nEndRow, rMark);
+    return aTester;
 }
 
-ScEditableTester::ScEditableTester( const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction ) :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
+ScEditableTester ScEditableTester::CreateAndTestRange(const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction)
 {
+    ScEditableTester aTester;
     if (eAction == sc::EditAction::Unknown)
-        TestRange(rDoc, rRange);
+        aTester.TestRange(rDoc, rRange);
     else
-        TestRangeForAction( rDoc, rRange, eAction );
+        aTester.TestRangeForAction( rDoc, rRange, eAction );
+    return aTester;
 }
 
-ScEditableTester::ScEditableTester( const ScDocument& rDoc, const ScMarkData& rMark ) :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
+ScEditableTester ScEditableTester::CreateAndTestSelection(const ScDocument& rDoc, const ScMarkData& rMark)
 {
-    TestSelection( rDoc, rMark );
+    ScEditableTester aTester;
+    aTester.TestSelection(rDoc, rMark);
+    return aTester;
 }
 
-ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
-    mbIsEditable(true),
-    mbOnlyMatrix(true)
+ScEditableTester ScEditableTester::CreateAndTestView(ScViewFunc* pView)
 {
+    ScEditableTester aTester;
     bool bThisMatrix;
     if ( !pView->SelectionEditable( &bThisMatrix ) )
     {
-        mbIsEditable = false;
+        aTester.mbIsEditable = false;
         if ( !bThisMatrix )
-            mbOnlyMatrix = false;
+            aTester.mbOnlyMatrix = false;
     }
+    return aTester;
 }
 
-ScEditableTester::ScEditableTester(
+ScEditableTester ScEditableTester::CreateAndTestBlockForAction(
     const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
-    SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark ) :
-    ScEditableTester()
+    SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark )
 {
-    TestBlockForAction(rDoc, eAction, nStartCol, nStartRow, nEndCol, nEndRow, rMark);
+    ScEditableTester aTester;
+    aTester.TestBlockForAction(rDoc, eAction, nStartCol, nStartRow, nEndCol, nEndRow, rMark);
+    return aTester;
 }
 
 void ScEditableTester::TestBlock( const ScDocument& rDoc, SCTAB nTab,

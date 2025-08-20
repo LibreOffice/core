@@ -93,7 +93,7 @@ void ScViewFunc::CutToClip()
 {
     UpdateInputLine();
 
-    ScEditableTester aTester( this );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestView(this);
     if (!aTester.IsEditable())                  // selection editable?
     {
         ErrorMessage( aTester.GetMessageId() );
@@ -1211,7 +1211,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
         //  check cell-protection
 
-    ScEditableTester aTester( rDoc, nStartTab, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());

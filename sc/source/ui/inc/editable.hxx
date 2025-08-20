@@ -27,44 +27,44 @@ class ScViewFunc;
 class ScMarkData;
 
 namespace sc {
-
 enum class EditAction;
-
 }
 
 class ScEditableTester
 {
-    bool mbIsEditable;
-    bool mbOnlyMatrix;
+private:
+    bool mbIsEditable = true;
+    bool mbOnlyMatrix = true;
 
 public:
-            ScEditableTester();
+    ScEditableTester();
 
-            // calls TestBlock
-            /** @param  bNoMatrixAtAll
-                        TRUE if there must not be any matrix, not even entirely
-                        contained; for example in sorting. */
-            ScEditableTester( const ScDocument& rDoc, SCTAB nTab,
+    // Enable move constructor
+    ScEditableTester(ScEditableTester&& rOther) noexcept = default;
+
+    // Allow copy assignment
+    ScEditableTester& operator=(const ScEditableTester& rOther) = default;
+
+    /** @param  bNoMatrixAtAll
+                TRUE if there must not be any matrix, not even entirely
+                contained; for example in sorting. */
+    static ScEditableTester CreateAndTestBlock(const ScDocument& rDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        bool bNoMatrixAtAll = false );
+                        bool bNoMatrixAtAll = false);
 
-            // calls TestSelectedBlock
-            ScEditableTester( const ScDocument& rDoc,
+    static ScEditableTester CreateAndTestSelectedBlock(const ScDocument& rDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        const ScMarkData& rMark );
+                        const ScMarkData& rMark);
 
-            // calls TestRange
-            ScEditableTester( const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction );
+    static ScEditableTester CreateAndTestRange(const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction);
 
-            // calls TestSelection
-            ScEditableTester( const ScDocument& rDoc, const ScMarkData& rMark );
+    static ScEditableTester CreateAndTestSelection(const ScDocument& rDoc, const ScMarkData& rMark);
 
-            // calls TestView
-            ScEditableTester( ScViewFunc* pView );
+    static ScEditableTester CreateAndTestView(ScViewFunc* pView);
 
-            ScEditableTester(
+    static ScEditableTester CreateAndTestBlockForAction(
                 const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol,
-                SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark );
+                SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark);
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
