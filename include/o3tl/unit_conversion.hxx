@@ -14,6 +14,7 @@
 
 #include <array>
 #include <cassert>
+#include <concepts>
 #include <numeric>
 #include <utility>
 #include <type_traits>
@@ -68,22 +69,20 @@ template <typename I> constexpr bool isBetween(I n, sal_Int64 min, sal_Int64 max
 }
 
 // Ensure correct rounding for both positive and negative integers
-template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
-constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d)
+template <std::integral I> constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d)
 {
     assert(m > 0 && d > 0);
     assert(isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m));
     // coverity[dead_error_line] - suppress warning for template
     return (n >= 0 ? (n * m + d / 2) : (n * m - d / 2)) / d;
 }
-template <typename F, std::enable_if_t<std::is_floating_point_v<F>, int> = 0>
-constexpr double MulDiv(F f, sal_Int64 m, sal_Int64 d)
+template <std::floating_point F> constexpr double MulDiv(F f, sal_Int64 m, sal_Int64 d)
 {
     assert(m > 0 && d > 0);
     return f * (double(m) / d);
 }
 
-template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+template <std::integral I>
 constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d, bool& bOverflow, sal_Int64 nDefault)
 {
     if (!isBetween(n, (SAL_MIN_INT64 + d / 2) / m, (SAL_MAX_INT64 - d / 2) / m))
@@ -95,8 +94,7 @@ constexpr sal_Int64 MulDiv(I n, sal_Int64 m, sal_Int64 d, bool& bOverflow, sal_I
     return MulDiv(n, m, d);
 }
 
-template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
-constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
+template <std::integral I> constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
 {
     if (sal_Int64 d_2 = d / 2; !isBetween(n, (SAL_MIN_INT64 + d_2) / m, (SAL_MAX_INT64 - d_2) / m))
     {
@@ -245,11 +243,8 @@ template <typename N, typename U> constexpr auto convertSaturate(N n, U from, U 
 // preprocessing to handle too large input values, just to clamp the result anyway. Use it like:
 //
 //     sal_Int32 n = convertNarrowing<sal_Int32, o3tl::Length::mm100, o3tl::Length::emu>(m);
-template <typename Out, auto from, auto to, typename N,
-          std::enable_if_t<
-              std::is_integral_v<N> && std::is_integral_v<Out> && sizeof(Out) < sizeof(sal_Int64),
-              int> = 0>
-constexpr Out convertNarrowing(N n)
+template <std::integral Out, auto from, auto to, std::integral N>
+requires(sizeof(Out) < sizeof(sal_Int64)) constexpr Out convertNarrowing(N n)
 {
     constexpr sal_Int64 nMin = convertSaturate(std::numeric_limits<Out>::min(), to, from);
     constexpr sal_Int64 nMax = convertSaturate(std::numeric_limits<Out>::max(), to, from);
