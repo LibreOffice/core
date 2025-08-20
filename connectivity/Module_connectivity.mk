@@ -119,11 +119,9 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 
 endif
 
-ifneq ($(CONNECTIVITY_TEST_MYSQL_DRIVER),)
 $(eval $(call gb_Module_add_check_targets,connectivity,\
     CppunitTest_connectivity_mysql_test \
 ))
-endif
 
 # general tests
 $(eval $(call gb_Module_add_check_targets,connectivity,\
