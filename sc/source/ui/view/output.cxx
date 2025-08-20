@@ -713,7 +713,8 @@ void ScOutputData::SetCellRotations()
 
                         // Check for values - below in SetCellRotation these will
                         // be converted to size_t and thus may not be negative
-                        if(nTargetX >= 0 && nTargetY >= 0)
+                        // tdf#168023: also do not rotate if the cell is empty
+                        if(nTargetX >= 0 && nTargetY >= 0 && !pInfo->maCell.hasEmptyValue())
                         {
                             // add rotation info to Array information
                             const Degree100 nAttrRotate(pPattern->GetRotateVal(pCondSet));
