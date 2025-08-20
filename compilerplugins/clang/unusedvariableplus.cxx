@@ -437,7 +437,7 @@ public:
             "utl::DisposableComponent",
             "ValueCounter_Impl",
             "VclListenerLock",
-            "vclcanvas::tools::OutDevStateKeeper",
+            "vclcanvastools::OutDevStateKeeper",
             "vcl::PaintBufferGuard",
             "vcl::RoadmapWizardTravelSuspension",
             "vcl::ScopedAntialiasing",

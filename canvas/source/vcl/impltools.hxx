@@ -47,10 +47,8 @@ namespace com::sun::star::rendering
 }
 
 
-namespace vclcanvas
+namespace vclcanvastools
 {
-    namespace tools
-    {
         ::Bitmap
         bitmapFromXBitmap( const css::uno::Reference<
                              css::rendering::XBitmap >& );
@@ -106,7 +104,7 @@ namespace vclcanvas
                 init();
             }
 
-            explicit OutDevStateKeeper( const OutDevProviderSharedPtr& rOutDev ) :
+            explicit OutDevStateKeeper( const vclcanvas::OutDevProviderSharedPtr& rOutDev ) :
                 mpOutDev( rOutDev ? &(rOutDev->getOutDev()) : nullptr ),
                 mbMappingWasEnabled( mpOutDev && mpOutDev->IsMapModeEnabled() ),
                 mnAntiAliasing( mpOutDev ? mpOutDev->GetAntialiasing() : AntialiasingFlags::NONE )
@@ -153,7 +151,6 @@ namespace vclcanvas
                                   const ::basegfx::B2DHomMatrix&                    rTransform );
 
         void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

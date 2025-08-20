@@ -49,7 +49,7 @@ namespace vclcanvas
         canvas::BitmapCanvasBase2<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
             CanvasBitmapHelper,
-            tools::LocalGuard,
+            vclcanvastools::LocalGuard,
             ::cppu::OWeakObject> > CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,

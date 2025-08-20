@@ -44,7 +44,7 @@ namespace vclcanvas
         mpBackBuffer = std::make_shared<BackBuffer>( rOutDev );
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
-        tools::SetDefaultDeviceAntiAliasing( &mpBackBuffer->getOutDev());
+        vclcanvastools::SetDefaultDeviceAntiAliasing( &mpBackBuffer->getOutDev());
     }
 
     bool SpriteDeviceHelper::showBuffer( bool, bool )

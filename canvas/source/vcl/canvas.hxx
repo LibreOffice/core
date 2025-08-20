@@ -53,13 +53,13 @@ namespace vclcanvas
                                              css::lang::XServiceInfo >    GraphicDeviceBase_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
                                            DeviceHelper,
-                                           tools::LocalGuard,
+                                           vclcanvastools::LocalGuard,
                                            ::cppu::OWeakObject >    CanvasBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
             CanvasBase_Base,
             CanvasHelper,
-            tools::LocalGuard,
+            vclcanvastools::LocalGuard,
             ::cppu::OWeakObject> > CanvasBaseT;
 
     /** Product of this component's factory.

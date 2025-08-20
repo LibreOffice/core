@@ -17,7 +17,7 @@ binaryurp/source/writer.hxx:135
 canvas/source/tools/surfaceproxy.hxx:104
     canvas::SurfaceProxy mpPageManager PageManagerSharedPtr
 canvas/source/vcl/impltools.hxx:95
-    vclcanvas::tools::LocalGuard aSolarGuard SolarMutexGuard
+    vclcanvastools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/accessibility/AccessibleChartShape.hxx:62
     chart::AccessibleChartShape m_aShapeTreeInfo ::accessibility::AccessibleShapeTreeInfo
 chart2/source/controller/dialogs/tp_3D_SceneIllumination.hxx:70

@@ -211,7 +211,7 @@ namespace vclcanvas
 
         // actual OutputDevice is a shared resource - restore its
         // state when done.
-        tools::OutDevStateKeeper aStateKeeper( rOutDev );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( rOutDev );
 
         const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
         const Point aEmptyPoint(0,0);

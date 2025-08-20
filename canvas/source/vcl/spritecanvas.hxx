@@ -60,7 +60,7 @@ namespace vclcanvas
                                              css::lang::XServiceInfo >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                  SpriteDeviceHelper,
-                                                 tools::LocalGuard,
+                                                 vclcanvastools::LocalGuard,
                                                  ::cppu::OWeakObject >  SpriteCanvasBase_Base;
 
     /** Mixin SpriteSurface
@@ -87,7 +87,7 @@ namespace vclcanvas
 
     typedef ::canvas::SpriteCanvasBase< SpriteCanvasBaseSpriteSurface_Base,
                                         SpriteCanvasHelper,
-                                        tools::LocalGuard,
+                                        vclcanvastools::LocalGuard,
                                         ::cppu::OWeakObject >           SpriteCanvasBaseT;
 
     /** Product of this component's factory.

@@ -120,7 +120,7 @@ namespace vclcanvas
 
         mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
 
-        tools::SetDefaultDeviceAntiAliasing( mpVDev );
+        vclcanvastools::SetDefaultDeviceAntiAliasing( mpVDev );
     }
 
     void BitmapBackBuffer::updateVDev() const

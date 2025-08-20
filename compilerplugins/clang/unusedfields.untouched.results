@@ -9,7 +9,7 @@ basic/qa/cppunit/test_global_as_new.cxx:25
 canvas/source/vcl/canvasbitmap.hxx:113
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:95
-    vclcanvas::tools::LocalGuard aSolarGuard SolarMutexGuard
+    vclcanvastools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/inc/dlg_DataEditor.hxx:48
     chart::DataEditor m_xContext css::uno::Reference<css::uno::XComponentContext>
 chart2/source/inc/ModifyListenerCallBack.hxx:50

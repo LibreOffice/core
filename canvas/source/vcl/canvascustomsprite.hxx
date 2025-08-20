@@ -69,7 +69,7 @@ namespace vclcanvas
     typedef ::canvas::CanvasCustomSpriteBase< CanvasCustomSpriteSpriteBase_Base,
                                               SpriteHelper,
                                               CanvasHelper,
-                                              tools::LocalGuard,
+                                              vclcanvastools::LocalGuard,
                                               ::cppu::OWeakObject >                     CanvasCustomSpriteBaseT;
 
     /* Definition of CanvasCustomSprite class */

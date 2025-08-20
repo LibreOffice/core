@@ -512,7 +512,7 @@ namespace vclcanvas
             const ::tools::Rectangle aPolygonDeviceRectOrig(
                 rPoly.GetBoundRect() );
 
-            if( tools::isRectangle( rPoly ) )
+            if( vclcanvastools::isRectangle( rPoly ) )
             {
                 // use optimized output path
 
@@ -609,10 +609,10 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
-            ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
 
@@ -685,7 +685,7 @@ namespace vclcanvas
                 // drawBitmap() in disguise
                 // =========================================
 
-                const bool bRectangularPolygon( tools::isRectangle( aPolyPoly ) );
+                const bool bRectangularPolygon( vclcanvastools::isRectangle( aPolyPoly ) );
 
                 ::basegfx::B2DHomMatrix aTotalTransform;
                 ::canvastools::mergeViewAndRenderTransform(aTotalTransform,
@@ -748,7 +748,7 @@ namespace vclcanvas
                     // texturing parameters
                     // ===========================================
 
-                    ::Bitmap aBmp( tools::bitmapFromXBitmap( textures[0].Bitmap ) );
+                    ::Bitmap aBmp( vclcanvastools::bitmapFromXBitmap( textures[0].Bitmap ) );
 
                     // scale down bitmap to [0,1]x[0,1] rect, as required
                     // from the XCanvas interface.
@@ -816,7 +816,7 @@ namespace vclcanvas
 
                         // complex transformation, use generic affine bitmap
                         // transformation
-                        aBmp = tools::transformBitmap( aBmp, aTotalTransform);
+                        aBmp = vclcanvastools::transformBitmap( aBmp, aTotalTransform);
 
                         pGrfObj = std::make_shared<GraphicObject>( aBmp );
 

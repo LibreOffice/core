@@ -39,7 +39,7 @@ canvas/inc/vclwrapper.hxx:138
 canvas/source/vcl/canvasfont.hxx:76
     const struct com::sun::star::geometry::Matrix2D & vclcanvas::CanvasFont::getFontMatrix() const
 canvas/source/vcl/impltools.hxx:83
-     vclcanvas::tools::LocalGuard::LocalGuard()
+     vclcanvastools::LocalGuard::LocalGuard()
 chart2/source/view/axes/VAxisBase.hxx:73
     const std::shared_ptr<chart::DataTableView> & chart::VAxisBase::getDataTableView()
 connectivity/inc/sdbcx/VGroup.hxx:61

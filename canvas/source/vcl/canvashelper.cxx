@@ -155,7 +155,7 @@ namespace vclcanvas
             return;
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
@@ -193,12 +193,12 @@ namespace vclcanvas
             return;
 
         // nope, render
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         setupOutDevState( viewState, renderState, LINE_COLOR );
 
-        const Point aStartPoint( tools::mapRealPoint2D( aStartRealPoint2D,
+        const Point aStartPoint( vclcanvastools::mapRealPoint2D( aStartRealPoint2D,
                                                         viewState, renderState ) );
-        const Point aEndPoint( tools::mapRealPoint2D( aEndRealPoint2D,
+        const Point aEndPoint( vclcanvastools::mapRealPoint2D( aEndRealPoint2D,
                                                       viewState, renderState ) );
         // TODO(F2): alpha
         mpOutDevProvider->getOutDev().DrawLine( aStartPoint, aEndPoint );
@@ -216,19 +216,19 @@ namespace vclcanvas
         if( !mpOutDevProvider )
             return;
 
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         setupOutDevState( viewState, renderState, LINE_COLOR );
 
-        const Point aStartPoint( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.Px,
+        const Point aStartPoint( vclcanvastools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.Px,
                                                                                aBezierSegment.Py),
                                                         viewState, renderState ) );
-        const Point aCtrlPoint1( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C1x,
+        const Point aCtrlPoint1( vclcanvastools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C1x,
                                                                                aBezierSegment.C1y),
                                                         viewState, renderState ) );
-        const Point aCtrlPoint2( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C2x,
+        const Point aCtrlPoint2( vclcanvastools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C2x,
                                                                                aBezierSegment.C2y),
                                                          viewState, renderState ) );
-        const Point aEndPoint( tools::mapRealPoint2D( _aEndPoint,
+        const Point aEndPoint( vclcanvastools::mapRealPoint2D( _aEndPoint,
                                                        viewState, renderState ) );
 
         ::tools::Polygon aPoly(4);
@@ -257,12 +257,12 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
             const ::basegfx::B2DPolyPolygon aBasegfxPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
-            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon( aBasegfxPolyPoly, viewState, renderState ) );
+            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon( aBasegfxPolyPoly, viewState, renderState ) );
 
             if( aBasegfxPolyPoly.isClosed() )
             {
@@ -307,7 +307,7 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             ::basegfx::B2DHomMatrix aMatrix;
             ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
@@ -456,13 +456,13 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             const int nAlpha( setupOutDevState( viewState, renderState, FILL_COLOR ) );
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
-            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            const ::tools::PolyPolygon aPolyPoly( vclcanvastools::mapPolyPolygon(
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
             const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
@@ -540,7 +540,7 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             ::Point aOutpos;
             if( !setupTextOutput( aOutpos, viewState, renderState, xFont ) )
@@ -599,7 +599,7 @@ namespace vclcanvas
         {
             if( mpOutDevProvider )
             {
-                tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+                vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
                 // TODO(T3): Race condition. We're taking the font
                 // from xLayoutedText, and then calling draw() at it,
@@ -644,7 +644,7 @@ namespace vclcanvas
 
         if( mpOutDevProvider )
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
             ::basegfx::B2DHomMatrix aMatrix;
@@ -653,7 +653,7 @@ namespace vclcanvas
             ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
             aOutputPos *= aMatrix;
 
-            ::Bitmap aBmp( tools::bitmapFromXBitmap(xBitmap) );
+            ::Bitmap aBmp( vclcanvastools::bitmapFromXBitmap(xBitmap) );
 
             // TODO(F2): Implement modulation again for other color
             // channels (currently, works only for alpha). Note: this
@@ -807,7 +807,7 @@ namespace vclcanvas
 
                     // complex transformation, use generic affine bitmap
                     // transformation
-                    aBmp = tools::transformBitmap( aBmp, aMatrix );
+                    aBmp = vclcanvastools::transformBitmap( aBmp, aMatrix );
 
                     pGrfObj = std::make_shared<GraphicObject>( aBmp );
 
@@ -913,7 +913,7 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
 
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
@@ -943,7 +943,7 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
 
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
@@ -993,7 +993,7 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
 
-        tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+        vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
@@ -1138,7 +1138,7 @@ namespace vclcanvas
         aVCLFont.SetFillColor( aColor );
 
         // no need to replicate this for mp2ndOutDev, we're modifying only aVCLFont here.
-        if( !tools::setupFontTransform( o_rOutPos, aVCLFont, viewState, renderState, rOutDev ) )
+        if( !vclcanvastools::setupFontTransform( o_rOutPos, aVCLFont, viewState, renderState, rOutDev ) )
             return false;
 
         rOutDev.SetFont( aVCLFont );
@@ -1163,7 +1163,7 @@ namespace vclcanvas
             return false; // disposed
         else
         {
-            tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
+            vclcanvastools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
             if (!rGrf->Draw(mpOutDevProvider->getOutDev(), rPt, rSz, &rAttr))

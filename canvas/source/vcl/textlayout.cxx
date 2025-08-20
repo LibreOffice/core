@@ -348,7 +348,7 @@ namespace vclcanvas
         // tdf#147999
         // On Windows we get the wrong font width for fallback fonts unless we setup again here.
         vcl::Font aFont(rOutDev.GetFont());
-        tools::setupFontWidth(mpFont->getFontMatrix(), aFont, rOutDev);
+        vclcanvastools::setupFontWidth(mpFont->getFontMatrix(), aFont, rOutDev);
         rOutDev.SetFont(aFont);
 #endif
 

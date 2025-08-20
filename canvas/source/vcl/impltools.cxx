@@ -44,8 +44,9 @@
 
 using namespace ::com::sun::star;
 
-namespace vclcanvas::tools
+namespace vclcanvastools
 {
+using namespace vclcanvas;
         ::Bitmap bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
             // TODO(F3): CanvasCustomSprite should also be tunnelled
@@ -214,8 +215,8 @@ namespace vclcanvas::tools
         ::Bitmap transformBitmap( const ::Bitmap&                 rBitmap,
                                   const ::basegfx::B2DHomMatrix&  rTransform )
         {
-            SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap()" );
-            SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap: 0x" << std::hex << &rBitmap );
+            SAL_INFO( "canvas.vcl", "::vclcanvastools::transformBitmap()" );
+            SAL_INFO( "canvas.vcl", "::vclcanvastools::transformBitmap: 0x" << std::hex << &rBitmap );
 
             // calc transformation and size of bitmap to be
             // generated. Note, that the translational components are
