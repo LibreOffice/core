@@ -45,15 +45,27 @@ class StorageHolder final
 
         struct TStorageInfo
         {
-            public:
+            private:
                 css::uno::Reference< css::embed::XStorage > Storage;
+            public:
                 sal_Int32 UseCount;
                 TStorageListenerList Listener;
 
+            public:
                 TStorageInfo(css::uno::Reference<css::embed::XStorage> xStorage)
                     : Storage(std::move(xStorage))
                     , UseCount(1)
                 {}
+
+                void clearStorage(const std::unique_lock<std::mutex>&)
+                {
+                    Storage.clear();
+                }
+
+                css::uno::Reference<css::embed::XStorage> getStorage(const std::unique_lock<std::mutex>&) const
+                {
+                    return Storage;
+                }
         };
 
         /** @short  TODO */

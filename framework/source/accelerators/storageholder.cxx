@@ -53,7 +53,7 @@ void StorageHolder::forgetCachedStorages()
     {
         TStorageInfo& rInfo = lStorage.second;
         // TODO think about listener !
-        rInfo.Storage.clear();
+        rInfo.clearStorage(g);
     }
     m_lStorages.clear();
 }
@@ -99,7 +99,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         {
             TStorageInfo& rInfo = pCheck->second;
             ++rInfo.UseCount;
-            xChild = rInfo.Storage;
+            xChild = rInfo.getStorage(aReadLock);
 
             aReadLock.unlock();
             // <- SAFE ------------------------------
@@ -169,7 +169,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
         }
 
         TStorageInfo& rInfo = pCheck->second;
-        lStoragesOfPath.push_back(rInfo.Storage);
+        lStoragesOfPath.push_back(rInfo.getStorage(g));
 
         sRelPath += lFolder + PATH_SEPARATOR;
     }
@@ -238,7 +238,7 @@ void StorageHolder::closePath(const OUString& rPath)
         --rInfo.UseCount;
         if (rInfo.UseCount < 1)
         {
-            rInfo.Storage.clear();
+            rInfo.clearStorage(g);
             m_lStorages.erase(pPath);
         }
     }
@@ -303,7 +303,7 @@ OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::
     for (auto const& lStorage : m_lStorages)
     {
         const TStorageInfo& rInfo = lStorage.second;
-        if (rInfo.Storage == xStorage)
+        if (rInfo.getStorage(g) == xStorage)
             return lStorage.first;
     }
 
@@ -349,7 +349,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 
         auto pParent = m_lStorages.find(sParentPath.makeStringAndClear());
         if (pParent != m_lStorages.end())
-            return pParent->second.Storage;
+            return pParent->second.getStorage(aReadLock);
     }
     // <- SAFE ----------------------------------
 
