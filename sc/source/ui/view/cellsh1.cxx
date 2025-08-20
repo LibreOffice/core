@@ -485,7 +485,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else
                 {
-                    ScEditableTester aTester( pTabViewShell );
+                    ScEditableTester aTester = ScEditableTester::CreateAndTestView(pTabViewShell);
                     if (aTester.IsEditable())
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -1563,7 +1563,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        ScEditableTester aTester( pTabViewShell );
+                        ScEditableTester aTester = ScEditableTester::CreateAndTestView(pTabViewShell);
                         if (aTester.IsEditable())
                         {
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

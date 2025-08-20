@@ -198,8 +198,9 @@ void ScViewFunc::DoRefConversion()
         aMarkRange = ScRange( GetViewData().GetCurX(),
             GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     }
-    ScEditableTester aTester( rDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
-                            aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(),rMark );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(
+                                rDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
+                                aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), rMark);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -340,7 +341,7 @@ void ScViewFunc::DoThesaurus()
     nTab = GetViewData().CurrentTabForData();
 
     ScAddress aPos(nCol, nRow, nTab);
-    ScEditableTester aTester( rDoc, nCol, nRow, nCol, nRow, rMark );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, rMark);
     if (!aTester.IsEditable())
     {
         ErrorMessage(aTester.GetMessageId());
@@ -468,7 +469,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     bool bMarked = rMark.IsMultiMarked();
     if (bMarked)
     {
-        ScEditableTester aTester( rDoc, rMark );
+        ScEditableTester aTester = ScEditableTester::CreateAndTestSelection(rDoc, rMark);
         if (!aTester.IsEditable())
         {
             ErrorMessage(aTester.GetMessageId());

@@ -513,8 +513,9 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         else
             nStartingColToEdit++;
     }
-    ScEditableTester aTester( rDoc, nTab, nStartingColToEdit, nStartingRowToEdit,
-            aLocalParam.nCol2, aLocalParam.nRow2, true /*bNoMatrixAtAll*/ );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
+            rDoc, nTab, nStartingColToEdit, nStartingRowToEdit,
+            aLocalParam.nCol2, aLocalParam.nRow2, true /*bNoMatrixAtAll*/);
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -740,8 +741,9 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             return false;
         }
 
-        ScEditableTester aTester( rDoc, nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
-                                                aLocalParam.nCol2,aLocalParam.nRow2);
+        ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nDestTab,
+                                    aLocalParam.nCol1, aLocalParam.nRow1,
+                                    aLocalParam.nCol2,aLocalParam.nRow2);
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -1056,7 +1058,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return;
     }
 
-    ScEditableTester aTester( rDoc, nTab, 0,rParam.nRow1+1, rDoc.MaxCol(),rDoc.MaxRow() );
+    ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, 0, rParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -1229,7 +1231,7 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi,
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange & r = rRanges[i];
-        ScEditableTester aTester(rDoc, r, eAction);
+        ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, r, eAction);
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -1283,7 +1285,7 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
 
     if (!rDoc.IsImportingXML())
     {
-        ScEditableTester aTester(rDoc, rNewOut, eAction);
+        ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, rNewOut, eAction);
         if (!aTester.IsEditable())
         {
             //  destination area isn't editable
@@ -1544,7 +1546,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
     if (!rDoc.IsImportingXML())
     {
-        ScEditableTester aTester(rDoc, aNewOut, sc::EditAction::Unknown);
+        ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, aNewOut, sc::EditAction::Unknown);
         if (!aTester.IsEditable())
         {
             //  destination area isn't editable
