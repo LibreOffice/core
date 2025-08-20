@@ -19,6 +19,7 @@
 
 #include "bessel.hxx"
 #include <cmath>
+#include <numbers>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -327,8 +328,7 @@ static double Bessely0( double fX )
         return sqrt(1/M_PI/fX)
                 *(std::sin(fX)-std::cos(fX));
     const double epsilon = 1.0e-15;
-    const double EulerGamma = 0.57721566490153286060;
-    double alpha = log(fX/2.0)+EulerGamma;
+    double alpha = log(fX/2.0)+std::numbers::egamma;
     double u = alpha;
 
     double k = 1.0;
@@ -381,12 +381,11 @@ static double Bessely1( double fX )
         return - sqrt(1/M_PI/fX)
                 *(std::sin(fX)+std::cos(fX));
     const double epsilon = 1.0e-15;
-    const double EulerGamma = 0.57721566490153286060;
     double alpha = 1.0/fX;
     double f_bar = -1.0;
     double u = alpha;
     double k = 1.0;
-    alpha = 1.0 - EulerGamma - log(fX/2.0);
+    alpha = 1.0 - std::numbers::egamma - log(fX/2.0);
     double g_bar_delta_u = -alpha;
     double g_bar = -2.0 / fX;
     double delta_u = g_bar_delta_u / g_bar;
