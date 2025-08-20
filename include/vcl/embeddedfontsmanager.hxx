@@ -61,6 +61,11 @@ public:
         bool bSubsetted = false);
 
     /**
+      fileUrl needs to be created via fileUrlForTemporaryFont
+    */
+    bool addEmbeddedFont( const OUString& fileUrl, const OUString& fontName, bool sufficientFontRights );
+
+    /**
       Adds the passed fonts to the list of known fonts. The fonts are used only until application
       exit.
 

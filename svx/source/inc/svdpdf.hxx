@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <map>
 
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
@@ -43,10 +44,44 @@ class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
 
+struct FontSubSet
+{
+    OUString cidFontInfoUrl;
+    OUString toMergedMapUrl;
+    OUString pfaCIDUrl;
+    std::map<sal_Int32, OString> glyphToChars;
+    std::map<OString, sal_Int32> charsToGlyph;
+    int nGlyphCount;
+};
+
+struct SubSetInfo
+{
+    std::vector<FontSubSet> aComponents;
+};
+
+struct EmbeddedFontInfo
+{
+    OUString sFontName;
+    OUString sFontFile;
+    FontWeight eFontWeight;
+};
+
+struct OfficeFontInfo
+{
+    OUString sFontName;
+    FontWeight eFontWeight;
+};
+
 // Helper Class to import PDF
 class ImpSdrPdfImport final
 {
     std::vector<rtl::Reference<SdrObject>> maTmpList;
+
+    std::map<vcl::pdf::PFDiumFont, OfficeFontInfo> maImportedFonts;
+    std::map<OUString, SubSetInfo> maDifferentSubsetsForFont;
+    // map of PostScriptName->Merged Font File for that font
+    std::map<OUString, EmbeddedFontInfo> maEmbeddedFonts;
+
     ScopedVclPtr<VirtualDevice> mpVD;
     tools::Rectangle maScaleRect;
     size_t mnMapScalingOfs; // from here on, not edited with MapScaling
@@ -121,6 +156,13 @@ class ImpSdrPdfImport final
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport, int nPageIndex);
+
+    void CollectFonts();
+
+    static EmbeddedFontInfo convertToOTF(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
+                                         const OUString& fontName, const OUString& baseFontName,
+                                         std::u16string_view fontFileName,
+                                         const std::vector<uint8_t>& toUnicodeData);
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrPdfImport(const ImpSdrPdfImport&) = delete;
