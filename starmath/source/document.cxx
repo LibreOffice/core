@@ -887,18 +887,18 @@ void SmDocShell::Execute(SfxRequest& rReq)
             OSL_ENSURE (pDev, "device for font list missing" );
 
             auto pFontTypeDialog = std::make_shared<SmFontTypeDialog>(rReq.GetFrameWeld(), pDev);
-            SmFormat aOldFormat  = GetFormat();
-            pFontTypeDialog->ReadFrom( aOldFormat );
-            weld::DialogController::runAsync( pFontTypeDialog, [aOldFormat, pFontTypeDialog, this](sal_Int32 nResult) {
+            auto xOldFormat = std::make_shared<SmFormat>(GetFormat());
+            pFontTypeDialog->ReadFrom(*xOldFormat);
+            weld::DialogController::runAsync( pFontTypeDialog, [xOldFormat=std::move(xOldFormat), pFontTypeDialog, this](sal_Int32 nResult) {
                 if (nResult == RET_OK)
                 {
-                    SmFormat aNewFormat( aOldFormat );
+                    SmFormat aNewFormat(*xOldFormat);
                     pFontTypeDialog->WriteTo(aNewFormat);
 
                     SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                     if (pTmpUndoMgr)
                         pTmpUndoMgr->AddUndoAction(
-                            std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                            std::make_unique<SmFormatAction>(this, *xOldFormat, aNewFormat));
 
                     SetFormat( aNewFormat );
                     Repaint();
@@ -910,18 +910,18 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_FONTSIZE:
         {
             auto pFontSizeDialog = std::make_shared<SmFontSizeDialog>(rReq.GetFrameWeld());
-            SmFormat aOldFormat  = GetFormat();
-            pFontSizeDialog->ReadFrom( aOldFormat );
-            weld::DialogController::runAsync(pFontSizeDialog, [aOldFormat, pFontSizeDialog, this](sal_Int32 nResult) {
+            auto xOldFormat = std::make_shared<SmFormat>(GetFormat());
+            pFontSizeDialog->ReadFrom(*xOldFormat);
+            weld::DialogController::runAsync(pFontSizeDialog, [xOldFormat=std::move(xOldFormat), pFontSizeDialog, this](sal_Int32 nResult) {
                 if (nResult == RET_OK)
                 {
-                    SmFormat aNewFormat( aOldFormat );
+                    SmFormat aNewFormat(*xOldFormat);
                     pFontSizeDialog->WriteTo(aNewFormat);
 
                     SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                     if (pTmpUndoMgr)
                         pTmpUndoMgr->AddUndoAction(
-                            std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                            std::make_unique<SmFormatAction>(this, *xOldFormat, aNewFormat));
 
                     SetFormat( aNewFormat );
                     Repaint();
@@ -933,18 +933,18 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_DISTANCE:
         {
             auto pDistanceDialog = std::make_shared<SmDistanceDialog>(rReq.GetFrameWeld());
-            SmFormat aOldFormat  = GetFormat();
-            pDistanceDialog->ReadFrom( aOldFormat );
-            weld::DialogController::runAsync(pDistanceDialog, [aOldFormat, pDistanceDialog, this](sal_Int32 nResult) {
+            auto xOldFormat = std::make_shared<SmFormat>(GetFormat());
+            pDistanceDialog->ReadFrom(*xOldFormat);
+            weld::DialogController::runAsync(pDistanceDialog, [xOldFormat=std::move(xOldFormat), pDistanceDialog, this](sal_Int32 nResult) {
                 if (nResult == RET_OK)
                 {
-                    SmFormat aNewFormat( aOldFormat );
+                    SmFormat aNewFormat(*xOldFormat);
                     pDistanceDialog->WriteTo(aNewFormat);
 
                     SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                     if (pTmpUndoMgr)
                         pTmpUndoMgr->AddUndoAction(
-                            std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                            std::make_unique<SmFormatAction>(this, *xOldFormat, aNewFormat));
 
                     SetFormat( aNewFormat );
                     Repaint();
@@ -956,12 +956,12 @@ void SmDocShell::Execute(SfxRequest& rReq)
         case SID_ALIGN:
         {
             auto pAlignDialog = std::make_shared<SmAlignDialog>(rReq.GetFrameWeld());
-            SmFormat aOldFormat  = GetFormat();
-            pAlignDialog->ReadFrom( aOldFormat );
-            weld::DialogController::runAsync(pAlignDialog, [aOldFormat, pAlignDialog, this](sal_Int32 nResult) {
+            auto xOldFormat = std::make_shared<SmFormat>(GetFormat());
+            pAlignDialog->ReadFrom(*xOldFormat);
+            weld::DialogController::runAsync(pAlignDialog, [xOldFormat=std::move(xOldFormat), pAlignDialog, this](sal_Int32 nResult) {
                 if (nResult == RET_OK)
                 {
-                    SmFormat aNewFormat( aOldFormat );
+                    SmFormat aNewFormat(*xOldFormat);
                     pAlignDialog->WriteTo(aNewFormat);
 
                     auto* config = SmModule::get()->GetConfig();
@@ -972,7 +972,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                     if (pTmpUndoMgr)
                         pTmpUndoMgr->AddUndoAction(
-                            std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+                            std::make_unique<SmFormatAction>(this, *xOldFormat, aNewFormat));
 
                     SetFormat( aNewFormat );
                     Repaint();
