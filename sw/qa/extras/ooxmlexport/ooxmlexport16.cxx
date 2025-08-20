@@ -490,6 +490,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf168017, "tdf168017.docx")
+{
+    // Don't crash when document is imported
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf125936_numberingSuperscript, "tdf125936_numberingSuperscript.docx")
 {
     // Without the fix, the first character run was superscripted.
