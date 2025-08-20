@@ -25,19 +25,18 @@
 #include <vcl/customweld.hxx>
 
 class SfxObjectShell;
-class ValueSet;
 class SvxLineStyleToolBoxControl;
 
 class SvxLineBox final : public WeldToolbarPopup
 {
     rtl::Reference<SvxLineStyleToolBoxControl> mxControl;
-    std::unique_ptr<ValueSet> mxLineStyleSet;
-    std::unique_ptr<weld::CustomWeld> mxLineStyleSetWin;
+    std::unique_ptr<weld::IconView> mxLineStyleIV;
 
     void FillControl();
     void Fill(const XDashListRef& pList);
 
-    DECL_LINK(SelectHdl, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     virtual void GrabFocus() override;
 

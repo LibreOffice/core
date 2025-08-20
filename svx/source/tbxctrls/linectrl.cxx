@@ -26,7 +26,6 @@
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
-#include <svtools/valueset.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
@@ -56,7 +55,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star;
 
 // For End Line Controller
-#define MAX_LINES 12
 
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
@@ -548,21 +546,27 @@ com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
 SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"svx/ui/floatinglinestyle.ui"_ustr, u"FloatingLineStyle"_ustr)
     , mxControl(pControl)
-    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxLineStyleSet))
+    , mxLineStyleIV(m_xBuilder->weld_icon_view(u"floating_line_style_iconview"_ustr))
 {
-    mxLineStyleSet->SetStyle(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
-
     FillControl();
 
-    mxLineStyleSet->SelectItem(nInitialIndex + 1);
+    if (nInitialIndex >= 0)
+        mxLineStyleIV->select(nInitialIndex);
 
-    mxLineStyleSet->SetSelectHdl( LINK( this, SvxLineBox, SelectHdl ) );
+    mxLineStyleIV->connect_item_activated( LINK( this, SvxLineBox, ItemActivatedHdl ) );
+
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        mxLineStyleIV->connect_query_tooltip(LINK(this, SvxLineBox, QueryTooltipHdl));
+    }
 }
 
 void SvxLineBox::GrabFocus()
 {
-    mxLineStyleSet->GrabFocus();
+    mxLineStyleIV->grab_focus();
 }
 
 SvxLineBox::~SvxLineBox()
@@ -573,18 +577,24 @@ SvxLineBox::~SvxLineBox()
 
 void SvxLineBox::Fill( const XDashListRef &pList )
 {
-    mxLineStyleSet->Clear();
+    mxLineStyleIV->clear();
 
     if( !pList.is() )
         return;
 
     // entry for 'none'
-    mxLineStyleSet->InsertItem(1, Image(), pList->GetStringForUiNoLine());
+    ScopedVclPtrInstance< VirtualDevice > pVDEmpty;
+    pVDEmpty->SetOutputSizePixel(pList->GetBitmapForUISolidLine().GetSizePixel(), false);
+    pVDEmpty->Erase(); // Uses default white background
+    mxLineStyleIV->append(u"1"_ustr, pList->GetStringForUiNoLine(), pVDEmpty.get());
 
     // entry for solid line
-    const auto& rBmp = pList->GetBitmapForUISolidLine();
+    ScopedVclPtrInstance< VirtualDevice > pVDSolid;
+    const BitmapEx& rBmp = pList->GetBitmapForUISolidLine();
     Size aBmpSize = rBmp.GetSizePixel();
-    mxLineStyleSet->InsertItem(2, Image(rBmp), pList->GetStringForUiSolidLine());
+    pVDSolid->SetOutputSizePixel(aBmpSize, false);
+    pVDSolid->DrawBitmapEx(Point(), rBmp);
+    mxLineStyleIV->append(u"2"_ustr, pList->GetStringForUiSolidLine(), pVDSolid.get());
 
     // entries for dashed lines
     tools::Long nCount = pList->Count();
@@ -593,32 +603,24 @@ void SvxLineBox::Fill( const XDashListRef &pList )
         const XDashEntry* pEntry = pList->GetDash(i);
         const BitmapEx aBitmap = pList->GetUiBitmap(i);
 
-        mxLineStyleSet->InsertItem(i + 3, Image(aBitmap), pEntry->GetName());
+        ScopedVclPtrInstance< VirtualDevice > pVDDash;
+        Size aDashSize = aBitmap.GetSizePixel();
+        pVDDash->SetOutputSizePixel(aDashSize, false);
+        pVDDash->DrawBitmapEx(Point(), aBitmap);
+
+        mxLineStyleIV->append(OUString::number(i + 3), pEntry->GetName(), pVDDash.get());
     }
-
-    sal_uInt16 nLines = std::min( static_cast<sal_uInt16>(nCount + 2), sal_uInt16(MAX_LINES) );
-    mxLineStyleSet->SetLineCount(nLines);
-
-    WinBits nBits = mxLineStyleSet->GetStyle();
-    if ( nLines == mxLineStyleSet->GetItemCount() )
-        nBits &= ~WB_VSCROLL;
-    else
-        nBits |= WB_VSCROLL;
-    mxLineStyleSet->SetStyle( nBits );
-
-    Size aSize(aBmpSize);
-    aSize.AdjustWidth(6);
-    aSize.AdjustHeight(6);
-    aSize = mxLineStyleSet->CalcWindowSizePixel(aSize);
-    mxLineStyleSet->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    mxLineStyleSet->SetOutputSizePixel(aSize);
 }
 
-IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxLineBox, ItemActivatedHdl, weld::IconView&, bool)
 {
+    OUString sId = mxLineStyleIV->get_selected_id();
+    if (sId.isEmpty())
+        return false;
+
     drawing::LineStyle eXLS;
-    sal_Int32 nPos = mxLineStyleSet->GetSelectedItemId();
-    --nPos; // ids start at 1, get the pos of the id
+    sal_Int32 nPos = sId.toUInt32();
+    --nPos; // Convert from 1-based ID to 0-based position
 
     switch ( nPos )
     {
@@ -668,6 +670,53 @@ IMPL_LINK_NOARG(SvxLineBox, SelectHdl, ValueSet*, void)
     mxControl->dispatchLineStyleCommand(u".uno:XLineStyle"_ustr, aArgs);
 
     mxControl->EndPopupMode();
+
+    return true;
+}
+
+IMPL_LINK(SvxLineBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = mxLineStyleIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_Int32 nPos = sId.toUInt32();
+    --nPos; // Convert from 1-based ID to 0-based position
+
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    if (!pSh)
+        return OUString();
+
+    const SvxDashListItem* pItem = pSh->GetItem(SID_DASH_LIST);
+    if (!pItem)
+        return OUString();
+
+    XDashListRef pList = pItem->GetDashList();
+    if (!pList.is())
+        return OUString();
+
+    switch (nPos)
+    {
+        case 0:
+            return pList->GetStringForUiNoLine();
+        case 1:
+            return pList->GetStringForUiSolidLine();
+        default:
+        {
+            tools::Long nDashIndex = nPos - 2;
+            if (nDashIndex >= 0 && nDashIndex < pList->Count())
+            {
+                const XDashEntry* pEntry = pList->GetDash(nDashIndex);
+                if (pEntry)
+                {
+                    return pEntry->GetName();
+                }
+            }
+            break;
+        }
+    }
+
+    return OUString();
 }
 
 void SvxLineBox::FillControl()
