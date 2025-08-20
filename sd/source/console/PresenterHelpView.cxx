@@ -392,6 +392,9 @@ void PresenterHelpView::CheckFontSize()
                     rxBlock->maRight.GetHeight());
             });
 
+        if (nY == 0)
+            break;
+
         const double nHeightDifference (nY - (mnSeparatorY-gnVerticalBorder));
         if (nHeightDifference <= 0 && nHeightDifference > -50)
         {
