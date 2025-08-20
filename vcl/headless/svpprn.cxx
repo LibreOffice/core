@@ -60,8 +60,6 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     return aDir;
 }
 
-static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
-
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->SetOrientation( rData.m_eOrientation == orientation::Landscape ? Orientation::Landscape : Orientation::Portrait );
@@ -76,9 +74,9 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pJobSetup->SetPaperHeight( 0 );
     if( pJobSetup->GetPaperFormat() == PAPER_USER )
     {
-        // transform to 100dth mm
-        width               = PtTo10Mu( width );
-        height              = PtTo10Mu( height );
+        // convert from points to 1/100 mm
+        width = o3tl::convert(width, o3tl::Length::pt, o3tl::Length::mm100);
+        height = o3tl::convert(height, o3tl::Length::pt, o3tl::Length::mm100);
 
         if( rData.m_eOrientation == psp::orientation::Portrait )
         {
