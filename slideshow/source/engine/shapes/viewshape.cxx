@@ -40,15 +40,25 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "viewshape.hxx"
+#include "basegfx/color/bcolor.hxx"
 #include "basegfx/point/b2dpoint.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
+#include "canvasbitmap.hxx"
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_canvascustomsprite.hxx"
 #include "cairo_spritecanvas.hxx"
 #include "com/sun/star/uno/Reference.h"
+#include "comphelper/servicehelper.hxx"
+#include <PresenterCanvas.hxx>
+#include "drawinglayer/attribute/lineattribute.hxx"
 #include "drawinglayer/geometry/viewinformation2d.hxx"
+#include "drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx"
+#include "drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
+#include "drawinglayer/processor2d/vclpixelprocessor2d.hxx"
 #include "sal/types.h"
+#include "spritecanvas.hxx"
 #include "vcl/outdev.hxx"
 #include <tools.hxx>
 #include <utility>
@@ -875,6 +885,25 @@ namespace slideshow::internal
             }
             else
             {
+                // Step 1: Create a rectangle polygon
+                // Let's say rectangle at (10, 10) with width=50, height=30
+                basegfx::B2DRange rectRange(0.0, 0.0, 60000.0, 40000.0); // x1, y1, x2, y2
+                basegfx::B2DPolygon rectPolygon = basegfx::utils::createPolygonFromRect(rectRange);
+                basegfx::B2DPolyPolygon rectPolyPolygon(rectPolygon);
+
+                // Step 2: Create fill primitive (red fill)
+                basegfx::BColor fillColor(1.0, 0.0, 0.0); // RGB red in 0..1
+                drawinglayer::primitive2d::Primitive2DReference xFillPrim(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(rectPolyPolygon,
+                                                                               fillColor));
+
+                // Step 3: Create stroke primitive (blue outline)
+                basegfx::BColor strokeColor(0.0, 0.0, 1.0); // RGB blue
+                drawinglayer::attribute::LineAttribute lineAttr(strokeColor,
+                                                                1.0); // width = 1.0 units
+                drawinglayer::primitive2d::Primitive2DReference xStrokePrim(
+                    new drawinglayer::primitive2d::PolygonStrokePrimitive2D(rectPolygon, lineAttr));
+
                 // The call below can be uncommented to check
                 // if the shape rendered using primitives
                 // perfectly overlaps the shape rendered
@@ -891,10 +920,28 @@ namespace slideshow::internal
                     return true;
                 if (!bIsVisible)
                     return true;
+
+                drawinglayer::geometry::ViewInformation2D aViewInormation;
+                aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
+                basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
+                // Original Position of center of shape wrt origin
+                basegfx::B2DPoint aOrigCenterPos(rArgs.maOrigBounds.getCenter());
+                aOrigCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Current Position of center of shape wrt origin
+                basegfx::B2DPoint aCurrCenterPos(rArgs.maBounds.getCenter());
+                aCurrCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Bring the shape to the current Position
+                aMatrix.translate(-aOrigCenterPos + aCurrCenterPos);
+                aViewInormation.setViewTransformation(aMatrix);
+
                 uno::Reference<css::lang::XServiceInfo> xInfo(
                     mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY);
                 cairo::SurfaceSharedPtr pSurface;
-                if (!xInfo.is() || xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
+                if (!xInfo.is())
+                {
+                    return true;
+                }
+                if (xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
                 {
                     /* return render( mpViewLayer->getCanvas(),
                                    rMtf,
@@ -904,6 +951,35 @@ namespace slideshow::internal
                                    rArgs.mrAttr,
                                    rArgs.mrSubsets,
                                    bIsVisible ); */
+                    vclcanvas::CanvasBitmap* pCanvasBitmap
+                        = static_cast<vclcanvas::CanvasBitmap*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    OutputDevice& rOutDev = pCanvasBitmap->mrOutDev;
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    /* drawinglayer::primitive2d::Primitive2DContainer rContainer2;
+                    rContainer2.push_back(xFillPrim);
+                    rContainer2.push_back(xStrokePrim); */
+                    // aProcessor.process(rContainer2);
+                    aProcessor.process(rContainer);
+                    return true;
+                }
+                else if(xInfo->getImplementationName().indexOf("PresenterCanvas") != -1)
+                {
+                    sd::presenter::PresenterCanvas* pPresentationCanvas
+                        = static_cast<sd::presenter::PresenterCanvas*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    vclcanvas::SpriteCanvas* pSpriteCanvas = static_cast<vclcanvas::SpriteCanvas*>(
+                        pPresentationCanvas->mxUpdateCanvas.get());
+                    OutputDevice& rOutDev = *pSpriteCanvas->mpOutDev;
+                    /* drawinglayer::geometry::ViewInformation2D aViewInormation;
+                    basegfx::B2DHomMatrix aMatrix;
+                    aViewInormation.setViewTransformation(aMatrix); */
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    drawinglayer::primitive2d::Primitive2DContainer rContainer2;
+                    rContainer2.push_back(xFillPrim);
+                    rContainer2.push_back(xStrokePrim);
+                    /* aProcessor.process(rContainer2);
+                    pSpriteCanvas->updateScreen(true); */
                     return true;
                 }
                 if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
@@ -922,7 +998,7 @@ namespace slideshow::internal
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
                     pSurface = pCanvasCustomSprite->getSurface();
                 }
-                else
+                else if(xInfo->getImplementationName().indexOf("CanvasBitmap") != -1)
                 {
                     // Bitmap Canvas
                     cairocanvas::CanvasBitmap* pCanvasBitmap
@@ -930,19 +1006,11 @@ namespace slideshow::internal
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
                     pSurface = pCanvasBitmap->getSurface();
                 }
+                else
+                {
+                    return true;
+                }
 
-                drawinglayer::geometry::ViewInformation2D aViewInormation;
-                aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
-                basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
-                // Original Position of center of shape wrt origin
-                basegfx::B2DPoint aOrigCenterPos(rArgs.maOrigBounds.getCenter());
-                aOrigCenterPos *= mpViewLayer->getSpriteTransformation();
-                // Current Position of center of shape wrt origin
-                basegfx::B2DPoint aCurrCenterPos(rArgs.maBounds.getCenter());
-                aCurrCenterPos *= mpViewLayer->getSpriteTransformation();
-                // Bring the shape to the current Position
-                aMatrix.translate(-aOrigCenterPos + aCurrCenterPos);
-                aViewInormation.setViewTransformation(aMatrix);
                 drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
                     aViewInormation, pSurface->getCairoSurface().get());
                 aProcessor.process(rContainer);

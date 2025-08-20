@@ -94,6 +94,7 @@ namespace vclcanvas
             pOutDevProvider = std::make_shared<OutDevHolder>(*pOutDev);
 
         // setup helper
+        mpOutDev = &pOutDevProvider->getOutDev();
         maDeviceHelper.init( pOutDevProvider );
         setWindow( xParentWindow.is()
             ? uno::Reference<awt::XWindow2>(xParentWindow, uno::UNO_QUERY_THROW)

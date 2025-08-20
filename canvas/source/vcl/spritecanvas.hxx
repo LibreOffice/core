@@ -109,6 +109,7 @@ namespace vclcanvas
                             css::uno::XComponentContext >& rxContext );
 
         void initialize();
+        OutputDevice* mpOutDev;
 
         /// For resource tracking
         virtual ~SpriteCanvas() override;

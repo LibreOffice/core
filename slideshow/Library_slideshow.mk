@@ -15,8 +15,10 @@ $(eval $(call gb_Library_set_include,slideshow,\
     -I$(SRCDIR)/slideshow/source/engine/shapes \
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/source/ui/presenter \
     -I$(SRCDIR)/sd/source/ui/slideshow \
     -I$(SRCDIR)/canvas/source/cairo \
+    -I$(SRCDIR)/canvas/source/vcl \
     -I$(SRCDIR)/canvas/inc \
     -I$(SRCDIR)/svx/inc \
 ))
@@ -39,7 +41,6 @@ $(eval $(call gb_Library_use_sdk_api,slideshow))
 $(eval $(call gb_Library_use_libraries,slideshow,\
     $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
-	cairocanvas \
     canvastools \
     comphelper \
     cppcanvas \

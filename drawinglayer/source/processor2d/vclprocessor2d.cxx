@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vclprocessor2d.hxx"
+#include <drawinglayer/processor2d/vclprocessor2d.hxx>
 
 #include "getdigitlanguage.hxx"
 #include "vclhelperbufferdevice.hxx"

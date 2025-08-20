@@ -18,7 +18,7 @@
  */
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/gdimtf.hxx>
-#include "vclpixelprocessor2d.hxx"
+#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include "vclmetafileprocessor2d.hxx"
 #include <config_vclplug.h>
 

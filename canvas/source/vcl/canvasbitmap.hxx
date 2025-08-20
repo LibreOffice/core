@@ -35,6 +35,7 @@
 
 #include "impltools.hxx"
 #include "repainttarget.hxx"
+#include "vcl/outdev.hxx"
 
 
 /* Definition of CanvasBitmap class */
@@ -67,6 +68,7 @@ namespace vclcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
+        OutputDevice& mrOutDev;
         CanvasBitmap( const ::Size&                                rSize,
                       bool                                         bAlphaBitmap,
                       css::rendering::XGraphicDevice&              rDevice,
