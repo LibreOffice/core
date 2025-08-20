@@ -20,13 +20,13 @@ namespace com::sun::star::rendering
 class XPolyPolygon2D;
 }
 
-namespace cppcanvas
-{
-namespace tools
+namespace cppcanvastools
 {
 struct TextLineInfo;
 }
 
+namespace cppcanvas
+{
 namespace internal
 {
 struct OutDevState;
@@ -59,7 +59,7 @@ public:
 
     /** Init textlines with specified linewidth and TextLineInfo.
      */
-    void init(double nLineWidth, const tools::TextLineInfo& rLineInfo);
+    void init(double nLineWidth, const cppcanvastools::TextLineInfo& rLineInfo);
 
     /** Fill the textlines with colors.
         OutDevState::textUnderlineColor.

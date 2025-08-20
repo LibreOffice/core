@@ -92,7 +92,7 @@ namespace cppcanvas::internal
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
 
                 if( bFill )
                     maFillColor = rState.fillColor;
@@ -112,7 +112,7 @@ namespace cppcanvas::internal
                 maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
 
                 if( bFill )
                 {
@@ -192,7 +192,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds(
+                return cppcanvastools::calcDevicePixelBounds(
                     maBounds,
                     mpCanvas->getViewState(),
                     aLocalState );
@@ -262,7 +262,7 @@ namespace cppcanvas::internal
                 mpCanvas( rCanvas ),
                 maTexture( rTexture )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
             }
 
             bool TexturedPolyPolyAction::renderPrimitive( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
@@ -303,7 +303,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds(
+                return cppcanvastools::calcDevicePixelBounds(
                     maBounds,
                     mpCanvas->getViewState(),
                     aLocalState );
@@ -371,7 +371,7 @@ namespace cppcanvas::internal
                 mpCanvas( rCanvas ),
                 maStrokeAttributes(std::move( aStrokeAttributes ))
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
             }
 
@@ -411,7 +411,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds(
+                return cppcanvastools::calcDevicePixelBounds(
                     maBounds,
                     mpCanvas->getViewState(),
                     aLocalState );

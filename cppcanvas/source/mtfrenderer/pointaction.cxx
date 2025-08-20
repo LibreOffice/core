@@ -78,7 +78,7 @@ namespace cppcanvas::internal
                 maPoint( rPoint ),
                 mpCanvas(std::move( xCanvas ))
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
             }
 
@@ -89,7 +89,7 @@ namespace cppcanvas::internal
                 maPoint( rPoint ),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = vcl::unotools::colorToDoubleSequence(
                     rAltColor,
                     rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
@@ -127,7 +127,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.getX()-1,
+                return cppcanvastools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.getX()-1,
                                                                           maPoint.getY()-1,
                                                                           maPoint.getX()+1,
                                                                           maPoint.getY()+1 ),

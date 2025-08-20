@@ -43,9 +43,10 @@ namespace cppcanvas
     {
         struct OutDevState;
     }
+}
 
-    namespace tools
-    {
+namespace cppcanvastools
+{
         /** Init render state from OutDevState
 
             This method initializes the given render state object,
@@ -131,7 +132,7 @@ namespace cppcanvas
          */
         bool modifyClip( css::rendering::RenderState&                       o_rRenderState,
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
-                         const CanvasSharedPtr&                             rCanvas,
+                         const ::cppcanvas::CanvasSharedPtr&                rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
                          const ::basegfx::B2DVector*                        pScaling,
                          const double*                                      pRotation );
@@ -206,7 +207,6 @@ namespace cppcanvas
                                          ::basegfx::B2DPolyPolygon& rUnderlinePolyPoly,
                                          ::basegfx::B2DPolyPolygon& rStrikeoutPolyPoly );
 
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

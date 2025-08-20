@@ -83,7 +83,7 @@ namespace cppcanvas::internal
                 mxBitmap( vcl::unotools::xBitmapFromBitmap( rBmpEx ) ),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
 
                 // Setup transformation such that the next render call is
                 // moved rPoint away.
@@ -92,7 +92,7 @@ namespace cppcanvas::internal
                                                       aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState,
+                cppcanvastools::modifyClip( maState,
                                    rState,
                                    rCanvas,
                                    rDstPoint,
@@ -109,7 +109,7 @@ namespace cppcanvas::internal
                 mxBitmap( vcl::unotools::xBitmapFromBitmap( rBmp ) ),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
 
                 // Setup transformation such that the next render call is
                 // moved rPoint away, and scaled according to the ratio
@@ -123,7 +123,7 @@ namespace cppcanvas::internal
                 ::canvastools::appendToRenderState( maState, aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState,
+                cppcanvastools::modifyClip( maState,
                                    rState,
                                    rCanvas,
                                    rDstPoint,
@@ -166,7 +166,7 @@ namespace cppcanvas::internal
 
                 const geometry::IntegerSize2D aSize( mxBitmap->getSize() );
 
-                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( 0,0,
+                return cppcanvastools::calcDevicePixelBounds( ::basegfx::B2DRange( 0,0,
                                                                           aSize.Width,
                                                                           aSize.Height ),
                                                      mpCanvas->getViewState(),

@@ -23,22 +23,22 @@
 
 using namespace ::com::sun::star;
 
-namespace cppcanvas::tools
+namespace cppcanvastools
 {
-        uno::Sequence< double > intSRGBAToDoubleSequence( IntSRGBA aColor  )
+        uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA aColor  )
         {
             uno::Sequence< double > aRes{
-                getRed(aColor) / 255.0,
-                getGreen(aColor) / 255.0,
-                getBlue(aColor) / 255.0,
-                getAlpha(aColor) / 255.0
+                cppcanvas::getRed(aColor) / 255.0,
+                cppcanvas::getGreen(aColor) / 255.0,
+                cppcanvas::getBlue(aColor) / 255.0,
+                cppcanvas::getAlpha(aColor) / 255.0
             };
             return aRes;
         }
 
-        IntSRGBA doubleSequenceToIntSRGBA( const uno::Sequence< double >& rColor  )
+        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const uno::Sequence< double >& rColor  )
         {
-            return makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
+            return cppcanvas::makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[1] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[2] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[3] + .5 ) );

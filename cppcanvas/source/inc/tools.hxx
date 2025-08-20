@@ -22,11 +22,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppcanvas/color.hxx>
 
-namespace cppcanvas::tools
+namespace cppcanvastools
     {
-        css::uno::Sequence< double > intSRGBAToDoubleSequence( IntSRGBA );
+        css::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA );
 
-        IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
+        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
     }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

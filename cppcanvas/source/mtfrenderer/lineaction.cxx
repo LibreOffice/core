@@ -77,7 +77,7 @@ namespace cppcanvas::internal
                 maEndPoint( rEndPoint ),
                 mpCanvas(std::move( xCanvas ))
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
                 maState.DeviceColor = rState.lineColor;
             }
 
@@ -114,7 +114,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint,
+                return cppcanvastools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint,
                                                                           maEndPoint ),
                                                      mpCanvas->getViewState(),
                                                      aLocalState );

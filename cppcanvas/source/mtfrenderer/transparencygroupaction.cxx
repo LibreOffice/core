@@ -146,11 +146,11 @@ namespace cppcanvas::internal
                 maDstSize(rDstSize.getX(), rDstSize.getY()),
                 mpCanvas( rCanvas )
             {
-                tools::initRenderState(maState,rState);
+                cppcanvastools::initRenderState(maState,rState);
                 implSetupTransform( maState, rDstPoint );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState,
+                cppcanvastools::modifyClip( maState,
                                    rState,
                                    rCanvas,
                                    rDstPoint,
@@ -468,7 +468,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                return tools::calcDevicePixelBounds(
+                return cppcanvastools::calcDevicePixelBounds(
                     ::basegfx::B2DRange( 0,0,
                                          maDstSize.getWidth(),
                                          maDstSize.getHeight() ),

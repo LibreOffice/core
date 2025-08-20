@@ -59,19 +59,19 @@ namespace cppcanvas::internal
 
         void ImplPolyPolygon::setRGBAFillColor( IntSRGBA aColor )
         {
-            maFillColor = tools::intSRGBAToDoubleSequence( aColor );
+            maFillColor = cppcanvastools::intSRGBAToDoubleSequence( aColor );
             mbFillColorSet = true;
         }
 
         void ImplPolyPolygon::setRGBALineColor( IntSRGBA aColor )
         {
-            maStrokeColor = tools::intSRGBAToDoubleSequence( aColor );
+            maStrokeColor = cppcanvastools::intSRGBAToDoubleSequence( aColor );
             mbStrokeColorSet = true;
         }
 
         IntSRGBA ImplPolyPolygon::getRGBALineColor() const
         {
-            return tools::doubleSequenceToIntSRGBA( maStrokeColor );
+            return cppcanvastools::doubleSequenceToIntSRGBA( maStrokeColor );
         }
 
         void ImplPolyPolygon::setStrokeWidth( const double& rStrokeWidth )

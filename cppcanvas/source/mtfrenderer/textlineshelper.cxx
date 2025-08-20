@@ -44,12 +44,12 @@ TextLinesHelper::TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rSt
 {
 }
 
-void TextLinesHelper::init(double nLineWidth, const tools::TextLineInfo& rLineInfo)
+void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo& rLineInfo)
 {
     ::basegfx::B2DRange aRange; // default is empty.
     ::basegfx::B2DPolyPolygon aOverline, aUnderline, aStrikeout;
-    tools::createTextLinesPolyPolygon(0.0, nLineWidth, rLineInfo, aOverline, aUnderline,
-                                      aStrikeout);
+    cppcanvastools::createTextLinesPolyPolygon(0.0, nLineWidth, rLineInfo, aOverline, aUnderline,
+                                               aStrikeout);
 
     mxOverline.clear();
     mxUnderline.clear();
