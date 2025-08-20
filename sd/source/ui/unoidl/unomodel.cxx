@@ -4679,7 +4679,22 @@ OString SdXImpressDocument::getPresentationInfo() const
                 SdPage* pNotesPage = pPage ? mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes) : nullptr;
                 if (pNotesPage)
                 {
+                    SdrObject* pItObj = nullptr;
                     SdrObject* pNotes = pNotesPage->GetPresObj(PresObjKind::Notes);
+
+                    if (!pNotes)
+                    {
+                        for (size_t nNote = 0; nNote < pNotesPage->GetObjCount(); nNote++)
+                        {
+                            pItObj = pNotesPage->GetObj(nNote);
+                            if (pItObj && pItObj->GetObjIdentifier() == SdrObjKind::Text)
+                            {
+                                pNotes = pItObj;
+                                break;
+                            }
+                        }
+                    }
+
                     if (pNotes)
                     {
                         OUStringBuffer strNotes;
