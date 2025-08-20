@@ -280,8 +280,11 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     double fUIScale  = 1.0;
     if (mpView)
     {
-        fUIScale  = double(mpView->GetModel().GetUIScale());
-
+        double fModelUIScale  = double(mpView->GetModel().GetUIScale());
+        if (fModelUIScale == 0)
+            SAL_WARN("cui.tabpages", "zero UIScale");
+        else
+            fUIScale = fModelUIScale;
 
         if (mpView->GetMarkedObjectList().GetMarkCount() != 0)
         {
