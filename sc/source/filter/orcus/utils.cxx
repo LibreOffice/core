@@ -6,13 +6,14 @@
  */
 
 #include <orcus_utils.hxx>
+#include <osl/thread.hxx>
 
 orcus::file_content toFileContent(const OUString& rPath)
 {
 #ifdef _WIN32
     return orcus::file_content(rPath);
 #else
-    return orcus::file_content(rPath.toUtf8());
+    return orcus::file_content(OUStringToOString(rPath, osl_getThreadTextEncoding()));
 #endif
 }
 
