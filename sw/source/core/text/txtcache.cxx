@@ -137,22 +137,23 @@ std::unique_ptr<SwParaPortion> SwTextFrame::SetPara(std::unique_ptr<SwParaPortio
                                         Get( this, GetCacheIdx(), false ));
         if ( pTextLine )
         {
-            xOld = pTextLine->SetPara(std::move(xNew));
+            return pTextLine->SetPara(std::move(xNew));
         }
         else
         {
-            OSL_ENSURE( !xNew, "+SetPara: Losing SwParaPortion" );
             mnCacheIndex = USHRT_MAX;
         }
     }
-    else if (xNew)
-    {   // Insert a new one
+
+    if (xNew)
+    {
+        // Insert a new one
         SwTextLine *pTextLine = new SwTextLine(this, std::move(xNew));
         if (SwTextFrame::GetTextCache()->Insert(pTextLine, false))
             mnCacheIndex = pTextLine->GetCachePos();
         else
         {
-            OSL_FAIL( "+SetPara: InsertCache failed." );
+            OSL_FAIL("+SetPara: InsertCache failed, Losing SwParaPortion.");
         }
     }
 
