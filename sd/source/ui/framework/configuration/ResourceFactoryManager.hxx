@@ -96,7 +96,7 @@ private:
 
     /** Look up the factory for the given URL.
         @param rsURLBase
-            The css::tools::URL.Main part of a URL. Arguments have to be
+            The css::util::URL.Main part of a URL. Arguments have to be
             stripped off by the caller.
         @return
             When the factory has not yet been added then return NULL.
