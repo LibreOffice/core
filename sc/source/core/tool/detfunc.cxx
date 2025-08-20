@@ -74,7 +74,6 @@
 #include <vector>
 #include <memory>
 
-using ::std::vector;
 using namespace com::sun::star;
 
 namespace {
@@ -1331,7 +1330,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
 }
 
 void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  vector<ScTokenRef>& rRefTokens)
+                                  std::vector<ScTokenRef>& rRefTokens)
 {
     ScCellIterator aIter(rDoc, ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
@@ -1350,9 +1349,9 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 }
 
 void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  vector<ScTokenRef>& rRefTokens)
+                                  std::vector<ScTokenRef>& rRefTokens)
 {
-    vector<ScTokenRef> aSrcRange;
+    std::vector<ScTokenRef> aSrcRange;
     aSrcRange.push_back(
         ScRefTokenHelper::createRefToken(rDoc, ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)));
 

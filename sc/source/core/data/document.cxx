@@ -109,7 +109,6 @@ using namespace ::com::sun::star;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
-using ::std::set;
 
 namespace {
 
@@ -4399,13 +4398,13 @@ CRFlags ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
     return CRFlags::NONE;
 }
 
-void ScDocument::GetAllRowBreaks(set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
+void ScDocument::GetAllRowBreaks(std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
         pTable->GetAllRowBreaks(rBreaks, bPage, bManual);
 }
 
-void ScDocument::GetAllColBreaks(set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
+void ScDocument::GetAllColBreaks(std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
 {
     if (const ScTable* pTable = FetchTable(nTab))
         pTable->GetAllColBreaks(rBreaks, bPage, bManual);
@@ -6410,7 +6409,7 @@ bool lcl_hasDirtyRange(const ScDocument& rDoc, ScFormulaCell* pCell, const ScRan
 void ScDocument::SetSubTotalCellsDirty(const ScRange& rDirtyRange)
 {
     // to update the list by skipping cells that no longer contain subtotal function.
-    set<ScFormulaCell*> aNewSet;
+    std::set<ScFormulaCell*> aNewSet;
 
     bool bOldRecalc = GetAutoCalc();
     SetAutoCalc(false);

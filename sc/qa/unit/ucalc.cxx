@@ -69,8 +69,6 @@
 
 class ScUndoPaste;
 class ScUndoCut;
-using ::std::cerr;
-using ::std::endl;
 
 namespace {
 
@@ -414,8 +412,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPoolUndoDoc)
                 svl::SharedString aSS2 = rCopyDoc.GetSharedString(aPos);
                 if (aSS1.getDataIgnoreCase() != aSS2.getDataIgnoreCase())
                 {
-                    cerr << "String hash values are not equal at row " << (i+1)
-                        << " for string '" << aSS1.getString() << "'" << endl;
+                    std::cerr << "String hash values are not equal at row " << (i+1)
+                        << " for string '" << aSS1.getString() << "'" << std::endl;
                     return false;
                 }
             }
@@ -1165,27 +1163,27 @@ bool Test::checkHorizontalIterator(ScDocument& rDoc, const std::vector<std::vect
     {
         if (i >= nCheckCount)
         {
-            cerr << "hit invalid check " << i << " of " << nCheckCount << endl;
+            std::cerr << "hit invalid check " << i << " of " << nCheckCount << std::endl;
             CPPUNIT_FAIL("Iterator claims there is more data than there should be.");
             return false;
         }
 
         if (pChecks[i].nCol != nCol)
         {
-            cerr << "Column mismatch " << pChecks[i].nCol << " vs. " << nCol << endl;
+            std::cerr << "Column mismatch " << pChecks[i].nCol << " vs. " << nCol << std::endl;
             return false;
         }
 
         if (pChecks[i].nRow != nRow)
         {
-            cerr << "Row mismatch " << pChecks[i].nRow << " vs. " << nRow << endl;
+            std::cerr << "Row mismatch " << pChecks[i].nRow << " vs. " << nRow << std::endl;
             return false;
         }
 
         if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(rDoc))
         {
-            cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
-                pCell->getString(rDoc) << endl;
+            std::cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
+                pCell->getString(rDoc) << std::endl;
             return false;
         }
     }
@@ -1549,14 +1547,14 @@ bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const Sc
     const SvtBroadcaster* pBC = rDoc.GetBroadcaster(rFrom);
     if (pBC)
     {
-        cerr << "Broadcaster shouldn't be here." << endl;
+        std::cerr << "Broadcaster shouldn't be here." << std::endl;
         return false;
     }
 
     pBC = rDoc.GetBroadcaster(rTo);
     if (!pBC)
     {
-        cerr << "Broadcaster should be here." << endl;
+        std::cerr << "Broadcaster should be here." << std::endl;
         return false;
     }
     return true;
@@ -1567,21 +1565,21 @@ formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos
     ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
     {
-        cerr << "Formula cell expected, but not found." << endl;
+        std::cerr << "Formula cell expected, but not found." << std::endl;
         return nullptr;
     }
 
     ScTokenArray* pTokens = pFC->GetCode();
     if (!pTokens)
     {
-        cerr << "Token array is not present." << endl;
+        std::cerr << "Token array is not present." << std::endl;
         return nullptr;
     }
 
     formula::FormulaToken* pToken = pTokens->FirstToken();
     if (!pToken || pToken->GetType() != formula::svSingleRef)
     {
-        cerr << "Not a single reference token." << endl;
+        std::cerr << "Not a single reference token." << std::endl;
         return nullptr;
     }
 
@@ -1597,13 +1595,13 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCCOL nRelCo
     ScSingleRefData& rRef = *pToken->GetSingleRef();
     if (!rRef.IsColRel() || rRef.Col() != nRelCol)
     {
-        cerr << "Unexpected relative column address." << endl;
+        std::cerr << "Unexpected relative column address." << std::endl;
         return false;
     }
 
     if (!rRef.IsRowRel() || rRef.Row() != nRelRow)
     {
-        cerr << "Unexpected relative row address." << endl;
+        std::cerr << "Unexpected relative row address." << std::endl;
         return false;
     }
 
@@ -1619,7 +1617,7 @@ bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
     ScSingleRefData& rRef = *pToken->GetSingleRef();
     if (!rRef.IsDeleted())
     {
-        cerr << "Deleted reference is expected, but it's still a valid reference." << endl;
+        std::cerr << "Deleted reference is expected, but it's still a valid reference." << std::endl;
         return false;
     }
 

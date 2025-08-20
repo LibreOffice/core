@@ -28,7 +28,6 @@
 
 using namespace com::sun::star;
 
-using ::std::vector;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 

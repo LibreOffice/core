@@ -58,8 +58,6 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::unique_ptr;
-using ::std::vector;
 
 namespace
 {
@@ -335,7 +333,7 @@ bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell& rNewDocShell, const vector<SCTAB> &aTab,
+ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell& rNewDocShell, const std::vector<SCTAB> &aTab,
                                     ScDocumentUniquePtr pUndoDocument, std::unique_ptr<ScRefUndoData> pRefData ) :
     ScMoveUndo( rNewDocShell, std::move(pUndoDocument), std::move(pRefData) )
 {
@@ -574,8 +572,8 @@ bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoMoveTab::ScUndoMoveTab(
-    ScDocShell& rNewDocShell, std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
-    std::unique_ptr<vector<OUString>> pOldNames, std::unique_ptr<vector<OUString>> pNewNames) :
+    ScDocShell& rNewDocShell, std::unique_ptr<std::vector<SCTAB>> pOldTabs, std::unique_ptr<std::vector<SCTAB>> pNewTabs,
+    std::unique_ptr<std::vector<OUString>> pOldNames, std::unique_ptr<std::vector<OUString>> pNewNames) :
     ScSimpleUndo( rNewDocShell ),
     mpOldTabs(std::move(pOldTabs)), mpNewTabs(std::move(pNewTabs)),
     mpOldNames(std::move(pOldNames)), mpNewNames(std::move(pNewNames))
@@ -686,8 +684,8 @@ bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoCopyTab::ScUndoCopyTab(
     ScDocShell& rNewDocShell,
-    std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
-    std::unique_ptr<vector<OUString>> pNewNames) :
+    std::unique_ptr<std::vector<SCTAB>> pOldTabs, std::unique_ptr<std::vector<SCTAB>> pNewTabs,
+    std::unique_ptr<std::vector<OUString>> pNewNames) :
     ScSimpleUndo( rNewDocShell ),
     mpOldTabs(std::move(pOldTabs)),
     mpNewTabs(std::move(pNewTabs)),
@@ -731,7 +729,7 @@ void ScUndoCopyTab::Undo()
 
     DoSdrUndoAction( pDrawUndo.get(), &rDoc );         // before the sheets are deleted
 
-    vector<SCTAB>::const_reverse_iterator itr, itrEnd = mpNewTabs->rend();
+    std::vector<SCTAB>::const_reverse_iterator itr, itrEnd = mpNewTabs->rend();
     for (itr = mpNewTabs->rbegin(); itr != itrEnd; ++itr)
     {
         SCTAB nDestTab = *itr;
@@ -1276,7 +1274,7 @@ OUString ScUndoShowHideTab::GetComment() const
     return ScResId(pId);
 }
 
-ScUndoDocProtect::ScUndoDocProtect(ScDocShell& rShell, unique_ptr<ScDocProtection> && pProtectSettings) :
+ScUndoDocProtect::ScUndoDocProtect(ScDocShell& rShell, std::unique_ptr<ScDocProtection> && pProtectSettings) :
     ScSimpleUndo(rShell),
     mpProtectSettings(std::move(pProtectSettings))
 {
@@ -1293,7 +1291,7 @@ void ScUndoDocProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
-        unique_ptr<ScDocProtection> pCopy(new ScDocProtection(*mpProtectSettings));
+        std::unique_ptr<ScDocProtection> pCopy(new ScDocProtection(*mpProtectSettings));
         pCopy->setProtected(true);
         rDoc.SetDocProtection(pCopy.get());
     }
@@ -1343,7 +1341,7 @@ OUString ScUndoDocProtect::GetComment() const
     return ScResId(pId);
 }
 
-ScUndoTabProtect::ScUndoTabProtect(ScDocShell& rShell, SCTAB nTab, unique_ptr<ScTableProtection> && pProtectSettings) :
+ScUndoTabProtect::ScUndoTabProtect(ScDocShell& rShell, SCTAB nTab, std::unique_ptr<ScTableProtection> && pProtectSettings) :
     ScSimpleUndo(rShell),
     mnTab(nTab),
     mpProtectSettings(std::move(pProtectSettings))
@@ -1361,7 +1359,7 @@ void ScUndoTabProtect::DoProtect(bool bProtect)
     if (bProtect)
     {
         // set protection.
-        unique_ptr<ScTableProtection> pCopy(new ScTableProtection(*mpProtectSettings));
+        std::unique_ptr<ScTableProtection> pCopy(new ScTableProtection(*mpProtectSettings));
         pCopy->setProtected(true);
         rDoc.SetTabProtection(mnTab, pCopy.get());
     }

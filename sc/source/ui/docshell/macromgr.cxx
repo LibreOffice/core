@@ -31,8 +31,6 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::std::vector;
-using ::std::pair;
 
 /**
  * A simple container to keep track of cells that depend on basic modules
@@ -47,8 +45,8 @@ public:
         ModuleCellMap::iterator itr = maCells.find(rModuleName);
         if (itr == maCells.end())
         {
-            pair<ModuleCellMap::iterator, bool> r = maCells.emplace(
-                rModuleName, vector<ScFormulaCell*>());
+            std::pair<ModuleCellMap::iterator, bool> r = maCells.emplace(
+                rModuleName, std::vector<ScFormulaCell*>());
 
             if (!r.second)
                 // insertion failed.
@@ -67,13 +65,13 @@ public:
         }
     }
 
-    void getCellsByModule(const OUString& rModuleName, vector<ScFormulaCell*>& rCells)
+    void getCellsByModule(const OUString& rModuleName, std::vector<ScFormulaCell*>& rCells)
     {
         ModuleCellMap::iterator itr = maCells.find(rModuleName);
         if (itr == maCells.end())
             return;
 
-        vector<ScFormulaCell*>& rCellList = itr->second;
+        std::vector<ScFormulaCell*>& rCellList = itr->second;
 
         // Remove duplicates.
         std::sort(rCellList.begin(), rCellList.end());
@@ -81,12 +79,12 @@ public:
         rCellList.erase(last, rCellList.end());
 
         // exception safe copy
-        vector<ScFormulaCell*> temp(rCellList);
+        std::vector<ScFormulaCell*> temp(rCellList);
         rCells.swap(temp);
     }
 
 private:
-    typedef std::unordered_map<OUString, vector<ScFormulaCell*>> ModuleCellMap;
+    typedef std::unordered_map<OUString, std::vector<ScFormulaCell*>> ModuleCellMap;
     ModuleCellMap maCells;
 };
 
@@ -182,7 +180,7 @@ void ScMacroManager::RemoveDependentCell(const ScFormulaCell* pCell)
 
 void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
 {
-    vector<ScFormulaCell*> aCells;
+    std::vector<ScFormulaCell*> aCells;
     mpDepTracker->getCellsByModule(aModuleName, aCells);
     for (ScFormulaCell* pCell : aCells)
     {

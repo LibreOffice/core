@@ -5620,48 +5620,48 @@ void ScFormulaCell::SyncSharedCode()
 
 void ScFormulaCell::Dump() const
 {
-    cout << "-- formula cell (" << aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDocument) << ")" << endl;
-    cout << "  * shared: " << (mxGroup ? "true" : "false") << endl;
+    std::cout << "-- formula cell (" << aPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDocument) << ")" << std::endl;
+    std::cout << "  * shared: " << (mxGroup ? "true" : "false") << std::endl;
     if (mxGroup)
     {
-        cout << "    * shared length: " << mxGroup->mnLength << endl;
-        cout << "    * shared calc state: " << mxGroup->meCalcState << endl;
+        std::cout << "    * shared length: " << mxGroup->mnLength << std::endl;
+        std::cout << "    * shared calc state: " << mxGroup->meCalcState << std::endl;
     }
 
     sc::TokenStringContext aCxt(rDocument, rDocument.GetGrammar());
-    cout << "  * code: " << pCode->CreateString(aCxt, aPos) << endl;
+    std::cout << "  * code: " << pCode->CreateString(aCxt, aPos) << std::endl;
 
     FormulaError nErrCode = pCode->GetCodeError();
-    cout << "  * code error: ";
+    std::cout << "  * code error: ";
     if (nErrCode == FormulaError::NONE)
-        cout << "(none)";
+        std::cout << "(none)";
     else
     {
         OUString aStr = ScGlobal::GetErrorString(nErrCode);
-        cout << "  * code error: " << aStr << " (" << int(nErrCode) << ")";
+        std::cout << "  * code error: " << aStr << " (" << int(nErrCode) << ")";
     }
-    cout << endl;
+    std::cout << std::endl;
 
-    cout << "  * result: ";
+    std::cout << "  * result: ";
     sc::FormulaResultValue aRV = aResult.GetResult();
     switch (aRV.meType)
     {
         case sc::FormulaResultValue::Value:
-            cout << aRV.mfValue << " (value)";
+            std::cout << aRV.mfValue << " (value)";
             break;
         case sc::FormulaResultValue::String:
-            cout << aRV.maString.getString() << " (string)";
+            std::cout << aRV.maString.getString() << " (string)";
             break;
         case sc::FormulaResultValue::Error:
-            cout << ScGlobal::GetErrorString(aRV.mnError) << " (error: " << int(aRV.mnError) << ")";
+            std::cout << ScGlobal::GetErrorString(aRV.mnError) << " (error: " << int(aRV.mnError) << ")";
             break;
         case sc::FormulaResultValue::Invalid:
-            cout << "(invalid)";
+            std::cout << "(invalid)";
             break;
         default:
             ;
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 #endif

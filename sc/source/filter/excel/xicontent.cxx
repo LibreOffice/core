@@ -63,7 +63,6 @@
 #include <sal/log.hxx>
 
 using ::com::sun::star::uno::Sequence;
-using ::std::unique_ptr;
 
 // Shared string table ========================================================
 
@@ -245,9 +244,9 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
-    ::std::unique_ptr< OUString > xLongName;    // link / file name
-    ::std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
-    ::std::unique_ptr< OUString > xTextMark;    // text mark
+    std::unique_ptr< OUString > xLongName;    // link / file name
+    std::unique_ptr< OUString > xShortName;   // 8.3-representation of file name
+    std::unique_ptr< OUString > xTextMark;    // text mark
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
@@ -654,7 +653,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     const ScAddress& rPos = maRanges.front().aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
-    ::std::unique_ptr< ScTokenArray > xTokArr1;
+    std::unique_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 > 0 )
     {
         std::unique_ptr<ScTokenArray> pTokArr;
@@ -668,7 +667,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         }
     }
 
-    ::std::unique_ptr< ScTokenArray > xTokArr2;
+    std::unique_ptr< ScTokenArray > xTokArr2;
     if( nFmlaSize2 > 0 )
     {
         std::unique_ptr<ScTokenArray> pTokArr;
@@ -793,7 +792,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     // first formula
     // string list is single tStr token with NUL separators -> replace them with LF
     rStrm.SetNulSubstChar( '\n' );
-    ::std::unique_ptr< ScTokenArray > xTokArr1;
+    std::unique_ptr< ScTokenArray > xTokArr1;
 
     // We can't import the formula directly because we need the range
     sal_uInt16 nLenFormula1 = rStrm.ReaduInt16();
@@ -803,7 +802,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.Ignore(nLenFormula1);
 
     // second formula
-    ::std::unique_ptr< ScTokenArray > xTokArr2;
+    std::unique_ptr< ScTokenArray > xTokArr2;
 
     sal_uInt16 nLenFormula2 = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
@@ -1306,7 +1305,7 @@ void XclImpDocProtectBuffer::Apply() const
         // If neither is set then the document is not protected at all.
         return;
 
-    unique_ptr<ScDocProtection> pProtect(new ScDocProtection);
+    std::unique_ptr<ScDocProtection> pProtect(new ScDocProtection);
     pProtect->setProtected(true);
 
     if (mnPassHash)
@@ -1396,7 +1395,7 @@ void XclImpSheetProtectBuffer::Apply() const
             // This sheet is (for whatever reason) not protected.
             continue;
 
-        unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(true);
 
         // 16-bit hash password

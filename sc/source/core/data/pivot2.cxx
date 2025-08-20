@@ -20,13 +20,6 @@
 #include <pivot.hxx>
 #include <utility>
 
-#if DEBUG_PIVOT_TABLE
-using std::cout;
-using std::endl;
-#endif
-
-
-
 // ScDPName
 
 ScDPName::ScDPName() : mnDupCount(0)
@@ -153,9 +146,9 @@ ScPivotFuncData::ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask ) :
 #if DEBUG_PIVOT_TABLE
 void ScPivotFuncData::Dump() const
 {
-    cout << "ScPivotFuncData: (col=" << mnCol << ", original dim=" << mnOriginalDim
+    std::cout << "ScPivotFuncData: (col=" << mnCol << ", original dim=" << mnOriginalDim
         << ", func mask=" << static_cast<int>(mnFuncMask) << ", duplicate count=" << static_cast<int>(mnDupCount)
-        << ")" << endl;
+        << ")" << std::endl;
 }
 #endif
 

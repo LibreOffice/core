@@ -21,14 +21,14 @@ ScDPNumGroupInfo::ScDPNumGroupInfo() :
 
 void ScDPNumGroupInfo::Dump() const
 {
-    cout << "--- ScDPNumGroupInfo" << endl;
-    cout << "  enabled: " << mbEnable << endl;
-    cout << "  auto start: " << mbAutoStart << endl;
-    cout << "  auto end: " << mbAutoEnd << endl;
-    cout << "  start: " << mfStart << endl;
-    cout << "  end: " << mfEnd << endl;
-    cout << "  step: " << mfStep << endl;
-    cout << "---" << endl;
+    std::cout << "--- ScDPNumGroupInfo" << std::endl;
+    std::cout << "  enabled: " << mbEnable << std::endl;
+    std::cout << "  auto start: " << mbAutoStart << std::endl;
+    std::cout << "  auto end: " << mbAutoEnd << std::endl;
+    std::cout << "  start: " << mfStart << std::endl;
+    std::cout << "  end: " << mfEnd << std::endl;
+    std::cout << "  step: " << mfStep << std::endl;
+    std::cout << "---" << std::endl;
 }
 #endif
 

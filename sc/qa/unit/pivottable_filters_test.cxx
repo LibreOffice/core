@@ -31,9 +31,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using namespace ::com::sun::star;
-using ::std::cerr;
-using ::std::cout;
-using ::std::endl;
 
 class ScPivotTableFiltersTest : public ScModelTestBase
 {
@@ -1012,14 +1009,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
         {
             if (!rDoc.HasPivotTable())
             {
-                cerr << "The document should have pivot table." << endl;
+                std::cerr << "The document should have pivot table." << std::endl;
                 return false;
             }
 
             const ScDPCollection* pDPs = rDoc.GetDPCollection();
             if (!pDPs)
             {
-                cerr << "Pivot table container should exist." << endl;
+                std::cerr << "Pivot table container should exist." << std::endl;
                 return false;
             }
 
@@ -1027,7 +1024,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
             if (!pCache)
             {
-                cerr << "The document should have a pivot cache for A1:J3 on Sheet1." << endl;
+                std::cerr << "The document should have a pivot cache for A1:J3 on Sheet1."
+                          << std::endl;
                 return false;
             }
 
@@ -1038,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             size_t nCount = pCache->GetFieldCount();
             if (nCount != SAL_N_ELEMENTS(pNames))
             {
-                cout << "Incorrect number of fields in pivot cache." << endl;
+                std::cout << "Incorrect number of fields in pivot cache." << std::endl;
                 return false;
             }
 
@@ -1047,8 +1045,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
                 OUString aCacheName = pCache->GetDimensionName(i);
                 if (aCacheName != OUString::createFromAscii(pNames[i]))
                 {
-                    cerr << "Field " << i << " has label '" << aCacheName << "' but expected '"
-                         << pNames[i] << "'" << endl;
+                    std::cerr << "Field " << i << " has label '" << aCacheName << "' but expected '"
+                              << pNames[i] << "'" << std::endl;
                     return false;
                 }
             }
@@ -1056,7 +1054,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0, 10, 0); // A11
             if (!pDPObj)
             {
-                cerr << "A pivot table should exist over A11." << endl;
+                std::cerr << "A pivot table should exist over A11." << std::endl;
                 return false;
             }
 
@@ -1064,7 +1062,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             ScRange aOutRange = pDPObj->GetOutRange();
             if (ScRange(0, 7, 0, 3, 14, 0) != aOutRange)
             {
-                cerr << "Incorrect output range." << endl;
+                std::cerr << "Incorrect output range." << std::endl;
                 return false;
             }
 
@@ -1076,7 +1074,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
             if (!pSaveData)
             {
-                cerr << "Save data should exist in each pivot table object." << endl;
+                std::cerr << "Save data should exist in each pivot table object." << std::endl;
                 return false;
             }
 
@@ -1084,7 +1082,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F1")
             {
-                cerr << "Pivot table should have one row field labelled 'F1'" << endl;
+                std::cerr << "Pivot table should have one row field labelled 'F1'" << std::endl;
                 return false;
             }
 
@@ -1092,30 +1090,31 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableXLSX)
                                                      aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F4")
             {
-                cerr << "Pivot table should have one column field labelled 'F4'" << endl;
+                std::cerr << "Pivot table should have one column field labelled 'F4'" << std::endl;
                 return false;
             }
 
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aDims);
             if (aDims.size() != 2 || aDims[0]->GetName() != "F7" || aDims[1]->GetName() != "F6")
             {
-                cerr << "Pivot table should have two page fields labelled 'F7' and 'F6' in this "
-                        "order."
-                     << endl;
+                std::cerr
+                    << "Pivot table should have two page fields labelled 'F7' and 'F6' in this "
+                       "order."
+                    << std::endl;
                 return false;
             }
 
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "F10")
             {
-                cerr << "Pivot table should have one data field labelled 'F10'" << endl;
+                std::cerr << "Pivot table should have one data field labelled 'F10'" << std::endl;
                 return false;
             }
 
             const ScDPSaveDimension* pDim = aDims[0];
             if (pDim->GetFunction() != ScGeneralFunction::SUM)
             {
-                cerr << "Data field should have SUM function." << endl;
+                std::cerr << "Data field should have SUM function." << std::endl;
                 return false;
             }
 
@@ -1147,14 +1146,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
         {
             if (!rDoc.HasPivotTable())
             {
-                cerr << "The document should have pivot table." << endl;
+                std::cerr << "The document should have pivot table." << std::endl;
                 return false;
             }
 
             const ScDPCollection* pDPs = rDoc.GetDPCollection();
             if (!pDPs)
             {
-                cerr << "Pivot table container should exist." << endl;
+                std::cerr << "Pivot table container should exist." << std::endl;
                 return false;
             }
 
@@ -1162,7 +1161,8 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
             const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
             if (!pCache)
             {
-                cerr << "The document should have a pivot cache for B2:C9 on 'Src'." << endl;
+                std::cerr << "The document should have a pivot cache for B2:C9 on 'Src'."
+                          << std::endl;
                 return false;
             }
 
@@ -1172,14 +1172,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
             size_t nCount = pCache->GetFieldCount();
             if (nCount != SAL_N_ELEMENTS(pNames))
             {
-                cout << "Incorrect number of fields in pivot cache." << endl;
+                std::cout << "Incorrect number of fields in pivot cache." << std::endl;
                 return false;
             }
 
             const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0, 2, 0); // A3
             if (!pDPObj)
             {
-                cerr << "A pivot table should exist over A3." << endl;
+                std::cerr << "A pivot table should exist over A3." << std::endl;
                 return false;
             }
 
@@ -1187,14 +1187,14 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
             ScRange aOutRange = pDPObj->GetOutRange();
             if (ScRange(0, 2, 0, 2, 11, 0) != aOutRange)
             {
-                cerr << "Incorrect output range." << endl;
+                std::cerr << "Incorrect output range." << std::endl;
                 return false;
             }
 
             const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
             if (!pSaveData)
             {
-                cerr << "Save data should exist in each pivot table object." << endl;
+                std::cerr << "Save data should exist in each pivot table object." << std::endl;
                 return false;
             }
 
@@ -1202,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
             pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
             if (aDims.size() != 1 || aDims[0]->GetName() != "Name")
             {
-                cerr << "Pivot table should have one row field labelled 'Name'" << endl;
+                std::cerr << "Pivot table should have one row field labelled 'Name'" << std::endl;
                 return false;
             }
 
@@ -1211,21 +1211,21 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
                 || ScDPUtil::getSourceDimensionName(aDims[0]->GetName()) != "Value"
                 || ScDPUtil::getSourceDimensionName(aDims[1]->GetName()) != "Value")
             {
-                cerr << "Pivot table should have two duplicated data fields both of which are "
-                        "named 'Value'."
-                     << endl;
+                std::cerr << "Pivot table should have two duplicated data fields both of which are "
+                             "named 'Value'."
+                          << std::endl;
                 return false;
             }
 
             if (aDims[0]->GetFunction() != ScGeneralFunction::SUM)
             {
-                cerr << "First data field should be SUM." << endl;
+                std::cerr << "First data field should be SUM." << std::endl;
                 return false;
             }
 
             if (aDims[1]->GetFunction() != ScGeneralFunction::COUNT)
             {
-                cerr << "First data field should be COUNT." << endl;
+                std::cerr << "First data field should be COUNT." << std::endl;
                 return false;
             }
 
@@ -1233,8 +1233,9 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFiltersTest, testPivotTableTwoDataFieldsXLSX)
                                                      aDims);
             if (aDims.size() != 1 || !aDims[0]->IsDataLayout())
             {
-                cerr << "Pivot table should have one column field which is a data layout field."
-                     << endl;
+                std::cerr
+                    << "Pivot table should have one column field which is a data layout field."
+                    << std::endl;
                 return false;
             }
 

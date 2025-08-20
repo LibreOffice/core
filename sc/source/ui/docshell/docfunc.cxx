@@ -115,7 +115,6 @@
 #include <sfx2/viewfrm.hxx>
 
 using namespace com::sun::star;
-using ::std::vector;
 
 #define AUTOFORMAT_WARN_SIZE 0x10ffffUL
 
@@ -546,11 +545,11 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
 }
 
 static void lcl_collectAllPredOrSuccRanges(
-    const ScRangeList& rSrcRanges, vector<ScTokenRef>& rRefTokens, ScDocShell& rDocShell,
+    const ScRangeList& rSrcRanges, std::vector<ScTokenRef>& rRefTokens, ScDocShell& rDocShell,
     bool bPred)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    vector<ScTokenRef> aRefTokens;
+    std::vector<ScTokenRef> aRefTokens;
     if (rSrcRanges.empty())
         return;
     ScRange const & rFrontRange = rSrcRanges.front();
@@ -571,12 +570,12 @@ static void lcl_collectAllPredOrSuccRanges(
     rRefTokens.swap(aRefTokens);
 }
 
-void ScDocFunc::DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, vector<ScTokenRef>& rRefTokens)
+void ScDocFunc::DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, std::vector<ScTokenRef>& rRefTokens)
 {
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, true);
 }
 
-void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<ScTokenRef>& rRefTokens)
+void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, std::vector<ScTokenRef>& rRefTokens)
 {
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
@@ -2440,7 +2439,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     //Issue 8302 want to be able to insert into the middle of merged cells
     //the patch comes from maoyg
-    ::std::vector<ScRange> qDecreaseRange;
+    std::vector<ScRange> qDecreaseRange;
     bool bDeletingMerge = false;
     OUString aUndo = ScResId( STR_UNDO_DELETECELLS );
     if (bRecord)
@@ -3402,7 +3401,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
     {
         if (bRecord)
         {
-            vector<SCTAB> theTabs;
+            std::vector<SCTAB> theTabs;
             theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
                         std::make_unique<ScUndoDeleteTab>( rDocShell, theTabs, std::move(pUndoDoc), std::move(pUndoData) ));
@@ -4968,8 +4967,6 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
 
 bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bool bRecord, bool bApi, bool bEmptyMergedCells /*=false*/ )
 {
-    using ::std::set;
-
     ScDocShellModificator aModificator( rDocShell );
 
     SCCOL nStartCol = rOption.mnStartCol;
@@ -5095,8 +5092,6 @@ bool ScDocFunc::UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveM
 
 bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge )
 {
-    using ::std::set;
-
     if (rOption.maTabs.empty())
         // Nothing to unmerge.
         return true;

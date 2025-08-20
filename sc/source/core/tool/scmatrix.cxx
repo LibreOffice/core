@@ -46,12 +46,7 @@
 
 #if DEBUG_MATRIX
 #include <iostream>
-using std::cout;
-using std::endl;
 #endif
-
-using ::std::pair;
-using ::std::advance;
 
 namespace {
 
@@ -2742,33 +2737,33 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
 
 void ScMatrixImpl::Dump() const
 {
-    cout << "-- matrix content" << endl;
+    std::cout << "-- matrix content" << std::endl;
     SCSIZE nCols, nRows;
     GetDimensions(nCols, nRows);
     for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
     {
         for (SCSIZE nCol = 0; nCol < nCols; ++nCol)
         {
-            cout << "  row=" << nRow << ", col=" << nCol << " : ";
+            std::cout << "  row=" << nRow << ", col=" << nCol << " : ";
             switch (maMat.get_type(nRow, nCol))
             {
                 case mdds::mtm::element_string:
-                    cout << "string (" << maMat.get_string(nRow, nCol).getString() << ")";
+                    std::cout << "string (" << maMat.get_string(nRow, nCol).getString() << ")";
                 break;
                 case mdds::mtm::element_numeric:
-                    cout << "numeric (" << maMat.get_numeric(nRow, nCol) << ")";
+                    std::cout << "numeric (" << maMat.get_numeric(nRow, nCol) << ")";
                 break;
                 case mdds::mtm::element_boolean:
-                    cout << "boolean (" << maMat.get_boolean(nRow, nCol) << ")";
+                    std::cout << "boolean (" << maMat.get_boolean(nRow, nCol) << ")";
                 break;
                 case mdds::mtm::element_empty:
-                    cout << "empty";
+                    std::cout << "empty";
                 break;
                 default:
                     ;
             }
 
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 }

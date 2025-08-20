@@ -63,9 +63,6 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 
-using ::std::unique_ptr;
-using ::std::vector;
-
 //  former viewfunc/dbfunc methods
 
 void ScDocShell::ErrorMessage(TranslateId pGlobStrId)
@@ -946,8 +943,8 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
 
             if (bRecord)
             {
-                unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
-                unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
+                std::unique_ptr<std::vector<SCTAB>> pSrcList(new std::vector<SCTAB>(1, nSrcTab));
+                std::unique_ptr<std::vector<SCTAB>> pDestList(new std::vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
                         std::make_unique<ScUndoCopyTab>(*this, std::move(pSrcList), std::move(pDestList)));
             }
@@ -1010,8 +1007,8 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
         }
         else if (bRecord)
         {
-            unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
-            unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
+            std::unique_ptr<std::vector<SCTAB>> pSrcList(new std::vector<SCTAB>(1, nSrcTab));
+            std::unique_ptr<std::vector<SCTAB>> pDestList(new std::vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoMoveTab>(*this, std::move(pSrcList), std::move(pDestList)));
         }

@@ -40,9 +40,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 
-using ::std::vector;
-using ::std::shared_ptr;
-
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
 namespace {
@@ -462,7 +459,7 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     return maMemberEntries;
 }
 
-ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
+ScDPGroupTableData::ScDPGroupTableData( const std::shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
     ScDPTableData(pDocument),
     pSourceData( pSource ),
     pDoc( pDocument )
@@ -638,7 +635,7 @@ public:
 
 }
 
-void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterion>& rCriteria)
+void ScDPGroupTableData::ModifyFilterCriteria(std::vector<ScDPFilteredCache::Criterion>& rCriteria)
 {
     // Build dimension ID to object map for group dimensions.
     typedef std::unordered_map<tools::Long, const ScDPGroupDimension*> GroupFieldMapType;
@@ -649,7 +646,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
         aGroupFieldIds.emplace(rGroup.GetGroupDim(), &rGroup);
     }
 
-    vector<ScDPFilteredCache::Criterion> aNewCriteria;
+    std::vector<ScDPFilteredCache::Criterion> aNewCriteria;
     aNewCriteria.reserve(rCriteria.size() + aGroups.size());
 
     // Go through all the filtered field names and process them appropriately.
@@ -801,7 +798,7 @@ void ScDPGroupTableData::ReloadCacheTable()
     pSourceData->ReloadCacheTable();
 }
 
-void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<sal_Int32>& rDims)
+void ScDPGroupTableData::FillGroupValues(std::vector<SCROW>& rItems, const std::vector<sal_Int32>& rDims)
 {
     sal_Int32 nGroupedColumns = aGroups.size();
 
@@ -1017,14 +1014,14 @@ sal_Int32 ScDPGroupTableData::Compare(sal_Int32 nDim, sal_Int32 nDataId1, sal_In
 
 void ScDPGroupTableData::Dump() const
 {
-    cout << "--- ScDPGroupTableData" << endl;
+    std::cout << "--- ScDPGroupTableData" << std::endl;
     for (tools::Long i = 0; i < nSourceCount; ++i)
     {
-        cout << "* dimension: " << i << endl;
+        std::cout << "* dimension: " << i << std::endl;
         const ScDPNumGroupDimension& rGrp = pNumGroups[i];
         rGrp.GetInfo().Dump();
     }
-    cout << "---" << endl;
+    std::cout << "---" << std::endl;
 }
 #endif
 

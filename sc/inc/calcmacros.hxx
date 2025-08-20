@@ -27,9 +27,6 @@
     DUMP_COLUMN_STORAGE || DEBUG_COLUMN_STORAGE || \
     DEBUG_FORMULA_COMPILER
 #include <iostream>
-using std::cout;
-using std::cerr;
-using std::endl;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

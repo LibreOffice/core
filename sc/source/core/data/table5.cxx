@@ -53,7 +53,6 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
-using ::std::set;
 
 void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
 {
@@ -322,21 +321,21 @@ bool ScTable::HasManualBreaks() const
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
 
-void ScTable::SetRowManualBreaks(::std::set<SCROW>&& rBreaks)
+void ScTable::SetRowManualBreaks(std::set<SCROW>&& rBreaks)
 {
     maRowManualBreaks = std::move(rBreaks);
     InvalidatePageBreaks();
     SetStreamValid(false);
 }
 
-void ScTable::SetColManualBreaks(::std::set<SCCOL>&& rBreaks)
+void ScTable::SetColManualBreaks(std::set<SCCOL>&& rBreaks)
 {
     maColManualBreaks = std::move(rBreaks);
     InvalidatePageBreaks();
     SetStreamValid(false);
 }
 
-void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) const
+void ScTable::GetAllRowBreaks(std::set<SCROW>& rBreaks, bool bPage, bool bManual) const
 {
     if (bPage)
         rBreaks = maRowPageBreaks;
@@ -348,7 +347,7 @@ void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) con
     }
 }
 
-void ScTable::GetAllColBreaks(set<SCCOL>& rBreaks, bool bPage, bool bManual) const
+void ScTable::GetAllColBreaks(std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const
 {
     if (bPage)
         rBreaks = maColPageBreaks;
@@ -394,7 +393,7 @@ bool ScTable::HasColManualBreak(SCCOL nCol) const
 
 SCROW ScTable::GetNextManualBreak(SCROW nRow) const
 {
-    set<SCROW>::const_iterator itr = maRowManualBreaks.lower_bound(nRow);
+    std::set<SCROW>::const_iterator itr = maRowManualBreaks.lower_bound(nRow);
     return itr == maRowManualBreaks.end() ? -1 : *itr;
 }
 
@@ -403,8 +402,8 @@ void ScTable::RemoveRowPageBreaks(SCROW nStartRow, SCROW nEndRow)
     if (!ValidRow(nStartRow) || !ValidRow(nEndRow))
         return;
 
-    set<SCROW>::iterator low = maRowPageBreaks.lower_bound(nStartRow);
-    set<SCROW>::iterator high = maRowPageBreaks.upper_bound(nEndRow);
+    std::set<SCROW>::iterator low = maRowPageBreaks.lower_bound(nStartRow);
+    std::set<SCROW>::iterator high = maRowPageBreaks.upper_bound(nEndRow);
     maRowPageBreaks.erase(low, high);
 }
 
@@ -470,11 +469,9 @@ void ScTable::SetColBreak(SCCOL nCol, bool bPage, bool bManual)
 
 Sequence<TablePageBreakData> ScTable::GetRowBreakData() const
 {
-    using ::std::inserter;
-
-    set<SCROW> aRowBreaks = maRowPageBreaks;
+    std::set<SCROW> aRowBreaks = maRowPageBreaks;
     copy(maRowManualBreaks.begin(), maRowManualBreaks.end(),
-         inserter(aRowBreaks, aRowBreaks.begin()));
+         std::inserter(aRowBreaks, aRowBreaks.begin()));
 
     Sequence<TablePageBreakData> aSeq(aRowBreaks.size());
     std::transform(aRowBreaks.begin(), aRowBreaks.end(), aSeq.getArray(), [this](const SCROW nRow) {

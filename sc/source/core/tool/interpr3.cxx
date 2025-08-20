@@ -39,7 +39,6 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
 
-using ::std::vector;
 using namespace formula;
 
 /// Two columns of data should be sortable with GetSortArray() and QuickSort()
@@ -1834,7 +1833,7 @@ void ScInterpreter::ScPoissonDist( bool bODFF )
 
 /** Local function used in the calculation of the hypergeometric distribution.
  */
-static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower, double fUpper, double fBase )
+static void lcl_PutFactorialElements(std::vector< double >& cn, double fLower, double fUpper, double fBase )
 {
     for ( double i = fLower; i <= fUpper; ++i )
     {
@@ -3366,7 +3365,7 @@ void ScInterpreter::ScSkewp()
     CalculateSkewOrSkewp( true );
 }
 
-double ScInterpreter::GetMedian( vector<double> & rArray )
+double ScInterpreter::GetMedian( std::vector<double> & rArray )
 {
     size_t nSize = rArray.size();
     if (nSize == 0 || nGlobalError != FormulaError::NONE)
@@ -3377,7 +3376,7 @@ double ScInterpreter::GetMedian( vector<double> & rArray )
 
     // Upper median.
     size_t nMid = nSize / 2;
-    vector<double>::iterator iMid = rArray.begin() + nMid;
+    std::vector<double>::iterator iMid = rArray.begin() + nMid;
     ::std::nth_element( rArray.begin(), iMid, rArray.end());
     if (nSize & 1)
         return *iMid;   // Lower and upper median are equal.
@@ -3395,12 +3394,12 @@ void ScInterpreter::ScMedian()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
-    vector<double> aArray;
+    std::vector<double> aArray;
     GetNumberSequenceArray( nParamCount, aArray, false );
     PushDouble( GetMedian( aArray));
 }
 
-double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile )
+double ScInterpreter::GetPercentile(std::vector<double> & rArray, double fPercentile )
 {
     size_t nSize = rArray.size();
     if (nSize == 1)
@@ -3410,7 +3409,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
         size_t nIndex = static_cast<size_t>(::rtl::math::approxFloor( fPercentile * (nSize-1)));
         double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
         OSL_ENSURE(nIndex < nSize, "GetPercentile: wrong index(1)");
-        vector<double>::iterator iter = rArray.begin() + nIndex;
+        std::vector<double>::iterator iter = rArray.begin() + nIndex;
         ::std::nth_element( rArray.begin(), iter, rArray.end());
         if (fDiff <= 0.0)
         {
@@ -3429,7 +3428,7 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
     }
 }
 
-double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fPercentile )
+double ScInterpreter::GetPercentileExclusive(std::vector<double> & rArray, double fPercentile )
 {
     size_t nSize1 = rArray.size() + 1;
     if ( rArray.empty() || nSize1 == 1 || nGlobalError != FormulaError::NONE)
@@ -3446,7 +3445,7 @@ double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fP
     size_t nIndex = static_cast<size_t>(::rtl::math::approxFloor( fPercentile * nSize1 - 1 ));
     double fDiff = fPercentile *  nSize1 - 1 - ::rtl::math::approxFloor( fPercentile * nSize1 - 1 );
     OSL_ENSURE(nIndex < ( nSize1 - 1 ), "GetPercentile: wrong index(1)");
-    vector<double>::iterator iter = rArray.begin() + nIndex;
+    std::vector<double>::iterator iter = rArray.begin() + nIndex;
     ::std::nth_element( rArray.begin(), iter, rArray.end());
     if (fDiff == 0.0)
         return *iter;
@@ -3469,7 +3468,7 @@ void ScInterpreter::ScPercentile( bool bInclusive )
         PushIllegalArgument();
         return;
     }
-    vector<double> aArray;
+    std::vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
     if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
@@ -3492,7 +3491,7 @@ void ScInterpreter::ScQuartile( bool bInclusive )
         PushIllegalArgument();
         return;
     }
-    vector<double> aArray;
+    std::vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
     if ( aArray.empty() || nGlobalError != FormulaError::NONE )
     {
@@ -3510,7 +3509,7 @@ void ScInterpreter::ScModalValue()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
-    vector<double> aSortArray;
+    std::vector<double> aSortArray;
     GetSortArray( nParamCount, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if (nSize == 0 || nGlobalError != FormulaError::NONE)
@@ -3554,9 +3553,9 @@ void ScInterpreter::ScModalValue_MS( bool bSingle )
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
-    vector<double> aArray;
+    std::vector<double> aArray;
     GetNumberSequenceArray( nParamCount, aArray, false );
-    vector< double > aSortArray( aArray );
+    std::vector< double > aSortArray( aArray );
     QuickSort( aSortArray, nullptr );
     SCSIZE nSize = aSortArray.size();
     if ( nSize == 0 || nGlobalError != FormulaError::NONE )
@@ -3565,7 +3564,7 @@ void ScInterpreter::ScModalValue_MS( bool bSingle )
     {
         SCSIZE nMax = 1, nCount = 1;
         double nOldVal = aSortArray[ 0 ];
-        vector< double > aResultArray( 1 );
+        std::vector< double > aResultArray( 1 );
         SCSIZE i;
         for ( i = 1; i < nSize; i++ )
         {
@@ -3579,7 +3578,7 @@ void ScInterpreter::ScModalValue_MS( bool bSingle )
                     {
                         nMax = nCount;
                         if ( aResultArray.size() != 1 )
-                            vector< double >( 1 ).swap( aResultArray );
+                            std::vector< double >( 1 ).swap( aResultArray );
                         aResultArray[ 0 ] = nOldVal;
                     }
                     else
@@ -3592,7 +3591,7 @@ void ScInterpreter::ScModalValue_MS( bool bSingle )
         if ( nCount >= nMax && nCount > 1 )
         {
             if ( nCount > nMax )
-                vector< double >().swap( aResultArray );
+                std::vector< double >().swap( aResultArray );
             aResultArray.emplace_back( nOldVal );
         }
         if ( nMax == 1 && nCount == 1 )
@@ -3602,8 +3601,8 @@ void ScInterpreter::ScModalValue_MS( bool bSingle )
         else
         {
             // sort resultArray according to ordering of aArray
-            vector< vector< double > > aOrder;
-            aOrder.resize( aResultArray.size(), vector< double >( 2 ) );
+            std::vector<std::vector<double>> aOrder;
+            aOrder.resize( aResultArray.size(), std::vector< double >( 2 ) );
             for ( i = 0; i < aResultArray.size(); i++ )
             {
                 for ( SCSIZE j = 0; j < nSize; j++ )
@@ -3661,7 +3660,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
                 return static_cast<SCSIZE>(f);
             });
 
-    vector<double> aSortArray;
+    std::vector<double> aSortArray;
     GetNumberSequenceArray(1, aSortArray, false );
     const SCSIZE nSize = aSortArray.size();
     if (nSize == 0 || nGlobalError != FormulaError::NONE)
@@ -3678,7 +3677,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
         }
         else
         {
-            vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
+            std::vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
             ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
             PushDouble( *iPos);
         }
@@ -3746,7 +3745,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
         return;
     }
     double fNum = GetDouble();
-    vector<double> aSortArray;
+    std::vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if ( nSize == 0 || nGlobalError != FormulaError::NONE )
@@ -3772,7 +3771,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     }
 }
 
-double ScInterpreter::GetPercentrank( ::std::vector<double> & rArray, double fVal, bool bInclusive )
+double ScInterpreter::GetPercentrank(std::vector<double> & rArray, double fVal, bool bInclusive )
 {
     SCSIZE nSize = rArray.size();
     double fRes;
@@ -3839,7 +3838,7 @@ void ScInterpreter::ScTrimMean()
         PushIllegalArgument();
         return;
     }
-    vector<double> aSortArray;
+    std::vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
     if (nSize == 0 || nGlobalError != FormulaError::NONE)
@@ -3960,7 +3959,7 @@ std::vector<double> ScInterpreter::GetRankNumberArray( SCSIZE& rCol, SCSIZE& rRo
     return aArray;
 }
 
-void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray, bool bConvertTextInArray )
+void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, std::vector<double>& rArray, bool bConvertTextInArray )
 {
     ScAddress aAdr;
     ScRange aRange;
@@ -4588,7 +4587,7 @@ short ScInterpreter::CompareMatrixCell( const ScMatrixRef& pMatSrc, sal_uInt16 n
     return nRes;
 }
 
-void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<tools::Long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, std::vector<double>& rSortArray, std::vector<tools::Long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_COUNT_DOUBLE_FOR_SORT(mrDoc.GetSheetLimits()))
@@ -4604,19 +4603,17 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
         QuickSort( rSortArray, pIndexOrder);
 }
 
-static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSortArray, vector<tools::Long>* pIndexOrder )
+static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, std::vector<double>& rSortArray, std::vector<tools::Long>* pIndexOrder )
 {
     // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
-
-    using ::std::swap;
 
     if (nHi - nLo == 1)
     {
         if (rSortArray[nLo] > rSortArray[nHi])
         {
-            swap(rSortArray[nLo],  rSortArray[nHi]);
+            std::swap(rSortArray[nLo],  rSortArray[nHi]);
             if (pIndexOrder)
-                swap(pIndexOrder->at(nLo), pIndexOrder->at(nHi));
+                std::swap(pIndexOrder->at(nLo), pIndexOrder->at(nHi));
         }
         return;
     }
@@ -4632,9 +4629,9 @@ static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSo
         {
             if (ni != nj)
             {
-                swap(rSortArray[ni],  rSortArray[nj]);
+                std::swap(rSortArray[ni],  rSortArray[nj]);
                 if (pIndexOrder)
-                    swap(pIndexOrder->at(ni), pIndexOrder->at(nj));
+                    std::swap(pIndexOrder->at(ni), pIndexOrder->at(nj));
             }
 
             ++ni;
@@ -4655,7 +4652,7 @@ static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSo
     }
 }
 
-void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<tools::Long>* pIndexOrder )
+void ScInterpreter::QuickSort(std::vector<double>& rSortArray, std::vector<tools::Long>* pIndexOrder )
 {
     tools::Long n = static_cast<tools::Long>(rSortArray.size());
 
@@ -4674,9 +4671,9 @@ void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<tools::Long>* 
     for (size_t i = 0; (i + 4) <= nValCount-1; i += 4)
     {
         size_t nInd = comphelper::rng::uniform_size_distribution(0, nValCount-2);
-        ::std::swap( rSortArray[i], rSortArray[nInd]);
+        std::swap( rSortArray[i], rSortArray[nInd]);
         if (pIndexOrder)
-            ::std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
+            std::swap( pIndexOrder->at(i), pIndexOrder->at(nInd));
     }
 
     lcl_QuickSort(0, n-1, rSortArray, pIndexOrder);
@@ -4693,7 +4690,7 @@ void ScInterpreter::ScRank( bool bAverage )
     else
         bAscending = false;
 
-    vector<double> aSortArray;
+    std::vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();

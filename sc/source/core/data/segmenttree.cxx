@@ -27,8 +27,6 @@
 #include <global.hxx>
 #include <rtl/strbuf.hxx>
 
-using ::std::numeric_limits;
-
 namespace {
 
 template<typename ValueType_, typename ExtValueType_ = ValueType_>
@@ -289,7 +287,7 @@ void ScFlatSegmentsImpl<ValueType_, ExtValueType_>::insertSegment(SCCOLROW nPos,
 template<typename ValueType_, typename ExtValueType_>
 SCCOLROW ScFlatSegmentsImpl<ValueType_, ExtValueType_>::findLastTrue(ValueType nValue) const
 {
-    SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); // position not found.
+    SCCOLROW nPos = std::numeric_limits<SCCOLROW>::max(); // position not found.
     typename fst_type::const_reverse_iterator itr = maSegments.rbegin(), itrEnd = maSegments.rend();
     // Note that when searching in reverse direction, we need to skip the first
     // node, since the right-most leaf node does not store a valid value.

@@ -43,9 +43,6 @@
 
 using namespace ::oox;
 
-using ::std::set;
-using ::std::numeric_limits;
-
 // Page settings records ======================================================
 
 // Header/footer --------------------------------------------------------------
@@ -368,10 +365,10 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     // *** page breaks ***
 
-    set<SCROW> aRowBreaks;
+    std::set<SCROW> aRowBreaks;
     rDoc.GetAllRowBreaks(aRowBreaks, nScTab, false, true);
 
-    SCROW const nMaxRow = numeric_limits<sal_uInt16>::max();
+    SCROW const nMaxRow = std::numeric_limits<sal_uInt16>::max();
     for (const SCROW nRow : aRowBreaks)
     {
         if (nRow > nMaxRow)
@@ -388,7 +385,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.maHorPageBreaks.erase(itr, maData.maHorPageBreaks.end());
     }
 
-    set<SCCOL> aColBreaks;
+    std::set<SCCOL> aColBreaks;
     rDoc.GetAllColBreaks(aColBreaks, nScTab, false, true);
     for (const auto& rColBreak : aColBreaks)
         maData.maVerPageBreaks.push_back(rColBreak);

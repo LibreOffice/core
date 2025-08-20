@@ -125,7 +125,6 @@ using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::FormulaTokenArrayPlainIterator;
-using ::std::unique_ptr;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -2158,7 +2157,7 @@ void XclImpChSeries::ReadChSerTrendLine( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
-    unique_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
+    std::unique_ptr<XclImpChSerErrorBar> pErrorBar(new XclImpChSerErrorBar(GetChRoot()));
     pErrorBar->ReadChSerErrorBar(rStrm);
     sal_uInt8 nBarType = pErrorBar->GetBarType();
     m_ErrorBars.insert(std::make_pair(nBarType, std::move(pErrorBar)));
@@ -2830,13 +2829,13 @@ void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
     if (m_DropBars.find(EXC_CHDROPBAR_UP) == m_DropBars.end())
     {
-        unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
+        std::unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
         p->ReadRecordGroup(rStrm);
         m_DropBars.insert(std::make_pair(EXC_CHDROPBAR_UP, std::move(p)));
     }
     else if (m_DropBars.find(EXC_CHDROPBAR_DOWN) == m_DropBars.end())
     {
-        unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
+        std::unique_ptr<XclImpChDropBar> p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
         p->ReadRecordGroup(rStrm);
         m_DropBars.insert(std::make_pair(EXC_CHDROPBAR_DOWN, std::move(p)));
     }
@@ -3911,7 +3910,7 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     sal_uInt16 nTextId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
     {
-        unique_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
+        std::unique_ptr<XclImpChText> pText(new XclImpChText(GetChRoot()));
         pText->ReadRecordGroup(rStrm);
         m_DefTexts.insert(std::make_pair(nTextId, std::move(pText)));
     }
@@ -4068,7 +4067,7 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
         rxSeries->FillAllSourceLinks( aRefTokens );
     if( !aRefTokens.empty() )
     {
-        ::std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, rDoc, std::move(aRefTokens) ) );
+        std::unique_ptr< ScChartListener > xListener( new ScChartListener( rObjName, rDoc, std::move(aRefTokens) ) );
         xListener->SetUsed( true );
         xListener->StartListeningTo();
         pChartCollection->insert( xListener.release() );

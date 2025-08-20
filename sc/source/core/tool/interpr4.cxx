@@ -77,7 +77,6 @@
 
 using namespace com::sun::star;
 using namespace formula;
-using ::std::unique_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
@@ -2504,7 +2503,7 @@ svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
 void ScInterpreter::ScDBGet()
 {
     bool bMissingField = false;
-    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    std::unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (!pQueryParam)
     {
         // Failed to create query param.

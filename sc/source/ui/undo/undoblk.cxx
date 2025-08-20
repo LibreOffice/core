@@ -2336,8 +2336,6 @@ void ScUndoRemoveMerge::AddCellMergeOption( const ScCellMergeOption& rOption )
 
 void ScUndoRemoveMerge::Undo()
 {
-    using ::std::set;
-
     SetCurTab();
     BeginUndo();
 
@@ -2372,8 +2370,6 @@ void ScUndoRemoveMerge::Undo()
 
 void ScUndoRemoveMerge::Redo()
 {
-    using ::std::set;
-
     SetCurTab();
     BeginRedo();
 

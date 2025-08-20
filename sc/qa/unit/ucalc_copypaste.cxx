@@ -31,9 +31,6 @@
 
 #include <memory>
 
-using ::std::cerr;
-using ::std::endl;
-
 class TestCopyPaste : public ScUcalcTestBase
 {
 protected:
@@ -9225,15 +9222,16 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
             {
                 if (!mpDoc->GetString(aPos).equalsAscii(p->mpStr))
                 {
-                    cerr << aPosStr << ": incorrect string value: expected='" << p->mpStr
-                         << "' actual='" << mpDoc->GetString(aPos) << endl;
+                    std::cerr << aPosStr << ": incorrect string value: expected='" << p->mpStr
+                              << "' actual='" << mpDoc->GetString(aPos) << std::endl;
                     return false;
                 }
 
                 const SvxBrushItem* pBrush = mpDoc->GetAttr(aPos, ATTR_BACKGROUND);
                 if (!pBrush)
                 {
-                    cerr << aPosStr << ": failed to get brush item from the cell." << endl;
+                    std::cerr << aPosStr << ": failed to get brush item from the cell."
+                              << std::endl;
                     return false;
                 }
 
@@ -9241,13 +9239,13 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
                 {
                     Color aExpected = p->maColor;
                     Color aActual = pBrush->GetColor();
-                    cerr << aPosStr << ": incorrect cell background color: expected=("
-                         << static_cast<int>(aExpected.GetRed()) << ","
-                         << static_cast<int>(aExpected.GetGreen()) << ","
-                         << static_cast<int>(aExpected.GetBlue()) << "), actual=("
-                         << static_cast<int>(aActual.GetRed()) << ","
-                         << static_cast<int>(aActual.GetGreen()) << ","
-                         << static_cast<int>(aActual.GetBlue()) << ")" << endl;
+                    std::cerr << aPosStr << ": incorrect cell background color: expected=("
+                              << static_cast<int>(aExpected.GetRed()) << ","
+                              << static_cast<int>(aExpected.GetGreen()) << ","
+                              << static_cast<int>(aExpected.GetBlue()) << "), actual=("
+                              << static_cast<int>(aActual.GetRed()) << ","
+                              << static_cast<int>(aActual.GetGreen()) << ","
+                              << static_cast<int>(aActual.GetBlue()) << ")" << std::endl;
 
                     return false;
                 }
@@ -9255,11 +9253,12 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteSkipEmpty)
                 bool bHasNote = mpDoc->HasNote(aPos);
                 if (bHasNote != p->mbHasNote)
                 {
-                    cerr << aPosStr << ": ";
+                    std::cerr << aPosStr << ": ";
                     if (p->mbHasNote)
-                        cerr << "this cell should have a cell note, but doesn't." << endl;
+                        std::cerr << "this cell should have a cell note, but doesn't." << std::endl;
                     else
-                        cerr << "this cell should NOT have a cell note, but one is found." << endl;
+                        std::cerr << "this cell should NOT have a cell note, but one is found."
+                                  << std::endl;
 
                     return false;
                 }

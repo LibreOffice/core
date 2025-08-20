@@ -1718,12 +1718,12 @@ void ScColumn::CellStorageModified()
     {
         if (itCell->position != itAttr->position || itCell->size != itAttr->size)
         {
-            cout << "ScColumn::CellStorageModified: Cell array and cell text attribute array are out of sync." << endl;
-            cout << "-- cell array" << endl;
-            maCells.dump_blocks(cout);
-            cout << "-- attribute array" << endl;
-            maCellTextAttrs.dump_blocks(cout);
-            cout.flush();
+            std::cout << "ScColumn::CellStorageModified: Cell array and cell text attribute array are out of sync." << std::endl;
+            std::cout << "-- cell array" << std::endl;
+            maCells.dump_blocks(std::cout);
+            std::cout << "-- attribute array" << endl;
+            maCellTextAttrs.dump_blocks(std::cout);
+            std::cout.flush();
             abort();
         }
 
@@ -1754,28 +1754,28 @@ struct ColumnStorageDumper
         switch (rNode.type)
         {
             case sc::element_type_numeric:
-                cout << "  * numeric block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                std::cout << "  * numeric block (pos=" << rNode.position << ", length=" << rNode.size << ")" << std::endl;
                 break;
             case sc::element_type_string:
-                cout << "  * string block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                std::cout << "  * string block (pos=" << rNode.position << ", length=" << rNode.size << ")" << std::endl;
                 break;
             case sc::element_type_edittext:
-                cout << "  * edit-text block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                std::cout << "  * edit-text block (pos=" << rNode.position << ", length=" << rNode.size << ")" << std::endl;
                 break;
             case sc::element_type_formula:
                 dumpFormulaBlock(rNode);
                 break;
             case sc::element_type_empty:
-                cout << "  * empty block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+                std::cout << "  * empty block (pos=" << rNode.position << ", length=" << rNode.size << ")" << std::endl;
                 break;
             default:
-                cout << "  * unknown block" << endl;
+                std::cout << "  * unknown block" << std::endl;
         }
     }
 
     void dumpFormulaBlock(const sc::CellStoreType::value_type& rNode) const
     {
-        cout << "  * formula block (pos=" << rNode.position << ", length=" << rNode.size << ")" << endl;
+        std::cout << "  * formula block (pos=" << rNode.position << ", length=" << rNode.size << ")" << std::endl;
         sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
         sc::formula_block::const_iterator itEnd = sc::formula_block::end(*rNode.data);
 
@@ -1784,7 +1784,7 @@ struct ColumnStorageDumper
             const ScFormulaCell* pCell = *it;
             if (!pCell->IsShared())
             {
-                cout << "    * row " << pCell->aPos.Row() << " not shared" << endl;
+                std::cout << "    * row " << pCell->aPos.Row() << " not shared" << std::endl;
                 printFormula(pCell);
                 printResult(pCell);
                 continue;
@@ -1792,14 +1792,14 @@ struct ColumnStorageDumper
 
             if (pCell->GetSharedTopRow() != pCell->aPos.Row())
             {
-                cout << "    * row " << pCell->aPos.Row() << " shared with top row "
+                std::cout << "    * row " << pCell->aPos.Row() << " shared with top row "
                     << pCell->GetSharedTopRow() << " with length " << pCell->GetSharedLength()
-                    << endl;
+                    << std::endl;
                 continue;
             }
 
             SCROW nLen = pCell->GetSharedLength();
-            cout << "    * group: start=" << pCell->aPos.Row() << ", length=" << nLen << endl;
+            std::cout << "    * group: start=" << pCell->aPos.Row() << ", length=" << nLen << std::endl;
             printFormula(pCell);
             printResult(pCell);
 
@@ -1818,14 +1818,14 @@ struct ColumnStorageDumper
     {
         sc::TokenStringContext aCxt(mrDoc, mrDoc.GetGrammar());
         OUString aFormula = pCell->GetCode()->CreateString(aCxt, pCell->aPos);
-        cout << "      * formula: " << aFormula << endl;
+        std::cout << "      * formula: " << aFormula << std::endl;
     }
 
 #if DUMP_FORMULA_RESULTS
     void printResult(const ScFormulaCell* pCell) const
     {
         sc::FormulaResultValue aRes = pCell->GetResult();
-        cout << "    * result: ";
+        std::cout << "    * result: ";
         switch (aRes.meType)
         {
             case sc::FormulaResultValue::Value:
@@ -1842,7 +1842,7 @@ struct ColumnStorageDumper
                 break;
         }
 
-        cout << endl;
+        std::cout << std::endl;
     }
 #else
     void printResult(const ScFormulaCell*) const
@@ -1856,9 +1856,9 @@ struct ColumnStorageDumper
 
 void ScColumn::DumpColumnStorage() const
 {
-    cout << "-- table: " << nTab << "; column: " << nCol << endl;
+    std::cout << "-- table: " << nTab << "; column: " << nCol << std::endl;
     std::for_each(maCells.begin(), maCells.end(), ColumnStorageDumper(GetDoc()));
-    cout << "--" << endl;
+    std::cout << "--" << std::endl;
 }
 #endif
 

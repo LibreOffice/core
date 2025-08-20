@@ -31,10 +31,8 @@
 
 using namespace formula;
 
-using ::std::vector;
-
 void ScRefTokenHelper::compileRangeRepresentation(
-    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument& rDoc,
+    std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument& rDoc,
     const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar, bool bOnly3DRef)
 {
     // #i107275# ignore parentheses
@@ -177,7 +175,7 @@ bool ScRefTokenHelper::getRangeFromToken(
 }
 
 void ScRefTokenHelper::getRangeListFromTokens(
-    const ScDocument* pDoc, ScRangeList& rRangeList, const vector<ScTokenRef>& rTokens, const ScAddress& rPos)
+    const ScDocument* pDoc, ScRangeList& rRangeList, const std::vector<ScTokenRef>& rTokens, const ScAddress& rPos)
 {
     for (const auto& rToken : rTokens)
     {
@@ -200,9 +198,9 @@ void ScRefTokenHelper::getTokenFromRange(const ScDocument* pDoc, ScTokenRef& pTo
     pToken.reset(new ScDoubleRefToken(pDoc->GetSheetLimits(), aData));
 }
 
-void ScRefTokenHelper::getTokensFromRangeList(const ScDocument* pDoc, vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
+void ScRefTokenHelper::getTokensFromRangeList(const ScDocument* pDoc, std::vector<ScTokenRef>& pTokens, const ScRangeList& rRanges)
 {
-    vector<ScTokenRef> aTokens;
+    std::vector<ScTokenRef> aTokens;
     size_t nCount = rRanges.size();
     aTokens.reserve(nCount);
     for (size_t i = 0; i < nCount; ++i)
@@ -245,7 +243,7 @@ bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
 
 bool ScRefTokenHelper::intersects(
     const ScDocument* pDoc,
-    const vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+    const std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     if (!isRef(pToken))
         return false;
@@ -289,7 +287,7 @@ public:
      * @param rTokens existing list of reference tokens
      * @param rToken new token
      */
-    void operator() (const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+    void operator() (const ScDocument* pDoc, std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
         join(pDoc, rTokens, pToken, rPos);
     }
@@ -324,7 +322,7 @@ private:
         return true;
     }
 
-    void join(const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+    void join(const ScDocument* pDoc, std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
     {
         // Normalize the token to a double reference.
         ScComplexRefData aData;
@@ -436,7 +434,7 @@ private:
 
 }
 
-void ScRefTokenHelper::join(const ScDocument* pDoc, vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
+void ScRefTokenHelper::join(const ScDocument* pDoc, std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos)
 {
     JoinRefTokenRanges join;
     join(pDoc, rTokens, pToken, rPos);

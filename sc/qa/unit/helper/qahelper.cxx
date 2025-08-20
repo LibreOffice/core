@@ -51,9 +51,6 @@
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::std::cout;
-using ::std::cerr;
-using ::std::endl;
 
 FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
     mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
@@ -363,33 +360,33 @@ const SdrOle2Obj* ScModelTestBase::getSingleOleObject(ScDocument& rDoc, sal_uInt
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     if (!pDrawLayer)
     {
-        cout << "Failed to retrieve the drawing layer object." << endl;
+        std::cout << "Failed to retrieve the drawing layer object." << std::endl;
         return nullptr;
     }
 
     const SdrPage* pPage = pDrawLayer->GetPage(nPage);
     if (!pPage)
     {
-        cout << "Failed to retrieve the page object." << endl;
+        std::cout << "Failed to retrieve the page object." << std::endl;
         return nullptr;
     }
 
     if (pPage->GetObjCount() != 1)
     {
-        cout << "This page should contain one drawing object." << endl;
+        std::cout << "This page should contain one drawing object." << std::endl;
         return nullptr;
     }
 
     const SdrObject* pObj = pPage->GetObj(0);
     if (!pObj)
     {
-        cout << "Failed to retrieve the drawing object." << endl;
+        std::cout << "Failed to retrieve the drawing object." << std::endl;
         return nullptr;
     }
 
     if (pObj->GetObjIdentifier() != SdrObjKind::OLE2)
     {
-        cout << "This is not an OLE2 object." << endl;
+        std::cout << "This is not an OLE2 object." << std::endl;
         return nullptr;
     }
 
@@ -405,7 +402,7 @@ const SdrOle2Obj* ScModelTestBase::getSingleChartObject(ScDocument& rDoc, sal_uI
 
     if (!pObj->IsChart())
     {
-        cout << "This should be a chart object." << endl;
+        std::cout << "This should be a chart object." << std::endl;
         return nullptr;
     }
 
@@ -420,35 +417,35 @@ static std::vector<OUString> getChartRangeRepresentations(const SdrOle2Obj& rCha
     Reference<frame::XModel> xModel = rChartObj.getXModel();
     if (!xModel.is())
     {
-        cout << "Failed to get the embedded object interface." << endl;
+        std::cout << "Failed to get the embedded object interface." << std::endl;
         return aRangeReps;
     }
 
     Reference<chart2::XChartDocument> xChartDoc(xModel, UNO_QUERY);
     if (!xChartDoc.is())
     {
-        cout << "Failed to get the chart document interface." << endl;
+        std::cout << "Failed to get the chart document interface." << std::endl;
         return aRangeReps;
     }
 
     Reference<chart2::data::XDataSource> xDataSource(xChartDoc, UNO_QUERY);
     if (!xDataSource.is())
     {
-        cout << "Failed to get the data source interface." << endl;
+        std::cout << "Failed to get the data source interface." << std::endl;
         return aRangeReps;
     }
 
     Sequence<Reference<chart2::data::XLabeledDataSequence> > xDataSeqs = xDataSource->getDataSequences();
     if (!xDataSeqs.hasElements())
     {
-        cout << "There should be at least one data sequences." << endl;
+        std::cout << "There should be at least one data sequences." << std::endl;
         return aRangeReps;
     }
 
     Reference<chart2::data::XDataReceiver> xDataRec(xChartDoc, UNO_QUERY);
     if (!xDataRec.is())
     {
-        cout << "Failed to get the data receiver interface." << endl;
+        std::cout << "Failed to get the data receiver interface." << std::endl;
         return aRangeReps;
     }
 
@@ -869,7 +866,7 @@ bool ScUcalcTestBase::insertRangeNames(
         bool bSuccess = pNames->insert(pNew);
         if (!bSuccess)
         {
-            cerr << "Insertion failed." << endl;
+            std::cerr << "Insertion failed." << std::endl;
             return false;
         }
     }
@@ -888,9 +885,9 @@ OUString ScUcalcTestBase::getRangeByName(ScDocument* pDoc, const OUString& aRang
 void ScUcalcTestBase::printFormula(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const char* pCaption)
 {
     if (pCaption != nullptr)
-        cout << pCaption << ", ";
-    cout << nCol << "/" << nRow << ": " << pDoc->GetFormula(nCol, nRow, nTab);
-    cout << endl;
+        std::cout << pCaption << ", ";
+    std::cout << nCol << "/" << nRow << ": " << pDoc->GetFormula(nCol, nRow, nTab);
+    std::cout << std::endl;
 }
 #else
 // Avoid unused parameter warning
@@ -944,14 +941,14 @@ bool ScUcalcTestBase::checkFormulaPosition(ScDocument& rDoc, const ScAddress& rP
     const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
     {
-        cerr << "Formula cell expected at " << aStr << " but not found." << endl;
+        std::cerr << "Formula cell expected at " << aStr << " but not found." << std::endl;
         return false;
     }
 
     if (pFC->aPos != rPos)
     {
         OUString aStr2(pFC->aPos.Format(ScRefFlags::VALID));
-        cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
+        std::cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << std::endl;
         return false;
     }
 
@@ -970,7 +967,7 @@ bool ScUcalcTestBase::checkFormulaPositions(
         if (!checkFormulaPosition(rDoc, aPos))
         {
             OUString aStr(aPos.Format(ScRefFlags::VALID));
-            cerr << "Formula cell position failed at " << aStr << "." << endl;
+            std::cerr << "Formula cell position failed at " << aStr << "." << std::endl;
             return false;
         }
     }

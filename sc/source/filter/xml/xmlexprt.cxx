@@ -187,7 +187,6 @@ constexpr OUString SC_LAYERID = u"LayerID"_ustr;
 using namespace formula;
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::std::vector;
 using ::com::sun::star::uno::UNO_QUERY;
 
 namespace
@@ -892,7 +891,7 @@ void ScXMLExport::ExportExternalRefCacheStyles(const ScDocument& rDoc)
         return;
 
     // Export each unique number format used in the external ref cache.
-    vector<sal_uInt32> aNumFmts;
+    std::vector<sal_uInt32> aNumFmts;
     pRefMgr->getAllCachedNumberFormats(aNumFmts);
     static constexpr OUString aDefaultStyle(u"Default"_ustr);
     for (const auto& rNumFmt : aNumFmts)
@@ -903,7 +902,7 @@ void ScXMLExport::ExportExternalRefCacheStyles(const ScDocument& rDoc)
 
         uno::Any aVal;
         aVal <<= nNumFmt;
-        vector<XMLPropertyState> aProps;
+        std::vector<XMLPropertyState> aProps;
         aVal <<= aDefaultStyle;
         aProps.emplace_back(nEntryIndex, aVal);
 
@@ -4981,7 +4980,7 @@ void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
         if (!pUrl)
             continue;
 
-        vector<OUString> aTabNames;
+        std::vector<OUString> aTabNames;
         pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
         if (aTabNames.empty())
             continue;
@@ -5019,11 +5018,11 @@ void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
 
             // Determine maximum column count of used area, for repeated cells.
             SCCOL nMaxColsUsed = 1;     // assume that there is at least one cell somewhere...
-            vector<SCROW> aRows;
+            std::vector<SCROW> aRows;
             pTable->getAllRows(aRows);
             for (SCROW nRow : aRows)
             {
-                vector<SCCOL> aCols;
+                std::vector<SCCOL> aCols;
                 pTable->getAllCols(nRow, aCols);
                 if (!aCols.empty())
                 {
@@ -5079,7 +5078,7 @@ void ScXMLExport::WriteExternalRefCaches(const ScDocument& rDoc)
                 }
                 SvXMLElementExport aElemRow(*this, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true);
 
-                vector<SCCOL> aCols;
+                std::vector<SCCOL> aCols;
                 pTable->getAllCols(nRow, aCols);
                 SCCOL nLastCol = 0;
                 bool bFirstCol = true;

@@ -56,7 +56,6 @@
 
 #include <vector>
 
-using std::unique_ptr;
 using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteTable( SfxRequest& rReq )

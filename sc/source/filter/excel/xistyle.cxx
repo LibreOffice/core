@@ -80,7 +80,6 @@
 #include <svl/numformat.hxx>
 #include <o3tl/string_view.hxx>
 
-using ::std::vector;
 using namespace ::com::sun::star;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;

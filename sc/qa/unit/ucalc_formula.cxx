@@ -30,8 +30,6 @@
 #include <vector>
 
 using namespace formula;
-using ::std::cerr;
-using ::std::endl;
 
 namespace {
 void setExpandRefs(bool bExpand)
@@ -246,8 +244,8 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString&
     bool bEquals = OUString(rArray.mpStringArray[nPos]).equalsIgnoreAsciiCase(rVal);
     if (!bEquals)
     {
-        cerr << "Expected: " << rVal.toAsciiUpperCase() << " (upcased)" << endl;
-        cerr << "Actual: " << OUString(rArray.mpStringArray[nPos]) << " (upcased)" << endl;
+        std::cerr << "Expected: " << rVal.toAsciiUpperCase() << " (upcased)" << std::endl;
+        std::cerr << "Actual: " << OUString(rArray.mpStringArray[nPos]) << " (upcased)" << std::endl;
     }
     return bEquals;
 }
@@ -885,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)
             {
                 std::ostringstream os;
                 os << "These two formulas should be evaluated equal: '"
-                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
+                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << std::endl;
                 CPPUNIT_FAIL(os.str());
             }
         }
@@ -895,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)
             {
                 std::ostringstream os;
                 os << "These two formulas should be evaluated non-equal: '"
-                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
+                    << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << std::endl;
                 CPPUNIT_FAIL(os.str());
             }
         }
@@ -4218,7 +4216,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
 
             if (rList.size() != nCheckSize)
             {
-                cerr << "List size is not what is expected." << endl;
+                std::cerr << "List size is not what is expected." << std::endl;
                 return false;
             }
 
@@ -4228,8 +4226,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdateValidity)
             {
                 if (aExpected[i] != rList[i].GetValue())
                 {
-                    cerr << "Incorrect value at position " << i
-                        << ": expected=" << aExpected[i] << ", actual=" << rList[i].GetValue() << endl;
+                    std::cerr << "Incorrect value at position " << i
+                        << ": expected=" << aExpected[i] << ", actual=" << rList[i].GetValue() << std::endl;
                     return false;
                 }
             }
@@ -4970,7 +4968,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncN)
         bool bGood = result == checks1[i];
         if (!bGood)
         {
-            cerr << "row " << (i+1) << ": expected=" << checks1[i] << " actual=" << result << endl;
+            std::cerr << "row " << (i+1) << ": expected=" << checks1[i] << " actual=" << result << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
         }
     }
@@ -4983,7 +4981,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncN)
         bool bGood = result == checks2[i];
         if (!bGood)
         {
-            cerr << "row " << (i+2+1) << ": expected=" << checks2[i] << " actual=" << result << endl;
+            std::cerr << "row " << (i+2+1) << ": expected=" << checks2[i] << " actual=" << result << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
         }
     }
@@ -5053,8 +5051,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFuncCOUNTIF)
         bool bGood = result == aChecks[i].fResult;
         if (!bGood)
         {
-            cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
-                << "  expected=" << aChecks[i].fResult << "  actual=" << result << endl;
+            std::cerr << "row " << (nRow+1) << ": formula" << aChecks[i].pFormula
+                << "  expected=" << aChecks[i].fResult << "  actual=" << result << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for COUNTIF", false);
         }
     }

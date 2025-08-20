@@ -83,7 +83,6 @@ const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 ScCalcConfig *ScInterpreter::mpGlobalConfig = nullptr;
 
 using namespace formula;
-using ::std::unique_ptr;
 
 void ScInterpreter::ScIfJump()
 {
@@ -10420,7 +10419,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         if (nGlobalError != FormulaError::NONE)
             return nullptr;
 
-        unique_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
+        std::unique_ptr<ScDBRangeBase> pDBRef( PopDBDoubleRef() );
 
         if (nGlobalError != FormulaError::NONE || !pDBRef)
             return nullptr;
@@ -10452,7 +10451,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
         if (!mrDoc.ValidCol(nField))
             return nullptr;
 
-        unique_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
+        std::unique_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
 
         if (pParam)
         {
@@ -10492,7 +10491,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
     KahanSum fErg = 0;
     sal_uLong nCount = 0;
     bool bMissingField = false;
-    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    std::unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
     {
         if (!pQueryParam->IsValidFieldIndex())
@@ -10561,7 +10560,7 @@ void ScInterpreter::ScDBSum()
 void ScInterpreter::ScDBCount()
 {
     bool bMissingField = true;
-    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    std::unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
     {
         sal_uLong nCount = 0;
@@ -10619,7 +10618,7 @@ void ScInterpreter::ScDBCount()
 void ScInterpreter::ScDBCount2()
 {
     bool bMissingField = true;
-    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    std::unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
     {
         if (!pQueryParam->IsValidFieldIndex())
@@ -10674,7 +10673,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
     rValCount = 0.0;
     bool bMissingField = false;
-    unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    std::unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (pQueryParam)
     {
         if (!pQueryParam->IsValidFieldIndex())

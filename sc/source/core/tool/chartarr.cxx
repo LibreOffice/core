@@ -32,8 +32,6 @@
 #include <memory>
 #include <vector>
 
-using ::std::vector;
-
 ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
 {
     nRowCnt = nRows;
@@ -152,7 +150,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
     }
 
     SCSIZE nTotalCols = ( nCol1 <= nCol2 ? nCol2 - nCol1 + 1 : 0 );
-    vector<SCCOL> aCols;
+    std::vector<SCCOL> aCols;
     aCols.reserve(nTotalCols);
     for (SCSIZE i=0; i<nTotalCols; i++)
     {
@@ -163,7 +161,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
     SCSIZE nColCount = aCols.size();
 
     SCSIZE nTotalRows = ( nRow1 <= nRow2 ? nRow2 - nRow1 + 1 : 0 );
-    vector<SCROW> aRows;
+    std::vector<SCROW> aRows;
     aRows.reserve(nTotalRows);
     if (nRow1 <= nRow2)
     {

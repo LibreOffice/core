@@ -36,8 +36,6 @@
 #include <xistyle.hxx>
 #include <documentimport.hxx>
 
-using ::std::vector;
-
 const sal_uInt16 ExcelToSc::nRowMask = 0x3FFF;
 
 void ImportExcel::Formula25()
@@ -1301,7 +1299,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
 }
 
 void ExcelToSc::ConvertExternName( std::unique_ptr<ScTokenArray>& /*rpArray*/, XclImpStream& /*rStrm*/, std::size_t /*nFormulaLen*/,
-                                      const OUString& /*rUrl*/, const vector<OUString>& /*rTabNames*/ )
+                                      const OUString& /*rUrl*/, const std::vector<OUString>& /*rTabNames*/ )
 {
 }
 

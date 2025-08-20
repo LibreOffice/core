@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <algorithm>
 
-using ::std::vector;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
@@ -229,7 +228,7 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
     return bFilter && bPage;
 }
 
-void ScDPFilteredCache::filterByPageDimension(const vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
+void ScDPFilteredCache::filterByPageDimension(const std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     SCROW nRowSize = getRowSize();
     SCROW nDataSize = mrCache.GetDataSize();
@@ -276,18 +275,18 @@ const OUString & ScDPFilteredCache::getFieldName(SCCOL nIndex) const
     return mrCache.GetDimensionName(nIndex);
 }
 
-const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
+const std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
 {
     if (nColumn < 0 || o3tl::make_unsigned(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
-        static const ::std::vector<SCROW> emptyEntries{};
+        static const std::vector<SCROW> emptyEntries{};
         return emptyEntries;
     }
     return maFieldEntries[nColumn];
 }
 
-void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
+void ScDPFilteredCache::filterTable(const std::vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
                                  const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
@@ -298,7 +297,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         return;
 
     // Row first, then column.
-    vector< Sequence<Any> > tableData;
+    std::vector< Sequence<Any> > tableData;
     tableData.reserve(nRowSize+1);
 
     // Header first.
@@ -365,7 +364,7 @@ bool ScDPFilteredCache::empty() const
     return maFieldEntries.empty();
 }
 
-bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
+bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const std::vector<Criterion>& rCriteria,
                                     const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
 {
     sal_Int32 nColSize = getColSize();
@@ -395,7 +394,7 @@ void ScDPFilteredCache::dumpRowFlag( const RowFlagType& rFlag )
     for (++it; it != itEnd; ++it)
     {
         SCROW nRow2 = it->first;
-        cout << "  * range " << nRow1 << "-" << nRow2 << ": " << (bShow ? "on" : "off") << endl;
+        std::cout << "  * range " << nRow1 << "-" << nRow2 << ": " << (bShow ? "on" : "off") << std::endl;
         bShow = it->second;
         nRow1 = nRow2;
     }
@@ -403,27 +402,27 @@ void ScDPFilteredCache::dumpRowFlag( const RowFlagType& rFlag )
 
 void ScDPFilteredCache::dump() const
 {
-    cout << "--- pivot filtered cache dump" << endl;
+    std::cout << "--- pivot filtered cache dump" << std::endl;
 
-    cout << endl;
-    cout << "* show by filter" << endl;
+    std::cout << std::endl;
+    std::cout << "* show by filter" << std::endl;
     dumpRowFlag(maShowByFilter);
 
-    cout << endl;
-    cout << "* show by page dimensions" << endl;
+    std::cout << std::endl;
+    std::cout << "* show by page dimensions" << std::endl;
     dumpRowFlag(maShowByPage);
 
-    cout << endl;
-    cout << "* field entries" << endl;
+    std::cout << std::endl;
+    std::cout << "* field entries" << std::endl;
     size_t nFieldCount = maFieldEntries.size();
     for (size_t i = 0; i < nFieldCount; ++i)
     {
-        const vector<SCROW>& rField = maFieldEntries[i];
-        cout << "  * field " << i << endl;
+        const std::vector<SCROW>& rField = maFieldEntries[i];
+        std::cout << "  * field " << i << std::endl;
         for (size_t j = 0, n = rField.size(); j < n; ++j)
-            cout << "    ID: " << rField[j] << endl;
+            std::cout << "    ID: " << rField[j] << std::endl;
     }
-    cout << "---" << endl;
+    std::cout << "---" << std::endl;
 }
 
 #endif

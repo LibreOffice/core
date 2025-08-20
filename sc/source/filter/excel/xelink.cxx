@@ -42,8 +42,6 @@
 #include <memory>
 #include <string_view>
 
-using ::std::unique_ptr;
-using ::std::vector;
 using ::com::sun::star::uno::Any;
 
 using namespace oox;
@@ -122,7 +120,7 @@ private:
 
 private:
     const XclExpSupbook&    mrSupbook;
-    unique_ptr<ScTokenArray>  mpArray;
+    std::unique_ptr<ScTokenArray>  mpArray;
 };
 
 // List of external names =====================================================
@@ -2090,7 +2088,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
     // Unused external references are not saved, only kept in memory.
     // Those that are saved must be indexed from 1, so indexes must be reordered
     ScExternalRefManager* pRefMgr = GetDoc().GetExternalRefManager();
-    vector<sal_uInt16> aExternFileIds;
+    std::vector<sal_uInt16> aExternFileIds;
     for (size_t nPos = 0, nSize = maSupbookList.GetSize(); nPos < nSize; ++nPos)
     {
         XclExpSupbookRef xRef(maSupbookList.GetRecord(nPos));

@@ -52,7 +52,6 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
-using ::std::unique_ptr;
 
 #define SC_DPSAVEMODE_DONTKNOW 2
 
@@ -162,21 +161,21 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 void ScDPSaveMember::Dump(int nIndent) const
 {
     std::string aIndent(nIndent*4, ' ');
-    cout << aIndent << "* member name: '" << aName << "'" << endl;
+    std::cout << aIndent << "* member name: '" << aName << "'" << std::endl;
 
-    cout << aIndent << "    + layout name: ";
+    std::cout << aIndent << "    + layout name: ";
     if (mpLayoutName)
-        cout << "'" << *mpLayoutName << "'";
+        std::cout << "'" << *mpLayoutName << "'";
     else
-        cout << "(none)";
-    cout << endl;
+        std::cout << "(none)";
+    std::cout << std::endl;
 
-    cout << aIndent << "    + visibility: ";
+    std::cout << aIndent << "    + visibility: ";
     if (nVisibleMode == SC_DPSAVEMODE_DONTKNOW)
-        cout << "(unknown)";
+        std::cout << "(unknown)";
     else
-        cout << (nVisibleMode ? "visible" : "hidden");
-    cout << endl;
+        std::cout << (nVisibleMode ? "visible" : "hidden");
+    std::cout << std::endl;
 }
 
 #endif
@@ -652,38 +651,38 @@ void ScDPSaveDimension::Dump(int nIndent) const
     static const char* const pOrientNames[] = { "hidden", "column", "row", "page", "data" };
     std::string aIndent(nIndent*4, ' ');
 
-    cout << aIndent << "* dimension name: '" << aName << "'" << endl;
+    std::cout << aIndent << "* dimension name: '" << aName << "'" << std::endl;
 
-    cout << aIndent << "    + orientation: ";
+    std::cout << aIndent << "    + orientation: ";
     if (nOrientation <= DataPilotFieldOrientation_DATA)
-        cout << pOrientNames[static_cast<int>(nOrientation)];
+        std::cout << pOrientNames[static_cast<int>(nOrientation)];
     else
-        cout << "(invalid)";
-    cout << endl;
+        std::cout << "(invalid)";
+    std::cout << std::endl;
 
-    cout << aIndent << "    + layout name: ";
+    std::cout << aIndent << "    + layout name: ";
     if (mpLayoutName)
-        cout << "'" << *mpLayoutName << "'";
+        std::cout << "'" << *mpLayoutName << "'";
     else
-        cout << "(none)";
-    cout << endl;
+        std::cout << "(none)";
+    std::cout << std::endl;
 
-    cout << aIndent << "    + subtotal name: ";
+    std::cout << aIndent << "    + subtotal name: ";
     if (mpSubtotalName)
-        cout << "'" << *mpSubtotalName << "'";
+        std::cout << "'" << *mpSubtotalName << "'";
     else
-        cout << "(none)";
-    cout << endl;
+        std::cout << "(none)";
+    std::cout << std::endl;
 
-    cout << aIndent << "    + is data layout: " << (bIsDataLayout ? "yes" : "no") << endl;
-    cout << aIndent << "    + is duplicate: " << (bDupFlag ? "yes" : "no") << endl;
+    std::cout << aIndent << "    + is data layout: " << (bIsDataLayout ? "yes" : "no") << std::endl;
+    std::cout << aIndent << "    + is duplicate: " << (bDupFlag ? "yes" : "no") << std::endl;
 
     for (ScDPSaveMember* pMem : maMemberList)
     {
         pMem->Dump(nIndent+1);
     }
 
-    cout << endl; // blank line
+    std::cout << std::endl; // blank line
 }
 
 #endif
@@ -1265,7 +1264,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
                 // this member instance already exists. nothing to do.
                 continue;
 
-            unique_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
+            std::unique_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
             pNewMember->SetIsVisible(true);
             iter->AddMember(std::move(pNewMember));
         }

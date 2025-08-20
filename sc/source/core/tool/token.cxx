@@ -56,7 +56,6 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 
-using ::std::vector;
 using namespace formula;
 using namespace com::sun::star;
 

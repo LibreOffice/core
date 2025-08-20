@@ -29,9 +29,6 @@
 #include <algorithm>
 #include <memory>
 
-using ::std::vector;
-using ::std::find_if;
-using ::std::for_each;
 using ::formula::FormulaGrammar;
 
 namespace {
@@ -1087,7 +1084,7 @@ bool ScRangeList::Contains( const ScRange& rRange ) const
 sal_uInt64 ScRangeList::GetCellCount() const
 {
     CountCells func;
-    return for_each(maRanges.begin(), maRanges.end(), func).getCellCount();
+    return std::for_each(maRanges.begin(), maRanges.end(), func).getCellCount();
 }
 
 void ScRangeList::Remove(size_t nPos)

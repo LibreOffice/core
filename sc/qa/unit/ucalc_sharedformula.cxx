@@ -26,9 +26,6 @@
 #include <memory>
 #include <string_view>
 
-using ::std::cerr;
-using ::std::endl;
-
 class TestSharedFormula : public ScUcalcTestBase
 {
 };
@@ -873,7 +870,7 @@ CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasInsertRow)
             ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
             if (!pFC || pFC->GetSharedTopRow() != 0 || pFC->GetSharedLength() != 2)
             {
-                cerr << "B1:B2 should be grouped." << endl;
+                std::cerr << "B1:B2 should be grouped." << std::endl;
                 return false;
             }
 
@@ -881,7 +878,7 @@ CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasInsertRow)
             pFC = pDoc->GetFormulaCell(ScAddress(1,3,0));
             if (!pFC || pFC->GetSharedTopRow() != 3 || pFC->GetSharedLength() != 2)
             {
-                cerr << "B4:B5 should be grouped." << endl;
+                std::cerr << "B4:B5 should be grouped." << std::endl;
                 return false;
             }
 
@@ -899,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasInsertRow)
             // Ensure that B5 is empty.
             if (pDoc->GetCellType(ScAddress(1,4,0)) != CELLTYPE_NONE)
             {
-                cerr << "B5 should be empty." << endl;
+                std::cerr << "B5 should be empty." << std::endl;
                 return false;
             }
 
@@ -907,7 +904,7 @@ CPPUNIT_TEST_FIXTURE(TestSharedFormula, testSharedFormulasInsertRow)
             ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
             if (!pFC || pFC->GetSharedTopRow() != 0 || pFC->GetSharedLength() != 4)
             {
-                cerr << "B1:B4 should be grouped." << endl;
+                std::cerr << "B1:B4 should be grouped." << std::endl;
                 return false;
             }
 

@@ -36,7 +36,6 @@ constexpr OUString URI_XLS_LEGACY = u"http://docs.oasis-open.org/office/ns/table
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::std::vector;
 
 bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
@@ -137,8 +136,8 @@ public:
     bool isOptionEnabled(SCSIZE nOptId) const;
     void setOption(SCSIZE nOptId, bool bEnabled);
 
-    void setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt );
-    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
+    void setEnhancedProtection(std::vector< ScEnhancedProtection > && rProt );
+    const std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
     bool updateReference( UpdateRefMode, const ScDocument&, const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
@@ -146,13 +145,13 @@ public:
 private:
     OUString maPassText;
     css::uno::Sequence<sal_Int8>   maPassHash;
-    ::std::vector<bool> maOptions;
+    std::vector<bool> maOptions;
     bool mbEmptyPass;
     bool mbProtected;
     ScPasswordHash meHash1;
     ScPasswordHash meHash2;
     ScOoxPasswordHash maPasswordHash;
-    ::std::vector< ScEnhancedProtection > maEnhancedProtection;
+    std::vector< ScEnhancedProtection > maEnhancedProtection;
 };
 
 Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(std::u16string_view aPassText, ScPasswordHash eHash)
@@ -187,7 +186,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(
     // TODO: Right now, we only support double-hash by SHA1.
     if (eHash == PASSHASH_SHA1)
     {
-        auto aChars = comphelper::sequenceToContainer<vector<char>>(rPassHash);
+        auto aChars = comphelper::sequenceToContainer<std::vector<char>>(rPassHash);
 
         Sequence<sal_Int8> aNewHash;
         SvPasswordHelper::GetHashPassword(aNewHash, aChars.data(), aChars.size());
@@ -423,7 +422,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
     maOptions[nOptId] = bEnabled;
 }
 
-void ScTableProtectionImpl::setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt )
+void ScTableProtectionImpl::setEnhancedProtection(std::vector< ScEnhancedProtection > && rProt )
 {
     maEnhancedProtection = std::move(rProt);
 }
@@ -697,12 +696,12 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
     mpImpl->setOption(eOption, bEnabled);
 }
 
-void ScTableProtection::setEnhancedProtection( ::std::vector< ScEnhancedProtection > && rProt )
+void ScTableProtection::setEnhancedProtection(std::vector< ScEnhancedProtection > && rProt )
 {
     mpImpl->setEnhancedProtection(std::move(rProt));
 }
 
-const ::std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const
+const std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProtection() const
 {
     return mpImpl->getEnhancedProtection();
 }

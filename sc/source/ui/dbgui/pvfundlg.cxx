@@ -41,7 +41,6 @@
 using namespace ::com::sun::star::sheet;
 
 using ::com::sun::star::uno::Sequence;
-using ::std::vector;
 
 namespace {
 
@@ -69,10 +68,10 @@ bool lclFillListBox(weld::ComboBox& rLBox, const Sequence< OUString >& rStrings)
     return bEmpty;
 }
 
-bool lclFillListBox(weld::ComboBox& rLBox, const vector<ScDPLabelData::Member>& rMembers, int nEmptyPos)
+bool lclFillListBox(weld::ComboBox& rLBox, const std::vector<ScDPLabelData::Member>& rMembers, int nEmptyPos)
 {
     bool bEmpty = false;
-    vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
+    std::vector<ScDPLabelData::Member>::const_iterator itr = rMembers.begin(), itrEnd = rMembers.end();
     for (; itr != itrEnd; ++itr)
     {
         OUString aName = itr->getDisplayName();
@@ -87,7 +86,7 @@ bool lclFillListBox(weld::ComboBox& rLBox, const vector<ScDPLabelData::Member>& 
     return bEmpty;
 }
 
-bool lclFillListBox(weld::TreeView& rLBox, const vector<ScDPLabelData::Member>& rMembers)
+bool lclFillListBox(weld::TreeView& rLBox, const std::vector<ScDPLabelData::Member>& rMembers)
 {
     bool bEmpty = false;
     for (const auto& rMember : rMembers)
@@ -428,7 +427,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, weld::ComboBox&, rLBox, void )
         size_t nBasePos = mxLbBaseField->get_active();
         if (nBasePos < mrLabelVec.size())
         {
-            const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos]->maMembers;
+            const std::vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos]->maMembers;
             mbEmptyItem = lclFillListBox(*mxLbBaseItem, rMembers, SC_BASEITEM_USER_POS);
             // build cache for base names.
             NameMapType aMap;

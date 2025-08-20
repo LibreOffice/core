@@ -50,7 +50,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
-using ::std::vector;
 
 //  used for sheet- and area link:
 static std::span<const SfxItemPropertyMapEntry> lcl_GetSheetLinkMap()
@@ -1441,7 +1440,7 @@ Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRo
 Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllRows()
 {
     SolarMutexGuard aGuard;
-    vector<SCROW> aRows;
+    std::vector<SCROW> aRows;
     mpTable->getAllRows(aRows);
     size_t nSize = aRows.size();
     Sequence<sal_Int32> aRowsSeq(nSize);
@@ -1458,7 +1457,7 @@ Sequence< sal_Int32 > SAL_CALL ScExternalSheetCacheObj::getAllColumns(sal_Int32 
     if (nRow < 0)
         throw IllegalArgumentException();
 
-    vector<SCCOL> aCols;
+    std::vector<SCCOL> aCols;
     mpTable->getAllCols(static_cast<SCROW>(nRow), aCols);
     size_t nSize = aCols.size();
     Sequence<sal_Int32> aColsSeq(nSize);
@@ -1517,11 +1516,11 @@ Any SAL_CALL ScExternalDocLinkObj::getByName(const OUString &aName)
 Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
 {
     SolarMutexGuard aGuard;
-    vector<OUString> aTabNames;
+    std::vector<OUString> aTabNames;
     mpRefMgr->getAllCachedTableNames(mnFileId, aTabNames);
 
     // #i116940# be consistent with getByName: include only table names which have a cache already
-    vector<OUString> aValidNames;
+    std::vector<OUString> aValidNames;
     std::copy_if(aTabNames.begin(), aTabNames.end(), std::back_inserter(aValidNames),
         [&](const OUString& rTabName) { return mpRefMgr->getCacheTable(mnFileId, rTabName, false); });
 

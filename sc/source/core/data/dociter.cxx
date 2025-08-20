@@ -52,10 +52,6 @@
 #include <limits>
 #include <vector>
 
-using ::rtl::math::approxEqual;
-using ::std::vector;
-using ::std::set;
-
 // iterators have very high frequency use -> custom debug.
 // #define debugiter(...) fprintf(stderr, __VA_ARGS__)
 #define debugiter(...)
@@ -602,7 +598,7 @@ bool isQueryByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem
 bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScMatrix& rMat) const
 {
     SCSIZE nEntryCount = mpParam->GetEntryCount();
-    vector<bool> aResults;
+    std::vector<bool> aResults;
     aResults.reserve(nEntryCount);
 
     const CollatorWrapper& rCollator = ScGlobal::GetCollator(mpParam->bCaseSens);
@@ -637,7 +633,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
         {
             // By value
             double fMatVal = rMat.GetDouble(nField, nRow);
-            bool bEqual = approxEqual(fMatVal, rItem.mfVal);
+            bool bEqual = rtl::math::approxEqual(fMatVal, rItem.mfVal);
             switch (rEntry.eOp)
             {
                 case SC_EQUAL:
@@ -1620,7 +1616,7 @@ ScDocRowHeightUpdater::TabRanges::TabRanges(SCTAB nTab, SCROW nMaxRow) :
 {
 }
 
-ScDocRowHeightUpdater::ScDocRowHeightUpdater(ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY, const vector<TabRanges>* pTabRangesArray) :
+ScDocRowHeightUpdater::ScDocRowHeightUpdater(ScDocument& rDoc, OutputDevice* pOutDev, double fPPTX, double fPPTY, const std::vector<TabRanges>* pTabRangesArray) :
     mrDoc(rDoc), mpOutDev(pOutDev), mfPPTX(fPPTX), mfPPTY(fPPTY), mpTabRangesArray(pTabRangesArray)
 {
 }
@@ -1766,7 +1762,7 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
     return nullptr; // Nothing anymore
 }
 
-ScRowBreakIterator::ScRowBreakIterator(set<SCROW>& rBreaks) :
+ScRowBreakIterator::ScRowBreakIterator(std::set<SCROW>& rBreaks) :
     mrBreaks(rBreaks),
     maItr(rBreaks.begin()), maEnd(rBreaks.end())
 {

@@ -71,7 +71,6 @@
 #include <iostream>
 
 using namespace com::sun::star;
-using ::std::vector;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -100,11 +99,11 @@ class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
     sal_uInt16          mnTab;
-    ::std::vector< bool > mbNeedLineCols;
-    ::std::vector< SCCOL > mnCols;
+    std::vector< bool > mbNeedLineCols;
+    std::vector< SCCOL > mnCols;
 
-    ::std::vector< bool > mbNeedLineRows;
-    ::std::vector< SCROW > mnRows;
+    std::vector< bool > mbNeedLineRows;
+    std::vector< SCROW > mnRows;
 
     SCCOL   mnTabStartCol;
     SCROW   mnTabStartRow;
@@ -1508,7 +1507,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
     {
         case DataPilotTablePositionType::RESULT:
         {
-            vector<DataPilotFieldFilter> aFilters;
+            std::vector<DataPilotFieldFilter> aFilters;
             GetDataResultPositionData(aFilters, rPos);
 
             DataPilotTableResultData aResData;
@@ -1596,7 +1595,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
     }
 }
 
-bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
+bool ScDPOutput::GetDataResultPositionData(std::vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
 {
     // Check to make sure there is at least one data field.
     Reference<beans::XPropertySet> xPropSet(mxSource, UNO_QUERY);

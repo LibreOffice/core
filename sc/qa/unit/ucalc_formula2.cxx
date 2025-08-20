@@ -31,9 +31,6 @@
 #include <vector>
 
 using namespace formula;
-using ::std::vector;
-using ::std::cerr;
-using ::std::endl;
 
 namespace
 {
@@ -41,12 +38,12 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 {
     ScRange aRange;
 
-    vector<SCROW> aRows;
+    std::vector<SCROW> aRows;
     pCacheTab->getAllRows(aRows);
     bool bFirst = true;
     for (const SCROW nRow : aRows)
     {
-        vector<SCCOL> aCols;
+        std::vector<SCCOL> aCols;
         pCacheTab->getAllCols(nRow, aCols);
         for (const SCCOL nCol : aCols)
         {
@@ -643,8 +640,9 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncVLOOKUP)
         bool bGood = aRes.equalsAscii(aChecks[i].pRes);
         if (!bGood)
         {
-            cerr << "row " << (i + 1) << ": lookup value='" << aChecks[i].pLookup << "'  expected='"
-                 << aChecks[i].pRes << "' actual='" << aRes << "'" << endl;
+            std::cerr << "row " << (i + 1) << ": lookup value='" << aChecks[i].pLookup
+                      << "'  expected='" << aChecks[i].pRes << "' actual='" << aRes << "'"
+                      << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for VLOOKUP", false);
         }
     }
@@ -750,10 +748,11 @@ void TestFormula2::runTestMATCH(ScDocument* pDoc, const char* aData[DataSize],
         OUString aStr = pDoc->GetString(2, i, 0);
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
-            cerr << "row " << (i + 1) << ": expected='" << aChecks[i].pRes << "' actual='" << aStr
-                 << "'"
-                    " criterion='"
-                 << aChecks[i].pVal << "'" << endl;
+            std::cerr << "row " << (i + 1) << ": expected='" << aChecks[i].pRes << "' actual='"
+                      << aStr
+                      << "'"
+                         " criterion='"
+                      << aChecks[i].pVal << "'" << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for MATCH", false);
         }
     }
@@ -787,11 +786,11 @@ void TestFormula2::runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[Da
         OUString aStr = pDoc->GetString(i, 2, 0);
         if (!aStr.equalsAscii(aChecks[i].pRes))
         {
-            cerr << "column " << char('A' + i) << ": expected='" << aChecks[i].pRes << "' actual='"
-                 << aStr
-                 << "'"
-                    " criterion='"
-                 << aChecks[i].pVal << "'" << endl;
+            std::cerr << "column " << char('A' + i) << ": expected='" << aChecks[i].pRes
+                      << "' actual='" << aStr
+                      << "'"
+                         " criterion='"
+                      << aChecks[i].pVal << "'" << std::endl;
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for horizontal MATCH", false);
         }
     }
@@ -1608,7 +1607,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
     // that the first 3 are what we expect.
     ScExternalRefManager* pRefMgr = m_pDoc->GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
-    vector<OUString> aTabNames;
+    std::vector<OUString> aTabNames;
     pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
     CPPUNIT_ASSERT_MESSAGE("There should be at least 3 sheets.", aTabNames.size() >= 3);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected sheet name.", aTabNames[0], aExtSh1Name);

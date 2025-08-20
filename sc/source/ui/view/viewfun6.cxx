@@ -69,8 +69,6 @@ void collectUIInformation( const OUString& aevent )
 
 }
 
-using ::std::vector;
-
 void ScViewFunc::DetectiveAddPred()
 {
     ScDocShell& rDocSh = GetViewData().GetDocShell();
@@ -181,7 +179,7 @@ void ScViewFunc::DetectiveMarkPred()
     else
         aRanges.push_back(ScRange(aCurPos));
 
-    vector<ScTokenRef> aRefTokens;
+    std::vector<ScTokenRef> aRefTokens;
     rDocSh.GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
@@ -244,7 +242,7 @@ void ScViewFunc::DetectiveMarkSucc()
     else
         aRanges.push_back(ScRange(aCurPos));
 
-    vector<ScTokenRef> aRefTokens;
+    std::vector<ScTokenRef> aRefTokens;
     rDocSh.GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())

@@ -82,8 +82,6 @@
 #include <algorithm>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -688,7 +686,7 @@ ScDPTableData* ScDPObject::GetTableData()
 {
     if (!mpTableData)
     {
-        shared_ptr<ScDPTableData> pData;
+        std::shared_ptr<ScDPTableData> pData;
         const ScDPDimensionSaveData* pDimData = mpSaveData ? mpSaveData->GetExistingDimensionData() : nullptr;
 
         if (mpImportDescription)
@@ -847,7 +845,7 @@ void ScDPObject::ReloadGroupTableData()
     {
         // This is already a group table data. Salvage the source data and
         // re-create a new group data.
-        const shared_ptr<ScDPTableData>& pSource = pData->GetSourceTableData();
+        const std::shared_ptr<ScDPTableData>& pSource = pData->GetSourceTableData();
         auto pGroupData = std::make_shared<ScDPGroupTableData>(pSource, mpDocument);
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
@@ -1005,7 +1003,7 @@ bool ScDPObject::SyncAllDimensionMembers()
 
 bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
 {
-    vector<ScDPLabelData::Member> aMembers;
+    std::vector<ScDPLabelData::Member> aMembers;
     if (!GetMembers(nDim, GetUsedHierarchy(nDim), aMembers))
         return false;
 
@@ -1018,7 +1016,7 @@ bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
     return true;
 }
 
-bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelData::Member>& rMembers )
+bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, std::vector<ScDPLabelData::Member>& rMembers )
 {
     Reference< sheet::XMembersAccess > xMembersNA;
     if (!GetMembersNA( nDim, nHier, xMembersNA ))
@@ -1026,7 +1024,7 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
 
     Reference<container::XIndexAccess> xMembersIA( new ScNameToIndexAccess(xMembersNA) );
     sal_Int32 nCount = xMembersIA->getCount();
-    vector<ScDPLabelData::Member> aMembers;
+    std::vector<ScDPLabelData::Member> aMembers;
     aMembers.reserve(nCount);
 
     for (sal_Int32 i = 0; i < nCount; ++i)
@@ -1161,7 +1159,7 @@ bool ScDPObject::GetDataFieldPositionData(
 {
     CreateOutput();
 
-    vector<sheet::DataPilotFieldFilter> aFilters;
+    std::vector<sheet::DataPilotFieldFilter> aFilters;
     if (!mpOutput->GetDataResultPositionData(aFilters, rPos))
         return false;
 
@@ -2183,7 +2181,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
     //TODO: merge multiple occurrences (data field with different functions)
     //TODO: force data field in one dimension
 
-    vector<tools::Long> aPos;
+    std::vector<tools::Long> aPos;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
@@ -2629,7 +2627,7 @@ OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSour
     return aName;
 }
 
-bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
+bool hasFieldColumn(const std::vector<ScPivotField>* pRefFields, SCCOL nCol)
 {
     if (!pRefFields)
         return false;

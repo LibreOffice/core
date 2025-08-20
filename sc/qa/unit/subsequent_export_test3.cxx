@@ -35,8 +35,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::std::cerr;
-using ::std::endl;
 
 class ScExportTest3 : public ScModelTestBase
 {
@@ -333,14 +331,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
             ScChangeTrack* pCT = rDoc.GetChangeTrack();
             if (!pCT)
             {
-                cerr << "Change track instance doesn't exist." << endl;
+                std::cerr << "Change track instance doesn't exist." << std::endl;
                 return false;
             }
 
             sal_uLong nActionMax = pCT->GetActionMax();
             if (nActionMax != 13)
             {
-                cerr << "Unexpected highest action ID value." << endl;
+                std::cerr << "Unexpected highest action ID value." << std::endl;
                 return false;
             }
 
@@ -350,13 +348,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                 const ScChangeAction* pAction = pCT->GetAction(nActId);
                 if (!pAction)
                 {
-                    cerr << "No action for action number " << nActId << " found." << endl;
+                    std::cerr << "No action for action number " << nActId << " found." << std::endl;
                     return false;
                 }
 
                 if (pAction->GetType() != aChecks[i].meType)
                 {
-                    cerr << "Unexpected action type for action number " << nActId << "." << endl;
+                    std::cerr << "Unexpected action type for action number " << nActId << "."
+                              << std::endl;
                     return false;
                 }
 
@@ -367,9 +366,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
 
                 if (!checkRange(pAction->GetType(), aCheck, rRange))
                 {
-                    cerr << "Unexpected range for action number " << nActId
-                         << ": expected=" << toString(aCheck) << " actual=" << toString(rRange)
-                         << endl;
+                    std::cerr << "Unexpected range for action number " << nActId
+                              << ": expected=" << toString(aCheck) << " actual=" << toString(rRange)
+                              << std::endl;
                     return false;
                 }
 
@@ -380,8 +379,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
                         const ScChangeActionIns* p = static_cast<const ScChangeActionIns*>(pAction);
                         if (p->IsEndOfList() != aChecks[i].mbRowInsertedAtBottom)
                         {
-                            cerr << "Unexpected end-of-list flag for action number " << nActId
-                                 << "." << endl;
+                            std::cerr << "Unexpected end-of-list flag for action number " << nActId
+                                      << "." << std::endl;
                             return false;
                         }
                     }
@@ -398,21 +397,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
             ScChangeTrack* pCT = rDoc.GetChangeTrack();
             if (!pCT)
             {
-                cerr << "Change track instance doesn't exist." << endl;
+                std::cerr << "Change track instance doesn't exist." << std::endl;
                 return false;
             }
 
             ScChangeAction* pAction = pCT->GetLast();
             if (pAction->GetUser() != "Kohei Yoshida")
             {
-                cerr << "Wrong user name." << endl;
+                std::cerr << "Wrong user name." << std::endl;
                 return false;
             }
 
             DateTime aDT = pAction->GetDateTime();
             if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
             {
-                cerr << "Wrong time stamp." << endl;
+                std::cerr << "Wrong time stamp." << std::endl;
                 return false;
             }
 
@@ -423,22 +422,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
             pAction = pCT->GetLast();
             if (!pAction)
             {
-                cerr << "Failed to retrieve last revision." << endl;
+                std::cerr << "Failed to retrieve last revision." << std::endl;
                 return false;
             }
 
             if (rOwnerName != pAction->GetUser())
             {
-                cerr << "Wrong user name." << endl;
+                std::cerr << "Wrong user name." << std::endl;
                 return false;
             }
 
             DateTime aDTNew = pAction->GetDateTime();
             if (aDTNew <= aDT)
             {
-                cerr << "Time stamp of the new revision should be more recent than that of the "
-                        "last revision."
-                     << endl;
+                std::cerr
+                    << "Time stamp of the new revision should be more recent than that of the "
+                       "last revision."
+                    << std::endl;
                 return false;
             }
 
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
             // green, red, blue, yellow (from left to right).
             if (aTabNames.size() != 4)
             {
-                cerr << "There should be exactly 4 sheets." << endl;
+                std::cerr << "There should be exactly 4 sheets." << std::endl;
                 return false;
             }
 
@@ -514,8 +514,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
                 OUString aExpected = OUString::createFromAscii(pNames[i]);
                 if (aExpected != aTabNames[i])
                 {
-                    cerr << "incorrect sheet name: expected='" << aExpected << "', actual='"
-                         << aTabNames[i] << "'" << endl;
+                    std::cerr << "incorrect sheet name: expected='" << aExpected << "', actual='"
+                              << aTabNames[i] << "'" << std::endl;
                     return false;
                 }
             }
@@ -531,7 +531,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSheetTabColorsXLSX)
             {
                 if (aXclColors[i] != rDoc.GetTabBgColor(i))
                 {
-                    cerr << "wrong sheet color for sheet " << i << endl;
+                    std::cerr << "wrong sheet color for sheet " << i << std::endl;
                     return false;
                 }
             }
@@ -638,8 +638,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
             OUString aExpected = u"Response"_ustr;
             if (aActual != aExpected)
             {
-                cerr << "Wrong content in A2: expected='" << aExpected << "', actual='" << aActual
-                     << "'" << endl;
+                std::cerr << "Wrong content in A2: expected='" << aExpected << "', actual='"
+                          << aActual << "'" << std::endl;
                 return false;
             }
 
@@ -647,8 +647,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
             aExpected = "Response";
             if (aActual != aExpected)
             {
-                cerr << "Wrong content in B2: expected='" << aExpected << "', actual='" << aActual
-                     << "'" << endl;
+                std::cerr << "Wrong content in B2: expected='" << aExpected << "', actual='"
+                          << aActual << "'" << std::endl;
                 return false;
             }
 
@@ -660,8 +660,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
                 double fActual = rDoc.GetValue(aPos);
                 if (fExpected != fActual)
                 {
-                    cerr << "Wrong value in A" << (i + 2) << ": expected=" << fExpected
-                         << ", actual=" << fActual << endl;
+                    std::cerr << "Wrong value in A" << (i + 2) << ": expected=" << fExpected
+                              << ", actual=" << fActual << std::endl;
                     return false;
                 }
 
@@ -669,7 +669,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
                 ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
                 if (!pFC)
                 {
-                    cerr << "B" << (i + 2) << " should be a formula cell." << endl;
+                    std::cerr << "B" << (i + 2) << " should be a formula cell." << std::endl;
                     return false;
                 }
 
@@ -677,16 +677,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLS)
                 aExpected = "Coefficients!RC[-1]";
                 if (aFormula != aExpected)
                 {
-                    cerr << "Wrong formula in B" << (i + 2) << ": expected='" << aExpected
-                         << "', actual='" << aFormula << "'" << endl;
+                    std::cerr << "Wrong formula in B" << (i + 2) << ": expected='" << aExpected
+                              << "', actual='" << aFormula << "'" << std::endl;
                     return false;
                 }
 
                 fActual = rDoc.GetValue(aPos);
                 if (fExpected != fActual)
                 {
-                    cerr << "Wrong value in B" << (i + 2) << ": expected=" << fExpected
-                         << ", actual=" << fActual << endl;
+                    std::cerr << "Wrong value in B" << (i + 2) << ": expected=" << fExpected
+                              << ", actual=" << fActual << std::endl;
                     return false;
                 }
             }
@@ -721,8 +721,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
             SCTAB nTabCount = rDoc.GetTableCount();
             if (nTabCount != 2)
             {
-                cerr << "Document should have exactly 2 sheets.  " << nTabCount << " found."
-                     << endl;
+                std::cerr << "Document should have exactly 2 sheets.  " << nTabCount << " found."
+                          << std::endl;
                 return false;
             }
 
@@ -732,8 +732,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
                 Color aTabBgColor = rDoc.GetTabBgColor(i);
                 if (aTabBgColor != COL_AUTO)
                 {
-                    cerr << "The tab color of Sheet " << (i + 1) << " should not be explicitly set."
-                         << endl;
+                    std::cerr << "The tab color of Sheet " << (i + 1)
+                              << " should not be explicitly set." << std::endl;
                     return false;
                 }
             }
@@ -746,8 +746,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
                 double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
-                    cerr << "Wrong value in B" << (i + 1) << ": expected=" << fExpected
-                         << ", actual=" << fVal << endl;
+                    std::cerr << "Wrong value in B" << (i + 1) << ": expected=" << fExpected
+                              << ", actual=" << fVal << std::endl;
                     return false;
                 }
             }
@@ -760,8 +760,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
                 double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
-                    cerr << "Wrong value in C" << (i + 1) << ": expected=" << fExpected
-                         << ", actual=" << fVal << endl;
+                    std::cerr << "Wrong value in C" << (i + 1) << ": expected=" << fExpected
+                              << ", actual=" << fVal << std::endl;
                     return false;
                 }
             }
@@ -774,8 +774,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaExportXLSX)
                 double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
-                    cerr << "Wrong value in D" << (i + 1) << ": expected=" << fExpected
-                         << ", actual=" << fVal << endl;
+                    std::cerr << "Wrong value in D" << (i + 1) << ": expected=" << fExpected
+                              << ", actual=" << fVal << std::endl;
                     return false;
                 }
             }
@@ -822,8 +822,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaStringResultExportXLSX)
                     OUString aExpected = OUString::createFromAscii(expected[i]);
                     if (aStr != aExpected)
                     {
-                        cerr << "Wrong value in B" << (i + 2) << ": expected='" << aExpected
-                             << "', actual='" << aStr << "'" << endl;
+                        std::cerr << "Wrong value in B" << (i + 2) << ": expected='" << aExpected
+                                  << "', actual='" << aStr << "'" << std::endl;
                         return false;
                     }
                 }
@@ -839,8 +839,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testSharedFormulaStringResultExportXLSX)
                     OUString aExpected = OUString::createFromAscii(expected[i]);
                     if (aStr != aExpected)
                     {
-                        cerr << "Wrong value in C" << (i + 2) << ": expected='" << aExpected
-                             << "', actual='" << aStr << "'" << endl;
+                        std::cerr << "Wrong value in C" << (i + 2) << ": expected='" << aExpected
+                                  << "', actual='" << aStr << "'" << std::endl;
                         return false;
                     }
                 }

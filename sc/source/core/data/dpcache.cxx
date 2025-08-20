@@ -178,14 +178,12 @@ struct Bucket
 
 #if DEBUG_PIVOT_TABLE
 #include <iostream>
-using std::cout;
-using std::endl;
 
 struct PrintBucket
 {
     void operator() (const Bucket& v) const
     {
-        cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << endl;
+        std::cout << "value: " << v.maValue.GetValue() << "  order index: " << v.mnOrderIndex << "  data index: " << v.mnDataIndex << std::endl;
     }
 };
 
@@ -1405,13 +1403,13 @@ namespace {
 void dumpItems(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
 {
     for (size_t i = 0; i < rItems.size(); ++i)
-        cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << endl;
+        std::cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << std::endl;
 }
 
 void dumpSourceData(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
 {
     for (const auto& rIndex : rArray)
-        cout << "      '" << rCache.GetFormattedString(nDim, rItems[rIndex], false) << "'" << endl;
+        std::cout << "      '" << rCache.GetFormattedString(nDim, rItems[rIndex], false) << "'" << std::endl;
 }
 
 const char* getGroupTypeName(sal_Int32 nType)
@@ -1444,27 +1442,27 @@ void ScDPCache::Dump() const
     bool bDumpItems = false;
     bool bDumpSourceData = false;
 
-    cout << "--- pivot cache dump" << endl;
+    std::cout << "--- pivot cache dump" << std::endl;
     {
         size_t i = 0;
         for (const auto& rxField : maFields)
         {
             const Field& fld = *rxField;
-            cout << "* source dimension: " << GetDimensionName(i) << " (ID = " << i << ")" << endl;
-            cout << "    item count: " << fld.maItems.size() << endl;
+            std::cout << "* source dimension: " << GetDimensionName(i) << " (ID = " << i << ")" << std::endl;
+            std::cout << "    item count: " << fld.maItems.size() << std::endl;
             if (bDumpItems)
                 dumpItems(*this, i, fld.maItems, 0);
             if (fld.mpGroup)
             {
-                cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
-                cout << "    group type: " << getGroupTypeName(fld.mpGroup->mnGroupType) << endl;
+                std::cout << "    group item count: " << fld.mpGroup->maItems.size() << std::endl;
+                std::cout << "    group type: " << getGroupTypeName(fld.mpGroup->mnGroupType) << std::endl;
                 if (bDumpItems)
                     dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
 
             if (bDumpSourceData)
             {
-                cout << "    source data (re-constructed):" << endl;
+                std::cout << "    source data (re-constructed):" << std::endl;
                 dumpSourceData(*this, i, fld.maItems, fld.maData);
             }
 
@@ -1477,9 +1475,9 @@ void ScDPCache::Dump() const
         for (const auto& rxGroupField : maGroupFields)
         {
             const GroupItems& gi = *rxGroupField;
-            cout << "* group dimension: (unnamed) (ID = " << i << ")" << endl;
-            cout << "    item count: " << gi.maItems.size() << endl;
-            cout << "    group type: " << getGroupTypeName(gi.mnGroupType) << endl;
+            std::cout << "* group dimension: (unnamed) (ID = " << i << ")" << std::endl;
+            std::cout << "    item count: " << gi.maItems.size() << std::endl;
+            std::cout << "    group type: " << getGroupTypeName(gi.mnGroupType) << std::endl;
             if (bDumpItems)
                 dumpItems(*this, i, gi.maItems, 0);
             ++i;
@@ -1488,7 +1486,7 @@ void ScDPCache::Dump() const
 
     {
         struct { SCROW start; SCROW end; bool empty; } aRange;
-        cout << "* empty rows: " << endl;
+        std::cout << "* empty rows: " << std::endl;
         mdds::flat_segment_tree<SCROW, bool>::const_iterator it = maEmptyRows.begin(), itEnd = maEmptyRows.end();
         if (it != itEnd)
         {
@@ -1498,14 +1496,14 @@ void ScDPCache::Dump() const
             for (++it; it != itEnd; ++it)
             {
                 aRange.end = it->first-1;
-                cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << endl;
+                std::cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << std::endl;
                 aRange.start = it->first;
                 aRange.empty = it->second;
             }
         }
     }
 
-    cout << "---" << endl;
+    std::cout << "---" << std::endl;
 }
 
 #endif

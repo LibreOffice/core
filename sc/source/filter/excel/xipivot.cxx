@@ -61,7 +61,6 @@ using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
-using ::std::vector;
 
 // Pivot cache
 
@@ -1528,8 +1527,8 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 
     ScDocument& rDoc = GetDoc();
 
-    vector<const ScDPSaveDimension*> aFieldDims;
-    vector<ScAddress> aFieldBtns;
+    std::vector<const ScDPSaveDimension*> aFieldDims;
+    std::vector<ScAddress> aFieldBtns;
 
     aGeometry.getPageFieldPositions(aFieldBtns);
     for (const auto& rFieldBtn : aFieldBtns)
@@ -1548,7 +1547,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aFieldDims);
     if (aFieldBtns.size() == aFieldDims.size())
     {
-        vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+        std::vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
         for (const auto& rFieldBtn : aFieldBtns)
         {
             ScMF nMFlag = ScMF::Button;
@@ -1567,7 +1566,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     if (!((aFieldBtns.size() == aFieldDims.size()) || (maPTAddlInfo.mbCompactMode && aFieldBtns.size() == 1)))
         return;
 
-    vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
+    std::vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
     for (const auto& rFieldBtn : aFieldBtns)
     {
         ScMF nMFlag = ScMF::Button;

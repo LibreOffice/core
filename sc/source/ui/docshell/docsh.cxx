@@ -158,8 +158,6 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using std::shared_ptr;
-using ::std::vector;
 
 //  Filter names (like in sclib.cxx)
 
@@ -1260,7 +1258,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     // Set optimal row height after import?
     bool bSetRowHeights = false;
 
-    vector<ScDocRowHeightUpdater::TabRanges> aRecalcRowRangesArray;
+    std::vector<ScDocRowHeightUpdater::TabRanges> aRecalcRowRangesArray;
 
     //  All filters need the complete file in one piece (not asynchronously)
     //  So make sure that we transfer the whole file with CreateFileStream
@@ -3195,7 +3193,7 @@ ScFormatSaveData* ScDocShell::GetFormatSaveData()
 
 namespace {
 
-void removeKeysIfExists(const Reference<ui::XAcceleratorConfiguration>& xScAccel, const vector<const awt::KeyEvent*>& rKeys)
+void removeKeysIfExists(const Reference<ui::XAcceleratorConfiguration>& xScAccel, const std::vector<const awt::KeyEvent*>& rKeys)
 {
     for (const awt::KeyEvent* p : rKeys)
     {
@@ -3237,7 +3235,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     if (!xScAccel.is())
         return;
 
-    vector<const awt::KeyEvent*> aKeys;
+    std::vector<const awt::KeyEvent*> aKeys;
     aKeys.reserve(9);
 
     // Backspace key

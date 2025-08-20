@@ -35,9 +35,6 @@
 #include <utility>
 #include <vector>
 
-using ::std::unique_ptr;
-using ::std::vector;
-
 namespace {
 
 void lcl_uppercase(OUString& rStr)
@@ -154,7 +151,7 @@ bool lcl_createExcelQuery(
     bool bValid = true;
     SCCOL nCols = pQueryRef->getColSize();
     SCROW nRows = pQueryRef->getRowSize();
-    vector<SCCOL> aFields(nCols);
+    std::vector<SCCOL> aFields(nCols);
     SCCOL nCol = 0;
     while (bValid && (nCol < nCols))
     {
@@ -360,7 +357,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, FormulaError* pEr
 
 std::unique_ptr<ScDBQueryParamBase> ScDBInternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
-    unique_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
+    std::unique_ptr<ScDBQueryParamInternal> pParam(new ScDBQueryParamInternal);
 
     // Set the database range first.
     const ScAddress& s = maRange.aStart;
@@ -455,7 +452,7 @@ SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, FormulaError* pEr
 
 std::unique_ptr<ScDBQueryParamBase> ScDBExternalRange::createQueryParam(const ScDBRangeBase* pQueryRef) const
 {
-    unique_ptr<ScDBQueryParamMatrix> pParam(new ScDBQueryParamMatrix);
+    std::unique_ptr<ScDBQueryParamMatrix> pParam(new ScDBQueryParamMatrix);
     pParam->mpMatrix = mpMatrix;
     fillQueryOptions(pParam.get());
 

@@ -50,10 +50,8 @@
 
 using namespace css;
 using namespace css::sheet;
-using css::sheet::DataPilotFieldOrientation;
-using std::vector;
 
-DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
+sheet::DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
@@ -61,23 +59,23 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     if (!pDPObj)
         return DataPilotFieldOrientation_HIDDEN;
 
-    DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
+    sheet::DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
 
     // Check for page field first.
     if (nCol > 0)
     {
         // look for the dimension header left of the drop-down arrow
         tools::Long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
-        if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
+        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
         {
             bool bIsDataLayout = false;
             OUString aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( !aFieldName.isEmpty() && !bIsDataLayout )
-                return DataPilotFieldOrientation_PAGE;
+                return sheet::DataPilotFieldOrientation_PAGE;
         }
     }
 
-    nOrient = DataPilotFieldOrientation_HIDDEN;
+    nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
 
     // Now, check for row/column field.
     tools::Long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
@@ -95,7 +93,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
 // private method for mouse button handling
 bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
-    if (GetDPFieldOrientation( nCol, nRow ) == DataPilotFieldOrientation_PAGE)
+    if (GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE)
     {
         LaunchPageFieldMenu( nCol, nRow );
         return true;
@@ -655,7 +653,7 @@ void ScGridWindow::DPSetupFieldPopup(std::unique_ptr<ScCheckListMenuControl::Ext
 
     if (bDimOrientNotPage)
     {
-        vector<OUString> aUserSortNames;
+        std::vector<OUString> aUserSortNames;
         ScUserList& rUserList = ScGlobal::GetUserList();
         size_t nUserListSize = rUserList.size();
         aUserSortNames.reserve(nUserListSize);

@@ -79,7 +79,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::std::vector;
 
 //          outliner
 
@@ -1715,7 +1714,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, tools::Long nDimIndex, bool bAs
     {
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
-        vector<OUString> aMembers;
+        std::vector<OUString> aMembers;
         std::unordered_set<OUString> aMemberSet;
         size_t nMemberCount = 0;
         for (ScDPSaveMember* pMem : rDimMembers)
@@ -1753,7 +1752,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, tools::Long nDimIndex, bool bAs
 
         // Rank all members.
 
-        vector<OUString> aRankedNames(nMemberCount);
+        std::vector<OUString> aRankedNames(nMemberCount);
         sal_uInt16 nCurStrId = 0;
         for (auto const& aMemberName : aMembers)
         {

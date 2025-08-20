@@ -34,8 +34,6 @@
 
 #include <o3tl/safeint.hxx>
 
-using ::std::vector;
-
 namespace {
 
 /**
@@ -1265,7 +1263,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
 }
 
 void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
-                                       const OUString& rUrl, const vector<OUString>& rTabNames )
+                                       const OUString& rUrl, const std::vector<OUString>& rTabNames )
 {
     if( !GetDocShell() )
         return;

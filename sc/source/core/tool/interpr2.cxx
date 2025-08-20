@@ -52,7 +52,6 @@
 
 #include <string.h>
 
-using ::std::vector;
 using namespace com::sun::star;
 using namespace formula;
 
@@ -344,12 +343,12 @@ void ScInterpreter::ScEasterSunday()
 }
 
 FormulaError ScInterpreter::GetWeekendAndHolidayMasks(
-    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, vector< double >& rSortArray,
+    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, std::vector< double >& rSortArray,
     bool bWeekendMask[ 7 ] )
 {
     if ( nParamCount == 4 )
     {
-        vector< double > nWeekendDays;
+        std::vector< double > nWeekendDays;
         GetNumberSequenceArray( 1, nWeekendDays, false );
         if ( nGlobalError != FormulaError::NONE )
             return nGlobalError;
@@ -384,7 +383,7 @@ FormulaError ScInterpreter::GetWeekendAndHolidayMasks(
 }
 
 FormulaError ScInterpreter::GetWeekendAndHolidayMasks_MS(
-    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, vector< double >& rSortArray,
+    const sal_uInt8 nParamCount, const sal_Int32 nNullDate, std::vector< double >& rSortArray,
     bool bWeekendMask[ 7 ], bool bWorkdayFunction )
 {
     FormulaError nErr = FormulaError::NONE;
@@ -506,7 +505,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
     if ( !MustHaveParamCount( nParamCount, 2, 4 ) )
         return;
 
-    vector<double> nSortArray;
+    std::vector<double> nSortArray;
     bool bWeekendMask[ 7 ];
     const Date& rNullDate = mrContext.NFGetNullDate();
     sal_Int32 nNullDate = rNullDate.GetAsNormalizedDays();
@@ -563,7 +562,7 @@ void ScInterpreter::ScWorkday_MS()
         return;
 
     nFuncFmtType = SvNumFormatType::DATE;
-    vector<double> nSortArray;
+    std::vector<double> nSortArray;
     bool bWeekendMask[ 7 ];
     const Date& rNullDate = mrContext.NFGetNullDate();
     sal_Int32 nNullDate = rNullDate.GetAsNormalizedDays();

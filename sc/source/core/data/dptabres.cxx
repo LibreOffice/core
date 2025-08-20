@@ -53,8 +53,6 @@
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::pair;
 using ::com::sun::star::uno::Sequence;
 
 namespace {
@@ -1017,7 +1015,7 @@ bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
     return false;
 }
 
-bool ScDPResultMember::IsValidEntry( const vector< SCROW >& aMembers ) const
+bool ScDPResultMember::IsValidEntry( const std::vector< SCROW >& aMembers ) const
 {
     if ( !IsValid() )
         return false;
@@ -1028,15 +1026,15 @@ bool ScDPResultMember::IsValidEntry( const vector< SCROW >& aMembers ) const
         if (aMembers.size() < 2)
             return false;
 
-        vector<SCROW>::const_iterator itr = aMembers.begin();
-        vector<SCROW> aChildMembers(++itr, aMembers.end());
+        std::vector<SCROW>::const_iterator itr = aMembers.begin();
+        std::vector<SCROW> aChildMembers(++itr, aMembers.end());
         return pChildDim->IsValidEntry(aChildMembers);
     }
     else
         return true;
 }
 
-void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
+void ScDPResultMember::InitFrom( const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLev,
                                  size_t nPos, ScDPInitState& rInitState ,
                                  bool bInitChild )
 {
@@ -1081,7 +1079,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
 }
 
 void ScDPResultMember::LateInitFrom(
-    LateInitParams& rParams, const vector<SCROW>& pItemData, size_t nPos, ScDPInitState& rInitState)
+    LateInitParams& rParams, const std::vector<SCROW>& pItemData, size_t nPos, ScDPInitState& rInitState)
 {
     //  without LateInit, everything has already been initialized
     if ( !pResultData->IsLateInit() )
@@ -1254,8 +1252,8 @@ tools::Long ScDPResultMember::GetSubTotalCount( tools::Long* pUserSubStart ) con
         return 0;
 }
 
-void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const ScDPResultDimension* pDataDim,
-                                    const vector< SCROW >& aDataMembers, const vector<ScDPValue>& aValues )
+void ScDPResultMember::ProcessData( const std::vector< SCROW >& aChildMembers, const ScDPResultDimension* pDataDim,
+                                    const std::vector< SCROW >& aDataMembers, const std::vector<ScDPValue>& aValues )
 {
     SetHasElements();
 
@@ -1910,7 +1908,7 @@ static tools::Long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
     return nRet;
 }
 
-void ScDPDataMember::UpdateValues( const vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState )
+void ScDPDataMember::UpdateValues( const std::vector<ScDPValue>& aValues, const ScDPSubTotalState& rSubState )
 {
     //TODO: find out how many and which subtotals are used
 
@@ -1934,7 +1932,7 @@ void ScDPDataMember::UpdateValues( const vector<ScDPValue>& aValues, const ScDPS
     }
 }
 
-void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const vector<ScDPValue>& aValues,
+void ScDPDataMember::ProcessData( const std::vector< SCROW >& aChildMembers, const std::vector<ScDPValue>& aValues,
                                     const ScDPSubTotalState& rSubState )
 {
     if ( pResultData->IsLateInit() && !pChildDimension && pResultMember && pResultMember->GetChildDimension() )
@@ -2797,7 +2795,7 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 }
 
 void ScDPResultDimension::InitFrom(
-    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev,
+    const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLev,
     size_t nPos, ScDPInitState& rInitState,  bool bInitChild )
 {
     if (nPos >= ppDim.size() || nPos >= ppLev.size())
@@ -2865,7 +2863,7 @@ void ScDPResultDimension::InitFrom(
 }
 
 void ScDPResultDimension::LateInitFrom(
-    LateInitParams& rParams, const vector<SCROW>& pItemData, size_t nPos, ScDPInitState& rInitState)
+    LateInitParams& rParams, const std::vector<SCROW>& pItemData, size_t nPos, ScDPInitState& rInitState)
 {
     if ( rParams.IsEnd( nPos ) )
         return;
@@ -3004,7 +3002,7 @@ tools::Long ScDPResultDimension::GetSize(tools::Long nMeasure) const
     return nTotal;
 }
 
-bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
+bool ScDPResultDimension::IsValidEntry( const std::vector< SCROW >& aMembers ) const
 {
     if (aMembers.empty())
         return false;
@@ -3018,10 +3016,10 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     return false;
 }
 
-void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
+void ScDPResultDimension::ProcessData( const std::vector< SCROW >& aMembers,
                                        const ScDPResultDimension* pDataDim,
-                                       const vector< SCROW >& aDataMembers,
-                                       const vector<ScDPValue>& aValues ) const
+                                       const std::vector< SCROW >& aDataMembers,
+                                       const std::vector<ScDPValue>& aValues ) const
 {
     if (aMembers.empty())
         return;
@@ -3029,10 +3027,10 @@ void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
     ScDPResultMember* pMember = FindMember( aMembers[0] );
     if ( nullptr != pMember )
     {
-        vector<SCROW> aChildMembers;
+        std::vector<SCROW> aChildMembers;
         if (aMembers.size() > 1)
         {
-            vector<SCROW>::const_iterator itr = aMembers.begin();
+            std::vector<SCROW>::const_iterator itr = aMembers.begin();
             aChildMembers.insert(aChildMembers.begin(), ++itr, aMembers.end());
         }
         pMember->ProcessData( aChildMembers, pDataDim, aDataMembers, aValues );
@@ -3578,7 +3576,7 @@ void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
     }
 }
 
-void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const vector<ScDPValue>& aValues,
+void ScDPDataDimension::ProcessData( const std::vector< SCROW >& aDataMembers, const std::vector<ScDPValue>& aValues,
                                      const ScDPSubTotalState& rSubState )
 {
     // the ScDPItemData array must contain enough entries for all dimensions - this isn't checked
@@ -3591,10 +3589,10 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
         {
-            vector<SCROW> aChildDataMembers;
+            std::vector<SCROW> aChildDataMembers;
             if (aDataMembers.size() > 1)
             {
-                vector<SCROW>::const_iterator itr = aDataMembers.begin();
+                std::vector<SCROW>::const_iterator itr = aDataMembers.begin();
                 aChildDataMembers.insert(aChildDataMembers.begin(), ++itr, aDataMembers.end());
             }
             pMember->ProcessData( aChildDataMembers, aValues, rSubState );
@@ -3907,7 +3905,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
     DimMemberType::iterator itr = maDimensions.find(rDimName);
     if (itr == maDimensions.end())
     {
-        pair<DimMemberType::iterator, bool> r = maDimensions.emplace(
+        std::pair<DimMemberType::iterator, bool> r = maDimensions.emplace(
             rDimName, VisibleMemberType());
 
         if (!r.second)
@@ -3920,7 +3918,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
     rMem.insert(rMemberItem);
 }
 
-void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
+void ScDPResultVisibilityData::fillFieldFilters(std::vector<ScDPFilteredCache::Criterion>& rFilters) const
 {
     typedef std::unordered_map<OUString, tools::Long> FieldNameMapType;
     FieldNameMapType aFieldNames;
@@ -4071,7 +4069,7 @@ ResultMembers::~ResultMembers()
 }
 
 LateInitParams::LateInitParams(
-    const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLev, bool bRow ) :
+    const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLev, bool bRow ) :
     mppDim( ppDim ),
     mppLev( ppLev ),
     mbRow( bRow ),

@@ -27,7 +27,6 @@
 
 
 using namespace ::com::sun::star;
-using ::std::vector;
 
 ScDPTableData::CalcInfo::CalcInfo() :
     pInitState( nullptr ),
@@ -187,7 +186,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
         //TODO: single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
-            vector<SCROW> aEmptyData;
+            std::vector<SCROW> aEmptyData;
             rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, nullptr, aEmptyData, rData.aValues);
         }
 
@@ -215,7 +214,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTab
 }
 
 void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                const vector<sal_Int32>& rDims, vector<SCROW>& rItemData)
+                                const std::vector<sal_Int32>& rDims, std::vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
     rItemData.reserve(rItemData.size() + nDimSize);
@@ -250,7 +249,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( sal_Int32 nDim, sal_Int32 n
     if ( nIndex >= GetMembersCount( nDim ) )
         return nullptr;
 
-    const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
+    const std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
     return GetCacheTable().getCache().GetItemDataById( static_cast<SCCOL>(nDim), static_cast<SCROW>(nMembers[nIndex]) );
 }

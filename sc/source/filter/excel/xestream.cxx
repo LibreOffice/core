@@ -79,7 +79,6 @@
 #define DEBUG_XL_ENCRYPTION 0
 
 using ::com::sun::star::uno::XInterface;
-using ::std::vector;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -239,7 +238,7 @@ std::size_t XclExpStream::Write( const void* pData, std::size_t nBytes )
                 if (mbUseEncrypter && HasValidEncrypter())
                 {
                     OSL_ENSURE(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
-                    vector<sal_uInt8> aBytes(nWriteLen);
+                    std::vector<sal_uInt8> aBytes(nWriteLen);
                     memcpy(aBytes.data(), pBuffer, nWriteLen);
                     mxEncrypter->EncryptBytes(mrStrm, aBytes);
                     // TODO: How do I check if all the bytes have been successfully written ?
@@ -498,13 +497,13 @@ void XclExpBiff8Encrypter::GetDocId( sal_uInt8 pnDocId[16] ) const
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )
 {
-    vector<sal_uInt8> aByte { nData };
+    std::vector<sal_uInt8> aByte { nData };
     EncryptBytes(rStrm, aByte);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt16 nData )
 {
-    ::std::vector<sal_uInt8> pnBytes
+    std::vector<sal_uInt8> pnBytes
     {
         o3tl::narrowing<sal_uInt8>(nData & 0xFF),
         o3tl::narrowing<sal_uInt8>((nData >> 8) & 0xFF)
@@ -514,7 +513,7 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt16 nData )
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt32 nData )
 {
-    ::std::vector<sal_uInt8> pnBytes
+    std::vector<sal_uInt8> pnBytes
     {
         o3tl::narrowing<sal_uInt8>(nData & 0xFF),
         o3tl::narrowing<sal_uInt8>((nData >>  8) & 0xFF),
@@ -526,14 +525,14 @@ void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt32 nData )
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, float fValue )
 {
-    ::std::vector<sal_uInt8> pnBytes(4);
+    std::vector<sal_uInt8> pnBytes(4);
     memcpy(pnBytes.data(), &fValue, 4);
     EncryptBytes(rStrm, pnBytes);
 }
 
 void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, double fValue )
 {
-    ::std::vector<sal_uInt8> pnBytes(8);
+    std::vector<sal_uInt8> pnBytes(8);
     memcpy(pnBytes.data(), &fValue, 8);
     EncryptBytes(rStrm, pnBytes);
 }
@@ -589,7 +588,7 @@ sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( std::size_t nStrmPos )
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
-void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
+void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, std::vector<sal_uInt8>& aBytes )
 {
     sal_uInt64 nStrmPos = rStrm.Tell();
     sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);

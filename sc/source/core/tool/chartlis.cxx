@@ -29,8 +29,6 @@
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
-using ::std::for_each;
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.
@@ -106,7 +104,7 @@ ScChartListener::ScChartListener( OUString aName, ScDocument& rDocP,
     ScRefTokenHelper::getTokensFromRangeList(&rDocP, maTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( OUString aName, ScDocument& rDocP, vector<ScTokenRef> aTokens ) :
+ScChartListener::ScChartListener( OUString aName, ScDocument& rDocP, std::vector<ScTokenRef> aTokens ) :
     maTokens(std::move(aTokens)),
     maName(std::move(aName)),
     mrDoc( rDocP ),
@@ -192,7 +190,7 @@ ScRangeListRef ScChartListener::GetRangeList() const
 
 void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
 {
-    vector<ScTokenRef> aTokens;
+    std::vector<ScTokenRef> aTokens;
     ScRefTokenHelper::getTokensFromRangeList(&mrDoc, aTokens, *rNew);
     maTokens.swap(aTokens);
 }
@@ -267,7 +265,7 @@ void ScChartListener::StartListeningTo()
         // no references to listen to.
         return;
 
-    for_each(maTokens.begin(), maTokens.end(), StartEndListening(mrDoc, *this, true));
+    std::for_each(maTokens.begin(), maTokens.end(), StartEndListening(mrDoc, *this, true));
 }
 
 void ScChartListener::EndListeningTo()
@@ -276,7 +274,7 @@ void ScChartListener::EndListeningTo()
         // no references to listen to.
         return;
 
-    for_each(maTokens.begin(), maTokens.end(), StartEndListening(mrDoc, *this, false));
+    std::for_each(maTokens.begin(), maTokens.end(), StartEndListening(mrDoc, *this, false));
 }
 
 void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,

@@ -110,9 +110,6 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
 }
 }
 
-using ::std::vector;
-using ::std::unique_ptr;
-
 bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 {
     ScDocShell& rDocSh = GetViewData().GetDocShell();
@@ -2549,7 +2546,7 @@ void ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 }
 
-bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
+bool ScViewFunc::DeleteTables(const std::vector<SCTAB> &TheTabs, bool bRecord )
 {
     ScDocShell& rDocSh  = GetViewData().GetDocShell();
     ScDocument& rDoc    = rDocSh.GetDocument();
@@ -2927,7 +2924,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         SCTAB       nTabCount   = rDoc.GetTableCount();
         SCTAB       nTabSelCount = rMark.GetSelectCount();
 
-        vector<SCTAB> TheTabs;
+        std::vector<SCTAB> TheTabs;
 
         for(SCTAB i=0; i<nTabCount; ++i)
         {
@@ -3064,10 +3061,10 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         // Move or copy within the same document.
         SCTAB       nTabCount   = rDoc.GetTableCount();
 
-        unique_ptr< vector<SCTAB> >    pSrcTabs(new vector<SCTAB>);
-        unique_ptr< vector<SCTAB> >    pDestTabs(new vector<SCTAB>);
-        unique_ptr< vector<OUString> > pTabNames(new vector<OUString>);
-        unique_ptr< vector<OUString> > pDestNames;
+        std::unique_ptr<std::vector<SCTAB>> pSrcTabs(new std::vector<SCTAB>);
+        std::unique_ptr<std::vector<SCTAB>> pDestTabs(new std::vector<SCTAB>);
+        std::unique_ptr<std::vector<OUString>> pTabNames(new std::vector<OUString>);
+        std::unique_ptr<std::vector<OUString>> pDestNames;
         pSrcTabs->reserve(nTabCount);
         pDestTabs->reserve(nTabCount);
         pTabNames->reserve(nTabCount);
@@ -3164,7 +3161,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
         // Rename must be done after all sheets have been moved.
         if (bRename)
         {
-            pDestNames.reset(new vector<OUString>);
+            pDestNames.reset(new std::vector<OUString>);
             size_t n = pDestTabs->size();
             pDestNames->reserve(n);
             for (size_t j = 0; j < n; ++j)

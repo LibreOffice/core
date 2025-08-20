@@ -79,7 +79,6 @@
 
 using namespace formula;
 using namespace ::com::sun::star;
-using ::std::vector;
 
 const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
 const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
@@ -777,14 +776,14 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
 }
 
 static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
-                                const vector<OUString>& rTabNames, const ScRange& rRef )
+                                const std::vector<OUString>& rTabNames, const ScRange& rRef )
 {
     SCTAB nTabSpan = rRef.aEnd.Tab() - rRef.aStart.Tab();
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();
-        vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
-        vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
+        std::vector<OUString>::const_iterator itrBeg = rTabNames.begin(), itrEnd = rTabNames.end();
+        std::vector<OUString>::const_iterator itr = ::std::find(itrBeg, itrEnd, rTabName1);
         if (itr == rTabNames.end())
         {
             rTabName2 = ScResId(STR_NO_REF_TABLE);
@@ -1284,7 +1283,7 @@ struct ConventionXL
     }
 
     static void makeExternalTabNameRange( OUStringBuffer& rBuf, const OUString& rTabName,
-                                          const vector<OUString>& rTabNames,
+                                          const std::vector<OUString>& rTabNames,
                                           const ScRange& rRef )
     {
         OUString aLastTabName;
@@ -5426,7 +5425,7 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
         break;
         case svExternalDoubleRef:
         {
-            vector<OUString> aTabNames;
+            std::vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
             // No sheet names is a valid case if external sheets were not
             // cached in this document and external document is not reachable,
@@ -5688,7 +5687,7 @@ FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaT
     return extendRangeReference( rDoc.GetSheetLimits(), rTok1, rTok2, aPos, true/*bReuseDoubleRef*/ );
 }
 
-void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
+void ScCompiler::fillAddInToken(std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
 {
     // All known AddIn functions.
     sheet::FormulaOpCodeMapEntry aEntry;

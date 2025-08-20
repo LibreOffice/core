@@ -22,8 +22,6 @@
 
 #include <vector>
 
-using ::std::vector;
-
 ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter) :
     maOutRange(rOutRange),
     mnRowFields(0),
@@ -72,12 +70,12 @@ void ScDPOutputGeometry::setCompactMode(bool bCompactMode)
     mbCompactMode = bCompactMode;
 }
 
-void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) const
+void ScDPOutputGeometry::getColumnFieldPositions(std::vector<ScAddress>& rAddrs) const
 {
     sal_uInt32 nColumnFields, nRowFields;
     adjustFieldsForDataLayout(nColumnFields, nRowFields);
 
-    vector<ScAddress> aAddrs;
+    std::vector<ScAddress> aAddrs;
     if (!nColumnFields)
     {
         rAddrs.swap(aAddrs);
@@ -107,12 +105,12 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
     rAddrs.swap(aAddrs);
 }
 
-void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
+void ScDPOutputGeometry::getRowFieldPositions(std::vector<ScAddress>& rAddrs) const
 {
     sal_uInt32 nColumnFields, nRowFields;
     adjustFieldsForDataLayout(nColumnFields, nRowFields);
 
-    vector<ScAddress> aAddrs;
+    std::vector<ScAddress> aAddrs;
     if (!nRowFields)
     {
         rAddrs.swap(aAddrs);
@@ -132,9 +130,9 @@ void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
     rAddrs.swap(aAddrs);
 }
 
-void ScDPOutputGeometry::getPageFieldPositions(vector<ScAddress>& rAddrs) const
+void ScDPOutputGeometry::getPageFieldPositions(std::vector<ScAddress>& rAddrs) const
 {
-    vector<ScAddress> aAddrs;
+    std::vector<ScAddress> aAddrs;
     if (!mnPageFields)
     {
         rAddrs.swap(aAddrs);

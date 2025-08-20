@@ -162,7 +162,6 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
-using ::std::vector;
 
 // difference between VBA and file format width, in character units
 const double fExtraWidth = 182.0 / 256.0;
@@ -580,7 +579,7 @@ sal_Int32 m_nArea;
 }
 
 typedef ::cppu::WeakImplHelper< container::XEnumeration > CellsEnumeration_BASE;
-typedef ::std::vector< CellPos > vCellPos;
+typedef std::vector< CellPos > vCellPos;
 
 namespace {
 
@@ -2492,7 +2491,7 @@ ScVbaRange::setMergeCells( const uno::Any& aIsMerged )
         sal_Int32 nCount = mxRanges->getCount();
 
         // VBA does nothing (no error) if the own ranges overlap somehow
-        ::std::vector< table::CellRangeAddress > aList;
+        std::vector< table::CellRangeAddress > aList;
         for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
         {
             uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( mxRanges->getByIndex( nIndex ), uno::UNO_QUERY_THROW );

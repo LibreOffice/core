@@ -38,7 +38,6 @@
 #include <formula/errorcodes.hxx>
 
 using namespace formula;
-using ::std::pair;
 
 // ScRangeData
 
@@ -830,7 +829,7 @@ bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
 
     OUString aName(p->GetUpperName());
     erase(aName); // ptr_map won't insert it if a duplicate name exists.
-    pair<DataType::iterator, bool> r =
+    std::pair<DataType::iterator, bool> r =
         m_Data.insert(std::make_pair(aName, std::unique_ptr<ScRangeData>(p)));
     if (r.second)
     {

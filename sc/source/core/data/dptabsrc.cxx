@@ -56,7 +56,6 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;
-using ::std::vector;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
@@ -421,7 +420,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 {
     sal_Int32 nColumnCount = GetData()->GetColumnCount();
 
-    vector<ScDPFilteredCache::Criterion> aFilterCriteria;
+    std::vector<ScDPFilteredCache::Criterion> aFilterCriteria;
     for (const sheet::DataPilotFieldFilter& rFilter : aFilters)
     {
         const OUString& aFieldName = rFilter.FieldName;
@@ -516,7 +515,7 @@ void ScDPSource::disposeData()
     mbResultOverflow = false;
 }
 
-static tools::Long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, tools::Long nLevels )
+static tools::Long lcl_CountMinMembers(const std::vector<ScDPDimension*>& ppDim, const std::vector<ScDPLevel*>& ppLevel, tools::Long nLevels )
 {
     //  Calculate the product of the member count for those consecutive levels that
     //  have the "show all" flag, one following level, and the data layout dimension.
@@ -673,7 +672,7 @@ void ScDPSource::FilterCacheByPageDimensions()
     }
 
     // filter table by page dimensions.
-    vector<ScDPFilteredCache::Criterion> aCriteria;
+    std::vector<ScDPFilteredCache::Criterion> aCriteria;
     for (const auto& rDimIndex : maPageDims)
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
@@ -736,10 +735,10 @@ void ScDPSource::CreateRes_Impl()
     // TODO: Aggregate pDataNames, pDataRefValues, nDataRefOrient, and
     // eDataFunctions into a structure and use vector instead of static
     // or pointer arrays.
-    vector<OUString> aDataNames;
-    vector<sheet::DataPilotFieldReference> aDataRefValues;
-    vector<ScSubTotalFunc> aDataFunctions;
-    vector<sheet::DataPilotFieldOrientation> aDataRefOrient;
+    std::vector<OUString> aDataNames;
+    std::vector<sheet::DataPilotFieldReference> aDataRefValues;
+    std::vector<ScSubTotalFunc> aDataFunctions;
+    std::vector<sheet::DataPilotFieldOrientation> aDataRefOrient;
 
     ScDPTableData::CalcInfo aInfo;
 

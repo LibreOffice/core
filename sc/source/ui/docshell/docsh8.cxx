@@ -81,7 +81,6 @@
 #include <vector>
 
 using namespace com::sun::star;
-using ::std::vector;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
@@ -224,7 +223,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<tools::Long>& rScales)
+static void lcl_setScalesToColumns(ScDocument& rDoc, const std::vector<tools::Long>& rScales)
 {
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     if (!pFormatter)
@@ -342,7 +341,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
         aProgress.SetState( 0 );
 
-        vector<tools::Long> aScales(nColCount, -1);
+        std::vector<tools::Long> aScales(nColCount, -1);
         for (sal_Int32 i=0; i<nColCount; i++)
         {
             OUString aHeader = xMeta->getColumnLabel( i+1 );
