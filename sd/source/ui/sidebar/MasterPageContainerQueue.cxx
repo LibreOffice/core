@@ -189,10 +189,10 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
             break;
 
         // First check whether the system is idle.
-        tools::IdleState nIdleState (tools::IdleDetection::GetIdleState(nullptr));
-        if (nIdleState != tools::IdleState::Idle)
+        sdtools::IdleState nIdleState (sdtools::IdleDetection::GetIdleState(nullptr));
+        if (nIdleState != sdtools::IdleState::Idle)
         {
-            if (nIdleState & tools::IdleState::FullScreenShowActive)
+            if (nIdleState & sdtools::IdleState::FullScreenShowActive)
                 bIsShowingFullScreenShow = true;
             break;
         }

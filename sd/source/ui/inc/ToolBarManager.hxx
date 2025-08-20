@@ -28,7 +28,7 @@
 
 class SdrView;
 namespace sd { class ViewShell; }
-namespace sd::tools { class EventMultiplexer; }
+namespace sdtools { class EventMultiplexer; }
 
 namespace sd {
 
@@ -65,7 +65,7 @@ public:
     */
     static std::shared_ptr<ToolBarManager> Create (
         ViewShellBase& rBase,
-        const std::shared_ptr<tools::EventMultiplexer>& rpMultiplexer,
+        const std::shared_ptr<sdtools::EventMultiplexer>& rpMultiplexer,
         const std::shared_ptr<ViewShellManager>& rpViewShellManager);
 
     ~ToolBarManager();

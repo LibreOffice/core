@@ -262,18 +262,18 @@ void CustomAnimationPane::addUndo()
 
 void CustomAnimationPane::addListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
 
 void CustomAnimationPane::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
-    tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

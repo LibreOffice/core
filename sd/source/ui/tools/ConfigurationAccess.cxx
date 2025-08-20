@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace sd::tools {
+namespace sdtools {
 
 ConfigurationAccess::ConfigurationAccess (
     const OUString& rsRootName,
@@ -108,6 +108,6 @@ void ConfigurationAccess::CommitChanges()
         xConfiguration->commitChanges();
 }
 
-} // end of namespace sd::tools
+} // end of namespace sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,7 @@
 #include <memory>
 #include <functional>
 
-namespace sd::tools
+namespace sdtools
 {
 /** Store a function object and execute it asynchronous.
 
@@ -72,6 +72,6 @@ private:
     DECL_LINK(TimerCallback, Timer*, void);
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

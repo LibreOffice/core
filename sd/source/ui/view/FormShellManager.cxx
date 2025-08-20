@@ -60,7 +60,7 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
 {
     // Register at the EventMultiplexer to be informed about changes in the
     // center pane.
-    Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 
     RegisterAtCenterPane();
@@ -72,7 +72,7 @@ void FormShellManager::ImplDestroy()
     UnregisterAtCenterPane();
 
     // Unregister from the EventMultiplexer.
-    Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
     if (mpSubShellFactory)
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(FormShellManager, FormControlActivated, LinkParamNone*, void)
     }
 }
 
-IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

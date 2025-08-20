@@ -106,9 +106,9 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
 {
     try
     {
-        tools::ConfigurationAccess aConfiguration (
+        sdtools::ConfigurationAccess aConfiguration (
             GetPathToImpressConfigurationRoot(),
-            tools::ConfigurationAccess::READ_ONLY);
+            sdtools::ConfigurationAccess::READ_ONLY);
         Reference<container::XNameAccess> xSet (
             aConfiguration.GetConfigurationNode(GetPathToSetNode()),
             UNO_QUERY);
@@ -168,9 +168,9 @@ void RecentlyUsedMasterPages::SavePersistentValues()
 {
     try
     {
-        tools::ConfigurationAccess aConfiguration (
+        sdtools::ConfigurationAccess aConfiguration (
             GetPathToImpressConfigurationRoot(),
-            tools::ConfigurationAccess::READ_WRITE);
+            sdtools::ConfigurationAccess::READ_WRITE);
         Reference<container::XNameContainer> xSet (
             aConfiguration.GetConfigurationNode(GetPathToSetNode()),
             UNO_QUERY);

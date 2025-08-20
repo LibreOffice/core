@@ -32,7 +32,7 @@ class SdrTextObj;
 class SfxProgress;
 class EditView;
 
-namespace sd::tools {
+namespace sdtools {
     class EventMultiplexerEvent;
 }
 
@@ -219,7 +219,7 @@ private:
     */
     DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
 
-    DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void);
 
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> maDragAndDropModelGuard;

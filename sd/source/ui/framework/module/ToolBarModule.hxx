@@ -33,7 +33,7 @@ class DrawController;
 class ViewShellBase;
 }
 
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 }
@@ -88,7 +88,7 @@ private:
     void HandlePaneViewShellFocused(
         const rtl::Reference<sd::framework::ResourceId>& rxResourceId);
 
-    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
 };
 
 } // end of namespace sd::framework

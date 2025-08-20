@@ -1231,7 +1231,7 @@ sd/source/ui/inc/navigatr.hxx:146
 sd/source/ui/inc/SlideshowLayerRenderer.hxx:89
     sd::RenderPass mbAnimation _Bool
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:72
-    sd::tools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
+    sdtools::TimerBasedTaskExecution mpSelf std::shared_ptr<TimerBasedTaskExecution>
 sd/source/ui/inc/ViewShellImplementation.hxx:78
     sd::ViewShell::Implementation::ToolBarManagerLock mpLock ::std::unique_ptr<ToolBarManager::UpdateLock, o3tl::default_delete<ToolBarManager::UpdateLock> >
 sd/source/ui/inc/ViewShellImplementation.hxx:89

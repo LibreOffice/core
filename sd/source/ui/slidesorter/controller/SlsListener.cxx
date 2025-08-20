@@ -115,7 +115,7 @@ Listener::Listener (
             StartListening(*pMainViewShell);
         }
 
-        Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->AddEventListener(aLink);
     }
 }
@@ -166,7 +166,7 @@ void Listener::ReleaseListeners()
 
     if (mpBase != nullptr)
     {
-        Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->RemoveEventListener(aLink);
     }
 }
@@ -314,7 +314,7 @@ void Listener::Notify (
     }
 }
 
-IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(Listener, EventMultiplexerCallback, ::sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

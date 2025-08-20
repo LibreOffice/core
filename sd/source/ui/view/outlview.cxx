@@ -340,7 +340,7 @@ OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
         FillOutliner();
     }
 
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(aLink);
 
     Reference<XFrame> xFrame;
@@ -366,7 +366,7 @@ OutlineView::~OutlineView()
     DBG_ASSERT(maDragAndDropModelGuard == nullptr,
                "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!");
 
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
     DisconnectFromApplication();
 
@@ -1576,7 +1576,7 @@ IMPL_LINK_NOARG(OutlineView, AppEventListenerHdl, VclSimpleEvent&, void)
     onUpdateStyleSettings(false);
 }
 
-IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(OutlineView, EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

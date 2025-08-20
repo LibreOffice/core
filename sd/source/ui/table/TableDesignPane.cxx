@@ -712,18 +712,18 @@ void TableDesignWidget::endTextEditForStyle(const Reference<XInterface>& rStyle)
 
 void TableDesignWidget::addListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void TableDesignWidget::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
-    tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

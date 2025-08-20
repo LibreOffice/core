@@ -31,7 +31,7 @@
 class SdDrawDocument;
 class SdXImpressDocument;
 namespace com::sun::star::drawing { class XDrawView; }
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sdtools { class EventMultiplexerEvent; }
 
 namespace sd
 {
@@ -101,7 +101,7 @@ private:
     DECL_LINK( DurationLoseFocusHdl, weld::Widget&, void );
     DECL_LINK( SoundListBoxSelected, weld::ComboBox&, void );
     DECL_LINK( LoopSoundBoxChecked, weld::Toggleable&, void );
-    DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK( EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void );
     DECL_LINK(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;

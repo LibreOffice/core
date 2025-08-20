@@ -27,12 +27,12 @@
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::container { class XIndexAccess; class XNameContainer; }
 
-namespace sd
-{
-
-namespace tools {
+namespace sdtools {
 class EventMultiplexerEvent;
 }
+
+namespace sd
+{
 
 class ViewShellBase;
 class DrawController;
@@ -91,7 +91,7 @@ private:
 
     void FillDesignPreviewControl();
 
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(implContextMenuHandler, const Point*, void);
     DECL_LINK(implValueSetHdl, ValueSet*, void);
     DECL_LINK(implCheckBoxHdl, weld::Toggleable&, void);

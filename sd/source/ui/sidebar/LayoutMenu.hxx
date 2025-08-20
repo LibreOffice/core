@@ -40,7 +40,7 @@ class DrawDocShell;
 class ViewShellBase;
 }
 
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 class SlotStateListener;
@@ -95,7 +95,7 @@ private:
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
     */
-    rtl::Reference<::sd::tools::SlotStateListener> mxListener;
+    rtl::Reference<::sdtools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
@@ -165,7 +165,7 @@ private:
     DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(StateChangeHandler, const OUString&, void);
-    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(MenuSelectAsyncHdl, void*, void);
     DECL_LINK(OnPopupEnd, const OUString&, void);
 

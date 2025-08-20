@@ -5293,13 +5293,13 @@ sd/source/ui/inc/ToolBarManager.hxx:133
 sd/source/ui/inc/ToolBarManager.hxx:134
     enum sd::ToolBarManager::ToolBarGroup MasterMode
 sd/source/ui/inc/tools/ConfigurationAccess.hxx:43
-    enum sd::tools::ConfigurationAccess::WriteMode READ_WRITE
+    enum sdtools::ConfigurationAccess::WriteMode READ_WRITE
 sd/source/ui/inc/tools/IdleDetection.hxx:34
-    enum sd::tools::IdleState SystemEventPending
+    enum sdtools::IdleState SystemEventPending
 sd/source/ui/inc/tools/IdleDetection.hxx:44
-    enum sd::tools::IdleState WindowShowActive
+    enum sdtools::IdleState WindowShowActive
 sd/source/ui/inc/tools/IdleDetection.hxx:48
-    enum sd::tools::IdleState WindowPainting
+    enum sdtools::IdleState WindowPainting
 sd/source/ui/remotecontrol/BluetoothServer.cxx:100
     enum sd::BluetoothServer::Impl::BluezVersion BLUEZ4
 sd/source/ui/remotecontrol/BluetoothServer.hxx:47

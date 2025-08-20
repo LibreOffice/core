@@ -28,7 +28,7 @@
 namespace com::sun::star::container { class XHierarchicalNameAccess; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-namespace sd::tools {
+namespace sdtools {
 
 /** This class gives access to the configuration.  Create an object of this
     class for one node of the configuration.  This will be the root node.
@@ -99,6 +99,6 @@ private:
         const WriteMode eMode);
 };
 
-} // end of namespace sd::tools
+} // end of namespace sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

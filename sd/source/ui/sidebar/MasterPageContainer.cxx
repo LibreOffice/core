@@ -153,7 +153,7 @@ private:
     // We have to remember the tasks for initialization and filling in case
     // a MasterPageContainer object is destroyed before these tasks have
     // been completed.
-    std::weak_ptr<sd::tools::TimerBasedTaskExecution> mpFillerTask;
+    std::weak_ptr<sdtools::TimerBasedTaskExecution> mpFillerTask;
 
     Size maSmallPreviewSizePixel;
     Size maLargePreviewSizePixel;
@@ -480,7 +480,7 @@ MasterPageContainer::Implementation::~Implementation()
 {
     // When the initializer or filler tasks are still running then we have
     // to stop them now in order to prevent them from calling us back.
-    tools::TimerBasedTaskExecution::ReleaseTask(mpFillerTask);
+    sdtools::TimerBasedTaskExecution::ReleaseTask(mpFillerTask);
 
     mpRequestQueue.reset();
 
@@ -511,7 +511,7 @@ void MasterPageContainer::Implementation::LateInit()
     mpRequestQueue.reset(MasterPageContainerQueue::Create(
         std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
-    mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
+    mpFillerTask = ::sdtools::TimerBasedTaskExecution::Create(
         std::make_shared<MasterPageContainerFiller>(*this),
         5,
         50);

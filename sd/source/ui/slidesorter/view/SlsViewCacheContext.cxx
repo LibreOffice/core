@@ -60,8 +60,8 @@ void ViewCacheContext::NotifyPreviewCreation(cache::CacheKey aKey)
 
 bool ViewCacheContext::IsIdle()
 {
-    tools::IdleState nIdleState (tools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow()));
-    return nIdleState == tools::IdleState::Idle;
+    sdtools::IdleState nIdleState (sdtools::IdleDetection::GetIdleState(mrSlideSorter.GetContentWindow()));
+    return nIdleState == sdtools::IdleState::Idle;
 }
 
 bool ViewCacheContext::IsVisible (cache::CacheKey aKey)

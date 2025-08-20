@@ -29,7 +29,7 @@ namespace sd
 {
 class SmartTag;
 }
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 }
@@ -52,7 +52,7 @@ public:
     void onZoomChanged();
     void UpdateTags();
 
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(UpdateTagsHdl, void*, void);
 
     bool CreateTags();

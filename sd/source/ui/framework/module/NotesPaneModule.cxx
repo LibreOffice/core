@@ -98,8 +98,7 @@ void NotesPaneModule::disposing(std::unique_lock<std::mutex>&)
     }
 }
 
-IMPL_LINK(NotesPaneModule, EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, rEvent,
-          void)
+IMPL_LINK(NotesPaneModule, EventMultiplexerListener, sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     if (!mxConfigurationController.is())
         return;

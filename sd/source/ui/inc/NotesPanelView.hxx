@@ -14,7 +14,7 @@
 
 class SdrTextObj;
 
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 }
@@ -83,7 +83,7 @@ public:
     DECL_LINK(StatusEventHdl, EditStatus&, void);
     DECL_LINK(EditModifiedHdl, LinkParamNone*, void);
     DECL_LINK(ModifyTimerHdl, Timer*, void);
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void);
 };
 }
 

@@ -1152,18 +1152,18 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
 
 void AnnotationManagerImpl::addListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
 
 void AnnotationManagerImpl::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
-    tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

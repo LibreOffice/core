@@ -141,7 +141,7 @@ public:
     VclPtr<vcl::Window> mpViewWindow;
     std::shared_ptr<ToolBarManager> mpToolBarManager;
     std::shared_ptr<ViewShellManager> mpViewShellManager;
-    std::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
+    std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
     std::unique_ptr<FormShellManager> mpFormShellManager;
 
     explicit Implementation (ViewShellBase& rBase);
@@ -304,7 +304,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     mpImpl->LateInit();
     InitializeFramework();
 
-    mpImpl->mpEventMultiplexer = std::make_shared<tools::EventMultiplexer>(*this);
+    mpImpl->mpEventMultiplexer = std::make_shared<sdtools::EventMultiplexer>(*this);
 
     mpImpl->mpFormShellManager = std::make_unique<FormShellManager>(*this);
 
@@ -948,7 +948,7 @@ void ViewShellBase::SetViewOptions(const SdViewOptions& rOptions) const
     mpImpl->maViewOptions = rOptions;
 }
 
-std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer() const
+std::shared_ptr<sdtools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer() const
 {
     OSL_ASSERT(mpImpl != nullptr);
     OSL_ASSERT(mpImpl->mpEventMultiplexer != nullptr);

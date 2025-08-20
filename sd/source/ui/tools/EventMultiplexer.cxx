@@ -46,7 +46,7 @@ using ::sd::framework::FrameworkHelper;
 
 class SdDrawDocument;
 
-namespace sd::tools {
+namespace sdtools {
 
 typedef cppu::ImplInheritanceHelper<
       sd::framework::ConfigurationChangeListener,
@@ -60,7 +60,7 @@ class EventMultiplexer::Implementation
       public SfxListener
 {
 public:
-    explicit Implementation (ViewShellBase& rBase);
+    explicit Implementation (sd::ViewShellBase& rBase);
     virtual ~Implementation() override;
 
     void AddEventListener (
@@ -106,7 +106,7 @@ protected:
         const SfxHint& rHint) override;
 
 private:
-    ViewShellBase& mrBase;
+    sd::ViewShellBase& mrBase;
     typedef ::std::vector<Link<EventMultiplexerEvent&,void>> ListenerList;
     ListenerList maListeners;
 
@@ -139,7 +139,7 @@ constexpr OUString aEditModePropertyName = u"IsMasterPageMode"_ustr;
 
 //===== EventMultiplexer ======================================================
 
-EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
+EventMultiplexer::EventMultiplexer (sd::ViewShellBase& rBase)
     : mpImpl (new EventMultiplexer::Implementation(rBase))
 {
 }
@@ -179,7 +179,7 @@ void EventMultiplexer::MultiplexEvent(EventMultiplexerEventId eEventId, void con
 
 //===== EventMultiplexer::Implementation ======================================
 
-EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
+EventMultiplexer::Implementation::Implementation (sd::ViewShellBase& rBase)
     : mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
@@ -208,7 +208,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
         StartListening (*mpDocument);
 
     // Listen for configuration changes.
-    DrawController& rDrawController = *mrBase.GetDrawController();
+    sd::DrawController& rDrawController = *mrBase.GetDrawController();
 
     rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
         rDrawController.getConfigurationController());
@@ -220,13 +220,13 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
 
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ResourceActivation);
+        sd::framework::ConfigurationChangeEventType::ResourceActivation);
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ResourceDeactivation);
+        sd::framework::ConfigurationChangeEventType::ResourceDeactivation);
     xConfigurationController->addConfigurationChangeListener(
         this,
-        framework::ConfigurationChangeEventType::ConfigurationUpdateEnd);
+        sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd);
 }
 
 EventMultiplexer::Implementation::~Implementation()
@@ -490,7 +490,7 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
 {
     switch (rEvent.Type)
     {
-        case framework::ConfigurationChangeEventType::ResourceActivation:
+        case sd::framework::ConfigurationChangeEventType::ResourceActivation:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
                 CallListeners (EventMultiplexerEventId::ViewAdded);
@@ -505,8 +505,8 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
                 if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
                     auto pView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
-                    slidesorter::SlideSorterViewShell* pViewShell
-                        = dynamic_cast<slidesorter::SlideSorterViewShell*>(
+                    sd::slidesorter::SlideSorterViewShell* pViewShell
+                        = dynamic_cast<sd::slidesorter::SlideSorterViewShell*>(
                             FrameworkHelper::GetViewShell(pView).get());
                     if (pViewShell != nullptr)
                         pViewShell->AddSelectionChangeListener (
@@ -517,7 +517,7 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
             }
             break;
 
-        case framework::ConfigurationChangeEventType::ResourceDeactivation:
+        case sd::framework::ConfigurationChangeEventType::ResourceDeactivation:
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
             {
                 if (rEvent.ResourceId->isBoundToURL(
@@ -530,9 +530,9 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
                 // selection change listener at slide sorter.
                 if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
-                    auto pView = dynamic_cast<framework::AbstractView*>(rEvent.ResourceObject.get());
-                    slidesorter::SlideSorterViewShell* pViewShell
-                        = dynamic_cast<slidesorter::SlideSorterViewShell*>(
+                    auto pView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
+                    sd::slidesorter::SlideSorterViewShell* pViewShell
+                        = dynamic_cast<sd::slidesorter::SlideSorterViewShell*>(
                             FrameworkHelper::GetViewShell(pView).get());
                     if (pViewShell != nullptr)
                         pViewShell->RemoveSelectionChangeListener (
@@ -543,7 +543,7 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
             }
             break;
 
-        case framework::ConfigurationChangeEventType::ConfigurationUpdateEnd:
+        case sd::framework::ConfigurationChangeEventType::ConfigurationUpdateEnd:
             CallListeners (EventMultiplexerEventId::ConfigurationUpdated);
             break;
 
@@ -644,6 +644,6 @@ EventMultiplexerEvent::EventMultiplexerEvent (
 {
 }
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

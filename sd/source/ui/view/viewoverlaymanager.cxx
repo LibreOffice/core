@@ -440,7 +440,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mnUpdateTagsEvent( nullptr )
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener(aLink);
 
     StartListening( *mrBase.GetDocShell() );
@@ -448,7 +448,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 
 ViewOverlayManager::~ViewOverlayManager()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 
     if( mnUpdateTagsEvent )
@@ -536,7 +536,7 @@ bool ViewOverlayManager::DisposeTags()
 }
 
 IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
-    tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

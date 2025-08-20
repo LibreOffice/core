@@ -37,7 +37,7 @@ namespace sd {
 class ViewShellBase;
 }
 
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sdtools { class EventMultiplexerEvent; }
 namespace sd::slidesorter { class SlideSorter; }
 
 namespace sd::slidesorter::controller {
@@ -149,7 +149,7 @@ private:
     */
     void HandleShapeModification (const SdrPage* pPage);
 
-    DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerCallback, sdtools::EventMultiplexerEvent&, void);
 };
 
 } // end of namespace ::sd::slidesorter::controller

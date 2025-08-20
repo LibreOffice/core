@@ -27,7 +27,7 @@ class SdDrawDocument;
 struct SdViewOptions;
 class SfxRequest;
 
-namespace sd::tools {
+namespace sdtools {
 class EventMultiplexer;
 }
 
@@ -189,7 +189,7 @@ public:
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
-    std::shared_ptr<tools::EventMultiplexer> const & GetEventMultiplexer() const;
+    std::shared_ptr<sdtools::EventMultiplexer> const & GetEventMultiplexer() const;
 
     /** returns the complete area of the current view relative to the frame
         window

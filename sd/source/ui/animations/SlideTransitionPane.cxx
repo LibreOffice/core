@@ -920,18 +920,18 @@ void SlideTransitionPane::playCurrentEffect()
 
 void SlideTransitionPane::addListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void SlideTransitionPane::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
-    tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

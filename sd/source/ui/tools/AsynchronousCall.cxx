@@ -20,7 +20,7 @@
 #include <memory>
 #include <tools/AsynchronousCall.hxx>
 
-namespace sd::tools
+namespace sdtools
 {
 AsynchronousCall::AsynchronousCall()
     : maTimer("sd AsynchronousCall")
@@ -51,6 +51,6 @@ IMPL_LINK(AsynchronousCall, TimerCallback, Timer*, pTimer, void)
     }
 }
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

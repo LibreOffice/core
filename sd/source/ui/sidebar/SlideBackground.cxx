@@ -550,18 +550,18 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
 
 void SlideBackground::addListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void SlideBackground::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    Link<sdtools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(SlideBackground, EventMultiplexerListener,
-                tools::EventMultiplexerEvent&, rEvent, void)
+                sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

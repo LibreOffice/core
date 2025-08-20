@@ -30,7 +30,7 @@
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace weld { class ComboBox; }
 namespace com::sun::star::animations { class XAnimationNode; }
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sdtools { class EventMultiplexerEvent; }
 
 enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
 
@@ -104,7 +104,7 @@ private:
     DECL_LINK( implClickHdl, weld::Button&, void );
     DECL_LINK( implToggleHdl, weld::Toggleable&, void );
     DECL_LINK( implPropertyHdl, LinkParamNone*, void );
-    DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK( EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void );
     DECL_LINK( lateInitCallback, Timer *, void );
     DECL_LINK( DurationModifiedHdl, weld::MetricSpinButton&, void );
     DECL_LINK( DelayModifiedHdl, weld::MetricSpinButton&, void );

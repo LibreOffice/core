@@ -120,7 +120,7 @@ enum class EventMultiplexerEventId
     FocusShifted,
 };
 
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent
 {
@@ -145,7 +145,7 @@ class EventMultiplexer
 public:
     /** Create new EventMultiplexer for the given ViewShellBase object.
     */
-    EventMultiplexer(ViewShellBase& rBase);
+    EventMultiplexer(sd::ViewShellBase& rBase);
     ~EventMultiplexer();
 
     /** Add an event listener that will be informed about the specified
@@ -176,6 +176,6 @@ private:
     rtl::Reference<Implementation> mpImpl;
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

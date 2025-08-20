@@ -2587,11 +2587,11 @@ sd/source/ui/inc/smarttag.hxx:158
     enum SdrHdlKind eNewKind
     23
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:50
-    class std::shared_ptr<class sd::tools::TimerBasedTaskExecution> sd::tools::TimerBasedTaskExecution::Create(const class std::shared_ptr<class sd::tools::AsynchronousTask> &,unsigned int,unsigned int)
+    class std::shared_ptr<class sdtools::TimerBasedTaskExecution> sdtools::TimerBasedTaskExecution::Create(const class std::shared_ptr<class sdtools::AsynchronousTask> &,unsigned int,unsigned int)
     unsigned int nMillisecondsBetweenSteps
     5
 sd/source/ui/inc/tools/TimerBasedTaskExecution.hxx:50
-    class std::shared_ptr<class sd::tools::TimerBasedTaskExecution> sd::tools::TimerBasedTaskExecution::Create(const class std::shared_ptr<class sd::tools::AsynchronousTask> &,unsigned int,unsigned int)
+    class std::shared_ptr<class sdtools::TimerBasedTaskExecution> sdtools::TimerBasedTaskExecution::Create(const class std::shared_ptr<class sdtools::AsynchronousTask> &,unsigned int,unsigned int)
     unsigned int nMaxTimePerStep
     50
 sd/source/ui/inc/ViewShellManager.hxx:159

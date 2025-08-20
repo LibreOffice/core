@@ -66,7 +66,7 @@ public:
     supported format) last.  When a step does not add a new template then
     the value of the previous step is returned.
 */
-class TemplateScanner final : public ::sd::tools::AsynchronousTask
+class TemplateScanner final : public ::sdtools::AsynchronousTask
 {
 public:
     /** Create a new template scanner and prepare but do not execute the scanning.

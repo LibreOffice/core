@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star;
 
-namespace sd::tools {
+namespace sdtools {
 
 IdleState IdleDetection::GetIdleState (const vcl::Window* pWindow)
 {
@@ -73,10 +73,10 @@ IdleState IdleDetection::CheckSlideShowRunning()
             continue;
 
         // Get sd::ViewShell from active frame.
-        ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pViewFrame);
+        sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame);
         if (pBase != nullptr)
         {
-            rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pBase ) );
+            rtl::Reference< sd::SlideShow > xSlideShow( sd::SlideShow::GetSlideShow( *pBase ) );
             if( xSlideShow.is() && xSlideShow->isRunning() && !xSlideShow->IsInteractiveSlideshow()) // IASS
             {
                 if (xSlideShow->isFullScreen())
@@ -98,6 +98,6 @@ IdleState IdleDetection::CheckWindowPainting (const vcl::Window& rWindow)
         return IdleState::Idle;
 }
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

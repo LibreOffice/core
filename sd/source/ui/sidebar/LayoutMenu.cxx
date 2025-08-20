@@ -156,14 +156,14 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     mxLayoutIconView->connect_query_tooltip(LINK(this, LayoutMenu, QueryTooltipHdl));
     InvalidateContent();
 
-    Link<::sd::tools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<::sdtools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink);
 
     mxLayoutIconView->set_help_id(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     mxLayoutIconView->set_accessible_name(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
-    mxListener = new ::sd::tools::SlotStateListener(
+    mxListener = new ::sdtools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
         u".uno:VerticalTextState"_ustr);
@@ -189,7 +189,7 @@ void LayoutMenu::Dispose()
         mxListener->dispose();
 
     Clear();
-    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 }
 
@@ -669,7 +669,7 @@ void LayoutMenu::UpdateSelection()
         mxLayoutIconView->unselect_all();
 }
 
-IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

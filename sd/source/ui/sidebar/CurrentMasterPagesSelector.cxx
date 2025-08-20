@@ -68,7 +68,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector(
                           u"modules/simpress/ui/masterpagepanel.ui"_ustr,
                           u"masterpagecurrent_icons"_ustr)
 {
-    Link<sd::tools::EventMultiplexerEvent&, void> aLink(
+    Link<sdtools::EventMultiplexerEvent&, void> aLink(
         LINK(this, CurrentMasterPagesSelector, EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink);
 }
@@ -84,7 +84,7 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
         OSL_ASSERT(mrDocument.GetDocSh() != nullptr);
     }
 
-    Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
 
@@ -215,7 +215,7 @@ void CurrentMasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
 }
 
 IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
-    sd::tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

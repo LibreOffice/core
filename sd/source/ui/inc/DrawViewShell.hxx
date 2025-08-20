@@ -492,7 +492,7 @@ private:
     /** On some occasions it is necessary to make SwitchPage calls
         asynchronously.
     */
-    tools::AsynchronousCall maAsynchronousSwitchPageCall;
+    sdtools::AsynchronousCall maAsynchronousSwitchPageCall;
     /** This flag is used to prevent nested calls to SwitchPage().
     */
     bool mbIsInSwitchPage;

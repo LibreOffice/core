@@ -248,7 +248,7 @@ public:
     */
     Implementation (
         ViewShellBase& rBase,
-        std::shared_ptr<sd::tools::EventMultiplexer> pMultiplexer,
+        std::shared_ptr<sdtools::EventMultiplexer> pMultiplexer,
         const std::shared_ptr<ViewShellManager>& rpViewShellManager,
         const std::shared_ptr<ToolBarManager>& rpToolBarManager);
     ~Implementation();
@@ -303,7 +303,7 @@ public:
 private:
     mutable ::osl::Mutex maMutex;
     ViewShellBase& mrBase;
-    std::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
+    std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
     bool mbIsValid;
     ToolBarList maToolBarList;
     ToolBarShellList maToolBarShellList;
@@ -327,7 +327,7 @@ private:
     bool CheckPlugInMode (std::u16string_view rsName) const;
 
     DECL_LINK(UpdateCallback, void *, void);
-    DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerCallback, sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(SetValidCallback, void*, void);
 };
 
@@ -335,7 +335,7 @@ private:
 
 std::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
-    const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    const std::shared_ptr<sdtools::EventMultiplexer>& rpMultiplexer,
     const std::shared_ptr<ViewShellManager>& rpViewShellManager)
 {
     std::shared_ptr<ToolBarManager> pManager (new ToolBarManager());
@@ -499,7 +499,7 @@ void ToolBarManager::ToolBarsDestroyed()
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
-    std::shared_ptr<sd::tools::EventMultiplexer> pMultiplexer,
+    std::shared_ptr<sdtools::EventMultiplexer> pMultiplexer,
     const std::shared_ptr<ViewShellManager>& rpViewShellManager,
     const std::shared_ptr<ToolBarManager>& rpToolBarManager)
     : mrBase(rBase),
@@ -512,7 +512,7 @@ ToolBarManager::Implementation::Implementation (
       mnPendingSetValidCall(nullptr),
       maToolBarRules(rpToolBarManager,rpViewShellManager)
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->AddEventListener( aLink );
 }
 
@@ -523,7 +523,7 @@ ToolBarManager::Implementation::Implementation (
 ToolBarManager::Implementation::~Implementation()
 {
     // Unregister at broadcasters.
-    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->RemoveEventListener(aLink);
 
     // Abort pending user calls.
@@ -828,7 +828,7 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback, void*, void)
 }
 
 IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
-    sd::tools::EventMultiplexerEvent&, rEvent, void)
+    sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     SolarMutexGuard g;
     switch (rEvent.meEventId)

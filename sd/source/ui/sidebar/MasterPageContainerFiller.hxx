@@ -36,7 +36,7 @@ namespace sd::sidebar
     pages.  These are provided by one default page and from the existing
     Impress templates.  This is done asynchronously.
 */
-class MasterPageContainerFiller : public ::sd::tools::AsynchronousTask
+class MasterPageContainerFiller : public ::sdtools::AsynchronousTask
 {
 public:
     class ContainerAdapter

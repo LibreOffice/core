@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 namespace sd { class ViewShellBase; }
-namespace sd::tools { class EventMultiplexerEvent; }
+namespace sdtools { class EventMultiplexerEvent; }
 
 class ColorListBox;
 class SvxPageItem;
@@ -151,7 +151,7 @@ private:
     DECL_LINK(CloseMasterHdl, weld::Button&, void);
     DECL_LINK(EditMasterHdl, weld::Button&, void);
     DECL_LINK(SelectBgHdl, weld::Button&, void);
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void );
     DECL_LINK( ModifyMarginHdl, weld::ComboBox&, void );
 
     void Initialize();

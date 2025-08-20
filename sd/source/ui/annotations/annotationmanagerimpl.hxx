@@ -36,6 +36,7 @@ class SdDrawDocument;
 struct ImplSVEvent;
 
 namespace sdr::annotation { class Annotation; }
+namespace sdtools { class EventMultiplexerEvent; }
 
 namespace sd
 {
@@ -43,8 +44,6 @@ class Annotation;
 class ViewShellBase;
 class View;
 class DrawController;
-
-namespace tools { class EventMultiplexerEvent; }
 
 typedef comphelper::WeakComponentImplHelper <
     css::document::XEventListener
@@ -93,7 +92,7 @@ public:
 
     void invalidateSlots();
 
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void);
     DECL_LINK(UpdateTagsHdl, void *, void);
 
     void UpdateTags(bool bSynchron = false);

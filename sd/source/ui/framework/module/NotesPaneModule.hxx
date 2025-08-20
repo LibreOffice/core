@@ -20,7 +20,7 @@ namespace sd
 class DrawController;
 class ViewShellBase;
 }
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 }
@@ -76,7 +76,7 @@ private:
                            const rtl::Reference<sd::framework::Configuration>& rxConfiguration);
     bool IsMasterView(const rtl::Reference<sd::framework::AbstractView>& xView);
 
-    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, ::sdtools::EventMultiplexerEvent&, void);
 };
 
 } // end of namespace sd::framework

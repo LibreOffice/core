@@ -246,7 +246,7 @@ IMPL_LINK_NOARG(NotesPanelView, ModifyTimerHdl, Timer*, void)
     aModifyIdle.Stop();
 }
 
-IMPL_LINK(NotesPanelView, EventMultiplexerListener, tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(NotesPanelView, EventMultiplexerListener, sdtools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

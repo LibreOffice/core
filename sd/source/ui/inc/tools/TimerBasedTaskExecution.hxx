@@ -23,7 +23,7 @@
 
 #include <memory>
 
-namespace sd::tools {
+namespace sdtools {
 
 class AsynchronousTask;
 
@@ -84,6 +84,6 @@ private:
     DECL_LINK(TimerCallback, Timer *, void);
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

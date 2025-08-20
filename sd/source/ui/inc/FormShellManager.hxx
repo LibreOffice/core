@@ -32,7 +32,7 @@ namespace vcl
 class Window;
 }
 
-namespace sd::tools
+namespace sdtools
 {
 class EventMultiplexerEvent;
 }
@@ -119,7 +119,7 @@ private:
         When this happens then we unregister at the window of the old and
         register at the window of the new shell.
     */
-    DECL_LINK(ConfigurationUpdateHandler, ::sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(ConfigurationUpdateHandler, ::sdtools::EventMultiplexerEvent&, void);
 
     /** This call back is called by the form shell when it gets the focus.
         In this case the form shell is moved to the top of the shell stack.

@@ -19,7 +19,7 @@
 
 #pragma once
 
-namespace sd::tools
+namespace sdtools
 {
 /** Interface for the asynchronous execution of a task.  This interface
     allows a controller to run the task either timer based with a fixed
@@ -44,6 +44,6 @@ protected:
     ~AsynchronousTask() {}
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

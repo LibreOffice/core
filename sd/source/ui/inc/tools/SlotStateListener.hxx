@@ -28,7 +28,7 @@ namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { class XStatusListener; }
 
-namespace sd::tools {
+namespace sdtools {
 
 typedef comphelper::WeakComponentImplHelper<
     css::frame::XStatusListener
@@ -132,6 +132,6 @@ private:
             const css::util::URL& rURL) const;
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

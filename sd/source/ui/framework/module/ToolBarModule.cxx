@@ -243,7 +243,7 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
     }
 }
 
-IMPL_LINK(ToolBarModule, EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, rEvent,
+IMPL_LINK(ToolBarModule, EventMultiplexerListener, sdtools::EventMultiplexerEvent&, rEvent,
           void)
 {
     if (!mpBase)

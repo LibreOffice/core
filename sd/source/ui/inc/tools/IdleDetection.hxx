@@ -23,7 +23,7 @@
 
 namespace vcl { class Window; }
 
-namespace sd::tools {
+namespace sdtools {
     enum class IdleState {
         /** When GetIdleState() returns this value, then the system is idle.
         */
@@ -47,12 +47,12 @@ namespace sd::tools {
         */
         WindowPainting = 0x0008,
     };
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 namespace o3tl {
-    template<> struct typed_flags<::sd::tools::IdleState> : is_typed_flags<::sd::tools::IdleState, 0x0f> {};
+    template<> struct typed_flags<::sdtools::IdleState> : is_typed_flags<::sdtools::IdleState, 0x0f> {};
 }
 
-namespace sd::tools {
+namespace sdtools {
 
 /** Detect whether the system is idle and some time consuming operation may
     be carried out.  This class distinguishes between different states of
@@ -84,6 +84,6 @@ private:
     static IdleState CheckWindowPainting (const vcl::Window& rWindow);
 };
 
-} // end of namespace ::sd::tools
+} // end of namespace ::sdtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
