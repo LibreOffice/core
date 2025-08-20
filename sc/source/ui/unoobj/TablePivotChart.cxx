@@ -56,7 +56,7 @@ void TablePivotChart::Notify(SfxBroadcaster&, const SfxHint& rHint)
 uno::Reference<lang::XComponent> SAL_CALL TablePivotChart::getEmbeddedObject()
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = sc::tools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sc::tools::ChartSourceType::PIVOT_TABLE);
+    SdrOle2Obj* pObject = sctools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sctools::ChartSourceType::PIVOT_TABLE);
     if (pObject && svt::EmbeddedObjectRef::TryRunningState(pObject->GetObjRef()))
         return uno::Reference<lang::XComponent>(pObject->GetObjRef()->getComponent(), uno::UNO_QUERY);
     return nullptr;
@@ -80,7 +80,7 @@ OUString SAL_CALL TablePivotChart::getPivotTableName()
 {
     SolarMutexGuard aGuard;
 
-    SdrOle2Obj* pObject = sc::tools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sc::tools::ChartSourceType::PIVOT_TABLE);
+    SdrOle2Obj* pObject = sctools::findChartsByName(m_pDocShell, m_nTab, m_aChartName, sctools::ChartSourceType::PIVOT_TABLE);
     if (!pObject)
         return OUString();
 

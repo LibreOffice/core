@@ -126,9 +126,9 @@ rtl::Reference<ScChartObj> ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex
 
 rtl::Reference<ScChartObj> ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
-    if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE))
+    if (sctools::findChartsByName(pDocShell, nTab, aName, sctools::ChartSourceType::CELL_RANGE))
         return new ScChartObj( pDocShell, nTab, aName );
-    if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::PIVOT_TABLE))
+    if (sctools::findChartsByName(pDocShell, nTab, aName, sctools::ChartSourceType::PIVOT_TABLE))
         return new ScChartObj( pDocShell, nTab, aName );
     return nullptr;
 }
@@ -269,7 +269,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObj = sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE);
+    SdrOle2Obj* pObj = sctools::findChartsByName(pDocShell, nTab, aName, sctools::ChartSourceType::CELL_RANGE);
     if (pObj)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -400,8 +400,8 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
 sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* aOle2Obj = sc::tools::findChartsByName(pDocShell, nTab, aName,
-                                                       sc::tools::ChartSourceType::CELL_RANGE);
+    SdrOle2Obj* aOle2Obj = sctools::findChartsByName(pDocShell, nTab, aName,
+                                                       sctools::ChartSourceType::CELL_RANGE);
     return aOle2Obj != nullptr;
 }
 
@@ -703,8 +703,8 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
 uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject()
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = sc::tools::findChartsByName(pDocShell, nTab, aChartName,
-                                                      sc::tools::ChartSourceType::CELL_RANGE);
+    SdrOle2Obj* pObject = sctools::findChartsByName(pDocShell, nTab, aChartName,
+                                                      sctools::ChartSourceType::CELL_RANGE);
     if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
     {
         //TODO/LATER: is it OK that something is returned for *all* objects, not only own objects?

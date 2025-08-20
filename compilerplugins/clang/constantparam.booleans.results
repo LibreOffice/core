@@ -2315,8 +2315,8 @@ sc/inc/cellformtmpl.hxx:33
     _Bool bForceSystemLocale
     0
 sc/inc/ChartTools.hxx:46
-    class SdrOle2Obj * getChartByIndex(class ScDocShell *,short,long,enum sc::tools::ChartSourceType)
-    enum sc::tools::ChartSourceType eChartSourceType
+    class SdrOle2Obj * getChartByIndex(class ScDocShell *,short,long,enum sctools::ChartSourceType)
+    enum sctools::ChartSourceType eChartSourceType
     1
 sc/inc/chgtrack.hxx:705
     void ScChangeActionContent::PutOldValueToDoc(class ScDocument *,short,int) const

@@ -164,7 +164,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
 void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = sc::tools::findChartsByName(m_pDocShell, m_nTab, rName, sc::tools::ChartSourceType::PIVOT_TABLE);
+    SdrOle2Obj* pObject = sctools::findChartsByName(m_pDocShell, m_nTab, rName, sctools::ChartSourceType::PIVOT_TABLE);
     if (pObject)
     {
         ScDocument& rDoc = m_pDocShell->GetDocument();
@@ -184,7 +184,7 @@ sal_Int32 SAL_CALL TablePivotCharts::getCount()
     if (!m_pDocShell)
         return nCount;
 
-    sc::tools::ChartIterator aIterator(m_pDocShell, m_nTab, sc::tools::ChartSourceType::PIVOT_TABLE);
+    sctools::ChartIterator aIterator(m_pDocShell, m_nTab, sctools::ChartSourceType::PIVOT_TABLE);
 
     SdrOle2Obj* pOleObject = aIterator.next();
     while (pOleObject)
@@ -199,8 +199,8 @@ sal_Int32 SAL_CALL TablePivotCharts::getCount()
 uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = sc::tools::getChartByIndex(m_pDocShell, m_nTab, nIndex,
-                                                     sc::tools::ChartSourceType::PIVOT_TABLE);
+    SdrOle2Obj* pObject = sctools::getChartByIndex(m_pDocShell, m_nTab, nIndex,
+                                                     sctools::ChartSourceType::PIVOT_TABLE);
     if (!pObject)
         throw lang::IndexOutOfBoundsException();
 
@@ -234,7 +234,7 @@ uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 
-    if (!sc::tools::findChartsByName(m_pDocShell, m_nTab, rName, sc::tools::ChartSourceType::PIVOT_TABLE))
+    if (!sctools::findChartsByName(m_pDocShell, m_nTab, rName, sctools::ChartSourceType::PIVOT_TABLE))
         throw container::NoSuchElementException();
 
     uno::Reference<table::XTablePivotChart> xChart(new TablePivotChart(m_pDocShell, m_nTab, rName));
@@ -249,7 +249,7 @@ uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
     SolarMutexGuard aGuard;
 
     std::vector<OUString> aElements;
-    sc::tools::ChartIterator aIterator(m_pDocShell, m_nTab, sc::tools::ChartSourceType::PIVOT_TABLE);
+    sctools::ChartIterator aIterator(m_pDocShell, m_nTab, sctools::ChartSourceType::PIVOT_TABLE);
 
     SdrOle2Obj* pOleObject = aIterator.next();
     while (pOleObject)
@@ -269,7 +269,7 @@ sal_Bool SAL_CALL TablePivotCharts::hasByName(OUString const & rName)
 {
     SolarMutexGuard aGuard;
 
-    return sc::tools::findChartsByName(m_pDocShell, m_nTab, rName, sc::tools::ChartSourceType::PIVOT_TABLE) != nullptr;
+    return sctools::findChartsByName(m_pDocShell, m_nTab, rName, sctools::ChartSourceType::PIVOT_TABLE) != nullptr;
 }
 
 } // end sc namespace

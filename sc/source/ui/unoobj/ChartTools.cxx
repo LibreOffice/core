@@ -21,7 +21,7 @@
 
 using namespace css;
 
-namespace sc::tools {
+namespace sctools {
 
 namespace {
 
@@ -155,7 +155,7 @@ std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivot
         if (!pPage)
             continue;
 
-        sc::tools::ChartIterator aIterator(&rDocShell, nPageNo, ChartSourceType::PIVOT_TABLE);
+        ChartIterator aIterator(&rDocShell, nPageNo, ChartSourceType::PIVOT_TABLE);
         SdrOle2Obj* pObject = aIterator.next();
         while (pObject)
         {
@@ -169,6 +169,6 @@ std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivot
     return aObjects;
 }
 
-} // end sc::tools
+} // end sctools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

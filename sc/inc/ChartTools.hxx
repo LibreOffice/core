@@ -21,7 +21,7 @@
 class ScDocShell;
 class SdrOle2Obj;
 
-namespace sc::tools {
+namespace sctools {
 
 enum class ChartSourceType
 {
@@ -48,6 +48,6 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
 
 std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(std::u16string_view sPivotTableName, ScDocShell& rDocShell);
 
-} // end sc::tools
+} // end sctools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
