@@ -144,7 +144,7 @@ namespace canvas
                                         const css::rendering::ViewState&      viewState,
                                         const css::rendering::RenderState&    renderState) override
         {
-            tools::verifyArgs(aPoint, viewState, renderState,
+            canvastools::verifyArgs(aPoint, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -158,7 +158,7 @@ namespace canvas
                                        const css::rendering::ViewState&   viewState,
                                        const css::rendering::RenderState& renderState) override
         {
-            tools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
+            canvastools::verifyArgs(aStartPoint, aEndPoint, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -174,7 +174,7 @@ namespace canvas
                                           const css::rendering::ViewState&             viewState,
                                           const css::rendering::RenderState&           renderState ) override
         {
-            tools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
+            canvastools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -190,7 +190,7 @@ namespace canvas
                             const css::rendering::ViewState&                             viewState,
                             const css::rendering::RenderState&                           renderState) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -207,7 +207,7 @@ namespace canvas
                               const css::rendering::RenderState&                             renderState,
                               const css::rendering::StrokeAttributes&                        strokeAttributes) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -225,7 +225,7 @@ namespace canvas
                                        const css::uno::Sequence< css::rendering::Texture >&           textures,
                                        const css::rendering::StrokeAttributes&                        strokeAttributes ) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -244,7 +244,7 @@ namespace canvas
                                             const css::uno::Reference< css::geometry::XMapping2D >&       xMapping,
                                             const css::rendering::StrokeAttributes&                       strokeAttributes ) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -261,7 +261,7 @@ namespace canvas
                                const css::rendering::RenderState&                                          renderState,
                                const css::rendering::StrokeAttributes&                                     strokeAttributes ) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -277,7 +277,7 @@ namespace canvas
                              const css::rendering::ViewState&                                          viewState,
                              const css::rendering::RenderState&                                        renderState) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -294,7 +294,7 @@ namespace canvas
                                     const css::rendering::RenderState&                           renderState,
                                     const css::uno::Sequence< css::rendering::Texture >&         textures) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -312,7 +312,7 @@ namespace canvas
                                           const css::uno::Sequence< css::rendering::Texture >&            textures,
                                           const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) override
         {
-            tools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
+            canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -329,7 +329,7 @@ namespace canvas
                         const css::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                         const css::geometry::Matrix2D&                                         fontMatrix ) override
         {
-            tools::verifyArgs(fontRequest,
+            canvastools::verifyArgs(fontRequest,
                               // dummy, to keep argPos in sync
                               fontRequest,
                               fontMatrix,
@@ -346,7 +346,7 @@ namespace canvas
             queryAvailableFonts( const css::rendering::FontInfo&                          aFilter,
                                  const css::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
         {
-            tools::verifyArgs(aFilter,
+            canvastools::verifyArgs(aFilter,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -363,10 +363,10 @@ namespace canvas
                      const css::rendering::RenderState&                                       renderState,
                      sal_Int8                                                                 textDirection) override
         {
-            tools::verifyArgs(xFont, viewState, renderState,
+            canvastools::verifyArgs(xFont, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
-            tools::verifyRange( textDirection,
+            canvastools::verifyRange( textDirection,
                                 css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT,
                                 css::rendering::TextDirection::STRONG_RIGHT_TO_LEFT );
 
@@ -383,7 +383,7 @@ namespace canvas
                             const css::rendering::ViewState&                                       viewState,
                             const css::rendering::RenderState&                                     renderState) override
         {
-            tools::verifyArgs(laidOutText, viewState, renderState,
+            canvastools::verifyArgs(laidOutText, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -400,7 +400,7 @@ namespace canvas
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
         {
-            tools::verifyArgs(xBitmap, viewState, renderState,
+            canvastools::verifyArgs(xBitmap, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 
@@ -416,7 +416,7 @@ namespace canvas
                                  const css::rendering::ViewState&                                      viewState,
                                  const css::rendering::RenderState&                                    renderState ) override
         {
-            tools::verifyArgs(xBitmap, viewState, renderState,
+            canvastools::verifyArgs(xBitmap, viewState, renderState,
                               __func__,
                               static_cast< UnambiguousBaseType* >(this));
 

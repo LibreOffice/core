@@ -78,8 +78,8 @@ namespace cppcanvas::internal
                 rendering::ViewState    aViewState;
                 rendering::RenderState  aRenderState;
 
-                ::canvas::tools::initViewState( aViewState );
-                ::canvas::tools::initRenderState( aRenderState );
+                ::canvastools::initViewState( aViewState );
+                ::canvastools::initRenderState( aRenderState );
 
                 mxSprite->move( ::basegfx::unotools::point2DFromB2DPoint( rNewPos ),
                                 aViewState,
@@ -97,10 +97,10 @@ namespace cppcanvas::internal
             rendering::ViewState    aViewState;
             rendering::RenderState  aRenderState;
 
-            ::canvas::tools::initViewState( aViewState );
-            ::canvas::tools::initRenderState( aRenderState );
+            ::canvastools::initViewState( aViewState );
+            ::canvastools::initRenderState( aRenderState );
 
-            ::canvas::tools::setViewStateTransform( aViewState,
+            ::canvastools::setViewStateTransform( aViewState,
                                                     mpTransformArbiter->getTransformation() );
 
             mxSprite->move( ::basegfx::unotools::point2DFromB2DPoint( rNewPos ),

@@ -94,7 +94,7 @@ namespace canvas
         // XSpriteCanvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
-            tools::verifyArgs(animation,
+            canvastools::verifyArgs(animation,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -106,10 +106,10 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
-            tools::verifyArgs(animationBitmaps,
+            canvastools::verifyArgs(animationBitmaps,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
-            tools::verifyRange( interpolationMode,
+            canvastools::verifyRange( interpolationMode,
                                 css::rendering::InterpolationMode::NEAREST_NEIGHBOR,
                                 css::rendering::InterpolationMode::BEZIERSPLINE4 );
 
@@ -120,7 +120,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
-            tools::verifySpriteSize(spriteSize,
+            canvastools::verifySpriteSize(spriteSize,
                                     __func__,
                                     static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -131,7 +131,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
-            tools::verifyArgs(original,
+            canvastools::verifyArgs(original,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 

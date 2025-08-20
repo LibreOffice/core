@@ -69,7 +69,7 @@ namespace dxcanvas
                                          calcFontStyle( rFontRequest ),
                                          Gdiplus::UnitWorld );
 
-        ::canvas::tools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
+        ::canvastools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
     void SAL_CALL CanvasFont::disposing()

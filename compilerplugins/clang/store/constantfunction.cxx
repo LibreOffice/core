@@ -204,7 +204,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
     // template magic, include/canvas/verifyinput.hxx
-    if (aFunctionName == "canvas::tools::verifyInput") {
+    if (aFunctionName == "canvastools::verifyInput") {
         return true;
     }
     // template magic, cppcanvas/source/mtfrenderer/implrenderer.cxx

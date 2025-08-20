@@ -241,7 +241,7 @@ namespace dxcanvas
         // would copy pixel that are not supposed to be part of
         // the sprite.
         const ::basegfx::B2IRange& rDestRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
+            ::canvastools::spritePixelAreaFromB2DRange( rMoveEnd ) );
 
         // not much sense in really implementing scrollUpdate here,
         // since outputting a sprite only partially would result in

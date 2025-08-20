@@ -27,7 +27,7 @@ namespace oglcanvas
         mnEmphasisMark(0),
         maFontMatrix( fontMatrix )
     {
-        ::canvas::tools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
+        ::canvastools::extractExtraFontProperties(extraFontProperties, mnEmphasisMark);
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL CanvasFont::createTextLayout( const rendering::StringContext& aText,

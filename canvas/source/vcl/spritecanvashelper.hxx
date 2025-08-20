@@ -153,7 +153,7 @@ namespace vclcanvas
         VclPtr< VirtualDevice > maVDev;
 
         /// For the frame counter timings
-        ::canvas::tools::ElapsedTime                    maLastUpdate;
+        ::canvastools::ElapsedTime                    maLastUpdate;
 
         /// When true, canvas displays debug info on each frame
         bool                                            mbShowFrameInfo;

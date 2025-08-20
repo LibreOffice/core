@@ -72,10 +72,8 @@ namespace com::sun::star::beans {
 class Color;
 class OutputDevice;
 
-namespace canvas
+namespace canvastools
 {
-    namespace tools
-    {
         /** Compute the next highest power of 2 of a 32-bit value
 
             Code devised by Sean Anderson, in good ole HAKMEM
@@ -541,7 +539,6 @@ namespace canvas
 
         CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32& rEmphasisMark);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

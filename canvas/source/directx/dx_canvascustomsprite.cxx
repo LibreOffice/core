@@ -50,8 +50,8 @@ namespace dxcanvas
 
         mpSurface = std::make_shared<DXSurfaceBitmap>(
                 ::basegfx::B2ISize(
-                    ::canvas::tools::roundUp( rSpriteSize.Width ),
-                    ::canvas::tools::roundUp( rSpriteSize.Height )),
+                    ::canvastools::roundUp( rSpriteSize.Width ),
+                    ::canvastools::roundUp( rSpriteSize.Height )),
                 rSurfaceProxy,
                 rRenderModule,
                 true);

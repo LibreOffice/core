@@ -213,7 +213,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
 basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds,
                                        basegfx::B2DHomMatrix const& rTransformation )
 {
-    ::basegfx::B2DRange aTmpRect = ::canvas::tools::calcTransformedRectBounds(
+    ::basegfx::B2DRange aTmpRect = ::canvastools::calcTransformedRectBounds(
                                                 rLayerBounds,
                                                 rTransformation );
 
@@ -463,7 +463,7 @@ public:
 
     virtual css::geometry::IntegerSize2D getTranslationOffset() const override
     {
-        basegfx::B2DRectangle aTmpRect = canvas::tools::calcTransformedRectBounds(
+        basegfx::B2DRectangle aTmpRect = canvastools::calcTransformedRectBounds(
                                                   maLayerBounds,
                                                   maTransformation );
         geometry::IntegerSize2D offset(0, 0);
@@ -512,7 +512,7 @@ private:
     {
         // Offset given transformation by left, top border of given
         // range (after transformation through given transformation)
-        basegfx::B2DRectangle aTmpRect = canvas::tools::calcTransformedRectBounds(
+        basegfx::B2DRectangle aTmpRect = canvastools::calcTransformedRectBounds(
                                                   maLayerBounds,
                                                   maTransformation );
 
@@ -774,7 +774,7 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     {
         OSL_FAIL( "SlideView::SlideView(): Singular matrix!" );
 
-        canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
+        canvastools::setIdentityAffineMatrix2D(aViewTransform);
     }
 
     basegfx::unotools::homMatrixFromAffineMatrix(
@@ -1058,7 +1058,7 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     {
         OSL_FAIL( "SlideView::modified(): Singular matrix!" );
 
-        canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
+        canvastools::setIdentityAffineMatrix2D(aViewTransform);
     }
 
     // view transformation really changed?

@@ -48,7 +48,7 @@ namespace cairocanvas
         mpRefDevice(std::move( rDevice )),
         mnEmphasisMark(0)
     {
-        ::canvas::tools::extractExtraFontProperties(rExtraFontProperties, mnEmphasisMark);
+        ::canvastools::extractExtraFontProperties(rExtraFontProperties, mnEmphasisMark);
 
         maFont->SetAlignment( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==css::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );

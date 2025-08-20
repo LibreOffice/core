@@ -39,13 +39,13 @@ namespace cairocanvas
     CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
-        maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),
-                ::canvas::tools::roundUp( rSpriteSize.Height ) )
+        maSize( ::canvastools::roundUp( rSpriteSize.Width ),
+                ::canvastools::roundUp( rSpriteSize.Height ) )
     {
         ENSURE_OR_THROW( rRefDevice,
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( rSpriteSize.Width ) << ", " << ::canvas::tools::roundUp( rSpriteSize.Height ));
+        SAL_INFO( "canvas.cairo", "sprite size: " << ::canvastools::roundUp( rSpriteSize.Width ) << ", " << ::canvastools::roundUp( rSpriteSize.Height ));
 
         mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR_ALPHA );
 

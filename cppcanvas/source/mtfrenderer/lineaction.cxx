@@ -87,7 +87,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::LineAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 mpCanvas->getUNOCanvas()->drawLine( ::basegfx::unotools::point2DFromB2DPoint(maStartPoint),
                                                     ::basegfx::unotools::point2DFromB2DPoint(maEndPoint),
@@ -112,7 +112,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange LineAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maStartPoint,
                                                                           maEndPoint ),

@@ -27,7 +27,7 @@
 namespace slideshow::internal
 {
         WakeupEvent::WakeupEvent(
-            std::shared_ptr<canvas::tools::ElapsedTime> const & pTimeBase,
+            std::shared_ptr<canvastools::ElapsedTime> const & pTimeBase,
             ActivitiesQueue& rActivityQueue ) :
             Event(u"WakeupEvent"_ustr),
             maTimer(pTimeBase),

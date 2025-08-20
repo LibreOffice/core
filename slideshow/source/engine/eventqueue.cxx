@@ -43,7 +43,7 @@ namespace slideshow::internal
 
 
         EventQueue::EventQueue(
-            std::shared_ptr<canvas::tools::ElapsedTime> pPresTimer )
+            std::shared_ptr<canvastools::ElapsedTime> pPresTimer )
             : maMutex(),
               maEvents(),
               maNextEvents(),

@@ -144,7 +144,7 @@ private:
         one used by SlideShowImpl: it is not paused or modified by
         animations.
     */
-    canvas::tools::ElapsedTime maTimer;
+    canvastools::ElapsedTime maTimer;
     /** Time between the display of frames.  Enforced only when mbIsActive
         is <TRUE/>.
     */
@@ -429,7 +429,7 @@ private:
     std::optional<sal_Int32>          maEraseInk;
     //end changed
 
-    std::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
+    std::shared_ptr<canvastools::ElapsedTime> mpPresTimer;
     ScreenUpdater                           maScreenUpdater;
     EventQueue                              maEventQueue;
     EventMultiplexer                        maEventMultiplexer;
@@ -561,7 +561,7 @@ SlideShowImpl::SlideShowImpl(
       maShapeCursors(),
       maUserPaintColor(),
       maUserPaintStrokeWidth(4.0),
-      mpPresTimer( std::make_shared<canvas::tools::ElapsedTime>() ),
+      mpPresTimer( std::make_shared<canvastools::ElapsedTime>() ),
       maScreenUpdater(maViewContainer),
       maEventQueue( mpPresTimer ),
       maEventMultiplexer( maEventQueue,
@@ -2116,7 +2116,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             //Get a shared-ptr that outlives the scope-guard which will
             //ensure that the pointed-to-item exists in the case of a
             //::dispose clearing mpPresTimer
-            std::shared_ptr<canvas::tools::ElapsedTime> xTimer(mpPresTimer);
+            std::shared_ptr<canvastools::ElapsedTime> xTimer(mpPresTimer);
             comphelper::ScopeGuard scopeGuard(
                 [&xTimer]() { return xTimer->releaseTimer(); } );
             xTimer->holdTimer();

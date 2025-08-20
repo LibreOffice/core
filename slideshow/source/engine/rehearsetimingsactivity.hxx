@@ -111,7 +111,7 @@ private:
     ScreenUpdater&                  mrScreenUpdater;
     EventMultiplexer&               mrEventMultiplexer;
     ActivitiesQueue&                mrActivitiesQueue;
-    canvas::tools::ElapsedTime      maElapsedTime;
+    canvastools::ElapsedTime      maElapsedTime;
 
     ViewsVecT                       maViews;
 

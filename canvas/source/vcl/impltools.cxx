@@ -91,7 +91,7 @@ namespace vclcanvas::tools
         {
             ::basegfx::B2DHomMatrix aMatrix;
 
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+            ::canvastools::mergeViewAndRenderTransform(aMatrix,
                                                          rViewState,
                                                          rRenderState);
 
@@ -188,7 +188,7 @@ namespace vclcanvas::tools
             ::basegfx::B2DPoint aPoint( ::basegfx::unotools::b2DPointFromRealPoint2D(rPoint) );
 
             ::basegfx::B2DHomMatrix aMatrix;
-            aPoint *= ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+            aPoint *= ::canvastools::mergeViewAndRenderTransform(aMatrix,
                                                                    rViewState,
                                                                    rRenderState);
 
@@ -200,7 +200,7 @@ namespace vclcanvas::tools
                                       const rendering::RenderState&     rRenderState )
         {
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+            ::canvastools::mergeViewAndRenderTransform(aMatrix,
                                                          rViewState,
                                                          rRenderState);
 
@@ -227,7 +227,7 @@ namespace vclcanvas::tools
             const ::basegfx::B2DRectangle aSrcRect( 0, 0,
                                                     aBmpSize.Width(),
                                                     aBmpSize.Height() );
-            ::basegfx::B2DRectangle     aDestRect = ::canvas::tools::calcTransformedRectBounds(
+            ::basegfx::B2DRectangle     aDestRect = ::canvastools::calcTransformedRectBounds(
                                                         aSrcRect,
                                                         rTransform );
 
@@ -235,7 +235,7 @@ namespace vclcanvas::tools
             // aligned with (0,0). The method takes the given
             // rectangle, and calculates a transformation that maps
             // this rectangle unscaled to the origin.
-            ::basegfx::B2DHomMatrix aLocalTransform = ::canvas::tools::calcRectToOriginTransform(
+            ::basegfx::B2DHomMatrix aLocalTransform = ::canvastools::calcRectToOriginTransform(
                                                         aSrcRect,
                                                         rTransform );
 

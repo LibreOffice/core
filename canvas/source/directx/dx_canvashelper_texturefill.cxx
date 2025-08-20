@@ -256,7 +256,7 @@ namespace dxcanvas
                     nColorSteps += numColorSteps(rColors[i],rColors[i+1]);
                 ::basegfx::B2DHomMatrix aTotalTransform;
                 const int nStepCount=
-                    ::canvas::tools::calcGradientStepCount(aTotalTransform,
+                    ::canvastools::calcGradientStepCount(aTotalTransform,
                                                            viewState,
                                                            renderState,
                                                            texture,

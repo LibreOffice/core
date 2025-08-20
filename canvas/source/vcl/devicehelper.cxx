@@ -44,7 +44,7 @@ namespace vclcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
         if( !mpOutDev )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         // Map a one-by-one millimeter box to pixel
         OutputDevice& rOutDev = mpOutDev->getOutDev();
@@ -59,7 +59,7 @@ namespace vclcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpOutDev )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
         OutputDevice& rOutDev = mpOutDev->getOutDev();
@@ -177,7 +177,7 @@ namespace vclcanvas
             static uno::Reference<rendering::XColorSpace> xColorSpace =
             []()
             {
-                auto xTmp = canvas::tools::getStdColorSpace();
+                auto xTmp = canvastools::getStdColorSpace();
                 assert( xTmp.is() );
                 return xTmp;
             }();

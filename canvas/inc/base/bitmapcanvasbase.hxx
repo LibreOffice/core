@@ -110,7 +110,7 @@ namespace canvas
                                         const css::rendering::ViewState&                                           destViewState,
                                         const css::rendering::RenderState&                                         destRenderState ) override
         {
-            tools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
+            canvastools::verifyArgs(sourceCanvas, sourceRect, sourceViewState, sourceRenderState,
                               destRect, destViewState, destRenderState,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));

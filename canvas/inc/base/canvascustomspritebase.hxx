@@ -116,7 +116,7 @@ namespace canvas
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
         {
-            tools::verifyArgs(xBitmap, viewState, renderState,
+            canvastools::verifyArgs(xBitmap, viewState, renderState,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -140,7 +140,7 @@ namespace canvas
         // XSprite
         virtual void SAL_CALL setAlpha( double alpha ) override
         {
-            tools::verifyRange( alpha, 0.0, 1.0 );
+            canvastools::verifyRange( alpha, 0.0, 1.0 );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -151,7 +151,7 @@ namespace canvas
                                     const css::rendering::ViewState&   viewState,
                                     const css::rendering::RenderState& renderState ) override
         {
-            tools::verifyArgs(aNewPos, viewState, renderState,
+            canvastools::verifyArgs(aNewPos, viewState, renderState,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 
@@ -162,7 +162,7 @@ namespace canvas
 
         virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
         {
-            tools::verifyArgs(aTransformation,
+            canvastools::verifyArgs(aTransformation,
                               __func__,
                               static_cast< typename BaseType::UnambiguousBaseType* >(this));
 

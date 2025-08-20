@@ -259,9 +259,9 @@ namespace cairocanvas
         // would copy pixel that are not supposed to be part of
         // the sprite.
         ::basegfx::B2IRange aSourceRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
+            ::canvastools::spritePixelAreaFromB2DRange( rMoveStart ) );
         const ::basegfx::B2IRange aDestRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
+            ::canvastools::spritePixelAreaFromB2DRange( rMoveEnd ) );
         ::basegfx::B2IPoint aDestPos( aDestRect.getMinimum() );
 
         std::vector< ::basegfx::B2IRange > aUnscrollableAreas;
@@ -272,7 +272,7 @@ namespace cairocanvas
 
         // clip to output bounds (cannot properly scroll stuff
         // _outside_ our screen area)
-        if( !::canvas::tools::clipScrollArea( aSourceRect,
+        if( !::canvastools::clipScrollArea( aSourceRect,
                                               aDestPos,
                                               aUnscrollableAreas,
                                               aOutputBounds ) )
@@ -445,9 +445,9 @@ namespace cairocanvas
         // device's area.
         const Size  aOutputSize(
             std::min( rSize.getWidth(),
-                        ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X()) ),
+                        ::canvastools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X()) ),
             std::min( rSize.getHeight(),
-                        ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y()) ) );
+                        ::canvastools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y()) ) );
 
         cairo_rectangle( pCompositingCairo.get(), aOutputPosition.X(), aOutputPosition.Y(), aOutputSize.Width(), aOutputSize.Height() );
         cairo_clip( pCompositingCairo.get() );

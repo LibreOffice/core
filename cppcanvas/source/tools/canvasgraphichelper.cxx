@@ -40,12 +40,12 @@ namespace cppcanvas::internal
             OSL_ENSURE( mpCanvas && mpCanvas->getUNOCanvas().is(),
                         "CanvasGraphicHelper::CanvasGraphicHelper: no valid canvas" );
 
-            ::canvas::tools::initRenderState( maRenderState );
+            ::canvastools::initRenderState( maRenderState );
         }
 
         void CanvasGraphicHelper::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {
-            ::canvas::tools::setRenderStateTransform( maRenderState, rMatrix );
+            ::canvastools::setRenderStateTransform( maRenderState, rMatrix );
         }
 
         void CanvasGraphicHelper::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )

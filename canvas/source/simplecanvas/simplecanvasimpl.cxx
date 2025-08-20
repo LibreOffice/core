@@ -37,7 +37,6 @@
 #include <functional>
 
 using namespace ::com::sun::star;
-using namespace canvas;
 
 namespace
 {
@@ -88,7 +87,7 @@ namespace
             m_aFillColor( &color2Sequence ),
             m_aRectClip( [&xDevice](geometry::RealRectangle2D const& rRect) { return rect2Poly(xDevice, rRect); } )
         {
-            tools::setIdentityAffineMatrix2D( m_aTransformation );
+            canvastools::setIdentityAffineMatrix2D( m_aTransformation );
         }
     };
 
@@ -152,7 +151,7 @@ namespace
                                                geometry::Matrix2D()); } ),
             maRenderState( mxCanvas->getDevice() )
         {
-            tools::initViewState(maViewState);
+            canvastools::initViewState(maViewState);
         }
 
 
@@ -259,7 +258,7 @@ namespace
             std::unique_lock aGuard( m_aMutex );
             const basegfx::B2DHomMatrix offsetTransform(basegfx::utils::createTranslateB2DHomMatrix(aOutPos.X,aOutPos.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
-            tools::appendToRenderState(aRenderState, offsetTransform);
+            canvastools::appendToRenderState(aRenderState, offsetTransform);
 
             mxCanvas->drawText(aText,
                                maFont.getOutValue(),
@@ -274,7 +273,7 @@ namespace
             std::unique_lock aGuard( m_aMutex );
             const basegfx::B2DHomMatrix offsetTransform(basegfx::utils::createTranslateB2DHomMatrix(aLeftTop.X,aLeftTop.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
-            tools::appendToRenderState(aRenderState, offsetTransform);
+            canvastools::appendToRenderState(aRenderState, offsetTransform);
 
             mxCanvas->drawBitmap(xBitmap,maViewState,aRenderState);
         }

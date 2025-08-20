@@ -111,7 +111,7 @@ namespace cairocanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpRefDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );

@@ -101,7 +101,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PointAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 mpCanvas->getUNOCanvas()->drawPoint( ::basegfx::unotools::point2DFromB2DPoint(maPoint),
                                                      mpCanvas->getViewState(),
@@ -125,7 +125,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange PointAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.getX()-1,
                                                                           maPoint.getY()-1,

@@ -156,9 +156,9 @@ namespace vclcanvas
         if( !mpOutDevProvider )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
-        rendering::IntegerBitmapLayout aBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );
+        rendering::IntegerBitmapLayout aBitmapLayout( ::canvastools::getStdMemoryLayout(getSize()) );
         if ( !hasAlpha() )
-            aBitmapLayout.ColorSpace = canvas::tools::getStdColorSpaceWithoutAlpha();
+            aBitmapLayout.ColorSpace = canvastools::getStdColorSpaceWithoutAlpha();
 
         return aBitmapLayout;
     }

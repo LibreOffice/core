@@ -117,9 +117,9 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
                                       1000.0 ); // sprite should be in front of all
                                                 // other sprites
         rendering::ViewState viewState;
-        canvas::tools::initViewState( viewState );
+        canvastools::initViewState( viewState );
         rendering::RenderState renderState;
-        canvas::tools::initRenderState( renderState );
+        canvastools::initRenderState( renderState );
         sprite->getContentCanvas()->getUNOCanvas()->drawBitmap(
             mxBitmap, viewState, renderState );
 

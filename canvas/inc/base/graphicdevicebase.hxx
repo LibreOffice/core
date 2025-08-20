@@ -184,7 +184,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const css::geometry::IntegerSize2D& size ) override
         {
-            tools::verifyBitmapSize(size,
+            canvastools::verifyBitmapSize(size,
                                     __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
@@ -195,7 +195,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileBitmap( const css::geometry::IntegerSize2D& size ) override
         {
-            tools::verifyBitmapSize(size,
+            canvastools::verifyBitmapSize(size,
                                     __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
@@ -206,7 +206,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
         {
-            tools::verifyBitmapSize(size,
+            canvastools::verifyBitmapSize(size,
                                     __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 
@@ -217,7 +217,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XVolatileBitmap > SAL_CALL createVolatileAlphaBitmap( const css::geometry::IntegerSize2D& size ) override
         {
-            tools::verifyBitmapSize(size,
+            canvastools::verifyBitmapSize(size,
                                     __func__,
                                     static_cast< UnambiguousBaseType* >(this));
 

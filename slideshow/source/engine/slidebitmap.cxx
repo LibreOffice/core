@@ -58,10 +58,10 @@ namespace slideshow::internal
             aViewState.AffineTransform = rCanvas->getViewState().AffineTransform;
 
             rendering::RenderState aRenderState;
-            ::canvas::tools::initRenderState( aRenderState );
+            ::canvastools::initRenderState( aRenderState );
 
             const basegfx::B2DHomMatrix aTranslation(basegfx::utils::createTranslateB2DHomMatrix(maOutputPos));
-            ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
+            ::canvastools::setRenderStateTransform( aRenderState, aTranslation );
 
             try
             {

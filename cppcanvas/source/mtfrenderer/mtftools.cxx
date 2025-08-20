@@ -42,8 +42,8 @@ namespace cppcanvas::tools
         void initRenderState( rendering::RenderState&                   renderState,
                               const ::cppcanvas::internal::OutDevState& outdevState )
         {
-            ::canvas::tools::initRenderState( renderState );
-            ::canvas::tools::setRenderStateTransform( renderState,
+            ::canvastools::initRenderState( renderState );
+            ::canvastools::setRenderStateTransform( renderState,
                                                       outdevState.transform );
             renderState.Clip = outdevState.xClipPoly;
         }
@@ -630,11 +630,11 @@ namespace cppcanvas::tools
                                                    const rendering::RenderState&    renderState )
         {
             ::basegfx::B2DHomMatrix aTransform;
-            ::canvas::tools::mergeViewAndRenderTransform( aTransform,
+            ::canvastools::mergeViewAndRenderTransform( aTransform,
                                                           viewState,
                                                           renderState );
 
-            return  ::canvas::tools::calcTransformedRectBounds(rBounds,
+            return  ::canvastools::calcTransformedRectBounds(rBounds,
                                                                aTransform );
         }
 

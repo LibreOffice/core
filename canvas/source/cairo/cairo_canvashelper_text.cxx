@@ -65,7 +65,7 @@ namespace cairocanvas
     {
         ::basegfx::B2DHomMatrix aMatrix;
 
-        ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+        ::canvastools::mergeViewAndRenderTransform(aMatrix,
                                                      rViewState,
                                                      rRenderState);
 
@@ -114,7 +114,7 @@ namespace cairocanvas
                       const rendering::ViewState&   viewState,
                       const rendering::RenderState& renderState )
     {
-        ::canvas::tools::verifyInput( renderState,
+        ::canvastools::verifyInput( renderState,
                                       __func__,
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
@@ -122,7 +122,7 @@ namespace cairocanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-        ::canvas::tools::clipOutDev(viewState, renderState, rOutDev);
+        ::canvastools::clipOutDev(viewState, renderState, rOutDev);
 
         Color aColor( COL_WHITE );
 

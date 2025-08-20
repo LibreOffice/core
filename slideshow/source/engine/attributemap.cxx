@@ -26,7 +26,7 @@
 
 namespace slideshow::internal
 {
-        typedef ::canvas::tools::ValueMap< AttributeType > AnimateAttributeMap;
+        typedef ::canvastools::ValueMap< AttributeType > AnimateAttributeMap;
 
         AttributeType mapAttributeName( const OUString& rAttrName )
         {

@@ -164,7 +164,7 @@ namespace slideshow::internal
                     // resize surrounding window and applet to current shape size
                     // ==========================================================
 
-                    ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds(
+                    ::basegfx::B2DRange aTmpRange = ::canvastools::calcTransformedRectBounds(
                                                                 rBounds,
                                                                 mpViewLayer->getTransformation() );
                     const ::basegfx::B2IRange aPixelBounds(
@@ -229,7 +229,7 @@ namespace slideshow::internal
             if( !mxFrame.is() )
                 return false;
 
-            ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds(
+            ::basegfx::B2DRange aTmpRange = ::canvastools::calcTransformedRectBounds(
                                                         rBounds,
                                                         mpViewLayer->getTransformation() );
             const ::basegfx::B2IRange aPixelBounds(

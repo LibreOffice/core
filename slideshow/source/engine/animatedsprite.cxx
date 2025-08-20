@@ -106,7 +106,7 @@ namespace slideshow::internal
                 rSpriteSizePixel.getWidth() < 0.5 * maEffectiveSpriteSizePixel.getWidth() )
             {
                 // enlarge or shrink width
-                aNewSize.setWidth( ::canvas::tools::nextPow2( ::basegfx::fround(rSpriteSizePixel.getWidth()) ) );
+                aNewSize.setWidth( ::canvastools::nextPow2( ::basegfx::fround(rSpriteSizePixel.getWidth()) ) );
                 bNeedResize = true;
             }
 
@@ -114,7 +114,7 @@ namespace slideshow::internal
                 rSpriteSizePixel.getHeight() < 0.5*maEffectiveSpriteSizePixel.getHeight() )
             {
                 // enlarge or shrink height, by doubling it
-                aNewSize.setHeight( ::canvas::tools::nextPow2( ::basegfx::fround(rSpriteSizePixel.getHeight()) ) );
+                aNewSize.setHeight( ::canvastools::nextPow2( ::basegfx::fround(rSpriteSizePixel.getHeight()) ) );
                 bNeedResize = true;
             }
 

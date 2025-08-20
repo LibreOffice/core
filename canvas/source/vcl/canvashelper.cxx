@@ -310,7 +310,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+            ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
 
             ::basegfx::B2DPolyPolygon aPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
@@ -569,16 +569,16 @@ namespace vclcanvas
             mpOutDevProvider->getOutDev().SetLayoutMode( nLayoutMode );
             mpOutDevProvider->getOutDev().DrawText( aOutpos,
                                             text.Text,
-                                            ::canvas::tools::numeric_cast<sal_uInt16>(text.StartPosition),
-                                            ::canvas::tools::numeric_cast<sal_uInt16>(text.Length) );
+                                            ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
+                                            ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
 
             if( mp2ndOutDevProvider )
             {
                 mp2ndOutDevProvider->getOutDev().SetLayoutMode( nLayoutMode );
                 mp2ndOutDevProvider->getOutDev().DrawText( aOutpos,
                                                    text.Text,
-                                                   ::canvas::tools::numeric_cast<sal_uInt16>(text.StartPosition),
-                                                   ::canvas::tools::numeric_cast<sal_uInt16>(text.Length) );
+                                                   ::canvastools::numeric_cast<sal_uInt16>(text.StartPosition),
+                                                   ::canvastools::numeric_cast<sal_uInt16>(text.Length) );
             }
         }
 
@@ -636,7 +636,7 @@ namespace vclcanvas
         ENSURE_ARG_OR_THROW( xBitmap.is(),
                              "bitmap is NULL");
 
-        ::canvas::tools::verifyInput( renderState,
+        ::canvastools::verifyInput( renderState,
                                       __func__,
                                       mpDevice,
                                       4,
@@ -648,7 +648,7 @@ namespace vclcanvas
             setupOutDevState( viewState, renderState, IGNORE_COLOR );
 
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+            ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
 
             ::basegfx::B2DPoint aOutputPos( 0.0, 0.0 );
             aOutputPos *= aMatrix;
@@ -795,7 +795,7 @@ namespace vclcanvas
                     // modify output position, to account for the fact
                     // that transformBitmap() always normalizes its output
                     // bitmap into the smallest enclosing box.
-                    ::basegfx::B2DRectangle aDestRect = ::canvas::tools::calcTransformedRectBounds(
+                    ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
                                                                 ::basegfx::B2DRectangle(0,
                                                                                         0,
                                                                                         aBmpSize.Width(),
@@ -1005,7 +1005,7 @@ namespace vclcanvas
                              "Y coordinate out of bounds" );
 
         // TODO(F2): Support alpha canvas here
-        return ::canvas::tools::colorToStdIntSequence(
+        return ::canvastools::colorToStdIntSequence(
             rOutDev.GetPixel(
                 vcl::unotools::pointFromIntegerPoint2D( pos )));
     }
@@ -1015,9 +1015,9 @@ namespace vclcanvas
         if( !mpOutDevProvider )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
-        rendering::IntegerBitmapLayout aBitmapLayout( ::canvas::tools::getStdMemoryLayout(getSize()) );
+        rendering::IntegerBitmapLayout aBitmapLayout( ::canvastools::getStdMemoryLayout(getSize()) );
         if ( !mbHaveAlpha )
-            aBitmapLayout.ColorSpace = canvas::tools::getStdColorSpaceWithoutAlpha();
+            aBitmapLayout.ColorSpace = canvastools::getStdColorSpaceWithoutAlpha();
 
         return aBitmapLayout;
     }
@@ -1029,7 +1029,7 @@ namespace vclcanvas
         ENSURE_OR_THROW( mpOutDevProvider,
                          "outdev null. Are we disposed?" );
 
-        ::canvas::tools::verifyInput( renderState,
+        ::canvastools::verifyInput( renderState,
                                       __func__,
                                       mpDevice,
                                       2,
@@ -1048,7 +1048,7 @@ namespace vclcanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-        ::canvas::tools::clipOutDev(viewState, renderState, rOutDev, p2ndOutDev);
+        ::canvastools::clipOutDev(viewState, renderState, rOutDev, p2ndOutDev);
 
         Color aColor( COL_WHITE );
 

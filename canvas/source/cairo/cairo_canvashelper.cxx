@@ -1279,8 +1279,8 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         if( mpCairo )
         {
-            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::canvas::tools::roundUp( newSize.Width ),
-                                                                                               ::canvas::tools::roundUp( newSize.Height ) ),
+            return uno::Reference< rendering::XBitmap >( new CanvasBitmap( ::basegfx::B2ISize( ::canvastools::roundUp( newSize.Width ),
+                                                                                               ::canvastools::roundUp( newSize.Height ) ),
                                                                            mpSurfaceProvider, mpDevice, false ) );
         }
         else

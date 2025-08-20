@@ -41,7 +41,7 @@ namespace cppcanvas::internal
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );
 
-            ::canvas::tools::initViewState( maViewState );
+            ::canvastools::initViewState( maViewState );
         }
 
         ImplCanvas::~ImplCanvas()
@@ -50,12 +50,12 @@ namespace cppcanvas::internal
 
         void ImplCanvas::setTransformation( const ::basegfx::B2DHomMatrix& rMatrix )
         {
-            ::canvas::tools::setViewStateTransform( maViewState, rMatrix );
+            ::canvastools::setViewStateTransform( maViewState, rMatrix );
         }
 
         ::basegfx::B2DHomMatrix ImplCanvas::getTransformation() const
         {
-            return ::canvas::tools::getViewStateTransform( maViewState );
+            return ::canvastools::getViewStateTransform( maViewState );
         }
 
         void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )

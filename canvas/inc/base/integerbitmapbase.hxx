@@ -43,10 +43,10 @@ namespace canvas
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
                                                                               const css::geometry::IntegerRectangle2D& rect ) override
         {
-            tools::verifyArgs(rect,
+            canvastools::verifyArgs(rect,
                               __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(rect, Base::getSize() );
+            canvastools::verifyIndexRange(rect, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
 
@@ -58,10 +58,10 @@ namespace canvas
                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                        const css::geometry::IntegerRectangle2D&   rect ) override
         {
-            tools::verifyArgs(bitmapLayout, rect,
+            canvastools::verifyArgs(bitmapLayout, rect,
                               __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(rect, Base::getSize() );
+            canvastools::verifyIndexRange(rect, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
 
@@ -72,10 +72,10 @@ namespace canvas
                                         const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                         const css::geometry::IntegerPoint2D&       pos ) override
         {
-            tools::verifyArgs(bitmapLayout, pos,
+            canvastools::verifyArgs(bitmapLayout, pos,
                               __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(pos, Base::getSize() );
+            canvastools::verifyIndexRange(pos, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
 
@@ -85,10 +85,10 @@ namespace canvas
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                                                                   const css::geometry::IntegerPoint2D& pos ) override
         {
-            tools::verifyArgs(pos,
+            canvastools::verifyArgs(pos,
                               __func__,
                               static_cast< typename Base::UnambiguousBaseType* >(this));
-            tools::verifyIndexRange(pos, Base::getSize() );
+            canvastools::verifyIndexRange(pos, Base::getSize() );
 
             typename Base::MutexType aGuard( Base::m_aMutex );
 

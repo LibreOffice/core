@@ -60,7 +60,7 @@ namespace slideshow::internal
 
         private:
             /// Time elapsed since activity started
-            ::canvas::tools::ElapsedTime    maTimer;
+            ::canvastools::ElapsedTime    maTimer;
 
             /// Simple duration of activity
             const double                    mnMinSimpleDuration;

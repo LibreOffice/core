@@ -24,7 +24,7 @@
 #include <tools/time.hxx>
 #include <utility>
 
-namespace canvas::tools {
+namespace canvastools {
 
 double ElapsedTime::getSystemTime()
 {

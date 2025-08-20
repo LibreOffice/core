@@ -49,10 +49,8 @@ namespace com::sun::star::rendering
 
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
-namespace canvas
+namespace canvastools
 {
-    namespace tools
-    {
 
         // Input checking facilities
 
@@ -567,7 +565,6 @@ namespace canvas
         CANVASTOOLS_DLLPUBLIC void verifySpriteSize( const css::geometry::RealSize2D& size,
                                const char*                                   pStr,
                                const css::uno::Reference< css::uno::XInterface >&  xIf );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,7 +37,7 @@ class WakeupEvent : public Event
 {
 public:
     WakeupEvent(
-        std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+        std::shared_ptr< ::canvastools::ElapsedTime > const& pTimeBase,
         ActivitiesQueue & rActivityQueue );
     WakeupEvent(const WakeupEvent&) = delete;
     WakeupEvent& operator=(const WakeupEvent&) = delete;
@@ -68,7 +68,7 @@ public:
     void setActivity( const ActivitySharedPtr& rActivity );
 
 private:
-    ::canvas::tools::ElapsedTime    maTimer;
+    ::canvastools::ElapsedTime    maTimer;
     double                          mnNextTime;
     ActivitySharedPtr               mpActivity;
     ActivitiesQueue&                mrActivityQueue;

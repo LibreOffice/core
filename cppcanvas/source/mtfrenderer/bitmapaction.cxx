@@ -88,7 +88,7 @@ namespace cppcanvas::internal
                 // Setup transformation such that the next render call is
                 // moved rPoint away.
                 const basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createTranslateB2DHomMatrix(rDstPoint));
-                ::canvas::tools::appendToRenderState( maState,
+                ::canvastools::appendToRenderState( maState,
                                                       aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
@@ -120,7 +120,7 @@ namespace cppcanvas::internal
                                                    rDstSize.getY() / aBmpSize.Height() );
                 const basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aScale, rDstPoint));
-                ::canvas::tools::appendToRenderState( maState, aLocalTransformation );
+                ::canvastools::appendToRenderState( maState, aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
                 tools::modifyClip( maState,
@@ -138,7 +138,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::BitmapAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 rCachedPrimitive = mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
                                                                          mpCanvas->getViewState(),
@@ -162,7 +162,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange BitmapAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 const geometry::IntegerSize2D aSize( mxBitmap->getSize() );
 

@@ -146,7 +146,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 if( maFillColor.hasElements() )
                 {
@@ -190,7 +190,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange PolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds(
                     maBounds,
@@ -272,7 +272,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 uno::Sequence< rendering::Texture > aSeq { maTexture };
 
@@ -301,7 +301,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange TexturedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds(
                     maBounds,
@@ -382,7 +382,7 @@ namespace cppcanvas::internal
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::PolyPolyAction: 0x" << std::hex << this );
 
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 rCachedPrimitive = mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
                                                                                 mpCanvas->getViewState(),
@@ -409,7 +409,7 @@ namespace cppcanvas::internal
             ::basegfx::B2DRange StrokedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation ) const
             {
                 rendering::RenderState aLocalState( maState );
-                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+                ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
                 return tools::calcDevicePixelBounds(
                     maBounds,

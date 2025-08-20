@@ -97,7 +97,7 @@ namespace canvas
         // XBufferController
         virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) override
         {
-            tools::verifyRange( nBuffers, sal_Int32(1) );
+            canvastools::verifyRange( nBuffers, sal_Int32(1) );
 
             return 1;
         }
@@ -176,7 +176,7 @@ namespace canvas
             // notifySizeUpdate's bounds are relative to the toplevel
             // window
             if( !mbIsTopLevel )
-                return tools::getAbsoluteWindowRect(
+                return canvastools::getAbsoluteWindowRect(
                     rBounds,
                     mxWindow );
             else

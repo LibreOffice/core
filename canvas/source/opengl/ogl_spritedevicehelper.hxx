@@ -114,7 +114,7 @@ namespace oglcanvas
         std::set< ::rtl::Reference< CanvasCustomSprite > > maActiveSprites;
 
         /// For the frame counter timings
-        ::canvas::tools::ElapsedTime                       maLastUpdate;
+        ::canvastools::ElapsedTime                       maLastUpdate;
 
         std::shared_ptr<TextureCache>                    mpTextureCache;
 

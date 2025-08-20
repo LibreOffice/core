@@ -190,7 +190,7 @@ namespace vclcanvas
             return;
 
         ::tools::PolyPolygon aMarkerPoly(
-            ::canvas::tools::getBoundMarksPolyPolygon(
+            ::canvastools::getBoundMarksPolyPolygon(
                 ::basegfx::B2DRectangle(aOutPos.X(),
                                         aOutPos.Y(),
                                         aOutPos.X() + aOutputSize.Width()-1,

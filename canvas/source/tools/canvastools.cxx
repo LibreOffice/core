@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-namespace canvas::tools
+namespace canvastools
 {
         geometry::RealSize2D createInfiniteSize2D()
         {
@@ -1098,9 +1098,7 @@ namespace canvas::tools
             rTotalTransform.identity();
             ::basegfx::unotools::homMatrixFromAffineMatrix( rTotalTransform,
                                                             texture.AffineTransform );
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
-                                                         viewState,
-                                                         renderState);
+            mergeViewAndRenderTransform(aMatrix, viewState, renderState);
             rTotalTransform *= aMatrix; // prepend total view/render transformation
 
             // determine size of gradient in device coordinate system
@@ -1169,10 +1167,7 @@ namespace canvas::tools
                     ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
 
                 ::basegfx::B2DHomMatrix aMatrix;
-                aClipPoly.transform(
-                    ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
-                                                                  viewState,
-                                                                  renderState ) );
+                aClipPoly.transform(mergeViewAndRenderTransform(aMatrix, viewState, renderState));
 
                 if( aClipPoly.count() )
                 {

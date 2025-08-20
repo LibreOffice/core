@@ -70,7 +70,7 @@ namespace dxcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
         if( !mpDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         HDC hDC = getHDC();
         ENSURE_OR_THROW( hDC,
@@ -87,7 +87,7 @@ namespace dxcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpDevice )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         HDC hDC=getHDC();
         ENSURE_OR_THROW( hDC,

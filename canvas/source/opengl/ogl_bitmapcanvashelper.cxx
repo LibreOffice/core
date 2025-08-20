@@ -57,7 +57,7 @@ namespace oglcanvas
 
     rendering::IntegerBitmapLayout BitmapCanvasHelper::getMemoryLayout() const
     {
-        return ::canvas::tools::getStdMemoryLayout(getSize());
+        return ::canvastools::getStdMemoryLayout(getSize());
     }
 
 }

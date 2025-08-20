@@ -40,7 +40,7 @@ namespace oglcanvas
         ENSURE_OR_THROW( rRefDevice,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
+        ::canvastools::setIdentityAffineMatrix2D(maTransformation);
         maCanvasHelper.init( *rRefDevice,
                              rDeviceHelper );
     }
@@ -57,7 +57,7 @@ namespace oglcanvas
 
     void SAL_CALL CanvasCustomSprite::setAlpha( double alpha )
     {
-        canvas::tools::verifyRange( alpha, 0.0, 1.0 );
+        canvastools::verifyRange( alpha, 0.0, 1.0 );
 
         ::osl::MutexGuard aGuard( m_aMutex );
         mfAlpha = alpha;
@@ -67,13 +67,13 @@ namespace oglcanvas
                                             const rendering::ViewState&   viewState,
                                             const rendering::RenderState& renderState )
     {
-        canvas::tools::verifyArgs(aNewPos, viewState, renderState,
+        canvastools::verifyArgs(aNewPos, viewState, renderState,
                                   __func__,
                                   getXWeak());
 
         ::osl::MutexGuard aGuard( m_aMutex );
         ::basegfx::B2DHomMatrix aTransform;
-        ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+        ::canvastools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
                                                      renderState);
 
@@ -125,8 +125,8 @@ namespace oglcanvas
 
         TransformationPreserver aPreserver1;
         const ::basegfx::B2IVector aSpriteSizePixel(
-            ::canvas::tools::roundUp( maSize.Width ),
-            ::canvas::tools::roundUp( maSize.Height ));
+            ::canvastools::roundUp( maSize.Width ),
+            ::canvastools::roundUp( maSize.Height ));
 
         // translate sprite to output position
         glTranslated(maPosition.getX(), maPosition.getY(), 0);

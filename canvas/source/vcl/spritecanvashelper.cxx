@@ -294,7 +294,7 @@ namespace vclcanvas
         }
 
 #if OSL_DEBUG_LEVEL > 0
-        static ::canvas::tools::ElapsedTime aElapsedTime;
+        static ::canvastools::ElapsedTime aElapsedTime;
 
         // log time immediately after surface flip
         SAL_INFO("canvas.vcl", "SpriteCanvasHelper::updateScreen(): flip done at " <<
@@ -352,9 +352,9 @@ namespace vclcanvas
         // would copy pixel that are not supposed to be part of
         // the sprite.
         ::basegfx::B2IRange aSourceRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
+            ::canvastools::spritePixelAreaFromB2DRange( rMoveStart ) );
         const ::basegfx::B2IRange aDestRect(
-            ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
+            ::canvastools::spritePixelAreaFromB2DRange( rMoveEnd ) );
         ::basegfx::B2IPoint aDestPos( aDestRect.getMinimum() );
 
         std::vector< ::basegfx::B2IRange > aUnscrollableAreas;
@@ -367,7 +367,7 @@ namespace vclcanvas
         // clip to output bounds (cannot properly scroll stuff
         // _outside_ our screen area)
         if( !mbIsUnsafeScrolling ||
-            !::canvas::tools::clipScrollArea( aSourceRect,
+            !::canvastools::clipScrollArea( aSourceRect,
                                               aDestPos,
                                               aUnscrollableAreas,
                                               aOutputBounds ) )
@@ -483,10 +483,10 @@ namespace vclcanvas
         const ::Size aOutputSize(
             std::max( sal_Int32( 0 ),
                         std::min( static_cast< sal_Int32 >(aTargetSizePixel.Width() - aOutputPosition.X()),
-                                    ::canvas::tools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X() ))),
+                                    ::canvastools::roundUp( rRequestedArea.getMaxX() - aOutputPosition.X() ))),
             std::max( sal_Int32( 0 ),
                         std::min( static_cast< sal_Int32 >(aTargetSizePixel.Height() - aOutputPosition.Y()),
-                                    ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y() ))));
+                                    ::canvastools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y() ))));
 
         // early exit for empty output area.
         if( aOutputSize.Width() == 0 &&

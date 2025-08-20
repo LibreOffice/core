@@ -499,7 +499,7 @@ namespace vclcanvas
 
             ::basegfx::B2DHomMatrix aTotalTransform;
             const int nStepCount=
-                ::canvas::tools::calcGradientStepCount(aTotalTransform,
+                ::canvastools::calcGradientStepCount(aTotalTransform,
                                                        viewState,
                                                        renderState,
                                                        texture,
@@ -575,7 +575,7 @@ namespace vclcanvas
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DHomMatrix aTextureTransform;
-                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvas::tools::calcTransformedRectBounds(
+                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvastools::calcTransformedRectBounds(
                                                             aRect,
                                                             aTextureTransform );
                 rOutDev.SetLineColor( COL_RED );
@@ -688,7 +688,7 @@ namespace vclcanvas
                 const bool bRectangularPolygon( tools::isRectangle( aPolyPoly ) );
 
                 ::basegfx::B2DHomMatrix aTotalTransform;
-                ::canvas::tools::mergeViewAndRenderTransform(aTotalTransform,
+                ::canvastools::mergeViewAndRenderTransform(aTotalTransform,
                                                              viewState,
                                                              renderState);
                 ::basegfx::B2DHomMatrix aTextureTransform;
@@ -698,7 +698,7 @@ namespace vclcanvas
                 aTotalTransform *= aTextureTransform;
 
                 const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
-                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvas::tools::calcTransformedRectBounds(
+                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvastools::calcTransformedRectBounds(
                                                             aRect,
                                                             aTotalTransform );
 
@@ -709,12 +709,12 @@ namespace vclcanvas
                     aIntegerTextureDeviceRect == aPolygonDeviceRect )
                 {
                     rendering::RenderState aLocalState( renderState );
-                    ::canvas::tools::appendToRenderState(aLocalState,
+                    ::canvastools::appendToRenderState(aLocalState,
                                                          aTextureTransform);
                     ::basegfx::B2DHomMatrix aScaleCorrection;
                     aScaleCorrection.scale( 1.0/aBmpSize.Width,
                                             1.0/aBmpSize.Height );
-                    ::canvas::tools::appendToRenderState(aLocalState,
+                    ::canvastools::appendToRenderState(aLocalState,
                                                          aScaleCorrection);
 
                     // need alpha modulation?
@@ -762,7 +762,7 @@ namespace vclcanvas
 
                     // combine with view and render transform
                     ::basegfx::B2DHomMatrix aMatrix;
-                    ::canvas::tools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
+                    ::canvastools::mergeViewAndRenderTransform(aMatrix, viewState, renderState);
 
                     // combine all three transformations into one
                     // global texture-to-device-space transformation
@@ -804,7 +804,7 @@ namespace vclcanvas
                         // modify output position, to account for the fact
                         // that transformBitmap() always normalizes its output
                         // bitmap into the smallest enclosing box.
-                        ::basegfx::B2DRectangle aDestRect = ::canvas::tools::calcTransformedRectBounds(
+                        ::basegfx::B2DRectangle aDestRect = ::canvastools::calcTransformedRectBounds(
                                                                     ::basegfx::B2DRectangle(0,
                                                                                             0,
                                                                                             aBmpSize.Width,
@@ -863,7 +863,7 @@ namespace vclcanvas
                     // Finally, the bound rect is transformed back to
                     // device coordinate space, were we determine the
                     // start point from it.
-                    ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvas::tools::calcTransformedRectBounds(
+                    ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvastools::calcTransformedRectBounds(
                                                                 vcl::unotools::b2DRectangleFromRectangle(aPolygonDeviceRect),
                                                                 aInverseTextureTransform );
 
@@ -876,17 +876,17 @@ namespace vclcanvas
                     // as _soon_ as any fractional amount is
                     // encountered. This is to ensure that the full
                     // polygon area is filled with texture tiles.
-                    const sal_Int32 nX1( ::canvas::tools::roundDown( aTextureSpacePolygonRect.getMinX() ) );
-                    const sal_Int32 nY1( ::canvas::tools::roundDown( aTextureSpacePolygonRect.getMinY() ) );
-                    const sal_Int32 nX2( ::canvas::tools::roundUp( aTextureSpacePolygonRect.getMaxX() ) );
-                    const sal_Int32 nY2( ::canvas::tools::roundUp( aTextureSpacePolygonRect.getMaxY() ) );
+                    const sal_Int32 nX1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinX() ) );
+                    const sal_Int32 nY1( ::canvastools::roundDown( aTextureSpacePolygonRect.getMinY() ) );
+                    const sal_Int32 nX2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxX() ) );
+                    const sal_Int32 nY2( ::canvastools::roundUp( aTextureSpacePolygonRect.getMaxY() ) );
                     const ::basegfx::B2DRectangle aSingleTextureRect(
                         nX1, nY1,
                         nX1 + 1.0,
                         nY1 + 1.0 );
 
                     // and convert back to device space
-                    ::basegfx::B2DRectangle aSingleDeviceTextureRect = ::canvas::tools::calcTransformedRectBounds(
+                    ::basegfx::B2DRectangle aSingleDeviceTextureRect = ::canvastools::calcTransformedRectBounds(
                                                                 aSingleTextureRect,
                                                                 aPureTotalTransform );
 

@@ -58,7 +58,7 @@ namespace canvas
             GetterType getter;
             SetterType setter;
         };
-        typedef tools::ValueMap< Callbacks >     MapType;
+        typedef canvastools::ValueMap< Callbacks >     MapType;
         typedef std::vector< MapType::MapEntry > InputMap;
 
         class MakeMap : public InputMap

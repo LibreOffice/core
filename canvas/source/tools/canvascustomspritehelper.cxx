@@ -70,7 +70,7 @@ namespace canvas
 
             // rectangular area which is actually covered by the sprite.
             // coordinates are relative to the sprite origin.
-            ::basegfx::B2DRectangle aSpriteRectPixel = ::canvas::tools::calcTransformedRectBounds(
+            ::basegfx::B2DRectangle aSpriteRectPixel = ::canvastools::calcTransformedRectBounds(
                                                         aBounds,
                                                         maTransform );
 
@@ -194,14 +194,14 @@ namespace canvas
         basegfx::B2DSize rOurSize(rSprite->getSizePixel().getX(), rSprite->getSizePixel().getY());
 
         ::basegfx::B2DHomMatrix aTransform;
-        if( tools::isInside(
+        if( canvastools::isInside(
                 ::basegfx::B2DRectangle( 0.0,0.0,
                                          rOurSize.getWidth(),
                                          rOurSize.getHeight() ),
                 ::basegfx::B2DRectangle( 0.0,0.0,
                                          aInputSize.Width,
                                          aInputSize.Height ),
-                ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+                ::canvastools::mergeViewAndRenderTransform(aTransform,
                                                              viewState,
                                                              renderState) ) )
         {
@@ -239,7 +239,7 @@ namespace canvas
             return; // we're disposed
 
         ::basegfx::B2DHomMatrix aTransform;
-        ::canvas::tools::mergeViewAndRenderTransform(aTransform,
+        ::canvastools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
                                                      renderState);
 
@@ -412,7 +412,7 @@ namespace canvas
 
         // transform bounds at origin, as the sprite transformation is
         // formulated that way
-        return ::canvas::tools::calcTransformedRectBounds(
+        return ::canvastools::calcTransformedRectBounds(
                                                            rBounds,
                                                            aTransform );
     }

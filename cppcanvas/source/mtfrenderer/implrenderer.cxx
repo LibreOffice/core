@@ -749,7 +749,7 @@ namespace cppcanvas::internal
             aFontRequest.FontDescription.FontDescription.Weight =
                 rParms.mrParms.maFontWeight ?
                 *rParms.mrParms.maFontWeight :
-                ::canvas::tools::numeric_cast<sal_Int8>( ::basegfx::fround( rFont.GetWeight() ) );
+                ::canvastools::numeric_cast<sal_Int8>( ::basegfx::fround( rFont.GetWeight() ) );
             aFontRequest.FontDescription.FontDescription.Letterform =
                 rParms.mrParms.maFontLetterForm ?
                 *rParms.mrParms.maFontLetterForm :
@@ -777,7 +777,7 @@ namespace cppcanvas::internal
             }
 
             geometry::Matrix2D aFontMatrix;
-            ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
+            ::canvastools::setIdentityMatrix2D( aFontMatrix );
 
             // TODO(F2): use correct scale direction, font
             // height might be width or anything else
@@ -2978,7 +2978,7 @@ namespace cppcanvas::internal
                 // render subset of actions
                 // ========================
 
-                ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform( getRenderState() );
+                ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform( getRenderState() );
 
                 ActionRenderer aRenderer( aMatrix );
 
@@ -3020,7 +3020,7 @@ namespace cppcanvas::internal
             // query bounds for subset of actions
             // ==================================
 
-            ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform(
+            ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
                                                       getRenderState() );
 
             AreaQuery aQuery( aMatrix );
@@ -3038,7 +3038,7 @@ namespace cppcanvas::internal
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::draw()" );
 
-            ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform(
+            ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
                                                       getRenderState() );
 
             try

@@ -633,7 +633,7 @@ sd/source/ui/slideshow/showwindow.hxx:98
 sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:144
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:96
-    sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
+    sd::slidesorter::controller::Animator maElapsedTime ::canvastools::ElapsedTime
 sdext/source/pdfimport/inc/pdfihelper.hxx:103
     pdfi::GraphicsContext BlendMode sal_Int8
 sfx2/source/appl/lnkbase2.cxx:82
@@ -643,7 +643,7 @@ sfx2/source/inc/appdata.hxx:62
 slideshow/source/engine/shapes/drawshape.hxx:57
     slideshow::internal::DelayedGraphicLoader mpVDev ScopedVclPtrInstance<VirtualDevice>
 slideshow/source/engine/slideshowimpl.cxx:147
-    (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
+    (anonymous namespace)::FrameSynchronization maTimer canvastools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:427
     UCBStorageStream_Impl m_aKey OString
 starmath/inc/ElementsDockingWindow.hxx:41

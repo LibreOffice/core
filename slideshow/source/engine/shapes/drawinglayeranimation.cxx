@@ -183,7 +183,7 @@ private:
     ShapeAttributeLayerHolder                   maShapeAttrLayer;
     GDIMetaFileSharedPtr                        mpMetaFile;
     IntrinsicAnimationEventHandlerSharedPtr     mpListener;
-    canvas::tools::ElapsedTime                  maTimer;
+    canvastools::ElapsedTime                  maTimer;
     double                                      mfRotationAngle;
     bool                                        mbIsShapeAnimated;
     bool                                        mbIsDisposed;

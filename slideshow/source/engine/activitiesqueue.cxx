@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 namespace slideshow::internal
 {
         ActivitiesQueue::ActivitiesQueue(
-          std::shared_ptr< ::canvas::tools::ElapsedTime > pPresTimer ) :
+          std::shared_ptr< ::canvastools::ElapsedTime > pPresTimer ) :
             mpTimer(std::move( pPresTimer )),
             maCurrentActivitiesWaiting(),
             maCurrentActivitiesReinsert(),

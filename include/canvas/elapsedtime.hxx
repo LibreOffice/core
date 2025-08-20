@@ -22,7 +22,7 @@
 #include <canvas/canvastoolsdllapi.h>
 #include <memory>
 
-namespace canvas::tools
+namespace canvastools
 {
         /** Calculate elapsed time.
 

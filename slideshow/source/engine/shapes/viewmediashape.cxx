@@ -183,7 +183,7 @@ namespace slideshow::internal
                 aViewState.AffineTransform = pCanvas->getViewState().AffineTransform;
 
                 rendering::RenderState aRenderState;
-                ::canvas::tools::initRenderState( aRenderState );
+                ::canvastools::initRenderState( aRenderState );
 
                 const ::Size aBmpSize( aBmp.GetSizePixel() );
 
@@ -191,7 +191,7 @@ namespace slideshow::internal
                                                    rBounds.getHeight() / aBmpSize.Height() );
                 const basegfx::B2DHomMatrix aTranslation(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aScale, rBounds.getMinimum()));
-                ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
+                ::canvastools::setRenderStateTransform( aRenderState, aTranslation );
 
                 pCanvas->getUNOCanvas()->drawBitmap( xBitmap,
                                                      aViewState,
@@ -228,7 +228,7 @@ namespace slideshow::internal
                 maWindowOffset.Y = aRect.Y;
             }
 
-            ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds(
+            ::basegfx::B2DRange aTmpRange = ::canvastools::calcTransformedRectBounds(
                                                         rNewBounds,
                                                         mpViewLayer->getTransformation() );
             const ::basegfx::B2IRange aRangePix(
@@ -313,7 +313,7 @@ namespace slideshow::internal
                         // create visible object
                         uno::Sequence< uno::Any > aDeviceParams;
 
-                        if( ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
+                        if( ::canvastools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
                         {
                             implInitializePlayerWindow( rBounds, aDeviceParams );
                         }
@@ -421,7 +421,7 @@ namespace slideshow::internal
 
                 if( pWindow )
                 {
-                    ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds( rBounds,
+                    ::basegfx::B2DRange aTmpRange = ::canvastools::calcTransformedRectBounds( rBounds,
                                                                 mpViewLayer->getTransformation() );
                     const ::basegfx::B2IRange aRangePix(
                         ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));

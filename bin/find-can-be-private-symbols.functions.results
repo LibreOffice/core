@@ -10568,10 +10568,10 @@ canvas::ParametricPolyPolygon::~ParametricPolyPolygon()
 canvas::PropertySetHelper::isPropertyName(rtl::OUString const&) const
 canvas::SpriteRedrawManager::isAreaUpdateNotOpaque(basegfx::B2DRange const&, std::pair<basegfx::B2DRange, canvas::SpriteRedrawManager::SpriteInfo> const&) const
 canvas::createSurfaceProxyManager(std::shared_ptr<canvas::IRenderModule> const&)
-canvas::tools::ElapsedTime::getCurrentTime() const
-canvas::tools::ElapsedTime::getElapsedTimeImpl() const
-canvas::tools::ElapsedTime::getSystemTime()
-canvas::tools::isInside(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
+canvastools::ElapsedTime::getCurrentTime() const
+canvastools::ElapsedTime::getElapsedTimeImpl() const
+canvastools::ElapsedTime::getSystemTime()
+canvastools::isInside(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DHomMatrix const&)
 chart::AddPointToPoly(com::sun::star::drawing::PolyPolygonShape3D&, com::sun::star::drawing::Position3D const&, int)
 chart::AddPointToPoly(std::__debug::vector<std::__debug::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> >, std::allocator<std::__debug::vector<com::sun::star::drawing::Position3D, std::allocator<com::sun::star::drawing::Position3D> > > >&, com::sun::star::drawing::Position3D const&, int)
 chart::Axis::AllocateSubGrids()

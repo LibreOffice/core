@@ -53,7 +53,7 @@ namespace slideshow::internal {
 class RehearseTimingsActivity::WakeupEvent : public Event
 {
 public:
-    WakeupEvent( std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+    WakeupEvent( std::shared_ptr< ::canvastools::ElapsedTime > const& pTimeBase,
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
         Event(u"WakeupEvent"_ustr),
@@ -99,7 +99,7 @@ public:
     void setNextTimeout( double nextTime ) { mnNextTime = nextTime; }
 
 private:
-    ::canvas::tools::ElapsedTime    maTimer;
+    ::canvastools::ElapsedTime    maTimer;
     double                          mnNextTime;
     std::weak_ptr<Activity>         mpActivity;
     ActivitiesQueue&                mrActivityQueue;

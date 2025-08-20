@@ -562,7 +562,7 @@ namespace slideshow::internal
             aTransform *= rShapeTransform;
 
             // apply shape transformation to unit rect
-            return ::canvas::tools::calcTransformedRectBounds(
+            return ::canvastools::calcTransformedRectBounds(
                 rUnitBounds,
                 aTransform );
         }
@@ -761,7 +761,7 @@ namespace slideshow::internal
             const basegfx::B2DRange aRect( 0,0,
                                            rSlideSize.getX(),
                                            rSlideSize.getY() );
-            basegfx::B2DRange aTmpRect = canvas::tools::calcTransformedRectBounds(
+            basegfx::B2DRange aTmpRect = canvastools::calcTransformedRectBounds(
                                                       aRect,
                                                       pView->getTransformation() );
 

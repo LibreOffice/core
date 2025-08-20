@@ -147,7 +147,7 @@ namespace oglcanvas
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalResolution()
     {
         if( !mxContext->isInitialized() )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         // Map a one-by-one millimeter box to pixel
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
@@ -162,7 +162,7 @@ namespace oglcanvas
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalSize()
     {
         if( !mxContext->isInitialized() )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvastools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
@@ -352,7 +352,7 @@ namespace oglcanvas
     uno::Reference<rendering::XColorSpace> SpriteDeviceHelper::getColorSpace() const
     {
         // always the same
-        return ::canvas::tools::getStdColorSpace();
+        return ::canvastools::getStdColorSpace();
     }
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )

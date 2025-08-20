@@ -549,7 +549,7 @@ void SlideSorterView::RequestRepaint (const vcl::Region& rRepaintRegion)
 }
 
 #ifdef DEBUG_TIMING
-static ::canvas::tools::ElapsedTime gaTimer;
+static ::canvastools::ElapsedTime gaTimer;
 static const size_t gFrameTimeCount (10);
 static size_t gFrameTimeIndex (0);
 static ::std::vector<double> gFrameTimes (gFrameTimeCount, 0);

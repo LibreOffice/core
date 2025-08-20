@@ -210,7 +210,7 @@ namespace dxcanvas
         if( !mpTarget )
             return rendering::IntegerBitmapLayout(); // we're disposed
 
-        return ::canvas::tools::getStdMemoryLayout(getSize());
+        return ::canvastools::getStdMemoryLayout(getSize());
     }
     bool BitmapCanvasHelper::hasAlpha() const
     {

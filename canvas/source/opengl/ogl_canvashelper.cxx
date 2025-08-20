@@ -603,7 +603,7 @@ namespace oglcanvas
                         uno::Sequence<sal_Int8> aARGBBytes(
                             aLayout.ColorSpace->convertToIntegerColorSpace(
                                 aPixelData,
-                                canvas::tools::getStdColorSpace()));
+                                canvastools::getStdColorSpace()));
 
                         rAct.maFunction = std::bind(&lcl_fillTexturedPolyPolygon,
                                                         std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
@@ -809,7 +809,7 @@ namespace oglcanvas
                     uno::Sequence<sal_Int8> aARGBBytes(
                         aLayout.ColorSpace->convertToIntegerColorSpace(
                             aPixelData,
-                            canvas::tools::getStdColorSpace()));
+                            canvastools::getStdColorSpace()));
 
                     mpRecordedActions->push_back( Action() );
                     Action& rAct=mpRecordedActions->back();
@@ -852,7 +852,7 @@ namespace oglcanvas
 
         // setup overall transform only now. View clip above was
         // relative to view transform
-        ::canvas::tools::mergeViewAndRenderTransform(o_action.maTransform,
+        ::canvastools::mergeViewAndRenderTransform(o_action.maTransform,
                                                      viewState,
                                                      renderState);
         // setup compositing - mapping courtesy David Reveman

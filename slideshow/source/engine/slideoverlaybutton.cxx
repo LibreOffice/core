@@ -106,9 +106,9 @@ void SlideOverlayButton::viewAdded(const UnoViewSharedPtr& rView)
                                      1000.0); // sprite should be in front of all
         // other sprites
         css::rendering::ViewState viewState;
-        canvas::tools::initViewState(viewState);
+        canvastools::initViewState(viewState);
         css::rendering::RenderState renderState;
-        canvas::tools::initRenderState(renderState);
+        canvastools::initRenderState(renderState);
         sprite->getContentCanvas()->getUNOCanvas()->drawBitmap(mxIconBitmap, viewState,
                                                                renderState);
 

@@ -174,8 +174,8 @@ namespace vclcanvas
         if (pVDev->GetGlyphBoundRects(
             Point(0,0),
             maText.Text,
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
+            ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),
+            ::canvastools::numeric_cast<sal_uInt16>(maText.Length),
             aMetricVector))
         {
             aBoundingBoxes.realloc(aMetricVector.size());
@@ -265,8 +265,8 @@ namespace vclcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               pVDev->GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
+                                                  ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                  ::canvastools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -367,15 +367,15 @@ namespace vclcanvas
                                    maText.Text,
                                    aOffsets,
                                    aKashidaArray,
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                                   ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                   ::canvastools::numeric_cast<sal_uInt16>(maText.Length) );
         }
         else
         {
             rOutDev.DrawText( rOutpos,
                               maText.Text,
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
-                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
+                              ::canvastools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                              ::canvastools::numeric_cast<sal_uInt16>(maText.Length) );
         }
     }
 
@@ -418,7 +418,7 @@ namespace vclcanvas
     {
         ::basegfx::B2DHomMatrix aMatrix;
 
-        ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+        ::canvastools::mergeViewAndRenderTransform(aMatrix,
                                                      viewState,
                                                      renderState);
 

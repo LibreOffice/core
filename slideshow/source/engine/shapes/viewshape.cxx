@@ -183,8 +183,8 @@ namespace slideshow::internal
             pRenderer->setTransformation( rTransform );
 #if OSL_DEBUG_LEVEL >= 2
             rendering::RenderState aRenderState;
-            ::canvas::tools::initRenderState(aRenderState);
-            ::canvas::tools::setRenderStateTransform(aRenderState,
+            ::canvastools::initRenderState(aRenderState);
+            ::canvastools::setRenderStateTransform(aRenderState,
                                                      rTransform);
             aRenderState.DeviceColor.realloc(4);
             aRenderState.DeviceColor[0] = 1.0;
@@ -248,7 +248,7 @@ namespace slideshow::internal
                 // transformation might result in smaller
                 // overall bounds.
 
-                ::basegfx::B2DRectangle aBoundsPixel = ::canvas::tools::calcTransformedRectBounds(
+                ::basegfx::B2DRectangle aBoundsPixel = ::canvastools::calcTransformedRectBounds(
                                                             rUntransformedArea,
                                                             rCanvasTransformation );
 
@@ -340,7 +340,7 @@ namespace slideshow::internal
             // translational component.
             const ::basegfx::B2DRectangle aNominalShapeBoundsPixel(
                 shapeArea2AreaPixel( aCanvasTransform,
-                                     ::canvas::tools::calcTransformedRectBounds(
+                                     ::canvastools::calcTransformedRectBounds(
                                          ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
                                          aNonTranslationalShapeTransformation ) ) );
 
@@ -579,7 +579,7 @@ namespace slideshow::internal
                         // area_ in device pixel
                         const ::basegfx::B2DHomMatrix aCanvasTransform(
                             rDestinationCanvas->getTransformation() );
-                        ::basegfx::B2DRectangle aTmpRect = ::canvas::tools::calcTransformedRectBounds(
+                        ::basegfx::B2DRectangle aTmpRect = ::canvastools::calcTransformedRectBounds(
                                                                     rUpdateBounds,
                                                                     aCanvasTransform );
 

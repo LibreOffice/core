@@ -153,7 +153,7 @@ namespace dxcanvas
 
             // create world transformation matrix
             ::basegfx::B2DHomMatrix aWorldTransform;
-            ::canvas::tools::mergeViewAndRenderTransform(aWorldTransform, rViewState, rRenderState);
+            ::canvastools::mergeViewAndRenderTransform(aWorldTransform, rViewState, rRenderState);
 
             if(!rOutputOffset.equalZero())
             {
@@ -302,8 +302,8 @@ namespace dxcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               xVirtualDevice->GetTextWidth(
                                                   rText.Text,
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.Length) ),
+                                                  ::canvastools::numeric_cast<sal_uInt16>(rText.StartPosition),
+                                                  ::canvastools::numeric_cast<sal_uInt16>(rText.Length) ),
                                               nBelowBaseline );
         }
     }
