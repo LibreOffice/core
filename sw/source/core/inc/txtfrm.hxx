@@ -300,8 +300,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     bool GetDropRect_( SwRect &rRect ) const;
 
-    // returns the old SwParaPortion, if present
-    std::unique_ptr<SwParaPortion> SetPara(std::unique_ptr<SwParaPortion> xNew);
+    void SetPara(SwParaPortion *pNew, bool bDelete);
 
     bool IsFootnoteNumFrame_() const;
 
