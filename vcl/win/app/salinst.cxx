@@ -899,7 +899,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
             if ( !sApplicationName.isEmpty() )
             {
-                OUString sApplicationID("Collabora.CollaboraOffice." + sApplicationName);
+                OUString sApplicationID("CIB.CIBOffice." + sApplicationName);
 
                 SHARDAPPIDINFO info;
                 info.psi = pShellItem;

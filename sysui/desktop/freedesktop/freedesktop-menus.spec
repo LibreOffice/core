@@ -24,7 +24,7 @@ Name: %pkgprefix-freedesktop-menus
 #BuildRequires: perl
 Group: Office
 License: LGPLv3 with MPLv2, ALv2 and others
-Provides: collaboraoffice-desktop-integration
+Provides: ciboffice-desktop-integration
 Provides: libreoffice-desktop-integration
 Conflicts: %pkgprefix-suse-menus
 Conflicts: %pkgprefix-debian-menus
@@ -376,7 +376,7 @@ fi
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
-%if "%unixfilename" != "collaboraoffice" && "%unixfilename" != "collaboraofficedev"
+%if "%unixfilename" != "ciboffice" && "%unixfilename" != "cibofficedev"
 # compat symlinks
 %attr(0755,root,root) /opt/%unixfilename
 %endif

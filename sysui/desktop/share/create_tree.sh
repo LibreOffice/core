@@ -39,14 +39,14 @@ office_root=${office_prefix}/${PREFIX}
 #this symlink is needed to have the API bootstrap functions running right
 ln -sf "${office_root}/program/soffice" "${DESTDIR}/${BINDIR}/${PREFIX}"
 
-if test "${PREFIX}" != collaboraoffice -a "${PREFIX}" != collaboraofficedev  ; then
+if test "${PREFIX}" != ciboffice -a "${PREFIX}" != cibofficedev  ; then
     # compat symlinks
     mkdir -p "${DESTDIR}${office_prefix}"
-    ln -sf collaboraoffice "${DESTDIR}${office_root}"
-    ln -sf /${BINDIR}/${PREFIX} "${DESTDIR}/${PREFIXDIR}/bin/collaboraoffice"
+    ln -sf ciboffice "${DESTDIR}${office_root}"
+    ln -sf /${BINDIR}/${PREFIX} "${DESTDIR}/${PREFIXDIR}/bin/ciboffice"
 fi
 
-test "${PREFIX}" = collaboraofficedev && mime_def_file="collaboraofficedev.xml" || mime_def_file="collaboraoffice.xml"
+test "${PREFIX}" = cibofficedev && mime_def_file="cibofficedev.xml" || mime_def_file="ciboffice.xml"
 mkdir -p "${DESTDIR}/${PREFIXDIR}/share/mime/packages"
 cp openoffice.org.xml "${DESTDIR}/${PREFIXDIR}/share/mime/packages/$mime_def_file"
 chmod 0644 "${DESTDIR}/${PREFIXDIR}/share/mime/packages/$mime_def_file"

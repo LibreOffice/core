@@ -8,12 +8,12 @@ Globals
             UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
-            WINDOWSBASISROOTNAME Collabora Office
-            UNIXBASISROOTNAME collaboraoffice
+            WINDOWSBASISROOTNAME CIB Office
+            UNIXBASISROOTNAME ciboffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             HIDELICENSEDIALOG 0
             PACKAGEPREFIX
-            BASISPACKAGEPREFIX collaboraofficebasis
-            UREPACKAGEPREFIX collaboraoffice
+            BASISPACKAGEPREFIX cibofficebasis
+            UREPACKAGEPREFIX ciboffice
             SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 0,0,0
             PROGRESSSIZE 460,6
@@ -30,7 +30,8 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
-            OOOVENDOR Collabora Productivity Ltd.
+            OOOVENDOR CIB software GmbH
+            OOODOWNLOADNAME 1
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
@@ -38,13 +39,13 @@ Globals
     }
 }
 
-CollaboraOffice
+CIBOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME Collabora Office
+            PRODUCTNAME CIB Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@
             POSTVERSIONEXTENSION
@@ -64,37 +65,42 @@ CollaboraOffice
             SPELLCHECKERFILE spellchecker_selection.txt
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.cib.de/office
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
         script          setup_osl
-        downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
-        langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
+        downloadname    CIBOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CIBOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CIBOffice_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
-LibreOfficeDev
+CIBOfficeDev
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOfficeDev
+            PRODUCTNAME CIB Office Dev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME CIBOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME cibofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             USERDIRPRODUCTVERSION 4
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             DEVELOPMENTPRODUCT 1
-            BASISPACKAGEPREFIX lodevbasis
-            UREPACKAGEPREFIX libreofficedev
-            SOLSUREPACKAGEPREFIX libreofficedev
+            BASISPACKAGEPREFIX cibofficedevbasis
+            UREPACKAGEPREFIX cibofficedev
+            SOLSUREPACKAGEPREFIX cibofficedev
             REGISTRYLAYERNAME LayerDev
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
@@ -109,25 +115,29 @@ LibreOfficeDev
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.cib.de/office
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
+        downloadname    CIBOfficeDev_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CIBOfficeDev_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CIBOfficeDev_{productversion}_helppack_{os}_install_{languages}
         include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
-LibreOffice_SDK
+CIBOffice_SDK
 {
     Settings
     {
-        downloadname LibreOffice-SDK_{packageversion}_{os}_install_{languages}
+        downloadname CIBOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOffice
+            PRODUCTNAME CIB Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             POSTVERSIONEXTENSION SDK
@@ -146,6 +156,10 @@ LibreOffice_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.cib.de/office
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -154,26 +168,26 @@ LibreOffice_SDK
     }
 }
 
-LibreOfficeDev_SDK
+CIBOfficeDev_SDK
 {
     Settings
     {
-        downloadname LibreOfficeDev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname CIBOfficeDev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOfficeDev
+            PRODUCTNAME CIBOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME CIBOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME cibofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION SDK
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@.SDK
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
-            BASISPACKAGEPREFIX lodevbasis
-            UREPACKAGEPREFIX libreofficedev
-            SOLSUREPACKAGEPREFIX libreofficedev
+            BASISPACKAGEPREFIX cibofficedevbasis
+            UREPACKAGEPREFIX cibofficedev
+            SOLSUREPACKAGEPREFIX cibofficedev
             REGISTRYLAYERNAME LayerDev
             DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
@@ -187,6 +201,10 @@ LibreOfficeDev_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
+            STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.cib.de/office
+            STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
+            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5

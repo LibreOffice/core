@@ -578,7 +578,7 @@ postprocess_main_SED := \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
 	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
-	-e 's,$${STARTCENTER_INFO_URL},https://collaboraoffice.com,g' \
+	-e 's,$${STARTCENTER_INFO_URL},https://www.cib.de/office,g' \
 	-e 's,$${SYSTEM_LIBEXTTEXTCAT_DATA},$(SYSTEM_LIBEXTTEXTCAT_DATA),g' \
 	-e 's,$${SYSTEM_LIBNUMBERTEXT_DATA},$(SYSTEM_LIBNUMBERTEXT_DATA),g' \
 	-e 's,$${PRIVACY_POLICY_URL},$(PRIVACY_POLICY_URL),g' \
