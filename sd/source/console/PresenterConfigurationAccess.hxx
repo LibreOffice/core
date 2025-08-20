@@ -170,7 +170,7 @@ private:
     css::uno::Any maNode;
 };
 
-} // end of namespace sdext::tools
+} // end of namespace sdext::presenter
 
 #endif
 
