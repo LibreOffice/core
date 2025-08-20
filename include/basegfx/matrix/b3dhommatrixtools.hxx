@@ -38,6 +38,6 @@ UnoHomogenMatrixToB3DHomMatrix(const css::drawing::HomogenMatrix& rMatrixIn);
 BASEGFX_DLLPUBLIC void B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
                                                       css::drawing::HomogenMatrix& rMatrixOut);
 
-} // end of namespace basegfx::tools
+} // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
