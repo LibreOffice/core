@@ -117,6 +117,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbTextSpecial                   = false;
     mbRefPoint                      = false;
     mbEnableRTL                     = false;    // mirroring must be explicitly allowed (typically for windows only)
+    mbSubpixelPositioning           = false; // tdf#168002 allow SubpixelPositioning (default: false)
 
     // struct ImplMapRes
     maMapRes.mnMapOfsX              = 0;

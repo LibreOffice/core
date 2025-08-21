@@ -1253,7 +1253,32 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
     std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout(0);
 
     if (pSalLayout)
-        pSalLayout->SetSubpixelPositioning(mbMap);
+    {
+        const bool bActivateSubpixelPositioning(IsMapModeEnabled() || isSubpixelPositioning());
+        // tdf#168002
+        // SubpixelPositioning was until now activated when *any* MapMode was set, but
+        // there is another case this is needed: When a TextSimplePortionPrimitive2D
+        // is rendered by a SDPR.
+        // In that case a TextLayouterDevice is used (to isolate all Text-related stuff
+        // that should not be at OutputDevice) combined with a 'empty' OutDev -> no
+        // MapMode used. It now gets SubpixelPositioning at it's OutDev to allow
+        // checking/usage here.
+        // The DXArray for Primitives (see that TextPrimitive) is defined in the
+        // Unit-Text_Coordinate-System, thus in (0..1) ranges. That allows to
+        // have the DXArray transformation-independent and thus re-usable and
+        // is used since the TextPrimitive was created.
+        // If there is a DXArray missing at the text Primitive (as is the case
+        // with SVG imported ones, but allowed in general) one gets automatically
+        // created during the SalLayout creation for rendering. Unfortunately there
+        // (see GenericSalLayout::LayoutText, usages of GetSubpixelPositioning) the
+        // coordinates get std::round'ed, so all up to that point correctly
+        // calculated metric information in that double-precision dependent coordinate
+        // space gets *shredded*.
+        // To avoid that, SubpixelPositioning  has to be activated. While this might
+        // be done in the future for all cases (SubpixelPositioning == true) for now
+        // just add this case with the Primitives to not break stuff.
+        pSalLayout->SetSubpixelPositioning(bActivateSubpixelPositioning);
+    }
 
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs, pGlyphs ? pGlyphs->Impl(0) : nullptr ) )
