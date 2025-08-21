@@ -137,308 +137,311 @@ namespace svgio::svgreader
             const SvgStyleAttributes& rSvgStyleAttributes) const
         {
             // prepare retval, index and length
-            rtl::Reference<BasePrimitive2D> pRetval;
             const sal_uInt32 nLength(getText().getLength());
+            if (!nLength)
+                return nullptr;
 
-            if(nLength)
+            const sal_uInt32 nIndex(0);
+
+            // prepare FontAttribute
+            const drawinglayer::attribute::FontAttribute aFontAttribute(getFontAttribute(rSvgStyleAttributes));
+
+            // prepare FontSizeNumber
+            double fFontWidth(rSvgStyleAttributes.getFontSizeNumber().solve(*this));
+
+            if (fFontWidth == 0)
+                return nullptr;
+
+            rtl::Reference<BasePrimitive2D> pRetval;
+            double fFontHeight(fFontWidth);
+
+            // prepare locale
+            css::lang::Locale aLocale;
+
+            // prepare TextLayouterDevice; use a larger font size for more linear size
+            // calculations. Similar to nTextSizeFactor in sd/source/ui/view/sdview.cxx
+            // (ViewRedirector::createRedirectedPrimitive2DSequence).
+            const double sizeFactor = fFontHeight < 50000 ? 50000 / fFontHeight : 1.0;
+            TextLayouterDevice aTextLayouterDevice;
+            aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth * sizeFactor, fFontHeight * sizeFactor, aLocale);
+
+            // prepare TextArray
+            ::std::vector< double > aTextArray(rSvgTextPosition.getX());
+            ::std::vector< double > aDxArray(rSvgTextPosition.getDx());
+
+            // Do nothing when X and Dx arrays are empty
+            if((!aTextArray.empty() || !aDxArray.empty()) && aTextArray.size() < nLength)
             {
-                const sal_uInt32 nIndex(0);
+                const sal_uInt32 nArray(aTextArray.size());
 
-                // prepare FontAttribute
-                const drawinglayer::attribute::FontAttribute aFontAttribute(getFontAttribute(rSvgStyleAttributes));
-
-                // prepare FontSizeNumber
-                double fFontWidth(rSvgStyleAttributes.getFontSizeNumber().solve(*this));
-                double fFontHeight(fFontWidth);
-
-                // prepare locale
-                css::lang::Locale aLocale;
-
-                // prepare TextLayouterDevice; use a larger font size for more linear size
-                // calculations. Similar to nTextSizeFactor in sd/source/ui/view/sdview.cxx
-                // (ViewRedirector::createRedirectedPrimitive2DSequence).
-                const double sizeFactor = fFontHeight < 50000 ? 50000 / fFontHeight : 1.0;
-                TextLayouterDevice aTextLayouterDevice;
-                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth * sizeFactor, fFontHeight * sizeFactor, aLocale);
-
-                // prepare TextArray
-                ::std::vector< double > aTextArray(rSvgTextPosition.getX());
-                ::std::vector< double > aDxArray(rSvgTextPosition.getDx());
-
-                // Do nothing when X and Dx arrays are empty
-                if((!aTextArray.empty() || !aDxArray.empty()) && aTextArray.size() < nLength)
+                double fStartX(0.0);
+                if (!aTextArray.empty())
                 {
-                    const sal_uInt32 nArray(aTextArray.size());
-
-                    double fStartX(0.0);
-                    if (!aTextArray.empty())
+                    if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
                     {
-                        if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
-                        {
-                            fStartX = rSvgTextPosition.getParent()->getPosition().getX();
-                        }
-                        else
-                        {
-                            fStartX = aTextArray[nArray - 1];
-                        }
-                    }
-
-                    ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
-                    double fComulativeDx(0.0);
-
-                    aTextArray.reserve(nLength);
-                    for(size_t a = 0; a < aExtendArray.size(); ++a)
-                    {
-                        if (a < aDxArray.size())
-                        {
-                            fComulativeDx += aDxArray[a];
-                        }
-                        aTextArray.push_back(aExtendArray[a] / sizeFactor + fStartX + fComulativeDx);
-                    }
-                }
-
-                // get current TextPosition and TextWidth in units
-                basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
-                double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength) / sizeFactor);
-
-                // check for user-given TextLength
-                if(0.0 != rSvgTextPosition.getTextLength()
-                    && !basegfx::fTools::equal(fTextWidth, rSvgTextPosition.getTextLength()))
-                {
-                    const double fFactor(rSvgTextPosition.getTextLength() / fTextWidth);
-
-                    if(rSvgTextPosition.getLengthAdjust())
-                    {
-                        // spacing, need to create and expand TextArray
-                        if(aTextArray.empty())
-                        {
-                            auto aExtendArray(aTextLayouterDevice.getTextArray(getText(), nIndex, nLength));
-                            aTextArray.reserve(aExtendArray.size());
-                            for (auto n : aExtendArray)
-                                aTextArray.push_back(n / sizeFactor);
-                        }
-
-                        for(auto &a : aTextArray)
-                        {
-                            a *= fFactor;
-                        }
+                        fStartX = rSvgTextPosition.getParent()->getPosition().getX();
                     }
                     else
                     {
-                        // spacing and glyphs, just apply to FontWidth
-                        fFontWidth *= fFactor;
-                    }
-
-                    fTextWidth = rSvgTextPosition.getTextLength();
-                }
-
-                // get TextAlign
-                TextAlign aTextAlign(rSvgStyleAttributes.getTextAlign());
-
-                // map TextAnchor to TextAlign, there seems not to be a difference
-                if(TextAnchor::notset != rSvgStyleAttributes.getTextAnchor())
-                {
-                    switch(rSvgStyleAttributes.getTextAnchor())
-                    {
-                        case TextAnchor::start:
-                        {
-                            aTextAlign = TextAlign::left;
-                            break;
-                        }
-                        case TextAnchor::middle:
-                        {
-                            aTextAlign = TextAlign::center;
-                            break;
-                        }
-                        case TextAnchor::end:
-                        {
-                            aTextAlign = TextAlign::right;
-                            break;
-                        }
-                        default:
-                        {
-                            break;
-                        }
+                        fStartX = aTextArray[nArray - 1];
                     }
                 }
 
-                // apply TextAlign
-                switch(aTextAlign)
+                ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
+                double fComulativeDx(0.0);
+
+                aTextArray.reserve(nLength);
+                for(size_t a = 0; a < aExtendArray.size(); ++a)
                 {
-                    case TextAlign::right:
+                    if (a < aDxArray.size())
                     {
-                        aPosition.setX(aPosition.getX() - mpParentLine->getTextLineWidth());
-                        break;
+                        fComulativeDx += aDxArray[a];
                     }
-                    case TextAlign::center:
-                    {
-                        aPosition.setX(aPosition.getX() - (mpParentLine->getTextLineWidth() * 0.5));
-                        break;
-                    }
-                    case TextAlign::notset:
-                    case TextAlign::left:
-                    case TextAlign::justify:
-                    {
-                        // TextAlign::notset, TextAlign::left: nothing to do
-                        // TextAlign::justify is not clear currently; handle as TextAlign::left
-                        break;
-                    }
+                    aTextArray.push_back(aExtendArray[a] / sizeFactor + fStartX + fComulativeDx);
                 }
+            }
 
-                // get DominantBaseline
-                const DominantBaseline aDominantBaseline(rSvgStyleAttributes.getDominantBaseline());
+            // get current TextPosition and TextWidth in units
+            basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
+            double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength) / sizeFactor);
 
-                basegfx::B2DRange aRange(aTextLayouterDevice.getTextBoundRect(getText(), nIndex, nLength));
-                // apply DominantBaseline
-                switch(aDominantBaseline)
+            // check for user-given TextLength
+            if(0.0 != rSvgTextPosition.getTextLength()
+                && !basegfx::fTools::equal(fTextWidth, rSvgTextPosition.getTextLength()))
+            {
+                const double fFactor(rSvgTextPosition.getTextLength() / fTextWidth);
+
+                if(rSvgTextPosition.getLengthAdjust())
                 {
-                    case DominantBaseline::Middle:
-                    case DominantBaseline::Central:
+                    // spacing, need to create and expand TextArray
+                    if(aTextArray.empty())
                     {
-                        aPosition.setY(aPosition.getY() - aRange.getCenterY() / sizeFactor);
-                        break;
+                        auto aExtendArray(aTextLayouterDevice.getTextArray(getText(), nIndex, nLength));
+                        aTextArray.reserve(aExtendArray.size());
+                        for (auto n : aExtendArray)
+                            aTextArray.push_back(n / sizeFactor);
                     }
-                    case DominantBaseline::Hanging:
+
+                    for(auto &a : aTextArray)
                     {
-                        aPosition.setY(aPosition.getY() - aRange.getMinY() / sizeFactor);
-                        break;
+                        a *= fFactor;
                     }
-                    default: // DominantBaseline::Auto
-                    {
-                        // nothing to do
-                        break;
-                    }
-                }
-
-                // get BaselineShift
-                const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
-
-                // apply BaselineShift
-                switch(aBaselineShift)
-                {
-                    case BaselineShift::Sub:
-                    {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset() / sizeFactor);
-                        break;
-                    }
-                    case BaselineShift::Super:
-                    {
-                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset() / sizeFactor);
-                        break;
-                    }
-                    case BaselineShift::Percentage:
-                    case BaselineShift::Length:
-                    {
-                        const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
-                        const double mfBaselineShift(aNumber.solve(*this));
-
-                        aPosition.setY(aPosition.getY() - mfBaselineShift);
-                        break;
-                    }
-                    default: // BaselineShift::Baseline
-                    {
-                        // nothing to do
-                        break;
-                    }
-                }
-
-                // get fill color
-                basegfx::BColor aFill(0, 0, 0);
-                if(rSvgStyleAttributes.getFill())
-                    aFill = *rSvgStyleAttributes.getFill();
-
-                // get fill opacity
-                double fFillOpacity = 1.0;
-                if (rSvgStyleAttributes.getFillOpacity().isSet())
-                {
-                    fFillOpacity = rSvgStyleAttributes.getFillOpacity().getNumber();
-                }
-
-                // prepare TextTransformation
-                basegfx::B2DHomMatrix aTextTransform;
-
-                aTextTransform.scale(fFontWidth, fFontHeight);
-                aTextTransform.translate(aPosition.getX(), aPosition.getY());
-
-                // check TextDecoration and if TextDecoratedPortionPrimitive2D is needed
-                const TextDecoration aDeco(rSvgStyleAttributes.getTextDecoration());
-
-                if(TextDecoration::underline == aDeco
-                    || TextDecoration::overline == aDeco
-                    || TextDecoration::line_through == aDeco)
-                {
-                    // get the fill for decoration as described by SVG. We cannot
-                    // have different stroke colors/definitions for those, though
-                    const SvgStyleAttributes* pDecoDef = rSvgStyleAttributes.getTextDecorationDefiningSvgStyleAttributes();
-
-                    basegfx::BColor aDecoColor(aFill);
-                    if(pDecoDef && pDecoDef->getFill())
-                        aDecoColor = *pDecoDef->getFill();
-
-                    TextLine eFontOverline = TEXT_LINE_NONE;
-                    if(TextDecoration::overline == aDeco)
-                        eFontOverline = TEXT_LINE_SINGLE;
-
-                    TextLine eFontUnderline = TEXT_LINE_NONE;
-                    if(TextDecoration::underline == aDeco)
-                        eFontUnderline = TEXT_LINE_SINGLE;
-
-                    TextStrikeout eTextStrikeout = TEXT_STRIKEOUT_NONE;
-                    if(TextDecoration::line_through == aDeco)
-                        eTextStrikeout = TEXT_STRIKEOUT_SINGLE;
-
-                    // create decorated text primitive
-                    pRetval = new TextDecoratedPortionPrimitive2D(
-                        aTextTransform,
-                        getText(),
-                        nIndex,
-                        nLength,
-                        std::move(aTextArray),
-                        {},
-                        aFontAttribute,
-                        std::move(aLocale),
-                        aFill,
-                        COL_TRANSPARENT,
-
-                        // extra props for decorated
-                        aDecoColor,
-                        aDecoColor,
-                        eFontOverline,
-                        eFontUnderline,
-                        false,
-                        eTextStrikeout,
-                        false,
-                        TEXT_FONT_EMPHASIS_MARK_NONE,
-                        true,
-                        false,
-                        TEXT_RELIEF_NONE,
-                        false);
                 }
                 else
                 {
-                    // create text primitive
-                    pRetval = new TextSimplePortionPrimitive2D(
-                        aTextTransform,
-                        getText(),
-                        nIndex,
-                        nLength,
-                        std::move(aTextArray),
-                        {},
-                        aFontAttribute,
-                        std::move(aLocale),
-                        aFill);
+                    // spacing and glyphs, just apply to FontWidth
+                    fFontWidth *= fFactor;
                 }
 
-                if (fFillOpacity != 1.0)
-                {
-                    pRetval = new UnifiedTransparencePrimitive2D(
-                        drawinglayer::primitive2d::Primitive2DContainer{ pRetval },
-                        1.0 - fFillOpacity);
-                }
-
-                // advance current TextPosition
-                rSvgTextPosition.setPosition(rSvgTextPosition.getPosition() + basegfx::B2DVector(fTextWidth, 0.0));
+                fTextWidth = rSvgTextPosition.getTextLength();
             }
+
+            // get TextAlign
+            TextAlign aTextAlign(rSvgStyleAttributes.getTextAlign());
+
+            // map TextAnchor to TextAlign, there seems not to be a difference
+            if(TextAnchor::notset != rSvgStyleAttributes.getTextAnchor())
+            {
+                switch(rSvgStyleAttributes.getTextAnchor())
+                {
+                    case TextAnchor::start:
+                    {
+                        aTextAlign = TextAlign::left;
+                        break;
+                    }
+                    case TextAnchor::middle:
+                    {
+                        aTextAlign = TextAlign::center;
+                        break;
+                    }
+                    case TextAnchor::end:
+                    {
+                        aTextAlign = TextAlign::right;
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+            }
+
+            // apply TextAlign
+            switch(aTextAlign)
+            {
+                case TextAlign::right:
+                {
+                    aPosition.setX(aPosition.getX() - mpParentLine->getTextLineWidth());
+                    break;
+                }
+                case TextAlign::center:
+                {
+                    aPosition.setX(aPosition.getX() - (mpParentLine->getTextLineWidth() * 0.5));
+                    break;
+                }
+                case TextAlign::notset:
+                case TextAlign::left:
+                case TextAlign::justify:
+                {
+                    // TextAlign::notset, TextAlign::left: nothing to do
+                    // TextAlign::justify is not clear currently; handle as TextAlign::left
+                    break;
+                }
+            }
+
+            // get DominantBaseline
+            const DominantBaseline aDominantBaseline(rSvgStyleAttributes.getDominantBaseline());
+
+            basegfx::B2DRange aRange(aTextLayouterDevice.getTextBoundRect(getText(), nIndex, nLength));
+            // apply DominantBaseline
+            switch(aDominantBaseline)
+            {
+                case DominantBaseline::Middle:
+                case DominantBaseline::Central:
+                {
+                    aPosition.setY(aPosition.getY() - aRange.getCenterY() / sizeFactor);
+                    break;
+                }
+                case DominantBaseline::Hanging:
+                {
+                    aPosition.setY(aPosition.getY() - aRange.getMinY() / sizeFactor);
+                    break;
+                }
+                default: // DominantBaseline::Auto
+                {
+                    // nothing to do
+                    break;
+                }
+            }
+
+            // get BaselineShift
+            const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
+
+            // apply BaselineShift
+            switch(aBaselineShift)
+            {
+                case BaselineShift::Sub:
+                {
+                    aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset() / sizeFactor);
+                    break;
+                }
+                case BaselineShift::Super:
+                {
+                    aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset() / sizeFactor);
+                    break;
+                }
+                case BaselineShift::Percentage:
+                case BaselineShift::Length:
+                {
+                    const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
+                    const double mfBaselineShift(aNumber.solve(*this));
+
+                    aPosition.setY(aPosition.getY() - mfBaselineShift);
+                    break;
+                }
+                default: // BaselineShift::Baseline
+                {
+                    // nothing to do
+                    break;
+                }
+            }
+
+            // get fill color
+            basegfx::BColor aFill(0, 0, 0);
+            if(rSvgStyleAttributes.getFill())
+                aFill = *rSvgStyleAttributes.getFill();
+
+            // get fill opacity
+            double fFillOpacity = 1.0;
+            if (rSvgStyleAttributes.getFillOpacity().isSet())
+            {
+                fFillOpacity = rSvgStyleAttributes.getFillOpacity().getNumber();
+            }
+
+            // prepare TextTransformation
+            basegfx::B2DHomMatrix aTextTransform;
+
+            aTextTransform.scale(fFontWidth, fFontHeight);
+            aTextTransform.translate(aPosition.getX(), aPosition.getY());
+
+            // check TextDecoration and if TextDecoratedPortionPrimitive2D is needed
+            const TextDecoration aDeco(rSvgStyleAttributes.getTextDecoration());
+
+            if(TextDecoration::underline == aDeco
+                || TextDecoration::overline == aDeco
+                || TextDecoration::line_through == aDeco)
+            {
+                // get the fill for decoration as described by SVG. We cannot
+                // have different stroke colors/definitions for those, though
+                const SvgStyleAttributes* pDecoDef = rSvgStyleAttributes.getTextDecorationDefiningSvgStyleAttributes();
+
+                basegfx::BColor aDecoColor(aFill);
+                if(pDecoDef && pDecoDef->getFill())
+                    aDecoColor = *pDecoDef->getFill();
+
+                TextLine eFontOverline = TEXT_LINE_NONE;
+                if(TextDecoration::overline == aDeco)
+                    eFontOverline = TEXT_LINE_SINGLE;
+
+                TextLine eFontUnderline = TEXT_LINE_NONE;
+                if(TextDecoration::underline == aDeco)
+                    eFontUnderline = TEXT_LINE_SINGLE;
+
+                TextStrikeout eTextStrikeout = TEXT_STRIKEOUT_NONE;
+                if(TextDecoration::line_through == aDeco)
+                    eTextStrikeout = TEXT_STRIKEOUT_SINGLE;
+
+                // create decorated text primitive
+                pRetval = new TextDecoratedPortionPrimitive2D(
+                    aTextTransform,
+                    getText(),
+                    nIndex,
+                    nLength,
+                    std::move(aTextArray),
+                    {},
+                    aFontAttribute,
+                    std::move(aLocale),
+                    aFill,
+                    COL_TRANSPARENT,
+
+                    // extra props for decorated
+                    aDecoColor,
+                    aDecoColor,
+                    eFontOverline,
+                    eFontUnderline,
+                    false,
+                    eTextStrikeout,
+                    false,
+                    TEXT_FONT_EMPHASIS_MARK_NONE,
+                    true,
+                    false,
+                    TEXT_RELIEF_NONE,
+                    false);
+            }
+            else
+            {
+                // create text primitive
+                pRetval = new TextSimplePortionPrimitive2D(
+                    aTextTransform,
+                    getText(),
+                    nIndex,
+                    nLength,
+                    std::move(aTextArray),
+                    {},
+                    aFontAttribute,
+                    std::move(aLocale),
+                    aFill);
+            }
+
+            if (fFillOpacity != 1.0)
+            {
+                pRetval = new UnifiedTransparencePrimitive2D(
+                    drawinglayer::primitive2d::Primitive2DContainer{ pRetval },
+                    1.0 - fFillOpacity);
+            }
+
+            // advance current TextPosition
+            rSvgTextPosition.setPosition(rSvgTextPosition.getPosition() + basegfx::B2DVector(fTextWidth, 0.0));
 
             return pRetval;
         }
