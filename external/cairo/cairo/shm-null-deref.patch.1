@@ -1,0 +1,14 @@
+diff -ur cairo.org/src/cairo-xlib-render-compositor.c cairo/src/cairo-xlib-render-compositor.c
+--- cairo.org/src/cairo-xlib-render-compositor.c	2025-08-21 09:40:19.517297288 +0200
++++ cairo/src/cairo-xlib-render-compositor.c	2025-08-21 09:41:29.360415588 +0200
+@@ -377,7 +377,8 @@
+     }
+ 
+ out:
+-    cairo_surface_destroy (&shm->base);
++    if (shm)
++        cairo_surface_destroy (&shm->base);
+     return status;
+ }
+ 
+
