@@ -31,13 +31,14 @@ public:
     ReportDesignTestBase()
         : UnoApiTest(u"reportdesign/qa/unit/data"_ustr){};
 
-    void loadURL(std::u16string_view rURL);
+    void loadURLCopy(std::u16string_view rURL);
     virtual void tearDown() override;
 };
 
-void ReportDesignTestBase::loadURL(std::u16string_view sURL)
+void ReportDesignTestBase::loadURLCopy(std::u16string_view sURL)
 {
-    mxComponent = mxDesktop->loadComponentFromURL(createFileURL(sURL), u"_default"_ustr, 0, {});
+    createTempCopy(sURL);
+    mxComponent = mxDesktop->loadComponentFromURL(maTempFile.GetURL(), u"_default"_ustr, 0, {});
 }
 
 void ReportDesignTestBase::tearDown()

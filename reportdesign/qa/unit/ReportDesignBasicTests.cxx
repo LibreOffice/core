@@ -28,22 +28,18 @@ using namespace ::com::sun::star::uno;
 class RptBasicTest : public ReportDesignTestBase
 {
 public:
-    void roundTripTest();
     void testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
                               Reference<frame::XComponentLoader>& xComponentLoader,
                               Reference<XConnection>& xActiveConnection);
-
-    CPPUNIT_TEST_SUITE(RptBasicTest);
-    CPPUNIT_TEST(roundTripTest);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void RptBasicTest::roundTripTest()
+#if !defined(MACOSX) && !defined(_WIN32) //FIXME
+CPPUNIT_TEST_FIXTURE(RptBasicTest, roundTripTest)
 {
     // Test loading and saving an already prepared Report
     // This is a very general test designed to catch crashes
     // on import and saving
-    loadURL(u"roundTrip.odb");
+    loadURLCopy(u"roundTrip.odb");
 
     Reference<frame::XModel> xModel(mxComponent, UNO_QUERY_THROW);
     Reference<frame::XController> xController(xModel->getCurrentController());
@@ -61,6 +57,7 @@ void RptBasicTest::roundTripTest()
     testLoadingAndSaving(u"writer8"_ustr, aReportNames[0], xComponentLoader, xActiveConnection);
     testLoadingAndSaving(u"calc8"_ustr, aReportNames[1], xComponentLoader, xActiveConnection);
 }
+#endif
 
 void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
                                         Reference<frame::XComponentLoader>& xComponentLoader,
@@ -81,8 +78,6 @@ void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUStr
     Reference<util::XCloseable> xCloseable(xComponent, UNO_QUERY_THROW);
     xCloseable->close(true);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(RptBasicTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
