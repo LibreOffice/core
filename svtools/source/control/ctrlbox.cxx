@@ -828,13 +828,12 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
         if (nPage >= rVirtualDevs.size())
         {
             bool bIsLOK = comphelper::LibreOfficeKit::isActive();
-            if (bIsLOK) // allow transparent background in LOK case
-                rVirtualDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA));
-            else
-                rVirtualDevs.emplace_back(m_xComboBox->create_render_virtual_device());
+            rVirtualDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::WITH_ALPHA));
 
             VirtualDevice& rDevice = *rVirtualDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
+            rDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+            rDevice.Erase();
             if (bIsLOK)
             {
                 rDevice.SetDPIX(nDPIX);
