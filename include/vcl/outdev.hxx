@@ -254,6 +254,7 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
+    mutable bool                    mbSubpixelPositioning : 1;
 
 protected:
     mutable std::shared_ptr<vcl::font::PhysicalFontCollection> mxFontCollection;
@@ -1280,6 +1281,10 @@ public:
     // Enabling/disabling RTL only makes sense for OutputDevices that use a mirroring SalGraphicsLayout
     virtual void                EnableRTL( bool bEnable = true);
     bool                        IsRTLEnabled() const { return mbEnableRTL; }
+
+    // tdf#168002 allow SubpixelPositioning for this device (default: false)
+    bool isSubpixelPositioning() const { return mbSubpixelPositioning; }
+    void setSubpixelPositioning(bool bNew) { mbSubpixelPositioning = bNew; }
 
     bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
 

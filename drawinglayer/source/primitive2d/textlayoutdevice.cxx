@@ -162,6 +162,8 @@ void releaseGlobalVirtualDevice()
 TextLayouterDevice::TextLayouterDevice()
     : mrDevice(acquireGlobalVirtualDevice())
 {
+    // tdf#168002 activate SubpixelPositioning for al TextLayouterDevice-calls
+    mrDevice.setSubpixelPositioning(true);
 }
 
 TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE { releaseGlobalVirtualDevice(); }
