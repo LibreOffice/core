@@ -156,6 +156,12 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
     GetBindings().Update(SID_HYPERLINK_GETLINK);
     GetBindings().Update(SID_READONLY_MODE);
 
+    // Now that we have got the link data, we can reset
+    // all the pages with the correct information
+    for (std::unique_ptr<IconChoicePageData>& page: maPageList) {
+        page->xPage->Reset(*pSet);
+    }
+
     m_xResetBtn->connect_clicked( LINK( this, SvxHpLinkDlg, ResetHdl ) );
     m_xOKBtn->connect_clicked( LINK ( this, SvxHpLinkDlg, ClickOkHdl_Impl ) );
     m_xApplyBtn->connect_clicked ( LINK ( this, SvxHpLinkDlg, ClickApplyHdl_Impl ) );
