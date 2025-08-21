@@ -492,6 +492,7 @@ sal_uInt32 ScCsvGrid::GetColumnFromPos( sal_Int32 nPos ) const
 
 sal_Int32 ScCsvGrid::GetColumnWidth( sal_uInt32 nColIndex ) const
 {
+    // coverity[ tainted_data_return : SUPPRESS ] 2024.6.1
     return IsValidColumn( nColIndex ) ? (GetColumnPos( nColIndex + 1 ) - GetColumnPos( nColIndex )) : 0;
 }
 
