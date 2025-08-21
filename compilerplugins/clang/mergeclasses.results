@@ -198,7 +198,6 @@ merge SdrPaintView with SdrSnapView
 merge SdrPolyEditView with SdrGlueEditView
 maybe merge SdrPowerPointImport with ImplSdPPTImport, in modules filter and sd
 merge SdrSnapView with SdrMarkView
-maybe merge SdrUIObject with (anonymous namespace)::ImpressSdrObject, in modules svx and sd
 maybe merge SdrUndoAttrObj with sd::UndoAttrObject, in modules svx and sd
 maybe merge SdrUndoDelObj with sd::UndoDeleteObject, in modules svx and sd
 maybe merge SdrUndoGeoObj with sd::UndoGeoObject, in modules svx and sd

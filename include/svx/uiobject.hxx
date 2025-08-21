@@ -16,24 +16,7 @@
 
 #include <vcl/uitest/uiobject.hxx>
 
-class SdrObject;
 class SvxColorValueSet;
-
-class SVXCORE_DLLPUBLIC SdrUIObject : public UIObject
-{
-public:
-
-    virtual ~SdrUIObject() override;
-
-    virtual StringMap get_state() override;
-
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
-
-    virtual OUString get_type() const override;
-
-    virtual SdrObject* get_object() = 0;
-};
 
 class SvxColorValueSetUIObject final : public DrawingAreaUIObject
 {

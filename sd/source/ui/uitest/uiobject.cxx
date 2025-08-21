@@ -16,20 +16,23 @@
 
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/uiobject.hxx>
 #include <tools/debug.hxx>
 #include <utility>
 
 namespace
 {
-class ImpressSdrObject : public SdrUIObject
+class ImpressSdrObject : public UIObject
 {
 public:
     ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, OUString aName);
 
-    SdrObject* get_object() override;
-
     virtual bool equals(const UIObject& rOther) const override;
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
+
+    virtual OUString get_type() const override;
 
 private:
     VclPtr<sd::Window> mxWindow;
@@ -74,8 +77,6 @@ ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, OUStri
 {
 }
 
-SdrObject* ImpressSdrObject::get_object() { return getObject(mxWindow, maName); }
-
 bool ImpressSdrObject::equals(const UIObject& rOther) const
 {
     const ImpressSdrObject* pOther = dynamic_cast<const ImpressSdrObject*>(&rOther);
@@ -83,6 +84,146 @@ bool ImpressSdrObject::equals(const UIObject& rOther) const
         return false;
     return mxWindow.get() == pOther->mxWindow.get();
 }
+
+StringMap ImpressSdrObject::get_state()
+{
+    StringMap aMap;
+    SdrObject* pObject = getObject(mxWindow, maName);
+
+    if (!pObject)
+        return aMap;
+
+    aMap[u"Name"_ustr] = pObject->GetName();
+    aMap[u"Description"_ustr] = pObject->GetDescription();
+    aMap[u"Title"_ustr] = pObject->GetTitle();
+    aMap[u"Z-Order"_ustr] = OUString::number(pObject->GetOrdNum());
+    aMap[u"Layer"_ustr] = OUString::number(pObject->GetLayer().get());
+    aMap[u"IsGroupObject"_ustr] = OUString::boolean(pObject->IsGroupObject());
+    aMap[u"IsPolyObject"_ustr] = OUString::boolean(pObject->IsPolyObj());
+    aMap[u"PointCount"_ustr] = OUString::number(pObject->GetPointCount());
+    aMap[u"HasTextEdit"_ustr] = OUString::boolean(pObject->HasTextEdit());
+    aMap[u"HasMacro"_ustr] = OUString::boolean(pObject->HasMacro());
+    aMap[u"IsClosed"_ustr] = OUString::boolean(pObject->IsClosedObj());
+    aMap[u"IsEdgeObject"_ustr] = OUString::boolean(pObject->IsEdgeObj());
+    aMap[u"Is3DObject"_ustr] = OUString::boolean(pObject->Is3DObj());
+    aMap[u"IsUNOObject"_ustr] = OUString::boolean(pObject->IsUnoObj());
+    aMap[u"MoveProtected"_ustr] = OUString::boolean(pObject->IsMoveProtect());
+    aMap[u"ResizeProtected"_ustr] = OUString::boolean(pObject->IsResizeProtect());
+    aMap[u"Printable"_ustr] = OUString::boolean(pObject->IsPrintable());
+    aMap[u"Visible"_ustr] = OUString::boolean(pObject->IsVisible());
+    aMap[u"HasText"_ustr] = OUString::boolean(pObject->HasText());
+
+    return aMap;
+}
+
+void ImpressSdrObject::execute(const OUString& rAction, const StringMap& rParameters)
+{
+    SdrObject* pObj = getObject(mxWindow, maName);
+    if (!pObj)
+        return;
+
+    if (rAction == "MOVE")
+    {
+        auto itrNX = rParameters.find(u"X"_ustr);
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+
+        auto itrNY = rParameters.find(u"Y"_ustr);
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
+        Size aMoveRange(nX, nY);
+        pObj->Move(aMoveRange);
+    }
+    else if (rAction == "RESIZE")
+    {
+        auto itrNX = rParameters.find(u"X"_ustr);
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+
+        auto itrNY = rParameters.find(u"Y"_ustr);
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
+        Point aPos(nX, nY);
+
+        auto itrFracX = rParameters.find(u"FRAC_X"_ustr);
+        if (itrFracX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
+        double nFracX = itrFracX->second.toDouble();
+        Fraction aFracX(nFracX);
+
+        auto itrFracY = rParameters.find(u"FRAC_Y"_ustr);
+        if (itrFracY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
+        double nFracY = itrFracY->second.toDouble();
+        Fraction aFracY(nFracY);
+        pObj->Resize(aPos, aFracX, aFracY, true /*bRelative*/);
+    }
+    else if (rAction == "CROP")
+    {
+        // RotateFlyFrame3: Note: Crop does nothing at SdrObject
+        // anymore, see comment at SdrObject::NbcCrop
+        auto itrNX = rParameters.find(u"X"_ustr);
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+
+        auto itrNY = rParameters.find(u"Y"_ustr);
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+
+        const double fX(itrNX->second.toDouble());
+        const double fY(itrNY->second.toDouble());
+        const basegfx::B2DPoint aPos(fX, fY);
+
+        auto itrFracX = rParameters.find(u"FRAC_X"_ustr);
+        if (itrFracX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter FRAC_X"_ustr);
+        const double fFracX(itrFracX->second.toDouble());
+
+        auto itrFracY = rParameters.find(u"FRAC_Y"_ustr);
+        if (itrFracY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter FRAC_Y"_ustr);
+        const double fFracY(itrFracY->second.toDouble());
+
+        pObj->Crop(aPos, fFracX, fFracY);
+    }
+    else if (rAction == "ROTATE")
+    {
+        auto itrNX = rParameters.find(u"X"_ustr);
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter X"_ustr);
+
+        auto itrNY = rParameters.find(u"Y"_ustr);
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter Y"_ustr);
+
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
+        Point aPos(nX, nY);
+
+        auto itrAngle = rParameters.find(u"ANGLE"_ustr);
+        if (itrAngle == rParameters.end())
+            throw css::uno::RuntimeException(u"missing parameter ANGLE"_ustr);
+
+        double nAngle = itrAngle->second.toDouble();
+        pObj->Rotate(aPos, Degree100(sal_Int32(nAngle)), 0, 0);
+    }
+    else if (rAction == "Mirror")
+    {
+        pObj->Mirror(Point(), Point());
+    }
+    else if (rAction == "SHEAR")
+    {
+        pObj->Shear(Point(), 0_deg100 /*nAngle*/, 0, false);
+    }
+}
+
+OUString ImpressSdrObject::get_type() const { return u"ImpressSdrObject"_ustr; }
 
 ImpressWindowUIObject::ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow)
     : WindowUIObject(xWindow)
