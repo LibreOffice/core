@@ -413,6 +413,11 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
     if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
         auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if (pChangeHint->m_pOldFormat == nullptr && pChangeHint->m_pNewFormat == nullptr)
+        {
+            ForceUpdateTextNode();
+            return;
+        }
         if (!IsFieldInDoc())
             return;
 
