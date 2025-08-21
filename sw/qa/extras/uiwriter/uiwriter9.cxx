@@ -271,6 +271,154 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159377)
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(28), pDoc->GetNodes().Count());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testSplitFloatingTable)
+{
+    createSwDoc("floattable-split.docx");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // apparently follow fly is on the text frame of page 1 even though
+        // positioned on page 2...
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    5);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    4);
+    }
+
+    pWrtShell->GotoFly(UIName{ u"Frame1"_ustr });
+    pWrtShell->Down(/*bSelect=*/false, 3);
+
+    pWrtShell->SplitTable(SplitTable_HeadlineOption::BorderCopy);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab/row", 3);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly", 2);
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    4);
+    }
+
+    pWrtShell->Do(SwWrtShell::UNDO);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // apparently follow fly is on the text frame of page 1 even though
+        // positioned on page 2...
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    5);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[2]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    4);
+    }
+
+    pWrtShell->Do(SwWrtShell::REDO);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab/row", 3);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly", 2);
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    4);
+    }
+
+    // now check that these round-trip as floating tables
+    saveAndReload(u"Office Open XML Text"_ustr);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly/tab/row", 3);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly", 2);
+
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/anchored/fly/txt", 0);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top < "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    2);
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/txt[3]/anchored/fly[infos/bounds/@top > "
+                    "/root/page[2]/infos/bounds/@top]/tab/row",
+                    4);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPasteTableInMiddleOfParagraph)
 {
     createSwDoc();

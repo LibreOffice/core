@@ -28,10 +28,12 @@
 #include <svl/stritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
+#include <formatflysplit.hxx>
 #include <fmtornt.hxx>
 #include <fmtfordr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtlsplt.hxx>
 #include <frmatr.hxx>
 #include <cellfrm.hxx>
@@ -80,6 +82,7 @@
 #include <strings.hrc>
 #include <docsh.hxx>
 #include <unochart.hxx>
+#include <unoframe.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <cstdlib>
@@ -3174,6 +3177,118 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
     }
 }
 
+namespace {
+
+::std::optional<::std::tuple<SwStartNode &, SwFrameFormat &, SwTextNode &>>
+FindFloatingTable(SwTableNode & rTableNode)
+{
+    SwStartNode *const pStartNode{rTableNode.GetNodes()[rTableNode.GetIndex()-1]->GetStartNode()};
+    if (pStartNode
+        && pStartNode->GetStartNodeType() == SwFlyStartNode
+        && pStartNode->EndOfSectionIndex()-1 == rTableNode.EndOfSectionIndex())
+    {
+        SwFrameFormat *const pFormat{rTableNode.GetFlyFormat()};
+        if (pFormat && pFormat->GetFlySplit().GetValue())
+        {
+            SwFormatAnchor const& rAnchor{pFormat->GetAnchor()};
+            SwNode *const pNode{rAnchor.GetAnchorNode()};
+            if (pNode && pNode->IsTextNode() // cannot work for at-fly, at-page
+                && rAnchor.GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            {
+                return {{*pStartNode, *pFormat, *pNode->GetTextNode()}};
+            }
+        }
+    }
+    return {};
+}
+
+} // namespace
+
+void SwNodes::MergeFloatingTableFrame(SwNodeOffset const nEndOfOldFlyIndex)
+{
+    SwEndNode *const pFrameEndNode{(*this)[nEndOfOldFlyIndex]->GetEndNode()};
+    assert(pFrameEndNode);
+    SwStartNode *const pFrameStartNode{pFrameEndNode->StartOfSectionNode()};
+    assert(pFrameStartNode && pFrameStartNode->GetStartNodeType() == SwFlyStartNode);
+    SwStartNode *const pNewFrameStartNode{(*this)[nEndOfOldFlyIndex+1]->GetStartNode()};
+    assert(pNewFrameStartNode && pNewFrameStartNode->GetStartNodeType() == SwFlyStartNode);
+    SwTableNode *const pNewTableNode{(*this)[nEndOfOldFlyIndex+2]->GetTableNode()};
+    assert(pNewTableNode);
+    assert(pNewTableNode->StartOfSectionNode() == pNewFrameStartNode);
+    SwTableNode *const pOldTableNode{(*this)[pFrameStartNode->GetIndex()+1]->GetTableNode()};
+    assert(pOldTableNode);
+    assert(pOldTableNode->StartOfSectionNode() == pFrameStartNode);
+
+    SwFrameFormat *const pNewFlyFormat{pNewTableNode->GetFlyFormat()};
+    pNewFlyFormat->DelFrames();
+
+    // reset anchor item
+    SwFrameFormat & rFlyFormat{*pOldTableNode->GetFlyFormat()};
+    SwFormatAnchor anchor{rFlyFormat.GetAnchor()};
+    SwNodeIndex const newAnchor(*(*this)[anchor.GetAnchorNode()->GetIndex()]);
+    SwTextNode *const pOldAnchorNode{(*this)[anchor.GetAnchorNode()->GetIndex()+1]->GetTextNode()};
+    assert(pOldAnchorNode);
+    SwPosition const pos{*pOldAnchorNode};
+    anchor.SetAnchor(&pos);
+    rFlyFormat.SetFormatAttr(anchor);
+
+    // delete inserted anchor node
+    {
+        SwPaM pamToCorr(newAnchor);
+        SwPaM pamSafe(newAnchor);
+        bool const success = pamSafe.Move(fnMoveForward, GoInContent);
+        assert(success); (void) success; // must move to old anchor node
+        ::PaMCorrAbs(pamToCorr, *pamSafe.GetPoint());
+    }
+    Delete(newAnchor);
+
+    // delete new format (also deletes its SdrObject)
+    m_rMyDoc.DelFrameFormat(pNewFlyFormat);
+
+    // merge fly nodes/delete inserted nodes
+    pFrameStartNode->m_pEndOfSection = pNewFrameStartNode->EndOfSectionNode();
+    pFrameStartNode->EndOfSectionNode()->m_pStartOfSection = pFrameStartNode;
+    pNewTableNode->m_pStartOfSection = pFrameStartNode;
+    DelNodes(SwNodeIndex(*pFrameEndNode), SwNodeOffset(2));
+}
+
+void SwNodes::SplitFloatingTableFrame(SwTableNode & rNewTableNode,
+    ::std::tuple<SwStartNode &, SwFrameFormat &, SwTextNode &> const floatingFrame)
+{
+    auto const [rFrameStartNode, rFlyFormat, rAnchorNode]{floatingFrame};
+    SwEndNode *const pOldFrameEndNode{rFrameStartNode.EndOfSectionNode()->GetEndNode()};
+    assert(pOldFrameEndNode);
+
+    // insert new fly nodes between tables
+    new SwEndNode(rNewTableNode, rFrameStartNode);
+    SwStartNode *const pNewFrameStartNode{new SwStartNode{rNewTableNode, SwNodeType::Start, SwFlyStartNode}};
+    pOldFrameEndNode->m_pStartOfSection = pNewFrameStartNode;
+    pNewFrameStartNode->m_pEndOfSection = pOldFrameEndNode;
+    rNewTableNode.m_pStartOfSection = pNewFrameStartNode;
+
+    // relevant part of DocumentLayoutManager::CopyLayoutFormat()
+    auto const newName{m_rMyDoc.GetUniqueFrameName()};
+    SwFlyFrameFormat *const pNewFlyFormat{m_rMyDoc.MakeFlyFrameFormat(newName,
+        static_cast<SwFrameFormat *>(rFlyFormat.GetRegisteredIn()))};
+    SwXFrame::GetOrCreateSdrObject(*pNewFlyFormat);
+    pNewFlyFormat->CopyAttrs(rFlyFormat);
+    pNewFlyFormat->ResetFormatAttr(RES_CHAIN);
+
+    // deleting existing frames for anchor change should not be necessary, and
+    // crashes because it was already added to mpFlyDestroy by FndBox_::DelFrames()
+
+    // create new anchor node *before* existing one
+    SwTextNode *const pNewAnchorNode{MakeTextNode(rAnchorNode,
+        m_rMyDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_TEXT))};
+    SwFormatAnchor anchor{rFlyFormat.GetAnchor()};
+    SwPosition const pos{*pNewAnchorNode};
+    anchor.SetAnchor(&pos);
+    rFlyFormat.SetFormatAttr(anchor);
+    pNewFlyFormat->SetFormatAttr(SwFormatContent{pNewFrameStartNode});
+
+    pNewFlyFormat->MakeFrames();
+}
+
 /**
  * Splits a Table in the top-level Line which contains the Index.
  * All succeeding top-level Lines go into a new Table/Node.
@@ -3220,7 +3335,9 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
     aFndBox.SetTableLines( rTable );
     aFndBox.DelFrames( rTable );
 
-    SwTableNode* pNew = GetNodes().SplitTable( rPos.GetNode(), false, bCalcNewSize );
+    auto const oFloatingFrame{FindFloatingTable(*pTNd)};
+
+    SwTableNode* pNew = GetNodes().SplitTable(rPos.GetNode(), false, bCalcNewSize);
 
     if( pNew )
     {
@@ -3228,8 +3345,12 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         SwUndoSplitTable* pUndo = nullptr;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            pUndo = new SwUndoSplitTable(
-                        *pNew, std::move(pSaveRowSp), eHdlnMode, bCalcNewSize);
+            pUndo = new SwUndoSplitTable(*pNew, std::move(pSaveRowSp),
+                            eHdlnMode, bCalcNewSize, oFloatingFrame
+                    ? ::std::get<0>(*oFloatingFrame).GetIndex() < ::std::get<2>(*oFloatingFrame).GetIndex()
+                        ? SwUndoSplitTable::FloatingMode::FloatingAnchoredAfter
+                        : SwUndoSplitTable::FloatingMode::FloatingAnchoredBefore
+                    : SwUndoSplitTable::FloatingMode::Not);
             GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
             if( aHistory.Count() )
                 pUndo->SaveFormula( aHistory );
@@ -3289,12 +3410,18 @@ void SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
             break;
         }
 
-        // And insert Frames
-        pNew->MakeOwnFrames();
+        if (oFloatingFrame)
+        {
+            GetNodes().SplitFloatingTableFrame(*pNew, *oFloatingFrame);
+        }
+        else
+        {
+            pNew->MakeOwnFrames();
 
-        // Insert a paragraph between the Table
-        GetNodes().MakeTextNode( *pNew,
+            // Insert a paragraph between the tables
+            GetNodes().MakeTextNode( *pNew,
                                 getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+        }
     }
 
     // Update Layout

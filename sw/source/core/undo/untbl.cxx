@@ -2822,9 +2822,13 @@ void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
-    std::unique_ptr<SwSaveRowSpan> pRowSp, SplitTable_HeadlineOption eMode, bool bNewSize )
-    : SwUndo( SwUndoId::SPLIT_TABLE, rTableNd.GetDoc() ),
-    m_nTableNode( rTableNd.GetIndex() ), m_nOffset( 0 ), mpSaveRowSpan( std::move(pRowSp) ),
+        std::unique_ptr<SwSaveRowSpan> pRowSp, SplitTable_HeadlineOption const eMode,
+        bool const bNewSize, FloatingMode const eFloatingMode)
+    : SwUndo( SwUndoId::SPLIT_TABLE, rTableNd.GetDoc() )
+    , m_nTableNode( rTableNd.GetIndex() )
+    , m_nOffset( 0 )
+    , m_eFloatingMode(eFloatingMode)
+    , mpSaveRowSpan( std::move(pRowSp) ),
     m_nMode( eMode ), m_nFormulaEnd( 0 ), m_bCalcNewSize( bNewSize )
 {
     switch( m_nMode )
@@ -2853,10 +2857,20 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
 
     SwPosition& rPtPos = *pPam->GetPoint();
-    rPtPos.Assign( m_nTableNode + m_nOffset );
-    assert(rPtPos.GetNode().GetContentNode()->Len() == 0); // empty para inserted
 
+    if (m_eFloatingMode != FloatingMode::Not)
     {
+        // index members are *before* frame-split
+        auto const nEndOfOldFlyIndex{m_nTableNode + m_nOffset
+            + (m_eFloatingMode == FloatingMode::FloatingAnchoredBefore ? 1 : 0)};
+        rDoc.GetNodes().MergeFloatingTableFrame(nEndOfOldFlyIndex);
+    }
+    else
+    {
+        rPtPos.Assign(m_nTableNode + m_nOffset);
+        assert(rPtPos.GetNode().IsTextNode()); // inserted text node
+        assert(rPtPos.GetNode().GetContentNode()->Len() == 0); // empty para inserted
+
         // avoid asserts from ~SwContentIndexReg
         SwNodeIndex const idx(rDoc.GetNodes(), m_nTableNode + m_nOffset);
         {
@@ -2871,6 +2885,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     rPtPos.Assign( m_nTableNode + m_nOffset );
     SwTableNode* pTableNd = rPtPos.GetNode().GetTableNode();
+    assert(pTableNd);
     SwTable& rTable = pTableNd->GetTable();
     rTable.SwitchFormulasToInternalRepresentation();
 
