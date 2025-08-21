@@ -555,7 +555,6 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 {
     // if the view has selected objects, items with SfxItemState::DEFAULT need to be disabled
-    const SfxPoolItem* pItem;
 
     // corner radius
     if(!pView->IsEdgeRadiusAllowed())
@@ -565,11 +564,10 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
     else
     {
-        pItem = GetItem( *rAttrs, SDRATTR_CORNER_RADIUS );
-
-        if( pItem )
+        const SfxPoolItem* pItem = GetItem(*rAttrs, SDRATTR_CORNER_RADIUS);
+        const double fUIScale(pView->GetModel().GetUIScale());
+        if (pItem && fUIScale != 0.0)
         {
-            const double fUIScale(double(pView->GetModel().GetUIScale()));
             const double fTmp(static_cast<double>(static_cast<const SdrMetricItem*>(pItem)->GetValue()) / fUIScale);
             SetMetricValue(*m_xMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
@@ -589,9 +587,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
     }
     else
     {
-        pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_SHEAR );
-
-        if( pItem )
+        if (const SfxPoolItem* pItem = GetItem(*rAttrs, SID_ATTR_TRANSFORM_SHEAR))
         {
             m_xMtrAngle->set_value(static_cast<const SdrAngleItem*>(pItem)->GetValue().get(), FieldUnit::NONE);
         }
