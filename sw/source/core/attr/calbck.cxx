@@ -253,6 +253,7 @@ void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify
         && rHint.GetId() != SfxHintId::SwRemoveUnoObject
+        && rHint.GetId() != SfxHintId::SwFormatChange
         && rHint.GetId() != SfxHintId::SwAttrSetChange
         && rHint.GetId() != SfxHintId::SwObjectDying
         && rHint.GetId() != SfxHintId::SwUpdateAttr)

@@ -5719,46 +5719,43 @@ void SwTextNode::TriggerNodeUpdate(const sw::AttrSetChangeHint& rHint)
 
 void SwTextNode::TriggerNodeUpdate(const SwFormatChangeHint& rHint)
 {
-    assert(!rHint.m_pOldFormat || dynamic_cast<const SwTextFormatColl*>(rHint.m_pOldFormat));
-    assert(!rHint.m_pNewFormat || dynamic_cast<const SwTextFormatColl*>(rHint.m_pNewFormat));
-    const SwTextFormatColl* pTxtFmtColOld = static_cast<const SwTextFormatColl*>(
-            rHint.m_pOldFormat);
-    const SwTextFormatColl* pTxtFmtColNew = static_cast<const SwTextFormatColl*>(
-            rHint.m_pNewFormat);
+    sw::TextNodeNotificationSuppressor(*this);
+
+    // Override Modify so that deleting styles works properly (outline
+    // numbering!).
+    // Never call ChgTextCollUpdateNum for Nodes in Undo.
+    if( rHint.m_pOldFormat
+            && rHint.m_pNewFormat
+            && GetRegisteredIn() == rHint.m_pNewFormat
+            && GetNodes().IsDocNodes() )
     {
-        sw::TextNodeNotificationSuppressor(*this);
-
-        // Override Modify so that deleting styles works properly (outline
-        // numbering!).
-        // Never call ChgTextCollUpdateNum for Nodes in Undo.
-        if( GetRegisteredIn() == rHint.m_pNewFormat
-                && GetNodes().IsDocNodes() )
+        assert(dynamic_cast<const SwTextFormatColl*>(rHint.m_pNewFormat));
+        if (const SwTextFormatColl* pTxtFmtColOld = dynamic_cast<const SwTextFormatColl*>(rHint.m_pOldFormat))
         {
-            if (pTxtFmtColOld)
-            {
-                ChgTextCollUpdateNum(pTxtFmtColOld, pTxtFmtColNew);
-            }
+            ChgTextCollUpdateNum(
+                pTxtFmtColOld, static_cast<const SwTextFormatColl*>(rHint.m_pNewFormat));
         }
+    }
 
-        // reset fill information
-        if (maFillAttributes)
-        {
-            maFillAttributes.reset();
-        }
+    // reset fill information
+    if (maFillAttributes && rHint.m_pNewFormat)
+    {
+        // ..on format change (e.g. style changed)
+        maFillAttributes.reset();
+    }
 
-        if ( !mbInSetOrResetAttr )
-        {
-            HandleModifyAtTextNodeFormatChange( *this );
-        }
+    if ( !mbInSetOrResetAttr )
+    {
+        HandleModifyAtTextNodeFormatChange( *this );
+    }
 
-        SwContentNode::SwClientNotify(*this, rHint);
+    SwContentNode::SwClientNotify(*this, rHint);
 
-        SwDoc& rDoc = GetDoc();
-        // #125329# - assure that text node is in document nodes array
-        if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
-        {
-            rDoc.GetNodes().UpdateOutlineNode(*this);
-        }
+    SwDoc& rDoc = GetDoc();
+    // #125329# - assure that text node is in document nodes array
+    if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+    {
+        rDoc.GetNodes().UpdateOutlineNode(*this);
     }
 }
 

@@ -102,9 +102,13 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
     }
     if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
-        SwFlyFrame::SwClientNotify(rMod, rHint);
-        if(GetAnchorFrame())
-            AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
+        auto pFormatChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if (pFormatChangeHint->m_pNewFormat)
+        {
+            SwFlyFrame::SwClientNotify(rMod, rHint);
+            if(GetAnchorFrame())
+                AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
+        }
         return;
     }
     if (rHint.GetId() == SfxHintId::SwAttrSetChange)
