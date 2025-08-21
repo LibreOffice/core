@@ -376,9 +376,9 @@ public:
     SD_DLLPUBLIC void removeAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
     void removeAnnotationNoNotify(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation) override;
 
-    void setLinkAnnotations(std::vector<std::pair<basegfx::B2DRectangle, OUString>> aLinks)
+    void setLinkAnnotations(const std::vector<std::pair<basegfx::B2DRectangle, OUString>>& rLinks)
     {
-        maLinkAnnotations = aLinks;
+        maLinkAnnotations = rLinks;
     }
     const std::vector<std::pair<basegfx::B2DRectangle, OUString>>& getLinkAnnotations() const
     {
