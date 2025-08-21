@@ -186,7 +186,7 @@ sal_Int32 VtableFactory::BaseOffset::calculate(
     typelib_InterfaceTypeDescription * type, sal_Int32 offset)
 {
     OUString name(type->aBase.pTypeName);
-    if (m_map.find(name) == m_map.end()) {
+    if (!m_map.contains(name)) {
         for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
             offset = calculate(type->ppBaseTypes[i], offset);
         }
