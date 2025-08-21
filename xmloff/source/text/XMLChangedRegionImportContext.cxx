@@ -103,7 +103,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImport
             switch (rAttribute.getToken())
             {
                 case XML_ELEMENT(LO_EXT, XML_STYLE_NAME):
-                    m_aAutoStyleName = rAttribute.toString();
+                    m_aStyleName = rAttribute.toString();
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("xmloff", rAttribute);
@@ -157,15 +157,17 @@ void XMLChangedRegionImportContext::SetChangeInfo(
 {
     // If the format redline has an autostyle, look up the internal 'auto name'.
     OUString aAutoName;
-    if (!m_aAutoStyleName.isEmpty())
+    if (!m_aStyleName.isEmpty())
     {
         rtl::Reference<XMLTextImportHelper> xHelper = GetImport().GetTextImport();
         // Map the XML-level automatic style name (e.g. T1) to an 'auto name' that exists in the
         // char auto style pool (e.g. 3cb7b270).
-        XMLPropStyleContext* pStyle = xHelper->FindAutoCharStyle(m_aAutoStyleName);
+        XMLPropStyleContext* pStyle = xHelper->FindAutoCharStyle(m_aStyleName);
+        // Split m_aStyleName into a named character style and an autostyle.
         if (pStyle)
         {
             pStyle->GetAutoName() >>= aAutoName;
+            m_aStyleName = pStyle->GetParentName();
         }
     }
 
@@ -173,7 +175,7 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     if (::sax::Converter::parseDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, rMovedID, bMergeLastPara, aAutoName);
+            rType, sID, rAuthor, rComment, aDateTime, rMovedID, bMergeLastPara, m_aStyleName, aAutoName);
     }
 }
 

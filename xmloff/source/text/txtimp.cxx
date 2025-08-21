@@ -2328,7 +2328,8 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const util::DateTime& /*rDateTime*/,
                                       const OUString& /*rMovedID*/,
                                       bool /*bMergeLastPara*/,
-                                      const OUString& /*rAutoStyleName*/)
+                                      const OUString& /*rStyleName*/,
+                                      const OUString& /*rAutoName*/)
 {
     // dummy implementation: do nothing
 }
