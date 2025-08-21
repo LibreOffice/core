@@ -19,6 +19,8 @@ pdfium_patches += constexpr-template.patch
 pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
+# expose this mapping information
+pdfium_patches += tounicodeinfo.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 

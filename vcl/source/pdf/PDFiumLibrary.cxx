@@ -421,6 +421,7 @@ public:
     int getFontAngle() override;
     PFDiumFont getFont() override;
     bool getFontData(PFDiumFont font, std::vector<uint8_t>& rData) override;
+    bool getFontToUnicode(PFDiumFont font, std::vector<uint8_t>& rData) override;
     bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
@@ -1181,6 +1182,23 @@ bool PDFiumPageObjectImpl::getFontData(PFDiumFont font, std::vector<uint8_t>& rD
     }
     rData.resize(buflen);
     bOk = FPDFFont_GetFontData(pFontObject, rData.data(), rData.size(), &buflen);
+    assert(bOk && rData.size() == buflen);
+    return bOk;
+}
+
+bool PDFiumPageObjectImpl::getFontToUnicode(PFDiumFont font, std::vector<uint8_t>& rData)
+{
+    FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
+
+    size_t buflen(0);
+    bool bOk = FPDFFont_GetToUnicodeContent(pFontObject, nullptr, 0, &buflen);
+    if (!bOk)
+    {
+        SAL_WARN("vcl.filter", "PDFiumImpl: failed to get font data");
+        return false;
+    }
+    rData.resize(buflen);
+    bOk = FPDFFont_GetToUnicodeContent(pFontObject, rData.data(), rData.size(), &buflen);
     assert(bOk && rData.size() == buflen);
     return bOk;
 }
