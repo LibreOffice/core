@@ -625,6 +625,14 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
             else if (pNew)
             {
+                const SwFormatFrameSize &rSz = static_cast<const SwFormatFrameSize&>(*pNew);
+
+                {
+                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+                    aFrm.Height( std::max( rSz.GetHeight(), tools::Long(MINLAY) ) );
+                    aFrm.Width ( std::max( rSz.GetWidth(),  tools::Long(MINLAY) ) );
+                }
+
                 if ( GetUpper() )
                 {
                     static_cast<SwRootFrame*>(GetUpper())->CheckViewLayout( nullptr, nullptr );
