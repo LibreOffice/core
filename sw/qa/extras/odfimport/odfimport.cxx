@@ -1545,6 +1545,21 @@ CPPUNIT_TEST_FIXTURE(Test, testWindowsFileZone)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf167774)
+{
+    createSwDoc("tdf167774.odt");
+
+    CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
+
+    for (int i = 1; i <= 4; ++i)
+    {
+        // Without the fix in place, this test would have failed with
+        // - Expected: 9
+        // - Actual  : 10.8
+        CPPUNIT_ASSERT_EQUAL(float(9), getProperty<float>(getParagraph(i), u"CharHeight"_ustr));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmptyTrailingSpans)
 {
     createSwDoc("emptyParagraphLoosesFontHeight.fodt");
