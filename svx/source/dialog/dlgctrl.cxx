@@ -55,7 +55,7 @@ using namespace ::com::sun::star::accessibility;
 
 Bitmap& SvxRectCtl::GetRectBitmap()
 {
-    if( !maBitmap.IsEmpty() )
+    if( maBitmap.IsEmpty() )
         InitRectBitmap();
 
     return maBitmap;
