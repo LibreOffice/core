@@ -14,7 +14,7 @@
     <string name="file_icon_desc">fileicon</string>
     <string name="title_recents">Fichiers récents</string>
     <string name="title_browser">Tous les fichiers</string>
-    <string name="pref_category_general">Général</string>
+    <string name="pref_category_general">Standard</string>
     <string name="create_file">Créer un nouveau fichier</string>
     <string name="new_textdocument">Nouveau document texte</string>
     <string name="new_presentation">Nouvelle présentation</string>
