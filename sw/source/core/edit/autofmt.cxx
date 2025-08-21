@@ -1504,7 +1504,9 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     bool bIsShortBullet = sStrWithTrailingBlanks == "* " || sStrWithTrailingBlanks == "- ";
     sal_uInt16 nMinLen = bIsShortBullet ? 1 : 2;
 
-    DeleteLeadingTrailingBlanks();
+    // only delete blanks if something else (numbering or style) is going to be changed
+    if (m_aFlags.bSetNumRule || !m_aFlags.bAFormatByInput || m_aFlags.bReplaceStyles)
+        DeleteLeadingTrailingBlanks();
 
     bool bChgBullet = false, bChgEnum = false;
     TextFrameIndex nAutoCorrPos(0);
