@@ -47,46 +47,36 @@ public:
     typedef E             key_type;
     typedef size_t        size_type;
 
-    static const size_type max_index = static_cast<size_type>(E::LAST);
+    static constexpr size_type size() { return static_cast<size_type>(E::LAST) + 1; };
 
-    typedef typename std::array<V, max_index + 1>::iterator iterator;
-    typedef typename std::array<V, max_index + 1>::const_iterator const_iterator;
+    typedef typename std::array<V, size()>::iterator iterator;
+    typedef typename std::array<V, size()>::const_iterator const_iterator;
 
     template <std::convertible_to<V>... T>
-        requires(sizeof...(T) == max_index + 1)
+        requires(sizeof...(T) == size())
     constexpr enumarray(T&&... args)
-        : detail_values{ std::forward<T>(args)... }
+        : values{ std::forward<T>(args)... }
     {
     }
 
     // coverity[uninit_ctor] - by design:
     enumarray() {}
 
-    const V& operator[](E index) const
-    {
-        assert(index>=static_cast<E>(0) && index<=E::LAST);
-        return detail_values[static_cast<size_type>(index)];
-    }
+    constexpr const V& operator[](E key) const { return values[static_cast<size_type>(key)]; }
 
-    V& operator[](E index)
-    {
-        assert(index>=static_cast<E>(0) && index<=E::LAST);
-        return detail_values[static_cast<size_type>(index)];
-    }
+    constexpr V& operator[](E key) { return values[static_cast<size_type>(key)]; }
 
-    void fill(V val)
-    { for (size_type i=0; i<=max_index; ++i) detail_values[i] = val; }
+    constexpr void fill(const V& val) { values.fill(val); }
 
-    static size_type size()        { return max_index + 1; }
-    iterator         begin()       { return detail_values.begin(); }
-    iterator         end()         { return detail_values.end(); }
-    const_iterator   begin() const { return detail_values.begin(); }
-    const_iterator   end() const   { return detail_values.end(); }
+    constexpr iterator         begin()       { return values.begin(); }
+    constexpr iterator         end()         { return values.end(); }
+    constexpr const_iterator   begin() const { return values.begin(); }
+    constexpr const_iterator   end() const   { return values.end(); }
 
-    V*               data()       { return detail_values.data(); }
+    constexpr V*               data()       { return values.data(); }
 
 private:
-    std::array<V, max_index + 1> detail_values;
+    std::array<V, size()> values;
 };
 
 }; // namespace o3tl
