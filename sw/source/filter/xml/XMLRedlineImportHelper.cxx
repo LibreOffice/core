@@ -44,6 +44,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
 #include <istyleaccess.hxx>
+#include <unocrsrhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -191,7 +192,8 @@ public:
     util::DateTime aDateTime;       // change DateTime
     OUString sMovedID;              // change move id string
     bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
-    OUString m_aAutoStyleName;
+    OUString m_aStyleName;
+    OUString m_aAutoName;
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
 
@@ -374,7 +376,8 @@ void XMLRedlineImportHelper::Add(
     const util::DateTime& rDateTime,
     const OUString& rMovedID,
     bool bMergeLastPara,
-    const OUString& rAutoStyleName)
+    const OUString& rStyleName,
+    const OUString& rAutoName)
 {
     // we need to do the following:
     // 1) parse type string
@@ -413,7 +416,8 @@ void XMLRedlineImportHelper::Add(
     pInfo->aDateTime = rDateTime;
     pInfo->sMovedID = rMovedID;
     pInfo->bMergeLastParagraph = bMergeLastPara;
-    pInfo->m_aAutoStyleName = rAutoStyleName;
+    pInfo->m_aStyleName = rStyleName;
+    pInfo->m_aAutoName = rAutoName;
 
     //reserve MoveID so it won't be reused by others
     if (!rMovedID.isEmpty())
@@ -794,18 +798,29 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // Create the redline's extra data if we have a matching autostyle.
-        if (!pRedlineInfo->m_aAutoStyleName.isEmpty())
+        std::shared_ptr<SfxItemSet> pAutoStyle;
+        IStyleAccess& rStyleAccess = pDoc->GetIStyleAccess();
+        if (!pRedlineInfo->m_aStyleName.isEmpty())
         {
-            IStyleAccess& rStyleAccess = pDoc->GetIStyleAccess();
-            std::shared_ptr<SfxItemSet> pAutoStyle = rStyleAccess.getByName(
-                pRedlineInfo->m_aAutoStyleName, IStyleAccess::AUTO_STYLE_CHAR);
-            if (pAutoStyle)
-            {
-                sal_uInt16 nPoolFormatId = USHRT_MAX;
-                SwRedlineExtraData_FormatColl aExtraData(u""_ustr, nPoolFormatId, pAutoStyle);
-                // aExtraData is copied here.
-                pRedline->SetExtraData(&aExtraData);
-            }
+            // Named character style.
+            SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aItemSet(pDoc->GetAttrPool());
+            uno::Any aStyleName;
+            aStyleName <<= pRedlineInfo->m_aStyleName;
+            SwUnoCursorHelper::SetCharStyle(*pDoc, aStyleName, aItemSet);
+            pAutoStyle = rStyleAccess.getAutomaticStyle(aItemSet, IStyleAccess::AUTO_STYLE_CHAR);
+        }
+        else if (!pRedlineInfo->m_aAutoName.isEmpty())
+        {
+            // Just a set of character properties with an automatic name.
+            pAutoStyle
+                = rStyleAccess.getByName(pRedlineInfo->m_aAutoName, IStyleAccess::AUTO_STYLE_CHAR);
+        }
+        if (pAutoStyle)
+        {
+            sal_uInt16 nPoolFormatId = USHRT_MAX;
+            SwRedlineExtraData_FormatColl aExtraData(u""_ustr, nPoolFormatId, pAutoStyle);
+            // aExtraData is copied here.
+            pRedline->SetExtraData(&aExtraData);
         }
 
         // set redline mode (without doing the associated book-keeping)

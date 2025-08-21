@@ -15,6 +15,8 @@
 #include <docsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
+#include <wrtsh.hxx>
+#include <fchrfmt.hxx>
 
 namespace
 {
@@ -122,6 +124,35 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteThenFormatOdtImport)
     const SwRedlineData& rInnerRedlineData = *rRedlineData1.Next();
     CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rInnerRedlineData.GetType());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlines[2]->GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatCharStyleChangeOdtImport)
+{
+    // Given a document with a format redline, containing a char style change (strong -> quote):
+    // When importing that document:
+    createSwDoc("format-char-style-change.odt");
+
+    // Then make sure the model has the new style name, the redline has the old style name:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aSet(pDoc->GetAttrPool());
+    pWrtShell->GetCurAttr(aSet);
+    const SwFormatCharFormat& rNewCharFormat = aSet.Get(RES_TXTATR_CHARFMT);
+    CPPUNIT_ASSERT_EQUAL(u"Quote Char"_ustr, rNewCharFormat.GetCharFormat()->GetName());
+    const IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    const SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlineTable.size());
+    const SwRangeRedline* pRedline = rRedlineTable[0];
+    auto pExtraData = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pRedline->GetExtraData());
+    // Without the accompanying fix in place, this test would have failed, the format redline didn't
+    // contain the old style name.
+    CPPUNIT_ASSERT(pExtraData);
+    std::shared_ptr<SfxItemSet> pRedlineSet = pExtraData->GetItemSet();
+    CPPUNIT_ASSERT(pRedlineSet);
+    const SwFormatCharFormat& rOldCharFormat = pRedlineSet->Get(RES_TXTATR_CHARFMT);
+    CPPUNIT_ASSERT_EQUAL(u"Strong Emphasis"_ustr, rOldCharFormat.GetCharFormat()->GetName());
 }
 }
 

@@ -49,7 +49,7 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     /// merge-last-paragraph flag
     bool bMergeLastPara;
 
-    OUString m_aAutoStyleName;
+    OUString m_aStyleName;
 
 public:
 
