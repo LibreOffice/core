@@ -1292,8 +1292,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 
         /* we should remove <?xml version="1.0" encoding="UTF-8"?>
         XML declaration from the string as rStrm.PushStream() already adds it. */
-        sal_uInt32 nXmlDeclarationLocation = sXmlMapsContent.find(">");
-        sXmlMapsContent = sXmlMapsContent.substr(nXmlDeclarationLocation + 1);
+        const std::size_t nXmlDeclarationLocation = sXmlMapsContent.find("?>");
+
+        // but there may not be an XML declaration, we should also check that.
+        if (nXmlDeclarationLocation != std::string::npos)
+            sXmlMapsContent = sXmlMapsContent.substr(nXmlDeclarationLocation + 2);
 
         // write contents into xl/xmlMaps.xml
         rStrm.GetCurrentStream()->write(sXmlMapsContent);
