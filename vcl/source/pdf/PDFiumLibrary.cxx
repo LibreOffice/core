@@ -416,6 +416,7 @@ public:
     basegfx::B2DRectangle getBounds() override;
     double getFontSize() override;
     OUString getFontName() override;
+    OUString getBaseFontName() override;
     int getFontAngle() override;
     bool getFontData(std::vector<uint8_t>& rData) override;
     bool getFontProperties(FontWeight& weight) override;
@@ -1139,6 +1140,21 @@ double PDFiumPageObjectImpl::getFontSize()
     float nSize{};
     FPDFTextObj_GetFontSize(mpPageObject, &nSize);
     return nSize;
+}
+
+OUString PDFiumPageObjectImpl::getBaseFontName()
+{
+    OUString sBaseFontName;
+    const int nBaseFontName = 80 + 1;
+    std::unique_ptr<char[]> pBaseFontName(new char[nBaseFontName]); // + terminating null
+    FPDF_FONT pFontObject = FPDFTextObj_GetFont(mpPageObject);
+    int nBaseFontNameChars
+        = FPDFFont_GetBaseFontName(pFontObject, pBaseFontName.get(), nBaseFontName);
+    if (nBaseFontName >= nBaseFontNameChars)
+    {
+        sBaseFontName = OUString::createFromAscii(pBaseFontName.get());
+    }
+    return sBaseFontName;
 }
 
 OUString PDFiumPageObjectImpl::getFontName()
