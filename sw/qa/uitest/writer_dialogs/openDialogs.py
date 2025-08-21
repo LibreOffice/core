@@ -121,6 +121,7 @@ dialogs = [
     {"command": ".uno:ShowLicense", "closeButton": "close", "skipTestOK": True},
     # {"command": ".uno:About", "closeButton": "close"},
         # tested in sw/qa/uitest/writer_tests5/about_test.py
+    {"command": ".uno:UIPicker", "closeButton": "cancel"},
 ]
 
 def load_tests(loader, tests, pattern):
