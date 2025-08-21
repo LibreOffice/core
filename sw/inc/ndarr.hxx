@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include <tuple>
 
 #include "bparr.hxx"
 #include "ndtyp.hxx"
@@ -39,6 +40,7 @@ class SwAttrSet;
 class SfxItemSet;
 class SwContentNode;
 class SwDoc;
+class SwFrameFormat;
 class SwGrfFormatColl;
 class SwGrfNode;
 class SwNode;
@@ -302,11 +304,14 @@ public:
        Is the flag bCalcNewSize set to TRUE, the new SSize for both
        tables is calculated from the Maximum of the boxes, provided
        SSize is set "absolute" (LONG_MAX).
-       (Momentarily this is needed only for the RTF-parser.) */
+     */
     SwTableNode* SplitTable( SwNode& rPos, bool bAfter = true,
                                 bool bCalcNewSize = false );
+    void SplitFloatingTableFrame(SwTableNode & rNewTableNode,
+        ::std::tuple<SwStartNode &, SwFrameFormat &, SwTextNode &> floatingFrame);
     /// Two Tables that are following one another are merged.
     bool MergeTable( SwNode& rPos, bool bWithPrev = true );
+    void MergeFloatingTableFrame(SwNodeOffset nEndOfOldFlyIndex);
 
     /// Insert a new SwSection.
     SwSectionNode* InsertTextSection(SwNode& rNd,

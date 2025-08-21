@@ -319,7 +319,12 @@ public:
 
 class SwUndoSplitTable final : public SwUndo
 {
+public:
+    enum class FloatingMode { Not, FloatingAnchoredAfter, FloatingAnchoredBefore };
+
+private:
     SwNodeOffset m_nTableNode, m_nOffset;
+    FloatingMode m_eFloatingMode;
     std::unique_ptr<SwSaveRowSpan> mpSaveRowSpan; // stores row span values at the splitting row
     std::unique_ptr<SaveTable> m_pSavedTable;
     std::unique_ptr<SwHistory> m_pHistory;
@@ -329,7 +334,7 @@ class SwUndoSplitTable final : public SwUndo
 
 public:
     SwUndoSplitTable( const SwTableNode& rTableNd, std::unique_ptr<SwSaveRowSpan> pRowSp,
-            SplitTable_HeadlineOption nMode, bool bCalcNewSize );
+            SplitTable_HeadlineOption nMode, bool bCalcNewSize, FloatingMode eMode);
 
     virtual ~SwUndoSplitTable() override;
 
