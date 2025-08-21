@@ -19,13 +19,15 @@
 
 #include <sal/config.h>
 
-#include <cstring>
+#include <algorithm>
+#include <span>
+#include <string_view>
 
+#include <rtl/character.hxx>
 #include <rtl/tencinfo.h>
 
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
-#include <memory>
 
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
@@ -37,82 +39,18 @@ sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 
 /* ======================================================================= */
 
-static void Impl_toAsciiLower( const char* pName, char* pBuf )
-{
-    while ( *pName )
-    {
-        /* A-Z */
-        if ( (*pName >= 0x41) && (*pName <= 0x5A) )
-            *pBuf = (*pName)+0x20;  /* toAsciiLower */
-        else
-            *pBuf = *pName;
-
-        pBuf++;
-        pName++;
-    }
-
-    *pBuf = '\0';
-}
-
-/* ----------------------------------------------------------------------- */
-
-static void Impl_toAsciiLowerAndRemoveNonAlphanumeric( const char* pName, char* pBuf )
-{
-    while ( *pName )
-    {
-        /* A-Z */
-        if ( (*pName >= 0x41) && (*pName <= 0x5A) )
-        {
-            *pBuf = (*pName)+0x20;  /* toAsciiLower */
-            pBuf++;
-        }
-        /* a-z, 0-9 */
-        else if ( ((*pName >= 0x61) && (*pName <= 0x7A)) ||
-                  ((*pName >= 0x30) && (*pName <= 0x39)) )
-        {
-            *pBuf = *pName;
-            pBuf++;
-        }
-
-        pName++;
-    }
-
-    *pBuf = '\0';
-}
-
-/* ----------------------------------------------------------------------- */
-
-/* pMatchStr must match with all characters in pCompStr */
-static bool Impl_matchString( const char* pCompStr, const char* pMatchStr )
-{
-    /* We test only for end in MatchStr, because the last 0 character from */
-    /* pCompStr is unequal a character in MatchStr, so the loop terminates */
-    while ( *pMatchStr )
-    {
-        if ( *pCompStr != *pMatchStr )
-            return false;
-
-        pCompStr++;
-        pMatchStr++;
-    }
-
-    return true;
-}
-
-/* ======================================================================= */
-
 namespace {
 
 struct ImplStrCharsetDef
 {
-    const char*             mpCharsetStr;
+    std::string_view mpCharsetStr;
     rtl_TextEncoding        meTextEncoding;
 };
 
 struct ImplStrFirstPartCharsetDef
 {
-    const char*             mpCharsetStr;
-    const ImplStrCharsetDef*    mpSecondPartTab;
+    std::string_view mpCharsetStr;
+    std::span<const ImplStrCharsetDef> mpSecondPartTab;
 };
 
 }
@@ -210,7 +148,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
     /* for the first matching string in the tables. */
     /* Sort order: unique (first 14, then 1), important */
 
-    static ImplStrCharsetDef const aUnixCharsetISOTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetISOTab[] =
     {
         { "15", RTL_TEXTENCODING_ISO_8859_15 },
         { "14", RTL_TEXTENCODING_ISO_8859_14 },
@@ -226,16 +164,14 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "7", RTL_TEXTENCODING_ISO_8859_7 },
         { "8", RTL_TEXTENCODING_ISO_8859_8 },
         { "9", RTL_TEXTENCODING_ISO_8859_9 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetADOBETab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetADOBETab[] =
     {
         { "fontspecific", RTL_TEXTENCODING_SYMBOL },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetMSTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetMSTab[] =
     {
         { "1252", RTL_TEXTENCODING_MS_1252 },
         { "1250", RTL_TEXTENCODING_MS_1250 },
@@ -265,10 +201,9 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "cp949", RTL_TEXTENCODING_MS_949 },
         { "cp950", RTL_TEXTENCODING_MS_950 },
         { "cp1361", RTL_TEXTENCODING_MS_1361 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetIBMTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetIBMTab[] =
     {
         { "437", RTL_TEXTENCODING_IBM_437 },
         { "850", RTL_TEXTENCODING_IBM_850 },
@@ -288,95 +223,90 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { "874", RTL_TEXTENCODING_MS_874 },
         { "1004", RTL_TEXTENCODING_MS_1252 },
         { "65400", RTL_TEXTENCODING_SYMBOL },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetKOI8Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetKOI8Tab[] =
     {
         { "r", RTL_TEXTENCODING_KOI8_R },
         { "u", RTL_TEXTENCODING_KOI8_U },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetJISX0208Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetJISX0208Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_JIS_X_0208 }
+        { {}, RTL_TEXTENCODING_JIS_X_0208 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetJISX0201Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetJISX0201Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_JIS_X_0201 }
+        { {}, RTL_TEXTENCODING_JIS_X_0201 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetJISX0212Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetJISX0212Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_JIS_X_0212 }
+        { {}, RTL_TEXTENCODING_JIS_X_0212 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetGBTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetGBTab[] =
     {
-        { nullptr, RTL_TEXTENCODING_GB_2312 }
+        { {}, RTL_TEXTENCODING_GB_2312 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetGBKTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetGBKTab[] =
     {
-        { nullptr, RTL_TEXTENCODING_GBK }
+        { {}, RTL_TEXTENCODING_GBK }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetBIG5Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetBIG5Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_BIG5 }
+        { {}, RTL_TEXTENCODING_BIG5 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetKSC56011987Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetKSC56011987Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_EUC_KR }
+        { {}, RTL_TEXTENCODING_EUC_KR }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetKSC56011992Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetKSC56011992Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_MS_1361 }
+        { {}, RTL_TEXTENCODING_MS_1361 }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetISO10646Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetISO10646Tab[] =
     {
-        { nullptr, RTL_TEXTENCODING_UNICODE }
+        { {}, RTL_TEXTENCODING_UNICODE }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetUNICODETab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetUNICODETab[] =
     {
 /* Currently every Unicode Encoding is for us Unicode */
 /*        { "fontspecific", RTL_TEXTENCODING_UNICODE }, */
-        { nullptr, RTL_TEXTENCODING_UNICODE }
+        { {}, RTL_TEXTENCODING_UNICODE }
     };
 
-    static ImplStrCharsetDef const aUnixCharsetSymbolTab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetSymbolTab[] =
     {
-        { nullptr, RTL_TEXTENCODING_SYMBOL }
+        { {}, RTL_TEXTENCODING_SYMBOL }
     };
 
     /* See <http://cvs.freedesktop.org/xorg/xc/fonts/encodings/iso8859-11.enc?
        rev=1.1.1.1>: */
-    static ImplStrCharsetDef const aUnixCharsetTIS620Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetTIS620Tab[] =
     {
         { "0", RTL_TEXTENCODING_TIS_620 },
         { "2529", RTL_TEXTENCODING_TIS_620 },
         { "2533", RTL_TEXTENCODING_TIS_620 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
-    static ImplStrCharsetDef const aUnixCharsetTIS6202529Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetTIS6202529Tab[] =
     {
         { "1", RTL_TEXTENCODING_TIS_620 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
-    static ImplStrCharsetDef const aUnixCharsetTIS6202533Tab[] =
+    static constexpr ImplStrCharsetDef aUnixCharsetTIS6202533Tab[] =
     {
         { "0", RTL_TEXTENCODING_TIS_620 },
         { "1", RTL_TEXTENCODING_TIS_620 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    static ImplStrFirstPartCharsetDef const aUnixCharsetFirstPartTab[] =
+    static constexpr ImplStrFirstPartCharsetDef aUnixCharsetFirstPartTab[] =
     {
         { "iso8859", aUnixCharsetISOTab },
         { "adobe", aUnixCharsetADOBETab },
@@ -407,66 +337,40 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
 /*        { "sunudcko.1997",  },        */
 /*        { "sunudczh.1997",  },        */
 /*        { "sunudczhtw.1997",  },      */
-        { nullptr, nullptr }
     };
 
-    rtl_TextEncoding    eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    char*           pTempBuf;
-    sal_uInt32          nBufLen = strlen( pUnixCharset )+1;
-    const char*     pFirstPart;
-    const char*     pSecondPart;
-
-    /* Alloc Buffer and map to lower case */
-    std::unique_ptr<char[]> pBuf(new char[nBufLen]);
-    Impl_toAsciiLower( pUnixCharset, pBuf.get() );
-
-    /* Search FirstPart */
-    pFirstPart = pBuf.get();
-    pSecondPart = nullptr;
-    pTempBuf = pBuf.get();
-    while ( *pTempBuf )
-    {
-        if ( *pTempBuf == '-' )
-        {
-            *pTempBuf = '\0';
-            pSecondPart = pTempBuf+1;
-            break;
-        }
-
-        pTempBuf++;
-    }
+    const std::string_view charset(pUnixCharset);
+    const size_t dashPos = charset.find('-');
+    if (dashPos == std::string_view::npos)
+        return RTL_TEXTENCODING_DONTKNOW;
 
     /* found part separator */
-    if ( pSecondPart )
+    /* Alloc Buffer and map to lower case */
+    char buf1[20]; // more than enough to compare the longest prefix here, which is 14 chars
+    std::string_view part1 = charset.substr(0, std::min(dashPos, size_t(20)));
+    std::transform(part1.begin(), part1.end(), buf1, rtl::toAsciiLowerCase<unsigned char>);
+    part1 = { buf1, part1.size() };
+
+    char buf2[20]; // more than enough to compare the longest postfix here, which is 13 chars
+    std::string_view part2 = charset.substr(dashPos + 1, 20);
+    std::transform(part2.begin(), part2.end(), buf2, rtl::toAsciiLowerCase<unsigned char>);
+    part2 = { buf2, part2.size() };
+
+    /* Search for the part tab */
+    for (const auto& rFirstPartData : aUnixCharsetFirstPartTab)
     {
-        /* Search for the part tab */
-        const ImplStrFirstPartCharsetDef* pFirstPartData = aUnixCharsetFirstPartTab;
-        while ( pFirstPartData->mpCharsetStr )
+        if (part1.starts_with(rFirstPartData.mpCharsetStr))
         {
-            if ( Impl_matchString( pFirstPart, pFirstPartData->mpCharsetStr ) )
-            {
-                /* Search for the charset in the second part tab */
-                const ImplStrCharsetDef* pData = pFirstPartData->mpSecondPartTab;
-                while ( pData->mpCharsetStr )
-                {
-                    if ( Impl_matchString( pSecondPart, pData->mpCharsetStr ) )
-                    {
-                        break;
-                    }
+            /* Search for the charset in the second part tab */
+            for (const auto& rData : rFirstPartData.mpSecondPartTab)
+                if (part2.starts_with(rData.mpCharsetStr)) // empty mpCharsetStr matches always
+                    return rData.meTextEncoding;
 
-                    pData++;
-                }
-
-                /* use default encoding for first part */
-                eEncoding = pData->meTextEncoding;
-                break;
-            }
-
-            pFirstPartData++;
+            return RTL_TEXTENCODING_DONTKNOW;
         }
     }
 
-    return eEncoding;
+    return RTL_TEXTENCODING_DONTKNOW;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -477,7 +381,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
     /* characters. The function search for the first equal string in */
     /* the table. In this table are only the most used mime types. */
     /* Sort order: important */
-    static ImplStrCharsetDef const aVIPMimeCharsetTab[] =
+    static constexpr ImplStrCharsetDef aVIPMimeCharsetTab[] =
     {
         { "usascii", RTL_TEXTENCODING_ASCII_US },
         { "utf8", RTL_TEXTENCODING_UTF8 },
@@ -519,14 +423,13 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
         { "windows1256", RTL_TEXTENCODING_MS_1256 },
         { "windows1257", RTL_TEXTENCODING_MS_1257 },
         { "windows1258", RTL_TEXTENCODING_MS_1258 },
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
     /* All Identifiers are in lower case and contain only alphanumeric */
     /* characters. The function search for the first matching string in */
     /* the table. */
     /* Sort order: unique (first iso885914, then iso88591), important */
-    static ImplStrCharsetDef const aMimeCharsetTab[] =
+    static constexpr ImplStrCharsetDef aMimeCharsetTab[] =
     {
         { "unicode11utf7", RTL_TEXTENCODING_UTF7 },
         { "caunicode11utf7", RTL_TEXTENCODING_UTF7 },
@@ -737,46 +640,27 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const char* pMimeC
         { "xisciide", RTL_TEXTENCODING_ISCII_DEVANAGARI },
             /* This is not an official MIME character set name, but is in use by
                various windows APIs. */
-        { nullptr, RTL_TEXTENCODING_DONTKNOW }
     };
 
-    rtl_TextEncoding            eEncoding = RTL_TEXTENCODING_DONTKNOW;
-    const ImplStrCharsetDef*    pData = aVIPMimeCharsetTab;
-    sal_uInt32                  nBufLen = strlen( pMimeCharset )+1;
-
     /* Alloc Buffer and map to lower case and remove non alphanumeric chars */
-    std::unique_ptr<char[]> pBuf(new char[nBufLen]);
-    Impl_toAsciiLowerAndRemoveNonAlphanumeric( pMimeCharset, pBuf.get() );
+    char buf[30]; // more than enough to compare the longest encoding name here, which is 23 chars
+    auto end = std::begin(buf);
+    for (const char* p = pMimeCharset; *p && end != std::end(buf); ++p)
+        if (rtl::isAsciiAlphanumeric<unsigned char>(*p))
+            *end++ = rtl::toAsciiLowerCase<unsigned char>(*p);
+    std::string_view charset(buf, end);
 
     /* Search for equal in the VIP table */
-    while ( pData->mpCharsetStr )
-    {
-        if ( strcmp( pBuf.get(), pData->mpCharsetStr ) == 0 )
-        {
-            eEncoding = pData->meTextEncoding;
-            break;
-        }
-
-        pData++;
-    }
+    for (const auto& rData : aVIPMimeCharsetTab)
+        if (charset == rData.mpCharsetStr)
+            return rData.meTextEncoding;
 
     /* Search for matching in the mime table */
-    if ( eEncoding == RTL_TEXTENCODING_DONTKNOW )
-    {
-        pData = aMimeCharsetTab;
-        while ( pData->mpCharsetStr )
-        {
-            if ( Impl_matchString( pBuf.get(), pData->mpCharsetStr ) )
-            {
-                eEncoding = pData->meTextEncoding;
-                break;
-            }
+    for (const auto& rData : aMimeCharsetTab)
+        if (charset.starts_with(rData.mpCharsetStr))
+            return rData.meTextEncoding;
 
-            pData++;
-        }
-    }
-
-    return eEncoding;
+    return RTL_TEXTENCODING_DONTKNOW;
 }
 
 /* ======================================================================= */
