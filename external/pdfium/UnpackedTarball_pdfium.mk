@@ -17,6 +17,8 @@ pdfium_patches += constexpr-template.patch
 pdfium_patches += freebsd.patch
 
 pdfium_patches += system-abseil.diff
+# expose this mapping information
+pdfium_patches += tounicodeinfo.patch.1
 
 pdfium_patches += system-fast_float.diff
 
