@@ -664,16 +664,18 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
     tools::Long nX, nY;
     bHasAlpha = aBitmap.HasAlpha();
 
-    data = static_cast<unsigned char*>(malloc( nWidth*nHeight*(bHasAlpha ? 4 : 3) ));
+    /// BOTH of the cairo formats use a 32-bit pixel.
+    auto nScanlineSize = nWidth*4;
+    data = static_cast<unsigned char*>(malloc(nHeight * nScanlineSize));
     if (!data)
         std::abort();
 
-    tools::Long nOff = 0;
     ::Color aColor;
 
     for( nY = 0; nY < nHeight; nY++ )
     {
         ::Scanline pReadScan;
+        tools::Long nOff = nY * nScanlineSize;
 
         switch( pBitmapReadAcc->GetScanlineFormat() )
         {
@@ -685,6 +687,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             {
                 aColor = pBitmapReadAcc->GetPaletteColor(*pReadScan++);
 #ifdef OSL_BIGENDIAN
+                data[ nOff++ ] = 0xff;
                 data[ nOff++ ] = aColor.GetRed();
                 data[ nOff++ ] = aColor.GetGreen();
                 data[ nOff++ ] = aColor.GetBlue();
@@ -692,6 +695,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
                 data[ nOff++ ] = aColor.GetBlue();
                 data[ nOff++ ] = aColor.GetGreen();
                 data[ nOff++ ] = aColor.GetRed();
+                data[ nOff++ ] = 0xff;
 #endif
             }
             break;
@@ -702,15 +706,17 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             for( nX = 0; nX < nWidth; nX++ )
             {
 #ifdef OSL_BIGENDIAN
-                data[ nOff + 3 ] = *pReadScan++;
+                data[ nOff + 3 ] = 0xff;
                 data[ nOff + 2 ] = *pReadScan++;
                 data[ nOff + 1 ] = *pReadScan++;
+                data[ nOff + 0 ] = *pReadScan++;
 #else
+                data[ nOff + 0 ] = *pReadScan++;
                 data[ nOff + 1 ] = *pReadScan++;
                 data[ nOff + 2 ] = *pReadScan++;
-                data[ nOff + 3 ] = *pReadScan++;
+                data[ nOff + 3 ] = 0xff;
 #endif
-                nOff += 3;
+                nOff += 4;
             }
             break;
         case ScanlineFormat::N24BitTcRgb:
@@ -720,15 +726,17 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             for( nX = 0; nX < nWidth; nX++ )
             {
 #ifdef OSL_BIGENDIAN
-                data[ nOff + 3 ] = *pReadScan++;
+                data[ nOff + 3 ] = 0xff;
                 data[ nOff + 2 ] = *pReadScan++;
                 data[ nOff + 1 ] = *pReadScan++;
+                data[ nOff + 0 ] = *pReadScan++;
 #else
+                data[ nOff + 0 ] = *pReadScan++;
                 data[ nOff + 1 ] = *pReadScan++;
                 data[ nOff + 2 ] = *pReadScan++;
-                data[ nOff + 3 ] = *pReadScan++;
+                data[ nOff + 3 ] = 0xff;
 #endif
-                nOff += 3;
+                nOff += 4;
             }
             break;
         case ScanlineFormat::N32BitTcBgra:
@@ -760,6 +768,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             for( nX = 0; nX < nWidth; nX++ )
             {
 #ifdef OSL_BIGENDIAN
+                data[ nOff++ ] = 0xff;
                 data[ nOff++ ] = pReadScan[ 2 ];
                 data[ nOff++ ] = pReadScan[ 1 ];
                 data[ nOff++ ] = pReadScan[ 0 ];
@@ -768,6 +777,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
                 data[ nOff++ ] = *pReadScan++;
                 data[ nOff++ ] = *pReadScan++;
                 data[ nOff++ ] = *pReadScan++;
+                data[ nOff++ ] = 0xff;
                 pReadScan++;
 #endif
             }
@@ -801,6 +811,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
             for( nX = 0; nX < nWidth; nX++ )
             {
 #ifdef OSL_BIGENDIAN
+                data[ nOff++ ] = 0xff;
                 data[ nOff++ ] = *pReadScan++;
                 data[ nOff++ ] = *pReadScan++;
                 data[ nOff++ ] = *pReadScan++;
@@ -809,6 +820,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
                 data[ nOff++ ] = pReadScan[ 2 ];
                 data[ nOff++ ] = pReadScan[ 1 ];
                 data[ nOff++ ] = pReadScan[ 0 ];
+                data[ nOff++ ] = 0xff;
                 pReadScan += 4;
 #endif
             }

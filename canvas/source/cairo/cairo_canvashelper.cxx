@@ -348,6 +348,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 tools::Long nHeight;
                 vcl::bitmap::CanvasCairoExtractBitmapData(aBitmap, data, bHasAlpha, nWidth, nHeight);
 
+                // both of the cairo formats use a 32-bit pixel
                 pSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
