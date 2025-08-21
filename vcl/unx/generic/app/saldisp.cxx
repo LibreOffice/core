@@ -419,7 +419,7 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
         XGCValues values;
         values.graphics_exposures   = False;
         values.fill_style           = FillOpaqueStippled;
-        values.background           = (1<<pSD->m_aVisual.GetDepth())-1;
+        values.background           = (sal_Int64(1) << pSD->m_aVisual.GetDepth()) - 1;
         values.foreground           = 0;
 
         pSD->m_aCopyGC       = XCreateGC( pDisp_,
@@ -2320,7 +2320,7 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
     GetXPixel( aColor, 0xFF, 0xFF, 0xFF );
     m_nWhitePixel = aColor.pixel;
 
-    m_nUsed = 1 << m_aVisual.GetDepth();
+    m_nUsed = sal_Int64(1) << m_aVisual.GetDepth();
 
     if( m_aVisual.GetClass() != PseudoColor )
         return;
