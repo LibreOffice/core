@@ -991,6 +991,8 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
 
 void PosSizePropertyPanel::DisableControls()
 {
+    const bool bZeroDimension = mlOldWidth == 0 || mlOldHeight == 0;
+
     if( mbPositionProtected )
     {
         // the position is protected("Position protect" option in modal dialog is checked),
@@ -1065,6 +1067,10 @@ void PosSizePropertyPanel::DisableControls()
             }
         }
     }
+
+    // tdf#150743 Disable Keep ratio if there is zero width/height
+    if (bZeroDimension)
+        mxCbxScale->set_sensitive(false);
 }
 
 void PosSizePropertyPanel::SetPosSizeMinMax(const Fraction& rUIScale)
