@@ -156,6 +156,7 @@ public:
     virtual basegfx::B2DRectangle getBounds() = 0;
     virtual double getFontSize() = 0;
     virtual OUString getFontName() = 0;
+    virtual OUString getBaseFontName() = 0;
     virtual int getFontAngle() = 0;
     virtual PFDiumFont getFont() = 0;
     virtual bool getFontData(PFDiumFont font, std::vector<uint8_t>& rData) = 0;
