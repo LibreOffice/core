@@ -1264,11 +1264,10 @@ UpdateCheck::setCheckFailedState()
 
 
 void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdateHandler,
+                                   const uno::Reference<beans::XPropertySet>& xMenuBarUI,
                                    UpdateState& eState,
                                    bool suppressBubble )
 {
-    uno::Reference<beans::XPropertySet> xMenuBarUI( m_xMenuBarUI );
-
     if ( ( UPDATESTATE_NO_UPDATE_AVAIL == eState ) && m_bHasExtensionUpdate )
         eState = UPDATESTATE_EXT_UPD_AVAIL;
 
@@ -1323,10 +1322,11 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
     OUString aImageName(m_aImageName);
+    uno::Reference<beans::XPropertySet> xMenuBarUI(m_xMenuBarUI);
 
     aGuard.unlock();
 
-    handleMenuBarUI( aUpdateHandler, eState, suppressBubble );
+    handleMenuBarUI(aUpdateHandler, xMenuBarUI, eState, suppressBubble);
 
     if( (UPDATESTATE_UPDATE_AVAIL == eState)
      || (UPDATESTATE_DOWNLOAD_PAUSED == eState)

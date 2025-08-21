@@ -148,6 +148,7 @@ private:
     /* This method turns on the menubar icon and triggers the bubble window
      */
     void handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdateHandler,
+                          const css::uno::Reference<css::beans::XPropertySet>& xMenuBarUI,
                           UpdateState& eState, bool suppressBubble );
     enum State {
         NOT_INITIALIZED,
