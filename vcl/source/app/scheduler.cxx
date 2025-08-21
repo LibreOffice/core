@@ -332,6 +332,11 @@ int Scheduler::GetMostUrgentTaskPriority()
                 if (nReadyPeriod == ImmediateTimeoutMs)
                 {
                     nMostUrgentPriority = nTaskPriority;
+                    // 0..4 (inclusive) is typically considered "high priority".
+                    SAL_INFO("vcl.schedule", "Scheduler::GetMostUrgentTaskPriority: reporting "
+                                                 << nMostUrgentPriority
+                                                 << " as the most urgent priority, task is '"
+                                                 << pTask->GetDebugName() << "'");
                     return nMostUrgentPriority;
                 }
             }

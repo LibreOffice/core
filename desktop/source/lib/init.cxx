@@ -3107,6 +3107,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             pDocument->maFontsMissing.insert(aFontMappingUseData[i].mOriginalFont);
         }
 
+        SAL_INFO("lok", "lo_documentLoadWithOptions: finished @ " << osl_getGlobalTimer());
         return pDocument;
     }
     catch (const uno::Exception& exception)
@@ -4436,6 +4437,12 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
 {
+    static bool bFirst = true;
+    if (bFirst)
+    {
+        bFirst = false;
+        SAL_INFO("lok", "doc_paintPartTile: first tile @ " << osl_getGlobalTimer());
+    }
     comphelper::ProfileZone aZone("doc_paintPartTile");
 
     SolarMutexGuard aGuard;
