@@ -13,6 +13,22 @@
     <property name="border-width">4</property>
     <property name="constrain-to">none</property>
     <child>
+    <object class="GtkTreeStore" id="liststore1">
+      <columns>
+        <!-- column-name pixbuf -->
+        <column type="GdkPixbuf"/>
+        <!-- column-name id -->
+        <column type="gchararray"/>
+      </columns>
+    </object>
+    <object class="GtkTreeStore" id="liststore2">
+      <columns>
+        <!-- column-name pixbuf -->
+        <column type="GdkPixbuf"/>
+        <!-- column-name id -->
+        <column type="gchararray"/>
+      </columns>
+    </object>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -24,7 +40,7 @@
             <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="numberingwindow|label_default">Bullet Library</property>
             <accessibility>
-              <relation type="label-for" target="valueset"/>
+              <relation type="label-for" target="numbering_window_iconview"/>
             </accessibility>
           </object>
           <packing>
@@ -34,7 +50,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="valuesetwin">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
@@ -43,21 +59,20 @@
             <property name="vscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkIconView" id="numbering_window_iconview">
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkDrawingArea" id="valueset">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="label_default"/>
-                    </accessibility>
-                  </object>
-                </child>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
+                <property name="columns">4</property>
+                <property name="item-width">80</property>
+                <property name="selection-mode">single</property>
+                <property name="activate-on-single-click">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label_default"/>
+                </accessibility>
               </object>
             </child>
           </object>
@@ -73,7 +88,7 @@
             <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="numberingwindow|label_doc">Document Bullets</property>
             <accessibility>
-              <relation type="label-for" target="valueset_doc"/>
+              <relation type="label-for" target="numbering_window_iconview_doc"/>
             </accessibility>
           </object>
           <packing>
@@ -83,7 +98,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="valuesetwin_doc">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>
@@ -92,23 +107,22 @@
             <property name="vscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkViewport">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <object class="GtkDrawingArea" id="valueset_doc">
+                  <object class="GtkIconView" id="numbering_window_iconview_doc">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="columns">4</property>
+                   <property name="item-width">80</property>
+                    <property name="selection-mode">single</property>
+                    <property name="activate-on-single-click">True</property>
                     <accessibility>
                       <relation type="labelled-by" target="label_doc"/>
                     </accessibility>
                   </object>
                 </child>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
