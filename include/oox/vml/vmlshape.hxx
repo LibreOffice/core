@@ -194,6 +194,8 @@ struct ClientData
     bool                mbMultiLine;        ///< True = textbox allows line breaks.
     bool                mbVScroll;          ///< True = textbox has a vertical scrollbar.
     bool                mbSecretEdit;       ///< True = textbox is a password edit field.
+    bool                mbMoveWithCells;    ///< True = shape moves with the cell (anchored to cell).
+    bool                mbSizeWithCells;    ///< True = shape resizes with the cell.
 
     explicit            ClientData();
 };
