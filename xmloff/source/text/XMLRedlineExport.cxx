@@ -376,7 +376,7 @@ void XMLRedlineExport::ExportChangedRegion(
             OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(xAutoStyle, bIsUICharStyle, bHasAutoStyle);
             if (!sStyle.isEmpty())
             {
-                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, sStyle);
+                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, rExport.EncodeStyleName(sStyle));
             }
         }
 
