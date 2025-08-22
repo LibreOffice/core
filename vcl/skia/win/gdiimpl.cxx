@@ -417,11 +417,6 @@ sk_sp<SkImage> SkiaCompatibleDC::getAsImageDiff(const SkiaCompatibleDC& white) c
     paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     SkCanvas* canvas = surface->getCanvas();
     canvas->save();
-    // The data we got is upside-down.
-    SkMatrix matrix;
-    matrix.preTranslate(0, tmpBitmap.height());
-    matrix.setConcat(matrix, SkMatrix::Scale(1, -1));
-    canvas->concat(matrix);
     canvas->drawImage(tmpBitmap.asImage(), 0, 0, SkSamplingOptions(), &paint);
     canvas->restore();
     return makeCheckedImageSnapshot(surface);
