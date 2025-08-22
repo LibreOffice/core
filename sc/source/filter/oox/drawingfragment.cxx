@@ -23,6 +23,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -31,6 +32,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <rtl/strbuf.hxx>
 #include <svx/svdobj.hxx>
 #include <drwlayer.hxx>
@@ -751,6 +754,54 @@ void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
     }
     catch( Exception& )
     {
+    }
+
+    // Anchor to cell holding top left corner of the shape if true
+    if (pClientData->mbMoveWithCells)
+    {
+        Reference< css::sheet::XSpreadsheet > xSheet;
+        Reference< css::sheet::XSpreadsheetDocument > xSSDoc( this->getFilter().getModel(), UNO_QUERY );
+        if ( xSSDoc.is() )
+        {
+            Reference< XIndexAccess > xSheets( xSSDoc->getSheets(), UNO_QUERY );
+            if ( xSheets.is() )
+            {
+                Any aSheetAny = xSheets->getByIndex( getSheetIndex() );
+                aSheetAny >>= xSheet;
+            }
+        }
+        if ( xSheet.is() )
+        {
+            sal_Int32 nCol = -1;
+            sal_Int32 nRow = -1;
+
+            if ( pClientData->mnCol >= 0 && pClientData->mnRow >= 0 )
+            {
+                nCol = pClientData->mnCol;
+                nRow = pClientData->mnRow;
+            }
+            else if ( !pClientData->maAnchor.isEmpty() )
+            {
+                // maAnchor is "LeftColumn, LeftOffset, TopRow, TopOffset, RightColumn, RightOffset, BottomRow, BottomOffset". Extract tokens 0 and 2.
+                sal_Int32 nIndex = 0;
+                nCol = o3tl::toInt32(o3tl::getToken(pClientData->maAnchor, 0, ',', nIndex));
+                // skip LeftOffset
+                o3tl::getToken(pClientData->maAnchor, 0, ',', nIndex);
+                nRow = o3tl::toInt32(o3tl::getToken(pClientData->maAnchor, 0, ',', nIndex));
+            }
+
+            if ( nCol >= 0 && nRow >= 0 )
+            {
+                Reference< css::table::XCell > xCell = xSheet->getCellByPosition( nCol, nRow );
+                if ( xCell.is() )
+                {
+                    Reference< XPropertySet > aPropertySet( rxShape, UNO_QUERY_THROW );
+                    aPropertySet->setPropertyValue( "Anchor", Any( xCell ) );
+                    if (pClientData->mbSizeWithCells)
+                        aPropertySet->setPropertyValue( "ResizeWithCell", Any( true ) );
+                }
+            }
+        }
     }
 }
 

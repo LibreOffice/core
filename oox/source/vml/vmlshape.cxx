@@ -260,7 +260,9 @@ ClientData::ClientData() :
     mbNo3D2( false ),
     mbMultiLine( false ),
     mbVScroll( false ),
-    mbSecretEdit( false )
+    mbSecretEdit( false ),
+    mbMoveWithCells( true ),
+    mbSizeWithCells( true )
 {
 }
 
