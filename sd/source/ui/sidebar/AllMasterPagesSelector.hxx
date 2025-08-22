@@ -38,12 +38,26 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
+    static std::unique_ptr<PanelLayout> Create (
+        weld::Widget* pParent,
+        ViewShellBase& rViewShellBase);
+
+    // Sidebar
     AllMasterPagesSelector (
         weld::Widget* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+
+    // Notebookbar
+    AllMasterPagesSelector (
+        weld::Widget* pParent,
+        SdDrawDocument& rDocument,
+        ViewShellBase& rBase,
+        const std::shared_ptr<MasterPageContainer>& rpContainer);
+
+
     virtual ~AllMasterPagesSelector() override;
 
 

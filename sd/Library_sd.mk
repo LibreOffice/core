@@ -370,6 +370,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/sidebar/RecentlyUsedMasterPages \
 	sd/source/ui/sidebar/RecentMasterPagesSelector \
 	sd/source/ui/sidebar/SlideBackground \
+	sd/source/ui/sidebar/SlideMasterPagesAllToolBoxControl \
 	sd/source/ui/slideshow/PaneHider \
 	sd/source/ui/slideshow/SlideShowRestarter \
 	sd/source/ui/slideshow/showwin \

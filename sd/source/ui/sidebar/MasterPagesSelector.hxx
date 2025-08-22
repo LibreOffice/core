@@ -49,10 +49,17 @@ class MasterPagesSelector : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
 {
 public:
+    // Sidebar
     MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
                         std::shared_ptr<MasterPageContainer> pContainer,
                         css::uno::Reference<css::ui::XSidebar> xSidebar,
                         const OUString& rUIFileName, const OUString& rIconViewId);
+
+    // Notebookbar
+    MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
+                        std::shared_ptr<MasterPageContainer> pContainer,
+                        const OUString& rUIFileName, const OUString& rIconViewId);
+
     virtual ~MasterPagesSelector() override;
 
     virtual void LateInit();

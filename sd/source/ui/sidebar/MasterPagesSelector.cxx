@@ -49,6 +49,7 @@ namespace sd::sidebar {
     */
 constexpr OUStringLiteral gsDefaultClickAction = u"applyselect";
 
+// Sidebar
 MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument,
                                          ViewShellBase& rBase,
                                          std::shared_ptr<MasterPageContainer> pContainer,
@@ -68,6 +69,26 @@ MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
 }
+
+// Notebookbar
+MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument,
+                                         ViewShellBase& rBase,
+                                         std::shared_ptr<MasterPageContainer> pContainer,
+                                         const OUString& rUIFileName, const OUString& rIconViewId)
+    : PanelLayout(pParent, u"MasterPagePanel"_ustr, rUIFileName)
+    , mpContainer(std::move(pContainer))
+    , mxPreviewIconView(m_xBuilder->weld_icon_view(rIconViewId))
+    , mrDocument(rDocument)
+    , mrBase(rBase)
+{
+    mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
+    mxPreviewIconView->connect_mouse_press(LINK(this, MasterPagesSelector, MousePressHdl));
+    mxPreviewIconView->connect_query_tooltip(LINK(this, MasterPagesSelector, QueryTooltipHdl));
+
+    Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
+    mpContainer->AddChangeListener(aChangeListener);
+}
+
 
 MasterPagesSelector::~MasterPagesSelector()
 {
