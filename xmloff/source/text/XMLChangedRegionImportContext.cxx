@@ -170,6 +170,11 @@ void XMLChangedRegionImportContext::SetChangeInfo(
             m_aStyleName = pStyle->GetParentName();
         }
     }
+    if (!m_aStyleName.isEmpty())
+    {
+        // We have a named character style name, decode it.
+        m_aStyleName = GetImport().GetStyleDisplayName(XmlStyleFamily::TEXT_TEXT, m_aStyleName);
+    }
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, rDate))
