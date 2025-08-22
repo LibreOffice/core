@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <config_skia.h>
+
 #include <skia/win/gdiimpl.hxx>
 
 #include <win/saldata.hxx>
