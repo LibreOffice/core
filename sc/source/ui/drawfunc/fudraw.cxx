@@ -136,11 +136,14 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
-    pView->GetSfxViewShell()->GetDrawView()->MouseMove(rMEvt, pWindow->GetOutDev());
-    //  evaluate modifiers only if in a drawing layer action
-    //  (don't interfere with keyboard shortcut handling)
-    if (pView->IsAction())
-        DoModifiers( rMEvt );
+    if (SfxViewShell* pSfxViewShell = pView->GetSfxViewShell())
+    {
+        pSfxViewShell->GetDrawView()->MouseMove(rMEvt, pWindow->GetOutDev());
+        //  evaluate modifiers only if in a drawing layer action
+        //  (don't interfere with keyboard shortcut handling)
+        if (pView->IsAction())
+            DoModifiers( rMEvt );
+    }
 
     return false;
 }
