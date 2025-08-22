@@ -75,4 +75,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sd_layout_tests,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_layout_tests))
 
+$(eval $(call gb_CppunitTest_add_arguments,sd_layout_tests, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:
