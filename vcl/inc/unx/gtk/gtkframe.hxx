@@ -412,7 +412,8 @@ class GtkSalFrame final : public SalFrame
 
     void setMinMaxSize();
 
-    void AllocateFrame();
+    //returns true if FrameSize changed
+    bool AllocateFrame();
     void TriggerPaintEvent();
 
     void updateWMClass();

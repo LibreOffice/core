@@ -2140,12 +2140,12 @@ void GtkSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
     }
 }
 
-void GtkSalFrame::AllocateFrame()
+bool GtkSalFrame::AllocateFrame()
 {
     basegfx::B2IVector aFrameSize( maGeometry.width(), maGeometry.height() );
     if (m_pSurface && m_aFrameSize.getX() == aFrameSize.getX() &&
                       m_aFrameSize.getY() == aFrameSize.getY() )
-        return;
+        return false;
 
     if( aFrameSize.getX() == 0 )
         aFrameSize.setX( 1 );
@@ -2166,6 +2166,8 @@ void GtkSalFrame::AllocateFrame()
 
     if (m_pGraphics)
         m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
+
+    return true;
 }
 
 void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
@@ -3877,10 +3879,9 @@ void GtkSalFrame::DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight
         return;
     maGeometry.setSize({ nWidth, nHeight });
     bool bRealized = gtk_widget_get_realized(pWidget);
-    if (bRealized)
-        AllocateFrame();
+    bool bTriggerPaintEvent = bRealized && AllocateFrame();
     CallCallbackExc( SalEvent::Resize, nullptr );
-    if (bRealized)
+    if (bTriggerPaintEvent)
         TriggerPaintEvent();
 }
 
