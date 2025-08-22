@@ -196,34 +196,98 @@ void ClientDataContext::onEndElement()
 {
     switch( getCurrentElement() )
     {
-        case VMLX_TOKEN( Anchor ):      mrClientData.maAnchor = maElementText;                                          break;
-        case VMLX_TOKEN( FmlaMacro ):   mrClientData.maFmlaMacro = maElementText;                                       break;
-        case VMLX_TOKEN( FmlaPict ):    mrClientData.maFmlaPict = maElementText;                                        break;
-        case VMLX_TOKEN( FmlaLink ):    mrClientData.maFmlaLink = maElementText;                                        break;
-        case VMLX_TOKEN( FmlaRange ):   mrClientData.maFmlaRange = maElementText;                                       break;
-        case VMLX_TOKEN( FmlaGroup ):   mrClientData.maFmlaGroup = maElementText;                                       break;
-        case VMLX_TOKEN( TextHAlign ):  mrClientData.mnTextHAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( TextVAlign ):  mrClientData.mnTextVAlign = AttributeConversion::decodeToken( maElementText );  break;
-        case VMLX_TOKEN( Column ):      mrClientData.mnCol = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Row ):         mrClientData.mnRow = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Checked ):     mrClientData.mnChecked = maElementText.toInt32();                               break;
-        case VMLX_TOKEN( DropStyle ):   mrClientData.mnDropStyle = AttributeConversion::decodeToken( maElementText );   break;
-        case VMLX_TOKEN( DropLines ):   mrClientData.mnDropLines = maElementText.toInt32();                             break;
-        case VMLX_TOKEN( Val ):         mrClientData.mnVal = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Min ):         mrClientData.mnMin = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Max ):         mrClientData.mnMax = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Inc ):         mrClientData.mnInc = maElementText.toInt32();                                   break;
-        case VMLX_TOKEN( Page ):        mrClientData.mnPage = maElementText.toInt32();                                  break;
-        case VMLX_TOKEN( SelType ):     mrClientData.mnSelType = AttributeConversion::decodeToken( maElementText );     break;
-        case VMLX_TOKEN( VTEdit ):      mrClientData.mnVTEdit = maElementText.toInt32();                                break;
-        case VMLX_TOKEN( PrintObject ): mrClientData.mbPrintObject = lclDecodeVmlxBool( maElementText, true );          break;
-        case VMLX_TOKEN( Visible ):     mrClientData.mbVisible = lclDecodeVmlxBool( maElementText, true );              break;
-        case VMLX_TOKEN( DDE ):         mrClientData.mbDde = lclDecodeVmlxBool( maElementText, true );                  break;
-        case VMLX_TOKEN( NoThreeD ):    mrClientData.mbNo3D = lclDecodeVmlxBool( maElementText, true );                 break;
-        case VMLX_TOKEN( NoThreeD2 ):   mrClientData.mbNo3D2 = lclDecodeVmlxBool( maElementText, true );                break;
-        case VMLX_TOKEN( MultiLine ):   mrClientData.mbMultiLine = lclDecodeVmlxBool( maElementText, true );            break;
-        case VMLX_TOKEN( VScroll ):     mrClientData.mbVScroll = lclDecodeVmlxBool( maElementText, true );              break;
-        case VMLX_TOKEN( SecretEdit ):  mrClientData.mbSecretEdit = lclDecodeVmlxBool( maElementText, true );           break;
+        case VMLX_TOKEN(Anchor):
+            mrClientData.maAnchor = maElementText;
+            break;
+        case VMLX_TOKEN(FmlaMacro):
+            mrClientData.maFmlaMacro = maElementText;
+            break;
+        case VMLX_TOKEN(FmlaPict):
+            mrClientData.maFmlaPict = maElementText;
+            break;
+        case VMLX_TOKEN(FmlaLink):
+            mrClientData.maFmlaLink = maElementText;
+            break;
+        case VMLX_TOKEN(FmlaRange):
+            mrClientData.maFmlaRange = maElementText;
+            break;
+        case VMLX_TOKEN(FmlaGroup):
+            mrClientData.maFmlaGroup = maElementText;
+            break;
+        case VMLX_TOKEN(TextHAlign):
+            mrClientData.mnTextHAlign = AttributeConversion::decodeToken(maElementText);
+            break;
+        case VMLX_TOKEN(TextVAlign):
+            mrClientData.mnTextVAlign = AttributeConversion::decodeToken(maElementText);
+            break;
+        case VMLX_TOKEN(Column):
+            mrClientData.mnCol = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Row):
+            mrClientData.mnRow = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Checked):
+            mrClientData.mnChecked = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(DropStyle):
+            mrClientData.mnDropStyle = AttributeConversion::decodeToken(maElementText);
+            break;
+        case VMLX_TOKEN(DropLines):
+            mrClientData.mnDropLines = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Val):
+            mrClientData.mnVal = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Min):
+            mrClientData.mnMin = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Max):
+            mrClientData.mnMax = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Inc):
+            mrClientData.mnInc = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(Page):
+            mrClientData.mnPage = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(SelType):
+            mrClientData.mnSelType = AttributeConversion::decodeToken(maElementText);
+            break;
+        case VMLX_TOKEN(VTEdit):
+            mrClientData.mnVTEdit = maElementText.toInt32();
+            break;
+        case VMLX_TOKEN(PrintObject):
+            mrClientData.mbPrintObject = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(Visible):
+            mrClientData.mbVisible = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(DDE):
+            mrClientData.mbDde = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(NoThreeD):
+            mrClientData.mbNo3D = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(NoThreeD2):
+            mrClientData.mbNo3D2 = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(MultiLine):
+            mrClientData.mbMultiLine = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(VScroll):
+            mrClientData.mbVScroll = lclDecodeVmlxBool(maElementText, true);
+            break;
+        case VMLX_TOKEN(SecretEdit):
+            mrClientData.mbSecretEdit = lclDecodeVmlxBool(maElementText, true);
+            break;
+        // Oddly, Excel will declare MoveWithCells and SizeWithCells with no value if these are false (therefore, bDefaultForEmpty == false)
+        // When MoveWithCells and SizeWithCells are NOT declared they should be assumed true.
+        case VMLX_TOKEN(MoveWithCells):
+            mrClientData.mbMoveWithCells = lclDecodeVmlxBool(maElementText, false);
+            break;
+        case VMLX_TOKEN(SizeWithCells):
+            mrClientData.mbSizeWithCells = lclDecodeVmlxBool(maElementText, false);
+            break;
     }
 }
 
