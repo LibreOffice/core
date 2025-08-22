@@ -615,8 +615,16 @@ void QuickFindPanel::FillSearchFindsList()
             if (xPaM->GetPageNum() != nPage)
             {
                 nPage = xPaM->GetPageNum();
-                OUString sPageEntry(u"-"_ustr + SwResId(ST_PGE) + u" "_ustr
-                                    + OUString::number(nPage));
+                OUString sPageEntry;
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    sPageEntry = u"-$#~"_ustr + SwResId(ST_PGE) + u" "_ustr
+                                 + OUString::number(nPage) + u"~#$-"_ustr;
+                }
+                else
+                {
+                    sPageEntry = u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage);
+                }
                 m_xSearchFindsList->append(sPageEntry, sPageEntry);
             }
 
