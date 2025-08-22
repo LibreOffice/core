@@ -123,8 +123,6 @@ private:
     std::unique_ptr<weld::Button> m_xLinguDicsDelPB;
     std::unique_ptr<weld::TreeView> m_xLinguOptionsCLB;
     std::unique_ptr<weld::Button> m_xLinguOptionsEditPB;
-    std::unique_ptr<weld::Box> m_xMoreDictsBox;
-    std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
 
     void    AddDicBoxEntry( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
     static sal_uInt32 GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );

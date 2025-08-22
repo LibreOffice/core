@@ -808,8 +808,6 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , m_xLinguDicsDelPB(m_xBuilder->weld_button(u"lingudictsdelete"_ustr))
     , m_xLinguOptionsCLB(m_xBuilder->weld_tree_view(u"linguoptions"_ustr))
     , m_xLinguOptionsEditPB(m_xBuilder->weld_button(u"linguoptionsedit"_ustr))
-    , m_xMoreDictsBox(m_xBuilder->weld_box(u"moredictsbox"_ustr))
-    , m_xMoreDictsLink(m_xBuilder->weld_link_button(u"moredictslink"_ustr))
 {
     m_xLinguModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xLinguDicsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
@@ -832,16 +830,10 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     m_xLinguOptionsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguOptionsCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxLinguTabPage, OnLinkClick));
-    if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
-        m_xMoreDictsBox->hide();
-
     if (comphelper::LibreOfficeKit::isActive())
     {
         // hide User-defined Dictionaries part
         m_xBuilder->weld_frame(u"dictsframe"_ustr)->hide();
-        // hide Get more dictionaries URL + icon
-        m_xMoreDictsBox->hide();
     }
 
     xProp = LinguMgr::GetLinguPropertySet();
@@ -896,8 +888,6 @@ OUString SvxLinguTabPage::GetAllStrings()
         if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
-
-    sAllStrings += m_xMoreDictsLink->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -1542,12 +1532,6 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         m_xLinguModulesFT->hide();
         m_xLinguModulesCLB->hide();
         m_xLinguModulesEditPB->hide();
-
-        if (officecfg::Office::Security::Hyperlinks::Open::get() != SvtExtendedSecurityOptions::OPEN_NEVER &&
-            !comphelper::LibreOfficeKit::isActive())
-        {
-            m_xMoreDictsBox->show();
-        }
     }
 }
 
@@ -1568,7 +1552,6 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     , m_xPrioUpPB(m_xBuilder->weld_button(u"up"_ustr))
     , m_xPrioDownPB(m_xBuilder->weld_button(u"down"_ustr))
     , m_xBackPB(m_xBuilder->weld_button(u"back"_ustr))
-    , m_xMoreDictsLink(m_xBuilder->weld_link_button(u"moredictslink"_ustr))
     , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box(u"language"_ustr)))
 {
@@ -1589,10 +1572,6 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     // in case of not installed language modules
     m_xPrioUpPB->set_sensitive( false );
     m_xPrioDownPB->set_sensitive( false );
-
-    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxEditModulesDlg, OnLinkClick));
-    if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
-        m_xMoreDictsLink->hide();
 
     // set that we want the checkbox shown if spellchecking is available
     m_xLanguageLB->SetLanguageList(SvxLanguageListFlags::EMPTY, false, false, true);
