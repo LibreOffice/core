@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <optional>
 #include <vector>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -53,10 +54,22 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
 {
     Reference< XInputStream > mxStream;
 
-    // Encoding
-    bool mbEncodingInitialized;
-    rtl_TextToUnicodeConverter  mConvText2Unicode;
-    rtl_TextToUnicodeContext    mContextText2Unicode;
+    struct Encoding_t
+    {
+        rtl_TextToUnicodeConverter  mConvText2Unicode;
+        rtl_TextToUnicodeContext    mContextText2Unicode;
+        Encoding_t(rtl_TextEncoding encoding)
+        {
+            mConvText2Unicode = rtl_createTextToUnicodeConverter(encoding);
+            mContextText2Unicode = rtl_createTextToUnicodeContext(mConvText2Unicode);
+        }
+        ~Encoding_t()
+        {
+            rtl_destroyTextToUnicodeContext(mConvText2Unicode, mContextText2Unicode);
+            rtl_destroyTextToUnicodeConverter(mConvText2Unicode);
+        }
+    };
+    std::optional<Encoding_t> moEncoding;
     Sequence<sal_Int8>          mSeqSource;
 
     // Internal buffer for characters that are already converted successfully
@@ -76,7 +89,6 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
 
 public:
     OTextInputStream();
-    virtual ~OTextInputStream() override;
 
     // Methods XTextInputStream
     virtual OUString SAL_CALL readLine(  ) override;
@@ -104,23 +116,11 @@ public:
 }
 
 OTextInputStream::OTextInputStream()
-    : mbEncodingInitialized(false)
-    , mConvText2Unicode(nullptr)
-    , mContextText2Unicode(nullptr)
-    , mSeqSource(READ_BYTE_COUNT)
+    : mSeqSource(READ_BYTE_COUNT)
     , mvBuffer(INITIAL_UNICODE_BUFFER_CAPACITY, 0)
     , mnCharsInBuffer(0)
     , mbReachedEOF(false)
 {
-}
-
-OTextInputStream::~OTextInputStream()
-{
-    if( mbEncodingInitialized )
-    {
-        rtl_destroyTextToUnicodeContext( mConvText2Unicode, mContextText2Unicode );
-        rtl_destroyTextToUnicodeConverter( mConvText2Unicode );
-    }
 }
 
 // Check uninitialized object
@@ -161,11 +161,11 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
                                            bool bRemoveDelimiter, bool bFindLineEnd )
 {
     OUString aRetStr;
-    if( !mbEncodingInitialized )
+    if (!moEncoding)
     {
         setEncoding( u"utf8"_ustr );
     }
-    if( !mbEncodingInitialized )
+    if (!moEncoding)
         return aRetStr;
 
     // Only for bFindLineEnd
@@ -265,8 +265,8 @@ sal_Int32 OTextInputStream::implReadNext()
             // All invalid characters are transformed to the unicode undefined char
             sal_Size nSrcCvtBytes = 0;
             mnCharsInBuffer += rtl_convertTextToUnicode(
-                                mConvText2Unicode,
-                                mContextText2Unicode,
+                                moEncoding->mConvText2Unicode,
+                                moEncoding->mContextText2Unicode,
                                 reinterpret_cast<const char*>(mSeqSource.getConstArray() + nSourceCount),
                                 mSeqSource.getLength() - nSourceCount,
                                 mvBuffer.data() + mnCharsInBuffer,
@@ -312,9 +312,7 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
         return;
 
-    mbEncodingInitialized = true;
-    mConvText2Unicode = rtl_createTextToUnicodeConverter( encoding );
-    mContextText2Unicode = rtl_createTextToUnicodeContext( mConvText2Unicode );
+    moEncoding.emplace(encoding);
 }
 
 
@@ -382,7 +380,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 io_OTextInputStream_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new OTextInputStream());
+    return cppu::acquire(new OTextInputStream);
 }
 
 
