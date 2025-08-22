@@ -94,6 +94,10 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
             return u"calc_MS_Excel_2003_XML"_ustr;
         case orcus::format_t::parquet:
             return u"Apache Parquet"_ustr;
+        case orcus::format_t::xml:
+            return u"generic_XML"_ustr;
+        case orcus::format_t::json:
+            return u"generic_JSON"_ustr;
         default:;
     }
 

@@ -263,6 +263,8 @@ int getFlatTypeRank(std::u16string_view rType)
         "XHTML_File",
         "svg_Scalable_Vector_Graphics",
         "math_MathML_XML_Math",
+        "generic_HTML",
+        "generic_XML",
 
         // Non-compressed text
         "dxf_AutoCAD_Interchange",
@@ -274,7 +276,7 @@ int getFlatTypeRank(std::u16string_view rType)
         "xbm_X_Consortium",
         "writer_Rich_Text_Format",
         "writer_web_HTML_help",
-        "generic_HTML",
+        "generic_JSON",
         "generic_Markdown",
 
         "generic_Text", // Plain text (catch all)
@@ -993,7 +995,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.
     //                                               Our types list was sorted by such criteria!
-    // d) detect service return a valid result    => return its decision
+    // d) detect service return a valid result    => return its decision but only when it matches the type being tested
     // e) detect service return an invalid result
     //    or any needed information could not be
     //    obtained from the cache                 => ignore it, and continue with search
@@ -1041,8 +1043,12 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
 
             OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
 
-            // d)
-            if (!sDeepType.isEmpty())
+            // d) call it 'detected' only when the reported type matches the
+            // type being checked for.  This is important because many detectors
+            // report multiple different types which may mess up our strict type
+            // check order e.g when the type being tested is of higher
+            // complexity and the detector reports a type of lower complexity.
+            if (sDeepType == sFlatType)
                 return sDeepType;
         }
         catch(const css::container::NoSuchElementException&)
