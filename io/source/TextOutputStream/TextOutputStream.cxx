@@ -27,6 +27,7 @@
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XTextOutputStream2.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <optional>
@@ -147,8 +148,6 @@ void OTextOutputStream::writeString( const OUString& aString )
     {
         setEncoding( u"utf8"_ustr );
     }
-    if (!moEncoding)
-        return;
 
     Sequence<sal_Int8> aByteSeq = implConvert( aString );
     mxStream->writeBytes( aByteSeq );
@@ -159,7 +158,7 @@ void OTextOutputStream::setEncoding( const OUString& Encoding )
     OString aOEncodingStr = OUStringToOString( Encoding, RTL_TEXTENCODING_ASCII_US );
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( aOEncodingStr.getStr() );
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
-        return;
+        throw IllegalArgumentException("Unknown encoding '" + Encoding + "'", getXWeak(), 0);
 
     moEncoding.emplace(encoding);
 }

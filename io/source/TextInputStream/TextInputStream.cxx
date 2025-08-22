@@ -30,6 +30,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <optional>
@@ -165,8 +166,6 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     {
         setEncoding( u"utf8"_ustr );
     }
-    if (!moEncoding)
-        return aRetStr;
 
     // Only for bFindLineEnd
     constexpr sal_Unicode cLineEndChar1 = '\r';
@@ -310,7 +309,7 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
     OString aOEncodingStr = OUStringToOString( Encoding, RTL_TEXTENCODING_ASCII_US );
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( aOEncodingStr.getStr() );
     if( RTL_TEXTENCODING_DONTKNOW == encoding )
-        return;
+        throw IllegalArgumentException("Unknown encoding '" + Encoding + "'", getXWeak(), 0);
 
     moEncoding.emplace(encoding);
 }
