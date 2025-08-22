@@ -406,7 +406,10 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
     else if( eProtocol != INetProtocol::NotValid )
     {
-        XclExpString aUrl( aUrlObj.GetURLNoMark(), XclStrFlags::ForceUnicode, 255 );
+        // There is an undocumented limitation of 8192 characters for XLSX hyperlink length; and
+        // one more for XLS format, which is a strange number 2083; both found by experimentation:
+        const sal_uInt16 nMaxLen = rRoot.GetOutput() == EXC_OUTPUT_XML_2007 ? 8192 : 2083;
+        XclExpString aUrl(aUrlObj.GetURLNoMark(), XclStrFlags::ForceUnicode, nMaxLen);
         aXclStrm    << XclTools::maGuidUrlMoniker
                     << sal_uInt32( aUrl.GetBufferSize() + 2 );  // byte count + 1 trailing zero word
         aUrl.WriteBuffer( aXclStrm );                           // NO flags

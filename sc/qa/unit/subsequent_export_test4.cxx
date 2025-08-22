@@ -52,8 +52,12 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2366,6 +2370,78 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf108244)
     CPPUNIT_ASSERT(pXmlDoc);
 
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getXPathContent(pXmlDoc, "count(//office:annotation)"));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf150229)
+{
+    // Create a long URL: longer than Excel allows
+    OUString longUrl = []() {
+        OUStringBuffer buf("https://www.example.org/query?foo&bar&baz=");
+        while (buf.getLength() < 8200)
+            buf.append("0123456789");
+        return buf.makeStringAndClear();
+    }();
+
+    // Create a document, and put that URL as hyperlink into a cell
+
+    createScDoc();
+
+    {
+        auto xDoc = mxComponent.queryThrow<sheet::XSpreadsheetDocument>();
+        auto xSheets = xDoc->getSheets().queryThrow<container::XIndexAccess>();
+        auto xSheet = xSheets->getByIndex(0).queryThrow<sheet::XSpreadsheet>();
+        auto xCell = xSheet->getCellByPosition(0, 0).queryThrow<text::XText>();
+
+        auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+        auto xField = xFactory->createInstance(u"com.sun.star.text.TextField.URL"_ustr)
+                          .queryThrow<beans::XPropertySet>();
+        xField->setPropertyValue(u"URL"_ustr, uno::Any(longUrl));
+        xField->setPropertyValue(u"Representation"_ustr, uno::Any(u"hyperlink"_ustr));
+
+        xCell->insertTextContent(xCell->createTextCursor(), xField.queryThrow<text::XTextContent>(),
+                                 false);
+    }
+
+    // Test XLSX export: the hyperlink must truncate at 8192 character boundary
+
+    saveAndReload(u"Calc Office Open XML"_ustr);
+
+    {
+        auto xDoc = mxComponent.queryThrow<sheet::XSpreadsheetDocument>();
+        auto xSheets = xDoc->getSheets().queryThrow<container::XIndexAccess>();
+        auto xSheet = xSheets->getByIndex(0).queryThrow<sheet::XSpreadsheet>();
+        auto xCell = xSheet->getCellByPosition(0, 0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"hyperlink"_ustr, xCell->getString());
+        auto xCellFieldsSupplier = xCell.queryThrow<text::XTextFieldsSupplier>();
+        auto xFields = xCellFieldsSupplier->getTextFields()->createEnumeration();
+        auto xField = xFields->nextElement().queryThrow<beans::XPropertySet>();
+        CPPUNIT_ASSERT_EQUAL(longUrl.copy(0, 8192),
+                             xField->getPropertyValue(u"URL"_ustr).get<OUString>());
+    }
+
+    // Test the respective OOXML markyp
+
+    xmlDocUniquePtr pXml = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pXml);
+    assertXPath(pXml, "//rels:Relationship", "Target", longUrl.subView(0, 8192));
+
+    // Test XLS export: the hyperlink must truncate at 2083 character boundary (that's the limit
+    // I found experimentally)
+
+    saveAndReload(u"MS Excel 97"_ustr);
+
+    {
+        auto xDoc = mxComponent.queryThrow<sheet::XSpreadsheetDocument>();
+        auto xSheets = xDoc->getSheets().queryThrow<container::XIndexAccess>();
+        auto xSheet = xSheets->getByIndex(0).queryThrow<sheet::XSpreadsheet>();
+        auto xCell = xSheet->getCellByPosition(0, 0).queryThrow<text::XText>();
+        CPPUNIT_ASSERT_EQUAL(u"hyperlink"_ustr, xCell->getString());
+        auto xCellFieldsSupplier = xCell.queryThrow<text::XTextFieldsSupplier>();
+        auto xFields = xCellFieldsSupplier->getTextFields()->createEnumeration();
+        auto xField = xFields->nextElement().queryThrow<beans::XPropertySet>();
+        CPPUNIT_ASSERT_EQUAL(longUrl.copy(0, 2083),
+                             xField->getPropertyValue(u"URL"_ustr).get<OUString>());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
