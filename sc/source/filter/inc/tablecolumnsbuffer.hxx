@@ -22,7 +22,6 @@
 #include <oox/helper/refvector.hxx>
 #include <dbdata.hxx>
 #include "workbookhelper.hxx"
-#include <osl/diagnose.h>
 
 namespace oox { class AttributeList; }
 namespace oox { class SequenceInputStream; }
@@ -45,18 +44,12 @@ public:
     const OUString&     getName() const;
     /** Gets the attributes of this column. */
     const TableColumnAttributes& getColumnAttributes() const;
-    /** Imports XML column properties for the xmlColumnPr element. */
-    void                importXmlColumnPr(const AttributeList& rAttribs);
-    /** Returns access to the table column model data. */
-    TableColumnModel& getModel() { return maModel; }
 
 private:
     OUString            maName;
     sal_Int32           mnId;
     sal_Int32           mnDataDxfId;
     TableColumnAttributes maColumnAttributes;
-
-    TableColumnModel    maModel;
 };
 
 class TableColumns : public WorkbookHelper

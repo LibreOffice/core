@@ -13,7 +13,6 @@
 #include <document.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
-#include <sax/fastattribs.hxx>
 
 using namespace oox;
 
@@ -223,7 +222,6 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
     const std::vector< TableColumnAttributes >& rColAttributes = rData.GetTableColumnAttributes();
-    const std::vector< TableColumnModel >& rTableColumnModel = rData.GetTableColumnModel();
     if (!rColNames.empty())
     {
         pTableStrm->startElement(XML_tableColumns,
@@ -237,7 +235,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
             // OOXTODO: write <totalsRowFormula> once we support it.
 
-            pTableStrm->startElement( XML_tableColumn,
+            pTableStrm->singleElement( XML_tableColumn,
                     XML_id, OString::number(i+1),
                     XML_name, rColNames[i].toUtf8(),
                     XML_totalsRowFunction, (i < rColAttributes.size() ? rColAttributes[i].maTotalsFunction : std::nullopt)
@@ -251,25 +249,6 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_totalsRowLabel, ...,
                     // OOXTODO: XML_uniqueName, ...
             );
-
-            if (i < rTableColumnModel.size() && rTableColumnModel[i].mxXmlColumnPr)
-            {
-                // export <xmlColumnPr>
-                rtl::Reference<sax_fastparser::FastAttributeList> pXmlColumnPrAttrList
-                    = sax_fastparser::FastSerializerHelper::createAttrList();
-
-                XmlColumnPrModel* rXmlColRef = rTableColumnModel[i].mxXmlColumnPr.get();
-
-                pXmlColumnPrAttrList->add(XML_mapId, OUString::number(rXmlColRef->mnMapId));
-                pXmlColumnPrAttrList->add(XML_xpath, rXmlColRef->msXpath);
-                pXmlColumnPrAttrList->add(XML_xmlDataType, rXmlColRef->msXmlDataType);
-                pXmlColumnPrAttrList->add(XML_denormalized, ToPsz10(rXmlColRef->mbDenormalized));
-
-                pTableStrm->singleElement(XML_xmlColumnPr, pXmlColumnPrAttrList);
-            }
-
-            // put </tableColumn>
-            pTableStrm->endElement(XML_tableColumn);
         }
 
         pTableStrm->endElement( XML_tableColumns);

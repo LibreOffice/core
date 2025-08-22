@@ -627,8 +627,6 @@ private:
     bool mbConnectionXml = false;
     bool mbCustomXml = false;
     OUString aCustomXmlFragmentPath;
-    bool mbXmlMapsXml = false;
-    std::string sXmlMapsContent;
 
 public:
     bool                     IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder);
@@ -644,14 +642,6 @@ public:
     }
     const OUString & getCustomXmlItems() { return aCustomXmlFragmentPath; }
     bool hasCustomXml() { return mbCustomXml; }
-
-    void setHasXmlMaps(bool bUse, const std::string& sContent)
-    {
-        mbXmlMapsXml = bUse;
-        sXmlMapsContent = sContent;
-    }
-    const std::string& getXmlMapsItem() { return sXmlMapsContent; }
-    bool hasXmlMaps() { return mbXmlMapsXml; }
 
     bool IsEmbedFonts() const { return mbEmbedFonts; }
     bool IsEmbedUsedFontsOnly() const { return mbEmbedUsedFontsOnly; }

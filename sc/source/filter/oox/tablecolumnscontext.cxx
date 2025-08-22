@@ -32,14 +32,9 @@ TableColumnContext::TableColumnContext( WorksheetContextBase& rParent, TableColu
 {
 }
 
-ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TableColumnContext::onCreateContext( sal_Int32 /*nElement*/, const AttributeList& /*rAttribs*/ )
 {
-    switch (nElement)
-    {
-        case XLS_TOKEN(xmlColumnPr):
-            mrTableColumn.importXmlColumnPr( rAttribs );
-            break;
-    }
+    /* no known child elements */
     return nullptr;
 }
 
