@@ -425,9 +425,6 @@ constexpr auto SidebarList
         { u"modules/simpress/ui/customanimationfragment.ui" },
         { u"modules/simpress/ui/customanimationspanel.ui" },
         { u"modules/simpress/ui/layoutpanel.ui" },
-        { u"modules/simpress/ui/masterpagepanel.ui" },
-        { u"modules/simpress/ui/masterpagepanelall.ui" },
-        { u"modules/simpress/ui/masterpagepanelrecent.ui" },
         { u"modules/simpress/ui/sidebarslidebackground.ui" },
         { u"modules/simpress/ui/tabledesignpanel.ui" },
         // smath
@@ -495,6 +492,7 @@ constexpr auto NotebookbarList
         { u"svx/ui/fontsizebox.ui" },
         { u"svx/ui/stylespreview.ui" },
         // not interim builder, but regular builder:
+        { u"modules/simpress/ui/masterpagepanelall.ui" },
         { u"modules/simpress/ui/slidetransitionspanel.ui" }
     });
 
