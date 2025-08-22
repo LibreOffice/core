@@ -175,8 +175,9 @@ enum class SotClipboardFormatId : sal_uInt32
     RICHTEXT               = 145,
     STRING_TSVC            = 146,
     PDF                    = 147,
+    BIFF_12                = 148,
     // the point at which we start allocating "runtime" format IDs
-    USER_END  = PDF
+    USER_END  = BIFF_12
 };
 
 /** Make it easier to iterate over format IDs */

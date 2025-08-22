@@ -203,6 +203,7 @@ namespace
             /*145 SotClipboardFormatId::RICHTEXT*/ { "text/richtext", "Richtext Format", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*146 SotClipboardFormatId::STRING_TSVC*/            { "application/x-libreoffice-tsvc", "Text TSV-Calc", &cppu::UnoType<OUString>::get() },
             /*147 SotClipboardFormatId::PDF*/            { "application/pdf", "PDF Document", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+            /*148 SotClipboardFormatId::BIFF_12*/                 { "application/x-openoffice-biff-12;windows_formatname=\"Biff12\"", "Biff12", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             };
             return &aInstance[0];
         }

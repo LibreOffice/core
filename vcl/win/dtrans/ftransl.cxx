@@ -216,6 +216,8 @@ static const std::vector< FormatEntry > g_TranslTable {
         FormatEntry("application/x-openoffice-biff-5;windows_formatname=\"Biff 5\"", "Biff 5", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::BIFF_8
         FormatEntry("application/x-openoffice-biff-8;windows_formatname=\"Biff8\"", "Biff8", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+    //SotClipboardFormatId::BIFF_12
+        FormatEntry("application/x-openoffice-biff-12;windows_formatname=\"Biff12\"", "Biff12", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::SYLK_BIGCAPS
         FormatEntry("application/x-openoffice-sylk-bigcaps;windows_formatname=\"SYLK\"", "SYLK", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     //SotClipboardFormatId::LINK
