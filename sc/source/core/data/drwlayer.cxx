@@ -2917,7 +2917,7 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 
 void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
 {
-    if ( bFlg && pDoc )
+    if (bFlg && pDoc && pDoc->GetChartListenerCollection()) // clip documents don't have it
         pDoc->SetChartListenerCollectionNeedsUpdate( true );
     FmFormModel::SetChanged( bFlg );
 }

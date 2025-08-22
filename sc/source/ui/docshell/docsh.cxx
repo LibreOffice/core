@@ -2966,6 +2966,11 @@ std::unique_ptr<ScDocFunc> ScDocShell::CreateDocFunc()
     return std::make_unique<ScDocFuncDirect>( *this );
 }
 
+ScDocShell::ScDocShell(const SfxModelFlags i_nSfxCreationFlags, ScDocumentMode docMode)
+    : ScDocShell(i_nSfxCreationFlags, std::make_shared<ScDocument>(docMode, this))
+{
+}
+
 ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shared_ptr<ScDocument>& pDoc ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     m_pDocument       ( pDoc ? pDoc : std::make_shared<ScDocument>( SCDOCMODE_DOCUMENT, this )),

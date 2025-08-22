@@ -1017,6 +1017,7 @@ SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Move[] =
     { SotClipboardFormatId::LINK, EXCHG_OUT_ACTION_INSERT_DDE, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BIFF_8, EXCHG_IN_ACTION_MOVE, SotExchangeActionFlags::InsertTargetUrl, 0 },
+    { SotClipboardFormatId::BIFF_12, EXCHG_IN_ACTION_MOVE, SotExchangeActionFlags::InsertTargetUrl, 0 },
 };
 SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =
 {
@@ -1045,6 +1046,7 @@ SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Copy[] =
     { SotClipboardFormatId::LINK, EXCHG_OUT_ACTION_INSERT_DDE, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::SVIM, EXCHG_OUT_ACTION_INSERT_IMAGEMAP, SotExchangeActionFlags::InsertTargetUrl, 0 },
     { SotClipboardFormatId::BIFF_8, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertTargetUrl, 0 },
+    { SotClipboardFormatId::BIFF_12, EXCHG_IN_ACTION_COPY, SotExchangeActionFlags::InsertTargetUrl, 0 },
 };
 SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =
 {

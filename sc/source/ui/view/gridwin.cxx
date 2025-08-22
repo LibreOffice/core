@@ -4466,6 +4466,8 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         nFormatId = SotClipboardFormatId::SBA_DATAEXCHANGE;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE ) )
         nFormatId = SotClipboardFormatId::SBA_FIELDDATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::BIFF_12 ) )
+        nFormatId = SotClipboardFormatId::BIFF_12;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::BIFF_8 ) )
         nFormatId = SotClipboardFormatId::BIFF_8;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::BIFF_5 ) )

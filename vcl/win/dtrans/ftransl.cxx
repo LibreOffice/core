@@ -177,6 +177,7 @@ auto initTranslTable()
         FormatEntry(xFactory, SotClipboardFormatId::BIFF_5),
         FormatEntry(xFactory, SotClipboardFormatId::BIFF__5),
         FormatEntry(xFactory, SotClipboardFormatId::BIFF_8),
+        FormatEntry(xFactory, SotClipboardFormatId::BIFF_12),
         FormatEntry(xFactory, SotClipboardFormatId::SYLK_BIGCAPS),
         FormatEntry(xFactory, SotClipboardFormatId::LINK),
         FormatEntry(xFactory, SotClipboardFormatId::STARDRAW_TABBAR),

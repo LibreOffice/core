@@ -418,6 +418,9 @@ private:
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 
     bool CheckSheetViewProtection(sc::Operation eOperation);
+
+    void PasteFromExcelClip(ScDocument& rClipDoc, SCTAB nSrcTab, SCCOL nPosX, SCROW nPosY,
+                            const Point* pLogicPos, bool bAllowDialogs);
 };
 
 extern bool bPasteIsMove;

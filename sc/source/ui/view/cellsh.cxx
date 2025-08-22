@@ -492,6 +492,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RICHTEXT );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML_SIMPLE );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_12 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_8 );
         lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_5 );
     }

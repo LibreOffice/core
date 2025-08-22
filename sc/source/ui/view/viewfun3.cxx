@@ -517,6 +517,7 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
+            SotClipboardFormatId nBiff12= SotExchange::RegisterFormatName(u"Biff12"_ustr);
             SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(u"Biff8"_ustr);
             SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(u"Biff5"_ustr);
 
@@ -602,7 +603,9 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
                 else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ))
                     PasteFromSystem( SotClipboardFormatId::EMBEDDED_OBJ_OLE );
                     // SotClipboardFormatId::PRIVATE no longer here (can't work if pOwnClip is NULL)
-                else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
+                else if (aDataHelper.HasFormat(nBiff12))      // before xxx_OLE formats
+                    PasteFromSystem(nBiff12);
+                else if (aDataHelper.HasFormat(nBiff8))
                     PasteFromSystem(nBiff8);
                 else if (aDataHelper.HasFormat(nBiff5))
                     PasteFromSystem(nBiff5);
@@ -656,6 +659,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     else
     {
             TransferableDataHelper aDataHelper( rxTransferable );
+            SotClipboardFormatId nBiff12 = SotExchange::RegisterFormatName(u"Biff12"_ustr);
             SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(u"Biff8"_ustr);
             SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(u"Biff5"_ustr);
             SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
@@ -688,7 +692,9 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
             else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ))
                 nFormatId = SotClipboardFormatId::EMBEDDED_OBJ_OLE;
             // SotClipboardFormatId::PRIVATE no longer here (can't work if pOwnClip is NULL)
-            else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
+            else if (aDataHelper.HasFormat(nBiff12))      // before xxx_OLE formats
+                nFormatId = nBiff12;
+            else if (aDataHelper.HasFormat(nBiff8))
                 nFormatId = nBiff8;
             else if (aDataHelper.HasFormat(nBiff5))
                 nFormatId = nBiff5;

@@ -171,6 +171,7 @@ private:
 public:
     explicit        ScDocShell( const ScDocShell& rDocShell ) = delete;
     SC_DLLPUBLIC explicit ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT, const std::shared_ptr<ScDocument>& pDoc = {} );
+    explicit ScDocShell(const SfxModelFlags i_nSfxCreationFlags, ScDocumentMode);
                     virtual ~ScDocShell() override;
 
     SC_DLLPUBLIC virtual SfxUndoManager* GetUndoManager() override;
