@@ -11602,8 +11602,6 @@ svx/source/sidebar/graphic/GraphicPropertyPanel.hxx
 svx/source/sidebar/line/LinePropertyPanel.cxx
 svx/source/sidebar/line/LinePropertyPanel.hxx
 svx/source/sidebar/line/LinePropertyPanelBase.cxx
-svx/source/sidebar/line/LineWidthValueSet.cxx
-svx/source/sidebar/line/LineWidthValueSet.hxx
 svx/source/sidebar/media/MediaPlaybackPanel.cxx
 svx/source/sidebar/media/MediaPlaybackPanel.hxx
 svx/source/sidebar/nbdtmg.cxx

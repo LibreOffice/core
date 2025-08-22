@@ -26,12 +26,9 @@
 #include <svtools/toolbarmenu.hxx>
 #include <array>
 
-class ValueSet;
-
 namespace svx::sidebar
 {
 class LinePropertyPanelBase;
-class LineWidthValueSet;
 
 class LineWidthPopup final : public WeldToolbarPopup
 {
@@ -57,11 +54,17 @@ private:
     Image m_aIMGCusGray;
 
     std::unique_ptr<weld::MetricSpinButton> m_xMFWidth;
-    std::unique_ptr<LineWidthValueSet> m_xVSWidth;
-    std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
+    std::unique_ptr<weld::IconView> m_xIVWidth;
+    Size aPreviewSize;
 
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, weld::IconView&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
+
+    VclPtr<VirtualDevice> CreateLinePreview(sal_uInt16 nLineWidth, const OUString& rText);
+    VclPtr<VirtualDevice> CreateCustomPreview(const Image& rImage, const OUString& rText,
+                                              bool bEnabled);
+    void PopulateIconView();
 };
 
 } // end of namespace svx::sidebar

@@ -26,8 +26,10 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include "LineWidthValueSet.hxx"
 #include <bitmaps.hlst>
+#include <comphelper/lok.hxx>
+#include <vcl/virdev.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 namespace svx::sidebar
 {
@@ -43,11 +45,9 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     , m_aIMGCus(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM)
     , m_aIMGCusGray(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM_GRAY)
     , m_xMFWidth(m_xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::POINT))
-    , m_xVSWidth(new LineWidthValueSet())
-    , m_xVSWidthWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xVSWidth))
+    , m_xIVWidth(m_xBuilder->weld_icon_view(u"line_iconview"_ustr))
+    , aPreviewSize(300, 20)
 {
-    m_xVSWidth->SetStyle(m_xVSWidth->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT);
-
     maStrUnits[0] = "0.5";
     maStrUnits[1] = "0.8";
     maStrUnits[2] = "1.0";
@@ -68,39 +68,63 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
         maStrUnits[i] += m_sPt;
     }
 
-    for (sal_uInt16 i = 1; i <= 9; ++i)
+    PopulateIconView();
+
+    m_xIVWidth->connect_item_activated(LINK(this, LineWidthPopup, ItemActivatedHdl));
+
+    // Avoid LibreOffice Kit crash: tooltip handlers cause segfault during JSDialog
+    // serialization when popup widgets are destroyed/recreated during character formatting resets.
+    // Tooltip event binding is not needed for LibreOffice Kit
+    if (!comphelper::LibreOfficeKit::isActive())
     {
-        m_xVSWidth->InsertItem(i);
-        m_xVSWidth->SetItemText(i, maStrUnits[i - 1]);
+        m_xIVWidth->connect_query_tooltip(LINK(this, LineWidthPopup, QueryTooltipHdl));
     }
 
-    m_xVSWidth->SetUnit(maStrUnits);
-    m_xVSWidth->SetItemData(1, reinterpret_cast<void*>(5));
-    m_xVSWidth->SetItemData(2, reinterpret_cast<void*>(8));
-    m_xVSWidth->SetItemData(3, reinterpret_cast<void*>(10));
-    m_xVSWidth->SetItemData(4, reinterpret_cast<void*>(15));
-    m_xVSWidth->SetItemData(5, reinterpret_cast<void*>(23));
-    m_xVSWidth->SetItemData(6, reinterpret_cast<void*>(30));
-    m_xVSWidth->SetItemData(7, reinterpret_cast<void*>(45));
-    m_xVSWidth->SetItemData(8, reinterpret_cast<void*>(60));
-    m_xVSWidth->SetImage(m_aIMGCusGray);
-
-    m_xVSWidth->SetSelItem(0);
-
-    m_xVSWidth->SetSelectHdl(LINK(this, LineWidthPopup, VSSelectHdl));
     m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
 }
 
 LineWidthPopup::~LineWidthPopup() {}
 
-IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(LineWidthPopup, ItemActivatedHdl, weld::IconView&, bool)
 {
-    sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
+    OUString sSelectedId = m_xIVWidth->get_selected_id();
+    if (sSelectedId.isEmpty())
+        return false;
+
+    sal_uInt32 iPos = sSelectedId.toUInt32();
+
     if (iPos >= 1 && iPos <= 8)
     {
-        sal_IntPtr nVal = OutputDevice::LogicToLogic(
-            reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData(iPos)), MapUnit::MapPoint,
-            m_eMapUnit);
+        sal_IntPtr nVal = 0;
+        switch (iPos - 1)
+        {
+            case 0:
+                nVal = 5;
+                break; // 0.5pt
+            case 1:
+                nVal = 8;
+                break; // 0.8pt
+            case 2:
+                nVal = 10;
+                break; // 1.0pt
+            case 3:
+                nVal = 15;
+                break; // 1.5pt
+            case 4:
+                nVal = 23;
+                break; // 2.3pt
+            case 5:
+                nVal = 30;
+                break; // 3.0pt
+            case 6:
+                nVal = 45;
+                break; // 4.5pt
+            case 7:
+                nVal = 60;
+                break; // 6.0pt
+        }
+
+        nVal = OutputDevice::LogicToLogic(nVal, MapUnit::MapPoint, m_eMapUnit);
         nVal = m_xMFWidth->denormalize(nVal);
         XLineWidthItem aWidthItem(nVal);
         m_rParent.setLineWidth(aWidthItem);
@@ -119,12 +143,6 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
             m_rParent.setLineWidth(aWidthItem);
             m_rParent.SetWidth(nVal);
         }
-        else
-        {
-            m_xVSWidth->SetNoSelection(); //add , set no selection and keep the last select item
-            m_xVSWidth->SetFormat();
-            m_xVSWidth->Invalidate();
-        }
         //modify end
     }
 
@@ -132,16 +150,14 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
     {
         m_rParent.EndLineWidthPopup();
     }
+
+    return true;
 }
 
 IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 {
-    if (m_xVSWidth->GetSelItem())
-    {
-        m_xVSWidth->SetSelItem(0);
-        m_xVSWidth->SetFormat();
-        m_xVSWidth->Invalidate();
-    }
+    m_xIVWidth->unselect_all();
+
     tools::Long nTmp = static_cast<tools::Long>(m_xMFWidth->get_value(FieldUnit::NONE));
     tools::Long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, m_eMapUnit);
     sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize(nVal));
@@ -149,11 +165,24 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
     m_rParent.setLineWidth(aWidthItem);
 }
 
+IMPL_LINK(LineWidthPopup, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    OUString sId = m_xIVWidth->get_id(rIter);
+    sal_uInt16 iPos = sId.toUInt32();
+    if (iPos >= 1 && iPos <= 8)
+        return maStrUnits[iPos - 1];
+    else if (iPos == 9)
+        return m_bCustom ? (OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt)
+                         : maStrUnits[8];
+    return OUString();
+}
+
 void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit)
 {
     m_bVSFocus = true;
-    m_xVSWidth->SetSelItem(0);
+    m_xIVWidth->unselect_all();
     m_eMapUnit = eMapUnit;
+
     SvtViewOptions aWinOpt(EViewType::Window, u"PopupPanel_LineWidth"_ustr);
     if (aWinOpt.Exists())
     {
@@ -165,18 +194,19 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
         OUString aWinData(aTmp);
         m_nCustomWidth = aWinData.toInt32();
         m_bCustom = true;
-        m_xVSWidth->SetImage(m_aIMGCus);
-        m_xVSWidth->SetCusEnable(true);
 
         OUString aStrTip = OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt;
-        m_xVSWidth->SetItemText(9, aStrTip);
+        VclPtr<VirtualDevice> aCustomVDev = CreateCustomPreview(m_aIMGCus, aStrTip, true);
+        m_xIVWidth->set_image(8, aCustomVDev);
+        m_xIVWidth->set_text(8, aStrTip);
     }
     else
     {
         m_bCustom = false;
-        m_xVSWidth->SetImage(m_aIMGCusGray);
-        m_xVSWidth->SetCusEnable(false);
-        m_xVSWidth->SetItemText(9, maStrUnits[8]);
+        VclPtr<VirtualDevice> aCustomVDev
+            = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
+        m_xIVWidth->set_image(8, aCustomVDev);
+        m_xIVWidth->set_text(8, maStrUnits[8]);
     }
 
     if (bValuable)
@@ -196,7 +226,7 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     {
         if (strCurrValue == maStrUnits[i])
         {
-            m_xVSWidth->SetSelItem(i + 1);
+            m_xIVWidth->select(i);
             break;
         }
     }
@@ -204,19 +234,108 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     if (i >= 8)
     {
         m_bVSFocus = false;
-        m_xVSWidth->SetSelItem(0);
+        m_xIVWidth->unselect_all();
     }
-
-    m_xVSWidth->SetFormat();
-    m_xVSWidth->Invalidate();
 }
 
 void LineWidthPopup::GrabFocus()
 {
     if (m_bVSFocus)
-        m_xVSWidth->GrabFocus();
+        m_xIVWidth->grab_focus();
     else
         m_xMFWidth->grab_focus();
+}
+
+VclPtr<VirtualDevice> LineWidthPopup::CreateLinePreview(sal_uInt16 nLineWidth,
+                                                        const OUString& rText)
+{
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    pVDev->SetOutputSizePixel(aPreviewSize);
+
+    // Set background
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pVDev->SetFillColor(rStyleSettings.GetWindowColor());
+
+    // Set font
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS,
+                                                 MsLangId::getConfiguredSystemLanguage(),
+                                                 GetDefaultFontFlags::OnlyOne));
+    Size aFontSize = aFont.GetFontSize();
+    aFontSize.setHeight(aPreviewSize.Height() * 3 / 5);
+    aFont.SetFontSize(aFontSize);
+    aFont.SetColor(rStyleSettings.GetFieldTextColor());
+    pVDev->SetFont(aFont);
+
+    // Draw text
+    Point aTextStart(aPreviewSize.Width() * 7 / 9, aPreviewSize.Height() / 6);
+    pVDev->DrawText(aTextStart, rText);
+
+    // Draw line with specified width
+    pVDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    Point aLineStart(5, (aPreviewSize.Height() - nLineWidth) / 2);
+    Point aLineEnd(aPreviewSize.Width() * 7 / 9 - 10, (aPreviewSize.Height() - nLineWidth) / 2);
+
+    for (sal_uInt16 i = 1; i <= nLineWidth; i++)
+    {
+        pVDev->DrawLine(aLineStart, aLineEnd);
+        aLineStart.AdjustY(1);
+        aLineEnd.AdjustY(1);
+    }
+
+    return pVDev;
+}
+
+VclPtr<VirtualDevice> LineWidthPopup::CreateCustomPreview(const Image& rImage,
+                                                          const OUString& rText, bool bEnabled)
+{
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    pVDev->SetOutputSizePixel(aPreviewSize);
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pVDev->SetFillColor(rStyleSettings.GetWindowColor());
+
+    // Draw image
+    Point aImgStart(5, (aPreviewSize.Height() - 23) / 2);
+    pVDev->DrawImage(aImgStart, rImage);
+
+    // Set font and color
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS,
+                                                 MsLangId::getConfiguredSystemLanguage(),
+                                                 GetDefaultFontFlags::OnlyOne));
+    Size aFontSize = aFont.GetFontSize();
+    aFontSize.setHeight(aPreviewSize.Height() * 3 / 5);
+    aFont.SetFontSize(aFontSize);
+
+    if (bEnabled)
+        aFont.SetColor(rStyleSettings.GetFieldTextColor());
+    else
+        aFont.SetColor(rStyleSettings.GetDisableColor());
+
+    pVDev->SetFont(aFont);
+
+    // Draw text
+    tools::Rectangle aStrRect(Point(rImage.GetSizePixel().Width() + 20, aPreviewSize.Height() / 6),
+                              Size(aPreviewSize.Width() - rImage.GetSizePixel().Width() - 25,
+                                   aPreviewSize.Height() - aPreviewSize.Height() / 3));
+    pVDev->DrawText(aStrRect, rText, DrawTextFlags::EndEllipsis);
+
+    return pVDev;
+}
+
+void LineWidthPopup::PopulateIconView()
+{
+    m_xIVWidth->clear();
+
+    for (sal_uInt16 i = 1; i <= 8; ++i)
+    {
+        OUString sId = OUString::number(i);
+        VclPtr<VirtualDevice> aPreview = CreateLinePreview(i, maStrUnits[i - 1]);
+        m_xIVWidth->insert(-1, &maStrUnits[i - 1], &sId, aPreview, nullptr);
+    }
+
+    OUString sCustomId = OUString::number(9);
+    VclPtr<VirtualDevice> aCustomPreview = CreateCustomPreview(m_aIMGCusGray, maStrUnits[8], false);
+    m_xIVWidth->insert(-1, &maStrUnits[8], &sCustomId, aCustomPreview, nullptr);
 }
 
 } // end of namespace svx::sidebar
