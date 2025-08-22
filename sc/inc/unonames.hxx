@@ -341,6 +341,7 @@ inline constexpr OUString SC_UNONAME_TEXTFIELD_TYPE   = u"TextFieldType"_ustr;
 inline constexpr OUString SC_UNONAME_REPR             = u"Representation"_ustr;
 inline constexpr OUString SC_UNONAME_TARGET           = u"TargetFrame"_ustr;
 inline constexpr OUString SC_UNONAME_URL              = u"URL"_ustr;
+inline constexpr OUString SC_UNONAME_FORMAT           = u"Format"_ustr;
 
 // date time field
 inline constexpr OUString SC_UNONAME_ISDATE           = u"IsDate"_ustr;

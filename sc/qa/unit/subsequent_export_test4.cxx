@@ -2274,8 +2274,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf150229)
         xField->setPropertyValue(u"URL"_ustr, uno::Any(longUrl));
         xField->setPropertyValue(u"Representation"_ustr, uno::Any(u"hyperlink"_ustr));
 
-        xCell->insertTextContent(xCell->createTextCursor(), xField.queryThrow<text::XTextContent>(),
-                                 false);
+        xCell->insertTextContent(xCell->getEnd(), xField.queryThrow<text::XTextContent>(), false);
     }
 
     // Test XLSX export: the hyperlink must truncate at 8192 character boundary
