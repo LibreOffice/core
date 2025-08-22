@@ -67,7 +67,6 @@ class BackingWindow : public InterimItemWindow
     std::unique_ptr<weld::CustomWeld> mxBrandImageWeld;
 
     std::unique_ptr<weld::Button> mxHelpButton;
-    std::unique_ptr<weld::Button> mxExtensionsButton;
     std::unique_ptr<weld::Button> mxDonateButton;
 
     std::unique_ptr<weld::Container> mxAllButtonsBox;
@@ -96,7 +95,6 @@ class BackingWindow : public InterimItemWindow
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(ClickHelpHdl, weld::Button&, void);
     DECL_LINK(MenuSelectHdl, const OUString&, void);
-    DECL_STATIC_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);

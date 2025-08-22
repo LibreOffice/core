@@ -151,8 +151,6 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     , mxBrandImage(new BrandImage)
     , mxBrandImageWeld(new weld::CustomWeld(*m_xBuilder, u"daBrand"_ustr, *mxBrandImage))
     , mxHelpButton(m_xBuilder->weld_button(u"help"_ustr))
-    , mxExtensionsButton(m_xBuilder->weld_button(u"extensions"_ustr))
-    , mxDonateButton(m_xBuilder->weld_button(u"donate"_ustr))
     , mxAllButtonsBox(m_xBuilder->weld_container(u"all_buttons_box"_ustr))
     , mxButtonsBox(m_xBuilder->weld_container(u"buttons_box"_ustr))
     , mxSmallButtonsBox(m_xBuilder->weld_container(u"small_buttons_box"_ustr))
@@ -175,21 +173,6 @@ BackingWindow::BackingWindow(vcl::Window* i_pParent)
     //set an alternative help label that doesn't hotkey the H of the Help menu
     mxHelpButton->set_label(mxAltHelpLabel->get_label());
     mxHelpButton->connect_clicked(LINK(this, BackingWindow, ClickHelpHdl));
-
-    // tdf#161796 replace the extension button with a donate button
-    if (officecfg::Office::Common::Misc::ShowDonation::get())
-    {
-        mxExtensionsButton->hide();
-        mxDonateButton->show();
-        mxDonateButton->set_from_icon_name(BMP_DONATE);
-        OUString sDonate(SfxResId(STR_DONATE_BUTTON));
-        if (sDonate.getLength() > 8)
-        {
-            mxDonateButton->set_tooltip_text(sDonate);
-            sDonate = OUString::Concat(sDonate.subView(0, 7)) + "...";
-        }
-        mxDonateButton->set_label(sDonate);
-    }
 
     mxDropTarget = mxAllRecentThumbnails->GetDropTarget();
 
@@ -251,8 +234,6 @@ void BackingWindow::dispose()
     mxBrandImageWeld.reset();
     mxBrandImage.reset();
     mxHelpButton.reset();
-    mxDonateButton.reset();
-    mxExtensionsButton.reset();
     mxAllButtonsBox.reset();
     mxButtonsBox.reset();
     mxSmallButtonsBox.reset();
@@ -305,9 +286,6 @@ void BackingWindow::initControls()
     mxLocalView->ShowTooltips( true );
 
     checkInstalledModules();
-
-    mxExtensionsButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
-    mxDonateButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     mxOpenButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
 
@@ -541,32 +519,6 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
     css::uno::Reference<XFramesSupplier> xFramesSupplier(mxDesktopDispatchProvider, UNO_QUERY);
     if (xFramesSupplier)
         xFramesSupplier->setActiveFrame(mxFrame);
-}
-
-IMPL_STATIC_LINK_NOARG(BackingWindow, ExtLinkClickHdl, weld::Button&, void)
-{
-    try
-    {
-        OUString sURL;
-        if (officecfg::Office::Common::Misc::ShowDonation::get())
-            sURL = officecfg::Office::Common::Menus::DonationURL::get() +
-                "?BCP47=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() +
-                "&LOlang=" + LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
-        else
-            sURL = officecfg::Office::Common::Menus::ExtensionsURL::get() +
-                "?LOvers=" + utl::ConfigManager::getProductVersion() +
-                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
-
-        Reference<css::system::XSystemShellExecute> const
-            xSystemShellExecute(
-                css::system::SystemShellExecute::create(
-                    ::comphelper::getProcessComponentContext()));
-        xSystemShellExecute->execute(sURL, OUString(),
-            css::system::SystemShellExecuteFlags::URIS_ONLY);
-    }
-    catch (const Exception&)
-    {
-    }
 }
 
 void BackingWindow::applyFilter()
