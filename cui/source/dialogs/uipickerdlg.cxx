@@ -35,9 +35,10 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     m_xOKBtn->set_visible(false);
     m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"
 
+    // it's mandatory for gtk3 to set the icon before changing the label
+    m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
     m_xApplyBtn->set_label(
         CuiResId(RID_CUISTR_UI_APPLY).replaceFirst("%MODULE", UITabPage::GetCurrentApp()));
-    m_xApplyBtn->set_from_icon_name("sw/res/sc20558.png");
     m_xResetBtn->set_label(CuiResId(RID_CUISTR_UI_APPLYALL));
     m_xApplyBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));
     m_xResetBtn->connect_clicked(LINK(this, UIPickerDialog, OnApplyClick));
