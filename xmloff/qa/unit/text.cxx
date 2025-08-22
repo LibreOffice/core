@@ -1353,6 +1353,26 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsImport)
     CPPUNIT_ASSERT_EQUAL(24.f, fCharheight);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharStyleExport)
+{
+    // Given a document with a format redline, the redline contains the old char style:
+    loadFromFile(u"format-char-style-change.docx");
+
+    // When exporting the document to ODT:
+    save(u"writer8"_ustr);
+
+    // Then make sure the style name is encoded:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change");
+    OUString aStyleName = getXPath(
+        pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change", "style-name");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Strong_20_Emphasis
+    // - Actual  : Strong Emphasis
+    // i.e. the style name was not encoded.
+    CPPUNIT_ASSERT_EQUAL(u"Strong_20_Emphasis"_ustr, aStyleName);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
