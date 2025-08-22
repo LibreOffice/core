@@ -81,6 +81,7 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
         { SC_UNONAME_TARGET,   0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_TEXTWRAP, 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
         { SC_UNONAME_URL,      0,  cppu::UnoType<OUString>::get(),    0, 0},
+        { SC_UNONAME_FORMAT,   0,  cppu::UnoType<sal_Int16>::get(),   0, 0 },
     };
     static SfxItemPropertySet aURLPropertySet_Impl( aURLPropertyMap_Impl );
     return &aURLPropertySet_Impl;
@@ -644,6 +645,11 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
             if (rVal >>= aStrVal)
                 pURL->SetTargetFrame(aStrVal);
         }
+        else if (rName == SC_UNONAME_FORMAT)
+        {
+            if (sal_Int16 nVal; rVal >>= nVal)
+                pURL->SetFormat(static_cast<SvxURLFormat>(nVal));
+        }
         else
             throw beans::UnknownPropertyException(rName);
 
@@ -703,6 +709,8 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
             aRet <<= pURL->GetRepresentation();
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= pURL->GetTargetFrame();
+        else if (rName == SC_UNONAME_FORMAT)
+            aRet <<= static_cast<sal_Int16>(pURL->GetFormat());
         else
             throw beans::UnknownPropertyException(rName);
     }
@@ -716,6 +724,8 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
             aRet <<= rURL.GetRepresentation();
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= rURL.GetTargetFrame();
+        else if (rName == SC_UNONAME_FORMAT)
+            aRet <<= static_cast<sal_Int16>(rURL.GetFormat());
         else
             throw beans::UnknownPropertyException(rName);
     }
