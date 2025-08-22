@@ -5731,6 +5731,7 @@ include/svx/ParseContext.hxx
 include/svx/ShapeTypeHandler.hxx
 include/svx/SmartTagItem.hxx
 include/svx/SmartTagMgr.hxx
+include/svx/svxbmpnumiconview.hxx
 include/svx/SvxColorChildWindow.hxx
 include/svx/SvxPresetListBox.hxx
 include/svx/algitem.hxx
@@ -11318,6 +11319,7 @@ svx/source/dialog/searchcharmap.cxx
 svx/source/dialog/spacinglistbox.cxx
 svx/source/dialog/srchctrl.cxx
 svx/source/dialog/srchdlg.cxx
+svx/source/dialog/svxbmpnumiconview.cxx
 svx/source/dialog/svxbmpnumvalueset.cxx
 svx/source/dialog/svxgraphicitem.cxx
 svx/source/dialog/svxruler.cxx
