@@ -740,8 +740,6 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             const sal_Int32 nOtherStart = pOther->GetStart();
             if (nThisEnd < nOtherStart)
                 break;
-            if (nThisStart < nOtherStart)
-                continue;
             const sal_Int32 nOtherEnd = *pOther->End();
 
             if (nThisStart <= nOtherStart && nOtherStart <= nThisEnd)
