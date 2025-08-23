@@ -5854,6 +5854,14 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     }
 }
 
+SvxUnoTextRangeBase* ScCellObj::getSvxUnoTextRange(const uno::Reference<text::XTextRange>& xRange)
+{
+    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>(xRange);
+    if (!pRange && xRange.get() == this) // cell itself passed as range?
+        pRange = &GetUnoText();
+    return pRange;
+}
+
 //  XText
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
@@ -5867,7 +5875,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
 {
     SolarMutexGuard aGuard;
 
-    SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( aTextPosition );
+    SvxUnoTextRangeBase* pRange = getSvxUnoTextRange(aTextPosition);
     if (!pRange)
         throw uno::RuntimeException();
 
@@ -5896,18 +5904,15 @@ void SAL_CALL ScCellObj::setString( const OUString& aText )
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
                                         const OUString& aString, sal_Bool bAbsorb )
 {
-    // special handling for ScCellTextCursor is no longer needed,
-    // SvxUnoText::insertString checks for SvxUnoTextRangeBase instead of SvxUnoTextRange
-
     SolarMutexGuard aGuard;
-    GetUnoText().insertString(xRange, aString, bAbsorb);
+    GetUnoText().insertString(getSvxUnoTextRange(xRange), aString, bAbsorb);
 }
 
 void SAL_CALL ScCellObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
                                                 sal_Int16 nControlCharacter, sal_Bool bAbsorb )
 {
     SolarMutexGuard aGuard;
-    GetUnoText().insertControlCharacter(xRange, nControlCharacter, bAbsorb);
+    GetUnoText().insertControlCharacter(getSvxUnoTextRange(xRange), nControlCharacter, bAbsorb);
 }
 
 void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRange >& xRange,
@@ -5920,11 +5925,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
         throw lang::IllegalArgumentException(u"Content already inserted"_ustr, getXWeak(), 1);
     if (ScDocShell* pDocSh = GetDocShell(); pDocSh && pCellField)
     {
-        auto* pTextRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>(xRange);
-        if (!pTextRange && xRange.get() == this) // cell itself passed as range?
-            pTextRange = &GetUnoText();
-
-        if (pTextRange)
+        if (auto* pTextRange = getSvxUnoTextRange(xRange))
         {
             SvxEditSource* pEditSource = pTextRange->GetEditSource();
             ESelection aSelection(pTextRange->GetSelection());
