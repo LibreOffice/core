@@ -675,6 +675,11 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const css::uno::
         if (rVal >>= aStrVal)
             rData.SetTargetFrame(aStrVal);
     }
+    else if (rName == SC_UNONAME_FORMAT)
+    {
+        if (sal_Int16 nVal; rVal >>= nVal)
+            rData.SetFormat(static_cast<SvxURLFormat>(nVal));
+    }
     else
         throw beans::UnknownPropertyException(rName);
 }
