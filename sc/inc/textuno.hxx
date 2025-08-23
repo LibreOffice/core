@@ -204,8 +204,6 @@ public:
 
 //  derived cursor objects for getImplementation and getText/getStart/getEnd
 
-//! uno3: SvxUnoTextCursor is not derived from XUnoTunnel, but should be (?)
-
 class ScCellTextCursor final : public SvxUnoTextCursor
 {
     rtl::Reference<ScCellObj> mxTextObj;
