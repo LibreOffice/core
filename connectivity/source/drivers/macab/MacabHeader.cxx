@@ -68,6 +68,18 @@ MacabHeader::MacabHeader()
 
 MacabHeader::~MacabHeader()
 {
+    if(fields != nullptr)
+    {
+        sal_Int32 i;
+        for(i = 0; i < size; i++)
+        {
+            if(fields[i] != nullptr && fields[i]->value != nullptr)
+            {
+                CFRelease(fields[i]->value);
+                fields[i]->value = nullptr;
+            }
+        }
+    }
 }
 
 

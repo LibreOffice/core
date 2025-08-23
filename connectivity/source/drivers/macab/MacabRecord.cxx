@@ -51,15 +51,7 @@ MacabRecord::MacabRecord(const sal_Int32 _size)
 MacabRecord::~MacabRecord()
 {
     if(size > 0)
-    {
         releaseFields();
-        int i;
-        for(i = 0; i < size; i++)
-        {
-            delete fields[i];
-            fields[i] = nullptr;
-        }
-    }
 }
 
 
@@ -155,7 +147,15 @@ void MacabRecord::releaseFields()
      */
     sal_Int32 i;
     for(i = 0; i < size; i++)
-        CFRelease(fields[i]->value);
+    {
+        if(fields[i] != nullptr)
+        {
+            if(fields[i]->value != nullptr)
+                CFRelease(fields[i]->value);
+            delete fields[i];
+            fields[i] = nullptr;
+        }
+    }
 }
 
 

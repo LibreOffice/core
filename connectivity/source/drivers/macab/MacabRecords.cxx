@@ -163,6 +163,17 @@ void MacabRecords::initialize()
 
 MacabRecords::~MacabRecords()
 {
+    if(header != nullptr)
+        delete header;
+
+    if(records != nullptr)
+    {
+        sal_Int32 i;
+        for(i = 0; i < recordsSize; i++)
+            delete records[i];
+
+        delete [] records;
+    }
 }
 
 
@@ -492,6 +503,9 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
     if(propertyValue != nullptr)
         CFRelease(propertyValue);
 
+    if(localizedPropertyName != nullptr)
+        CFRelease(localizedPropertyName);
+
     return result;
 }
 
@@ -516,6 +530,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             headerNames = new macabfield *[1];
             headerNames[0] = new macabfield;
             headerNames[0]->value = _propertyName;
+            if(headerNames[0]->value)
+                CFRetain(_propertyName);
             headerNames[0]->type = _propertyType;
             break;
 
@@ -797,7 +813,11 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
         manageDuplicateHeaders(headerNames, length);
         MacabHeader *headerResult = new MacabHeader(length, headerNames);
         for(sal_Int32 i = 0; i < length; ++i)
+        {
+            if(headerNames[i]->value)
+                CFRelease(headerNames[i]->value);
             delete headerNames[i];
+        }
         delete [] headerNames;
         return headerResult;
     }

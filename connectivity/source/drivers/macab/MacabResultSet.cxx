@@ -53,6 +53,7 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
       OPropertySetHelper(MacabResultSet_BASE::rBHelper),
       m_xStatement(pStmt),
       m_aMacabRecords(),
+      m_bMacabRecordsNeedsDelete(false),
       m_nRowPos(-1),
       m_bWasNull(true),
       m_sTableName(MacabAddressBook::getDefaultTableName())
@@ -61,12 +62,19 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
 
 MacabResultSet::~MacabResultSet()
 {
+    if(m_aMacabRecords != nullptr && m_bMacabRecordsNeedsDelete)
+        delete m_aMacabRecords;
 }
 
 void MacabResultSet::allMacabRecords()
 {
     rtl::Reference<MacabConnection> pConnection = static_cast< MacabConnection *>(m_xStatement->getConnection().get());
 
+    if(m_aMacabRecords != nullptr && m_bMacabRecordsNeedsDelete)
+    {
+        m_bMacabRecordsNeedsDelete = false;
+        delete m_aMacabRecords;
+    }
     m_aMacabRecords = pConnection->getAddressBook()->getMacabRecords(m_sTableName);
 }
 
@@ -87,6 +95,7 @@ void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
     // The copy constructor copies everything but records (including the
     // maximum allocated size, which means that we'll never have to resize)
     m_aMacabRecords = new MacabRecords(allRecords);
+    m_bMacabRecordsNeedsDelete = true;
 
     if(pCondition->isAlwaysFalse())
     {
