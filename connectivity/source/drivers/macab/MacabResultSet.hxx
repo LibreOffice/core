@@ -59,6 +59,7 @@ namespace connectivity::macab
             ::rtl::Reference< MacabCommonStatement >        m_xStatement;       // the statement that has created this result set
             ::rtl::Reference< MacabResultSetMetaData >  m_xMetaData;        // the description of the columns in this result set
             MacabRecords *                      m_aMacabRecords;    // address book entries matching the query
+            bool                                m_bMacabRecordsNeedsDelete;
             sal_Int32                                   m_nRowPos;          // the current row within the result set
             bool                                    m_bWasNull;         // last entry retrieved from this result set was NULL
             OUString                     m_sTableName;
