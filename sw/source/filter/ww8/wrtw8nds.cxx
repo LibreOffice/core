@@ -2306,10 +2306,10 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
 }
 
 namespace {
-OUString lcl_GetSymbolFont(SwAttrPool& rPool, const SwTextNode* pTextNode, int nStart, int nEnd)
+OUString lcl_GetSymbolFont(SwAttrPool& rPool, const SwTextNode& rTextNode, int nStart, int nEnd)
 {
     SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( rPool );
-    if ( pTextNode && pTextNode->GetParaAttr(aSet, nStart, nEnd) )
+    if (rTextNode.GetParaAttr(aSet, nStart, nEnd))
     {
         SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_FONT);
         if (pPoolItem)
@@ -2553,8 +2553,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                2) Ensure that it is a text node and not in a fly.
                3) If the anchor is associated with a text node with empty text then we ignore.
                */
-            if( rNode.IsTextNode()
-                && GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
+            if (GetExportFormat() == MSWordExportBase::ExportFormat::DOCX
                 && aStr != OUStringChar(CH_TXTATR_BREAKWORD) && !aStr.isEmpty()
                     && !rNode.GetFlyFormat()
                     && aAttrIter.IsAnchorLinkedToThisNode(rNode.GetIndex()) )
@@ -2755,28 +2754,20 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 assert(0 <= nLen);
 
                 OUString aSnippet( aAttrIter.GetSnippet( aStr, nCurrentPos + ofs, nLen ) );
-                const SwTextNode* pTextNode( rNode.GetTextNode() );
                 if (m_bAddFootnoteTab && (m_nTextTyp == TXT_EDN || m_nTextTyp == TXT_FTN)
                     && nCurrentPos == 0 && nLen > 0 && aSnippet[0] != 0x09)
                 {
                     // Allow MSO to emulate LO footnote text starting at left margin - only meaningful with hanging indent
-                    sal_Int32 nFirstLineIndent=0;
-                    SfxItemSetFixed<RES_MARGIN_FIRSTLINE, RES_MARGIN_FIRSTLINE> aSet( m_rDoc.GetAttrPool() );
-
-                    if ( pTextNode && pTextNode->GetAttr(aSet) )
-                    {
-                        const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
-                        if (pFirstLine)
-                            nFirstLineIndent = pFirstLine->ResolveTextFirstLineOffset({});
-                    }
+                    const SvxFirstLineIndentItem& rFirstLine = rNode.GetAttr(RES_MARGIN_FIRSTLINE);
 
                     // Insert tab for aesthetic purposes #i24762#
-                    if (nFirstLineIndent < 0)
+                    if (rFirstLine.ResolveTextFirstLineOffset({}) < 0)
                         aSnippet = "\x09" + aSnippet;
                     m_bAddFootnoteTab = false;
                 }
 
-                aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), pTextNode, nCurrentPos + ofs, nCurrentPos + ofs + nLen);
+                aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos + ofs,
+                                                nCurrentPos + ofs + nLen);
 
                 if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )
                 {
@@ -2910,7 +2901,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
             AttrOutput().WritePostitFieldReference();
 
-            aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), &rNode, nCurrentPos, nCurrentPos + nLen);
+            aSymbolFont = lcl_GetSymbolFont(m_rDoc.GetAttrPool(), rNode, nCurrentPos, nCurrentPos + nLen);
 
             if (bPostponeWritingText)
             {
