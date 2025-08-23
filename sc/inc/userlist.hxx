@@ -78,7 +78,6 @@ public:
     ScUserListData& operator[](size_t nIndex) { return maData[nIndex]; }
     ScUserList& operator=(const ScUserList& r) = default;
     bool operator==(const ScUserList& r) const;
-    bool operator!=(const ScUserList& r) const { return !operator==(r); }
 
     void clear() { maData.clear(); }
     size_t size() const { return maData.size(); }

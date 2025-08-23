@@ -137,7 +137,6 @@ class ScColumnsRange final
 
         // Comparing iterators from different containers is undefined, so comparing mCol is enough.
         bool operator==(const Iterator & rOther) const {return mCol == rOther.mCol;}
-        bool operator!=(const Iterator & rOther) const {return !(*this == rOther);}
         SCCOL operator*() const {return mCol;}
     };
 
