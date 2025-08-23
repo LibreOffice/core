@@ -1891,7 +1891,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             default: break;
         }
         if (!aIdent.isEmpty())
+        {
+            assert(nContentType != ContentTypeId::UNKNOWN && "aIdent is empty if UNKNOWN type");
             xPop->set_active(aIdent, mTrackContentType[nContentType]);
+        }
 
         // Edit only if the shown content is coming from the current view.
         if (State::HIDDEN != m_eState &&
