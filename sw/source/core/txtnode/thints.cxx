@@ -665,8 +665,6 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             sal_Int32 nOtherStart = pOther->GetStart();
             if (nThisEnd < nOtherStart)
                 break;
-            if (nThisStart < nOtherStart)
-                continue;
             const sal_Int32 nOtherEnd = *pOther->GetEnd();
 
             // Check if start of new attribute overlaps with pOther:
