@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <condition_variable>
 #include <mutex>
 #include <osl/conditn.hxx>
 #include <cppuhelper/weak.hxx>
@@ -71,7 +72,7 @@ protected:
                             m_xListener;
 
     osl::Condition          m_aSourceSet;
-    osl::Condition          m_aListenerSet;
+    std::condition_variable m_aListenerSet;
 
 protected:
     void impl_init();

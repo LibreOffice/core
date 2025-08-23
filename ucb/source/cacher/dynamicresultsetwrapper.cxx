@@ -238,11 +238,12 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
     }
     OSL_ENSURE( m_bGotWelcome, "first notification was without WELCOME" );
 
-    aGuard.unlock();
+    m_aListenerSet.wait(aGuard, [this]{ return m_xListener.is(); });
 
-    if( !m_xListener.is() )
-        m_aListenerSet.wait();
-    m_xListener->notify( aNewEvent );
+    Reference<XDynamicResultSetListener> xListener = m_xListener;
+
+    aGuard.unlock();
+    xListener->notify( aNewEvent );
 
     /*
     m_bUseOne = !m_bUseOne;
@@ -340,7 +341,7 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
     if ( xSource.is() )
         xSource->setListener( xMyListenerImpl );
 
-    m_aListenerSet.set();
+    m_aListenerSet.notify_all();
 }
 
 //virtual
