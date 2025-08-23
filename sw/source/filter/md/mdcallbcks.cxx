@@ -17,15 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/postitem.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 
+#include <charatr.hxx>
+#include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <fmtanchr.hxx>
 #include <fmtinfmt.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <fmtanchr.hxx>
+#include <poolfmt.hxx>
 #include <tools/urlobj.hxx>
 
 #include "swmd.hxx"
@@ -178,7 +182,13 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
             break;
         }
         case MD_SPAN_CODE:
+        {
+            SwDoc* pDoc = parser->m_xDoc.get();
+            SwTextFormatColl* pColl
+                = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+            pItem.reset(new SvxFontItem(pColl->GetFont()));
             break;
+        }
         case MD_SPAN_DEL:
             pItem.reset(new SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT));
             break;
