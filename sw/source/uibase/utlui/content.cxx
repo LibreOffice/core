@@ -3256,6 +3256,9 @@ void SwContentTree::Display( bool bActive )
 
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
             {
+                // starts at 0 so ContentTypeId::UNKNOWN of -1 is skipped
+                assert(nCntType != ContentTypeId::UNKNOWN);
+
                 std::unique_ptr<SwContentType>& rpContentT = bActive ?
                                     m_aActiveContentArr[nCntType] :
                                     m_aHiddenContentArr[nCntType];
