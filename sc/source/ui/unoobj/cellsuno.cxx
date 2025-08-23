@@ -5922,13 +5922,16 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
                                                 sal_Bool bAbsorb )
 {
     SolarMutexGuard aGuard;
-    ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh && xContent.is() )
+    ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
+    if (pCellField && pCellField->IsInserted())
+        throw lang::IllegalArgumentException(u"Content already inserted"_ustr, getXWeak(), 1);
+    if (ScDocShell* pDocSh = GetDocShell(); pDocSh && pCellField)
     {
-        ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
-        SvxUnoTextRangeBase* pTextRange = comphelper::getFromUnoTunnel<ScCellTextCursor>( xRange );
+        auto* pTextRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>(xRange);
+        if (!pTextRange && xRange.get() == this) // cell itself passed as range?
+            pTextRange = &GetUnoText();
 
-        if ( pCellField && !pCellField->IsInserted() && pTextRange )
+        if (pTextRange)
         {
             SvxEditSource* pEditSource = pTextRange->GetEditSource();
             ESelection aSelection(pTextRange->GetSelection());
