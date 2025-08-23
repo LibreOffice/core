@@ -1540,6 +1540,13 @@ static bool convertDurationHelper(util::Duration& rDuration, V string)
 
     if (bSuccess)
     {
+        bSuccess = nYears >= std::numeric_limits<sal_Int16>::min() &&
+                   nYears <= std::numeric_limits<sal_Int16>::max();
+        SAL_WARN_IF(!bSuccess, "sax", "convertDurationHelper: year overflow: " << nYears);
+    }
+
+    if (bSuccess)
+    {
         rDuration.Negative      = bIsNegativeDuration;
         rDuration.Years         = static_cast<sal_Int16>(nYears);
         rDuration.Months        = static_cast<sal_Int16>(nMonths);
