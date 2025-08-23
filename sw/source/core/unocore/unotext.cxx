@@ -914,12 +914,13 @@ sal_Int16 SwXText::ComparePositions(
     {
         throw lang::IllegalArgumentException();
     }
-#ifdef DBG_UTIL
+    // The UNO API documentation for this method says we have to throw
+    // if either aPam1 or aPam2 is not within this text, and some
+    // extensions rely on that behaviour.
     if (!CheckForOwnMember(aPam1) || !CheckForOwnMember(aPam2))
     {
         throw lang::IllegalArgumentException();
     }
-#endif
 
     sal_Int16 nCompare = 0;
     SwPosition const*const pStart1 = aPam1.Start();
