@@ -86,9 +86,6 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star::ucb;
 
 
-// maximum allowed length of combined characters field
-#define MAX_COMBINED_CHARACTERS 6
-
 struct XMLTextImportHelper::Impl
 {
     std::optional< std::vector<OUString> > m_xPrevFrmNames;
@@ -1301,6 +1298,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         u"com.sun.star.text.TextField.CombinedCharacters"_ustr), UNO_QUERY);
                 if( xTmp.is() )
                 {
+                    // maximum allowed length of combined characters field
+                    constexpr auto MAX_COMBINED_CHARACTERS = 6;
+
                     // fix cursor if larger than possible for
                     // combined characters field
                     if (rCursor->getString().getLength() >
