@@ -70,17 +70,15 @@ Entry const CtrlIdToResIdTable[] = {
     { CHECKBOX_GPGSIGN,                         STR_SVT_FILEPICKER_GPGSIGN }
 };
 
-const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
-
 static TranslateId CtrlIdToResId( sal_Int32 aControlId )
 {
     TranslateId pResId;
 
-    for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
+    for ( const auto& entry : CtrlIdToResIdTable )
     {
-        if ( CtrlIdToResIdTable[i].ctrlId == aControlId )
+        if ( entry.ctrlId == aControlId )
         {
-            pResId = CtrlIdToResIdTable[i].resId;
+            pResId = entry.resId;
             break;
         }
     }
