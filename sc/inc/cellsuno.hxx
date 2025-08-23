@@ -116,6 +116,7 @@ class ScTableRowsObj;
 class ScTableValidationObj;
 class ScCellObj;
 class SolarMutexGuard;
+class SvxUnoTextRangeBase;
 
 namespace editeng { class SvxBorderLine; }
 
@@ -666,6 +667,9 @@ private:
                                 css::uno::Any& ) override;
     virtual void            SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry,
                                                 const css::uno::Any& aValue ) override;
+
+    SvxUnoTextRangeBase*
+    getSvxUnoTextRange(const css::uno::Reference<css::text::XTextRange>& xRange);
 
 public:
     static const SvxItemPropertySet* GetEditPropertySet();
