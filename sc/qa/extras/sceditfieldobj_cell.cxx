@@ -112,8 +112,9 @@ void ScEditFieldObj_Cell::tearDown()
 
 namespace
 {
-uno::Reference<text::XTextField> getNewField(const uno::Reference<lang::XMultiServiceFactory>& xSM)
+uno::Reference<text::XTextField> getNewField(const uno::Reference<uno::XInterface>& xComponent)
 {
+    uno::Reference<lang::XMultiServiceFactory> xSM(xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextField> xField(
         xSM->createInstance(u"com.sun.star.text.TextField.URL"_ustr), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropSet(xField, uno::UNO_QUERY_THROW);
@@ -129,10 +130,8 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
     // Return a field that's already in the cell.
     if (!mxField.is())
     {
-        uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
-
         // Create a new URL field object, and populate it with name and URL.
-        mxField = getNewField(xSM);
+        mxField = getNewField(mxComponent);
 
         // Insert this field into a cell.
         uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -151,8 +150,7 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
 uno::Reference<text::XTextContent> ScEditFieldObj_Cell::getTextContent()
 {
     // Return a field object that's not yet inserted.
-    uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, uno::UNO_QUERY_THROW);
-    return uno::Reference<text::XTextContent>(getNewField(xSM), uno::UNO_QUERY_THROW);
+    return uno::Reference<text::XTextContent>(getNewField(mxComponent), uno::UNO_QUERY_THROW);
 }
 
 uno::Reference<text::XTextRange> ScEditFieldObj_Cell::getTextRange()
