@@ -832,7 +832,8 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
 
             VirtualDevice& rDevice = *rVirtualDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
-            rDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
+            const Color aColor = Application::GetSettings().GetStyleSettings().GetFieldColor();
+            rDevice.SetBackground(Wallpaper(aColor));
             rDevice.Erase();
             if (bIsLOK)
             {
