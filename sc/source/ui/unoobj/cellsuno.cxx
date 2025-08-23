@@ -5866,20 +5866,13 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
                                     const uno::Reference<text::XTextRange>& aTextPosition )
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<SvxUnoTextCursor> pCursor = new ScCellTextCursor( *this );
 
     SvxUnoTextRangeBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextRangeBase>( aTextPosition );
-    if(pRange)
-        pCursor->SetSelection( pRange->GetSelection() );
-    else
-    {
-        ScCellTextCursor* pOther = comphelper::getFromUnoTunnel<ScCellTextCursor>( aTextPosition );
-        if(!pOther)
-            throw uno::RuntimeException();
+    if (!pRange)
+        throw uno::RuntimeException();
 
-        pCursor->SetSelection( pOther->GetSelection() );
-
-    }
+    rtl::Reference<SvxUnoTextCursor> pCursor = new ScCellTextCursor(*this);
+    pCursor->SetSelection(pRange->GetSelection());
 
     return pCursor;
 }
