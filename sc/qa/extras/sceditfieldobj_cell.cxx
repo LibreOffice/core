@@ -142,10 +142,8 @@ uno::Reference<uno::XInterface> ScEditFieldObj_Cell::init()
         uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
         uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY_THROW);
 
-        uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-        uno::Reference<text::XTextRange> xRange(xCursor, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextContent> xContent(mxField, uno::UNO_QUERY_THROW);
-        xText->insertTextContent(xRange, xContent, false);
+        xText->insertTextContent(xText, xContent, false);
     }
     return mxField;
 }
