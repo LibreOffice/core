@@ -934,6 +934,8 @@ UpdateCheck::shutdownThread(bool join)
 void
 UpdateCheck::enableAutoCheck(bool enable)
 {
+    // The (recursive) mutex is (at time of writing) always locked already here
+    std::scoped_lock aGuard(m_aMutex);
     if( enable )
     {
         m_updateCheckRunning = true;
