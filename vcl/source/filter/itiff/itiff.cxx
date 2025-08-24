@@ -245,19 +245,11 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
 
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
-            Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
+            Bitmap bitmap(Size(w, h), vcl::PixelFormat::N32_BPP);
             BitmapScopedWriteAccess access(bitmap);
             if (!access)
             {
                 SAL_WARN("filter.tiff", "cannot create image " << w << " x " << h);
-                break;
-            }
-
-            AlphaMask bitmapAlpha(Size(w, h));
-            BitmapScopedWriteAccess accessAlpha(bitmapAlpha);
-            if (!accessAlpha)
-            {
-                SAL_WARN("filter.tiff", "cannot create alpha " << w << " x " << h);
                 break;
             }
 
@@ -296,8 +288,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                             break;
                     }
 
-                    access->SetPixel(y, dest, Color(r, g, b));
-                    accessAlpha->SetPixelIndex(y, dest, a);
+                    access->SetPixel(y, dest, Color(ColorAlpha, a, r, g, b));
                     ++src;
                 }
             }
@@ -305,16 +296,13 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             raster.clear();
 
             access.reset();
-            accessAlpha.reset();
-
-            BitmapEx aBitmapEx(bitmap, bitmapAlpha);
 
             if (!bFuzzing)
             {
                 switch (nOrientation)
                 {
                     case ORIENTATION_LEFTBOT:
-                        aBitmapEx.Rotate(2700_deg10, COL_BLACK);
+                        bitmap.Rotate(2700_deg10, COL_BLACK);
                         break;
                     default:
                         break;
@@ -337,10 +325,10 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
                         aMapMode =  MapMode(MapUnit::MapCM, Point(0,0), Fraction(1/xres), Fraction(1/yres));
                 }
             }
-            aBitmapEx.SetPrefMapMode(aMapMode);
-            aBitmapEx.SetPrefSize(Size(w, h));
+            bitmap.SetPrefMapMode(aMapMode);
+            bitmap.SetPrefSize(Size(w, h));
 
-            AnimationFrame aAnimationFrame(aBitmapEx, Point(0, 0), aBitmapEx.GetSizePixel(),
+            AnimationFrame aAnimationFrame(BitmapEx(bitmap), Point(0, 0), bitmap.GetSizePixel(),
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
             aAnimation.Insert(aAnimationFrame);
         }
