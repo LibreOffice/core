@@ -43,6 +43,10 @@
 #include <map>
 #include <string_view>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
@@ -73,13 +77,13 @@ constexpr std::string_view gpsFONT_IC = "ic";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
-const std::map<sal_Int16, std::string_view> stConvertMeasureUnitStrMap{
+constexpr auto stConvertMeasureUnitStrMap = frozen::make_unordered_map<sal_Int16, std::string_view>({
     { MeasureUnit::MM, gpsMM },          { MeasureUnit::CM, gpsCM },
     { MeasureUnit::INCH, gpsINCH },      { MeasureUnit::POINT, gpsPT },
     { MeasureUnit::PICA, gpsPC },        { MeasureUnit::PERCENT, gpsPERCENT },
     { MeasureUnit::PIXEL, gpsPX },       { MeasureUnit::FONT_EM, gpsFONT_EM },
     { MeasureUnit::FONT_CJK_ADVANCE, gpsFONT_IC }
-};
+});
 
 o3tl::Length Measure2O3tlUnit(sal_Int16 nUnit)
 {

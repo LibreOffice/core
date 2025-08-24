@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_common_precompiled_header,sax))
 $(eval $(call gb_Library_use_sdk_api,sax))
 
 $(eval $(call gb_Library_use_externals,sax,\
+	frozen \
 	libxml2 \
 	expat \
 ))
