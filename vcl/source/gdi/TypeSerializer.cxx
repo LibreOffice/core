@@ -208,12 +208,12 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
     }
     else
     {
-        BitmapEx aBitmapEx;
+        Bitmap aBitmap;
         const SvStreamEndian nOldFormat = mrStream.GetEndian();
 
         mrStream.SeekRel(-4);
         mrStream.SetEndian(SvStreamEndian::LITTLE);
-        ReadDIBBitmapEx(aBitmapEx, mrStream);
+        ReadDIBBitmapEx(aBitmap, mrStream);
 
         if (!mrStream.GetError())
         {
@@ -235,12 +235,12 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
                     // #108077# manually set loaded BmpEx to Animation
                     // (which skips loading its BmpEx if already done)
-                    aAnimation.SetBitmapEx(aBitmapEx);
+                    aAnimation.SetBitmapEx(BitmapEx(aBitmap));
                     rGraphic = Graphic(aAnimation);
                 }
                 else
                 {
-                    rGraphic = Graphic(aBitmapEx);
+                    rGraphic = Graphic(aBitmap);
                 }
             }
             else

@@ -1698,7 +1698,7 @@ bool ReadDIBBitmapEx(
     bool bMSOFormat)
 {
     Bitmap aBmp;
-    if (!ImplReadDIB(aBmp, nullptr, rIStm, bFileHeader, bMSOFormat) && !rIStm.GetError())
+    if (!ImplReadDIB(aBmp, nullptr, rIStm, bFileHeader, bMSOFormat) || rIStm.GetError())
         return false;
 
     // base bitmap was read, set as return value and try to read alpha extra-data
