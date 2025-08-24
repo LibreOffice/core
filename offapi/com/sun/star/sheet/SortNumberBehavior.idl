@@ -1,0 +1,41 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com {  module sun {  module star {  module sheet {
+
+/** Describes how numbers inside text are handled in text comparisons.
+
+    The constants correspond to the ODF attribute
+    table:embedded-number-behavior (19.628, part 3 ODF 1.4).
+    That has values 'alpha-numeric', 'double' and 'integer'.
+    Value 'integer' is not yet implemented.
+
+    @since LibreOffice 26.2
+ */
+published constants SortNumberBehavior
+{
+    /** Digits inside text are compared alphanumerically.
+
+        "K10" < "K2" < "K3", for example.
+      */
+    const long ALPHA_NUMERIC = 0;
+
+    /** Comparison of text uses natural sort.
+
+        "K2" < "K3" < "K10", for example. The number parts inside the text
+        may be decimal numbers. Which character is considered a decimal
+        separator, depends on the language of the text.
+        Read ODF standard for details.
+      */
+    const long DOUBLE = 1;
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

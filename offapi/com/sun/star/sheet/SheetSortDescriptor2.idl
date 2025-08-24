@@ -79,6 +79,14 @@ published service SheetSortDescriptor2
         should not be sorted.
      */
     [property] boolean ContainsHeader;
+
+
+    /** specifies how numbers inside text are handled in text comparisons
+        @see com::sun::star::sheet::SortNumberBehavior
+
+        @since LibreOffice 26.2
+    */
+    [optional, property] long NumberBehavior;
 };
 
 

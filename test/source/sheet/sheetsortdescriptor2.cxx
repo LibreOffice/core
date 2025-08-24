@@ -14,6 +14,8 @@
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
+#include <com/sun/star/sheet/SortNumberBehavior.hpp>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -90,6 +92,11 @@ void SheetSortDescriptor2::testSheetSortDescriptor2Properties()
             names.push_back(value.Name);
             bool bValue = false;
             CPPUNIT_ASSERT(value.Value >>= bValue);
+        }
+        else if (value.Name == "NumberBehavior")
+        {
+            sal_Int32 nValue = sheet::SortNumberBehavior::ALPHA_NUMERIC;
+            CPPUNIT_ASSERT(value.Value >>= nValue);
         }
         else
         {

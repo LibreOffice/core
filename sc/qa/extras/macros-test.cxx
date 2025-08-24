@@ -995,6 +995,28 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf47479)
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), xRowAddressable->getRangeAddress().Sheet);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf161948NaturalSortAPI)
+{
+    // Since LO 26.2 the feature natural sort is available in the API.
+    // Here we test, that is can be used in Basic macros.
+    createScDoc("tdf161948_NaturalSort.ods");
+    ScDocument* pDoc = getScDoc();
+    // The source has "K3", "K10", "K104", "K23", "K2" in Range A2:A6 and label in A1.
+    // The result goes to range C1:C6.
+
+    // Enable natural sorting and sort. Examine cell C2
+    executeMacro(u"vnd.sun.star.script:Standard.SortTest.EnableNaturalSort"
+                 "?language=Basic&location=document"_ustr);
+    OUString sCellContent = pDoc->GetString(2, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(u"K2"_ustr, sCellContent);
+
+    // Enable default alphanumerically sorting and sort. Examine cell C2.
+    executeMacro(u"vnd.sun.star.script:Standard.SortTest.EnableAlphaNumericSort"
+                 "?language=Basic&location=document"_ustr);
+    sCellContent = pDoc->GetString(2, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(u"K10"_ustr, sCellContent);
+}
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {

@@ -38,6 +38,7 @@
 #include <com/sun/star/sheet/FilterFieldType.hpp>
 #include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField2.hpp>
+#include <com/sun/star/sheet/SortNumberBehavior.hpp>
 
 #include <dapiuno.hxx>
 #include <cellsuno.hxx>
@@ -317,11 +318,16 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
     pArray[8].Name = SC_UNONAME_UINDEX;
     pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
+
+    pArray[9].Name = SC_UNONAME_NUMBERBEHAVIOR;
+    pArray[9].Value <<= rParam.bNaturalSort ? SortNumberBehavior::DOUBLE
+                            : SortNumberBehavior::ALPHA_NUMERIC;
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
     sal_Int32 nSortSize = static_cast<sal_Int32>(rParam.GetSortKeyCount());
+    rParam.bNaturalSort = false; // default if optional SC_UNONAME_NUMBERBEHAVIOR does not exist
 
     for (const beans::PropertyValue& rProp : rSeq)
     {
@@ -436,6 +442,12 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             OUString sStr;
             if ( rProp.Value >>= sStr )
                 rParam.aCollatorAlgorithm = sStr;
+        }
+        else if (aPropName == SC_UNONAME_NUMBERBEHAVIOR)
+        {
+            sal_Int16 nVal = SortNumberBehavior::ALPHA_NUMERIC;
+            if (rProp.Value >>= nVal)
+                rParam.bNaturalSort = nVal == SortNumberBehavior::DOUBLE;
         }
     }
 }
