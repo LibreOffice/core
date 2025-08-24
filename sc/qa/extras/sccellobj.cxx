@@ -18,13 +18,15 @@
 #include <test/text/xsimpletext.hxx>
 #include <test/util/xindent.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -48,6 +50,8 @@ public:
     virtual uno::Reference<uno::XInterface> init() override;
     virtual uno::Reference<uno::XInterface> getXSpreadsheet() override;
     virtual void setUp() override;
+
+    void testInsertVarious_ScCellObj();
 
     CPPUNIT_TEST_SUITE(ScCellObj);
 
@@ -86,6 +90,8 @@ public:
     CPPUNIT_TEST(testCreateTextCursorByRange);
     CPPUNIT_TEST(testInsertString);
     CPPUNIT_TEST(testInsertControlCharacter);
+
+    CPPUNIT_TEST(testInsertVarious_ScCellObj);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -130,6 +136,46 @@ void ScCellObj::setUp()
 {
     UnoApiTest::setUp();
     loadFromURL(u"private:factory/scalc"_ustr);
+}
+
+void ScCellObj::testInsertVarious_ScCellObj()
+{
+    auto xText = init().queryThrow<text::XText>();
+
+    xText->setString(u"foo"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, xText->getString());
+
+    // Test different kinds of XTextRange passed to insertString: cursor, start/end, itself.
+    // The test relies on createTextCursor() giving the position at the end of the text; this
+    // is true for Calc cells, but e.g. Writer produces cursors at the start - who is right?
+
+    xText->insertString(xText, u"b"_ustr, true); // must replace all
+    xText->insertString(xText->createTextCursor(), u"c"_ustr, false);
+    xText->insertString(xText->getStart(), u"a"_ustr, false);
+    xText->insertString(xText->getEnd(), u"d"_ustr, false);
+    xText->insertString(xText, u"e"_ustr, false);
+
+    // Test insertString interleaved with insertTextContent
+
+    auto makeField = [xF = mxComponent.queryThrow<lang::XMultiServiceFactory>()](const OUString& s)
+    {
+        auto xField = xF->createInstance(u"com.sun.star.text.textfield.URL"_ustr)
+                          .queryThrow<beans::XPropertySet>();
+        xField->setPropertyValue(u"URL"_ustr, uno::Any(u"http://www.example.org/"_ustr));
+        xField->setPropertyValue(u"Representation"_ustr, uno::Any(s));
+        return xField.queryThrow<text::XTextContent>();
+    };
+
+    xText->insertString(xText->createTextCursor(), u" 1: "_ustr, false);
+    xText->insertTextContent(xText->createTextCursor(), makeField(u"h1"_ustr), false);
+
+    xText->insertString(xText->getEnd(), u" 2: "_ustr, false);
+    xText->insertTextContent(xText->getEnd(), makeField(u"h2"_ustr), false);
+
+    xText->insertString(xText, u" 3: "_ustr, false);
+    xText->insertTextContent(xText, makeField(u"h3"_ustr), false);
+
+    CPPUNIT_ASSERT_EQUAL(u"abcde 1: h1 2: h2 3: h3"_ustr, xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCellObj);

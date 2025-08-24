@@ -5724,6 +5724,12 @@ SvxUnoText& ScCellObj::GetUnoText()
                 pEditSource->SetDoUpdateData(false);
         }
     }
+    else
+    {
+        // Make sure every time, that the cell object's selection covers all the cell's content.
+        // Selection's start.nPara == EE_PARA_MAX is handled explicitly in CheckSelection
+        mxUnoText->SetSelection({ EE_PARA_MAX, 0, 0, 0 });
+    }
     return *mxUnoText;
 }
 
@@ -5897,7 +5903,7 @@ void SAL_CALL ScCellObj::setString( const OUString& aText )
 
     // don't create pUnoText here if not there
     if (mxUnoText.is())
-        mxUnoText->SetSelection(ESelection( 0,0, 0,aText.getLength() ));
+        mxUnoText->SetSelection({ EE_PARA_MAX, 0, 0, 0 });
 }
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
