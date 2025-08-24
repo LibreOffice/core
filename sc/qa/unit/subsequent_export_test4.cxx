@@ -2303,7 +2303,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf150229)
                              xField->getPropertyValue(u"URL"_ustr).get<OUString>());
     }
 
-    // Test the respective OOXML markyp
+    // Test the respective OOXML markup
 
     xmlDocUniquePtr pXml = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXml);
