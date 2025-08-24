@@ -343,7 +343,9 @@ void LinkManager::UpdateAllLinks(
 
             OUString aMsg = SfxResId(STR_QUERY_UPDATE_LINKS);
             INetURLObject aURL(pPersist->getDocumentBaseURL());
-            aMsg = aMsg.replaceFirst("%{filename}", aURL.GetLastName());
+            // tdf#168089 - don't URL encode filename for the update links confirmation dialog
+            aMsg = aMsg.replaceFirst("%{filename}",
+                                     aURL.GetLastName(INetURLObject::DecodeMechanism::Unambiguous));
 
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParentWin,
                                                            VclMessageType::Question, VclButtonsType::YesNo, aMsg));
