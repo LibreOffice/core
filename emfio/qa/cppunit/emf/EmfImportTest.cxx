@@ -1565,8 +1565,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRoundRect)
     assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color", u"#ff0000");
 
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]/polypolygon", "path",
-                u"m100 2700c0-250 350-500 700-500h2590c350 0 700 250 700 500v990c0 250-350 500-700 "
-                u"500h-2590c-350 0-700-250-700-500z");
+                u"m100 2700c0-230 380-500 700-500h2590c310 0 700 270 700 500v990c0 220-390 500-700 "
+                u"500h-2590c-320 0-700-280-700-500z");
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[2]", "color", u"#ffffff");
 
     assertXPathContent(

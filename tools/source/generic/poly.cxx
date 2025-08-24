@@ -154,40 +154,40 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rRect, sal_uInt32 nHorzRound,
 
             mxPointAry[0] = Point(aRect.Left(), aRect.Top() + nVertRound);
 
-            mxPointAry[1] = Point(aRect.Left(), aRect.Top() + 0.5 * nVertRound);
+            mxPointAry[1] = Point(aRect.Left(), aRect.Top() + fKappa * nVertRound);
             mxFlagAry[1] = PolyFlags::Control;
 
-            mxPointAry[2] = Point(aRect.Left() + 0.5 * nHorzRound, aRect.Top());
+            mxPointAry[2] = Point(aRect.Left() + fKappa * nHorzRound, aRect.Top());
             mxFlagAry[2] = PolyFlags::Control;
 
             mxPointAry[3] = Point(aRect.Left() + nHorzRound, aRect.Top());
 
             mxPointAry[4] = Point(aRect.Right() - nHorzRound, aRect.Top());
 
-            mxPointAry[5] = Point(aRect.Right() - 0.5 * nHorzRound, aRect.Top());
+            mxPointAry[5] = Point(aRect.Right() - fKappa * nHorzRound, aRect.Top());
             mxFlagAry[5] = PolyFlags::Control;
 
-            mxPointAry[6] = Point(aRect.Right(), aRect.Top() + 0.5 * nVertRound);
+            mxPointAry[6] = Point(aRect.Right(), aRect.Top() + fKappa * nVertRound);
             mxFlagAry[6] = PolyFlags::Control;
 
             mxPointAry[7] = Point(aRect.Right(), aRect.Top() + nVertRound);
 
             mxPointAry[8] = Point(aRect.Right(), aRect.Bottom() - nVertRound);
 
-            mxPointAry[9] = Point(aRect.Right(), aRect.Bottom() - 0.5 * nVertRound);
+            mxPointAry[9] = Point(aRect.Right(), aRect.Bottom() - fKappa * nVertRound);
             mxFlagAry[9] = PolyFlags::Control;
 
-            mxPointAry[10] = Point(aRect.Right() - 0.5 * nHorzRound, aRect.Bottom());
+            mxPointAry[10] = Point(aRect.Right() - fKappa * nHorzRound, aRect.Bottom());
             mxFlagAry[10] = PolyFlags::Control;
 
             mxPointAry[11] = Point(aRect.Right() - nHorzRound, aRect.Bottom());
 
             mxPointAry[12] = Point(aRect.Left() + nHorzRound, aRect.Bottom());
 
-            mxPointAry[13] = Point(aRect.Left() + 0.5 * nHorzRound, aRect.Bottom());
+            mxPointAry[13] = Point(aRect.Left() + fKappa * nHorzRound, aRect.Bottom());
             mxFlagAry[13] = PolyFlags::Control;
 
-            mxPointAry[14] = Point(aRect.Left(), aRect.Bottom() - 0.5 * nVertRound);
+            mxPointAry[14] = Point(aRect.Left(), aRect.Bottom() - fKappa * nVertRound);
             mxFlagAry[14] = PolyFlags::Control;
 
             mxPointAry[15] = Point(aRect.Left(), aRect.Bottom() - nVertRound);
