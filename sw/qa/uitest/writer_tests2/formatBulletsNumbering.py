@@ -26,11 +26,13 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xBulletPage = xDialog.getChild("PickBulletPage")
-                xSelector = xBulletPage.getChild("valueset")
+                xSelector = xBulletPage.getChild("pick_bullet_iconview")
 
                 # Select element number 3
-                xSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
-                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "3")
+                element3 = xSelector.getChild("2")
+                element3.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xSelector)["VisibleCount"], "8")
+                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "2")
                 xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
                 with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
                     xCharSet = xCharSetDialog.getChild("showcharset")
@@ -42,11 +44,13 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xBulletPage = xDialog.getChild("PickBulletPage")
-                xSelector = xBulletPage.getChild("valueset")
+                xSelector = xBulletPage.getChild("pick_bullet_iconview")
 
                 # Select element number 3
-                xSelector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
-                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "3")
+                element3 = xSelector.getChild("2")
+                element3.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xSelector)["VisibleCount"], "8")
+                self.assertEqual(get_state_as_dict(xSelector)["SelectedItemId"], "2")
                 xChangeBulletBtn = xBulletPage.getChild("changeBulletBtn")
                 with self.ui_test.execute_blocking_action(xChangeBulletBtn.executeAction, args=('CLICK', ())) as xCharSetDialog:
                     xHexText = xCharSetDialog.getChild("hexvalue")
@@ -240,16 +244,19 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xBulletPage = xDialog.getChild("PickBulletPage")
-                xselector = xBulletPage.getChild("valueset")
-                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
+                xselector = xBulletPage.getChild("pick_bullet_iconview")
                 # Select element num 3
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "3"}))
+                element3 = xselector.getChild("2")
+                element3.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xselector)["VisibleCount"], "8")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "2")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "3")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "2")
                 # Select element num 7
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "7"}))
+                element7 = xselector.getChild("6")
+                element7.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xselector)["VisibleCount"], "8")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "6")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "7")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "6")
 
             # Test other Pages
             with self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog") as xDialog:

@@ -78,6 +78,19 @@
 
 #include <bitmaps.hlst>
 
+#include <vcl/virdev.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <editeng/svxenum.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <svx/svxbmpnumiconview.hxx>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::text;
+using namespace com::sun::star::container;
+using namespace com::sun::star::style;
+
 using namespace css;
 using namespace css::uno;
 using namespace css::beans;
@@ -133,21 +146,6 @@ static bool lcl_IsNumFmtSet(SvxNumRule const * pNum, sal_uInt16 nLevelMask)
         nMask <<= 1 ;
     }
     return bRet;
-}
-
-static vcl::Font& lcl_GetDefaultBulletFont()
-{
-    static vcl::Font aDefBulletFont = []()
-    {
-        vcl::Font tmp(u"OpenSymbol"_ustr, u""_ustr, Size(0, 14));
-        tmp.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-        tmp.SetFamily( FAMILY_DONTKNOW );
-        tmp.SetPitch( PITCH_DONTKNOW );
-        tmp.SetWeight( WEIGHT_DONTKNOW );
-        tmp.SetTransparent( true );
-        return tmp;
-    }();
-    return aDefBulletFont;
 }
 
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
@@ -326,14 +324,15 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
     , bPreset(false)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , m_xBtChangeBullet(m_xBuilder->weld_button(u"changeBulletBtn"_ustr))
-    , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xExamplesVS))
+    , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_bullet_iconview"_ustr))
+    , aPreviewSize(150, 200)
 {
     SetExchangeSupport();
     m_xBtChangeBullet->set_sensitive(false);
-    m_xExamplesVS->init(NumberingPageType::BULLET);
-    m_xExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
-    m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
+    SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::BULLET, aPreviewSize);
+    m_xExamplesIV->connect_selection_changed(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
+    m_xExamplesIV->connect_item_activated(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
+    m_xExamplesIV->connect_query_tooltip(LINK(this, SvxBulletPickTabPage, QueryTooltipHdl));
     m_xBtChangeBullet->connect_clicked(LINK(this, SvxBulletPickTabPage, ClickAddChangeHdl_Impl));
     m_aBulletSymbols = officecfg::Office::Common::BulletsNumbering::DefaultBullets::get();
     m_aBulletSymbolsFonts = officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get();
@@ -341,8 +340,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(weld::Container* pPage, weld::DialogC
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
-    m_xExamplesVSWin.reset();
-    m_xExamplesVS.reset();
+    m_xExamplesIV.reset();
 }
 
 std::unique_ptr<SfxTabPage> SvxBulletPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
@@ -381,13 +379,13 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pActNum && *pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        m_xExamplesVS->SetNoSelection();
+        m_xExamplesIV->unselect_all();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
-        m_xExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(m_xExamplesVS.get());
+        m_xExamplesIV->select(0);
+        NumSelectHdl_Impl(*m_xExamplesIV);
         bPreset = true;
     }
     bPreset |= bIsPreset;
@@ -432,7 +430,17 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
+IMPL_LINK(SvxBulletPickTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    const OUString sId = m_xExamplesIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_Int32 nIndex = sId.toInt32();
+    return SvxBmpNumIconView::GetNumberingDescription(NumberingPageType::BULLET, nIndex);
+}
+
+IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
 {
     if(!pActNum)
         return;
@@ -441,9 +449,10 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
     bPreset = false;
     bModified = true;
-    sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
+    OUString sId = m_xExamplesIV->get_selected_id();
+    sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
     sal_Unicode cChar = m_aBulletSymbols[nIndex].toChar();
-    vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    vcl::Font& rActBulletFont = SvxBmpNumIconView::GetDefaultBulletFont();
     rActBulletFont.SetFamilyName(m_aBulletSymbolsFonts[nIndex]);
 
     sal_uInt16 nMask = 1;
@@ -465,11 +474,16 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool)
 {
-    NumSelectHdl_Impl(m_xExamplesVS.get());
+    if(m_xExamplesIV->get_selected_id().isEmpty())
+        return false;
+
+    NumSelectHdl_Impl(*m_xExamplesIV);
     weld::Button& rOk = GetDialogController()->GetOKButton();
     rOk.clicked();
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, void)
@@ -530,7 +544,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
     auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
 
-    sal_uInt16 nIndex = m_xExamplesVS->GetSelectedItemId() - 1;
+    OUString sId = m_xExamplesIV->get_selected_id();
+    sal_uInt16 nIndex = !sId.isEmpty() ? sId.toInt32() : 0;
     for (size_t i = 0; i < m_aBulletSymbols.size(); ++i)
     {
         if (i == nIndex)
@@ -550,8 +565,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
     officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::set(aBulletSymbolsFontsList, batch);
     batch->commit();
 
-    m_xExamplesVS->SetFormat();
-    m_xExamplesVS->Invalidate();
+    SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::BULLET, aPreviewSize);
 }
 
 void SvxBulletPickTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -712,7 +726,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
     SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_xExamplesVS->GetSelectedItemId() - 1];
 
-    const vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    const vcl::Font& rActBulletFont = SvxBmpNumIconView::GetDefaultBulletFont();
     SvxNumSettings_Impl* pLevelSettings = nullptr;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1151,7 +1165,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     m_xBulRelSizeMF->set_min(SVX_NUM_REL_SIZE_MIN, FieldUnit::PERCENT);
     m_xBulRelSizeMF->set_increments(5, 50, FieldUnit::PERCENT);
     SetExchangeSupport();
-    aActBulletFont = lcl_GetDefaultBulletFont();
+    aActBulletFont = SvxBmpNumIconView::GetDefaultBulletFont();
     // vertical alignment = fill makes the drawingarea expand the associated spinedits so we have to size it here
     const sal_Int16 aHeight
         = static_cast<sal_Int16>(std::max(int(m_xRatioCB->get_preferred_size().getHeight() / 2
