@@ -145,8 +145,9 @@ class ScriptForge(object, metaclass = _Singleton):
                             ('ScriptForge.Region', 4),
                             ('ScriptForge.Services', 5),
                             ('ScriptForge.Session', 6),
-                            ('ScriptForge.String', 7),
-                            ('ScriptForge.UI', 8)])
+                            ('ScriptForge.SharedMemory', 7),
+                            ('ScriptForge.String', 8),
+                            ('ScriptForge.UI', 9)])
 
     def __init__(self, hostname = '', port = 0, pipe = ''):
         """
@@ -1608,6 +1609,43 @@ class SFScriptForge:
 
         def WebService(self, uri):
             return self.ExecMethod(self.vbMethod, 'WebService', uri)
+
+    # #########################################################################
+    # SF_SharedMemory CLASS
+    # #########################################################################
+    class SF_SharedMemory(SFServices, metaclass = _Singleton):
+        """
+            Contains the mechanisms to manage persistent memory storage across Basic and/or Python scripts.
+
+            The SharedMemory service implements interfaces allowing to store both Basic and Python variables
+            in persistent storage, and to retrieve them later from either Basic or Python scripts interchangeably.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.SharedMemory'
+        servicesynonyms = ('sharedmemory', 'scriptforge.sharedmemory')
+        serviceproperties = dict()
+
+        def Exists(self, variablename):
+            return self.ExecMethod(self.vbMethod, 'Exists', variablename)
+
+        def ReadValue(self, variablename):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'ReadValue', variablename)
+
+        def Remove(self, variablename):
+            return self.ExecMethod(self.vbMethod, 'Remove', variablename)
+
+        def RemoveAll(self):
+            return self.ExecMethod(self.vbMethod, 'RemoveAll')
+
+        def StoreValue(self, value, variablename):
+            if isinstance(value, SFServices):
+                return self.ExecMethod(self.vbMethod + self.flgObject, 'StoreValue',
+                                       value.objectreference, variablename)
+            if isinstance(value, datetime.datetime):
+                value = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
+                return self.ExecMethod(self.vbMethod + self.flgDateArg, 'StoreValue', value, variablename)
+            return self.ExecMethod(self.vbMethod, 'StoreValue', value, variablename)
 
     # #########################################################################
     # SF_String CLASS
@@ -3170,6 +3208,7 @@ L10N = SFScriptForge.SF_L10N
 PLATFORM = SFScriptForge.SF_Platform
 REGION = SFScriptForge.SF_Region
 SESSION = SFScriptForge.SF_Session
+SHAREDMEMORY = SFScriptForge.SF_SharedMemory
 STRING = SFScriptForge.SF_String
 TEXTSTREAM = SFScriptForge.SF_TextStream
 TIMER = SFScriptForge.SF_Timer

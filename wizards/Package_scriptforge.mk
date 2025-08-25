@@ -31,6 +31,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 	SF_Root.xba \
 	SF_Services.xba \
 	SF_Session.xba \
+	SF_SharedMemory.xba \
 	SF_String.xba \
 	SF_TextStream.xba \
 	SF_Timer.xba \

@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="SF_SharedMemory" script:language="StarBasic" script:moduleType="normal">REM =======================================================================================================================
+REM ===			The ScriptForge library and its associated libraries are part of the LibreOffice project.				===
+REM ===					Full documentation is available on https://help.libreoffice.org/								===
+REM =======================================================================================================================
+
+Option Compatible
+Option Explicit
+
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+&apos;&apos;&apos;	SF_SharedMemory
+&apos;&apos;&apos;	===============
+&apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.SharedMemory&quot; service
+&apos;&apos;&apos;		Implemented as a usual Basic module
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Contains the mechanisms to manage persistent memory storage
+&apos;&apos;&apos;		across Basic and/or Python scripts.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		When a script stops running, all the variables it uses vanish,
+&apos;&apos;&apos;		except Basic Global variables, which stay in memory until the end
+&apos;&apos;&apos;		of the LibreOffice session.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		However event-driven scripting can often benefit from having variables
+&apos;&apos;&apos;		still being available when the next script is triggered, probably due
+&apos;&apos;&apos;		to a user action.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The SharedMemory service implements interfaces allowing to store both BASIC
+&apos;&apos;&apos;		and PYTHON variables in persistent storage, and to retrieve them later
+&apos;&apos;&apos;		from either BASIC or PYTHON scripts interchangeably.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The use of the Basic Global statement is more efficient than the actual service
+&apos;&apos;&apos;		and should be preferred when the variables are created and retrieved in basic
+&apos;&apos;&apos;		scripts only.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Service invocation example:
+&apos;&apos;&apos;			Dim memory As Variant
+&apos;&apos;&apos;			memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Example:
+&apos;&apos;&apos;			Sub CreateDoc()
+&apos;&apos;&apos;			ui = CreateScriptService(&quot;UI&quot;)
+&apos;&apos;&apos;			doc = ui.CreateDocument(&quot;Calc&quot;)
+&apos;&apos;&apos;			store = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;			store.StoreValue(doc, &quot;actualdocument&quot;)
+&apos;&apos;&apos;			...
+&apos;&apos;&apos;
+&apos;&apos;&apos;			def UpdateDoc():
+&apos;&apos;&apos;				store = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;				doc = store.ReadValue(&quot;actualdocument&quot;)
+&apos;&apos;&apos;				...
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Detailed user documentation:
+&apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_SharedMemory.html?DbPAR=BASIC
+&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
+
+REM ================================================================== EXCEPTIONS
+
+REM ============================================================ MODULE CONSTANTS
+
+REM ===================================================== CONSTRUCTOR/DESTRUCTOR
+
+REM -----------------------------------------------------------------------------
+Public Function Dispose() As Variant
+	RemoveAll()
+	Set Dispose = Nothing
+End Function	&apos;	ScriptForge.SF_SharedMemory Explicit destructor
+
+REM ================================================================== PROPERTIES
+
+REM -----------------------------------------------------------------------------
+Property Get ObjectType As String
+&apos;&apos;&apos;	Only to enable object representation
+	ObjectType = &quot;SF_SharedMemory&quot;
+End Property	&apos;	ScriptForge.SF_SharedMemory.ObjectType
+
+REM -----------------------------------------------------------------------------
+Property Get ServiceName As String
+&apos;&apos;&apos;	Internal use
+	ServiceName = &quot;ScriptForge.SharedMemory&quot;
+End Property	&apos;	ScriptForge.SF_SharedMemory.ServiceName
+
+REM ============================================================== PUBLIC METHODS
+
+REM -----------------------------------------------------------------------------
+Public Function GetProperty(Optional ByVal PropertyName As Variant) As Variant
+&apos;&apos;&apos;	Return the actual value of the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The actual value of the property
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SharedMemory.GetProperty&quot;
+Const cstSubArgs = &quot;PropertyName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	GetProperty = Null
+
+Check:SharedMemory
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	Select Case UCase(PropertyName)
+		Case Else
+	End Select
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.GetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function Methods() As Variant
+&apos;&apos;&apos;	Return the list of public methods of the SharedMemory service as an array
+
+	Methods = Array( _
+					&quot;Exists&quot; _
+					, &quot;ReadValue&quot; _
+					, &quot;Rename&quot; _
+					, &quot;Remove&quot; _
+					, &quot;RemoveAll&quot; _
+					, &quot;StoreValue&quot; _
+					)
+
+End Function	&apos;	ScriptForge.SF_SharedMemory.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function Properties() As Variant
+&apos;&apos;&apos;	Return the list or properties as an array
+
+	Properties = Array( _
+					)
+
+End Function	&apos;	ScriptForge.SF_SharedMemory.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function Exists(Optional ByVal VariableName As Variant) As Boolean
+&apos;&apos;&apos;	Returns True if the given name exists in the shared and persistent storage.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		VariableName: a case-sensitive name.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if VariableName exists.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;		If memory.Exists(&quot;ActualDoc&quot;) Then
+&apos;&apos;&apos;			...
+
+Dim bExists As Boolean			&apos;	Return value
+
+Const cstThisSub = &quot;SharedMemory.Exists&quot;
+Const cstSubArgs = &quot;VariableName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bExists = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING) Then GoTo Catch
+	End If
+
+Try:
+	If Not IsNull(_SF_.GlobalStorage) Then bExists = _SF_.GlobalStorage.Exists(VariableName)
+
+Finally:
+	Exists = bExists
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.Exists
+
+REM -----------------------------------------------------------------------------
+Public Function ReadValue(Optional ByVal VariableName As Variant) As Variant
+&apos;&apos;&apos;	Read in the shared and persistent storage area the requested value or array of values.
+&apos;&apos;&apos;	If the returned value is a ScriptForge class instance, the user script can verify if the
+&apos;&apos;&apos;	corresponding interface (dialog, document, ...) is still valid with its IsAlive property.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		VariableName: the case-sensitive name of the value to retrieve.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A scalar or an array of scalars.
+&apos;&apos;&apos;		If VariableName does not exist, an error is generated.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;		doc = CreateScriptService(&quot;Document&quot;, ThisComponent)
+&apos;&apos;&apos;		memory.StoreValue(doc, &quot;ActualDoc&quot;)
+&apos;&apos;&apos;		...		&apos;	The script might be stopped
+&apos;&apos;&apos;		doc2 = memory.ReadValue(&quot;ActualDoc&quot;)
+&apos;&apos;&apos;		If doc2.IsAlive Then	&apos;	Check that the document has not be closed by the user
+&apos;&apos;&apos;			...
+
+Dim vRead As Variant			&apos;	Return value
+Dim vKeys As Variant			&apos;	Array of dictionary keys
+
+Const cstThisSub = &quot;SharedMemory.ReadValue&quot;
+Const cstSubArgs = &quot;VariableName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vRead = Empty
+	&apos;	Initialize the dictionary if necessary
+	If IsNull(_SF_.GlobalStorage) Then _SF_.GlobalStorage = CreateScriptService(&quot;Dictionary&quot;, True)
+
+Check:
+	vKeys = _SF_.GlobalStorage.Keys
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING, vKeys, True) Then GoTo Catch
+	End If
+
+Try:
+	&apos;	Read the value in the persistent dictionary
+	vRead =  _SF_.GlobalStorage.Item(VariableName)
+
+Finally:
+	ReadValue = vRead
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.ReadValue
+
+REM -----------------------------------------------------------------------------
+Public Function Remove(Optional ByVal VariableName As Variant) As Boolean
+&apos;&apos;&apos;	Remove the entry in the shared and persistent storage area corresponding with the given name.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		VariableName: the case-sensitive name to remove.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A scalar or an array of scalars.
+&apos;&apos;&apos;		If VariableName does not exist, an error is generated.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;		If memory.Exists(&quot;ActualDoc&quot;) Then memory.Remove(&quot;ActualDoc&quot;)
+&apos;&apos;&apos;			...
+
+Dim bRemove As Boolean			&apos;	Return value
+Dim vKeys As Variant			&apos;	Array of dictionary keys
+
+Const cstThisSub = &quot;SharedMemory.Remove&quot;
+Const cstSubArgs = &quot;VariableName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRemove = False
+	&apos;	Initialize the dictionary if necessary
+	If IsNull(_SF_.GlobalStorage) Then _SF_.GlobalStorage = CreateScriptService(&quot;Dictionary&quot;, True)
+
+Check:
+	vKeys = _SF_.GlobalStorage.Keys
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING, vKeys, True) Then GoTo Catch
+	End If
+
+Try:
+	&apos;	Remove key and item from the persistent dictionary
+	bRemove =  _SF_.GlobalStorage.Remove(VariableName)
+
+Finally:
+	Remove = bRemove
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.Remove
+
+REM -----------------------------------------------------------------------------
+Public Function RemoveAll() As Boolean
+&apos;&apos;&apos;	Remove the whole content of the shared and persistent storage area.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;		memory.RemoveAll()
+&apos;&apos;&apos;		MsgBox memory.Exists(&quot;ActualDoc&quot;)	&apos;	False
+&apos;&apos;&apos;			...
+
+Dim bRemoveAll As Boolean			&apos;	Return value
+
+Const cstThisSub = &quot;SharedMemory.RemoveAll&quot;
+Const cstSubArgs = &quot;&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bRemoveAll = False
+
+Check:
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	If Not IsNull(_SF_.GlobalStorage) Then bRemoveAll = _SF_.GlobalStorage.RemoveAll()
+
+Finally:
+	RemoveAll = bRemoveAll
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.RemoveAll
+
+REM -----------------------------------------------------------------------------
+Public Function SetProperty(Optional ByVal PropertyName As Variant _
+								, Optional ByRef Value As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Set a new value to the given property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PropertyName: the name of the property as a string
+&apos;&apos;&apos;		Value: its new value
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		ARGUMENTERROR		The property does not exist
+
+Const cstThisSub = &quot;SharedMemory.SetProperty&quot;
+Const cstSubArgs = &quot;PropertyName, Value&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SetProperty = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	End If
+
+Try:
+	Select Case UCase(PropertyName)
+		Case Else
+	End Select
+	SetProperty = True
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.SetProperty
+
+REM -----------------------------------------------------------------------------
+Public Function StoreValue(Optional ByVal Value As Variant _
+								, Optional ByVal VariableName As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Store in the shared and persistent storage area the given value.
+&apos;&apos;&apos;	Later retrieval will be done thanks to the given variable name.
+&apos;&apos;&apos;	If the given name already exists, its value is replaced without warning.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Value: the value to be stored.
+&apos;&apos;&apos;			The supported variable types are:
+&apos;&apos;&apos;			* Scalar or 1D-array/tuple combining :
+&apos;&apos;&apos;				- Integer/Long or int, within the bounds of the Basic Long type
+&apos;&apos;&apos;				- Single/Double or float, within the bounds of the Basic Double type
+&apos;&apos;&apos;				- String or str
+&apos;&apos;&apos;				- Boolean or bool
+&apos;&apos;&apos;				- Null or None (Empty and Nothing are reset to Null)
+&apos;&apos;&apos;				- Variant embedding one of above types
+&apos;&apos;&apos;			* Date or datetime.datetime
+&apos;&apos;&apos;			* UNO object
+&apos;&apos;&apos;			* ScriptForge class instance
+&apos;&apos;&apos;		VariableName: the case-sensitive name to retrieve the Value when needed.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
+&apos;&apos;&apos;		doc = CreateScriptService(&quot;Document&quot;, ThisComponent)
+&apos;&apos;&apos;		memory.StoreValue(doc, &quot;ActualDoc&quot;)
+
+Dim bStore As Boolean			&apos;	Return value
+Dim vGlobal As Variant			&apos;	A stored value
+Dim i As Long
+
+Const cstThisSub = &quot;SharedMemory.StoreValue&quot;
+Const cstSubArgs = &quot;Value, VariableName&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bStore = False
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If IsArray(Value) Then
+			If Not SF_Utils._ValidateArray(Value, &quot;Value&quot;, 1) Then GoTo Catch
+		End If
+		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING) Then GoTo Catch
+	End If
+
+Try:
+	&apos;	Initialize the dictionary if necessary
+	If IsNull(_SF_.GlobalStorage) Then _SF_.GlobalStorage = CreateScriptService(&quot;Dictionary&quot;, True)
+
+	&apos;	Size the returned array when the input is an array
+	If IsArray(Value) Then
+		vGlobal = Array()
+		ReDim vGlobal(LBound(Value) To UBound(Value))
+		For i = LBound(vGlobal) To UBound(vGlobal)
+			vGlobal(i) = _ConvertValue(Value(i), pbArray := True)
+			If IsEmpty(vGlobal(i)) Then
+				vGlobal = Empty
+				Exit For
+			End If
+		Next i
+	Else
+		vGlobal = _ConvertValue(Value, pbArray := False)
+	End If
+
+	&apos;	Store the value in the persistent dictionary
+	If Not IsEmpty(vGlobal) Then
+		With _SF_.GlobalStorage
+			If .Exists(VariableName) Then bStore = .ReplaceItem(VariableName, vGlobal) Else bStore = .Add(VariableName, vGlobal)
+		End With
+	End If
+
+Finally:
+	StoreValue = bStore
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_SharedMemory.StoreValue
+
+REM =========================================================== PRIVATE FUNCTIONS
+
+REM -----------------------------------------------------------------------------
+Private Function _ConvertValue(pvValue As Variant _
+								, pbArray As Boolean _
+								) As Variant
+&apos;&apos;&apos;	Convert the input value to one of the types applicable
+&apos;&apos;&apos;	to shared memory constraints.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pvValue: the input value, must not be an array
+&apos;&apos;&apos;		pbArray: when True, pvValue is an item inside an array
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The converted value.
+&apos;&apos;&apos;		Empty when the conversion was not successful.
+
+Dim vGlobal As Variant			&apos;	Return value
+Dim iObjectType As Integer		&apos;	The object type returned by _VarTypeObj()
+
+Try:
+	vGlobal = Empty
+	Select Case VarType(pvValue)
+		Case V_INTEGER, V_LONG, V_BIGINT
+			vGlobal = CLng(pvValue)
+		Case V_SINGLE, V_DOUBLE, V_CURRENCY, V_DECIMAL
+			vGlobal = CDbl(pvValue)
+		Case V_EMPTY, V_NULL
+			vGlobal = Null
+		Case V_STRING, ScriptForge.V_BOOLEAN
+			vGlobal = pvValue
+		Case V_DATE						&apos;	No dates in arrays
+			If Not pbArray Then vGlobal = pvValue
+		Case ScriptForge.V_OBJECT
+			If Not pbArray Then			&apos;	No objects in arrays
+				iObjectType = SF_Utils._VarTypeObj(pvValue).iVarType
+				Select Case iObjectType
+					Case ScriptForge.V_Nothing
+						vGlobal = Null
+					Case ScriptForge.V_UNOOBJECT, ScriptForge.V_SFOBJECT
+						vGlobal = pvValue
+					Case Else	&apos;	V_BASICOBJECT
+				End Select
+			End If
+		Case &gt;= ScriptForge.V_ARRAY		&apos;	No subarrays
+		Case Else
+	End Select
+
+Finally:
+	_ConvertValue = vGlobal
+	Exit Function
+End Function	&apos;	ScriptForge.SF_SharedMemory._ConvertValue
+
+REM =============================================== END OF SCRIPTFORGE.SF_SHAREDMEMORY
+</script:module>

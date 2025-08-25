@@ -67,7 +67,7 @@ REM ===================================================== CONSTRUCTOR/DESTRUCTOR
 REM -----------------------------------------------------------------------------
 Public Function Dispose() As Variant
 	Set Dispose = Nothing
-End Function	&apos;	ScriptForge.SF_Array Explicit destructor
+End Function	&apos;	ScriptForge.SF_Session Explicit destructor
 
 REM ================================================================== PROPERTIES
 
@@ -81,7 +81,7 @@ REM ----------------------------------------------------------------------------
 Property Get ServiceName As String
 &apos;&apos;&apos;	Internal use
 	ServiceName = &quot;ScriptForge.Session&quot;
-End Property	&apos;	ScriptForge.SF_Array.ServiceName
+End Property	&apos;	ScriptForge.SF_Session.ServiceName
 
 REM -----------------------------------------------------------------------------
 Property Get SCRIPTISAPPLICATION As String

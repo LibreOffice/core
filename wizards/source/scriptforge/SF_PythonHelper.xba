@@ -1021,16 +1021,5 @@ Catch:
 	GoTo Finally
 End Function	&apos;	ScriptForge.SF_PythonHelper._PythonDispatcher
 
-REM -----------------------------------------------------------------------------
-Private Function _Repr() As String
-&apos;&apos;&apos;	Convert the Basic instance to a readable string, typically for debugging purposes (DebugPrint ...)
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;	Return:
-&apos;&apos;&apos;		&quot;[PythonHelper]&quot;
-
-	_Repr = &quot;[PythonHelper]&quot;
-
-End Function	&apos;	ScriptForge.SF_PythonHelper._Repr
-
 REM ================================================= END OF SCRIPTFORGE.SF_PythonHelper
 </script:module>

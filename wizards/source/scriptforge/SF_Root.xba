@@ -74,14 +74,14 @@ Private URLTransformer		As Object	&apos; com.sun.star.util.URLTransformer
 Private Introspection		As Object	&apos; com.sun.star.beans.Introspection
 Private BrowseNodeFactory	As Object	&apos; com.sun.star.script.browse.BrowseNodeFactory
 Private DatabaseContext		As Object	&apos; com.sun.star.sdb.DatabaseContext
-Private ConfigurationProvider	As Object
-										&apos; com.sun.star.configuration.ConfigurationProvider
+Private ConfigurationProvider _
+							As Object	&apos; com.sun.star.configuration.ConfigurationProvider
 Private PackageProvider		As Object	&apos; com.sun.star.comp.deployment.PackageInformationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 Private GraphicExportFilter	As Object	&apos; com.sun.star.drawing.GraphicExportFilter
 Private Toolkit				As Object	&apos; com.sun.star.awt.Toolkit
-Private ModuleUIConfigurationManagerSupplier	As Object
-										&apos; com.sun.star.ui.ModuleUIConfigurationManagerSupplier
+Private ModuleUIConfigurationManagerSupplier _
+							As Object	&apos; com.sun.star.ui.ModuleUIConfigurationManagerSupplier
 Private TransientDocument	As Object	&apos; com.sun.star.frame.TransientDocumentsDocumentContentFactory
 
 &apos;	Specific persistent services objects or properties
@@ -94,6 +94,7 @@ Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs libra
 Private SFForms				As Variant	&apos; Persistent storage for the SF_Form class in the SFDocuments library
 Private PythonStorage		As Variant	&apos; Persistent storage for the objects created and processed in Python
 Private PythonPermanent		As Long		&apos; Number of permanent entries in PythonStorage containing standard module objects
+Private GlobalStorage		As Object	&apos; Dictionary of storage shared between Basic and Python
 
 REM ====================================================== CONSTRUCTOR/DESTRUCTOR
 
@@ -159,6 +160,7 @@ Private Sub Class_Initialize()
 	SFForms = Empty
 	PythonStorage = Empty
 	PythonPermanent = -1
+	Set GlobalStorage = Nothing
 End Sub		&apos;	ScriptForge.SF_Root Constructor
 
 REM -----------------------------------------------------------------------------
@@ -271,7 +273,7 @@ Public Sub _InitPythonStorage()
 
 Try:
 	If Not IsArray(PythonStorage) Then
-		PythonPermanent = 8
+		PythonPermanent = 9
 		PythonStorage = Array()
 		ReDim PythonStorage(0 To PythonPermanent)
 		&apos;	Initialize each entry
@@ -282,8 +284,9 @@ Try:
 		PythonStorage(4) = ScriptForge.SF_Region
 		PythonStorage(5) = ScriptForge.SF_Services
 		PythonStorage(6) = ScriptForge.SF_Session
-		PythonStorage(7) = ScriptForge.SF_String
-		PythonStorage(8) = ScriptForge.SF_UI
+		PythonStorage(7) = ScriptForge.SF_SharedMemory
+		PythonStorage(8) = ScriptForge.SF_String
+		PythonStorage(9) = ScriptForge.SF_UI
 	End If
 
 Finally:

@@ -63,6 +63,7 @@ L10N = SFScriptForge.SF_L10N
 PLATFORM = SFScriptForge.SF_Platform
 REGION = SFScriptForge.SF_Region
 SESSION = SFScriptForge.SF_Session
+SHAREDMEMORY = SFScriptForge.SF_SharedMemory
 STRING = SFScriptForge.SF_String
 TEXTSTREAM = SFScriptForge.SF_TextStream
 TIMER = SFScriptForge.SF_Timer
@@ -1795,7 +1796,7 @@ class SFScriptForge:
 
         @classmethod
         def ExecuteBasicScript(
-            cls, scope: str = ..., script: str = ..., *args: Optional[Any]
+            cls, scope: Optional[str] = ..., script: str = ..., *args: Optional[Any]
         ) -> Any:
             """
                 Execute the Basic script given its name and location and fetch its result if any.
@@ -2035,6 +2036,85 @@ class SFScriptForge:
                         The web page content of the URI.
                 """
             ...
+
+    # #########################################################################
+    # SF_SharedMemory CLASS
+    # #########################################################################
+    class SF_SharedMemory(SFServices, metaclass = ...):
+        """
+            Contains the mechanisms to manage persistent memory storage across Basic and/or Python scripts.
+
+            The SharedMemory service implements interfaces allowing to store both Basic and Python variables
+            in persistent storage, and to retrieve them later from either Basic or Python scripts interchangeably.
+            """
+
+        def Exists(self, variablename: str) -> bool:
+            """
+                Returns whether the given name exists in the shared and persistent storage.
+                    Args
+                        ``variablename``: a case-sensitive name.
+                    Returns
+                        ``True`` when the name has been found.
+                """
+            ...
+
+        def ReadValue(self, variablename: str) -> Any:
+            """
+                Read in the shared and persistent storage area the requested value or array of values.
+                    Args
+                        ``variablename``: the case-sensitive name of the value to retrieve.
+                    Returns
+                        A scalar or a tuple of scalars. If ``variablename`` does not exist, an error is raised.
+                    Note
+                        If the returned value is a ``ScriptForge`` class instance, the user script can verify if the
+                        corresponding interface (dialog, document, ...) is still valid with its ``IsAlive`` property.
+                """
+            ...
+
+        def Remove(self, variablename: str) -> bool:
+            """
+                Remove the entry in the shared and persistent storage area corresponding with the given name.
+                    Args
+                        ``variablename``: the case-sensitive name of the variable to remove.
+                    Returns
+                        ``True`` when the name has been removed successfully.
+                """
+            ...
+
+        def RemoveAll(self) -> bool:
+            """
+                Remove the whole content of the shared and persistent storage area.
+                    Returns
+                        ``True`` when successful.
+                """
+            ...
+
+        def StoreValue(self,
+                       value: Union[Any | datetime.datetime | UNO, Tuple[Union[int, float, str, bool]]],
+                       variablename: str
+                       ) -> bool:
+            """
+                Store in the shared and persistent storage area the given value. Later retrieval will be done thanks
+                to the given variable name. If the given name already exists, its value is replaced without warning.
+                    Args
+                        ``value``: the value to be stored.
+                            The supported variable types are:
+                                * Scalar or tuple combining:
+                                    - int, within the bounds of the Basic Long type
+                                    - float, within the bounds of the Basic Double type
+                                    - str
+                                    - bool
+                                    - None
+                                * datetime.datetime
+                                * UNO object
+                                * ScriptForge class instance
+
+                        ``variablename``: the case-sensitive name to retrieve ``value`` when needed.
+                    Returns
+                        ``True`` when successful
+                """
+            ...
+
     # #########################################################################
     # SF_String CLASS
     # #########################################################################
@@ -7712,6 +7792,8 @@ def CreateScriptService(service: Literal['platform', 'Platform', 'ScriptForge.Pl
 def CreateScriptService(service: Literal['region', 'Region', 'ScriptForge.Region']) -> Optional[REGION]: ...
 @overload
 def CreateScriptService(service: Literal['session', 'Session', 'ScriptForge.Session']) -> SESSION: ...
+@overload
+def CreateScriptService(service: Literal['sharedmemory', 'SharedMemory', 'ScriptForge.SharedMemory']) -> SHAREDMEMORY: ...
 @overload
 def CreateScriptService(service: Literal['string', 'String', 'ScriptForge.String']) -> STRING: ...
 @overload

@@ -13,20 +13,34 @@ Option Explicit
 &apos;&apos;&apos;	===========
 &apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.Services&quot; service
 &apos;&apos;&apos;		Implemented as a usual Basic module
-&apos;&apos;&apos;		The ScriptForge framework includes
-&apos;&apos;&apos;			the current ScriptForge library
-&apos;&apos;&apos;			a number of &quot;associated&quot; libraries
-&apos;&apos;&apos;			any user/contributor extension wanting to fit into the framework 
+&apos;&apos;&apos;
+&apos;&apos;&apos;		The modules and classes implemented in ScriptForge will be invoked
+&apos;&apos;&apos;		from user scripts as &quot;Services&quot;.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		A generic constructor of those services has been designed for that purpose:
+&apos;&apos;&apos;			CreateScriptService(&quot;servicename&quot;[, arg0, arg1, ...])
+&apos;&apos;&apos;		All top-level services are created through this mechanism.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		To become a candidate for incorporation into ScriptForge, a library of services
+&apos;&apos;&apos;		must register its services by implementing a
+&apos;&apos;&apos;			RegisterScriptServices(...)
+&apos;&apos;&apos;		method. This method must be present in any external library wanting to extend
+&apos;&apos;&apos;		the set of available services.
+&apos;&apos;&apos;
+&apos;&apos;&apos;		Above mechanisms make ScriptForge an easily extensible ecosystem combining a core library,
+&apos;&apos;&apos;		additional standard libraries and libraries published as extensions or distributed
+&apos;&apos;&apos;		as company extensions.
+&apos;&apos;&apos;
 &apos;&apos;&apos;		The methods in this module constitute the kernel of the ScriptForge framework
-&apos;&apos;&apos;			- RegisterScriptServices
-&apos;&apos;&apos;				Register for a library the list of services it implements
-&apos;&apos;&apos;				Each library in the framework must implement its own RegisterScriptServices method
+&apos;&apos;&apos;			RegisterScriptServices()
+&apos;&apos;&apos;				Register for a library the list of services it implements.
+&apos;&apos;&apos;				Each library in the framework must implement its own RegisterScriptServices() method.
 &apos;&apos;&apos;				This method consists in a series of invocations of next 2 methods
-&apos;&apos;&apos;			- RegisterService
-&apos;&apos;&apos;				Register a single service
-&apos;&apos;&apos;			- RegisterEventManager
-&apos;&apos;&apos;				Register a single event manager
-&apos;&apos;&apos;			- CreateScriptService
+&apos;&apos;&apos;					RegisterService()
+&apos;&apos;&apos;						Register a single service
+&apos;&apos;&apos;					RegisterEventManager()
+&apos;&apos;&apos;						Register a single event manager
+&apos;&apos;&apos;			CreateScriptService()
 &apos;&apos;&apos;				Called by user scripts to get an object giving access to a service or to the event manager
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
@@ -84,12 +98,12 @@ Public Function CreateScriptService(Optional ByRef Service As Variant _
 &apos;&apos;&apos;		UNKNOWNSERVICEERROR				Service not found
 &apos;&apos;&apos;	Examples
 &apos;&apos;&apos;		CreateScriptService(&quot;Array&quot;)
-&apos;&apos;&apos;					=&gt; Refers to ScriptForge.Array or SF_Array
-&apos;&apos;&apos;		CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+&apos;&apos;&apos;					=&gt; Refers to &quot;ScriptForge.Array&quot;, i.e. the ScriptForge.SF_Array module
+&apos;&apos;&apos;		CreateScriptService(&quot;ScriptForge.Dictionary&quot;, ...)
 &apos;&apos;&apos;					=&gt; Returns a new empty dictionary; &quot;ScriptForge.&quot; is optional
-&apos;&apos;&apos;		CreateScriptService(&quot;SFDocuments.Calc&quot;)
+&apos;&apos;&apos;		CreateScriptService(&quot;SFDocuments.Calc&quot;, ...)
 &apos;&apos;&apos;					=&gt; Refers to the Calc service, implemented in the SFDocuments library
-&apos;&apos;&apos;		CreateScriptService(&quot;Dialog&quot;, dlgName)
+&apos;&apos;&apos;		CreateScriptService(&quot;Dialog&quot;, dlgName, ...)
 &apos;&apos;&apos;					=&gt; Returns a Dialog instance referring to the dlgName dialog
 &apos;&apos;&apos;		CreateScriptService(&quot;SFDocuments.Event&quot;, oEvent)
 &apos;&apos;&apos;					=&gt; Refers to the Document service instance, implemented in the SFDocuments library, having triggered the event
@@ -301,6 +315,7 @@ Public Sub RegisterScriptServices() As Variant
 		.RegisterService(&quot;Platform&quot;, GlobalScope.ScriptForge.SF_Platform)
 		.RegisterService(&quot;Region&quot;, GlobalScope.ScriptForge.SF_Region)
 		.RegisterService(&quot;Session&quot;, GlobalScope.ScriptForge.SF_Session)
+		.RegisterService(&quot;SharedMemory&quot;, GlobalScope.ScriptForge.SF_SharedMemory)
 		.RegisterService(&quot;String&quot;, GlobalScope.ScriptForge.SF_String)
 		.RegisterService(&quot;Timer&quot;, &quot;ScriptForge.SF_Services._NewTimer&quot;)
 		.RegisterService(&quot;UI&quot;, GlobalScope.ScriptForge.SF_UI)
