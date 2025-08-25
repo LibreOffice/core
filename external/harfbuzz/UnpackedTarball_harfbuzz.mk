@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/harfbuzz_visibility.patch.1 \
-    external/harfbuzz/ubsan.patch \
 ))
 
 # meson will replace python3 from shebang in build commands with the
