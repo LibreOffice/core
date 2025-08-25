@@ -241,9 +241,9 @@ void TipOfTheDayDialog::UpdateTip()
 
     if (!aGraphic.IsAnimated())
     {
-        BitmapEx aBmpEx(aGraphic.GetBitmapEx());
-        if (aBmpEx.Scale(ThumbSize))
-            aGraphic = aBmpEx;
+        Bitmap aBmp(aGraphic.GetBitmap());
+        if (aBmp.Scale(ThumbSize))
+            aGraphic = aBmp;
     }
     m_aPreview.SetPreview(aGraphic);
 }

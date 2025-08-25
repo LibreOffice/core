@@ -156,7 +156,7 @@ namespace svgio::svgreader
             const Graphic& rGraphic,
             drawinglayer::primitive2d::Primitive2DContainer& rEmbedded,
             basegfx::B2DRange& rViewBox,
-            BitmapEx& rBitmapEx)
+            Bitmap& rBitmap)
         {
             if(GraphicType::Bitmap == rGraphic.GetType())
             {
@@ -171,13 +171,13 @@ namespace svgio::svgreader
                 else
                 {
                     // get bitmap
-                    rBitmapEx = rGraphic.GetBitmapEx();
+                    rBitmap = rGraphic.GetBitmap();
                 }
             }
             else
             {
                 // evtl. convert to bitmap
-                rBitmapEx = rGraphic.GetBitmapEx();
+                rBitmap = rGraphic.GetBitmap();
             }
         }
 
@@ -195,7 +195,7 @@ namespace svgio::svgreader
             if(fWidth <= 0.0 || fHeight <= 0.0)
                 return;
 
-            BitmapEx aBitmapEx;
+            Bitmap aBitmap;
             drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
             // prepare Target and ViewBox for evtl. AspectRatio mappings
@@ -220,7 +220,7 @@ namespace svgio::svgreader
                         u"",
                         aStream))
                     {
-                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
+                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmap);
                     }
                 }
             }
@@ -247,7 +247,7 @@ namespace svgio::svgreader
                            aAbsUrl,
                            aStream))
                     {
-                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);
+                        extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmap);
                     }
                 }
             }
@@ -266,10 +266,10 @@ namespace svgio::svgreader
                 }
             }
 
-            if(!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()  && 0 != aBitmapEx.GetSizePixel().Height())
+            if(!aBitmap.IsEmpty() && 0 != aBitmap.GetSizePixel().Width()  && 0 != aBitmap.GetSizePixel().Height())
             {
                 // calculate centered unit size
-                const double fAspectRatio = static_cast<double>(aBitmapEx.GetSizePixel().Width()) / static_cast<double>(aBitmapEx.GetSizePixel().Height());
+                const double fAspectRatio = static_cast<double>(aBitmap.GetSizePixel().Width()) / static_cast<double>(aBitmap.GetSizePixel().Height());
 
                 if (basegfx::fTools::equalZero(fAspectRatio))
                 {
@@ -301,7 +301,7 @@ namespace svgio::svgreader
                 // as transformation to map the picture data correctly
                 aNewTarget.resize(1);
                 aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
-                    Bitmap(aBitmapEx),
+                    aBitmap,
                     basegfx::utils::createScaleTranslateB2DHomMatrix(
                         aViewBox.getRange(),
                         aViewBox.getMinimum()));

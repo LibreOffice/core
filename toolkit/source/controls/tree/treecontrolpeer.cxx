@@ -1392,7 +1392,7 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
         Reference< XGraphic > xGraphic( mxGraphicProvider->queryGraphic( aProps ) );
 
         Graphic aGraphic( xGraphic );
-        rImage = Image(aGraphic.GetBitmapEx());
+        rImage = Image(aGraphic.GetBitmap());
         return true;
     }
     catch( Exception& )

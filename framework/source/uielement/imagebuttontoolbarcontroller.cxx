@@ -124,17 +124,17 @@ bool ImageButtonToolbarController::ReadImageFromURL( bool bBigImage, const OUStr
     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
     rGF.ImportGraphic( aGraphic, u"", *pStream );
 
-    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
 
     const ::Size aSize = bBigImage ? aImageSizeBig : aImageSizeSmall; // Sizes used for toolbar images
 
-    ::Size aBmpSize = aBitmapEx.GetSizePixel();
+    ::Size aBmpSize = aBitmap.GetSizePixel();
     if ( !aBmpSize.IsEmpty() )
     {
         ::Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
         if ( aBmpSize != aNoScaleSize )
-            aBitmapEx.Scale( aNoScaleSize, BmpScaleFlag::BestQuality );
-        aImage = Image( aBitmapEx );
+            aBitmap.Scale( aNoScaleSize, BmpScaleFlag::BestQuality );
+        aImage = Image( aBitmap );
         return true;
     }
 

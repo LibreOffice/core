@@ -726,7 +726,7 @@ namespace drawinglayer::primitive2d
                 // if there is no logical size, create a size from pixel size and set MapMode accordingly
                 if(GraphicType::Bitmap == aGraphic.GetType())
                 {
-                    aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
+                    aGraphic.SetPrefSize(aGraphic.GetBitmap().GetSizePixel());
                     aGraphic.SetPrefMapMode(MapMode(MapUnit::MapPixel));
                     aPrefSize = aGraphic.GetPrefSize();
                 }

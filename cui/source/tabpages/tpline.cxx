@@ -1410,7 +1410,7 @@ void SvxLineTabPage::PopulateMenus()
 
             if(pGraphic)
             {
-                BitmapEx aBitmap(pGraphic->GetBitmapEx());
+                Bitmap aBitmap(pGraphic->GetBitmap());
                 Size aSize(aBitmap.GetSizePixel());
                 if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
                 {

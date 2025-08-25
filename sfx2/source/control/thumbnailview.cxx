@@ -175,17 +175,17 @@ Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
     }
 
     // Extract the image from the stream.
-    BitmapEx aThumbnail;
+    Bitmap aThumbnail;
     if (auto pStream = utl::UcbStreamHelper::CreateStream(xIStream, /*CloseStream=*/true))
     {
         Graphic aGraphic = GraphicFilter::GetGraphicFilter().ImportUnloadedGraphic(*pStream);
-        aThumbnail = aGraphic.GetBitmapEx();
+        aThumbnail = aGraphic.GetBitmap();
     }
 
     // Note that the preview is returned without scaling it to the desired
     // width.  This gives the caller the chance to take advantage of a
     // possibly larger resolution then was asked for.
-    return Bitmap(aThumbnail);
+    return aThumbnail;
 }
 
 ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)

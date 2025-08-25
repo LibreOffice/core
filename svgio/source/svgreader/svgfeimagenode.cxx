@@ -74,7 +74,7 @@ void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
 void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                            const SvgFilterNode* pParent) const
 {
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
 
     if (!maData.isEmpty())
     {
@@ -90,7 +90,7 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
             if (ERRCODE_NONE
                 == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, u"", aStream))
             {
-                aBitmapEx = aGraphic.GetBitmapEx();
+                aBitmap = aGraphic.GetBitmap();
             }
         }
     }
@@ -115,20 +115,20 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
             if (ERRCODE_NONE
                 == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aAbsUrl, aStream))
             {
-                aBitmapEx = aGraphic.GetBitmapEx();
+                aBitmap = aGraphic.GetBitmap();
             }
         }
     }
 
-    if (!aBitmapEx.IsEmpty() && 0 != aBitmapEx.GetSizePixel().Width()
-        && 0 != aBitmapEx.GetSizePixel().Height())
+    if (!aBitmap.IsEmpty() && 0 != aBitmap.GetSizePixel().Width()
+        && 0 != aBitmap.GetSizePixel().Height())
     {
         basegfx::B2DRange aViewBox
             = rTarget.getB2DRange(drawinglayer::geometry::ViewInformation2D());
         const drawinglayer::primitive2d::Primitive2DReference xRef(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                Bitmap(aBitmapEx), basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                       aViewBox.getRange(), aViewBox.getMinimum())));
+                aBitmap, basegfx::utils::createScaleTranslateB2DHomMatrix(aViewBox.getRange(),
+                                                                          aViewBox.getMinimum())));
 
         rTarget = drawinglayer::primitive2d::Primitive2DContainer{ xRef };
     }

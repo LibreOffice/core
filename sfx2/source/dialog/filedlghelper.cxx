@@ -735,7 +735,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
             // is responsible for placing it at its
             // proper position and painting a frame
 
-            BitmapEx aBmp = maGraphic.GetBitmapEx();
+            Bitmap aBmp = maGraphic.GetBitmap();
             if ( !aBmp.IsEmpty() )
             {
                 // scale the bitmap to the correct size

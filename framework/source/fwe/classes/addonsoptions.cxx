@@ -1569,16 +1569,16 @@ Bitmap AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         rGF.ImportGraphic( aGraphic, u"", *pStream );
 
-        BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+        Bitmap aBitmap = aGraphic.GetBitmap();
 
-        Size aBmpSize = aBitmapEx.GetSizePixel();
+        Size aBmpSize = aBitmap.GetSizePixel();
         if ( !aBmpSize.IsEmpty() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
-            if( !aBitmapEx.IsAlpha() )
-                aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+            if( !aBitmap.HasAlpha() )
+                aBitmap = Bitmap(BitmapEx( aBitmap.CreateColorBitmap(), COL_LIGHTMAGENTA ));
 
-            aImage = Bitmap(aBitmapEx);
+            aImage = aBitmap;
         }
     }
 

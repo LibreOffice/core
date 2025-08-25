@@ -461,10 +461,10 @@ void ExportDialog::GetGraphicStream()
                         ( ( maSize.Width != aSizePixel.Width() ) ||
                           ( maSize.Height != aSizePixel.Height() ) ) )
                     {
-                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        Bitmap aBmp( aGraphic.GetBitmap() );
                         // export: use highest quality
-                        aBmpEx.Scale( Size( maSize.Width, maSize.Height ), BmpScaleFlag::Lanczos );
-                        aGraphic = aBmpEx;
+                        aBmp.Scale( Size( maSize.Width, maSize.Height ), BmpScaleFlag::Lanczos );
+                        aGraphic = aBmp;
                     }
                 }
 

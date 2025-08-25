@@ -1031,7 +1031,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     Graphic aGraphic;
     GraphicConverter::Import( *pIn, aGraphic );
 
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     tools::Long nPixelX = aBitmap.GetSizePixel().Width();
     tools::Long nPixelY = aBitmap.GetSizePixel().Height();
     double ratio = nPixelY/static_cast<double>(nPixelX);
@@ -2036,7 +2036,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, 
         }
         if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
         {
-            BitmapEx aBitmap(aGraphic.GetBitmapEx());
+            Bitmap aBitmap(aGraphic.GetBitmap());
             Size aSize(aBitmap.GetSizePixel());
             if(aSize.Width() > MAX_BMP_WIDTH ||
                 aSize.Height() > MAX_BMP_HEIGHT)

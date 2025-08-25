@@ -238,7 +238,7 @@ void LoadImage(std::u16string_view rPreviewFile, std::shared_ptr<AdditionsItem> 
 
     // for VCL to be able to create bitmaps / do visual changes in the thread
     aFilter.ImportGraphic(aGraphic, aURLObj);
-    BitmapEx aBmp = aGraphic.GetBitmapEx();
+    Bitmap aBmp = aGraphic.GetBitmap();
     Size aBmpSize = aBmp.GetSizePixel();
     Size aThumbSize(pCurrentItem->m_xImageScreenshot->get_size_request());
     if (!aBmp.IsEmpty())

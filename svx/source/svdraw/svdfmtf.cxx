@@ -528,11 +528,11 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
         }
         else
         {
-            BitmapEx aBitmapEx;
+            Bitmap aBitmap;
 
             if(pSdrGrafObj)
             {
-                aBitmapEx = pSdrGrafObj->GetGraphic().GetBitmapEx();
+                aBitmap = pSdrGrafObj->GetGraphic().GetBitmap();
             }
 
             pObj.clear();
@@ -558,11 +558,11 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
                     pObj->SetLayer(aOldLayer);
                     pObj->SetMergedItemSet(aOldItemSet);
 
-                    if(!aBitmapEx.IsEmpty())
+                    if(!aBitmap.IsEmpty())
                     {
                         // aNewRange is inside of aOldRange and defines which part of aBitmapEx is used
-                        const double fScaleX(aBitmapEx.GetSizePixel().Width() / (aOldRange.getWidth() ? aOldRange.getWidth() : 1.0));
-                        const double fScaleY(aBitmapEx.GetSizePixel().Height() / (aOldRange.getHeight() ? aOldRange.getHeight() : 1.0));
+                        const double fScaleX(aBitmap.GetSizePixel().Width() / (aOldRange.getWidth() ? aOldRange.getWidth() : 1.0));
+                        const double fScaleY(aBitmap.GetSizePixel().Height() / (aOldRange.getHeight() ? aOldRange.getHeight() : 1.0));
                         basegfx::B2DRange aPixel(aNewRange);
                         basegfx::B2DHomMatrix aTrans;
 
@@ -570,7 +570,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
                         aTrans.scale(fScaleX, fScaleY);
                         aPixel.transform(aTrans);
 
-                        const Size aOrigSizePixel(aBitmapEx.GetSizePixel());
+                        const Size aOrigSizePixel(aBitmap.GetSizePixel());
                         const Point aClipTopLeft(
                             basegfx::fround<tools::Long>(floor(std::max(0.0, aPixel.getMinX()))),
                             basegfx::fround<tools::Long>(floor(std::max(0.0, aPixel.getMinY()))));
@@ -578,7 +578,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
                             basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Width()), aPixel.getWidth()))),
                             basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Height()), aPixel.getHeight()))));
                         const BitmapEx aClippedBitmap(
-                            aBitmapEx,
+                            BitmapEx(aBitmap),
                             aClipTopLeft,
                             aClipSize);
 

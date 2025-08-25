@@ -2325,7 +2325,7 @@ void SAL_CALL VCLXDialog::setProperty(
             {
                 Graphic aImage(xGraphic);
 
-                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                Wallpaper aWallpaper(aImage.GetBitmap());
                 aWallpaper.SetStyle( WallpaperStyle::Scale );
                 pDialog->SetBackground( aWallpaper );
             }
@@ -2460,7 +2460,7 @@ void SAL_CALL VCLXMultiPage::setProperty(
             {
                 Graphic aImage(xGraphic);
 
-                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                Wallpaper aWallpaper(aImage.GetBitmap());
                 aWallpaper.SetStyle( WallpaperStyle::Scale );
                 pTabControl->SetBackground( aWallpaper );
             }
@@ -2670,7 +2670,7 @@ void SAL_CALL VCLXTabPage::setProperty(
             {
                 Graphic aImage(xGraphic);
 
-                Wallpaper aWallpaper(aImage.GetBitmapEx());
+                Wallpaper aWallpaper(aImage.GetBitmap());
                 aWallpaper.SetStyle( WallpaperStyle::Scale );
                 pTabPage->SetBackground( aWallpaper );
             }

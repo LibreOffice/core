@@ -106,10 +106,10 @@ void CuiGraphicPreviewWindow::ScaleImageToFit()
 
         if( !mpOrigGraphic->IsAnimated() )
         {
-            BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
+            Bitmap aBmp( mpOrigGraphic->GetBitmap() );
 
-            if( aBmpEx.Scale( aGrfSize ) )
-                maScaledOrig = aBmpEx;
+            if( aBmp.Scale( aGrfSize ) )
+                maScaledOrig = aBmp;
         }
     }
 
@@ -208,14 +208,14 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapMosaicFilter(aSize.getWidth(), aSize.getHeight())))
+        if (BitmapFilter::Filter(aBmp, BitmapMosaicFilter(aSize.getWidth(), aSize.getHeight())))
         {
             if( IsEnhanceEdges() )
-                BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter());
+                BitmapFilter::Filter(aBmp, BitmapSharpenFilter());
 
-            aRet = aBmpEx;
+            aRet = aBmp;
         }
     }
 
@@ -252,11 +252,11 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapSmoothenFilter(nRadius)))
+        if (BitmapFilter::Filter(aBmp, BitmapSmoothenFilter(nRadius)))
         {
-            aRet = aBmpEx;
+            aRet = aBmp;
         }
     }
 
@@ -305,14 +305,14 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapSolarizeFilter(nGreyThreshold)))
+        if (BitmapFilter::Filter(aBmp, BitmapSolarizeFilter(nGreyThreshold)))
         {
             if( IsInvert() )
-                aBmpEx.Invert();
+                aBmp.Invert();
 
-            aRet = aBmpEx;
+            aRet = aBmp;
         }
     }
 
@@ -347,10 +347,10 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double,
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapSepiaFilter(nSepiaPct)))
-            aRet = aBmpEx;
+        if (BitmapFilter::Filter(aBmp, BitmapSepiaFilter(nSepiaPct)))
+            aRet = aBmp;
     }
 
     return aRet;
@@ -361,7 +361,7 @@ GraphicFilterPoster::GraphicFilterPoster(weld::Window* pParent, const Graphic& r
     : GraphicFilterDialog(pParent, u"cui/ui/posterdialog.ui"_ustr, u"PosterDialog"_ustr, rGraphic)
     , mxNumPoster(m_xBuilder->weld_spin_button(u"value"_ustr))
 {
-    mxNumPoster->set_range(2, vcl::pixelFormatBitCount(rGraphic.GetBitmapEx().getPixelFormat()));
+    mxNumPoster->set_range(2, vcl::pixelFormatBitCount(rGraphic.GetBitmap().getPixelFormat()));
     mxNumPoster->set_value(nPosterCount);
     mxNumPoster->connect_value_changed(LINK(this, GraphicFilterPoster, EditModifyHdl));
 }
@@ -385,10 +385,10 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapColorQuantizationFilter(nPosterCount)))
-            aRet = aBmpEx;
+        if (BitmapFilter::Filter(aBmp, BitmapColorQuantizationFilter(nPosterCount)))
+            aRet = aBmp;
     }
 
     return aRet;
@@ -456,10 +456,10 @@ Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double
     }
     else
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
 
-        if (BitmapFilter::Filter(aBmpEx, BitmapEmbossGreyFilter(nAzim, nElev)))
-            aRet = aBmpEx;
+        if (BitmapFilter::Filter(aBmp, BitmapEmbossGreyFilter(nAzim, nElev)))
+            aRet = aBmp;
     }
 
     return aRet;

@@ -310,10 +310,10 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                         ( ( nWidth != aSizePixel.Width() ) ||
                           ( nHeight != aSizePixel.Height() ) ) )
                     {
-                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        Bitmap aBmp( aGraphic.GetBitmap() );
                         // export: use highest quality
-                        aBmpEx.Scale( Size( nWidth, nHeight ), BmpScaleFlag::Lanczos );
-                        aGraphic = aBmpEx;
+                        aBmp.Scale( Size( nWidth, nHeight ), BmpScaleFlag::Lanczos );
+                        aGraphic = aBmp;
                     }
 
                     XOutBitmap::WriteGraphic( aGraphic, sPath, aFilter,
