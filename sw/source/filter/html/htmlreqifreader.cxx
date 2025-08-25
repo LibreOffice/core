@@ -548,8 +548,8 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     SvMemoryStream aNativeData;
 
     // Set white background for the semi-transparent pixels.
-    BitmapEx aBitmapEx = rGraphic.GetBitmapEx();
-    Bitmap aBitmap = aBitmapEx.GetBitmap(/*aTransparentReplaceColor=*/COL_WHITE);
+    Bitmap aBitmap = rGraphic.GetBitmap();
+    aBitmap.ReplaceTransparency(/*aTransparentReplaceColor=*/COL_WHITE);
 
     if (aBitmap.getPixelFormat() != vcl::PixelFormat::N24_BPP)
     {

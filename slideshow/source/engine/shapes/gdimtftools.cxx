@@ -133,12 +133,11 @@ public:
             // wrap bitmap into GDIMetafile
             GDIMetaFileSharedPtr xMtf = std::make_shared<GDIMetaFile>();
 
-            ::BitmapEx      aBmpEx( aGraphic.GetBitmapEx() );
+            ::Bitmap      aBmp( aGraphic.GetBitmap() );
 
-            xMtf->AddAction( new MetaBmpExAction( Point(),
-                                                 aBmpEx ) );
-            xMtf->SetPrefSize( aBmpEx.GetPrefSize() );
-            xMtf->SetPrefMapMode( aBmpEx.GetPrefMapMode() );
+            xMtf->AddAction( new MetaBmpExAction( Point(), BitmapEx(aBmp) ) );
+            xMtf->SetPrefSize( aBmp.GetPrefSize() );
+            xMtf->SetPrefMapMode( aBmp.GetPrefMapMode() );
 
             return xMtf;
         }

@@ -47,12 +47,12 @@ void generatePreview(std::string_view rPdfPath, std::string_view rPngPath)
         != ERRCODE_NONE)
         return;
 
-    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     OUString aOutURL;
     osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPngPath), aOutURL);
     SvFileStream aOutStream(aOutURL, StreamMode::WRITE);
     vcl::PngImageWriter aWriter(aOutStream);
-    aWriter.write(aBitmapEx);
+    aWriter.write(aBitmap);
 }
 
 int pdfVerify(int nArgc, char** pArgv)
