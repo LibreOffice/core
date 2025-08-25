@@ -859,14 +859,15 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     , bPreset(false)
     , m_xErrorText(m_xBuilder->weld_label(u"errorft"_ustr))
     , m_xBtBrowseFile(m_xBuilder->weld_button(u"browseBtn"_ustr))
-    , m_xExamplesVS(new SvxBmpNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xExamplesVS))
+    , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_graphic_iconview"_ustr))
 {
     SetExchangeSupport();
 
-    m_xExamplesVS->init();
-    m_xExamplesVS->SetSelectHdl(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
-    m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
+    GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
+    SvxBmpNumIconView::PopulateBitmapIconView(m_xExamplesIV.get());
+    m_xExamplesIV->connect_selection_changed(LINK(this, SvxBitmapPickTabPage, NumSelectHdl_Impl));
+    m_xExamplesIV->connect_item_activated(LINK(this, SvxBitmapPickTabPage, DoubleClickHdl_Impl));
+    m_xExamplesIV->connect_query_tooltip(LINK(this, SvxBitmapPickTabPage, QueryTooltipHdl));
     m_xBtBrowseFile->connect_clicked(LINK(this, SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl));
 
     if(comphelper::LibreOfficeKit::isActive())
@@ -880,7 +881,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     size_t i = 0;
     for (auto & grfName : aGrfNames)
     {
-        m_xExamplesVS->InsertItem( i + 1, i);
+        VclPtr<VirtualDevice> pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
 
         INetURLObject aObj(grfName);
         if (aObj.GetProtocol() == INetProtocol::File)
@@ -890,7 +891,8 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
             grfName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
         }
 
-        m_xExamplesVS->SetItemText( i + 1, grfName );
+        OUString sId = OUString::number(i);
+        m_xExamplesIV->insert(-1, &grfName, &sId, pVDev, nullptr);
         ++i;
     }
 
@@ -900,16 +902,14 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     }
     else
     {
-        m_xExamplesVS->Show();
-        m_xExamplesVS->SetFormat();
-        m_xExamplesVS->Invalidate();
+        m_xExamplesIV->show();
     }
 }
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    m_xExamplesVSWin.reset();
-    m_xExamplesVS.reset();
+    GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
+    m_xExamplesIV.reset();
 }
 
 std::unique_ptr<SfxTabPage> SvxBitmapPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
@@ -937,14 +937,14 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pActNum && *pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        m_xExamplesVS->SetNoSelection();
+        m_xExamplesIV->unselect_all();
     }
 
     if(!aGrfNames.empty() &&
         (pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset)))
     {
-        m_xExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(m_xExamplesVS.get());
+        m_xExamplesIV->select(0);
+        NumSelectHdl_Impl(*m_xExamplesIV);
         bPreset = true;
     }
     bPreset |= bIsPreset;
@@ -998,14 +998,39 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
+IMPL_LINK(SvxBitmapPickTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    const OUString sId = m_xExamplesIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_Int32 nIndex = sId.toInt32();
+
+    if (nIndex >= 0 && nIndex < static_cast<sal_Int32>(aGrfNames.size()))
+    {
+        OUString sImageName = aGrfNames[nIndex];
+        INetURLObject aObj(sImageName);
+        if (aObj.GetProtocol() == INetProtocol::File)
+        {
+            aObj.removeExtension();
+            sImageName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+        }
+
+        return sImageName;
+    }
+
+    return OUString();
+}
+
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
 {
     if(!pActNum)
         return;
 
     bPreset = false;
     bModified = true;
-    sal_uInt16 nIdx = m_xExamplesVS->GetSelectedItemId() - 1;
+    OUString sId = m_xExamplesIV->get_selected_id();
+    sal_uInt16 nIdx = !sId.isEmpty() ? sId.toInt32() : 0;
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -1034,11 +1059,16 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool)
 {
-    NumSelectHdl_Impl(m_xExamplesVS.get());
+    if(m_xExamplesIV->get_selected_id().isEmpty())
+        return false;
+
+    NumSelectHdl_Impl(*m_xExamplesIV);
     weld::Button& rOk = GetDialogController()->GetOKButton();
     rOk.clicked();
+
+    return true;
 }
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
@@ -1117,7 +1147,8 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     size_t i = 0;
     for (auto & grfName : aGrfNames)
     {
-        m_xExamplesVS->InsertItem( i + 1, i);
+        VclPtr<VirtualDevice> pVDev = SvxBmpNumIconView::CreateBitmapBulletPreview(i);
+
         INetURLObject aObj(grfName);
         if (aObj.GetProtocol() == INetProtocol::File)
         {
@@ -1125,7 +1156,9 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
             aObj.removeExtension();
             grfName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
         }
-        m_xExamplesVS->SetItemText( i + 1, grfName );
+
+        OUString sId = OUString::number(i);
+        m_xExamplesIV->insert(-1, &grfName, &sId, pVDev, nullptr);
         ++i;
     }
 
@@ -1135,8 +1168,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     }
     else
     {
-        m_xExamplesVS->Show();
-        m_xExamplesVS->SetFormat();
+        m_xExamplesIV->show();
     }
 }
 

@@ -297,16 +297,22 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "3")
                 xGraphicPage = xDialog.getChild("PickGraphicPage")
-                xselector = xGraphicPage.getChild("valueset")
-                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "92")
+                xselector = xGraphicPage.getChild("pick_graphic_iconview")
                 # Select element num 22
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "22"}))
+                element22 = xselector.getChild("21")
+                element22.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xselector)["VisibleCount"], "92")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "21")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "22")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "21")
+                self.assertEqual(get_state_as_dict(xselector)["SelectEntryText"], "Bullet15-Arrow-Blue")
+
                 # Select element num 73
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "73"}))
+                element73 = xselector.getChild("72")
+                element73.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xselector)["VisibleCount"], "92")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "72")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "73")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "72")
+                self.assertEqual(get_state_as_dict(xselector)["SelectEntryText"], "orgsqare")
 
 
    def test_bullets_and_numbering_document_bullet_list(self):

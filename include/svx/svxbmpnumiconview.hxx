@@ -68,6 +68,9 @@ public:
         Reference<XNumberingFormatter> const& xFormat,
         const Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
+
+    static VclPtr<VirtualDevice> CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex);
+    static void PopulateBitmapIconView(weld::IconView* pIconView);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

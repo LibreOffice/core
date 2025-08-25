@@ -29,7 +29,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
-
+#include <svx/gallery.hxx>
+#include <vcl/graph.hxx>
 #include <svx/svxbmpnumiconview.hxx>
 
 using namespace com::sun::star::uno;
@@ -533,6 +534,74 @@ void SvxBmpNumIconView::SetOutlineNumberingSettings(
         OUString sId = OUString::number(i);
         OUString sText = GetNumberingDescription(NumberingPageType::OUTLINE, i);
         mxIconView->insert(-1, &sText, &sId, pVDev, nullptr);
+    }
+}
+
+VclPtr<VirtualDevice> SvxBmpNumIconView::CreateBitmapBulletPreview(sal_uInt32 nGalleryIndex)
+{
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    Size aRectSize(150, 200);
+    pVDev->SetOutputSizePixel(aRectSize);
+
+    const Color aBackColor(COL_WHITE);
+    const Color aTextColor(COL_BLACK);
+
+    pVDev->SetFillColor(aBackColor);
+    pVDev->SetLineColor(aTextColor);
+    pVDev->DrawRect(tools::Rectangle(Point(0,0), aRectSize));
+
+    tools::Long nRectWidth = aRectSize.Width();
+    tools::Long nRectHeight = aRectSize.Height();
+    Size aGraphicSize(nRectHeight/8, nRectHeight/8);
+
+    pVDev->SetLineColor(COL_LIGHTGRAY);
+    Point aStart(nRectWidth * 25 / 100, 0);
+    Point aEnd(nRectWidth * 9 / 10, 0);
+    for (sal_uInt16 i = 11; i < 100; i += 33)
+    {
+        aStart.setY(nRectHeight * i / 100);
+        aEnd.setY(aStart.Y());
+        pVDev->DrawLine(aStart, aEnd);
+        aStart.setY(nRectHeight * (i + 11) / 100);
+        aEnd.setY(aStart.Y());
+        pVDev->DrawLine(aStart, aEnd);
+    }
+
+    Graphic aGraphic;
+    if (GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, nGalleryIndex, &aGraphic))
+    {
+        Point aPos(5, 0);
+        for (sal_uInt16 i = 0; i < 3; i++)
+        {
+            sal_uInt16 nY = 11 + i * 33;
+            aPos.setY(nRectHeight * nY / 100);
+            aGraphic.Draw(*pVDev, aPos, aGraphicSize);
+        }
+    }
+    else
+    {
+        vcl::Font aFont("Arial", Size(0, 12));
+        pVDev->SetFont(aFont);
+        pVDev->DrawText(Point(10, 50), u"No Image"_ustr);
+    }
+
+    return pVDev;
+}
+
+void SvxBmpNumIconView::PopulateBitmapIconView(weld::IconView* pIconView)
+{
+    if (!pIconView)
+        return;
+
+    pIconView->clear();
+
+    sal_uInt32 nCount = GalleryExplorer::GetSdrObjCount(GALLERY_THEME_BULLETS);
+
+    for (sal_uInt32 i = 0; i < std::min(nCount, sal_uInt32(8)); ++i)
+    {
+        VclPtr<VirtualDevice> pVDev = CreateBitmapBulletPreview(i);
+        OUString sId = OUString::number(i);
+        pIconView->insert(-1, nullptr, &sId, pVDev, nullptr);
     }
 }
 

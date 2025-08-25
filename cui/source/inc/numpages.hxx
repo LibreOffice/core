@@ -178,11 +178,11 @@ class SvxBitmapPickTabPage final : public SfxTabPage
 
     std::unique_ptr<weld::Label> m_xErrorText;
     std::unique_ptr<weld::Button> m_xBtBrowseFile;
-    std::unique_ptr<SvxBmpNumValueSet> m_xExamplesVS;
-    std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
+    std::unique_ptr<weld::IconView> m_xExamplesIV;
 
-    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
+    DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
     DECL_LINK(ClickAddBrowseHdl_Impl, weld::Button&, void);
 
 public:
