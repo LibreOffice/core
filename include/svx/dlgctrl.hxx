@@ -74,13 +74,13 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetContro
 {
 private:
     SvxTabPage* m_pPage;
-    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
-    sal_uInt16 nBorderWidth;
-    Point aPtLT, aPtMT, aPtRT;
-    Point aPtLM, aPtMM, aPtRM;
-    Point aPtLB, aPtMB, aPtRB;
-    Point aPtNew;
-    RectPoint eRP, eDefRP;
+    rtl::Reference<SvxRectCtlAccessibleContext> m_pAccContext;
+    sal_uInt16 m_nBorderWidth;
+    Point m_aPtLT, m_aPtMT, m_aPtRT;
+    Point m_aPtLM, m_aPtMM, m_aPtRM;
+    Point m_aPtLB, m_aPtMB, m_aPtRB;
+    Point m_aPtNew;
+    RectPoint m_eRP, m_eDefRP;
     Bitmap maBitmap;
     CTL_STATE m_nState;
     bool mbCompleteDisable : 1;
@@ -115,7 +115,7 @@ public:
     virtual void StyleUpdated() override;
 
     void                Reset();
-    RectPoint           GetActualRP() const { return eRP;}
+    RectPoint           GetActualRP() const { return m_eRP;}
     void                SetActualRP( RectPoint eNewRP );
 
     void                SetState( CTL_STATE nState );

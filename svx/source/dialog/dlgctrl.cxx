@@ -63,9 +63,9 @@ Bitmap& SvxRectCtl::GetRectBitmap()
 
 SvxRectCtl::SvxRectCtl(SvxTabPage* pPage)
     : m_pPage(pPage)
-    , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(200, 0), MapMode(MapUnit::Map100thMM)).Width())
-    , eRP(RectPoint::MM)
-    , eDefRP(RectPoint::MM)
+    , m_nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(200, 0), MapMode(MapUnit::Map100thMM)).Width())
+    , m_eRP(RectPoint::MM)
+    , m_eDefRP(RectPoint::MM)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
 {
@@ -82,15 +82,15 @@ void SvxRectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 {
-    nBorderWidth = Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width();
-    eDefRP = eRpt;
+    m_nBorderWidth = Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width();
+    m_eDefRP = eRpt;
     Resize();
 }
 
 SvxRectCtl::~SvxRectCtl()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    pAccContext.clear();
+    m_pAccContext.clear();
 #endif
 }
 
@@ -101,17 +101,17 @@ void SvxRectCtl::Resize()
 
 void SvxRectCtl::Resize_Impl(const Size &rSize)
 {
-    aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
-    aPtMT = Point( rSize.Width() / 2, 0 + nBorderWidth );
-    aPtRT = Point( rSize.Width() - nBorderWidth, 0 + nBorderWidth );
+    m_aPtLT = Point( 0 + m_nBorderWidth,  0 + m_nBorderWidth );
+    m_aPtMT = Point( rSize.Width() / 2, 0 + m_nBorderWidth );
+    m_aPtRT = Point( rSize.Width() - m_nBorderWidth, 0 + m_nBorderWidth );
 
-    aPtLM = Point( 0 + nBorderWidth,  rSize.Height() / 2 );
-    aPtMM = Point( rSize.Width() / 2, rSize.Height() / 2 );
-    aPtRM = Point( rSize.Width() - nBorderWidth, rSize.Height() / 2 );
+    m_aPtLM = Point( 0 + m_nBorderWidth,  rSize.Height() / 2 );
+    m_aPtMM = Point( rSize.Width() / 2, rSize.Height() / 2 );
+    m_aPtRM = Point( rSize.Width() - m_nBorderWidth, rSize.Height() / 2 );
 
-    aPtLB = Point( 0 + nBorderWidth,    rSize.Height() - nBorderWidth );
-    aPtMB = Point( rSize.Width() / 2,   rSize.Height() - nBorderWidth );
-    aPtRB = Point( rSize.Width() - nBorderWidth, rSize.Height() - nBorderWidth );
+    m_aPtLB = Point( 0 + m_nBorderWidth,    rSize.Height() - m_nBorderWidth );
+    m_aPtMB = Point( rSize.Width() / 2,   rSize.Height() - m_nBorderWidth );
+    m_aPtRB = Point( rSize.Width() - m_nBorderWidth, rSize.Height() - m_nBorderWidth );
 
     Reset();
     StyleUpdated();
@@ -184,12 +184,12 @@ bool SvxRectCtl::MouseButtonDown(const MouseEvent& rMEvt)
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if(!IsCompletelyDisabled())
     {
-        aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
-        eRP = GetRPFromPoint( aPtNew );
-        SetActualRP( eRP );
+        m_aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
+        m_eRP = GetRPFromPoint( m_aPtNew );
+        SetActualRP( m_eRP );
 
         if (m_pPage)
-            m_pPage->PointChanged(GetDrawingArea(), eRP);
+            m_pPage->PointChanged(GetDrawingArea(), m_eRP);
     }
     return true;
 }
@@ -200,7 +200,7 @@ bool SvxRectCtl::KeyInput(const KeyEvent& rKeyEvt)
     if (IsCompletelyDisabled())
         return false;
 
-    RectPoint eNewRP = eRP;
+    RectPoint eNewRP = m_eRP;
 
     switch( rKeyEvt.GetKeyCode().GetCode() )
     {
@@ -267,12 +267,12 @@ bool SvxRectCtl::KeyInput(const KeyEvent& rKeyEvt)
         default:
             return false;
     }
-    if( eNewRP != eRP )
+    if( eNewRP != m_eRP )
     {
         SetActualRP( eNewRP );
 
         if (m_pPage)
-            m_pPage->PointChanged(GetDrawingArea(), eRP);
+            m_pPage->PointChanged(GetDrawingArea(), m_eRP);
     }
     return true;
 }
@@ -301,10 +301,10 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     {
         Color aOldCol = rRenderContext.GetLineColor();
         rRenderContext.SetLineColor(rStyles.GetLightColor());
-        rRenderContext.DrawRect(tools::Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
+        rRenderContext.DrawRect(tools::Rectangle(m_aPtLT + aPtDiff, m_aPtRB + aPtDiff));
         rRenderContext.SetLineColor(aOldCol);
     }
-    rRenderContext.DrawRect(tools::Rectangle(aPtLT, aPtRB));
+    rRenderContext.DrawRect(tools::Rectangle(m_aPtLT, m_aPtRB));
 
     rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
 
@@ -323,30 +323,30 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (IsCompletelyDisabled())
     {
-        rRenderContext.DrawBitmapEx(aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
     }
     else
     {
-        rRenderContext.DrawBitmapEx(aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRT - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
 
         // Center for rectangle and line
-        rRenderContext.DrawBitmapEx(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
 
-        rRenderContext.DrawBitmapEx(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
-        rRenderContext.DrawBitmapEx(aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmapEx(m_aPtRB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
     }
 
     // draw active button, avoid center pos for angle
@@ -355,7 +355,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     {
         if (IsEnabled())
         {
-            Point aCenterPt(aPtNew);
+            Point aCenterPt(m_aPtNew);
             aCenterPt -= aToCenter;
 
             rRenderContext.DrawBitmapEx(aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap);
@@ -377,36 +377,36 @@ const Point& SvxRectCtl::GetPointFromRP( RectPoint _eRP) const
 {
     switch( _eRP )
     {
-        case RectPoint::LT: return aPtLT;
-        case RectPoint::MT: return aPtMT;
-        case RectPoint::RT: return aPtRT;
-        case RectPoint::LM: return aPtLM;
-        case RectPoint::MM: return aPtMM;
-        case RectPoint::RM: return aPtRM;
-        case RectPoint::LB: return aPtLB;
-        case RectPoint::MB: return aPtMB;
-        case RectPoint::RB: return aPtRB;
+        case RectPoint::LT: return m_aPtLT;
+        case RectPoint::MT: return m_aPtMT;
+        case RectPoint::RT: return m_aPtRT;
+        case RectPoint::LM: return m_aPtLM;
+        case RectPoint::MM: return m_aPtMM;
+        case RectPoint::RM: return m_aPtRM;
+        case RectPoint::LB: return m_aPtLB;
+        case RectPoint::MB: return m_aPtMB;
+        case RectPoint::RB: return m_aPtRB;
     }
-    return aPtMM; // default
+    return m_aPtMM; // default
 }
 
 Point SvxRectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
 {
-    Point aPtLast = aPtNew;
-    aPtNew = GetPointFromRP( eNewRP );
+    Point aPtLast = m_aPtNew;
+    m_aPtNew = GetPointFromRP( eNewRP );
 
     if( m_nState & CTL_STATE::NOHORZ )
-        aPtNew.setX( aPtMM.X() );
+        m_aPtNew.setX( m_aPtMM.X() );
 
     if( m_nState & CTL_STATE::NOVERT )
-        aPtNew.setY( aPtMM.Y() );
+        m_aPtNew.setY( m_aPtMM.Y() );
 
     // fdo#74751 this fix reverse base point on RTL UI.
     bool bRTL = AllSettings::GetLayoutRTL();
-    eNewRP = GetRPFromPoint( aPtNew, bRTL );
+    eNewRP = GetRPFromPoint( m_aPtNew, bRTL );
 
-    eDefRP = eNewRP;
-    eRP = eNewRP;
+    m_eDefRP = eNewRP;
+    m_eRP = eNewRP;
 
     return aPtLast;
 }
@@ -417,9 +417,9 @@ void SvxRectCtl::GetFocus()
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     // Send accessibility event.
-    if (pAccContext.is())
+    if (m_pAccContext.is())
     {
-        pAccContext->FireChildFocus(GetActualRP());
+        m_pAccContext->FireChildFocus(GetActualRP());
     }
 #endif
 }
@@ -440,26 +440,26 @@ Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
     if( !( m_nState & CTL_STATE::NOHORZ ) )
     {
         if( aPt.X() < aSize.Width() / 3 )
-            x = aPtLT.X();
+            x = m_aPtLT.X();
         else if( aPt.X() < aSize.Width() * 2 / 3 )
-            x = aPtMM.X();
+            x = m_aPtMM.X();
         else
-            x = aPtRB.X();
+            x = m_aPtRB.X();
     }
     else
-        x = aPtMM.X();
+        x = m_aPtMM.X();
 
     if( !( m_nState & CTL_STATE::NOVERT ) )
     {
         if( aPt.Y() < aSize.Height() / 3 )
-            y = aPtLT.Y();
+            y = m_aPtLT.Y();
         else if( aPt.Y() < aSize.Height() * 2 / 3 )
-            y = aPtMM.Y();
+            y = m_aPtMM.Y();
         else
-            y = aPtRB.Y();
+            y = m_aPtRB.Y();
     }
     else
-            y = aPtMM.Y();
+            y = m_aPtMM.Y();
 
     return Point( x, y );
 }
@@ -471,14 +471,14 @@ RectPoint SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 {
     RectPoint rPoint = RectPoint::MM;  // default
 
-    if (aPt == aPtLT) rPoint = bRTL ? RectPoint::RT : RectPoint::LT;
-    else if( aPt == aPtMT) rPoint = RectPoint::MT;
-    else if( aPt == aPtRT) rPoint = bRTL ? RectPoint::LT : RectPoint::RT;
-    else if( aPt == aPtLM) rPoint = bRTL ? RectPoint::RM : RectPoint::LM;
-    else if( aPt == aPtRM) rPoint = bRTL ? RectPoint::LM : RectPoint::RM;
-    else if( aPt == aPtLB) rPoint = bRTL ? RectPoint::RB : RectPoint::LB;
-    else if( aPt == aPtMB) rPoint = RectPoint::MB;
-    else if( aPt == aPtRB) rPoint = bRTL ? RectPoint::LB : RectPoint::RB;
+    if (aPt == m_aPtLT) rPoint = bRTL ? RectPoint::RT : RectPoint::LT;
+    else if( aPt == m_aPtMT) rPoint = RectPoint::MT;
+    else if( aPt == m_aPtRT) rPoint = bRTL ? RectPoint::LT : RectPoint::RT;
+    else if( aPt == m_aPtLM) rPoint = bRTL ? RectPoint::RM : RectPoint::LM;
+    else if( aPt == m_aPtRM) rPoint = bRTL ? RectPoint::LM : RectPoint::RM;
+    else if( aPt == m_aPtLB) rPoint = bRTL ? RectPoint::RB : RectPoint::LB;
+    else if( aPt == m_aPtMB) rPoint = RectPoint::MB;
+    else if( aPt == m_aPtRB) rPoint = bRTL ? RectPoint::LB : RectPoint::RB;
 
     return rPoint;
 }
@@ -487,8 +487,8 @@ RectPoint SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 
 void SvxRectCtl::Reset()
 {
-    aPtNew = GetPointFromRP( eDefRP );
-    eRP = eDefRP;
+    m_aPtNew = GetPointFromRP( m_eDefRP );
+    m_eRP = m_eDefRP;
     Invalidate();
 }
 
@@ -503,8 +503,8 @@ void SvxRectCtl::SetActualRP( RectPoint eNewRP )
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     // notify accessibility object about change
-    if (pAccContext.is())
-        pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
+    if (m_pAccContext.is())
+        m_pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
 #endif
 }
 
@@ -512,26 +512,26 @@ void SvxRectCtl::SetState( CTL_STATE nState )
 {
     m_nState = nState;
 
-    Point aPtLast( GetPointFromRP( eRP ) );
+    Point aPtLast( GetPointFromRP( m_eRP ) );
     Point _aPtNew( aPtLast );
 
     if( m_nState & CTL_STATE::NOHORZ )
-        _aPtNew.setX( aPtMM.X() );
+        _aPtNew.setX( m_aPtMM.X() );
 
     if( m_nState & CTL_STATE::NOVERT)
-        _aPtNew.setY( aPtMM.Y() );
+        _aPtNew.setY( m_aPtMM.Y() );
 
-    eRP = GetRPFromPoint( _aPtNew );
+    m_eRP = GetRPFromPoint( _aPtNew );
     Invalidate();
 
     if (m_pPage)
-        m_pPage->PointChanged(GetDrawingArea(), eRP);
+        m_pPage->PointChanged(GetDrawingArea(), m_eRP);
 }
 
 tools::Rectangle SvxRectCtl::CalculateFocusRectangle() const
 {
     Size        aDstBtnSize(15, 15);
-    return tools::Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
+    return tools::Rectangle( m_aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
 }
 
 tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
@@ -557,9 +557,9 @@ tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) con
 rtl::Reference<comphelper::OAccessible> SvxRectCtl::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    pAccContext = new SvxRectCtlAccessibleContext(this);
+    m_pAccContext = new SvxRectCtlAccessibleContext(this);
 #endif
-    return pAccContext;
+    return m_pAccContext;
 }
 
 RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
