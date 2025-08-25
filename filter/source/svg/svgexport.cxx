@@ -2401,7 +2401,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
                     const Point    aNullPt;
                     const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
 
-                    aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmapEx() ) );
+                    aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, BitmapEx(aGraphic.GetBitmap()) ) );
                     aMtf.SetPrefSize( aSize );
                     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
 

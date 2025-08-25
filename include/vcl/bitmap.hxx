@@ -596,6 +596,8 @@ public:
      */
     void BlendAlpha( sal_uInt8 nAlpha );
 
+    void CombineMaskOr(Color maskColor, sal_uInt8 nTol);
+
     /** Remove existing blending against COL_WHITE based on given AlphaMask
 
         Inside convertToBitmapEx the content gets rendered to RGB target (no 'A'),
@@ -635,6 +637,9 @@ public:
     */
     [[nodiscard]]
     Bitmap            Modify( const basegfx::BColorModifierStack& rBColorModifierStack) const;
+
+    [[nodiscard]]
+    static Bitmap     AutoScaleBitmap( Bitmap const & rBitmap, const tools::Long aStandardSize );
 
     SAL_DLLPRIVATE void Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;
