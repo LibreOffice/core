@@ -49,7 +49,7 @@ Bitmap XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
 
     if(nIndex < Count())
     {
-        Bitmap rBitmap( GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmapEx());
+        Bitmap rBitmap( GetBitmap( nIndex )->GetGraphicObject().GetGraphic().GetBitmap());
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         pVirtualDevice->SetOutputSizePixel(rSize);
 

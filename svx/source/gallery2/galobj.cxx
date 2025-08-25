@@ -73,7 +73,7 @@ BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
         {
             const Graphic aGraphic(GetThumbMtf());
 
-            aRetval = aGraphic.GetBitmapEx();
+            aRetval = aGraphic.GetBitmap();
         }
 
         if(!aRetval.IsEmpty())
@@ -101,7 +101,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
     if( rGraphic.GetType() == GraphicType::Bitmap )
     {
-        Bitmap      aBmp( rGraphic.GetBitmapEx() );
+        Bitmap      aBmp( rGraphic.GetBitmap() );
         Size        aBmpSize( aBmp.GetSizePixel() );
 
         if( aBmpSize.Width() && aBmpSize.Height() )
@@ -161,7 +161,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             aSize.setHeight( static_cast<sal_Int32>( S_THUMB / fFactor ) );
 
         const GraphicConversionParameters aParameters(aSize, false, true, true /*TODO: extra ", true" post-#i121194#*/);
-        aThumbBmp = Bitmap(rGraphic.GetBitmapEx(aParameters));
+        aThumbBmp = rGraphic.GetBitmap(aParameters);
 
         if( !aThumbBmp.IsEmpty() )
         {

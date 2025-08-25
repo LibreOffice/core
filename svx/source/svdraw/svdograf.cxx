@@ -342,7 +342,7 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
         else if (mpGraphicObject->GetGraphic().GetType() == GraphicType::GdiMetafile)
         {
             // Replacement graphic for PDF and metafiles is just the bitmap.
-            const_cast<SdrGrafObj*>(this)->mpReplacementGraphicObject.reset(new GraphicObject(mpGraphicObject->GetGraphic().GetBitmapEx()));
+            const_cast<SdrGrafObj*>(this)->mpReplacementGraphicObject.reset(new GraphicObject(mpGraphicObject->GetGraphic().GetBitmap()));
         }
     }
 
@@ -1005,8 +1005,8 @@ rtl::Reference<SdrObject> SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAdd
                 SfxItemSet aSet(GetObjectItemSet());
 
                 aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-                const BitmapEx aBitmapEx(GetTransformedGraphic().GetBitmapEx());
-                aSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
+                const Bitmap aBitmap(GetTransformedGraphic().GetBitmap());
+                aSet.Put(XFillBitmapItem(OUString(), Graphic(aBitmap)));
                 aSet.Put(XFillBmpTileItem(false));
 
                 pRetval->SetMergedItemSet(aSet);

@@ -685,7 +685,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                     const Graphic* pGrf2 = pBrsh2->GetGraphic();
                     if (pGrf1==pGrf2) bIsMatch = true;
                     if (pGrf1 && pGrf2) {
-                        if ( pGrf1->GetBitmapEx() == pGrf2->GetBitmapEx() &&
+                        if ( pGrf1->GetBitmap() == pGrf2->GetBitmap() &&
                                 _pSet->aSize == aFmt.GetGraphicSize())
                             bIsMatch = true;
                     }

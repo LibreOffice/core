@@ -793,10 +793,10 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                                 ( ( rSettings.mnWidth != aSizePixel.Width() ) ||
                                   ( rSettings.mnHeight != aSizePixel.Height() ) ) )
                             {
-                                BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                                Bitmap aBmp( aGraphic.GetBitmap() );
                                 // export: use highest quality
-                                aBmpEx.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
-                                aGraphic = aBmpEx;
+                                aBmp.Scale( Size( rSettings.mnWidth, rSettings.mnHeight ), BmpScaleFlag::Lanczos );
+                                aGraphic = aBmp;
                             }
 
                             // #118804# only accept for bitmap graphics, else the

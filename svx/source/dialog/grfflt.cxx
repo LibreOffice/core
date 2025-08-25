@@ -68,10 +68,10 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
             }
             else
             {
-                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+                Bitmap aBmp( aInputGraphic.GetBitmap() );
 
-                if( aBmpEx.Invert() )
-                    aOutputGraphic = aBmpEx;
+                if( aBmp.Invert() )
+                    aOutputGraphic = aBmp;
             }
 
             if( pShell )
@@ -105,10 +105,10 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
             }
             else
             {
-                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+                Bitmap aBmp( aInputGraphic.GetBitmap() );
 
-                if (BitmapFilter::Filter(aBmpEx, BitmapSharpenFilter()))
-                    aOutputGraphic = aBmpEx;
+                if (BitmapFilter::Filter(aBmp, BitmapSharpenFilter()))
+                    aOutputGraphic = aBmp;
             }
 
             if( pShell )
@@ -135,10 +135,10 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
             }
             else
             {
-                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+                Bitmap aBmp( aInputGraphic.GetBitmap() );
 
-                if (BitmapFilter::Filter(aBmpEx, BitmapMedianFilter()))
-                    aOutputGraphic = aBmpEx;
+                if (BitmapFilter::Filter(aBmp, BitmapMedianFilter()))
+                    aOutputGraphic = aBmp;
             }
 
             if( pShell )
@@ -165,10 +165,10 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
             }
             else
             {
-                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+                Bitmap aBmp( aInputGraphic.GetBitmap() );
 
-                if (BitmapFilter::Filter(aBmpEx, BitmapSobelGreyFilter()))
-                    aOutputGraphic = aBmpEx;
+                if (BitmapFilter::Filter(aBmp, BitmapSobelGreyFilter()))
+                    aOutputGraphic = aBmp;
             }
 
             if( pShell )
@@ -216,10 +216,10 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
             }
             else
             {
-                BitmapEx aBmpEx( aInputGraphic.GetBitmapEx() );
+                Bitmap aBmp( aInputGraphic.GetBitmap() );
 
-                if (BitmapFilter::Filter(aBmpEx, BitmapPopArtFilter()))
-                    aOutputGraphic = aBmpEx;
+                if (BitmapFilter::Filter(aBmp, BitmapPopArtFilter()))
+                    aOutputGraphic = aBmp;
             }
 
             if( pShell )

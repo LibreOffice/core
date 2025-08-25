@@ -492,7 +492,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     else if( ( SotClipboardFormatId::BITMAP == nFormat || SotClipboardFormatId::PNG == nFormat)
         && mpGraphicObject )
     {
-        bRet = SetBitmapEx( Bitmap(mpGraphicObject->GetGraphic().GetBitmapEx()), rFlavor );
+        bRet = SetBitmapEx( mpGraphicObject->GetGraphic().GetBitmap(), rFlavor );
     }
 
     return bRet;

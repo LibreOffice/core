@@ -169,9 +169,9 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
                 tools::Long nTop = aPixel.getHeight() * rCrop.Top / aPref.getHeight();
                 tools::Long nRight = aPixel.getWidth() * rCrop.Right / aPref.getWidth();
                 tools::Long nBottom = aPixel.getHeight() * rCrop.Bottom / aPref.getHeight();
-                BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
-                aBitmapEx.Crop({nLeft, nTop, aPixel.getWidth() - nRight, aPixel.getHeight() - nBottom});
-                aGraphic = aBitmapEx;
+                Bitmap aBitmap = aGraphic.GetBitmap();
+                aBitmap.Crop({nLeft, nTop, aPixel.getWidth() - nRight, aPixel.getHeight() - nBottom});
+                aGraphic = aBitmap;
             }
 
             // We have an explicit graphic for this media object, then go with that instead of

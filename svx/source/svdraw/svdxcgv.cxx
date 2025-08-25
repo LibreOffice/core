@@ -435,7 +435,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked, const sal
             if(bNoVDevIfOneBmpMarked)
             {
                 if (pGrafObj->GetGraphicType() == GraphicType::Bitmap)
-                    aBmp = Bitmap(pGrafObj->GetTransformedGraphic().GetBitmapEx());
+                    aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
             }
             else
             {

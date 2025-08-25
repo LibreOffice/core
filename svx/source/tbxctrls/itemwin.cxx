@@ -188,15 +188,15 @@ void SvxFillTypeBox::Fill(weld::ComboBox& rListBox)
 
 namespace
 {
-    void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
+    void formatBitmapToSize(Bitmap& rBitmap, const Size& rSize)
     {
-        if(rBitmapEx.IsEmpty() || rSize.IsEmpty())
+        if(rBitmap.IsEmpty() || rSize.IsEmpty())
             return;
 
         ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
         pVirtualDevice->SetOutputSizePixel(rSize);
 
-        if(rBitmapEx.IsAlpha())
+        if(rBitmap.HasAlpha())
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -216,14 +216,14 @@ namespace
             }
         }
 
-        if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+        if(rBitmap.GetSizePixel().Width() >= rSize.Width() && rBitmap.GetSizePixel().Height() >= rSize.Height())
         {
-            rBitmapEx.Scale(rSize);
-            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+            rBitmap.Scale(rSize);
+            pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmap);
         }
         else
         {
-            const Size aBitmapSize(rBitmapEx.GetSizePixel());
+            const Size aBitmapSize(rBitmap.GetSizePixel());
 
             for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
@@ -231,12 +231,12 @@ namespace
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
-                        rBitmapEx);
+                        rBitmap);
                 }
             }
         }
 
-        rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+        rBitmap = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
     }
 } // end of anonymous namespace
 
@@ -309,9 +309,9 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
-        BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        formatBitmapExToSize(aBitmapEx, aSize);
-        pVD->DrawBitmapEx(Point(), aBitmapEx);
+        Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
+        formatBitmapToSize(aBitmap, aSize);
+        pVD->DrawBitmapEx(Point(), aBitmap);
         rBox.append(u""_ustr, pEntry->GetName(), *pVD);
     }
 
@@ -333,9 +333,9 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
     for( tools::Long i = 0; i < nCount; i++ )
     {
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
-        BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        formatBitmapExToSize(aBitmapEx, aSize);
-        pVD->DrawBitmapEx(Point(), aBitmapEx);
+        Bitmap aBitmap = pEntry->GetGraphicObject().GetGraphic().GetBitmap();
+        formatBitmapToSize(aBitmap, aSize);
+        pVD->DrawBitmapEx(Point(), aBitmap);
         rBox.append(u""_ustr, pEntry->GetName(), *pVD);
     }
 

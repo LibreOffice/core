@@ -535,6 +535,10 @@ public:
                                 size_t nColorCount,
                                 sal_uInt8 const * pTols );
 
+    /** Replace transparency with given color.
+     */
+    void ReplaceTransparency( const Color& rColor );
+
     /** Change various global color characteristics
 
         @param nLuminancePercent
@@ -565,7 +569,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    SAL_DLLPRIVATE bool Adjust(
+    bool Adjust(
                                 short nLuminancePercent,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,

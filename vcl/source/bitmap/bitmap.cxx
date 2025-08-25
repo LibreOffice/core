@@ -2272,4 +2272,42 @@ void Bitmap::BlendAlpha(sal_uInt8 nAlpha)
     }
 }
 
+void Bitmap::ReplaceTransparency(const Color& rReplaceColor)
+{
+    if( !HasAlpha() )
+        return;
+
+    Bitmap aNewBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
+    aNewBmp.SetPrefSize(GetPrefSize());
+    aNewBmp.SetPrefMapMode(GetPrefMapMode());
+
+    {
+        BitmapScopedReadAccess pReadAccess(*this);
+        assert(pReadAccess);
+        if( !pReadAccess )
+            return;
+
+        BitmapScopedWriteAccess pWriteAccess(*this);
+        assert(pWriteAccess);
+        if( !pWriteAccess )
+            return;
+
+        const tools::Long  nWidth = pReadAccess->Width(), nHeight = pReadAccess->Height();
+        for( tools::Long nY = 0; nY < nHeight; nY++ )
+        {
+            Scanline pReadScanline = pReadAccess->GetScanline( nY );
+            Scanline pWriteScanline = pWriteAccess->GetScanline( nY );
+            for( tools::Long nX = 0; nX < nWidth; nX++ )
+            {
+                BitmapColor aCol = pReadAccess->GetPixelFromData( pReadScanline, nX );
+                aCol.Merge(rReplaceColor, aCol.GetAlpha());
+                aCol.SetAlpha(255);
+                pWriteAccess->SetPixelOnData( pWriteScanline, nX, aCol );
+            }
+        }
+    }
+
+    *this = std::move(aNewBmp);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

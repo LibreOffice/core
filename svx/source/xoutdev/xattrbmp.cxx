@@ -54,7 +54,7 @@ XOBitmap::~XOBitmap()
 
 Bitmap XOBitmap::GetBitmap() const
 {
-    return Bitmap(GetGraphicObject().GetGraphic().GetBitmapEx());
+    return GetGraphicObject().GetGraphic().GetBitmap();
 }
 
 const GraphicObject& XOBitmap::GetGraphicObject() const
@@ -162,7 +162,7 @@ bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 bool XFillBitmapItem::isPattern() const
 {
     Color aBack, aFront;
-    return vcl::bitmap::isHistorical8x8(Bitmap(GetGraphicObject().GetGraphic().GetBitmapEx()), aBack, aFront);
+    return vcl::bitmap::isHistorical8x8(GetGraphicObject().GetGraphic().GetBitmap(), aBack, aFront);
 }
 
 bool XFillBitmapItem::GetPresentation(

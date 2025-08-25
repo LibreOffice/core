@@ -104,7 +104,7 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
         }
         else
         {
-            BitmapEx aBmp( rGraphic.GetBitmapEx() );
+            Bitmap aBmp( rGraphic.GetBitmap() );
             aBmp.Mirror( nMirrorFlags );
             aRetGraphic = aBmp;
         }
@@ -325,10 +325,10 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                 }
             }
             else
-                aGraphic = rGraphic.GetBitmapEx();
+                aGraphic = rGraphic.GetBitmap();
         }
         else
-            aGraphic = rGraphic.GetBitmapEx();
+            aGraphic = rGraphic.GetBitmap();
 
         // mirror?
         if( ( nFlags & XOutFlags::MirrorHorz ) || ( nFlags & XOutFlags::MirrorVert ) )

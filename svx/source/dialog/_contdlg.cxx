@@ -114,12 +114,17 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                 aBmp.Convert( BmpConversion::N1BitThreshold );
             }
         }
-        else if( rGraphic.IsTransparent() )
-            aBmp = rGraphic.GetBitmapEx().GetAlphaMask().GetBitmap();
         else
         {
-            aBmp = rGraphic.GetBitmapEx().GetBitmap();
-            bContourEdgeDetect = true;
+            Bitmap aTmpBmp = rGraphic.GetBitmap();
+            if (aTmpBmp.HasAlpha())
+                aBmp = aTmpBmp.CreateAlphaMask().GetBitmap();
+            else
+            {
+
+                aBmp = aTmpBmp;
+                bContourEdgeDetect = true;
+            }
         }
     }
     else if( rGraphic.GetType() != GraphicType::NONE )
@@ -631,10 +636,10 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
         {
             const tools::Long  nTol = static_cast<tools::Long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255 / 100);
 
-            AlphaMask aMask = aGraphic.GetBitmapEx().GetBitmap().CreateAlphaMask( rColor, nTol );
+            AlphaMask aMask = aGraphic.GetBitmap().CreateColorBitmap().CreateAlphaMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
-                aMask.AlphaCombineOr( aGraphic.GetBitmapEx().GetAlphaMask() );
+                aMask.AlphaCombineOr( aGraphic.GetBitmap().CreateAlphaMask() );
 
             if( !aMask.IsEmpty() )
             {
@@ -645,7 +650,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
-                Bitmap aBmp = aGraphic.GetBitmapEx().GetBitmap();
+                Bitmap aBmp = aGraphic.GetBitmap().CreateColorBitmap();
                 aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 mnGrfChanged++;
 

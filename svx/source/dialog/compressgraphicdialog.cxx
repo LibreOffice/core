@@ -258,7 +258,7 @@ BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType() const
 
 void CompressGraphicsDialog::Compress(SvStream& aStream)
 {
-    BitmapEx aBitmap = m_aGraphic.GetBitmapEx();
+    Bitmap aBitmap = m_aGraphic.GetBitmap();
     if ( m_xReduceResolutionCB->get_active() )
     {
         tools::Long nPixelX = static_cast<tools::Long>( GetViewWidthInch() * m_dResolution );
@@ -394,7 +394,7 @@ tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle() const
     {
         tools::Long nPixelX = static_cast<tools::Long>( GetViewWidthInch()  * m_dResolution );
         tools::Long nPixelY = static_cast<tools::Long>( GetViewHeightInch() * m_dResolution );
-        Size aSize = m_aGraphic.GetBitmapEx().GetSizePixel();
+        Size aSize = m_aGraphic.GetBitmap().GetSizePixel();
         double aScaleX = nPixelX / static_cast<double>(aSize.Width());
         double aScaleY = nPixelY / static_cast<double>(aSize.Height());
 

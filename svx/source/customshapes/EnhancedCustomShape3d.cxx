@@ -528,12 +528,12 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                     aPlaceholderObjectList.push_back( p3DObj.get() );
                 else if ( bUseTwoFillStyles )
                 {
-                    BitmapEx aFillBmp;
+                    Bitmap aFillBmp;
                     bool bFillBmpTile = p3DObj->GetMergedItem( XATTR_FILLBMP_TILE ).GetValue();
                     if ( bFillBmpTile )
                     {
                         const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
-                        aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
+                        aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmap();
 
                         // #i122777# old adaptation of FillStyle bitmap size to 5-times the original size; this is not needed
                         // anymore and was used in old times to male the fill look better when converting to 3D. Removed
@@ -555,7 +555,7 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
                         if ( aSnapRect != aBoundRect && aSnapRect.GetWidth() > 0 && aSnapRect.GetHeight() > 0)
                         {
                             const XFillBitmapItem& rBmpItm = p3DObj->GetMergedItem(XATTR_FILLBITMAP);
-                            aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmapEx();
+                            aFillBmp = rBmpItm.GetGraphicObject().GetGraphic().GetBitmap();
                             Size aBmpSize( aFillBmp.GetSizePixel() );
                             double fXScale = static_cast<double>(aBoundRect.GetWidth()) / static_cast<double>(aSnapRect.GetWidth());
                             double fYScale = static_cast<double>(aBoundRect.GetHeight()) / static_cast<double>(aSnapRect.GetHeight());
