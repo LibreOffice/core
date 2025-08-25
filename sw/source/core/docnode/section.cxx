@@ -1178,7 +1178,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             {
                 nRet = SwFindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
-                                    sFilter, 0, pDoc->GetDocShell() );
+                                    sFilter, 0, pDoc->GetDocShell(), {} );
                 if( nRet )
                 {
                     SwDoc* pSrcDoc = static_cast<SwDocShell*>( xDocSh.get() )->GetDoc();

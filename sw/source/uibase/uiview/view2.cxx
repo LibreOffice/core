@@ -2948,7 +2948,7 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
         SfxObjectShellLock xLockRef;
 
         const int nRet = SwFindDocShell( xDocSh, xLockRef, pMedium->GetName(), OUString(),
-                                    OUString(), nVersion, pDocSh );
+                                    OUString(), nVersion, pDocSh, pMedium->GetInteractionHandler() );
         if( nRet )
         {
             SwWait aWait( *GetDocShell(), true );

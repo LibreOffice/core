@@ -1710,7 +1710,8 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     const OUString& rPasswd,
                     const OUString& rFilter,
                     sal_Int16 nVersion,
-                    SwDocShell* pDestSh )
+                    SwDocShell* pDestSh,
+                    const uno::Reference<task::XInteractionHandler>& xIHandler )
 {
     if ( rFileName.empty() )
         return 0;
@@ -1758,6 +1759,8 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     // 2. Open the file ourselves
     std::unique_ptr<SfxMedium> xMed(new SfxMedium( aTmpObj.GetMainURL(
                              INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
+    if (xIHandler)
+        xMed->GetItemSet().Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, uno::Any(xIHandler)));
     if( INetProtocol::File == aTmpObj.GetProtocol() )
         xMed->Download(); // Touch the medium (download it)
 
