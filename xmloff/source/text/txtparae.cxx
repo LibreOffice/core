@@ -653,7 +653,8 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
 
 void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const std::span<const XMLPropertyState> aAddStates )
+                                  const std::span<const XMLPropertyState> aAddStates,
+                                  bool bCheckParent )
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
@@ -737,6 +738,11 @@ void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
         break;
     case XmlStyleFamily::TEXT_TEXT:
         {
+            if (bCheckParent && xPropSetInfo->hasPropertyByName(gsCharStyleName))
+            {
+                rPropSet->getPropertyValue(gsCharStyleName) >>= sParent;
+            }
+
             // Get parent and remove hyperlinks (they aren't of interest)
             rtl::Reference< XMLPropertySetMapper > xPM(xPropMapper->getPropertySetMapper());
             sal_uInt16 nIgnoreProps = 0;
@@ -912,7 +918,8 @@ OUString XMLTextParagraphExport::FindTextStyle(
            const Reference < XPropertySet > & rPropSet,
         bool& rbHasCharStyle,
         bool& rbHasAutoStyle,
-        const XMLPropertyState** ppAddStates ) const
+        const XMLPropertyState** ppAddStates,
+        const OUString* pParentName) const
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper(GetTextPropMapper());
     std::vector<XMLPropertyState> aPropStates(xPropMapper->Filter(GetExport(), rPropSet));
@@ -975,9 +982,15 @@ OUString XMLTextParagraphExport::FindTextStyle(
                 aPropStates.erase( aSecondDel );
             aPropStates.erase( aFirstDel );
         }
+        OUString aParentName;
+        if (pParentName)
+        {
+            // Format redlines can have an autostyle with a parent.
+            aParentName = *pParentName;
+        }
         sName = GetAutoStylePool().Find(
             XmlStyleFamily::TEXT_TEXT,
-            OUString(), // AutoStyles should not have parents!
+            aParentName,
             aPropStates );
         rbHasAutoStyle = true;
     }
