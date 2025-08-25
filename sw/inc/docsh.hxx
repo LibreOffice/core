@@ -359,6 +359,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     const OUString& rPasswd,
                     const OUString& rFilter,
                     sal_Int16 nVersion,
-                    SwDocShell* pDestSh );
+                    SwDocShell* pDestSh,
+                    const css::uno::Reference<css::task::XInteractionHandler>& xIHandler);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
