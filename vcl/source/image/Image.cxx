@@ -55,7 +55,7 @@ Image::Image(uno::Reference<graphic::XGraphic> const & rxGraphic)
         else if (aGraphic.GetType() == GraphicType::GdiMetafile)
             mpImplData = std::make_shared<ImplImage>(aGraphic.GetGDIMetaFile());
         else
-            ImplInit(Bitmap(aGraphic.GetBitmapEx()));
+            ImplInit(aGraphic.GetBitmap());
     }
 }
 

@@ -502,13 +502,13 @@ void ImplApplyBitmapScaling( ::Graphic& rGraphic, sal_Int32 nPixelWidth, sal_Int
 {
     if ( nPixelWidth && nPixelHeight )
     {
-        BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-        MapMode aPrefMapMode( aBmpEx.GetPrefMapMode() );
-        Size    aPrefSize( aBmpEx.GetPrefSize() );
-        aBmpEx.Scale( Size( nPixelWidth, nPixelHeight ) );
-        aBmpEx.SetPrefMapMode( aPrefMapMode );
-        aBmpEx.SetPrefSize( aPrefSize );
-        rGraphic = aBmpEx;
+        Bitmap aBmp( rGraphic.GetBitmap() );
+        MapMode aPrefMapMode( aBmp.GetPrefMapMode() );
+        Size    aPrefSize( aBmp.GetPrefSize() );
+        aBmp.Scale( Size( nPixelWidth, nPixelHeight ) );
+        aBmp.SetPrefMapMode( aPrefMapMode );
+        aBmp.SetPrefSize( aPrefSize );
+        rGraphic = aBmp;
     }
 }
 

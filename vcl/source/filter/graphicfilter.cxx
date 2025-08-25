@@ -246,9 +246,9 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         sal_Int32 nColors = rConfigItem.ReadInt32( u"Color"_ustr, 0 );
         if ( nColors )  // graphic conversion necessary ?
         {
-            BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-            aBmpEx.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
-            aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
+            Bitmap aBmp( aGraphic.GetBitmap() );
+            aBmp.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
+            aGraphic = aBmp;                          // they have in the BmpConversion enum, so it should be
         }                                               // allowed to cast them
     }
     else
