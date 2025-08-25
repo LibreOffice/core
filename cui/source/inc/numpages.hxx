@@ -65,11 +65,12 @@ class SvxSingleNumPickTabPage final : public SfxTabPage
     bool                    bPreset     : 1;
     TypedWhichId<SvxNumBulletItem> nNumItemId;
 
-    std::unique_ptr<SvxNumValueSet> m_xExamplesVS;
-    std::unique_ptr<weld::CustomWeld> m_xExamplesVSWin;
+    std::unique_ptr<weld::IconView> m_xExamplesIV;
+    Size aPreviewSize;
 
-    DECL_LINK(NumSelectHdl_Impl, ValueSet*, void);
-    DECL_LINK(DoubleClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
+    DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
 public:
     SvxSingleNumPickTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -82,7 +83,6 @@ public:
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
-    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 class SvxBulletPickTabPage final : public SfxTabPage
