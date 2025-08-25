@@ -179,7 +179,7 @@ void ScTabViewShell::Activate(bool bMDI)
             if ( pExtOpt && pExtOpt->IsChanged() )
             {
                 GetViewData().ReadExtOptions(*pExtOpt);        // Excel view settings
-                SetTabNo( GetViewData().GetTabNo(), true );
+                SetTabNo( GetViewData().CurrentTabForData(), true );
                 pExtOpt->SetChanged( false );
             }
         }
@@ -445,7 +445,7 @@ void ScTabViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
     ScSplitPos ePos = rViewData.GetActivePart();
     SCCOL nCol = rViewData.GetPosX(WhichH(ePos));
     SCROW nRow = rViewData.GetPosY(WhichV(ePos));
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     bool bNegativePage = rDoc.IsNegativePage( nTab );
 
     tools::Rectangle aLogicRect = rDoc.GetMMRect( nCol, nRow, nCol, nRow, nTab );
@@ -512,7 +512,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData().ReadUserDataSequence(rSettings);
-    SetTabNo( GetViewData().GetTabNo(), true );
+    SetTabNo( GetViewData().CurrentTabForData(), true );
 
     if ( GetViewData().IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), true );
@@ -547,7 +547,7 @@ void ScTabViewShell::DoReadUserData( std::u16string_view rData )
     bool bFocus = pOldWin && pOldWin->HasFocus();
 
     GetViewData().ReadUserData(rData);
-    SetTabNo( GetViewData().GetTabNo(), true );
+    SetTabNo( GetViewData().CurrentTabForData(), true );
 
     if ( GetViewData().IsPagebreakMode() )
         SetCurSubShell( GetCurObjectSelectionType(), true );
@@ -1235,7 +1235,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     HideNoteMarker();   // note marker
 
     // don't do extra HideCursor/ShowCursor calls if EnterHandler will switch to a different sheet
-    bool bOnRefSheet = ( GetViewData().GetRefTabNo() == GetViewData().GetTabNo() );
+    bool bOnRefSheet = ( GetViewData().GetRefTabNo() == GetViewData().CurrentTabForData() );
     bool bHideCursor = ( ( nCode == KEY_RETURN && bInPlace ) || nCode == KEY_TAB ) && bOnRefSheet;
 
     if (bHideCursor)
@@ -2209,7 +2209,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocShell->GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     OUString aTmp;
     rDoc.GetName(nTab, aTmp);
     rData.aTabName = aTmp;

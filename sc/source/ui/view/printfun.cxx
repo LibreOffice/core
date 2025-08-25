@@ -444,7 +444,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
 
     SCTAB nTab = 0;
     if (pViewData)
-        nTab = pViewData->GetTabNo();
+        nTab = pViewData->CurrentTabForData();
 
     bool bDoGrid, bNullVal, bFormula;
     ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();

@@ -399,8 +399,19 @@ public:
     SCTAB           GetRefTabNo() const                     { return nRefTabNo; }
     void            SetRefTabNo( SCTAB nNewTab )            { nRefTabNo = nNewTab; }
 
-    SCTAB GetTab() const { return mnTabNumber; }
-    SC_DLLPUBLIC SCTAB GetTabNo() const;
+    /** Returns the tab number for this view (UI)
+     *
+     * Directly return the value and ignore that there might be a sheet view tab.
+     */
+    SCTAB GetTabNumber() const { return mnTabNumber; }
+
+    /** Returns the tab that is currently used to fetch the data of a sheet
+     *
+     * This returns a different tab when view sheets are used. For a sheet view
+     * the data is stored in a different (sheet view specific) tab.
+     */
+    SC_DLLPUBLIC SCTAB CurrentTabForData() const;
+
     void SetSheetViewID(sc::SheetViewID nID)
     {
         pThisTab->mnSheetViewID = nID;

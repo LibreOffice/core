@@ -87,7 +87,7 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
     ScViewData& rViewData = GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
+    bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
     if (bNegativeX)
         pClient->SetNegativeX(true);
 
@@ -167,7 +167,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         ScViewData& rViewData = GetViewData();
         ScDocShell* pDocSh = rViewData.GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.GetTabNo());
+        bool bNegativeX = comphelper::LibreOfficeKit::isActive() && rDoc.IsNegativePage(rViewData.CurrentTabForData());
         SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
         if ( !pClient )
             pClient = new ScClient( this, pWin, &GetScDrawView()->GetModel(), pObj );
@@ -591,7 +591,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     bool bOle = GetViewFrame().GetFrame().IsInPlace();
-    bool bTabProt = GetViewData().GetDocument().IsTabProtected(GetViewData().GetTabNo());
+    bool bTabProt = GetViewData().GetDocument().IsTabProtected(GetViewData().CurrentTabForData());
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
     SdrView* pSdrView = GetScDrawView();
@@ -652,7 +652,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     else
                     {
                         if (GetViewData().GetDocument().IsBlockEditable
-                            (GetViewData().GetTabNo(), GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetCurX(), GetViewData().GetCurY()))
+                            (GetViewData().CurrentTabForData(), GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetCurX(), GetViewData().GetCurY()))
                         {
                             bDisableInsertImage = false;
                         }

@@ -99,7 +99,7 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     Window::Paint(rRenderContext, rRect);
 
-    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->CurrentTabForData() );
     tools::Long nDarkX = bLayoutRTL ? 0 : nPosX;
 
     //  both buttons have the same look now - only dark right/bottom lines
@@ -150,7 +150,7 @@ namespace
 
 bool lcl_HasColOutline( const ScViewData& rViewData )
 {
-    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.GetTabNo());
+    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.CurrentTabForData());
     if (pTable)
     {
         const ScOutlineArray& rArray = pTable->GetColArray();
@@ -162,7 +162,7 @@ bool lcl_HasColOutline( const ScViewData& rViewData )
 
 bool lcl_HasRowOutline( const ScViewData& rViewData )
 {
-    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.GetTabNo());
+    const ScOutlineTable* pTable = rViewData.GetDocument().GetOutlineTable(rViewData.CurrentTabForData());
     if (pTable)
     {
         const ScOutlineArray& rArray = pTable->GetRowArray();
@@ -240,7 +240,7 @@ void ScTabView::InitScrollBar(ScrollAdaptor& rScrollBar, tools::Long nMaxVal, co
     rScrollBar.SetScrollHdl(rLink);
     rScrollBar.SetMouseReleaseHdl(LINK(this, ScTabView, EndScrollHdl));
 
-    rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() ) );
+    rScrollBar.EnableRTL( aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() ) );
 
     // Related: tdf#155266 Eliminate delayed scrollbar redrawing when swiping
     // By default, the layout idle timer in the InterimWindowItem class
@@ -304,7 +304,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if (bHasHint)
         RemoveHintWindow();
 
-    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
     tools::Long nTotalWidth = rSize.Width();
     if ( bLayoutRTL )
         nTotalWidth += 2*rOffset.X();
@@ -812,7 +812,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
     bool bOutlMode   = aViewData.IsOutlineMode();
     bool bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
     bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
-    bool bLayoutRTL  = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL  = aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
 
     rBorder = SvBorder();
 
@@ -1122,7 +1122,7 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
         nViewPos = aViewData.GetPosY( (pScroll == aVScrollTop.get()) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
-    bool bLayoutRTL = bHoriz && aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = bHoriz && aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
 
     ScrollType eType = pScroll->GetScrollType();
     if ( eType == ScrollType::Drag )
@@ -1375,7 +1375,7 @@ void ScTabView::ScrollX( tools::Long nDeltaX, ScHSplitPos eWhich, bool bUpdBars 
     }
 
     SCCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     while ( rDoc.ColHidden(nNewX, nTab) &&
             nNewX+nDir >= 0 && nNewX+nDir <= rDoc.MaxCol() )
         nNewX = sal::static_int_cast<SCCOL>( nNewX + nDir );
@@ -1458,7 +1458,7 @@ void ScTabView::ScrollY( tools::Long nDeltaY, ScVSplitPos eWhich, bool bUpdBars 
     }
 
     SCROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     while ( rDoc.RowHidden(nNewY, nTab) &&
             nNewY+nDir >= 0 && nNewY+nDir <= rDoc.MaxRow() )
         nNewY += nDir;
@@ -1542,7 +1542,7 @@ SCROW lcl_LastVisible( const ScViewData& rViewData )
     // If many rows are hidden at end of the document,
     // then there should not be a switch to wide row headers because of this
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
 
     SCROW nVis = rDoc.MaxRow();
     SCROW startRow;
@@ -1737,7 +1737,7 @@ void ScTabView::DoHSplit(tools::Long nSplitPos)
     //  nSplitPos is the real pixel position on the frame window,
     //  mirroring for RTL has to be done here.
 
-    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
     if ( bLayoutRTL )
         nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
@@ -1879,7 +1879,7 @@ Point ScTabView::GetInsertPos() const
     ScDocument& rDoc = aViewData.GetDocument();
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     tools::Long nPosX = 0;
     for (SCCOL i=0; i<nCol; i++)
         nPosX += rDoc.GetColWidth(i,nTab);
@@ -1920,7 +1920,7 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
             : pWin->PixelToLogic( tools::Rectangle( Point(0,0), pWin->GetOutputSizePixel() ), aDrawMode ) );
 
         ScDocument& rDoc = aViewData.GetDocument();
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -2045,7 +2045,7 @@ Point ScTabView::GetChartDialogPos( const Size& rDialogSize, const tools::Rectan
         Size aSpace = pWin->LogicToPixel( Size(8, 12), MapMode(MapUnit::MapAppFont));
 
         ScDocument& rDoc = aViewData.GetDocument();
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
         bool bCenterHor = false;
@@ -2140,7 +2140,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
         ePos = SC_SPLIT_TOPLEFT;
     vcl::Window* pWin = pGridWin[ePos];
 
-    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
     bool bUpdateFix = false;
 
     if ( bFreeze )
@@ -2461,7 +2461,7 @@ void ScTabView::StartDataSelect()
     // a normal data select popup.
     const ScMergeFlagAttr* pAttr =
         aViewData.GetDocument().GetAttr(
-            nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG);
+            nCol, nRow, aViewData.CurrentTabForData(), ATTR_MERGE_FLAG);
 
     if (pAttr->HasAutoFilter())
         pWin->LaunchAutoFilterMenu(nCol, nRow);
@@ -2497,7 +2497,7 @@ void ScTabView::EnableAutoSpell( bool bEnable )
     if (bEnable)
         mpSpellCheckCxt =
             std::make_shared<sc::SpellCheckContext>(&aViewData.GetDocument(),
-                                      aViewData.GetTabNo());
+                                      aViewData.CurrentTabForData());
     else
         mpSpellCheckCxt.reset();
 
@@ -2755,8 +2755,8 @@ private:
                                  nStartRow, nEndRow, nTopPx, nBottomPx,
                                  mnEnlargeY, mrViewData);
 
-        maRange.aStart.Set(nStartCol, nStartRow, mrViewData.GetTabNo());
-        maRange.aEnd.Set(nEndCol, nEndRow, mrViewData.GetTabNo());
+        maRange.aStart.Set(nStartCol, nStartRow, mrViewData.CurrentTabForData());
+        maRange.aEnd.Set(nEndCol, nEndRow, mrViewData.CurrentTabForData());
 
         maBoundPositions.SetLeft(nLeftPx);
         maBoundPositions.SetRight(nRightPx);
@@ -2776,7 +2776,7 @@ private:
         const auto& rStartNearest = rPosHelper.getNearestByPosition(nStartPos);
         const auto& rEndNearest = rPosHelper.getNearestByPosition(nEndPos);
 
-        ScBoundsProvider aBoundsProvider(rViewData, rViewData.GetTabNo(), bColumns);
+        ScBoundsProvider aBoundsProvider(rViewData, rViewData.CurrentTabForData(), bColumns);
         aBoundsProvider.Compute(rStartNearest, rEndNearest, nStartPos, nEndPos);
         aBoundsProvider.EnlargeBy(nEnlarge);
         if (bColumns)
@@ -2892,7 +2892,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     rJsonWriter.put("commandName", ".uno:ViewRowColumnHeaders");
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     SCROW nStartRow = -1;
     SCROW nEndRow = -1;
     tools::Long nStartHeightPx = 0;
@@ -3159,7 +3159,7 @@ OString ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSizes, 
         { "rows",    false, bRows    }
     };
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     for (const auto& rDimEntry : aDimEntries)
     {

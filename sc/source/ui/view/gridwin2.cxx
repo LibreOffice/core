@@ -59,7 +59,7 @@ using std::vector;
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDPObject* pDPObj = rDoc.GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
         return DataPilotFieldOrientation_HIDDEN;
@@ -109,7 +109,7 @@ bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     Point aScrPos  = mrViewData.GetScrPos(nCol, nRow, eWhich);
     Point aDiffPix = rMEvt.GetPosPixel();
 
@@ -154,7 +154,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup, bool bMultiField )
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
 
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
 
@@ -242,10 +242,10 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
 void ScGridWindow::DoPushPivotToggle( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
-    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.CurrentTabForData() );
 
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
 
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
@@ -327,7 +327,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
     bool    bMouseTop;
     mrViewData.GetMouseQuadrant( aPixel, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
 
-    ScAddress aPos( nPosX, nPosY, mrViewData.GetTabNo() );
+    ScAddress aPos( nPosX, nPosY, mrViewData.CurrentTabForData() );
 
     tools::Rectangle aPosRect;
     DataPilotFieldOrientation nOrient;
@@ -400,7 +400,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 bool ScGridWindow::DPTestFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj)
 {
-    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.CurrentTabForData() );
     bool bLOK = comphelper::LibreOfficeKit::isActive();
 
     // Get the geometry of the cell.
@@ -430,7 +430,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
 bool ScGridWindow::DPTestMultiFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
 {
-    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.CurrentTabForData() );
     bool bLOK = comphelper::LibreOfficeKit::isActive();
 
     // Get the geometry of the cell.
@@ -718,7 +718,7 @@ void ScGridWindow::DPConfigFieldPopup()
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
-    aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
+    aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData());
     mpDPFieldPopup->setConfig(aConfig);
 }
 
@@ -1202,7 +1202,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         ScViewFunc* pViewFunc = mrViewData.GetView();
         ScDocShell* pDocSh = mrViewData.GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
         bool bUndo (rDoc.IsUndoEnabled());
 
         if ( bBreak )

@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
     CPPUNIT_ASSERT(rDoc.ColHidden(3, 2));
     CPPUNIT_ASSERT(rDoc.ColHidden(4, 2));
 
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.CurrentTabForData());
 
     executeMacro(
         u"vnd.sun.Star.script:VBAProject.ThisWorkbook.testUnhide?language=Basic&location=document"_ustr);
@@ -178,7 +178,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testSheetAndColumnSelectAndHide)
     CPPUNIT_ASSERT(!rDoc.ColHidden(3, 2));
     CPPUNIT_ASSERT(!rDoc.ColHidden(4, 2));
 
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), rViewData.CurrentTabForData());
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPrintArea)

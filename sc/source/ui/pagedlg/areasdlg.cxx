@@ -137,7 +137,7 @@ ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Win
     if ( pScViewSh )
     {
         pViewData = &pScViewSh->GetViewData();
-        nCurTab   = pViewData->GetTabNo();
+        nCurTab   = pViewData->CurrentTabForData();
     }
 
     Impl_Reset();

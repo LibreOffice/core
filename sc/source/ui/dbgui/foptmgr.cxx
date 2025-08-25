@@ -85,10 +85,10 @@ void ScFilterOptionsMgr::Init()
         OUString theAreaStr;
         ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
                                                 rQueryData.nRow1,
-                                                pViewData->GetTabNo() ),
+                                                pViewData->CurrentTabForData() ),
                                      ScAddress( rQueryData.nCol2,
                                                 rQueryData.nRow2,
-                                                pViewData->GetTabNo() ) );
+                                                pViewData->CurrentTabForData() ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         OUString theDbArea;
         OUString   theDbName(STR_DB_LOCAL_NONAME);

@@ -148,7 +148,7 @@ void ScViewFunctionSet::BeginDrag()
     if (m_pViewData->GetViewShell()->IsLokReadOnlyView())
         return;
 
-    SCTAB nTab = m_pViewData->GetTabNo();
+    SCTAB nTab = m_pViewData->CurrentTabForData();
 
     SCCOL nPosX;
     SCROW nPosY;
@@ -235,7 +235,7 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 {
     bool bRefMode = ScModule::get()->IsFormulaMode();
     ScTabView* pView = m_pViewData->GetView();
-    SCTAB nTab = m_pViewData->GetTabNo();
+    SCTAB nTab = m_pViewData->CurrentTabForData();
 
     if (bRefMode)
     {
@@ -355,7 +355,7 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
         bool bLeft, bTop;
         m_pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
         ScDocument& rDoc = m_pViewData->GetDocument();
-        SCTAB nTab = m_pViewData->GetTabNo();
+        SCTAB nTab = m_pViewData->CurrentTabForData();
         if ( bLeft && !bRightScroll )
             do --nPosX; while ( nPosX>=0 && rDoc.ColHidden( nPosX, nTab ) );
         if ( bTop && !bBottomScroll )
@@ -440,7 +440,7 @@ bool ScViewFunctionSet::CheckRefBounds(SCCOL nPosX, SCROW nPosY)
 bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll )
 {
     ScTabView* pView = m_pViewData->GetView();
-    SCTAB nTab = m_pViewData->GetTabNo();
+    SCTAB nTab = m_pViewData->CurrentTabForData();
     ScDocument& rDoc = m_pViewData->GetDocument();
 
     if ( rDoc.IsTabProtected(nTab) )
@@ -492,11 +492,11 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             if (!m_bAnchor)
             {
                 pView->DoneRefMode( true );
-                pView->InitRefMode( nPosX, nPosY, m_pViewData->GetTabNo(), SC_REFTYPE_REF );
+                pView->InitRefMode( nPosX, nPosY, m_pViewData->CurrentTabForData(), SC_REFTYPE_REF );
             }
 
             if(SfxLokHelper::getDeviceFormFactor() != LOKDeviceFormFactor::MOBILE)
-                pView->UpdateRef( nPosX, nPosY, m_pViewData->GetTabNo() );
+                pView->UpdateRef( nPosX, nPosY, m_pViewData->CurrentTabForData() );
 
             pView->SelectionChanged();
         }
@@ -828,13 +828,13 @@ void ScHeaderFunctionSet::CreateAnchor()
     pView->DoneBlockMode( true );
     if (bColumn)
     {
-        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), true, true );
-        pView->MarkCursor( static_cast<SCCOL>(nCursorPos), pViewData->MaxRow(), pViewData->GetTabNo() );
+        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->CurrentTabForData(), true, true );
+        pView->MarkCursor( static_cast<SCCOL>(nCursorPos), pViewData->MaxRow(), pViewData->CurrentTabForData() );
     }
     else
     {
-        pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), true, false, true );
-        pView->MarkCursor( pViewData->MaxCol(), nCursorPos, pViewData->GetTabNo() );
+        pView->InitBlockMode( 0, nCursorPos, pViewData->CurrentTabForData(), true, false, true );
+        pView->MarkCursor( pViewData->MaxCol(), nCursorPos, pViewData->CurrentTabForData() );
     }
     bAnchor = true;
 }
@@ -940,12 +940,12 @@ void ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bD
     {
         pView->DoneBlockMode( true );
         pViewData->GetMarkData().MarkToMulti();         //! who changes this?
-        pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), true, bColumn, !bColumn );
+        pView->InitBlockMode( nPosX, nPosY, pViewData->CurrentTabForData(), true, bColumn, !bColumn );
 
         bAnchor = true;
     }
 
-    pView->MarkCursor( nPosX, nPosY, pViewData->GetTabNo(), bColumn, !bColumn );
+    pView->MarkCursor( nPosX, nPosY, pViewData->CurrentTabForData(), bColumn, !bColumn );
 
     // SelectionChanged inside of HideCursor because of UpdateAutoFillMark
     pView->SelectionChanged();

@@ -194,7 +194,7 @@ void SparklineDataRangeDialog::perform()
     ScRangeList aList{ maDataRange };
 
     auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
-    rDocFunc.ChangeSparkline(mpSparkline, mrViewData.GetTabNo(), aList);
+    rDocFunc.ChangeSparkline(mpSparkline, mrViewData.CurrentTabForData(), aList);
 }
 
 } // end sc

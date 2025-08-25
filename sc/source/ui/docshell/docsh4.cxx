@@ -608,7 +608,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     break;
 
                 ScDocument& rDoc = GetDocument();
-                const SCTAB nTab = pViewData->GetTabNo();
+                const SCTAB nTab = pViewData->CurrentTabForData();
 
                 // obtain the page-style’s ItemSet
                 OUString aStyleName = rDoc.GetPageStyle(nTab);
@@ -675,7 +675,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (!pViewData)
                     break;
                 ScDocument& rDoc = GetDocument();
-                const SCTAB nTab = pViewData->GetTabNo();
+                const SCTAB nTab = pViewData->CurrentTabForData();
                 OUString aStyleName = rDoc.GetPageStyle(nTab);
                 ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
@@ -743,7 +743,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
 
                 ScDocument& rDoc = GetDocument();
-                const SCTAB nTab = pViewData->GetTabNo();
+                const SCTAB nTab = pViewData->CurrentTabForData();
                 OUString aStyleName = rDoc.GetPageStyle(nTab);
                 ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet = pStylePool->Find(aStyleName, SfxStyleFamily::Page);
@@ -1048,7 +1048,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if ( pSh )
                             {
                                 //! omit SetTabNo in DeleteTable?
-                                SCTAB nDispTab = pSh->GetViewData().GetTabNo();
+                                SCTAB nDispTab = pSh->GetViewData().CurrentTabForData();
                                 pSh->DeleteTable( nTab );
                                 pSh->SetTabNo(nDispTab);
                                 rReq.Done();
@@ -2468,7 +2468,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                     if (pViewData)
                     {
                         ScDocument& rDoc = GetDocument();
-                        const SCTAB nTab = pViewData->GetTabNo();
+                        const SCTAB nTab = pViewData->CurrentTabForData();
 
                         OUString aStyleName = rDoc.GetPageStyle(nTab);
                         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
@@ -2550,7 +2550,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                         ScMarkData aMark = pViewShell->GetViewData().GetMarkData();
                         SCCOL  nCol = pViewShell->GetViewData().GetCurX();
                         SCROW  nRow = pViewShell->GetViewData().GetCurY();
-                        SCTAB  nTab = pViewShell->GetViewData().GetTabNo();
+                        SCTAB  nTab = pViewShell->GetViewData().CurrentTabForData();
 
                         aMark.SetMarkArea(ScRange(nCol, nRow, nTab));
                         const ScPatternAttr* pSelAttrs = GetDocument().GetSelectionPattern(aMark);
@@ -3007,7 +3007,7 @@ SCTAB ScDocShell::GetCurTab()
 
     ScViewData* pViewData = GetViewData();
 
-    return pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
+    return pViewData ? pViewData->CurrentTabForData() : static_cast<SCTAB>(0);
 }
 
 ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )

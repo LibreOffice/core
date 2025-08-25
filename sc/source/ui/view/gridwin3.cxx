@@ -263,7 +263,7 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
         return mrViewData.GetLogicMode();
     }
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     bool bNegativePage = rDoc.IsNegativePage( nTab );
 
     MapMode aDrawMode = mrViewData.GetLogicMode();
@@ -323,7 +323,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
         const ScViewOptions& rOpts = mrViewData.GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
-            bool bNegativePage = mrViewData.GetDocument().IsNegativePage( mrViewData.GetTabNo() );
+            bool bNegativePage = mrViewData.GetDocument().IsNegativePage( mrViewData.CurrentTabForData() );
             Point aPos = mrViewData.GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(std::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));

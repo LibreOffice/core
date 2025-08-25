@@ -208,7 +208,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? &pViewData->GetDocument() : nullptr;
-    nSrcTab     = pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
+    nSrcTab     = pViewData ? pViewData->CurrentTabForData() : static_cast<SCTAB>(0);
 
     // for easier access:
     maFieldLbArr.reserve(QUERY_ENTRY_COUNT);

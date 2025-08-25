@@ -138,7 +138,7 @@ ScDBData* ScDBFunc::GetDBData( bool bMark, ScGetDBMode eMode, ScGetDBSelection e
     else if ( eMode != SC_DB_OLD )
         pData = pDocSh->GetDBData(
                     ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(),
-                             GetViewData().GetTabNo() ),
+                             GetViewData().CurrentTabForData() ),
                     eMode, ScGetDBSelection::Keep );
 
     if (!pData)
@@ -187,7 +187,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
@@ -213,7 +213,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam )
 void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDBDocFunc aDBDocFunc( *pDocSh );
     bool bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, false );
     if ( bSuccess && !rSortParam.bInplace )
@@ -234,7 +234,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
 void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, bool bRecord )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDBDocFunc aDBDocFunc( *pDocSh );
     bool bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, false );
 
@@ -287,7 +287,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     SCCOL  nCol;
     SCROW  nRow = aParam.nRow1;
-    SCTAB  nTab = pViewData->GetTabNo();
+    SCTAB  nTab = pViewData->CurrentTabForData();
     ScMF   nFlag;
     bool   bHasAuto = true;
     bool   bHeader  = pDBData->HasHeader();
@@ -451,7 +451,8 @@ void ScDBFunc::HideAutoFilter()
 bool ScDBFunc::ImportData( const ScImportParam& rParam )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScEditableTester aTester( rDoc, GetViewData().GetTabNo(), rParam.nCol1,rParam.nRow1,
+
+    ScEditableTester aTester( rDoc, GetViewData().CurrentTabForData(), rParam.nCol1,rParam.nRow1,
                                                             rParam.nCol2,rParam.nRow2 );
     if ( !aTester.IsEditable() )
     {
@@ -460,7 +461,7 @@ bool ScDBFunc::ImportData( const ScImportParam& rParam )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData().GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData().GetTabNo(), rParam, nullptr );
+    return aDBDocFunc.DoImport( GetViewData().CurrentTabForData(), rParam, nullptr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

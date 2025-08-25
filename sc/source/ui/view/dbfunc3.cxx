@@ -94,11 +94,11 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.MakeOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().CurrentTabForData());
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             false /* bHidden */, false /* bFiltered */,
-                                                            true /* bGroups */, GetViewData().GetTabNo());
+                                                            true /* bGroups */, GetViewData().CurrentTabForData());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -115,11 +115,11 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         ScOutlineDocFunc aFunc(*pDocSh);
         aFunc.RemoveOutline( aRange, bColumns, bRecord, false );
 
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), bColumns ? COLUMN_HEADER : ROW_HEADER, GetViewData().CurrentTabForData());
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
                                                             bColumns, !bColumns, false /* bSizes*/,
                                                             true /* bHidden */, true /* bFiltered */,
-                                                            true /* bGroups */, GetViewData().GetTabNo());
+                                                            true /* bGroups */, GetViewData().CurrentTabForData());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -192,7 +192,7 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
 
 void ScDBFunc::RemoveAllOutlines( bool bRecord )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -213,7 +213,7 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
 void ScDBFunc::AutoOutline( )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScRange aRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab );     // the complete sheet, if nothing is marked
     ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
@@ -231,7 +231,7 @@ void ScDBFunc::AutoOutline( )
 
 void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -265,7 +265,7 @@ void ScDBFunc::SetOutlineState( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEn
 
 void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -285,7 +285,7 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
 
 void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScOutlineDocFunc aFunc(*pDocSh);
 
@@ -317,7 +317,7 @@ bool ScDBFunc::OutlinePossible(bool bHide)
     if (GetViewData().GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         ScDocument& rDoc = GetViewData().GetDocument();
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
         if (pTable)
         {
@@ -394,7 +394,7 @@ void ScDBFunc::ShowMarkedOutlines( bool bRecord )
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(), true, true,
                 false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                true /* bGroups */, GetViewData().GetTabNo());
+                true /* bGroups */, GetViewData().CurrentTabForData());
             UpdateScrollBars();
         }
     }
@@ -417,7 +417,7 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(), true, true,
                 false /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-                true /* bGroups */, GetViewData().GetTabNo());
+                true /* bGroups */, GetViewData().CurrentTabForData());
             UpdateScrollBars();
         }
     }
@@ -435,7 +435,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -637,7 +637,7 @@ bool ScDBFunc::MakePivotTable(
     ScRange aDestRange = rDest;
     if ( bNewTable )
     {
-        SCTAB nSrcTab = GetViewData().GetTabNo();
+        SCTAB nSrcTab = GetViewData().CurrentTabForData();
 
         OUString aName( ScResId(STR_PIVOT_TABLE) );
         OUString aStr;
@@ -708,7 +708,7 @@ void ScDBFunc::DeletePivotTable()
     ScDocument& rDoc      = pDocSh->GetDocument();
     ScDPObject* pDPObj    = rDoc.GetDPAtCursor( GetViewData().GetCurX(),
                                                   GetViewData().GetCurY(),
-                                                  GetViewData().GetTabNo() );
+                                                  GetViewData().CurrentTabForData() );
     if ( pDPObj )
     {
         ScDBDocFunc aFunc( *pDocSh );
@@ -726,7 +726,7 @@ void ScDBFunc::RecalcPivotTable()
 
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor( GetViewData().GetCurX(),
                                               GetViewData().GetCurY(),
-                                              GetViewData().GetTabNo() );
+                                              GetViewData().CurrentTabForData() );
     if (pDPObj)
     {
         // Remove existing data cache for the data that this datapilot uses,
@@ -743,7 +743,7 @@ void ScDBFunc::RecalcPivotTable()
 void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, tools::Long& rDimension)
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if ( !pDPObj )
         return;
 
@@ -810,7 +810,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
 
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocument& rDoc = GetViewData().GetDocument();
 
     ScDPObject* pDPObj = rDoc.GetDPAtCursor( nCurX, nCurY, nTab );
@@ -923,7 +923,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
 
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocument& rDoc = GetViewData().GetDocument();
 
     ScDPObject* pDPObj = rDoc.GetDPAtCursor( nCurX, nCurY, nTab );
@@ -986,7 +986,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
 void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts )
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if (!pDPObj)
         return;
 
@@ -1084,7 +1084,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
 void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if (!pDPObj)
         return;
 
@@ -1126,7 +1126,7 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 void ScDBFunc::GroupDataPilot()
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if (!pDPObj)
         return;
 
@@ -1260,7 +1260,7 @@ void ScDBFunc::GroupDataPilot()
 void ScDBFunc::UngroupDataPilot()
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if (!pDPObj)
         return;
 
@@ -1902,7 +1902,7 @@ bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& 
     bool bRet = false;
 
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
@@ -1937,7 +1937,7 @@ bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& 
 void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName)
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     if ( !pDPObj )
         return;
 
@@ -2043,7 +2043,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     SCCOL nColSize = aTabData[0].getLength();
 
-    SCTAB nNewTab = GetViewData().GetTabNo();
+    SCTAB nNewTab = GetViewData().CurrentTabForData();
 
     ScDocumentUniquePtr pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( &rDoc, nNewTab );
@@ -2107,7 +2107,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 {
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScDocument& rDoc = GetViewData().GetDocument();
     ScDBData* pDBData = GetDBData();
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -2273,7 +2273,7 @@ void ScDBFunc::OnLOKShowHideColRow(bool bColumns, SCCOLROW nStart)
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SCTAB nCurrentTabIndex = GetViewData().CurrentTabForData();
     SfxViewShell* pThisViewShell = GetViewData().GetViewShell();
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)

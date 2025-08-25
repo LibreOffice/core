@@ -541,7 +541,7 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
             continue;
 
         ScViewData& rData = pTabViewShell->GetViewData();
-        if (rData.GetTabNo() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
+        if (rData.CurrentTabForData() == nTab && rData.GetZoomX() == rZoomX && rData.GetZoomY() == rZoomY &&
             getTabViewRenderState(*pTabViewShell) == rViewRenderState)
         {
             return &rData;
@@ -570,7 +570,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
     // and hence avoid grid-offset recomputation on all shapes which is not cheap.
     ScViewData* pViewData = lcl_getViewMatchingDocZoomTab(aFracX, aFracY,
-            pActiveViewData->GetTabNo(), pViewShell->GetDocId(),
+            pActiveViewData->CurrentTabForData(), pViewShell->GetDocId(),
             getTabViewRenderState(*pViewShell));
     if (!pViewData)
         pViewData = pActiveViewData;
@@ -601,7 +601,7 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
 
     // Draw Form controls
     ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
-    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->GetTabNo()));
+    SdrPage* pPage = pDrawLayer->GetPage(sal_uInt16(pViewData->CurrentTabForData()));
     SdrView* pDrawView = pViewData->GetViewShell()->GetScDrawView();
     tools::Rectangle aTileRect(Point(nTilePosX, nTilePosY), Size(nTileWidth, nTileHeight));
     Size aOutputSize(nOutputWidth, nOutputHeight);
@@ -722,7 +722,7 @@ Size ScModelObj::getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTil
     if (!pViewData)
         return aSize;
 
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->CurrentTabForData();
     rnTiledRenderingAreaEndCol = 0;
     rnTiledRenderingAreaEndRow = 0;
     const ScDocument& rDoc = pDocShell->GetDocument();
@@ -803,7 +803,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     if (!pGridWindow)
         return;
 
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->CurrentTabForData();
     const ScDocument& rDoc = pDocShell->GetDocument();
     bool bDrawNegativeX = rDoc.IsNegativePage(nTab);
     if (SfxLokHelper::testInPlaceComponentMouseEventHit(pViewShell, nType, nX, nY, nCount,

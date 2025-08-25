@@ -285,7 +285,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
     if (pEd != m_xEdDataArea.get() && pEd != m_xEdDestArea.get())
         return false;
 
-    SCTAB    nTab    = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     bool bEditOk = false;
     OUString theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
     if ( nDataAreaCount > 0 )
     {
         ScRefAddress aDestAddress;
-        SCTAB       nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         OUString    aDestPosStr( m_xEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = rDoc.GetAddressConvention();
 

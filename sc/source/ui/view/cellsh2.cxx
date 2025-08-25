@@ -92,7 +92,7 @@ static bool lcl_GetTextToColumnsRange( const ScViewData& rData, ScRange& rRange,
     {
         const SCCOL nCol = rData.GetCurX();
         const SCROW nRow = rData.GetCurY();
-        const SCTAB nTab = rData.GetTabNo();
+        const SCTAB nTab = rData.CurrentTabForData();
         rRange = ScRange( nCol, nRow, nTab, nCol, nRow, nTab );
         bRet = true;
     }
@@ -131,7 +131,7 @@ static bool lcl_GetSortParam( const ScViewData& rData, const ScSortParam& rSortP
     ScTabViewShell* pTabViewShell   = rData.GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();
     ScDocument& rDoc                = rData.GetDocument();
-    SCTAB nTab                      = rData.GetTabNo();
+    SCTAB nTab                      = rData.CurrentTabForData();
     ScDirection eFillDir            = DIR_TOP;
     bool  bSort                     = true;
     ScRange aExternalRange;
@@ -395,7 +395,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if( lcl_GetSortParam( rData, aSortParam ) )
                 {
                     SCCOL nCol  = GetViewData().GetCurX();
-                    SCCOL nTab  = GetViewData().GetTabNo();
+                    SCCOL nTab  = GetViewData().CurrentTabForData();
                     ScDocument& rDoc = GetViewData().GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
@@ -448,7 +448,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScDocument& rDoc = GetViewData().GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.CurrentTabForData() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -518,7 +518,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         SfxItemSetFixed<SCITEM_SORTDATA, SCITEM_SORTDATA>  aArgSet( GetPool() );
 
                         pDBData->GetSortParam( aSortParam );
-                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.GetTabNo() );
+                        bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.CurrentTabForData() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -647,7 +647,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pReqArgs && (pQueryItem =
                         pReqArgs->GetItemIfSet( SCITEM_QUERYDATA )) )
                 {
-                    SCTAB nCurTab = GetViewData().GetTabNo();
+                    SCTAB nCurTab = GetViewData().CurrentTabForData();
                     SCTAB nRefTab = GetViewData().GetRefTabNo();
 
                     // If RefInput switched to a different sheet from the data sheet,
@@ -700,7 +700,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pReqArgs && (pPItem =
                         pReqArgs->GetItemIfSet( SCITEM_PIVOTDATA )) )
                 {
-                    SCTAB nCurTab = GetViewData().GetTabNo();
+                    SCTAB nCurTab = GetViewData().CurrentTabForData();
                     SCTAB nRefTab = GetViewData().GetRefTabNo();
 
                     // If RefInput switched to a different sheet from the data sheet,
@@ -869,7 +869,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScDocument& rDoc = GetViewData().GetDocument();
                     SCCOL nCurX = GetViewData().GetCurX();
                     SCROW nCurY = GetViewData().GetCurY();
-                    SCTAB nTab = GetViewData().GetTabNo();
+                    SCTAB nTab = GetViewData().CurrentTabForData();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
                     sal_uInt32 nIndex = rDoc.GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA )->GetValue();
@@ -1113,7 +1113,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
     ScDocument& rDoc        = pDocSh->GetDocument();
     SCCOL       nPosX       = rData.GetCurX();
     SCROW       nPosY       = rData.GetCurY();
-    SCTAB       nTab        = rData.GetTabNo();
+    SCTAB       nTab        = rData.CurrentTabForData();
 
     bool bAutoFilter = false;
     bool bAutoFilterTested = false;
@@ -1280,7 +1280,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     {
                         nStartCol = GetViewData().GetCurX();
                         nStartRow = GetViewData().GetCurY();
-                        nStartTab = GetViewData().GetTabNo();
+                        nStartTab = GetViewData().CurrentTabForData();
                     }
 
                     ScDBData* pDBData = bSelected

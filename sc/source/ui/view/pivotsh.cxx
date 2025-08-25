@@ -131,7 +131,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
     bool bFilterDisable = bDisable;
     if (!bDisable)
     {
-        SCCOL nTab = pViewShell->GetViewData().GetTabNo();
+        SCCOL nTab = pViewShell->GetViewData().CurrentTabForData();
         const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
         if (pTabProt && pTabProt->isProtected())
         {
@@ -173,7 +173,7 @@ ScDPObject* ScPivotShell::GetCurrDPObject()
 {
     const ScViewData& rViewData = pViewShell->GetViewData();
     return rViewData.GetDocument().GetDPAtCursor(
-        rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+        rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2456,7 +2456,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
     {
         ScViewData& rViewData = pViewSh->GetViewData();
         ScDocument& rDoc = rViewData.GetDocument();
-        SCTAB nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         ScAddress::Details aDetails( rDoc.GetAddressConvention());
 
         // test in same order as in SID_CURRENTCELL execute
@@ -2618,7 +2618,7 @@ void ScPosWnd::DoEnter()
                             (rViewData.GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );
-                        ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+                        ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
                         OUString aContent(aSelection.Format(rDoc, ScRefFlags::RANGE_ABS_3D, rDoc.GetAddressConvention()));
                         ScRangeData* pNew = new ScRangeData( rDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
@@ -2641,7 +2641,7 @@ void ScPosWnd::DoEnter()
                     {
                         // Note that SID_CURRENTCELL always expects address to
                         // be in Calc A1 format.  Convert the text.
-                        ScRange aRange(0,0, rViewData.GetTabNo());
+                        ScRange aRange(0,0, rViewData.CurrentTabForData());
                         aRange.ParseAny(aText, rDoc, rDoc.GetAddressConvention());
                         aText = aRange.Format(rDoc, ScRefFlags::RANGE_ABS_3D, ::formula::FormulaGrammar::CONV_OOO);
                     }

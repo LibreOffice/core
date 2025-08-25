@@ -48,7 +48,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
     bool bDone = false;
 
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB       nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     OUString aTrackText;
@@ -218,7 +218,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         SCCOL nPosX;
         SCROW nPosY;
         ScDocument& rDoc = mrViewData.GetDocument();
-        SCTAB       nTab = mrViewData.GetTabNo();
+        SCTAB       nTab = mrViewData.CurrentTabForData();
         const ScViewOptions& rOpts = mrViewData.GetOptions();
         mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
@@ -341,7 +341,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 ScDocument& rDoc = mrViewData.GetDocument();
                 SCCOL nPosX;
                 SCROW nPosY;
-                SCTAB       nTab = mrViewData.GetTabNo();
+                SCTAB nTab = mrViewData.CurrentTabForData();
                 mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
 

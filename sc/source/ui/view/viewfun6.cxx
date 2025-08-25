@@ -109,14 +109,14 @@ void ScViewFunc::DetectiveAddError()
 void ScViewFunc::DetectiveDelAll()
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelAll( GetViewData().GetTabNo() );
+    pDocSh->GetDocFunc().DetectiveDelAll( GetViewData().CurrentTabForData() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveMarkInvalid()
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    pDocSh->GetDocFunc().DetectiveMarkInvalid( GetViewData().GetTabNo() );
+    pDocSh->GetDocFunc().DetectiveMarkInvalid( GetViewData().CurrentTabForData() );
     RecalcPPT();
 }
 
@@ -500,7 +500,7 @@ void ScViewFunc::ShowNote( bool bShow )
     if( bShow )
         HideNoteMarker();
     const ScViewData& rViewData = GetViewData();
-    ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+    ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
     // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
     rViewData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShow );
 }
@@ -517,7 +517,7 @@ void ScViewFunc::EditNote()
     ScDocument& rDoc = pDocSh->GetDocument();
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScAddress aPos( nCol, nRow, nTab );
 
     // start drawing undo to catch undo action for insertion of the caption object

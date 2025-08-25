@@ -120,7 +120,7 @@ void ScTabPageSortFields::Init()
     if ( pDoc )
     {
         ScDBCollection* pDBColl = pDoc->GetDBCollection();
-        const SCTAB     nCurTab = pViewData->GetTabNo();
+        const SCTAB     nCurTab = pViewData->CurrentTabForData();
         if ( pDBColl )
         {
             ScDBData* pDBData
@@ -320,7 +320,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
     SCCOL   nFirstSortCol   = aSortData.nCol1;
     SCROW   nFirstSortRow   = aSortData.nRow1;
-    SCTAB   nTab        = pViewData->GetTabNo();
+    SCTAB   nTab        = pViewData->CurrentTabForData();
     sal_uInt16  i           = 1;
     nFieldArr.clear();
     nFieldArr.push_back(0);
@@ -608,7 +608,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
     if ( pDoc && !aSortData.bInplace )
     {
-        ScRefFlags nFormat = (aSortData.nDestTab != pViewData->GetTabNo())
+        ScRefFlags nFormat = (aSortData.nDestTab != pViewData->CurrentTabForData())
                             ? ScRefFlags::RANGE_ABS_3D
                             : ScRefFlags::RANGE_ABS;
 
@@ -718,7 +718,7 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
         {
             //  visible table is default for input without table
             //  must be changed to GetRefTabNo when sorting has RefInput!
-            thePos.SetTab( pViewData->GetTabNo() );
+            thePos.SetTab( pViewData->CurrentTabForData() );
         }
 
         ScRefFlags nResult = thePos.Parse( thePosStr, *pDoc, pDoc->GetAddressConvention() );

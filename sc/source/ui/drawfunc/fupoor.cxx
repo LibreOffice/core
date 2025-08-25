@@ -83,7 +83,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 
     ScViewData& rViewData = rViewShell.GetViewData();
-    if ( rViewData.GetDocument().IsNegativePage( rViewData.GetTabNo() ) )
+    if ( rViewData.GetDocument().IsNegativePage( rViewData.CurrentTabForData() ) )
         dx = -dx;
 
     ScSplitPos eWhich = rViewData.GetActivePart();

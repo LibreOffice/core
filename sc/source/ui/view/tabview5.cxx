@@ -295,7 +295,7 @@ void ScTabView::ImplTabChanged(bool bSameTabButMoved)
     {
         DrawDeselectAll();      // end also text edit mode
 
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         pDrawView->HideSdrPage();
         pDrawView->ShowSdrPage(pDrawView->GetModel().GetPage(nTab));
 
@@ -365,7 +365,7 @@ void ScTabView::UpdateLayerLocks()
     if (!pDrawView)
         return;
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     bool bEx = aViewData.GetViewShell()->IsDrawSelMode();
     bool bProt = aViewData.GetDocument().IsTabProtected( nTab ) ||
                  aViewData.GetSfxDocShell()->IsReadOnly();
@@ -528,7 +528,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
             ScDocument& rDoc = aViewData.GetDocument();
             for (i=0; i<4; i++)
                 if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-                    rDoc.StartAnimations( aViewData.GetTabNo() );
+                    rDoc.StartAnimations( aViewData.CurrentTabForData() );
         }
     }
     else
@@ -568,7 +568,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
 {
     vcl::Window* pWin = GetActiveWin();
     Size aWinSize = pWin->GetOutputSizePixel();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     tools::Rectangle aRect = pWin->LogicToPixel( rHMMRect );
 

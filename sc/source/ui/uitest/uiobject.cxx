@@ -64,7 +64,7 @@ StringMap ScGridWinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap[u"SelectedTable"_ustr] = OUString::number(mxGridWindow->getViewData().GetTabNo());
+    aMap[u"SelectedTable"_ustr] = OUString::number(mxGridWindow->getViewData().CurrentTabForData());
     aMap[u"CurrentColumn"_ustr] = OUString::number(mxGridWindow->getViewData().GetCurX());
     aMap[u"CurrentRow"_ustr] = OUString::number(mxGridWindow->getViewData().GetCurY());
 
@@ -81,7 +81,7 @@ StringMap ScGridWinUIObject::get_state()
     aMap[u"MarkedArea"_ustr] = aMarkedAreaString;
 
     ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
-    ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().GetTabNo() );
+    ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().CurrentTabForData() );
     if ( rDoc.HasNote( aPos ) )
     {
         ScPostIt* pNote = rDoc.GetNote(aPos);
@@ -91,13 +91,13 @@ StringMap ScGridWinUIObject::get_state()
 
     SCCOL nCol;
     SCROW nRow;
-    aMap[u"CurrentTableHasData"_ustr] = OUString::boolean( rDoc.GetDataStart( mxGridWindow->getViewData().GetTabNo(), nCol, nRow ) );
+    aMap[u"CurrentTableHasData"_ustr] = OUString::boolean( rDoc.GetDataStart( mxGridWindow->getViewData().CurrentTabForData(), nCol, nRow ) );
     nCol = mxGridWindow->getViewData().GetCurX();
     nRow = 0;
-    aMap[u"CurrentColumnHasData"_ustr] = OUString::boolean( rDoc.GetPrintAreaVer( mxGridWindow->getViewData().GetTabNo(), nCol, nCol, nRow, true ) );
+    aMap[u"CurrentColumnHasData"_ustr] = OUString::boolean( rDoc.GetPrintAreaVer( mxGridWindow->getViewData().CurrentTabForData(), nCol, nCol, nRow, true ) );
     nRow = mxGridWindow->getViewData().GetCurY();
     nCol = 0;
-    aMap[u"CurrentRowHasData"_ustr] = OUString::boolean( rDoc.GetPrintAreaHor( mxGridWindow->getViewData().GetTabNo(), nRow, nRow, nCol ) );
+    aMap[u"CurrentRowHasData"_ustr] = OUString::boolean( rDoc.GetPrintAreaHor( mxGridWindow->getViewData().CurrentTabForData(), nRow, nRow, nCol ) );
 
     ScAppOptions aOpt = ScModule::get()->GetAppOptions();
     aMap[u"Zoom"_ustr] = OUString::number( aOpt.GetZoom() );
@@ -309,7 +309,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find(u"SETTEXT"_ustr);
             const OUString rStr = itr->second;
             ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
-            ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().GetTabNo() );
+            ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().CurrentTabForData() );
             rDoc.GetOrCreateNote( aPos )->SetText( aPos , rStr );
         }
     }
@@ -370,7 +370,7 @@ SdrPage* get_draw_page(VclPtr<ScGridWindow> const & xGridWindow, SCTAB nTab)
 
 std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
 {
-    SCTAB nTab = xGridWindow->getViewData().GetTabNo();
+    SCTAB nTab = xGridWindow->getViewData().CurrentTabForData();
     SdrPage* pPage = get_draw_page(xGridWindow, nTab);
 
     std::set<OUString> aRet;

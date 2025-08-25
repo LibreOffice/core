@@ -56,7 +56,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
         nStartRow   = aStart.Row();
         nEndRow = aEnd.Row();
 
-        nTab = rViewData.GetTabNo();
+        nTab = rViewData.CurrentTabForData();
         bool bNoSelection(false);
         //if there is no selection
         if ((nStartCol == nEndCol) && (nStartRow == nEndRow))

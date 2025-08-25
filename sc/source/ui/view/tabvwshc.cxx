@@ -191,7 +191,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             // dialog checks, what is in the cell
 
             ScViewData& rViewData = GetViewData();
-            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+            rViewData.SetRefTabNo( rViewData.CurrentTabForData() );
             xResult = std::make_shared<ScSimpleRefDlg>(pB, pCW, pParent);
             break;
         }
@@ -202,14 +202,14 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult = std::make_shared<ScNameDlg>(pB, pCW, pParent, GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ) );
+                                                GetViewData().CurrentTabForData() ) );
             }
             else
             {
                 xResult = std::make_shared<ScNameDlg>( pB, pCW, pParent, GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
-                                                GetViewData().GetTabNo() ), &m_RangeMap);
+                                                GetViewData().CurrentTabForData() ), &m_RangeMap);
                 static_cast<ScNameDlg*>(xResult.get())->SetEntry(maName, maScope);
                 mbInSwitch = false;
             }
@@ -224,7 +224,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), std::move(aRangeMap),
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
-                                          GetViewData().GetTabNo()), true);
+                                          GetViewData().CurrentTabForData()), true);
             }
             else
             {
@@ -236,7 +236,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), std::move(aRangeMap),
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
-                                          GetViewData().GetTabNo()), false);
+                                          GetViewData().CurrentTabForData()), false);
             }
             break;
         }
@@ -275,7 +275,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScViewData& rViewData = GetViewData();
             ScAddress   aCurPos( rViewData.GetCurX(),
                                  rViewData.GetCurY(),
-                                 rViewData.GetTabNo());
+                                 rViewData.CurrentTabForData());
             xResult = std::make_shared<ScSolverDlg>(pB, pCW, pParent, &rViewData.GetDocument(), aCurPos);
             break;
         }
@@ -284,7 +284,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScViewData&   rViewData  = GetViewData();
             ScRefAddress  aCurPos   ( rViewData.GetCurX(),
                                       rViewData.GetCurY(),
-                                      rViewData.GetTabNo());
+                                      rViewData.CurrentTabForData());
 
             xResult = std::make_shared<ScTabOpDlg>(pB, pCW, pParent, &rViewData.GetDocument(), aCurPos);
             break;
@@ -350,7 +350,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                                       &aQueryParam ) );
 
             // mark current sheet (due to RefInput in dialog)
-            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
+            GetViewData().SetRefTabNo( GetViewData().CurrentTabForData() );
 
             xResult = std::make_shared<ScFilterDlg>(pB, pCW, pParent, aArgSet);
             break;
@@ -377,7 +377,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             aArgSet.Put( aItem );
 
             // mark current sheet (due to RefInput in dialog)
-            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
+            GetViewData().SetRefTabNo( GetViewData().CurrentTabForData() );
 
             xResult = std::make_shared<ScSpecialFilterDlg>(pB, pCW, pParent, aArgSet);
             break;
@@ -385,7 +385,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_OPENDLG_OPTSOLVER:
         {
             ScViewData& rViewData = GetViewData();
-            ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+            ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData());
             xResult = std::make_shared<ScOptSolverDlg>(pB, pCW, pParent, rViewData.GetDocShell(), aCurPos);
             break;
         }
@@ -408,8 +408,8 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             {
                 // Check for an existing datapilot output.
                 ScViewData& rViewData = GetViewData();
-                rViewData.SetRefTabNo( rViewData.GetTabNo() );
-                ScDPObject* pObj = rDoc.GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                rViewData.SetRefTabNo( rViewData.CurrentTabForData() );
+                ScDPObject* pObj = rDoc.GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData());
                 xResult = std::make_shared<ScPivotLayoutDialog>(pB, pCW, pParent, &rViewData, pDialogDPObject.get(), pObj == nullptr);
             }
 
@@ -432,7 +432,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if (rDlgData)
             {
                 ScViewData& rViewData = GetViewData();
-                rViewData.SetRefTabNo( rViewData.GetTabNo() );
+                rViewData.SetRefTabNo( rViewData.CurrentTabForData() );
 
                 xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, rDlgData);
 
@@ -454,7 +454,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
 int ScTabViewShell::getPart() const
 {
-    return GetViewData().GetTabNo();
+    return GetViewData().CurrentTabForData();
 }
 
 void ScTabViewShell::afterCallbackRegistered()

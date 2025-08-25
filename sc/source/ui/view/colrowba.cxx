@@ -75,7 +75,7 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     const ScViewData& rViewData = pTabView->GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     if (rDoc.ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
@@ -208,7 +208,7 @@ OUString ScColBar::GetDragHelp( tools::Long nVal )
 bool ScColBar::IsLayoutRTL() const        // override only for columns
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    return rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
+    return rViewData.GetDocument().IsLayoutRTL( rViewData.CurrentTabForData() );
 }
 
 ScRowBar::ScRowBar( vcl::Window* pParent, ScVSplitPos eWhich,
@@ -234,7 +234,7 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
 {
     const ScViewData& rViewData = pTabView->GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     SCROW nLastRow = -1;
     if (rDoc.RowHidden(nEntryNo, nTab, nullptr, &nLastRow))
         return 0;
@@ -368,14 +368,14 @@ SCCOLROW ScRowBar::GetHiddenCount( SCCOLROW nEntryNo ) const // override only fo
 {
     const ScViewData& rViewData = pTabView->GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     return rDoc.GetHiddenRowCount( nEntryNo, nTab );
 }
 
 bool ScRowBar::IsMirrored() const // override only for rows
 {
     const ScViewData& rViewData = pTabView->GetViewData();
-    return rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
+    return rViewData.GetDocument().IsLayoutRTL( rViewData.CurrentTabForData() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

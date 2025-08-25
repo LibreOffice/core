@@ -397,7 +397,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     std::vector<sc::ColRowSpan> aSpans;
     if (bVertical && pTabView)
     {
-        SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        SCTAB nTab = pTabView->GetViewData().CurrentTabForData();
         ScDocument& rDoc = pTabView->GetViewData().GetDocument();
 
         ScDBData* pDBData = rDoc.GetAnonymousDBData(nTab);
@@ -669,7 +669,7 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         return false;
 
     ScViewData& rViewData = pViewSh->GetViewData();
-    sal_uInt16 nTab = rViewData.GetTabNo();
+    sal_uInt16 nTab = rViewData.CurrentTabForData();
     ScDocument& rDoc = rViewData.GetDocument();
     const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
     bool bSelectAllowed = true;
@@ -719,7 +719,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if( !pTabView )
             return;
-        SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        SCTAB nTab = pTabView->GetViewData().CurrentTabForData();
         if( !rMEvt.IsShift() )
             pTabView->DoneRefMode( rMEvt.IsMod1() );
         ScDocument& rDoc = pTabView->GetViewData().GetDocument();
@@ -870,7 +870,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
             return;
         bool bTmp;
         SCCOLROW nHitNo = GetMousePos(rMEvt.GetPosPixel(), bTmp);
-        SCTAB nTab = pTabView->GetViewData().GetTabNo();
+        SCTAB nTab = pTabView->GetViewData().CurrentTabForData();
         ScDocument& rDoc = pTabView->GetViewData().GetDocument();
         if( !bVertical )
             pTabView->UpdateRef( nHitNo, rDoc.MaxRow(), nTab );
@@ -949,7 +949,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     // Selecting this cell is not allowed, neither is context menu.
                     return;
 
-                SCTAB nTab = rViewData.GetTabNo();
+                SCTAB nTab = rViewData.CurrentTabForData();
                 ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
                 ScRange aNewRange;
                 if ( bVertical )

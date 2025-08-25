@@ -182,7 +182,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
     if (aRange.empty())
     {
-        ScAddress aPosition(mpViewData->GetCurX(), mpViewData->GetCurY(), mpViewData->GetTabNo());
+        ScAddress aPosition(mpViewData->GetCurX(), mpViewData->GetCurY(),
+                            mpViewData->CurrentTabForData());
         aRange.push_back(ScRange(aPosition));
     }
     maPosition = aRange.GetTopLeftCorner();

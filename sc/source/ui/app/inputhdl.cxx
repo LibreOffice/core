@@ -442,7 +442,7 @@ handle_r1c1:
             {
                 //  Set tables if not specified
                 if ( (nFlags & ScRefFlags::TAB_3D) == ScRefFlags::ZERO)
-                    aRange.aStart.SetTab( pActiveViewSh->GetViewData().GetTabNo() );
+                    aRange.aStart.SetTab( pActiveViewSh->GetViewData().CurrentTabForData() );
                 if ( (nFlags & ScRefFlags::TAB2_3D) == ScRefFlags::ZERO)
                     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 
@@ -571,7 +571,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
         tools::Long nY2 = rViewData.GetRefEndY();
         tools::Long nTab = rViewData.GetRefStartZ();
 
-        if (rViewData.GetRefEndZ() == rViewData.GetTabNo())
+        if (rViewData.GetRefEndZ() == rViewData.CurrentTabForData())
             nTab = rViewData.GetRefEndZ();
 
         PutInOrder(nX1, nX2);
@@ -989,7 +989,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
         ScDocument& rDoc = rViewData.GetDocument();
         rDoc.ApplyAsianEditSettings( *mpEditEngine );
         mpEditEngine->SetDefaultHorizontalTextDirection(
-            rDoc.GetEditTextDirection( rViewData.GetTabNo() ) );
+            rDoc.GetEditTextDirection( rViewData.CurrentTabForData() ) );
         mpEditEngine->SetFirstWordCapitalization( false );
     }
 
@@ -2841,7 +2841,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         }
         if (!bNeedGrow)
         {
-            bNeedGrow = rViewData.GetDocument().IsLayoutRTL( rViewData.GetTabNo() );
+            bNeedGrow = rViewData.GetDocument().IsLayoutRTL( rViewData.CurrentTabForData() );
         }
         if (bNeedGrow)
         {
@@ -3707,7 +3707,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
             aRefStr = rRef.Format(rDoc, ScRefFlags::VALID, aAddrDetails);
     }
     bool bLOKShowSelect = true;
-    if(comphelper::LibreOfficeKit::isActive() && pRefViewSh->GetViewData().GetRefTabNo() != pRefViewSh->GetViewData().GetTabNo())
+    if(comphelper::LibreOfficeKit::isActive() && pRefViewSh->GetViewData().GetRefTabNo() != pRefViewSh->GetViewData().CurrentTabForData())
         bLOKShowSelect = false;
 
     if (pTableView || pTopView)

@@ -125,7 +125,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
             ScDocument& rDoc        = rViewData.GetDocument();
             SCCOL       nPosX       = rViewData.GetCurX();
             SCROW       nPosY       = rViewData.GetCurY();
-            SCTAB       nTab        = rViewData.GetTabNo();
+            SCTAB       nTab        = rViewData.CurrentTabForData();
 
             OUString aStr = ScResId(pGlobStrId) + ": ";
 
@@ -191,7 +191,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     ScMarkData& rMark       = rViewData.GetMarkData();
     SCCOL       nPosX       = rViewData.GetCurX();
     SCROW       nPosY       = rViewData.GetCurY();
-    SCTAB       nTab        = rViewData.GetTabNo();
+    SCTAB       nTab        = rViewData.CurrentTabForData();
 
     SfxViewFrame& rThisFrame = GetViewFrame();
     bool bOle = GetViewFrame().GetFrame().IsInPlace();
@@ -272,7 +272,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_CURRENTTAB:
                 // Table for Basic is 1-based
-                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().GetTabNo()) + 1 ) );
+                rSet.Put( SfxUInt16Item( nWhich, static_cast<sal_uInt16>(GetViewData().CurrentTabForData()) + 1 ) );
                 break;
 
             case SID_CURRENTDOC:
@@ -454,7 +454,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_OUTLINE_DELETEALL:
                 {
-                    SCTAB nOlTab = GetViewData().GetTabNo();
+                    SCTAB nOlTab = GetViewData().CurrentTabForData();
                     ScOutlineTable* pOlTable = rDoc.GetOutlineTable( nOlTab );
                     if (pOlTable == nullptr)
                         rSet.DisableItem( nWhich );
@@ -488,7 +488,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     Point aPos;
                     bool bIsCol = (nWhich == SID_WINDOW_FIX_COL);
                     aPos.setX(rViewData.GetLOKSheetFreezeIndex(bIsCol));
-                    aPos.setY(rViewData.GetTabNo());
+                    aPos.setY(rViewData.CurrentTabForData());
                     rSet.Put(SfxPointItem(nWhich, aPos));
                 }
                 break;
@@ -582,7 +582,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     GetSelectionFrame( aLineOuter, aLineInner );
 
     //Fix border incorrect for RTL fdo#62399
-    if( rDoc.IsLayoutRTL( GetViewData().GetTabNo() ) )
+    if( rDoc.IsLayoutRTL( GetViewData().CurrentTabForData() ) )
     {
         std::unique_ptr<SvxBoxItem> aNewFrame(aLineOuter->Clone());
         std::unique_ptr<SvxBoxInfoItem> aTempInfo(aLineInner->Clone());
@@ -718,7 +718,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
         ScDocument&             rDoc        = rViewData.GetDocument();
         SCCOL                   nPosX       = rViewData.GetCurX();
         SCROW                   nPosY       = rViewData.GetCurY();
-        SCTAB                   nTab        = rViewData.GetTabNo();
+        SCTAB                   nTab        = rViewData.CurrentTabForData();
         SCTAB                   nStartTab   = 0;
         SCTAB                   nEndTab     = 0;
         SCCOL                   nStartCol   = 0;
@@ -951,7 +951,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     }
 
     SfxBindings&        rBindings   = GetViewData().GetBindings();
-    const SCTAB         nCurTab     = GetViewData().GetTabNo();
+    const SCTAB         nCurTab     = GetViewData().CurrentTabForData();
     ScDocShell*         pDocSh      = GetViewData().GetDocShell();
     ScDocument&         rDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData().GetMarkData();
@@ -1820,7 +1820,7 @@ void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_FAMILY4:     // page style sheets
             {
-                SCTAB           nCurTab     = GetViewData().GetTabNo();
+                SCTAB           nCurTab     = GetViewData().CurrentTabForData();
                 OUString        aPageStyle  = rDoc.GetPageStyle( nCurTab );
                 SfxStyleSheet*  pStyleSheet = pStylePool ? static_cast<SfxStyleSheet*>(pStylePool->
                                     Find( aPageStyle, SfxStyleFamily::Page )) : nullptr;

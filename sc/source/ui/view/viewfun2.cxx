@@ -179,7 +179,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData, bool bRa
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
                 GetViewData().GetViewShell(),
                 bRangeWidthChanged /* bColumns */, true /* bRows */,
@@ -200,7 +200,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
     Fraction aZoomX = GetViewData().GetZoomX();
@@ -241,7 +241,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bApi )
                 false /* bColumns */, true /* bRows */,
                 true /* bSizes*/, false /* bHidden */, false /* bFiltered */,
                 false /* bGroups */, nTab);
-        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().GetTabNo());
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), ROW_HEADER, GetViewData().CurrentTabForData());
     }
 
     return bChanged;
@@ -511,7 +511,7 @@ static sal_Int8 GetSubTotal( const OpCode eCode )
 bool ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
 {
     ScDocument& rDoc = GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
 
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
@@ -884,7 +884,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMultiMarked() )
     {
@@ -970,7 +970,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* pPos,
                                     bool bSetModified )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScAddress aCursor;
     if (pPos)
         aCursor = *pPos;
@@ -987,7 +987,7 @@ void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* p
 void ScViewFunc::DeletePageBreak( bool bColumn, bool bRecord, const ScAddress* pPos,
                                     bool bSetModified )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScAddress aCursor;
     if (pPos)
         aCursor = *pPos;
@@ -1005,7 +1005,7 @@ void ScViewFunc::RemoveManualBreaks()
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     bool bUndo(rDoc.IsUndoEnabled());
 
     if (bUndo)
@@ -1028,7 +1028,7 @@ void ScViewFunc::RemoveManualBreaks()
 void ScViewFunc::SetPrintZoom(sal_uInt16 nScale)
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     pDocSh->SetPrintZoom( nTab, nScale, 0/*nPages*/ );
 }
 
@@ -1131,7 +1131,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
     //  undo (for all tables)
     if (bUndo)
     {
-        SCTAB nCurTab = GetViewData().GetTabNo();
+        SCTAB nCurTab = GetViewData().CurrentTabForData();
         std::unique_ptr<ScPrintRangeSaver> pNewRanges = rDoc.CreatePrintRangeSaver();
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -1488,7 +1488,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
 void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                             SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount )
 {
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScRange aRange( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab );
     ScRange aSourceRange( aRange );
     ScDocShell* pDocSh = GetViewData().GetDocShell();
@@ -1540,7 +1540,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                                    SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount )
 {
     const ScDocument* pDoc = &GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     CellType eCellType;
 
     ScGridWindow* pWin = GetActiveWin();
@@ -1709,7 +1709,7 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData& rMark = GetViewData().GetMarkData();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     bool bUndo(rDoc.IsUndoEnabled());
 
     ScRange aMarkRange;
@@ -1907,7 +1907,7 @@ void ScViewFunc::TransliterateText( TransliterationFlags nType )
     {
         //  no selection -> use cursor position
 
-        ScAddress aCursor( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+        ScAddress aCursor( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
         aFuncMark.SetMarkArea( ScRange( aCursor ) );
     }
 
@@ -1996,7 +1996,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     SCTAB nTab, nOldTab;
     nCol = nOldCol = GetViewData().GetCurX();
     nRow = nOldRow = GetViewData().GetCurY();
-    nTab = nOldTab = GetViewData().GetTabNo();
+    nTab = nOldTab = GetViewData().CurrentTabForData();
 
     SvxSearchCmd nCommand = pSearchItem->GetCommand();
     bool bAllTables = pSearchItem->IsAllTables();
@@ -2173,7 +2173,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
     if ( bFound )
     {
-        if ( nTab != GetViewData().GetTabNo() )
+        if ( nTab != GetViewData().CurrentTabForData() )
             SetTabNo( nTab );
 
         //  if nothing is marked, DoneBlockMode, then marking can start
@@ -2361,7 +2361,7 @@ void ScViewFunc::MakeScenario( const OUString& rName, const OUString& rComment,
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScMarkData& rMark   = GetViewData().GetMarkData();
-    SCTAB       nTab    = GetViewData().GetTabNo();
+    SCTAB       nTab    = GetViewData().CurrentTabForData();
 
     SCTAB nNewTab = pDocSh->MakeScenario( nTab, rName, rComment, rColor, nFlags, rMark );
     if (nFlags & ScScenarioFlags::CopyAll)
@@ -2398,7 +2398,7 @@ void ScViewFunc::ExtendScenario()
 void ScViewFunc::UseScenario( const OUString& rName )
 {
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
-    SCTAB       nTab    = GetViewData().GetTabNo();
+    SCTAB       nTab    = GetViewData().CurrentTabForData();
 
     DoneBlockMode();
     InitOwnBlockMode( ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab));
@@ -2714,7 +2714,7 @@ void ScViewFunc::InsertAreaLink( const OUString& rFile,
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     SCCOL nPosX = GetViewData().GetCurX();
     SCROW nPosY = GetViewData().GetCurY();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScAddress aPos( nPosX, nPosY, nTab );
 
     pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, ScRange(aPos), 0/*nRefresh*/, false, false );
@@ -2749,7 +2749,7 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
 
     if ( nTab <= MAXTAB )
         ImportTables( pSrcSh, 1, &nTab, true,
-                    GetViewData().GetTabNo() );
+                    GetViewData().CurrentTabForData() );
 }
 
 //  Copy/link tables from another document
@@ -3180,7 +3180,7 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
             // No need to keep this around when we are not renaming.
             pTabNames.reset();
 
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
 
         if (comphelper::LibreOfficeKit::isActive() && !pSrcTabs->empty())
         {

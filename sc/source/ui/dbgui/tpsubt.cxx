@@ -245,7 +245,7 @@ void ScTpSubTotalGroup::FillListBoxes()
 
     SCCOL   nFirstCol   = rSubTotalData.nCol1;
     SCROW   nFirstRow   = rSubTotalData.nRow1;
-    SCTAB   nTab        = pViewData->GetTabNo();
+    SCTAB   nTab        = pViewData->CurrentTabForData();
     SCCOL   nMaxCol     = rSubTotalData.nCol2;
     SCCOL   col;
     OUString  aFieldName;
@@ -525,7 +525,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     theSubTotalData.bDoSort         = m_xBtnSort->get_active();
 
     theSubTotalData.bSummaryBelow   = m_xBtnSummary->get_active();
-    pDoc->SetTotalsRowBelow(pViewData->GetTabNo(), theSubTotalData.bSummaryBelow);
+    pDoc->SetTotalsRowBelow(pViewData->CurrentTabForData(), theSubTotalData.bSummaryBelow);
 
     theSubTotalData.bAscending      = m_xBtnAscending->get_active();
     theSubTotalData.bUserDef        = m_xBtnUserDef->get_active();

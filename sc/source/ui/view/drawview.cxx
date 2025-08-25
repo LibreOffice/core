@@ -80,7 +80,7 @@ void ScDrawView::Construct()
 
     if (pViewData)
     {
-        SCTAB nViewTab = pViewData->GetTabNo();
+        SCTAB nViewTab = pViewData->CurrentTabForData();
         ShowSdrPage(GetModel().GetPage(nViewTab));
 
         bool bEx = pViewData->GetViewShell()->IsDrawSelMode();
@@ -306,7 +306,7 @@ void ScDrawView::RecalcScale()
 
     if (pViewData)
     {
-        nTab = pViewData->GetTabNo();
+        nTab = pViewData->CurrentTabForData();
         nPPTX = pViewData->GetPPTX();
         nPPTY = pViewData->GetPPTY();
         aZoomX = pViewData->GetZoomX();
@@ -823,7 +823,7 @@ SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )
     if( pViewData && (rMarkList.GetMarkCount() == 1) )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, pViewData->GetTabNo() ) )
+        if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, pViewData->CurrentTabForData() ) )
         {
             if( ppCaptData ) *ppCaptData = pCaptData;
             return pObj;

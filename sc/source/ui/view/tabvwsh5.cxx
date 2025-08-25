@@ -45,7 +45,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         const ScPaintHint* pPaintHint = static_cast<const ScPaintHint*>(&rHint);
         PaintPartFlags nParts = pPaintHint->GetParts();
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         if (pPaintHint->GetStartTab() <= nTab && pPaintHint->GetEndTab() >= nTab)
         {
             if (nParts & PaintPartFlags::Extras)          // first if table vanished !!!
@@ -54,7 +54,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             // if the current sheet has pending row height updates (sheet links refreshed),
             // execute them before invalidating the window
-            GetViewData().GetDocShell()->UpdatePendingRowHeights( GetViewData().GetTabNo() );
+            GetViewData().GetDocShell()->UpdatePendingRowHeights( GetViewData().CurrentTabForData() );
 
             if (nParts & PaintPartFlags::Size)
                 RepeatResize();                     //! InvalidateBorder ???
@@ -84,7 +84,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  ScEditViewHint is only received at active view
         auto pEditViewHint = static_cast<const ScEditViewHint*>(&rHint);
 
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         if ( pEditViewHint->GetTab() == nTab )
         {
             SCCOL nCol = pEditViewHint->GetCol();
@@ -114,7 +114,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         auto pTablesHint = static_cast<const ScTablesHint*>(&rHint);
         // first fetch current table (can be changed during DeleteTab on ViewData)
-        SCTAB nActiveTab = GetViewData().GetTabNo();
+        SCTAB nActiveTab = GetViewData().CurrentTabForData();
 
         SCTAB nTab1 = pTablesHint->GetTab1();
         SCTAB nTab2 = pTablesHint->GetTab2();
@@ -247,7 +247,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SfxHintId::DocChanged:
                 {
                     ScDocument& rDoc = GetViewData().GetDocument();
-                    if (!rDoc.HasTable( GetViewData().GetTabNo() ))
+                    if (!rDoc.HasTable( GetViewData().CurrentTabForData() ))
                     {
                         SetTabNo(0);
                     }
@@ -297,7 +297,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case SfxHintId::ScForceSetTab:
-                SetTabNo( GetViewData().GetTabNo(), true );
+                SetTabNo(GetViewData().GetTabNumber(), true);
                 break;
 
             case SfxHintId::LanguageChanged:

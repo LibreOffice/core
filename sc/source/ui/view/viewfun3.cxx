@@ -768,7 +768,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
             pTabViewShell->OnLOKSetWidthOrHeight(rViewData.GetCurY(), false);
 
             ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pTabViewShell, true /* bColumns */, true /* bRows */,
-                true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.GetTabNo());
+                true /* bSizes */, false /* bHidden */, false /* bFiltered */, false /* bGroups */, rViewData.CurrentTabForData());
         }
     }
     return bRet;
@@ -1007,7 +1007,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             // filtered.
             nStartCol = GetViewData().GetCurX();
             nStartRow = GetViewData().GetCurY();
-            nStartTab = GetViewData().GetTabNo();
+            nStartTab = GetViewData().CurrentTabForData();
             nEndCol = nStartCol + nDestSizeX;
             nEndRow = nStartRow + nDestSizeY;
             nEndTab = nStartTab;
@@ -1134,7 +1134,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     {
         nStartCol = GetViewData().GetCurX();
         nStartRow = GetViewData().GetCurY();
-        nStartTab = GetViewData().GetTabNo();
+        nStartTab = GetViewData().CurrentTabForData();
         nEndCol = nStartCol + nDestSizeX;
         nEndRow = nStartRow + nDestSizeY;
         nEndTab = nStartTab;
@@ -1974,7 +1974,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos )
 
     //  mark destination area (set cursor, no marks)
 
-    if ( GetViewData().GetTabNo() != rDestPos.Tab() )
+    if ( GetViewData().CurrentTabForData() != rDestPos.Tab() )
         SetTabNo( rDestPos.Tab() );
 
     MoveCursorAbs( rDestPos.Col(), rDestPos.Row(), SC_FOLLOW_NONE, false, false );
@@ -2002,7 +2002,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     ScDocumentUniquePtr pUndoDoc;
     ScDocumentUniquePtr pRedoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     SCTAB nStartTab = nTab;
     SCTAB nEndTab = nTab;
 
@@ -2063,7 +2063,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 
 void ScViewFunc::MakeNewSheetView()
 {
-    SCTAB nTab = GetViewData().GetTab();
+    SCTAB nTab = GetViewData().GetTabNumber();
     ScDocument& rDoc = GetViewData().GetDocument();
 
     SCTAB nSheetViewTab = nTab + 1;

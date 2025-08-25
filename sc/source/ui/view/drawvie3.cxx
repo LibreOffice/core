@@ -46,7 +46,7 @@ ScDrawView::ScDrawView(
     pViewData( pData ),
     pDev( pOut ),
     rDoc( pData->GetDocument() ),
-    nTab( pData->GetTabNo() ),
+    nTab( pData->CurrentTabForData() ),
     pDropMarkObj( nullptr ),
     bInConstruct( true )
 {

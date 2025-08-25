@@ -538,7 +538,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 bool bIsMultMark = refScMarkData.IsMultiMarked();
                 bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
 //              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
-                sal_uInt16 nTab = rViewData.GetTabNo();
+                sal_uInt16 nTab = rViewData.CurrentTabForData();
                 const ScRange& aMarkRange = refScMarkData.GetMarkArea();
                 aEvent.OldValue.clear();
                 ScDocument* pDoc= GetDocument(mpViewShell);
@@ -959,7 +959,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
 {
     if (IsFormulaMode())
     {
-        ScAddress aCellAddress(static_cast<SCCOL>(nColumn), nRow, mpViewShell->GetViewData().GetTabNo());
+        ScAddress aCellAddress(static_cast<SCCOL>(nColumn), nRow, mpViewShell->GetViewData().CurrentTabForData());
         if ((aCellAddress == m_aFormulaActiveCell) && m_pAccFormulaCell.is())
         {
             return m_pAccFormulaCell;
@@ -1171,10 +1171,11 @@ void SAL_CALL ScAccessibleSpreadsheet::selectAllAccessibleChildren(  )
     {
         ScDocument* pDoc = GetDocument(mpViewShell);
         ScViewData& rViewData = mpViewShell->GetViewData();
-        mpViewShell->InitRefMode( 0, 0, rViewData.GetTabNo(), SC_REFTYPE_REF );
-        rViewData.SetRefStart(0, 0, rViewData.GetTabNo());
-        rViewData.SetRefEnd(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
-        mpViewShell->UpdateRef(pDoc->MaxCol(), pDoc->MaxRow(), rViewData.GetTabNo());
+        auto nCurrentTab = rViewData.CurrentTabForData();
+        mpViewShell->InitRefMode( 0, 0, nCurrentTab, SC_REFTYPE_REF );
+        rViewData.SetRefStart(0, 0, nCurrentTab);
+        rViewData.SetRefEnd(pDoc->MaxCol(), pDoc->MaxRow(), nCurrentTab);
+        mpViewShell->UpdateRef(pDoc->MaxCol(), pDoc->MaxRow(), nCurrentTab);
     }
     else
         mpViewShell->SelectAll();
@@ -1261,7 +1262,7 @@ void SAL_CALL ScAccessibleSpreadsheet::deselectAccessibleChild( sal_Int64 nChild
     if (IsFormulaMode())
     {
         if(IsScAddrFormulaSel(
-            ScAddress(static_cast<SCCOL>(nCol), nRow,mpViewShell->GetViewData().GetTabNo()))
+            ScAddress(static_cast<SCCOL>(nCol), nRow,mpViewShell->GetViewData().CurrentTabForData()))
             )
         {
             SelectCell(nRow, nCol, true);
@@ -1284,8 +1285,8 @@ void ScAccessibleSpreadsheet::SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bD
         {
             ScViewData& rViewData = mpViewShell->GetViewData();
 
-            mpViewShell->InitRefMode( static_cast<SCCOL>(nCol), nRow, rViewData.GetTabNo(), SC_REFTYPE_REF );
-            mpViewShell->UpdateRef(static_cast<SCCOL>(nCol), nRow, rViewData.GetTabNo());
+            mpViewShell->InitRefMode( static_cast<SCCOL>(nCol), nRow, rViewData.CurrentTabForData(), SC_REFTYPE_REF );
+            mpViewShell->UpdateRef(static_cast<SCCOL>(nCol), nRow, rViewData.CurrentTabForData());
         }
         return ;
     }
@@ -1664,7 +1665,7 @@ bool ScAccessibleSpreadsheet::IsScAddrFormulaSel(const ScAddress &addr) const
 {
     return addr.Col() >= m_nMinX && addr.Col() <= m_nMaxX &&
         addr.Row() >= m_nMinY && addr.Row() <= m_nMaxY &&
-        addr.Tab() == mpViewShell->GetViewData().GetTabNo();
+        addr.Tab() == mpViewShell->GetViewData().CurrentTabForData();
 }
 
 bool ScAccessibleSpreadsheet::CheckChildIndex(sal_Int64 nIndex) const
@@ -1684,7 +1685,7 @@ ScAddress ScAccessibleSpreadsheet::GetChildIndexAddress(sal_Int64 nIndex) const
     return ScAddress(
         static_cast<SCCOL>((nIndex - nIndex % nRowAll) / nRowAll +  + m_nMinX),
         nIndex % nRowAll + m_nMinY,
-        mpViewShell->GetViewData().GetTabNo()
+        mpViewShell->GetViewData().CurrentTabForData()
         );
 }
 
@@ -1724,7 +1725,7 @@ bool ScAccessibleSpreadsheet::GetFormulaCurrentFocusCell(ScAddress &addr)
     ScDocument* pDoc = GetDocument(mpViewShell);
     if( /* Always true: nRefX >= 0 && */ nRefX <= pDoc->MaxCol() && nRefY >= 0 && nRefY <= pDoc->MaxRow())
     {
-        addr = ScAddress(nRefX,nRefY,rViewData.GetTabNo());
+        addr = ScAddress(nRefX, nRefY, rViewData.CurrentTabForData());
         return true;
     }
     return false;

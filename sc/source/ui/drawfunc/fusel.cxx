@@ -90,7 +90,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     {
         ScViewData& rViewData = rViewShell.GetViewData();
         ScDocument& rDocument = rViewData.GetDocument();
-        if (rDocument.IsNegativePage(rViewData.GetTabNo()))
+        if (rDocument.IsNegativePage(rViewData.CurrentTabForData()))
             aMDPos.setX(-aMDPos.X());
     }
 
@@ -360,7 +360,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
-    if (comphelper::LibreOfficeKit::isActive() && rDocument.IsNegativePage(rViewData.GetTabNo()))
+    if (comphelper::LibreOfficeKit::isActive() && rDocument.IsNegativePage(rViewData.CurrentTabForData()))
         aPnt.setX(-aPnt.X());
 
     if (pView && rMEvt.IsLeft())
@@ -547,7 +547,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         ScModelObj* pModelObj = ( pDocShell ? pDocShell->GetModel() : nullptr );
         if ( pModelObj )
         {
-            SCTAB nTab = rViewData.GetTabNo();
+            SCTAB nTab = rViewData.CurrentTabForData();
             ScChartHelper::CreateProtectedChartListenersAndNotify( rDocument, pPage, pModelObj, nTab,
                 aProtectedChartRangesVector, aExcludedChartNames );
         }

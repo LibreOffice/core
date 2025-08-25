@@ -67,7 +67,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxButtonCancel(m_xBuilder->weld_button(u"cancel"_ustr))
     , mpActiveEdit(nullptr)
-    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo())
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData())
     , mDialogLostFocus(false)
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
