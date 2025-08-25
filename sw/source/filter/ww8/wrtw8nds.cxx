@@ -3444,10 +3444,27 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         const bool bInTOX = rSection.GetType() == SectionType::ToxContent || rSection.GetType() == SectionType::ToxHeader;
         if ( !pSet && !bInTOX )
         {
+            if (GetExportFormat() == MSWordExportBase::ExportFormat::DOC)
+            {
+                bool bJustifiedTextBeforeContinuousSectionBreak = false;
+                SwNodeIndex aDummy(rSectionNode);
+                const SwContentNode* pLastContent
+                    = SwNodes::GoPrevSection(&aDummy, /*SkipHidden*/ true, /*SkipProtected*/ false);
+                if (pLastContent && pLastContent->IsTextNode() && !pLastContent->FindTableNode())
+                {
+                    // avoid MS Word bug justifying the last line in this instance
+                    bJustifiedTextBeforeContinuousSectionBreak
+                        = pLastContent->GetSwAttrSet().GetAdjust().GetAdjust() == SvxAdjust::Block;
+                }
+                if (bJustifiedTextBeforeContinuousSectionBreak)
+                    WriteChar(msword::PageBreak); // indicates a continuous section break here
+                else
+                    ReplaceCr(msword::PageBreak); // indicates a continuous section break here
+            }
+
             // new Section with no own PageDesc/-Break
             //  -> write follow section break;
             const SwSectionFormat* pFormat = rSection.GetFormat();
-            ReplaceCr( msword::PageBreak ); // Indicator for Page/Section-Break
 
             // Get the page in use at the top of this section
             const SwPageDesc *pCurrent = SwPageDesc::GetPageDescOfNode(rNd);

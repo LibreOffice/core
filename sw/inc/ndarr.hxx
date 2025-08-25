@@ -210,7 +210,7 @@ public:
                                            bool bSkipProtect = true );
     static SwContentNode* GoNextSection( SwPosition *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
-    static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
+    SW_DLLPUBLIC static SwContentNode* GoPrevSection( SwNodeIndex *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );
     static SwContentNode* GoPrevSection( SwPosition *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true );

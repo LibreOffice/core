@@ -110,7 +110,7 @@ namespace ww8 { class Frame; }
 
 namespace msword {
     const sal_uInt8 ColumnBreak = 0xE;
-    const sal_uInt8 PageBreak   = 0xC;
+    const sal_uInt8 PageBreak = 0xC; // can indicate either a page or continuous break!
 }
 
 /// Type of a style in the style table.

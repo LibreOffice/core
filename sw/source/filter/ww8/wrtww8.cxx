@@ -3021,7 +3021,7 @@ void MSWordExportBase::WriteText()
 
                 if (bNeedExportBreakHere)  //#120140# End of check
                 {
-                    ReplaceCr( char(0xc) ); // indicator for Page/Section-Break
+                    ReplaceCr(msword::PageBreak); // either page or continuous break
 
                     const SwSectionFormat* pParentFormat = rSect.GetFormat()->GetParent();
                     if ( !pParentFormat )
