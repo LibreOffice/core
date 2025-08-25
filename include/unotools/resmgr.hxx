@@ -31,39 +31,45 @@ typedef OUString (*ResHookProc)(const OUString& rStr);
 
 struct UNOTOOLS_DLLPUBLIC TranslateId
 {
-    const char* mpContext;
-    const char8_t* mpId;
+    const char* mpContext = nullptr;
+    const char8_t* mpId = nullptr;
 
-    inline constexpr TranslateId()
-        : mpContext(nullptr), mpId(nullptr) {}
-    inline TranslateId(const char* pContext, const char* pId)
-        : mpContext(pContext), mpId(reinterpret_cast<char8_t const *>(pId)) {}
-    inline constexpr TranslateId(const char* pContext, const char8_t* pId)
-        : mpContext(pContext), mpId(pId) {}
+    constexpr TranslateId() = default;
+
+    TranslateId(const char* pContext, const char* pId)
+        : mpContext(pContext)
+        , mpId(reinterpret_cast<char8_t const *>(pId))
+    {}
+
+    constexpr TranslateId(const char* pContext, const char8_t* pId)
+        : mpContext(pContext)
+        , mpId(pId)
+    {}
 
     char const * getId() const { return reinterpret_cast<char const *>(mpId); }
 
-    inline operator bool() const { return mpId != nullptr; }
+    operator bool() const { return mpId != nullptr; }
 
     bool operator==(const TranslateId& other) const;
-    inline bool operator!=(const TranslateId& other) const { return !operator==(other); }
 };
 
 struct UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) TranslateNId
 {
-    const char* mpContext;
-    const char* mpSingular;
-    const char* mpPlural;
+    const char* mpContext = nullptr;
+    const char* mpSingular = nullptr;
+    const char* mpPlural = nullptr;
 
-    inline TranslateNId()
-        : mpContext(nullptr), mpSingular(nullptr), mpPlural(nullptr) {}
-    inline TranslateNId(const char* pContext, const char* pSingular, const char* pPlural)
-        : mpContext(pContext), mpSingular(pSingular), mpPlural(pPlural) {}
+    TranslateNId() = default;
 
-    inline operator bool() const { return mpContext != nullptr; }
+    TranslateNId(const char* pContext, const char* pSingular, const char* pPlural)
+        : mpContext(pContext)
+        , mpSingular(pSingular)
+        , mpPlural(pPlural)
+    {}
+
+    operator bool() const { return mpContext != nullptr; }
 
     bool operator==(const TranslateNId& other) const;
-    inline bool operator!=(const TranslateNId& other) const { return !operator==(other); }
 };
 
 namespace Translate
