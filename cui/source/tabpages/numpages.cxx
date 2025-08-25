@@ -598,14 +598,15 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
     , bModified(false)
     , bPreset(false)
-    , m_xExamplesVS(new SvxNumValueSet(m_xBuilder->weld_scrolled_window(u"valuesetwin"_ustr, true)))
-    , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *m_xExamplesVS))
+    , m_xExamplesIV(m_xBuilder->weld_icon_view(u"pick_outline_iconview"_ustr))
+    , aPreviewSize(150, 200)
 {
     SetExchangeSupport();
 
-    m_xExamplesVS->init(NumberingPageType::OUTLINE);
-    m_xExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
-    m_xExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
+    SvxBmpNumIconView::PopulateIconView(m_xExamplesIV.get(), NumberingPageType::OUTLINE, aPreviewSize);
+    m_xExamplesIV->connect_selection_changed(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
+    m_xExamplesIV->connect_item_activated(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
+    m_xExamplesIV->connect_query_tooltip(LINK(this, SvxNumPickTabPage, QueryTooltipHdl));
 
     Reference<XDefaultNumberingProvider> xDefNum = SvxNumOptionsTabPageHelper::GetNumberingProvider();
     if(!xDefNum.is())
@@ -641,13 +642,12 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
     {
     }
     Reference<XNumberingFormatter> xFormat(xDefNum, UNO_QUERY);
-    m_xExamplesVS->SetOutlineNumberingSettings(aOutlineAccess, xFormat, rLocale);
+    SvxBmpNumIconView::SetOutlineNumberingSettings(m_xExamplesIV.get(), aPreviewSize, aOutlineAccess, xFormat, rLocale);
 }
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
 {
-    m_xExamplesVSWin.reset();
-    m_xExamplesVS.reset();
+    m_xExamplesIV.reset();
 }
 
 std::unique_ptr<SfxTabPage> SvxNumPickTabPage::Create(weld::Container* pPage, weld::DialogController* pController,
@@ -686,13 +686,13 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pActNum && *pSaveNum != *pActNum)
     {
         *pActNum = *pSaveNum;
-        m_xExamplesVS->SetNoSelection();
+        m_xExamplesIV->unselect_all();
     }
 
     if(pActNum && (!lcl_IsNumFmtSet(pActNum.get(), nActNumLvl) || bIsPreset))
     {
-        m_xExamplesVS->SelectItem(1);
-        NumSelectHdl_Impl(m_xExamplesVS.get());
+        m_xExamplesIV->select(0);
+        NumSelectHdl_Impl(*m_xExamplesIV);
         bPreset = true;
     }
     bPreset |= bIsPreset;
@@ -729,8 +729,18 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 
 }
 
+IMPL_LINK(SvxNumPickTabPage, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    const OUString sId = m_xExamplesIV->get_id(rIter);
+    if (sId.isEmpty())
+        return OUString();
+
+    sal_Int32 nIndex = sId.toInt32();
+    return SvxBmpNumIconView::GetNumberingDescription(NumberingPageType::OUTLINE, nIndex);
+}
+
 // all levels are changed here
-IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, weld::IconView&, void)
 {
     if(!pActNum)
         return;
@@ -740,7 +750,9 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 
     const FontList*  pList = nullptr;
 
-    SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_xExamplesVS->GetSelectedItemId() - 1];
+    OUString sId = m_xExamplesIV->get_selected_id();
+    sal_uInt16 nIdx = !sId.isEmpty() ? sId.toInt32() : 0;
+    SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[nIdx];
 
     const vcl::Font& rActBulletFont = SvxBmpNumIconView::GetDefaultBulletFont();
     SvxNumSettings_Impl* pLevelSettings = nullptr;
@@ -817,11 +829,16 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl, weld::IconView&, bool)
 {
-    NumSelectHdl_Impl(m_xExamplesVS.get());
+    if(m_xExamplesIV->get_selected_id().isEmpty())
+        return false;
+
+    NumSelectHdl_Impl(*m_xExamplesIV);
     weld::Button& rOk = GetDialogController()->GetOKButton();
     rOk.clicked();
+
+    return true;
 }
 
 void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
