@@ -912,7 +912,7 @@ void SvxBulletAndPositionDlg::PopulateGalleryMenu()
             sGrfName = aObj.PathToFileName();
         if (GalleryExplorer::GetGraphicObj(GALLERY_THEME_BULLETS, i, &aGraphic))
         {
-            BitmapEx aBitmap(aGraphic.GetBitmapEx());
+            Bitmap aBitmap(aGraphic.GetBitmap());
             Size aSize(aBitmap.GetSizePixel());
             if (aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
             {

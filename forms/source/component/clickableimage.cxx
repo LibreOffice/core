@@ -812,7 +812,7 @@ namespace frm
 
     IMPL_LINK( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic, void )
     {
-        const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : nullptr );
+        const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Graphic(i_pGraphic->GetBitmap()).GetXGraphic() : nullptr );
         if ( !xGraphic.is() )
         {
             m_xGraphicObject.clear();

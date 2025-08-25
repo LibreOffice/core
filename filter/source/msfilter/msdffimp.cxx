@@ -3805,7 +3805,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
 
     double      fFactor;
     Size        aCropSize;
-    BitmapEx    aCropBitmap;
+    Bitmap      aCropBitmap;
     sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
 
     // Cropping has to be applied on a loaded graphic.
@@ -3815,7 +3815,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
         aCropSize = lcl_GetPrefSize(rGraf, MapMode(MapUnit::Map100thMM));
     else
     {
-        aCropBitmap = rGraf.GetBitmapEx();
+        aCropBitmap = rGraf.GetBitmap();
         aCropSize = aCropBitmap.GetSizePixel();
     }
     if ( nCropTop )

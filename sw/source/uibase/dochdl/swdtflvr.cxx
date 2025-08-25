@@ -1011,7 +1011,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut, bool bDeleteRedlines )
         m_pWrtShell->Copy(rDoc);
 
 #if HAVE_FEATURE_DESKTOP
-        if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmapEx().IsEmpty())
+        if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmap().IsEmpty())
           AddFormat( SotClipboardFormatId::SVXB );
 #endif
 

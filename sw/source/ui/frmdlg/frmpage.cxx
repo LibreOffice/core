@@ -2506,7 +2506,7 @@ SwGrfExtPage::SwGrfExtPage(weld::Container* pPage, weld::DialogController* pCont
     // tdf#138843 place holder for the graphic type
     , m_xLabelGraphicType(m_xBuilder->weld_label(u"label-graphic-type"_ustr))
 {
-    m_aBmpWin.SetBitmapEx(BitmapEx(Bitmap(RID_BMP_PREVIEW_FALLBACK)));
+    m_aBmpWin.SetBitmap(Bitmap(RID_BMP_PREVIEW_FALLBACK));
 
     m_xCtlAngle->SetLinkedField(m_xNfAngle.get(), 2);
 
@@ -2823,7 +2823,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
 
     if (m_bHorz || m_bVert)
     {
-        BitmapEx aTmpBmp(m_bGraphic ? m_aGraphic.GetBitmapEx() : m_aBmp);
+        Bitmap aTmpBmp(m_bGraphic ? m_aGraphic.GetBitmap() : m_aBmp);
         BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
         if (m_bHorz)
             nMirrorFlags |= BmpMirrorFlags::Vertical;
@@ -2854,7 +2854,7 @@ void BmpWindow::SetGraphic(const Graphic& rGraphic)
     Invalidate();
 }
 
-void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
+void BmpWindow::SetBitmap(const Bitmap& rBmp)
 {
     m_aBmp = rBmp;
     Invalidate();

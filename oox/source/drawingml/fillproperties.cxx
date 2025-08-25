@@ -88,10 +88,10 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
 
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     const ::Color aColor(0x00);
-    aBitmapEx.Rotate(nRotation, aColor);
-    aReturnGraphic = ::Graphic(aBitmapEx);
+    aBitmap.Rotate(nRotation, aColor);
+    aReturnGraphic = ::Graphic(aBitmap);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
@@ -134,22 +134,22 @@ Reference<XGraphic> lclCropGraphic(uno::Reference<graphic::XGraphic> const& xGra
     ::Graphic aGraphic(xGraphic);
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
-    BitmapEx aBitmapEx;
+    Bitmap aBitmap;
     if (quotients)
     {
-        aBitmapEx = aGraphic.GetBitmapEx();
+        aBitmap = aGraphic.GetBitmap();
 
-        const Size bmpSize = aBitmapEx.GetSizePixel();
+        const Size bmpSize = aBitmap.GetSizePixel();
         const auto& [qx1, qy1, qx2, qy2] = *quotients;
         const tools::Long l = std::round(bmpSize.Width() * qx1);
         const tools::Long t = std::round(bmpSize.Height() * qy1);
         const tools::Long r = std::round(bmpSize.Width() * qx2);
         const tools::Long b = std::round(bmpSize.Height() * qy2);
 
-        aBitmapEx.Crop({ l, t, bmpSize.Width() - r - 1, bmpSize.Height() - b - 1 });
+        aBitmap.Crop({ l, t, bmpSize.Width() - r - 1, bmpSize.Height() - b - 1 });
     }
 
-    ::Graphic aReturnGraphic(aBitmapEx);
+    ::Graphic aReturnGraphic(aBitmap);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
@@ -162,7 +162,7 @@ Reference< XGraphic > lclMirrorGraphic(uno::Reference<graphic::XGraphic> const &
 
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     BmpMirrorFlags nMirrorFlags = BmpMirrorFlags::NONE;
 
     if(bFlipH)
@@ -170,9 +170,9 @@ Reference< XGraphic > lclMirrorGraphic(uno::Reference<graphic::XGraphic> const &
     if(bFlipV)
         nMirrorFlags |= BmpMirrorFlags::Vertical;
 
-    aBitmapEx.Mirror(nMirrorFlags);
+    aBitmap.Mirror(nMirrorFlags);
 
-    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic = ::Graphic(aBitmap);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
@@ -185,10 +185,10 @@ Reference< XGraphic > lclGreysScaleGraphic(uno::Reference<graphic::XGraphic> con
 
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-    aBitmapEx.Convert(BmpConversion::N8BitGreys);
+    Bitmap aBitmap(aGraphic.GetBitmap());
+    aBitmap.Convert(BmpConversion::N8BitGreys);
 
-    aReturnGraphic = ::Graphic(aBitmapEx);
+    aReturnGraphic = ::Graphic(aBitmap);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
 
     return aReturnGraphic.GetXGraphic();
@@ -207,13 +207,21 @@ Reference<XGraphic> lclApplyBlackWhiteEffect(const BlipFillProperties& aBlipProp
         ::Graphic aGraphic(xGraphic);
         ::Graphic aReturnGraphic;
 
-        BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-        const AlphaMask& aMask(aBitmapEx.GetAlphaMask());
+        Bitmap aBitmap(aGraphic.GetBitmap());
+        if (aBitmap.HasAlpha())
+        {
+            const AlphaMask aMask(aBitmap.CreateAlphaMask());
 
-        Bitmap aTmpBmp(aBitmapEx.GetBitmap());
-        BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ nThreshold });
+            Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
+            BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ nThreshold });
 
-        aReturnGraphic = ::Graphic(BitmapEx(aTmpBmp, aMask));
+            aReturnGraphic = ::Graphic(BitmapEx(aTmpBmp, aMask));
+        }
+        else
+        {
+            BitmapFilter::Filter(aBitmap, BitmapMonochromeFilter{ nThreshold });
+            aReturnGraphic = ::Graphic(aBitmap);
+        }
         aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
         return aReturnGraphic.GetXGraphic();
     }

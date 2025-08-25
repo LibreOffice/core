@@ -63,7 +63,7 @@ void FuVectorize::DoExecute( SfxRequest& )
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSdVectorizeDlg> pDlg(
             pFact->CreateSdVectorizeDlg(mpWindow ? mpWindow->GetFrameWeld() : nullptr,
-                                        pSdrGrafObj->GetGraphic().GetBitmapEx().GetBitmap(), mpDocSh ) );
+                                        pSdrGrafObj->GetGraphic().GetBitmap().CreateColorBitmap(), mpDocSh ) );
     if( pDlg->Execute() != RET_OK )
         return;
 

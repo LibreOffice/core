@@ -28,7 +28,7 @@ class BmpWindow final : public weld::CustomWidgetController
 {
 private:
     Graphic     m_aGraphic;
-    BitmapEx    m_aBmp;
+    Bitmap      m_aBmp;
 
     bool        m_bHorz : 1;
     bool        m_bVert : 1;
@@ -44,7 +44,7 @@ public:
     void MirrorVert(bool bMirror) { m_bVert = bMirror; Invalidate(); }
     void MirrorHorz(bool bMirror) { m_bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
-    void SetBitmapEx(const BitmapEx& rGrf);
+    void SetBitmap(const Bitmap& rGrf);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

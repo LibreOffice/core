@@ -91,13 +91,13 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
         Graphic         aMappedGraphic;
         GraphicObject   aGraphicObject(rGraphic);
         Size            aPrefSize( rGraphic.GetPrefSize() );
-        BitmapEx        aBmpEx( rGraphic.GetBitmapEx() );
+        Bitmap          aBmp( rGraphic.GetBitmap() );
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {
             if (aPrefSize.IsEmpty())
             {
-                aBmpEx.Scale(aPrefSize);
+                aBmp.Scale(aPrefSize);
             }
             else
             {
@@ -113,11 +113,11 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
                 if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
                 {
-                    aBmpEx.Scale( fXScale, fYScale );
+                    aBmp.Scale( fXScale, fYScale );
                     rGraphicSize = Size( static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Width()) / fXScale + 0.5 ),
                                      static_cast<sal_Int32>(static_cast<double>(rGraphicSize.Height()) / fYScale + 0.5 ) );
 
-                    aMappedGraphic = Graphic( aBmpEx );
+                    aMappedGraphic = Graphic( aBmp );
                     aGraphicObject.SetGraphic(aMappedGraphic);
                 }
             }

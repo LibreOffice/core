@@ -602,7 +602,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, weld::TreeView&, void)
             m_pGraphicFilter->ImportGraphic( aGraphic, aURLObj, nFilter, nullptr, nFilterImportFlags );
         }
 
-        BitmapEx aBmp = aGraphic.GetBitmapEx();
+        Bitmap aBmp = aGraphic.GetBitmap();
         sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
         sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
 

@@ -641,8 +641,8 @@ Fraction AnimationWindow::GetScale()
         Size aBmpSize(0, 0);
         for (size_t i = 0; i < nCount; i++)
         {
-            BitmapEx const & rBitmap = m_FrameList[i].first;
-            Size aTempSize( rBitmap.GetBitmap().GetSizePixel() );
+            Bitmap const & rBitmap = m_FrameList[i].first;
+            Size aTempSize( rBitmap.GetSizePixel() );
             aBmpSize.setWidth( std::max( aBmpSize.Width(), aTempSize.Width() ) );
             aBmpSize.setHeight( std::max( aBmpSize.Height(), aTempSize.Height() ) );
         }
@@ -745,7 +745,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(rAnimationFrame.maBitmapEx, aTime));
+                            ::std::make_pair(Bitmap(rAnimationFrame.maBitmapEx), aTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -763,11 +763,11 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
             for (const rtl::Reference<SdrObject>& pSnapShot : *pObjList)
             {
-                BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
+                Bitmap aBitmap(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmap());
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                         m_FrameList.begin() + nIndex,
-                        ::std::make_pair(aBitmapEx, m_xFormatter->GetTime()));
+                        ::std::make_pair(aBitmap, m_xFormatter->GetTime()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;
@@ -783,14 +783,14 @@ void AnimationWindow::AddObj (::sd::View& rView )
     // also one single animated object
     if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
     {
-        BitmapEx aBitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
+        Bitmap aBitmap(rView.GetAllMarkedGraphic().GetBitmap());
 
         ::tools::Time aTime( m_xFormatter->GetTime() );
 
         size_t nIndex = m_nCurrentFrame + 1;
         m_FrameList.insert(
                 m_FrameList.begin() + nIndex,
-                ::std::make_pair(aBitmapEx, aTime));
+                ::std::make_pair(aBitmap, aTime));
     }
 
     // one single object
@@ -812,11 +812,11 @@ void AnimationWindow::AddObj (::sd::View& rView )
             {
                 // Clone
                 SdrObject* pObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj());
-                BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pObject).GetBitmapEx());
+                Bitmap aBitmap(SdrExchangeView::GetObjGraphic(*pObject).GetBitmap());
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(
                     m_FrameList.begin() + nIndex,
-                    ::std::make_pair(aBitmapEx, m_xFormatter->GetTime()));
+                    ::std::make_pair(aBitmap, m_xFormatter->GetTime()));
 
                 // increment => next one inserted after this one
                 ++m_nCurrentFrame;
@@ -881,10 +881,10 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
     {
-        const BitmapEx& rBmpEx = m_FrameList[i].first;
-        const Graphic   aGraphic( rBmpEx );
+        const Bitmap&   rBmp = m_FrameList[i].first;
+        const Graphic   aGraphic( rBmp );
         Size            aTmpSizeLog;
-        const Size      aTmpSizePix( rBmpEx.GetSizePixel() );
+        const Size      aTmpSizePix( rBmp.GetSizePixel() );
 
         if ( aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
             aTmpSizeLog = pDefDev->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
@@ -912,10 +912,10 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             ::tools::Long  nTime = rTime.GetNanoSec();
             nTime += rTime.GetSec() * 100;
 
-            BitmapEx const & rBitmapEx = m_FrameList[i].first;
+            Bitmap const & rBitmap = m_FrameList[i].first;
 
             // calculate offset for the specified direction
-            const Size aBitmapSize( rBitmapEx.GetSizePixel() );
+            const Size aBitmapSize( rBitmap.GetSizePixel() );
 
             switch( eBA )
             {
@@ -968,7 +968,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             if( nPos != -1 && nPos != m_xLbLoopCount->get_count() - 1 ) // endless
                 nLoopCount = m_xLbLoopCount->get_active_text().toUInt32();
 
-            aAnimationFrame.maBitmapEx = rBitmapEx;
+            aAnimationFrame.maBitmapEx = rBitmap;
             aAnimationFrame.maPositionPixel = aPt;
             aAnimationFrame.maSizePixel = aBitmapSize;
             aAnimationFrame.mnWait = nTime;
