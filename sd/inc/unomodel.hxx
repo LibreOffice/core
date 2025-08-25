@@ -328,7 +328,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdDrawPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::container::XNameAccess, css::lang::XServiceInfo, css::lang::XComponent >
+class SAL_DLLPUBLIC_RTTI SdDrawPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::container::XNameAccess, css::lang::XServiceInfo, css::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
