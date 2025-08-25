@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,xmloff_text,\
 $(eval $(call gb_CppunitTest_add_exception_objects,xmloff_text, \
     xmloff/qa/unit/text \
     xmloff/qa/unit/text/txtprmap \
+    xmloff/qa/unit/text/txtparae \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,xmloff_text, \

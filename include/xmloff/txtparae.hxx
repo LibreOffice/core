@@ -195,7 +195,8 @@ public:
             const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
             bool& rbHasCharStyle,
             bool& rbHasAutoStyle,
-            const XMLPropertyState** pAddState = nullptr) const;
+            const XMLPropertyState** pAddState = nullptr,
+            const OUString* pParentName = nullptr) const;
 
     void exportTextRangeEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
@@ -400,7 +401,8 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        std::span<const XMLPropertyState> aAddStates = {} );
+        std::span<const XMLPropertyState> aAddStates = {},
+        bool bCheckParent = false );
 
     /// find style name for specified family and parent
     OUString Find(
