@@ -269,7 +269,7 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     rFilter.ImportGraphic( aGraphicResult, u"import", aStream );
 
-    BitmapEx aBitmap = aGraphicResult.GetBitmapEx();
+    Bitmap aBitmap = aGraphicResult.GetBitmap();
 
     SAL_INFO("vcl", "got bitmap of size " << aBitmap.GetSizePixel().Width() << "x" << aBitmap.GetSizePixel().Height());
     Size aFixedSize( aBitmap.GetSizePixel() );

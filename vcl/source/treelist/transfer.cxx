@@ -1598,7 +1598,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, Bitmap& rBm
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             Graphic aGraphic;
             if (rFilter.ImportGraphic(aGraphic, u"", *xStm) == ERRCODE_NONE)
-                rBmp = Bitmap(aGraphic.GetBitmapEx());
+                rBmp = aGraphic.GetBitmap();
         }
 
         if(rBmp.IsEmpty())
