@@ -816,7 +816,7 @@ sub get_rtflicensefilesource
 {
     my ($language, $includepatharrayref) = @_;
 
-    my $licensefilename = "EULA_en-US.rtf";
+    my $licensefilename = "license_" . $language . ".rtf";
 
     my $sourcefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $includepatharrayref, 1);
 
