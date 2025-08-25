@@ -46,7 +46,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     ScViewData& rViewData = GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     if ( rDoc.IsTabProtected(nTab) )
     {
         ErrorMessage(STR_PROTECTIONERR);

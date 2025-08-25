@@ -426,7 +426,7 @@ void ScAutoFmtPreview::Init()
 
 void ScAutoFmtPreview::DetectRTL(const ScViewData& rViewData)
 {
-    SCTAB nCurrentTab = rViewData.GetTabNo();
+    SCTAB nCurrentTab = rViewData.CurrentTabForData();
     ScDocument& rDoc = rViewData.GetDocument();
     mbRTL = rDoc.IsLayoutRTL(nCurrentTab);
     xBreakIter = rDoc.GetBreakIterator();

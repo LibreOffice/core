@@ -26,7 +26,7 @@
 ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
     meType( SC_SELECTTYPE_NONE )
 {
-    maCursor.SetTab( rViewData.GetTabNo() );
+    maCursor.SetTab( rViewData.CurrentTabForData() );
     ScSplitPos eWhich = rViewData.GetActivePart();
 
     if( rViewData.HasEditView( eWhich ) )

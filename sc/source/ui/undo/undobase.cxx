@@ -235,7 +235,7 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
     {
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
-        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
         if ( nTab < nStart || nTab > nEnd )                     // if not in range:
             pViewShell->SetTabNo( nStart );                     // at beginning of the range
     }
@@ -346,7 +346,7 @@ void ScBlockUndo::ShowBlock()
     ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
     pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                SC_FOLLOW_JUMP, false, false );
-    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
     ScRange aRange = aBlockRange;
     aRange.aStart.SetTab( nTab );
     aRange.aEnd.SetTab( nTab );
@@ -406,7 +406,7 @@ void ScMultiBlockUndo::ShowBlock()
     ShowTable(aRange);
     pViewShell->MoveCursorAbs(
         aRange.aStart.Col(), aRange.aStart.Row(), SC_FOLLOW_JUMP, false, false);
-    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
     aRange.aStart.SetTab(nTab);
     aRange.aEnd.SetTab(nTab);
     pViewShell->MarkRange(aRange, false);

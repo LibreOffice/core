@@ -43,7 +43,7 @@ bool ScTabViewShell::HasSelection( bool bText ) const
         // Content contained: Count2 >= 1
         ScDocument& rDoc = rData.GetDocument();
         ScMarkData& rMark = rData.GetMarkData();
-        ScAddress aCursor( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
+        ScAddress aCursor( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
         double fVal = 0.0;
         if ( rDoc.GetSelectionFunction( SUBTOTAL_FUNC_CNT2, aCursor, rMark, fVal ) )
             bHas = ( fVal > 0.5 );

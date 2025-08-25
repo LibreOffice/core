@@ -55,7 +55,7 @@ using namespace com::sun::star;
 
 static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSize )
 {
-    SdrPage* pPage = rData.GetScDrawView()->GetModel().GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
+    SdrPage* pPage = rData.GetScDrawView()->GetModel().GetPage( static_cast<sal_uInt16>(rData.CurrentTabForData()) );
     assert(pPage && "pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
@@ -89,7 +89,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         pRef->SetMapMode( MapMode(MapUnit::Map100thMM) );
     }
 
-    bool bNegativePage = GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() );
+    bool bNegativePage = GetViewData().GetDocument().IsNegativePage( GetViewData().CurrentTabForData() );
 
     SdrView* pDragEditView = nullptr;
     const ScDragData* pData = ScModule::get()->GetDragData();
@@ -135,7 +135,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         else
         {
             SdrModel& rDrawModel = pDragEditView->GetModel();
-            SCTAB nTab = GetViewData().GetTabNo();
+            SCTAB nTab = GetViewData().CurrentTabForData();
             SdrPage* pDestPage = rDrawModel.GetPage( static_cast< sal_uInt16 >( nTab ) );
             OSL_ENSURE(pDestPage,"who is this, Page?");
 
@@ -205,7 +205,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             nOptions |= SdrInsertFlags::DONTMARK;
 
         ::std::vector< OUString > aExcludedChartNames;
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         SdrPage* pPage = pScDrawView->GetModel().GetPage( static_cast< sal_uInt16 >( nTab ) );
         OSL_ENSURE( pPage, "Page?" );
         if ( pPage )
@@ -348,7 +348,7 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 
         // don't call AdjustInsertPos
         Point aInsPos = rPos;
-        if ( GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() ) )
+        if ( GetViewData().GetDocument().IsNegativePage( GetViewData().CurrentTabForData() ) )
             aInsPos.AdjustX( -(aSize.Width()) );
         tools::Rectangle aRect( aInsPos, aSize );
 
@@ -430,7 +430,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     Size aSize = pWin->LogicToLogic( rGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
-    if ( GetViewData().GetDocument().IsNegativePage( GetViewData().GetTabNo() ) )
+    if ( GetViewData().GetDocument().IsNegativePage( GetViewData().CurrentTabForData() ) )
         aPos.AdjustX( -(aSize.Width()) );
 
     GetViewData().GetViewShell()->SetDrawShell( true );

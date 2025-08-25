@@ -187,7 +187,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
     ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->CurrentTabForData();
     ScAddress aPos( nCol, nRow, nTab );
 
     std::unique_ptr<ScTokenArray> pScTokA(m_pRefComp->CompileString(rStr));
@@ -321,7 +321,7 @@ void ScFormulaReferenceHelper::Init()
     ScDocument& rDoc = pViewData->GetDocument();
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->CurrentTabForData();
     ScAddress aCursorPos( nCol, nRow, nTab );
 
     m_pRefComp.reset( new ScCompiler( rDoc, aCursorPos, rDoc.GetGrammar()) );

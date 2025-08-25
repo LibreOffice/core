@@ -365,7 +365,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     else
     {
         ScViewData& rViewData = GetViewData();
-        tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo()) ? -1 : 1;
+        tools::Long nLayoutSign = rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData()) ? -1 : 1;
         aInsertPos = rViewData.getLOKVisibleArea().Center();
         if (comphelper::LibreOfficeKit::isCompatFlagSet(
                 comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))

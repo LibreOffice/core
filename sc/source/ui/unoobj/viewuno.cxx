@@ -270,7 +270,7 @@ table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange()
         SCROW nVisY = rViewData.VisibleCellsY( eWhichV );
         if (!nVisX) nVisX = 1;  // there has to be something in the range
         if (!nVisY) nVisY = 1;
-        aAdr.Sheet       = rViewData.GetTabNo();
+        aAdr.Sheet       = rViewData.CurrentTabForData();
         aAdr.StartColumn = rViewData.GetPosX( eWhichH );
         aAdr.StartRow    = rViewData.GetPosY( eWhichV );
         aAdr.EndColumn   = aAdr.StartColumn + nVisX - 1;
@@ -397,7 +397,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
                                     SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
             ScAddress aCell(pViewShell->GetViewData().GetPosX(eWhichH),
                 pViewShell->GetViewData().GetPosY(eWhichV),
-                pViewShell->GetViewData().GetTabNo());
+                pViewShell->GetViewData().CurrentTabForData());
             tools::Rectangle aCellRect( rDoc.GetMMRect( aCell.Col(), aCell.Row(), aCell.Col(), aCell.Row(), aCell.Tab() ) );
             Size aVisSize( pWindow->PixelToLogic( pWindow->GetSizePixel(), pWindow->GetDrawMapMode( true ) ) );
             Point aVisPos( aCellRect.TopLeft() );
@@ -456,7 +456,7 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     mbLeftMousePressed(false)
 {
     if (pViewSh)
-        nPreviousTab = pViewSh->GetViewData().GetTabNo();
+        nPreviousTab = pViewSh->GetViewData().CurrentTabForData();
 }
 
 ScTabViewObj::~ScTabViewObj()
@@ -557,7 +557,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
         sheet::ActivationEvent aEvent;
         uno::Reference< sheet::XSpreadsheetView > xView(this);
         aEvent.Source.set(xView, uno::UNO_QUERY);
-        aEvent.ActiveSheet = new ScTableSheetObj(&rDocSh, rViewData.GetTabNo());
+        aEvent.ActiveSheet = new ScTableSheetObj(&rDocSh, rViewData.CurrentTabForData());
         // Listener's handler may remove it from the listeners list
         for (size_t i = aActivationListeners.size(); i > 0; --i)
         {
@@ -574,7 +574,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
 
     /*  Handle sheet events, but do not trigger event handlers, if the old
         active sheet gets re-activated after inserting/deleting/moving a sheet. */
-    SCTAB nNewTab = rViewData.GetTabNo();
+    SCTAB nNewTab = rViewData.CurrentTabForData();
     if ( !bSameTabButMoved && (nNewTab != nPreviousTab) )
     {
         lcl_CallActivate( rDocSh, nPreviousTab, ScSheetEventId::UNFOCUS );
@@ -736,7 +736,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 // multiselection
 
                 const ScRange & rFirst = rRanges[ 0 ];
-                if ( !lcl_TabInRanges( rViewData.GetTabNo(), rRanges ) )
+                if ( !lcl_TabInRanges( rViewData.CurrentTabForData(), rRanges ) )
                     pViewSh->SetTabNo( rFirst.aStart.Tab() );
                 pViewSh->DoneBlockMode();
                 pViewSh->InitOwnBlockMode( rFirst );    /* TODO: or even the overall range? */
@@ -1088,7 +1088,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTabViewObj::getActiveSheet()
     if (pViewSh)
     {
         ScViewData& rViewData = pViewSh->GetViewData();
-        SCTAB nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         return new ScTableSheetObj( &rViewData.GetDocShell(), nTab );
     }
     return nullptr;
@@ -1128,7 +1128,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
         SCROW nY;
         ScViewData& rData = GetViewShell()->GetViewData();
         ScSplitPos eSplitMode = rData.GetActivePart();
-        SCTAB nTab(rData.GetTabNo());
+        SCTAB nTab(rData.CurrentTabForData());
         rData.GetPosFromPixel( rPoint.X(), rPoint.Y(), eSplitMode, nX, nY);
 
         ScAddress aCellPos (nX, nY, nTab);
@@ -1174,7 +1174,7 @@ bool ScTabViewObj::IsMouseListening() const
     // also include sheet events, because MousePressed must be called for them
     ScViewData& rViewData = GetViewShell()->GetViewData();
     ScDocument& rDoc = rViewData.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     return
         rDoc.HasSheetEventScript( nTab, ScSheetEventId::RIGHTCLICK, true ) ||
         rDoc.HasSheetEventScript( nTab, ScSheetEventId::DOUBLECLICK, true ) ||
@@ -1227,7 +1227,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         ScViewData& rViewData = pViewSh->GetViewData();
         ScDocShell& rDocSh = rViewData.GetDocShell();
         ScDocument& rDoc = rDocSh.GetDocument();
-        SCTAB nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
         if (pEvents)
         {
@@ -1702,7 +1702,7 @@ void ScTabViewObj::SelectionChanged()
     ScViewData& rViewData = pViewSh->GetViewData();
     ScDocShell& rDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = rDocSh.GetDocument();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
     if (pEvents)
     {
@@ -2198,7 +2198,7 @@ uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
     if (pExtOpt && pExtOpt->IsChanged())
     {
         pViewSh->GetViewData().ReadExtOptions(*pExtOpt);        // Excel view settings
-        pViewSh->SetTabNo(pViewSh->GetViewData().GetTabNo(), true);
+        pViewSh->SetTabNo(pViewSh->GetViewData().CurrentTabForData(), true);
         pExtOpt->SetChanged(false);
     }
 

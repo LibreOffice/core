@@ -85,7 +85,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
         ScDocShell& rDocSh = GetViewData().GetDocShell();
         ScDocument& rDoc = rDocSh.GetDocument();
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         const bool bRecord (rDoc.IsUndoEnabled());
 
         const ScPatternAttr* pPattern = rDoc.GetPattern( nStartCol, nStartRow, nTab );
@@ -158,7 +158,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         HideAllCursors();
         ScDocShell& rDocSh = GetViewData().GetDocShell();
         ScImportExport aImpEx( rDocSh.GetDocument(),
-            ScAddress( nStartCol, nStartRow, GetViewData().GetTabNo() ) );
+            ScAddress( nStartCol, nStartRow, GetViewData().CurrentTabForData() ) );
 
         OUString aStr;
         std::unique_ptr<SvStream> xStream;
@@ -196,7 +196,7 @@ void ScViewFunc::DoRefConversion()
     else
     {
         aMarkRange = ScRange( GetViewData().GetCurX(),
-            GetViewData().GetCurY(), GetViewData().GetTabNo() );
+            GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     }
     ScEditableTester aTester( rDoc, aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(),rMark );
@@ -337,7 +337,7 @@ void ScViewFunc::DoThesaurus()
         nCol = GetViewData().GetCurX();
         nRow = GetViewData().GetCurY();
     }
-    nTab = GetViewData().GetTabNo();
+    nTab = GetViewData().CurrentTabForData();
 
     ScAddress aPos(nCol, nRow, nTab);
     ScEditableTester aTester( rDoc, nCol, nRow, nCol, nRow, rMark );
@@ -462,7 +462,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
 
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP);
     }
-    nTab = rViewData.GetTabNo();
+    nTab = rViewData.CurrentTabForData();
 
     rMark.MarkToMulti();
     bool bMarked = rMark.IsMultiMarked();
@@ -648,7 +648,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     {
         tools::Rectangle aRect( rPos, Size(0,0) );
         ScRange aRange = GetViewData().GetDocument().
-                            GetRange( GetViewData().GetTabNo(), aRect );
+                            GetRange( GetViewData().CurrentTabForData(), aRect );
         SCCOL nPosX = aRange.aStart.Col();
         SCROW nPosY = aRange.aStart.Row();
 
@@ -713,7 +713,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
     // insert into not edited cell
 
     ScDocument& rDoc = GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     ScAddress aCellPos( nPosX, nPosY, nTab );
     EditEngine aEngine( rDoc.GetEditEnginePool() );
 
@@ -748,7 +748,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
 
 bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
 {
-    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
     ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
 
     const EditTextObject* pData = rDoc.GetEditText(aPos);

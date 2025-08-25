@@ -1984,7 +1984,7 @@ SCTAB ScAccessibleDocument::getVisibleTable() const
 {
     SCTAB nVisibleTable(0);
     if (mpViewShell)
-        nVisibleTable = mpViewShell->GetViewData().GetTabNo();
+        nVisibleTable = mpViewShell->GetViewData().CurrentTabForData();
     return nVisibleTable;
 }
 

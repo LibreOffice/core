@@ -46,7 +46,7 @@ ScDrawView::ScDrawView(
     rViewData( rData ),
     pDev( pOut ),
     rDoc( rData.GetDocument() ),
-    nTab( rData.GetTabNo() ),
+    nTab( rData.CurrentTabForData() ),
     pDropMarkObj( nullptr ),
     bInConstruct( true )
 {

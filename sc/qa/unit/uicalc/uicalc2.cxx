@@ -274,11 +274,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
         lcl_AssertCurrentCursorPosition(*pDocSh, u"N5");
     }
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().CurrentTabForData());
 
     dispatchCommand(mxComponent, u".uno:JumpToNextTable"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getViewShell()->GetViewData().GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getViewShell()->GetViewData().CurrentTabForData());
     lcl_AssertCurrentCursorPosition(*pDocSh, u"A4");
 
     // Go to row 9
@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf131455)
 
     dispatchCommand(mxComponent, u".uno:JumpToPrevTable"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getViewShell()->GetViewData().CurrentTabForData());
     lcl_AssertCurrentCursorPosition(*pDocSh, u"N5");
 
     //Cursor can't move forward to the right
@@ -310,11 +310,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124818)
     createScDoc("tdf124818.xls");
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getViewShell()->GetViewData().GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), getViewShell()->GetViewData().CurrentTabForData());
 
     dispatchCommand(mxComponent, u".uno:JumpToPrevTable"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getViewShell()->GetViewData().GetTabNo());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getViewShell()->GetViewData().CurrentTabForData());
 
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     SdrPage* pPage = pDrawLayer->GetPage(1);

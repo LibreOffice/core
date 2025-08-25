@@ -667,7 +667,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
         {
             bAreaOk = ScRangeUtil::IsAbsArea( theAreaStr,
                                              *pDoc,
-                                             pViewData->GetTabNo(),
+                                             pViewData->CurrentTabForData(),
                                              &theAreaStr,
                                              &theStartPos,
                                              &theEndPos,
@@ -676,7 +676,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
             {
                 bAreaOk = ScRangeUtil::IsAbsPos(  theAreaStr,
                                                  *pDoc,
-                                                 pViewData->GetTabNo(),
+                                                 pViewData->CurrentTabForData(),
                                                  &theAreaStr,
                                                  &theStartPos,
                                                  pDoc->GetAddressConvention() );

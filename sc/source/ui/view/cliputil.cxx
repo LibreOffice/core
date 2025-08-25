@@ -52,7 +52,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
     ScDocument& rThisDoc = rViewData.GetDocument();
     SCCOL nThisCol = rViewData.GetCurX();
     SCROW nThisRow = rViewData.GetCurY();
-    SCTAB nThisTab = rViewData.GetTabNo();
+    SCTAB nThisTab = rViewData.CurrentTabForData();
     ScDPObject* pDPObj = rThisDoc.GetDPAtCursor( nThisCol, nThisRow, nThisTab );
 
     if ( pOwnClip && pDPObj )

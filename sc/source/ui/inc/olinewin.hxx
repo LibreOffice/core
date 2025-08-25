@@ -80,7 +80,7 @@ private:
     /** Returns the calc document. */
     ScDocument&          GetDoc() const { return mrViewData.GetDocument(); }
     /** Returns the current sheet index. */
-    SCTAB                GetTab() const { return mrViewData.GetTabNo(); }
+    SCTAB                GetTab() const { return mrViewData.CurrentTabForData(); }
     /** Returns the outline array of the corresponding document. */
     const ScOutlineArray*       GetOutlineArray() const;
     /** Returns the specified outline entry. */

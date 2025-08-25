@@ -698,7 +698,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
         case SID_INSERT_FIELD_SHEET:
         {
-            SvxTableField aField(rViewData.GetTabNo());
+            SvxTableField aField(rViewData.CurrentTabForData());
             SvxFieldItem aItem(aField, EE_FEATURE_FIELD);
             pTableView->InsertField(aItem);
         }
@@ -822,7 +822,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         ScDocument& rDoc = rViewData.GetDocument();
                         SCCOL nPosX = rViewData.GetCurX();
                         SCROW nPosY = rViewData.GetCurY();
-                        SCTAB nTab = rViewData.GetTabNo();
+                        SCTAB nTab = rViewData.CurrentTabForData();
                         aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
                     }
                     rSet.Put(aHLinkItem);

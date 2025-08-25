@@ -205,7 +205,7 @@ void ScTPValidationValue::RefInputDonePostHdl()
 
         pOldParent->hide();
         ScViewData& rViewData = pValidationDlg->GetTabViewShell()->GetViewData();
-        SCTAB nCurTab = rViewData.GetTabNo();
+        SCTAB nCurTab = rViewData.CurrentTabForData();
         SCTAB nRefTab = rViewData.GetRefTabNo();
         // If RefInput switched to a different sheet from the data sheet,
         // switch back: fdo#53920

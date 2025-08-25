@@ -171,7 +171,7 @@ void ScExtraEditViewManager::Modifier<ScExtraEditViewManager::Remover>(ScGridWin
 void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     rDoc.SkipOverlapped(nPosX, nPosY, nTab);
 
     ScModule* mod = ScModule::get();
@@ -819,7 +819,7 @@ void ScTabView::TestHintWindow()
     ScDocument& rDoc = aViewData.GetDocument();
     const SfxUInt32Item* pItem = rDoc.GetAttr( aViewData.GetCurX(),
                                                aViewData.GetCurY(),
-                                               aViewData.GetTabNo(),
+                                               aViewData.CurrentTabForData(),
                                                ATTR_VALIDDATA );
     if ( pItem->GetValue() )
     {
@@ -898,7 +898,7 @@ void ScTabView::TestHintWindow()
         // list drop-down button
         if ( pData && pData->HasSelectionList() )
         {
-            aListValPos.Set( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
+            aListValPos.Set( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.CurrentTabForData() );
             bListValButton = true;
         }
     }
@@ -1159,7 +1159,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             while ( nCurX >= nNewDeltaX+nSizeX )
             {
                 nNewDeltaX = nCurX-nSizeX+1;
-                SCTAB nTab = aViewData.GetTabNo();
+                SCTAB nTab = aViewData.CurrentTabForData();
                 while ( nNewDeltaX < rDoc.MaxCol() && !rDoc.GetColWidth( nNewDeltaX, nTab ) )
                     ++nNewDeltaX;
                 nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
@@ -1167,7 +1167,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             while ( nCurY >= nNewDeltaY+nSizeY )
             {
                 nNewDeltaY = nCurY-nSizeY+1;
-                SCTAB nTab = aViewData.GetTabNo();
+                SCTAB nTab = aViewData.CurrentTabForData();
                 while ( nNewDeltaY < rDoc.MaxRow() && !rDoc.GetRowHeight( nNewDeltaY, nTab ) )
                     ++nNewDeltaY;
                 nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
@@ -1274,7 +1274,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         const ScMarkData& rMark = aViewData.GetMarkData();
         ScRangeList aSelList;
         rMark.FillRangeListWithMarks(&aSelList, false);
-        if (!aSelList.Contains(ScRange(nCurX, nCurY, aViewData.GetTabNo())))
+        if (!aSelList.Contains(ScRange(nCurX, nCurY, aViewData.CurrentTabForData())))
             // Cursor not in existing selection.  Start a new selection.
             DoneBlockMode(true);
     }
@@ -1291,7 +1291,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             {
                 rMark.ResetMark();
                 DoneBlockMode();
-                InitOwnBlockMode( ScRange( nCurX, nCurY, aViewData.GetTabNo()));
+                InitOwnBlockMode( ScRange( nCurX, nCurY, aViewData.CurrentTabForData()));
                 MarkDataChanged();
             }
         }
@@ -1316,7 +1316,7 @@ void ScTabView::MoveCursorRel( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                bool bShift, bool bKeepSel )
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
     const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
@@ -1389,7 +1389,7 @@ void ScTabView::MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bo
 void ScTabView::MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     SCCOL nCurX;
     SCROW nCurY;
@@ -1419,7 +1419,7 @@ void ScTabView::MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, boo
 void ScTabView::MoveCursorScreen( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift )
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     SCCOL nCurX;
     SCROW nCurY;
@@ -1485,7 +1485,7 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
     aViewData.GetMoveCursor( nCurX,nCurY );
     SCCOL nNewX = nCurX;
     SCROW nNewY = nCurY;
-    SCTAB nTab  = aViewData.GetTabNo();
+    SCTAB nTab  = aViewData.CurrentTabForData();
 
     ScMarkData& rMark = aViewData.GetMarkData();
     ScDocument& rDoc  = aViewData.GetDocument();
@@ -1597,7 +1597,7 @@ void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
     aViewData.GetMoveCursor( nCurX,nCurY );
     SCCOL nNewX = nCurX;
     SCROW nNewY = nCurY;
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     ScDocument& rDoc = aViewData.GetDocument();
     rDoc.GetNextPos( nNewX,nNewY, nTab, nMove,0, bMarked, true, rMark );
@@ -1631,7 +1631,7 @@ void ScTabView::MarkColumns()
         nEndCol=nStartCol;
     }
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     ScDocument& rDoc = aViewData.GetDocument();
     DoneBlockMode();
     InitBlockMode( nStartCol,0, nTab );
@@ -1658,7 +1658,7 @@ void ScTabView::MarkRows()
         nEndRow=nStartRow;
     }
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     ScDocument& rDoc = aViewData.GetDocument();
     DoneBlockMode();
     InitBlockMode( 0,nStartRow, nTab );
@@ -1671,7 +1671,7 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
 {
     ScDocument& rDoc = aViewData.GetDocument();
     SCCOL nStartCol = nCol;
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
@@ -1698,7 +1698,7 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
 {
     ScDocument& rDoc = aViewData.GetDocument();
     SCROW nStartRow = nRow;
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
@@ -1745,7 +1745,7 @@ void ScTabView::HighlightOverlay()
 void ScTabView::MarkDataArea( bool bIncludeCursor )
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     SCCOL nStartCol = aViewData.GetCurX();
     SCROW nStartRow = aViewData.GetCurY();
     SCCOL nEndCol = nStartCol;
@@ -1765,7 +1765,7 @@ void ScTabView::MarkDataArea( bool bIncludeCursor )
 void ScTabView::MarkMatrixFormula()
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    ScAddress aCursor( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
+    ScAddress aCursor( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.CurrentTabForData() );
     ScRange aMatrix;
     if ( rDoc.GetMatrixFormulaRange( aCursor, aMatrix ) )
     {
@@ -1846,7 +1846,7 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
     OSL_ENSURE( nDir==-1 || nDir==1, "SelectNextTab: invalid value");
 
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     SCTAB nNextTab = nTab;
     SCTAB nCount = rDoc.GetTableCount();
     if (nDir < 0)
@@ -1906,7 +1906,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         return;
     }
 
-    if (!bNew && nTab == aViewData.GetTabNo())
+    if (!bNew && nTab == aViewData.CurrentTabForData())
         return;
 
     // FormShell would like to be informed before the switch
@@ -2162,11 +2162,11 @@ void ScTabView::OnLibreOfficeKitTabChanged()
         return;
 
     ScTabViewShell* pThisViewShell = aViewData.GetViewShell();
-    SCTAB nThisTabNo = pThisViewShell->GetViewData().GetTabNo();
+    SCTAB nThisTabNo = pThisViewShell->GetViewData().CurrentTabForData();
     auto lTabSwitch = [pThisViewShell, nThisTabNo] (ScTabViewShell* pOtherViewShell)
     {
         ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
-        SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
+        SCTAB nOtherTabNo = rOtherViewData.CurrentTabForData();
         if (nThisTabNo == nOtherTabNo)
         {
             for (int i = 0; i < 4; ++i)
@@ -2607,7 +2607,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter& rEngine, SCCOL nCol, SCROW 
 
 void ScTabView::UpdateEditView()
 {
-    if (aViewData.GetTabNo() != aViewData.GetRefTabNo() && ScModule::get()->IsFormulaMode())
+    if (aViewData.CurrentTabForData() != aViewData.GetRefTabNo() && ScModule::get()->IsFormulaMode())
         return;
 
     ScSplitPos eActive = aViewData.GetActivePart();
@@ -2639,7 +2639,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     SCROW nRow1 = aViewData.GetEditStartRow();
     SCCOL nCol2 = aViewData.GetEditEndCol();
     SCROW nRow2 = aViewData.GetEditEndRow();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     bool bPaint[4];
     bool bNotifyAcc = false;
     tools::Rectangle aRectangle[4];
@@ -2743,7 +2743,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     if (bGrabFocus)
     {
 //      should be done like this, so that Sfx notice it, but it does not work:
-//!     aViewData.GetViewShell()->GetViewFrame().GetWindow().GrabFocus();
+//!     aViewData.CurrentTabForData()->GetViewFrame().GetWindow().GrabFocus();
 //      therefore first like this:
         GetActiveWin()->GrabFocus();
     }
@@ -2866,7 +2866,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         if (bOut)
             continue;
 
-        bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
+        bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.CurrentTabForData() );
         tools::Long nLayoutSign = (!bIsTiledRendering && bLayoutRTL) ? -1 : 1;
 
         Point aStart = aViewData.GetScrPos( nCol1, nRow1, static_cast<ScSplitPos>(i) );
@@ -2921,7 +2921,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             //  (switch to Search() )
             //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
             //!                     0, nRow1, nCol1-1, nRow2.
-            //!                     aViewData.GetTabNo() ) )
+            //!                     aViewData.CurrentTabForData() ) )
             tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
             aStart.AdjustX( -(nMarkPixel * nLayoutSign) );
         }
@@ -3009,7 +3009,7 @@ void ScTabView::PaintRangeFinder( tools::Long nNumber )
     if ( !(pRangeFinder && pRangeFinder->GetDocName() == aViewData.GetDocShell().GetTitle()) )
         return;
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     sal_uInt16 nCount = static_cast<sal_uInt16>(pRangeFinder->Count());
 
     if (nNumber < 0)
@@ -3031,7 +3031,7 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 {
     maHighlightRanges.emplace_back( rRange, rColor );
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     if ( nTab >= rRange.aStart.Tab() && nTab <= rRange.aEnd.Tab() )
         PaintArea( rRange.aStart.Col(), rRange.aStart.Row(),
                     rRange.aEnd.Col(), rRange.aEnd.Row(), ScUpdateMode::Marks );
@@ -3039,7 +3039,7 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 
 void ScTabView::ClearHighlightRanges()
 {
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     for (ScHighlightEntry const & rEntry : maHighlightRanges)
     {
         ScRange aRange = rEntry.aRef;
@@ -3185,7 +3185,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
         --nStartCol;                //! general ?
 
     ScDocument& rDoc = aViewData.GetDocument();
-    bool bLayoutRTL = rDoc.IsLayoutRTL( aViewData.GetTabNo() );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( aViewData.CurrentTabForData() );
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (sal_uInt16 i = 0; i < 2; i++)
@@ -3269,7 +3269,7 @@ bool ScTabView::PaintExtras()
 {
     bool bRet = false;
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     if (!rDoc.HasTable(nTab))                  // sheet is deleted?
     {
         SCTAB nCount = rDoc.GetTableCount();

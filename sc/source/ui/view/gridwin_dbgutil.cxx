@@ -42,7 +42,7 @@ void dumpScDrawObjData(const ScGridWindow& rWindow, const ScDrawObjData& rData, 
 void ScGridWindow::dumpColumnInformationPixel()
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
@@ -54,7 +54,7 @@ void ScGridWindow::dumpColumnInformationPixel()
 void ScGridWindow::dumpColumnInformationHmm()
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
@@ -67,7 +67,7 @@ void ScGridWindow::dumpCellProperties()
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     const ScMarkData& rMark = mrViewData.GetMarkData();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
 
     ScRangeList aList;
     if (rMark.IsMultiMarked())

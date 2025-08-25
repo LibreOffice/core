@@ -370,7 +370,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         if (
                             aCursorPos.Col() == GetViewData().GetCurX() &&
                             aCursorPos.Row() == GetViewData().GetCurY() &&
-                            aCursorPos.Tab() == GetViewData().GetTabNo()
+                            aCursorPos.Tab() == GetViewData().CurrentTabForData()
                             )
                         {
                             SfxStringItem   aItem( SID_ENTER_STRING, aString );
@@ -543,7 +543,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 ScDocument& rDoc = GetViewData().GetDocument();
                 ScMarkData& rMark = GetViewData().GetMarkData();
-                SCTAB nTab = GetViewData().GetTabNo();
+                SCTAB nTab = GetViewData().CurrentTabForData();
 
                 if ( rDoc.IsScenario(nTab) )
                 {
@@ -655,7 +655,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_SELECTALL:
             {
-                SCTAB nTab = GetViewData().GetTabNo();
+                SCTAB nTab = GetViewData().CurrentTabForData();
                 SCCOL nStartCol = GetViewData().GetCurX();
                 SCROW nStartRow = GetViewData().GetCurY();
                 SCCOL nEndCol = nStartCol;
@@ -725,11 +725,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = pScMod->GetMetric();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetRowHeight( rData.GetCurY(),
-                                                              rData.GetTabNo() );
+                                                              rData.CurrentTabForData() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), u"RowHeightDialog"_ustr, nCurHeight,
-                        rData.GetDocument().GetSheetOptimalMinRowHeight(rData.GetTabNo()),
+                        rData.GetDocument().GetSheetOptimalMinRowHeight(rData.CurrentTabForData()),
                         eMetric, 2, MAX_ROW_HEIGHT));
 
                     pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
@@ -831,7 +831,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScViewData& rData      = GetViewData();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetColWidth( rData.GetCurX(),
-                                                             rData.GetTabNo() );
+                                                             rData.CurrentTabForData() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), u"ColWidthDialog"_ustr, nCurHeight,

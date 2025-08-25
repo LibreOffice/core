@@ -122,8 +122,8 @@ void ScTabView::StopRefMode()
         HideTip();
         UpdateShrinkOverlay();
 
-        if ( aViewData.GetTabNo() >= aViewData.GetRefStartZ() &&
-                aViewData.GetTabNo() <= aViewData.GetRefEndZ() )
+        if ( aViewData.CurrentTabForData() >= aViewData.GetRefStartZ() &&
+                aViewData.CurrentTabForData() <= aViewData.GetRefEndZ() )
         {
             ScDocument& rDoc = aViewData.GetDocument();
             SCCOL nStartX = aViewData.GetRefStartX();
@@ -131,7 +131,7 @@ void ScTabView::StopRefMode()
             SCCOL nEndX = aViewData.GetRefEndX();
             SCROW nEndY = aViewData.GetRefEndY();
             if ( nStartX == nEndX && nStartY == nEndY )
-                rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
+                rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.CurrentTabForData() );
 
             PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
         }
@@ -172,15 +172,15 @@ void ScTabView::DoneRefMode( bool bContinue )
     UpdateShrinkOverlay();
 
     //  Paint:
-    if ( bWasRef && aViewData.GetTabNo() >= aViewData.GetRefStartZ() &&
-                    aViewData.GetTabNo() <= aViewData.GetRefEndZ() )
+    if ( bWasRef && aViewData.CurrentTabForData() >= aViewData.GetRefStartZ() &&
+                    aViewData.CurrentTabForData() <= aViewData.GetRefEndZ() )
     {
         SCCOL nStartX = aViewData.GetRefStartX();
         SCROW nStartY = aViewData.GetRefStartY();
         SCCOL nEndX = aViewData.GetRefEndX();
         SCROW nEndY = aViewData.GetRefEndY();
         if ( nStartX == nEndX && nStartY == nEndY )
-            rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
+            rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.CurrentTabForData() );
 
         PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
     }
@@ -206,7 +206,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
          nCurZ != aViewData.GetRefEndZ() )
     {
         ScMarkData& rMark = aViewData.GetMarkData();
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
 
         SCCOL nStartX = aViewData.GetRefStartX();
         SCROW nStartY = aViewData.GetRefStartY();
@@ -369,13 +369,13 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 
     ScModule* mod = ScModule::get();
-    if (nCurZ == aViewData.GetTabNo())
+    if (nCurZ == aViewData.CurrentTabForData())
     {
         SCCOL nStartX = nCurX;
         SCROW nStartY = nCurY;
         SCCOL nEndX = nCurX;
         SCROW nEndY = nCurY;
-        rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
+        rDoc.ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.CurrentTabForData() );
 
         //! draw only markings over content!
         PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
@@ -469,13 +469,13 @@ static tools::Long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW
 
 void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 {
-    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().GetTabNo());
+    ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().CurrentTabForData());
 
     tools::Long        nDiff;
     bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
     bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB       nTab = aViewData.GetTabNo();
+    SCTAB       nTab = aViewData.CurrentTabForData();
     bool        bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     SCCOL       nUsedX;
     SCROW       nUsedY;
@@ -585,7 +585,7 @@ void ScTabView::InterpretVisible()
     if ( !rDoc.GetAutoCalc() )
         return;
 
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     for (sal_uInt16 i=0; i<4; i++)
     {
         //  rely on gridwin pointers to find used panes

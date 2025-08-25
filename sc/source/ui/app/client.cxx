@@ -93,7 +93,7 @@ void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
             aLogicRect.SetPos( aOldRect.TopLeft() );
     }
 
-    sal_uInt16 nTab = pViewSh->GetViewData().GetTabNo();
+    sal_uInt16 nTab = pViewSh->GetViewData().CurrentTabForData();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( !(pPage && aLogicRect != aOldRect) )
         return;

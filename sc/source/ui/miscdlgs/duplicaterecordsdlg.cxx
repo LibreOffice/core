@@ -88,7 +88,7 @@ void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
         {
             for (int i = mrRange.aStart.Col(); i <= mrRange.aEnd.Col(); ++i)
             {
-                OUString aStr(ScAddress(i, 0, mrViewData.GetTabNo())
+                OUString aStr(ScAddress(i, 0, mrViewData.CurrentTabForData())
                                   .Format(ScRefFlags::COL_VALID, &mrViewData.GetDocument()));
                 InsertEntry(aStr, bToggle);
             }
@@ -148,7 +148,7 @@ void ScDuplicateRecordsDlg::Init()
         = officecfg::Office::Calc::Misc::HandleDuplicateRecords::DataIncludesHeaders::get();
 
     ScDBCollection* pDBColl = rDoc.GetDBCollection();
-    const SCTAB nCurTab = mrViewData.GetTabNo();
+    const SCTAB nCurTab = mrViewData.CurrentTabForData();
     if (pDBColl)
     {
         ScDBData* pDBData

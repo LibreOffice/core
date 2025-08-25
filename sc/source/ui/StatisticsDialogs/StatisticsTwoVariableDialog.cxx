@@ -43,7 +43,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button(u"groupedby-columns-radio"_ustr))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button(u"groupedby-rows-radio"_ustr))
     , mpActiveEdit(nullptr)
-    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() )
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() )
     , mDialogLostFocus(false)
 {
     mxVariable1RangeEdit->SetReferences(this, mxVariable1RangeLabel.get());

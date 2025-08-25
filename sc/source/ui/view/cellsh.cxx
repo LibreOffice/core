@@ -114,7 +114,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     nRow1 = aMarkRange.aStart.Row();
     nCol2 = aMarkRange.aEnd.Col();
     nRow2 = aMarkRange.aEnd.Row();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -362,7 +362,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     ScDocShell& rDocShell = GetViewData().GetDocShell();
     ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
     ScAddress aCursor( GetViewData().GetCurX(), GetViewData().GetCurY(),
-                        GetViewData().GetTabNo() );
+                        GetViewData().CurrentTabForData() );
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
@@ -402,7 +402,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 break;
             case SID_INSERT_POSTIT:
                 {
-                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                     if( rDoc.GetNote(aPos) )
                     {
                         bDisable = true;
@@ -419,7 +419,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 break;
             case SID_EDIT_POSTIT:
                 {
-                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                     bDisable = rDoc.GetNote(aPos) == nullptr;
                 }
                 break;
@@ -635,7 +635,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     {
         SCCOL nCol = GetViewData().GetCurX();
         SCROW nRow = GetViewData().GetCurY();
-        SCTAB nTab = GetViewData().GetTabNo();
+        SCTAB nTab = GetViewData().CurrentTabForData();
         ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
         if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = true;
@@ -686,7 +686,7 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
         ScDocument& rDoc        = rData.GetDocument();
         SCCOL       nPosX       = rData.GetCurX();
         SCROW       nPosY       = rData.GetCurY();
-        SCTAB       nTab        = rData.GetTabNo();
+        SCTAB       nTab        = rData.CurrentTabForData();
         aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
     }
 
@@ -702,7 +702,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     ScMarkData& rMark       = rData.GetMarkData();
     SCCOL       nPosX       = rData.GetCurX();
     SCROW       nPosY       = rData.GetCurY();
-    SCTAB       nTab        = rData.GetTabNo();
+    SCTAB       nTab        = rData.CurrentTabForData();
 
     SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -1037,7 +1037,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OUTLINE_MAKE:
                 {
                     if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                            GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                            GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                     {
                         //! test for data pilot operation
                     }
@@ -1049,7 +1049,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
             case SID_OUTLINE_SHOW:
                 if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                 {
                     //! test for data pilot operation
                 }
@@ -1059,7 +1059,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_OUTLINE_HIDE:
                 if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                 {
                     //! test for data pilot operation
                 }
@@ -1070,7 +1070,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_OUTLINE_REMOVE:
                 {
                     if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                            GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                            GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                     {
                         //! test for data pilot operation
                     }
@@ -1288,7 +1288,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SPELL_DIALOG:
                 {
-                    if (rDoc.IsTabProtected(rData.GetTabNo()))
+                    if (rDoc.IsTabProtected(rData.CurrentTabForData()))
                     {
                         bool bVisible = false;
                         SfxViewFrame* pViewFrame = ( pTabViewShell ? &pTabViewShell->GetViewFrame() : nullptr );

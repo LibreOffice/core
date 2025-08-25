@@ -120,7 +120,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
     {
         const ScViewData& rViewData = rViewShell.GetViewData();
         ScDocument& rDoc = rViewData.GetDocument();
-        SCTAB nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         ScDocShell& rDocSh = rViewData.GetDocShell();
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || rDocSh.IsReadOnly();
 

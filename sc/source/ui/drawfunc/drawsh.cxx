@@ -187,7 +187,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
                 const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
 
-                bool bNegateX = comphelper::LibreOfficeKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo());
+                bool bNegateX = comphelper::LibreOfficeKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData());
                 pView->MoveShapeHandle(handleNum, Point(bNegateX ? -static_cast<tools::Long>(newPosX) : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
             }
         }

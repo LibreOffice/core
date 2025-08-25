@@ -209,7 +209,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
     if ( pViewShell && aURL.Complete == cURLInsertColumns )
     {
         ScViewData& rViewData = pViewShell->GetViewData();
-        ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+        ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
 
         ScDBDocFunc aFunc( rViewData.GetDocShell() );
         aFunc.DoImportUno( aPos, aArgs );

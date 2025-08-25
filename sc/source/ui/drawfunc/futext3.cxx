@@ -55,7 +55,7 @@ void FuText::StopEditMode()
 
     ScAddress aNotePos;
     ScPostIt* pNote = nullptr;
-    if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
+    if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.CurrentTabForData() ) )
     {
         aNotePos = pCaptData->maStart;
         pNote = rDoc.GetNote( aNotePos );

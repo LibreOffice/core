@@ -482,7 +482,7 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         PaintTopArea( nStartCol, nEndCol );
 
     aViewData.GetDocument().ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow,
-                                            aViewData.GetTabNo() );
+                                            aViewData.CurrentTabForData() );
     PaintArea( nStartCol, nStartRow, nEndCol, nEndRow, ScUpdateMode::Marks );
 }
 
@@ -560,7 +560,7 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     if (!rDoc.ValidRow(nCurY)) nCurY = rDoc.MaxRow();
 
     ScMarkData& rMark = aViewData.GetMarkData();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     //  unmark part?
     if (bForceNeg)
@@ -618,7 +618,7 @@ void ScTabView::DoneBlockModeHighlight( bool bContinue )
         rMark.MarkToMulti();
     else
     {
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         ScDocument& rDoc = aViewData.GetDocument();
         if ( rDoc.HasTable(nTab) )
             rMark.ResetMark();
@@ -652,7 +652,7 @@ void ScTabView::DoneBlockMode( bool bContinue )
     {
         // the sheet may be invalid at this point because DoneBlockMode from SetTabNo is
         // called (for example, when the current sheet is closed from another View)
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         ScDocument& rDoc = aViewData.GetDocument();
         if ( rDoc.HasTable(nTab) )
             PaintBlock( true );                             // true -> delete block
@@ -861,7 +861,7 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     }
 
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     // FindAreaPos knows only -1 or 1 as direction
     SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
@@ -942,7 +942,7 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
 void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCCOL nMovX)
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
     const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
@@ -1011,7 +1011,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY)
 {
     ScDocument& rDoc = aViewData.GetDocument();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     bool bSkipProtected = false, bSkipUnprotected = false;
     const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
@@ -1105,7 +1105,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
     bool bRefInputMode = pViewShell && pViewShell->IsRefInputMode();
     if (bRefInputMode && !aViewData.IsRefMode())
         // initialize formula reference mode if it hasn't already.
-        InitRefMode(aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), SC_REFTYPE_REF);
+        InitRefMode(aViewData.GetCurX(), aViewData.GetCurY(), aViewData.CurrentTabForData(), SC_REFTYPE_REF);
 
     ScDocument& rDoc = aViewData.GetDocument();
 
@@ -1138,7 +1138,7 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
     {
         // normal selection mode
 
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
         SCCOL nOrigX = aViewData.GetCurX();
         SCROW nOrigY = aViewData.GetCurY();
 
@@ -1236,7 +1236,7 @@ void ScTabView::UpdateAllOverlays()
 void ScTabView::PaintBlock( bool bReset )
 {
     ScMarkData& rMark = aViewData.GetMarkData();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     bool bMulti = rMark.IsMultiMarked();
     if (!(rMark.IsMarked() || bMulti))
         return;
@@ -1290,7 +1290,7 @@ void ScTabView::SelectAll( bool bContinue )
 {
     ScDocument& rDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
 
     if (rMark.IsMarked())
     {
@@ -1327,7 +1327,7 @@ void ScTabView::DeselectAllTables()
 {
     ScDocument& rDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.CurrentTabForData();
     SCTAB nCount = rDoc.GetTableCount();
 
     for (SCTAB i=0; i<nCount; i++)
@@ -1420,7 +1420,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     nZoom = 100;                // nothing selected
                 else
                 {
-                    SCTAB   nTab = aViewData.GetTabNo();
+                    SCTAB   nTab = aViewData.CurrentTabForData();
                     ScRange aMarkRange;
                     if ( aViewData.GetSimpleArea( aMarkRange ) != SC_MARK_SIMPLE )
                         aMarkRange = rMark.GetMultiMarkArea();
@@ -1508,7 +1508,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
             case SvxZoomType::WHOLEPAGE:    // nZoom corresponds to the whole page or
             case SvxZoomType::PAGEWIDTH:    // nZoom corresponds to the page width
                 {
-                    SCTAB               nCurTab     = aViewData.GetTabNo();
+                    SCTAB               nCurTab     = aViewData.CurrentTabForData();
                     ScDocument&         rDoc        = aViewData.GetDocument();
                     ScStyleSheetPool*   pStylePool  = rDoc.GetStyleSheetPool();
                     SfxStyleSheetBase*  pStyleSheet =
@@ -1683,7 +1683,7 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
     {
         ScDocShell& rDocSh = aViewData.GetDocShell();
         ScDocument& rDoc = rDocSh.GetDocument();
-        SCTAB nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.CurrentTabForData();
 
         sal_uInt16 nCount = rDoc.GetPrintRangeCount(nTab);
         if (!nCount)

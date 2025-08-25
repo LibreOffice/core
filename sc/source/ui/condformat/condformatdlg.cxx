@@ -455,7 +455,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     else if (!mpDlgData->IsManaged())
     {
         ScDocument& rDoc = mrViewData.GetDocument();
-        pFormat = rDoc.GetCondFormList(mrViewData.GetTabNo())->GetFormat ( mnKey );
+        pFormat = rDoc.GetCondFormList(mrViewData.CurrentTabForData())->GetFormat ( mnKey );
     }
 
     ScRangeList aRange;
@@ -469,7 +469,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
         mrViewData.GetMarkData().FillRangeListWithMarks(&aRange, false);
         if(aRange.empty())
         {
-            ScAddress aPos(mrViewData.GetCurX(), mrViewData.GetCurY(), mrViewData.GetTabNo());
+            ScAddress aPos(mrViewData.GetCurX(), mrViewData.GetCurY(), mrViewData.CurrentTabForData());
             aRange.push_back(ScRange(aPos));
         }
         mnKey = 0;

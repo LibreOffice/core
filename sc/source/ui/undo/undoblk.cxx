@@ -273,7 +273,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
     bool bColsAffected = (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT);
     bool bRowsAffected = (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN);
 
@@ -544,7 +544,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
-    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+    SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
     bool bColsAffected = (eCmd == DelCellCmd::Cols || eCmd == DelCellCmd::CellsLeft);
     bool bRowsAffected = (eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::CellsUp);
 
@@ -1866,7 +1866,7 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
         ScViewData& rViewData = pViewTarget->GetViewShell().GetViewData();
-        return !rViewData.GetDocument().IsScenario( rViewData.GetTabNo() );
+        return !rViewData.GetDocument().IsScenario( rViewData.CurrentTabForData() );
     }
     return false;
 }

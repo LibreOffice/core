@@ -306,7 +306,7 @@ void ScUndoFillTable::DoChange( const bool bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
         if ( !aMarkData.GetTableSelect(nTab) )
             pViewShell->SetTabNo( nSrcTab );
 

@@ -504,7 +504,7 @@ void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
         ScTabViewShell& rViewShell = pViewTarget->GetViewShell();
-        rViewShell.DeleteTable( rViewShell.GetViewData().GetTabNo() );
+        rViewShell.DeleteTable( rViewShell.GetViewData().CurrentTabForData() );
     }
 }
 

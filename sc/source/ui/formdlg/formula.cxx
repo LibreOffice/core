@@ -116,7 +116,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     m_pDoc = &rViewData.GetDocument();
     SCCOL nCol = rViewData.GetCurX();
     SCROW nRow = rViewData.GetCurY();
-    SCTAB nTab = rViewData.GetTabNo();
+    SCTAB nTab = rViewData.CurrentTabForData();
     m_CursorPos = ScAddress( nCol, nRow, nTab );
 
     m_pViewShell->InitFormEditData(rViewData.GetDocShell()); // create new
@@ -619,7 +619,7 @@ void ScFormulaDlg::switchBack()
 
     ScViewData& rVD=pScViewShell->GetViewData();
     SCTAB nExecTab = m_CursorPos.Tab();
-    if ( nExecTab != rVD.GetTabNo() )
+    if ( nExecTab != rVD.CurrentTabForData() )
         pScViewShell->SetTabNo( nExecTab );
 
     SCROW nRow = m_CursorPos.Row();

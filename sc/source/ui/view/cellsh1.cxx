@@ -492,7 +492,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                         ScopedVclPtr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetFrameWeld()));
                         ScDocument& rDoc = GetViewData().GetDocument();
-                        SCTAB nTab = GetViewData().GetTabNo();
+                        SCTAB nTab = GetViewData().CurrentTabForData();
                         if ( rDoc.IsTabProtected(nTab) )
                             pDlg->DisableObjects();
                         if (pDlg->Execute() == RET_OK)
@@ -933,7 +933,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         SCROW nMergeRow = nStartRow;
                         if ( GetViewData().GetDocument().ExtendMerge(
                                 nStartCol, nStartRow, nMergeCol, nMergeRow,
-                                GetViewData().GetTabNo() ) )
+                                GetViewData().CurrentTabForData() ) )
                         {
                             if ( nFillCol >= nStartCol && nFillCol <= nMergeCol && nFillRow == nStartRow )
                                 nFillCol = nStartCol;
@@ -1191,7 +1191,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 std::shared_ptr<sc::SparklineGroup> pSparklineGroup;
                 if (GetViewData().GetDocument().GetSparklineGroupInRange(aMarkRange, pSparklineGroup) && pSparklineGroup)
                 {
-                    GetViewData().GetDocShell().GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().GetTabNo());
+                    GetViewData().GetDocShell().GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().CurrentTabForData());
                 }
             }
             rReq.Done();
@@ -1203,7 +1203,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             ScRange aRange;
             if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
             {
-                ScAddress aCursorAddress(GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo());
+                ScAddress aCursorAddress(GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData());
                 auto pSparkline = GetViewData().GetDocument().GetSparkline(aCursorAddress);
                 if (pSparkline)
                 {
@@ -1231,7 +1231,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_HIDE:
             if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                    GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                    GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                 pTabViewShell->SetDataPilotDetails( false );
             else
                 pTabViewShell->HideMarkedOutlines();
@@ -1241,7 +1241,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OUTLINE_SHOW:
             {
                 ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                    GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                                    GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                 if ( pDPObj )
                 {
                     Sequence<sheet::DataPilotFieldFilter> aFilters;
@@ -1259,7 +1259,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else if ( !pDPObj->IsServiceData() &&
                                pDPObj->GetDataFieldPositionData(
-                                   ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() ),
+                                   ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() ),
                                    aFilters ) )
                         pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
@@ -1277,7 +1277,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bOk = true;
 
                 if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                 {
                     ScDPNumGroupInfo aNumInfo;
                     aNumInfo.mbEnable    = true;
@@ -1373,7 +1373,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bOk = true;
 
                 if ( GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
-                                        GetViewData().GetCurY(), GetViewData().GetTabNo() ) )
+                                        GetViewData().GetCurY(), GetViewData().CurrentTabForData() ) )
                 {
                     pTabViewShell->UngroupDataPilot();
                     bOk = false;
@@ -1576,7 +1576,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if (!bOtherDoc)
                             {
                                 ScViewData& rData = GetViewData();
-                                if ( rData.GetMarkData().GetTableSelect( rData.GetTabNo() ) )
+                                if ( rData.GetMarkData().GetTableSelect( rData.CurrentTabForData() ) )
                                 {
                                     SCCOL nStartX, nEndX, nClipStartX, nClipSizeX, nRangeSizeX;
                                     SCROW nStartY, nEndY, nClipStartY, nClipSizeY, nRangeSizeY;
@@ -1592,7 +1592,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                         // assume the destination as the current cell
                                         nStartX = nEndX = rData.GetCurX();
                                         nStartY = nEndY = rData.GetCurY();
-                                        nStartTab = rData.GetTabNo();
+                                        nStartTab = rData.CurrentTabForData();
                                     }
                                     // we now have clip- and range dimensions
                                     // the size of the destination area is the larger of the two
@@ -1769,7 +1769,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         nPosX = GetViewData().GetCurX();
                         nPosY = GetViewData().GetCurY();
                     }
-                    ScAddress aCellPos(nPosX, nPosY, GetViewData().GetTabNo());
+                    ScAddress aCellPos(nPosX, nPosY, GetViewData().CurrentTabForData());
                     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
                     pObj->SetOverwriting(true);
                     if (pDlg->Execute()) {
@@ -2313,13 +2313,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 rData.GetMarkData().FillRangeListWithMarks(&aRangeList, false);
 
                 ScDocument& rDoc = GetViewData().GetDocument();
-                if(rDoc.IsTabProtected(rData.GetTabNo()))
+                if(rDoc.IsTabProtected(rData.CurrentTabForData()))
                 {
                     pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
                     break;
                 }
 
-                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.GetTabNo());
+                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData());
                 if(aRangeList.empty())
                 {
                     aRangeList.push_back(ScRange(aPos));
@@ -2664,7 +2664,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxStringItem& rTextItem = pReqArgs->Get( SID_RANGE_NOTETEXT );
 
                 //  always cursor position
-                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                 pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();
             }
@@ -2689,7 +2689,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         SetTabNoAndCursor( GetViewData(), aCellId );
                     }
 
-                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                    ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                     pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(),
                                                 pAuthorItem ? &pAuthorItem->GetValue() : nullptr,
                                                 pDateItem ? &pDateItem->GetValue() : nullptr );
@@ -2705,7 +2705,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_NOTE_VISIBLE:
             {
                 ScDocument& rDoc = GetViewData().GetDocument();
-                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
+                ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().CurrentTabForData() );
                 if( ScPostIt* pNote = rDoc.GetNote(aPos) )
                 {
                     bool bShow;
@@ -2739,7 +2739,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if (!rMark.IsMarked() && !rMark.IsMultiMarked())
                 {
                     // Check current cell
-                    ScAddress aPos( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
+                    ScAddress aPos( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
                     if( rDoc.GetNote(aPos) )
                     {
                         rData.GetDocShell().GetDocFunc().ShowNote( aPos, bShowNote );
@@ -2989,13 +2989,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScViewData& rData = GetViewData();
                 ScDocument& rDoc = rData.GetDocument();
 
-                if (rDoc.IsTabProtected(rData.GetTabNo()))
+                if (rDoc.IsTabProtected(rData.CurrentTabForData()))
                 {
                     pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
                     break;
                 }
 
-                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.GetTabNo());
+                ScAddress aPos(rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData());
 
                 ScConditionalFormatList* pList = nullptr;
 
@@ -3188,7 +3188,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_SELECT_UNPROTECTED_CELLS:
             {
                 ScViewData& rData = GetViewData();
-                SCTAB aTab = rData.GetTabNo();
+                SCTAB aTab = rData.CurrentTabForData();
                 ScMarkData& rMark = rData.GetMarkData();
                 ScDocument& rDoc = rData.GetDocument();
                 ScRangeList rRangeList;
@@ -3428,7 +3428,7 @@ void ScCellShell::ExecuteExternalSource(
             bMove = true;                       // insert/delete cells to fit range
         }
         else
-            aLinkRange = ScRange( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
+            aLinkRange = ScRange( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
 
         rData.GetDocFunc().InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
                                             aLinkRange, _nRefreshDelaySeconds, bMove, false );
@@ -3535,7 +3535,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     // ScPivot is no longer used...
     ScDPObject* pDPObj = rDoc.GetDPAtCursor(
                                 rData.GetCurX(), rData.GetCurY(),
-                                rData.GetTabNo() );
+                                rData.CurrentTabForData() );
     if ( pDPObj )   // on an existing table?
     {
         std::unique_ptr<ScDPObject> pNewDPObject;
@@ -3555,7 +3555,7 @@ void ScCellShell::ExecuteDataPilotDialog()
 
         //  output to cursor position for non-sheet data
         ScAddress aDestPos( rData.GetCurX(), rData.GetCurY(),
-                                rData.GetTabNo() );
+                                rData.CurrentTabForData() );
 
         //  first select type of source data
 
@@ -3754,7 +3754,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     pDBData->GetSubTotalParam( aSubTotalParam );
 
     ScDocument& rDoc = GetViewData().GetDocument();
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     if (!rDoc.GetTotalsRowBelow(nTab))
         aSubTotalParam.bSummaryBelow = false;
 

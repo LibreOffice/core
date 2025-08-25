@@ -37,7 +37,7 @@ ScInsertCellDlg::ScInsertCellDlg(weld::Window* pParent, ScViewData& rViewData,
     , m_xNumberOfRows(m_xBuilder->weld_spin_button(u"number_of_rows"_ustr))
     , m_xNumberOfCols(m_xBuilder->weld_spin_button(u"number_of_columns"_ustr))
 {
-    if (rViewData.GetDocument().IsLayoutRTL(rViewData.GetTabNo()))
+    if (rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData()))
         m_xBtnCellsRight->set_label(ScResId(SCSTR_INSERT_RTL));
 
     m_xNumberOfRows->set_range(1, MAX_INS_ROWS);

@@ -167,7 +167,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             {
                 SCCOL nCol = rViewData.GetCurX();
                 SCROW nRow = rViewData.GetCurY();
-                SCTAB nTab = rViewData.GetTabNo();
+                SCTAB nTab = rViewData.CurrentTabForData();
                 ScRange aRange( nCol, nRow, nTab );
                 aFuncMark.SetMarkArea( aRange );
             }
@@ -384,7 +384,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             LanguageType eLanguage = ScGlobal::eLnge;
 
             sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat(
-                rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData());
             const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
             if (pEntry)
@@ -414,7 +414,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
 
                 sal_uInt32 nCurrentNumberFormat = rDoc.GetNumberFormat(
-                    rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                    rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData());
                 const SvNumberformat* pEntry = pFormatter->GetEntry(nCurrentNumberFormat);
 
                 if(!pEntry)
@@ -1008,7 +1008,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     SCCOL nCol = rViewData.GetCurX();
                     SCROW nRow = rViewData.GetCurY();
-                    SCTAB nTab = rViewData.GetTabNo();
+                    SCTAB nTab = rViewData.CurrentTabForData();
                     ScRange aRange( nCol, nRow, nTab );
                     aFuncMark.SetMarkArea( aRange );
                 }
@@ -1981,7 +1981,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         SvxFrameDirection eCellDir = rAttrSet.Get( ATTR_WRITINGDIR ).GetValue();
         if ( eCellDir == SvxFrameDirection::Environment )
             eBidiDir = GetViewData().GetDocument().
-                                GetEditTextDirection( GetViewData().GetTabNo() );
+                                GetEditTextDirection( GetViewData().CurrentTabForData() );
         else if ( eCellDir == SvxFrameDirection::Horizontal_RL_TB )
             eBidiDir = EEHorizontalTextDirection::R2L;
         else
@@ -2114,7 +2114,7 @@ SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
     else
     {
         sal_uInt32 nNumFmt = rDoc.GetNumberFormat( rViewData.GetCurX(), rViewData.GetCurY(),
-                               rViewData.GetTabNo());
+                               rViewData.CurrentTabForData());
         nType = pFormatter->GetType( nNumFmt );
     }
     return nType;

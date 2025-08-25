@@ -29,7 +29,7 @@ ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pC
     , mInputRange(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
-    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo())
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData())
     , mnLastSampleSizeValue(1)
     , mnLastPeriodValue(1)
     , mDialogLostFocus(false)

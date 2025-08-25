@@ -214,7 +214,7 @@ void ScTabViewShell::ExecGoToTab( SfxRequest& rReq, SfxBindings& rBindings )
             if( rDoc.IsVisible( nTab ) )
             {
                 rDoc.GetName( nTab, aTabName );
-                pDlg->Insert( aTabName, rViewData.GetTabNo() == nTab );
+                pDlg->Insert( aTabName, rViewData.CurrentTabForData() == nTab );
             }
         }
 
@@ -254,7 +254,7 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
     ScModule* pScMod = ScModule::get();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScDocument&         rDoc = GetViewData().GetDocument();
-    SCTAB               nTab = GetViewData().GetTabNo();
+    SCTAB               nTab = GetViewData().CurrentTabForData();
     bool                bOldProtection = rDoc.IsTabProtected(nTab);
 
     if( pReqArgs )
@@ -481,7 +481,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_STATUS_PAGESTYLE:
         case SID_HFEDIT:
             GetViewData().GetDocShell().
-                ExecutePageStyle( *this, rReq, GetViewData().GetTabNo() );
+                ExecutePageStyle( *this, rReq, GetViewData().CurrentTabForData() );
             break;
 
         case SID_JUMPTOMARK:
@@ -528,7 +528,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScRefFlagsAndType aResult = lcl_ParseRangeOrAddress(aScRange, aScAddress, aAddress, rDoc,
                         rViewData.GetCurX(), rViewData.GetCurY());
                 ScRefFlags  nResult = aResult.nResult;
-                SCTAB       nTab = rViewData.GetTabNo();
+                SCTAB       nTab = rViewData.CurrentTabForData();
                 bool        bMark = true;
 
                 // Is this a range ?
@@ -903,9 +903,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                 uno::UNO_QUERY);
 
                         ScRange aRange(ScAddress(aCellRange.StartColumn, aCellRange.StartRow,
-                                    GetViewData().GetTabNo()),
+                                    GetViewData().CurrentTabForData()),
                                 ScAddress(aCellRange.EndColumn, aCellRange.EndRow,
-                                    GetViewData().GetTabNo()));
+                                    GetViewData().CurrentTabForData()));
 
                         uno::Reference<sheet::XCellRangeData> xCellRangeData(xSheetRange,
                                 uno::UNO_QUERY);
@@ -1259,7 +1259,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         rMark.SelectTable( static_cast<SCTAB>(aIndexList[nSelIx]), true );
 
                     // activate another table, if current is deselected
-                    if( !rMark.GetTableSelect( rViewData.GetTabNo() ) )
+                    if( !rMark.GetTableSelect( rViewData.CurrentTabForData() ) )
                     {
                         rMark.SelectTable( nFirstVisTab, true );
                         SetTabNo( nFirstVisTab );
@@ -1318,7 +1318,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScViewData& rViewData = GetViewData();
-                    SCTAB nThisTab = rViewData.GetTabNo();
+                    SCTAB nThisTab = rViewData.CurrentTabForData();
                     bool bChangedX = false, bChangedY = false;
                     if (rViewData.GetLOKSheetFreezeIndex(true) > 0 ||
                         rViewData.GetLOKSheetFreezeIndex(false) > 0 )                             // remove freeze
@@ -1340,7 +1340,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
-                            if (rOtherViewData.GetTabNo() != nThisTab)
+                            if (rOtherViewData.CurrentTabForData() != nThisTab)
                                 return;
 
                             SfxBindings& rOtherBind = rOtherViewData.GetBindings();
@@ -1370,7 +1370,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (comphelper::LibreOfficeKit::isActive())
                 {
                     ScViewData& rViewData = GetViewData();
-                    SCTAB nThisTab = rViewData.GetTabNo();
+                    SCTAB nThisTab = rViewData.CurrentTabForData();
                     bool bChanged = rViewData.SetLOKSheetFreezeIndex(nFreezeIndex, bIsCol);
                     rReq.Done();
                     if (bChanged)
@@ -1380,7 +1380,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // Invalidate the slot for all views on the same tab of the document.
                         SfxLokHelper::forEachOtherView(this, [nSlot, nThisTab](ScTabViewShell* pOther) {
                             ScViewData& rOtherViewData = pOther->GetViewData();
-                            if (rOtherViewData.GetTabNo() != nThisTab)
+                            if (rOtherViewData.CurrentTabForData() != nThisTab)
                                 return;
 
                             SfxBindings& rOtherBind = rOtherViewData.GetBindings();
@@ -1427,7 +1427,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_CHG_COMMENT:
             {
                 ScViewData& rData = GetViewData();
-                ScAddress aCursorPos( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
+                ScAddress aCursorPos( rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData() );
                 ScDocShell& rDocSh = rData.GetDocShell();
 
                 ScChangeAction* pAction = rDocSh.GetChangeAction( aCursorPos );

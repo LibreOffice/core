@@ -350,7 +350,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             ScViewData& rData = rViewSh.GetViewData();
 
             Point aPnt = rViewSh.GetInsertPos();
-            if ( rData.GetDocument().IsNegativePage( rData.GetTabNo() ) )
+            if ( rData.GetDocument().IsNegativePage( rData.CurrentTabForData() ) )
                 aPnt.AdjustX( -(aSize.Width()) );      // move position to left edge
             tools::Rectangle aRect (aPnt, aSize);
             rtl::Reference<SdrOle2Obj> pObj = new SdrOle2Obj(
@@ -441,7 +441,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
         ScDocument& rDocument = rViewSh.GetViewData().GetDocument();
         ScDPObject* pObject = rDocument.GetDPAtCursor(rViewSh.GetViewData().GetCurX(),
                                                       rViewSh.GetViewData().GetCurY(),
-                                                      rViewSh.GetViewData().GetTabNo());
+                                                      rViewSh.GetViewData().CurrentTabForData());
         if (pObject)
         {
             aRangeString = pObject->GetName();
@@ -545,7 +545,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 if ( pBoolItem->GetValue() )
                     nToTable = static_cast<sal_uInt16>(rScDoc.GetTableCount());
                 else
-                    nToTable = static_cast<sal_uInt16>(rData.GetTabNo());
+                    nToTable = static_cast<sal_uInt16>(rData.CurrentTabForData());
             }
         }
         else
@@ -580,7 +580,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 OSL_FAIL( "Could not create new table :-/" );
             }
         }
-        else if ( nToTable != rData.GetTabNo() )
+        else if ( nToTable != rData.CurrentTabForData() )
         {
             rViewSh.SetTabNo( nToTable, true );
         }

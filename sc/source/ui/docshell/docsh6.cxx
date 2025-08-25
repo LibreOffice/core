@@ -165,7 +165,7 @@ void ScDocShell::UpdateOle(const ScViewData& rViewData, bool bSnapSize)
         aNewArea = m_pDocument->GetEmbeddedRect();
     else
     {
-        SCTAB nTab = rViewData.GetTabNo();
+        SCTAB nTab = rViewData.CurrentTabForData();
         if ( nTab != m_pDocument->GetVisibleTab() )
             m_pDocument->SetVisibleTab( nTab );
 

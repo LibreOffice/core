@@ -65,7 +65,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
     , rViewData(rData)
     , rDoc(rViewData.GetDocument())
-    , nSrcTab(rViewData.GetTabNo())
+    , nSrcTab(rViewData.CurrentTabForData())
     , bRefInputMode(false)
     , m_xLbConnect1(m_xBuilder->weld_combo_box(u"connect1"_ustr))
     , m_xLbField1(m_xBuilder->weld_combo_box(u"field1"_ustr))

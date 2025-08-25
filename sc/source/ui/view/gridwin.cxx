@@ -300,7 +300,7 @@ static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScVie
         return;
 
     ScDocument& rDoc = rViewData.GetDocument();
-    ScAddress aCellPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+    ScAddress aCellPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.CurrentTabForData() );
     ScPostIt* pNote = rDoc.GetNote( aCellPos );
     SdrObject* pObj = pNote ? pNote->GetCaption() : nullptr;
     if( pObj && pObj->GetLogicRect().Contains( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
@@ -940,7 +940,7 @@ void collectUIInformation(const OUString& aRow, const OUString& aCol , const OUS
 
 void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 {
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
@@ -1123,7 +1123,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
-    aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
+    aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData());
     mpAutoFilterPopup->setConfig(aConfig);
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -1335,7 +1335,7 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
         // We assume that the page field button is located in cell to the immediate left.
         return;
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDPObject* pDPObj = mrViewData.GetDocument().GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
         return;
@@ -1349,7 +1349,7 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 {
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDPObject* pDPObj = mrViewData.GetDocument().GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
         return;
@@ -1424,7 +1424,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         bMenuAtTop = false;
     }
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     tools::Long nSizeX  = 0;
@@ -1496,7 +1496,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
     mpFilterBox.reset();
 
     ScDocument& rDoc = mrViewData.GetDocument();
-    const SCTAB nTab = mrViewData.GetTabNo();
+    const SCTAB nTab = mrViewData.CurrentTabForData();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     tools::Long nSizeX  = 0;
@@ -1663,7 +1663,7 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr 
     if (pViewHdl && mrViewData.HasEditView(mrViewData.GetActivePart()))
         pViewHdl->CancelHandler();
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScViewFunc* pView = mrViewData.GetView();
     pView->EnterData( nCol, nRow, nTab, rStr );
 
@@ -1719,7 +1719,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
     if ( mrViewData.IsActive() && !bOleActive && !mrViewData.GetViewShell()->IsLokReadOnlyView())
     {
         ScDocument& rDoc = mrViewData.GetDocument();
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
         //  Auto-Fill
@@ -1727,7 +1727,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
         ScRange aMarkRange;
         if (mrViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE)
         {
-            if (aMarkRange.aStart.Tab() == mrViewData.GetTabNo() && mpAutoFillRect)
+            if (aMarkRange.aStart.Tab() == mrViewData.CurrentTabForData() && mpAutoFillRect)
             {
                 Point aMousePos = rMEvt.GetPosPixel();
                 if (mpAutoFillRect->Contains(aMousePos))
@@ -1760,7 +1760,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
         {
             ScRange aRange;
             rDoc.GetEmbedded( aRange );
-            if ( mrViewData.GetTabNo() == aRange.aStart.Tab() )
+            if ( mrViewData.CurrentTabForData() == aRange.aStart.Tab() )
             {
                 Point aStartPos = mrViewData.GetScrPos( aRange.aStart.Col(), aRange.aStart.Row(), eWhich );
                 Point aEndPos   = mrViewData.GetScrPos( aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich );
@@ -1934,7 +1934,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         pSelEng->SetVisibleArea( tools::Rectangle(Point(), GetOutputSizePixel()) );
     }
 
-    if (bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNo()))
+    if (bEditMode && (mrViewData.GetRefTabNo() == mrViewData.CurrentTabForData()))
     {
         Point   aPos = rMEvt.GetPosPixel();
         SCCOL  nPosX;
@@ -1959,7 +1959,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             pScMod->SetInputMode( SC_INPUT_TABLE );
             bEEMouse = true;
 
-            if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.GetTabNo()))
+            if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
             {
                 Point aMouse = rMEvt.GetPosPixel();
                 tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2048,7 +2048,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     SCCOL nPosX;
     SCROW nPosY;
     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     m_nDownPosX = nPosX;
     m_nDownPosY = nPosY;
 
@@ -2263,7 +2263,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
-        if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.GetTabNo()))
+        if (comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(mrViewData.CurrentTabForData()))
         {
             Point aMouse = rMEvt.GetPosPixel();
             tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2370,7 +2370,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             pView->MarkRange( aDelRange, false );
             pView->DeleteContents( InsertDeleteFlags::CONTENTS );
-            SCTAB nTab = mrViewData.GetTabNo();
+            SCTAB nTab = mrViewData.CurrentTabForData();
             ScRange aBlockRange( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
             if ( aBlockRange != aDelRange )
             {
@@ -2418,7 +2418,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
     else if (mrViewData.GetFillMode() == ScFillMode::MATRIX)
     {
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
         SCCOL nStartCol;
         SCROW nStartRow;
         SCCOL nEndCol;
@@ -2479,12 +2479,12 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                         break;
 
                     case SfxStyleFamily::Page:
-                        mrViewData.GetDocument().SetPageStyle( mrViewData.GetTabNo(),
+                        mrViewData.GetDocument().SetPageStyle( mrViewData.CurrentTabForData(),
                                                                pStyleSheet->GetName() );
 
                         ScPrintFunc( mrViewData.GetDocShell(),
                                      mrViewData.GetViewShell()->GetPrinter(true),
-                                     mrViewData.GetTabNo() ).UpdatePages();
+                                     mrViewData.CurrentTabForData() ).UpdatePages();
 
                         rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                         break;
@@ -2508,7 +2508,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     Point aPos = rMEvt.GetPosPixel();
     SCCOL nPosX;
     SCROW nPosY;
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor( nPosX, nPosY, nTab );
 
@@ -2523,7 +2523,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         //  data pilot table
         if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
-            ScAddress aCellPos( nPosX, nPosY, mrViewData.GetTabNo() );
+            ScAddress aCellPos( nPosX, nPosY, mrViewData.CurrentTabForData() );
 
             // Check for header drill-down first.
             sheet::DataPilotTableHeaderData aData;
@@ -2677,7 +2677,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             if( xVbaEvents.is() ) try
             {
                 aPos = rMEvt.GetPosPixel();
-                nTab = mrViewData.GetTabNo();
+                nTab = mrViewData.CurrentTabForData();
                 mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 OUString sURL;
                 ScRefCellValue aCell;
@@ -2821,7 +2821,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         SCROW       nEditRow;
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
-        if (comphelper::LibreOfficeKit::isActive() && mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo()))
+        if (comphelper::LibreOfficeKit::isActive() && mrViewData.GetDocument().IsLayoutRTL(mrViewData.CurrentTabForData()))
         {
             Point aMouse = rMEvt.GetPosPixel();
             tools::Rectangle aOutputArea = pEditView->GetOutputArea();
@@ -2866,7 +2866,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     bool bEditMode = mrViewData.HasEditView(eWhich);
 
     //! Test if refMode dragging !!!
-    if ( bEditMode && (mrViewData.GetRefTabNo() == mrViewData.GetTabNo()) )
+    if ( bEditMode && (mrViewData.GetRefTabNo() == mrViewData.CurrentTabForData()) )
     {
         Point   aPos = rMEvt.GetPosPixel();
         SCCOL  nPosX;
@@ -3358,7 +3358,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if ( bMouse )
     {
         ScDocument& rDoc = mrViewData.GetDocument();
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
         const ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         bool bSelectAllowed = true;
         if ( pProtect && pProtect->isProtected() )
@@ -3500,7 +3500,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     {
         //  non-edit menu by keyboard -> use lower right of cell cursor position
         ScDocument& rDoc = mrViewData.GetDocument();
-        SCTAB nTabNo = mrViewData.GetTabNo();
+        SCTAB nTabNo = mrViewData.CurrentTabForData();
         bool bLayoutIsRTL = rDoc.IsLayoutRTL(nTabNo);
 
         SCCOL nCurX = mrViewData.GetCurX();
@@ -4042,7 +4042,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScD
         if (pSourceDoc == &rThisDoc)
         {
             OUString aName;
-            if ( rThisDoc.HasChartAtPoint(mrViewData.GetTabNo(), PixelToLogic(aPos), aName ))
+            if ( rThisDoc.HasChartAtPoint(mrViewData.CurrentTabForData(), PixelToLogic(aPos), aName ))
             {
                 if (bDragRect)          // Remove rectangle
                 {
@@ -4088,7 +4088,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScD
             nNewDragY = rThisDoc.MaxRow()-(nSizeY-1);
 
         //  don't break scenario ranges, don't drop on filtered
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
         ScRange aDropRange = lcl_MakeDropRange( rThisDoc, nNewDragX, nNewDragY, nTab, aSourceRange );
         if ( lcl_TestScenarioRedliningDrop( &rThisDoc, aDropRange ) ||
              lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) ||
@@ -4291,7 +4291,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     nMyAction = DND_ACTION_COPY;
 
             SdrObject* pHitObj = rThisDoc.GetObjectAtPoint(
-                        mrViewData.GetTabNo(), PixelToLogic(rEvt.maPosPixel) );
+                        mrViewData.CurrentTabForData(), PixelToLogic(rEvt.maPosPixel) );
             if ( pHitObj && nMyAction == DND_ACTION_LINK )
             {
                 if ( IsDropFormatSupported(SotClipboardFormatId::SVXB)
@@ -4376,7 +4376,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     SCCOL nPosX;
                     SCROW nPosY;
                     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-                    SCTAB nTab = mrViewData.GetTabNo();
+                    SCTAB nTab = mrViewData.CurrentTabForData();
                     ScDocument& rDoc = mrViewData.GetDocument();
 
                     ScEditableTester aTester( rDoc, nTab, nPosX,nPosY, nPosX,nPosY );
@@ -4531,7 +4531,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     ScDocShell& rDocSh     = mrViewData.GetDocShell();
     ScDocument& rThisDoc   = mrViewData.GetDocument();
     ScViewFunc* pView      = mrViewData.GetView();
-    SCTAB       nThisTab   = mrViewData.GetTabNo();
+    SCTAB       nThisTab   = mrViewData.CurrentTabForData();
     ScDragSrc   nFlags     = pTransObj->GetDragSourceFlags();
 
     bool bIsNavi = (nFlags & ScDragSrc::Navigator) == ScDragSrc::Navigator;
@@ -4971,7 +4971,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
 
     ScDocument& rThisDoc = mrViewData.GetDocument();
-    SdrObject* pHitObj = rThisDoc.GetObjectAtPoint( mrViewData.GetTabNo(), PixelToLogic(aPos) );
+    SdrObject* pHitObj = rThisDoc.GetObjectAtPoint( mrViewData.CurrentTabForData(), PixelToLogic(aPos) );
     if ( pHitObj && bIsLink )
     {
         //  dropped on drawing object
@@ -5077,9 +5077,10 @@ void ScGridWindow::UpdateEditViewPos()
     //  hide EditView?
 
     bool bHide = ( nEndCol<mrViewData.GetPosX(eHWhich) || nEndRow<mrViewData.GetPosY(eVWhich) );
-    if (ScModule::get()->IsFormulaMode())
-        if ( mrViewData.GetTabNo() != mrViewData.GetRefTabNo() )
-            bHide = true;
+
+    if (ScModule::get()->IsFormulaMode() && mrViewData.GetTabNumber() != mrViewData.GetRefTabNo())
+        bHide = true;
+
 
     if (bHide)
     {
@@ -5206,7 +5207,7 @@ void ScGridWindow::UpdateFormulaRange(SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2
 
     SCROW nPosY = nY1;
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
 
     if ( !comphelper::LibreOfficeKit::isActive() )
     {
@@ -5386,7 +5387,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                 pRangeFinder->GetDocName() == mrViewData.GetDocShell().GetTitle() )
         {
             ScDocument& rDoc = mrViewData.GetDocument();
-            SCTAB nTab = mrViewData.GetTabNo();
+            SCTAB nTab = mrViewData.CurrentTabForData();
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -5924,7 +5925,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
     SCROW nPosY;
     mrViewData.GetPosFromPixel( rPos.X(), rPos.Y(), eWhich, nPosX, nPosY );
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocShell& rDocSh = mrViewData.GetDocShell();
     ScDocument& rDoc = rDocSh.GetDocument();
     OUString sURL;
@@ -6025,7 +6026,7 @@ bool ScGridWindow::GetEditUrl(const Point& rPos, OUString* pName, OUString* pUrl
 bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange )
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     SCTAB nTabCount = rDoc.GetTableCount();
     if ( nTab+1<nTabCount && rDoc.IsScenario(nTab+1) && !rDoc.IsScenario(nTab) )
     {
@@ -6583,7 +6584,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     //  determine the cursor rectangles in pixels (moved from ScGridWindow::DrawCursor)
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     SCCOL nX = mrViewData.GetCurX();
     SCROW nY = mrViewData.GetCurY();
 
@@ -6827,7 +6828,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
             ScDocument& rDoc = mrViewData.GetDocument();
-            SCTAB nTab = mrViewData.GetTabNo();
+            SCTAB nTab = mrViewData.CurrentTabForData();
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
             for(const tools::Rectangle & rRA : aRects)
@@ -6895,7 +6896,7 @@ void ScGridWindow::UpdateHighlightOverlay()
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
             ScDocument& rDoc = mrViewData.GetDocument();
-            SCTAB nTab = mrViewData.GetTabNo();
+            SCTAB nTab = mrViewData.CurrentTabForData();
             bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
             for(const tools::Rectangle & rRA : aRects)
@@ -6955,7 +6956,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
     //  get the AutoFill handle rectangle in pixels
 
-    if ( !(bAutoMarkVisible && aAutoMarkPos.Tab() == mrViewData.GetTabNo() &&
+    if ( !(bAutoMarkVisible && aAutoMarkPos.Tab() == mrViewData.CurrentTabForData() &&
          !mrViewData.HasEditView(eWhich) && mrViewData.IsActive()) )
         return;
 
@@ -6968,7 +6969,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
         return;
     }
 
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     ScDocument& rDoc = mrViewData.GetDocument();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
@@ -7094,7 +7095,7 @@ void ScGridWindow::UpdateDragRectOverlay()
         SCCOL nX2 = bDragRect ? nDragEndX : aPagebreakDrag.aEnd.Col();
         SCROW nY2 = bDragRect ? nDragEndY : aPagebreakDrag.aEnd.Row();
 
-        SCTAB nTab = mrViewData.GetTabNo();
+        SCTAB nTab = mrViewData.CurrentTabForData();
 
         SCCOL nPosX = mrViewData.GetPosX(WhichH(eWhich));
         SCROW nPosY = mrViewData.GetPosY(WhichV(eWhich));
@@ -7307,7 +7308,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 
     tools::Rectangle aPixRect;
     ScRange aRange;
-    SCTAB nTab = mrViewData.GetTabNo();
+    SCTAB nTab = mrViewData.CurrentTabForData();
     if ( mrViewData.IsRefMode() && nTab >= mrViewData.GetRefStartZ() && nTab <= mrViewData.GetRefEndZ() &&
          mrViewData.GetDelMark( aRange ) )
     {
@@ -7398,7 +7399,7 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
                     SCCOL nColumn = pCurrentSparkline->getColumn();
                     SCROW nRow = pCurrentSparkline->getRow();
 
-                    SCTAB nTab = mrViewData.GetTabNo();
+                    SCTAB nTab = mrViewData.CurrentTabForData();
                     ScRange aCurrRange(nColumn, nRow, nTab);
                     bool bMerge = rDocument.IsMerged(aCurrentAddress);
                     if (bMerge)

@@ -46,7 +46,8 @@ ScNamePasteDlg::ScNamePasteDlg(weld::Window* pParent, ScDocShell* pShell)
 
     ScAddress aPos;
     if (ScViewData* pViewData = ScDocShell::GetViewData())
-        aPos = ScAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+        aPos
+            = ScAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->CurrentTabForData());
 
     std::unique_ptr<weld::TreeView> xTreeView(m_xBuilder->weld_tree_view(u"ctrl"_ustr));
     xTreeView->set_size_request(xTreeView->get_approximate_digit_width() * 75,

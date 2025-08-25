@@ -102,7 +102,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
         {
             //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
-            SCTAB nTab = GetViewData().GetTabNo();
+            SCTAB nTab = GetViewData().CurrentTabForData();
             tools::Long nXT = 0;
             for (SCCOL i=0; i<nPosX; i++)
                 nXT += rDoc.GetColWidth(i,nTab);
@@ -152,7 +152,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
             ScDocShell& rDocSh = GetViewData().GetDocShell();
-            SCTAB nTab = GetViewData().GetTabNo();
+            SCTAB nTab = GetViewData().CurrentTabForData();
 
             ClickCursor(nPosX, nPosY, false);               // set cursor position
 
@@ -453,7 +453,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
     //  mark range
 
-    SCTAB nTab = GetViewData().GetTabNo();
+    SCTAB nTab = GetViewData().CurrentTabForData();
     SCCOL nCurX = GetViewData().GetCurX();
     SCROW nCurY = GetViewData().GetCurY();
     HideAllCursors();
@@ -761,7 +761,7 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
 
     bool bRet = false;
     ScDocument& rDoc = GetViewData().GetDocument();
-    ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
+    ScAddress aCellPos( nPosX, nPosY, GetViewData().CurrentTabForData() );
     auto pObj = std::make_shared<ScImportExport>(GetViewData().GetDocument(), aCellPos);
     pObj->SetOverwriting( true );
 

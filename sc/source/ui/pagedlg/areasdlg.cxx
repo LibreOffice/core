@@ -99,7 +99,7 @@ ScPrintAreasDlg::ScPrintAreasDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Win
     , bDlgLostFocus(false)
     , rViewData(rData)
     , rDoc(rViewData.GetDocument())
-    , nCurTab(rViewData.GetTabNo())
+    , nCurTab(rViewData.CurrentTabForData())
     , m_xLbPrintArea(m_xBuilder->weld_combo_box(u"lbprintarea"_ustr))
     , m_xEdPrintArea(new formula::RefEdit(m_xBuilder->weld_entry(u"edprintarea"_ustr)))
     , m_xRbPrintArea(new formula::RefButton(m_xBuilder->weld_button(u"rbprintarea"_ustr)))

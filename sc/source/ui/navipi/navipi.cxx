@@ -741,7 +741,7 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
     if ( pTab )
         nCurTab = *pTab;
     else if ( ScViewData* pData = GetViewData() )
-        nCurTab = pData->GetTabNo();
+        nCurTab = pData->CurrentTabForData();
 }
 
 void ScNavigatorDlg::UpdateAll()
