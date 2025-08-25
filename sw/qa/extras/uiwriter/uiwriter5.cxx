@@ -100,6 +100,188 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf139127)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf168068)
+{
+    createSwDoc();
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(u"To be or not to be"_ustr);
+
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // Select second and third words
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    {
+        auto xRun1(getRun(getParagraph(1), 1));
+        CPPUNIT_ASSERT(xRun1.is());
+        CPPUNIT_ASSERT_EQUAL(u"To "_ustr, xRun1->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun1, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun1, u"CharPosture"_ustr));
+
+        auto xRun2(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xRun2.is());
+        CPPUNIT_ASSERT_EQUAL(u"be or"_ustr, xRun2->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun2, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun2, u"CharPosture"_ustr));
+
+        auto xRun3(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xRun3.is());
+        CPPUNIT_ASSERT_EQUAL(u" not to be"_ustr, xRun3->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun3, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun3, u"CharPosture"_ustr));
+    }
+
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+
+    // Select third and fourth words
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Italic"_ustr, {});
+
+    {
+        auto xRun1(getRun(getParagraph(1), 1));
+        CPPUNIT_ASSERT(xRun1.is());
+        CPPUNIT_ASSERT_EQUAL(u"To "_ustr, xRun1->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun1, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun1, u"CharPosture"_ustr));
+
+        auto xRun2(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xRun2.is());
+        CPPUNIT_ASSERT_EQUAL(u"be "_ustr, xRun2->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun2, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun2, u"CharPosture"_ustr));
+
+        auto xRun3(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xRun3.is());
+        CPPUNIT_ASSERT_EQUAL(u"or"_ustr, xRun3->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun3, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun3, u"CharPosture"_ustr));
+
+        auto xRun4(getRun(getParagraph(1), 4));
+        CPPUNIT_ASSERT(xRun4.is());
+        CPPUNIT_ASSERT_EQUAL(u" not"_ustr, xRun4->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun4, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun4, u"CharPosture"_ustr));
+
+        auto xRun5(getRun(getParagraph(1), 5));
+        CPPUNIT_ASSERT(xRun5.is());
+        CPPUNIT_ASSERT_EQUAL(u" to be"_ustr, xRun5->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun5, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun5, u"CharPosture"_ustr));
+    }
+
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // Select second, third and fourth words
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 9, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    {
+        auto xRun1(getRun(getParagraph(1), 1));
+        CPPUNIT_ASSERT(xRun1.is());
+        CPPUNIT_ASSERT_EQUAL(u"To "_ustr, xRun1->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun1, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun1, u"CharPosture"_ustr));
+
+        auto xRun2(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xRun2.is());
+        CPPUNIT_ASSERT_EQUAL(u"be "_ustr, xRun2->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun2, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun2, u"CharPosture"_ustr));
+
+        auto xRun3(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xRun3.is());
+        CPPUNIT_ASSERT_EQUAL(u"or"_ustr, xRun3->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun3, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun3, u"CharPosture"_ustr));
+
+        auto xRun4(getRun(getParagraph(1), 4));
+        CPPUNIT_ASSERT(xRun4.is());
+        CPPUNIT_ASSERT_EQUAL(u" not"_ustr, xRun4->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun4, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun4, u"CharPosture"_ustr));
+
+        auto xRun5(getRun(getParagraph(1), 5));
+        CPPUNIT_ASSERT(xRun5.is());
+        CPPUNIT_ASSERT_EQUAL(u" to be"_ustr, xRun5->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun5, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun5, u"CharPosture"_ustr));
+    }
+
+    // Unbold
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    {
+        auto xRun1(getRun(getParagraph(1), 1));
+        CPPUNIT_ASSERT(xRun1.is());
+        CPPUNIT_ASSERT_EQUAL(u"To "_ustr, xRun1->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun1, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun1, u"CharPosture"_ustr));
+
+        auto xRun2(getRun(getParagraph(1), 2));
+        CPPUNIT_ASSERT(xRun2.is());
+        CPPUNIT_ASSERT_EQUAL(u"be "_ustr, xRun2->getString());
+
+        // Without the fix in place, this test would have failed here with
+        // - Expected: 100
+        // - Actual  : 150
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun2, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun2, u"CharPosture"_ustr));
+
+        auto xRun3(getRun(getParagraph(1), 3));
+        CPPUNIT_ASSERT(xRun3.is());
+        CPPUNIT_ASSERT_EQUAL(u"or"_ustr, xRun3->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun3, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun3, u"CharPosture"_ustr));
+
+        auto xRun4(getRun(getParagraph(1), 4));
+        CPPUNIT_ASSERT(xRun4.is());
+        CPPUNIT_ASSERT_EQUAL(u" not"_ustr, xRun4->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun4, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                             getProperty<awt::FontSlant>(xRun4, u"CharPosture"_ustr));
+
+        auto xRun5(getRun(getParagraph(1), 5));
+        CPPUNIT_ASSERT(xRun5.is());
+        CPPUNIT_ASSERT_EQUAL(u" to be"_ustr, xRun5->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                             getProperty<float>(xRun5, u"CharWeight"_ustr));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                             getProperty<awt::FontSlant>(xRun5, u"CharPosture"_ustr));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf138479)
 {
     createSwDoc();
