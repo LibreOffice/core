@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_TITLEHELPER_HXX
-#define INCLUDED_FRAMEWORK_TITLEHELPER_HXX
+#pragma once
 
 #include <config_options.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -175,7 +174,5 @@ class UNLESS_MERGELIBS_MORE(FWK_DLLPUBLIC) TitleHelper final :
 };
 
 } // namespace framework
-
-#endif // INCLUDED_FRAMEWORK_TITLEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

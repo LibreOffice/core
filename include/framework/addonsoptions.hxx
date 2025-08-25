@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
-#define INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
+
+#pragma once
 
 #include <config_options.h>
 #include <sal/types.h>
@@ -258,7 +258,5 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
 };
 
 }
-
-#endif // INCLUDED_FRAMEWORK_ADDONSOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

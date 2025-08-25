@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
-#define INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
+#pragma once
 
 #include <config_options.h>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
@@ -97,7 +96,5 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
