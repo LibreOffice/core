@@ -1060,7 +1060,7 @@ module com {
      ::com::sun::star::uno::XInterface createInstanceWithContext([in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
      ::com::sun::star::uno::XInterface createInstanceWithArgumentsAndContext([in] sequence< any > Arguments, [in] ::com::sun::star::uno::XComponentContext Context) raises (::com::sun::star::uno::Exception);
     };
-    /** @deprecated */ published interface XSingleServiceFactory {
+    published interface XSingleServiceFactory {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::uno::XInterface createInstance() raises (::com::sun::star::uno::Exception);
      ::com::sun::star::uno::XInterface createInstanceWithArguments([in] sequence< any > aArguments) raises (::com::sun::star::uno::Exception);
