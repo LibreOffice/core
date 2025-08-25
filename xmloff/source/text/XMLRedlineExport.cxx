@@ -269,7 +269,10 @@ void XMLRedlineExport::ExportChangeAutoStyle(
     aAny >>= xAutoFormat;
     if (xAutoFormat.is())
     {
-        rExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xAutoFormat);
+        // Check for parent style when declaring the automatic style.
+        rExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xAutoFormat,
+                                              /*aAddStates=*/{}, /*bDontSeek=*/false,
+                                              /*bCheckParent=*/true);
     }
 }
 
@@ -373,7 +376,15 @@ void XMLRedlineExport::ExportChangedRegion(
         {
             bool bIsUICharStyle;
             bool bHasAutoStyle;
-            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(xAutoStyle, bIsUICharStyle, bHasAutoStyle);
+            OUString aParentName;
+            uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xAutoStyle->getPropertySetInfo();
+            if (xPropSetInfo->hasPropertyByName("CharStyleName"))
+            {
+                // Consider parent style when referring to the declared automatic style.
+                xAutoStyle->getPropertyValue("CharStyleName") >>= aParentName;
+            }
+            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(
+                xAutoStyle, bIsUICharStyle, bHasAutoStyle, /*pAddState=*/nullptr, &aParentName);
             if (!sStyle.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, rExport.EncodeStyleName(sStyle));
