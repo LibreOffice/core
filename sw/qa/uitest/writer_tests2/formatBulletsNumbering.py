@@ -284,13 +284,14 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
                 xOutlinePage = xDialog.getChild("PickOutlinePage")
-                xselector = xOutlinePage.getChild("valueset")
-                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "8")
+                xselector = xOutlinePage.getChild("pick_outline_iconview")
                 # Select element num 1
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "1"}))
+                element1 = xselector.getChild("0")
+                element1.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(xselector)["VisibleCount"], "8")
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "0")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "1")
-                self.assertEqual(get_state_as_dict(xselector)["ItemText"], "Uppercase Roman, uppercase letters, numeric, lowercase letters, lowercase Roman, solid small circular bullet")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "0")
+                self.assertEqual(get_state_as_dict(xselector)["SelectEntryText"], "Uppercase Roman, uppercase letters, numeric, lowercase letters, lowercase Roman, solid small circular bullet")
 
                 # Select the GraphicPage's Selector
                 xTabs = xDialog.getChild("tabcontrol")
