@@ -297,16 +297,17 @@ class formatBulletsNumbering(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "3")
                 xGraphicPage = xDialog.getChild("PickGraphicPage")
-                xselector = xGraphicPage.getChild("valueset")
-                self.assertEqual(get_state_as_dict(xselector)["ItemsCount"], "25")
+                xselector = xGraphicPage.getChild("pick_graphic_iconview")
                 # Select element num 12
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "12"}))
+                element12 = xselector.getChild("11")
+                element12.executeAction("SELECT", mkPropertyValues({}))
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "11")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "12")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "11")
                 # Select element num 23
-                xselector.executeAction("CHOOSE", mkPropertyValues({"POS": "23"}))
+                element23 = xselector.getChild("22")
+                element23.executeAction("SELECT", mkPropertyValues({}))
                 self.assertEqual(get_state_as_dict(xselector)["SelectedItemPos"], "22")
-                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "23")
+                self.assertEqual(get_state_as_dict(xselector)["SelectedItemId"], "22")
 
 
     def test_bullets_and_numbering_document_bullet_list(self):
