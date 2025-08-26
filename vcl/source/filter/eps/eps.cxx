@@ -339,9 +339,9 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         ErrCode nErrCode;
         if ( mbGrayScale )
         {
-            BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
-            aTempBitmapEx.Convert( BmpConversion::N8BitGreys );
-            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
+            Bitmap aTempBitmap( rGraphic.GetBitmap() );
+            aTempBitmap.Convert( BmpConversion::N8BitGreys );
+            nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmap, ConvertDataFormat::TIF ) ;
         }
         else
             nErrCode = GraphicConverter::Export( rTargetStream, rGraphic, ConvertDataFormat::TIF ) ;
@@ -471,7 +471,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     if ( pPreview && aSizePoint.Width() && aSizePoint.Height() )
     {
         Size aSizeBitmap( ( aSizePoint.Width() + 7 ) & ~7, aSizePoint.Height() );
-        Bitmap aTmpBitmap( pPreview->GetBitmapEx().GetBitmap() );
+        Bitmap aTmpBitmap( pPreview->GetBitmap().CreateColorBitmap() );
         aTmpBitmap.Scale( aSizeBitmap, BmpScaleFlag::BestQuality );
         aTmpBitmap.Convert( BmpConversion::N1BitThreshold );
         BitmapScopedReadAccess pAcc(aTmpBitmap);

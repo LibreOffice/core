@@ -160,7 +160,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 
     if (!maGraphic.IsNone())
     {
-        return vcl::bitmap::GetMaskDIB(maGraphic.GetBitmapEx());
+        return vcl::bitmap::GetMaskDIB(maGraphic.GetBitmap());
     }
     else
     {

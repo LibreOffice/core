@@ -218,7 +218,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         // Resolution is set
         if( nMode == 1 )
         {
-            BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
+            Bitmap      aBitmap( rGraphic.GetBitmap() );
             MapMode     aMap( MapUnit::Map100thInch );
 
             sal_Int32   nDPI = rConfigItem.ReadInt32( u"Resolution"_ustr, 75 );

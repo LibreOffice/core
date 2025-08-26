@@ -140,7 +140,7 @@ static void MakeAsMeta(Graphic &rGraphic)
 
     pVDev->EnableOutput( false );
     aMtf.Record( pVDev );
-    pVDev->DrawBitmapEx( Point(), aSize, rGraphic.GetBitmapEx() );
+    pVDev->DrawBitmapEx( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));

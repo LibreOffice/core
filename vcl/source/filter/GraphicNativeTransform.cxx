@@ -74,7 +74,7 @@ bool GraphicNativeTransform::rotateBitmapOnly(Degree10 aRotation)
         return false;
     }
 
-    BitmapEx aBitmap = mrGraphic.GetBitmapEx();
+    Bitmap aBitmap = mrGraphic.GetBitmap();
     aBitmap.Rotate(aRotation, COL_BLACK);
     mrGraphic = aBitmap;
 
@@ -101,7 +101,7 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(aType);
 
-    BitmapEx aBitmap = mrGraphic.GetBitmapEx();
+    Bitmap aBitmap = mrGraphic.GetBitmap();
     aBitmap.Rotate(aRotation, COL_BLACK);
     rFilter.ExportGraphic(aBitmap, u"none", aStream, nFilterFormat, &aFilterData);
 
@@ -116,7 +116,7 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
 
 void GraphicNativeTransform::rotateJPEG(Degree10 aRotation)
 {
-    BitmapEx aBitmap = mrGraphic.GetBitmapEx();
+    Bitmap aBitmap = mrGraphic.GetBitmap();
 
     if (aBitmap.GetSizePixel().Width() % 16 != 0 || aBitmap.GetSizePixel().Height() % 16 != 0)
     {
