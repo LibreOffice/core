@@ -183,7 +183,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
 
         INetURLObject aURL( aFileName );
         // tdf#132421 - don't URL encode filename for the import ASCII dialog title
-        OUString aPrivDatName(aURL.GetLastName(INetURLObject::DecodeMechanism::Unambiguous));
+        OUString aPrivDatName(aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
         std::unique_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
