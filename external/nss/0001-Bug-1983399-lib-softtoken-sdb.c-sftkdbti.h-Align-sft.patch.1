@@ -1,0 +1,77 @@
+From 41b30bd6ee62ed0b8420c45e71ea9f1e6e46cc67 Mon Sep 17 00:00:00 2001
+From: Robert Relyea <rrelyea@redhat.com>
+Date: Tue, 19 Aug 2025 17:35:17 -0700
+Subject: [PATCH] Bug 1983399 lib/softtoken/{sdb.c,sftkdbti.h}: Align
+ sftkdb_known_attributes_size type r=rrelyea patch by nvinson234
+
+sftkdb_known_attributes_size is defined with conflicting types. In /lib/softtoken/sdb.c it is defined as a 'const size_t'; whereas in lib/softtoken/sftkdbti.h it is defined as an 'unsigned int'. The correct type for sftkdb_known_attributes_size is size_t since its value is derived from the size of the sftkdb_known_attributes array.
+
+Differential Revision: https://phabricator.services.mozilla.com/D261440
+
+--HG--
+extra : rebase_source : e234b04d1754b26d2b4e8b79978bd8403d85fa5e
+---
+ lib/softoken/sdb.c      | 12 ++++++------
+ lib/softoken/sftkdbti.h |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/lib/softoken/sdb.c b/lib/softoken/sdb.c
+index 8b5ce70e3..28480ee2a 100644
+--- nss/nss/lib/softoken/sdb.c
++++ nss/nss/lib/softoken/sdb.c
+@@ -158,7 +158,7 @@ const CK_ATTRIBUTE_TYPE sftkdb_known_attributes[] = {
+ };
+ // clang-format on
+ 
+-const int sftkdb_known_attributes_size = PR_ARRAY_SIZE(sftkdb_known_attributes);
++const size_t sftkdb_known_attributes_size = PR_ARRAY_SIZE(sftkdb_known_attributes);
+ 
+ /*
+  * Note on use of sqlReadDB: Only one thread at a time may have an actual
+@@ -2024,8 +2024,8 @@ sdb_update_column(sqlite3 *sqlDB, const char *table, sdbDataType type)
+     }
+     /* we have more attributes than in the database, so we know things
+      * are missing, find what was missing */
+-    for (int i = 0; i < sftkdb_known_attributes_size; i++) {
+-        char *typeString = sqlite3_mprintf("a%x", sftkdb_known_attributes[i]);
++    for (size_t i = 0; i < sftkdb_known_attributes_size; i++) {
++        char *typeString = sqlite3_mprintf("a%lx", sftkdb_known_attributes[i]);
+         PRBool found = PR_FALSE;
+         /* this one index is important, we skip the first column (id), since
+          * it will never match, starting at zero isn't a bug,
+@@ -2072,7 +2072,6 @@ CK_RV
+ sdb_init(char *dbname, char *table, sdbDataType type, int *inUpdate,
+          int *newInit, int inFlags, PRUint32 accessOps, SDB **pSdb)
+ {
+-    int i;
+     char *initStr = NULL;
+     char *newStr;
+     char *queryStr = NULL;
+@@ -2136,8 +2135,9 @@ sdb_init(char *dbname, char *table, sdbDataType type, int *inUpdate,
+             goto loser;
+         }
+         initStr = sqlite3_mprintf("");
+-        for (i = 0; initStr && i < sftkdb_known_attributes_size; i++) {
+-            newStr = sqlite3_mprintf("%s, a%x", initStr, sftkdb_known_attributes[i]);
++        for (size_t i = 0; initStr && i < sftkdb_known_attributes_size; i++) {
++            newStr = sqlite3_mprintf("%s, a%lx", initStr,
++                                     sftkdb_known_attributes[i]);
+             sqlite3_free(initStr);
+             initStr = newStr;
+         }
+diff --git a/lib/softoken/sftkdbti.h b/lib/softoken/sftkdbti.h
+index c08334919..7dfbdabf1 100644
+--- nss/nss/lib/softoken/sftkdbti.h
++++ nss/nss/lib/softoken/sftkdbti.h
+@@ -27,7 +27,7 @@ struct SFTKDBHandleStr {
+ };
+ 
+ extern const CK_ATTRIBUTE_TYPE sftkdb_known_attributes[];
+-extern unsigned int sftkdb_known_attributes_size;
++extern size_t sftkdb_known_attributes_size;
+ 
+ #define SFTK_KEYDB_TYPE 0x40000000
+ #define SFTK_CERTDB_TYPE 0x00000000
+-- 
+2.39.5
+
