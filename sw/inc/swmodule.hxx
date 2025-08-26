@@ -36,6 +36,7 @@
 #include "fldupde.hxx"
 
 class Color;
+class ItemInfoPackage;
 class SfxItemSet;
 class SfxRequest;
 class SfxErrorHandler;
@@ -96,6 +97,8 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
     std::unique_ptr<SfxErrorHandler> m_pErrorHandler;
 
     std::unique_ptr<SwTableAutoFormatTable> m_xTableAutoFormatTable;
+
+    std::unique_ptr<ItemInfoPackage> m_xItemInfoPackageSwAttributes;
 
     rtl::Reference<SwAttrPool> m_pAttrPool;
 
@@ -241,6 +244,8 @@ public:
     void    InitAttrPool();
     // Delete pool before it is too late.
     void    RemoveAttrPool();
+
+    ItemInfoPackage& getItemInfoPackageSwAttributes();
 
     // Invalidates online spell-wrong-lists if necessary.
     static void  CheckSpellChanges( bool bOnlineSpelling,

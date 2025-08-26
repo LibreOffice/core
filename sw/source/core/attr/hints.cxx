@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <ndtxt.hxx>
+#include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <init.hxx>
 #include <svl/languageoptions.hxx>
@@ -138,11 +139,11 @@ const SfxPoolItem* GetDfltAttr(sal_uInt16 nWhich)
 {
 #ifdef DBG_UTIL
     OSL_ASSERT(nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN);
-    const SfxPoolItem* pRetval(getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem());
+    const SfxPoolItem* pRetval(SwModule::get()->getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem());
     OSL_ENSURE(pRetval, "GetDfltFormatAttr(): Dflt == 0");
     return pRetval;
 #else
-    return getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem();
+    return SwModule::get()->getItemInfoPackageSwAttributes().getExistingItemInfo(nWhich - POOLATTR_BEGIN).getItem();
 #endif
 }
 

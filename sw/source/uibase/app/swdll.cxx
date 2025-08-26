@@ -155,11 +155,12 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
         m_pAutoCorrCfg->SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
     }
 
+    m_pFilters.reset();
+
     // Pool has to be deleted before statics are
     SwModule::get()->RemoveAttrPool();
 
     ::FinitUI();
-    m_pFilters.reset();
     ::FinitCore();
     // sign out object-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));

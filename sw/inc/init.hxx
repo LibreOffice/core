@@ -32,7 +32,7 @@ class ItemInfoPackage;
 
 void InitCore();   // bastyp/init.cxx
 void FinitCore();
-ItemInfoPackage& getItemInfoPackageSwAttributes();
+std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes();
 
 namespace sw {
 

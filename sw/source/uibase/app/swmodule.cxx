@@ -73,6 +73,7 @@
 #include <wtabsh.hxx>
 #include <navipi.hxx>
 #include <QuickFindPanel.hxx>
+#include <init.hxx>
 #include <inputwin.hxx>
 #include <usrpref.hxx>
 #include <uinums.hxx>
@@ -342,15 +343,23 @@ void SwDLL::RegisterControls()
 // Load Module (only dummy for linking of the DLL)
 void    SwModule::InitAttrPool()
 {
-    OSL_ENSURE(!m_pAttrPool, "Pool already exists!");
-    m_pAttrPool = new SwAttrPool(nullptr);
+    OSL_ENSURE(!m_pAttrPool && !m_xItemInfoPackageSwAttributes, "Pool already exists!");
+    m_xItemInfoPackageSwAttributes = createItemInfoPackageSwAttributes();
+    m_pAttrPool = new SwAttrPool(*m_xItemInfoPackageSwAttributes, nullptr);
     SetPool(m_pAttrPool.get());
+}
+
+ItemInfoPackage& SwModule::getItemInfoPackageSwAttributes()
+{
+    assert(m_xItemInfoPackageSwAttributes && "InitAttrPool should have been called before this");
+    return *m_xItemInfoPackageSwAttributes;
 }
 
 void    SwModule::RemoveAttrPool()
 {
     SetPool(nullptr);
     m_pAttrPool.clear();
+    m_xItemInfoPackageSwAttributes.reset();
 }
 
 std::optional<SfxStyleFamilies> SwModule::CreateStyleFamilies()

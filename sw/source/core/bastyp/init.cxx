@@ -270,7 +270,7 @@ SwTOXMark* createSwTOXMarkForItemInfoPackage()
     return new SwTOXMark();
 }
 
-ItemInfoPackage& getItemInfoPackageSwAttributes()
+std::unique_ptr<ItemInfoPackage> createItemInfoPackageSwAttributes()
 {
     class ItemInfoPackageSwAttributes : public ItemInfoPackage
     {
@@ -494,11 +494,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
         }
     };
 
-
-    static std::unique_ptr<ItemInfoPackageSwAttributes> g_aItemInfoPackageSwAttributes;
-    if (!g_aItemInfoPackageSwAttributes)
-        g_aItemInfoPackageSwAttributes.reset(new ItemInfoPackageSwAttributes);
-    return *g_aItemInfoPackageSwAttributes;
+    return std::make_unique<ItemInfoPackageSwAttributes>();
 }
 
 std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;
