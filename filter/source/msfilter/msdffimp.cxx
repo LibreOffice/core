@@ -1396,7 +1396,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 {
                     if ( eMSO_FillType == mso_fillPattern )
                     {
-                        Bitmap aBmp( aGraf.GetBitmapEx().GetBitmap() );
+                        Bitmap aBmp( aGraf.GetBitmap().CreateColorBitmap() );
                         if (aBmp.GetSizePixel().Width() == 8 &&
                             aBmp.GetSizePixel().Height() == 8 &&
                             aBmp.getPixelFormat() == vcl::PixelFormat::N8_BPP)
