@@ -29,8 +29,6 @@
 #include <biginteger.hxx>
 #include "sanextension_mscryptimpl.hxx"
 
-#include "oid.hxx"
-
 #include <rtl/locale.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -457,17 +455,133 @@ void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCe
     }
 }
 
-static OUString findOIDDescription(char const *oid)
+static OUString findOIDDescription(std::string_view oid)
 {
-    OUString ouOID = OUString::createFromAscii( oid );
-    for (const auto& entry : OIDs)
-    {
-        OUString item = OUString::createFromAscii( entry.oid );
-        if (ouOID == item)
-        {
-            return OUString::createFromAscii( entry.desc );
-        }
-    }
+    static constexpr std::pair<std::string_view, OUString> OIDs[] = {
+        { "1.2.840.113549", u"RSA Data Security Inc."_ustr },
+        { "1.2.840.113549.1", u"PKCS"_ustr },
+        { "1.2.840.113549.2", u"RSA digest algorithm"_ustr },
+        { "1.2.840.113549.3", u"RSA cipher algorithm"_ustr },
+        { "1.2.840.113549.1.1", u"PKCS #1"_ustr },
+        { "1.2.840.113549.1.2", u"Unknown"_ustr },
+        { "1.2.840.113549.1.3", u"Unknown"_ustr },
+        { "1.2.840.113549.1.4", u"Unknown"_ustr },
+        { "1.2.840.113549.1.5", u"PKCS #5"_ustr },
+        { "1.2.840.113549.1.6", u"Unknown"_ustr },
+        { "1.2.840.113549.1.7", u"PKCS #7"_ustr },
+        { "1.2.840.113549.1.8", u"Unknown"_ustr },
+        { "1.2.840.113549.1.9", u"PKCS #9"_ustr },
+        { "1.2.840.113549.1.10", u"Unknown"_ustr },
+        { "1.2.840.113549.1.12", u"PKCS #12"_ustr },
+        { "1.2.840.113549.1.1.2", u"PKCS #1 MD2 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.3", u"PKCS #1 MD4 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.4", u"PKCS #1 MD5 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.1", u"PKCS #1 RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.2", u"PKCS #1 MD2 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.3", u"PKCS #1 MD4 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.4", u"PKCS #1 MD5 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.5", u"PKCS #1 SHA-1 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.1.5", u"PKCS #1 SHA-1 With RSA Encryption"_ustr },
+        { "1.2.840.113549.1.3.1", u"Unknown"_ustr },
+        { "1.2.840.113549.1.7.1", u"PKCS #7 Data"_ustr },
+        { "1.2.840.113549.1.7.2", u"PKCS #7 Signed Data"_ustr },
+        { "1.2.840.113549.1.7.3", u"PKCS #7 Enveloped Data"_ustr },
+        { "1.2.840.113549.1.7.4", u"PKCS #7 Signed and Enveloped Data"_ustr },
+        { "1.2.840.113549.1.7.5", u"PKCS #7 Digested Data"_ustr },
+        { "1.2.840.113549.1.7.6", u"PKCS #7 Encrypted Data"_ustr },
+        { "1.2.840.113549.1.9.1", u"PKCS #9 Email Address"_ustr },
+        { "1.2.840.113549.1.9.2", u"PKCS #9 Unstructured Name"_ustr },
+        { "1.2.840.113549.1.9.3", u"PKCS #9 Content Type"_ustr },
+        { "1.2.840.113549.1.9.4", u"PKCS #9 Message Digest"_ustr },
+        { "1.2.840.113549.1.9.5", u"PKCS #9 Signing Time"_ustr },
+        { "1.2.840.113549.1.9.6", u"PKCS #9 Counter Signature"_ustr },
+        { "1.2.840.113549.1.9.7", u"PKCS #9 Challenge Password"_ustr },
+        { "1.2.840.113549.1.9.8", u"PKCS #9 Unstructured Address"_ustr },
+        { "1.2.840.113549.1.9.9", u"PKCS #9 Extended Certificate Attributes"_ustr },
+        { "1.2.840.113549.1.9.15", u"PKCS #9 S/MIME Capabilities"_ustr },
+        { "1.2.840.113549.1.9.15.1", u"Unknown"_ustr },
+        { "1.2.840.113549.3.2", u"RC2-CBC"_ustr },
+        { "1.2.840.113549.3.4", u"RC4"_ustr },
+        { "1.2.840.113549.3.7", u"DES-EDE3-CBC"_ustr },
+        { "1.2.840.113549.3.9", u"RC5-CBCPad"_ustr },
+        { "1.2.840.10046", u"ANSI X9.42"_ustr },
+        { "1.2.840.10046.2.1", u"Diffie-Hellman Public Key Algorithm"_ustr },
+        { "1.2.840.10040", u"ANSI X9.57"_ustr },
+        { "1.2.840.10040.4.1", u"ANSI X9.57 DSA Signature"_ustr },
+        { "1.2.840.10040.4.3", u"ANSI X9.57 Algorithm DSA Signature with SHA-1 Digest"_ustr },
+        { "2.5", u"Directory"_ustr },
+        { "2.5.8", u"X.500-defined algorithms"_ustr },
+        { "2.5.8.1", u"X.500-defined encryption algorithms"_ustr },
+        { "2.5.8.2", u"Unknown"_ustr },
+        { "2.5.8.3", u"Unknown"_ustr },
+        { "2.5.8.1.1", u"RSA Encryption Algorithm"_ustr },
+        { "1.3.14", u"Open Systems Implementors Workshop"_ustr },
+        { "1.3.14.3.2", u"OIW SECSIG Algorithm"_ustr },
+        { "1.3.14.3.2.2", u"Unknown"_ustr },
+        { "1.3.14.3.2.3", u"Unknown"_ustr },
+        { "1.3.14.3.2.4", u"Unknown"_ustr },
+        { "1.3.14.3.2.6", u"DES-ECB"_ustr },
+        { "1.3.14.3.2.7", u"DES-CBC"_ustr },
+        { "1.3.14.3.2.8", u"DES-OFB"_ustr },
+        { "1.3.14.3.2.9", u"DES-CFB"_ustr },
+        { "1.3.14.3.2.10", u"DES-MAC"_ustr },
+        { "1.3.14.3.2.11", u"Unknown"_ustr },
+        { "1.3.14.3.2.12", u"Unknown"_ustr },
+        { "1.3.14.3.2.13", u"Unknown"_ustr },
+        { "1.3.14.3.2.14", u"Unknown"_ustr },
+        { "1.3.14.3.2.15", u"ISO SHA with RSA Signature"_ustr },
+        { "1.3.14.3.2.16", u"Unknown"_ustr },
+        { "1.3.14.3.2.17", u"DES-EDE"_ustr },
+        { "1.3.14.3.2.18", u"Unknown"_ustr },
+        { "1.3.14.3.2.19", u"Unknown"_ustr },
+        { "1.3.14.3.2.20", u"Unknown"_ustr },
+        { "1.3.14.3.2.21", u"Unknown"_ustr },
+        { "1.3.14.3.2.22", u"Unknown"_ustr },
+        { "1.3.14.3.2.23", u"Unknown"_ustr },
+        { "1.3.14.3.2.24", u"Unknown"_ustr },
+        { "1.3.14.3.2.25", u"Unknown"_ustr },
+        { "1.3.14.3.2.26", u"SHA-1"_ustr },
+        { "1.3.14.3.2.27", u"Forgezza DSA Signature with SHA-1 Digest"_ustr },
+        { "1.3.14.3.2.28", u"Unknown"_ustr },
+        { "1.3.14.3.2.29", u"Unknown"_ustr },
+        { "1.3.14.7.2", u"Unknown"_ustr },
+        { "1.3.14.7.2.1", u"Unknown"_ustr },
+        { "1.3.14.7.2.2", u"Unknown"_ustr },
+        { "1.3.14.7.2.3", u"Unknown"_ustr },
+        { "1.3.14.7.2.2.1", u"Unknown"_ustr },
+        { "1.3.14.7.2.3.1", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1", u"US DOD Infosec"_ustr },
+        { "2.16.840.1.101.2.1.1.1", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.2", u"MISSI DSS Algorithm (Old)"_ustr },
+        { "2.16.840.1.101.2.1.1.3", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.4", u"Skipjack CBC64"_ustr },
+        { "2.16.840.1.101.2.1.1.5", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.6", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.7", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.8", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.9", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.10", u"MISSI KEA Algorithm"_ustr },
+        { "2.16.840.1.101.2.1.1.11", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.12", u"MISSI KEA and DSS Algorithm (Old)"_ustr },
+        { "2.16.840.1.101.2.1.1.13", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.14", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.15", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.16", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.17", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.18", u"Unknown"_ustr },
+        { "2.16.840.1.101.2.1.1.19", u"MISSI DSS Algorithm"_ustr },
+        { "2.16.840.1.101.2.1.1.20", u"MISSI KEA and DSS Algorithm"_ustr },
+        { "2.16.840.1.101.2.1.1.21", u"Unknown"_ustr },
+        { "1.2.643.2.2.35.0", u"GOST_R_34.10-2001_Test"_ustr },
+        { "1.2.643.2.2.35.1", u"GOST_R_34.10-2001_Sign_DH_PRO"_ustr },
+        { "1.2.643.2.2.35.2", u"GOST_R_34.10-2001_Sign_DH_CARD"_ustr },
+        { "1.2.643.2.2.35.3", u"GOST_R_34.10-2001_Sign_DH"_ustr },
+        { "1.2.643.2.2.36.0", u"GOST_R_34.10-2001_Sign_DH_PRO"_ustr },
+    };
+
+    for (const auto& [item_oid, desc] : OIDs)
+        if (oid == item_oid)
+            return desc;
 
     return OUString() ;
 }
