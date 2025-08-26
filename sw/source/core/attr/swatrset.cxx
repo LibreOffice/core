@@ -45,11 +45,11 @@
 
 
 
-SwAttrPool::SwAttrPool(SwDoc& rDoc)
+SwAttrPool::SwAttrPool(ItemInfoPackage& rInfoPackage, SwDoc& rDoc)
 : SfxItemPool(u"SWG"_ustr)
 , m_rDoc(rDoc)
 {
-    registerItemInfoPackage(getItemInfoPackageSwAttributes());
+    registerItemInfoPackage(rInfoPackage);
 
     // create SfxItemPool and EditEngine pool and add these in a chain. These
     // belong us and will be removed/destroyed in removeAndDeleteSecondaryPools() used from

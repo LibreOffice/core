@@ -99,6 +99,7 @@
 #include <DocumentStylePoolManager.hxx>
 #include <DocumentExternalDataManager.hxx>
 #include <wrtsh.hxx>
+#include <swmodule.hxx>
 #include <unocrsr.hxx>
 #include <fmthdft.hxx>
 #include <frameformats.hxx>
@@ -206,7 +207,7 @@ static void lcl_DelFormatIndices( SwFormat const * pFormat )
  */
 SwDoc::SwDoc()
     : m_pNodes(new SwNodes(*this)),
-    mpAttrPool(new SwAttrPool(*this)),
+    mpAttrPool(new SwAttrPool(SwModule::get()->getItemInfoPackageSwAttributes(), *this)),
     maOLEModifiedIdle( "sw::SwDoc maOLEModifiedIdle" ),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),

@@ -72,6 +72,7 @@
 #include <wlistsh.hxx>
 #include <wtabsh.hxx>
 #include <navipi.hxx>
+#include <init.hxx>
 #include <inputwin.hxx>
 #include <usrpref.hxx>
 #include <uinums.hxx>
@@ -335,6 +336,23 @@ void SwDLL::RegisterControls()
     SwNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);
 
     SwJumpToSpecificPageControl::RegisterControl(SID_JUMP_TO_SPECIFIC_PAGE, pMod);
+}
+
+void SwModule::InitItemInfoPackageSwAttributes()
+{
+    OSL_ENSURE(!m_xItemInfoPackageSwAttributes, "ItemInfoPackageSwAttributes already exists!");
+    m_xItemInfoPackageSwAttributes = createItemInfoPackageSwAttributes();
+}
+
+ItemInfoPackage& SwModule::getItemInfoPackageSwAttributes()
+{
+    assert(m_xItemInfoPackageSwAttributes && "InitItemInfoPackageSwAttributes should have been called before this");
+    return *m_xItemInfoPackageSwAttributes;
+}
+
+void SwModule::RemoveItemInfoPackageSwAttributes()
+{
+    m_xItemInfoPackageSwAttributes.reset();
 }
 
 SfxStyleFamilies SwModule::CreateStyleFamilies()

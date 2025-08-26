@@ -27,6 +27,7 @@
 class SwDoc;
 class OutputDevice;
 class IDocumentSettingAccess;
+class ItemInfoPackage;
 class SvxPostureItem;
 class SvxWeightItem;
 class SvxShadowedItem;
@@ -149,7 +150,7 @@ private:
     SwDoc& m_rDoc;
 
 public:
-    SwAttrPool( SwDoc& rDoc );
+    SwAttrPool(ItemInfoPackage& rInfoPackage, SwDoc& rDoc);
 private:
     virtual ~SwAttrPool() override;
 public:

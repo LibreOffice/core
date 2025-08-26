@@ -36,6 +36,7 @@
 #include "fldupde.hxx"
 
 class Color;
+class ItemInfoPackage;
 class SfxItemSet;
 class SfxRequest;
 class SfxErrorHandler;
@@ -94,6 +95,7 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
 
     std::unique_ptr<SwTableAutoFormatTable> m_xTableAutoFormatTable;
 
+    std::unique_ptr<ItemInfoPackage> m_xItemInfoPackageSwAttributes;
 
     // Current view is held here in order to avoid one's being forced
     // to work via GetActiveView.
@@ -232,6 +234,11 @@ public:
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) override;
     virtual std::unique_ptr<SfxTabPage> CreateTabPage( sal_uInt16 nId, weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet ) override;
     SW_DLLPUBLIC virtual SfxStyleFamilies CreateStyleFamilies() override;
+
+    void    InitItemInfoPackageSwAttributes();
+    void    RemoveItemInfoPackageSwAttributes();
+
+    ItemInfoPackage& getItemInfoPackageSwAttributes();
 
     // Invalidates online spell-wrong-lists if necessary.
     static void  CheckSpellChanges( bool bOnlineSpelling,
