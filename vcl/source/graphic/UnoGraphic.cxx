@@ -145,7 +145,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
     {
         SvMemoryStream aMemoryStream;
 
-        WriteDIB(maGraphic.GetBitmapEx().GetBitmap(), aMemoryStream, false, true);
+        WriteDIB(maGraphic.GetBitmap().CreateColorBitmap(), aMemoryStream, false, true);
         return css::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell());
     }
     else
@@ -187,27 +187,27 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
     if (aGraphic.GetType() == GraphicType::Bitmap ||
         aGraphic.GetType() == GraphicType::GdiMetafile)
     {
-        BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
+        Bitmap aBitmap(aGraphic.GetBitmap());
 
-        if (aBitmapEx.IsAlpha())
+        if (aBitmap.HasAlpha())
         {
-            aBitmapEx.ChangeColorAlpha( cIndexFrom, nAlphaTo );
-            aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-            aReturnGraphic = ::Graphic(aBitmapEx);
+            aBitmap.ChangeColorAlpha( cIndexFrom, nAlphaTo );
+            aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+            aReturnGraphic = ::Graphic(aBitmap);
         }
         else
         {
             if ((nAlphaTo == 0) || (nAlphaTo == sal::static_int_cast< sal_Int8 >(0xff)))
             {
-                Bitmap aBitmap(aBitmapEx.GetBitmap());
-                AlphaMask aMask(aBitmap.CreateAlphaMask(aColorFrom, nTolerance));
-                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(BitmapEx(aBitmap, aMask));
+                Bitmap aBitmap2(aBitmap);
+                AlphaMask aMask(aBitmap2.CreateAlphaMask(aColorFrom, nTolerance));
+                aBitmap2.Replace(aColorFrom, aColorTo, nTolerance);
+                aReturnGraphic = ::Graphic(BitmapEx(aBitmap2, aMask));
             }
             else
             {
-                aBitmapEx.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(aBitmapEx);
+                aBitmap.Replace(aColorFrom, aColorTo, nTolerance);
+                aReturnGraphic = ::Graphic(aBitmap);
             }
         }
     }
@@ -242,9 +242,9 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyBrightnessContrast(
     ::Graphic aGraphic(rxGraphic);
     ::Graphic aReturnGraphic;
 
-    BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-    aBitmapEx.Adjust(nBrightness, nContrast, 0, 0, 0, 0, false, mso);
-    aReturnGraphic = ::Graphic(aBitmapEx);
+    Bitmap aBitmap(aGraphic.GetBitmap());
+    aBitmap.Adjust(nBrightness, nContrast, 0, 0, 0, 0, false, mso);
+    aReturnGraphic = ::Graphic(aBitmap);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());
     return aReturnGraphic.GetXGraphic();
 }
