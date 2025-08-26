@@ -54,7 +54,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,cairo) $(ZLIB_CFLAGS)" \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,cairo)" \
 			) \
-		$(if $(filter ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
+		$(if $(filter MACOSX ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
 		LIBS="$(ZLIB_LIBS)" \
 		$(if $(filter -fsanitize=%,$(LDFLAGS)),LDFLAGS="$(LDFLAGS) -fuse-ld=bfd") \
 		pixman_CFLAGS="-I$(gb_UnpackedTarball_workdir)/pixman/pixman -pthread" \
