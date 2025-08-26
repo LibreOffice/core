@@ -74,7 +74,7 @@ namespace
 {
     constexpr sal_uInt16 SPELLUNDO_START = 200;
 
-    enum SpellUndoAction
+    enum class SpellUndoAction
     {
         CHANGE_LANGUAGE          = SPELLUNDO_START + 1,
         CHANGE_TEXTENGINE        = SPELLUNDO_START + 2,
@@ -91,7 +91,7 @@ namespace
 namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
 {
-    sal_uInt16          m_nId;
+    SpellUndoAction m_nId;
     const Link<SpellUndoAction_Impl&,void>& m_rActionLink;
     //undo of button enabling
     bool            m_bEnableChangePB;
@@ -107,7 +107,7 @@ class SpellUndoAction_Impl : public SfxUndoAction
     tools::Long            m_nOffset;
 
 public:
-    SpellUndoAction_Impl(sal_uInt16 nId, const Link<SpellUndoAction_Impl&,void>& rActionLink) :
+    SpellUndoAction_Impl(SpellUndoAction nId, const Link<SpellUndoAction_Impl&,void>& rActionLink) :
         m_nId(nId),
         m_rActionLink( rActionLink),
         m_bEnableChangePB(false),
@@ -119,7 +119,7 @@ public:
         {}
 
     virtual void            Undo() override;
-    sal_uInt16              GetId() const;
+    SpellUndoAction GetId() const;
 
     void                    SetEnableChangePB(){m_bEnableChangePB = true;}
     bool                    IsEnableChangePB() const {return m_bEnableChangePB;}
@@ -155,7 +155,7 @@ void SpellUndoAction_Impl::Undo()
 }
 
 
-sal_uInt16 SpellUndoAction_Impl::GetId()const
+SpellUndoAction SpellUndoAction_Impl::GetId()const
 {
     return m_nId;
 }
@@ -514,7 +514,7 @@ public:
     UndoChangeGroupGuard(SentenceEditWindow_Impl& rSentenceED)
         : m_rSentenceED(rSentenceED)
     {
-        m_rSentenceED.UndoActionStart(SpellUndoAction::CHANGE_GROUP);
+        m_rSentenceED.UndoActionStart(sal_uInt16(SpellUndoAction::CHANGE_GROUP));
     }
     ~UndoChangeGroupGuard()
     {
@@ -662,7 +662,10 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
         break;
         case SpellUndoAction::ADD_IGNORE_RULE:
             //undo of ignored rules is not supported
+        case SpellUndoAction::CHANGE_LANGUAGE:
+        case SpellUndoAction::CHANGE_GROUP:
         break;
+
     }
 }
 
@@ -1304,7 +1307,7 @@ namespace
   -----------------------------------------------------------------------*/
 namespace
 {
-    enum SelectionType
+    enum class SelectionType
     {
         INVALID     = 0,
         LEFT_NO     = 1,
@@ -1317,7 +1320,7 @@ namespace
         OUTSIDE_YES = 8
     };
 
-    enum Action
+    enum class Action
     {
         UNDOEDIT    = 0,
         CONTINUE    = 1,
@@ -1346,7 +1349,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         bool bHasErrorLeft = false;
 
         bool bHasRange = aCurrentSelection.HasRange();
-        sal_uInt8 nSelectionType = 0; // invalid type!
+        SelectionType nSelectionType = SelectionType::INVALID;
 
         std::vector<EECharAttrib> aAttribList;
         m_xEditEngine->GetCharAttribs(0, aAttribList);
@@ -1433,15 +1436,11 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         bool bIsErrorActive = (pErrorAttr && pErrorAttr->nStart == m_nErrorStart) ||
                 (pErrorAttrLeft && pErrorAttrLeft->nStart == m_nErrorStart);
 
-        SAL_WARN_IF(
-            nSelectionType == SelectionType::INVALID, "cui.dialogs",
-            "selection type not set");
-
         const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
         bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
         bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
 
-        sal_Int8 nAction = Action::CONTINUE;
+        Action nAction = Action::CONTINUE;
         switch(nSelectionType)
         {
 //    1 - backspace                   delete                      any other
@@ -1492,6 +1491,9 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             case SelectionType::OUTSIDE_NO :
             case SelectionType::OUTSIDE_YES:
                 nAction = Action::UNDOEDIT;
+            break;
+            case SelectionType::INVALID:
+                SAL_WARN("cui.dialogs", "selection type not set");
             break;
         }
         //save the current paragraph
@@ -1792,7 +1794,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     //calculate length changes
     auto nDiffLen = rNewWord.getLength() - m_nErrorEnd + m_nErrorStart;
     //Remove spell error attribute
-    m_xEditEngine->UndoActionStart(SpellUndoAction::MOVE_ERROREND);
+    m_xEditEngine->UndoActionStart(sal_uInt16(SpellUndoAction::MOVE_ERROREND));
     const EECharAttrib* pErrorAttrib = FindCharAttrib(m_nErrorStart, EE_CHAR_GRABBAG, aAttribList);
     DBG_ASSERT(pErrorAttrib, "no error attribute found");
     bool bSpellErrorDescription = false;
