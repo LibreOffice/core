@@ -345,7 +345,7 @@ void LinkManager::UpdateAllLinks(
             INetURLObject aURL(pPersist->getDocumentBaseURL());
             // tdf#168089 - don't URL encode filename for the update links confirmation dialog
             aMsg = aMsg.replaceFirst("%{filename}",
-                                     aURL.GetLastName(INetURLObject::DecodeMechanism::Unambiguous));
+                                     aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset));
 
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParentWin,
                                                            VclMessageType::Question, VclButtonsType::YesNo, aMsg));
