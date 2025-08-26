@@ -70,7 +70,8 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector(
 {
     Link<sdtools::EventMultiplexerEvent&, void> aLink(
         LINK(this, CurrentMasterPagesSelector, EventMultiplexerListener));
-    rBase.GetEventMultiplexer()->AddEventListener(aLink);
+    mpEventMultiplexer = rBase.GetEventMultiplexer();
+    mpEventMultiplexer->AddEventListener(aLink);
 }
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
@@ -85,7 +86,7 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector()
     }
 
     Link<sdtools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
-    mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
+    mpEventMultiplexer->RemoveEventListener(aLink);
 }
 
 void CurrentMasterPagesSelector::LateInit()

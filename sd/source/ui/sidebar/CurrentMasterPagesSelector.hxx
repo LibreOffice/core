@@ -23,7 +23,7 @@
 
 #include "MasterPagesSelector.hxx"
 
-namespace sdtools { class EventMultiplexerEvent; }
+namespace sdtools { class EventMultiplexer; class EventMultiplexerEvent; }
 
 namespace sd::sidebar {
 
@@ -70,6 +70,7 @@ private:
     virtual void LateInit() override;
 
     DECL_LINK(EventMultiplexerListener,sdtools::EventMultiplexerEvent&, void);
+    std::shared_ptr<sdtools::EventMultiplexer> mpEventMultiplexer;
 };
 
 } // end of namespace sd::sidebar
