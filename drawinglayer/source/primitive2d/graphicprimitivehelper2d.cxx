@@ -666,14 +666,14 @@ namespace drawinglayer::primitive2d
                         {
                             rContainer.append(
                                 new BitmapPrimitive2D(
-                                    Bitmap(rGraphic.GetBitmapEx()),
+                                    rGraphic.GetBitmap(),
                                     rTransform));
                         }
                         else
                         {
                             rContainer.append(
                                 new BitmapAlphaPrimitive2D(
-                                    Bitmap(rGraphic.GetBitmapEx()),
+                                    rGraphic.GetBitmap(),
                                     rTransform,
                                     fTransparency));
                         }

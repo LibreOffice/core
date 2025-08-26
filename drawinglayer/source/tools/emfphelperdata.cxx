@@ -1502,7 +1502,7 @@ namespace emfplushelper
                             Size aSize;
                             if (image->type == ImageDataTypeBitmap)
                             {
-                                aSize = image->graphic.GetBitmapEx().GetSizePixel();
+                                aSize = image->graphic.GetBitmap().GetSizePixel();
                                 SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width()
                                                                                     << "x"
                                                                                     << aSize.Height());
@@ -1549,7 +1549,7 @@ namespace emfplushelper
 
                             if (image->type == ImageDataTypeBitmap)
                             {
-                                Bitmap aBmp(image->graphic.GetBitmapEx());
+                                Bitmap aBmp(image->graphic.GetBitmap());
                                 aBmp.Crop(aSource);
                                 aSize = aBmp.GetSizePixel();
                                 if (aSize.Width() > 0 && aSize.Height() > 0)

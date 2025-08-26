@@ -628,7 +628,7 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
     // nBWidth, nBHeight is the pixel size of the needed bitmap. To not need to scale it
     // in vcl many times, create a size-optimized version
     const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
-    BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+    Bitmap aBitmap(rFillGraphicAttribute.getGraphic().GetBitmap());
     const bool bPreScaled(nBWidth * nBHeight < (250 * 250));
 
     // ... but only up to a maximum size, else it gets too expensive
@@ -637,26 +637,26 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
         // if color depth is below 24bit, expand before scaling for better quality.
         // This is even needed for low colors, else the scale will produce
         // a bitmap in gray or Black/White (!)
-        if (isPalettePixelFormat(aBitmapEx.getPixelFormat()))
+        if (isPalettePixelFormat(aBitmap.getPixelFormat()))
         {
-            aBitmapEx.Convert(BmpConversion::N24Bit);
+            aBitmap.Convert(BmpConversion::N24Bit);
         }
 
-        aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
+        aBitmap.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
     }
 
     if (rFillBitmapCandidate.hasTransparency())
-        aBitmapEx.BlendAlpha(
+        aBitmap.BlendAlpha(
             static_cast<sal_uInt8>(255 - (rFillBitmapCandidate.getTransparency() * 255)));
 
     if (maBColorModifierStack.count())
     {
         // when color modifier, apply to bitmap
-        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+        aBitmap = aBitmap.Modify(maBColorModifierStack);
 
         // ModifyBitmapEx uses empty bitmap as sign to return that
         // the content will be completely replaced to mono color, use shortcut
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
         {
             // color gets completely replaced, get it
             const basegfx::BColor aModifiedColor(
@@ -726,7 +726,7 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
     if (nOffsetX == 0 && nOffsetY == 0 && aNeededBitmapSizePixel.getWidth() == 1
         && aNeededBitmapSizePixel.getHeight() == 1)
     {
-        Color col = aBitmapEx.GetPixelColor(0, 0);
+        Color col = aBitmap.GetPixelColor(0, 0);
         mpOutputDevice->SetLineColor(col);
         mpOutputDevice->SetFillColor(col);
         mpOutputDevice->DrawRect(aVisiblePixel);
@@ -745,12 +745,12 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
                 {
                     if (bPreScaled)
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmap);
                     }
                     else
                     {
                         mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
-                                                     aNeededBitmapSizePixel, aBitmapEx);
+                                                     aNeededBitmapSizePixel, aBitmap);
                     }
                 }
             }
@@ -770,12 +770,12 @@ bool VclProcessor2D::RenderFillGraphicPrimitive2DImpl(
                 {
                     if (bPreScaled)
                     {
-                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmap);
                     }
                     else
                     {
                         mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(),
-                                                     aNeededBitmapSizePixel, aBitmapEx);
+                                                     aNeededBitmapSizePixel, aBitmap);
                     }
                 }
             }

@@ -58,7 +58,7 @@ namespace drawinglayer::attribute
                 // available when a renderer works with multi-threading.
                 // When changing this, please check if it is still possible to
                 // use a metafile as texture for a 3D object
-                maGraphic.GetBitmapEx();
+                maGraphic.GetBitmap();
             }
 
             ImpFillGraphicAttribute()
