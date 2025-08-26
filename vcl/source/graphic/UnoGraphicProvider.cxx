@@ -73,22 +73,22 @@ Bitmap BitmapFromDIB(const css::uno::Sequence<sal_Int8>& dib)
 
 namespace vcl
 {
-BitmapEx GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
+Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
 {
     if (!xBitmap)
         return {};
 
     if (auto xGraphic = xBitmap.query<css::graphic::XGraphic>())
-        return Graphic(xGraphic).GetBitmapEx();
+        return Graphic(xGraphic).GetBitmap();
 
     // This is an unknown implementation of a XBitmap interface
     if (Bitmap aMask = BitmapFromDIB(xBitmap->getMaskDIB()); !aMask.IsEmpty())
     {
         aMask.Invert(); // Convert from transparency to alpha
-        return BitmapEx(BitmapFromDIB(xBitmap->getDIB()), aMask);
+        return Bitmap(BitmapEx(BitmapFromDIB(xBitmap->getDIB()), aMask));
     }
 
-    BitmapEx aBmp;
+    Bitmap aBmp;
     ReadDIBBitmapEx(aBmp, o3tl::temporary(AsStream(xBitmap->getDIB())), true);
     return aBmp;
 }
@@ -98,9 +98,9 @@ css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any)
     if (auto xRet = any.query<css::graphic::XGraphic>())
         return xRet;
 
-    if (BitmapEx aBmpEx = GetBitmap(any.query<css::awt::XBitmap>()); !aBmpEx.IsEmpty())
+    if (Bitmap aBmp = GetBitmap(any.query<css::awt::XBitmap>()); !aBmp.IsEmpty())
     {
-        return Graphic(aBmpEx).GetXGraphic();
+        return Graphic(aBmp).GetXGraphic();
     }
 
     return {};

@@ -25,7 +25,7 @@ class Any;
 
 namespace vcl
 {
-VCL_DLLPUBLIC BitmapEx GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap);
+VCL_DLLPUBLIC Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap);
 
 // Checks if the Any contains graphic::XGraphic; or if awt::XBitmap is there, converts it
 VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any);
