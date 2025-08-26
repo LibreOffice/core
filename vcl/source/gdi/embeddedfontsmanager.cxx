@@ -214,6 +214,35 @@ OUString getFilenameForExport(std::u16string_view familyName, FontFamily family,
                             RTL_TEXTENCODING_UTF8);
 }
 
+// Check if it's (legally) allowed to embed the font file into a document
+// (ttf has a flag allowing this). PhysicalFontFace::IsEmbeddable() appears
+// to have a different meaning (guessing from code, IsSubsettable() might
+// possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
+// So just try to open the data as ttf and see.
+bool sufficientTTFRights(const void* data, tools::Long size,
+                         EmbeddedFontsManager::FontRights rights)
+{
+    TrueTypeFont* font;
+    if (OpenTTFontBuffer(data, size, 0 /*TODO*/, &font) == SFErrCodes::Ok)
+    {
+        TTGlobalFontInfo info;
+        GetTTGlobalFontInfo(font, &info);
+        CloseTTFont(font);
+        // https://www.microsoft.com/typography/otspec/os2.htm#fst
+        int copyright = info.typeFlags;
+        switch (rights)
+        {
+            case EmbeddedFontsManager::FontRights::ViewingAllowed:
+                // Embedding not restricted completely.
+                return (copyright & 0x02) != 0x02;
+            case EmbeddedFontsManager::FontRights::EditingAllowed:
+                // Font is installable or editable.
+                return copyright == 0 || (copyright & 0x08);
+        }
+    }
+    return true; // no known restriction
+}
+
 }
 
 EmbeddedFontsManager::EmbeddedFontsManager(const uno::Reference<frame::XModel>& xModel)
@@ -510,34 +539,6 @@ void EmbeddedFontsManager::releaseFonts(const std::vector<std::pair<OUString, OU
     }
 
     OutputDevice::ImplUpdateAllFontData(true);
-}
-
-// Check if it's (legally) allowed to embed the font file into a document
-// (ttf has a flag allowing this). PhysicalFontFace::IsEmbeddable() appears
-// to have a different meaning (guessing from code, IsSubsettable() might
-// possibly mean it's ttf, while IsEmbeddable() might mean it's type1).
-// So just try to open the data as ttf and see.
-bool EmbeddedFontsManager::sufficientTTFRights( const void* data, tools::Long size, FontRights rights )
-{
-    TrueTypeFont* font;
-    if( OpenTTFontBuffer( data, size, 0 /*TODO*/, &font ) == SFErrCodes::Ok )
-    {
-        TTGlobalFontInfo info;
-        GetTTGlobalFontInfo( font, &info );
-        CloseTTFont( font );
-        // https://www.microsoft.com/typography/otspec/os2.htm#fst
-        int copyright = info.typeFlags;
-        switch( rights )
-        {
-            case FontRights::ViewingAllowed:
-                // Embedding not restricted completely.
-                return ( copyright & 0x02 ) != 0x02;
-            case FontRights::EditingAllowed:
-                // Font is installable or editable.
-                return copyright == 0 || ( copyright & 0x08 );
-        }
-    }
-    return true; // no known restriction
 }
 
 // static

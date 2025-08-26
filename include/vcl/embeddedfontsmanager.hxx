@@ -76,15 +76,6 @@ public:
                               bool& activatedRestrictedFonts);
 
     /**
-      Returns if the restrictions specified in the font (if present) allow embedding
-      the font for a particular purpose.
-      @param data font data
-      @param size size of the font data
-      @param rights type of operation to be allowed for the font
-    */
-    static bool sufficientTTFRights( const void* data, tools::Long size, FontRights rights );
-
-    /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
       @internal
     */
