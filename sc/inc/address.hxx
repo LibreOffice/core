@@ -393,33 +393,17 @@ public:
         return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
     }
 
-    /** Less than ordered by tab,col,row. */
-    constexpr bool operator<(const ScAddress& rAddress) const
+    constexpr auto operator<=>(const ScAddress& rAddress) const
     {
-        if (nTab == rAddress.nTab)
+        if (auto bTabResult = nTab <=> rAddress.nTab; bTabResult == 0)
         {
-            if (nCol == rAddress.nCol)
-                return nRow < rAddress.nRow;
+            if (auto bColResult = nCol <=> rAddress.nCol; bColResult == 0)
+                return nRow <=> rAddress.nRow;
             else
-                return nCol < rAddress.nCol;
+                return bColResult;
         }
         else
-            return nTab < rAddress.nTab;
-    }
-
-    constexpr bool operator<=( const ScAddress& rAddress ) const
-    {
-        return operator<(rAddress) || operator==(rAddress);
-    }
-
-    constexpr bool operator>(const ScAddress& rAddress) const
-    {
-        return !(operator<=(rAddress));
-    }
-
-    constexpr bool operator>=(const ScAddress& rAddress) const
-    {
-        return !(operator<(rAddress));
+            return bTabResult;
     }
 
     /** Less than ordered by tab,row,col as needed by row-wise import/export */
