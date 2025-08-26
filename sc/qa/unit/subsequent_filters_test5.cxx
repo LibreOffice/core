@@ -132,6 +132,78 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf94627)
     ASSERT_DOUBLES_EQUAL(2, fVal);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testGenericXMLMapped)
+{
+    createScDoc("xml-mapped/list-of-records.xml");
+    ScDocument* pDoc = getScDoc();
+
+    std::vector<std::vector<const char*>> aCheck = {
+        { "id", "name", "email", "age", "city" },
+        { "1", "John Smith", "john.smith@example.com", "34", "New York" },
+        { "2", "Emma Johnson", "emma.johnson@example.com", "28", "Los Angeles" },
+        { "3", "Michael Chen", "michael.chen@example.com", "45", "Chicago" },
+        { "4", "Sophia Rodriguez", "sophia.rodriguez@example.com", "19", "Houston" },
+        { "5", "James Brown", "james.brown@example.com", "52", "Phoenix" },
+        { "6", "Olivia Davis", "olivia.davis@example.com", "27", "Philadelphia" },
+        { "7", "William Wilson", "william.wilson@example.com", "39", "San Antonio" },
+        { "8", "Ava Martinez", "ava.martinez@example.com", "31", "San Diego" },
+        { "9", "Lucas Taylor", "lucas.taylor@example.com", "23", "Dallas" },
+        { "10", "Mia Anderson", "mia.anderson@example.com", "29", "San Jose" },
+        { "11", "Ethan Thomas", "ethan.thomas@example.com", "41", "Austin" },
+        { "12", "Isabella Lee", "isabella.lee@example.com", "26", "Jacksonville" },
+        { "13", "Alexander Walker", "alexander.walker@example.com", "37", "San Francisco" },
+        { "14", "Charlotte Harris", "charlotte.harris@example.com", "33", "Columbus" },
+        { "15", "Daniel Lewis", "daniel.lewis@example.com", "30", "Indianapolis" },
+        { "16", "Amelia Clark", "amelia.clark@example.com", "24", "Seattle" },
+        { "17", "Henry Young", "henry.young@example.com", "48", "Denver" },
+        { "18", "Harper King", "harper.king@example.com", "21", "Washington" },
+        { "19", "Benjamin Scott", "benjamin.scott@example.com", "35", "Boston" },
+        { "20", "Evelyn Adams", "evelyn.adams@example.com", "40", "Portland" },
+    };
+
+    ScRange aOutRange;
+    aOutRange.Parse(u"A1:E21"_ustr, *pDoc);
+    bool bGood = checkOutput(pDoc, aOutRange, aCheck, "expected output");
+    CPPUNIT_ASSERT(bGood);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testGenericJSONMapped1)
+{
+    createScDoc("json-mapped/list-of-objects.json");
+    ScDocument* pDoc = getScDoc();
+
+    std::vector<std::vector<const char*>> aCheck = {
+        { "A", "B", "C", "D" },
+        { "1", "2", "3", nullptr },
+        { "11", "12", "13", nullptr },
+        { "21", "22", nullptr, "24" },
+        { nullptr, nullptr, "text", nullptr },
+    };
+
+    ScRange aOutRange;
+    aOutRange.Parse(u"A1:D5"_ustr, *pDoc);
+    bool bGood = checkOutput(pDoc, aOutRange, aCheck, "expected output");
+    CPPUNIT_ASSERT(bGood);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testGenericJSONMapped2)
+{
+    createScDoc("json-mapped/nested-arrays.json");
+    ScDocument* pDoc = getScDoc();
+
+    std::vector<std::vector<const char*>> aCheck = {
+        { "field 0", "field 1", "field 2" },
+        { "1", "2", "3" },
+        { "4", "5", "6" },
+        { "7", "8", "9" },
+    };
+
+    ScRange aOutRange;
+    aOutRange.Parse(u"A1:C4"_ustr, *pDoc);
+    bool bGood = checkOutput(pDoc, aOutRange, aCheck, "expected output");
+    CPPUNIT_ASSERT(bGood);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
