@@ -6,10 +6,10 @@ _IsSetupTypeMin	Typical
 AgreeToLicense	No
 ApplicationUsers	AllUsers
 ARPCOMMENTS	ARPCOMMENTSTEMPLATE
-ARPCONTACT	Collabora Productivity Ltd.
-ARPHELPLINK	https://CollaboraOffice.com
-ARPURLINFOABOUT	https://CollaboraOffice.com
-ARPURLUPDATEINFO	https://CollaboraOffice.com
+ARPCONTACT	CIB software GmbH
+ARPHELPLINK	https://www.cib.de/en/office/
+ARPURLINFOABOUT	https://www.cib.de/en/office/
+ARPURLUPDATEINFO	https://www.cib.de/en/office/
 ARPNOREPAIR	1
 ARPNOMODIFY	1
 DefaultUIFont	Tahoma8

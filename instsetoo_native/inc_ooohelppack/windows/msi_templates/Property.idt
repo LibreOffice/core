@@ -7,10 +7,10 @@ AgreeToLicense	No
 ApplicationUsers	AllUsers
 ALLUSERS	1
 ARPCOMMENTS	ARPCOMMENTSTEMPLATE
-ARPCONTACT	Collabora Productivity Ltd.
-ARPHELPLINK	https://CollaboraOffice.com
-ARPURLINFOABOUT	https://CollaboraOffice.com
-ARPURLUPDATEINFO	https://CollaboraOffice.com
+ARPCONTACT	CIB software GmbH
+ARPHELPLINK	https://www.cib.de/en/office/
+ARPURLINFOABOUT	https://www.cib.de/en/office/
+ARPURLUPDATEINFO	https://www.cib.de/en/office/
 DefaultUIFont	DialogDefault
 DialogCaption	Windows Installer
 DiskPrompt	[1]

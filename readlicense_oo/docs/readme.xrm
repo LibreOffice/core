@@ -17,7 +17,7 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="CollaboraOffice" xml:lang="en-US">For more information please visit ${PRODUCTNAME} home page at <a href="https://collaboraoffice.com">https://CollaboraOffice.com/</a>.</p>
+			<p id="CIB Office" xml:lang="en-US">For more information please visit ${PRODUCTNAME} home page at <a href="https://www.cib.de/en/office/">https://www.cib.de/en/office/</a>.</p>
 		</div>
 	</body>
 </html>
