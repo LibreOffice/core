@@ -133,7 +133,7 @@ bool lclDrawObj(OutputDevice& rOut, const Point& rPt, const Size& rSz,
     return bRet;
 }
 
-void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
+void lclImplAdjust( Bitmap& rBmp, const GraphicAttr& rAttr, GraphicAdjustmentFlags nAdjustmentFlags )
 {
     GraphicAttr aAttr( rAttr );
 
@@ -142,11 +142,11 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
         switch( aAttr.GetDrawMode() )
         {
             case GraphicDrawMode::Mono:
-                rBmpEx.Convert( BmpConversion::N1BitThreshold );
+                rBmp.Convert( BmpConversion::N1BitThreshold );
             break;
 
             case GraphicDrawMode::Greys:
-                rBmpEx.Convert( BmpConversion::N8BitGreys );
+                rBmp.Convert( BmpConversion::N8BitGreys );
             break;
 
             case GraphicDrawMode::Watermark:
@@ -163,24 +163,24 @@ void lclImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, GraphicAdjustmen
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::COLORS ) && aAttr.IsAdjusted() )
     {
-        rBmpEx.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
+        rBmp.Adjust( aAttr.GetLuminance(), aAttr.GetContrast(),
                        aAttr.GetChannelR(), aAttr.GetChannelG(), aAttr.GetChannelB(),
                        aAttr.GetGamma(), aAttr.IsInvert() );
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::MIRROR ) && aAttr.IsMirrored() )
     {
-        rBmpEx.Mirror( aAttr.GetMirrorFlags() );
+        rBmp.Mirror( aAttr.GetMirrorFlags() );
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::ROTATE ) && aAttr.IsRotated() )
     {
-        rBmpEx.Rotate( aAttr.GetRotation(), COL_TRANSPARENT );
+        rBmp.Rotate( aAttr.GetRotation(), COL_TRANSPARENT );
     }
 
     if( ( nAdjustmentFlags & GraphicAdjustmentFlags::TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        rBmpEx.AdjustTransparency(255 - aAttr.GetAlpha());
+        rBmp.AdjustTransparency(255 - aAttr.GetAlpha());
     }
 }
 
@@ -694,7 +694,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     }
     else if( GraphicType::Bitmap == eType )
     {
-        BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
+        Bitmap aBitmap( aTransGraphic.GetBitmap() );
         tools::Rectangle aCropRect;
 
         // convert crops to pixel
@@ -728,7 +728,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                     aMapGraph));
 
             if(rAttr.IsCropped()
-                && (aSrcSizePixel.Width() != aBitmapEx.GetSizePixel().Width() || aSrcSizePixel.Height() != aBitmapEx.GetSizePixel().Height())
+                && (aSrcSizePixel.Width() != aBitmap.GetSizePixel().Width() || aSrcSizePixel.Height() != aBitmap.GetSizePixel().Height())
                 && aSrcSizePixel.Width())
             {
                 // the size in pixels calculated from Graphic's internal MapMode (aTransGraphic.GetPrefMapMode())
@@ -740,15 +740,15 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 // another possibility is to adapt the values created so far with a factor; this
                 // will keep the original Bitmap untouched and thus quality will not change
                 // caution: convert to double first, else pretty big errors may occur
-                const double fFactorX(static_cast<double>(aBitmapEx.GetSizePixel().Width()) / aSrcSizePixel.Width());
-                const double fFactorY(static_cast<double>(aBitmapEx.GetSizePixel().Height()) / aSrcSizePixel.Height());
+                const double fFactorX(static_cast<double>(aBitmap.GetSizePixel().Width()) / aSrcSizePixel.Width());
+                const double fFactorY(static_cast<double>(aBitmap.GetSizePixel().Height()) / aSrcSizePixel.Height());
 
                 aCropLeftTop.setWidth( basegfx::fround<tools::Long>(aCropLeftTop.Width() * fFactorX) );
                 aCropLeftTop.setHeight( basegfx::fround<tools::Long>(aCropLeftTop.Height() * fFactorY) );
                 aCropRightBottom.setWidth( basegfx::fround<tools::Long>(aCropRightBottom.Width() * fFactorX) );
                 aCropRightBottom.setHeight( basegfx::fround<tools::Long>(aCropRightBottom.Height() * fFactorY) );
 
-                aSrcSizePixel = aBitmapEx.GetSizePixel();
+                aSrcSizePixel = aBitmap.GetSizePixel();
             }
 
             // setup crop rectangle in pixel
@@ -820,10 +820,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         }
         else
         {
-            ImplTransformBitmap( aBitmapEx, rAttr, aCropLeftTop, aCropRightBottom,
+            ImplTransformBitmap( aBitmap, rAttr, aCropLeftTop, aCropRightBottom,
                                  aCropRect, rDestSize, true );
 
-            aTransGraphic = aBitmapEx;
+            aTransGraphic = aBitmap;
         }
 
         aTransGraphic.SetPrefSize( rDestSize );
@@ -858,9 +858,9 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const
                 }
                 else
                 {
-                    BitmapEx aBmpEx( maGraphic.GetBitmapEx() );
-                    lclImplAdjust( aBmpEx, aAttr, GraphicAdjustmentFlags::ALL );
-                    aGraphic = aBmpEx;
+                    Bitmap aBmp( maGraphic.GetBitmap() );
+                    lclImplAdjust( aBmp, aAttr, GraphicAdjustmentFlags::ALL );
+                    aGraphic = aBmp;
                 }
             }
             else

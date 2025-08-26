@@ -308,7 +308,7 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
                 GraphicObject aAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmapEx().GetAlphaMask().GetBitmap()));
+                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmap().CreateAlphaMask().GetBitmap()));
                 else
                     aAlphaGraphic.SetGraphic(BitmapEx(Bitmap()));
 
@@ -499,4 +499,78 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
     rBmpEx.Scale( fScaleX, fScaleY );
 }
 
+void GraphicObject::ImplTransformBitmap( Bitmap&            rBmp,
+                                         const GraphicAttr& rAttr,
+                                         const Size&        rCropLeftTop,
+                                         const Size&        rCropRightBottom,
+                                         const tools::Rectangle&   rCropRect,
+                                         const Size&        rDstSize,
+                                         bool               bEnlarge ) const
+{
+    // #107947# Extracted from svdograf.cxx
+
+    // #104115# Crop the bitmap
+    if( rAttr.IsCropped() )
+    {
+        rBmp.Crop( rCropRect );
+
+        // #104115# Negative crop sizes mean: enlarge bitmap and pad
+        if( bEnlarge && (
+            rCropLeftTop.Width() < 0 ||
+            rCropLeftTop.Height() < 0 ||
+            rCropRightBottom.Width() < 0 ||
+            rCropRightBottom.Height() < 0 ) )
+        {
+            Size aBmpSize( rBmp.GetSizePixel() );
+            sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );
+            sal_Int32 nPadTop( rCropLeftTop.Height() < 0 ? -rCropLeftTop.Height() : 0 );
+            sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (rCropRightBottom.Width() < 0 ? -rCropRightBottom.Width() : 0) );
+            sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (rCropRightBottom.Height() < 0 ? -rCropRightBottom.Height() : 0) );
+
+            Bitmap aBmp2;
+
+            if( rBmp.HasAlpha() )
+            {
+                aBmp2 = rBmp;
+            }
+            else
+            {
+                // #104115# Generate mask bitmap and init to zero
+                AlphaMask aMask(aBmpSize);
+                aMask.Erase(255);
+
+                // #104115# Always generate transparent bitmap, we need the border transparent
+                aBmp2 = Bitmap(BitmapEx( rBmp.CreateColorBitmap(), aMask ));
+
+                // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
+                rBmp = aBmp2;
+            }
+
+            aBmp2.Scale(Size(nPadTotalWidth, nPadTotalHeight));
+            aBmp2.Erase( Color(ColorAlpha,0,0,0,0) );
+            aBmp2.CopyPixel( tools::Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), tools::Rectangle( Point(0, 0), aBmpSize ), rBmp );
+            rBmp = aBmp2;
+        }
+    }
+
+    const Size  aSizePixel( rBmp.GetSizePixel() );
+
+    if( rAttr.GetRotation() == 0_deg10 || IsAnimated() )
+        return;
+
+    if( !(aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height()) )
+        return;
+
+    double fSrcWH = static_cast<double>(aSizePixel.Width()) / aSizePixel.Height();
+    double fDstWH = static_cast<double>(rDstSize.Width()) / rDstSize.Height();
+    double fScaleX = 1.0, fScaleY = 1.0;
+
+    // always choose scaling to shrink bitmap
+    if( fSrcWH < fDstWH )
+        fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+    else
+        fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+    rBmp.Scale( fScaleX, fScaleY );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
