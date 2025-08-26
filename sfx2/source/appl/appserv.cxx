@@ -301,27 +301,18 @@ namespace
     {
     private:
         std::unique_ptr<weld::Button> m_xBtnLicense;
-        std::unique_ptr<weld::Button> m_xBtnEula;
 
-        DECL_LINK(EulaHdl, weld::Button&, void);
         DECL_LINK(LicenseHdl, weld::Button&, void);
 
     public:
         LicenseDialog(weld::Window* pParent)
             : GenericDialogController(pParent, u"sfx/ui/licensedialog.ui"_ustr,  u"LicenseDialog"_ustr)
             , m_xBtnLicense(m_xBuilder->weld_button("license"))
-            , m_xBtnEula(m_xBuilder->weld_button("eula"))
         {
             m_xBtnLicense->connect_clicked( LINK(this, LicenseDialog, LicenseHdl) );
-            m_xBtnEula->connect_clicked( LINK(this, LicenseDialog, EulaHdl) );
         }
     };
 
-    IMPL_LINK_NOARG(LicenseDialog, EulaHdl, weld::Button&, void)
-    {
-        response(RET_OK);
-        showDocument("EULA.odt");
-    }
 
     IMPL_LINK_NOARG(LicenseDialog, LicenseHdl, weld::Button&, void)
     {
