@@ -195,9 +195,12 @@ bool PropertyMap::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
     return true;
 }
 
-Any PropertyMap::getProperty( sal_Int32 nPropId )
+Any PropertyMap::getProperty( sal_Int32 nPropId ) const
 {
-    return maProperties[ nPropId ];
+    auto it = maProperties.find(nPropId);
+    if (it != maProperties.end())
+        return it->second;
+    return Any();
 }
 
 void PropertyMap::erase( sal_Int32 nPropId )
