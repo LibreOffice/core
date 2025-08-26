@@ -536,7 +536,7 @@ namespace emfio
         aGraphic.getVectorGraphicData()->setSizeHint(maSizeHint);
 
         maBmpSaveList.emplace_back(
-            aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true);
+            aGraphic.GetBitmap(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true);
         const std::shared_ptr<VectorGraphicData> pVectorGraphicData
             = aGraphic.getVectorGraphicData();
         if (!pVectorGraphicData)
@@ -1659,7 +1659,7 @@ namespace emfio
                                         }
                                     }
 #endif
-                                    maBmpSaveList.emplace_back(aBitmapEx, aRect, SRCAND|SRCINVERT);
+                                    maBmpSaveList.emplace_back(Bitmap(aBitmapEx), aRect, SRCAND|SRCINVERT);
                                 }
                             }
                         }

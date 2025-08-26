@@ -1664,10 +1664,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
     // - Expected: 0
     // - Actual  : 255
     // i.e. the pixel in the center was entirely opaque, while it should be transparent.
-    BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
-    Size size = aBitmapEx.GetSizePixel();
+    Bitmap aBitmap = aGraphic.GetBitmap();
+    Size size = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0),
-                         aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
+                         aBitmap.GetPixelColor(size.Width() / 2, size.Height() / 2).GetAlpha());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAlignRtlReading)

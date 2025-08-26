@@ -569,15 +569,12 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
         if (!mpAnimationContainer && maVectorGraphicData)
             updateBitmapFromVectorGraphic(rParameters.getSizePixel());
 
-        BitmapEx aRetBmpEx;
         if (mpAnimationContainer)
-            aRetBmpEx = mpAnimationContainer->maAnimation.GetBitmapEx();
+            aRetBmp = Bitmap(mpAnimationContainer->maAnimation.GetBitmapEx());
         else if (mpBitmapContainer)
-            aRetBmpEx = mpBitmapContainer->maBitmap;
+            aRetBmp = mpBitmapContainer->maBitmap;
         else
-            aRetBmpEx = maCachedBitmap;
-
-        aRetBmp = aRetBmpEx.GetBitmap(COL_WHITE);
+            aRetBmp = maCachedBitmap;
 
         if (rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
             aRetBmp.Scale(rParameters.getSizePixel());

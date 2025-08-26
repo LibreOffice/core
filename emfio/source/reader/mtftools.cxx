@@ -1995,8 +1995,8 @@ namespace emfio
                         if ( nObjectsOfSameSize == 2 )
                         {
                             BSaveStruct* pSave2 = &rSaveList[i + 1];
-                            if ( ( pSave->aBmpEx.GetPrefSize() == pSave2->aBmpEx.GetPrefSize() ) &&
-                                 ( pSave->aBmpEx.GetPrefMapMode() == pSave2->aBmpEx.GetPrefMapMode() ) )
+                            if ( ( pSave->aBmp.GetPrefSize() == pSave2->aBmp.GetPrefSize() ) &&
+                                 ( pSave->aBmp.GetPrefMapMode() == pSave2->aBmp.GetPrefMapMode() ) )
                             {
                                 // TODO: Strictly speaking, we should
                                 // check whether mask is monochrome, and
@@ -2006,8 +2006,9 @@ namespace emfio
                                 // bitmap.
                                 if ( ( nWinRop == SRCPAINT ) && ( pSave2->nWinRop == SRCAND ) )
                                 {
-                                    Bitmap aMask( pSave->aBmpEx.GetBitmap() ); aMask.Invert();
-                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), aMask );
+                                    Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
+                                    aMask.Invert();
+                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -2017,8 +2018,8 @@ namespace emfio
                                 // is inverted
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
                                 {
-                                    const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
+                                    const Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
+                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -2026,8 +2027,8 @@ namespace emfio
                                 // tdf#90539
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
                                 {
-                                    const Bitmap & rMask( pSave->aBmpEx.GetBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmpEx.GetBitmap(), rMask );
+                                    const Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
+                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
                                     ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
@@ -2040,16 +2041,16 @@ namespace emfio
                     {
                         Push();
                         WMFRasterOp nOldRop = SetRasterOp( WMFRasterOp::CopyPen );
-                        Bitmap      aBitmap( pSave->aBmpEx.GetBitmap() );
+                        Bitmap      aBitmap( pSave->aBmp.CreateColorBitmap() );
                         sal_uInt32  nOperation = ( nRasterOperation & 0xf );
                         switch( nOperation )
                         {
                             case 0x1 :
                             case 0xe :
                             {
-                                if(pSave->aBmpEx.IsAlpha())
+                                if(pSave->aBmp.HasAlpha())
                                 {
-                                    ImplDrawBitmap( aPos, aSize, pSave->aBmpEx );
+                                    ImplDrawBitmap( aPos, aSize, BitmapEx(pSave->aBmp) );
                                 }
                                 else
                                 {
@@ -2152,7 +2153,7 @@ namespace emfio
                                     aBitmap.Invert();
                                 if (pSave->m_bForceAlpha)
                                 {
-                                    ImplDrawBitmap(aPos, aSize, pSave->aBmpEx);
+                                    ImplDrawBitmap(aPos, aSize, BitmapEx(pSave->aBmp));
                                 }
                                 else
                                 {

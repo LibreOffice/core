@@ -2287,7 +2287,7 @@ void Bitmap::ReplaceTransparency(const Color& rReplaceColor)
         if( !pReadAccess )
             return;
 
-        BitmapScopedWriteAccess pWriteAccess(*this);
+        BitmapScopedWriteAccess pWriteAccess(aNewBmp);
         assert(pWriteAccess);
         if( !pWriteAccess )
             return;
