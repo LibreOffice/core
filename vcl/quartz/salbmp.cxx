@@ -320,9 +320,20 @@ Size QuartzSalBitmap::GetSize() const
     return Size( mnWidth, mnHeight );
 }
 
-sal_uInt16 QuartzSalBitmap::GetBitCount() const
+ScanlineFormat QuartzSalBitmap::GetScanlineFormat() const
 {
-    return mnBits;
+    switch( mnBits )
+    {
+        case 1:
+            return ScanlineFormat::N1BitMsbPal;
+        case 8:
+            return ScanlineFormat::N8BitPal;
+        case 24:
+            return ScanlineFormat::N24BitTcBgr;
+        case 32:
+            return ScanlineFormat::N32BitTcArgb;
+        default: abort();
+    }
 }
 
 namespace {
@@ -427,22 +438,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
     pBuffer->mnScanlineSize = mnBytesPerRow;
     pBuffer->mpBits = m_pUserBuffer.get();
     pBuffer->mnBitCount = mnBits;
-    switch( mnBits )
-    {
-        case 1:
-            pBuffer->meFormat = ScanlineFormat::N1BitMsbPal;
-            break;
-        case 8:
-            pBuffer->meFormat = ScanlineFormat::N8BitPal;
-            break;
-        case 24:
-            pBuffer->meFormat = ScanlineFormat::N24BitTcBgr;
-            break;
-        case 32:
-            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
-            break;
-        default: assert(false);
-    }
+    pBuffer->meFormat = GetScanlineFormat();
 
     // some BitmapBuffer users depend on a complete palette
     if( (mnBits <= 8) && !maPalette )

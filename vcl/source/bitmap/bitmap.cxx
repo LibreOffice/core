@@ -353,6 +353,22 @@ vcl::PixelFormat Bitmap::getPixelFormat() const
     return vcl::PixelFormat::INVALID;
 }
 
+bool Bitmap::HasAlpha() const
+{
+    if (!mxSalBmp)
+        return false;
+    switch(mxSalBmp->GetScanlineFormat())
+    {
+        case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcRgba:
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool Bitmap::HasGreyPaletteAny() const
 {
     bool bRet = false;

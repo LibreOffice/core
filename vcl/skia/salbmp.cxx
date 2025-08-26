@@ -201,7 +201,34 @@ void SkiaSalBitmap::Destroy()
 
 Size SkiaSalBitmap::GetSize() const { return mSize; }
 
-sal_uInt16 SkiaSalBitmap::GetBitCount() const { return mBitCount; }
+ScanlineFormat SkiaSalBitmap::GetScanlineFormat() const
+{
+    switch (mBitCount)
+    {
+        case 1:
+            return ScanlineFormat::N1BitMsbPal;
+        case 8:
+            return ScanlineFormat::N8BitPal;
+        case 24:
+            // Make the RGB/BGR format match the default Skia 32bpp format, to allow
+            // easy conversion later.
+            return kN32_SkColorTypeIsBGRA ? ScanlineFormat::N24BitTcBgr
+                                          : ScanlineFormat::N24BitTcRgb;
+        case 32:
+            if (m_bWithoutAlpha)
+            {
+                return kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgrx
+                                              : ScanlineFormat::N32BitTcRgbx;
+            }
+            else
+            {
+                return kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
+                                              : ScanlineFormat::N32BitTcRgba;
+            }
+        default:
+            abort();
+    }
+}
 
 BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
 {
@@ -282,35 +309,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
         mPixelsSize = savedPixelsSize;
         ComputeScanlineSize();
     }
-    switch (mBitCount)
-    {
-        case 1:
-            buffer->meFormat = ScanlineFormat::N1BitMsbPal;
-            break;
-        case 8:
-            buffer->meFormat = ScanlineFormat::N8BitPal;
-            break;
-        case 24:
-            // Make the RGB/BGR format match the default Skia 32bpp format, to allow
-            // easy conversion later.
-            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N24BitTcBgr
-                                                      : ScanlineFormat::N24BitTcRgb;
-            break;
-        case 32:
-            if (m_bWithoutAlpha)
-            {
-                buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgrx
-                                                          : ScanlineFormat::N32BitTcRgbx;
-            }
-            else
-            {
-                buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
-                                                          : ScanlineFormat::N32BitTcRgba;
-            }
-            break;
-        default:
-            abort();
-    }
+    buffer->meFormat = GetScanlineFormat();
     buffer->meDirection = ScanlineDirection::TopDown;
     // Refcount all read/write accesses, to catch problems with existing accesses while
     // a bitmap changes, and also to detect when we can free mBuffer if wanted.

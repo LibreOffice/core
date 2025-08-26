@@ -730,6 +730,25 @@ void* WinSalBitmap::ImplCopyDIB( void* pDIB, sal_Int32 nSize )
     return pCopy;
 }
 
+ScanlineFormat WinSalBitmap::GetScanlineFormat() const
+{
+    if (!mpDIB)
+        return ScanlineFormat::NONE;
+
+    PBITMAPINFO pBI = static_cast<PBITMAPINFO>(mpDIB);
+    if (!pBI)
+        return ScanlineFormat::NONE;
+
+    PBITMAPINFOHEADER pBIH = &pBI->bmiHeader;
+    if( pBIH->biPlanes != 1 )
+        return ScanlineFormat::NONE;
+
+    return pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
+           pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
+           pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcBgra :
+           ScanlineFormat::NONE;
+}
+
 BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
     if (!mpDIB)
@@ -746,10 +765,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
     {
         pBuffer.reset(new BitmapBuffer);
 
-        pBuffer->meFormat = pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
-                            pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
-                            pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcBgra :
-                            ScanlineFormat::NONE;
+        pBuffer->meFormat = GetScanlineFormat();
         assert (pBuffer->meFormat != ScanlineFormat::NONE);
 
         if (pBuffer->meFormat != ScanlineFormat::NONE)

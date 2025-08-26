@@ -71,7 +71,8 @@ public:
                                     Size& rSize ) = 0;
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
-    virtual sal_uInt16      GetBitCount() const = 0;
+    sal_uInt16              GetBitCount() const;
+    virtual ScanlineFormat  GetScanlineFormat() const = 0;
 
     virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;

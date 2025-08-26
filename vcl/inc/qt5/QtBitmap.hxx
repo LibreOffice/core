@@ -45,7 +45,7 @@ public:
                         Size& rSize) override;
     virtual void Destroy() final override;
     virtual Size GetSize() const override;
-    virtual sal_uInt16 GetBitCount() const override;
+    virtual ScanlineFormat GetScanlineFormat() const override;
 
     virtual BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
     virtual void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;

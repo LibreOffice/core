@@ -142,7 +142,7 @@ public:
     bool                    HasGreyPalette8Bit() const;
     bool                    HasGreyPaletteAny() const;
     // does this bitmap have alpha information?
-    inline bool             HasAlpha() const { return getPixelFormat() == vcl::PixelFormat::N32_BPP; }
+    bool                    HasAlpha() const;
 
     /** return the alpha data, copied into an AlphaMask. Will assert if this Bitmap has no alpha. */
     AlphaMask               CreateAlphaMask() const;

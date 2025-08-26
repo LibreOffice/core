@@ -85,6 +85,28 @@ void SalBitmap::updateChecksum() const
     }
 }
 
+sal_uInt16 SalBitmap::GetBitCount() const
+{
+    switch (GetScanlineFormat())
+    {
+        case ScanlineFormat::NONE: return 0;
+        case ScanlineFormat::N1BitMsbPal: return 1;
+        case ScanlineFormat::N8BitPal: return 8;
+        case ScanlineFormat::N24BitTcBgr: return 24;
+        case ScanlineFormat::N24BitTcRgb: return 24;
+        case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
+        case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
+        case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
+        case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
+            return 32;
+        default: abort();
+    }
+}
+
 namespace
 {
 

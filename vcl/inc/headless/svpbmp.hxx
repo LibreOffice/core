@@ -55,7 +55,7 @@ public:
     }
     SAL_DLLPRIVATE virtual void            Destroy() final override;
     SAL_DLLPRIVATE virtual Size            GetSize() const override;
-    SAL_DLLPRIVATE virtual sal_uInt16      GetBitCount() const override;
+    SAL_DLLPRIVATE virtual ScanlineFormat  GetScanlineFormat() const override;
 
     SAL_DLLPRIVATE virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) override;
     SAL_DLLPRIVATE virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;

@@ -66,7 +66,7 @@ public:
     void            Destroy() override;
 
     Size            GetSize() const override;
-    sal_uInt16          GetBitCount() const override;
+    ScanlineFormat  GetScanlineFormat() const override;
 
     BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) override;
     void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;

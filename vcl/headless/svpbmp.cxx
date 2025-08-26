@@ -223,16 +223,11 @@ Size SvpSalBitmap::GetSize() const
     return aSize;
 }
 
-sal_uInt16 SvpSalBitmap::GetBitCount() const
+ScanlineFormat SvpSalBitmap::GetScanlineFormat() const
 {
-    sal_uInt16 nBitCount;
-
-    if (moDIB.has_value())
-        nBitCount = moDIB->mnBitCount;
-    else
-        nBitCount = 0;
-
-    return nBitCount;
+    if (!moDIB.has_value())
+        return ScanlineFormat::NONE;
+    return moDIB->meFormat;
 }
 
 BitmapBuffer* SvpSalBitmap::AcquireBuffer(BitmapAccessMode)
