@@ -1371,7 +1371,7 @@ gb_ExternalProject__use_fontconfig :=
 
 else # SYSTEM_FONTCONFIG
 
-ifeq ($(ENABLE_FONTCONFIG),TRUE)
+ifneq (,$(filter FONTCONFIG,$(BUILD_TYPE)))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	fontconfig \
