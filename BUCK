@@ -1,3 +1,5 @@
+# This and the other BUCK files found in the source are part of a
+# toolchain to upload LibreOffice API to Maven Central
 prebuilt_jar(
   name = 'juh',
   binary_jar = 'instdir/program/classes/juh.jar',
