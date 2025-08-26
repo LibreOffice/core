@@ -33,12 +33,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 
-namespace com::sun::star {
-    namespace sheet {
-        struct ExternalLinkInfo;
-    }
-}
-
+namespace com::sun::star::sheet { struct ExternalLinkInfo; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 
 class ScDocument;
@@ -52,102 +47,102 @@ typedef size_t SCSIZE;
 // included, we should not be using those stupid macros anyway.
 #undef min
 #undef max
-const SCROW    SCROW_MAX    = ::std::numeric_limits<SCROW>::max();
-const SCCOL    SCCOL_MAX    = ::std::numeric_limits<SCCOL>::max();
-const SCTAB    SCTAB_MAX    = ::std::numeric_limits<SCTAB>::max();
-const SCCOLROW SCCOLROW_MAX = ::std::numeric_limits<SCCOLROW>::max();
-const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
+constexpr SCROW SCROW_MAX = std::numeric_limits<SCROW>::max();
+constexpr SCCOL SCCOL_MAX = std::numeric_limits<SCCOL>::max();
+constexpr SCTAB SCTAB_MAX = std::numeric_limits<SCTAB>::max();
+constexpr SCCOLROW SCCOLROW_MAX = std::numeric_limits<SCCOLROW>::max();
+constexpr SCSIZE SCSIZE_MAX = std::numeric_limits<SCSIZE>::max();
 
 // Count values
-const SCROW       MAXROWCOUNT    = 1048576;
-const SCCOL       MAXCOLCOUNT    = 16384;
-const SCCOL       INITIALCOLCOUNT = 1; // initial number of columns we allocate memory for
+constexpr SCROW MAXROWCOUNT = 1024 * 1024;
+constexpr SCCOL MAXCOLCOUNT = 16 * 1024;
+constexpr SCCOL INITIALCOLCOUNT = 1; // initial number of columns we allocate memory for
 /// limiting to 10000 for now, problem with 32 bit builds for now
-const SCTAB       MAXTABCOUNT    = 10000;
+constexpr SCTAB MAXTABCOUNT = 10000;
 // Maximum values
-const SCROW       MAXROW         = MAXROWCOUNT - 1;
-const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
-const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
-const SCCOLROW    MAXCOLROW      = MAXROW;
-const SCROW       MAXROWCOUNT_JUMBO = 16 * 1024 * 1024;
-const SCCOL       MAXCOLCOUNT_JUMBO = 16384;
-const SCROW       MAXROW_JUMBO   = MAXROWCOUNT_JUMBO - 1;
-const SCCOL       MAXCOL_JUMBO   = MAXCOLCOUNT_JUMBO - 1;
+constexpr SCROW MAXROW = MAXROWCOUNT - 1;
+constexpr SCCOL MAXCOL = MAXCOLCOUNT - 1;
+constexpr SCTAB MAXTAB = MAXTABCOUNT - 1;
+constexpr SCCOLROW MAXCOLROW = MAXROW;
+constexpr SCROW MAXROWCOUNT_JUMBO = 16 * 1024 * 1024;
+constexpr SCCOL MAXCOLCOUNT_JUMBO = 16 * 1024;
+constexpr SCROW MAXROW_JUMBO = MAXROWCOUNT_JUMBO - 1;
+constexpr SCCOL MAXCOL_JUMBO = MAXCOLCOUNT_JUMBO - 1;
 // Maximum tiled rendering values
-const SCROW       MAXTILEDROW    = MAXROW;
+constexpr SCROW MAXTILEDROW    = MAXROW;
 // Limit the initial tab count to prevent users to set the count too high,
 // which could cause the memory usage of blank documents to exceed the
 // available system memory.
-const SCTAB       MAXINITTAB = 1024;
-const SCTAB       MININITTAB = 1;
+constexpr SCTAB MAXINITTAB = 1024;
+constexpr SCTAB MININITTAB = 1;
 
-inline constexpr OUString MAXROW_STRING(u"1048575"_ustr);
-inline constexpr OUString MAXCOL_STRING(u"XFD"_ustr);
-inline constexpr OUString MAXROW_JUMBO_STRING(u"16777215"_ustr);
-inline constexpr OUString MAXCOL_JUMBO_STRING(u"XFD"_ustr);
+constexpr OUString MAXROW_STRING(u"1048575"_ustr);
+constexpr OUString MAXCOL_STRING(u"XFD"_ustr);
+constexpr OUString MAXROW_JUMBO_STRING(u"16777215"_ustr);
+constexpr OUString MAXCOL_JUMBO_STRING(u"XFD"_ustr);
 
 // Special values
-const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
-const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
-const SCROW SCROWS32K         = 32000; // for fuzzing
-const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
-const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
-const SCCOL SC_TABSTART_NONE  = SCCOL_MAX;
+constexpr SCTAB SC_TAB_APPEND = SCTAB_MAX;
+constexpr SCTAB TABLEID_DOC = SCTAB_MAX;  // entire document, e.g. protect
+constexpr SCROW SCROWS32K = 32000; // for fuzzing
+constexpr SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
+constexpr SCROW SCROW_REPEAT_NONE = SCROW_MAX;
+constexpr SCCOL SC_TABSTART_NONE = SCCOL_MAX;
 
-const SCROW MAXROW_30         = 8191;
+constexpr SCROW MAXROW_30 = 8191;
 
-[[nodiscard]] inline bool ValidCol( SCCOL nCol, SCCOL nMaxCol )
+[[nodiscard]] constexpr bool ValidCol( SCCOL nCol, SCCOL nMaxCol )
 {
     assert(nMaxCol == MAXCOL || nMaxCol == MAXCOL_JUMBO); // temporary to debug jumbo sheets work
     return nCol >= 0 && nCol <= nMaxCol;
 }
 
-[[nodiscard]] inline bool ValidRow( SCROW nRow, SCROW nMaxRow)
+[[nodiscard]] constexpr bool ValidRow( SCROW nRow, SCROW nMaxRow)
 {
     assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return nRow >= 0 && nRow <= nMaxRow;
 }
 
-[[nodiscard]] inline bool ValidTab( SCTAB nTab )
+[[nodiscard]] constexpr bool ValidTab( SCTAB nTab )
 {
     return nTab >= 0 && nTab <= MAXTAB;
 }
 
-[[nodiscard]] inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
+[[nodiscard]] constexpr bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
 {
     return nTab >= 0 && nTab <= nMaxTab;
 }
 
-[[nodiscard]] inline bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol, SCROW nMaxRow )
+[[nodiscard]] constexpr bool ValidColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow);
 }
 
-[[nodiscard]] inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol, SCROW nMaxRow )
+[[nodiscard]] constexpr bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return ValidCol(nCol,nMaxCol) && ValidRow(nRow,nMaxRow) && ValidTab( nTab);
 }
 
-[[nodiscard]] inline SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol )
+[[nodiscard]] constexpr SCCOL SanitizeCol( SCCOL nCol, SCCOL nMaxCol )
 {
     assert(nMaxCol == MAXCOL || nMaxCol == MAXCOL_JUMBO); // temporary to debug jumbo sheets work
     return nCol < 0 ? 0 : (nCol > nMaxCol ? nMaxCol : nCol);
 }
 
-[[nodiscard]] inline SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow )
+[[nodiscard]] constexpr SCROW SanitizeRow( SCROW nRow, SCROW nMaxRow )
 {
     assert(nMaxRow == MAXROW || nMaxRow == MAXROW_JUMBO); // temporary to debug jumbo sheets work
     return nRow < 0 ? 0 : (nRow > nMaxRow ? nMaxRow : nRow);
 }
 
-[[nodiscard]] inline SCTAB SanitizeTab( SCTAB nTab )
+[[nodiscard]] constexpr SCTAB SanitizeTab( SCTAB nTab )
 {
     return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
-template <typename T> inline void PutInOrder(T& nStart, T& nEnd)
+template <typename T> constexpr void PutInOrder(T& nStart, T& nEnd)
 {
     if (nEnd < nStart)
         std::swap(nStart, nEnd);
@@ -193,11 +188,13 @@ namespace o3tl
 {
     template<> struct typed_flags<ScRefFlags> : is_typed_flags<ScRefFlags, 0xffff> {};
 }
-inline void applyStartToEndFlags(ScRefFlags &target,const ScRefFlags source)
+
+constexpr void applyStartToEndFlags(ScRefFlags &target,const ScRefFlags source)
 {
     target |= ScRefFlags(o3tl::to_underlying(source) << 4);
 }
-inline void applyStartToEndFlags(ScRefFlags &target)
+
+constexpr void applyStartToEndFlags(ScRefFlags &target)
 {
     target |= ScRefFlags(o3tl::to_underlying(target) << 4);
 }
