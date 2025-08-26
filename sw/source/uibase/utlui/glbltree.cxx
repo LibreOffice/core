@@ -532,7 +532,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
         aFileName.SetSmartURL( *pFileName );
         // tdf#127978 - don't URL encode filename for navigator's tooltip
         aFileNames.getArray()[0]
-            = aFileName.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+            = aFileName.GetMainURL(INetURLObject::DecodeMechanism::WithCharset);
         InsertRegion( pCont, aFileNames );
     }
 }
