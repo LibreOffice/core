@@ -59,7 +59,7 @@ inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
  */
 class SharedFormulaBuffer : public ExcRoot
 {
-    typedef std::unordered_map<ScAddress, ScTokenArray, ScAddressHashFunctor> TokenArraysType;
+    typedef std::unordered_map<ScAddress, ScTokenArray> TokenArraysType;
     TokenArraysType maTokenArrays;
 
 public:

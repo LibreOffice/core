@@ -463,13 +463,19 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-struct ScAddressHashFunctor
+namespace std
 {
-    size_t operator()( const ScAddress & rAddress ) const
+
+template <>
+struct hash<ScAddress>
+{
+    std::size_t operator()(ScAddress const & rAddress) const
     {
         return rAddress.hash();
     }
 };
+
+} // end namespace std
 
 [[nodiscard]] constexpr bool ValidAddress(const ScAddress& rAddress, SCCOL nMaxCol, SCROW nMaxRow)
 {
