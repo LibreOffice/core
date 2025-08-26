@@ -248,77 +248,107 @@ public:
         {}
     };
 
-    ScAddress() :
+    constexpr ScAddress() :
         nRow(0), nCol(0), nTab(0)
     {}
-    ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
+
+    constexpr ScAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP ) :
         nRow(nRowP), nCol(nColP), nTab(nTabP)
     {}
+
     /** coverity[uninit_member] - Yes, it is what it seems to be: Uninitialized.
         May be used for performance reasons if it is initialized by other means. */
-    ScAddress( Uninitialized )
+    constexpr ScAddress( Uninitialized )
     {}
-    ScAddress( InitializeInvalid ) :
+
+    constexpr ScAddress( InitializeInvalid ) :
         nRow(-1), nCol(-1), nTab(-1)
     {}
-    ScAddress( const ScAddress& rAddress ) :
+
+    constexpr ScAddress( const ScAddress& rAddress ) :
         nRow(rAddress.nRow), nCol(rAddress.nCol), nTab(rAddress.nTab)
     {}
-    inline ScAddress& operator=( const ScAddress& rAddress );
 
-    inline void Set( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    constexpr ScAddress& operator=(const ScAddress& rAddress)
+    {
+        nCol = rAddress.nCol;
+        nRow = rAddress.nRow;
+        nTab = rAddress.nTab;
+        return *this;
+    }
 
-    SCROW Row() const
+    constexpr void Set(SCCOL nColP, SCROW nRowP, SCTAB nTabP)
+    {
+        nCol = nColP;
+        nRow = nRowP;
+        nTab = nTabP;
+    }
+
+    constexpr SCROW Row() const
     {
         return nRow;
     }
 
-    SCCOL Col() const
+    constexpr SCCOL Col() const
     {
         return nCol;
     }
-    SCTAB Tab() const
+
+    constexpr SCTAB Tab() const
     {
         return nTab;
     }
-    void SetRow( SCROW nRowP )
+
+    constexpr void SetRow( SCROW nRowP )
     {
         nRow = nRowP;
     }
-    void SetCol( SCCOL nColP )
+
+    constexpr void SetCol( SCCOL nColP )
     {
         nCol = nColP;
     }
-    void SetTab( SCTAB nTabP )
+
+    constexpr void SetTab( SCTAB nTabP )
     {
         nTab = nTabP;
     }
-    void SetInvalid()
+
+    constexpr void SetInvalid()
     {
         nRow = -1;
         nCol = -1;
         nTab = -1;
     }
-    bool IsValid() const
+
+    constexpr bool IsValid() const
     {
         return (nRow >= 0) && (nCol >= 0) && (nTab >= 0);
     }
 
-    inline void PutInOrder( ScAddress& rAddress );
+    constexpr void PutInOrder(ScAddress& rAddress)
+    {
+        ::PutInOrder(nCol, rAddress.nCol);
+        ::PutInOrder(nRow, rAddress.nRow);
+        ::PutInOrder(nTab, rAddress.nTab);
+    }
 
-    void IncRow( SCROW nDelta = 1 )
+    constexpr void IncRow( SCROW nDelta = 1 )
     {
-        nRow = sal::static_int_cast<SCROW>(nRow + nDelta);
+        nRow = static_cast<SCROW>(nRow + nDelta);
     }
-    void IncCol( SCCOL nDelta = 1 )
+
+    constexpr void IncCol( SCCOL nDelta = 1 )
     {
-        nCol = sal::static_int_cast<SCCOL>(nCol + nDelta);
+        nCol = static_cast<SCCOL>(nCol + nDelta);
     }
-    void IncTab( SCTAB nDelta = 1 )
+
+    constexpr void IncTab( SCTAB nDelta = 1 )
     {
-        nTab = sal::static_int_cast<SCTAB>(nTab + nDelta);
+        nTab = static_cast<SCTAB>(nTab + nDelta);
     }
-    void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
+
+    constexpr void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     {
         nColP = nCol;
         nRowP = nRow;
@@ -358,13 +388,72 @@ public:
     [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
             ScAddress& rErrorPos, const ScDocument& rDoc );
 
-    inline bool operator==( const ScAddress& rAddress ) const;
-    inline bool operator!=( const ScAddress& rAddress ) const;
-    inline bool operator<( const ScAddress& rAddress ) const;
-    inline bool operator<=( const ScAddress& rAddress ) const;
-    inline bool lessThanByRow( const ScAddress& rAddress ) const;
+    constexpr bool operator==( const ScAddress& rAddress ) const
+    {
+        return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
+    }
 
-    inline size_t hash() const;
+    /** Less than ordered by tab,col,row. */
+    constexpr bool operator<(const ScAddress& rAddress) const
+    {
+        if (nTab == rAddress.nTab)
+        {
+            if (nCol == rAddress.nCol)
+                return nRow < rAddress.nRow;
+            else
+                return nCol < rAddress.nCol;
+        }
+        else
+            return nTab < rAddress.nTab;
+    }
+
+    constexpr bool operator<=( const ScAddress& rAddress ) const
+    {
+        return operator<(rAddress) || operator==(rAddress);
+    }
+
+    constexpr bool operator>(const ScAddress& rAddress) const
+    {
+        return !(operator<=(rAddress));
+    }
+
+    constexpr bool operator>=(const ScAddress& rAddress) const
+    {
+        return !(operator<(rAddress));
+    }
+
+    /** Less than ordered by tab,row,col as needed by row-wise import/export */
+    bool lessThanByRow(const ScAddress& rAddress) const
+    {
+        if (nTab == rAddress.nTab)
+        {
+            if (nRow == rAddress.nRow)
+                return nCol < rAddress.nCol;
+            else
+                return nRow < rAddress.nRow;
+        }
+        else
+            return nTab < rAddress.nTab;
+    }
+
+    size_t hash() const
+    {
+    #if SAL_TYPES_SIZEOFPOINTER == 8
+        // 16 bits for the columns, and 20 bits for the rows
+        return (static_cast<size_t>(nTab) << 36) ^
+               (static_cast<size_t>(nCol) << 20) ^
+                static_cast<size_t>(nRow);
+    #else
+        // Assume that there are not that many addresses with row > 2^16 AND column
+        // > 2^8 AND sheet > 2^8 so we won't have too many collisions.
+        if (nRow <= 0xffff)
+            return (static_cast<size_t>(nTab) << 24) ^
+                (static_cast<size_t>(nCol) << 16) ^ static_cast<size_t>(nRow);
+        else
+            return (static_cast<size_t>(nTab) << 28) ^
+                (static_cast<size_t>(nCol) << 24) ^ static_cast<size_t>(nRow);
+    #endif
+    }
 
     /**
      * Create a human-readable string representation of the cell address.  You
@@ -390,90 +479,6 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-inline void ScAddress::PutInOrder( ScAddress& rAddress )
-{
-    ::PutInOrder(nCol, rAddress.nCol);
-    ::PutInOrder(nRow, rAddress.nRow);
-    ::PutInOrder(nTab, rAddress.nTab);
-}
-
-inline void ScAddress::Set( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
-{
-    nCol = nColP;
-    nRow = nRowP;
-    nTab = nTabP;
-}
-
-inline ScAddress& ScAddress::operator=( const ScAddress& rAddress )
-{
-    nCol = rAddress.nCol;
-    nRow = rAddress.nRow;
-    nTab = rAddress.nTab;
-    return *this;
-}
-
-inline bool ScAddress::operator==( const ScAddress& rAddress ) const
-{
-    return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
-}
-
-inline bool ScAddress::operator!=( const ScAddress& rAddress ) const
-{
-    return !operator==( rAddress );
-}
-
-/** Less than ordered by tab,col,row. */
-inline bool ScAddress::operator<( const ScAddress& rAddress ) const
-{
-    if (nTab == rAddress.nTab)
-    {
-        if (nCol == rAddress.nCol)
-            return nRow < rAddress.nRow;
-        else
-            return nCol < rAddress.nCol;
-    }
-    else
-        return nTab < rAddress.nTab;
-}
-
-inline bool ScAddress::operator<=( const ScAddress& rAddress ) const
-{
-    return operator<( rAddress ) || operator==( rAddress );
-}
-
-/** Less than ordered by tab,row,col as needed by row-wise import/export */
-inline bool ScAddress::lessThanByRow( const ScAddress& rAddress ) const
-{
-    if (nTab == rAddress.nTab)
-    {
-        if (nRow == rAddress.nRow)
-            return nCol < rAddress.nCol;
-        else
-            return nRow < rAddress.nRow;
-    }
-    else
-        return nTab < rAddress.nTab;
-}
-
-inline size_t ScAddress::hash() const
-{
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    // 16 bits for the columns, and 20 bits for the rows
-    return (static_cast<size_t>(nTab) << 36) ^
-           (static_cast<size_t>(nCol) << 20) ^
-            static_cast<size_t>(nRow);
-#else
-    // Assume that there are not that many addresses with row > 2^16 AND column
-    // > 2^8 AND sheet > 2^8 so we won't have too many collisions.
-    if (nRow <= 0xffff)
-        return (static_cast<size_t>(nTab) << 24) ^
-            (static_cast<size_t>(nCol) << 16) ^ static_cast<size_t>(nRow);
-    else
-        return (static_cast<size_t>(nTab) << 28) ^
-            (static_cast<size_t>(nCol) << 24) ^ static_cast<size_t>(nRow);
-#endif
-}
-
 struct ScAddressHashFunctor
 {
     size_t operator()( const ScAddress & rAddress ) const
@@ -482,7 +487,7 @@ struct ScAddressHashFunctor
     }
 };
 
-[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol, SCROW nMaxRow )
+[[nodiscard]] constexpr bool ValidAddress(const ScAddress& rAddress, SCCOL nMaxCol, SCROW nMaxRow)
 {
     return ValidCol(rAddress.Col(), nMaxCol) && ValidRow(rAddress.Row(), nMaxRow) && ValidTab(rAddress.Tab());
 }
