@@ -12,7 +12,7 @@
         <prop oor:name="Extensions"><value>json</value></prop>
         <prop oor:name="MediaType"><value>application/json</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>calc_json_Orcus</value></prop>
+        <prop oor:name="PreferredFilter"><value>Orcus JSON</value></prop>
         <prop oor:name="UIName"><value>JSON Document</value></prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

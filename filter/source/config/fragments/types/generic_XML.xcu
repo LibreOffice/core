@@ -12,7 +12,7 @@
         <prop oor:name="Extensions"><value>xml</value></prop>
         <prop oor:name="MediaType"><value>application/xml</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
-        <prop oor:name="PreferredFilter"><value>calc_xml_Orcus</value></prop>
+        <prop oor:name="PreferredFilter"><value>Orcus XML</value></prop>
         <prop oor:name="UIName"><value>XML Document</value></prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
