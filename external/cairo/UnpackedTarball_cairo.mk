@@ -51,7 +51,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 ))
 endif
 
-ifneq (,$(filter ANDROID iOS,$(OS)))
+ifneq (,$(filter MACOSX ANDROID iOS,$(OS)))
 $(eval $(call gb_UnpackedTarball_add_file,cairo,.,external/cairo/cairo/dummy_pkg_config))
 endif
 
