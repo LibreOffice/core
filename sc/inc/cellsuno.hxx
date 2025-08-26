@@ -670,6 +670,9 @@ private:
 
     SvxUnoTextRangeBase*
     getSvxUnoTextRange(const css::uno::Reference<css::text::XTextRange>& xRange);
+    bool insertScEditFieldObj(const css::uno::Reference<css::text::XTextRange>& xRange,
+                              const css::uno::Reference<css::text::XTextContent>& xContent,
+                              bool bAbsorb);
 
 public:
     static const SvxItemPropertySet* GetEditPropertySet();

@@ -5920,55 +5920,61 @@ void SAL_CALL ScCellObj::insertControlCharacter( const uno::Reference<text::XTex
     GetUnoText().insertControlCharacter(getSvxUnoTextRange(xRange), nControlCharacter, bAbsorb);
 }
 
+bool ScCellObj::insertScEditFieldObj(const uno::Reference<text::XTextRange>& xRange,
+                                     const uno::Reference<text::XTextContent>& xContent,
+                                     bool bAbsorb)
+{
+    DBG_TESTSOLARMUTEX();
+    ScDocShell* pDocSh = GetDocShell();
+    if (!pDocSh)
+        return false;
+    ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
+    if (!pCellField || pCellField->IsInserted())
+        return false;
+    SvxUnoTextRangeBase* pTextRange = getSvxUnoTextRange(xRange);
+    if (!pTextRange)
+        return false;
+
+    SvxEditSource* pEditSource = pTextRange->GetEditSource();
+    ESelection aSelection(pTextRange->GetSelection());
+
+    if (!bAbsorb)
+    {
+        //  do not replace -> append
+        aSelection.Adjust();
+        aSelection.CollapseToEnd();
+    }
+
+    if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
+        pCellField->setPropertyValue(SC_UNONAME_TABLEPOS, uno::Any(sal_Int32(aCellPos.Tab())));
+
+    SvxFieldItem aItem = pCellField->CreateFieldItem();
+    SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
+    pForwarder->QuickInsertField(aItem, aSelection);
+    pEditSource->UpdateData();
+
+    //  new selection: a digit
+    aSelection.Adjust();
+    aSelection.end.nPara = aSelection.start.nPara;
+    aSelection.end.nIndex = aSelection.start.nIndex + 1;
+    uno::Reference<text::XTextRange> xParent(this);
+    pCellField->InitDoc(xParent, std::make_unique<ScCellEditSource>(pDocSh, aCellPos), aSelection);
+
+    //  for bAbsorb=FALSE, the new selection must be behind the inserted content
+    //  (the xml filter relies on this)
+    if (!bAbsorb)
+        aSelection.start.nIndex = aSelection.end.nIndex;
+    pTextRange->SetSelection(aSelection);
+    return true;
+}
+
 void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRange >& xRange,
                                                 const uno::Reference<text::XTextContent >& xContent,
                                                 sal_Bool bAbsorb )
 {
     SolarMutexGuard aGuard;
-    ScEditFieldObj* pCellField = dynamic_cast<ScEditFieldObj*>(xContent.get());
-    if (pCellField && pCellField->IsInserted())
-        throw lang::IllegalArgumentException(u"Content already inserted"_ustr, getXWeak(), 1);
-    if (ScDocShell* pDocSh = GetDocShell(); pDocSh && pCellField)
-    {
-        if (auto* pTextRange = getSvxUnoTextRange(xRange))
-        {
-            SvxEditSource* pEditSource = pTextRange->GetEditSource();
-            ESelection aSelection(pTextRange->GetSelection());
-
-            if (!bAbsorb)
-            {
-                //  do not replace -> append
-                aSelection.Adjust();
-                aSelection.CollapseToEnd();
-            }
-
-            if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
-                pCellField->setPropertyValue(SC_UNONAME_TABLEPOS, uno::Any(sal_Int32(aCellPos.Tab())));
-
-            SvxFieldItem aItem = pCellField->CreateFieldItem();
-            SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
-            pForwarder->QuickInsertField( aItem, aSelection );
-            pEditSource->UpdateData();
-
-            //  new selection: a digit
-            aSelection.Adjust();
-            aSelection.end.nPara = aSelection.start.nPara;
-            aSelection.end.nIndex = aSelection.start.nIndex + 1;
-            uno::Reference<text::XTextRange> xParent(this);
-            pCellField->InitDoc(
-                xParent, std::make_unique<ScCellEditSource>(pDocSh, aCellPos), aSelection);
-
-            //  for bAbsorb=FALSE, the new selection must be behind the inserted content
-            //  (the xml filter relies on this)
-            if (!bAbsorb)
-                aSelection.start.nIndex = aSelection.end.nIndex;
-
-            pTextRange->SetSelection( aSelection );
-
-            return;
-        }
-    }
-    GetUnoText().insertTextContent(xRange, xContent, bAbsorb);
+    if (!insertScEditFieldObj(xRange, xContent, bAbsorb))
+        GetUnoText().insertTextContent(xRange, xContent, bAbsorb);
 }
 
 void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextContent>& xContent )
