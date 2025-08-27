@@ -249,12 +249,10 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     bool bLayoutRTL = IsLayoutRTL();
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
-    bool bMirrored = IsMirrored();
 
     OUString            aString;
     sal_uInt16          nBarSize;
     Point               aScrPos;
-    Size                aTextSize;
 
     if (bVertical)
         nBarSize = static_cast<sal_uInt16>(GetSizePixel().Width());
@@ -586,25 +584,20 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                                         bBoldSet = bMark;
                                     }
                                 }
-
-                                aString = GetEntryText( nEntryNo );
-                                aTextSize.setWidth( GetTextWidth( aString ) );
-                                aTextSize.setHeight( GetTextHeight() );
-
-                                Point aTxtPos(aScrPos);
-                                if (bVertical)
-                                {
-                                    aTxtPos.AdjustX((nBarSize-aTextSize.Width())/2 );
-                                    aTxtPos.AdjustY((nSizePix*nLayoutSign-aTextSize.Height())/2 );
-                                    if ( bMirrored )
-                                        aTxtPos.AdjustX(1 );   // dark border is left instead of right
-                                }
+                                aString = GetEntryText(nEntryNo);
+                                const bool bRight
+                                    = GetTextWidth(aString) > fabs(aScrPos.X() - aEndPos.X());
+                                DrawTextFlags nDrawTextStyle(
+                                    (bRight ? DrawTextFlags::Right : DrawTextFlags::Center)
+                                    | DrawTextFlags::VCenter | DrawTextFlags::Clip);
+                                tools::Rectangle aRect;
+                                if (!bVertical && bLayoutRTL)
+                                    aRect = tools::Rectangle(aEndPos.X(), aScrPos.Y(), aScrPos.X(),
+                                                             aEndPos.Y());
                                 else
-                                {
-                                    aTxtPos.AdjustX((nSizePix*nLayoutSign-aTextSize.Width()+1)/2 );
-                                    aTxtPos.AdjustY((nBarSize-aTextSize.Height())/2 );
-                                }
-                                GetOutDev()->DrawText( aTxtPos, aString );
+                                    aRect = tools::Rectangle(aScrPos.X(), aScrPos.Y(), aEndPos.X(),
+                                                             aEndPos.Y());
+                                GetOutDev()->DrawText(aRect, aString, nDrawTextStyle);
                             }
                             break;
                     }
