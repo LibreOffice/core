@@ -72,6 +72,7 @@ class SwMarkdownParser
     OUString m_sBaseURL;
 
     sal_Int32 m_nBlockQuoteDepth = -1;
+    tools::Long m_nProgress = 0;
 
     bool m_bNewDoc;
     bool m_bNoParSpace = true;

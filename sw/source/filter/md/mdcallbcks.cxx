@@ -30,6 +30,7 @@
 #include <fmtinfmt.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <poolfmt.hxx>
+#include <mdiexp.hxx>
 #include <tools/urlobj.hxx>
 
 #include "swmd.hxx"
@@ -37,6 +38,8 @@
 int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void* userdata)
 {
     SwMarkdownParser* parser = static_cast<SwMarkdownParser*>(userdata);
+    ::SetProgressState(parser->m_nProgress, parser->m_xDoc->GetDocShell());
+
     switch (type)
     {
         case MD_BLOCK_DOC:
@@ -242,6 +245,7 @@ int SwMarkdownParser::text_callback(MD_TEXTTYPE type, const MD_CHAR* text, MD_SI
                                     void* userdata)
 {
     SwMarkdownParser* parser = static_cast<SwMarkdownParser*>(userdata);
+    parser->m_nProgress += size;
 
     switch (type)
     {
