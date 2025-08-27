@@ -20,7 +20,6 @@
 #include <svl/itemset.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <unotools/tempfile.hxx>
 
 #include <orcus/format_detection.hpp>
 #include <orcus/orcus_import_ods.hpp>
@@ -31,37 +30,6 @@ using namespace com::sun::star;
 
 namespace
 {
-/**
- * Stream copied to a temporary file with a filepath.
- */
-class CopiedTempStream
-{
-    utl::TempFileNamed maTemp;
-
-public:
-    CopiedTempStream(SvStream& rSrc)
-    {
-        maTemp.EnableKillingFile();
-        SvStream* pDest = maTemp.GetStream(StreamMode::WRITE);
-
-        rSrc.Seek(0);
-
-        const std::size_t nReadBuffer = 1024 * 32;
-        std::size_t nRead = 0;
-
-        do
-        {
-            char pData[nReadBuffer];
-            nRead = rSrc.ReadBytes(pData, nReadBuffer);
-            pDest->WriteBytes(pData, nRead);
-        } while (nRead == nReadBuffer);
-
-        maTemp.CloseStream();
-    }
-
-    OUString getFileName() const { return maTemp.GetFileName(); }
-};
-
 uno::Reference<task::XStatusIndicator> getStatusIndicator(const SfxMedium& rMedium)
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;

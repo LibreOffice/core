@@ -14,8 +14,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <unotools/mediadescriptor.hxx>
-
 #include <tools/stream.hxx>
+#include <orcus_utils.hxx>
 
 #include <orcus/format_detection.hpp>
 
@@ -71,20 +71,10 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
 
     css::uno::Reference<css::io::XInputStream> xInputStream(
         aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], css::uno::UNO_QUERY);
-    SvMemoryStream aContent(xInputStream->available());
 
-    static const sal_Int32 nBytes = 4096;
-    css::uno::Sequence<sal_Int8> aSeq(nBytes);
-    bool bEnd = false;
-    while (!bEnd)
-    {
-        sal_Int32 nReadBytes = xInputStream->readBytes(aSeq, nBytes);
-        bEnd = (nReadBytes != nBytes);
-        aContent.WriteBytes(aSeq.getConstArray(), nReadBytes);
-    }
-
-    std::string_view aStream(static_cast<const char*>(aContent.GetData()), aContent.GetSize());
-    orcus::format_t eFormat = orcus::detect(aStream);
+    CopiedTempStream aTemp(xInputStream);
+    auto aContent = toFileContent(aTemp.getFileName());
+    orcus::format_t eFormat = orcus::detect(aContent.str());
 
     switch (eFormat)
     {
