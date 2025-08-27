@@ -311,6 +311,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     {
         m_xCloseBtn->hide();
         m_xHelpBtn->hide();
+        m_xSearchLB->grab_focus();
     }
 
     m_aPresentIdle.SetTimeout(50);
