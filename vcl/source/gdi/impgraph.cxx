@@ -660,43 +660,6 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
     return aRetBmp;
 }
 
-BitmapEx ImpGraphic::getBitmapEx(const GraphicConversionParameters& rParameters) const
-{
-    ensureAvailable();
-
-    BitmapEx aBitmapEx;
-
-    if (meType == GraphicType::Bitmap)
-    {
-        if (maVectorGraphicData)
-            updateBitmapFromVectorGraphic(rParameters.getSizePixel());
-
-        if (mpAnimationContainer)
-            aBitmapEx = mpAnimationContainer->maAnimation.GetBitmapEx();
-        else if (mpBitmapContainer)
-            aBitmapEx = mpBitmapContainer->maBitmap;
-        else
-            aBitmapEx = maCachedBitmap;
-
-        if (rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
-            aBitmapEx.Scale(rParameters.getSizePixel(), BmpScaleFlag::Fast);
-    }
-    else if (meType != GraphicType::Default && isSupportedGraphic())
-    {
-        if (maCachedBitmap.IsEmpty())
-        {
-            const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
-
-            // use maBitmapEx as local buffer for rendered metafile
-            const_cast<ImpGraphic*>(this)->maCachedBitmap = Bitmap(BitmapEx(getBitmap(rParameters), aMonoMask.getBitmap(rParameters)));
-        }
-
-        aBitmapEx = maCachedBitmap;
-    }
-
-    return aBitmapEx;
-}
-
 Animation ImpGraphic::getAnimation() const
 {
     Animation aAnimation;
@@ -794,7 +757,7 @@ Size ImpGraphic::getSizePixel() const
     if (isSwappedOut())
         aSize = maSwapInfo.maSizePixel;
     else
-        aSize = getBitmapEx(GraphicConversionParameters()).GetSizePixel();
+        aSize = getBitmap(GraphicConversionParameters()).GetSizePixel();
 
     return aSize;
 }

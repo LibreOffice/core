@@ -97,7 +97,7 @@ bool checkBitmap(Graphic& rGraphic)
 {
     bool bResult = true;
 
-    Bitmap aBitmap(rGraphic.GetBitmapEx().GetBitmap());
+    Bitmap aBitmap(rGraphic.GetBitmap().CreateColorBitmap());
     {
         BitmapScopedReadAccess pReadAccess(aBitmap);
         for (tools::Long y = 0; y < rGraphic.GetSizePixel().Height(); y++)
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphic_PNG_WithoutGfxLink)
 
     // Make sure to construct the Graphic from BitmapEx, so that we
     // don't have the GfxLink present.
-    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmapEx());
+    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmap());
 
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
@@ -659,7 +659,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithGfxLink)
 CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphicProperties_PNG_WithoutGfxLink)
 {
     // Prepare Graphic from a PNG image
-    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmapEx());
+    Graphic aGraphic(makeUnloadedGraphic(u"png").GetBitmap());
 
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.makeAvailable());
@@ -730,7 +730,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(223), aGraphic.GetGfxLink().GetDataSize());
 
     // Remember checksum so we can compare after swapping back in again
-    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
+    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmap().GetChecksum();
 
     // Check we are not swapped out yet
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
@@ -760,7 +760,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_SVG_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Compare that the checksum of the bitmap is still the same
-    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmap().GetChecksum());
 
     // Byte size shouldn't change
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());
@@ -789,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_SVG_WithoutGfxLink)
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
-    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
+    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmap().GetChecksum();
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
@@ -838,7 +838,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingVectorGraphic_SVG_WithoutGfxLink)
 
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.IsGfxLink());
 
-    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmap().GetChecksum());
 
     // File shouldn't be available anymore
     CPPUNIT_ASSERT_EQUAL(static_cast<SvStream*>(nullptr),
@@ -1079,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1515), aGraphic.GetGfxLink().GetDataSize());
 
     // Remember checksum so we can compare after swapping back in again
-    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmapEx().GetChecksum();
+    BitmapChecksum aBitmapChecksumBeforeSwapping = aGraphic.GetBitmap().GetChecksum();
 
     // Check we are not swapped out yet
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
@@ -1109,7 +1109,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithGfxLink)
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
 
     // Compare that the checksum of the bitmap is still the same
-    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmapEx().GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(aBitmapChecksumBeforeSwapping, aGraphic.GetBitmap().GetChecksum());
 
     // Byte size shouldn't change
     CPPUNIT_ASSERT_EQUAL(rByteSize, aGraphic.GetSizeBytes());

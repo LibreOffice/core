@@ -128,7 +128,7 @@ void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
     Graphic aLoadedGraphic;
     mpGraphicFilter->ImportGraphic( aLoadedGraphic, u"", aStream );
 
-    BitmapEx aLoadedBitmapEx = aLoadedGraphic.GetBitmapEx();
+    Bitmap aLoadedBitmapEx = aLoadedGraphic.GetBitmap();
     Size aSize = aLoadedBitmapEx.GetSizePixel();
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(100), aSize.Width());

@@ -1200,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134174)
     CPPUNIT_ASSERT(xGraphic.is());
 
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(Color(0x8b21db), aBitmap.GetPixelColor(0, 0));
 }
 
@@ -1215,7 +1215,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134210)
     CPPUNIT_ASSERT(xGraphic.is());
 
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(Color(0x605741), aBitmap.GetPixelColor(0, 0));
 }
 
@@ -1816,7 +1816,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testMirroredGraphic)
     xShape->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(Color(0x4f4955), aBitmap.GetPixelColor(0, 0));
 }
 
@@ -1831,7 +1831,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf134210CropPosition)
     xShape->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(Color(0x81d41a), aBitmap.GetPixelColor(0, 0));
 }
 
@@ -1844,7 +1844,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testGreysScaleGraphic)
     xShape->getPropertyValue(u"FillBitmap"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(Color(0x3c3c3c), aBitmap.GetPixelColor(0, 0));
 }
 
@@ -1932,7 +1932,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf112209)
     CPPUNIT_ASSERT(xGraphic.is());
 
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Color: R:132 G:132 B:132 A:0
@@ -2000,7 +2000,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89928BlackWhiteThreshold)
         CPPUNIT_ASSERT(xGraphic.is());
 
         Graphic aGraphic(xGraphic);
-        BitmapEx aBitmap(aGraphic.GetBitmapEx());
+        Bitmap aBitmap(aGraphic.GetBitmap());
 
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: Color: R:0 G:0 B:0 A:0
@@ -2016,7 +2016,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89928BlackWhiteThreshold)
         CPPUNIT_ASSERT(xGraphic.is());
 
         Graphic aGraphic(xGraphic);
-        BitmapEx aBitmap(aGraphic.GetBitmapEx());
+        Bitmap aBitmap(aGraphic.GetBitmap());
 
         CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFFFFFF), aBitmap.GetPixelColor(0, 0));
     }
@@ -2138,7 +2138,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, test_srcRect_smallNegBound)
     uno::Reference<graphic::XGraphic> xGraphic(
         getShapeFromPage(0, 0)->getPropertyValue(u"FillBitmap"_ustr), uno::UNO_QUERY_THROW);
 
-    BitmapEx aBitmap(Graphic(xGraphic).GetBitmapEx());
+    Bitmap aBitmap(Graphic(xGraphic).GetBitmap());
 
     // Properly cropped bitmap should have black pixels close to left edge, near vertical center.
     // Before the fix, the gear was distorted, and this area was white.

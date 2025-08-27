@@ -117,12 +117,12 @@ void WebpFilterTest::testRoundtrip(bool lossy)
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
-    BitmapEx aResultBitmap = aGraphic.GetBitmapEx();
+    Bitmap aResultBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(Size(20, 20), aResultBitmap.GetSizePixel());
-    CPPUNIT_ASSERT(aResultBitmap.IsAlpha());
+    CPPUNIT_ASSERT(aResultBitmap.HasAlpha());
 
     {
-        Bitmap tmpBitmap = aResultBitmap.GetBitmap();
+        Bitmap tmpBitmap = aResultBitmap.CreateColorBitmap();
         BitmapScopedReadAccess pAccess(tmpBitmap);
         // Note that x,y are swapped.
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAccess->GetPixel(0, 0)));
@@ -138,7 +138,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(pAccess->GetPixel(19, 0)));
             CPPUNIT_ASSERT_EQUAL(COL_BLUE, Color(pAccess->GetPixel(19, 19)));
         }
-        AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
+        AlphaMask tmpAlpha = aResultBitmap.CreateAlphaMask();
         BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 0));
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 19));
@@ -174,12 +174,12 @@ void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
-    BitmapEx aResultBitmap = aGraphic.GetBitmapEx();
+    Bitmap aResultBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), aResultBitmap.GetSizePixel());
-    CPPUNIT_ASSERT_EQUAL(alpha, aResultBitmap.IsAlpha());
+    CPPUNIT_ASSERT_EQUAL(alpha, aResultBitmap.HasAlpha());
 
     {
-        Bitmap tmpBitmap = aResultBitmap.GetBitmap();
+        Bitmap tmpBitmap = aResultBitmap.CreateColorBitmap();
         BitmapScopedReadAccess pAccess(tmpBitmap);
         // Note that x,y are swapped.
         if (lossy)
@@ -189,7 +189,7 @@ void WebpFilterTest::testRead(std::u16string_view rName, bool lossy, bool alpha)
         CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(pAccess->GetPixel(9, 9)));
         if (alpha)
         {
-            AlphaMask tmpAlpha = aResultBitmap.GetAlphaMask();
+            AlphaMask tmpAlpha = aResultBitmap.CreateAlphaMask();
             BitmapScopedReadAccess pAccessAlpha(tmpAlpha);
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(255), pAccessAlpha->GetPixelIndex(0, 0));
             CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pAccessAlpha->GetPixelIndex(0, 9));

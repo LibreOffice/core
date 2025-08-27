@@ -2530,7 +2530,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133477)
     TypeSerializer aSerializer(aStream);
     aSerializer.readGraphic(aGraphic);
 
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(1, 1));
 }
 

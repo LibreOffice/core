@@ -1423,7 +1423,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf141269)
     CPPUNIT_ASSERT(xGraphic.is());
 
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap(aGraphic.GetBitmapEx());
+    Bitmap aBitmap(aGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1920), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1080), aBitmap.GetSizePixel().Height());
 

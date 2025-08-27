@@ -765,7 +765,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic vclGraphic(graphic);
-    BitmapEx bitmap(vclGraphic.GetBitmapEx());
+    Bitmap bitmap(vclGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL( tools::Long(76), bitmap.GetSizePixel().Height());
 

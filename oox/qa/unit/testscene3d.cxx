@@ -43,7 +43,7 @@ protected:
     uno::Reference<drawing::XShape> getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex);
     // Converts the shape 0 on page 0 to a bitmap and returns this bitmap.
     // It assumes, that shape 0 on page 0 is the only shape.
-    void getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex);
+    void getShapeAsBitmap(Bitmap& rBMP, sal_uInt8 nShapeIndex);
 };
 
 uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal_uInt8 nPageIndex)
@@ -60,7 +60,7 @@ uno::Reference<drawing::XShape> TestScene3d::getShape(sal_uInt8 nShapeIndex, sal
     return xShape;
 }
 
-void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex)
+void TestScene3d::getShapeAsBitmap(Bitmap& rBMP, sal_uInt8 nShapeIndex)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     CPPUNIT_ASSERT(pViewShell);
@@ -78,7 +78,7 @@ void TestScene3d::getShapeAsBitmap(BitmapEx& rBMP, sal_uInt8 nShapeIndex)
     SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShapeBmp));
     CPPUNIT_ASSERT_MESSAGE("No image object created", pGrafObj);
     const Graphic& rGraphic = pGrafObj->GetGraphic();
-    rBMP = rGraphic.GetBitmapEx();
+    rBMP = rGraphic.GetBitmap();
     CPPUNIT_ASSERT_MESSAGE("No bitmap", !rBMP.IsEmpty());
 }
 
@@ -379,7 +379,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_modernCamera)
     // shape. This is the same shape as in test_lightRig_legacyCamera but with a modern camera.
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_modernCamera.pptx");
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
@@ -401,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_legacyCamera)
     // This is the same shape as in test_lightRig_modernCamera but with a legacy camera.
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_legacyCamera.pptx");
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
@@ -422,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_default)
     // second light is against view direction, the colors are same in LibreOffice and MS Office.
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_default.pptx");
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_dir_rotation)
     // direction of the second light is against the view direction, colors are same in LibreOffice
     // and MSO. The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_dir_rotation.pptx");
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_lightRig_rot_rotation)
     // rotated around x- and y-axis by element 'rot'.
     // The test assumes rendering with ShadeMode_FLAT.
     loadFromFile(u"Scene3d_lightRig_rot_rotation.pptx");
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0);
 
     // Size in pixel depends on dpi. Thus calculate positions relative to size.
@@ -497,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_highlight)
 
     loadFromFile(u"Scene3d_material_highlight.pptx");
 
-    BitmapEx aBMP;
+    Bitmap aBMP;
     getShapeAsBitmap(aBMP, 0); // material legacyPlastic
     sal_Int32 nX = 0.75 * aBMP.GetSizePixel().Width();
     sal_Int32 nYhigh = 0.25 * aBMP.GetSizePixel().Height();

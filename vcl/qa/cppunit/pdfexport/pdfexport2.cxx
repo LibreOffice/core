@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf121615)
     sal_uInt16 jpegFormat = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
     CPPUNIT_ASSERT(jpegFormat != GRFILTER_FORMAT_NOTFOUND);
     CPPUNIT_ASSERT_EQUAL(jpegFormat, format);
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(300), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf129085)
     sal_uInt16 jpegFormat = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
     CPPUNIT_ASSERT(jpegFormat != GRFILTER_FORMAT_NOTFOUND);
     CPPUNIT_ASSERT_EQUAL(jpegFormat, format);
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(884), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(925), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());

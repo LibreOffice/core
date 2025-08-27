@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_RGB_888)
     SvFileStream aFileStream(getFullUrl(u"BMP_R8G8B8.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_RGB_565)
     SvFileStream aFileStream(getFullUrl(u"BMP_R5G6B5.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(10), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_32_ARGB_8888)
     SvFileStream aFileStream(getFullUrl(u"BMP_A8R8G8B8.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
 
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Paint_24_RGB_888)
     SvFileStream aFileStream(getFullUrl(u"BMP_Paint_24bit.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmap.getPixelFormat());
@@ -96,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_1BPP)
     SvFileStream aFileStream(getFullUrl(u"BMP_Paint_1bit.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_4BPP)
     SvFileStream aFileStream(getFullUrl(u"BMP_Paint_4bit.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_8BPP)
     SvFileStream aFileStream(getFullUrl(u"BMP_Paint_8bit.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -144,7 +144,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_Index_8BPP_RLE)
     SvFileStream aFileStream(getFullUrl(u"BMP_8bit_RLE.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V4)
     SvFileStream aFileStream(getFullUrl(u"BMP_RLE.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V3)
     SvFileStream aFileStream(getFullUrl(u"BMP_RLE_V3.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testBMP_V2)
     SvFileStream aFileStream(getFullUrl(u"BMP_RLE_V2.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmap.getPixelFormat());
@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(BmpFilterTest, testTdf73523)
     SvFileStream aFileStream(getFullUrl(u"tdf73523.bmp"), StreamMode::READ);
     Graphic aGraphic;
     CPPUNIT_ASSERT(BmpReader(aFileStream, aGraphic));
-    auto aBitmap = aGraphic.GetBitmapEx();
+    auto aBitmap = aGraphic.GetBitmap();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: c[80000000]
     // - Actual  : c[00000000]

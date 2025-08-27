@@ -117,7 +117,7 @@ Graphic JpegReaderTest::loadJPG(const OUString& aURL)
 void JpegReaderTest::testReadRGB()
 {
     Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestRGB.jpeg"));
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
@@ -134,7 +134,7 @@ void JpegReaderTest::testReadRGB()
 void JpegReaderTest::testReadGray()
 {
     Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestGray.jpeg"));
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
@@ -154,7 +154,7 @@ void JpegReaderTest::testReadGray()
 void JpegReaderTest::testReadCMYK()
 {
     Graphic aGraphic = loadJPG(getFullUrl(u"JPEGTestCMYK.jpeg"));
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(12), aSize.Height());
@@ -171,7 +171,7 @@ void JpegReaderTest::testReadCMYK()
 void JpegReaderTest::testTdf138950()
 {
     Graphic aGraphic = loadJPG(getFullUrl(u"tdf138950.jpeg"));
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(720), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1280), aSize.Height());

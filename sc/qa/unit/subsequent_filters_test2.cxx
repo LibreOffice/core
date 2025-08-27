@@ -722,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testEmbeddedImageXLS)
     const SdrGrafObj* pImageObj = dynamic_cast<const SdrGrafObj*>(pObj);
     CPPUNIT_ASSERT(pImageObj);
     const Graphic& rGrf = pImageObj->GetGraphic();
-    BitmapEx aBMP = rGrf.GetBitmapEx();
+    Bitmap aBMP = rGrf.GetBitmap();
     CPPUNIT_ASSERT_MESSAGE(
         "Bitmap content should not be empty if the image has been properly imported.",
         !aBMP.IsEmpty());

@@ -27,9 +27,9 @@ class JpegWriterTest : public test::BootstrapFixtureBase
         return m_directories.getURLFromSrc(gaDataUrl) + sFileName;
     }
 
-    BitmapEx load(const OUString& aURL);
-    BitmapEx roundtripJPG(const BitmapEx& bitmap);
-    BitmapEx roundtripJPG(const OUString& aURL);
+    Bitmap load(const OUString& aURL);
+    Bitmap roundtripJPG(const Bitmap& bitmap);
+    Bitmap roundtripJPG(const OUString& aURL);
 
 public:
     void testWrite8BitGrayscale();
@@ -41,19 +41,19 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-BitmapEx JpegWriterTest::load(const OUString& aURL)
+Bitmap JpegWriterTest::load(const OUString& aURL)
 {
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    return aGraphic.GetBitmapEx();
+    return aGraphic.GetBitmap();
 }
 
-BitmapEx JpegWriterTest::roundtripJPG(const OUString& aURL) { return roundtripJPG(load(aURL)); }
+Bitmap JpegWriterTest::roundtripJPG(const OUString& aURL) { return roundtripJPG(load(aURL)); }
 
-BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
+Bitmap JpegWriterTest::roundtripJPG(const Bitmap& bitmap)
 {
     // EXPORT JPEG
     SvMemoryStream aStream;
@@ -73,12 +73,12 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
     sal_uInt16 importFormatJPG = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
     bResult = rFilter.ImportGraphic(aImportGraphic, u"memory", aStream, importFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    return aImportGraphic.GetBitmapEx();
+    return aImportGraphic.GetBitmap();
 }
 
 void JpegWriterTest::testWrite8BitGrayscale()
 {
-    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitGrayscale.jpg")).GetBitmap();
+    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitGrayscale.jpg")).CreateColorBitmap();
     BitmapScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.
@@ -94,7 +94,7 @@ void JpegWriterTest::testWrite8BitGrayscale()
 
 void JpegWriterTest::testWrite8BitNonGrayscale()
 {
-    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitNonGrayscale.gif")).GetBitmap();
+    Bitmap bitmap = roundtripJPG(getFullUrl(u"8BitNonGrayscale.gif")).CreateColorBitmap();
     BitmapScopedReadAccess access(bitmap);
     const ScanlineFormat format = access->GetScanlineFormat();
     // Check that it's still 8bit grayscale.

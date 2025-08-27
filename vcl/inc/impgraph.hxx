@@ -129,8 +129,7 @@ private:
     bool isAvailable() const;
     bool makeAvailable();
 
-    BitmapEx            getBitmapEx(const GraphicConversionParameters& rParameters) const;
-    /// Gives direct access to the contained BitmapEx.
+    /// Gives direct access to the contained Bitmap.
     const Bitmap&       getBitmapRef() const;
     Animation           getAnimation() const;
     const GDIMetaFile&  getGDIMetaFile() const;

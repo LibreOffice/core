@@ -331,11 +331,6 @@ bool Graphic::IsEPS() const
     return mxImpGraphic->isEPS();
 }
 
-BitmapEx Graphic::GetBitmapEx(const GraphicConversionParameters& rParameters) const
-{
-    return mxImpGraphic->getBitmapEx(rParameters);
-}
-
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mxImpGraphic->getBitmap(rParameters);

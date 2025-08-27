@@ -75,7 +75,7 @@ void BitmapRenderTest::testTdf104141()
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     pVDev->DrawBitmapEx(Point(20, 20), aBitmap);
 
     // Check drawing results: ensure that it contains transparent
@@ -98,7 +98,7 @@ void BitmapRenderTest::testTdf113918()
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     pVDev->DrawBitmapEx(Point(0, 0), aBitmap);
 
     // Ensure that image is drawn with white background color from palette
@@ -259,7 +259,7 @@ void BitmapRenderTest::testTdf116888()
     SvFileStream aFileStream(aURL, StreamMode::READ);
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     CPPUNIT_ASSERT(!aBitmap.IsEmpty());
     aBitmap.Scale(0.8, 0.8); // This scaling discards mpUserData,
     BitmapScopedReadAccess pAccess(aBitmap); // forcing ReadTexture() here.

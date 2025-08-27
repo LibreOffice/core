@@ -108,7 +108,7 @@ void TiffFilterTest::testTdf115863()
     // - Actual  : 0x8203(Error Area:Vcl Class:General Code:3)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(528), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(618), aSize.Height());
@@ -159,7 +159,7 @@ void TiffFilterTest::testTdf74331()
 
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
-    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     Size aSize = aBitmap.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Height());
@@ -218,7 +218,7 @@ void TiffFilterTest::testRoundtrip()
     ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeTif, aGraphic.GetGfxLink().GetType());
-    Bitmap aResultBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Bitmap aResultBitmap = aGraphic.GetBitmap().CreateColorBitmap();
     CPPUNIT_ASSERT_EQUAL(Size(2, 2), aResultBitmap.GetSizePixel());
 
     {
@@ -256,7 +256,7 @@ void TiffFilterTest::testRGB8bits()
         ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
-        Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+        Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
         Size aSize = aBitmap.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Height());
@@ -291,7 +291,7 @@ void TiffFilterTest::testRGB16bits()
         ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
-        Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+        Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
         Size aSize = aBitmap.GetSizePixel();
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Width());
         CPPUNIT_ASSERT_EQUAL(tools::Long(10), aSize.Height());

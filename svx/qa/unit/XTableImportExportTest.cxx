@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         CPPUNIT_ASSERT(xGraphic.is());
         Graphic aGraphic(xGraphic);
         CPPUNIT_ASSERT(!aGraphic.IsNone());
-        Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+        Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
         CPPUNIT_ASSERT_EQUAL(aChecksum, aBitmap.GetChecksum());
     }
 }

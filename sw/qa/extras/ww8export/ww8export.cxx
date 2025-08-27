@@ -463,7 +463,7 @@ DECLARE_WW8EXPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.doc")
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( u"Graphic"_ustr ) >>= graphic;
     Graphic vclGraphic(graphic);
-    BitmapEx bitmap(vclGraphic.GetBitmapEx());
+    Bitmap bitmap(vclGraphic.GetBitmap());
     CPPUNIT_ASSERT_EQUAL( tools::Long(58), bitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL( tools::Long(320), bitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT_EQUAL( Color(206,206,206), bitmap.GetPixelColor(16,27));

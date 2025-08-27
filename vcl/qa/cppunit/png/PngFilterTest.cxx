@@ -1975,10 +1975,10 @@ void PngFilterTest::testTdf153180MonochromeFilterPngExport()
     }
 
     // Apply the monochrome filter to the graphic but keep the alpha.
-    BitmapEx aBitmapEx(aGraphicOriginal.GetBitmapEx());
-    AlphaMask aAlphaMask(aBitmapEx.GetAlphaMask());
+    Bitmap aBitmap(aGraphicOriginal.GetBitmap());
+    AlphaMask aAlphaMask(aBitmap.CreateAlphaMask());
 
-    Bitmap aTmpBmp(aBitmapEx.GetBitmap());
+    Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
     BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
 
     Graphic aGraphicAfterFilter{ BitmapEx(aTmpBmp, aAlphaMask) };
@@ -1991,7 +1991,7 @@ void PngFilterTest::testTdf153180MonochromeFilterPngExport()
     {
         SvStream& rStream = *aTempFile.GetStream(StreamMode::WRITE);
         vcl::PngImageWriter aPngWriter(rStream);
-        bool bWriteSuccess = aPngWriter.write(aGraphicAfterFilter.GetBitmapEx());
+        bool bWriteSuccess = aPngWriter.write(aGraphicAfterFilter.GetBitmap());
         CPPUNIT_ASSERT_EQUAL(true, bWriteSuccess);
         aTempFile.CloseStream();
     }

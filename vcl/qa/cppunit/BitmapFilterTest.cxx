@@ -73,7 +73,7 @@ private:
         return m_directories.getURLFromSrc(u"vcl/qa/cppunit/data/") + sFileName;
     }
 
-    BitmapEx loadBitmap(std::u16string_view sFileName)
+    Bitmap loadBitmap(std::u16string_view sFileName)
     {
         Graphic aGraphic;
         const OUString aURL(getFullUrl(sFileName));
@@ -81,7 +81,7 @@ private:
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         ErrCode aResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
         CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aResult);
-        return aGraphic.GetBitmapEx();
+        return aGraphic.GetBitmap();
     }
 
     template <class BitmapT> // handle both Bitmap and BitmapEx
@@ -173,15 +173,13 @@ void BitmapFilterTest::testBlurCorrectness()
 
 void BitmapFilterTest::testBasicMorphology()
 {
-    const BitmapEx aOrigBitmap = loadBitmap(u"testBasicMorphology.png");
-    const BitmapEx aRefBitmapDilated1 = loadBitmap(u"testBasicMorphologyDilated1.png");
-    const BitmapEx aRefBitmapDilated1Eroded1
-        = loadBitmap(u"testBasicMorphologyDilated1Eroded1.png");
-    const BitmapEx aRefBitmapDilated2 = loadBitmap(u"testBasicMorphologyDilated2.png");
-    const BitmapEx aRefBitmapDilated2Eroded1
-        = loadBitmap(u"testBasicMorphologyDilated2Eroded1.png");
+    const Bitmap aOrigBitmap = loadBitmap(u"testBasicMorphology.png");
+    const Bitmap aRefBitmapDilated1 = loadBitmap(u"testBasicMorphologyDilated1.png");
+    const Bitmap aRefBitmapDilated1Eroded1 = loadBitmap(u"testBasicMorphologyDilated1Eroded1.png");
+    const Bitmap aRefBitmapDilated2 = loadBitmap(u"testBasicMorphologyDilated2.png");
+    const Bitmap aRefBitmapDilated2Eroded1 = loadBitmap(u"testBasicMorphologyDilated2Eroded1.png");
 
-    BitmapEx aTransformBitmap = aOrigBitmap;
+    Bitmap aTransformBitmap = aOrigBitmap;
     BitmapFilter::Filter(aTransformBitmap, BitmapDilateFilter(1));
     if (constWriteResultBitmap)
         savePNG(u"~/Dilated1.png"_ustr, aTransformBitmap);

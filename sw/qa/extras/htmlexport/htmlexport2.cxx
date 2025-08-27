@@ -1293,7 +1293,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter().ImportGraphic(graphic, aUrl));
 
     // Check that only ~4% of pixels are not transparent (before the fix, it was completely black)
-    BitmapEx bitmap = graphic.GetBitmapEx();
+    Bitmap bitmap = graphic.GetBitmap();
     Size size = bitmap.GetSizePixel();
     int numNonTransparent = 0;
     for (tools::Long y = 0; y < size.Height(); ++y)
@@ -1313,7 +1313,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter().ImportGraphic(graphic, aUrl));
 
     // Check that some pixels are transparent (before the fix, it was completely black)
-    bitmap = graphic.GetBitmapEx();
+    bitmap = graphic.GetBitmap();
     size = bitmap.GetSizePixel();
     numNonTransparent = 0;
     for (tools::Long y = 0; y < size.Height(); ++y)

@@ -524,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN777345)
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
     Graphic aGraphic(xGraphic);
-    BitmapEx aBitmap = aGraphic.GetBitmapEx();
+    Bitmap aBitmap = aGraphic.GetBitmap();
     CPPUNIT_ASSERT_EQUAL( Size( 17, 16 ), aBitmap.GetSizePixel());
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 0, 0 ));
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 16, 15 ));
