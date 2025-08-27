@@ -43,7 +43,7 @@ public:
 
     void            InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< OUString > &rNameVector );
-    BitmapEx        GetAsHorizontalStrip() const;
+    Bitmap          GetAsHorizontalStrip() const;
     sal_uInt16      GetImageCount() const;
 
     void            AddImage( const OUString& rImageName, const Image& rImage );

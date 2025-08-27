@@ -39,16 +39,16 @@ ImageList::ImageList(const std::vector< OUString >& rNameVector,
 }
 
 // FIXME: Rather a performance hazard
-BitmapEx ImageList::GetAsHorizontalStrip() const
+Bitmap ImageList::GetAsHorizontalStrip() const
 {
     sal_uInt16 nCount = maImages.size();
     if( !nCount )
-        return BitmapEx();
+        return Bitmap();
 
     Bitmap aTempl = maImages[ 0 ]->maImage.GetBitmap();
     Size aImageSize(aTempl.GetSizePixel());
     Size aSize(aImageSize.Width() * nCount, aImageSize.Height());
-    BitmapEx aResult( BitmapEx(aTempl), Point(), aSize );
+    Bitmap aResult( aTempl, Point(), aSize );
 
     tools::Rectangle aSrcRect( Point( 0, 0 ), aImageSize );
     for (sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++)
@@ -56,7 +56,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
         tools::Rectangle aDestRect( Point( nIdx * aImageSize.Width(), 0 ), aImageSize );
         ImageAryData *pData = maImages[ nIdx ].get();
         Bitmap aTmp = pData->maImage.GetBitmap();
-        aResult.CopyPixel( aDestRect, aSrcRect, BitmapEx(aTmp));
+        aResult.CopyPixel( aDestRect, aSrcRect, aTmp);
     }
 
     return aResult;

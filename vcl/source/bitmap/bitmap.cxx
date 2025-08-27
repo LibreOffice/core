@@ -191,6 +191,18 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
     }
 }
 
+Bitmap::Bitmap( const Bitmap& rBitmap, Point aSrc, Size aSize )
+{
+    if( rBitmap.IsEmpty() || aSize.IsEmpty() )
+        return;
+
+    *this = Bitmap(aSize, rBitmap.getPixelFormat());
+
+    tools::Rectangle aDestRect( Point( 0, 0 ), aSize );
+    tools::Rectangle aSrcRect( aSrc, aSize );
+    CopyPixel( aDestRect, aSrcRect, rBitmap );
+}
+
 Bitmap::Bitmap( const OUString& rIconName )
 {
     loadFromIconTheme( rIconName );
