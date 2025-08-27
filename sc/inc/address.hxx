@@ -389,10 +389,7 @@ public:
     [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
             ScAddress& rErrorPos, const ScDocument& rDoc );
 
-    constexpr bool operator==( const ScAddress& rAddress ) const
-    {
-        return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
-    }
+    constexpr bool operator==(const ScAddress& rAddress) const = default;
 
     constexpr auto operator<=>(const ScAddress& rh) const
     {
