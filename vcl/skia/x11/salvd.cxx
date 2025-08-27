@@ -80,8 +80,8 @@ void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphicsAcquired
 
 bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent)
 {
-    assert(!bAlphaMaskTransparent && "TODO");
-    (void)bAlphaMaskTransparent;
+    //TODO: Handle transparent images if bAlphaMaskTransparent is set to true
+    SAL_WARN_IF(bAlphaMaskTransparent, "vcl", "Skia on X11 does not currently handle transparency");
     if (!nDX)
         nDX = 1;
     if (!nDY)
