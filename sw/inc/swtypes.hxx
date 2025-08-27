@@ -153,7 +153,8 @@ enum class SetAttrMode
     NOHINTEXPAND    = 0x0100,
     /// don't change the cursor position
     NO_CURSOR_CHANGE = 0x0200,
-    // remove all char attributes and char styles when para/char styles are applied
+    /// remove all char attributes and char styles when para/char styles are applied
+    /// as well as removing list attributes (when para styles are applied)
     REMOVE_ALL_ATTR = 0x0400
 };
 namespace o3tl

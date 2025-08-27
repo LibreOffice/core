@@ -1221,7 +1221,8 @@ bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, con
             pSh->MoveSection( GoCurrSection, fnSectionEnd );
             pSh->SelAll();
 
-            pSh->SetTextFormatColl( pColl, true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
+            const bool bResetAllCharAttrs(nMode & KEY_MOD1);
+            pSh->SetTextFormatColl(pColl, true, bResetAllCharAttrs);
 
             // zero the upper and lower margins of the paragraph (also an interoperability issue)
             SfxItemSetFixed<RES_UL_SPACE, RES_UL_SPACE> aSet2(pSh->GetAttrPool());
@@ -1292,12 +1293,11 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
                 // #i62675#
                 // clear also list attributes at affected text nodes, if paragraph
                 // style has the list style attribute set.
-                const SetAttrMode nAttrModeFlag
-                    = (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT;
+                const bool bResetAllCharAttrs(nMode & KEY_MOD1);
                 const bool bResetListAttrs
-                    = nAttrModeFlag == SetAttrMode::REMOVE_ALL_ATTR
+                    = bResetAllCharAttrs
                       || (pColl && pColl->GetItemState(RES_PARATR_NUMRULE) == SfxItemState::SET);
-                pSh->SetTextFormatColl(pColl, bResetListAttrs, nAttrModeFlag);
+                pSh->SetTextFormatColl(pColl, bResetListAttrs, bResetAllCharAttrs);
             }
             break;
         }
