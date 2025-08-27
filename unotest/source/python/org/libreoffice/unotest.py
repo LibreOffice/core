@@ -28,7 +28,7 @@ except ImportError:
     raise
 
 try:
-    from com.sun.star.document import XDocumentEventListener
+    from com.sun.star.document import XDocumentEventListener  # noqa: F401
 except ImportError:
     print("UNO API class not found: try to set URE_BOOTSTRAP variable")
     print("to something like:")
