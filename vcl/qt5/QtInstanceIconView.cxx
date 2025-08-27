@@ -93,7 +93,7 @@ void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* 
 {
     std::optional<QPixmap> oPixmap;
     if (pIcon)
-        oPixmap = toQPixmap(BitmapEx(*pIcon));
+        oPixmap = toQPixmap(*pIcon);
 
     const QPixmap* pPixmapIcon = oPixmap.has_value() ? &oPixmap.value() : nullptr;
     insert(nPos, pStr, pId, pPixmapIcon, pRet);

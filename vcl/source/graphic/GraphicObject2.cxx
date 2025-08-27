@@ -139,7 +139,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
                                       rTileSizePixel, pAttr, aTileInfo ) )
     {
         // extract generated tile -> see comment on the first loop below
-        BitmapEx aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
+        Bitmap aTileBitmap( rVDev.GetBitmap( aTileInfo.aTileTopLeft, aTileInfo.aTileSizePixel ) );
 
         xTmpGraphic.reset(new GraphicObject(std::move(aTileBitmap)));
         pTileGraphic = xTmpGraphic.get();
@@ -308,9 +308,9 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
                 GraphicObject aAlphaGraphic;
 
                 if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic(BitmapEx(GetGraphic().GetBitmap().CreateAlphaMask().GetBitmap()));
+                    aAlphaGraphic.SetGraphic(GetGraphic().GetBitmap().CreateAlphaMask().GetBitmap());
                 else
-                    aAlphaGraphic.SetGraphic(BitmapEx(Bitmap()));
+                    aAlphaGraphic.SetGraphic(Bitmap());
 
                 if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr ) )

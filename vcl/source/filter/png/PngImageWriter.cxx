@@ -365,7 +365,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             const AnimationFrame& rCurrentFrame = *rFrames[1 + i];
             SvMemoryStream aStream;
 
-            if (!pngWrite(aStream, rCurrentFrame.maBitmapEx, nCompressionLevel, bInterlaced,
+            if (!pngWrite(aStream, Bitmap(rCurrentFrame.maBitmapEx), nCompressionLevel, bInterlaced,
                           bTranslucent, {}))
                 return false;
 

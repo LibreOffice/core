@@ -37,11 +37,11 @@ inline OUString toOUString(const QString& s)
     return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
-inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
+inline QPixmap toQPixmap(const Bitmap& rBitmap)
 {
     SvMemoryStream aMemoryStream;
     vcl::PngImageWriter aWriter(aMemoryStream);
-    aWriter.write(rBitmapEx);
+    aWriter.write(rBitmap);
     QPixmap aPixmap;
     aPixmap.loadFromData(static_cast<const uchar*>(aMemoryStream.GetData()),
                          aMemoryStream.TellEnd());
@@ -49,7 +49,7 @@ inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
     return aPixmap;
 }
 
-inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(BitmapEx(rImage.GetBitmap())); }
+inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(rImage.GetBitmap()); }
 
 inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {
@@ -68,7 +68,7 @@ inline QPixmap toQPixmap(const OutputDevice& rDevice)
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)
 {
     Bitmap aIcon(rIconName);
-    return toQPixmap(BitmapEx(aIcon));
+    return toQPixmap(aIcon);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
