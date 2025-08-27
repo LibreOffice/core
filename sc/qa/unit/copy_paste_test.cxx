@@ -412,10 +412,10 @@ void ScCopyPasteTest::testTdf40993_fillMergedCells()
             }
         }
     }
-    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(*pDoc, 1, 5, 0), ScAddress(2, 4, 0));
-    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(*pDoc, 0, 5, 0), ScAddress(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(*pDoc, 4, 6, 0), ScAddress(1, 2, 0));
-    CPPUNIT_ASSERT_EQUAL(lcl_getMergeSizeOfCell(*pDoc, 3, 5, 0), ScAddress(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(2, 4, 0), lcl_getMergeSizeOfCell(*pDoc, 1, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 2, 0), lcl_getMergeSizeOfCell(*pDoc, 0, 5, 0));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(1, 2, 0), lcl_getMergeSizeOfCell(*pDoc, 4, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(ScAddress(2, 1, 0), lcl_getMergeSizeOfCell(*pDoc, 3, 5, 0));
 }
 
 static void lcl_clickAndCheckCurrentArea(SCCOL nCol, SCROW nRow, SCCOL nCol2, SCROW nRow2, ScTabViewShell* pViewShell)
