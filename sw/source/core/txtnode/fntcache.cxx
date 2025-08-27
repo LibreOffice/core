@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/lazydelete.hxx>
 #include <vcl/glyphitemcache.hxx>
+#include <vcl/fontcapabilities.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -264,6 +265,32 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
     }
 }
 
+// tdf#129808: Oddly, Word scales up ascent and line height for *fonts* that self-report
+// coverage for certain specific CJK code pages, even when that font isn't used for CJK
+// text. Apply this scale when necessary.
+static sal_uInt16 lcl_ApplyCjkHeightAdjustment(sal_uInt16 nBase, const SwViewShell* pSh,
+                                               const OutputDevice& rDev)
+{
+    if (!pSh || !pSh->getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS))
+    {
+        return nBase;
+    }
+
+    vcl::FontCapabilities stCaps;
+    if (rDev.GetFontCapabilities(stCaps) && stCaps.oCodePageRange.has_value())
+    {
+        if (stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP932)
+            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP936)
+            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP949)
+            || stCaps.oCodePageRange->test(vcl::CodePageCoverage::CP950))
+        {
+            return (nBase * 127) / 100;
+        }
+    }
+
+    return nBase;
+}
+
 // Returns the Ascent of the Font on the given output device;
 // it may be necessary to create the screen font first.
 sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut )
@@ -293,6 +320,8 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         nRet = m_nPrtAscent;
     }
 
+    nRet = lcl_ApplyCjkHeightAdjustment(nRet, pSh, rRefDev);
+
 #if !defined(MACOSX) // #i89844# extleading is below the line for Mac
     // TODO: move extleading below the line for all platforms too
     nRet += GetFontLeading( pSh, rRefDev );
@@ -313,7 +342,9 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
     {
         CreateScrFont( *pSh, rOut );
         OSL_ENSURE( USHRT_MAX != m_nScrHeight, "nScrHeight is going berzerk" );
-        nRet = m_nScrHeight + GetFontLeading( pSh, rRefDev );
+
+        nRet = lcl_ApplyCjkHeightAdjustment(m_nScrHeight, pSh, rRefDev)
+               + GetFontLeading(pSh, rRefDev);
     }
     else
     {
@@ -336,7 +367,8 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
-        nRet = m_nPrtHeight + GetFontLeading( pSh, rRefDev );
+        nRet = lcl_ApplyCjkHeightAdjustment(m_nPrtHeight, pSh, rRefDev)
+               + GetFontLeading(pSh, rRefDev);
     }
 
     OSL_ENSURE( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" );

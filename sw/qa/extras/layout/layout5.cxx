@@ -1990,6 +1990,39 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167541)
     createSwDoc("tdf167541.fodt");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf129808CompatFlagSet)
+{
+    // tdf#129808: This document contains an embedded font that advertises CP950 coverage. When
+    // Word-compatible CJK metrics are enabled, the line height should be scaled higher.
+    createSwDoc("tdf129808-flag-set.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    auto nHeight1 = getXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1450), nHeight1);
+    CPPUNIT_ASSERT_LESS(sal_Int32(1460), nHeight1);
+
+    auto nHeight2 = getXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1450), nHeight2);
+    CPPUNIT_ASSERT_LESS(sal_Int32(1460), nHeight2);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf129808CompatFlagUnset)
+{
+    // tdf#129808: This test is identical to the previous test, but with the compatibility flag
+    // unset. This test should pass with or without the fix, but ensures the new behavior won't
+    // be applied unintentionally in the future.
+    createSwDoc("tdf129808-flag-unset.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    auto nHeight1 = getXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1140), nHeight1);
+    CPPUNIT_ASSERT_LESS(sal_Int32(1150), nHeight1);
+
+    auto nHeight2 = getXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1140), nHeight2);
+    CPPUNIT_ASSERT_LESS(sal_Int32(1150), nHeight2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

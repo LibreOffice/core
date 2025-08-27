@@ -172,7 +172,7 @@
       </prop>
       <prop oor:name="MsWordCompGridMetrics" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Use Word-compatible font metrics for text grid</desc>
+          <desc>Use Word-compatible font metrics for text grid and Asian text</desc>
         </info>
         <value>false</value>
       </prop>
