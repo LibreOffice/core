@@ -25,6 +25,7 @@
 #include <array>
 #include <limits>
 #include <ostream>
+#include <tuple>
 
 #include "scdllapi.h"
 #include "types.hxx"
@@ -393,17 +394,9 @@ public:
         return nRow == rAddress.nRow && nCol == rAddress.nCol && nTab == rAddress.nTab;
     }
 
-    constexpr auto operator<=>(const ScAddress& rAddress) const
+    constexpr auto operator<=>(const ScAddress& rh) const
     {
-        if (auto bTabResult = nTab <=> rAddress.nTab; bTabResult == 0)
-        {
-            if (auto bColResult = nCol <=> rAddress.nCol; bColResult == 0)
-                return nRow <=> rAddress.nRow;
-            else
-                return bColResult;
-        }
-        else
-            return bTabResult;
+        return std::make_tuple(nTab, nCol, nRow) <=> std::make_tuple(rh.nTab, rh.nCol, rh.nRow);
     }
 
     /** Less than ordered by tab,row,col as needed by row-wise import/export */
