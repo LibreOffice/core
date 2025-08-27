@@ -300,30 +300,7 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
         if( ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
                                 nNumTilesInCacheY, rSizePixel, pAttr ) )
         {
-            BitmapEx aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
-
-            // draw alpha content, if any
-            if( IsTransparent() )
-            {
-                GraphicObject aAlphaGraphic;
-
-                if( GetGraphic().IsAlpha() )
-                    aAlphaGraphic.SetGraphic(GetGraphic().GetBitmap().CreateAlphaMask().GetBitmap());
-                else
-                    aAlphaGraphic.SetGraphic(Bitmap());
-
-                if( aAlphaGraphic.ImplRenderTempTile( *aVDev, nNumTilesInCacheX,
-                                                      nNumTilesInCacheY, rSizePixel, pAttr ) )
-                {
-                    // Combine bitmap and alpha/mask
-                    if( GetGraphic().IsAlpha() )
-                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                AlphaMask( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) ) );
-                    else
-                        aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateAlphaMask( COL_WHITE ) );
-                }
-            }
+            Bitmap aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
 
             // paint generated tile
             GraphicObject aTmpGraphic( aTileBitmap );
