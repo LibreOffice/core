@@ -1,0 +1,18 @@
+--- fontconfig/src/fcinit.c
++++ fontconfig/src/fcinit.c
+@@ -108,7 +108,14 @@
+ 
+     FcInitDebug();
+ 
+-    if (!FcConfigParseAndLoad (config, 0, FcTrue)) {
++#if defined(__APPLE__)
++    // macOS doesn't have a default /etc/fonts/font.conf, so silence warning
++    // about that for now
++    FcBool complain = FcFalse;
++#else
++    FcBool complain = FcTrue;
++#endif
++    if (!FcConfigParseAndLoad (config, 0, complain)) {
+ 	const FcChar8 *sysroot = FcConfigGetSysRoot (config);
+ 	FcConfig      *fallback = FcInitFallbackConfigWithFilter (config, sysroot);
+ 
