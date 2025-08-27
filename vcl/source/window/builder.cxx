@@ -524,11 +524,9 @@ void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
-                       bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
+                       bool bLegacy, std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem)
     : WidgetBuilder(sUIDir, sUIFile, bLegacy)
-    , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
-                                   ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
-                                   : new NotebookBarAddonsItem{})
+    , m_pNotebookBarAddonsItem(std::move(pNotebookBarAddonsItem))
     , m_sID(std::move(sID))
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
@@ -3013,7 +3011,10 @@ void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const
 
     if(rClass == "NotebookBarAddonsMenuMergePoint")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
+        if (!comphelper::LibreOfficeKit::isActive())
+        {
+            NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
+        }
         m_pVclParserState->m_nLastMenuItemId = pParent->GetItemCount();
     }
     else if (rClass == "GtkMenuItem")

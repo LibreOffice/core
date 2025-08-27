@@ -210,7 +210,7 @@ public:
 
     void SetNotebookBar(const OUString& rUIXMLDescription,
                         const css::uno::Reference<css::frame::XFrame>& rFrame,
-                        const NotebookBarAddonsItem& aNotebookBarAddonsItem,
+                        std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem,
                         bool bReloadNotebookbar = false);
 
     void            CloseNotebookBar();

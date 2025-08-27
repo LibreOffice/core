@@ -19,6 +19,8 @@
 
 #include <config_wasm_strip.h>
 
+#include <comphelper/OAccessible.hxx>
+
 #include <sfx2/objface.hxx>
 #include <vcl/help.hxx>
 #include <vcl/commandevent.hxx>

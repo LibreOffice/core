@@ -19,6 +19,7 @@
 
 #include <tools/time.hxx>
 #include <sal/log.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>

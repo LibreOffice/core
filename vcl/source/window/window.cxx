@@ -24,6 +24,7 @@
 
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/OAccessible.hxx>
 #include <vcl/dndlistenercontainer.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>

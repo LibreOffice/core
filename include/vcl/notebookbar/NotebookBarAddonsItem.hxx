@@ -17,42 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
-#define INCLUDED_VCL_NOTEBOOKBARADDONSMERGER_HXX
+#pragma once
 
-#include <vcl/builder.hxx>
-#include <vcl/window.hxx>
 #include <vcl/image.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <vector>
-#include "NotebookBarAddonsItem.hxx"
 
-class Menu;
-
-struct AddonNotebookBarItem
+struct NotebookBarAddonsItem
 {
-    OUString sCommandURL;
-    OUString sLabel;
-    OUString sTarget;
-    OUString sContext;
-    OUString sControlType;
-    sal_uInt16 nWidth;
-    OUString sStyle;
+    std::vector<Image> aImageValues;
+    std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
 };
-
-namespace NotebookBarAddonsMerger
-{
-void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWidget& pFunction,
-                            const css::uno::Reference<css::frame::XFrame>& rFrame,
-                            const NotebookBarAddonsItem& aNotebookBarAddonsItem,
-                            VclBuilder::stringmap& rVec);
-void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUString& sItemIdName,
-                                const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                NotebookBarAddonsItem& aNotebookBarAddonsItem);
-};
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
