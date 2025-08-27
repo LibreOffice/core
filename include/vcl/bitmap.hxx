@@ -32,6 +32,7 @@
 #include <vcl/bitmap/BitmapTypes.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -597,6 +598,13 @@ public:
     void BlendAlpha( sal_uInt8 nAlpha );
 
     void CombineMaskOr(Color maskColor, sal_uInt8 nTol);
+
+    /**
+     * Retrieves the color model data we need for the XImageConsumer stuff.
+     */
+    void                GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
+                            sal_uInt32& rnRedMask, sal_uInt32& rnGreenMask, sal_uInt32& rnBlueMask, sal_uInt32& rnAlphaMask, sal_uInt32& rnTransparencyIndex,
+                            sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
 
     /** Remove existing blending against COL_WHITE based on given AlphaMask
 
