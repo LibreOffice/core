@@ -421,6 +421,15 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, css::uno::Any(sTypeName) } };
 
                 xNewFilter = GetFilterForProps(lQuery, nMust, nDont);
+                if (xNewFilter && xNewFilter->GetFilterName().endsWith("_pdf_addstream_import")
+                    && aFilterName.endsWith("_pdf_import")
+                    && sTypeName == "pdf_Portable_Document_Format")
+                {
+                    // pdf_Portable_Document_Format covers two sets of import filters: normal PDF
+                    // (like draw_pdf_import), and hybrid (like calc_pdf_addstream_import).
+                    // Type detection didn't detect hybrid PDF; this new filter can't match
+                    xNewFilter.reset();
+                }
             }
 
             if (xNewFilter)
