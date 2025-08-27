@@ -12,6 +12,7 @@
 #include <string_view>
 #include <utility>
 
+#include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/syswin.hxx>
@@ -71,7 +72,7 @@ public:
 
 NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                          const css::uno::Reference<css::frame::XFrame>& rFrame,
-                         const NotebookBarAddonsItem& aNotebookBarAddonsItem)
+                         std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem)
     : Control(pParent)
     , m_pEventListener(new NotebookBarContextChangeEventListener(this, rFrame))
     , m_pViewShell(nullptr)
@@ -97,7 +98,8 @@ NotebookBar::NotebookBar(Window* pParent, const OUString& rID, const OUString& r
     else
     {
         m_pUIBuilder.reset(
-            new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true, &aNotebookBarAddonsItem));
+            new VclBuilder(this, sUIDir, rUIXMLDescription, rID, rFrame, true,
+                           std::move(pNotebookBarAddonsItem)));
 
         // In the Notebookbar's .ui file must exist control handling context
         // - implementing NotebookbarContextControl interface with id "ContextContainer"

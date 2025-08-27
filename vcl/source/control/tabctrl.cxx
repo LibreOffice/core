@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/event.hxx>

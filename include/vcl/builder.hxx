@@ -22,6 +22,7 @@
 #include <vcl/toolboxid.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/notebookbar/NotebookBarAddonsItem.hxx>
 
 #include <memory>
 #include <map>
@@ -49,7 +50,6 @@ class TimeField;
 class ToolBox;
 class VclExpander;
 class VclMultiLineEdit;
-struct NotebookBarAddonsItem;
 namespace com::sun::star::frame { class XFrame; }
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
@@ -65,7 +65,7 @@ public:
                css::uno::Reference<css::frame::XFrame> xFrame
                = css::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true,
-               const NotebookBarAddonsItem* pNotebookBarAddonsItem = nullptr);
+               std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem = nullptr);
     virtual ~VclBuilder();
     ///releases references and disposes all children.
     void disposeBuilder();

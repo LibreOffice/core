@@ -1938,12 +1938,12 @@ void ImplBorderWindow::SetMenuBarMode( bool bHide )
 
 void ImplBorderWindow::SetNotebookBar(const OUString& rUIXMLDescription,
                                       const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                      const NotebookBarAddonsItem& aNotebookBarAddonsItem)
+                                      std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem)
 {
     if (mpNotebookBar)
         mpNotebookBar.disposeAndClear();
     mpNotebookBar = VclPtr<NotebookBar>::Create(this, "NotebookBar", rUIXMLDescription, rFrame,
-                                                aNotebookBarAddonsItem);
+                                                std::move(pNotebookBarAddonsItem));
     Resize();
 }
 
