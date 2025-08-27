@@ -636,14 +636,14 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
                     case MetaActionType::BMPSCALE:
                     case MetaActionType::BMPEXSCALE:
                     {
-                        BitmapEx aBmpEx;
+                        Bitmap aBmp;
                         Point aPos;
                         Size aSize;
                         if ( pAction->GetType() == MetaActionType::BMPSCALE )
                         {
                             MetaBmpScaleAction* pScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
                             assert(pScaleAction);
-                            aBmpEx = pScaleAction->GetBitmap();
+                            aBmp = pScaleAction->GetBitmap();
                             aPos = pScaleAction->GetPoint();
                             aSize = pScaleAction->GetSize();
                         }
@@ -651,11 +651,11 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
                         {
                             MetaBmpExScaleAction* pScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
                             assert(pScaleAction);
-                            aBmpEx = pScaleAction->GetBitmapEx();
+                            aBmp = Bitmap(pScaleAction->GetBitmapEx());
                             aPos = pScaleAction->GetPoint();
                             aSize = pScaleAction->GetSize();
                         }
-                        ::Graphic aGraphic( aBmpEx );
+                        ::Graphic aGraphic( aBmp );
                         const Size aSize100thmm( aDummyVDev->LogicToPixel( aSize ) );
                         Size aSize100thmm2( aDummyVDev->PixelToLogic(aSize100thmm, MapMode(MapUnit::Map100thMM)) );
 

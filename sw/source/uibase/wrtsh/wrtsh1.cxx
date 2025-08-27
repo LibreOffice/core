@@ -1209,7 +1209,7 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             pContentControl->SetPicture(true);
 
             // Create the placeholder bitmap.
-            BitmapEx aBitmap(Size(1, 1), vcl::PixelFormat::N24_BPP);
+            Bitmap aBitmap(Size(1, 1), vcl::PixelFormat::N24_BPP);
             Color aColor = SvtOptionsDrawinglayer::getHilightColor();
             aColor.IncreaseLuminance(255 * 0.75);
             aBitmap.Erase(aColor);

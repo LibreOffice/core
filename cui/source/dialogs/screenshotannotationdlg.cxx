@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     RepaintToBuffer();
 
     // extract Bitmap
-    const BitmapEx aTargetBitmap(
+    const Bitmap aTargetBitmap(
         mxVirtualBufferDevice->GetBitmap(
         Point(0, 0),
         mxVirtualBufferDevice->GetOutputSizePixel()));

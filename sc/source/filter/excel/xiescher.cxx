@@ -4221,7 +4221,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
     aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
     Bitmap aBitmap;
     if( ReadDIB(aBitmap, aMemStrm, false) )   // read DIB without file header
-        rGraphic = BitmapEx(aBitmap);
+        rGraphic = aBitmap;
 }
 
 void XclImpDrawing::ReadDffRecord( XclImpStream& rStrm )

@@ -150,7 +150,7 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                         else
                         {
                             // Support add-on images for context menu interceptors
-                            BitmapEx aBitmap(aAddonOptions.GetImageFromURL(aCommandURL, false, true));
+                            Bitmap aBitmap(aAddonOptions.GetImageFromURL(aCommandURL, false, true));
                             if (!aBitmap.IsEmpty())
                                 rSubMenu->setItemImage(nNewItemId, Graphic(aBitmap).GetXGraphic(), false);
                         }

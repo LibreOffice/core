@@ -101,7 +101,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::statusChanged( const frame::FeatureSta
         case -1:
         case 0:
         {
-            BitmapEx aEmpty(xList->GetBitmapForUISolidLine());
+            Bitmap aEmpty(xList->GetBitmapForUISolidLine());
             aEmpty.Erase(Application::GetSettings().GetStyleSettings().GetFieldColor());
             if (m_pToolbar)
             {

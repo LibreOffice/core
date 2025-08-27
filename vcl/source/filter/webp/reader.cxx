@@ -229,7 +229,7 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     }
 
     access.reset(); // Flush BitmapScopedWriteAccess.
-    graphic = BitmapEx(bitmap);
+    graphic = bitmap;
     return success;
 }
 

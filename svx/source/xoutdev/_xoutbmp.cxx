@@ -321,7 +321,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                 else
                 {
                     rGraphic.Draw(*pVDev, Point(), aSize);
-                    aGraphic = BitmapEx(pVDev->GetBitmap(Point(), aSize));
+                    aGraphic = pVDev->GetBitmap(Point(), aSize);
                 }
             }
             else

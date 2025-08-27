@@ -2127,7 +2127,7 @@ void SvtFileDialog::setImage(const Any& rImage)
 
     if ( rImage >>= aBmpSequence )
     {
-        BitmapEx        aBmp;
+        Bitmap          aBmp;
         SvMemoryStream  aData( aBmpSequence.getArray(),
                                aBmpSequence.getLength(),
                                StreamMode::READ );

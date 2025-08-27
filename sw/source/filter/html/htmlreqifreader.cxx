@@ -557,8 +557,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
         aBitmap.Convert(BmpConversion::N24Bit);
     }
 
-    if (GraphicConverter::Export(aNativeData, BitmapEx(aBitmap), ConvertDataFormat::BMP)
-        != ERRCODE_NONE)
+    if (GraphicConverter::Export(aNativeData, aBitmap, ConvertDataFormat::BMP) != ERRCODE_NONE)
     {
         SAL_WARN("sw.html", "WrapGraphicInRtf: bmp conversion failed");
     }

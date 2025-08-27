@@ -44,7 +44,7 @@ bool XPatternList::Create()
 {
     OUStringBuffer aStr(SvxResId(RID_SVXSTR_PATTERN));
     std::array<sal_uInt8,64> aArray;
-    BitmapEx aBitmap;
+    Bitmap aBitmap;
     const sal_Int32 nLen(aStr.getLength() - 1);
 
     aArray.fill(0);

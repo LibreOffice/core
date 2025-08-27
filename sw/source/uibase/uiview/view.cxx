@@ -1894,7 +1894,7 @@ void SwView::ScannerEventHdl()
 
             if( xBitmap.is() )
             {
-                const BitmapEx aScanBmp( VCLUnoHelper::GetBitmap( xBitmap ) );
+                const Bitmap aScanBmp( VCLUnoHelper::GetBitmap( xBitmap ) );
 
                 if( !aScanBmp.IsEmpty() )
                 {

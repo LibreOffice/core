@@ -588,7 +588,7 @@ bool LinkManager::GetGraphicFromAny(std::u16string_view rMimeType,
             {
                 Bitmap aBmp;
                 ReadDIB(aBmp, aMemStm, true);
-                rGraphic = BitmapEx(aBmp);
+                rGraphic = aBmp;
                 bRet = true;
             }
             break;
