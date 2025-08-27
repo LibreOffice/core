@@ -372,7 +372,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     }
     else
     {
-        BitmapEx aBmp( rGraphic.GetBitmapEx() );
+        Bitmap aBmp( rGraphic.GetBitmap() );
         pAMTF.reset( new GDIMetaFile );
         ScopedVclPtrInstance< VirtualDevice > pTmpVDev;
         pAMTF->Record( pTmpVDev );

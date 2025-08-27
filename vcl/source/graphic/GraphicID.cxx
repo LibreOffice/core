@@ -54,11 +54,11 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         }
         else
         {
-            const BitmapEx aBmpEx(rGraphic.getBitmapEx(GraphicConversionParameters()));
+            const Bitmap aBmp(rGraphic.getBitmap(GraphicConversionParameters()));
 
-            mnID1 |= aBmpEx.IsAlpha() ? 1 : 0;
-            mnID2 = aBmpEx.GetSizePixel().Width();
-            mnID3 = aBmpEx.GetSizePixel().Height();
+            mnID1 |= aBmp.HasAlpha() ? 1 : 0;
+            mnID2 = aBmp.GetSizePixel().Width();
+            mnID3 = aBmp.GetSizePixel().Height();
             mnID4 = rGraphic.getChecksum();
         }
     }

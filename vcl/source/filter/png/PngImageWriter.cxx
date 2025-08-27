@@ -140,7 +140,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     png_set_pHYs(pPng, pInfo, std::round(aPPM.getWidth()), std::round(aPPM.getHeight()),
                  PNG_RESOLUTION_METER);
 
-    Bitmap aBitmap(rGraphic.GetBitmapEx());
+    Bitmap aBitmap(rGraphic.GetBitmap());
 
     if (!bTranslucent && aBitmap.HasAlpha())
     {

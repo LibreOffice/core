@@ -139,7 +139,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
     {
         const bool bGrafTrans = rGraphic.IsTransparent();
 
-        BitmapEx aBmpEx = rGraphic.GetBitmapEx();
+        BitmapEx aBmpEx(rGraphic.GetBitmap());
 
         nMinPercent = 0;
         nMaxPercent = 100;
