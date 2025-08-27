@@ -342,6 +342,7 @@ constexpr ExtensionMap aWriterExtensionMap[] =
     { "xhtml", u"XHTML Writer File"_ustr },
     { "png",   u"writer_png_Export"_ustr },
     { "xml",   u"writer_indexing_export"_ustr },
+    { "md",    u"Markdown"_ustr },
 };
 
 constexpr ExtensionMap aCalcExtensionMap[] =
