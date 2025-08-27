@@ -1405,6 +1405,15 @@ OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const OUStr
     return createUniqueName( aElementNames, _rBaseName, _bStartWithNumber );
 }
 
+OUString createUniqueName(const Reference<XTablesSupplier>& _rxSupplier,const OUString& _rBaseName, bool _bStartWithNumber)
+{
+    Reference< XNameAccess > xContainer;
+    OSL_ENSURE( _rxSupplier.is(), "createUniqueName: invalid connection!" );
+    if ( _rxSupplier.is() )
+        xContainer = _rxSupplier->getTables();
+    return createUniqueName( xContainer, _rBaseName, _bStartWithNumber );
+}
+
 void showError(const SQLExceptionInfo& _rInfo,
                const Reference< XWindow>& _xParent,
                const Reference< XComponentContext >& _rxContext)

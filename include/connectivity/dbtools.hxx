@@ -485,6 +485,21 @@ namespace dbtools
                         const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
 
     /** search for a name that is NOT in the NameAcces
+        @param  _rxSupplier
+            the connection's XTablesSupplier to search in
+        @param  _rBaseName
+            the base name that should be used to create the new name
+        @param  _bStartWithNumber
+            When <TRUE/> the name ends with number even when the name itself doesn't occur in the collection.
+        @return
+            A name which doesn't exist in the collection.
+    */
+    OOO_DLLPUBLIC_DBTOOLS
+    OUString createUniqueName(const css::uno::Reference< css::sdbcx::XTablesSupplier>& _rxSupplier,
+                                     const OUString& _rBaseName,
+                                     bool _bStartWithNumber = true);
+
+    /** search for a name that is NOT in the NameAcces
         @param  _rxContainer
             the NameAccess container to search in
         @param  _rBaseName

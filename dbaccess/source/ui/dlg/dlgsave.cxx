@@ -22,6 +22,7 @@
 #include <strings.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <connectivity/dbtools.hxx>
 #include <UITools.hxx>
 #include <objectnamecheck.hxx>
@@ -29,9 +30,11 @@
 
 using namespace dbaui;
 using namespace dbtools;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
 
 IMPL_LINK(OSaveAsDlg, TextFilterHdl, OUString&, rTest, bool)
@@ -114,48 +117,80 @@ OSaveAsDlg::OSaveAsDlg( weld::Window * pParent,
         break;
 
     case CommandType::TABLE:
-        OSL_ENSURE( m_xMetaData.is(), "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!" );
+        assert(m_xMetaData.is() && "OSaveAsDlg::OSaveAsDlg: no meta data for entering table names: this will crash!");
         {
             m_xLabel->set_label(DBA_RES(STR_TBL_LABEL));
-            if(m_xMetaData.is() && !m_xMetaData->supportsCatalogsInTableDefinitions()) {
+            OUString sCatalog, sSchema, sTable;
+            EComposeRule eComposeRule = ::dbtools::EComposeRule::InDataManipulation;
+            if (!m_xMetaData->supportsCatalogsInTableDefinitions()) {
                 m_xCatalogLbl->hide();
                 m_xCatalog->hide();
             } else {
+                sCatalog = _xConnection->getCatalog();
                 // now fill the catalogs
                 lcl_fillComboList( *m_xCatalog, _xConnection,
-                                   &XDatabaseMetaData::getCatalogs, _xConnection->getCatalog() );
+                                   &XDatabaseMetaData::getCatalogs, sCatalog );
             }
 
-            if ( !m_xMetaData->supportsSchemasInTableDefinitions()) {
+            if (!m_xMetaData->supportsSchemasInTableDefinitions()) {
                 m_xSchemaLbl->hide();
                 m_xSchema->hide();
             } else {
+                Reference<XResultSet> xRes = m_xMetaData->getSchemas();
+                if (xRes.is())
+                {
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    while (xRes->next())
+                    {
+                        sSchema = xRow->getString(1);
+                        if (!xRow->wasNull())
+                            break;
+                    }
+                    Reference<XCloseable> xCloseable(xRes, UNO_QUERY);
+                    if (xCloseable.is())
+                        xCloseable->close();
+                }
+                if (sSchema.isEmpty())
+                    sSchema = m_xMetaData->getUserName();
+
+                // now fill the schemas
                 lcl_fillComboList( *m_xSchema, _xConnection,
-                                   &XDatabaseMetaData::getSchemas, m_xMetaData->getUserName() );
+                                   &XDatabaseMetaData::getSchemas, sSchema );
             }
 
-            OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
-            if(m_aName.indexOf('.') != -1) {
-                OUString sCatalog,sSchema,sTable;
-                ::dbtools::qualifiedNameComponents(m_xMetaData,
-                                                   m_aName,
-                                                   sCatalog,
-                                                   sSchema,
-                                                   sTable,
-                                                   ::dbtools::EComposeRule::InDataManipulation);
+            Reference< XTablesSupplier > xSupplier(_xConnection, UNO_QUERY);
+            if ( xSupplier.is() )
+            {
+                // get the unique table name
+                OUString sTableName = ::dbtools::composeTableName(m_xMetaData, sCatalog, sSchema, "Table", false, eComposeRule);
+                // we create a unique full table name
+                OUString sUniqueName = ::dbtools::createUniqueName(xSupplier, sTableName, true);
+                // we extract just the table name in sTable
+                ::dbtools::qualifiedNameComponents(m_xMetaData, sUniqueName, sCatalog, sSchema, sTable, eComposeRule);
+            } else {
+                // fall back to the previous implementation
+                if (m_aName.indexOf('.') != -1)
+                {
+                    ::dbtools::qualifiedNameComponents(m_xMetaData, m_aName, sCatalog, sSchema, sTable, eComposeRule);
+                    int nPos;
 
-                int nPos = m_xCatalog->find_text(sCatalog);
-                if (nPos != -1)
-                    m_xCatalog->set_active(nPos);
+                    if ( !sCatalog.isEmpty() ) {
+                        nPos = m_xCatalog->find_text(sCatalog);
+                        if (nPos != -1)
+                            m_xCatalog->set_active(nPos);
+                    }
 
-                if ( !sSchema.isEmpty() ) {
-                    nPos = m_xSchema->find_text(sSchema);
-                    if (nPos != -1)
-                        m_xSchema->set_active(nPos);
+                    if ( !sSchema.isEmpty() ) {
+                        nPos = m_xSchema->find_text(sSchema);
+                        if (nPos != -1)
+                            m_xSchema->set_active(nPos);
+                    }
+                } else {
+                    sTable = m_aName;
                 }
-                m_xTitle->set_text(sTable);
-            } else
-                m_xTitle->set_text(m_aName);
+            }
+
+            m_xTitle->set_text(sTable);
             m_xTitle->select_region(0, -1);
 
             sal_Int32 nLength =  m_xMetaData.is() ? m_xMetaData->getMaxTableNameLength() : 0;
