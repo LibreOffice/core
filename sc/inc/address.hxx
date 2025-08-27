@@ -397,17 +397,9 @@ public:
     }
 
     /** Less than ordered by tab,row,col as needed by row-wise import/export */
-    bool lessThanByRow(const ScAddress& rAddress) const
+    bool lessThanByRow(const ScAddress& rh) const
     {
-        if (nTab == rAddress.nTab)
-        {
-            if (nRow == rAddress.nRow)
-                return nCol < rAddress.nCol;
-            else
-                return nRow < rAddress.nRow;
-        }
-        else
-            return nTab < rAddress.nTab;
+        return std::make_tuple(nTab, nRow, nCol) < std::make_tuple(rh.nTab, rh.nRow, rh.nCol);
     }
 
     size_t hash() const
