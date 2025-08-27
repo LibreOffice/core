@@ -65,12 +65,12 @@ OUString VclTestResult::getStatus(bool bLocalize)
 
 namespace
 {
-void exportBitmapExToImage(OUString const& rImageName, const BitmapEx& rBitmapEx)
+void exportBitmapToImage(OUString const& rImageName, const Bitmap& rBitmap)
 {
-    BitmapEx aBitmapEx(rBitmapEx);
-    aBitmapEx.Scale(Size(500, 500), BmpScaleFlag::Fast);
+    Bitmap aBitmap(rBitmap);
+    aBitmap.Scale(Size(500, 500), BmpScaleFlag::Fast);
     SvFileStream aStream(rImageName, StreamMode::WRITE | StreamMode::TRUNC);
-    GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+    GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
 }
 
 // Some tests need special handling in drawing code (for example, not smoothscaling
@@ -117,10 +117,7 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPixel()
@@ -138,10 +135,7 @@ void GraphicsRenderTests::testDrawRectWithPixel()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithLine()
@@ -159,10 +153,7 @@ void GraphicsRenderTests::testDrawRectWithLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPolygon()
@@ -180,10 +171,7 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLine()
@@ -201,10 +189,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
@@ -222,10 +207,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygon()
@@ -243,10 +225,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
@@ -264,10 +243,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithRectangle()
@@ -285,10 +261,7 @@ void GraphicsRenderTests::testDrawRectAAWithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPixel()
@@ -306,10 +279,7 @@ void GraphicsRenderTests::testDrawRectAAWithPixel()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithLine()
@@ -327,10 +297,7 @@ void GraphicsRenderTests::testDrawRectAAWithLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolygon()
@@ -348,10 +315,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLine()
@@ -369,10 +333,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
@@ -390,10 +351,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
@@ -411,10 +369,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
@@ -432,10 +387,7 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithRectangle()
@@ -454,20 +406,14 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
     aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolygon()
@@ -486,20 +432,14 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
     aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
@@ -518,20 +458,14 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
     aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
@@ -550,20 +484,14 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
     aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolygon()
@@ -581,10 +509,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDiamondWithLine()
@@ -602,10 +527,7 @@ void GraphicsRenderTests::testDrawDiamondWithLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolyline()
@@ -623,10 +545,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolyline()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
@@ -644,10 +563,7 @@ void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawInvertWithRectangle()
@@ -666,10 +582,7 @@ void GraphicsRenderTests::testDrawInvertWithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawInvertN50WithRectangle()
@@ -688,10 +601,7 @@ void GraphicsRenderTests::testDrawInvertN50WithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
@@ -710,10 +620,7 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDropShapeWithPolyline()
@@ -731,10 +638,7 @@ void GraphicsRenderTests::testDrawDropShapeWithPolyline()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
@@ -753,10 +657,7 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
@@ -774,10 +675,7 @@ void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
@@ -795,10 +693,7 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDropShapeWithPolygon()
@@ -816,10 +711,7 @@ void GraphicsRenderTests::testDrawDropShapeWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
@@ -838,10 +730,7 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBitmap24bpp()
@@ -860,10 +749,7 @@ void GraphicsRenderTests::testDrawBitmap24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
@@ -882,10 +768,7 @@ void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testComplexDrawTransformedBitmap24bpp()
@@ -904,10 +787,7 @@ void GraphicsRenderTests::testComplexDrawTransformedBitmap24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
@@ -926,10 +806,7 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawMask24bpp()
@@ -947,10 +824,7 @@ void GraphicsRenderTests::testDrawMask24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBlend24bpp()
@@ -968,9 +842,7 @@ void GraphicsRenderTests::testDrawBlend24bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", Bitmap(aBitmapEx));
 }
 
 void GraphicsRenderTests::testDrawXor()
@@ -988,10 +860,7 @@ void GraphicsRenderTests::testDrawXor()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClipRectangle()
@@ -1009,10 +878,7 @@ void GraphicsRenderTests::testClipRectangle()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClipPolygon()
@@ -1030,10 +896,7 @@ void GraphicsRenderTests::testClipPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClipPolyPolygon()
@@ -1051,10 +914,7 @@ void GraphicsRenderTests::testClipPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClipB2DPolyPolygon()
@@ -1072,10 +932,7 @@ void GraphicsRenderTests::testClipB2DPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOutDev()
@@ -1094,10 +951,7 @@ void GraphicsRenderTests::testDrawOutDev()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOutDevScaledClipped()
@@ -1116,10 +970,7 @@ void GraphicsRenderTests::testDrawOutDevScaledClipped()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOutDevSelf()
@@ -1138,10 +989,7 @@ void GraphicsRenderTests::testDrawOutDevSelf()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDashedLine()
@@ -1159,10 +1007,7 @@ void GraphicsRenderTests::testDashedLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLinearGradient()
@@ -1181,10 +1026,7 @@ void GraphicsRenderTests::testLinearGradient()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLinearGradientAngled()
@@ -1203,10 +1045,7 @@ void GraphicsRenderTests::testLinearGradientAngled()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLinearGradientBorder()
@@ -1225,10 +1064,7 @@ void GraphicsRenderTests::testLinearGradientBorder()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLinearGradientIntensity()
@@ -1247,10 +1083,7 @@ void GraphicsRenderTests::testLinearGradientIntensity()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLinearGradientSteps()
@@ -1269,10 +1102,7 @@ void GraphicsRenderTests::testLinearGradientSteps()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testAxialGradient()
@@ -1291,10 +1121,7 @@ void GraphicsRenderTests::testAxialGradient()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testRadialGradient()
@@ -1313,10 +1140,7 @@ void GraphicsRenderTests::testRadialGradient()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testRadialGradientOfs()
@@ -1351,10 +1175,7 @@ void GraphicsRenderTests::testLineJoinBevel()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineJoinRound()
@@ -1372,10 +1193,7 @@ void GraphicsRenderTests::testLineJoinRound()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineJoinMiter()
@@ -1393,10 +1211,7 @@ void GraphicsRenderTests::testLineJoinMiter()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineJoinNone()
@@ -1414,10 +1229,7 @@ void GraphicsRenderTests::testLineJoinNone()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineCapRound()
@@ -1435,10 +1247,7 @@ void GraphicsRenderTests::testLineCapRound()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineCapSquare()
@@ -1456,10 +1265,7 @@ void GraphicsRenderTests::testLineCapSquare()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testLineCapButt()
@@ -1477,10 +1283,7 @@ void GraphicsRenderTests::testLineCapButt()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseWithPolyLine()
@@ -1498,10 +1301,7 @@ void GraphicsRenderTests::testHalfEllipseWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolyLine()
@@ -1520,10 +1320,7 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseWithPolyLineB2D()
@@ -1541,10 +1338,7 @@ void GraphicsRenderTests::testHalfEllipseWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolyLineB2D()
@@ -1563,10 +1357,7 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseWithPolygon()
@@ -1584,10 +1375,7 @@ void GraphicsRenderTests::testHalfEllipseWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClosedBezierWithPolyline()
@@ -1605,10 +1393,7 @@ void GraphicsRenderTests::testClosedBezierWithPolyline()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testClosedBezierWithPolygon()
@@ -1626,10 +1411,7 @@ void GraphicsRenderTests::testClosedBezierWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
@@ -1648,10 +1430,7 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testFilledAsymmetricalDropShape()
@@ -1665,10 +1444,7 @@ void GraphicsRenderTests::testFilledAsymmetricalDropShape()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testTextDrawing()
@@ -1686,10 +1462,7 @@ void GraphicsRenderTests::testTextDrawing()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygon()
@@ -1708,10 +1481,7 @@ void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
@@ -1730,10 +1500,7 @@ void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBitmap8bppGreyScale()
@@ -1752,10 +1519,7 @@ void GraphicsRenderTests::testDrawBitmap8bppGreyScale()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawTransformedBitmap8bppGreyScale()
@@ -1774,10 +1538,7 @@ void GraphicsRenderTests::testDrawTransformedBitmap8bppGreyScale()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBitmap32bpp()
@@ -1796,10 +1557,7 @@ void GraphicsRenderTests::testDrawBitmap32bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
@@ -1818,10 +1576,7 @@ void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
@@ -1840,10 +1595,7 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawMask32bpp()
@@ -1861,10 +1613,7 @@ void GraphicsRenderTests::testDrawMask32bpp()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawBlend32bpp()
@@ -1883,7 +1632,7 @@ void GraphicsRenderTests::testDrawBlend32bpp()
                      (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", Bitmap(aBitmapEx));
     }
 }
 
@@ -1903,10 +1652,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithRect()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithRect()
@@ -1925,10 +1671,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithRect()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPixel()
@@ -1946,10 +1689,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPixel()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPixel()
@@ -1967,10 +1707,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPixel()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithLine()
@@ -1988,10 +1725,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithLine()
@@ -2009,10 +1743,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLine()
@@ -2030,10 +1761,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLine()
@@ -2051,10 +1779,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolygon()
@@ -2072,10 +1797,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygon()
@@ -2093,10 +1815,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLineB2D()
@@ -2114,10 +1833,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLineB2D()
@@ -2135,10 +1851,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygon()
@@ -2156,10 +1869,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyPolygon()
@@ -2177,10 +1887,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygonB2D()
@@ -2198,10 +1905,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
@@ -2219,10 +1923,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyLine()
@@ -2240,10 +1941,7 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyLineB2D()
@@ -2261,10 +1959,7 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolygon()
@@ -2282,10 +1977,7 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygon()
@@ -2303,10 +1995,7 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygon()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
@@ -2324,10 +2013,7 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenBezierWithPolyLine()
@@ -2345,10 +2031,7 @@ void GraphicsRenderTests::testDrawOpenBezierWithPolyLine()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawOpenBezierWithPolyLineB2D()
@@ -2366,10 +2049,7 @@ void GraphicsRenderTests::testDrawOpenBezierWithPolyLineB2D()
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
-    {
-        BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
-    }
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::runALLTests()
