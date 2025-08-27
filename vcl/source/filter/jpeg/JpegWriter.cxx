@@ -202,14 +202,17 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
     // background color for alpha from the higher layers.
     Bitmap aGraphicBmp;
     if (rGraphic.GetType() == GraphicType::Bitmap)
-        aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap(COL_WHITE);
+    {
+        aGraphicBmp = rGraphic.GetBitmap();
+        aGraphicBmp.ReplaceTransparency(COL_WHITE);
+    }
     else
-        aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap();
+        aGraphicBmp = rGraphic.GetBitmap().CreateColorBitmap();
 
     if ( mbGreys )
     {
         if ( !aGraphicBmp.Convert( BmpConversion::N8BitGreys ) )
-            aGraphicBmp = rGraphic.GetBitmapEx().GetBitmap();
+            aGraphicBmp = rGraphic.GetBitmap().CreateColorBitmap();
     }
 
     mpReadAccess = aGraphicBmp;

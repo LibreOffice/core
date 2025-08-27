@@ -1728,11 +1728,11 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
             }
             else if ( aFilterName.equalsIgnoreAsciiCase( EXP_PNG ) )
             {
-                auto aBitmapEx = aGraphic.GetBitmapEx();
+                auto aBitmap = aGraphic.GetBitmap();
                 vcl::PngImageWriter aPNGWriter( rOStm );
                 if ( pFilterData )
                     aPNGWriter.setParameters( *pFilterData );
-                aPNGWriter.write( aBitmapEx );
+                aPNGWriter.write( aBitmap );
 
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
