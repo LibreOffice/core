@@ -229,21 +229,12 @@ bool detectPDF(uno::Reference<io::XInputStream> const& xInput, uno::Sequence<sal
             xSeek->seek(0);
 
         nHeaderReadSize = xInput->readBytes(aHeader, constHeaderSize);
-        if (nHeaderReadSize <= 5)
-            return false;
 
-        const sal_Int8* pBytes = aHeader.getConstArray();
-        for (sal_uInt64 i = 0; i < nHeaderReadSize - 5; i++)
-        {
-            if (pBytes[i+0] == '%' &&
-                pBytes[i+1] == 'P' &&
-                pBytes[i+2] == 'D' &&
-                pBytes[i+3] == 'F' &&
-                pBytes[i+4] == '-')
-            {
-                return true;
-            }
-        }
+        static constexpr std::string_view sig = "%PDF-";
+        // in case aHeader.getLength() != nHeaderReadSize
+        auto header_end = aHeader.begin() + nHeaderReadSize;
+        if (std::search(aHeader.begin(), header_end, sig.begin(), sig.end()) != header_end)
+            return true;
     }
     catch (const css::io::IOException &)
     {
