@@ -34,7 +34,7 @@ class tdf164722(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
             # Without the fix in place, it would have failed here
-            with self.ui_test.execute_dialog_through_command(".uno:ColorScaleFormatDialog") as xCondFormat:
+            with self.ui_test.execute_dialog_through_command(".uno:ColorScaleFormatDialog"):
                 pass
 
             self.assertEqual(1, cond_formats.Length)

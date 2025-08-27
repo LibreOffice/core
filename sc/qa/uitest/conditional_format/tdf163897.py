@@ -16,7 +16,6 @@ class tdf163897(UITestCase):
         # Use an existing document
         with self.ui_test.load_file(get_url_for_data_file("tdf105544.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
 
             with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
 

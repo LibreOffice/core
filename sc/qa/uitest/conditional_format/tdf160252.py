@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class tdf160252(UITestCase):
     def test_tdf160252(self):
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf160252.ods")) as calc_doc:
+        with self.ui_test.load_file(get_url_for_data_file("tdf160252.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
