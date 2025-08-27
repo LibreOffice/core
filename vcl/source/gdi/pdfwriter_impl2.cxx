@@ -71,13 +71,13 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
     m_rOuterFace.Pop();
 }
 
-void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx, const Graphic& i_Graphic,
+void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const Bitmap& i_rBitmap, const Graphic& i_Graphic,
                                        VirtualDevice const * i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
-    if ( i_rBitmapEx.IsEmpty() || !i_rSize.Width() || !i_rSize.Height() )
+    if ( i_rBitmap.IsEmpty() || !i_rSize.Width() || !i_rSize.Height() )
         return;
 
-    BitmapEx        aBitmapEx( i_rBitmapEx );
+    Bitmap          aBitmap( i_rBitmap );
     Point           aPoint( i_rPoint );
     Size            aSize( i_rSize );
 
@@ -100,11 +100,11 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
     if( nMirrorFlags != BmpMirrorFlags::NONE )
     {
-        aBitmapEx.Mirror( nMirrorFlags );
+        aBitmap.Mirror( nMirrorFlags );
     }
 
     bool bIsJpeg = false, bIsPng = false;
-    if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
+    if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmap() == aBitmap )
     {
         GfxLinkType eType = i_Graphic.GetGfxLink().GetType();
         bIsJpeg = (eType == GfxLinkType::NativeJpg);
@@ -112,7 +112,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     }
 
     // Do not downsample images smaller than 50x50px.
-    const Size aBmpSize(aBitmapEx.GetSizePixel());
+    const Size aBmpSize(aBitmap.GetSizePixel());
     if (i_rContext.m_nMaxImageResolution > 50 && aBmpSize.getWidth() > 50
         && aBmpSize.getHeight() > 50)
     {
@@ -151,21 +151,21 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )
             {
                 // #i121233# Use best quality for PDF exports
-                aBitmapEx.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
+                aBitmap.Scale( aNewBmpSize, BmpScaleFlag::BestQuality );
             }
             else
             {
-                aBitmapEx.SetEmpty();
+                aBitmap.SetEmpty();
             }
         }
     }
 
-    const Size aSizePixel( aBitmapEx.GetSizePixel() );
+    const Size aSizePixel( aBitmap.GetSizePixel() );
     if ( !(aSizePixel.Width() && aSizePixel.Height()) )
         return;
 
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
-        aBitmapEx.Convert(BmpConversion::N8BitGreys);
+        aBitmap.Convert(BmpConversion::N8BitGreys);
     bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
     if ( bIsPng || ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
         bUseJPGCompression = false;
@@ -178,10 +178,10 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     {
         // TODO this checks could be done much earlier, saving us
         // from trying conversion & stores before...
-        if ( !aBitmapEx.IsAlpha() )
+        if ( !aBitmap.HasAlpha() )
         {
             const auto aCacheEntry=m_aPDFBmpCache.find(
-                aBitmapEx.GetChecksum());
+                aBitmap.GetChecksum());
             if ( aCacheEntry != m_aPDFBmpCache.end() )
             {
                 m_rOuterFace.DrawJPGBitmap( *aCacheEntry->second, true, aSizePixel,
@@ -195,12 +195,12 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             SvMemoryStream aTemp;
             aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
             aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
-            WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
+            WriteDIBBitmapEx(BitmapEx(aBitmap), aTemp); // is capable of zlib stream compression
             nZippedFileSize = aTemp.TellEnd();
         }
-        if ( aBitmapEx.IsAlpha() )
-            aAlphaMask = aBitmapEx.GetAlphaMask();
-        Graphic aGraphic(BitmapEx(aBitmapEx.GetBitmap()));
+        if ( aBitmap.HasAlpha() )
+            aAlphaMask = aBitmap.CreateAlphaMask();
+        Graphic aGraphic(aBitmap.CreateColorBitmap());
 
         Sequence< PropertyValue > aFilterData{
             comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(i_rContext.m_nJPEGQuality)),
@@ -252,17 +252,17 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     if ( bUseJPGCompression )
     {
         m_rOuterFace.DrawJPGBitmap( *pStrm, bTrueColorJPG, aSizePixel, tools::Rectangle( aPoint, aSize ), aAlphaMask, i_Graphic );
-        if (!aBitmapEx.IsAlpha() && bTrueColorJPG)
+        if (!aBitmap.HasAlpha() && bTrueColorJPG)
         {
             // Cache last jpeg export
             m_aPDFBmpCache.insert(
-                {aBitmapEx.GetChecksum(), pStrm});
+                {aBitmap.GetChecksum(), pStrm});
         }
     }
-    else if ( aBitmapEx.IsAlpha() )
-        m_rOuterFace.DrawBitmapEx( aPoint, aSize, Bitmap(aBitmapEx) );
+    else if ( aBitmap.HasAlpha() )
+        m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmap );
     else
-        m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
+        m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmap, i_Graphic );
 
 }
 
@@ -520,7 +520,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev.disposeAndClear();
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                                implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint.GetBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
+                                implWriteBitmapEx( rPos, rSize, Bitmap(BitmapEx( aPaint.GetBitmap(), aAlpha )), aGraphic, pDummyVDev, i_rContext );
                             }
                         }
                     }
@@ -739,7 +739,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         aSize = pDummyVDev->PixelToLogic( aBitmapEx.GetSizePixel() );
 
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), aSize, aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), aSize, Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -747,17 +747,17 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), BitmapEx( pA->GetBitmap() ), aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), pA->GetBitmap(), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
                 case MetaActionType::BMPSCALEPART:
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
-                    BitmapEx aBitmapEx( pA->GetBitmap() );
-                    aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
+                    Bitmap aBitmap( pA->GetBitmap() );
+                    aBitmap.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmap, aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -768,7 +768,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), aSize, aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), aSize, Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -777,7 +777,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -788,7 +788,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetDestPoint(), pA->GetDestSize(), Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
