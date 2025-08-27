@@ -368,9 +368,9 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         return false;
 }
 
-bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
+bool ScViewFunc::PasteBitmap( const Point& rPos, const Bitmap& rBmp )
 {
-    Graphic aGraphic(rBmpEx);
+    Graphic aGraphic(rBmp);
     return PasteGraphic( rPos, aGraphic, u""_ustr );
 }
 

@@ -230,7 +230,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     {
         Bitmap aBmp;
         if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmp ) )
-            bRet = PasteBitmapEx( aPos, BitmapEx(aBmp) );
+            bRet = PasteBitmap( aPos, aBmp );
     }
     else if (nFormatId == SotClipboardFormatId::GDIMETAFILE)
     {

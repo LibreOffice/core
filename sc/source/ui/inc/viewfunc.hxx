@@ -149,7 +149,7 @@ public:
 
     bool            PasteFile( const Point&, const OUString&, bool bLink );
     bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size*, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
-    bool            PasteBitmapEx( const Point&, const BitmapEx& );
+    bool            PasteBitmap( const Point&, const Bitmap& );
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const OUString& rFile );
