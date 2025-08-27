@@ -365,7 +365,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                 {
                     if( mpGraphic->GetType() == GraphicType::Bitmap )
                     {
-                        auto ePixelFormat = mpGraphic->GetBitmapEx().GetBitmap().getPixelFormat();
+                        auto ePixelFormat = mpGraphic->GetBitmap().getPixelFormat();
                         nBitsPerPixel = vcl::pixelFormatBitCount(ePixelFormat);
                     }
                 }

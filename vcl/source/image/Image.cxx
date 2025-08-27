@@ -68,7 +68,7 @@ Image::Image(const OUString & rFileUrl)
     {
         Graphic aGraphic;
         if (ERRCODE_NONE == GraphicFilter::LoadGraphic(rFileUrl, u"" IMP_PNG ""_ustr, aGraphic))
-            ImplInit(Bitmap(aGraphic.GetBitmapEx()));
+            ImplInit(aGraphic.GetBitmap());
     }
 }
 

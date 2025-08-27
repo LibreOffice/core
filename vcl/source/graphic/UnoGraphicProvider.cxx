@@ -589,9 +589,9 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
             ImplCalculateCropRect( rGraphic, aCropLogic, aCropPixel );
             if ( bRemoveCropArea )
             {
-                BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
-                aBmpEx.Crop( aCropPixel );
-                rGraphic = aBmpEx;
+                Bitmap aBmp( rGraphic.GetBitmap() );
+                aBmp.Crop( aCropPixel );
+                rGraphic = aBmp;
             }
             Size aVisiblePixelSize( bRemoveCropArea ? rGraphic.GetSizePixel() : aCropPixel.GetSize() );
             ImplApplyBitmapResolution( rGraphic, nImageResolution, aVisiblePixelSize, aLogicalSize );
