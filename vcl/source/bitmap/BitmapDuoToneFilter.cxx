@@ -27,7 +27,8 @@ Bitmap BitmapDuoToneFilter::execute(Bitmap const& rBitmap) const
     const sal_Int32 nWidth = aBitmap.GetSizePixel().Width();
     const sal_Int32 nHeight = aBitmap.GetSizePixel().Height();
 
-    Bitmap aResultBitmap(aBitmap.GetSizePixel(), vcl::PixelFormat::N24_BPP);
+    Bitmap aResultBitmap(aBitmap.GetSizePixel(), rBitmap.HasAlpha() ? vcl::PixelFormat::N32_BPP
+                                                                    : vcl::PixelFormat::N24_BPP);
     BitmapScopedReadAccess pReadAcc(aBitmap);
     BitmapScopedWriteAccess pWriteAcc(aResultBitmap);
     const BitmapColor aColorOne(mnColorOne);
