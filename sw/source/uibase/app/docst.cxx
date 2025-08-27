@@ -1291,7 +1291,12 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
                 // #i62675#
                 // clear also list attributes at affected text nodes, if paragraph
                 // style has the list style attribute set.
-                pSh->SetTextFormatColl( pColl, true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
+                const SetAttrMode nAttrModeFlag
+                    = (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT;
+                const bool bResetListAttrs
+                    = nAttrModeFlag == SetAttrMode::REMOVE_ALL_ATTR
+                      || (pColl && pColl->GetItemState(RES_PARATR_NUMRULE) == SfxItemState::SET);
+                pSh->SetTextFormatColl(pColl, bResetListAttrs, nAttrModeFlag);
             }
             break;
         }
