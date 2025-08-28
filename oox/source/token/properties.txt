@@ -580,6 +580,7 @@ TableBorder
 TableLayout
 TableSelected
 Tables
+TableType
 Tabstop
 Tag
 TargetFrame

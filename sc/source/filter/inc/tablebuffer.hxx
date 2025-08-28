@@ -31,7 +31,7 @@ struct TableModel
     OUString            maProgName;         /// Programmatical name.
     OUString            maDisplayName;      /// Display name.
     sal_Int32           mnId;               /// Unique table identifier.
-    sal_Int32           mnType;             /// Table type (worksheet, query, etc.).
+    sal_Int32           mnType;             /// Table type ( [default] worksheet, xml or queryTable ).
     sal_Int32           mnHeaderRows;       /// Number of header rows.
     sal_Int32           mnTotalsRows;       /// Number of totals rows.
 

@@ -50,7 +50,7 @@ bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const st
 ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    bool bByR, bool bHasH, bool bTotals) :
+                    bool bByR, bool bHasH, bool bTotals, const OUString& rTableType) :
     // Listeners are to be setup by the "parent" container.
     mpSortParam(new ScSortParam),
     mpQueryParam(new ScQueryParam),
@@ -59,6 +59,7 @@ ScDBData::ScDBData( const OUString& rName,
     mpContainer (nullptr),
     aName       (rName),
     aUpper      (rName),
+    aTableType  (rTableType),
     nTable      (nTab),
     nStartCol   (nCol1),
     nStartRow   (nRow1),
@@ -92,6 +93,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     mpContainer         (nullptr),
     aName               (rData.aName),
     aUpper              (rData.aUpper),
+    aTableType          (rData.aTableType),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
     nStartRow           (rData.nStartRow),
@@ -127,6 +129,7 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     mpContainer         (nullptr),
     aName               (rName),
     aUpper              (rName),
+    aTableType          (rData.aTableType),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
     nStartRow           (rData.nStartRow),
@@ -185,6 +188,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         bStripData          = rData.bStripData;
         bIsAdvanced         = rData.bIsAdvanced;
         aAdvSource          = rData.aAdvSource;
+        aTableType          = rData.aTableType;
         bDBSelection        = rData.bDBSelection;
         nIndex              = rData.nIndex;
         bAutoFilter         = rData.bAutoFilter;

@@ -122,6 +122,24 @@ void Table::finalizeImport()
             aPropSet.setProperty( PROP_TotalsRow, true);
         }
 
+        // import tableType attribute of <table> node
+        sal_Int32 nToken = maModel.mnType;
+        OUString sValue;
+
+        switch (nToken)
+        {
+            case XML_xml:
+                sValue = "xml";
+                break;
+            case XML_queryTable:
+                sValue = "queryTable";
+                break;
+            default:
+                sValue = "worksheet";
+                break;
+        }
+        aPropSet.setProperty(PROP_TableType, css::uno::Any(sValue));
+
         // get formula token index of the database range
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
