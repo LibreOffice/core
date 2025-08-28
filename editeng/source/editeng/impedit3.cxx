@@ -3904,7 +3904,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                             break;
                             case PortionKind::TAB:
                             {
-                                if ( rTextPortion.GetExtraValue() && ( rTextPortion.GetExtraValue() != ' ' ) )
+                                if (auto c = rTextPortion.GetExtraValue(); c && (c != ' '))
                                 {
                                     // calculate expanded text
                                     SeekCursor(rParaPortion.GetNode(), nIndex+1, aTmpFont, &rOutDev);
@@ -3912,7 +3912,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont(rOutDev);
                                     tools::Long nCharWidth = aTmpFont.QuickGetTextSize( &rOutDev,
-                                        OUString(rTextPortion.GetExtraValue()), 0, 1, {} ).Width();
+                                        OUString(c), 0, 1, {} ).Width();
                                     sal_Int32 nChars = 2;
                                     if( nCharWidth )
                                         nChars = rTextPortion.GetSize().Width() / nCharWidth;
@@ -3922,9 +3922,7 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                         nChars = 3; // looks better
 
                                     // create expanded text
-                                    OUStringBuffer aBuf(nChars);
-                                    comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
-                                    OUString aText(aBuf.makeStringAndClear());
+                                    OUString aText(OUString::Concat(RepeatedUChar(c, nChars)));
 
                                     // create EOL and EOP bools
                                     const bool bEndOfLine(nPortion == pLine->GetEndPortion());

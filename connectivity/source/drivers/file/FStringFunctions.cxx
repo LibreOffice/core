@@ -154,9 +154,7 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
         return lhs;
 
     sal_Int32 nCount = std::max(lhs.getInt32(), sal_Int32(0));
-    OUStringBuffer sRet(nCount);
-    comphelper::string::padToLength(sRet, nCount, ' ');
-    return sRet.makeStringAndClear();
+    return OUString(OUString::Concat(RepeatedUChar(' ', nCount)));
 }
 
 ORowSetValue OOp_Replace::operate(const std::vector<ORowSetValue>& lhs) const

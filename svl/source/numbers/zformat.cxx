@@ -6052,7 +6052,6 @@ bool SvNumberformat::IsMinuteSecondFormat() const
 OUString SvNumberformat::GetFormatStringForTimePrecision( int nPrecision ) const
 {
     OUStringBuffer sString;
-    using comphelper::string::padToLength;
 
     sal_uInt16 nNumForCnt = NumFor[0].GetCount();
     auto const & rTypeArray = NumFor[0].Info().nTypeArray;
@@ -6070,8 +6069,7 @@ OUString SvNumberformat::GetFormatStringForTimePrecision( int nPrecision ) const
                 }
                 if (nPrecision > 0)
                 {
-                    sString.append( rLoc().getTime100SecSep() );
-                    padToLength(sString, sString.getLength() + nPrecision, '0');
+                    sString.append(rLoc().getTime100SecSep() + RepeatedUChar('0', nPrecision));
                 }
                 break;
             case NF_SYMBOLTYPE_TIME100SECSEP:

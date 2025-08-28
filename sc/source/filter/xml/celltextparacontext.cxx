@@ -347,9 +347,8 @@ void ScXMLCellFieldSContext::PushSpaces()
             mrParentCxt.PushSpan(u" ", maStyleName);
         else
         {
-            OUStringBuffer aBuf( mnCount);
-            comphelper::string::padToLength( aBuf, mnCount, ' ');
-            mrParentCxt.PushSpan( aBuf.makeStringAndClear(), maStyleName);
+            mrParentCxt.PushSpan(Concat2View(OUString::Concat(RepeatedUChar(' ', mnCount))),
+                                 maStyleName);
         }
     }
 }

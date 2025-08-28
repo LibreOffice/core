@@ -3564,8 +3564,7 @@ OUString SvNFEngine::GenerateFormat(SvNFLanguageData& rCurrentLanguage,
     }
     if (nPrecision > 0 && eType != SvNumFormatType::FRACTION && !( eType & SvNumFormatType::TIME ) )
     {
-        sString.append(rCurrentLanguage.GetNumDecimalSep());
-        padToLength(sString, sString.getLength() + nPrecision, '0');
+        sString.append(rCurrentLanguage.GetNumDecimalSep() + RepeatedUChar('0', nPrecision));
     }
 
     // Native Number
