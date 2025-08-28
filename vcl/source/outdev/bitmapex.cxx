@@ -172,7 +172,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         switch(nAction)
         {
             case MetaActionType::BMPEX:
-                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmpEx));
+                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, Bitmap(aBmpEx)));
                 break;
 
             case MetaActionType::BMPEXSCALE:
@@ -232,7 +232,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         switch(nAction)
         {
             case MetaActionType::BMPEX:
-                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmpEx));
+                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, Bitmap(aBmpEx)));
                 break;
 
             case MetaActionType::BMPEXSCALE:

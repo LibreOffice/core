@@ -1067,11 +1067,11 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
 #else
         u"469f0820", // atypical RGBA little-endian config
 #endif
-        u"839e8cce",
-        u"236aaf55", // 1-bit
-        u"2949ccc7", // 4-bit color bitmap - same as 8-bit color bitmap
-        u"2949ccc7",
-        u"e5df8aad",
+        u"a17eb609",
+        u"7bd5c66f", // 1-bit
+        u"ec307070", // 4-bit color bitmap - same as 8-bit color bitmap
+        u"ec307070",
+        u"b6d8e2d5",
 #endif
     };
 
@@ -1080,7 +1080,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         u"26bdebd04e5b18d685cea04982179e273ee3b659",
         u"f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5",
         u"7c953a06d34bbd38897f950d595df2880dbb0f75",
-        u"ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249",
+        u"7b51ea0cc5da3bbaf9b9d3dc1cde8e5fa69dbdf2",
         u"8a1ebc46f890eb0879464c6e293bffd4ce7fadc0", // 1-bit
         u"23611fc9f484c23e45bbd457730adb8ab5355509", // 4-bit color bitmap - same as 8-bit color bitmap
         u"23611fc9f484c23e45bbd457730adb8ab5355509",
@@ -1105,7 +1105,7 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         {"x", u"6"}, {"y", u"6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[3]}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
-            {"x", u"0"}, {"y", u"6"}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[4]}, {"pixelformat", u"8BPP"}
+            {"x", u"0"}, {"y", u"6"}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[4]}, {"pixelformat", u"24BPP"}
     });
     if (!bIsSvmFile)
     {
@@ -1114,13 +1114,13 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
         });
     }
     assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
-        {"x", u"2"}, {"y", u"6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[5]}, {"pixelformat", u"8BPP"}
+        {"x", u"2"}, {"y", u"6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[5]}, {"pixelformat", u"24BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
-        {"x", u"0"}, {"y", u"8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[6]}, {"pixelformat", u"8BPP"}
+        {"x", u"0"}, {"y", u"8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[6]}, {"pixelformat", u"24BPP"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
-        {"x", u"2"}, {"y", u"8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[7]}, {"pixelformat", u"8BPP"}
+        {"x", u"2"}, {"y", u"8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[7]}, {"pixelformat", u"24BPP"}
     });
 #else
     (void)bIsSvmFile;

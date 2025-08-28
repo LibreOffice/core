@@ -1952,9 +1952,9 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMP */
                     const MetaBmpExAction* pA = static_cast<const MetaBmpExAction*>(pAction);
-                    const BitmapEx& rBitmapEx = pA->GetBitmapEx();
+                    const Bitmap& rBitmap = pA->GetBitmap();
 
-                    createBitmapPrimitive(Bitmap(rBitmapEx), pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(rBitmap, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }

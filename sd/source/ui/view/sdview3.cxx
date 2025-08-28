@@ -214,7 +214,7 @@ bool View::InsertMetaFile( const TransferableDataHelper& rDataHelper, const Poin
                             {
                                 MetaBmpExAction* pBmpExAction = dynamic_cast< MetaBmpExAction* >( pAction );
                                 if( pBmpExAction )
-                                    aGraphic = Graphic(Bitmap(pBmpExAction->GetBitmapEx()) );
+                                    aGraphic = Graphic(pBmpExAction->GetBitmap());
                             }
                             break;
                         case MetaActionType::BMPEXSCALE:

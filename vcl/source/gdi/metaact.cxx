@@ -1067,15 +1067,15 @@ MetaBmpExAction::MetaBmpExAction() :
 MetaBmpExAction::~MetaBmpExAction()
 {}
 
-MetaBmpExAction::MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx ) :
+MetaBmpExAction::MetaBmpExAction( const Point& rPt, const Bitmap& rBmp ) :
     MetaAction  ( MetaActionType::BMPEX ),
-    maBmpEx     ( rBmpEx ),
+    maBmp       ( rBmp ),
     maPt        ( rPt )
 {}
 
 void MetaBmpExAction::Execute( OutputDevice* pOut )
 {
-    pOut->DrawBitmapEx( maPt, maBmpEx );
+    pOut->DrawBitmapEx( maPt, maBmp );
 }
 
 rtl::Reference<MetaAction> MetaBmpExAction::Clone() const

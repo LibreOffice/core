@@ -1129,11 +1129,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScaleAction const & rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction const & rAct)
 {
-    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetBitmapEx().GetSizePixel());
+    tools::Rectangle aRect(rAct.GetPoint(),rAct.GetBitmap().GetSizePixel());
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        Bitmap(rAct.GetBitmapEx()),
+        rAct.GetBitmap(),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)

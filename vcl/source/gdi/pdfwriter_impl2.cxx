@@ -764,11 +764,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEX:
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
-                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
-                            aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
+                    Bitmap aBitmap( pA->GetBitmap() );
+                    Size aSize( OutputDevice::LogicToLogic( aBitmap.GetPrefSize(),
+                            aBitmap.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), aSize, Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), aSize, aBitmap, aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 

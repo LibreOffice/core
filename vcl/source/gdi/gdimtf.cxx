@@ -1625,7 +1625,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
         case MetaActionType::BMPEX:
         {
             MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pAction);
-            tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmapEx().GetSizePixel() ) );
+            tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
             ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
@@ -2225,7 +2225,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
             case MetaActionType::BMPSCALE:       nSizeBytes += static_cast<MetaBmpScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
             case MetaActionType::BMPSCALEPART:   nSizeBytes += static_cast<MetaBmpScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
 
-            case MetaActionType::BMPEX:          nSizeBytes += static_cast<MetaBmpExAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case MetaActionType::BMPEX:          nSizeBytes += static_cast<MetaBmpExAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
             case MetaActionType::BMPEXSCALE:     nSizeBytes += static_cast<MetaBmpExScaleAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
             case MetaActionType::BMPEXSCALEPART: nSizeBytes += static_cast<MetaBmpExScalePartAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
 

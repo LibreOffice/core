@@ -815,11 +815,11 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case MetaActionType::BMPEX :
             {
-                BitmapEx aBitmapEx( static_cast<MetaBmpExAction*>(pMA)->GetBitmapEx() );
-                Bitmap aBitmap( aBitmapEx.GetBitmap() );
+                Bitmap aBitmapEx( static_cast<MetaBmpExAction*>(pMA)->GetBitmap() );
+                Bitmap aBitmap( aBitmapEx.CreateColorBitmap() );
                 if ( mbGrayScale )
                     aBitmap.Convert( BmpConversion::N8BitGreys );
-                const AlphaMask& aMask( aBitmapEx.GetAlphaMask() );
+                const AlphaMask aMask( aBitmapEx.CreateAlphaMask() );
                 Point aPoint( static_cast<const MetaBmpExAction*>(pMA)->GetPoint() );
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, &aMask, aPoint, aSize.Width(), aSize.Height() );

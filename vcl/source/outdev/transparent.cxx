@@ -820,7 +820,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         switch (rAct.GetType())
         {
             case MetaActionType::BMPEX:
-                aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx();
+                aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmap();
                 break;
 
             case MetaActionType::BMPEXSCALE:
@@ -1088,7 +1088,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 
         case MetaActionType::BMPEX:
             aActionBounds = tools::Rectangle( static_cast<const MetaBmpExAction&>(rAct).GetPoint(),
-                                       rOut.PixelToLogic( static_cast<const MetaBmpExAction&>(rAct).GetBitmapEx().GetSizePixel() ) );
+                                       rOut.PixelToLogic( static_cast<const MetaBmpExAction&>(rAct).GetBitmap().GetSizePixel() ) );
             break;
 
         case MetaActionType::BMPEXSCALE:

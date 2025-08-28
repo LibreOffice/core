@@ -135,7 +135,7 @@ public:
 
             ::Bitmap      aBmp( aGraphic.GetBitmap() );
 
-            xMtf->AddAction( new MetaBmpExAction( Point(), BitmapEx(aBmp) ) );
+            xMtf->AddAction( new MetaBmpExAction( Point(), aBmp ) );
             xMtf->SetPrefSize( aBmp.GetPrefSize() );
             xMtf->SetPrefMapMode( aBmp.GetPrefMapMode() );
 
@@ -375,11 +375,11 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 AlphaMask aAlphaMask(pVDevMask->GetBitmap(aEmptyPoint, aAnimSize));
                 pMtf->AddAction(
                     new MetaBmpExAction( aEmptyPoint,
-                                         BitmapEx(
+                                         Bitmap(BitmapEx(
                                              pVDev->GetBitmap(
                                                  aEmptyPoint,
                                                  aAnimSize ),
-                                             aAlphaMask)));
+                                             aAlphaMask))));
             }
             else
             {
@@ -387,11 +387,11 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 aAlphaMask.Invert(); // convert from transparency to alpha
                 pMtf->AddAction(
                     new MetaBmpExAction( aEmptyPoint,
-                                         BitmapEx(
+                                         Bitmap(BitmapEx(
                                              pVDev->GetBitmap(
                                                  aEmptyPoint,
                                                  aAnimSize ),
-                                             aAlphaMask)));
+                                             aAlphaMask))));
             }
             mnLoadedFrames = i+1;
         }

@@ -231,6 +231,120 @@ namespace
         return true;
     }
 
+    bool handleBitmapContent(
+        const basegfx::B2DPolyPolygon& rClip,
+        const Point& rPoint,
+        const Size& rSize,
+        const Bitmap& rBitmap,
+        GDIMetaFile& rTarget)
+    {
+        if(!rSize.Width() || !rSize.Height() || rBitmap.IsEmpty())
+        {
+            // bitmap or size is empty
+            return true;
+        }
+
+        const basegfx::B2DRange aLogicBitmapRange(
+            rPoint.X(), rPoint.Y(),
+            rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height());
+        const basegfx::B2DPolyPolygon aClipOfBitmap(
+            basegfx::utils::clipPolyPolygonOnRange(
+                rClip,
+                aLogicBitmapRange,
+                true,
+                false)); // stroke
+
+        if(!aClipOfBitmap.count())
+        {
+            // outside clip region
+            return true;
+        }
+
+        // inside or overlapping. Use area to find out if it is completely
+        // covering (inside) or overlapping
+        const double fClipArea(basegfx::utils::getArea(aClipOfBitmap));
+        const double fBitmapArea(
+            aLogicBitmapRange.getWidth() * aLogicBitmapRange.getWidth() +
+            aLogicBitmapRange.getHeight() * aLogicBitmapRange.getHeight());
+        const double fFactor(fClipArea / fBitmapArea);
+
+        if(basegfx::fTools::more(fFactor, 1.0 - 0.001))
+        {
+            // completely covering (with 0.1% tolerance)
+            return false;
+        }
+
+        // needs clipping (with 0.1% tolerance). Prepare VirtualDevice
+        // in pixel mode for alpha channel painting (black is transparent,
+        // white to paint 100% opacity)
+        const Size aSizePixel(rBitmap.GetSizePixel());
+        ScopedVclPtrInstance< VirtualDevice > aVDev;
+
+        aVDev->SetOutputSizePixel(aSizePixel);
+        aVDev->EnableMapMode(false);
+        aVDev->SetFillColor( COL_WHITE);
+        aVDev->SetLineColor();
+
+        if(rBitmap.HasAlpha())
+        {
+            // use given alpha channel
+            aVDev->DrawBitmap(Point(0, 0), rBitmap.CreateAlphaMask().GetBitmap());
+        }
+        else
+        {
+            // reset alpha channel
+            aVDev->SetBackground(Wallpaper(COL_BLACK));
+            aVDev->Erase();
+        }
+
+        // transform polygon from clipping to pixel coordinates
+        basegfx::B2DPolyPolygon aPixelPoly(aClipOfBitmap);
+        basegfx::B2DHomMatrix aTransform;
+
+        aTransform.translate(-aLogicBitmapRange.getMinX(), -aLogicBitmapRange.getMinY());
+        aTransform.scale(
+            static_cast< double >(aSizePixel.Width()) / aLogicBitmapRange.getWidth(),
+            static_cast< double >(aSizePixel.Height()) / aLogicBitmapRange.getHeight());
+        aPixelPoly.transform(aTransform);
+
+        // to fill the non-covered parts, use the Xor fill rule of
+        // tools::PolyPolygon painting. Start with an all-covering polygon and
+        // add the clip polygon one
+        basegfx::B2DPolyPolygon aInvertPixelPoly;
+
+        aInvertPixelPoly.append(
+            basegfx::utils::createPolygonFromRect(
+                basegfx::B2DRange(
+                    0.0, 0.0,
+                    aSizePixel.Width(), aSizePixel.Height())));
+        aInvertPixelPoly.append(aPixelPoly);
+
+        // paint as alpha
+        aVDev->DrawPolyPolygon(aInvertPixelPoly);
+
+        // get created alpha mask and set defaults
+        AlphaMask aAlpha(
+            aVDev->GetBitmap(
+                Point(0, 0),
+                aSizePixel));
+
+        aAlpha.SetPrefSize(rBitmap.GetPrefSize());
+        aAlpha.SetPrefMapMode(rBitmap.GetPrefMapMode());
+
+        // add new action replacing the old one
+        rTarget.AddAction(
+            new MetaBmpExScaleAction(
+                Point(
+                    basegfx::fround<tools::Long>(aLogicBitmapRange.getMinX()),
+                    basegfx::fround<tools::Long>(aLogicBitmapRange.getMinY())),
+                Size(
+                    basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
+                    basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
+                BitmapEx(rBitmap.CreateColorBitmap(), aAlpha)));
+
+        return true;
+    }
+
     void addSvtGraphicStroke(const SvtGraphicStroke& rStroke, GDIMetaFile& rTarget)
     {
         // write SvtGraphicFill
@@ -705,26 +819,26 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::BMPEX :
                 {
                     const MetaBmpExAction* pA = static_cast< const MetaBmpExAction* >(pAction);
-                    const BitmapEx& rBitmapEx = pA->GetBitmapEx();
+                    const Bitmap& rBitmap = pA->GetBitmap();
 
                     // the logical size depends on the PrefSize of the given bitmap in
                     // combination with the current MapMode
-                    Size aLogicalSize(rBitmapEx.GetPrefSize());
+                    Size aLogicalSize(rBitmap.GetPrefSize());
 
-                    if(MapUnit::MapPixel == rBitmapEx.GetPrefMapMode().GetMapUnit())
+                    if(MapUnit::MapPixel == rBitmap.GetPrefMapMode().GetMapUnit())
                     {
                         aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back());
                     }
                     else
                     {
-                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmapEx.GetPrefMapMode(), aMapModes.back());
+                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, rBitmap.GetPrefMapMode(), aMapModes.back());
                     }
 
                     bDone = handleBitmapContent(
                         aClips.back(),
                         pA->GetPoint(),
                         aLogicalSize,
-                        rBitmapEx,
+                        rBitmap,
                         aTarget);
                     break;
                 }

@@ -171,7 +171,7 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
                 nCrc = rtl_crc32(nCrc, aBT16, 2);
 
-                BCToBCOA(pAct->GetBitmapEx().GetChecksum(), aBCOA);
+                BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
                 nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
@@ -1103,11 +1103,11 @@ void SvmWriter::BmpScalePartHandler(const MetaBmpScalePartAction* pAction)
 
 void SvmWriter::BmpExHandler(const MetaBmpExAction* pAction)
 {
-    if (!pAction->GetBitmapEx().GetBitmap().IsEmpty())
+    if (!pAction->GetBitmap().CreateColorBitmap().IsEmpty())
     {
         mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
         VersionCompatWrite aCompat(mrStream, 1);
-        WriteDIBBitmapEx(pAction->GetBitmapEx(), mrStream);
+        WriteDIBBitmapEx(pAction->GetBitmap(), mrStream);
         TypeSerializer aSerializer(mrStream);
         aSerializer.writePoint(pAction->GetPoint());
     }

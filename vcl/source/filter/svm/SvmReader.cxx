@@ -937,14 +937,14 @@ rtl::Reference<MetaAction> SvmReader::BmpExHandler()
     rtl::Reference<MetaBmpExAction> pAction(new MetaBmpExAction);
 
     VersionCompatRead aCompat(mrStream);
-    BitmapEx aBmpEx;
-    ReadDIBBitmapEx(aBmpEx, mrStream);
+    Bitmap aBmp;
+    ReadDIBBitmapEx(aBmp, mrStream);
     TypeSerializer aSerializer(mrStream);
     Point aPoint;
     aSerializer.readPoint(aPoint);
 
     pAction->SetPoint(aPoint);
-    pAction->SetBitmapEx(aBmpEx);
+    pAction->SetBitmap(aBmp);
 
     return pAction;
 }

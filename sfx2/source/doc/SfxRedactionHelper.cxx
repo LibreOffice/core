@@ -530,7 +530,7 @@ void SfxRedactionHelper::searchImagesInMetaFile(
             {
                 MetaBmpExAction* pAction = static_cast<MetaBmpExAction*>(pCurrAct);
                 aDestPt = pAction->GetPoint();
-                aDestSz = pAction->GetBitmapEx().GetSizePixel();
+                aDestSz = pAction->GetBitmap().GetSizePixel();
                 break;
             }
 
