@@ -50,6 +50,9 @@
 #include <android/log.h>
 #include <osl/detail/android-bootstrap.h>
 #endif
+#if defined __EMSCRIPTEN__
+#include <emscripten/console.h>
+#endif
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
 #include <sys/syscall.h>
@@ -552,6 +555,8 @@ void SAL_CALL osl_setThreadName(char const * name)
     pthread_setname_np( pthread_self(), name );
 #elif defined MACOSX || defined IOS
     pthread_setname_np( name );
+#elif defined __EMSCRIPTEN__
+    emscripten_console_logf("Thread name: \"%s\"", name);
 #else
     (void) name;
 #endif
