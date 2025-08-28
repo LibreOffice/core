@@ -31,6 +31,7 @@
 class OutputDevice;
 class MetaAction;
 class Color;
+class Bitmap;
 class BitmapEx;
 namespace tools {
     class Polygon;
@@ -48,7 +49,7 @@ enum class MtfConversion
 
 
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
-typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
+typedef Bitmap (*BmpExchangeFnc)( const Bitmap& rBmp, const void* pBmpParam );
 
 class VCL_DLLPUBLIC GDIMetaFile final
 {
@@ -70,16 +71,16 @@ private:
 
 
     SAL_DLLPRIVATE static Color         ImplColAdjustFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx      ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Bitmap        ImplBmpAdjustFnc( const Bitmap& rBmp, const void* pBmpParam );
 
     SAL_DLLPRIVATE static Color         ImplColConvertFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx      ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Bitmap        ImplBmpConvertFnc( const Bitmap& rBmp, const void* pBmpParam );
 
     SAL_DLLPRIVATE static Color         ImplColMonoFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx      ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Bitmap        ImplBmpMonoFnc( const Bitmap& rBmp, const void* pBmpParam );
 
     SAL_DLLPRIVATE static Color         ImplColReplaceFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx      ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Bitmap        ImplBmpReplaceFnc( const Bitmap& rBmp, const void* pBmpParam );
 
     SAL_DLLPRIVATE void                 ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
                                                             BmpExchangeFnc pFncBmp, const void* pBmpParam );
