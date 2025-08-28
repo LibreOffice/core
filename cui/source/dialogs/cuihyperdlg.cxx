@@ -177,7 +177,14 @@ SvxHpLinkDlg::~SvxHpLinkDlg()
     pOutSet.reset();
 }
 
-void SvxHpLinkDlg::Activate() {
+IconChoicePage* SvxHpLinkDlg::GetTabPage( std::u16string_view rPageId )
+{
+    const IconChoicePageData* p = GetPageData(rPageId);
+    return (p == nullptr) ? nullptr : p->xPage.get();
+}
+
+void SvxHpLinkDlg::Activate()
+{
     if (mbGrabFocus) {
         static_cast<SvxHyperlinkTabPageBase *>(GetTabPage(GetCurPageId()))->SetInitFocus();
         mbGrabFocus = false;
@@ -234,48 +241,36 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, weld::Button&, void)
 |************************************************************************/
 void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
-    OUString sPageId(u"internet"_ustr);
+    mpItemSet->Put(*pItem);
 
     const OUString& aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);
     INetProtocol eProtocolTyp = aURL.GetProtocol();
 
-    switch ( eProtocolTyp )
-    {
-        case INetProtocol::Http :
-        case INetProtocol::Ftp :
-            sPageId = "internet";
-            break;
-        case INetProtocol::File :
-            sPageId = "document";
-            break;
-        case INetProtocol::Mailto :
-            sPageId = "mail";
-            break;
-        default :
-            if (aStrURL.startsWith("#"))
-                sPageId = "document";
-            else
-            {
-                // not valid
-                sPageId = GetCurPageId();
-            }
-            break;
+    OUString sPageId(msRememberedPageId);
+
+    if (eProtocolTyp == INetProtocol::Http || eProtocolTyp == INetProtocol::Https || eProtocolTyp == INetProtocol::Ftp) {
+        sPageId = "internet";
+    } else if (eProtocolTyp == INetProtocol::Mailto) {
+        sPageId = "mail";
+    } else if (!comphelper::LibreOfficeKit::isActive() &&
+        (eProtocolTyp == INetProtocol::File || aStrURL.startsWith("#"))) {
+        sPageId = "document";
     }
 
+    IconChoicePage* pPage = GetTabPage(sPageId);
+
+    // Switching to tab that doesn't exist should not crash
+    if (pPage == nullptr) { return; }
+
     ShowPage (sPageId);
-
-    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(GetTabPage( sPageId ));
-
     mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) != 0;
 
-    IconChoicePage* pPage = GetTabPage (sPageId);
-    if(pPage)
-    {
-        SfxItemSet& aPageSet = const_cast<SfxItemSet&>(pPage->GetItemSet ());
-        aPageSet.Put ( *pItem );
+    SfxItemSet& aPageSet = const_cast<SfxItemSet&>(pPage->GetItemSet ());
+    aPageSet.Put ( *pItem );
 
-        pCurrentPage->Reset( aPageSet );
+    for (std::unique_ptr<IconChoicePageData>& page: maPageList) {
+        page->xPage->Reset(*pSet);
     }
 }
 
