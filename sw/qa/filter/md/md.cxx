@@ -13,6 +13,13 @@
 
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <IDocumentStylePoolAccess.hxx>
+#include <poolfmt.hxx>
+#include <charatr.hxx>
+
 namespace
 {
 /**
@@ -176,6 +183,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTables)
 
     // cell C2
     CPPUNIT_ASSERT(getCell(xtable, u"C2"_ustr, u"data3"_ustr).is());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
+{
+    // Given a document where the middle word is a code portion:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A B C"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    SwView& rView = pWrtShell->GetView();
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END> aSet(rView.GetPool());
+    aSet.Put(pColl->GetFont());
+    pWrtShell->SetAttrSet(aSet);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the format of B is exported:
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    std::vector<char> aBuffer(aStream.remainingSize());
+    aStream.ReadBytes(aBuffer.data(), aBuffer.size());
+    std::string_view aActual(aBuffer.data(), aBuffer.size());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A `B` C
+    // - Actual  : A B C
+    // i.e. the code formatting was lost.
+    std::string_view aExpected("A `B` C" SAL_NEWLINE_STRING);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
