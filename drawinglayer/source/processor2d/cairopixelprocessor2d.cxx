@@ -1168,6 +1168,11 @@ Bitmap CairoPixelProcessor2D::extractBitmap() const
     const bool bHasAlpha(CAIRO_FORMAT_ARGB32 == aFormat);
     Bitmap aBitmap(aBitmapSize, bHasAlpha ? vcl::PixelFormat::N32_BPP : vcl::PixelFormat::N24_BPP);
     BitmapWriteAccess aAccess(aBitmap);
+    if (!aAccess)
+    {
+        SAL_WARN("drawinglayer", "Could not create image, likely too large, size= " << aBitmapSize);
+        return aRetval;
+    }
 
     // prepare cairo stuff
     const sal_uInt32 nStride(cairo_image_surface_get_stride(pReadSource));
