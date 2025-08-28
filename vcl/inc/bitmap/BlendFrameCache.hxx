@@ -20,7 +20,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 struct BlendFrameCache
 {
@@ -30,7 +30,7 @@ struct BlendFrameCache
     Color m_aLastColorTopRight;
     Color m_aLastColorBottomRight;
     Color m_aLastColorBottomLeft;
-    BitmapEx m_aLastResult;
+    Bitmap m_aLastResult;
 
     BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color const& rColorTopLeft,
                     Color const& rColorTopRight, Color const& rColorBottomRight,

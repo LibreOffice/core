@@ -41,7 +41,6 @@
 #include <svdata.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapMaskToAlphaFilter.hxx>
-#include <bitmap/BlendFrameCache.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
@@ -965,61 +964,6 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     if(IsAlpha())
         return BitmapEx(aChangedBitmap, GetAlphaMask());
     return BitmapEx(aChangedBitmap);
-}
-
-BitmapEx createAlphaBlendFrame(
-    const Size& rSize,
-    sal_uInt8 nAlpha,
-    const Color& rColorTopLeft,
-    const Color& rColorBottomRight)
-{
-    const sal_uInt32 nW(rSize.Width());
-    const sal_uInt32 nH(rSize.Height());
-
-    if(nW || nH)
-    {
-        Color aColTopRight(rColorTopLeft);
-        Color aColBottomLeft(rColorTopLeft);
-        const sal_uInt32 nDE(nW + nH);
-
-        aColTopRight.Merge(rColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
-        aColBottomLeft.Merge(rColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
-
-        return createAlphaBlendFrame(rSize, nAlpha, rColorTopLeft, aColTopRight, rColorBottomRight, aColBottomLeft);
-    }
-
-    return BitmapEx();
-}
-
-BitmapEx createAlphaBlendFrame(
-    const Size& rSize,
-    sal_uInt8 nAlpha,
-    const Color& rColorTopLeft,
-    const Color& rColorTopRight,
-    const Color& rColorBottomRight,
-    const Color& rColorBottomLeft)
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if (!pSVData->mpBlendFrameCache)
-    {
-        pSVData->mpBlendFrameCache.reset(new BlendFrameCache(rSize, nAlpha, rColorTopLeft, rColorTopRight, rColorBottomRight, rColorBottomLeft));
-        return pSVData->mpBlendFrameCache->m_aLastResult;
-    }
-
-    BlendFrameCache* pBlendFrameCache = pSVData->mpBlendFrameCache.get();
-
-    if(pBlendFrameCache->m_aLastSize == rSize
-        && pBlendFrameCache->m_nLastAlpha == nAlpha
-        && pBlendFrameCache->m_aLastColorTopLeft == rColorTopLeft
-        && pBlendFrameCache->m_aLastColorTopRight == rColorTopRight
-        && pBlendFrameCache->m_aLastColorBottomRight == rColorBottomRight
-        && pBlendFrameCache->m_aLastColorBottomLeft == rColorBottomLeft)
-    {
-        return pBlendFrameCache->m_aLastResult;
-    }
-
-    pSVData->mpBlendFrameCache.reset(new BlendFrameCache(rSize, nAlpha, rColorTopLeft, rColorTopRight, rColorBottomRight, rColorBottomLeft));
-    return pSVData->mpBlendFrameCache->m_aLastResult;
 }
 
 void BitmapEx::Replace(const Color& rSearchColor,

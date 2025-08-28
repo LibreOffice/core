@@ -427,7 +427,7 @@ void DeInitVCL()
 
     // lp#1560328: clear cache before disposing rest of VCL
     if(pSVData->mpBlendFrameCache)
-        pSVData->mpBlendFrameCache->m_aLastResult.Clear();
+        pSVData->mpBlendFrameCache->m_aLastResult = Bitmap();
     pSVData->mbDeInit = true;
 
     // Some events may need to access objects destroyed in ImplDeleteOnDeInit, so process them first

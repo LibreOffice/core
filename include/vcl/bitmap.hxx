@@ -714,6 +714,45 @@ inline sal_Int64 Bitmap::GetSizeBytes() const
     return aSizeInBytes;
 }
 
+/** Create a blend frame as Bitmap using an alpha value
+
+    @param nAlpha
+    The blend value defines how strong the frame will be blended with the
+    existing content, 255 == full coverage, 0 == no frame will be drawn
+
+    @param aColorTopLeft, aColorBottomRight
+    The colors defining the frame. These colors are linearly interpolated from
+    aColorTopLeft and aColorBottomRight using the width and height of the area
+
+    @param rSize
+    The size of the frame in pixels
+    */
+Bitmap VCL_DLLPUBLIC createAlphaBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    const Color& rColorTopLeft,
+    const Color& rColorBottomRight);
+
+/** Create a blend frame as Bitmap using an alpha value
+
+    @param nAlpha
+    The blend value defines how strong the frame will be blended with the
+    existing content, 255 == full coverage, 0 == no frame will be drawn
+
+    @param aColorTopLeft, aColorBottomRight, aColorTopRight, aColorBottomLeft
+    The colors defining the frame.
+
+    @param rSize
+    The size of the frame in pixels
+    */
+Bitmap createAlphaBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    const Color& rColorTopLeft,
+    const Color& rColorTopRight,
+    const Color& rColorBottomRight,
+    const Color& rColorBottomLeft);
+
 #endif // INCLUDED_VCL_BITMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

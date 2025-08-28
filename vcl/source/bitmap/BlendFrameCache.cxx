@@ -37,25 +37,21 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
     if (rSize.Width() <= 1 || rSize.Height() <= 1)
         return;
 
-    sal_uInt8 aEraseTrans(0xff);
-    Bitmap aContent(rSize, vcl::PixelFormat::N24_BPP);
-    AlphaMask aAlpha(rSize, &aEraseTrans);
-
-    aContent.Erase(COL_BLACK);
+    Bitmap aContent(rSize, vcl::PixelFormat::N32_BPP);
+    aContent.Erase(COL_TRANSPARENT);
 
     {
         BitmapScopedWriteAccess pContent(aContent);
-        BitmapScopedWriteAccess pAlpha(aAlpha);
-
-        if (!pContent || !pAlpha)
+        assert(pContent);
+        if (!pContent)
             return;
 
         Scanline pScanContent = pContent->GetScanline(0);
-        Scanline pScanAlpha = pContent->GetScanline(0);
 
         // x == 0, y == 0, top-left corner
-        pContent->SetPixelOnData(pScanContent, 0, rColorTopLeft);
-        pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
+        Color aCol(rColorTopLeft);
+        aCol.SetAlpha(nAlpha);
+        pContent->SetPixelOnData(pScanContent, 0, aCol);
 
         tools::Long x;
         const tools::Long nW(rSize.Width());
@@ -66,16 +62,17 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
             Color aMix(rColorTopLeft);
 
             aMix.Merge(rColorTopRight, 255 - sal_uInt8((x * 255) / nW));
+            aMix.SetAlpha(nAlpha);
             pContent->SetPixelOnData(pScanContent, x, aMix);
-            pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
         }
 
         // x == nW - 1, y == 0, top-right corner
         // #i123690# Caution! When nW is 1, x == nW is possible (!)
         if (x < nW)
         {
-            pContent->SetPixelOnData(pScanContent, x, rColorTopRight);
-            pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
+            aCol = rColorTopRight;
+            aCol.SetAlpha(nAlpha);
+            pContent->SetPixelOnData(pScanContent, x, aCol);
         }
 
         tools::Long y;
@@ -85,12 +82,11 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
         for (y = 1; y < nH - 1; y++)
         {
             pScanContent = pContent->GetScanline(y);
-            pScanAlpha = pContent->GetScanline(y);
             Color aMixA(rColorTopLeft);
 
             aMixA.Merge(rColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
+            aMixA.SetAlpha(nAlpha);
             pContent->SetPixelOnData(pScanContent, 0, aMixA);
-            pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if (x < nW)
@@ -98,8 +94,8 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
                 Color aMixB(rColorTopRight);
 
                 aMixB.Merge(rColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
+                aMixB.SetAlpha(nAlpha);
                 pContent->SetPixelOnData(pScanContent, x, aMixB);
-                pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
         }
 
@@ -107,8 +103,9 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
         if (y < nH)
         {
             // x == 0, y == nH - 1, bottom-left corner
-            pContent->SetPixelOnData(pScanContent, 0, rColorBottomLeft);
-            pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
+            aCol = rColorBottomLeft;
+            aCol.SetAlpha(nAlpha);
+            pContent->SetPixelOnData(pScanContent, 0, aCol);
 
             // y == nH - 1, bottom line left to right
             for (x = 1; x < nW - 1; x++)
@@ -116,21 +113,22 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
                 Color aMix(rColorBottomLeft);
 
                 aMix.Merge(rColorBottomRight, 255 - sal_uInt8(((x - 0) * 255) / nW));
+                aMix.SetAlpha(nAlpha);
                 pContent->SetPixelOnData(pScanContent, x, aMix);
-                pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
 
             // x == nW - 1, y == nH - 1, bottom-right corner
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if (x < nW)
             {
-                pContent->SetPixelOnData(pScanContent, x, rColorBottomRight);
-                pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
+                aCol = rColorBottomRight;
+                aCol.SetAlpha(nAlpha);
+                pContent->SetPixelOnData(pScanContent, x, aCol);
             }
         }
     }
 
-    m_aLastResult = BitmapEx(aContent, aAlpha);
+    m_aLastResult = aContent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

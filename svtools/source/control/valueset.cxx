@@ -23,7 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/debug.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
@@ -1500,7 +1500,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
         const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
         const sal_uInt8 nAlpha(255 - ((nEdgeBlendingPercent * 255) / 100));
-        const BitmapEx aBlendFrame(createAlphaBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
+        const Bitmap aBlendFrame(createAlphaBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
 
         if (!aBlendFrame.IsEmpty())
         {

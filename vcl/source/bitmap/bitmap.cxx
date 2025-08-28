@@ -46,6 +46,7 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/impoctree.hxx>
 #include <bitmap/Octree.hxx>
+#include <bitmap/BlendFrameCache.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <o3tl/any.hxx>
 
@@ -2454,6 +2455,61 @@ void  Bitmap::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
     rnWidth = pReadAccess->Width();
     rnHeight = pReadAccess->Height();
     rnBitCount = pReadAccess->GetBitCount();
+}
+
+Bitmap createAlphaBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    const Color& rColorTopLeft,
+    const Color& rColorBottomRight)
+{
+    const sal_uInt32 nW(rSize.Width());
+    const sal_uInt32 nH(rSize.Height());
+
+    if(nW || nH)
+    {
+        Color aColTopRight(rColorTopLeft);
+        Color aColBottomLeft(rColorTopLeft);
+        const sal_uInt32 nDE(nW + nH);
+
+        aColTopRight.Merge(rColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
+        aColBottomLeft.Merge(rColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
+
+        return createAlphaBlendFrame(rSize, nAlpha, rColorTopLeft, aColTopRight, rColorBottomRight, aColBottomLeft);
+    }
+
+    return Bitmap();
+}
+
+Bitmap createAlphaBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    const Color& rColorTopLeft,
+    const Color& rColorTopRight,
+    const Color& rColorBottomRight,
+    const Color& rColorBottomLeft)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if (!pSVData->mpBlendFrameCache)
+    {
+        pSVData->mpBlendFrameCache.reset(new BlendFrameCache(rSize, nAlpha, rColorTopLeft, rColorTopRight, rColorBottomRight, rColorBottomLeft));
+        return pSVData->mpBlendFrameCache->m_aLastResult;
+    }
+
+    BlendFrameCache* pBlendFrameCache = pSVData->mpBlendFrameCache.get();
+
+    if(pBlendFrameCache->m_aLastSize == rSize
+        && pBlendFrameCache->m_nLastAlpha == nAlpha
+        && pBlendFrameCache->m_aLastColorTopLeft == rColorTopLeft
+        && pBlendFrameCache->m_aLastColorTopRight == rColorTopRight
+        && pBlendFrameCache->m_aLastColorBottomRight == rColorBottomRight
+        && pBlendFrameCache->m_aLastColorBottomLeft == rColorBottomLeft)
+    {
+        return pBlendFrameCache->m_aLastResult;
+    }
+
+    pSVData->mpBlendFrameCache.reset(new BlendFrameCache(rSize, nAlpha, rColorTopLeft, rColorTopRight, rColorBottomRight, rColorBottomLeft));
+    return pSVData->mpBlendFrameCache->m_aLastResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
