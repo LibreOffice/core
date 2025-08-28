@@ -514,6 +514,9 @@ published service ParagraphProperties
         /** specifies the desired word spacing as percentage value relative
             to the width of the space character.
 
+            <p>It takes a percent value between [0, 1000], where the original
+            word spacing is denoted by 100.</p>
+
             @see ParaWordSpacingMininum
 
             @see ParaWordSpacingMaximum
@@ -524,6 +527,9 @@ published service ParagraphProperties
 
         /** specifies the minimum word spacing as percentage value relative
             to the width of the space character.
+
+            <p>It takes a percent value between [0, 1000], where the original
+            word spacing is denoted by 100.</p>
 
             @see ParaWordSpacing
 
@@ -536,6 +542,9 @@ published service ParagraphProperties
         /** specifies the maximum word spacing as percentage value relative
             to the width of the space character.
 
+            <p>It takes a percent value between [0, 1000], where the original
+            word spacing is denoted by 100.</p>
+
             @see ParaWordSpacing
 
             @see ParaWordSpacingMininum
@@ -547,6 +556,9 @@ published service ParagraphProperties
         /** specifies the minimum letter spacing as percentage value relative
             to the width of the space character.
 
+            <p>It takes a percent value between [-100, 0], where the original
+            letter spacing is denoted by 0, and negative values mean its shrinking.</p>
+
             @see CharKerning
 
             @see ParaLetterSpacingMaximum
@@ -557,6 +569,9 @@ published service ParagraphProperties
 
         /** specifies the maximum letter spacing as percentage value relative
             to the width of the space character.
+
+            <p>It takes a percent value between [0, 500], where the original
+            letter spacing is denoted by 0, and negative values mean its shrinking.</p>
 
             @see CharKerning
 

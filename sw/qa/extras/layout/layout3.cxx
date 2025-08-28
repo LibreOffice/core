@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
 
             // Assert we are using the expected position for the last char
             // This was 4673, now 4163, according to the fixed space shrinking
-            CPPUNIT_ASSERT_LESS(sal_Int32(4200), sal_Int32(pDXArray[45]));
+            CPPUNIT_ASSERT_LESS(sal_Int32(4250), sal_Int32(pDXArray[45]));
             break;
         }
     }
@@ -573,8 +573,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648)
             auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
             auto pDXArray = pTextArrayAction->GetDXArray();
 
-            // There should be 27 chars on the first line
-            // (tdf#164499 no space shrinking in lines with tabulation)
+            // There should be 27 characters on the first line
             CPPUNIT_ASSERT_EQUAL(size_t(27), pDXArray.size());
 
             // Assert we are using the expected position for the
@@ -588,6 +587,43 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648)
             // This was 977, now 965, according to the 25% maximum letter spacing
             CPPUNIT_ASSERT_LESS(sal_Int32(970), sal_Int32(pDXArray[5]));
             CPPUNIT_ASSERT_GREATER(sal_Int32(960), sal_Int32(pDXArray[5]));
+            break;
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648_minimum)
+{
+    createSwDoc("tdf167648_minimum.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 39 characters on the first line
+            // This was 27 characters, but setting minimum letter spacing
+            // to -25% allows more words in the line
+            CPPUNIT_ASSERT_EQUAL(size_t(39), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 266, according to the -25% minimum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(270), sal_Int32(pDXArray[1]));
+
             break;
         }
     }
