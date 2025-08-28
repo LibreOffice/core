@@ -787,11 +787,8 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
         case NS_ooxml::LN_CT_Anchor_wp14_anchorId:
         case NS_ooxml::LN_CT_Inline_wp14_anchorId:
         {
-            OUStringBuffer aBuffer = OUString::number(nIntValue, 16);
-            OUStringBuffer aString;
-            comphelper::string::padToLength(aString, 8 - aBuffer.getLength(), '0');
-            aString.append(aBuffer.getStr());
-            m_pImpl->m_sAnchorId = aString.makeStringAndClear().toAsciiUpperCase();
+            auto aBuffer = OUString::number(nIntValue, 16).toAsciiUpperCase();
+            m_pImpl->m_sAnchorId = RepeatedUChar('0', 8 - aBuffer.length) + aBuffer;
         }
         break;
         case NS_ooxml::LN_CT_Point2D_x:

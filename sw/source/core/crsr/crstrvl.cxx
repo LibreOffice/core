@@ -2545,20 +2545,17 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
     case SwFillMode::TabSpace:
     case SwFillMode::Space:
         {
-            OUStringBuffer sInsert;
+            OUString sInsert;
             if (aFPos.eMode == SwFillMode::Space)
             {
-                comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceOnlyCnt, ' ');
+                sInsert = OUString::Concat(RepeatedUChar(' ', aFPos.nSpaceOnlyCnt));
             }
             else
             {
-                if (aFPos.nTabCnt)
-                    comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
-                if (aFPos.nSpaceCnt)
-                    comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
+                sInsert = RepeatedUChar('\t', aFPos.nTabCnt) + RepeatedUChar(' ', aFPos.nSpaceCnt);
             }
             if (!sInsert.isEmpty())
-                GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurrentCursor, sInsert.makeStringAndClear());
+                GetDoc()->getIDocumentContentOperations().InsertString(*m_pCurrentCursor, sInsert);
         }
         [[fallthrough]]; // still need to set orientation
     case SwFillMode::Margin:
