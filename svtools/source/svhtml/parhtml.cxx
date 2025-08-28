@@ -1658,9 +1658,7 @@ HtmlTokenId HTMLParser::FilterPRE( HtmlTokenId nToken )
             DBG_ASSERT( aToken.isEmpty(), "Why is the token not empty?" );
             if (aToken.getLength() < nSpaces)
             {
-                using comphelper::string::padToLength;
-                OUStringBuffer aBuf(aToken);
-                aToken = padToLength(aBuf, nSpaces, ' ');
+                comphelper::string::padToLength(aToken, nSpaces, ' ');
             }
             nPre_LinePos += nSpaces;
             nToken = HtmlTokenId::TEXTTOKEN;
