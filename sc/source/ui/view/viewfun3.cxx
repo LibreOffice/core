@@ -819,7 +819,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
         Bitmap aBmp;
         ScDrawView* pScDrawView = GetScDrawView();
 
-        if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmp ) )
+        if (pScDrawView && aDataHelper.GetBitmap(SotClipboardFormatId::BITMAP, aBmp))
         {
             const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
 

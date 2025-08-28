@@ -708,8 +708,7 @@ bool TransferableHelper::SetString( const OUString& rString )
     return maAny.hasValue();
 }
 
-
-bool TransferableHelper::SetBitmapEx( const Bitmap& rBitmap, const DataFlavor& rFlavor )
+bool TransferableHelper::SetBitmap(const Bitmap& rBitmap, const DataFlavor& rFlavor)
 {
     if( !rBitmap.IsEmpty() )
     {
@@ -1521,8 +1520,7 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
     return bRet;
 }
 
-
-bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& rBmp ) const
+bool TransferableDataHelper::GetBitmap(SotClipboardFormatId nFormat, Bitmap& rBmp) const
 {
     if(SotClipboardFormatId::BITMAP == nFormat)
     {
@@ -1531,7 +1529,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& 
 
         if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor))
         {
-            if(GetBitmapEx(aFlavor, rBmp))
+            if (GetBitmap(aFlavor, rBmp))
             {
                 return true;
             }
@@ -1540,7 +1538,7 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& 
         // then JPEG
         if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::JPEG, aFlavor))
         {
-            if(GetBitmapEx(aFlavor, rBmp))
+            if (GetBitmap(aFlavor, rBmp))
             {
                 return true;
             }
@@ -1548,11 +1546,10 @@ bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& 
     }
 
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetBitmapEx( aFlavor, rBmp ) );
+    return (SotExchange::GetFormatDataFlavor(nFormat, aFlavor) && GetBitmap(aFlavor, rBmp));
 }
 
-
-bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, Bitmap& rBmp ) const
+bool TransferableDataHelper::GetBitmap(const DataFlavor& rFlavor, Bitmap& rBmp) const
 {
     std::unique_ptr<SvStream> xStm = GetSotStorageStream(rFlavor);
     DataFlavor aSubstFlavor;
@@ -1743,7 +1740,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
         // try to get PNG first
         Bitmap aBmp;
 
-        bRet = GetBitmapEx( aFlavor, aBmp );
+        bRet = GetBitmap(aFlavor, aBmp);
         if( bRet )
             rGraphic = aBmp;
     }
@@ -1764,7 +1761,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     {
         Bitmap aBitmap;
 
-        bRet = GetBitmapEx(aFlavor, aBitmap);
+        bRet = GetBitmap(aFlavor, aBitmap);
         if (bRet)
             rGraphic = aBitmap;
     }
@@ -1773,7 +1770,7 @@ bool TransferableDataHelper::GetGraphic( const css::datatransfer::DataFlavor& rF
     {
         Bitmap aBmp;
 
-        bRet = GetBitmapEx( aFlavor, aBmp );
+        bRet = GetBitmap(aFlavor, aBmp);
         if( bRet )
             rGraphic = aBmp;
     }

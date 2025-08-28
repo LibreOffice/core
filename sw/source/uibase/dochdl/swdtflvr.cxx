@@ -669,7 +669,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         case SotClipboardFormatId::PNG:
             // Neither pClpBitmap nor pClpGraphic are necessarily set
             if( (m_eBufferType & TransferBufferType::Graphic) && (m_oClpBitmap || m_oClpGraphic))
-                bOK = SetBitmapEx( (m_oClpBitmap ? m_oClpBitmap : m_oClpGraphic)->GetBitmap(), rFlavor );
+                bOK = SetBitmap((m_oClpBitmap ? m_oClpBitmap : m_oClpGraphic)->GetBitmap(), rFlavor);
             break;
 
         case SotClipboardFormatId::SVIM:

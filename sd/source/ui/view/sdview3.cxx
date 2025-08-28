@@ -1318,7 +1318,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         Bitmap aBmp;
 
         // get basic Bitmap data
-        rDataHelper.GetBitmapEx(SotClipboardFormatId::BITMAP, aBmp);
+        rDataHelper.GetBitmap(SotClipboardFormatId::BITMAP, aBmp);
 
         if(aBmp.IsEmpty())
         {

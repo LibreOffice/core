@@ -231,7 +231,7 @@ protected:
 
     bool                SetAny( const css::uno::Any& rAny );
     bool                SetString( const OUString& rString );
-    bool                SetBitmapEx( const Bitmap& rBitmap, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetBitmap(const Bitmap& rBitmap, const css::datatransfer::DataFlavor& rFlavor);
     bool                SetGDIMetaFile( const GDIMetaFile& rMtf );
     bool                SetGraphic( const Graphic& rGraphic );
     bool                SetImageMap( const ImageMap& rIMap );
@@ -314,8 +314,8 @@ public:
     bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr ) const;
     bool                        GetString( const css::datatransfer::DataFlavor& rFlavor, OUString& rStr ) const;
 
-    bool                        GetBitmapEx( SotClipboardFormatId nFormat, Bitmap& rBmp ) const;
-    bool                        GetBitmapEx( const css::datatransfer::DataFlavor& rFlavor, Bitmap& rBmp ) const;
+    bool                        GetBitmap(SotClipboardFormatId nFormat, Bitmap& rBmp) const;
+    bool                        GetBitmap(const css::datatransfer::DataFlavor& rFlavor, Bitmap& rBmp) const;
 
     /** Return as GDI metafile.
 

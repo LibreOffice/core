@@ -438,7 +438,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel, Point(), aScale, aScale ) );
             Bitmap aBmp( pVirtDev->GetBitmap( Point(), pVirtDev->GetOutputSize() ) );
-            bOK = SetBitmapEx( aBmp, rFlavor );
+            bOK = SetBitmap(aBmp, rFlavor);
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {

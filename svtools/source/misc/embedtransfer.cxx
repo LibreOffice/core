@@ -167,7 +167,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 }
                 else if ( ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG ) && m_oGraphic )
                 {
-                    bRet = SetBitmapEx( m_oGraphic->GetBitmap(), rFlavor );
+                    bRet = SetBitmap(m_oGraphic->GetBitmap(), rFlavor);
                 }
                 else if ( m_xObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {

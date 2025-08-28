@@ -576,7 +576,7 @@ void ChartController::executeDispatch_Paste()
         {
             // bitmap (non-graphic-manager)
             Bitmap aBmp;
-            if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmp ))
+            if (aDataHelper.GetBitmap(SotClipboardFormatId::BITMAP, aBmp))
                 aGraphic = Graphic( aBmp );
         }
         else if( aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
