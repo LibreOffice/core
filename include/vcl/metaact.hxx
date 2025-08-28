@@ -818,7 +818,7 @@ class VCL_DLLPUBLIC MetaBmpExScaleAction final : public MetaAction
 {
 private:
 
-    BitmapEx            maBmpEx;
+    Bitmap              maBmp;
     Point               maPt;
     Size                maSz;
 
@@ -835,18 +835,18 @@ public:
     SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
-                                              const BitmapEx& rBmpEx ) ;
+                                              const Bitmap& rBmp ) ;
 
     SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
+    const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
-    void                SetBitmapEx(const BitmapEx& rBmpEx) { maBmpEx = rBmpEx; }
+    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
     void                SetPoint(const Point& rPt) { maPt = rPt; }
     void                SetSize(const Size& rSz) { maSz = rSz; }
-    bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
+    bool                IsTransparent() const override { return GetBitmap().HasAlpha(); }
 };
 
 class VCL_DLLPUBLIC MetaBmpExScalePartAction final : public MetaAction

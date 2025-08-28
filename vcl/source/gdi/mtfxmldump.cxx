@@ -1017,8 +1017,8 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.startElement(sCurrentElementTag);
                 writePoint(rWriter, pMeta->GetPoint());
                 writeSize(rWriter, pMeta->GetSize());
-                Bitmap aBitmap = pMeta->GetBitmapEx().GetBitmap();
-                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
+                Bitmap aBitmap = pMeta->GetBitmap().CreateColorBitmap();
+                rWriter.attribute("transparenttype", convertBitmapTransparentType(pMeta->GetBitmap()));
                 writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }

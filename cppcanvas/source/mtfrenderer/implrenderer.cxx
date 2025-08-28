@@ -2211,7 +2211,7 @@ namespace cppcanvas::internal
 
                         std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
-                                    Bitmap(pAct->GetBitmapEx()),
+                                    pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
                                     vcl::unotools::b2DPointFromPoint( pAct->GetPoint() ),
                                     rStates.getState().mapModeTransform *

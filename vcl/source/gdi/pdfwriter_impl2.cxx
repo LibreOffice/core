@@ -775,9 +775,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMPEXSCALE:
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
+                    Bitmap aBitmap( pA->GetBitmap() );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), aBitmap, aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 

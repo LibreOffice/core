@@ -70,7 +70,7 @@ VCL_DLLPUBLIC ::Bitmap CanvasTransformBitmap( const ::Bitmap& rBitmap,
 
 VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixedTransparence, float fTransparence, const AlphaMask & rNewMask);
 
-VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap, BitmapEx & aBmpEx, basegfx::B2DPolyPolygon const & rClipPath);
+VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap, Bitmap & aBmp, basegfx::B2DPolyPolygon const & rClipPath);
 
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx);
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);

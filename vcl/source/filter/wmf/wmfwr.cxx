@@ -1261,8 +1261,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
             case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
-                Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
-                AlphaMask                   aMsk( pA->GetBitmapEx().GetAlphaMask() );
+                Bitmap                      aBmp( pA->GetBitmap().CreateColorBitmap() );
+                AlphaMask                   aMsk( pA->GetBitmap().CreateAlphaMask() );
 
                 if( !aMsk.IsEmpty() )
                 {

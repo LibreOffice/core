@@ -651,7 +651,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
                         {
                             MetaBmpExScaleAction* pScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
                             assert(pScaleAction);
-                            aBmp = Bitmap(pScaleAction->GetBitmapEx());
+                            aBmp = pScaleAction->GetBitmap();
                             aPos = pScaleAction->GetPoint();
                             aSize = pScaleAction->GetSize();
                         }
@@ -662,7 +662,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
                         ImplApplyBitmapResolution( aGraphic, nImageResolution,
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );
 
-                        rtl::Reference<MetaAction> pNewAction = new MetaBmpExScaleAction( aPos, aSize, BitmapEx(aGraphic.GetBitmap()) );
+                        rtl::Reference<MetaAction> pNewAction = new MetaBmpExScaleAction( aPos, aSize, aGraphic.GetBitmap() );
                         aMtf.ReplaceAction( pNewAction, i );
                         break;
                     }

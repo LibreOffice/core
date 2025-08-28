@@ -734,7 +734,7 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         // the bitmap has, this will be an always correct metafile
         if (aBitmap.HasAlpha())
         {
-            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), aBitmap.GetPrefSize(), BitmapEx(aBitmap)));
+            pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), aBitmap.GetPrefSize(), aBitmap));
         }
         else
         {

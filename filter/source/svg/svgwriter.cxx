@@ -1581,7 +1581,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             case MetaActionType::BMPEXSCALE:
             {
                 const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-                nChecksum = pA->GetBitmapEx().GetChecksum();
+                nChecksum = pA->GetBitmap().GetChecksum();
                 aPt = pA->GetPoint();
                 aSz = pA->GetSize();
             }
@@ -3929,9 +3929,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
                     else
                     {
-                        ImplWriteBmp( pA->GetBitmapEx(),
+                        ImplWriteBmp( BitmapEx(pA->GetBitmap()),
                                       pA->GetPoint(), pA->GetSize(),
-                                      Point(), pA->GetBitmapEx().GetSizePixel(), pxShape );
+                                      Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                     }
                 }
             }

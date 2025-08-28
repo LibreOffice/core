@@ -176,7 +176,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                 break;
 
             case MetaActionType::BMPEXSCALE:
-                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, Bitmap(aBmpEx)));
                 break;
 
             case MetaActionType::BMPEXSCALEPART:
@@ -236,7 +236,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                 break;
 
             case MetaActionType::BMPEXSCALE:
-                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
+                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, Bitmap(aBmpEx)));
                 break;
 
             case MetaActionType::BMPEXSCALEPART:

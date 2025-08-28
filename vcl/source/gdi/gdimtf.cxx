@@ -1009,11 +1009,11 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                 MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                 tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Polygon(tools::Rectangle( pAct->GetPoint(), pAct->GetSize() )), aRotAnchor, aRotOffset, fSin, fCos ) );
                 tools::Rectangle           aBmpRect( aBmpPoly.GetBoundRect() );
-                BitmapEx            aBmpEx( pAct->GetBitmap() );
+                Bitmap            aBmp( pAct->GetBitmap() );
 
-                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
+                aBmp.Rotate( nAngle10, COL_TRANSPARENT );
                 aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(),
-                                                          aBmpEx ) );
+                                                          aBmp ) );
             }
             break;
 
@@ -1022,12 +1022,12 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                 tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Polygon(tools::Rectangle( pAct->GetDestPoint(), pAct->GetDestSize() )), aRotAnchor, aRotOffset, fSin, fCos ) );
                 tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
-                BitmapEx                aBmpEx( pAct->GetBitmap() );
+                Bitmap                aBmp( pAct->GetBitmap() );
 
-                aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
-                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
+                aBmp.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
+                aBmp.Rotate( nAngle10, COL_TRANSPARENT );
 
-                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmp ) );
             }
             break;
 
@@ -1036,11 +1036,11 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                 MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                 tools::Polygon aBmpPoly( ImplGetRotatedPolygon( tools::Polygon(tools::Rectangle( pAct->GetPoint(), pAct->GetSize() )), aRotAnchor, aRotOffset, fSin, fCos ) );
                 tools::Rectangle               aBmpRect( aBmpPoly.GetBoundRect() );
-                BitmapEx                aBmpEx( pAct->GetBitmapEx() );
+                Bitmap                aBmp( pAct->GetBitmap() );
 
-                aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
+                aBmp.Rotate( nAngle10, COL_TRANSPARENT );
 
-                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmp ) );
             }
             break;
 
@@ -1054,7 +1054,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
                 aBmpEx.Crop( tools::Rectangle( pAct->GetSrcPoint(), pAct->GetSrcSize() ) );
                 aBmpEx.Rotate( nAngle10, COL_TRANSPARENT );
 
-                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), aBmpEx ) );
+                aMtf.AddAction( new MetaBmpExScaleAction( aBmpRect.TopLeft(), aBmpRect.GetSize(), Bitmap(aBmpEx) ) );
             }
             break;
 
@@ -1957,7 +1957,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             {
                 MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                 aMtf.push_back( new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(),
-                                                          BitmapEx(pFncBmp( Bitmap(pAct->GetBitmapEx()), pBmpParam )) )
+                                                          pFncBmp( pAct->GetBitmap(), pBmpParam ) )
                                                         );
             }
             break;
@@ -2226,7 +2226,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
             case MetaActionType::BMPSCALEPART:   nSizeBytes += static_cast<MetaBmpScalePartAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
 
             case MetaActionType::BMPEX:          nSizeBytes += static_cast<MetaBmpExAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
-            case MetaActionType::BMPEXSCALE:     nSizeBytes += static_cast<MetaBmpExScaleAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case MetaActionType::BMPEXSCALE:     nSizeBytes += static_cast<MetaBmpExScaleAction*>( pAction )->GetBitmap().GetSizeBytes(); break;
             case MetaActionType::BMPEXSCALEPART: nSizeBytes += static_cast<MetaBmpExScalePartAction*>( pAction )->GetBitmapEx().GetSizeBytes(); break;
 
             case MetaActionType::MASK:           nSizeBytes += static_cast<MetaMaskAction*>( pAction )->GetBitmap().GetSizeBytes(); break;

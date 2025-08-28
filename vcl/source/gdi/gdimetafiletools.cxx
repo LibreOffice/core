@@ -226,7 +226,7 @@ namespace
                 Size(
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
-                BitmapEx(rBitmapEx.GetBitmap(), aAlpha)));
+                Bitmap(BitmapEx(rBitmapEx.GetBitmap(), aAlpha))));
 
         return true;
     }
@@ -340,7 +340,7 @@ namespace
                 Size(
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
-                BitmapEx(rBitmap.CreateColorBitmap(), aAlpha)));
+                Bitmap(BitmapEx(rBitmap.CreateColorBitmap(), aAlpha))));
 
         return true;
     }
@@ -878,7 +878,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         aClips.back(),
                         pA->GetPoint(),
                         pA->GetSize(),
-                        pA->GetBitmapEx(),
+                        pA->GetBitmap(),
                         aTarget);
                     break;
                 }

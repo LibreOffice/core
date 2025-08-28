@@ -459,7 +459,7 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
         case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-            nChecksum = pA->GetBitmapEx().GetChecksum();
+            nChecksum = pA->GetBitmap().GetChecksum();
         }
         break;
         default: break;
@@ -488,7 +488,7 @@ MetaAction* CreateMetaBitmapAction( const MetaAction* pAction, const Point& rPt,
         case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-            pResAction = new MetaBmpExScaleAction( rPt, rSz, pA->GetBitmapEx() );
+            pResAction = new MetaBmpExScaleAction( rPt, rSz, pA->GetBitmap() );
         }
         break;
         default: break;
@@ -572,7 +572,7 @@ void MetaBitmapActionGetOrigSize( const MetaAction* pAction, Size& rSz )
         case MetaActionType::BMPEXSCALE:
         {
             const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-            const BitmapEx& rBitmap = pA->GetBitmapEx();
+            const Bitmap& rBitmap = pA->GetBitmap();
             rSz = rBitmap.GetSizePixel();
         }
         break;
@@ -2401,7 +2401,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< css::drawing::XDraw
                     const Point    aNullPt;
                     const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
 
-                    aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, BitmapEx(aGraphic.GetBitmap()) ) );
+                    aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmap() ) );
                     aMtf.SetPrefSize( aSize );
                     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
 

@@ -1101,21 +1101,21 @@ MetaBmpExScaleAction::~MetaBmpExScaleAction()
 {}
 
 MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
-                                            const BitmapEx& rBmpEx ) :
+                                            const Bitmap& rBmp ) :
     MetaAction  ( MetaActionType::BMPEXSCALE ),
-    maBmpEx     ( rBmpEx ),
+    maBmp       ( rBmp ),
     maPt        ( rPt ),
     maSz        ( rSz )
 {}
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
-    if (!AllowScale(maBmpEx.GetSizePixel(), pOut->LogicToPixel(maSz)))
+    if (!AllowScale(maBmp.GetSizePixel(), pOut->LogicToPixel(maSz)))
         return;
     if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maPt, maSz))))
         return;
 
-    pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
+    pOut->DrawBitmapEx( maPt, maSz, maBmp );
 }
 
 rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone() const

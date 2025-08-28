@@ -563,7 +563,7 @@ void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixedTransparence, 
 }
 
 
-void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBitmap, BitmapEx & aBmpEx, basegfx::B2DPolyPolygon const & rClipPath)
+void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap, Bitmap & aBmp, basegfx::B2DPolyPolygon const & rClipPath)
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     MapMode aMapMode( MapUnit::Map100thMM );
@@ -585,15 +585,15 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
     pVDev->EnableMapMode( false );
     const Bitmap aVDevMask(pVDev->GetBitmap(Point(), aSizePixel));
 
-    if(aBmpEx.IsAlpha())
+    if(aBmp.HasAlpha())
     {
         // bitmap already uses a Mask or Alpha, we need to blend that with
         // the new masking in pVDev.
         // need to blend in AlphaMask quality (8Bit)
         AlphaMask fromVDev(aVDevMask);
-        AlphaMask fromBmpEx(aBmpEx.GetAlphaMask());
         BitmapScopedReadAccess pR(fromVDev);
-        BitmapScopedWriteAccess pW(fromBmpEx);
+        BitmapScopedWriteAccess pW(aBmp);
+        assert(pR && pW);
 
         if(pR && pW)
         {
@@ -607,26 +607,27 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
                 for(tools::Long nX(0); nX < nWidth; nX++)
                 {
                     const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
-                    const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
+                    Color aCol = pW->GetColorFromData(pScanlineW, nX);
+                    const sal_uInt8 nIndW(aCol.GetAlpha());
 
                     // these values represent alpha (255 == no, 0 == fully transparent),
                     // so to blend these we have to multiply
                     const sal_uInt8 nCombined((nIndR * nIndW) >> 8);
 
-                    pW->SetPixelOnData(pScanlineW, nX, BitmapColor(nCombined));
+                    aCol.SetAlpha(nCombined);
+                    pW->SetPixelOnData(pScanlineW, nX, aCol);
                 }
             }
         }
 
         pR.reset();
         pW.reset();
-        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), fromBmpEx);
     }
     else
     {
         // no mask yet, create and add new mask. For better quality, use Alpha,
         // this allows the drawn mask being processed with AntiAliasing (AAed)
-        aBmpEx = BitmapEx(rBitmap.GetBitmap(), aVDevMask);
+        aBmp = Bitmap(BitmapEx(rBitmap, aVDevMask));
     }
 }
 

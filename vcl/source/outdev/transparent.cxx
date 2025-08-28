@@ -825,7 +825,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
 
             case MetaActionType::BMPEXSCALE:
             case MetaActionType::BMPEXSCALEPART:
-                aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
+                aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmap();
                 break;
 
             case MetaActionType::Transparent:

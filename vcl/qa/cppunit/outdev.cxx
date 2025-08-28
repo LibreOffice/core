@@ -370,7 +370,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
     auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
-    const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
+    const Bitmap& rBitmapEx = pBitmapAction->GetBitmap();
     Size aTransformedSize = rBitmapEx.GetSizePixel();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16x16
@@ -378,7 +378,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
     // I.e. the bitmap before scaling was already scaled down, just because it was rotated.
     CPPUNIT_ASSERT_EQUAL(Size(16, 16), aTransformedSize);
 
-    aBitmap = rBitmapEx.GetBitmap();
+    aBitmap = rBitmapEx.CreateColorBitmap();
     BitmapScopedReadAccess pAccess(aBitmap);
     for (int i = 0; i < 16; ++i)
     {
@@ -435,9 +435,9 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExFlip)
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
     auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
-    const BitmapEx& rBitmapEx = pBitmapAction->GetBitmapEx();
+    const Bitmap& rBitmapEx = pBitmapAction->GetBitmap();
 
-    aBitmap = rBitmapEx.GetBitmap();
+    aBitmap = rBitmapEx.CreateColorBitmap();
     BitmapScopedReadAccess pAccess(aBitmap);
     int nX = 8 * 0.25;
     int nY = 8 * 0.25;

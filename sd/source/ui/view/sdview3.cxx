@@ -221,7 +221,7 @@ bool View::InsertMetaFile( const TransferableDataHelper& rDataHelper, const Poin
                             {
                                 MetaBmpExScaleAction* pBmpExScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
                                 if( pBmpExScaleAction )
-                                    aGraphic = Graphic( Bitmap(pBmpExScaleAction->GetBitmapEx()) );
+                                    aGraphic = Graphic( pBmpExScaleAction->GetBitmap() );
                             }
                             break;
                         default: break;
