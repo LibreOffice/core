@@ -22,7 +22,7 @@
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/dllapi.h>
 #include <optional>
@@ -60,8 +60,7 @@ public:
                     Wallpaper( const Wallpaper& rWallpaper );
                     Wallpaper( Wallpaper&& rWallpaper );
                     Wallpaper( const Color& rColor );
-                    explicit Wallpaper( const BitmapEx& rBmpEx );
-                    explicit Wallpaper( const Bitmap& rBmpEx );
+                    explicit Wallpaper( const Bitmap& rBmp );
                     ~Wallpaper();
 
     void            SetColor( const Color& rColor );

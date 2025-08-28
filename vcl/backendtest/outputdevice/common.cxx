@@ -11,6 +11,7 @@
 #include <test/outputdevice.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/bitmapex.hxx>
 #include <salgdi.hxx>
 
 #include <map>

@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/debug.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>

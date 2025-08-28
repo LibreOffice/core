@@ -130,12 +130,6 @@ Wallpaper::Wallpaper( const Color& rColor )
     meStyle    = WallpaperStyle::Tile;
 }
 
-Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
-{
-    maBitmap   = Bitmap(rBmpEx);
-    meStyle    = WallpaperStyle::Tile;
-}
-
 Wallpaper::Wallpaper( const Bitmap& rBmp )
 {
     maBitmap   = rBmp;
