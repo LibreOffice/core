@@ -52,12 +52,12 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-BitmapEx createBitmap()
+Bitmap createBitmap()
 {
     Bitmap aBitmap(Size(100, 50), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 void XGraphicTest::testGraphic()

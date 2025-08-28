@@ -274,11 +274,11 @@ static void setupBaseVirtualDevice(VirtualDevice& rDevice, GDIMetaFile& rMeta)
 
 void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtualDev, const GDIMetaFile& rMetaFile, const char * where)
 {
-    BitmapEx aSourceBitmapEx( pVirtualDev->GetBitmap(Point(), Size(10, 10)) );
+    Bitmap aSourceBitmap( pVirtualDev->GetBitmap(Point(), Size(10, 10)) );
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevResult;
     pVirtualDevResult->SetOutputSizePixel(Size(10, 10));
     const_cast<GDIMetaFile&>(rMetaFile).Play(*pVirtualDevResult);
-    BitmapEx aResultBitmapEx( pVirtualDevResult->GetBitmap(Point(), Size(10, 10)) );
+    Bitmap aResultBitmap( pVirtualDevResult->GetBitmap(Point(), Size(10, 10)) );
 
     const bool bWriteCompareBitmap = false;
 
@@ -290,15 +290,15 @@ void SvmTest::checkRendering(ScopedVclPtrInstance<VirtualDevice> const & pVirtua
         {
             SvFileStream aStream(aTempFile.GetURL() + ".source.png", StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PngImageWriter aPNGWriter(aStream);
-            aPNGWriter.write(aSourceBitmapEx);
+            aPNGWriter.write(aSourceBitmap);
         }
         {
             SvFileStream aStream(aTempFile.GetURL() + ".result.png", StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PngImageWriter aPNGWriter(aStream);
-            aPNGWriter.write(aResultBitmapEx);
+            aPNGWriter.write(aSourceBitmap);
         }
     }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(where, aSourceBitmapEx.GetChecksum(), aResultBitmapEx.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(where, aSourceBitmap.GetChecksum(), aResultBitmap.GetChecksum());
 }
 
 static GDIMetaFile readMetafile(const OUString& rUrl)

@@ -33,10 +33,10 @@ class BackendTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(rBitmapEx);
-            aBitmapEx.Scale(Size(128, 128), BmpScaleFlag::Fast);
+            Bitmap aBitmap(rBitmapEx);
+            aBitmap.Scale(Size(128, 128), BmpScaleFlag::Fast);
             SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
         }
     }
 
@@ -47,7 +47,7 @@ class BackendTest : public test::BootstrapFixture
             Bitmap aBitmap(rBitmap);
             aBitmap.Scale(Size(128, 128), BmpScaleFlag::Fast);
             SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(BitmapEx(aBitmap), aStream);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
         }
     }
 
@@ -55,9 +55,9 @@ class BackendTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
+            Bitmap aBitmap(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
         }
     }
 

@@ -229,7 +229,7 @@ void GlowPrimitive2D::create2DDecomposition(
         {
             SvFileStream aNew(sDumpPath + "test_glow.png", StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PngImageWriter aPNGWriter(aNew);
-            aPNGWriter.write(result);
+            aPNGWriter.write(Bitmap(result));
         }
     }
 #endif

@@ -105,7 +105,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                     // offset of the sub-image within the total animation
                     aTransMap.SetOrigin( Point( rStepBmp.maPositionPixel.X(), rStepBmp.maPositionPixel.Y() ) );
                     pVDev->SetMapMode( aTransMap );
-                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.maBitmapEx, pRect ) );
+                    pVDev->DrawPolyPolygon( CreateAutoContour( Bitmap(rStepBmp.maBitmapEx), pRect ) );
                 }
 
                 aTransMap.SetOrigin( Point() );
@@ -651,7 +651,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
                 Bitmap aBmp = aGraphic.GetBitmap().CreateColorBitmap();
-                aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
+                aGraphic = Graphic( Bitmap(BitmapEx( aBmp, aMask )) );
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);

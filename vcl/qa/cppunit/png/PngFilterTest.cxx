@@ -1739,7 +1739,7 @@ void PngFilterTest::testMsGifInPng()
             aTempFile.EnableKillingFile();
         {
             SvStream& rStream = *aTempFile.GetStream(StreamMode::WRITE);
-            BitmapEx aDummyBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
+            Bitmap aDummyBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
             vcl::PngImageWriter aPngWriter(rStream);
             aPngWriter.setParameters(aPNGParameters);
             bool bWriteSuccess = aPngWriter.write(aDummyBitmap);
@@ -1786,10 +1786,9 @@ void PngFilterTest::testPngRoundtrip8BitGrey()
                 }
             }
         }
-        BitmapEx aBitmapEx(aBitmap);
 
         vcl::PngImageWriter aPngWriter(rStream);
-        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmap));
         aTempFile.CloseStream();
     }
     {
@@ -1834,10 +1833,9 @@ void PngFilterTest::testPngRoundtrip24()
                 }
             }
         }
-        BitmapEx aBitmapEx(aBitmap);
 
         vcl::PngImageWriter aPngWriter(rStream);
-        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmap));
     }
     {
         SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
@@ -1889,7 +1887,7 @@ void PngFilterTest::testPngRoundtrip24_8()
         }
         BitmapEx aBitmapEx(aBitmap, aAlpha);
         vcl::PngImageWriter aPngWriter(rStream);
-        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(Bitmap(aBitmapEx)));
     }
     {
         SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
@@ -1937,9 +1935,8 @@ void PngFilterTest::testPngWrite8BitRGBPalette()
                 }
             }
         }
-        BitmapEx aBitmapEx(aBitmap);
         vcl::PngImageWriter aPngWriter(aExportStream);
-        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmapEx));
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmap));
     }
     aExportStream.Seek(0);
     {
@@ -1981,7 +1978,7 @@ void PngFilterTest::testTdf153180MonochromeFilterPngExport()
     Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
     BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
 
-    Graphic aGraphicAfterFilter{ BitmapEx(aTmpBmp, aAlphaMask) };
+    Graphic aGraphicAfterFilter{ Bitmap(BitmapEx(aTmpBmp, aAlphaMask)) };
     CPPUNIT_ASSERT(aGraphicAfterFilter.IsAlpha());
 
     // export the resulting graphic

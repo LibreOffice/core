@@ -22,7 +22,7 @@ using namespace css;
 
 namespace
 {
-BitmapEx createBitmap(Size aSize, bool bAlpha = false)
+Bitmap createBitmap(Size aSize, bool bAlpha = false)
 {
     Bitmap aBitmap(aSize, vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
@@ -35,23 +35,23 @@ BitmapEx createBitmap(Size aSize, bool bAlpha = false)
         sal_uInt8 uAlphaValue = 0x80;
         AlphaMask aAlphaMask(aSize, &uAlphaValue);
 
-        return BitmapEx(aBitmap, aAlphaMask);
+        return Bitmap(BitmapEx(aBitmap, aAlphaMask));
     }
     else
     {
-        return BitmapEx(aBitmap);
+        return aBitmap;
     }
 }
 
 void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType,
                                   Size aSize = Size(120, 100), bool bAlpha = false)
 {
-    BitmapEx aBitmapEx = createBitmap(aSize, bAlpha);
+    Bitmap aBitmap = createBitmap(aSize, bAlpha);
 
     uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
-    rGraphicFilter.ExportGraphic(aBitmapEx, u"none", rStream, nFilterFormat, &aFilterData);
+    rGraphicFilter.ExportGraphic(aBitmap, u"none", rStream, nFilterFormat, &aFilterData);
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }

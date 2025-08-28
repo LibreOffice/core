@@ -30,15 +30,15 @@ class VclCjkTextTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
+            Bitmap aBitmap(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
             OUString cwd;
             CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_getProcessWorkingDir(&cwd.pData));
             OUString url;
             CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
                                  osl::FileBase::getAbsoluteFileURL(cwd, filename, url));
             SvFileStream aStream(url, StreamMode::WRITE | StreamMode::TRUNC);
-            CPPUNIT_ASSERT_EQUAL(
-                ERRCODE_NONE, GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream));
+            CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                                 GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream));
         }
     }
 

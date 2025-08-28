@@ -577,8 +577,8 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj1, bool bScale)
                         const Size aClipSize(
                             basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Width()), aPixel.getWidth()))),
                             basegfx::fround<tools::Long>(ceil(std::min(static_cast<double>(aOrigSizePixel.Height()), aPixel.getHeight()))));
-                        const BitmapEx aClippedBitmap(
-                            BitmapEx(aBitmap),
+                        const Bitmap aClippedBitmap(
+                            aBitmap,
                             aClipTopLeft,
                             aClipSize);
 
@@ -1133,7 +1133,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        rAct.GetBitmapEx(),
+        Bitmap(rAct.GetBitmapEx()),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1148,7 +1148,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScaleAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        rAct.GetBitmapEx(),
+        Bitmap(rAct.GetBitmapEx()),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1310,14 +1310,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTextRectAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
-    BitmapEx aBitmapEx(rAct.GetBitmap());
+    Bitmap aBitmap(rAct.GetBitmap());
 
     aRect.AdjustRight( 1 );
     aRect.AdjustBottom( 1 );
-    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmap.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        aBitmap,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1329,14 +1329,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetDestPoint(),rAct.GetDestSize());
-    BitmapEx aBitmapEx(rAct.GetBitmapEx());
+    Bitmap aBitmap(rAct.GetBitmapEx());
 
     aRect.AdjustRight( 1 );
     aRect.AdjustBottom( 1 );
-    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmap.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        aBitmap,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1353,7 +1353,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        Bitmap(aBitmapEx),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1370,7 +1370,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction const & rAct)
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        Bitmap(aBitmapEx),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1388,7 +1388,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction const & rAct)
     aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        aBitmapEx,
+        Bitmap(aBitmapEx),
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)

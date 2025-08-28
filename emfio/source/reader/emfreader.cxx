@@ -1655,7 +1655,7 @@ namespace emfio
                                             SvFileStream aNew(sDumpPath + "metafile_content.png",
                                                             StreamMode::WRITE | StreamMode::TRUNC);
                                             vcl::PngImageWriter aPNGWriter(aNew);
-                                            aPNGWriter.write(aBitmapEx);
+                                            aPNGWriter.write(Bitmap(aBitmapEx));
                                         }
                                     }
 #endif

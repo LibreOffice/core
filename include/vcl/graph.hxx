@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -92,7 +92,6 @@ public:
                     Graphic( const Graphic& rGraphic );
                     Graphic( Graphic&& rGraphic ) noexcept;
                     Graphic( const Image& rImage );
-                    Graphic( const BitmapEx& rBmpEx );
                     Graphic( const Bitmap& rBmp );
                     Graphic( const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
@@ -126,7 +125,7 @@ public:
     // MetaFile when played. Defaults will use a no-AAed, not snapped conversion as
     // before.
     Bitmap          GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
-    /// Gives direct access to the contained BitmapEx.
+    /// Gives direct access to the contained Bitmap.
     const Bitmap&   GetBitmapRef() const;
 
     Animation       GetAnimation() const;
@@ -152,7 +151,7 @@ public:
     void            Draw(OutputDevice& rOutDev, const Point& rDestPt,
                          const Size& rDestSize) const;
     static void     DrawEx(OutputDevice& rOutDev, const OUString& rText,
-                           vcl::Font& rFont, const BitmapEx& rBitmap,
+                           vcl::Font& rFont, const Bitmap& rBitmap,
                            const Point& rDestPt, const Size& rDestSize);
 
     void            StartAnimation(OutputDevice& rOutDev,

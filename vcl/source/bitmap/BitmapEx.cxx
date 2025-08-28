@@ -1446,7 +1446,7 @@ void BitmapEx::DumpAsPng(const char* pFileName) const
     SvFileStream aStream(sPath, StreamMode::STD_READWRITE | StreamMode::TRUNC);
     assert(aStream.good());
     vcl::PngImageWriter aWriter(aStream);
-    aWriter.write(*this);
+    aWriter.write(Bitmap(*this));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

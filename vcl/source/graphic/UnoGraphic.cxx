@@ -202,7 +202,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::colorChange(
                 Bitmap aBitmap2(aBitmap);
                 AlphaMask aMask(aBitmap2.CreateAlphaMask(aColorFrom, nTolerance));
                 aBitmap2.Replace(aColorFrom, aColorTo, nTolerance);
-                aReturnGraphic = ::Graphic(BitmapEx(aBitmap2, aMask));
+                aReturnGraphic = ::Graphic(Bitmap(BitmapEx(aBitmap2, aMask)));
             }
             else
             {

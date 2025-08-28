@@ -119,7 +119,7 @@ void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
     };
 
     sal_uInt16 aFilterType = mpGraphicFilter->GetExportFormatNumberForShortName(aFilterShortName);
-    mpGraphicFilter->ExportGraphic(BitmapEx(aBitmap), u"", aStream, aFilterType, &aFilterData );
+    mpGraphicFilter->ExportGraphic(aBitmap, u"", aStream, aFilterType, &aFilterData );
 
     CPPUNIT_ASSERT(aStream.Tell() > 0);
 

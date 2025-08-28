@@ -34,9 +34,9 @@ class VclPixelProcessor2DTest : public test::BootstrapFixture
     {
         if (mbExportBitmap)
         {
-            BitmapEx aBitmapEx(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
+            Bitmap aBitmap(device->GetBitmap(Point(0, 0), device->GetOutputSizePixel()));
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
         }
     }
 

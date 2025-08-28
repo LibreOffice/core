@@ -209,7 +209,7 @@ namespace drawinglayer::primitive2d
                 {
                     // need to create FillGraphicPrimitive2D
                     const drawinglayer::attribute::FillGraphicAttribute aAttribute(
-                        Graphic(bitmap),
+                        Graphic(Bitmap(bitmap)),
                         maFillGraphicAttribute.getGraphicRange(),
                         maFillGraphicAttribute.getTiling(),
                         maFillGraphicAttribute.getOffsetX(),

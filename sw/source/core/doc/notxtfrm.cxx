@@ -145,7 +145,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
 
     const Bitmap& rBmp = bDefect ? const_cast<SwViewShell&>(rSh).GetErrorBitmap()
                                  : const_cast<SwViewShell&>(rSh).GetReplacementBitmap();
-    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, BitmapEx(rBmp), rRect.Pos(), rRect.SSize());
+    Graphic::DrawEx(*rSh.GetOut(), rText, aFont, rBmp, rRect.Pos(), rRect.SSize());
 }
 
 SwNoTextFrame::SwNoTextFrame(SwNoTextNode * const pNode, SwFrame* pSib )

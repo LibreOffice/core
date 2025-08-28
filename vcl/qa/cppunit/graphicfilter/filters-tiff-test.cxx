@@ -211,7 +211,7 @@ void TiffFilterTest::testRoundtrip()
     SvMemoryStream aStream;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(u"tif");
-    rFilter.ExportGraphic(Graphic(BitmapEx(aBitmap)), u"none", aStream, nFilterFormat);
+    rFilter.ExportGraphic(Graphic(aBitmap), u"none", aStream, nFilterFormat);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;

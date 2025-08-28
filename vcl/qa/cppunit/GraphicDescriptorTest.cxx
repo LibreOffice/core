@@ -49,22 +49,22 @@ class GraphicDescriptorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST_SUITE_END();
 };
 
-BitmapEx createBitmap()
+Bitmap createBitmap()
 {
     Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
 
-    return BitmapEx(aBitmap);
+    return aBitmap;
 }
 
 void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType)
 {
-    BitmapEx aBitmapEx = createBitmap();
+    Bitmap aBitmap = createBitmap();
 
     uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
-    rGraphicFilter.ExportGraphic(aBitmapEx, u"none", rStream, nFilterFormat, &aFilterData);
+    rGraphicFilter.ExportGraphic(aBitmap, u"none", rStream, nFilterFormat, &aFilterData);
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }

@@ -52,7 +52,7 @@ GraphicTest::~GraphicTest()
 
 namespace
 {
-BitmapEx createBitmap(bool alpha = false)
+Bitmap createBitmap(bool alpha = false)
 {
     Bitmap aBitmap(Size(120, 100), vcl::PixelFormat::N24_BPP);
     aBitmap.Erase(COL_LIGHTRED);
@@ -65,22 +65,22 @@ BitmapEx createBitmap(bool alpha = false)
         sal_uInt8 uAlphaValue = 0x80;
         AlphaMask aAlphaMask(Size(120, 100), &uAlphaValue);
 
-        return BitmapEx(aBitmap, aAlphaMask);
+        return Bitmap(BitmapEx(aBitmap, aAlphaMask));
     }
     else
     {
-        return BitmapEx(aBitmap);
+        return aBitmap;
     }
 }
 
 void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType, bool alpha)
 {
-    BitmapEx aBitmapEx = createBitmap(alpha);
+    Bitmap aBitmap = createBitmap(alpha);
 
     uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
-    rGraphicFilter.ExportGraphic(aBitmapEx, u"none", rStream, nFilterFormat, &aFilterData);
+    rGraphicFilter.ExportGraphic(aBitmap, u"none", rStream, nFilterFormat, &aFilterData);
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }
@@ -297,11 +297,11 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testUnloadedGraphicLoadingWebp)
 CPPUNIT_TEST_FIXTURE(GraphicTest, testUnloadedGraphicWmf)
 {
     // Create some in-memory WMF data, set its own preferred size to 99x99.
-    BitmapEx aBitmapEx = createBitmap();
+    Bitmap aBitmap = createBitmap();
     SvMemoryStream aStream;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"wmf");
-    Graphic aGraphic(aBitmapEx);
+    Graphic aGraphic(aBitmap);
     aGraphic.SetPrefSize(Size(99, 99));
     aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
     rGraphicFilter.ExportGraphic(aGraphic, u"none", aStream, nFilterFormat);

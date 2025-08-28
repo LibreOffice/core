@@ -635,7 +635,7 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationFrame aAnimationFrame( aAnimation.Get( i ) );
-        aAnimationFrame.maBitmapEx = BitmapEx(Mask(aAnimationFrame.maBitmapEx).GetBitmap());
+        aAnimationFrame.maBitmapEx = BitmapEx(Mask(Bitmap(aAnimationFrame.maBitmapEx)).GetBitmap());
         aAnimation.Replace(aAnimationFrame, i);
     }
 
@@ -810,7 +810,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMP:
                 {
                     MetaBmpAction*  pAct = static_cast<MetaBmpAction*>(pAction);
-                    const Bitmap    aBmp( Mask(BitmapEx(pAct->GetBitmap())).GetBitmap().CreateColorBitmap() );
+                    const Bitmap    aBmp( Mask(pAct->GetBitmap()).GetBitmap().CreateColorBitmap() );
 
                     pAct = new MetaBmpAction( pAct->GetPoint(), aBmp );
                     aMtf.AddAction( pAct );
@@ -820,7 +820,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPSCALE:
                 {
                     MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
-                    const Bitmap        aBmp( Mask(BitmapEx(pAct->GetBitmap())).GetBitmap().CreateColorBitmap() );
+                    const Bitmap        aBmp( Mask(pAct->GetBitmap()).GetBitmap().CreateColorBitmap() );
 
                     pAct = new MetaBmpScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmp );
                     aMtf.AddAction( pAct );
@@ -830,7 +830,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPSCALEPART:
                 {
                     MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
-                    const Bitmap            aBmp( Mask(BitmapEx(pAct->GetBitmap())).GetBitmap().CreateColorBitmap() );
+                    const Bitmap            aBmp( Mask(pAct->GetBitmap()).GetBitmap().CreateColorBitmap() );
 
                     pAct = new MetaBmpScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
                                                        pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmp );
@@ -841,7 +841,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEX:
                 {
                     MetaBmpExAction*    pAct = static_cast<MetaBmpExAction*>(pAction);
-                    const BitmapEx      aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmap() );
+                    const BitmapEx      aBmpEx( Mask( Bitmap(pAct->GetBitmapEx()) ).GetBitmap() );
 
                     pAct = new MetaBmpExAction( pAct->GetPoint(), aBmpEx );
                     aMtf.AddAction( pAct );
@@ -851,7 +851,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEXSCALE:
                 {
                     MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
-                    const BitmapEx          aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmap() );
+                    const BitmapEx          aBmpEx( Mask( Bitmap(pAct->GetBitmapEx()) ).GetBitmap() );
 
                     pAct = new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmpEx );
                     aMtf.AddAction( pAct );
@@ -861,7 +861,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEXSCALEPART:
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
-                    const BitmapEx              aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmap() );
+                    const BitmapEx              aBmpEx( Mask( Bitmap(pAct->GetBitmapEx()) ).GetBitmap() );
 
                     pAct = new MetaBmpExScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
                                                          pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmpEx );

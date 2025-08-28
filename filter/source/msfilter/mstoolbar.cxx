@@ -292,7 +292,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                 // Without a command openoffice won't display the icon
                 if ( !sCommand.isEmpty() )
                 {
-                    BitmapEx aBitEx( pIcon->getBitMap() );
+                    Bitmap aBit( pIcon->getBitMap() );
                     TBCBitMap* pIconMask = pSpecificInfo->getIconMask();
                     if (pIconMask)
                     {
@@ -303,11 +303,11 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                             // according to the spec:
                             // "the iconMask is white in all the areas in which the icon is
                             // displayed as transparent and is black in all other areas."
-                            aBitEx = BitmapEx(aBitEx.GetBitmap(), rMaskBase.CreateAlphaMask(COL_WHITE));
+                            aBit = Bitmap(BitmapEx(aBit.CreateColorBitmap(), rMaskBase.CreateAlphaMask(COL_WHITE)));
                         }
                     }
 
-                    Graphic aGraphic( aBitEx );
+                    Graphic aGraphic( aBit );
                     helper.addIcon( aGraphic.GetXGraphic(), sCommand );
                 }
             }

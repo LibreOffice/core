@@ -37,14 +37,14 @@ namespace
 {
 
 void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
-                     vcl::Font* pFont, const BitmapEx* pBitmapEx,
+                     vcl::Font* pFont, const Bitmap* pBitmap,
                      const Point& rDestPt, const Size& rDestSize)
 {
     sal_uInt16  nPixel = static_cast<sal_uInt16>(rOutDev.PixelToLogic( Size( 1, 1 ) ).Width());
     sal_uInt16  nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
-    bool        bFilled = ( pBitmapEx != nullptr || pFont != nullptr );
+    bool        bFilled = ( pBitmap != nullptr || pFont != nullptr );
     tools::Rectangle   aBorderRect( aPoint, aSize );
 
     auto popIt = rOutDev.ScopedPush();
@@ -59,13 +59,13 @@ void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
     aSize.AdjustWidth( -(2*nPixelWidth + 4*nPixel) );
     aSize.AdjustHeight( -(2*nPixelWidth + 4*nPixel) );
 
-    if( !aSize.IsEmpty() && pBitmapEx && !pBitmapEx->IsEmpty() )
+    if( !aSize.IsEmpty() && pBitmap && !pBitmap->IsEmpty() )
     {
-        Size aBitmapSize( rOutDev.PixelToLogic( pBitmapEx->GetSizePixel() ) );
+        Size aBitmapSize( rOutDev.PixelToLogic( pBitmap->GetSizePixel() ) );
 
         if( aSize.Height() > aBitmapSize.Height() && aSize.Width() > aBitmapSize.Width() )
         {
-            rOutDev.DrawBitmapEx( aPoint, *pBitmapEx );
+            rOutDev.DrawBitmapEx( aPoint, *pBitmap );
             aPoint.AdjustX(aBitmapSize.Width() + 2*nPixel );
             aSize.AdjustWidth( -(aBitmapSize.Width() + 2*nPixel) );
         }
@@ -184,11 +184,6 @@ Graphic::Graphic(std::shared_ptr<GfxLink> const & rGfxLink, sal_Int32 nPageIndex
 
 Graphic::Graphic(GraphicExternalLink const & rGraphicExternalLink)
     : mxImpGraphic(new ImpGraphic(rGraphicExternalLink))
-{
-}
-
-Graphic::Graphic(const BitmapEx& rBitmapEx)
-    : mxImpGraphic(new ImpGraphic(Bitmap(rBitmapEx)))
 {
 }
 
@@ -430,7 +425,7 @@ void Graphic::Draw(OutputDevice& rOutDev, const Point& rDestPt,
 }
 
 void Graphic::DrawEx(OutputDevice& rOutDev, const OUString& rText,
-                     vcl::Font& rFont, const BitmapEx& rBitmap,
+                     vcl::Font& rFont, const Bitmap& rBitmap,
                      const Point& rDestPt, const Size& rDestSz)
 {
     ImplDrawDefault(rOutDev, &rText, &rFont, &rBitmap, rDestPt, rDestSz);

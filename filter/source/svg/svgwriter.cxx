@@ -3018,7 +3018,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         }
     }
 
-    if( !(bCached || GraphicConverter::Export( aOStm, *pBitmap, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
+    if( !(bCached || GraphicConverter::Export( aOStm, Bitmap(*pBitmap), ConvertDataFormat::PNG ) == ERRCODE_NONE) )
         return;
 
     Point                    aPt;

@@ -89,7 +89,7 @@ private:
     {
         SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(BitmapEx(rBmp), aStream);
+        rFilter.compressAsPNG(rBmp, aStream);
     }
 };
 
@@ -237,7 +237,7 @@ void BitmapFilterTest::testPerformance()
         std::unique_ptr<SvFileStream> pStream(new SvFileStream(
             u"~/BlurBigPerformance.png"_ustr, StreamMode::WRITE | StreamMode::TRUNC));
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(BitmapEx(aResult), *pStream);
+        rFilter.compressAsPNG(aResult, *pStream);
 
         pStream.reset(new SvFileStream(u"~/BlurBigPerformance.txt"_ustr, StreamMode::WRITE));
         pStream->WriteOString("Blur average time: ");

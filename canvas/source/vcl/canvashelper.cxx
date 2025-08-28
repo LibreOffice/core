@@ -842,7 +842,7 @@ namespace vclcanvas
                         AlphaMask aAlpha( aBmp.CreateAlphaMask() );
                         aAlpha.Invert();
                         BitmapEx a2ndBmpEx( aBmp.CreateColorBitmap(), aAlpha );
-                        p2ndGrfObj = std::make_shared<GraphicObject>( a2ndBmpEx );
+                        p2ndGrfObj = std::make_shared<GraphicObject>( Bitmap(a2ndBmpEx) );
                     }
 
                     p2ndGrfObj->Draw(mp2ndOutDevProvider->getOutDev(),
