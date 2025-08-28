@@ -2656,10 +2656,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    OUStringBuffer aBuf(m_aInBuffer);
-                    comphelper::string::padToLength(aBuf,
-                        m_aInBuffer.getLength() + aKeyEvent.GetRepeat() + 1, aCh);
-                    m_aInBuffer = aBuf.makeStringAndClear();
+                    m_aInBuffer += OUString::Concat(RepeatedUChar(aCh, aKeyEvent.GetRepeat() + 1));
                     bool delayFlush = Application::AnyInput( VclInputFlags::KEYBOARD );
                     bFlushBuffer = !delayFlush;
                     if( delayFlush )

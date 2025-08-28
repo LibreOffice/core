@@ -3940,6 +3940,7 @@ using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
 using ::rtl::OUStringChar;
 using ::rtl::Concat2View;
+using RepeatedUChar = ::rtl::RepeatedChar_t<sal_Unicode>;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)

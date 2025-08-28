@@ -817,9 +817,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     if(!(rAny >>= aParam))
         return false;
 
-    OUStringBuffer sBuf(+(AUTH_FIELD_END - 1));
-    comphelper::string::padToLength(sBuf, (AUTH_FIELD_END - 1), TOX_STYLE_DELIMITER);
-    OUString sToSet(sBuf.makeStringAndClear());
+    OUString sToSet = OUString::Concat(RepeatedUChar(TOX_STYLE_DELIMITER, AUTH_FIELD_END - 1));
     for (const PropertyValue& rParam : aParam)
     {
         const sal_Int32 nFound = lcl_Find(rParam.Name);

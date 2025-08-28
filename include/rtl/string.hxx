@@ -2722,6 +2722,7 @@ using ::rtl::OStringChar;
 using ::rtl::Concat2View;
 using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
+using RepeatedChar = ::rtl::RepeatedChar_t<char>;
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
