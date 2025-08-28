@@ -26,6 +26,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filter_md, \
     tl \
     unotest \
     utl \
+    svl \
+    sfx \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_filter_md,\
@@ -35,6 +37,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_filter_md,\
 
 $(eval $(call gb_CppunitTest_set_include,sw_filter_md,\
     -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
     -I$(SRCDIR)/sw/qa/inc \
     $$(INCLUDE) \
 ))

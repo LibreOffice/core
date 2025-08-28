@@ -28,18 +28,21 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/itemiter.hxx>
+#include <editeng/fontitem.hxx>
 
 #include <officecfg/Office/Writer.hxx>
 
 #include <docary.hxx>
 #include <fmtpdsc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <mdiexp.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <redline.hxx>
 #include <strings.hrc>
 #include <txatbase.hxx>
+#include <charatr.hxx>
 #include "wrtmd.hxx"
 
 #include <algorithm>
@@ -59,6 +62,7 @@ struct FormattingStatus
     int nPostureChange = 0;
     int nUnderlineChange = 0;
     int nWeightChange = 0;
+    int nCodeChange = 0;
     std::unordered_map<OUString, int> aHyperlinkChanges;
     std::unordered_map<const SwRangeRedline*, int> aRedlineChanges;
 };
@@ -101,14 +105,14 @@ struct NodePositions
     }
 };
 
-void ApplyItem(FormattingStatus& rChange, const SfxPoolItem& rItem, int increment)
+void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& rItem, int increment)
 {
-    auto IterateItemSet = [&rChange, increment](const SfxItemSet& set) {
+    auto IterateItemSet = [&rWrt, &rChange, increment](const SfxItemSet& set) {
         SfxItemIter iter(set);
         while (!iter.IsAtEnd())
         {
             if (const auto* pNestedItem = iter.GetCurItem())
-                ApplyItem(rChange, *pNestedItem, increment);
+                ApplyItem(rWrt, rChange, *pNestedItem, increment);
             iter.NextItem();
         }
     };
@@ -150,6 +154,20 @@ void ApplyItem(FormattingStatus& rChange, const SfxPoolItem& rItem, int incremen
             if (auto pStyle = rItem.StaticWhichCast(RES_TXTATR_CHARFMT).GetCharFormat())
                 IterateItemSet(pStyle->GetAttrSet());
             break;
+        case RES_CHRATR_FONT:
+        {
+            const SvxFontItem& rFontItem = rItem.StaticWhichCast(RES_CHRATR_FONT);
+            SwDoc* pDoc = rWrt.m_pDoc;
+            IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+            SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+            if (rFontItem == pColl->GetFont())
+            {
+                // We know the import uses this font for code spans, so map this back to a code
+                // span.
+                rChange.nCodeChange += increment;
+            }
+            break;
+        }
     }
 }
 
@@ -162,19 +180,19 @@ void ApplyItem(FormattingStatus& rChange, const SwRangeRedline* pItem, int incre
 // that starts and/or ends at this position, every property that starts here increments respective
 // applied status, and properties that end here decrement their applied count (see comment for
 // FormattingStatus).
-FormattingStatus CalculateFormattingChange(NodePositions& positions, sal_Int32 pos,
-                                           const FormattingStatus& currentFormatting)
+FormattingStatus CalculateFormattingChange(SwMDWriter& rWrt, NodePositions& positions,
+                                           sal_Int32 pos, const FormattingStatus& currentFormatting)
 {
     FormattingStatus result(currentFormatting);
     // 1. Output closing attributes
     for (auto* p = positions.hintEnds.current(); p && p->first == pos;
          p = positions.hintEnds.next())
-        ApplyItem(result, *p->second, -1);
+        ApplyItem(rWrt, result, *p->second, -1);
 
     // 2. Output opening attributes
     for (auto* p = positions.hintStarts.current(); p && p->first == pos;
          p = positions.hintStarts.next())
-        ApplyItem(result, *p->second, +1);
+        ApplyItem(rWrt, result, *p->second, +1);
 
     // 3. Output closing redlines
     for (auto* p = positions.redlineEnds.current(); p && p->first == pos;
@@ -201,11 +219,16 @@ bool ShouldOpenIt(int prev, int curr) { return prev != curr && prev <= 0 && curr
 void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 pos,
                          FormattingStatus& current)
 {
-    FormattingStatus result = CalculateFormattingChange(positions, pos, current);
+    FormattingStatus result = CalculateFormattingChange(rWrt, positions, pos, current);
 
     // Closing stuff
 
     // TODO/FIXME: the closing characters must be right-flanking
+
+    if (ShouldCloseIt(current.nCodeChange, result.nCodeChange))
+    {
+        rWrt.Strm().WriteUnicodeOrByteText(u"`");
+    }
 
     // Not in CommonMark
     if (ShouldCloseIt(current.nCrossedOutChange, result.nCrossedOutChange))
@@ -292,6 +315,11 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
         {
             rWrt.Strm().WriteUnicodeOrByteText(u"[");
         }
+    }
+
+    if (ShouldOpenIt(current.nCodeChange, result.nCodeChange))
+    {
+        rWrt.Strm().WriteUnicodeOrByteText(u"`");
     }
 
     current = std::move(result);
