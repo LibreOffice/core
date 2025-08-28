@@ -13,6 +13,7 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QToolTip>
 
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
@@ -43,6 +44,9 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
             &QtInstanceTreeView::handleSelectionChanged);
     connect(m_pModel, &QSortFilterProxyModel::dataChanged, this,
             &QtInstanceTreeView::handleDataChanged);
+
+    assert(m_pTreeView->viewport());
+    m_pTreeView->viewport()->installEventFilter(this);
 }
 
 void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
@@ -1097,6 +1101,14 @@ void QtInstanceTreeView::setColumnRoles(QTreeView& rTreeView,
     rTreeView.setProperty(PROPERTY_COLUMN_ROLES, QVariant::fromValue(rDataRoles));
 }
 
+bool QtInstanceTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    if (pEvent->type() == QEvent::ToolTip && pObject == m_pTreeView->viewport())
+        return handleToolTipEvent(static_cast<QHelpEvent*>(pEvent));
+
+    return QtInstanceWidget::eventFilter(pObject, pEvent);
+}
+
 QModelIndex QtInstanceTreeView::modelIndex(int nRow, int nCol,
                                            const QModelIndex& rParentIndex) const
 {
@@ -1156,6 +1168,23 @@ void QtInstanceTreeView::setImage(const weld::TreeIter& rIter, const QPixmap& rP
         QModelIndex aIndex = modelIndex(rIter, nCol);
         m_pModel->setData(aIndex, rPixmap, Qt::DecorationRole);
     });
+}
+
+bool QtInstanceTreeView::handleToolTipEvent(const QHelpEvent* pHelpEvent)
+{
+    QModelIndex aIndex = m_pTreeView->indexAt(pHelpEvent->pos());
+    if (!aIndex.isValid())
+        return false;
+
+    SolarMutexGuard g;
+    const QtInstanceTreeIter aIter(aIndex);
+    const QString sToolTip = toQString(signal_query_tooltip(aIter));
+    if (sToolTip.isEmpty())
+        return false;
+
+    QToolTip::showText(pHelpEvent->globalPos(), sToolTip, m_pTreeView,
+                       m_pTreeView->visualRect(aIndex));
+    return true;
 }
 
 void QtInstanceTreeView::handleActivated()

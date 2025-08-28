@@ -209,6 +209,8 @@ public:
     static void setColumnRoles(QTreeView& rTreeView,
                                const QList<QList<Qt::ItemDataRole>>& rDataRoles);
 
+    virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
 private:
     QModelIndex modelIndex(int nRow, int nCol = 0,
                            const QModelIndex& rParentIndex = QModelIndex()) const;
@@ -220,6 +222,8 @@ private:
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
     void setImage(const weld::TreeIter& rIter, const QPixmap& rPixmap, int nCol);
+
+    bool handleToolTipEvent(const QHelpEvent* pEvent);
 
 private Q_SLOTS:
     void handleActivated();
