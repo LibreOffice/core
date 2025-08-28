@@ -65,6 +65,8 @@ struct TableColumnModel
     XmlColumnPrModelPtr mxXmlColumnPr; // Special settings for XML Column Properties.
     XmlColumnPrModel&   createXmlColumnPr();
 
+    OUString            maUniqueName; // unique name of the <tableColumn>
+
     explicit            TableColumnModel();
 };
 
@@ -95,6 +97,7 @@ private:
     /// DBParam
     const OUString aName;
     OUString aUpper;
+    OUString        aTableType;
     SCTAB           nTable;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -134,7 +137,7 @@ public:
     SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-             bool bByR = true, bool bHasH = true, bool bTotals = false);
+             bool bByR = true, bool bHasH = true, bool bTotals = false, const OUString& rTableType = "worksheet");
     ScDBData(const ScDBData& rData);
     ScDBData(const OUString& rName, const ScDBData& rData);
     SC_DLLPUBLIC virtual ~ScDBData() override;
@@ -166,6 +169,8 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
+    void        SetTableType(OUString& sTableType) { aTableType = sTableType; }
+    const OUString& GetTableType() const           { return aTableType; }
 
     void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }
     /** Returns header row range if has headers, else invalid range. */

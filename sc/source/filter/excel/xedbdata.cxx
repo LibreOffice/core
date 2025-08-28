@@ -187,6 +187,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         XML_name, rData.GetName().toUtf8(),
         XML_displayName, rData.GetName().toUtf8(),
         XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aRange),
+        XML_tableType, rData.GetTableType().toUtf8(),
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),
         XML_totalsRowShown, ToPsz10(rData.HasTotals())  // we don't support that but if there are totals they are shown
@@ -201,7 +202,6 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         // OOXTODO: XML_insertRowShift, ...,
         // OOXTODO: XML_published, ...,
         // OOXTODO: XML_tableBorderDxfId, ...,
-        // OOXTODO: XML_tableType, ...,
         // OOXTODO: XML_totalsRowBorderDxfId, ...,
         // OOXTODO: XML_totalsRowCellStyle, ...,
         // OOXTODO: XML_totalsRowDxfId, ...
@@ -237,8 +237,15 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
             // OOXTODO: write <totalsRowFormula> once we support it.
 
+            OUString uniqueName;
+            if (i < rTableColumnModel.size() && !rTableColumnModel[i].maUniqueName.isEmpty())
+                uniqueName = rTableColumnModel[i].maUniqueName;
+            else
+                uniqueName = rColNames[i]; // fallback to column name if no unique name.
+
             pTableStrm->startElement( XML_tableColumn,
                     XML_id, OString::number(i+1),
+                    XML_uniqueName, uniqueName,
                     XML_name, rColNames[i].toUtf8(),
                     XML_totalsRowFunction, (i < rColAttributes.size() ? rColAttributes[i].maTotalsFunction : std::nullopt)
                     // OOXTODO: XML_dataCellStyle, ...,
@@ -249,7 +256,6 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_totalsRowCellStyle, ...,
                     // OOXTODO: XML_totalsRowDxfId, ...,
                     // OOXTODO: XML_totalsRowLabel, ...,
-                    // OOXTODO: XML_uniqueName, ...
             );
 
             if (i < rTableColumnModel.size() && rTableColumnModel[i].mxXmlColumnPr)

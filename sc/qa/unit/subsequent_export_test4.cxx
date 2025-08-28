@@ -1665,11 +1665,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_xmlMaps_and_xmlColumnPr)
                 "xsd:element[1]",
                 "name", u"Code");
 
-    // test <xmlColumnPr> of xl/tables/table1.xml
+    // xl/tables/table1.xml
     xmlDocUniquePtr pDocXmlTables = parseExport(u"xl/tables/table1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXmlTables);
+
+    // test xpath attribute of <xmlColumnPr>
     assertXPath(pDocXmlTables, "/x:table/x:tableColumns/x:tableColumn[1]/x:xmlColumnPr", "xpath",
                 u"/DataList/TransactionTypeList/TransactionType/Code");
+
+    // test tableType attribute of <table>
+    assertXPath(pDocXmlTables, "/x:table", "tableType", u"xml");
+
+    // test uniqueName attribute of <tableColumn>
+    assertXPath(pDocXmlTables, "/x:table/x:tableColumns/x:tableColumn[2]", "uniqueName",
+                u"Description");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterHiddenButton)

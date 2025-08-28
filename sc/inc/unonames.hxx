@@ -330,6 +330,7 @@ inline constexpr OUString SC_UNONAME_TOKENINDEX       = u"TokenIndex"_ustr;
 inline constexpr OUString SC_UNONAME_ISSHAREDFMLA     = u"IsSharedFormula"_ustr;
 inline constexpr OUString SC_UNONAME_TOTALSROW        = u"TotalsRow"_ustr;
 inline constexpr OUString SC_UNONAME_NUMBERBEHAVIOR   = u"NumberBehavior"_ustr;
+inline constexpr OUString SC_UNONAME_TABLETYPE        = u"TableType"_ustr;
 
 //  text fields
 inline constexpr OUString SC_UNONAME_ANCTYPE          = u"AnchorType"_ustr;

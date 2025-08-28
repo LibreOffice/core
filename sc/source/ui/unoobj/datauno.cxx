@@ -1976,6 +1976,12 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
     else if ( aPropertyName == SC_UNONAME_CONTHDR )
         aNewData.SetHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNONAME_TABLETYPE )
+    {
+        OUString aStrVal;
+        aValue >>= aStrVal;
+        aNewData.SetTableType(aStrVal);
+    }
     else
         bDo = false;
 
@@ -2061,6 +2067,12 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
             bool bHeader(GetDBData_Impl()->HasHeader());
 
             aRet <<= bHeader;
+        }
+        else if (aPropertyName == SC_UNONAME_TABLETYPE )
+        {
+            OUString sType(GetDBData_Impl()->GetTableType());
+
+            aRet <<= sType;
         }
     }
     return aRet;

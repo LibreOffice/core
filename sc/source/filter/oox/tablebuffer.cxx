@@ -119,6 +119,24 @@ void Table::finalizeImport()
             xDatabaseRange->setPropertyValue( u"TotalsRow"_ustr, css::uno::Any(true));
         }
 
+        // import tableType attribute of <table> node
+        sal_Int32 nToken = maModel.mnType;
+        OUString sValue;
+
+        switch (nToken)
+        {
+            case XML_xml:
+                sValue = "xml";
+                break;
+            case XML_queryTable:
+                sValue = "queryTable";
+                break;
+            default:
+                sValue = "worksheet";
+                break;
+        }
+        xDatabaseRange->setPropertyValue(u"TableType"_ustr, css::uno::Any(sValue));
+
         // get formula token index of the database range
         if( !(xDatabaseRange->getPropertyValue(u"TokenIndex"_ustr) >>= mnTokenIndex))
             mnTokenIndex = -1;
