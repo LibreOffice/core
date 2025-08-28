@@ -2083,17 +2083,14 @@ void SbiRuntime::StepRSET()
         sal_Int32 nVarStrLen = aRefVarString.getLength();
         sal_Int32 nValStrLen = aRefValString.getLength();
 
-        OUStringBuffer aNewStr(nVarStrLen);
         if (nVarStrLen > nValStrLen)
         {
-            comphelper::string::padToLength(aNewStr, nVarStrLen - nValStrLen, ' ');
-            aNewStr.append(aRefValString);
+            refVar->PutString(RepeatedUChar(' ', nVarStrLen - nValStrLen) + aRefValString);
         }
         else
         {
-            aNewStr.append(aRefValString.subView(0, nVarStrLen));
+            refVar->PutString(aRefValString.copy(0, nVarStrLen));
         }
-        refVar->PutString(aNewStr.makeStringAndClear());
 
         refVar->SetFlags( n );
     }
@@ -4583,9 +4580,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     if( bFixedString )
     {
         sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
-        OUStringBuffer aBuf(nCount);
-        comphelper::string::padToLength(aBuf, nCount);
-        pVar->PutString(aBuf.makeStringAndClear());
+        pVar->PutString(OUString::Concat(RepeatedUChar('\0', nCount)));
     }
 
     bool bVarToDim = ((nOp2 & SBX_TYPE_VAR_TO_DIM_FLAG) != 0);

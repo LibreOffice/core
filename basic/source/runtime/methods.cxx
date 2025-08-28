@@ -1300,9 +1300,7 @@ void SbRtl_Space(StarBASIC *, SbxArray & rPar, bool)
     }
 
     const sal_Int32 nCount = rPar.Get(1)->GetLong();
-    OUStringBuffer aBuf(nCount);
-    string::padToLength(aBuf, nCount, ' ');
-    rPar.Get(0)->PutString(aBuf.makeStringAndClear());
+    rPar.Get(0)->PutString(OUString::Concat(RepeatedUChar(' ', nCount)));
 }
 
 void SbRtl_Sqr(StarBASIC *, SbxArray & rPar, bool)
@@ -1466,9 +1464,7 @@ void SbRtl_String(StarBASIC *, SbxArray & rPar, bool)
         const OUString aStr = rPar.Get(2)->GetOUString();
         aFiller = aStr[0];
     }
-    OUStringBuffer aBuf(lCount);
-    string::padToLength(aBuf, lCount, aFiller);
-    rPar.Get(0)->PutString(aBuf.makeStringAndClear());
+    rPar.Get(0)->PutString(OUString::Concat(RepeatedUChar(aFiller, lCount)));
 }
 
 void SbRtl_Tab(StarBASIC *, SbxArray & rPar, bool)
@@ -1479,9 +1475,7 @@ void SbRtl_Tab(StarBASIC *, SbxArray & rPar, bool)
     }
 
     const sal_Int32 nCount = std::max(rPar.Get(1)->GetLong(), sal_Int32(0));
-    OUStringBuffer aStr(nCount);
-    comphelper::string::padToLength(aStr, nCount, '\t');
-    rPar.Get(0)->PutString(aStr.makeStringAndClear());
+    rPar.Get(0)->PutString(OUString::Concat(RepeatedUChar('\t', nCount)));
 }
 
 void SbRtl_Tan(StarBASIC *, SbxArray & rPar, bool)

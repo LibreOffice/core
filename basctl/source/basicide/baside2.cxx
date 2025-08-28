@@ -184,10 +184,8 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
         if ( aResult[nPos] == '\t' )
         {
             // not 4 Blanks, but at 4 TabPos:
-            OUStringBuffer aBlanker;
-            string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
             aResult.remove( nPos, 1 );
-            aResult.insert( nPos, aBlanker );
+            aResult.insert(nPos, OUString::Concat(RepeatedUChar(' ', 4 - (nPos % 4))));
             nMax = aResult.getLength();
         }
         ++nPos;
