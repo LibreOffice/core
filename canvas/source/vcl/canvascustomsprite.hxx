@@ -31,6 +31,7 @@
 #include <base/spritesurface.hxx>
 #include <base/canvascustomspritebase.hxx>
 
+#include "backbuffer.hxx"
 #include "sprite.hxx"
 #include "canvashelper.hxx"
 #include "spritehelper.hxx"
@@ -110,6 +111,10 @@ namespace vclcanvas
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const override;
+        OutputDevice* getOutDev() { return &getBackBuffer()->getOutDev();}
+
+    private:
+        BackBufferSharedPtr const & getBackBuffer() const { return maSpriteHelper.mpBackBufferMask; }
     };
 }
 

@@ -98,6 +98,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
+    css::awt::Point GetOffset() { return maOffset; }
 
     /** Merge the given view state with the view state that translates the
         (virtual) child canvas to the shared canvas.

@@ -268,6 +268,9 @@ namespace vclcanvas
 
         bool hasAlpha() const { return mbHaveAlpha; }
 
+        /// Rendering to this outdev does not preserve its state
+        OutDevProviderSharedPtr                      mpOutDevProvider;
+
     protected:
         /** Phyical output device
 
@@ -278,9 +281,6 @@ namespace vclcanvas
 
         /// Rendering to this outdev preserves its state
         OutDevProviderSharedPtr                      mpProtectedOutDevProvider;
-
-        /// Rendering to this outdev does not preserve its state
-        OutDevProviderSharedPtr                      mpOutDevProvider;
 
         /// Rendering to this outdev does not preserve its state
         OutDevProviderSharedPtr                      mp2ndOutDevProvider;

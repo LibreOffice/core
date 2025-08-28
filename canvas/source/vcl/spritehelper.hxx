@@ -88,13 +88,13 @@ namespace vclcanvas
                      bool&                      bSurfacesDirty,
                      bool                       bBufferedUpdate ) const;
 
-    private:
-        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const override;
-
         // for the redraw
         BackBufferSharedPtr                                 mpBackBuffer;
         BackBufferSharedPtr                                 mpBackBufferMask;
+
+    private:
+        virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
+            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const override;
 
         /// Cached bitmap for the current sprite content
         mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;
