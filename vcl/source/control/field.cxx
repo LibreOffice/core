@@ -784,13 +784,13 @@ namespace
         OUStringBuffer aBuf;
         sal_Int32 nTextLen;
 
-        nTextLen = std::u16string_view(OUString::number(rFormatter.GetMin())).size();
+        nTextLen = OUString::number(rFormatter.GetMin()).length;
         comphelper::string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(OUString::unacquired(aBuf).toInt64()));
         aBuf.setLength(0);
 
-        nTextLen = std::u16string_view(OUString::number(rFormatter.GetMax())).size();
+        nTextLen = OUString::number(rFormatter.GetMax()).length;
         comphelper::string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(OUString::unacquired(aBuf).toInt64()));
@@ -799,14 +799,13 @@ namespace
         Size aRet(std::max(aMinTextSize.Width(), aMaxTextSize.Width()),
                   std::max(aMinTextSize.Height(), aMaxTextSize.Height()));
 
-        OUStringBuffer sBuf("999999999");
+        aBuf = "999999999";
         sal_uInt16 nDigits = rFormatter.GetDecimalDigits();
         if (nDigits)
         {
-            sBuf.append('.');
-            comphelper::string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
+            aBuf.append("." + RepeatedUChar('9', nDigits));
         }
-        aMaxTextSize = rSpinField.CalcMinimumSizeForText(sBuf.makeStringAndClear());
+        aMaxTextSize = rSpinField.CalcMinimumSizeForText(aBuf.makeStringAndClear());
         aRet.setWidth( std::min(aRet.Width(), aMaxTextSize.Width()) );
 
         return aRet;

@@ -138,9 +138,7 @@ OUString VCLXAccessibleEdit::implGetText()
             sal_Unicode cEchoChar = pEdit->GetEchoChar();
             if ( !cEchoChar )
                 cEchoChar = '*';
-            OUStringBuffer sTmp(aText.getLength());
-            aText = comphelper::string::padToLength(sTmp, aText.getLength(),
-                cEchoChar).makeStringAndClear();
+            aText = OUString::Concat(RepeatedUChar(cEchoChar, aText.getLength()));
         }
     }
 

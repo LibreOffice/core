@@ -336,18 +336,14 @@ Size FixedText::GetOptimalSize() const
     sal_Int32 nMaxAvailWidth = 0x7fffffff;
     if (m_nMaxWidthChars != -1)
     {
-        OUStringBuffer aBuf(m_nMaxWidthChars);
-        comphelper::string::padToLength(aBuf, m_nMaxWidthChars, 'x');
-        nMaxAvailWidth = getTextDimensions(this,
-            aBuf.makeStringAndClear(), 0x7fffffff).Width();
+        OUString aBuf(OUString::Concat(RepeatedUChar('x', m_nMaxWidthChars)));
+        nMaxAvailWidth = getTextDimensions(this, aBuf, 0x7fffffff).Width();
     }
     Size aRet = CalcMinimumSize(nMaxAvailWidth);
     if (m_nMinWidthChars != -1)
     {
-        OUStringBuffer aBuf(m_nMinWidthChars);
-        comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
-        Size aMinAllowed = getTextDimensions(this,
-            aBuf.makeStringAndClear(), 0x7fffffff);
+        OUString aBuf(OUString::Concat(RepeatedUChar('x', m_nMinWidthChars)));
+        Size aMinAllowed = getTextDimensions(this, aBuf, 0x7fffffff);
         aRet.setWidth(std::max(aMinAllowed.Width(), aRet.Width()));
     }
     return aRet;

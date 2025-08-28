@@ -1677,14 +1677,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     //  string for decimal replacement
                                     //  has to be taken from nPrecision
                                     //  (positive number even for automatic decimals)
-                                    OUStringBuffer sDashStr;
+                                    OUString sDashStr;
                                     if (bDecDashes && nPrecision > 0)
-                                        comphelper::string::padToLength(sDashStr, nPrecision, '-');
+                                        sDashStr = OUString::Concat(RepeatedUChar('-', nPrecision));
                                     // "?" in decimal part are replaced by space character
                                     if (bDecAlign && nPrecision > 0)
                                         sDashStr = " ";
 
-                                    WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, nBlankInteger, sDashStr.makeStringAndClear(),
+                                    WriteNumberElement_Impl(nDecimals, nMinDecimals, nInteger, nBlankInteger, sDashStr,
                                         bThousand, nTrailingThousands, aEmbeddedEntries);
                                     bAnyContent = true;
                                 }

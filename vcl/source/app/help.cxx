@@ -341,9 +341,7 @@ void HelpTextWindow::SetHelpText( const OUString& rHelpText )
         else
             nCharsInLine = 35 + ((nHelpTextLength / 100) * 5);
         // average width to have all windows consistent
-        OUStringBuffer aBuf(nCharsInLine);
-        comphelper::string::padToLength(aBuf, nCharsInLine, 'x');
-        tools::Long nWidth = GetTextWidth( OUString::unacquired(aBuf) );
+        tools::Long nWidth = GetTextWidth(OUString::Concat(RepeatedUChar('x', nCharsInLine)));
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         tools::Rectangle aTry1( Point(), aTmpSize );
         DrawTextFlags nDrawFlags = DrawTextFlags::MultiLine | DrawTextFlags::WordBreak |

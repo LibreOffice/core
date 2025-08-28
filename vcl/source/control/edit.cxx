@@ -400,9 +400,7 @@ OUString Edit::ImplGetText() const
             cEchoChar = mcEchoChar;
         else
             cEchoChar = u'\x2022';
-        OUStringBuffer aText(maText.getLength());
-        comphelper::string::padToLength(aText, maText.getLength(), cEchoChar);
-        return aText.makeStringAndClear();
+        return OUString::Concat(RepeatedUChar(cEchoChar, maText.getLength()));
     }
     else
         return maText.toString();
