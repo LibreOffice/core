@@ -99,8 +99,7 @@ private:
     DECL_LINK (ClickOkHdl_Impl, weld::Button&, void );
     DECL_LINK (ClickApplyHdl_Impl, weld::Button&, void );
 
-    IconChoicePage*         GetTabPage( std::u16string_view rPageId )
-                                { return GetPageData(rPageId)->xPage.get(); }
+    IconChoicePage* GetTabPage( std::u16string_view rPageId );
 
     void                    ActivatePageImpl ();
     void                    DeActivatePageImpl ();
