@@ -129,7 +129,6 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     SetInputSet (mpItemSet.get());
 
-    // insert pages
     AddTabPage(u"internet"_ustr, SvxHyperlinkInternetTp::Create);
     AddTabPage(u"mail"_ustr, SvxHyperlinkMailTp::Create);
     if (!comphelper::LibreOfficeKit::isActive())
@@ -138,21 +137,8 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
         AddTabPage(u"newdocument"_ustr, SvxHyperlinkNewDocTp::Create);
     }
 
-    // tdf#90496 - remember last used view in hyperlink dialog
-    SetCurPageId(msRememberedPageId);
-
-    // Init Dialog
-    Start();
-
     GetBindings().Update(SID_HYPERLINK_GETLINK);
     GetBindings().Update(SID_READONLY_MODE);
-
-    // Now that we have got the link data, we can reset
-    // all the pages with the correct information
-    assert(pSet);
-    for (std::unique_ptr<IconChoicePageData>& page: maPageList) {
-        page->xPage->Reset(*pSet);
-    }
 
     m_xResetBtn->connect_clicked( LINK( this, SvxHpLinkDlg, ResetHdl ) );
     m_xOKBtn->connect_clicked( LINK ( this, SvxHpLinkDlg, ClickOkHdl_Impl ) );
