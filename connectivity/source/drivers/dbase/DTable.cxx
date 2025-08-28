@@ -1930,11 +1930,9 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         break;
                     WriteMemo(thisColVal, nBlockNo);
 
-                    OString aBlock(OString::number(nBlockNo));
+                    auto aBlock(OString::number(nBlockNo));
                     //align aBlock at the right of a nLen sequence, fill to the left with '0'
-                    OStringBuffer aStr;
-                    comphelper::string::padToLength(aStr, nLen - aBlock.getLength(), '0');
-                    aStr.append(aBlock);
+                    OString aStr = RepeatedChar('0', nLen - aBlock.length) + aBlock;
 
                     // Copy characters:
                     memcpy(pData, aStr.getStr(), nLen);

@@ -507,11 +507,10 @@ ErrCode SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
         {
             return nError = ERRCODE_BASIC_BAD_RECORD_LENGTH;
         }
-        OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
+        rBuf = read_uInt8s_ToOString(*pStrm, n);
         //Pad it out with ' ' to the requested length on short read
-        sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
-        comphelper::string::padToLength(aBuffer, nRequested, ' ');
-        rBuf = aBuffer.makeStringAndClear();
+        if (rBuf.getLength() < static_cast<sal_Int32>(n))
+            rBuf += OString::Concat(RepeatedChar(' ', n));
     }
     MapError();
     if( !nError && pStrm->eof() )

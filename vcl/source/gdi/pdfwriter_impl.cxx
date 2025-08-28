@@ -5556,10 +5556,8 @@ bool PDFWriterImpl::emitSignature()
     m_nSignatureContentOffset = nOffset + aLine.getLength();
 
     // reserve some space for the PKCS#7 object
-    OStringBuffer aContentFiller( MAX_SIGNATURE_CONTENT_LENGTH );
-    comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
-    aLine.append( aContentFiller );
-    aLine.append( ">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
+    aLine.append(RepeatedChar('0', MAX_SIGNATURE_CONTENT_LENGTH)
+                 + ">\n/Type/Sig/SubFilter/adbe.pkcs7.detached");
 
     if( !m_aContext.DocumentInfo.Author.isEmpty() )
     {
@@ -5581,10 +5579,7 @@ bool PDFWriterImpl::emitSignature()
     // mark the last ByteRange no and add some space. Now, we don't know
     // how many bytes we need for this ByteRange value
     // The real value will be overwritten in the finalizeSignature method
-    OStringBuffer aByteRangeFiller( 100  );
-    comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
-    aLine.append( aByteRangeFiller );
-    aLine.append("  /Filter/Adobe.PPKMS");
+    aLine.append(RepeatedChar(' ', 100) + "  /Filter/Adobe.PPKMS");
 
     //emit reason, location and contactinfo
     if ( !m_aContext.SignReason.isEmpty() )

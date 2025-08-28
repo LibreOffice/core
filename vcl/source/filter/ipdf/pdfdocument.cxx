@@ -140,9 +140,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
                                "<</Contents <");
     rContentOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // Reserve space for the PKCS#7 object.
-    OStringBuffer aContentFiller(MAX_SIGNATURE_CONTENT_LENGTH);
-    comphelper::string::padToLength(aContentFiller, MAX_SIGNATURE_CONTENT_LENGTH, '0');
-    aSigBuffer.append(aContentFiller + ">\n/Type/Sig/SubFilter");
+    aSigBuffer.append(RepeatedChar('0', MAX_SIGNATURE_CONTENT_LENGTH) + ">\n/Type/Sig/SubFilter");
     if (bAdES)
         aSigBuffer.append("/ETSI.CAdES.detached");
     else
@@ -161,9 +159,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
     rLastByteRangeOffset = aSignatureEntry.GetOffset() + aSigBuffer.getLength();
     // We don't know how many bytes we need for the last ByteRange value, this
     // should be enough.
-    OStringBuffer aByteRangeFiller;
-    comphelper::string::padToLength(aByteRangeFiller, 100, ' ');
-    aSigBuffer.append(aByteRangeFiller
+    aSigBuffer.append(RepeatedChar(' ', 100)
                       // Finish the Sig obj.
                       + " /Filter/Adobe.PPKMS");
 

@@ -55,10 +55,7 @@ OString lcl_padStartToLength(OString const& aString, sal_Int32 nLen, char cFill)
     if (nLen > aString.getLength())
     {
         sal_Int32 nDiff = nLen - aString.getLength();
-        OStringBuffer aBuffer;
-        comphelper::string::padToLength(aBuffer, nDiff, cFill);
-        aBuffer.append(aString);
-        return aBuffer.makeStringAndClear();
+        return RepeatedChar(cFill, nDiff) + aString;
     }
     else
         return aString;
