@@ -109,7 +109,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
             xUp->moveToInsertRow();
             xUp->moveToCurrentRow();
-            xUp->cancelRowUpdates();
             _xRs->beforeFirst();
             m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
             m_xCacheSet = new WrappedResultSet(i_nMaxRows);
