@@ -20,16 +20,19 @@ namespace
 
 constexpr auto IgnoredList
     = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/simpress/ui/tabviewbar.ui" },
         { u"modules/swriter/ui/annotation.ui" },
         { u"sfx/ui/deck.ui" },
+        { u"sfx/ui/extrabutton.ui" },
         { u"sfx/ui/infobar.ui" },
         { u"sfx/ui/tabbar.ui" },
         { u"sfx/ui/tabbarcontents.ui" },
         { u"svt/ui/scrollbars.ui" },
+        { u"svt/ui/tabbuttons.ui" }, // Calc -> sheet tabs on the bottom
+        { u"svt/ui/tabbuttonsmirrored.ui" }, // as above
         { u"svx/ui/measurewidthbar.ui" },
         { u"svx/ui/selectionmenu.ui" },
         { u"svx/ui/stylemenu.ui" },
-        { u"svt/ui/tabbuttons.ui" },
         { u"svx/ui/toolbarpopover.ui" },
         { u"modules/scalc/ui/dropmenu.ui"}, // Calc -> Navigator -> right click
         { u"modules/sdraw/ui/navigatorcontextmenu.ui" }, // Impress -> Navigator -> right click
@@ -460,6 +463,8 @@ constexpr auto SidebarList
         { u"svx/ui/sidebarpossize.ui" },
         { u"svx/ui/sidebarshadow.ui" },
         { u"svx/ui/sidebarstylespanel.ui" },
+        { u"svx/ui/sidebartextcolumnspanel.ui" },
+        { u"svx/ui/sidebartexteffect.ui" },
         { u"svx/ui/sidebartextpanel.ui" }
     });
 
