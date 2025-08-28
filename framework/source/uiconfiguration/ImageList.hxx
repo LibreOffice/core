@@ -41,7 +41,7 @@ public:
                     ImageList( const std::vector<OUString>& rNameVector,
                                const OUString& rPrefix);
 
-    void            InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
+    void            InsertFromHorizontalStrip( const Bitmap &rBitmap,
                                    const std::vector< OUString > &rNameVector );
     Bitmap          GetAsHorizontalStrip() const;
     sal_uInt16      GetImageCount() const;

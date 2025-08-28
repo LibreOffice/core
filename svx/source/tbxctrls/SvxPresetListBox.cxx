@@ -75,10 +75,9 @@ template <typename ListType, typename EntryType>
 void SvxPresetListBox::FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex)
 {
     const Size aSize(GetIconSize());
-    BitmapEx aBitmap;
     for (tools::Long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
-        aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
+        Bitmap aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
         EntryType* pItem = static_cast<EntryType*>(pList.Get(nIndex));
         InsertItem(nStartIndex, Image(aBitmap), pItem->GetName());
     }

@@ -33,11 +33,6 @@ Image::Image()
 {
 }
 
-Image::Image(const BitmapEx& rBitmapEx)
-{
-    ImplInit(Bitmap(rBitmapEx));
-}
-
 Image::Image(const Bitmap& rBitmap)
 {
     ImplInit(rBitmap);

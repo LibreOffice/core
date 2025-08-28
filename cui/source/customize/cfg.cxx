@@ -3007,9 +3007,8 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 Image aImage( xGraphic );
                 if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
                 {
-                    BitmapEx aBitmap(aImage.GetBitmap());
-                    BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
-                    aImage = Image( aBitmapex);
+                    Bitmap aBitmap = Bitmap::AutoScaleBitmap(aImage.GetBitmap(), m_nExpectedSize);
+                    aImage = Image( aBitmap );
                 }
                 m_xTbSymbol->InsertItem(nId, aImage, aURL, nPos); //modify
 
@@ -3150,9 +3149,8 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
             if ( bOK && ((aSize.Width != m_nExpectedSize) || (aSize.Height != m_nExpectedSize)) )
             {
-                BitmapEx aBitmap(aImage.GetBitmap());
-                BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
-                aImage = Image( aBitmapex);
+                Bitmap aBitmap = Bitmap::AutoScaleBitmap(aImage.GetBitmap(), m_nExpectedSize);
+                aImage = Image( aBitmap );
             }
             if ( bOK && !!aImage )
             {

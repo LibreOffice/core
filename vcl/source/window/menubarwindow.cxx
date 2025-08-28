@@ -93,21 +93,19 @@ void DecoToolBox::SetImages( tools::Long nMaxHeight, bool bForce )
 
     lastSize = nMaxHeight - border;
 
-    Color       aEraseColor( ColorTransparency, 255, 255, 255, 255 );
-    BitmapEx    aBmpExDst( maImage.GetBitmap() );
-    BitmapEx    aBmpExSrc( aBmpExDst );
+    Bitmap    aBmpDst( maImage.GetBitmap() );
+    Bitmap    aBmpSrc( aBmpDst );
 
-    aEraseColor.SetAlpha( 0 );
-    aBmpExDst.Erase( aEraseColor );
-    aBmpExDst.Scale( Size( lastSize, lastSize ) );
+    aBmpDst.Erase( Color( ColorAlpha, 0, 255, 255, 255 ) );
+    aBmpDst.Scale( Size( lastSize, lastSize ) );
 
     tools::Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
     tools::Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2,
                             (lastSize - maImage.GetSizePixel().Height())/2 ),
                         maImage.GetSizePixel() );
 
-    aBmpExDst.CopyPixel( aDestRect, aSrcRect, aBmpExSrc );
-    SetItemImage( ToolBoxItemId(IID_DOCUMENTCLOSE), Image( aBmpExDst ) );
+    aBmpDst.CopyPixel( aDestRect, aSrcRect, aBmpSrc );
+    SetItemImage( ToolBoxItemId(IID_DOCUMENTCLOSE), Image( aBmpDst ) );
 
 }
 

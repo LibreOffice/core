@@ -62,7 +62,7 @@ Bitmap ImageList::GetAsHorizontalStrip() const
     return aResult;
 }
 
-void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
+void ImageList::InsertFromHorizontalStrip( const Bitmap &rBitmap,
                                            const std::vector< OUString > &rNameVector )
 {
     sal_uInt16 nItems = sal::static_int_cast< sal_uInt16 >( rNameVector.size() );
@@ -70,8 +70,8 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
     if (!nItems)
             return;
 
-    Size aSize( rBitmapEx.GetSizePixel() );
-    DBG_ASSERT (rBitmapEx.GetSizePixel().Width() % nItems == 0,
+    Size aSize( rBitmap.GetSizePixel() );
+    DBG_ASSERT (rBitmap.GetSizePixel().Width() % nItems == 0,
                 "ImageList::InsertFromHorizontalStrip - very odd size");
     aSize.setWidth( aSize.Width() / nItems );
     maImages.clear();
@@ -81,7 +81,7 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
 
     for (sal_uInt16 nIdx = 0; nIdx < nItems; nIdx++)
     {
-        BitmapEx aBitmap( rBitmapEx, Point( nIdx * aSize.Width(), 0 ), aSize );
+        Bitmap aBitmap( rBitmap, Point( nIdx * aSize.Width(), 0 ), aSize );
         ImplAddImage( maPrefix, rNameVector[ nIdx ], nIdx + 1, Image( aBitmap ) );
     }
 }

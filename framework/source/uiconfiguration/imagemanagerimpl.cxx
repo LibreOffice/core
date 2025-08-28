@@ -352,7 +352,7 @@ void ImageManagerImpl::implts_loadUserImages(
 
                 if ( xBitmapStream.is() )
                 {
-                    BitmapEx aUserBitmap;
+                    Bitmap aUserBitmap;
                     {
                         std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
                         vcl::PngImageReader aPngReader( *pSvStream );

@@ -22,7 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 
 #include <memory>
@@ -41,7 +41,6 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
     friend class ::OutputDevice;
 public:
     Image();
-    explicit Image(BitmapEx const & rBitmapEx);
     explicit Image(Bitmap const & rBitmap);
     explicit Image(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
     explicit Image(OUString const & rPNGFileUrl);
