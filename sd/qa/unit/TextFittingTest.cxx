@@ -33,6 +33,11 @@ public:
     }
 };
 
+// Additionally visually check documents TextFittingComparisonWithMSO_*.pptx
+// Those documents contain a bitmap image that includes rendering from MSO
+// so we can visually check where our scaling implementation differs with the
+// rendering in MSO.
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
 {
     createSdImpressDoc("TextFitting.odp");
