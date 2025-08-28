@@ -62,5 +62,33 @@ class compareDocuments(UITestCase):
 
                 self.assertEqual(0, len(changesList.getChildren()))
 
+    def test_tdf168070(self):
+
+        with self.ui_test.load_file(get_url_for_data_file("tdf168070.docx")):
+
+            with self.ui_test.execute_dialog_through_command(".uno:CompareDocuments", close_button="") as xOpenDialog:
+
+                xFileName = xOpenDialog.getChild("file_name")
+                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf168070_2.docx")}))
+                xOpenBtn = xOpenDialog.getChild("open")
+
+                # The document is corrupted so click yes to repair it
+                with self.ui_test.execute_blocking_action(xOpenBtn.executeAction, args=('CLICK', ()), close_button="") as xRepairDialog:
+                    xYesBtn = xRepairDialog.getChild("yes")
+
+                    # Close the dialog and open it again so the list of changes is updated
+                    with self.ui_test.execute_dialog_through_action(xYesBtn, 'CLICK', close_button="close"):
+                        pass
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # Check the number of changes
+                self.assertEqual(6, len(changesList.getChildren()))
+
+                xAccBtn = xTrackDlg.getChild("acceptall")
+                xAccBtn.executeAction("CLICK", tuple())
+
+                self.assertEqual(0, len(changesList.getChildren()))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
