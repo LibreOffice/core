@@ -14528,6 +14528,8 @@ private:
         if (!gtk_tree_view_get_tooltip_context(pTreeView, &x, &y, keyboard_tip, &pModel, &pPath, &iter))
             return false;
 #endif
+
+        SolarMutexGuard g;
         OUString aTooltip = pThis->signal_query_tooltip(GtkInstanceTreeIter(iter));
         if (!aTooltip.isEmpty())
         {
