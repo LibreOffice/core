@@ -692,9 +692,9 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                         if (!bBadSelection)
                         {
                             sal_Int32 nCount = nTextStart - nStartReplace;
-                            OUStringBuffer sTemp(nCount);
-                            comphelper::string::padToLength(sTemp, nCount, cReplaceSymbol);
-                            m_pDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(), aReplaceSel);
+                            m_pDrawEditEngine->QuickInsertText(
+                                OUString::Concat(RepeatedUChar(cReplaceSymbol, nCount)),
+                                aReplaceSel);
                         }
                     }
                 }

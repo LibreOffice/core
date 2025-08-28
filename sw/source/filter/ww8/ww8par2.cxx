@@ -624,9 +624,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
             if( bListSymbol )
             {
                 // use cBulletChar for correct mapping on MAC
-                sText.setLength(0);
-                comphelper::string::padToLength(sText, rAV.cbTextBefore
-                    + rAV.cbTextAfter, cBulletChar);
+                sText = OUString::Concat(
+                    RepeatedUChar(cBulletChar, rAV.cbTextBefore + rAV.cbTextAfter));
             }
         }
     }

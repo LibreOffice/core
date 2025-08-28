@@ -170,6 +170,21 @@ struct ToStringHelper<OUStringChar_>
     { return addDataHelper(buffer, &literal.c, 1); }
 };
 
+// Output a character specified number of times. If the number is less than 1, do nothing.
+template <typename C> struct RepeatedChar_t
+{
+    C c;
+    sal_Int32 n;
+    constexpr RepeatedChar_t(C ch, sal_Int32 num) : c(ch), n(std::max(num, sal_Int32(0))) {}
+};
+
+template <typename C> struct ToStringHelper<RepeatedChar_t<C>>
+{
+    static std::size_t length(const RepeatedChar_t<C>& str) { return str.n; }
+    C* operator()(C* buffer, const RepeatedChar_t<C>& str) const
+    { return std::fill_n(buffer, str.n, str.c); }
+};
+
 /**
 @internal
 

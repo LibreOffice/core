@@ -574,13 +574,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 case NS_ooxml::LN_CT_Style_rsid:
                 {
                     // We want the rsid as a hex string, but always with the length of 8.
-                    OUStringBuffer aBuf = OUString::number(nIntValue, 16);
-                    OUStringBuffer aStr;
-                    comphelper::string::padToLength(aStr, 8 - aBuf.getLength(), '0');
-                    aStr.append(aBuf.getStr());
+                    auto aBuf = OUString::number(nIntValue, 16);
 
                     aValue.Name = "rsid";
-                    aValue.Value <<= aStr.makeStringAndClear();
+                    aValue.Value <<= OUString(RepeatedUChar('0', 8 - aBuf.length) + aBuf);
                 }
                 break;
                 case NS_ooxml::LN_CT_Style_qFormat:
