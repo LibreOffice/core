@@ -124,7 +124,6 @@ public:
     WhichRangesContainer GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
 
-    void                Start();
     bool                QueryClose();
 
     void                PageCreated(IconChoicePage& rPage);
