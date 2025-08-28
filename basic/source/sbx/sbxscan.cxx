@@ -299,39 +299,6 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     rRes = rtl::math::doubleToUString(nNum, rtl_math_StringFormat_Automatic, nPrec, cDecimalSep, true);
 }
 
-// formatted number output
-
-static void printfmtstr(std::u16string_view rStr, OUString& rRes, std::u16string_view rFmt)
-{
-    if (rFmt.empty())
-        rFmt = u"&";
-
-    OUStringBuffer aTemp;
-    auto pStr = rStr.begin();
-    auto pFmt = rFmt.begin();
-
-    switch( *pFmt )
-    {
-    case '!':
-        if (pStr != rStr.end())
-            aTemp.append(*pStr);
-        break;
-    case '\\':
-        do
-        {
-            aTemp.append(pStr != rStr.end() ? *pStr++ : u' ');
-        } while (++pFmt != rFmt.end() && *pFmt != '\\');
-        aTemp.append(pStr != rStr.end() ? *pStr : u' ');
-        break;
-    case '&':
-    default:
-        aTemp = rStr;
-        break;
-    }
-    rRes = aTemp.makeStringAndClear();
-}
-
-
 bool SbxValue::Scan(std::u16string_view rSrc, sal_Int32* pLen)
 {
     ErrCode eRes = ERRCODE_NONE;
@@ -527,6 +494,40 @@ std::optional<double> GetNumberIntl(const SbxValue& val, OUString& rStrVal,
                        : std::nullopt;
     }
 }
+
+void printfmtstr(const OUString& rStr, OUString& rRes, const OUString& rFmt)
+{
+    rRes = rStr;
+
+    switch (rFmt.isEmpty() ? '&' : rFmt[0])
+    {
+        case '!':
+            if (!rStr.isEmpty())
+                rRes = rStr.copy(0, 1);
+            break;
+        case '\\':
+            if (auto i = rFmt.indexOf('\\', 1) + 1, l = i ? i : rFmt.getLength();
+                l < rStr.getLength())
+                rRes = rStr.copy(0, l);
+            else if (l > rStr.getLength())
+                rRes += OUString::Concat(RepeatedUChar(' ', l - rStr.getLength()));
+            break;
+        case '&':
+            break; // Already assigned the correct value
+        default:
+            if (auto formatter = GetFormatter())
+            {
+                sal_uInt32 nIndex;
+                formatter->PutandConvertEntry(
+                    // [-loplugin:redundantfcast] a temporary is required here
+                    o3tl::temporary(OUString(rFmt)), o3tl::temporary(sal_Int32()),
+                    o3tl::temporary(SvNumFormatType()), nIndex, LANGUAGE_ENGLISH_US,
+                    Application::GetSettings().GetLanguageTag().getLanguageType(), true);
+                formatter->GetOutputString(rStr, nIndex, rRes, &o3tl::temporary<const Color*>({}));
+            }
+            break;
+    }
+}
 } // namespace
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
@@ -658,7 +659,10 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     else
     {
         pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
-        pFormatter->GetOutputString(*number, nIndex, rRes, &pCol);
+        if (nType == SvNumFormatType::TEXT && IsString())
+            pFormatter->GetOutputString(GetOUString(), nIndex, rRes, &pCol);
+        else
+            pFormatter->GetOutputString(*number, nIndex, rRes, &pCol);
     }
 #endif
 }
