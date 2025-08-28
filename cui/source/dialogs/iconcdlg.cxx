@@ -75,7 +75,6 @@ void SvxHpLinkDlg::AddTabPage(const OUString& rId, CreatePage pCreateFunc /* != 
 {
     weld::Container* pPage = m_xIconCtrl->get_page(rId);
     maPageList.emplace_back(new IconChoicePageData(rId, pCreateFunc(pPage, this, pSet)));
-    maPageList.back()->xPage->Reset(*pSet);
     PageCreated(*maPageList.back()->xPage);
 }
 
@@ -271,12 +270,6 @@ bool SvxHpLinkDlg::QueryClose()
         }
     }
     return bRet;
-}
-
-void SvxHpLinkDlg::Start()
-{
-    SwitchPage(msCurrentPageId);
-    ActivatePageImpl();
 }
 
 /**********************************************************************
