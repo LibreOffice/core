@@ -31,7 +31,7 @@ struct VCL_DLLPUBLIC PDFAnnotationMarker
 /** Stamp annotation marker - arbitrary bitmap as annotation */
 struct VCL_DLLPUBLIC PDFAnnotationMarkerStamp : public PDFAnnotationMarker
 {
-    BitmapEx maBitmapEx;
+    Bitmap maBitmap;
 };
 
 /** Free text annotation marker - showing text of the annotation in the document */
