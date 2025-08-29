@@ -171,16 +171,16 @@ void TextBody::ApplyMasterTextStyle(
     const ::oox::core::XmlFilterBase& rFilterBase,
     const css::uno::Reference< css::style::XStyle >& aXStyle,
     const TextCharacterProperties& rTextStyleProperties,
-    const TextListStylePtr& pMasterTextListStylePtr) const
+    const TextListStylePtr& pMasterTextListStylePtr, size_t nLevel) const
 {
     assert(!isEmpty());
 
-    if (maParagraphs.empty())
+    if (maParagraphs.empty() || maParagraphs.size() <= nLevel)
         return;
 
     // Apply character properties
     PropertySet aPropSet(aXStyle);
-    TextCharacterProperties aTextCharacterProps(maParagraphs[0]->getCharacterStyle(
+    TextCharacterProperties aTextCharacterProps(maParagraphs[nLevel]->getCharacterStyle(
         rTextStyleProperties, *pMasterTextListStylePtr, maTextListStyle));
     aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
 
@@ -189,7 +189,7 @@ void TextBody::ApplyMasterTextStyle(
     aCombinedTextStyle.apply(*pMasterTextListStylePtr);
     aCombinedTextStyle.apply(maTextListStyle);
 
-    TextParagraphProperties* pTextParagraphStyle = maParagraphs[0]->getParagraphStyle(aCombinedTextStyle);
+    TextParagraphProperties* pTextParagraphStyle = maParagraphs[nLevel]->getParagraphStyle(aCombinedTextStyle);
     if (pTextParagraphStyle)
     {
         Reference< XPropertySet > xProps(aXStyle, UNO_QUERY_THROW);
