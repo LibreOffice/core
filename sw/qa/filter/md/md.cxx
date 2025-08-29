@@ -218,6 +218,57 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExportingList)
+{
+    // Given a document that has both toplevel/nested bullets/numberings:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"B"_ustr);
+    pWrtShell->BulletOn();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"C"_ustr);
+    pWrtShell->NumUpDown(/*bDown=*/true);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"D"_ustr);
+    pWrtShell->DelNumRules();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"E"_ustr);
+    pWrtShell->NumOn();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"F"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"G"_ustr);
+    pWrtShell->NumUpDown(/*bDown=*/true);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure list type and level is exported:
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    std::vector<char> aBuffer(aStream.remainingSize());
+    aStream.ReadBytes(aBuffer.data(), aBuffer.size());
+    std::string_view aActual(aBuffer.data(), aBuffer.size());
+    std::string_view aExpected(
+        // clang-format off
+        "A" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        "- B" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        // indent is 2 spaces
+        "  - C" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        "D" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        "1. E" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        "2. F" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+        // indent is 3 spaces
+        "   1. G" SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed, all the "- " and "1. "
+    // style prefixes were lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

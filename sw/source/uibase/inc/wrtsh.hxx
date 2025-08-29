@@ -349,7 +349,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     */
     void    NumOrBulletOn(bool bNum); // #i29560#
     void    NumOrBulletOff(); // #i29560#
-    void    NumOn();
+    SW_DLLPUBLIC void    NumOn();
     SW_DLLPUBLIC void BulletOn();
 
     //OLE

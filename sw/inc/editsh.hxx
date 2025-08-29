@@ -529,7 +529,7 @@ public:
     void NoNum();
 
     /// Delete, split enumeration list.
-    void DelNumRules();
+    SW_DLLPUBLIC void DelNumRules();
 
     SW_DLLPUBLIC void NumUpDown( bool bDown = true );
 
