@@ -134,11 +134,7 @@ void Player::OnMediaPlayerEvent(MFP_EVENT_HEADER* pEventHeader)
 {
     if (FAILED(pEventHeader->hrEvent))
     {
-        SAL_WARN("avmedia.win",
-            "Player::OnMediaPlayerEvent failed with error code: " << pEventHeader->hrEvent);
-
-        ShowErrorMessage(L"MediaPlayerEvent error", pEventHeader->hrEvent);
-
+        ShowErrorMessage(pEventHeader->hrEvent, true);
         return;
     }
 
@@ -300,10 +296,7 @@ void Player::OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT* pEvent)
 
         if (FAILED(hr) || (!g_bHasVideo && !g_bHasAudio))
         {
-            SAL_WARN("avmedia.win",
-                "Player::OnMediaItemCreated failed with error code: " << hr);
-
-            ShowErrorMessage(L"IMFPMediaPlayer::SetMediaItem failed.", hr);
+            ShowErrorMessage(hr, true);
             m_state = Closed;
         }
     }
@@ -327,10 +320,7 @@ void Player::OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT* /*pEvent*/)
 
     if (FAILED(hr))
     {
-        SAL_WARN("avmedia.win",
-            "Player::OnMediaItemSet failed with error code: " << hr);
-
-        ShowErrorMessage(L"IMFPMediaPlayer::Play failed.", hr);
+        ShowErrorMessage(hr, true);
     }
 }
 
@@ -348,15 +338,24 @@ void Player::OnMediaItemEnded(MFP_PLAYBACK_ENDED_EVENT* /*pEvent*/)
         m_state = Stopped;
 }
 
-void Player::ShowErrorMessage(PCWSTR format, HRESULT hrErr)
+void Player::ShowErrorMessage(HRESULT hrErr, bool bPopUpWin)
 {
-    HRESULT hr = S_OK;
     TCHAR pszDest[MAX_PATH];
     LPCTSTR pszFormat = TEXT("%s (hr=0x%X)");
-    hr = StringCbPrintf(pszDest, sizeof(pszDest), pszFormat, format, hrErr);
+    const std::error_condition econd = std::system_category().default_error_condition(hrErr);
+    const std::string msg = econd.message();
+    HRESULT hr = StringCbPrintf(pszDest, sizeof(pszDest), pszFormat, msg.c_str(), hrErr);
     if (SUCCEEDED(hr))
     {
-        MessageBox(mnFrameWnd, pszDest, TEXT("Error"), MB_ICONERROR);
+        if (bPopUpWin)
+        {
+            MessageBox(mnFrameWnd, pszDest, TEXT("Error"), MB_ICONERROR);
+        }
+        else
+        {
+            SAL_WARN("avmedia.win",
+                     "Player::isPlaying failed with error code: " << std::string(pszDest));
+        }
     }
 }
 
@@ -446,10 +445,7 @@ void SAL_CALL Player::start(  )
 
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                "Player::start failed with error code: " << hr);
-
-            ShowErrorMessage(L"Error playing this file.", hr);
+            ShowErrorMessage(hr, true);
         }
     }
 }
@@ -490,8 +486,7 @@ sal_Bool SAL_CALL Player::isPlaying()
         }
         else
         {
-            SAL_WARN("avmedia.win",
-                "Player::isPlaying failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
         }
     }
 
@@ -530,8 +525,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
         HRESULT hr = g_pPlayer->SetPosition(MFP_POSITIONTYPE_100NS, &var);
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                     "Player::setMediaTime: setMediaTime failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
         }
         PropVariantClear(&var);
         // on resetting back to zero the reported timestamp doesn't seem to get
@@ -588,8 +582,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
         HRESULT hr = g_pPlayer->SetMute(bSet);
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                     "Player::setMute: setMute failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
         }
     }
 }
@@ -603,8 +596,7 @@ sal_Bool SAL_CALL Player::isMute(  )
         HRESULT hr = g_pPlayer->GetMute(&mbMuted);
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                     "Player::isMute: getMute failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
             mbMuted = false; // Reset to default if error occurs
         }
     }
@@ -622,8 +614,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
         HRESULT hr = g_pPlayer->SetVolume(mnUnmutedVolume);
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                     "Player::setVolumeDB: setVolumeDB failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
         }
     }
 }
@@ -637,8 +628,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
         HRESULT hr = g_pPlayer->GetVolume(&mnUnmutedVolume);
         if (FAILED(hr))
         {
-            SAL_WARN("avmedia.win",
-                "Player::getVolumeDB: getVolumeDB failed with error code: " << hr);
+            ShowErrorMessage(hr, false);
             mnUnmutedVolume = 1; // Reset to default if error occurs
         }
     }

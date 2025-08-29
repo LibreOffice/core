@@ -77,7 +77,7 @@ public:
     const UINT32  GetVideoHeight() const { return mnFrameHeight; }
 
     // Error handling
-    void    ShowErrorMessage(PCWSTR format, HRESULT hr);
+    void ShowErrorMessage(HRESULT hr, bool bPopUpWin);
 
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
