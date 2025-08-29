@@ -21,6 +21,8 @@
 
 #include <sal/config.h>
 
+#include <map>
+
 #include <rtl/ustring.hxx>
 
 #include <shellio.hxx>
@@ -33,6 +35,8 @@ public:
 
     bool isInTable() const { return m_bOutTable; }
     SwNodeOffset StartNodeIndex() const { return m_nStartNodeIndex; }
+    void SetListLevelPrefixSize(int nListLevel, int nPrefixSize);
+    const std::map<int, int>& GetListLevelPrefixSizes() const { return m_aListLevelPrefixSizes; }
 
 protected:
     ErrCode WriteStream() override;
@@ -42,6 +46,8 @@ private:
 
     bool m_bOutTable = false;
     SwNodeOffset m_nStartNodeIndex{ 0 };
+    /// List level -> prefix size map, e.g. "1. " size is 3.
+    std::map<int, int> m_aListLevelPrefixSizes;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

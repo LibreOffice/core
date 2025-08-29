@@ -29,6 +29,7 @@
 #include <sax/tools/converter.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/fontitem.hxx>
+#include <comphelper/string.hxx>
 
 #include <officecfg/Office/Writer.hxx>
 
@@ -406,8 +407,32 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
                 rWrt.Strm().WriteUniOrByteChar('#');
             rWrt.Strm().WriteUniOrByteChar(' ');
         }
+        else if (rNode.GetNumRule())
+        {
+            // <https://spec.commonmark.org/0.31.2/#list-items>, the amount of indent we have to use
+            // depends on the parent's prefix size.
+            OUStringBuffer aLevel;
+            auto it = rWrt.GetListLevelPrefixSizes().find(rNode.GetActualListLevel() - 1);
+            if (it != rWrt.GetListLevelPrefixSizes().end())
+            {
+                comphelper::string::padToLength(aLevel, it->second, ' ');
+            }
 
-        // TODO: handle lists
+            // In "1." form, should be one of "1." or "1)".
+            OUString aNumString(rNode.GetNumString());
+            if (aNumString.isEmpty() && rNode.HasBullet())
+            {
+                // Should be one of -, +, or *.
+                aNumString = u"-"_ustr;
+            }
+
+            if (!aLevel.isEmpty() || !aNumString.isEmpty())
+            {
+                OUString aPrefix = aLevel + aNumString + " ";
+                rWrt.Strm().WriteUnicodeOrByteText(aPrefix);
+                rWrt.SetListLevelPrefixSize(rNode.GetActualListLevel(), aPrefix.getLength());
+            }
+        }
 
         sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
         sal_Int32 nEnd = rNodeText.getLength();
@@ -615,6 +640,11 @@ void SwMDWriter::Out_SwDoc(SwPaM* pPam)
     } while (CopyNextPam(&pPam)); // until all PaM's processed
 
     m_bWriteAll = bSaveWriteAll; // reset to old values
+}
+
+void SwMDWriter::SetListLevelPrefixSize(int nListLevel, int nPrefixSize)
+{
+    m_aListLevelPrefixSizes[nListLevel] = nPrefixSize;
 }
 
 void GetMDWriter(std::u16string_view /*rFilterOptions*/, const OUString& rBaseURL, WriterRef& xRet)
