@@ -61,8 +61,8 @@ OString generateImportStatementLocal(std::string_view fromModule, std::string_vi
 }
 }
 
-//If idl has same varialbe name as a python keywords this function adds a '_' after it to avoid error.
-// e.g varialbe 'and' changes to 'and_'
+//If idl has same variable name as a python keywords this function adds a '_' after it to avoid error.
+// e.g variable 'and' changes to 'and_'
 OString getSafePythonIdentifier(const OString& unoIdentifier)
 {
     if (PYTHON_KEYWORDS.count(unoIdentifier))
@@ -1217,7 +1217,7 @@ void PythonStubGenerator::generateSingleton(unoidl::InterfaceBasedSingletonEntit
     dedent();
 }
 
-// Functions resposible for the indentation and dedentation of the python stubs.
+// Functions responsible for the indentation and dedentation of the python stubs.
 void PythonStubGenerator::indent() { m_indentLevel++; }
 void PythonStubGenerator::dedent()
 {
