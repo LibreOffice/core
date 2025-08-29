@@ -1352,7 +1352,8 @@ namespace emfio
                         mpInputStream->ReadInt32(nX32).ReadInt32(nY32).ReadInt32(nx32).ReadInt32(ny32).ReadUInt32(nW).ReadUInt32(nH);
                         SAL_INFO("emfio", "\t\t Rectangle position: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32);
                         SAL_INFO("emfio", "\t\t Ellipse Width: " << nW << ", Height" << nH);
-                        tools::Polygon aRoundRectPoly(ReadRectangle(nX32, nY32, nx32, ny32), nW, nH);
+                        // Convert from ellipse width and height to ellipse vertical and horizontal radius
+                        tools::Polygon aRoundRectPoly(ReadRectangle(nX32, nY32, nx32, ny32), nW >> 1, nH >> 1);
                         DrawPolygon(std::move(aRoundRectPoly), mbRecordPath);
                     }
                     break;
