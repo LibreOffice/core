@@ -2482,7 +2482,9 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     }
     mpFS->endElementNS(XML_p, XML_spPr);
 
-    WriteTextBox(xShape, XML_p, /*bWritePropertiesAsLstStyles=*/bUsePlaceholderIndex);
+    bool bWritePropertiesAsLstStyles = bUsePlaceholderIndex || ePlaceholder == Title
+                                       || ePlaceholder == Subtitle || ePlaceholder == Outliner;
+    WriteTextBox(xShape, XML_p, bWritePropertiesAsLstStyles);
 
     mpFS->endElementNS(XML_p, XML_sp);
 

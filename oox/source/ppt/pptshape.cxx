@@ -198,7 +198,29 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
             if (xFamilies->getByName(aStyle) >>= aXStyle)
             {
                 TextCharacterProperties aCharStyleProperties;
-                getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleProperties, mpMasterTextListStyle);
+                getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleProperties,
+                                                    mpMasterTextListStyle, size_t(0));
+                if (aStyle.equals(u"outline1"_ustr)/* BodyStyle */)
+                {
+                    for (size_t nLevel = 2; nLevel < 10; nLevel++) // outline2 ... outline9
+                    {
+                        char pOutline[9] = "outline1";
+                        pOutline[7] = static_cast<char>('0' + nLevel);
+                        OUString sOutlineStyle(OUString::createFromAscii(pOutline));
+                        if (xFamilies->hasByName(sOutlineStyle))
+                        {
+                            if (aXStyle.is())
+                                aXStyle.clear();
+
+                            xFamilies->getByName(sOutlineStyle) >>= aXStyle;
+                            if (aXStyle.is())
+                            {
+                                TextCharacterProperties aCharStyleLvlProps;
+                                getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleLvlProps, mpMasterTextListStyle, nLevel - 1);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

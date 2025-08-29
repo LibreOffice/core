@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
@@ -1436,6 +1437,85 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCustomPromptTexts)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong placeholder text was set!", aText,
                                      u"Text placeholder"_ustr);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPresObjTextStyles)
+{
+    createSdImpressDoc("pptx/tdf163239_v2.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    // 1st slide
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"Title Slide"_ustr), uno::UNO_QUERY);
+    {
+        // Title style
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
+                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(60.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
+                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
+                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    }
+    // 2nd slide
+    xStyleFamily.set(xStyleFamilies->getByName(u"Title and Content"_ustr), uno::UNO_QUERY);
+    {
+        // Title style
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName(u"title"_ustr),
+                                             uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropSet(xStyle, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(44.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
+                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+
+        // outline1 style
+        xStyle.set(xStyleFamily->getByName(u"outline1"_ustr), uno::UNO_QUERY);
+        xPropSet.set(xStyle, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(28.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
+                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+
+        // outline2 style
+        xStyle.set(xStyleFamily->getByName(u"outline2"_ustr), uno::UNO_QUERY);
+        xPropSet.set(xStyle, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(24.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
+                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+
+        // outline5 style
+        xStyle.set(xStyleFamily->getByName(u"outline5"_ustr), uno::UNO_QUERY);
+        xPropSet.set(xStyle, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(18.0f, xPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                             xPropSet->getPropertyValue(u"ParaAdjust"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL(u"Marianne"_ustr,
+                             xPropSet->getPropertyValue(u"CharFontName"_ustr).get<OUString>());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextStylesXML)
+{
+    createSdImpressDoc("pptx/tdf163239_v2.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+
+    assertXPath(pXmlDocRels, "/p:sldLayout/p:cSld/p:spTree/p:sp[1]/p:txBody/a:lstStyle/a:lvl1pPr",
+                "algn", u"ctr");
+    assertXPath(pXmlDocRels,
+                "/p:sldLayout/p:cSld/p:spTree/p:sp[1]/p:txBody/a:lstStyle/a:lvl1pPr/a:defRPr", "sz",
+                u"6000");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -101,7 +101,7 @@ public:
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const css::uno::Reference< css::style::XStyle > & aXStyle,
                             const TextCharacterProperties& rTextStyleProperties,
-                            const TextListStylePtr& pMasterTextListStylePtr) const;
+                            const TextListStylePtr& pMasterTextListStylePtr, size_t nLevel) const;
 private:
     TextParagraphVector maParagraphs;
     TextBodyProperties  maTextProperties;
