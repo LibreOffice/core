@@ -53,9 +53,6 @@
                 <property name="column-spacing">0</property>
                 <property name="item-padding">4</property>
                 <property name="activate-on-single-click">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="LBL_COLORFUL"/>
-                </accessibility>
               </object>
             </child>
           </object>
@@ -69,9 +66,6 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
-            <accessibility>
-              <relation type="label-for" target="colorful_palettes"/>
-            </accessibility>
           </object>
         </child>
       </object>
@@ -111,9 +105,6 @@
                 <property name="column-spacing">0</property>
                 <property name="item-padding">4</property>
                 <property name="activate-on-single-click">True</property>
-                <accessibility>
-                  <relation type="labelled-by" target="LBL_MONOCHROMATIC"/>
-                </accessibility>
               </object>
             </child>
           </object>
@@ -127,9 +118,6 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
-            <accessibility>
-              <relation type="label-for" target="monochromatic_palettes"/>
-            </accessibility>
           </object>
         </child>
       </object>
