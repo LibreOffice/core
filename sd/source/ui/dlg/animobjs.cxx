@@ -745,7 +745,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
-                            ::std::make_pair(Bitmap(rAnimationFrame.maBitmapEx), aTime));
+                            ::std::make_pair(rAnimationFrame.maBitmap, aTime));
 
                     // increment => next one inserted after this one
                     ++m_nCurrentFrame;
@@ -968,7 +968,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             if( nPos != -1 && nPos != m_xLbLoopCount->get_count() - 1 ) // endless
                 nLoopCount = m_xLbLoopCount->get_active_text().toUInt32();
 
-            aAnimationFrame.maBitmapEx = rBitmap;
+            aAnimationFrame.maBitmap = rBitmap;
             aAnimationFrame.maPositionPixel = aPt;
             aAnimationFrame.maSizePixel = aBitmapSize;
             aAnimationFrame.mnWait = nTime;

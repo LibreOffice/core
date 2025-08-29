@@ -328,7 +328,7 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             bitmap.SetPrefMapMode(aMapMode);
             bitmap.SetPrefSize(Size(w, h));
 
-            AnimationFrame aAnimationFrame(BitmapEx(bitmap), Point(0, 0), bitmap.GetSizePixel(),
+            AnimationFrame aAnimationFrame(bitmap, Point(0, 0), bitmap.GetSizePixel(),
                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back);
             aAnimation.Insert(aAnimationFrame);
         }

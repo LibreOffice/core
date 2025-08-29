@@ -775,7 +775,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
                     // cropping affects this frame, apply it then
                     // do _not_ apply enlargement, this is done below
-                    ImplTransformBitmap( aAnimationFrame.maBitmapEx, rAttr, Size(), Size(),
+                    ImplTransformBitmap( aAnimationFrame.maBitmap, rAttr, Size(), Size(),
                                          aCropRectRel, rDestSize, false );
 
                     aAnim.Replace( aAnimationFrame, nFrame );

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 enum class Disposal
 {
@@ -36,7 +36,7 @@ enum class Blend
 
 struct AnimationFrame
 {
-    BitmapEx maBitmapEx;
+    Bitmap maBitmap;
     Point maPositionPixel;
     Size maSizePixel;
     tools::Long mnWait;
@@ -52,10 +52,10 @@ struct AnimationFrame
     {
     }
 
-    AnimationFrame(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
+    AnimationFrame(const Bitmap& rBitmap, const Point& rPositionPixel, const Size& rSizePixel,
                    tools::Long nWait = 0, Disposal eDisposal = Disposal::Not,
                    Blend eBlend = Blend::Over)
-        : maBitmapEx(rBitmapEx)
+        : maBitmap(rBitmap)
         , maPositionPixel(rPositionPixel)
         , maSizePixel(rSizePixel)
         , mnWait(nWait)
@@ -67,7 +67,7 @@ struct AnimationFrame
 
     bool operator==(const AnimationFrame& rAnimationFrame) const
     {
-        return (rAnimationFrame.maBitmapEx == maBitmapEx
+        return (rAnimationFrame.maBitmap == maBitmap
                 && rAnimationFrame.maPositionPixel == maPositionPixel
                 && rAnimationFrame.maSizePixel == maSizePixel && rAnimationFrame.mnWait == mnWait
                 && rAnimationFrame.meDisposal == meDisposal && rAnimationFrame.meBlend == meBlend

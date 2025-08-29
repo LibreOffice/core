@@ -298,10 +298,9 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 case Disposal::Not:
                 {
                     pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
-                                        rAnimationFrame.maBitmapEx);
-                    AlphaMask aMask = rAnimationFrame.maBitmapEx.GetAlphaMask();
+                                        rAnimationFrame.maBitmap);
 
-                    if (aMask.IsEmpty())
+                    if (!rAnimationFrame.maBitmap.HasAlpha())
                     {
                         const tools::Rectangle aRect(aEmptyPoint, pVDevMask->GetOutputSizePixel());
                         const Wallpaper aWallpaper(COL_BLACK);
@@ -309,6 +308,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                     }
                     else
                     {
+                        AlphaMask aMask = rAnimationFrame.maBitmap.CreateAlphaMask();
                         BitmapEx aTmpMask(aMask.GetBitmap(), aMask);
                         pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aTmpMask);
                     }
@@ -318,22 +318,22 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 case Disposal::Back:
                 {
                     // #i70772# react on no mask
-                    const AlphaMask aMask(rAnimationFrame.maBitmapEx.GetAlphaMask());
-                    const Bitmap& rContent(rAnimationFrame.maBitmapEx.GetBitmap());
+                    const Bitmap aContent(rAnimationFrame.maBitmap.CreateColorBitmap());
 
                     pVDevMask->Erase();
-                    pVDev->DrawBitmap(rAnimationFrame.maPositionPixel, rContent);
+                    pVDev->DrawBitmap(rAnimationFrame.maPositionPixel, aContent);
 
-                    if (aMask.IsEmpty())
+                    if (!rAnimationFrame.maBitmap.HasAlpha())
                     {
                         const tools::Rectangle aRect(rAnimationFrame.maPositionPixel,
-                                                     rContent.GetSizePixel());
+                                                     aContent.GetSizePixel());
                         pVDevMask->SetFillColor(COL_BLACK);
                         pVDevMask->SetLineColor();
                         pVDevMask->DrawRect(aRect);
                     }
                     else
                     {
+                        const AlphaMask aMask(rAnimationFrame.maBitmap.CreateAlphaMask());
                         pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel, aMask.GetBitmap());
                     }
                     break;
@@ -342,9 +342,9 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 case Disposal::Previous:
                 {
                     pVDev->DrawBitmapEx(rAnimationFrame.maPositionPixel,
-                                        rAnimationFrame.maBitmapEx);
+                                        rAnimationFrame.maBitmap);
                     pVDevMask->DrawBitmap(rAnimationFrame.maPositionPixel,
-                                          rAnimationFrame.maBitmapEx.GetAlphaMask().GetBitmap());
+                                          rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap());
                     break;
                 }
             }

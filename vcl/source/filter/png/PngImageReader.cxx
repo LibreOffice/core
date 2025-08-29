@@ -649,7 +649,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 if (aDisposal == Disposal::Previous)
                     aDisposal = Disposal::Back;
                 AnimationFrame aAnimationFrame(
-                    BitmapEx(aBitmap), aFirstPoint, aCanvasSize,
+                    aBitmap, aFirstPoint, aCanvasSize,
                     NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
                 aAnimation.Insert(aAnimationFrame);
             }
@@ -694,7 +694,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
             Point aStartPoint(aFctlChunk->x_offset, aFctlChunk->y_offset);
             Size aSize(aFctlChunk->width, aFctlChunk->height);
             AnimationFrame aAnimationFrame(
-                BitmapEx(aFrameBitmap), aStartPoint, aSize,
+                aFrameBitmap, aStartPoint, aSize,
                 NumDenToTime(aFctlChunk->delay_num, aFctlChunk->delay_den), aDisposal, aBlend);
             aAnimation.Insert(aAnimationFrame);
         }

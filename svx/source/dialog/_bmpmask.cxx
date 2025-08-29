@@ -635,7 +635,7 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationFrame aAnimationFrame( aAnimation.Get( i ) );
-        aAnimationFrame.maBitmapEx = BitmapEx(Mask(Bitmap(aAnimationFrame.maBitmapEx)).GetBitmap());
+        aAnimationFrame.maBitmap = Mask(aAnimationFrame.maBitmap).GetBitmap();
         aAnimation.Replace(aAnimationFrame, i);
     }
 
@@ -892,7 +892,7 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
     for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationFrame aAnimationFrame(aAnimation.Get(i));
-        aAnimationFrame.maBitmapEx.ReplaceTransparency(rColor);
+        aAnimationFrame.maBitmap.ReplaceTransparency(rColor);
         aAnimation.Replace(aAnimationFrame, i);
     }
 

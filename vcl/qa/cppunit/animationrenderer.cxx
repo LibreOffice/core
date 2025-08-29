@@ -39,9 +39,9 @@ Animation createAnimation()
     Animation aAnimation;
 
     aAnimation.Insert(
-        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
+        AnimationFrame(Bitmap(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
     aAnimation.Insert(
-        AnimationFrame(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
+        AnimationFrame(Bitmap(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
 
     return aAnimation;
 }
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testGetPosSizeWindow)
 
     AnimationRenderer* pAnimationRenderer
         = new AnimationRenderer(&aTestAnim, pTestRC, Point(0, 0), Size(10, 10), 5);
-    AnimationFrame aAnimBmp(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
+    AnimationFrame aAnimBmp(Bitmap(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0),
                             Size(10, 10));
     Point aPos;
     Size aSize;

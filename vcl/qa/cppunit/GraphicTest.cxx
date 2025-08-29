@@ -1086,7 +1086,7 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithGfxLink)
 
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(89552), rByteSize);
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(179104), rByteSize);
 
     // Make sure we don't have a file
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileStream() == nullptr);
@@ -1158,10 +1158,10 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingAnimationGraphic_GIF_WithoutGfxLin
         pStream->Seek(0);
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15139), pStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(140851), pStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(*pStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("f3678a6f0adc2a86450facd850c4740ba0ecb52a"),
+        CPPUNIT_ASSERT_EQUAL(std::string("1d63bf2441d5d46c28f18978e5d104673c34a7cf"),
                              comphelper::hashToString(aHash));
     }
 

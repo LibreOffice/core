@@ -130,7 +130,7 @@ sal_uLong Animation::GetSizeBytes() const
 {
     return std::accumulate(maFrames.begin(), maFrames.end(), GetBitmapEx().GetSizeBytes(),
                            [](sal_Int64 nSize, const std::unique_ptr<AnimationFrame>& pFrame) {
-                               return nSize + pFrame->maBitmapEx.GetSizeBytes();
+                               return nSize + pFrame->maBitmap.GetSizeBytes();
                            });
 }
 
@@ -243,11 +243,11 @@ void Animation::Draw(OutputDevice& rOut, const Point& rDestPt, const Size& rDest
 
     if (rOut.GetConnectMetaFile() || (rOut.GetOutDevType() == OUTDEV_PRINTER))
     {
-        maFrames[0]->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+        maFrames[0]->maBitmap.Draw(&rOut, rDestPt, rDestSz);
     }
     else if (ANIMATION_TIMEOUT_ON_CLICK == pObj->mnWait)
     {
-        pObj->maBitmapEx.Draw(&rOut, rDestPt, rDestSz);
+        pObj->maBitmap.Draw(&rOut, rDestPt, rDestSz);
     }
     else
     {
@@ -321,7 +321,7 @@ void Animation::RenderNextFrameInAllRenderers()
             Stop();
             mbLoopTerminated = true;
             mnFrameIndex = maFrames.size() - 1;
-            maBitmapEx = maFrames[mnFrameIndex]->maBitmapEx;
+            maBitmapEx = maFrames[mnFrameIndex]->maBitmap;
             return;
         }
         else
@@ -409,7 +409,7 @@ bool Animation::Insert(const AnimationFrame& rStepBmp)
 
     // As a start, we make the first BitmapEx the replacement BitmapEx
     if (maFrames.size() == 1)
-        maBitmapEx = rStepBmp.maBitmapEx;
+        maBitmapEx = rStepBmp.maBitmap;
 
     return true;
 }
@@ -431,7 +431,7 @@ void Animation::Replace(const AnimationFrame& rNewAnimationFrame, sal_uInt16 nAn
     if ((!nAnimation && (!mbLoopTerminated || (maFrames.size() == 1)))
         || ((nAnimation == maFrames.size() - 1) && mbLoopTerminated))
     {
-        maBitmapEx = rNewAnimationFrame.maBitmapEx;
+        maBitmapEx = rNewAnimationFrame.maBitmap;
     }
 }
 
@@ -458,7 +458,7 @@ void Animation::Convert(BmpConversion eConversion)
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = maFrames[i]->maBitmapEx.Convert(eConversion);
+        bRet = maFrames[i]->maBitmap.Convert(eConversion);
     }
 
     maBitmapEx.Convert(eConversion);
@@ -475,7 +475,7 @@ bool Animation::ReduceColors(sal_uInt16 nNewColorCount)
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = BitmapFilter::Filter(maFrames[i]->maBitmapEx,
+        bRet = BitmapFilter::Filter(maFrames[i]->maBitmap,
                                     BitmapColorQuantizationFilter(nNewColorCount));
     }
 
@@ -495,7 +495,7 @@ bool Animation::Invert()
 
     for (auto& pFrame : maFrames)
     {
-        if (!pFrame->maBitmapEx.Invert())
+        if (!pFrame->maBitmap.Invert())
             return false;
     }
 
@@ -517,7 +517,7 @@ void Animation::Mirror(BmpMirrorFlags nMirrorFlags)
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
         AnimationFrame* pCurrentFrameBmp = maFrames[i].get();
-        bRet = pCurrentFrameBmp->maBitmapEx.Mirror(nMirrorFlags);
+        bRet = pCurrentFrameBmp->maBitmap.Mirror(nMirrorFlags);
         if (bRet)
         {
             if (nMirrorFlags & BmpMirrorFlags::Horizontal)
@@ -547,8 +547,8 @@ void Animation::Adjust(short nLuminancePercent, short nContrastPercent, short nC
 
     for (size_t i = 0, n = maFrames.size(); (i < n) && bRet; ++i)
     {
-        bRet = maFrames[i]->maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent,
-                                              nChannelGPercent, nChannelBPercent, fGamma, bInvert);
+        bRet = maFrames[i]->maBitmap.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent,
+                                            nChannelGPercent, nChannelBPercent, fGamma, bInvert);
     }
 
     maBitmapEx.Adjust(nLuminancePercent, nContrastPercent, nChannelRPercent, nChannelGPercent,
@@ -567,7 +567,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
     // If no BitmapEx was set we write the first Bitmap of
     // the Animation
     if (rAnimation.GetBitmapEx().GetBitmap().IsEmpty())
-        WriteDIBBitmapEx(rAnimation.Get(0).maBitmapEx, rOStm);
+        WriteDIBBitmapEx(rAnimation.Get(0).maBitmap, rOStm);
     else
         WriteDIBBitmapEx(rAnimation.GetBitmapEx(), rOStm);
 
@@ -580,7 +580,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
         const sal_uInt16 nRest = nCount - i - 1;
 
         // Write AnimationFrame
-        WriteDIBBitmapEx(rAnimationFrame.maBitmapEx, rOStm);
+        WriteDIBBitmapEx(rAnimationFrame.maBitmap, rOStm);
         tools::GenericTypeSerializer aSerializer(rOStm);
         aSerializer.writePoint(rAnimationFrame.maPositionPixel);
         aSerializer.writeSize(rAnimationFrame.maSizePixel);
@@ -644,7 +644,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 
         do
         {
-            ReadDIBBitmapEx(aAnimationFrame.maBitmapEx, rIStm);
+            ReadDIBBitmapEx(aAnimationFrame.maBitmap, rIStm);
             tools::GenericTypeSerializer aSerializer(rIStm);
             aSerializer.readPoint(aAnimationFrame.maPositionPixel);
             aSerializer.readSize(aAnimationFrame.maSizePixel);

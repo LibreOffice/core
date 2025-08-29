@@ -215,7 +215,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
     {
         const AnimationFrame& rAnimationFrame = rAnimation.Get( i );
 
-        WriteBitmapEx(rAnimationFrame.maBitmapEx, rAnimationFrame.maPositionPixel, true,
+        WriteBitmapEx(BitmapEx(rAnimationFrame.maBitmap), rAnimationFrame.maPositionPixel, true,
                        rAnimationFrame.mnWait, rAnimationFrame.meDisposal );
         nMinPercent = nMaxPercent;
         nMaxPercent = static_cast<sal_uInt32>(nMaxPercent + fStep);

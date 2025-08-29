@@ -271,7 +271,7 @@ void AnimationRenderer::draw( sal_uLong nIndex, VirtualDevice* pVDev )
             mpRestore->DrawOutDev( Point(), maRestSz, aPosPix, aSizePix, *pDev );
         }
 
-        pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnimationFrame.maBitmapEx );
+        pDev->DrawBitmapEx( aBmpPosPix, aBmpSizePix, rAnimationFrame.maBitmap );
 
         if( !pVDev )
         {

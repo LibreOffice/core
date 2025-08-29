@@ -227,9 +227,9 @@ void TypeSerializerTest::testGraphic_Animation()
         }
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15123), aMemoryStream.remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(140835), aMemoryStream.remainingSize());
         std::vector<unsigned char> aHash = calculateHash(aMemoryStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("1defb473c6f0eeb915935d5039ce0aaed00226ed"),
+        CPPUNIT_ASSERT_EQUAL(std::string("d002e4d28b2b3b68d9daad97343ea8811e579e2d"),
                              comphelper::hashToString(aHash));
 
         aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);

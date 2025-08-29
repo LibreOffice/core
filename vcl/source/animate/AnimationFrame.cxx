@@ -25,7 +25,7 @@
 
 BitmapChecksum AnimationFrame::GetChecksum() const
 {
-    BitmapChecksum nCrc = maBitmapEx.GetChecksum();
+    BitmapChecksum nCrc = maBitmap.GetChecksum();
     SVBT32 aBT32;
 
     Int32ToSVBT32(maPositionPixel.X(), aBT32);

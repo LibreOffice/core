@@ -664,7 +664,7 @@ void GIFReader::CreateNewBitmaps()
         AlphaMask aAlphaMask(aBmp1);
         // No need to convert from transparency to alpha
         // aBmp1 is already inverted
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
+        aAnimationFrame.maBitmap = Bitmap(BitmapEx( aBmp8, aAlphaMask ));
     }
     else if( nPaletteSize > 2 )
     {
@@ -676,7 +676,7 @@ void GIFReader::CreateNewBitmaps()
         // and create a completely opaque bitmap instead.
         // Note: this fix also fixes tdf#157576, tdf#157635, and tdf#157793.
         AlphaMask aAlphaMask(aBmp8.GetSizePixel());
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
+        aAnimationFrame.maBitmap = Bitmap(BitmapEx( aBmp8, aAlphaMask ));
     }
     else
     {
@@ -684,7 +684,7 @@ void GIFReader::CreateNewBitmaps()
         // in Word documents like the following test document to fail to be
         // parsed correctly:
         // sw/qa/extras/tiledrendering/data/tdf159626_yellowPatternFill.docx
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
+        aAnimationFrame.maBitmap = aBmp8;
     }
 
     aAnimationFrame.maPositionPixel = Point( nImagePosX, nImagePosY );
@@ -704,7 +704,7 @@ void GIFReader::CreateNewBitmaps()
     else
         aAnimationFrame.meDisposal = Disposal::Not;
 
-    nAnimationByteSize += aAnimationFrame.maBitmapEx.GetSizeBytes();
+    nAnimationByteSize += aAnimationFrame.maBitmap.GetSizeBytes();
     nAnimationMinFileData += static_cast<sal_uInt64>(nImageWidth) * nImageHeight / 2560;
     aAnimation.Insert(aAnimationFrame);
 
@@ -925,7 +925,7 @@ ReadState GIFReader::ReadGIF(ImportOutput& rImportOutput)
     if (aAnimation.Count() == 1)
     {
         rImportOutput.mbIsAnimated = false;
-        rImportOutput.moBitmap = Bitmap(aAnimation.Get(0).maBitmapEx);
+        rImportOutput.moBitmap = aAnimation.Get(0).maBitmap;
 
         if (aPrefSize.Width() && aPrefSize.Height())
         {

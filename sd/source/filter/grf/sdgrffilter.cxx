@@ -167,7 +167,7 @@ bool SdGRFFilter::Import()
             }
             for (size_t nPageIndex = 0; nPageIndex < nImages; ++nPageIndex)
             {
-                InsertSdrGrafObj(Bitmap(aAnim.Get(nPageIndex).maBitmapEx),
+                InsertSdrGrafObj(aAnim.Get(nPageIndex).maBitmap,
                                  mrDocument.GetSdPage(nPageIndex, PageKind::Standard));
             }
         }

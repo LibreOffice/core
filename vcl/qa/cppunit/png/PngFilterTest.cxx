@@ -329,9 +329,9 @@ void PngFilterTest::testApng()
     AnimationFrame aFrame1 = *rAnimation.GetAnimationFrames()[0];
     AnimationFrame aFrame2 = *rAnimation.GetAnimationFrames()[1];
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.maBitmapEx.GetPixelColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.maBitmapEx.GetPixelColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2.maBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.maBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.maBitmap.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2.maBitmap.GetPixelColor(0, 0));
 
     // Roundtrip the APNG
     SvMemoryStream aOutStream;
@@ -353,9 +353,9 @@ void PngFilterTest::testApng()
     AnimationFrame aFrame1Roundtripped = *rAnimation2.GetAnimationFrames()[0];
     AnimationFrame aFrame2Roundtripped = *rAnimation2.GetAnimationFrames()[1];
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1Roundtripped.maBitmapEx.GetPixelColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1Roundtripped.maBitmapEx.GetPixelColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2Roundtripped.maBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1Roundtripped.maBitmap.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1Roundtripped.maBitmap.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2Roundtripped.maBitmap.GetPixelColor(0, 0));
 
     // Make sure the two frames have the same properties
     CPPUNIT_ASSERT_EQUAL(aFrame1.maPositionPixel, aFrame1Roundtripped.maPositionPixel);
