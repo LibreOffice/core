@@ -79,6 +79,8 @@ void WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
         updateColumn(i,m_xUpdRow,*aIter);
     }
     m_xUpd->insertRow();
+    // We must go away from the insert row when the insert is finish
+    m_xUpd->moveToCurrentRow();
     (*_rInsertRow->begin()) = getBookmark();
 }
 
