@@ -31,6 +31,7 @@ using namespace ::com::sun::star::chart2;
 Dim3DLookResourceGroup::Dim3DLookResourceGroup(weld::Builder* pBuilder)
     : m_xCB_3DLook(pBuilder->weld_check_button(u"3dlook"_ustr))
     , m_xLB_Scheme(pBuilder->weld_combo_box(u"3dscheme"_ustr))
+    , m_xFT_Scheme(pBuilder->weld_label(u"3dschemeft"_ustr))
 {
     m_xCB_3DLook->connect_toggled(LINK(this, Dim3DLookResourceGroup, Dim3DLookCheckHdl));
     m_xLB_Scheme->connect_changed(LINK(this, Dim3DLookResourceGroup, SelectSchemeHdl));
@@ -40,12 +41,14 @@ void Dim3DLookResourceGroup::showControls(bool bShow)
 {
     m_xCB_3DLook->set_visible(bShow);
     m_xLB_Scheme->set_visible(bShow);
+    m_xFT_Scheme->set_visible(bShow);
 }
 
 void Dim3DLookResourceGroup::fillControls(const ChartTypeParameter& rParameter)
 {
     m_xCB_3DLook->set_active(rParameter.b3DLook);
     m_xLB_Scheme->set_sensitive(rParameter.b3DLook);
+    m_xFT_Scheme->set_sensitive(rParameter.b3DLook);
 
     // tdf#124295 - select always a 3D scheme
     switch (rParameter.eThreeDLookScheme)
