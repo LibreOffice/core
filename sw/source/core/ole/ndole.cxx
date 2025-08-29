@@ -33,7 +33,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <utility>
-#include <vcl/dropcache.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -58,7 +57,7 @@
 #include <svx/unopage.hxx>
 #include <comphelper/threadpool.hxx>
 #include <atomic>
-#include <vector>
+#include <deque>
 #include <libxml/xmlwriter.h>
 #include <osl/diagnose.h>
 #include <flyfrm.hxx>
@@ -71,38 +70,13 @@ namespace {
 
 class SwOLELRUCache
     : private utl::ConfigItem
-    , public CacheOwner
 {
 private:
-#if defined __cpp_lib_memory_resource
-    typedef std::pmr::vector<SwOLEObj*> vector_t;
-#else
-    typedef std::vector<SwOLEObj*> vector_t;
-#endif
-    vector_t m_OleObjects;
+    std::deque<SwOLEObj *> m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
     static uno::Sequence< OUString > GetPropertyNames();
 
     virtual void ImplCommit() override;
-
-    void tryShrinkCacheTo(sal_Int32 nVal);
-
-    virtual OUString getCacheName() const override
-    {
-        return "SwOLELRUCache";
-    }
-
-    virtual bool dropCaches() override
-    {
-        tryShrinkCacheTo(0);
-        return m_OleObjects.empty();
-    }
-
-    virtual void dumpState(rtl::OStringBuffer& rState) override
-    {
-        rState.append("\nSwOLELRUCache:\t");
-        rState.append(static_cast<sal_Int32>(m_OleObjects.size()));
-    }
 
 public:
     SwOLELRUCache();
@@ -1310,9 +1284,6 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwOLELRUCache::SwOLELRUCache()
     : utl::ConfigItem(u"Office.Common/Cache"_ustr)
-#if defined __cpp_lib_memory_resource
-    , m_OleObjects(&GetMemoryResource())
-#endif
     , m_nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );
@@ -1334,23 +1305,6 @@ void SwOLELRUCache::ImplCommit()
 {
 }
 
-void SwOLELRUCache::tryShrinkCacheTo(sal_Int32 nVal)
-{
-    // size of cache has been changed
-    sal_Int32 nCount = m_OleObjects.size();
-    sal_Int32 nPos = nCount;
-
-    // try to remove the last entries until new maximum size is reached
-    while( nCount > nVal )
-    {
-        SwOLEObj *const pObj = m_OleObjects[ --nPos ];
-        if ( pObj->UnloadObject() )
-            nCount--;
-        if ( !nPos )
-            break;
-    }
-}
-
 void SwOLELRUCache::Load()
 {
     Sequence< OUString > aNames( GetPropertyNames() );
@@ -1362,11 +1316,25 @@ void SwOLELRUCache::Load()
 
     sal_Int32 nVal = 0;
     *pValues >>= nVal;
+
     if (nVal < m_nLRU_InitSize)
     {
         std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
-        tryShrinkCacheTo(nVal);
+        // size of cache has been changed
+        sal_Int32 nCount = m_OleObjects.size();
+        sal_Int32 nPos = nCount;
+
+        // try to remove the last entries until new maximum size is reached
+        while( nCount > nVal )
+        {
+            SwOLEObj *const pObj = m_OleObjects[ --nPos ];
+            if ( pObj->UnloadObject() )
+                nCount--;
+            if ( !nPos )
+                break;
+        }
     }
+
     m_nLRU_InitSize = nVal;
 }
 
@@ -1392,7 +1360,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
         if ( pObj->UnloadObject() )
             nCount--;
     }
-    m_OleObjects.insert(m_OleObjects.begin(), &rObj);
+    m_OleObjects.push_front(&rObj);
 }
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
