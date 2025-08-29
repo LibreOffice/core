@@ -152,7 +152,7 @@ void PageObjectPainter::PaintPreview (
 BitmapEx PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
     const BitmapEx& rPreview,
-    const BitmapEx& rOverlay,
+    const Bitmap& rOverlay,
     const OutputDevice* pReferenceDevice)
 {
     ScopedVclPtr<VirtualDevice> pDevice;

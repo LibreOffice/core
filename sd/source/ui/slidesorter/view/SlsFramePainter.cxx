@@ -23,7 +23,7 @@
 
 namespace sd::slidesorter::view {
 
-FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
+FramePainter::FramePainter (const Bitmap& rShadowBitmap)
     : maTopLeft(rShadowBitmap,-1,-1),
       maTop(rShadowBitmap,0,-1),
       maTopRight(rShadowBitmap,+1,-1),
@@ -98,7 +98,7 @@ void FramePainter::AdaptColor (
 //===== FramePainter::OffsetBitmap ============================================
 
 FramePainter::OffsetBitmap::OffsetBitmap (
-    const BitmapEx& rBitmap,
+    const Bitmap& rBitmap,
     const sal_Int32 nHorizontalPosition,
     const sal_Int32 nVerticalPosition)
 {
@@ -115,7 +115,7 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     const Size aSize(
         nHorizontalPosition==0 ? nS : nC,
         nVerticalPosition==0 ? nS : nC);
-    maBitmap = BitmapEx(rBitmap, aOrigin, aSize);
+    maBitmap = Bitmap(rBitmap, aOrigin, aSize);
     if (maBitmap.IsEmpty())
         return;
     maOffset = Point(
@@ -209,6 +209,8 @@ void FramePainter::OffsetBitmap::PaintCenter (
     OutputDevice& rDevice,
     const ::tools::Rectangle& rBox) const
 {
+    if (maBitmap.IsEmpty())
+        return;
     const Size aBitmapSize (maBitmap.GetSizePixel());
     for (::tools::Long nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())
         for (::tools::Long nX=rBox.Left(); nX<=rBox.Right(); nX+=aBitmapSize.Width())

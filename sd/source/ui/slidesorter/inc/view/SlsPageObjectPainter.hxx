@@ -104,7 +104,7 @@ private:
     static BitmapEx CreateMarkedPreview(
         const Size& rSize,
         const BitmapEx& rPreview,
-        const BitmapEx& rOverlay,
+        const Bitmap& rOverlay,
         const OutputDevice* pReferenceDevice);
 
     /** Update the local pointer to the page object layouter to the

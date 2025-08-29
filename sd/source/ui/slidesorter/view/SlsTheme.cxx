@@ -199,7 +199,7 @@ void Theme::SetGradient (
     rGradient.maBorderColor2 = ChangeLuminance(aColor, nBorderEndOffset);
 }
 
-const BitmapEx& Theme::GetIcon (const IconType eType)
+const Bitmap& Theme::GetIcon (const IconType eType)
 {
     if (size_t(eType)<maIcons.size())
         return maIcons[eType];

@@ -107,7 +107,7 @@ public:
         Icon_FocusBorder,
         IconType_Size_
     };
-    const BitmapEx& GetIcon (const IconType eType);
+    const Bitmap& GetIcon (const IconType eType);
 
 private:
     class GradientDescriptor
@@ -120,7 +120,7 @@ private:
     };
     Color maBackgroundColor;
     ::std::vector<GradientDescriptor> maGradients;
-    ::std::vector<BitmapEx> maIcons;
+    ::std::vector<Bitmap> maIcons;
     ::std::vector<Color> maColor;
 
     GradientDescriptor& GetGradient (const GradientColorType eType);

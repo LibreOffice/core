@@ -26,7 +26,7 @@ namespace sd::slidesorter::view {
 class FramePainter
 {
 public:
-    explicit FramePainter (const BitmapEx& rBitmap);
+    explicit FramePainter (const Bitmap& rBitmap);
     ~FramePainter();
 
     /** Paint a border around the given box by using a set of bitmaps for
@@ -46,7 +46,7 @@ private:
     */
     class OffsetBitmap {
     public:
-        BitmapEx maBitmap;
+        Bitmap maBitmap;
         Point maOffset;
 
         /** Create one of the eight shadow bitmaps from one that combines
@@ -65,7 +65,7 @@ private:
                 Valid values are -1 (top), 0 (center), and +1 (bottom).
         */
         OffsetBitmap (
-            const BitmapEx& rBitmap,
+            const Bitmap& rBitmap,
             const sal_Int32 nHorizontalPosition,
             const sal_Int32 nVerticalPosition);
 
