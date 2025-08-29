@@ -54,6 +54,7 @@ private:
 private:
     std::unique_ptr<weld::CheckButton> m_xCB_3DLook;
     std::unique_ptr<weld::ComboBox> m_xLB_Scheme;
+    std::unique_ptr<weld::Label> m_xFT_Scheme;
 };
 
 class SortByXValuesResourceGroup final : public ChangingResource
