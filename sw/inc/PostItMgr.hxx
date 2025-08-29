@@ -204,7 +204,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         tools::Long GetNextBorder();
 
         sw::annotation::SwAnnotationWin* GetActiveSidebarWin() { return mpActivePostIt; }
-        void SetActiveSidebarWin( sw::annotation::SwAnnotationWin* p);
+        SW_DLLPUBLIC void SetActiveSidebarWin( sw::annotation::SwAnnotationWin* p);
         SW_DLLPUBLIC bool HasActiveSidebarWin() const;
         bool HasActiveAnnotationWin() const;
         void GrabFocusOnActiveSidebarWin();
@@ -252,6 +252,20 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         void PaintTile(OutputDevice& rRenderContext);
 
         sw::sidebarwindows::SidebarPosition GetSidebarPos(const Point& rPointLogic);
+
+        // The commands that directly delete comments (as opposed to deletion of the text that the
+        // comments are anchored to) behave differently, depending on the document type, when the
+        // change tracking is on. For ODF, we allow comments to be marked as deleted; for external
+        // document types, we delete them immediately, as if change tracking os off.
+        class CommentDeleteFlagsRestore
+        {
+        public:
+            virtual ~CommentDeleteFlagsRestore() = default;
+        };
+        // Checks if the respective configuration must be changed for 'delete' operation, makes the
+        // change if needed, and returns a RAII object that will restore the original configuration
+        // in its dtor.
+        [[nodiscard]] std::unique_ptr<CommentDeleteFlagsRestore> ConfigureForCommentDelete();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
