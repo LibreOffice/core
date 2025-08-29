@@ -4327,8 +4327,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #ifdef _WIN32
     // pBuffer was not used there
     pDevice->EnableMapMode(false);
-    BitmapEx aBmpEx(pDevice->GetBitmap({ 0, 0 }, { nCanvasWidth, nCanvasHeight }));
-    vcl::bitmap::fillWithData(pBuffer, aBmpEx);
+    Bitmap aBmp(pDevice->GetBitmap({ 0, 0 }, { nCanvasWidth, nCanvasHeight }));
+    vcl::bitmap::fillWithData(pBuffer, aBmp);
 #endif
 #endif
 
