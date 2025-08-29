@@ -53,7 +53,7 @@ Reference<rendering::XBitmap> SlideRenderer::createPreviewForCanvas (
     if (pCanvas)
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
-            Bitmap(CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor)))->getUNOBitmap();
+            CreatePreview(rxSlide, rMaximalSize, nSuperSampleFactor))->getUNOBitmap();
     else
         return nullptr;
 }
@@ -81,7 +81,7 @@ awt::Size SlideRenderer::calculatePreviewSize (
             sal::static_int_cast<sal_Int32>(rMaximalSize.Width / nSlideAspectRatio));
 }
 
-BitmapEx SlideRenderer::CreatePreview (
+Bitmap SlideRenderer::CreatePreview (
     const Reference<drawing::XDrawPage>& rxSlide,
     const awt::Size& rMaximalSize,
     sal_Int16 nSuperSampleFactor)
@@ -107,7 +107,7 @@ BitmapEx SlideRenderer::CreatePreview (
         double(aPageSize.Width()) / double(aPageSize.Height()),
         rMaximalSize));
     if (aPreviewSize.Width <= 0 || aPreviewSize.Height <= 0)
-        return BitmapEx();
+        return Bitmap();
 
     // Make sure that the super sample factor has a sane value.
     sal_Int16 nFactor (nSuperSampleFactor);
@@ -126,14 +126,14 @@ BitmapEx SlideRenderer::CreatePreview (
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
         true);
     if (nFactor == 1)
-        return BitmapEx(aPreview.GetBitmap());
+        return aPreview.GetBitmap();
     else
     {
         Bitmap aScaledPreview = aPreview.GetBitmap();
         aScaledPreview.Scale(
             Size(aPreviewSize.Width,aPreviewSize.Height),
             BmpScaleFlag::BestQuality);
-        return BitmapEx(aScaledPreview);
+        return aScaledPreview;
     }
 }
 

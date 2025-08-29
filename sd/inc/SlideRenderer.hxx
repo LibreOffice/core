@@ -56,7 +56,7 @@ private:
     PreviewRenderer maPreviewRenderer;
 
     /// @throws css::uno::RuntimeException
-    BitmapEx CreatePreview (
+    Bitmap CreatePreview (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor);
