@@ -686,7 +686,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        xBmp.set( new VclCanvasBitmap(Bitmap(BitmapEx(aBitmap,aMask))) );
+        xBmp.set( new VclCanvasBitmap(Bitmap(aBitmap,aMask)) );
 
         checkCanvasBitmap( xBmp, "masked bitmap", nDepth );
 
@@ -704,7 +704,7 @@ void CanvasBitmapTest::runTest()
             }
         }
 
-        xBmp.set( new VclCanvasBitmap(Bitmap(BitmapEx(aBitmap,aAlpha))) );
+        xBmp.set( new VclCanvasBitmap(Bitmap(aBitmap,aAlpha)) );
 
         checkCanvasBitmap( xBmp, "alpha bitmap", nDepth );
     }

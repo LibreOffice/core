@@ -215,7 +215,7 @@ Reference<XGraphic> lclApplyBlackWhiteEffect(const BlipFillProperties& aBlipProp
             Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
             BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ nThreshold });
 
-            aReturnGraphic = ::Graphic(Bitmap(BitmapEx(aTmpBmp, aMask)));
+            aReturnGraphic = ::Graphic(Bitmap(aTmpBmp, aMask));
         }
         else
         {

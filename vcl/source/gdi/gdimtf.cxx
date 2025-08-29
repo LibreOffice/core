@@ -1772,7 +1772,7 @@ Bitmap GDIMetaFile::ImplBmpMonoFnc( const Bitmap& rBmp, const void* pBmpParam )
     aBmp.Erase( static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor );
 
     if( rBmp.HasAlpha() )
-        return Bitmap(BitmapEx( aBmp, rBmp.CreateAlphaMask() ));
+        return Bitmap( aBmp, rBmp.CreateAlphaMask() );
     else
         return aBmp;
 }

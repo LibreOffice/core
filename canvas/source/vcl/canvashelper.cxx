@@ -721,7 +721,7 @@ namespace vclcanvas
                         // when Skia is enabled.
                         AlphaMask aAlpha( aBmp.CreateAlphaMask() );
                         aAlpha.Invert();
-                        aBmp = Bitmap(BitmapEx( aBmp.CreateColorBitmap(), aAlpha ));
+                        aBmp = Bitmap( aBmp.CreateColorBitmap(), aAlpha );
 
                         // HACK. Normally, CanvasHelper does not care about
                         // actually what mp2ndOutDev is...  well, here we do &
@@ -947,8 +947,8 @@ namespace vclcanvas
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
-        Bitmap aBitmap( BitmapEx(rOutDev.GetBitmap(aRect.TopLeft(),
-                                          aRect.GetSize())).GetBitmap() );
+        Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
+                                          aRect.GetSize()).CreateColorBitmap() );
 
         BitmapScopedReadAccess pReadAccess( aBitmap );
 

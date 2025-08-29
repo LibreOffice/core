@@ -227,6 +227,23 @@ void Bitmap::loadFromIconTheme( const OUString& rIconName )
     SAL_WARN_IF( !bSuccess, "vcl", "BitmapEx::BitmapEx(): could not load image " << rIconName << " via icon theme " << aIconTheme);
 }
 
+Bitmap::Bitmap( const Bitmap& rBmp, const Bitmap& rMask )
+{
+    *this = Bitmap(BitmapEx(rBmp, rMask));
+}
+
+Bitmap::Bitmap( const Bitmap& rBmp, const AlphaMask& rAlphaMask )
+{
+    *this = Bitmap(BitmapEx(rBmp, rAlphaMask));
+}
+
+
+Bitmap::Bitmap( const Bitmap& rBmp, const Color& rTransparentColor )
+{
+    *this = Bitmap(BitmapEx(rBmp, rTransparentColor));
+}
+
+
 #ifdef DBG_UTIL
 
 namespace

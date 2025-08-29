@@ -517,7 +517,7 @@ void GraphicObject::ImplTransformBitmap( Bitmap&            rBmp,
                 aMask.Erase(255);
 
                 // #104115# Always generate transparent bitmap, we need the border transparent
-                aBmp2 = Bitmap(BitmapEx( rBmp.CreateColorBitmap(), aMask ));
+                aBmp2 = Bitmap(rBmp.CreateColorBitmap(), aMask );
 
                 // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
                 rBmp = aBmp2;

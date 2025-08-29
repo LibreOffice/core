@@ -85,7 +85,7 @@ Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
     if (Bitmap aMask = BitmapFromDIB(xBitmap->getMaskDIB()); !aMask.IsEmpty())
     {
         aMask.Invert(); // Convert from transparency to alpha
-        return Bitmap(BitmapEx(BitmapFromDIB(xBitmap->getDIB()), aMask));
+        return Bitmap(BitmapFromDIB(xBitmap->getDIB()), aMask);
     }
 
     Bitmap aBmp;

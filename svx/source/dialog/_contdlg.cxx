@@ -651,7 +651,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
                 aRedoGraphic = Graphic();
                 aUndoGraphic = aGraphic;
                 Bitmap aBmp = aGraphic.GetBitmap().CreateColorBitmap();
-                aGraphic = Graphic( Bitmap(BitmapEx( aBmp, aMask )) );
+                aGraphic = Graphic( Bitmap( aBmp, aMask ) );
                 mnGrfChanged++;
 
                 bNewContour = (xQBox->run() == RET_YES);

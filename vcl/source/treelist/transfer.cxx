@@ -1613,7 +1613,7 @@ bool TransferableDataHelper::GetBitmap(const DataFlavor& rFlavor, Bitmap& rBmp) 
             }
             else
             {
-                rBmp = Bitmap(BitmapEx(aBitmap, aMask));
+                rBmp = Bitmap(aBitmap, aMask);
             }
         }
 

@@ -49,7 +49,7 @@ namespace vclcanvas
         {
             AlphaMask   aAlpha ( rSize );
 
-            maCanvasHelper.init( Bitmap(BitmapEx( aBitmap, aAlpha )),
+            maCanvasHelper.init( Bitmap( aBitmap, aAlpha ),
                                  rDevice,
                                  rOutDevProvider );
         }

@@ -303,7 +303,7 @@ Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
             aAlpha.Invert();
         }
         // return combined result
-        return Bitmap(BitmapEx(aRetval, aAlpha));
+        return Bitmap(aRetval, aAlpha);
     }
     else
         return aRetval;

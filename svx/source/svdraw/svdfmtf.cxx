@@ -1592,7 +1592,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction const & rAct)
                 aNewMask = AlphaMask(aBitmap.GetSizePixel(), &nTransparence);
             }
 
-            aBitmap = Bitmap(BitmapEx(aBitmap.CreateColorBitmap(), aNewMask));
+            aBitmap = Bitmap(aBitmap.CreateColorBitmap(), aNewMask);
         }
         else
         {

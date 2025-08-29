@@ -1576,7 +1576,7 @@ Bitmap AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
             if( !aBitmap.HasAlpha() )
-                aBitmap = Bitmap(BitmapEx( aBitmap.CreateColorBitmap(), COL_LIGHTMAGENTA ));
+                aBitmap = Bitmap( aBitmap.CreateColorBitmap(), COL_LIGHTMAGENTA );
 
             aImage = aBitmap;
         }

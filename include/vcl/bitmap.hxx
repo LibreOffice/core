@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <memory>
 
+class AlphaMask;
 class BitmapEx;
 namespace basegfx { class BColorModifierStack; }
 namespace com::sun::star::rendering {
@@ -120,6 +121,9 @@ public:
                             Bitmap( const Bitmap& rBitmap, Point aSrc, Size aSize );
     explicit                Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
+                            Bitmap( const Bitmap& rBmp, const Bitmap& rMask );
+                            Bitmap( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
+                            Bitmap( const Bitmap& rBmp, const Color& rTransparentColor );
     SAL_DLLPRIVATE explicit Bitmap( std::shared_ptr<SalBitmap> xSalBitmap );
                             ~Bitmap();
 

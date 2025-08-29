@@ -226,7 +226,7 @@ ReadState XPMReader::ReadXPM(Bitmap& rBitmap)
         if (mpMaskWriterAccess)
         {
             mpMaskWriterAccess.reset();
-            rBitmap = Bitmap(BitmapEx(maBitmap, maMaskBitmap));
+            rBitmap = Bitmap(maBitmap, maMaskBitmap);
         }
         else
         {

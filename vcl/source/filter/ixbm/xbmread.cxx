@@ -339,7 +339,7 @@ ReadState XBMReader::ReadXBM(Bitmap& rBitmap)
 
         mpWriteAccess.reset();
         aBlackBmp.Erase( COL_BLACK );
-        rBitmap = Bitmap(BitmapEx(aBlackBmp, maBitmap));
+        rBitmap = Bitmap(aBlackBmp, maBitmap);
         eReadState = XBMREAD_OK;
     }
 

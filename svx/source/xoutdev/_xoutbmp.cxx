@@ -316,7 +316,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
                     pVDev->SetRasterOp( RasterOp::Xor );
                     pVDev->DrawBitmap( aPt, aSize, aBitmap );
-                    aGraphic = Bitmap(BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) ));
+                    aGraphic = Bitmap( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                 }
                 else
                 {

@@ -1978,7 +1978,7 @@ void PngFilterTest::testTdf153180MonochromeFilterPngExport()
     Bitmap aTmpBmp(aBitmap.CreateColorBitmap());
     BitmapFilter::Filter(aTmpBmp, BitmapMonochromeFilter{ sal_uInt8{ 127 } });
 
-    Graphic aGraphicAfterFilter{ Bitmap(BitmapEx(aTmpBmp, aAlphaMask)) };
+    Graphic aGraphicAfterFilter{ Bitmap(aTmpBmp, aAlphaMask) };
     CPPUNIT_ASSERT(aGraphicAfterFilter.IsAlpha());
 
     // export the resulting graphic

@@ -627,7 +627,7 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitm
     {
         // no mask yet, create and add new mask. For better quality, use Alpha,
         // this allows the drawn mask being processed with AntiAliasing (AAed)
-        aBmp = Bitmap(BitmapEx(rBitmap, aVDevMask));
+        aBmp = Bitmap(rBitmap, aVDevMask);
     }
 }
 

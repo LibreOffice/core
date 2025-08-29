@@ -65,7 +65,7 @@ Bitmap createBitmap(bool alpha = false)
         sal_uInt8 uAlphaValue = 0x80;
         AlphaMask aAlphaMask(Size(120, 100), &uAlphaValue);
 
-        return Bitmap(BitmapEx(aBitmap, aAlphaMask));
+        return Bitmap(aBitmap, aAlphaMask);
     }
     else
     {

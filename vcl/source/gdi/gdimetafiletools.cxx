@@ -226,7 +226,7 @@ namespace
                 Size(
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
-                Bitmap(BitmapEx(rBitmapEx.GetBitmap(), aAlpha))));
+                Bitmap(rBitmapEx.GetBitmap(), aAlpha)));
 
         return true;
     }
@@ -340,7 +340,7 @@ namespace
                 Size(
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getWidth()),
                     basegfx::fround<tools::Long>(aLogicBitmapRange.getHeight())),
-                Bitmap(BitmapEx(rBitmap.CreateColorBitmap(), aAlpha))));
+                Bitmap(rBitmap.CreateColorBitmap(), aAlpha)));
 
         return true;
     }

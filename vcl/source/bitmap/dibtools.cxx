@@ -1728,7 +1728,7 @@ bool ReadDIBBitmapEx(
                     bRetval = ImplReadDIB(aMask, nullptr, rIStm, true);
 
                     if(bRetval && !aMask.IsEmpty())
-                        rTarget = Bitmap(BitmapEx(aBmp, aMask));
+                        rTarget = Bitmap(aBmp, aMask);
 
                     break;
                 }
@@ -1743,7 +1743,7 @@ bool ReadDIBBitmapEx(
 
                     if(bRetval)
                     {
-                        rTarget = Bitmap(BitmapEx(aBmp, aTransparentColor));
+                        rTarget = Bitmap(aBmp, aTransparentColor);
                     }
                     break;
                 }

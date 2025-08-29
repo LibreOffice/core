@@ -520,7 +520,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev.disposeAndClear();
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                                implWriteBitmapEx( rPos, rSize, Bitmap(BitmapEx( aPaint.GetBitmap(), aAlpha )), aGraphic, pDummyVDev, i_rContext );
+                                implWriteBitmapEx( rPos, rSize, Bitmap(aPaint.GetBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
                             }
                         }
                     }
