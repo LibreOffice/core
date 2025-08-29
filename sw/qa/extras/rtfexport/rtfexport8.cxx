@@ -1280,6 +1280,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162342)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168181)
+{
+    // Given an RTF with a hyperlink pointing to "c:\temp\doc1.doc",
+    // RTF- and field-encoded as "c:\\\\temp\\\\doc1.doc":
+    createSwDoc("hyperlink-with-backslashes.rtf");
+
+    // Test that the imported target string has single backslashes between hierarchical parts.
+    // Without the fix, the backslashes were doubled.
+    CPPUNIT_ASSERT_EQUAL(u"c:\\temp\\doc1.doc"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
+
+    // to test round-trip, deliberately duplicate one backslash:
+    getRun(getParagraph(1), 1)
+        .queryThrow<beans::XPropertySet>()
+        ->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(u"c:\\\\temp\\doc1.doc"_ustr));
+
+    saveAndReload(mpFilter);
+
+    // Test that the imported target string has correct expected number of backslashes.
+    // Without the fix, this returned with single backslashes, because there was no proper
+    // field-escaping on export: it was "c:\\temp\\doc1.doc" in RTF, with pairs of backslashes
+    CPPUNIT_ASSERT_EQUAL(u"c:\\\\temp\\doc1.doc"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

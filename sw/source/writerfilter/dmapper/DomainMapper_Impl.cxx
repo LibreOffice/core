@@ -8289,7 +8289,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
                         else
                         {
-                            sURL = *aPartIt;
+                            // ECMA-376 Part 1 17.16 "Fields and Hyperlinks" explains, that
+                            // "To include a backslash character in text, it shall be preceded
+                            // with another backslash". Double backslashes must be converted
+                            // to single ones.
+                            sURL = aPartIt->replaceAll("\\\\", "\\");
                         }
 
                         ++aPartIt;
@@ -8299,10 +8303,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                     {
                         if (sURL.startsWith("file:///"))
                         {
-                            // file:///absolute\\path\\to\\file => invalid file URI (Writer cannot open)
-                            // convert all double backslashes to slashes:
-                            sURL = sURL.replaceAll("\\\\", "/");
-
                             // file:///absolute\path\to\file => invalid file URI (Writer cannot open)
                             // convert all backslashes to slashes:
                             sURL = sURL.replace('\\', '/');
