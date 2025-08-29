@@ -139,7 +139,7 @@ void PageObjectPainter::PaintPreview (
     const SdrPage* pPage = rpDescriptor->GetPage();
     mpCache->SetPreciousFlag(pPage, true);
 
-    const BitmapEx aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
+    const Bitmap aPreview (GetPreviewBitmap(rpDescriptor, &rDevice));
     if ( ! aPreview.IsEmpty())
     {
         if (aPreview.GetSizePixel() != aBox.GetSize())
@@ -149,9 +149,9 @@ void PageObjectPainter::PaintPreview (
     }
 }
 
-BitmapEx PageObjectPainter::CreateMarkedPreview (
+Bitmap PageObjectPainter::CreateMarkedPreview (
     const Size& rSize,
-    const BitmapEx& rPreview,
+    const Bitmap& rPreview,
     const Bitmap& rOverlay,
     const OutputDevice* pReferenceDevice)
 {
@@ -173,10 +173,10 @@ BitmapEx PageObjectPainter::CreateMarkedPreview (
             for (::tools::Long nY=0; nY<rSize.Height(); nY+=nIconHeight)
                 pDevice->DrawBitmapEx(Point(nX,nY), rOverlay);
     }
-    return BitmapEx(pDevice->GetBitmap(Point(0,0), rSize));
+    return pDevice->GetBitmap(Point(0,0), rSize);
 }
 
-BitmapEx PageObjectPainter::GetPreviewBitmap (
+Bitmap PageObjectPainter::GetPreviewBitmap (
     const model::SharedPageDescriptor& rpDescriptor,
     const OutputDevice* pReferenceDevice) const
 {
@@ -187,7 +187,7 @@ BitmapEx PageObjectPainter::GetPreviewBitmap (
     {
         PageObjectLayouter *pPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
 
-        BitmapEx aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage));
+        Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage));
         const ::tools::Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
             PageObjectLayouter::Part::Preview,

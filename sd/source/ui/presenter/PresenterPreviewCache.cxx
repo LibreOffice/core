@@ -131,13 +131,13 @@ Reference<rendering::XBitmap> PresenterPreviewCache::getSlidePreview (
     if (pPage == nullptr)
         throw RuntimeException();
 
-    const BitmapEx aPreview (mpCache->GetPreviewBitmap(pPage,true));
+    const Bitmap aPreview (mpCache->GetPreviewBitmap(pPage,true));
     if (aPreview.IsEmpty())
         return nullptr;
     else
         return cppcanvas::VCLFactory::createBitmap(
             pCanvas,
-            Bitmap(aPreview))->getUNOBitmap();
+            aPreview)->getUNOBitmap();
 }
 
 void PresenterPreviewCache::addPreviewCreationNotifyListener (

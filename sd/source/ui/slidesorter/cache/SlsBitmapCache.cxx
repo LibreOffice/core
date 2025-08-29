@@ -40,7 +40,7 @@ namespace sd::slidesorter::cache {
 class BitmapCache::CacheEntry
 {
 public:
-    CacheEntry(const BitmapEx& rBitmap, sal_Int32 nLastAccessTime, bool bIsPrecious);
+    CacheEntry(const Bitmap& rBitmap, sal_Int32 nLastAccessTime, bool bIsPrecious);
     CacheEntry(sal_Int32 nLastAccessTime, bool bIsPrecious);
     inline void Recycle (const CacheEntry& rEntry);
     inline sal_Int32 GetMemorySize() const;
@@ -52,12 +52,12 @@ public:
     sal_Int32 GetAccessTime() const { return mnLastAccessTime; }
     void SetAccessTime (sal_Int32 nAccessTime) { mnLastAccessTime = nAccessTime; }
 
-    const BitmapEx& GetPreview() const { return maPreview; }
-    inline void SetPreview (const BitmapEx& rPreview);
+    const Bitmap& GetPreview() const { return maPreview; }
+    inline void SetPreview (const Bitmap& rPreview);
     bool HasPreview() const;
 
-    const BitmapEx& GetMarkedPreview() const { return maMarkedPreview; }
-    inline void SetMarkedPreview (const BitmapEx& rMarkePreview);
+    const Bitmap& GetMarkedPreview() const { return maMarkedPreview; }
+    inline void SetMarkedPreview (const Bitmap& rMarkePreview);
 
     bool HasReplacement() const { return (mpReplacement != nullptr); }
     inline bool HasLosslessReplacement() const;
@@ -66,8 +66,8 @@ public:
     void SetPrecious (bool bIsPrecious) { mbIsPrecious = bIsPrecious; }
 
 private:
-    BitmapEx maPreview;
-    BitmapEx maMarkedPreview;
+    Bitmap maPreview;
+    Bitmap maMarkedPreview;
     std::shared_ptr<BitmapReplacement> mpReplacement;
     std::shared_ptr<BitmapCompressor> mpCompressor;
     bool mbIsUpToDate;
@@ -168,7 +168,7 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
     return bIsUpToDate;
 }
 
-BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
+Bitmap BitmapCache::GetBitmap (const CacheKey& rKey)
 {
     std::unique_lock aGuard (maMutex);
 
@@ -177,7 +177,7 @@ BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
     {
         // Create an empty bitmap for the given key that acts as placeholder
         // until we are given the real one.  Mark it as not being up to date.
-        SetBitmap(aGuard, rKey, BitmapEx(), false);
+        SetBitmap(aGuard, rKey, Bitmap(), false);
         iEntry = mpBitmapContainer->find(rKey);
         iEntry->second.SetUpToDate(false);
     }
@@ -196,7 +196,7 @@ BitmapEx BitmapCache::GetBitmap (const CacheKey& rKey)
     return iEntry->second.GetPreview();
 }
 
-BitmapEx BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
+Bitmap BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
 {
     std::unique_lock aGuard (maMutex);
 
@@ -207,7 +207,7 @@ BitmapEx BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
         return iEntry->second.GetMarkedPreview();
     }
     else
-        return BitmapEx();
+        return Bitmap();
 }
 
 void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
@@ -258,7 +258,7 @@ void BitmapCache::InvalidateCache()
 
 void BitmapCache::SetBitmap (
     const CacheKey& rKey,
-    const BitmapEx& rPreview,
+    const Bitmap& rPreview,
     bool bIsPrecious)
 {
     std::unique_lock aGuard (maMutex);
@@ -268,7 +268,7 @@ void BitmapCache::SetBitmap (
 void BitmapCache::SetBitmap (
     std::unique_lock<std::mutex>& rGuard,
     const CacheKey& rKey,
-    const BitmapEx& rPreview,
+    const Bitmap& rPreview,
     bool bIsPrecious)
 {
     CacheBitmapContainer::iterator iEntry (mpBitmapContainer->find(rKey));
@@ -293,7 +293,7 @@ void BitmapCache::SetBitmap (
 
 void BitmapCache::SetMarkedBitmap (
     const CacheKey& rKey,
-    const BitmapEx& rPreview)
+    const Bitmap& rPreview)
 {
     std::unique_lock aGuard (maMutex);
 
@@ -325,7 +325,7 @@ void BitmapCache::SetPrecious (const CacheKey& rKey, bool bIsPrecious)
     {
         iEntry = mpBitmapContainer->emplace(
             rKey,
-            CacheEntry(BitmapEx(), mnCurrentAccessTime++, bIsPrecious)
+            CacheEntry(Bitmap(), mnCurrentAccessTime++, bIsPrecious)
             ).first;
         UpdateCacheSize(aGuard, iEntry->second, ADD);
     }
@@ -463,7 +463,7 @@ BitmapCache::CacheEntry::CacheEntry(
 }
 
 BitmapCache::CacheEntry::CacheEntry(
-    const BitmapEx& rPreview,
+    const Bitmap& rPreview,
     sal_Int32 nLastAccessTime,
     bool bIsPrecious)
     : maPreview(rPreview),
@@ -504,7 +504,7 @@ void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>&
 
     if (mpReplacement == nullptr)
     {
-        mpReplacement = rpCompressor->Compress(Bitmap(maPreview));
+        mpReplacement = rpCompressor->Compress(maPreview);
 
 #ifdef DEBUG_SD_SLSBITMAPCACHE
         sal_uInt32 nOldSize (maPreview.GetSizeBytes());
@@ -533,7 +533,7 @@ inline void BitmapCache::CacheEntry::Decompress()
     }
 }
 
-inline void BitmapCache::CacheEntry::SetPreview (const BitmapEx& rPreview)
+inline void BitmapCache::CacheEntry::SetPreview (const Bitmap& rPreview)
 {
     maPreview = rPreview;
     maMarkedPreview.SetEmpty();
@@ -546,7 +546,7 @@ bool BitmapCache::CacheEntry::HasPreview() const
     return ! maPreview.IsEmpty();
 }
 
-inline void BitmapCache::CacheEntry::SetMarkedPreview (const BitmapEx& rMarkedPreview)
+inline void BitmapCache::CacheEntry::SetMarkedPreview (const Bitmap& rMarkedPreview)
 {
     maMarkedPreview = rMarkedPreview;
 }

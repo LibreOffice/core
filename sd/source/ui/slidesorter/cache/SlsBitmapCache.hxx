@@ -92,11 +92,11 @@ public:
 
     /** Return the preview bitmap for the given contact object.
     */
-    BitmapEx GetBitmap(const CacheKey& rKey);
+    Bitmap GetBitmap(const CacheKey& rKey);
 
     /** Return the marked preview bitmap for the given contact object.
     */
-    BitmapEx GetMarkedBitmap(const CacheKey& rKey);
+    Bitmap GetMarkedBitmap(const CacheKey& rKey);
 
     /** Release the reference to the preview bitmap that is associated with
         the given key.
@@ -118,11 +118,11 @@ public:
 
     /** Add or replace a bitmap for the given key.
     */
-    void SetBitmap(const CacheKey& rKey, const BitmapEx& rPreview, bool bIsPrecious);
+    void SetBitmap(const CacheKey& rKey, const Bitmap& rPreview, bool bIsPrecious);
 
     /** Add or replace a marked bitmap for the given key.
     */
-    void SetMarkedBitmap(const CacheKey& rKey, const BitmapEx& rPreview);
+    void SetMarkedBitmap(const CacheKey& rKey, const Bitmap& rPreview);
 
     /** Mark the specified preview bitmap as precious, i.e. that it must not
         be compressed or otherwise removed from the cache.
@@ -206,7 +206,7 @@ private:
     void ReCalculateTotalCacheSize(std::unique_lock<std::mutex>& rGuard);
 
     void SetBitmap(std::unique_lock<std::mutex>& rGuard, const CacheKey& rKey,
-                   const BitmapEx& rPreview, bool bIsPrecious);
+                   const Bitmap& rPreview, bool bIsPrecious);
 };
 
 } // end of namespace ::sd::slidesorter::cache
