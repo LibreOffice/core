@@ -27,8 +27,6 @@
 #include <Diagram.hxx>
 #include <unonames.hxx>
 
-#include <svtools/valueset.hxx>
-
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/outdev.hxx>
@@ -54,12 +52,8 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aTimerTriggeredControllerLock( m_xChartModel )
     , m_xFT_ChooseType(m_xBuilder->weld_label(u"FT_CAPTION_FOR_WIZARD"_ustr))
     , m_xMainTypeList(m_xBuilder->weld_tree_view(u"charttype"_ustr))
-    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window(u"subtypewin"_ustr, true)))
-    , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, u"subtype"_ustr, *m_xSubTypeList))
+    , m_xSubTypeList(m_xBuilder->weld_icon_view(u"subtype_iconview"_ustr))
 {
-    Size aSize(m_xSubTypeList->GetDrawingArea()->get_ref_device().LogicToPixel(Size(150, 50), MapMode(MapUnit::MapAppFont)));
-    m_xSubTypeListWin->set_size_request(aSize.Width(), aSize.Height());
-
     if (bShowDescription)
     {
         m_xFT_ChooseType->show();
@@ -72,16 +66,13 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
     SetPageTitle(SchResId(STR_PAGE_CHARTTYPE));
 
     m_xMainTypeList->connect_changed(LINK(this, ChartTypeTabPage, SelectMainTypeHdl));
-    m_xSubTypeList->SetSelectHdl( LINK( this, ChartTypeTabPage, SelectSubTypeHdl ) );
+    m_xSubTypeList->connect_selection_changed( LINK( this, ChartTypeTabPage, SelectSubTypeHdl ) );
+    m_xSubTypeList->connect_query_tooltip( LINK(this, ChartTypeTabPage, QueryTooltipHdl) );
 
-    m_xSubTypeList->SetStyle(m_xSubTypeList->GetStyle() |
-        WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD | WB_FLATVALUESET | WB_3DLOOK );
     // Set number of columns in chart type selector.
     // TODO: Ideally this would not be hard-coded, but determined
     // programmatically based on the maximum number of chart types across all
     // controllers.
-    m_xSubTypeList->SetColCount(4);
-    m_xSubTypeList->SetLineCount(1);
 
     bool bEnableComplexChartTypes = true;
     uno::Reference< beans::XPropertySet > xProps( static_cast<cppu::OWeakObject*>(m_xChartModel.get()), uno::UNO_QUERY );
@@ -143,14 +134,13 @@ ChartTypeTabPage::~ChartTypeTabPage()
     m_pSplineResourceGroup.reset();
     m_pGeometryResourceGroup.reset();
     m_pSortByXValuesResourceGroup.reset();
-    m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
 }
 
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
 {
     ChartTypeParameter aParameter;
-    aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_xSubTypeList->GetSelectedItemId());
+    aParameter.nSubTypeIndex = m_xSubTypeList->get_selected_id().toInt32();
     m_pDim3DLookResourceGroup->fillParameter( aParameter );
     m_pStackingResourceGroup->fillParameter( aParameter );
     m_pSplineResourceGroup->fillParameter( aParameter );
@@ -214,7 +204,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
     return pTypeController;
 }
 
-IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, weld::IconView&, void)
 {
     if( m_pCurrentMainType )
     {
@@ -223,6 +213,16 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
         fillAllControls( aParameter, false );
         commitToModel( aParameter );
     }
+}
+
+IMPL_LINK(ChartTypeTabPage, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = m_xSubTypeList->get_id(iter);
+
+    if(!sId.isEmpty() && m_pCurrentMainType)
+        return m_pCurrentMainType->getChartName(sId.toInt32());
+
+    return OUString();
 }
 
 IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl, weld::TreeView&, void)
@@ -275,7 +275,7 @@ void ChartTypeTabPage::selectMainType()
 void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeController )
 {
     m_xMainTypeList->show();
-    m_xSubTypeList->Show();
+    m_xSubTypeList->show();
 
     bool bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls( bShow );
@@ -297,7 +297,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     {
         m_pCurrentMainType->fillSubTypeList(*m_xSubTypeList, rParameter);
     }
-    m_xSubTypeList->SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
+    m_xSubTypeList->select( static_cast<sal_uInt16>( rParameter.nSubTypeIndex - 1) ); // Convert 1-based subtype index to 0-based index for selection
     m_pDim3DLookResourceGroup->fillControls( rParameter );
     m_pStackingResourceGroup->fillControls( rParameter );
     m_pSplineResourceGroup->fillControls( rParameter );
@@ -358,7 +358,7 @@ void ChartTypeTabPage::initializePage()
     if( !bFound )
     {
         m_xMainTypeList->show();
-        m_xSubTypeList->Show();
+        m_xSubTypeList->show();
         m_pDim3DLookResourceGroup->showControls( false );
         m_pStackingResourceGroup->showControls( false );
         m_pSplineResourceGroup->showControls( false );
