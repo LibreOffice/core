@@ -330,16 +330,16 @@ namespace
 
 /** Fetches the text enclosed by the bookmark, resolved from the internal (input) link
  *
- * If a bookmark doesn't exist, return an empty string.
+ * If a bookmark doesn't exist, return the original string.
  **/
-OUString fetchBookmarkedValueFromInternalLink(std::u16string_view sURL, SwWrtShell& rShell)
+OUString fetchBookmarkedValueFromInternalLink(const OUString& sURL, SwWrtShell& rShell)
 {
     // Check if the URL is an internal link (starts with '#')
-    if (sURL[0] != '#')
-        return OUString();
+    if (!sURL.startsWith("#"))
+        return sURL;
 
     IDocumentMarkAccess* pMarkAccess = rShell.getIDocumentMarkAccess();
-    auto ppBookmark = pMarkAccess->findBookmark(SwMarkName(OUString(sURL.substr(1))));
+    auto ppBookmark = pMarkAccess->findBookmark(SwMarkName(sURL.copy(1)));
     if (ppBookmark != pMarkAccess->getBookmarksEnd()
         && IDocumentMarkAccess::GetType(**ppBookmark)
             == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
@@ -363,7 +363,7 @@ OUString fetchBookmarkedValueFromInternalLink(std::u16string_view sURL, SwWrtShe
             }
         }
     }
-    return OUString();
+    return sURL;
 }
 }
 
