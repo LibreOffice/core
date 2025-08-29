@@ -24,10 +24,12 @@ $(eval $(call gb_Module_add_screenshot_targets,reportdesign,\
     CppunitTest_reportdesign_dialogs_test \
 ))
 
-ifeq ($(ENABLE_JAVA),TRUE)
-$(eval $(call gb_Module_add_check_targets,reportdesign,\
-    CppunitTest_reportdesign_basic_test \
-))
-endif
+# Disable this until it is fixed, right now it keeps modifying
+# an in-tree file.
+#ifeq ($(ENABLE_JAVA),TRUE)
+#$(eval $(call gb_Module_add_check_targets,reportdesign,\
+#    CppunitTest_reportdesign_basic_test \
+#))
+#endif
 
 # vim: set noet sw=4 ts=4:
