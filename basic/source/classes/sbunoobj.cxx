@@ -2863,6 +2863,19 @@ Any SbUnoObject::getUnoAny()
     return aRetAny;
 }
 
+double SbUnoObject::GetDate() const
+{
+    // Handle structure info here. Without this, oleautomation data may be unable to convert
+    // to the wanted data type in the base method.
+    if (maStructInfo)
+    {
+        if (css::bridge::oleautomation::Date date; maTmpUnoObj >>= date)
+            return date.Value;
+    }
+
+    return SbxObject::GetDate();
+}
+
 // help method to create a Uno-Struct per CoreReflection
 static SbUnoObjectRef Impl_CreateUnoStruct( const OUString& aClassName )
 {
