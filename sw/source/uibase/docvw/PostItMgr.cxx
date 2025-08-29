@@ -45,6 +45,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <docstyle.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -61,6 +62,8 @@
 #include <strings.hrc>
 #include <cmdid.h>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
 #include <svl/srchitem.hxx>
@@ -366,6 +369,29 @@ namespace {
             return p;
         }
     };
+
+// a RAII object that sets Ignore redline flag, and restores previous redline flags in dtor
+class CommentDeleteFlagsRestoreImpl : public SwPostItMgr::CommentDeleteFlagsRestore
+{
+public:
+    CommentDeleteFlagsRestoreImpl(SwWrtShell* shell)
+        : m_pWrtShell(shell)
+        , m_eRestreFlags(m_pWrtShell->GetRedlineFlags())
+    {
+        m_pWrtShell->SetRedlineFlags(m_eRestreFlags | RedlineFlags::Ignore);
+    }
+    ~CommentDeleteFlagsRestoreImpl() { m_pWrtShell->SetRedlineFlags(m_eRestreFlags); }
+
+private:
+    SwWrtShell* m_pWrtShell;
+    RedlineFlags m_eRestreFlags;
+};
+
+bool isOwnFileFormat(SfxMedium* pMedium)
+{
+    // Assume that unsaved documents are own format
+    return !pMedium || !pMedium->GetFilter() || pMedium->GetFilter()->IsOwnFormat();
+}
 
 } // anonymous namespace
 
@@ -1603,6 +1629,17 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
+std::unique_ptr<SwPostItMgr::CommentDeleteFlagsRestore> SwPostItMgr::ConfigureForCommentDelete()
+{
+    if (!mpWrtShell->IsRedlineOn())
+        return {}; // No track changes - no need to disable it
+    if (isOwnFileFormat(mpView->GetDocShell()->GetMedium()))
+        return {}; // Format is smart enough to handle deleted comments in redlines
+
+    return std::unique_ptr<CommentDeleteFlagsRestore>(
+        new CommentDeleteFlagsRestoreImpl(mpWrtShell));
+}
+
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFields as well
 // RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
@@ -1621,11 +1658,13 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
     IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
     IsFieldNotDeleted aFilter2(rIDRA, aFilter);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter2);
+    auto restoreGuard = ConfigureForCommentDelete();
     while (const SwFormatField* pField = aStack.pop())
     {
         if (mpWrtShell->GotoField(*pField))
             mpWrtShell->DelRight();
     }
+    restoreGuard.reset();
     mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
@@ -1652,7 +1691,10 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter2);
     const SwFormatField* pField = aStack.pop();
     if (pField && mpWrtShell->GotoField(*pField))
+    {
+        auto restoreGuard = ConfigureForCommentDelete();
         mpWrtShell->DelRight();
+    }
     mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
@@ -1749,11 +1791,13 @@ void SwPostItMgr::Delete()
     IsFieldNotDeleted aFilter2(rIDRA, aFilter);
     FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(),
         aFilter2);
+    auto restoreGuard = ConfigureForCommentDelete();
     while (const SwFormatField* pField = aStack.pop())
     {
         if (mpWrtShell->GotoField(*pField))
             mpWrtShell->DelRight();
     }
+    restoreGuard.reset();
 
     mpWrtShell->EndUndo();
     PrepareView();
