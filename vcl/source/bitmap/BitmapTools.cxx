@@ -1006,46 +1006,6 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
     }
 #endif
 
-bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
-{
-    const Bitmap& aBitmap(rInput.GetBitmap());
-    if (aBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
-        return false;
-
-    Size aSize = aBitmap.GetSizePixel();
-    Bitmap aResultBitmap(aSize, vcl::PixelFormat::N24_BPP);
-    AlphaMask aResultAlpha(aSize);
-    {
-        BitmapScopedWriteAccess pResultBitmapAccess(aResultBitmap);
-        BitmapScopedWriteAccess pResultAlphaAccess(aResultAlpha);
-
-        BitmapScopedReadAccess pReadAccess(aBitmap);
-
-        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
-        {
-            Scanline aResultScan = pResultBitmapAccess->GetScanline(nY);
-            Scanline aResultScanAlpha = pResultAlphaAccess->GetScanline(nY);
-
-            Scanline aReadScan = pReadAccess->GetScanline(nY);
-
-            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
-            {
-                const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
-                BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());
-                BitmapColor aResultColorAlpha(aColor.GetAlpha(), aColor.GetAlpha(), aColor.GetAlpha());
-
-                pResultBitmapAccess->SetPixelOnData(aResultScan, nX, aResultColor);
-                pResultAlphaAccess->SetPixelOnData(aResultScanAlpha, nX, aResultColorAlpha);
-            }
-        }
-    }
-    if (rInput.IsAlpha())
-        rResult = BitmapEx(aResultBitmap, rInput.GetAlphaMask());
-    else
-        rResult = BitmapEx(aResultBitmap, aResultAlpha);
-    return true;
-}
-
 Bitmap GetDownsampledBitmap(Size const& rDstSizeTwip, Point const& rSrcPt, Size const& rSrcSz,
                             Bitmap const& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY)
 {

@@ -420,9 +420,6 @@ public:
     [[nodiscard]]
     BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
-    [[nodiscard]]
-    static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const tools::Long aStandardSize );
-
     SAL_DLLPRIVATE void ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo );
 
     /**

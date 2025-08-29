@@ -457,60 +457,6 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
 }
 
-BitmapEx BitmapEx::AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long aStandardSize)
-{
-    Point aEmptyPoint(0,0);
-    double imgposX = 0;
-    double imgposY = 0;
-    BitmapEx  aRet = aBitmap;
-    double imgOldWidth = aRet.GetSizePixel().Width();
-    double imgOldHeight = aRet.GetSizePixel().Height();
-
-    if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
-    {
-        sal_Int32 imgNewWidth = 0;
-        sal_Int32 imgNewHeight = 0;
-        if (imgOldWidth >= imgOldHeight)
-        {
-            imgNewWidth = aStandardSize;
-            imgNewHeight = sal_Int32(imgOldHeight / (imgOldWidth / aStandardSize) + 0.5);
-            imgposX = 0;
-            imgposY = (aStandardSize - (imgOldHeight / (imgOldWidth / aStandardSize) + 0.5)) / 2 + 0.5;
-        }
-        else
-        {
-            imgNewHeight = aStandardSize;
-            imgNewWidth = sal_Int32(imgOldWidth / (imgOldHeight / aStandardSize) + 0.5);
-            imgposY = 0;
-            imgposX = (aStandardSize - (imgOldWidth / (imgOldHeight / aStandardSize) + 0.5)) / 2 + 0.5;
-        }
-
-        Size aScaledSize( imgNewWidth, imgNewHeight );
-        aRet.Scale( aScaledSize, BmpScaleFlag::BestQuality );
-    }
-    else
-    {
-        imgposX = (aStandardSize - imgOldWidth) / 2 + 0.5;
-        imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
-    }
-
-    Size aStdSize( aStandardSize, aStandardSize );
-    tools::Rectangle aRect(aEmptyPoint, aStdSize );
-
-    ScopedVclPtrInstance< VirtualDevice > aVirDevice(*Application::GetDefaultDevice());
-    aVirDevice->SetOutputSizePixel( aStdSize );
-    aVirDevice->SetFillColor( COL_TRANSPARENT );
-    aVirDevice->SetLineColor( COL_TRANSPARENT );
-
-    // Draw a rect into virDevice
-    aVirDevice->DrawRect( aRect );
-    Point aPointPixel( static_cast<tools::Long>(imgposX), static_cast<tools::Long>(imgposY) );
-    aVirDevice->DrawBitmapEx( aPointPixel, aRet );
-    aRet = aVirDevice->GetBitmap( aEmptyPoint, aStdSize );
-
-    return aRet;
-}
-
 sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
 {
     if(maBitmap.IsEmpty())

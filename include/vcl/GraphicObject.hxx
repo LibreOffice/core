@@ -147,15 +147,6 @@ private:
                             ) const;
 
     void SAL_DLLPRIVATE     ImplTransformBitmap(
-                                BitmapEx&           rBmpEx,
-                                const GraphicAttr&  rAttr,
-                                const Size&         rCropLeftTop,
-                                const Size&         rCropRightBottom,
-                                const tools::Rectangle&    rCropRect,
-                                const Size&         rDstSize,
-                                bool                bEnlarge
-                            ) const;
-    void SAL_DLLPRIVATE     ImplTransformBitmap(
                                 Bitmap&             rBmp,
                                 const GraphicAttr&  rAttr,
                                 const Size&         rCropLeftTop,
