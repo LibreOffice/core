@@ -1017,6 +1017,23 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf161948NaturalSortAPI)
     CPPUNIT_ASSERT_EQUAL(u"K10"_ustr, sCellContent);
 }
 
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf81003_DateCellToVbaUDF)
+{
+    // The document contains a formula in B1 with a user-defined spreadsheet function from a
+    // VBA-compatibility module, taking a date from A1.
+    // Without the fix, this failed with
+    // - Expression: xComponent.is()
+    // - loading failed: file://.../vba-date.fods
+    // because there was a failure evaluating the function at the loading time, and loading failed.
+    // The reason was that the variable representing the cell as a VBA-compatibility object, with a
+    // css::bridge::oleautomation::Date as its value, didn't convert to Basic's Date when passed to
+    // the user-defined function:
+    createScDoc("vba-date.fods");
+    ScDocument* pDoc = getScDoc();
+    // Check value of B1. The serial date for 2025-08-29 is 45898.
+    CPPUNIT_ASSERT_EQUAL(45898.0, pDoc->GetValue(1, 0, 0));
+}
+
 ScMacrosTest::ScMacrosTest()
       : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {

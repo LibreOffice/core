@@ -147,7 +147,7 @@ public:
 
     float GetSingle() const { return Get(SbxSINGLE).nSingle; }
     double GetDouble() const { return Get(SbxDOUBLE).nDouble; }
-    double GetDate() const { return Get(SbxDATE).nDouble; }
+    virtual double GetDate() const { return Get(SbxDATE).nDouble; }
 
     bool GetBool() const { return Get(SbxBOOL).nUShort != 0; }
     SAL_DLLPRIVATE const OUString&   GetCoreString() const;

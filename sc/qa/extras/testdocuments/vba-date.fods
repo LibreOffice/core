@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries>
+    <ooo:library-embedded ooo:name="Standard">
+     <ooo:module ooo:name="Module1">
+      <ooo:source-code>
+Option VBASupport 1
+
+function valueOfDate(d as date) as double
+  valueOfDate = CDbl(d)
+end function
+      </ooo:source-code>
+     </ooo:module>
+    </ooo:library-embedded>
+   </ooo:libraries>
+  </office:script>
+ </office:scripts>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1">
+    <table:table-column/>
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="date" office:date-value="2025-08-29"/>
+     <table:table-cell table:formula="of:=VALUEOFDATE([.A1])" office:value-type="float"/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

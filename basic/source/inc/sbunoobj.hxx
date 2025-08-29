@@ -141,6 +141,8 @@ public:
 
     bool isNativeCOMObject() const
         { return bNativeCOMObject; }
+
+    virtual double GetDate() const override;
 };
 typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 
