@@ -95,7 +95,7 @@ OUString SvxCharView::GetCharInfoText()
     const bool bSuccess = GetDecimalValueAndCharName(nDecimalValue, sCharName);
     if (bSuccess)
     {
-        OUString aHexText = OUString::number(nDecimalValue, 16).toAsciiUpperCase();
+        auto aHexText = OUString::number(nDecimalValue, 16).toAsciiUpperCase();
         return GetText() + u" " + sCharName + u" U+" + aHexText;
     }
     return OUString();

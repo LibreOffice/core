@@ -1717,10 +1717,9 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
     UpdateButtons();
 
     // display Unicode position as symbol name while iterating over characters
-    const OUString aHex(OUString::number(cChar, 16).toAsciiUpperCase());
-    const OUString aPattern( (aHex.getLength() > 4) ? u"Ux000000"_ustr : u"Ux0000"_ustr );
-    OUString aUnicodePos = aPattern.subView( 0, aPattern.getLength() - aHex.getLength() ) +
-        aHex;
+    const auto aHex(OUString::number(cChar, 16).toAsciiUpperCase());
+    const OUString aPattern((aHex.length > 4) ? u"Ux000000"_ustr : u"Ux0000"_ustr);
+    OUString aUnicodePos = aPattern.subView(0, aPattern.getLength() - aHex.length) + aHex;
     m_xSymbols->set_entry_text(aUnicodePos);
     m_xSymbolName->set_label(aUnicodePos);
 }

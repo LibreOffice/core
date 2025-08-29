@@ -1342,9 +1342,9 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         eLang = LANGUAGE_SYSTEM;            //! error handling for unknown locales?
     if ( eLang != m_nFormatLang && eLang != LANGUAGE_SYSTEM )
     {
-        m_aFormatCode.append( "][$-" );
-        // language code in upper hex:
-        m_aFormatCode.append(OUString::number(static_cast<sal_uInt16>(eLang), 16).toAsciiUpperCase());
+        m_aFormatCode.append("][$-" +
+                             // language code in upper hex:
+                             OUString::number(eLang.get(), 16).toAsciiUpperCase());
     }
     m_aFormatCode.append( ']' );
 }
