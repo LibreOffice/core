@@ -855,7 +855,9 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget,
         m_aRun->append(" HYPERLINK ");
 
         m_aRun->append("\"");
-        m_aRun->append(msfilter::rtfutil::OutString(rUrl, m_rExport.GetCurrentEncoding()));
+        // In addition to RTF encoding, field text must escape all backslaches
+        m_aRun->append(msfilter::rtfutil::OutString(rUrl.replaceAll("\\", "\\\\"),
+                                                    m_rExport.GetCurrentEncoding()));
         m_aRun->append("\" ");
 
         // Adding the target is likely a LO embellishment.
