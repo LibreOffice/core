@@ -50,7 +50,7 @@
 from __future__ import annotations
 import datetime
 import time
-from typing import Any, Dict, List, Literal, NewType, Optional, overload, Sequence, Tuple, TypeVar, Union
+from typing import Any, Literal, NewType, overload, TypeVar
 
 # List the available service types
 #   SFScriptForge
@@ -92,12 +92,7 @@ POPUPMENU = SFWidgets.SF_PopupMenu
 TOOLBAR = SFWidgets.SF_Toolbar
 TOOLBARBUTTON = SFWidgets.SF_ToolbarButton
 #   Aggregate
-SERVICE = Union[ARRAY, BASIC, DICTIONARY, EXCEPTION, FILESYSTEM, L10N, PLATFORM, REGION, SESSION, STRING,
-                TEXTSTREAM, TIMER, UI,
-                DATABASE, DATASET, DATASHEET,
-                DIALOG, DIALOGCONTROL,
-                DOCUMENT, BASE, CALC, CALCREFERENCE, CHART, FORM, FORMCONTROL, FORMDOCUMENT, WRITER,
-                MENU, CONTEXTMENU, POPUPMENU, TOOLBAR, TOOLBARBUTTON]
+SERVICE = TypeVar('SERVICE', ARRAY, BASIC, DICTIONARY, EXCEPTION, FILESYSTEM, L10N, PLATFORM, REGION, SESSION, SHAREDMEMORY, STRING, TEXTSTREAM, TIMER, UI, DATABASE, DATASET, DATASHEET, DIALOG, DIALOGCONTROL, DOCUMENT, BASE, CALC, CALCREFERENCE, CHART, FORM, FORMCONTROL, FORMDOCUMENT, WRITER, MENU, CONTEXTMENU, POPUPMENU, TOOLBAR, TOOLBARBUTTON)
 #   UNO
 UNO = TypeVar('UNO', Any, Any)
 #   Other
@@ -136,9 +131,9 @@ In a SELECT statement, table-, query- and field names may be surrounded by squar
 SQL_ACTION = TypeVar('SQL_ACTION', str, str)
 """ A SQL command containing an action statement (CREATE TABLE, INSERT, DELETE, ...).
 Table- and field names may be surrounded by square brackets. """
-SCALAR = Union[int, float, str, datetime.datetime]
-VECTOR = Sequence[SCALAR]
-MATRIX = Sequence[VECTOR]
+SCALAR = int | float | str | datetime.datetime
+VECTOR = tuple[SCALAR]
+MATRIX = tuple[VECTOR]
 
 #   Define the used UNO types
 try:
@@ -207,7 +202,7 @@ except ImportError:
 # Docstring rules to display readable text both in PyCharm and VS Code
 # Indentation and punctuation are required like in the example below.
 #   def ImportFromCSVFile(self, filename: FILE, delimiter: str = ',',
-#                       dateformat: Literal['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'] = ...) -> Tuple[str, ...]:
+#                       dateformat: Literal['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'] = ...) -> tuple[str, ...]:
 #       """
 #           Import the data contained in a comma-separated values (CSV) file. The comma may be replaced
 #           by any character.
@@ -222,7 +217,7 @@ except ImportError:
 #                   The dash (-) may be replaced by a dot (.), a slash (/) or a space. Other date formats
 #                   will be ignored.
 #               Returns         <<<<< No colon (:)
-#                   A ``list`` of ``lists``.
+#                   A ``tuple`` of ``tuples``.
 #           """
 #       ...
 
@@ -289,7 +284,7 @@ class SFServices(object):
         """ Get the given property from the Basic world """
         ...
 
-    def Properties(self) -> Tuple[str, ...]:
+    def Properties(self) -> tuple[str, ...]:
         """ Properties list.    """
         ...
 
@@ -365,7 +360,7 @@ class SFScriptForge:
         IDYES: Literal[6]
 
         @classmethod
-        def CDate(cls, datevalue: Union[int, float, str]) -> Optional[datetime.datetime]:
+        def CDate(cls, datevalue: int | float | str) -> datetime.datetime | None:
             """
                 Converts a numeric expression or a string to a ``datetime.datetime`` Python native object.
                     Args
@@ -376,7 +371,7 @@ class SFScriptForge:
             ...
 
         @staticmethod
-        def CDateFromUnoDateTime(unodate: Union[UNODateTime, UNODate, UNOTime]) -> datetime.datetime:
+        def CDateFromUnoDateTime(unodate: UNODateTime | UNODate | UNOTime) -> datetime.datetime:
             """
                 Converts a ``UNO date/time`` representation to a ``datetime.datetime`` Python native object.
                     Args
@@ -387,7 +382,7 @@ class SFScriptForge:
             ...
 
         @staticmethod
-        def CDateToUnoDateTime(date: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time]
+        def CDateToUnoDateTime(date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time
                                ) -> UNODateTime:
             """
                 Converts a date representation into the ``com.sun.star.util.DateTime`` date format.
@@ -447,7 +442,7 @@ class SFScriptForge:
         def DateAdd(cls,
                     interval: Literal['yyyy', 'q', 'm','y', 'w', 'ww', 'd', 'h', 'n', 's'],
                     number: int,
-                    date: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time]
+                    date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time
                     ) -> datetime.datetime:
             """
                 Adds a date or time interval to a given date/time a number of times and returns the resulting date.
@@ -467,8 +462,8 @@ class SFScriptForge:
         @classmethod
         def DateDiff(cls,
                      interval: Literal['yyyy', 'q', 'm','y', 'w', 'ww', 'd', 'h', 'n', 's'],
-                     date1: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
-                     date2: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+                     date1: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
+                     date2: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
                      firstdayofweek: Literal[0, 1, 2, 3, 4, 5, 6, 7] = ...,
                      firstweekofyear: Literal[0, 1, 2, 3] = ...,
                      ) -> int:
@@ -490,7 +485,7 @@ class SFScriptForge:
         @classmethod
         def DatePart(cls,
                      interval: Literal['yyyy', 'q', 'm','y', 'w', 'ww', 'd', 'h', 'n', 's'],
-                     date: Union[float, time.struct_time, datetime.datetime, datetime.date, datetime.time],
+                     date: float | time.struct_time | datetime.datetime | datetime.date | datetime.time,
                      firstdayofweek: Literal[0, 1, 2, 3, 4, 5, 6, 7] = ...,
                      firstweekofyear: Literal[0, 1, 2, 3] = ...,
                      ) -> int:
@@ -524,7 +519,7 @@ class SFScriptForge:
             ...
 
         @classmethod
-        def Format(cls, expression: Union[datetime.datetime, float, int], format: str = ...) -> str:
+        def Format(cls, expression: datetime.datetime | float | int, format: str = ...) -> str:
             """
                 Converts a number to a string, and then formats it according to the format that you specify.
                     Args
@@ -675,7 +670,7 @@ class SFScriptForge:
             ...
 
         @classmethod
-        def Wait(cls, millisec: Union[int, float]) -> None:
+        def Wait(cls, millisec: int | float) -> None:
             """
                 Interrupts the program execution for the amount of time that you specify in milliseconds.
                 The method is an alternative to ``time.sleep()`` that sometimes freezes the LibreOffice
@@ -696,7 +691,7 @@ class SFScriptForge:
 
         StarDesktop: XDesktop
         """ Gets the desktop as a UNO object. """
-        ThisComponent: Optional[XComponent]
+        ThisComponent: XComponent | None
         """
             If the current component refers to a LibreOffice document, this method
             returns the UNO object representing the document.
@@ -705,7 +700,7 @@ class SFScriptForge:
                 Returns
                     The current component or None when not a document.
             """
-        ThisDatabaseDocument: Optional[XOfficeDatabaseDocument]
+        ThisDatabaseDocument: XOfficeDatabaseDocument | None
         """
             If the script is being executed from a Base document or any of its subcomponents
             this method returns the main component of the Base instance.
@@ -744,7 +739,7 @@ class SFScriptForge:
                 ``propval = myDict.ConvertToPropertyValues()``
             """
 
-        def ConvertToPropertyValues(self) -> Tuple[PropertyValue]:
+        def ConvertToPropertyValues(self) -> tuple[PropertyValue]:
             """
                 Store the content of the dictionary in an array of PropertyValues.
                 Each entry in the list is a ``com.sun.star.beans.PropertyValue``.
@@ -757,7 +752,7 @@ class SFScriptForge:
                 """
             ...
 
-        def ImportFromPropertyValues(self, propertyvalues: Sequence[PropertyValue], overwrite: bool = ...) -> bool:
+        def ImportFromPropertyValues(self, propertyvalues: tuple[PropertyValue], overwrite: bool = ...) -> bool:
             """
                 Inserts the contents of an array of ``PropertyValue`` objects into the current dictionary.
                 ``PropertyValue`` Names are used as keys in the dictionary, whereas Values contain
@@ -1098,7 +1093,7 @@ class SFScriptForge:
                 """
             ...
 
-        def Files(self, foldername: FILE, filter: str = ..., includesubfolders: bool = ...) -> Tuple[str, ...]:
+        def Files(self, foldername: FILE, filter: str = ..., includesubfolders: bool = ...) -> tuple[str, ...]:
             """
                 Gets a tuple of the ``FileNames`` stored in the given folder.
                 If the argument ``foldername`` specifies a folder that does not exist, an exception is raised.
@@ -1359,7 +1354,7 @@ class SFScriptForge:
                        foldername: FILE,
                        filter: str = ...,
                        includesubfolders: bool = ...
-                       ) -> Tuple[str, ...]:
+                       ) -> tuple[str, ...]:
             """
                 Returns a tuple of strings corresponding to the folders stored
                 in the given ``foldername``.
@@ -1391,7 +1386,7 @@ class SFScriptForge:
 
         Folder: FILE
         """ The folder containing the ``PO`` files  """
-        Languages: Tuple[str, ...]
+        Languages: tuple[str, ...]
         """ A list of all the base names (without the ``.po`` extensions found in the specified ``folder``. """
         Locale: str
         """ The currently active ``language-COUNTRY`` combination.  """
@@ -1500,11 +1495,11 @@ class SFScriptForge:
         """ The number of central processing units. """
         CurrentUser: str
         """ The name of the currently logged user.  """
-        Extensions: Tuple[str, ...]
+        Extensions: tuple[str, ...]
         """ An array of strings containing the internal IDs of all installed extensions.    """
-        FilterNames: Tuple[str, ...]
+        FilterNames: tuple[str, ...]
         """ An array of strings containing the available document import and export filter names.   """
-        Fonts: Tuple[str, ...]
+        Fonts: tuple[str, ...]
         """ An array of strings containing the names of all available fonts.    """
         FormatLocale: str
         """ The locale used for numbers and dates as a string in the format "la-CO" (language-COUNTRY). """
@@ -1526,7 +1521,7 @@ class SFScriptForge:
         """ The operating system's release. Example: ``5.8.0-44-generic``.    """
         OSVersion: str
         """ The operating system's build or version. Example:  ``#50-Ubuntu SMP Tue Feb 9 06:29:41 UTC 2021 ``  """
-        Printers: Tuple[str, ...]
+        Printers: tuple[str, ...]
         """ The list of available printers. The default printer is put in the first position of the list
         (index = [0]).  """
         Processor: str
@@ -1574,7 +1569,7 @@ class SFScriptForge:
                 """
             ...
 
-        def DatePatterns(self, region=...) -> Tuple[str, ...]:
+        def DatePatterns(self, region=...) -> tuple[str, ...]:
             """
             Gets an array of strings containing the date acceptance patterns for the specified region.
                 Args
@@ -1590,7 +1585,7 @@ class SFScriptForge:
                 """
             ...
 
-        def DayAbbrevNames(self, region: str = ...) -> Tuple[str, ...]:
+        def DayAbbrevNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets an array of strings containing the list of abbreviated weekday names in the specified language.
                     Args
@@ -1598,7 +1593,7 @@ class SFScriptForge:
                 """
             ...
 
-        def DayNames(self, region: str = ...) -> Tuple[str, ...]:
+        def DayNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets an array of strings containing the list of weekday names in the specified language.
                     Args
@@ -1606,7 +1601,7 @@ class SFScriptForge:
                 """
             ...
 
-        def DayNarrowNames(self, region: str = ...) -> Tuple[str, ...]:
+        def DayNarrowNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets a zero-based array of strings containing the list of the initials of weekday names
                 in the specified language.
@@ -1639,7 +1634,7 @@ class SFScriptForge:
                 """
             ...
 
-        def MonthAbbrevNames(self, region: str = ...) -> Tuple[str, ...]:
+        def MonthAbbrevNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets a zero-based array of strings containing the list of abbreviated month names
                 in the specified language.
@@ -1648,7 +1643,7 @@ class SFScriptForge:
                 """
             ...
 
-        def MonthNames(self, region: str = ...) -> Tuple[str, ...]:
+        def MonthNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets an array of strings containing the list of month names in the specified language.
                     Args
@@ -1656,7 +1651,7 @@ class SFScriptForge:
                 """
             ...
 
-        def MonthNarrowNames(self, region: str = ...) -> Tuple[str, ...]:
+        def MonthNarrowNames(self, region: str = ...) -> tuple[str, ...]:
             """
                 Gets an array of strings containing the list of the initials of month names in the specified language.
                     Args
@@ -1709,7 +1704,7 @@ class SFScriptForge:
                 """
             ...
 
-        def Number2Text(self, number: Union[int, float, str], locale: str = ...) -> str:
+        def Number2Text(self, number: int | float | str, locale: str = ...) -> str:
             """
                 Converts numbers and monetary values into written text for any of the currently supported languages.
                     Args
@@ -1796,7 +1791,7 @@ class SFScriptForge:
 
         @classmethod
         def ExecuteBasicScript(
-            cls, scope: Optional[str] = ..., script: str = ..., *args: Optional[Any]
+            cls, scope: str | None = ..., script: str = ..., *args: Any
         ) -> Any:
             """
                 Execute the Basic script given its name and location and fetch its result if any.
@@ -2000,7 +1995,7 @@ class SFScriptForge:
                 """
             ...
 
-        def UnoMethods(self, unoobject: UNO) -> Tuple[str, ...]:
+        def UnoMethods(self, unoobject: UNO) -> tuple[str, ...]:
             """
                 Returns a tuple of the methods callable from an UNO object. The tuple may be empty.
                     Args
@@ -2019,7 +2014,7 @@ class SFScriptForge:
                 """
             ...
 
-        def UnoProperties(self, unoobject: UNO) -> Tuple[str, ...]:
+        def UnoProperties(self, unoobject: UNO) -> tuple[str, ...]:
             """
                 Returns a tuple of the properties callable from an UNO object. The tuple may be empty.
                     Args
@@ -2090,7 +2085,7 @@ class SFScriptForge:
             ...
 
         def StoreValue(self,
-                       value: Union[Any | datetime.datetime | UNO, Tuple[Union[int, float, str, bool]]],
+                       value: Any | datetime.datetime | UNO | tuple[int | float | str | bool, ...],
                        variablename: str
                        ) -> bool:
             """
@@ -2270,7 +2265,7 @@ class SFScriptForge:
                            delimiter: str = ...,
                            occurrences: int = ...,
                            quotechar: Literal["'", '"'] = ...,
-                           ) -> Tuple[str, ...]:
+                           ) -> tuple[str, ...]:
             """
                 Split a string on ``delimiter`` into an array. If ``delimiter`` is part of a quoted (sub)string,
                 it is ignored. Use case: parsing of csv-like records containing quoted strings.
@@ -2288,7 +2283,7 @@ class SFScriptForge:
                 """
             ...
 
-        def Wrap(self, inputstr: str, width: int = ..., tabsize: int = ...) -> Tuple[str, ...]:
+        def Wrap(self, inputstr: str, width: int = ..., tabsize: int = ...) -> tuple[str, ...]:
             """
             Wraps every single paragraph in text (a string) so every line is at most ``width`` characters long.
                 Args
@@ -2539,7 +2534,7 @@ class SFScriptForge:
                                                 'CALC', 'DRAW', 'IMPRESS', 'MATH', 'WRITER'] = ...,
                            templatefile: FILE = ...,
                            hidden: bool = ...
-                           ) -> Union[DOCUMENT, CALC, WRITER]:
+                           ) -> DOCUMENT | CALC | WRITER:
             """
                 Create a new ``LibreOffice`` document of a given type or based on a given template.
                     Args
@@ -2559,7 +2554,7 @@ class SFScriptForge:
                 """
             ...
 
-        def Documents(self) -> Tuple[str, ...]:
+        def Documents(self) -> tuple[str, ...]:
             """
                 Returns the list of the currently open documents. Special windows are ignored.
                     Returns
@@ -2570,8 +2565,8 @@ class SFScriptForge:
 
         def GetDocument(
             self,
-            windowname: Union[str, XComponent, XOfficeDatabaseDocument] = ...
-        ) -> Union[BASE, CALC, DOCUMENT, FORMDOCUMENT, WRITER]:
+            windowname: str | XComponent | XOfficeDatabaseDocument = ...
+        ) -> BASE | CALC | DOCUMENT | FORMDOCUMENT | WRITER:
             """
                 Returns a ``Document`` object referring to the active window or the given window.
                     Args
@@ -2628,7 +2623,7 @@ class SFScriptForge:
                          macroexecution: Literal[0, 1, 2] = ...,
                          filtername: str = ...,
                          filteroptions: str = ...,
-                         ) -> Union[DOCUMENT, CALC, WRITER]:
+                         ) -> DOCUMENT | CALC | WRITER:
             """
                 Open an existing LibreOffice document with the given options.
                     Args
@@ -2685,7 +2680,7 @@ class SFScriptForge:
                 """
             ...
 
-        def SetStatusbar(self, text: str = ..., percentage: Union[int, float] = ...) -> None:
+        def SetStatusbar(self, text: str = ..., percentage: int | float = ...) -> None:
             """
                 Display a text and a progressbar in the status bar of the active window.
                 Any subsequent calls in the same macro run refer to the same status bar of the same window,
@@ -2697,7 +2692,7 @@ class SFScriptForge:
                         ``percentage``: the optional degree of progress between 0 and 100.
                 """
             ...
-        def ShowProgressBar(self, title: str = ..., text: str = ..., percentage: Union[int, float] = ...) -> None:
+        def ShowProgressBar(self, title: str = ..., text: str = ..., percentage: int | float = ...) -> None:
             """
                 Display a non-modal dialog box. Specify its title, an explicatory text and the progress
                 on a progressbar. A call without arguments erases the progress bar dialog.
@@ -2747,9 +2742,9 @@ class SFDatabases:
             literally without syntax checking nor review to the database engine.
             """
 
-        Queries: Tuple[str, ...]
+        Queries: tuple[str, ...]
         """ The list of stored queries. """
-        Tables: Tuple[str, ...]
+        Tables: tuple[str, ...]
         """ The list of stored tables.  """
         XConnection: UNO
         """ The ``UNO`` object representing the current connection (``com.sun.star.sdbc.XConnection``). """
@@ -2772,7 +2767,7 @@ class SFDatabases:
             ...
 
         def CreateDataset(self, sqlcommand: SQL_SELECT, directsql: bool = ..., filter: str = ..., orderby: str = ...
-        ) -> Optional[DATASET]:
+        ) -> DATASET | None:
             """
                 Creates a Dataset service instance based on a table, query or ``SQL SELECT`` statement.
                     Args
@@ -2792,7 +2787,7 @@ class SFDatabases:
                 """
             ...
 
-        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> Optional[Union[float, int]]:
+        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> float | int | None:
             """
                 Compute the aggregate function ``AVG()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2803,11 +2798,11 @@ class SFDatabases:
 
                         ``criteria``: an optional ``WHERE`` clause without the word ``WHERE``.
                     Returns
-                        int | float | None
+                        int, float, None
                 """
             ...
 
-        def DCount(self, expression: str, tablename: str, criteria: str = ...) -> Optional[int]:
+        def DCount(self, expression: str, tablename: str, criteria: str = ...) -> int | None:
             """
                 Compute the aggregate function ``COUNT()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2818,7 +2813,7 @@ class SFDatabases:
 
                         ``criteria``: an optional ``WHERE`` clause without the word ``WHERE``.
                     Returns
-                        int | float | None
+                        int, float, None
                 """
             ...
 
@@ -2846,7 +2841,7 @@ class SFDatabases:
             ...
 
         def DMax(self, expression: str, tablename: str, criteria: str = ...) \
-                -> Optional[Union[float, int, str, datetime.datetime]]:
+                -> float | int | str | datetime.datetime | None:
             """
                 Compute the aggregate function ``MAX()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2857,12 +2852,12 @@ class SFDatabases:
 
                         ``criteria``: an optional ``WHERE`` clause without the word ``WHERE``.
                     Returns
-                        int | float | None
+                        int, float, date, str, None
                 """
             ...
 
         def DMin(self, expression: str, tablename: str, criteria: str = ...) \
-                -> Optional[Union[float, int, str, datetime.datetime]]:
+                -> float | int | str | datetime.datetime | None:
             """
                 Compute the aggregate function ``MIN()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2873,11 +2868,11 @@ class SFDatabases:
 
                         ``criteria``: an optional ``WHERE`` clause without the word ``WHERE``.
                     Returns
-                        int | float | None
+                        int, float, None
                 """
             ...
 
-        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> Optional[Union[float, int]]:
+        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> float | int | None:
             """
                 Compute the aggregate function ``SUM()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2888,7 +2883,7 @@ class SFDatabases:
 
                         ``criteria``: an optional ``WHERE`` clause without the word ``WHERE``.
                     Returns
-                        int | float | None
+                        int, float, None
                 """
             ...
 
@@ -2916,7 +2911,7 @@ class SFDatabases:
                 """
             ...
 
-        def OpenFormDocument(self, formdocument: str) -> Optional[FORMDOCUMENT]:
+        def OpenFormDocument(self, formdocument: str) -> FORMDOCUMENT | None:
             """
                 Open the ``FormDocument`` given by its hierarchical name in normal mode.
                 If the form document is already open, the form document is made active.
@@ -2928,7 +2923,7 @@ class SFDatabases:
                 """
             ...
 
-        def OpenQuery(self, queryname: str) -> Optional[DATASHEET]:
+        def OpenQuery(self, queryname: str) -> DATASHEET | None:
             """
                 Opens the Data View window of the specified query.
                     Args
@@ -2939,7 +2934,7 @@ class SFDatabases:
                 """
             ...
 
-        def OpenSql(self, sql: SQL_SELECT, directsql: bool = ...) -> Optional[DATASHEET]:
+        def OpenSql(self, sql: SQL_SELECT, directsql: bool = ...) -> DATASHEET | None:
             """
                 Runs a ``SQL SELECT`` command, opens a Data View window with the results.
                     Args
@@ -2954,7 +2949,7 @@ class SFDatabases:
                 """
             ...
 
-        def OpenTable(self, tablename: str) -> Optional[DATASHEET]:
+        def OpenTable(self, tablename: str) -> DATASHEET | None:
             """
                 Opens the Data View window of the specified table.
                     Args
@@ -3028,7 +3023,7 @@ class SFDatabases:
         """ Returns ``True`` if the current record position is before the first record in the dataset,
         otherwise returns ``False``. Set this property to ``True`` to move the cursor to the beginning of the dataset.
         Setting this property to ``False`` is ignored.  """
-        DefaultValues: Dict
+        DefaultValues: dict
         """ Returns a ``dict`` with the default values used for each field in the dataset.
         The fields or columns in the dataset are the keys in the dictionary. The database field types are converted
         to their corresponding Python data types. When the field type is undefined, the default value is None.  """
@@ -3036,7 +3031,7 @@ class SFDatabases:
         """ Returns ``True`` if the current record position is after the last record in the dataset,
         otherwise returns ``False``. Set this property to ``True`` to move the cursor to the end of the dataset.
         Setting this property to ``False`` is ignored.  """
-        Fields: Tuple[str, ...]
+        Fields: tuple[str, ...]
         """ Returns a list containing the names of all fields in the dataset.   """
         Filter: str
         """ Returns the filter applied in addition to the eventual ``WHERE`` clause(s) in the initial ``SQL`` statement.
@@ -3056,9 +3051,9 @@ class SFDatabases:
         SourceType: str
         """ Returns the source of the dataset. It can be one of the following string values:
         ``TABLE``, ``QUERY`` or ``SQL``.    """
-        UpdatableFields: List
+        UpdatableFields: tuple
         """ Returns a ``list`` containing the names of all fields in the dataset that are updatable.    """
-        Values: Dict
+        Values: dict
         """ Returns a ``dict`` containing the pairs (field name: value) of the current record in the dataset.   """
         XRowSet: UNO
         """ Returns the ``com.sun.star.sdb.RowSet`` ``UNO`` object representing the dataset.    """
@@ -3120,7 +3115,7 @@ class SFDatabases:
                 """
             ...
 
-        def GetRows(self, header: bool = ..., maxrows: int = ...) -> Optional[MATRIX]:
+        def GetRows(self, header: bool = ..., maxrows: int = ...) -> MATRIX | None:
             """
                 Return the content of the dataset as a list of lists.
                 The first index corresponds to the individual records and the second index refers to the record fields.
@@ -3144,7 +3139,7 @@ class SFDatabases:
                 """
             ...
 
-        def Insert(self, *args, **kwargs: Dict) -> int:
+        def Insert(self, *args, **kwargs: dict) -> int:
             """
                 Inserts a new record at the end of the dataset and initialize its fields with the specified values.
                 Updatable fields with unspecified values are initialized with their default values.
@@ -3253,7 +3248,7 @@ class SFDatabases:
             The ``Base`` document owning the data may or may not be opened.
             """
 
-        ColumnHeaders: Tuple[str, ...]
+        ColumnHeaders: tuple[str, ...]
         """ Returns a list with the names of the column headers in the datasheet.   """
         CurrentColumn: str
         """ Returns the currently selected column name. """
@@ -3268,7 +3263,7 @@ class SFDatabases:
         """ Returns True when the datasheet component has not been closed by the user.  """
         LastRow: int
         """ Returns the number of rows in the datasheet.    """
-        MenuHeaders: Tuple[str, ...]
+        MenuHeaders: tuple[str, ...]
         """ Returns the list, as a tuple of strings, of the menus present in the menubar.   """
         OrderBy: str
         """ Specifies the order in which records are shown expressed as the ``ORDER BY`` clause of a ``SQL`` query
@@ -3303,7 +3298,7 @@ class SFDatabases:
                 """
             ...
 
-        def CreateMenu(self, menuheader: str, before: Union[str, int] = ..., submenuchar: str = ...) -> object:
+        def CreateMenu(self, menuheader: str, before: str | int = ..., submenuchar: str = ...) -> object:
             """
                 Creates a new menu entry in the data view window and returns a ``SFWidgets.Menu`` service instance,
                 with which menu items can be programmatically added.
@@ -3321,7 +3316,7 @@ class SFDatabases:
                 """
             ...
 
-        def GetText(self, column: Union[str, int] = ...) -> str:
+        def GetText(self, column: str | int = ...) -> str:
             """
                 Returns the text in a given column of the current row.
                     Args
@@ -3334,7 +3329,7 @@ class SFDatabases:
                 """
             ...
 
-        def GetValue(self, column: Union[str, int]) -> Optional[Union[str, int, float, datetime.datetime]]:
+        def GetValue(self, column: str | int) -> str | int | float | datetime.datetime | None:
             """
                 Returns the value in a given column of the current row as a valid Python type.
                     Args
@@ -3346,7 +3341,7 @@ class SFDatabases:
                 """
             ...
 
-        def GoToCell(self, row: int = ..., column: Union[int, str] = ...) -> None:
+        def GoToCell(self, row: int = ..., column: int | str = ...) -> None:
             """
                 Moves the cursor to the specified row and column.
                     Args
@@ -3376,7 +3371,7 @@ class SFDatabases:
                 """
             ...
 
-        def Toolbars(self, toolbarname: str = ...) -> Union[TOOLBAR, Tuple[str, ...]]:
+        def Toolbars(self, toolbarname: str = ...) -> TOOLBAR | tuple[str, ...]:
             """
                 Returns either a list of the available toolbar names in the actual datasheet or a ``Toolbar``
                 service instance.
@@ -3479,7 +3474,7 @@ class SFDialogs:
                 """
             ...
 
-        def Center(self, parent: Union[DIALOG, BASE, DOCUMENT, CALC, WRITER, FORMDOCUMENT, DATASHEET] = ...) -> bool:
+        def Center(self, parent: DIALOG | BASE | DOCUMENT | CALC | WRITER | FORMDOCUMENT | DATASHEET = ...) -> bool:
             """
                 Centres the current dialogue box instance in the middle of a parent window.
                 Without arguments, the method centres the dialogue box in the middle of the current window.
@@ -3492,7 +3487,7 @@ class SFDialogs:
                 """
             ...
         def CloneControl(
-            self, sourcename: str, controlname: str, left: int = ..., top: int = ...) -> Optional[DIALOGCONTROL]:
+            self, sourcename: str, controlname: str, left: int = ..., top: int = ...) -> DIALOGCONTROL | None:
             """
                 Duplicate an existing control of any type in the actual dialog.
                 The duplicated control is left unchanged. The new control can be relocated.
@@ -3509,7 +3504,7 @@ class SFDialogs:
                 """
             ...
 
-        def Controls(self, controlname: str = ...) -> Union[DIALOGCONTROL, Tuple[str, ...]]:
+        def Controls(self, controlname: str = ...) -> DIALOGCONTROL | tuple[str, ...]:
             """
                 Returns the list of the controls contained in the dialog or a dialog control object based on its name.
                     Args
@@ -3523,10 +3518,10 @@ class SFDialogs:
 
         def CreateButton(self,
                          controlname: str,
-                         place: Union[UNO, Tuple[int, int, int, int]],
+                         place: UNO | tuple[int, int, int, int],
                          toggle: bool = ...,
                          push: Literal["", "OK", "CANCEL"] = ...,
-                         ) -> Optional[DIALOGCONTROL]:
+                         ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``Button`` in the actual dialog.
                     Args
@@ -3546,9 +3541,9 @@ class SFDialogs:
 
         def CreateCheckBox(self,
                            controlname: str,
-                           place: Union[UNO, Tuple[int, int, int, int]],
+                           place: UNO | tuple[int, int, int, int],
                            multiline: bool = ...,
-                           ) -> Optional[DIALOGCONTROL]:
+                           ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ComboBox`` in the actual dialog.
                     Args
@@ -3567,11 +3562,11 @@ class SFDialogs:
 
         def CreateComboBox(self,
                            controlname: str,
-                           place: Union[UNO, Tuple[int, int, int, int]],
+                           place: UNO | tuple[int, int, int, int],
                            border: Literal["3D", "FLAT", "NONE"] = ...,
                            dropdown: bool = ...,
                            linecount: int = ...
-                           ) -> Optional[DIALOGCONTROL]:
+                           ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ComboBox`` in the actual dialog.
                     Args
@@ -3593,14 +3588,14 @@ class SFDialogs:
 
         def CreateCurrencyField(self,
                                 controlname: str,
-                                place: Union[UNO, Tuple[int, int, int, int]],
+                                place: UNO | tuple[int, int, int, int],
                                 border: Literal["3D", "FLAT", "NONE"] = ...,
                                 spinbutton: bool = ...,
-                                minvalue: Union[int, float] = ...,
-                                maxvalue: Union[int, float] = ...,
+                                minvalue: int | float = ...,
+                                maxvalue: int | float = ...,
                                 increment: int = ...,
                                 accuracy: int = ...
-                                ) -> Optional[DIALOGCONTROL]:
+                                ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``CurrencyField`` in the actual dialog.
                     Args
@@ -3628,12 +3623,12 @@ class SFDialogs:
 
         def CreateDateField(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
                             dropdown: bool = ...,
                             mindate: datetime.datetime = ...,
                             maxdate: datetime.datetime = ...,
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``DateField`` in the actual dialog.
                     Args
@@ -3657,9 +3652,9 @@ class SFDialogs:
 
         def CreateFileControl(self,
                               controlname: str,
-                              place: Union[UNO, Tuple[int, int, int, int]],
+                              place: UNO | tuple[int, int, int, int],
                               border: Literal["3D", "FLAT", "NONE"] = ...,
-                              ) -> Optional[DIALOGCONTROL]:
+                              ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``FileControl`` in the actual dialog.
                     Args
@@ -3675,9 +3670,9 @@ class SFDialogs:
 
         def CreateFixedLine(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             orientation: Literal["H", "Horizontal", "V", "Vertical"],
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``FixedLine`` in the actual dialog.
                     Args
@@ -3696,12 +3691,12 @@ class SFDialogs:
 
         def CreateFixedText(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
                             multiline: bool = ...,
                             align: Literal["LEFT", "CENTER", "RIGHT"] = ...,
                             verticalalign: Literal["TOP", "MIDDLE", "BOTTOM"] = ...,
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``FixedText`` in the actual dialog.
                     Args
@@ -3726,12 +3721,12 @@ class SFDialogs:
 
         def CreateFormattedField(self,
                                  controlname: str,
-                                 place: Union[UNO, Tuple[int, int, int, int]],
+                                 place: UNO | tuple[int, int, int, int],
                                  border: Literal["3D", "FLAT", "NONE"] = ...,
                                  spinbutton: bool = ...,
-                                 minvalue: Union[int, float] = ...,
-                                 maxvalue: Union[int, float] = ...,
-                                 ) -> Optional[DIALOGCONTROL]:
+                                 minvalue: int | float = ...,
+                                 maxvalue: int | float = ...,
+                                 ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``FormattedField`` in the actual dialog.
                     Args
@@ -3755,8 +3750,8 @@ class SFDialogs:
 
         def CreateGroupBox(self,
                            controlname: str,
-                           place: Union[UNO, Tuple[int, int, int, int]],
-                           ) -> Optional[DIALOGCONTROL]:
+                           place: UNO | tuple[int, int, int, int],
+                           ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``GroupBox`` in the actual dialog.
                     Args
@@ -3772,12 +3767,12 @@ class SFDialogs:
 
         def CreateHyperlink(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
                             multiline: bool = ...,
                             align: Literal["LEFT", "CENTER", "RIGHT"] = ...,
                             verticalalign: Literal["TOP", "MIDDLE", "BOTTOM"] = ...,
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``Hyperlink`` in the actual dialog.
                     Args
@@ -3802,10 +3797,10 @@ class SFDialogs:
 
         def CreateImageControl(self,
                                controlname: str,
-                               place: Union[UNO, Tuple[int, int, int, int]],
+                               place: UNO | tuple[int, int, int, int],
                                border: Literal["3D", "FLAT", "NONE"] = ...,
                                scale: Literal["FITTOSIZE", "KEEPRATIO", "NO"] = ...,
-                               ) -> Optional[DIALOGCONTROL]:
+                               ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ImageControl`` in the actual dialog.
                     Args
@@ -3825,12 +3820,12 @@ class SFDialogs:
 
         def CreateListBox(self,
                           controlname: str,
-                          place: Union[UNO, Tuple[int, int, int, int]],
+                          place: UNO | tuple[int, int, int, int],
                           border: Literal["3D", "FLAT", "NONE"] = ...,
                           dropdown: bool = ...,
                           linecount: int = ...,
                           multiselect: bool = ...
-                          ) -> Optional[DIALOGCONTROL]:
+                          ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ListBox`` in the actual dialog.
                     Args
@@ -3854,14 +3849,14 @@ class SFDialogs:
 
         def CreateNumericField(self,
                                controlname: str,
-                               place: Union[UNO, Tuple[int, int, int, int]],
+                               place: UNO | tuple[int, int, int, int],
                                border: Literal["3D", "FLAT", "NONE"] = ...,
                                spinbutton: bool = ...,
-                               minvalue: Union[int, float] = ...,
-                               maxvalue: Union[int, float] = ...,
+                               minvalue: int | float = ...,
+                               maxvalue: int | float = ...,
                                increment: int = ...,
                                accuracy: int = ...
-                               ) -> Optional[DIALOGCONTROL]:
+                               ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``NumericField`` in the actual dialog.
                     Args
@@ -3889,11 +3884,11 @@ class SFDialogs:
 
         def CreatePatternField(self,
                                controlname: str,
-                               place: Union[UNO, Tuple[int, int, int, int]],
+                               place: UNO | tuple[int, int, int, int],
                                border: Literal["3D", "FLAT", "NONE"] = ...,
                                editmask: str = ...,
                                literalmask: str = ...,
-                               ) -> Optional[DIALOGCONTROL]:
+                               ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``PatternField`` in the actual dialog.
                     Args
@@ -3916,11 +3911,11 @@ class SFDialogs:
 
         def CreateProgressBar(self,
                               controlname: str,
-                              place: Union[UNO, Tuple[int, int, int, int]],
+                              place: UNO | tuple[int, int, int, int],
                               border: Literal["3D", "FLAT", "NONE"] = ...,
-                              minvalue: Union[int, float] = ...,
-                              maxvalue: Union[int, float] = ...,
-                              ) -> Optional[DIALOGCONTROL]:
+                              minvalue: int | float = ...,
+                              maxvalue: int | float = ...,
+                              ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ProgressBar`` in the actual dialog.
                     Args
@@ -3942,10 +3937,10 @@ class SFDialogs:
 
         def CreateRadioButton(self,
                               controlname: str,
-                              place: Union[UNO, Tuple[int, int, int, int]],
+                              place: UNO | tuple[int, int, int, int],
                               border: Literal["3D", "FLAT", "NONE"] = ...,
                               multiline: bool = ...,
-                              ) -> Optional[DIALOGCONTROL]:
+                              ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``RadioButton`` in the actual dialog.
                     Args
@@ -3964,12 +3959,12 @@ class SFDialogs:
 
         def CreateScrollBar(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             orientation: Literal["H", "Horizontal", "V", "Vertical"],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
-                            minvalue: Union[int, float] = ...,
-                            maxvalue: Union[int, float] = ...,
-                            ) -> Optional[DIALOGCONTROL]:
+                            minvalue: int  | float = ...,
+                            maxvalue: int | float = ...,
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``ScrollBar`` in the actual dialog.
                     Args
@@ -3994,13 +3989,13 @@ class SFDialogs:
 
         def CreateTableControl(self,
                                controlname: str,
-                               place: Union[UNO, Tuple[int, int, int, int]],
+                               place: UNO | tuple[int, int, int, int],
                                border: Literal["3D", "FLAT", "NONE"] = ...,
                                rowheaders: bool = ...,
                                columnheaders: bool = ...,
                                scrollbars: Literal["H", "Horizontal", "V", "Vertical", "B", "Both", "N", "None"] = ...,
                                gridlines: bool = ...,
-                               ) -> Optional[DIALOGCONTROL]:
+                               ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``TableControl`` in the actual dialog.
                     Args
@@ -4027,10 +4022,10 @@ class SFDialogs:
 
         def CreateTabPageContainer(self,
                                    controlname: str,
-                                   place: Union[UNO, Tuple[int, int, int, int]],
-                                   tabheaders: Tuple[str, ...],
+                                   place: UNO | tuple[int, int, int, int],
+                                   tabheaders: tuple[str, ...],
                                    border: Literal["3D", "FLAT", "NONE"] = ...,
-                                   ) -> Optional[DIALOGCONTROL]:
+                                   ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type TabPageContainer in the actual dialog. Only one such creation is allowed
                 per dialog.
@@ -4057,12 +4052,12 @@ class SFDialogs:
 
         def CreateTextField(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
                             multiline: bool = ...,
                             maximumlength: int = ...,
                             passwordcharacter: str = ...
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``TextField`` in the actual dialog.
                     Args
@@ -4088,11 +4083,11 @@ class SFDialogs:
 
         def CreateTimeField(self,
                             controlname: str,
-                            place: Union[UNO, Tuple[int, int, int, int]],
+                            place: UNO | tuple[int, int, int, int],
                             border: Literal["3D", "FLAT", "NONE"] = ...,
                             mintime: datetime.datetime = ...,
                             maxtime: datetime.datetime = ...
-                            ) -> Optional[DIALOGCONTROL]:
+                            ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``TimeField`` in the actual dialog.
                     Args
@@ -4114,9 +4109,9 @@ class SFDialogs:
 
         def CreateTreeControl(self,
                               controlname: str,
-                              place: Union[UNO, Tuple[int, int, int, int]],
+                              place: UNO | tuple[int, int, int, int],
                               border: Literal["3D", "FLAT", "NONE"] = ...,
-                              ) -> Optional[DIALOGCONTROL]:
+                              ) -> DIALOGCONTROL | None:
             """
                 Create a new control of type ``TreeControl`` in the actual dialog.
                     Args
@@ -4207,7 +4202,7 @@ class SFDialogs:
                 """
             ...
 
-        def OrderTabs(self, tabslist: Sequence[str], start: int = ..., increment: int = ...) -> bool:
+        def OrderTabs(self, tabslist: tuple[str], start: int = ..., increment: int = ...) -> bool:
             """
                 Set the tabulation index of a series of controls.
 
@@ -4268,7 +4263,7 @@ class SFDialogs:
                 By using the SetPageManager method it is possible to define five types of page managers:
                     - List box or combo box: in this case, each entry in the list box or combo box corresponds to a page. The first item refers to Page 1, the second items refers to Page 2 and so on.
                     - Group of radio buttons: defines a group of radio buttons that will control which page is visible.
-                    - Sequence of buttons: defines a set of buttons, each of which corresponding to a dialog page. This can be used to emulate a tabbed interface by placing buttons side by side in the dialog.
+                    - tuple of buttons: defines a set of buttons, each of which corresponding to a dialog page. This can be used to emulate a tabbed interface by placing buttons side by side in the dialog.
                     - Previous/Next buttons: defines which buttons in the dialog that will be used to navigate to the Previous/Next page in the dialog.
                     - If the dialog contains a TabPageContainer control, the control always contributes implicitly to the page management.
 
@@ -4401,7 +4396,7 @@ class SFDialogs:
         RootNode: UNO
         """ Get the lowest root node (usually there is only one such root node), as a
         ``com.sun.star.awt.tree.XMutableTreeNode`` object. Applicable to ``TreeControl`` controls. """
-        RowSource: Sequence[str]
+        RowSource: tuple[str]
         """ Get/set the data contained in a ``combobox`` or a ``listbox``.  """
         TabIndex: int
         """ Specifies a control's place in the tab order in the dialog. """
@@ -4514,7 +4509,7 @@ class SFDialogs:
                      displayvalue: str = ...,
                      datavalue: Any = ...,
                      casesensitive: bool = ...,
-                     ) -> Optional[XMutableTreeNode]:
+                     ) -> XMutableTreeNode | None:
             """
                 Traverses the tree and find recursively, starting from the root, a node meeting some criteria.
                 Either (1 match is enough) having its ``DisplayValue`` like ``displayValue`` or
@@ -4564,7 +4559,7 @@ class SFDialogs:
 
         def SetTableData(self,
                          dataarray: MATRIX,
-                         widths: Sequence[Union[int, float]] = ...,
+                         widths: tuple[int | float, ...] = ...,
                          alignments: str = ...,
                          rowheaderwidth: int = ...,
                          ) -> bool:
@@ -4649,14 +4644,14 @@ class SFDocuments:
         This property is not applicable to ``Base`` documents. """
         DocumentType: str
         """ String value with the document type (``Base``, ``Calc``, ``Writer``, etc) """
-        ExportFilters: Tuple[str, ...]
+        ExportFilters: tuple[str, ...]
         """ Returns a tuple of strings with the export filter names applicable to the current document.
         Filters used for both import/export are also returned.
         This property is not applicable to ``Base`` documents. """
         FileSystem: FILE
         """ Returns a string with the URL path to the root of the virtual file system of the document.
         Use the ``FileSystem`` service to view its contents, as well as to create, open and read files stored in it. """
-        ImportFilters: Tuple[str, ...]
+        ImportFilters: tuple[str, ...]
         """ Returns a tuple of strings with the import filter names applicable to the current document.
         Filters used for both import/export are also returned.
         This property is not applicable to ``Base`` documents. """
@@ -4679,12 +4674,12 @@ class SFDocuments:
         Keywords: str
         """ Get/set the ``Keywords`` property of the document as a comma-separated list of keywords.
         This property is not applicable to ``Base`` documents. """
-        MenuHeaders: Tuple[str, ...]
+        MenuHeaders: tuple[str, ...]
         """ Returns the list, as a tuple of strings, of the menus present in the menubar.   """
         Readonly: bool
         """ ``True`` if the document is actually in read-only mode.
         This property is not applicable to ``Base`` documents. """
-        StyleFamilies: Tuple[str, ...]
+        StyleFamilies: tuple[str, ...]
         """ Get the list of available style families.
         This property is not applicable to ``Base`` documents. """
         Subject: str
@@ -4725,7 +4720,7 @@ class SFDocuments:
             ...
 
         def ContextMenus(self, contextmenuname: str = ..., submenuchar: str = ...
-                         ) -> Union[CONTEXTMENU, Tuple[str, ...]]:
+                         ) -> CONTEXTMENU | tuple[str, ...]:
             """
                 Returns either a list of the available ContextMenu names in the actual document
                 or a ``SFWidgets.SF_ContextMenu`` object instance.
@@ -4740,7 +4735,7 @@ class SFDocuments:
                 """
             ...
 
-        def CreateMenu(self, menuheader: str, before: Union[str, int] = ..., submenuchar: str = ...
+        def CreateMenu(self, menuheader: str, before: str | int = ..., submenuchar: str = ...
                        ) -> MENU:
             """
                 Creates a new menu entry in the menubar of a given document window.
@@ -4764,7 +4759,7 @@ class SFDocuments:
                 """
             ...
 
-        def DeleteStyles(self, family: str, styleslist: Union[str, Sequence[str]]) -> None:
+        def DeleteStyles(self, family: str, styleslist: str | tuple[str]) -> None:
             """
                 Suppresses a single style or a list of styles given by their names within a specific styles family.
                 Only user-defined styles may be deleted, built-in styles are ignored.
@@ -4961,7 +4956,7 @@ class SFDocuments:
                    used: bool = ...,
                    userdefined: bool = ...,
                    category: Literal['TEXT', 'CHAPTER', 'LIST', 'INDEX', 'EXTRA', 'HTML'] = ...,
-                   ) -> Tuple[str, ...]:
+                   ) -> tuple[str, ...]:
             """
                 Retrieves a list of styles matching an optional compound criteria, the returned list may be empty.
                 This method is not applicable to ``Base`` documents.
@@ -4987,7 +4982,7 @@ class SFDocuments:
                 """
             ...
 
-        def Toolbars(self, toolbarname: str = ...) -> Union[TOOLBAR, Tuple[str, ...]]:
+        def Toolbars(self, toolbarname: str = ...) -> TOOLBAR | tuple[str, ...]:
             """
                 Returns either a list of the available toolbar names in the actual document
                 or a ``SFWidgets.SF_Toolbar`` object instance.
@@ -5046,7 +5041,7 @@ class SFDocuments:
                 """
             ...
 
-        def FormDocuments(self) -> Tuple[str, ...]:
+        def FormDocuments(self) -> tuple[str, ...]:
             """
                 Return the list of the form documents contained in the ``Base`` document.
                     Returns
@@ -5055,7 +5050,7 @@ class SFDocuments:
                 """
             ...
 
-        def Forms(self, formdocument: str, form: Union[str, int] = ...) -> Union[FORM, Tuple[str, ...]]:
+        def Forms(self, formdocument: str, form: str | int = ...) -> FORM | tuple[str, ...]:
             """
                 Depending on the parameters provided this method will return:
                     - a tuple with the names of all the forms contained in a form document (if the ``form`` argument is absent)
@@ -5074,7 +5069,7 @@ class SFDocuments:
                 """
             ...
 
-        def GetDatabase(self, user: str = ..., password: str = ...) -> Optional[DATABASE]:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> DATABASE | None:
             """
                 Returns a ``SFDatabases.Database`` class instance giving access
                 to the execution of SQL commands on the database defined and/or stored in
@@ -5207,13 +5202,13 @@ class SFDocuments:
             service instance.
             """
 
-        CurrentSelection: Union[RANGE, Tuple[RANGE, ...]]
+        CurrentSelection: RANGE | tuple[RANGE, ...]
         """ Get/set the single selected range as a string or the list of selected ranges as a tuple of strings. """
 
-        DefinedNames: Tuple[str, ...]
+        DefinedNames: tuple[str, ...]
         """ The list of all names defined in the document, at global and sheet levels.  """
 
-        Sheets: Tuple[str, ...]
+        Sheets: tuple[str, ...]
         """ The list with the names of all existing sheets. """
 
         def FirstCell(self, rangename: RANGE) -> RANGE:
@@ -5396,7 +5391,7 @@ class SFDocuments:
                 """
             ...
 
-        def Charts(self, sheetname: SHEETNAME, chartname: str = ...) -> Union[Tuple[str, ...], CHART]:
+        def Charts(self, sheetname: SHEETNAME, chartname: str = ...) -> tuple[str, ...] | CHART:
             """
                 Returns either the list with the names of all chart objects in a given sheet
                 or a single Chart service instance.
@@ -5581,9 +5576,9 @@ class SFDocuments:
             ...
 
         def CopySheet(self,
-                      sheetname: Union[SHEETNAME, CALCREFERENCE],
+                      sheetname: SHEETNAME | CALCREFERENCE,
                       newname: SHEETNAME,
-                      beforesheet: Union[int, SHEETNAME]) -> bool:
+                      beforesheet: int | SHEETNAME) -> bool:
             """
                 Copies a specified sheet before an existing sheet or at the end of the list of sheets.
                 The sheet to be copied may be contained inside any open ``Calc`` document.
@@ -5606,7 +5601,7 @@ class SFDocuments:
                               filename: FILE,
                               sheetname: SHEETNAME,
                               newname: SHEETNAME,
-                              beforesheet: Union[int, SHEETNAME] = ...,
+                              beforesheet: int | SHEETNAME = ...,
                               ) -> bool:
             """
                 Copies a specified sheet from a closed Calc document and pastes it before an existing
@@ -5633,7 +5628,7 @@ class SFDocuments:
             ...
 
         def CopyToCell(self,
-                       sourcerange: Union[RANGE, CALCREFERENCE],
+                       sourcerange: RANGE | CALCREFERENCE,
                        destinationcell: RANGE
                        ) -> RANGE:
             """
@@ -5655,7 +5650,7 @@ class SFDocuments:
             ...
 
         def CopyToRange(self,
-                        sourcerange: Union[RANGE, CALCREFERENCE],
+                        sourcerange: RANGE | CALCREFERENCE,
                         destinationrange: RANGE
                         ) -> RANGE:
             """
@@ -5711,9 +5706,9 @@ class SFDocuments:
                              pivottablename: str,
                              sourcerange: RANGE,
                              targetcell: RANGE,
-                             datafields: Union[Sequence[str], str] = ...,
-                             rowfields: Union[Sequence[str], str] = ...,
-                             columnfields: Union[Sequence[str], str] = ...,
+                             datafields: tuple[str, ...] | str = ...,
+                             rowfields: tuple[str, ...] | str = ...,
+                             columnfields: tuple[str, ...] | str = ...,
                              filterbutton: bool = ...,
                              rowtotals: bool = ...,
                              columntotals: bool = ...,
@@ -5849,7 +5844,7 @@ class SFDocuments:
 
         def DefineName(self,
                        definedname: str,
-                       value: Union[str, int, float],
+                       value: str | int | float,
                        sheetname: SHEETNAME = ...
                        ) -> bool:
             """
@@ -5928,7 +5923,7 @@ class SFDocuments:
                 """
             ...
 
-        def Forms(self, sheetname: SHEETNAME, form: Union[int, str] = ...) -> Union[FORM, Tuple[str, ...]]:
+        def Forms(self, sheetname: SHEETNAME, form: int | str = ...) -> FORM | tuple[str, ...]:
             """
                 Depending on the parameters provided this method will return:
 
@@ -5954,7 +5949,7 @@ class SFDocuments:
                 """
             ...
 
-        def GetFormula(self, range: RANGE) -> Union[str, Tuple[str, ...], Tuple[Tuple[str, ...]]]:
+        def GetFormula(self, range: RANGE) -> str | tuple[str, ...] | tuple[tuple[str, ...]]:
             """
                 Get the formula(s) stored in the given range of cells as a single string, a tuple of strings,
                 or a tuple of tuples of strings.
@@ -5967,7 +5962,7 @@ class SFDocuments:
 
         def GetValue(self,
                      range: RANGE
-                     ) -> Union[str, Tuple[Union[str, float], ...], Tuple[Tuple[Union[str, float], ...]], ...]:
+                     ) -> str | tuple[str | float, ...] | tuple[tuple[str | float, ...], ...]:
             """
                 Get the value(s) stored in the given range of cells as a single value, a tuple or a tuple of tuples.
                 All returned values are either doubles or strings.
@@ -6049,7 +6044,7 @@ class SFDocuments:
 
         def ImportStylesFromFile(self,
                                  filename: FILE,
-                                 families: Union[str, Sequence[str]] = ...,
+                                 families: str | tuple[str, ...] = ...,
                                  overwrite: bool = ...
                                  ):
             """
@@ -6075,7 +6070,7 @@ class SFDocuments:
                 """
             ...
 
-        def InsertSheet(self, sheetname: SHEETNAME, beforesheet: Union[SHEETNAME, int] = ...) -> bool:
+        def InsertSheet(self, sheetname: SHEETNAME, beforesheet: SHEETNAME | int = ...) -> bool:
             """
                 Inserts a new empty sheet before an existing sheet or at the end of the list of sheets.
                     Args
@@ -6118,7 +6113,7 @@ class SFDocuments:
 
         def MoveSheet(self,
                       sheetname: SHEETNAME,
-                      beforesheet: Union[SHEETNAME, int] = ...
+                      beforesheet: SHEETNAME | int = ...
                       ) -> bool:
             """
                 Moves an existing sheet and places it before a specified sheet or at the end of the list of sheets.
@@ -6251,7 +6246,7 @@ class SFDocuments:
 
         def RemoveDuplicates(self,
                              range: RANGE,
-                             columns: Union[int, Sequence[int]],
+                             columns: int | tuple[int, ...],
                              header: bool = ...,
                              casesensitive: bool = ...,
                              mode: Literal["CLEAR", "COMPACT"] = ...,
@@ -6311,10 +6306,10 @@ class SFDocuments:
 
         def SetArray(self,
                      targetcell: RANGE,
-                     value: Union[SCALAR, VECTOR, MATRIX]
+                     value: SCALAR | VECTOR | MATRIX
                      ) -> RANGE:
             """
-                Stores the given value starting from a specified target cell. The updated area expands
+                Stores the given vlue starting from a specified target cell. The updated area expands
                 itself from the target cell or from the top-left corner of the given range to accommodate
                 the size of the input value argument. Vectors are always expanded vertically.
                     Args
@@ -6366,7 +6361,7 @@ class SFDocuments:
 
         def SetFormula(self,
                        targetrange: RANGE,
-                       formula: Union[str, Sequence[str], Sequence[Sequence[str]]]
+                       formula: str | tuple[str, ...] | tuple[tuple[str, ...], ...]
                        ) -> RANGE:
             """
                 Inserts the given (list of) formula(s) in the specified range.
@@ -6397,7 +6392,7 @@ class SFDocuments:
 
         def SetValue(self,
                      targetrange: RANGE,
-                     value: Union[SCALAR, VECTOR, MATRIX]
+                     value: SCALAR | VECTOR | MATRIX
                      ) -> RANGE:
             """
                 Stores the given value(s) in the specified range. The size of the modified area
@@ -6504,8 +6499,8 @@ class SFDocuments:
 
         def SortRange(self,
                       range: RANGE,
-                      sortkeys: Union[int, Sequence[int]],
-                      sortorder: Union[Literal['ASC', 'DESC', ''], Sequence[Literal['ASC', 'DESC', '']]] = ...,
+                      sortkeys: int | tuple[int, ...],
+                      sortorder: Literal['ASC', 'DESC', ''] | tuple[Literal['ASC', 'DESC', ''], ...] = ...,
                       destinationcell: RANGE = ...,
                       containsheader: bool = ...,
                       casesensitive: bool = ...,
@@ -6564,11 +6559,11 @@ class SFDocuments:
         Deep: bool
         """ When ``True`` indicates that the chart is three-dimensional and each series is arranged in the z-direction.
         When ``False`` series are arranged considering only two dimensions. """
-        Dim3D: Union[bool, str]
+        Dim3D: bool | str
         """ Get/set if the chart is displayed with 3D elements. If the value is a string, it must be either
         ``"Bar", "Cylinder", "Cone"`` or ``"Pyramid"``. If the boolean ``True`` value is specified,
         then the chart is displayed using 3D bars. """
-        Exploded: Union[int, float]
+        Exploded: int | float
         """ Get/set how much pie segments are offset from the chart center as a percentage of the radius.
         Applicable to ``Pie`` and ``Donut`` charts only. """
         Filled: bool
@@ -6667,9 +6662,9 @@ class SFDocuments:
         of the result set. Row -1 refers to the last row in the result set. """
         Filter: str
         """ Specifies a subset of records to be displayed as a ``SQL WHERE``-clause without the ``WHERE`` keyword. """
-        LinkChildFields: Tuple[str, ...]
+        LinkChildFields: tuple[str, ...]
         """ Specifies how records in a child subform are linked to records in its parent form. """
-        LinkParentFields: Tuple[str, ...]
+        LinkParentFields: tuple[str, ...]
         """ Specifies how records in a child subform are linked to records in its parent form. """
         Name: str
         """ The name of the current form. """
@@ -6708,10 +6703,10 @@ class SFDocuments:
         OrderBy: str
         """ Specifies in which order the records should be displayed as a ``SQL ORDER BY`` clause
         without the ``ORDER BY`` keywords. """
-        Parent: Union[FORM, FORMDOCUMENT, DOCUMENT, CALC, WRITER]
+        Parent: FORM | FORMDOCUMENT | DOCUMENT | CALC | WRITER
         """ The parent of the current form. It can be either a ``SFDocuments.Form``, a ``SFDocuments.FormDocument``,
         a ``SFDocuments.Document`` object or one of its subclasses. """
-        RecordSource: Union[SQL_SELECT, str]
+        RecordSource: SQL_SELECT | str
         """ Specifies the source of the data, as a table name, a query name or a SQL statement. """
 
         XForm: UNO
@@ -6746,7 +6741,7 @@ class SFDocuments:
                 """
             ...
 
-        def Controls(self, controlname: str = ...) -> Union[FORMCONTROL, Tuple[str, ...]]:
+        def Controls(self, controlname: str = ...) -> FORMCONTROL | tuple[str, ...]:
             """
                 The value returned by the method depends on the arguments provided:
                     - If the method is called without arguments, then it returns the list of the controls contained in the form.
@@ -6758,7 +6753,7 @@ class SFDocuments:
                 """
             ...
 
-        def GetDatabase(self, user: str = ..., password: str = ...) -> Optional[DATABASE]:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> DATABASE | None:
             """
                 Gets a ``SFDatabases.Database`` instance giving access to the execution of SQL commands
                 on the database the current form is connected to and/or that is stored in the current ``Base`` document.
@@ -6829,7 +6824,7 @@ class SFDocuments:
                 """
             ...
 
-        def Subforms(self, subform: Union[int, str] = ...) -> Union[FORM, Tuple[str, ...]]:
+        def Subforms(self, subform: int | str = ...) -> FORM | tuple[str, ...]:
             """
                 Depending on the parameters provided this method will return:
 
@@ -6886,7 +6881,7 @@ class SFDocuments:
         ListIndex: int
         """ Get/set which item is selected  in the control. In case of multiple selection, the index of the first
         item is returned. Applicable to ``ComboBox, ListBox`` controls.  """
-        ListSource: Union[str, Tuple[str, ...]]
+        ListSource: str | tuple[str, ...]
         """ Specifies the data contained in a control as a tuple of string values.
         Combined with ``ListSourceType``, may also contain the name of a table, a query or a complete SQL statement.
         Applicable to ``ComboBox, ListBox`` controls. """
@@ -6944,7 +6939,7 @@ class SFDocuments:
         OnUpdated: SCRIPT_URI
         """ Get/set the macro triggered by the ``After updating`` event. """
 
-        Parent: Union[FORM, FORMCONTROL]
+        Parent: FORM | FORMCONTROL
         """ Depending on the parent type, a form, a subform or a tablecontrol, returns the parent 
         ``SFDocuments.SF_Form`` or ``SFDocuments.SF_FormControl`` class instance. """
         Picture: FILE
@@ -6992,7 +6987,7 @@ class SFDocuments:
         XControlView: UNO
         """ The UNO representation (``com.sun.star.awt.XControl``) of the control view.  """
 
-        def Controls(self, controlname: str = ...) -> Union[FORMCONTROL, Tuple[str, ...]]:
+        def Controls(self, controlname: str = ...) -> FORMCONTROL | tuple[str, ...]:
             """
                 This method is applicable only to controls of the ``TableControl`` type.
                 The returned value depends on the arguments provided.
@@ -7041,7 +7036,7 @@ class SFDocuments:
                 """
             ...
 
-        def Forms(self, form: Union[int, str] = ...) -> Union[FORM, Tuple[str, ...]]:
+        def Forms(self, form: int | str = ...) -> FORM | tuple[str, ...]:
             """
                 Depending on the parameters provided this method will return:
 
@@ -7054,7 +7049,7 @@ class SFDocuments:
                 """
             ...
 
-        def GetDatabase(self, user: str = ..., password: str = ...) -> Optional[DATABASE]:
+        def GetDatabase(self, user: str = ..., password: str = ...) -> DATABASE | None:
             """
                 Returns a Database service instance (service = ``SFDatabases.Database``) giving access
                 to the execution of SQL commands on the database linked with the actual form document.
@@ -7107,7 +7102,7 @@ class SFDocuments:
             in the ``SF_Writer`` module.
             """
 
-        def Forms(self, form: Union[int, str] = ...) -> Union[FORM, Tuple[str, ...]]:
+        def Forms(self, form: int | str = ...) -> FORM | tuple[str, ...]:
             """
                 Depending on the parameters provided this method will return:
 
@@ -7122,7 +7117,7 @@ class SFDocuments:
 
         def ImportStylesFromFile(self,
                                  filename: FILE,
-                                 families: Union[str, Sequence[str]] = ...,
+                                 families: str | tuple[str, ...] = ...,
                                  overwrite: bool = ...
                                  ):
             """
@@ -7379,7 +7374,7 @@ class SFWidgets:
             Context menu items are either usual items or line separators. Checkboxes or radio buttons are not supported.
             """
 
-        ParentDocument: Union[DOCUMENT, BASE, CALC, FORMDOCUMENT, WRITER]
+        ParentDocument: DOCUMENT | BASE | CALC | FORMDOCUMENT | WRITER
         """ Document class (or one of its subclasses) instance to which the context menu belongs to. """
         ShortcutCharacter: str
         """ Character used to define the access key of a menu item. The default character is "~" (tilde). """
@@ -7595,7 +7590,7 @@ class SFWidgets:
                 """
             ...
 
-        def Execute(self, returnid: bool = ...) -> Union[int, str]:
+        def Execute(self, returnid: bool = ...) -> int | str:
             """
                 Displays the popup menu and waits for a user action.
                     Args
@@ -7646,7 +7641,7 @@ class SFWidgets:
         XUIElement: UNO
         """ Returns the ``com.sun.star.ui.XUIElement`` UNO object that represents the toolbar. """
 
-        def ToolbarButtons(self, buttonname: str = ...) -> Union[TOOLBARBUTTON, Tuple[str]]:
+        def ToolbarButtons(self, buttonname: str = ...) -> TOOLBARBUTTON | tuple[str, ...]:
             """
                 Returns either a list of the available toolbar button names in the actual toolbar
                 or a ``ToolbarButton`` object instance.
@@ -7697,7 +7692,7 @@ class SFWidgets:
         Y: int
         """ Returns the Y (vertical) coordinate of the top-left corner of the button, in pixels. """
 
-        def Execute(self) -> Optional[Any]:
+        def Execute(self) -> Any:
             """
                 Execute the command stored in the toolbar button.
                 The command can be a UNO command or a Basic/Python script (expressed in the
@@ -7713,7 +7708,7 @@ class SFWidgets:
 # #############################################################################
 @overload
 def CreateScriptService(service: Literal['servicename', 'Servicename', 'Library.Servicename'], *args: Any
-                        ) -> Optional[SERVICE]:
+                        ) -> SERVICE | None:
     """
         The modules and classes implemented in the ScriptForge libraries are invoked
         from user scripts as "Services". A generic constructor of those services has been designed for that purpose.
@@ -7722,7 +7717,7 @@ def CreateScriptService(service: Literal['servicename', 'Servicename', 'Library.
                 ``service``: the name of the service as a string 'library.service' or one of its synonyms.
 
                 The service names created with ``CreateScriptService()`` are:
-                    - ``Array``, ``Basic``, ``Dictionary``, ``Exception``, ``FileSystem``, ``L10N``, ``Platform``, ``Region``, ``Session``, ``String``, ``Timer``, ``UI``
+                    - ``Array``, ``Basic``, ``Dictionary``, ``Exception``, ``FileSystem``, ``L10N``, ``Platform``, ``Region``, ``Session``, ``SharedMemory``, ``String``, ``Timer``, ``UI``
                     - ``Database``
                     - ``Dialog``, ``NewDialog``, ``DialogEvent``
                     - ``Document``, ``Base``, ``Calc``, ``Writer``
@@ -7778,18 +7773,18 @@ def CreateScriptService(service: Literal['array', 'Array', 'ScriptForge.Array'])
 def CreateScriptService(service: Literal['basic', 'Basic', 'ScriptForge.Basic']) -> BASIC: ...
 @overload
 def CreateScriptService(service: Literal['dictionary', 'Dictionary', 'ScriptForge.Dictionary'],
-                        dic: Optional[Dict] = None) -> Optional[DICTIONARY]: ...
+                        dic: dict | None = None) -> DICTIONARY | None: ...
 @overload
 def CreateScriptService(service: Literal['exception', 'Exception', 'ScriptForge.Exception']) -> EXCEPTION: ...
 @overload
 def CreateScriptService(service: Literal['filesystem', 'FileSystem', 'ScriptForge.FileSystem']) -> FILESYSTEM: ...
 @overload
 def CreateScriptService(service: Literal['l10n', 'L10N', 'ScriptForge.L10N'], foldername: str = '',
-                        locale: str = '', encoding: str = '', locale2: str = '', encoding2: str = '') -> Optional[L10N]: ...
+                        locale: str = '', encoding: str = '', locale2: str = '', encoding2: str = '') -> L10N | None: ...
 @overload
 def CreateScriptService(service: Literal['platform', 'Platform', 'ScriptForge.Platform']) -> PLATFORM: ...
 @overload
-def CreateScriptService(service: Literal['region', 'Region', 'ScriptForge.Region']) -> Optional[REGION]: ...
+def CreateScriptService(service: Literal['region', 'Region', 'ScriptForge.Region']) -> REGION: ...
 @overload
 def CreateScriptService(service: Literal['session', 'Session', 'ScriptForge.Session']) -> SESSION: ...
 @overload
@@ -7798,36 +7793,36 @@ def CreateScriptService(service: Literal['sharedmemory', 'SharedMemory', 'Script
 def CreateScriptService(service: Literal['string', 'String', 'ScriptForge.String']) -> STRING: ...
 @overload
 def CreateScriptService(service: Literal['timer', 'Timer', 'ScriptForge.Timer'], start: bool = False
-                        ) -> Optional[TIMER]: ...
+                        ) -> TIMER | None: ...
 @overload
 def CreateScriptService(service: Literal['ui', 'UI', 'ScriptForge.UI']) -> UI: ...
 @overload
 def CreateScriptService(service: Literal['database', 'Database', 'SFDatabases.Database'], filename: str = '',
                         registrationname: str = '', readonly: bool = True, user: str = '', password: str = ''
-                        ) -> Optional[DATABASE]: ...
+                        ) -> DATABASE | None: ...
 @overload
 def CreateScriptService(service: Literal['dialog', 'Dialog', 'SFDialogs.Dialog'], container: str = '',
-                        library: str = 'Standard', dialogname: str = '') -> Optional[DIALOG]: ...
+                        library: str = 'Standard', dialogname: str = '') -> DIALOG | None: ...
 @overload
 def CreateScriptService(service: Literal['newdialog', 'NewDialog', 'SFDialogs.NewDialog'], dialogname: str,
-                        place: Tuple[int, int, int, int]) -> Optional[DIALOG]: ...
+                        place: tuple[int, int, int, int]) -> DIALOG | None: ...
 @overload
 def CreateScriptService(service: Literal['dialogevent', 'DialogEvent', 'SFDialogs.DialogEvent'],
-                        event: Optional[UNO] = None) -> Optional[Union[DIALOG, DIALOGCONTROL]]: ...
+                        event: UNO | None = None) -> DIALOG | DIALOGCONTROL | None: ...
 @overload
 def CreateScriptService(service: Literal['document', 'Document', 'SFDocuments.Document'],
-                        windowname: Union[UNO, str] = '') -> Optional[DOCUMENT]: ...
+                        windowname: UNO | str = '') -> DOCUMENT | None: ...
 @overload
-def CreateScriptService(service: Literal['base', 'Base', 'SFDocuments.Base'], windowname: Union[UNO, str] = ''
-                        ) -> Optional[BASE]: ...
+def CreateScriptService(service: Literal['base', 'Base', 'SFDocuments.Base'], windowname: UNO | str = ''
+                        ) -> BASE | None: ...
 @overload
-def CreateScriptService(service: Literal['calc', 'Calc', 'SFDocuments.Calc'], windowname: Union[UNO, str] = ''
-                        ) -> Optional[CALC]: ...
+def CreateScriptService(service: Literal['calc', 'Calc', 'SFDocuments.Calc'], windowname: UNO | str = ''
+                        ) -> CALC | None: ...
 @overload
-def CreateScriptService(service: Literal['writer', 'Writer', 'SFDocuments.Writer'], windowname: Union[UNO, str] = ''
-                        ) -> Optional[WRITER]: ...
+def CreateScriptService(service: Literal['writer', 'Writer', 'SFDocuments.Writer'], windowname: UNO | str = ''
+                        ) -> WRITER | None: ...
 @overload
-def CreateScriptService(service: Literal['popupmenu', 'PopupMenu', 'SFWidgets.PopupMenu'], event: Optional[UNO] = None,
-                        x: int = 0, y: int = 0, submenuchar:str = '') -> Optional[POPUPMENU]: ...
+def CreateScriptService(service: Literal['popupmenu', 'PopupMenu', 'SFWidgets.PopupMenu'], event: UNO | None = None,
+                        x: int = 0, y: int = 0, submenuchar:str = '') -> POPUPMENU | None: ...
 
 createScriptService, createscriptservice = CreateScriptService, CreateScriptService
