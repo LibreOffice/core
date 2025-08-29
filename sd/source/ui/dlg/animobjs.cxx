@@ -63,17 +63,17 @@ SdDisplay::~SdDisplay()
 {
 }
 
-void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
+void SdDisplay::SetBitmap( Bitmap const * pBmp )
 {
-    if( pBmpEx )
+    if( pBmp )
     {
-        aBitmapEx = *pBmpEx;
+        aBitmap = *pBmp;
     }
     else
     {
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         const Color aFillColor = rStyles.GetFieldColor();
-        aBitmapEx.Erase(aFillColor);
+        aBitmap.Erase(aFillColor);
     }
 }
 
@@ -89,7 +89,7 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     Point aPt;
     Size aSize = GetOutputSizePixel();
 
-    Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
+    Size aBmpSize = aBitmap.GetSizePixel();
     aBmpSize.setWidth( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
     aBmpSize.setHeight( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) ) );
 
@@ -98,7 +98,7 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     if( aBmpSize.Height() < aSize.Height() )
         aPt.setY( ( aSize.Height() - aBmpSize.Height() ) / 2 );
 
-    aBitmapEx.Draw(&rRenderContext, aPt, aBmpSize);
+    aBitmap.Draw(&rRenderContext, aPt, aBmpSize);
 }
 
 void SdDisplay::SetScale( const Fraction& rFrac )
@@ -507,7 +507,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     // tdf#95298 check m_nCurrentFrame for EMPTY_FRAMELIST to avoid out-of-bound array access
     if (!m_FrameList.empty() && EMPTY_FRAMELIST != m_nCurrentFrame)
     {
-        BitmapEx aBmp(m_FrameList[m_nCurrentFrame].first);
+        Bitmap aBmp(m_FrameList[m_nCurrentFrame].first);
 
         SdPage* pPage = pMyDoc->GetSdPage(0, PageKind::Standard);
         SdrObject *const pObject = pPage->GetObj(m_nCurrentFrame);
@@ -532,11 +532,11 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             aBmp = pVD->GetBitmap( aObjRect.TopLeft(), aObjSize );
         }
 
-        m_xCtlDisplay->SetBitmapEx(&aBmp);
+        m_xCtlDisplay->SetBitmap(&aBmp);
     }
     else
     {
-        m_xCtlDisplay->SetBitmapEx(nullptr);
+        m_xCtlDisplay->SetBitmap(nullptr);
     }
 
     m_xCtlDisplay->Invalidate();

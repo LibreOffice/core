@@ -52,7 +52,7 @@ enum BitmapAdjustment
 class SdDisplay final : public weld::CustomWidgetController
 {
 private:
-    BitmapEx    aBitmapEx;
+    Bitmap      aBitmap;
     Fraction    aScale;
 
 public:
@@ -61,7 +61,7 @@ public:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
 
-    void    SetBitmapEx( BitmapEx const * pBmpEx );
+    void    SetBitmap( Bitmap const * pBmp );
     void    SetScale( const Fraction& rFrac );
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
