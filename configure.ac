@@ -3022,6 +3022,10 @@ AC_ARG_WITH(dotnet,
          Requires .NET SDK 8 or higher. To disable building .NET components, use
          --without-dotnet or --with-dotnet=no.]))
 
+AC_ARG_ENABLE(rust-uno,
+    AS_HELP_STRING([--enable-rust-uno],
+        [Enable experimental Rust UNO support.]))
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -5925,6 +5929,16 @@ fi
 AC_SUBST(ENABLE_DOTNET)
 AC_SUBST(DOTNET)
 AC_SUBST(DOTNET_ROOT)
+
+AC_MSG_CHECKING([whether to enable Rust UNO support])
+if test "$enable_rust_uno" = "yes"; then
+    ENABLE_RUST_UNO=TRUE
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_RUST_UNO=
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_RUST_UNO)
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
