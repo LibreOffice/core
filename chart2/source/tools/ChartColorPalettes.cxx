@@ -95,6 +95,7 @@ void ChartColorPalettes::Fill()
 
         Bitmap aBitmap(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
         mxIconView->insert(-1, &sName, &sId, &aBitmap, nullptr);
+        mxIconView->set_item_accessible_name(i, sName);
     }
 
     mxIconView->thaw();
