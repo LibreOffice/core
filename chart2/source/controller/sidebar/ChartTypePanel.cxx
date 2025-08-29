@@ -29,7 +29,6 @@
 #include <Diagram.hxx>
 #include <unonames.hxx>
 
-#include <svtools/valueset.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
@@ -53,20 +52,11 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
     , m_nChangingCalls(0)
     , m_aTimerTriggeredControllerLock(m_xChartModel)
     , m_xMainTypeList(m_xBuilder->weld_combo_box(u"cmb_chartType"_ustr))
-    , m_xSubTypeList(new ValueSet(m_xBuilder->weld_scrolled_window(u"subtypewin"_ustr, true)))
-    , m_xSubTypeListWin(new weld::CustomWeld(*m_xBuilder, u"subtype"_ustr, *m_xSubTypeList))
+    , m_xSubTypeList(m_xBuilder->weld_icon_view(u"subtype_iconview"_ustr))
 {
-    Size aSize(m_xSubTypeList->GetDrawingArea()->get_ref_device().LogicToPixel(
-        Size(120, 40), MapMode(MapUnit::MapAppFont)));
-    m_xSubTypeListWin->set_size_request(aSize.Width(), aSize.Height());
-
     m_xMainTypeList->connect_changed(LINK(this, ChartTypePanel, SelectMainTypeHdl));
-    m_xSubTypeList->SetSelectHdl(LINK(this, ChartTypePanel, SelectSubTypeHdl));
-
-    m_xSubTypeList->SetStyle(m_xSubTypeList->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER
-                             | WB_NAMEFIELD | WB_FLATVALUESET | WB_3DLOOK);
-    m_xSubTypeList->SetColCount(4);
-    m_xSubTypeList->SetLineCount(1);
+    m_xSubTypeList->connect_selection_changed(LINK(this, ChartTypePanel, SelectSubTypeHdl));
+    m_xSubTypeList->connect_query_tooltip(LINK(this, ChartTypePanel, QueryTooltipHdl));
 
     bool bEnableComplexChartTypes = true;
     uno::Reference<beans::XPropertySet> xProps(static_cast<cppu::OWeakObject*>(m_xChartModel.get()),
@@ -130,17 +120,14 @@ ChartTypePanel::~ChartTypePanel()
     m_pSplineResourceGroup.reset();
     m_pGeometryResourceGroup.reset();
     m_pSortByXValuesResourceGroup.reset();
-    m_xSubTypeListWin.reset();
     m_xSubTypeList.reset();
 
-    m_xSubTypeListWin.reset();
-    m_xSubTypeList.reset();
     m_xMainTypeList.reset();
 }
 
 IMPL_LINK_NOARG(ChartTypePanel, SelectMainTypeHdl, weld::ComboBox&, void) { selectMainType(); }
 
-IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, weld::IconView&, void)
 {
     if (m_pCurrentMainType)
     {
@@ -149,6 +136,16 @@ IMPL_LINK_NOARG(ChartTypePanel, SelectSubTypeHdl, ValueSet*, void)
         fillAllControls(aParameter, false);
         commitToModel(aParameter);
     }
+}
+
+IMPL_LINK(ChartTypePanel, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
+{
+    const OUString sId = m_xSubTypeList->get_id(iter);
+
+    if (!sId.isEmpty() && m_pCurrentMainType)
+        return m_pCurrentMainType->getChartName(sId.toInt32());
+
+    return OUString();
 }
 
 void ChartTypePanel::Initialize()
@@ -206,7 +203,7 @@ void ChartTypePanel::Initialize()
 
     if (!bFound)
     {
-        m_xSubTypeList->Hide();
+        m_xSubTypeList->hide();
         m_pDim3DLookResourceGroup->showControls(false);
         m_pStackingResourceGroup->showControls(false);
         m_pSplineResourceGroup->showControls(false);
@@ -309,7 +306,7 @@ ChartTypeDialogController* ChartTypePanel::getSelectedMainType()
 void ChartTypePanel::showAllControls(ChartTypeDialogController& rTypeController)
 {
     m_xMainTypeList->show();
-    m_xSubTypeList->Show();
+    m_xSubTypeList->show();
 
     bool bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls(bShow);
@@ -332,7 +329,9 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
     {
         m_pCurrentMainType->fillSubTypeList(*m_xSubTypeList, rParameter);
     }
-    m_xSubTypeList->SelectItem(static_cast<sal_uInt16>(rParameter.nSubTypeIndex));
+    m_xSubTypeList->select(static_cast<sal_uInt16>(
+        rParameter.nSubTypeIndex
+        - 1)); // Convert 1-based subtype index to 0-based index for selection
     m_pDim3DLookResourceGroup->fillControls(rParameter);
     m_pStackingResourceGroup->fillControls(rParameter);
     m_pSplineResourceGroup->fillControls(rParameter);
@@ -344,7 +343,7 @@ void ChartTypePanel::fillAllControls(const ChartTypeParameter& rParameter,
 ChartTypeParameter ChartTypePanel::getCurrentParameter() const
 {
     ChartTypeParameter aParameter;
-    aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_xSubTypeList->GetSelectedItemId());
+    aParameter.nSubTypeIndex = m_xSubTypeList->get_selected_id().toInt32();
     m_pDim3DLookResourceGroup->fillParameter(aParameter);
     m_pStackingResourceGroup->fillParameter(aParameter);
     m_pSplineResourceGroup->fillParameter(aParameter);
