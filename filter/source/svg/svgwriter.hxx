@@ -342,7 +342,7 @@ private:
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops);
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth, Color aTextColor );
-    void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
+    void                    ImplWriteBmp( const Bitmap& rBmp, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,

@@ -605,13 +605,13 @@ namespace wmfemfhelper
 
     /** helper to create BitmapPrimitive2D based on current context */
     static void createBitmapPrimitive(
-        const BitmapEx& rBitmapEx,
+        const Bitmap& rBitmap,
         const Point& rPoint,
         const Size& rSize,
         TargetHolder& rTarget,
         PropertyHolder const & rProperties)
     {
-        if(rBitmapEx.IsEmpty())
+        if(rBitmap.IsEmpty())
             return;
 
         basegfx::B2DHomMatrix aObjectTransform;
@@ -625,7 +625,7 @@ namespace wmfemfhelper
 
         rTarget.append(
             new drawinglayer::primitive2d::BitmapPrimitive2D(
-                Bitmap(rBitmapEx),
+                rBitmap,
                 aObjectTransform));
     }
 
@@ -1920,9 +1920,9 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                    const BitmapEx aBitmapEx(pA->GetBitmap());
+                    const Bitmap aBitmap(pA->GetBitmap());
 
-                    createBitmapPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(aBitmap, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }
@@ -1942,8 +1942,7 @@ namespace wmfemfhelper
                             aCroppedBitmap.Crop(aCropRectangle);
                         }
 
-                        const BitmapEx aCroppedBitmapEx(aCroppedBitmap);
-                        createBitmapPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                        createBitmapPrimitive(aCroppedBitmap, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
                     break;
@@ -1964,7 +1963,7 @@ namespace wmfemfhelper
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                     const Bitmap& rBitmap = pA->GetBitmap();
 
-                    createBitmapPrimitive(BitmapEx(rBitmap), pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(rBitmap, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }
@@ -1972,19 +1971,19 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALEPART */
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
-                    const BitmapEx& rBitmapEx = pA->GetBitmapEx();
+                    const Bitmap& rBitmap = pA->GetBitmap();
 
-                    if(!rBitmapEx.IsEmpty())
+                    if(!rBitmap.IsEmpty())
                     {
-                        BitmapEx aCroppedBitmapEx(rBitmapEx);
+                        Bitmap aCroppedBitmap(rBitmap);
                         const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(!aCropRectangle.IsEmpty())
                         {
-                            aCroppedBitmapEx.Crop(aCropRectangle);
+                            aCroppedBitmap.Crop(aCropRectangle);
                         }
 
-                        createBitmapPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                        createBitmapPrimitive(aCroppedBitmap, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
                     break;
@@ -2004,9 +2003,9 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALE */
                     const MetaMaskScaleAction* pA = static_cast<const MetaMaskScaleAction*>(pAction);
-                    const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
+                    const Bitmap aBitmap(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
-                    createBitmapPrimitive(aBitmapEx, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(aBitmap, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }
@@ -2026,8 +2025,8 @@ namespace wmfemfhelper
                             aCroppedBitmap.Crop(aCropRectangle);
                         }
 
-                        const BitmapEx aCroppedBitmapEx(createMaskBmpEx(aCroppedBitmap, pA->GetColor()));
-                        createBitmapPrimitive(aCroppedBitmapEx, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
+                        const Bitmap aCroppedBitmap2(createMaskBmpEx(aCroppedBitmap, pA->GetColor()));
+                        createBitmapPrimitive(aCroppedBitmap2, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
                     break;

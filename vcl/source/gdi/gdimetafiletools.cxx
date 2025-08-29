@@ -899,16 +899,16 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 case MetaActionType::BMPEXSCALEPART :
                 {
                     const MetaBmpExScalePartAction* pA = static_cast< const MetaBmpExScalePartAction* >(pAction);
-                    const BitmapEx& rBitmapEx = pA->GetBitmapEx();
+                    const Bitmap& rBitmap = pA->GetBitmap();
 
-                    if(rBitmapEx.IsEmpty())
+                    if(rBitmap.IsEmpty())
                     {
                         // empty content
                         bDone = true;
                     }
                     else
                     {
-                        BitmapEx aCroppedBitmapEx(rBitmapEx);
+                        Bitmap aCroppedBitmap(rBitmap);
                         const tools::Rectangle aCropRectangle(pA->GetSrcPoint(), pA->GetSrcSize());
 
                         if(aCropRectangle.IsEmpty())
@@ -918,12 +918,12 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         }
                         else
                         {
-                            aCroppedBitmapEx.Crop(aCropRectangle);
+                            aCroppedBitmap.Crop(aCropRectangle);
                             bDone = handleBitmapContent(
                                 aClips.back(),
                                 pA->GetDestPoint(),
                                 pA->GetDestSize(),
-                                aCroppedBitmapEx,
+                                aCroppedBitmap,
                                 aTarget);
                         }
                     }

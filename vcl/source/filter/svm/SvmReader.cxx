@@ -975,8 +975,8 @@ rtl::Reference<MetaAction> SvmReader::BmpExScalePartHandler()
     rtl::Reference<MetaBmpExScalePartAction> pAction(new MetaBmpExScalePartAction);
 
     VersionCompatRead aCompat(mrStream);
-    BitmapEx aBmpEx;
-    ReadDIBBitmapEx(aBmpEx, mrStream);
+    Bitmap aBmp;
+    ReadDIBBitmapEx(aBmp, mrStream);
     TypeSerializer aSerializer(mrStream);
     Point aDstPoint;
     aSerializer.readPoint(aDstPoint);
@@ -987,7 +987,7 @@ rtl::Reference<MetaAction> SvmReader::BmpExScalePartHandler()
     Size aSrcSize;
     aSerializer.readSize(aSrcSize);
 
-    pAction->SetBitmapEx(aBmpEx);
+    pAction->SetBitmap(aBmp);
     pAction->SetDestPoint(aDstPoint);
     pAction->SetDestSize(aDstSize);
     pAction->SetSrcPoint(aSrcPoint);

@@ -1329,7 +1329,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpScalePartAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetDestPoint(),rAct.GetDestSize());
-    Bitmap aBitmap(rAct.GetBitmapEx());
+    Bitmap aBitmap(rAct.GetBitmap());
 
     aRect.AdjustRight( 1 );
     aRect.AdjustBottom( 1 );

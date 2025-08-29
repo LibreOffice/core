@@ -190,30 +190,29 @@ bool Printer::TransformAndReduceBitmapExToTargetRange(
 
 void Printer::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                BitmapEx& rBmpEx )
+                                Bitmap& rBmp )
 {
 #ifdef MACOSX
     // tdf#164354 draw alpha bitmaps directly to print graphics on macOS
     // On macOS, there are no known problems drawing semi-transparent
     // bitmaps so just draw the alpha bitmap directly without any blending.
-    AlphaMask aAlpha = rBmpEx.GetAlphaMask();
+    AlphaMask aAlpha = rBmp.CreateAlphaMask();
     aAlpha.Invert();
-    DrawDeviceAlphaBitmap( rBmpEx.GetBitmap(), aAlpha, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+    DrawDeviceAlphaBitmap( rBmp.CreateColorBitmap(), aAlpha, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     aAlpha.Invert();
 #else
-    if( rBmpEx.IsAlpha() )
+    if( rBmp.HasAlpha() )
     {
         // #107169# For true alpha bitmaps, no longer masking the
         // bitmap, but perform a full alpha blend against a white
         // background here.
-        Bitmap aBmp( rBmpEx.GetBitmap() );
-        aBmp.Blend( rBmpEx.GetAlphaMask(), COL_WHITE );
+        Bitmap aBmp( rBmp.CreateColorBitmap() );
+        aBmp.Blend( rBmp.CreateAlphaMask(), COL_WHITE );
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp );
     }
     else
     {
-        const Bitmap& aBmp( rBmpEx.GetBitmap() );
-        ImplPrintTransparent( aBmp, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        ImplPrintTransparent( rBmp, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
 #endif
 }

@@ -28,7 +28,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/rendercontext/State.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
@@ -853,7 +853,7 @@ class VCL_DLLPUBLIC MetaBmpExScalePartAction final : public MetaAction
 {
 private:
 
-    BitmapEx            maBmpEx;
+    Bitmap              maBmp;
     Point               maDstPt;
     Size                maDstSz;
     Point               maSrcPt;
@@ -873,22 +873,22 @@ public:
 
                         MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
-                                                  const BitmapEx& rBmpEx );
+                                                  const Bitmap& rBmp );
 
     SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
+    const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetDestPoint() const { return maDstPt; }
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
-    void                SetBitmapEx(const BitmapEx& rBmpEx) { maBmpEx = rBmpEx; }
+    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
     void                SetDestPoint(const Point& rDstPt) { maDstPt = rDstPt; }
     void                SetDestSize(const Size& rDstSz) { maDstSz = rDstSz; }
     void                SetSrcPoint(const Point& rSrcPt) { maSrcPt = rSrcPt; }
     void                SetSrcSize(const Size& rSrcSz) { maSrcSz = rSrcSz; }
-    bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
+    bool                IsTransparent() const override { return GetBitmap().HasAlpha(); }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskAction final : public MetaAction

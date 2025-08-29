@@ -332,14 +332,6 @@ OString convertLineStyleToString(const MetaActionType nActionType)
     return ""_ostr;
 }
 
-OUString convertBitmapExTransparentType(BitmapEx const & rBitmapEx)
-{
-    if (rBitmapEx.IsAlpha())
-        return u"bitmap"_ustr;
-    else
-        return u"none"_ustr;
-}
-
 OUString convertBitmapTransparentType(Bitmap const & rBitmap)
 {
     if (rBitmap.HasAlpha())
@@ -1027,7 +1019,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
             case MetaActionType::BMPEXSCALEPART:
             {
                 auto pMeta = static_cast<MetaBmpExScalePartAction*>(pAction);
-                Bitmap aBitmap = pMeta->GetBitmapEx().GetBitmap();
+                Bitmap aBitmap = pMeta->GetBitmap().CreateColorBitmap();
                 rWriter.startElement(sCurrentElementTag);
                 rWriter.attribute("destx", pMeta->GetDestPoint().X());
                 rWriter.attribute("desty", pMeta->GetDestPoint().Y());
@@ -1037,7 +1029,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("srcy", pMeta->GetSrcPoint().Y());
                 rWriter.attribute("srcwidth", pMeta->GetSrcSize().Width());
                 rWriter.attribute("srcheight", pMeta->GetSrcSize().Height());
-                rWriter.attribute("transparenttype", convertBitmapExTransparentType(pMeta->GetBitmapEx()));
+                rWriter.attribute("transparenttype", convertBitmapTransparentType(pMeta->GetBitmap()));
                 writeBitmap(rWriter, aBitmap);
                 rWriter.endElement();
             }

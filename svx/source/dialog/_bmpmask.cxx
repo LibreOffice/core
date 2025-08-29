@@ -861,10 +861,10 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case MetaActionType::BMPEXSCALEPART:
                 {
                     MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
-                    const BitmapEx              aBmpEx( Mask( Bitmap(pAct->GetBitmapEx()) ).GetBitmap() );
+                    const Bitmap                aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
 
                     pAct = new MetaBmpExScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
-                                                         pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmpEx );
+                                                         pAct->GetSrcPoint(), pAct->GetSrcSize(), aBmp );
                     aMtf.AddAction( pAct );
                 }
                 break;

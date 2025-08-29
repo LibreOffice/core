@@ -2912,16 +2912,16 @@ void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShap
 }
 }
 
-void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
+void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
                                     const Point& rPt, const Size& rSz,
                                     const Point& rSrcPt, const Size& rSrcSz,
                                     const css::uno::Reference<css::drawing::XShape>* pShape )
 {
-    if( rBmpEx.IsEmpty() )
+    if( rBmp.IsEmpty() )
         return;
     if( mpEmbeddedBitmapsMap && !mpEmbeddedBitmapsMap->empty())
     {
-        BitmapChecksum nChecksum = rBmpEx.GetChecksum();
+        BitmapChecksum nChecksum = rBmp.GetChecksum();
         if( mpEmbeddedBitmapsMap->find( nChecksum ) != mpEmbeddedBitmapsMap->end() )
         {
             // <use transform="translate(?) scale(?)" xlink:ref="?" >
@@ -2956,14 +2956,14 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         }
     }
 
-    BitmapEx aBmpEx( rBmpEx );
-    const tools::Rectangle aBmpRect( Point(), rBmpEx.GetSizePixel() );
+    Bitmap aBmp( rBmp );
+    const tools::Rectangle aBmpRect( Point(), rBmp.GetSizePixel() );
     const tools::Rectangle aSrcRect( rSrcPt, rSrcSz );
 
     if( aSrcRect != aBmpRect )
-        aBmpEx.Crop( aSrcRect );
+        aBmp.Crop( aSrcRect );
 
-    if( aBmpEx.IsEmpty() )
+    if( aBmp.IsEmpty() )
         return;
 
     SvMemoryStream aOStm( 65535, 65535 );
@@ -2977,7 +2977,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         if (aGraphic.GetType() == GraphicType::Bitmap)
         {
             const Bitmap& rGraphicBitmap = aGraphic.GetBitmapRef();
-            if (rGraphicBitmap == Bitmap(rBmpEx))
+            if (rGraphicBitmap == rBmp)
             {
                 bool bPNG = false;
                 GfxLink aGfxLink = aGraphic.GetGfxLink();
@@ -2998,13 +2998,13 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         }
     }
 
-    const BitmapEx* pBitmap = &rBmpEx;
-    BitmapEx aNewBitmap;
+    const Bitmap* pBitmap = &rBmp;
+    Bitmap aNewBitmap;
 
     // for preview we generate downscaled images (1280x720 max)
     if (mbIsPreview)
     {
-        Size aSize = rBmpEx.GetSizePixel();
+        Size aSize = rBmp.GetSizePixel();
         double fX = static_cast<double>(aSize.getWidth()) / 1280;
         double fY = static_cast<double>(aSize.getHeight()) / 720;
         double fFactor = fX > fY ? fX : fY;
@@ -3012,13 +3012,13 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         {
             aSize.setWidth(aSize.getWidth() / fFactor);
             aSize.setHeight(aSize.getHeight() / fFactor);
-            aNewBitmap = rBmpEx;
+            aNewBitmap = rBmp;
             aNewBitmap.Scale(aSize);
             pBitmap = &aNewBitmap;
         }
     }
 
-    if( !(bCached || GraphicConverter::Export( aOStm, Bitmap(*pBitmap), ConvertDataFormat::PNG ) == ERRCODE_NONE) )
+    if( !(bCached || GraphicConverter::Export( aOStm, *pBitmap, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
         return;
 
     Point                    aPt;
@@ -3409,7 +3409,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         {
                             bFound = true;
                             const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pSubstAct);
-                            ImplWriteBmp( BitmapEx(pBmpScaleAction->GetBitmap()),
+                            ImplWriteBmp( pBmpScaleAction->GetBitmap(),
                                           pA->GetPoint(), pA->GetSize(),
                                           Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), pxShape );
                         }
@@ -3862,7 +3862,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
 
-                    ImplWriteBmp( BitmapEx(pA->GetBitmap()),
+                    ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ),
                                   Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                 }
@@ -3882,7 +3882,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
                     else
                     {
-                        ImplWriteBmp( BitmapEx(pA->GetBitmap()),
+                        ImplWriteBmp( pA->GetBitmap(),
                                       pA->GetPoint(), pA->GetSize(),
                                       Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                     }
@@ -3896,7 +3896,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpScalePartAction* pA = static_cast<const MetaBmpScalePartAction*>(pAction);
 
-                    ImplWriteBmp( BitmapEx(pA->GetBitmap()),
+                    ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetDestPoint(), pA->GetDestSize(),
                                   pA->GetSrcPoint(), pA->GetSrcSize(), pxShape );
                 }
@@ -3909,7 +3909,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
 
-                    ImplWriteBmp( BitmapEx(pA->GetBitmap()),
+                    ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetPoint(), mpVDev->PixelToLogic( pA->GetBitmap().GetSizePixel() ),
                                   Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                 }
@@ -3929,7 +3929,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
                     else
                     {
-                        ImplWriteBmp( BitmapEx(pA->GetBitmap()),
+                        ImplWriteBmp( pA->GetBitmap(),
                                       pA->GetPoint(), pA->GetSize(),
                                       Point(), pA->GetBitmap().GetSizePixel(), pxShape );
                     }
@@ -3943,7 +3943,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
 
-                    ImplWriteBmp( pA->GetBitmapEx(),
+                    ImplWriteBmp( pA->GetBitmap(),
                                   pA->GetDestPoint(), pA->GetDestSize(),
                                   pA->GetSrcPoint(), pA->GetSrcSize(), pxShape );
                 }
