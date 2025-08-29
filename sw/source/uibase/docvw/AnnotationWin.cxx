@@ -417,6 +417,7 @@ void SwAnnotationWin::Delete()
     // we delete the field directly, the Mgr cleans up the PostIt by listening
     GrabFocusToDocument();
     pWrtShell->ClearMark();
+    auto restoreGuard = mrMgr.ConfigureForCommentDelete();
     pWrtShell->DelRight();
 }
 
