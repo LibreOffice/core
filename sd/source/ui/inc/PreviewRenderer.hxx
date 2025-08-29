@@ -94,7 +94,7 @@ public:
         width.  Add a frame to it afterwards.
     */
     Image ScaleBitmap (
-        const BitmapEx& rBitmap,
+        const Bitmap& rBitmap,
         int nWidth);
 
 protected:

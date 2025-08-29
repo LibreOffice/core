@@ -215,13 +215,13 @@ bool MasterPageDescriptor::UpdatePreview (
         {
             // Create the small preview by scaling the large one down.
             maSmallPreview = rRenderer.ScaleBitmap(
-                BitmapEx(maLargePreview.GetBitmap()),
+                maLargePreview.GetBitmap(),
                 rSmallSize.Width());
             // The large preview may not have the desired width.  Scale it
             // accordingly.
             if (maLargePreview.GetSizePixel().Width() != rLargeSize.Width())
                 maLargePreview = rRenderer.ScaleBitmap(
-                    BitmapEx(maLargePreview.GetBitmap()),
+                    maLargePreview.GetBitmap(),
                     rLargeSize.Width());
             bModified = true;
         }

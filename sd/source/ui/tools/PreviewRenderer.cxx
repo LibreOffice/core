@@ -408,7 +408,7 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
 }
 
 Image PreviewRenderer::ScaleBitmap (
-    const BitmapEx& rBitmapEx,
+    const Bitmap& rBitmap,
     int nWidth)
 {
     Image aPreview;
@@ -423,7 +423,7 @@ Image PreviewRenderer::ScaleBitmap (
             : sd::OUTPUT_DRAWMODE_COLOR);
 
         // Set output size.
-        Size aSize (rBitmapEx.GetSizePixel());
+        Size aSize (rBitmap.GetSizePixel());
         if (aSize.Width() <= 0)
             break;
         Size aFrameSize (
@@ -444,7 +444,7 @@ Image PreviewRenderer::ScaleBitmap (
         mpPreviewDevice->DrawRect (::tools::Rectangle(Point(0,0), aFrameSize));
 
         // Paint the bitmap scaled to the desired width.
-        BitmapEx aScaledBitmap(rBitmapEx);
+        Bitmap aScaledBitmap(rBitmap);
         aScaledBitmap.Scale (aPreviewSize, BmpScaleFlag::BestQuality);
         mpPreviewDevice->DrawBitmapEx (
             Point(1,1),
