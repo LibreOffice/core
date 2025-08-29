@@ -25,8 +25,14 @@ class tdf142851(UITestCase):
             xChart = xChartMain.getChild("CID/Page=")
 
             with self.ui_test.execute_dialog_through_action(xChart, "COMMAND", mkPropertyValues({"COMMAND" : "DiagramType"})) as xDialog:
-                chartTypeVisible = get_state_as_dict(xDialog.getChild("charttype"))['Visible']
-                subTypeVisible = get_state_as_dict(xDialog.getChild("subtype"))['Visible']
+                chartType = xDialog.getChild("charttype")
+                chartType_element = chartType.getChild("0")
+                chartType_element.executeAction("SELECT", mkPropertyValues({}))
+                chartTypeVisible = get_state_as_dict(chartType)['Visible']
+                subTypeIconView = xDialog.getChild("subtype_iconview")
+                subtype_element = subTypeIconView.getChild("0")
+                subtype_element.executeAction("SELECT", mkPropertyValues({}))
+                subTypeVisible = get_state_as_dict(subTypeIconView)['Visible']
 
             self.assertEqual('true', chartTypeVisible)
             self.assertEqual('true', subTypeVisible)

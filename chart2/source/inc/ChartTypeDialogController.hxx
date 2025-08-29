@@ -29,12 +29,13 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <vcl/weld.hxx>
 
+#include <vcl/image.hxx>
+#include <vcl/virdev.hxx>
+
 namespace com::sun::star::beans
 {
 class XPropertySet;
 }
-
-class ValueSet;
 
 namespace chart
 {
@@ -95,7 +96,9 @@ public:
     virtual OUString getName() = 0;
     virtual OUString getImage() = 0;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList, const ChartTypeParameter& rParameter);
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
+                                 const ChartTypeParameter& rParameter);
+    virtual OUString getChartName(sal_Int32 nId) const;
 
     virtual bool shouldShow_3DLookControl() const;
     virtual bool shouldShow_StackingControl() const;
@@ -133,6 +136,7 @@ public:
 protected:
     bool bSupportsXAxisWithValues;
     bool bSupports3D;
+    static Bitmap getPreviewBitmap(Image pPreview);
 };
 
 class ColumnOrBarChartDialogController_Base : public ChartTypeDialogController
@@ -156,8 +160,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
 };
 
 class BarChartDialogController final : public ColumnOrBarChartDialogController_Base
@@ -169,8 +174,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
 };
 
 class PieChartDialogController final : public ChartTypeDialogController
@@ -182,8 +188,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
     virtual bool shouldShow_3DLookControl() const override;
@@ -198,8 +205,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
     virtual bool shouldShow_3DLookControl() const override;
@@ -230,8 +238,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter) override;
 
@@ -248,8 +257,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
     virtual bool shouldShow_SplineControl() const override;
@@ -265,12 +275,16 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
     virtual void adjustParameterToMainType(ChartTypeParameter& rParameter) override;
 
     virtual bool shouldShow_3DLookControl() const override;
+
+private:
+    bool m_b3DLook = false;
 };
 
 class NetChartDialogController final : public ChartTypeDialogController
@@ -282,8 +296,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
     virtual bool shouldShow_StackingControl() const override;
@@ -298,8 +313,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };
 
@@ -311,8 +327,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 
     virtual void showExtraControls(weld::Builder* pBuilder) override;
@@ -341,8 +358,9 @@ public:
     virtual OUString getName() override;
     virtual OUString getImage() override;
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const override;
-    virtual void fillSubTypeList(ValueSet& rSubTypeList,
+    virtual void fillSubTypeList(weld::IconView& rSubTypeList,
                                  const ChartTypeParameter& rParameter) override;
+    virtual OUString getChartName(sal_Int32 nId) const override;
     virtual void adjustParameterToSubType(ChartTypeParameter& rParameter) override;
 };
 

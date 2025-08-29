@@ -85,7 +85,8 @@ private:
     void selectMainType();
 
     DECL_LINK(SelectMainTypeHdl, weld::ComboBox&, void);
-    DECL_LINK(SelectSubTypeHdl, ValueSet*, void);
+    DECL_LINK(SelectSubTypeHdl, weld::IconView&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     vcl::EnumContext maContext;
 
@@ -112,8 +113,7 @@ private:
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
     std::unique_ptr<weld::ComboBox> m_xMainTypeList;
-    std::unique_ptr<ValueSet> m_xSubTypeList;
-    std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
+    std::unique_ptr<weld::IconView> m_xSubTypeList;
 };
 }
 } // end of namespace ::chart::sidebar
