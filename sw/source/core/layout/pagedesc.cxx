@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
+#include <fmthdft.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <swtable.hxx>
@@ -421,6 +422,59 @@ void SwPageDesc::ChgFirstShare( bool bNew )
         m_eUse |= UseOnPage::FirstShare;
     else
         m_eUse &= UseOnPage::NoFirstShare;
+}
+
+bool SwPageDesc::SetFormatAttrOnAll(const SfxItemSet& rSet, const bool bHeader)
+{
+    if( !rSet.Count() )
+        return false;
+
+    // Warning: no attempt is made here to limit rSet to properties that are "safe"
+    // to duplicate to all of the different headers/footers.
+    assert(!rSet.HasItem(RES_CNTNT) && "unexpected use of SwPageDesc::SetFormatAttrOnAll");
+
+    bool bRet = false;
+    if (bHeader)
+    {
+        auto pHF = const_cast<SwFrameFormat*>(GetMaster().GetHeader().GetHeaderFormat());
+        bRet = pHF && pHF->SetFormatAttr(rSet);
+        if (bRet && !IsFirstShared())
+        {
+            pHF = const_cast<SwFrameFormat*>(GetFirstMaster().GetHeader().GetHeaderFormat());
+            pHF && pHF->SetFormatAttr(rSet);
+        }
+        if (bRet && !IsHeaderShared())
+        {
+            pHF = const_cast<SwFrameFormat*>(GetLeft().GetHeader().GetHeaderFormat());
+            pHF && pHF->SetFormatAttr(rSet);
+            if (!IsFirstShared())
+            {
+                pHF = const_cast<SwFrameFormat*>(GetFirstLeft().GetHeader().GetHeaderFormat());
+                pHF && pHF->SetFormatAttr(rSet);
+            }
+        }
+    }
+    else // footer
+    {
+        auto pHF = const_cast<SwFrameFormat*>(GetMaster().GetFooter().GetFooterFormat());
+        bRet = pHF && pHF->SetFormatAttr(rSet);
+        if (bRet && !IsFirstShared())
+        {
+            pHF = const_cast<SwFrameFormat*>(GetFirstMaster().GetFooter().GetFooterFormat());
+            pHF && pHF->SetFormatAttr(rSet);
+        }
+        if (bRet && !IsFooterShared())
+        {
+            pHF = const_cast<SwFrameFormat*>(GetLeft().GetFooter().GetFooterFormat());
+            pHF && pHF->SetFormatAttr(rSet);
+            if (bRet && !IsFirstShared())
+            {
+                pHF= const_cast<SwFrameFormat*>(GetFirstLeft().GetFooter().GetFooterFormat());
+                pHF && pHF->SetFormatAttr(rSet);
+            }
+        }
+    }
+    return bRet;
 }
 
 void SwPageDesc::StashFrameFormat(const SwFrameFormat& rFormat, bool bHeader, bool bLeft, bool bFirst)

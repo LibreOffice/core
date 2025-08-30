@@ -225,8 +225,20 @@ void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor cons
 
 // Fill header footer
 
-static void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
+static void FillHdFt(SfxPoolItem& rFormat, const SfxItemSet& rSet, SwPageDesc& rPageDesc,
+                     bool bApplyToAllFormatFrames)
 {
+    auto pHeader = dynamic_cast<SwFormatHeader*>(&rFormat);
+    auto pFooter = dynamic_cast<SwFormatFooter*>(&rFormat);
+    assert(pHeader || pFooter);
+
+    SwFrameFormat* pFormat;
+    if (pHeader)
+        pFormat = pHeader->GetHeaderFormat();
+    else
+        pFormat = pFooter->GetFooterFormat();
+    OSL_ENSURE(pFormat != nullptr, "no header or footer format");
+
     SwAttrSet aSet(pFormat->GetAttrSet());
     aSet.Put(rSet);
 
@@ -238,7 +250,14 @@ static void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
                             rSize.GetSize().Width(),
                             rSize.GetSize().Height());
     aSet.Put(aFrameSize);
-    pFormat->SetFormatAttr(aSet);
+    if (bApplyToAllFormatFrames)
+    {
+        // Apply the modified format to all (first, even, odd) of the page style's FrameFormats
+        aSet.DisableItem(RES_CNTNT); // don't duplicate the content though...
+        rPageDesc.SetFormatAttrOnAll(aSet, bool(pHeader));
+    }
+    else
+        pFormat->SetFormatAttr(aSet);
 }
 
 /// Convert from UseOnPage to SvxPageUsage.
@@ -273,7 +292,7 @@ static UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
 
 // PageDesc <-> convert into sets and back
 
-void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
+void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc, bool bApplyToAllFormatFrames)
 {
     SwFrameFormat& rMaster = rPageDesc.GetMaster();
     bool bFirstShare = false;
@@ -364,10 +383,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             // Pick out everything and adapt the header format
             SwFormatHeader aHeaderFormat(rMaster.GetHeader());
-            SwFrameFormat *pHeaderFormat = aHeaderFormat.GetHeaderFormat();
-            OSL_ENSURE(pHeaderFormat != nullptr, "no header format");
-
-            ::FillHdFt(pHeaderFormat, rHeaderSet);
+            ::FillHdFt(aHeaderFormat, rHeaderSet, rPageDesc, bApplyToAllFormatFrames);
 
             rPageDesc.ChgHeaderShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
@@ -400,10 +416,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             // Pick out everything and adapt the footer format
             SwFormatFooter aFooterFormat(rMaster.GetFooter());
-            SwFrameFormat *pFooterFormat = aFooterFormat.GetFooterFormat();
-            OSL_ENSURE(pFooterFormat != nullptr, "no footer format");
-
-            ::FillHdFt(pFooterFormat, rFooterSet);
+            ::FillHdFt(aFooterFormat, rFooterSet, rPageDesc, bApplyToAllFormatFrames);
 
             rPageDesc.ChgFooterShare(rFooterSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             if (!bFirstShare)

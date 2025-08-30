@@ -488,8 +488,8 @@ void SwHeaderFooterWin::ExecuteCommand(std::u16string_view rIdent)
     }
     else if (rIdent == u"borderback")
     {
-        const SwPageDesc* pDesc = pPageFrame->GetPageDesc();
-        const SwFrameFormat& rMaster = pDesc->GetMaster();
+        SwPageDesc& rPageDesc = const_cast<SwPageDesc&>(*pPageFrame->GetPageDesc());
+        SwFrameFormat& rMaster = rPageDesc.GetMaster();
         SwFrameFormat* pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetFooter().GetFooterFormat() );
         if ( m_bIsHeader )
             pHFFormat = const_cast< SwFrameFormat* >( rMaster.GetHeader().GetHeaderFormat() );
@@ -517,7 +517,9 @@ void SwHeaderFooterWin::ExecuteCommand(std::u16string_view rIdent)
 
         if (svx::ShowBorderBackgroundDlg( GetFrameWeld(), &aSet ) )
         {
-            pHFFormat->SetFormatAttr( aSet );
+            // Apply the modified format to all (first, even, odd) of the page style's FrameFormats
+            aSet.DisableItem(RES_CNTNT); // don't duplicate the content though...
+            rPageDesc.SetFormatAttrOnAll(aSet, m_bIsHeader);
             rView.GetDocShell()->SetModified();
         }
     }

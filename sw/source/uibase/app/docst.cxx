@@ -657,7 +657,8 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
             ::ConvertAttrGenToChar(aTmpSet, m_xTmp->GetItemSet());
         }
 
-        m_xTmp->SetItemSet( aTmpSet, false );
+        bool bParam1 = SfxStyleFamily::Page == m_nFamily; // bApplyToAllFormatFrames
+        m_xTmp->SetItemSet(aTmpSet, /*bBroadcast=*/ false, bParam1);
 
         if( SfxStyleFamily::Page == m_nFamily && SvtCTLOptions::IsCTLFontEnabled() )
         {

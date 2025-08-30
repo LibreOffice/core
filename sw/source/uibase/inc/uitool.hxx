@@ -69,7 +69,8 @@ SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrig
 void ApplyCharBackground(Color const& rBackgroundColor, model::ComplexColor const& rComplexColor, SwWrtShell& rShell);
 
 // SfxItemSets <-> PageDesc
-void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );
+void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc,
+                       bool bApplyToAllFormatFrames = false);
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet);
 
 // fill tabs with default tabs

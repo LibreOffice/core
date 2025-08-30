@@ -244,6 +244,9 @@ public:
     const SwFrameFormat &GetFirstMaster() const { return m_FirstMaster; }
     const SwFrameFormat &GetFirstLeft()   const { return m_FirstLeft; }
 
+    /// Set format properties on all non-shared odd/even/first headers (or footers)
+    bool SetFormatAttrOnAll(const SfxItemSet& rSet, const bool bHeader);
+
     /** Reset all attrs of the format but keep the ones a pagedesc
        cannot live without. */
     inline void ResetAllMasterAttr();

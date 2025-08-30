@@ -1622,8 +1622,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
 }
 
 // handling of parameter <bResetIndentAttrsAtParagraphStyle>
-void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
-                                  const bool bResetIndentAttrsAtParagraphStyle )
+void SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet, const bool bBroadcast, const bool bParam1)
 {
     // if applicable determine format first
     if(!m_bPhysical)
@@ -1715,6 +1714,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                 m_rDoc.DelTextFormatColl( m_pColl );
                 m_pColl = pCColl;
             }
+            const bool bResetIndentAttrsAtParagraphStyle = bParam1;
             if ( bResetIndentAttrsAtParagraphStyle &&
                  rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET &&
                  rSet.GetItemState(RES_MARGIN_FIRSTLINE, false) != SfxItemState::SET &&
@@ -1892,7 +1892,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
 
         if( pNewDsc )
         {
-            ::ItemSetToPageDesc( aSet, *pNewDsc );
+            const bool bApplyToAllFormatFrames = bParam1;
+            ::ItemSetToPageDesc(aSet, *pNewDsc, bApplyToAllFormatFrames);
             m_rDoc.ChgPageDesc( nPgDscPos, *pNewDsc );
             m_pDesc = &m_rDoc.GetPageDesc( nPgDscPos );
             m_rDoc.PreDelPageDesc(pNewDsc.get()); // #i7983#
