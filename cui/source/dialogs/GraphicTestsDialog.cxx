@@ -52,8 +52,7 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
     {
         return;
     }
-    ImageViewerDialog m_ImgVwDialog(m_xParentDialog, BitmapEx(m_xResultBitmap),
-                                    rButton.get_tooltip_text());
+    ImageViewerDialog m_ImgVwDialog(m_xParentDialog, m_xResultBitmap, rButton.get_tooltip_text());
     m_ImgVwDialog.run();
 }
 

@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/weld.hxx>
 
 class ImageViewerDialog : public weld::GenericDialogController
@@ -16,5 +16,5 @@ class ImageViewerDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Image> m_xDisplayImage;
 
 public:
-    ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap, const OUString& atitle);
+    ImageViewerDialog(weld::Dialog* pParent, Bitmap aBitmap, const OUString& atitle);
 };

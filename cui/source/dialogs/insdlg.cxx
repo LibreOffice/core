@@ -43,6 +43,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
+#include <vcl/dibtools.hxx>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -346,7 +347,7 @@ short SvInsertOleDlg::run()
                     //the image with this icon above it
                     Image aImage = SvFileInformationManager::GetImage(aURL, true);
                     SvMemoryStream aTemp;
-                    WriteDIBBitmapEx(BitmapEx(aImage.GetBitmap()), aTemp);
+                    WriteDIBBitmapEx(aImage.GetBitmap(), aTemp);
                     m_aIconMetaFile = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aTemp.GetData()), aTemp.TellEnd());
                     m_aIconMediaType = "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
                 }

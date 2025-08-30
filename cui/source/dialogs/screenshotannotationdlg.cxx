@@ -32,7 +32,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
@@ -158,8 +158,8 @@ private:
     // local variables
     weld::Window*               mpParentWindow;
     weld::Dialog&               mrParentDialog;
-    BitmapEx                    maParentDialogBitmap;
-    BitmapEx                    maDimmedDialogBitmap;
+    Bitmap                      maParentDialogBitmap;
+    Bitmap                      maDimmedDialogBitmap;
     Size                        maParentDialogSize;
 
     // VirtualDevice for buffered interaction paints
