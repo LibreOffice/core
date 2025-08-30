@@ -1762,6 +1762,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_xmlMaps_and_xmlColumnPr)
                 u"Description");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_tableType)
+{
+    createScDoc("xlsx/tdf167689_tableType.xlsx");
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pDocXmlTables = parseExport(u"xl/tables/table1.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXmlTables);
+
+    // if the source document does not have tableType attribute in <table> node,
+    // it shouldn't exist in the exported document either.
+    assertXPathNoAttribute(pDocXmlTables, "/x:table", "tableType");
+
+    // if there is no tableType, there should not be any uniqueName attribute in <tableColumn>
+    assertXPathNoAttribute(pDocXmlTables, "/x:table/x:tableColumns/x:tableColumn[1]", "uniqueName");
+    assertXPathNoAttribute(pDocXmlTables, "/x:table/x:tableColumns/x:tableColumn[2]", "uniqueName");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testAutofilterHiddenButton)
 {
     createScDoc("xlsx/hiddenButton.xlsx");

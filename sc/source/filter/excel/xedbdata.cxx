@@ -181,13 +181,20 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     ScRange aRange( ScAddress::UNINITIALIZED);
     rData.GetArea( aRange);
     sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
+
+    bool hasTableTypeAttr = !rData.GetTableType().isEmpty();
+    std::optional<OUString> tableType = std::nullopt;
+
+    if (hasTableTypeAttr)
+        tableType = rData.GetTableType();
+
     pTableStrm->startElement( XML_table,
         XML_xmlns, rStrm.getNamespaceURL(OOX_NS(xls)).toUtf8(),
         XML_id, OString::number( rEntry.mnTableId),
         XML_name, rData.GetName().toUtf8(),
         XML_displayName, rData.GetName().toUtf8(),
         XML_ref, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aRange),
-        XML_tableType, rData.GetTableType().toUtf8(),
+        XML_tableType, tableType,
         XML_headerRowCount, ToPsz10(rData.HasHeader()),
         XML_totalsRowCount, ToPsz10(rData.HasTotals()),
         XML_totalsRowShown, ToPsz10(rData.HasTotals())  // we don't support that but if there are totals they are shown
@@ -237,11 +244,17 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
             // OOXTODO: write <totalsRowFormula> once we support it.
 
-            OUString uniqueName;
-            if (i < rTableColumnModel.size() && !rTableColumnModel[i].maUniqueName.isEmpty())
-                uniqueName = rTableColumnModel[i].maUniqueName;
-            else
-                uniqueName = rColNames[i]; // fallback to column name if no unique name.
+            std::optional<OUString> uniqueName = std::nullopt;
+
+            // uniqueName should only be used when this table's tableType is queryTable or xml.
+            // in this implementation: if tableType attribute exists, it has either queryTable or xml value.
+            if (hasTableTypeAttr)
+            {
+                if (i < rTableColumnModel.size() && !rTableColumnModel[i].maUniqueName.isEmpty())
+                    uniqueName = rTableColumnModel[i].maUniqueName;
+                else
+                    uniqueName = rColNames[i]; // fallback to column name if no unique name.
+            }
 
             pTableStrm->startElement( XML_tableColumn,
                     XML_id, OString::number(i+1),

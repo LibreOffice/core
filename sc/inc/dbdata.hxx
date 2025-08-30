@@ -43,6 +43,7 @@ enum class ScDBDataPortion
     AREA        ///< entire area
 };
 
+// TODO: this can be merged with struct TableColumnModel
 struct TableColumnAttributes
 {
     std::optional<OUString> maTotalsFunction = std::nullopt;

@@ -131,11 +131,14 @@ void Table::finalizeImport()
             case XML_xml:
                 sValue = "xml";
                 break;
-            case XML_queryTable:
-                sValue = "queryTable";
-                break;
+            // TODO: activate this case when we support query tables.
+            // case XML_queryTable:
+            //     sValue = "queryTable";
+            //     break;
             default:
-                sValue = "worksheet";
+                // use="optional" default="worksheet".
+                // no need to export, set empty to prevent export.
+                sValue = OUString();
                 break;
         }
         aPropSet.setProperty(PROP_TableType, css::uno::Any(sValue));
