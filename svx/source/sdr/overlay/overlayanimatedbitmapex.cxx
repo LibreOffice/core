@@ -30,7 +30,7 @@ namespace sdr::overlay
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        BitmapEx(maBitmap1),
+                        maBitmap1,
                         getBasePosition(),
                         mnCenterX1,
                         mnCenterY1,
@@ -43,7 +43,7 @@ namespace sdr::overlay
             {
                 const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
                     new drawinglayer::primitive2d::OverlayBitmapExPrimitive(
-                        BitmapEx(maBitmap2),
+                        maBitmap2,
                         getBasePosition(),
                         mnCenterX2,
                         mnCenterY2,

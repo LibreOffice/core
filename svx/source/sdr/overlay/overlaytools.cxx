@@ -121,13 +121,13 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
 
         OverlayBitmapExPrimitive::OverlayBitmapExPrimitive(
-            const BitmapEx& rBitmapEx,
+            const Bitmap& rBitmap,
             const basegfx::B2DPoint& rBasePosition,
             sal_uInt16 nCenterX,
             sal_uInt16 nCenterY,
             double fShearX,
             double fRotation)
-        :   maBitmapEx(rBitmapEx),
+        :   maBitmap(rBitmap),
             maBasePosition(rBasePosition),
             mnCenterX(nCenterX),
             mnCenterY(nCenterY),
@@ -137,7 +137,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
 
         Primitive2DReference OverlayBitmapExPrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const Size aBitmapSize(getBitmapEx().GetSizePixel());
+            const Size aBitmapSize(getBitmap().GetSizePixel());
 
             if(!aBitmapSize.Width() || !aBitmapSize.Height() || getDiscreteUnit() <= 0.0)
                 return nullptr;
@@ -175,7 +175,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             // add BasePosition
             aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
-            return new BitmapPrimitive2D(Bitmap(getBitmapEx()), aTransform);
+            return new BitmapPrimitive2D(getBitmap(), aTransform);
         }
 
         bool OverlayBitmapExPrimitive::operator==( const BasePrimitive2D& rPrimitive ) const
@@ -184,7 +184,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
             {
                 const OverlayBitmapExPrimitive& rCompare = static_cast< const OverlayBitmapExPrimitive& >(rPrimitive);
 
-                return (getBitmapEx() == rCompare.getBitmapEx()
+                return (getBitmap() == rCompare.getBitmap()
                     && getBasePosition() == rCompare.getBasePosition()
                     && getCenterX() == rCompare.getCenterX()
                     && getCenterY() == rCompare.getCenterY()

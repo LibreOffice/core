@@ -68,13 +68,13 @@ namespace drawinglayer::primitive2d
         class OverlayBitmapExPrimitive final : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            // The BitmapEx to use, PixelSize is used
-            BitmapEx                                maBitmapEx;
+            // The Bitmap to use, PixelSize is used
+            Bitmap                                  maBitmap;
 
             // The logic position
             basegfx::B2DPoint                       maBasePosition;
 
-            // The pixel inside the BitmapEx which is associated with
+            // The pixel inside the Bitmap which is associated with
             // the target position (offset in the bitmap)
             sal_uInt16                              mnCenterX;
             sal_uInt16                              mnCenterY;
@@ -87,7 +87,7 @@ namespace drawinglayer::primitive2d
 
         public:
             OverlayBitmapExPrimitive(
-                const BitmapEx& rBitmapEx,
+                const Bitmap& rBitmap,
                 const basegfx::B2DPoint& rBasePosition,
                 sal_uInt16 nCenterX,
                 sal_uInt16 nCenterY,
@@ -95,7 +95,7 @@ namespace drawinglayer::primitive2d
                 double fRotation);
 
             // data access
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
+            const Bitmap& getBitmap() const { return maBitmap; }
             const basegfx::B2DPoint& getBasePosition() const { return maBasePosition; }
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
