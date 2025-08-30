@@ -33,7 +33,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

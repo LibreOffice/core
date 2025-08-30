@@ -29,8 +29,8 @@
 
 #include <vcl_canvas/canvastools.hxx>
 
-#include "cairo_canvasbitmap.hxx"
-#include "cairo_devicehelper.hxx"
+#include "canvas_inc/cairo_canvasbitmap.hxx"
+#include "canvas_inc/cairo_devicehelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

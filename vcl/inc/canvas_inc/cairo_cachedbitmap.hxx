@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <base/cachedprimitivebase.hxx>
+#include <canvas_inc/base/cachedprimitivebase.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 
 #include <vcl/cairo.hxx>

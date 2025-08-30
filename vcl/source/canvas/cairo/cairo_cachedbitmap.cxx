@@ -24,8 +24,8 @@
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
-#include "cairo_cachedbitmap.hxx"
-#include "cairo_repainttarget.hxx"
+#include "canvas_inc/cairo_cachedbitmap.hxx"
+#include "canvas_inc/cairo_repainttarget.hxx"
 
 
 using namespace ::cairo;

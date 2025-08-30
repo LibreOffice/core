@@ -40,7 +40,6 @@ $(eval $(call gb_Library_set_precompiled_header,vcl,vcl/inc/pch/precompiled_vcl)
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/canvas_inc \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\

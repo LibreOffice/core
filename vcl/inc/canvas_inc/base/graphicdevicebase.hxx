@@ -27,9 +27,9 @@
 
 #include <rtl/ref.hxx>
 
-#include <parametricpolypolygon.hxx>
-#include <propertysethelper.hxx>
-#include <verifyinput.hxx>
+#include <canvas_inc/parametricpolypolygon.hxx>
+#include <canvas_inc/propertysethelper.hxx>
+#include <canvas_inc/verifyinput.hxx>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }

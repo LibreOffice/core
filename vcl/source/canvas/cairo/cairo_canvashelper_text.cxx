@@ -29,11 +29,11 @@
 #include <vcl/virdev.hxx>
 
 #include <vcl_canvas/canvastools.hxx>
-#include <verifyinput.hxx>
+#include <canvas_inc/verifyinput.hxx>
 
-#include "cairo_canvasfont.hxx"
-#include "cairo_canvashelper.hxx"
-#include "cairo_textlayout.hxx"
+#include "canvas_inc/cairo_canvasfont.hxx"
+#include "canvas_inc/cairo_canvashelper.hxx"
+#include "canvas_inc/cairo_textlayout.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

@@ -22,9 +22,9 @@
 #include "vcl_canvas/customsprite.hxx"
 #include <rtl/ref.hxx>
 #include <com/sun/star/rendering/InterpolationMode.hpp>
-#include <base/integerbitmapbase.hxx>
-#include <base/bitmapcanvasbase.hxx>
-#include <spriteredrawmanager.hxx>
+#include <canvas_inc/base/integerbitmapbase.hxx>
+#include <canvas_inc/base/bitmapcanvasbase.hxx>
+#include <canvas_inc/spriteredrawmanager.hxx>
 
 namespace com::sun::star::rendering { class XAnimation; }
 namespace com::sun::star::rendering { class XAnimatedSprite; }

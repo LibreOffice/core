@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 
 #include <vcl_canvas/canvastools.hxx>
-#include <base/graphicdevicebase.hxx>
+#include <canvas_inc/base/graphicdevicebase.hxx>
 
 namespace com::sun::star::awt { class XTopWindow; }
 

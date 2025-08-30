@@ -26,7 +26,7 @@
 
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 
-#include <parametricpolypolygon.hxx>
+#include <canvas_inc/parametricpolypolygon.hxx>
 #include <utility>
 
 using namespace ::com::sun::star;

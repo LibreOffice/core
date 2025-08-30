@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <base/sprite.hxx>
+#include <canvas_inc/base/sprite.hxx>
 #include <memory>
 
 namespace vcl_canvas

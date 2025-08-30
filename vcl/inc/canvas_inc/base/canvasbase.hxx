@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <osl/mutex.hxx>
-#include <verifyinput.hxx>
+#include <canvas_inc/verifyinput.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::geometry { class XMapping2D; }

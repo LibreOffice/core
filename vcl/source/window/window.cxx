@@ -61,7 +61,7 @@
 #include <helpwin.hxx>
 #include <dndlistenercontainer.hxx>
 #include <dndeventdispatcher.hxx>
-#include <cairo_spritecanvas.hxx>
+#include <canvas_inc/cairo_spritecanvas.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>

@@ -29,8 +29,8 @@
 
 #include <vcl_canvas/canvastools.hxx>
 
-#include "cairo_canvasfont.hxx"
-#include "cairo_textlayout.hxx"
+#include "canvas_inc/cairo_canvasfont.hxx"
+#include "canvas_inc/cairo_textlayout.hxx"
 
 using namespace ::com::sun::star;
 

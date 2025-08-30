@@ -28,7 +28,7 @@
 
 #include <vcl/font.hxx>
 
-#include <vclwrapper.hxx>
+#include <canvas_inc/vclwrapper.hxx>
 
 #include "cairo_surfaceprovider.hxx"
 

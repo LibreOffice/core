@@ -20,7 +20,7 @@
 #pragma once
 
 #include <basegfx/vector/b2isize.hxx>
-#include <rendering/irendermodule.hxx>
+#include <canvas_inc/rendering/irendermodule.hxx>
 #include <utility>
 
 #include "page.hxx"

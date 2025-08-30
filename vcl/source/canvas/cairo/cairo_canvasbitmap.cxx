@@ -28,8 +28,8 @@
 
 #include <cairo.h>
 
-#include "cairo_canvasbitmap.hxx"
-#include "cairo_surfaceprovider.hxx"
+#include "canvas_inc/cairo_canvasbitmap.hxx"
+#include "canvas_inc/cairo_surfaceprovider.hxx"
 #include "vcl_canvas/graphicdevice.hxx"
 
 using namespace ::cairo;

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <base/canvasbase.hxx>
+#include <canvas_inc/base/canvasbase.hxx>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
 namespace com::sun::star::rendering { class XBitmapCanvas; }

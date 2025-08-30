@@ -25,9 +25,9 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <base/integerbitmapbase.hxx>
-#include <base/bitmapcanvasbase.hxx>
-#include <base/sprite.hxx>
+#include <canvas_inc/base/integerbitmapbase.hxx>
+#include <canvas_inc/base/bitmapcanvasbase.hxx>
+#include <canvas_inc/base/sprite.hxx>
 
 namespace com::sun::star::rendering { class XPolyPolygon2D; }
 

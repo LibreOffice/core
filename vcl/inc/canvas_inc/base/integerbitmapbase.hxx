@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
-#include <verifyinput.hxx>
+#include <canvas_inc/verifyinput.hxx>
 
 
 namespace vcl_canvas

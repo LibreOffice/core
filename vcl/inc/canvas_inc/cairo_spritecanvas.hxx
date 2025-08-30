@@ -29,15 +29,15 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <base/spritecanvasbase.hxx>
-#include <base/spritesurface.hxx>
-#include <base/disambiguationhelper.hxx>
-#include <base/bufferedgraphicdevicebase.hxx>
+#include <canvas_inc/base/spritecanvasbase.hxx>
+#include <canvas_inc/base/spritesurface.hxx>
+#include <canvas_inc/base/disambiguationhelper.hxx>
+#include <canvas_inc/base/bufferedgraphicdevicebase.hxx>
 
 #include "cairo_spritedevicehelper.hxx"
 #include "cairo_repainttarget.hxx"
 #include "cairo_surfaceprovider.hxx"
-#include "cairo_spritecanvashelper.hxx"
+#include "canvas_inc/cairo_spritecanvashelper.hxx"
 
 namespace vcl_cairocanvas
 {

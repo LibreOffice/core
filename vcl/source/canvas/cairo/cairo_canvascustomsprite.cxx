@@ -27,8 +27,8 @@
 #include <canvas/canvastools.hxx>
 #include <cairo.h>
 
-#include "cairo_canvascustomsprite.hxx"
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_canvascustomsprite.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 
 
 using namespace ::cairo;

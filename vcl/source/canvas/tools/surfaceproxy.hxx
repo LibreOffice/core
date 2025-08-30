@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <rendering/isurfaceproxy.hxx>
-#include <rendering/icolorbuffer.hxx>
+#include <canvas_inc/rendering/isurfaceproxy.hxx>
+#include <canvas_inc/rendering/icolorbuffer.hxx>
 
 #include "pagemanager.hxx"
 #include "surface.hxx"

@@ -29,17 +29,17 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 
-#include <base/basemutexhelper.hxx>
-#include <base/canvascustomspritebase.hxx>
+#include <canvas_inc/base/basemutexhelper.hxx>
+#include <canvas_inc/base/canvascustomspritebase.hxx>
 
 #include <memory>
 #include <vcl/cairo.hxx>
 
-#include "cairo_sprite.hxx"
-#include "cairo_canvashelper.hxx"
-#include "cairo_repainttarget.hxx"
-#include "cairo_spritehelper.hxx"
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_sprite.hxx"
+#include "canvas_inc/cairo_canvashelper.hxx"
+#include "canvas_inc/cairo_repainttarget.hxx"
+#include "canvas_inc/cairo_spritehelper.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 #include "vcl_canvas/canvas.hxx"
 #include "vcl_canvas/customsprite.hxx"
 

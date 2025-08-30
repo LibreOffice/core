@@ -21,7 +21,7 @@
 
 #include <string_view>
 
-#include <propertysethelper.hxx>
+#include <canvas_inc/propertysethelper.hxx>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 

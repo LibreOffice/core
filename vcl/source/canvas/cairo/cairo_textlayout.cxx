@@ -33,7 +33,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
-#include "cairo_textlayout.hxx"
+#include "canvas_inc/cairo_textlayout.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

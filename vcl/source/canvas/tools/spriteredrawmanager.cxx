@@ -26,7 +26,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
-#include <spriteredrawmanager.hxx>
+#include <canvas_inc/spriteredrawmanager.hxx>
 #include <boost/range/adaptor/reversed.hpp>
 #include <utility>
 

@@ -49,14 +49,14 @@
 #include <vcl/virdev.hxx>
 
 #include <vcl_canvas/canvastools.hxx>
-#include <parametricpolypolygon.hxx>
+#include <canvas_inc/parametricpolypolygon.hxx>
 #include <cairo.h>
 
-#include "cairo_cachedbitmap.hxx"
-#include "cairo_canvasbitmap.hxx"
-#include "cairo_surfaceprovider.hxx"
+#include "canvas_inc/cairo_cachedbitmap.hxx"
+#include "canvas_inc/cairo_canvasbitmap.hxx"
+#include "canvas_inc/cairo_surfaceprovider.hxx"
 #include "vcl_canvas/graphicdevice.hxx"
-#include "cairo_canvashelper.hxx"
+#include "canvas_inc/cairo_canvashelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

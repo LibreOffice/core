@@ -23,7 +23,7 @@
 #include <sal/log.hxx>
 
 #include "viewbackgroundshape.hxx"
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 #include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
 #include <tools.hxx>
 

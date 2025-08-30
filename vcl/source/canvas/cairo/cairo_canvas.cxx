@@ -28,7 +28,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "cairo_canvas.hxx"
+#include "canvas_inc/cairo_canvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

@@ -30,9 +30,9 @@
 
 #include <cairo.h>
 
-#include "cairo_canvascustomsprite.hxx"
+#include "canvas_inc/cairo_canvascustomsprite.hxx"
 #include "vcl_canvas/customsprite.hxx"
-#include "cairo_spritecanvashelper.hxx"
+#include "canvas_inc/cairo_spritecanvashelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

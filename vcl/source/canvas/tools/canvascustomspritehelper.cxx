@@ -32,7 +32,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <base/canvascustomspritehelper.hxx>
+#include <canvas_inc/base/canvascustomspritehelper.hxx>
 #include <vcl_canvas/canvastools.hxx>
 
 using namespace ::com::sun::star;

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <base/canvascustomspritehelper.hxx>
+#include <canvas_inc/base/canvascustomspritehelper.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 

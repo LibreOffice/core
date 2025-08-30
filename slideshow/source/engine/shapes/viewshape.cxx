@@ -18,7 +18,6 @@
  */
 
 #include <cairo.h>
-#include <cairo_spritecanvas.hxx>
 #include <memory>
 #include <sal/config.h>
 
@@ -42,9 +41,9 @@
 
 #include "viewshape.hxx"
 #include "basegfx/point/b2dpoint.hxx"
-#include "cairo_canvasbitmap.hxx"
-#include "cairo_canvascustomsprite.hxx"
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_canvasbitmap.hxx"
+#include "canvas_inc/cairo_canvascustomsprite.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 #include "com/sun/star/uno/Reference.h"
 #include "drawinglayer/geometry/viewinformation2d.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"

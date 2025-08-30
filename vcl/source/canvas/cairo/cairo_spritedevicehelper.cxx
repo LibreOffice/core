@@ -24,8 +24,8 @@
 
 #include <cairo.h>
 
-#include "cairo_devicehelper.hxx"
-#include "cairo_spritecanvas.hxx"
+#include "canvas_inc/cairo_devicehelper.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

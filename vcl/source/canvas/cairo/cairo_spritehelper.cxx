@@ -30,8 +30,8 @@
 #include <cairo.h>
 #include <pixman.h>
 
-#include "cairo_spritehelper.hxx"
-#include "cairo_surfaceprovider.hxx"
+#include "canvas_inc/cairo_spritehelper.hxx"
+#include "canvas_inc/cairo_surfaceprovider.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;

@@ -24,7 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <base/spritesurface.hxx>
+#include <canvas_inc/base/spritesurface.hxx>
 #include <vcl_canvas/canvastoolsdllapi.h>
 
 namespace com::sun::star::geometry { struct AffineMatrix2D; }
