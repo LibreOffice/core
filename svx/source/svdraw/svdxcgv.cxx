@@ -487,7 +487,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap(bool bNoVDevIfOneBmpMarked, const sal
                 eRangeUnit = o3tl::Length::twip;
             }
 
-            // if we have geometry and it has a range, convert to BitmapEx using
+            // if we have geometry and it has a range, convert to Bitmap using
             // common tooling
             aBmp = drawinglayer::convertPrimitive2DContainerToBitmap(
                 std::move(xPrimitives),

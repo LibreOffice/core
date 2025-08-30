@@ -71,7 +71,7 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, bool bHMirr,
         {
             AnimationFrame aAnimationFrame( aNewAnim.Get( i ) );
 
-            // mirror the BitmapEx
+            // mirror the Bitmap
             aAnimationFrame.maBitmap.Mirror( nMirrorFlags );
 
             // Adjust the positions inside the whole bitmap

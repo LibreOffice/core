@@ -1348,12 +1348,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaBmpExScalePartAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetPoint(), rAct.GetBitmap().GetSizePixel());
-    BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
+    Bitmap aBitmap(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        Bitmap(aBitmapEx),
+        aBitmap,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1365,12 +1365,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetPoint(), rAct.GetSize());
-    BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
+    Bitmap aBitmap(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        Bitmap(aBitmapEx),
+        aBitmap,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)
@@ -1382,13 +1382,13 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScaleAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction const & rAct)
 {
     tools::Rectangle aRect(rAct.GetDestPoint(), rAct.GetDestSize());
-    BitmapEx aBitmapEx(rAct.GetBitmap(), rAct.GetColor());
+    Bitmap aBitmap(rAct.GetBitmap(), rAct.GetColor());
 
     aRect.AdjustRight( 1 ); aRect.AdjustBottom( 1 );
-    aBitmapEx.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
+    aBitmap.Crop(tools::Rectangle(rAct.GetSrcPoint(), rAct.GetSrcSize()));
     rtl::Reference<SdrGrafObj> pGraf = new SdrGrafObj(
         *mpModel,
-        Bitmap(aBitmapEx),
+        aBitmap,
         aRect);
 
     // This action is not creating line and fill, set directly, do not use SetAttributes(..)

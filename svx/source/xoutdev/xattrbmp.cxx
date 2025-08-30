@@ -69,7 +69,7 @@ void XOBitmap::Bitmap2Array()
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     bool            bPixelColor = false;
-    const BitmapEx  aBitmap( GetBitmap() );
+    const Bitmap    aBitmap( GetBitmap() );
     const sal_Int32 nLines = 8; // type dependent
 
     if( !m_pPixelArray )

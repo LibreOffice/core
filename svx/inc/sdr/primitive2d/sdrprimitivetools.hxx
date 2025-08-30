@@ -32,7 +32,7 @@ class BColor;
 
 namespace drawinglayer::primitive2d
 {
-// create a 3x3 cross in given color as BitmapEx
+// create a 3x3 cross in given color as Bitmap
 Bitmap createDefaultCross_3x3(const basegfx::BColor& rBColor);
 } // end of namespace drawinglayer::primitive2d
 

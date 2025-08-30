@@ -162,7 +162,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     aBmp.SetPrefSize( rGraphic.GetPrefSize() );
     aBmp.SetPrefMapMode( rGraphic.GetPrefMapMode() );
 
-    return tools::PolyPolygon( BitmapEx(aBmp).GetContour( bContourEdgeDetect, pRect ) );
+    return tools::PolyPolygon( aBmp.GetContour( bContourEdgeDetect, pRect ) );
 }
 
 // Loop through to super class, no virtual Methods to not become incompatible

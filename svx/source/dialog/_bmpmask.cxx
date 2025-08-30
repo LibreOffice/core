@@ -616,7 +616,7 @@ Bitmap SvxBmpMask::ImpMaskTransparent( const Bitmap& rBitmap, const Color& rColo
     if( rBitmap.HasAlpha() )
         aMask.AlphaCombineOr( rBitmap.CreateAlphaMask() );
 
-    Bitmap aBmp(BitmapEx( rBitmap.CreateColorBitmap(), aMask ));
+    Bitmap aBmp( rBitmap.CreateColorBitmap(), aMask );
     LeaveWait();
 
     return aBmp;

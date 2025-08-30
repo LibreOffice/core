@@ -752,7 +752,7 @@ Bitmap ImpGetBitmap(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
         if (!sMarkerName.isEmpty())
         {
             OUString sMarkerPrefix(u"svx/res/marker-"_ustr);
-            BitmapEx aBitmapEx;
+            Bitmap aBitmap;
 
             if (eKindOfMarker == BitmapMarkerKind::Crosshair
              || eKindOfMarker == BitmapMarkerKind::Anchor
@@ -762,15 +762,15 @@ Bitmap ImpGetBitmap(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
              || eKindOfMarker == BitmapMarkerKind::Glue
              || eKindOfMarker == BitmapMarkerKind::Glue_Deselected)
             {
-                aBitmapEx = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + ".png");
+                aBitmap = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + ".png");
             }
             else
             {
-                aBitmapEx = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + "-" + appendMarkerColor(eIndex) + ".png");
+                aBitmap = vcl::bitmap::loadFromName(sMarkerPrefix + sMarkerName + "-" + appendMarkerColor(eIndex) + ".png");
             }
 
-            if (!aBitmapEx.IsEmpty())
-                return Bitmap(aBitmapEx);
+            if (!aBitmap.IsEmpty())
+                return aBitmap;
         }
     }
 

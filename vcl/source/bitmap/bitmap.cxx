@@ -2529,4 +2529,194 @@ Bitmap createAlphaBlendFrame(
     return pSVData->mpBlendFrameCache->m_aLastResult;
 }
 
+static Bitmap DetectEdges( const Bitmap& rBmp )
+{
+    constexpr sal_uInt8 cEdgeDetectThreshold = 128;
+    const Size  aSize( rBmp.GetSizePixel() );
+
+    if( ( aSize.Width() <= 2 ) || ( aSize.Height() <= 2 ) )
+        return rBmp;
+
+    Bitmap aWorkBmp( rBmp );
+
+    if( !aWorkBmp.Convert( BmpConversion::N8BitGreys ) )
+        return rBmp;
+
+    ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+    pVirDev->SetOutputSizePixel(aSize);
+    BitmapScopedReadAccess pReadAcc(aWorkBmp);
+    if( !pReadAcc )
+        return rBmp;
+
+    const tools::Long          nWidth = aSize.Width();
+    const tools::Long          nWidth2 = nWidth - 2;
+    const tools::Long          nHeight = aSize.Height();
+    const tools::Long          nHeight2 = nHeight - 2;
+    const tools::Long          lThres2 = static_cast<tools::Long>(cEdgeDetectThreshold) * cEdgeDetectThreshold;
+    tools::Long                nSum1;
+    tools::Long                nSum2;
+    tools::Long                lGray;
+
+    // initialize border with white pixels
+    pVirDev->SetLineColor( COL_WHITE );
+    pVirDev->DrawLine( Point(), Point( nWidth - 1, 0L ) );
+    pVirDev->DrawLine( Point( nWidth - 1, 0L ), Point( nWidth - 1, nHeight - 1 ) );
+    pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
+    pVirDev->DrawLine( Point( 0, nHeight - 1 ), Point() );
+
+    for( tools::Long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
+    {
+        Scanline pScanlineRead = pReadAcc->GetScanline( nY );
+        Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
+        Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
+        for( tools::Long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
+        {
+            nXTmp = nX;
+
+            nSum2 = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
+            nSum1 = -nSum2;
+            nSum2 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
+            lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );
+            nSum1 += lGray;
+            nSum2 += lGray;
+
+            nSum1 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+            nXTmp -= 2;
+            nSum1 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+
+            lGray = -static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
+            nSum1 += lGray;
+            nSum2 += lGray;
+            nSum2 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
+            lGray = static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
+            nSum1 += lGray;
+            nSum2 -= lGray;
+
+            if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
+                pVirDev->DrawPixel( Point(nXDst, nY), COL_WHITE );
+            else
+                pVirDev->DrawPixel( Point(nXDst, nY), COL_BLACK );
+        }
+    }
+
+    pReadAcc.reset();
+
+    Bitmap aRetBmp = pVirDev->GetBitmap(Point(0,0), aSize);
+
+    if( aRetBmp.IsEmpty() )
+        aRetBmp = rBmp;
+    else
+    {
+        aRetBmp.SetPrefMapMode( rBmp.GetPrefMapMode() );
+        aRetBmp.SetPrefSize( rBmp.GetPrefSize() );
+    }
+
+    return aRetBmp;
+}
+
+/** Get contours in image */
+tools::Polygon  Bitmap::GetContour( bool bContourEdgeDetect,
+                                    const tools::Rectangle* pWorkRectPixel )
+{
+    Bitmap aWorkBmp;
+    tools::Rectangle   aWorkRect( Point(), GetSizePixel() );
+
+    if( pWorkRectPixel )
+        aWorkRect.Intersection( *pWorkRectPixel );
+
+    aWorkRect.Normalize();
+
+    if ((aWorkRect.GetWidth() <= 4) || (aWorkRect.GetHeight() <= 4))
+        return tools::Polygon();
+
+    // if the flag is set, we need to detect edges
+    if( bContourEdgeDetect )
+        aWorkBmp = DetectEdges( CreateColorBitmap() );
+    else
+        aWorkBmp = CreateColorBitmap();
+
+    BitmapScopedReadAccess pAcc(aWorkBmp);
+
+    const tools::Long nWidth = pAcc ? pAcc->Width() : 0;
+    const tools::Long nHeight = pAcc ? pAcc->Height() : 0;
+
+    if (!pAcc || !nWidth || !nHeight)
+        return tools::Polygon();
+
+    // tdf#161833 treat semi-transparent pixels as opaque
+    // Limiting the contour wrapping polygon to only opaque pixels
+    // causes clipping of any shadows or other semi-transparent
+    // areas in the image. So, instead of testing for fully opaque
+    // pixels, treat pixels that are not fully transparent as opaque.
+    // tdf#162062 only apply fix for tdf#161833 if there is a palette
+    const BitmapColor   aTransparent = pAcc->GetBestMatchingColor( pAcc->HasPalette() ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
+
+    std::unique_ptr<Point[]> pPoints1;
+    std::unique_ptr<Point[]> pPoints2;
+
+    pPoints1.reset(new Point[ nHeight ]);
+    pPoints2.reset(new Point[ nHeight ]);
+
+    const tools::Long nStartX1 = aWorkRect.Left() + 1;
+    const tools::Long nEndX1 = aWorkRect.Right();
+    const tools::Long nStartX2 = nEndX1 - 1;
+    const tools::Long nStartY1 = aWorkRect.Top() + 1;
+    const tools::Long nEndY1 = aWorkRect.Bottom();
+
+    sal_uInt16 nPolyPos = 0;
+
+    for (tools::Long nY = nStartY1; nY < nEndY1; nY++)
+    {
+        tools::Long nX = nStartX1;
+        Scanline pScanline = pAcc->GetScanline( nY );
+
+        // scan row from left to right
+        while( nX < nEndX1 )
+        {
+            if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
+            {
+                pPoints1[ nPolyPos ] = Point( nX, nY );
+                nX = nStartX2;
+
+                // this loop always breaks eventually as there is at least one pixel
+                while( true )
+                {
+                    if( aTransparent != pAcc->GetPixelFromData( pScanline, nX ) )
+                    {
+                        pPoints2[ nPolyPos ] = Point( nX, nY );
+                        break;
+                    }
+
+                    nX--;
+                }
+
+                nPolyPos++;
+                break;
+            }
+
+            nX++;
+        }
+    }
+
+    const sal_uInt16 nNewSize1 = nPolyPos << 1;
+
+    tools::Polygon aRetPoly(nPolyPos, pPoints1.get());
+    aRetPoly.SetSize( nNewSize1 + 1 );
+    aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
+
+    for( sal_uInt16 j = nPolyPos; nPolyPos < nNewSize1; )
+    {
+        aRetPoly[ nPolyPos++ ] = pPoints2[ --j ];
+    }
+
+    Size const& rPrefSize = aWorkBmp.GetPrefSize();
+    const double fFactorX = static_cast<double>(rPrefSize.Width()) / nWidth;
+    const double fFactorY = static_cast<double>(rPrefSize.Height()) / nHeight;
+
+    if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
+        aRetPoly.Scale( fFactorX, fFactorY );
+
+    return aRetPoly;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
