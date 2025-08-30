@@ -128,11 +128,14 @@ void Table::finalizeImport()
             case XML_xml:
                 sValue = "xml";
                 break;
-            case XML_queryTable:
-                sValue = "queryTable";
-                break;
+            // TODO: activate this case when we support query tables.
+            // case XML_queryTable:
+            //     sValue = "queryTable";
+            //     break;
             default:
-                sValue = "worksheet";
+                // use="optional" default="worksheet".
+                // no need to export, set empty to prevent export.
+                sValue = OUString();
                 break;
         }
         xDatabaseRange->setPropertyValue(u"TableType"_ustr, css::uno::Any(sValue));
