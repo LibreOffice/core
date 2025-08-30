@@ -1594,8 +1594,8 @@ namespace emfio
 
                                 aTmp.Seek( 0 );
 
-                                // prepare to read and fill BitmapEx
-                                BitmapEx aBitmapEx;
+                                // prepare to read and fill Bitmap
+                                Bitmap aBitmapEx;
 
                                 if(bReadAlpha)
                                 {
@@ -1604,7 +1604,7 @@ namespace emfio
 
                                     if(ReadDIBV5(aBitmap, aAlpha, aTmp))
                                     {
-                                        aBitmapEx = BitmapEx(aBitmap, aAlpha);
+                                        aBitmapEx = Bitmap(aBitmap, aAlpha);
                                     }
                                 }
                                 else
@@ -1616,14 +1616,14 @@ namespace emfio
                                         if(0xff != aFunc.aSrcConstantAlpha)
                                         {
                                             // add const alpha channel
-                                            aBitmapEx = BitmapEx(
+                                            aBitmapEx = Bitmap(
                                                 aBitmap,
                                                 AlphaMask(aBitmap.GetSizePixel(), &aFunc.aSrcConstantAlpha));
                                         }
                                         else
                                         {
                                             // just use Bitmap
-                                            aBitmapEx = BitmapEx(aBitmap);
+                                            aBitmapEx = aBitmap;
                                         }
                                     }
                                 }
@@ -1655,11 +1655,11 @@ namespace emfio
                                             SvFileStream aNew(sDumpPath + "metafile_content.png",
                                                             StreamMode::WRITE | StreamMode::TRUNC);
                                             vcl::PngImageWriter aPNGWriter(aNew);
-                                            aPNGWriter.write(Bitmap(aBitmapEx));
+                                            aPNGWriter.write(aBitmapEx);
                                         }
                                     }
 #endif
-                                    maBmpSaveList.emplace_back(Bitmap(aBitmapEx), aRect, SRCAND|SRCINVERT);
+                                    maBmpSaveList.emplace_back(aBitmapEx, aRect, SRCAND|SRCINVERT);
                                 }
                             }
                         }

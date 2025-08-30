@@ -2008,8 +2008,8 @@ namespace emfio
                                 {
                                     Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
                                     aMask.Invert();
-                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
-                                    ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                    Bitmap aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
+                                    ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
                                 }
@@ -2019,8 +2019,8 @@ namespace emfio
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCPAINT ) )
                                 {
                                     const Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
-                                    ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                    Bitmap aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
+                                    ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
                                 }
@@ -2028,8 +2028,8 @@ namespace emfio
                                 else if ( ( nWinRop == SRCAND ) && ( pSave2->nWinRop == SRCINVERT ) )
                                 {
                                     const Bitmap aMask( pSave->aBmp.CreateColorBitmap() );
-                                    BitmapEx aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
-                                    ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                    Bitmap aBmpEx( pSave2->aBmp.CreateColorBitmap(), aMask );
+                                    ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     bDrawn = true;
                                     i++;
                                 }
@@ -2059,8 +2059,8 @@ namespace emfio
                                     SetRasterOp( WMFRasterOp::CopyPen );
                                     Bitmap  aMask( aBitmap );
                                     aMask.Invert();
-                                    BitmapEx aBmpEx( aBitmap, aMask );
-                                    ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                    Bitmap aBmpEx( aBitmap, aMask );
+                                    ImplDrawBitmap( aPos, aSize, aBmpEx );
                                     if ( nOperation == 0x1 )
                                     {
                                         SetRasterOp( WMFRasterOp::Not );
@@ -2078,8 +2078,8 @@ namespace emfio
                                     aBitmap.Convert( BmpConversion::N24Bit );
                                     aBitmap.Erase( maFillStyle.aFillColor );
                                 }
-                                BitmapEx aBmpEx( aBitmap, aMask );
-                                ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                Bitmap aBmpEx( aBitmap, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 if ( nOperation == 0x7 )
                                 {
                                     SetRasterOp( WMFRasterOp::Not );
@@ -2096,8 +2096,8 @@ namespace emfio
                                 SetRasterOp( WMFRasterOp::CopyPen );
                                 Bitmap  aMask( aBitmap );
                                 aBitmap.Invert();
-                                BitmapEx aBmpEx( aBitmap, aMask );
-                                ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                Bitmap aBmpEx( aBitmap, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
                                 ImplDrawBitmap( aPos, aSize, aBitmap );
                                 if ( nOperation == 0xb )
@@ -2113,8 +2113,8 @@ namespace emfio
                             {
                                 Bitmap  aMask( aBitmap );
                                 aMask.Invert();
-                                BitmapEx aBmpEx( aBitmap, aMask );
-                                ImplDrawBitmap( aPos, aSize, Bitmap(aBmpEx) );
+                                Bitmap aBmpEx( aBitmap, aMask );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 SetRasterOp( WMFRasterOp::XorPen );
                                 ImplDrawBitmap( aPos, aSize, aBitmap );
                                 if ( nOperation == 0xd )
