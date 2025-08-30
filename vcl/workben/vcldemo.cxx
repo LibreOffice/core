@@ -820,15 +820,15 @@ public:
         {
             Bitmap aPageShadowMask(u"sw/res/page-shadow-mask.png"_ustr);
 
-            BitmapEx aRight(aPageShadowMask);
+            Bitmap aRight(aPageShadowMask);
             sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
             // a width x 1 slice
             aRight.Crop(tools::Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
                                   Size(nSlice, 1)));
-            AlphaMask aAlphaMask(aRight.GetBitmap());
+            AlphaMask aAlphaMask(aRight.CreateColorBitmap());
             Bitmap aBlockColor(aAlphaMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_RED);
-            BitmapEx aShadowStretch(aBlockColor, aAlphaMask);
+            Bitmap aShadowStretch(aBlockColor, aAlphaMask);
 
             Point aRenderPt(r.TopLeft());
 
@@ -847,7 +847,7 @@ public:
             AlphaMask aWholeMask(aPageShadowMask.CreateColorBitmap());
             aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             aBlockColor.Erase(COL_GREEN);
-            BitmapEx aWhole(aBlockColor, aWholeMask);
+            Bitmap aWhole(aBlockColor, aWholeMask);
 
             aRenderPt = r.Center();
             aRenderPt.Move(nSlice+1, 0);
@@ -879,11 +879,11 @@ public:
         {
             maCheckered.RenderRegion(rDev, r, rCtx);
 
-            BitmapEx aBitmap(rCtx.mpDemoRenderer->maIntro);
+            Bitmap aBitmap(rCtx.mpDemoRenderer->maIntro);
             aBitmap.Scale(r.GetSize(), BmpScaleFlag::BestQuality);
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
-            rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
+            rDev.DrawBitmapEx(r.TopLeft(), Bitmap(aBitmap.CreateColorBitmap(),
                                                     aSemiTransp));
         }
     };
@@ -1077,7 +1077,7 @@ public:
             }
             else if (eType == RENDER_AS_BITMAPEX)
             {
-                BitmapEx aBitmapEx(pNested->GetBitmap(Point(0,0),aWhole.GetSize()));
+                Bitmap aBitmapEx(pNested->GetBitmap(Point(0,0),aWhole.GetSize()));
                 rDev.DrawBitmapEx(r.TopLeft(), aBitmapEx);
             }
             else if (eType == RENDER_AS_OUTDEV ||
@@ -1253,7 +1253,7 @@ public:
             }
         }
 
-        static BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx const &aSrc)
+        static Bitmap AlphaRecovery(OutputDevice &rDev, Point aPt, Bitmap const &aSrc)
         {
             // Compositing onto 2x colors beyond our control
             ScopedVclPtrInstance< VirtualDevice > aWhite;
@@ -1330,7 +1330,7 @@ public:
             rDev.DrawBitmap(aPt, aMask.GetBitmap());
             aPt.Move(aSrc.GetSizePixel().Width(), 0);
 
-            return BitmapEx(aRecovered, aMask);
+            return Bitmap(aRecovered, aMask);
         }
 
         virtual void RenderRegion(OutputDevice &rDev, tools::Rectangle r,
@@ -1343,7 +1343,7 @@ public:
                 Point aLocation(0,maIcons[0].GetSizePixel().Height() + 8);
                 for (size_t i = 0; i < maIcons.size(); i++)
                 {
-                    BitmapEx aSrc(maIcons[i]);
+                    Bitmap aSrc(maIcons[i]);
 
                     // original above
                     Point aAbove(aLocation);
@@ -1351,12 +1351,12 @@ public:
                     rDev.DrawBitmapEx(aAbove, aSrc);
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
-                    rDev.DrawBitmap(aAbove, aSrc.GetBitmap());
+                    rDev.DrawBitmap(aAbove, aSrc.CreateColorBitmap());
                     aAbove.Move(aSrc.GetSizePixel().Width(),0);
-                    rDev.DrawBitmap(aAbove, aSrc.GetAlphaMask().GetBitmap());
+                    rDev.DrawBitmap(aAbove, aSrc.CreateAlphaMask().GetBitmap());
 
                     // intermediates middle
-                    BitmapEx aResult = AlphaRecovery(rDev, aLocation, aSrc);
+                    Bitmap aResult = AlphaRecovery(rDev, aLocation, aSrc);
 
                     // result below
                     Point aBelow(aLocation);
@@ -1367,7 +1367,7 @@ public:
                     aBelow.Move(aResult.GetSizePixel().Width()+4,0);
                     rDev.DrawBitmapEx(aBelow, aResult);
 
-                    Bitmap aGrey = aSrc.GetBitmap();
+                    Bitmap aGrey = aSrc.CreateColorBitmap();
                     aGrey.Convert(BmpConversion::N8BitGreys);
                     rDev.DrawBitmap(aBelow, aGrey);
 
