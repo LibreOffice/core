@@ -35,7 +35,7 @@ public:
     BitmapFactory();
     ~BitmapFactory();
 
-    BitmapEx CreateBitmap(const SdPage& rPage, const Size& rPixelSize, const bool bDoSuperSampling);
+    Bitmap CreateBitmap(const SdPage& rPage, const Size& rPixelSize, const bool bDoSuperSampling);
 
 private:
     PreviewRenderer maRenderer;

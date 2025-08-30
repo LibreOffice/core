@@ -39,7 +39,7 @@ BitmapFactory::~BitmapFactory()
 {
 }
 
-BitmapEx BitmapFactory::CreateBitmap (
+Bitmap BitmapFactory::CreateBitmap (
     const SdPage& rPage,
     const Size& rPixelSize,
     const bool bDoSuperSampling)
@@ -53,7 +53,7 @@ BitmapEx BitmapFactory::CreateBitmap (
         aSize.setHeight( aSize.Height() * aSuperSamplingFactor );
     }
 
-    BitmapEx aPreview (maRenderer.RenderPage (
+    Bitmap aPreview (maRenderer.RenderPage (
         &rPage,
         aSize,
         true,
