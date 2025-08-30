@@ -173,7 +173,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
     }
     else
     {
-        BitmapEx aPreviewBitmap(maPreviewBitmap);
+        Bitmap aPreviewBitmap(maPreviewBitmap);
 
         // This explicit force-to-scale allows us to get the
         // mentioned best quality here. Unfortunately this is
