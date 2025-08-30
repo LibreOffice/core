@@ -108,7 +108,7 @@ namespace vclcanvas
             const ::Point aEmptyPoint;
             mpBackBuffer->getOutDev().EnableMapMode( false );
             mpBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
-            WriteDIB(BitmapEx(mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint, mpBackBuffer->getOutDev().GetOutputSizePixel())), aStream, false);
+            WriteDIB(mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint, mpBackBuffer->getOutDev().GetOutputSizePixel()), aStream, false);
         }
 
         ++nFilePostfixCount;
