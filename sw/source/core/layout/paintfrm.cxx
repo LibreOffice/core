@@ -6293,7 +6293,7 @@ enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 #define BORDER_TILE_SIZE 512
 
 /// Wrapper around pOut->DrawBitmapEx.
-static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const BitmapEx& rBitmapEx, PaintArea eArea)
+static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoint, const Size& aSize, const Bitmap& rBitmap, PaintArea eArea)
 {
     if(!comphelper::LibreOfficeKit::isActive())
     {
@@ -6333,7 +6333,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         pOut->DrawBitmapEx(pOut->PixelToLogic(aRender.TopLeft()),
                            pOut->PixelToLogic(aRender.GetSize()),
                            Point(0, 0), aRender.GetSize(),
-                           rBitmapEx);
+                           rBitmap);
     }
 
 }
@@ -6362,22 +6362,22 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
                                       ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor));
 
     drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
-    static tools::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageBottomRightShadowObj {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageBottomLeftShadowObj  {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageBottomShadowBaseObj  {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageRightShadowBaseObj  {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageTopShadowBaseObj  {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageTopLeftShadowObj  {};
-    static tools::DeleteOnDeinit< BitmapEx > aPageLeftShadowBaseObj  {};
-    BitmapEx& aPageTopRightShadow = *aPageTopRightShadowObj.get();
-    BitmapEx& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
-    BitmapEx& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();
-    BitmapEx& aPageBottomShadow = *aPageBottomShadowBaseObj.get();
-    BitmapEx& aPageRightShadow = *aPageRightShadowBaseObj.get();
-    BitmapEx& aPageTopShadow = *aPageTopShadowBaseObj.get();
-    BitmapEx& aPageTopLeftShadow = *aPageTopLeftShadowObj.get();
-    BitmapEx& aPageLeftShadow = *aPageLeftShadowBaseObj.get();
+    static tools::DeleteOnDeinit< Bitmap > aPageTopRightShadowObj {};
+    static tools::DeleteOnDeinit< Bitmap > aPageBottomRightShadowObj {};
+    static tools::DeleteOnDeinit< Bitmap > aPageBottomLeftShadowObj  {};
+    static tools::DeleteOnDeinit< Bitmap > aPageBottomShadowBaseObj  {};
+    static tools::DeleteOnDeinit< Bitmap > aPageRightShadowBaseObj  {};
+    static tools::DeleteOnDeinit< Bitmap > aPageTopShadowBaseObj  {};
+    static tools::DeleteOnDeinit< Bitmap > aPageTopLeftShadowObj  {};
+    static tools::DeleteOnDeinit< Bitmap > aPageLeftShadowBaseObj  {};
+    Bitmap& aPageTopRightShadow = *aPageTopRightShadowObj.get();
+    Bitmap& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
+    Bitmap& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();
+    Bitmap& aPageBottomShadow = *aPageBottomShadowBaseObj.get();
+    Bitmap& aPageRightShadow = *aPageRightShadowBaseObj.get();
+    Bitmap& aPageTopShadow = *aPageTopShadowBaseObj.get();
+    Bitmap& aPageTopLeftShadow = *aPageTopLeftShadowObj.get();
+    Bitmap& aPageLeftShadow = *aPageLeftShadowBaseObj.get();
     static Color aShadowColor( COL_AUTO );
 
     SwRect aAlignedPageRect( _rPageRect );
@@ -6391,42 +6391,42 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         AlphaMask aMask( shadowMask.getBottomRight().CreateColorBitmap() );
         Bitmap aFilledSquare(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageBottomRightShadow = BitmapEx( aFilledSquare, aMask );
+        aPageBottomRightShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getBottomLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageBottomLeftShadow = BitmapEx( aFilledSquare, aMask );
+        aPageBottomLeftShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getBottom().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageBottomShadow = BitmapEx( aFilledSquare, aMask );
+        aPageBottomShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTop().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageTopShadow = BitmapEx( aFilledSquare, aMask );
+        aPageTopShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTopRight().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageTopRightShadow = BitmapEx( aFilledSquare, aMask );
+        aPageTopRightShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getRight().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageRightShadow = BitmapEx( aFilledSquare, aMask );
+        aPageRightShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getTopLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageTopLeftShadow = BitmapEx( aFilledSquare, aMask );
+        aPageTopLeftShadow = Bitmap( aFilledSquare, aMask );
 
         aMask = AlphaMask( shadowMask.getLeft().CreateColorBitmap() );
         aFilledSquare = Bitmap(aMask.GetSizePixel(), vcl::PixelFormat::N24_BPP);
         aFilledSquare.Erase( aShadowColor );
-        aPageLeftShadow = BitmapEx( aFilledSquare, aMask );
+        aPageLeftShadow = Bitmap( aFilledSquare, aMask );
     }
 
     SwRect aPaintRect;
