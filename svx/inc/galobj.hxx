@@ -85,7 +85,7 @@ public:
     friend SvStream&        WriteSgaObject( SvStream& rOut, const SgaObject& rObj );
     friend SvStream&        ReadSgaObject( SvStream& rIn, SgaObject& rObj );
 
-    BitmapEx createPreviewBitmapEx(const Size& rSizePixel) const;
+    Bitmap createPreviewBitmap(const Size& rSizePixel) const;
 };
 
 class SgaObjectSound final : public SgaObject

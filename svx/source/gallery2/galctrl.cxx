@@ -339,7 +339,7 @@ void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
 
         if(pObj)
         {
-            aBitmap = Bitmap(pObj->createPreviewBitmapEx(aSize));
+            aBitmap = pObj->createPreviewBitmap(aSize);
             aItemTextTitle = GalleryBrowser::GetItemText(*pObj, GalleryItemFlags::Title);
 
             mpTheme->SetPreviewBitmapAndStrings(nId - 1, aBitmap, aSize, aItemTextTitle, aItemTextPath);

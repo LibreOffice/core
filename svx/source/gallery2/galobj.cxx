@@ -55,9 +55,9 @@ SgaObject::SgaObject(const SgaObject& aObject)
 {
 }
 
-BitmapEx SgaObject::createPreviewBitmapEx(const Size& rSizePixel) const
+Bitmap SgaObject::createPreviewBitmap(const Size& rSizePixel) const
 {
-    BitmapEx aRetval;
+    Bitmap aRetval;
 
     if(rSizePixel.Width() && rSizePixel.Height())
     {

@@ -1114,7 +1114,7 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
             std::unique_ptr<SgaObject> xObj = mpCurTheme->AcquireObject(i);
             if (xObj)
             {
-                aBitmap = Bitmap(xObj->createPreviewBitmapEx(maPreviewSize));
+                aBitmap = xObj->createPreviewBitmap(maPreviewSize);
                 sItemTextTitle = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Title);
                 sItemTextPath = GalleryBrowser::GetItemText(*xObj, GalleryItemFlags::Path);
 
