@@ -319,7 +319,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         Sequence< OUString > GetPropertyNamesStatusbarItem( std::u16string_view aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesImages( std::u16string_view aPropertyRootNode ) const;
-        static bool CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq );
+        static bool CreateImageFromSequence( Bitmap& rImage, Sequence< sal_Int8 >& rBitmapDataSeq );
 
         DECL_LINK(NotifyEvent, void*, void);
 
@@ -1626,14 +1626,14 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
         if ( i < PROPERTYCOUNT_EMBEDDED_IMAGES )
         {
             // Extract image data from the embedded hex binary sequence
-            BitmapEx aImage;
+            Bitmap aImage;
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.hasElements() &&
                 ( CreateImageFromSequence( aImage, aImageDataSeq ) ) )
             {
                 if ( !pEntry )
                     pEntry.reset(new ImageEntry);
-                pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, Bitmap(aImage));
+                pEntry->addImage(i == OFFSET_IMAGES_SMALL ? IMGSIZE_SMALL : IMGSIZE_BIG, aImage);
             }
         }
         else if ( i == OFFSET_IMAGES_SMALL_URL || i == OFFSET_IMAGES_BIG_URL )
@@ -1655,7 +1655,7 @@ std::unique_ptr<AddonsOptions_Impl::ImageEntry> AddonsOptions_Impl::ReadImageDat
 }
 
 // static
-bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sal_Int8 >& rBitmapDataSeq )
+bool AddonsOptions_Impl::CreateImageFromSequence( Bitmap& rImage, Sequence< sal_Int8 >& rBitmapDataSeq )
 {
     bool bResult = false;
 
@@ -1665,10 +1665,10 @@ bool AddonsOptions_Impl::CreateImageFromSequence( BitmapEx& rImage, Sequence< sa
 
         ReadDIBBitmapEx(rImage, aMemStream);
 
-        if( !rImage.IsAlpha() )
+        if( !rImage.HasAlpha() )
         {
             // Support non-transparent bitmaps to be downward compatible with OOo 1.1.x addons
-            rImage = BitmapEx( rImage.GetBitmap(), COL_LIGHTMAGENTA );
+            rImage = Bitmap( rImage, COL_LIGHTMAGENTA );
         }
 
         bResult = true;
