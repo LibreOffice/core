@@ -21,7 +21,7 @@
 
 #include <sdxfer.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <vector>
 
@@ -41,10 +41,10 @@ public:
     class Representative
     {
     public:
-        Representative (const BitmapEx& rBitmap, const bool bIsExcluded)
+        Representative (const Bitmap& rBitmap, const bool bIsExcluded)
             : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
 
-        BitmapEx maBitmap;
+        Bitmap maBitmap;
         bool mbIsExcluded;
     };
 

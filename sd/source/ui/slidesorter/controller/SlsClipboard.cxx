@@ -436,7 +436,7 @@ void Clipboard::CreateSlideTransferable (
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
         if ( ! pDescriptor || pDescriptor->GetPage()==nullptr)
             continue;
-        BitmapEx aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
+        Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
         aRepresentatives.emplace_back(
             aPreview,
             pDescriptor->HasState(model::PageDescriptor::ST_Excluded));
@@ -551,7 +551,7 @@ std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData 
         model::SharedPageDescriptor pDescriptor (rSlideSorter.GetModel().GetPageDescriptor((nPageIndex-1)/2));
         if ( ! pDescriptor || pDescriptor->GetPage()==nullptr)
             break;
-        BitmapEx aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
+        Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage(), false));
         aRepresentatives.emplace_back(
                 aPreview,
                 pDescriptor->HasState(model::PageDescriptor::ST_Excluded));
