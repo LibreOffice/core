@@ -196,11 +196,10 @@ namespace
     }
 
 
-    /** Create masked BitmapEx, where the white areas of rBitmap are
+    /** Create masked Bitmap, where the white areas of rBitmap are
         transparent, and the other appear in rMaskColor.
      */
-    BitmapEx createMaskBmpEx( const Bitmap&  rBitmap,
-                              const ::Color& rMaskColor )
+    Bitmap createMaskBmp( const Bitmap& rBitmap, const ::Color& rMaskColor )
     {
         const ::Color aWhite( COL_WHITE );
         BitmapPalette aBiLevelPalette{
@@ -213,7 +212,7 @@ namespace
                        &aBiLevelPalette );
         aSolid.Erase( rMaskColor );
 
-        return BitmapEx( aSolid, aMask );
+        return Bitmap( aSolid, aMask );
     }
 
     OUString convertToLocalizedNumerals(std::u16string_view rStr,
@@ -2266,10 +2265,10 @@ namespace cppcanvas::internal
                     {
                         MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pCurrAct);
 
-                        // create masked BitmapEx right here, as the
+                        // create masked Bitmap right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmp( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         std::shared_ptr<Action> pBmpAction(
@@ -2295,10 +2294,10 @@ namespace cppcanvas::internal
                     {
                         MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pCurrAct);
 
-                        // create masked BitmapEx right here, as the
+                        // create masked Bitmap right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmp( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         std::shared_ptr<Action> pBmpAction(
@@ -2326,10 +2325,10 @@ namespace cppcanvas::internal
                     {
                         MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pCurrAct);
 
-                        // create masked BitmapEx right here, as the
+                        // create masked Bitmap right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                        Bitmap aBmp( createMaskBmp( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
                         // crop bitmap to given source rectangle (no
