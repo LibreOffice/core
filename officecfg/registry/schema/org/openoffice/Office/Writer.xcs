@@ -2194,7 +2194,7 @@
           <desc>Specifies whether selected text will be enclosed with parentheses, square brackets, curly braces or quotation marks, depending on which button is pressed.</desc>
           <label>Enclose with characters</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="Revision">
