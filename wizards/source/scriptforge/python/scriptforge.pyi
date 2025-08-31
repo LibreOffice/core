@@ -6309,7 +6309,7 @@ class SFDocuments:
                      value: SCALAR | VECTOR | MATRIX
                      ) -> RANGE:
             """
-                Stores the given vlue starting from a specified target cell. The updated area expands
+                Stores the given value starting from a specified target cell. The updated area expands
                 itself from the target cell or from the top-left corner of the given range to accommodate
                 the size of the input value argument. Vectors are always expanded vertically.
                     Args
