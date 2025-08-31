@@ -1493,7 +1493,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
                 nAction = Action::UNDOEDIT;
             break;
             case SelectionType::INVALID:
-                SAL_WARN("cui.dialogs", "selection type not set");
+                assert(false && "selection type not set");
             break;
         }
         //save the current paragraph
