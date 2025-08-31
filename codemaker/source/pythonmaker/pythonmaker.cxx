@@ -26,6 +26,7 @@
 #include "pythonoptions.hxx"
 #include "pythontype.hxx"
 
+// coverity[tainted_data] - this is a build time tool
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     // Object to hold parsed command-line options.
