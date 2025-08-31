@@ -606,9 +606,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 {
+    // Turn "Enclose with characters" on temporarily
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard _([&] {
+        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
+        pBatch->commit();
+    });
+
     createSwDoc();
 
-    // Check that the particular setting is turned on by default
     const SwViewOption* pVwOpt = getSwDocShell()->GetWrtShell()->GetViewOptions();
     CPPUNIT_ASSERT(pVwOpt);
     CPPUNIT_ASSERT(pVwOpt->IsEncloseWithCharactersOn());
@@ -687,6 +696,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 {
+    // Turn "Enclose with characters" on temporarily
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard _([&] {
+        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
+        pBatch->commit();
+    });
+
     // Given a document with several paragraphs, and a formula object
     createSwDoc("text-with-formula.fodt");
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
@@ -762,6 +781,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167133)
 {
+    // Turn "Enclose with characters" on temporarily
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(true, pBatch);
+    pBatch->commit();
+    comphelper::ScopeGuard _([&] {
+        officecfg::Office::Writer::FmtAidsAutocomplete::EncloseWithCharacters::set(false, pBatch);
+        pBatch->commit();
+    });
+
     // Given a document with a single paragraph, having a formula object
     createSwDoc("text-with-formula-one-paragraph.fodt");
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
