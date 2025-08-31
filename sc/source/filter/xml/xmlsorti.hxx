@@ -42,6 +42,7 @@ class ScXMLSortContext : public ScXMLImportContext
     bool        bBindFormatsToContent;
     bool        bIsCaseSensitive;
     bool        bEnabledUserList;
+    OUString    msEmbeddedNumberBehavior;
 
 public:
 

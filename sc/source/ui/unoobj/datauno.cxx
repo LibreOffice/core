@@ -445,7 +445,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName == SC_UNONAME_NUMBERBEHAVIOR)
         {
-            sal_Int16 nVal = SortNumberBehavior::ALPHA_NUMERIC;
+            sal_Int32 nVal = SortNumberBehavior::ALPHA_NUMERIC;
             if (rProp.Value >>= nVal)
                 rParam.bNaturalSort = nVal == SortNumberBehavior::DOUBLE;
         }

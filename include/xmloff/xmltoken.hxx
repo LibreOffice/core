@@ -742,6 +742,7 @@ namespace xmloff::token {
         XML_ELLIPSE,
         XML_EMAIL,
         XML_EMBED,
+        XML_EMBEDDED_NUMBER_BEHAVIOR,
         XML_EMBEDDED_VISIBLE_AREA,
         XML_EMBOSSED,
         XML_EMISSIVE_COLOR,

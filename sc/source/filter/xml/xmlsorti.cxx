@@ -29,6 +29,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <com/sun/star/util/SortField.hpp>
+#include <com/sun/star/sheet/SortNumberBehavior.hpp>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -42,7 +43,8 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     bCopyOutputData(false),
     bBindFormatsToContent(true),
     bIsCaseSensitive(false),
-    bEnabledUserList(false)
+    bEnabledUserList(false),
+    msEmbeddedNumberBehavior(u"alpha-numeric"_ustr)
 {
     if ( !rAttrList.is() )
         return;
@@ -99,6 +101,11 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                 sAlgorithm = aIter.toString();
             }
             break;
+            case XML_ELEMENT( TABLE, XML_EMBEDDED_NUMBER_BEHAVIOR ) :
+            {
+                msEmbeddedNumberBehavior = aIter.toString();
+            }
+            break;
         }
     }
 }
@@ -134,7 +141,7 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
         ++i;
     if (nAlgoLength)
         ++i;
-    uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
+    uno::Sequence <beans::PropertyValue> aSortDescriptor(8 + i);
     auto pSortDescriptor = aSortDescriptor.getArray();
     pSortDescriptor[0].Name = SC_UNONAME_BINDFMT;
     pSortDescriptor[0].Value <<= bBindFormatsToContent;
@@ -150,15 +157,21 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     pSortDescriptor[5].Value <<= nUserListIndex;
     pSortDescriptor[6].Name = SC_UNONAME_SORTFLD;
     pSortDescriptor[6].Value <<= aSortFields;
+    pSortDescriptor[7].Name = SC_UNONAME_NUMBERBEHAVIOR;
+    // value 'integer' is not yet implemented. Map it to 'double'.
+    if (msEmbeddedNumberBehavior.equals(u"double"_ustr) || msEmbeddedNumberBehavior.equals(u"integer"_ustr))
+        pSortDescriptor[7].Value <<= sheet::SortNumberBehavior::DOUBLE;
+    else
+        pSortDescriptor[7].Value <<= sheet::SortNumberBehavior::ALPHA_NUMERIC;
     if (!maLanguageTagODF.isEmpty())
     {
-        pSortDescriptor[7].Name = SC_UNONAME_COLLLOC;
-        pSortDescriptor[7].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
+        pSortDescriptor[8].Name = SC_UNONAME_COLLLOC;
+        pSortDescriptor[8].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
     }
     if (nAlgoLength)
     {
-        pSortDescriptor[6 + i].Name = SC_UNONAME_COLLALG;
-        pSortDescriptor[6 + i].Value <<= sAlgorithm;
+        pSortDescriptor[7 + i].Name = SC_UNONAME_COLLALG;
+        pSortDescriptor[7 + i].Value <<= sAlgorithm;
     }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }

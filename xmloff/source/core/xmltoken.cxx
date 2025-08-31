@@ -754,6 +754,7 @@ namespace xmloff::token {
         TOKEN( "ellipse",                         XML_ELLIPSE ),
         TOKEN( "email",                           XML_EMAIL ),
         TOKEN( "embed",                           XML_EMBED ),
+        TOKEN( "embedded-number-behavior",        XML_EMBEDDED_NUMBER_BEHAVIOR ),
         TOKEN( "embedded-visible-area",           XML_EMBEDDED_VISIBLE_AREA ),
         TOKEN( "embossed",                        XML_EMBOSSED ),
         TOKEN( "emissive-color",                  XML_EMISSIVE_COLOR ),

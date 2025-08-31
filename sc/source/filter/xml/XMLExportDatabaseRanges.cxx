@@ -85,6 +85,12 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
     if (aParam.bCaseSens)
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
+    if (aParam.bNaturalSort)
+    {
+        if (mrExport.getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EMBEDDED_NUMBER_BEHAVIOR, XML_DOUBLE);
+    }
+
     mrExport.AddLanguageTagAttributes( XML_NAMESPACE_TABLE, XML_NAMESPACE_TABLE, aParam.aCollatorLocale, false);
     if (!aParam.aCollatorAlgorithm.isEmpty())
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aParam.aCollatorAlgorithm);

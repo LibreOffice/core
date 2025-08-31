@@ -659,6 +659,7 @@ effect
 ellipse
 email
 embed
+embedded-number-behavior
 embedded-visible-area
 embossed
 emissive-color

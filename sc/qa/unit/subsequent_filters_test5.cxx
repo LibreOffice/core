@@ -11,7 +11,14 @@
 // core, please keep it alphabetically ordered
 #include "helper/qahelper.hxx"
 
+#include <comphelper/propertyvalue.hxx>
 #include <dbdata.hxx>
+#include <dbdocfun.hxx>
+#include <document.hxx>
+#include <sortparam.hxx>
+#include <types.hxx>
+
+#include <array>
 
 using namespace css;
 using namespace css::uno;
@@ -202,6 +209,71 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testGenericJSONMapped2)
     aOutRange.Parse(u"A1:C4"_ustr, *pDoc);
     bool bGood = checkOutput(pDoc, aOutRange, aCheck, "expected output");
     CPPUNIT_ASSERT(bGood);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
+{
+    // The test document contains a database range that is named "myData". Its source range is A1:A6,
+    // thereby A1 is a header. The sorting result is stored in output range C1:C6.
+
+    // Open document
+    createScDoc("ods/tdf161948_NaturalSortSaveLoad.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Enable natural sort in sort descriptor
+    ScDBData* pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5); // tab, col1, row1, col2, row2
+    ScSortParam aSortParam; // that is a struct
+    pDBData->GetSortParam(aSortParam);
+    aSortParam.bNaturalSort = true;
+
+    // The output range and the ScDBData are only updated, when you actual sort using the new
+    // parameters.
+    ScDocShell* pDocSh = getScDocShell();
+    ScDBDocFunc aFunc(*pDocSh);
+    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Verify items are naturally sorted
+    const std::array<OUString, 6> aExpected
+        = { u"items"_ustr, u"K3"_ustr, u"K12"_ustr, u"K23"_ustr, u"K104"_ustr, u"K203"_ustr };
+    for (SCROW nRow = 0; nRow <= 5; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpected[nRow], pDoc->GetString(ScAddress(2, nRow, 0)));
+    }
+
+    // Save and reload, verify file format and reloaded sort descriptor
+    saveAndReload(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    assertXPath(pXmlDoc, "//table:sort", "embedded-number-behavior", u"double");
+    pDoc = getScDoc();
+    pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);
+    pDBData->GetSortParam(aSortParam);
+    CPPUNIT_ASSERT(aSortParam.bNaturalSort);
+
+    // disable natural sorted
+    aSortParam.bNaturalSort = false;
+    pDocSh = getScDocShell();
+    ScDBDocFunc aFunc2(*pDocSh);
+    bSorted = aFunc2.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Verify items are alpha-numerically sorted
+    const std::array<OUString, 6> aExpected2
+        = { u"items"_ustr, u"K104"_ustr, u"K12"_ustr, u"K203"_ustr, u"K23"_ustr, u"K3"_ustr };
+    for (SCROW nRow = 0; nRow <= 5; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpected2[nRow], pDoc->GetString(ScAddress(2, nRow, 0)));
+    }
+
+    // Save and reload, verify file format and reloaded sort descriptor
+    // "alpha-numeric" is default and thus not written.
+    saveAndReload(u"calc8"_ustr);
+    pXmlDoc = parseExport("content.xml");
+    assertXPathNoAttribute(pXmlDoc, "//table:sort", "embedded-number-behavior");
+    pDoc = getScDoc();
+    pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);
+    pDBData->GetSortParam(aSortParam);
+    CPPUNIT_ASSERT(!aSortParam.bNaturalSort);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
