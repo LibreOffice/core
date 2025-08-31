@@ -3292,15 +3292,11 @@ void SbRtl_Randomize(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Rnd(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() > 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        std::uniform_real_distribution<double> dist(0.0, 1.0);
-        double const tmp(dist(theRandomNumberGenerator().global_rng));
-        rPar.Get(0)->PutDouble(tmp);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    double const tmp(dist(theRandomNumberGenerator().global_rng));
+    rPar.Get(0)->PutDouble(tmp);
 }
 
 
