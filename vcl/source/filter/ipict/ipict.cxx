@@ -230,7 +230,7 @@ private:
 
     sal_uInt64 ReadAndDrawText();
 
-    sal_uInt64 ReadPixMapEtc(BitmapEx & rBitmap, bool bBaseAddr, bool bColorTable,
+    sal_uInt64 ReadPixMapEtc(Bitmap & rBitmap, bool bBaseAddr, bool bColorTable,
                         tools::Rectangle * pSrcRect, tools::Rectangle * pDestRect,
                         bool bMode, bool bMaskRgn);
 
@@ -497,7 +497,7 @@ sal_uInt64 PictReader::ReadPixPattern(PictReader::Pattern &pattern)
     pPict->ReadUInt16(nPatType);
     if (nPatType==1) {
         pattern.read(*pPict);
-        BitmapEx aBMP;
+        Bitmap aBMP;
         nDataSize=ReadPixMapEtc(aBMP,false,true,nullptr,nullptr,false,false);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
@@ -710,7 +710,7 @@ sal_uInt64 PictReader::ReadAndDrawText()
     return nDataLen;
 }
 
-sal_uInt64 PictReader::ReadPixMapEtc( BitmapEx &rBitmap, bool bBaseAddr, bool bColorTable, tools::Rectangle* pSrcRect,
+sal_uInt64 PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColorTable, tools::Rectangle* pSrcRect,
                                     tools::Rectangle* pDestRect, bool bMode, bool bMaskRgn )
 {
     std::unique_ptr<vcl::bitmap::RawBitmap> pBitmap;
@@ -1820,7 +1820,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0090: { // BitsRect
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
@@ -1828,7 +1828,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x0091: { // BitsRgn
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
@@ -1847,7 +1847,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x0098: { // PackBitsRect
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
@@ -1855,7 +1855,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x0099: { // PackBitsRgn
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
@@ -1863,7 +1863,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x009a: { // DirectBitsRect
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
         DrawingMethod( PictDrawingMethod::PAINT );
@@ -1871,7 +1871,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
         break;
     }
     case 0x009b: { // DirectBitsRgn
-        BitmapEx aBmp;
+        Bitmap aBmp;
         tools::Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
         DrawingMethod( PictDrawingMethod::PAINT );
