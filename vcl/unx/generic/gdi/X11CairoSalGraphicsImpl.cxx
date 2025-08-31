@@ -166,12 +166,6 @@ void X11CairoSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBit
     mrCairoCommon.drawBitmap(rPosAry, rSalBitmap, getAntiAlias());
 }
 
-void X11CairoSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                                         const SalBitmap& rTransparentBitmap)
-{
-    drawAlphaBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
-}
-
 bool X11CairoSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap,
                                               const SalBitmap& rAlphaBmp)
 {

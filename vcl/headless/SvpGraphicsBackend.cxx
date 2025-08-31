@@ -169,12 +169,6 @@ void SvpGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
     m_rCairoCommon.drawBitmap(rPosAry, rSalBitmap, getAntiAlias());
 }
 
-void SvpGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransparentBitmap)
-{
-    drawAlphaBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
-}
-
 void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap,
                                   Color nMaskColor)
 {

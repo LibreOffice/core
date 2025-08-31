@@ -153,11 +153,6 @@ public:
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
 
-    virtual void drawBitmap(
-                const SalTwoRect& rPosAry,
-                const SalBitmap& rSalBitmap,
-                const SalBitmap& rMaskBitmap ) = 0;
-
     virtual void drawMask(
                 const SalTwoRect& rPosAry,
                 const SalBitmap& rSalBitmap,

@@ -247,9 +247,6 @@ protected:
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
     virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransparentBitmap ) override;
     virtual void        drawMask( const SalTwoRect& rPosAry,
                                   const SalBitmap& rSalBitmap,
                                   Color nMaskColor ) override;

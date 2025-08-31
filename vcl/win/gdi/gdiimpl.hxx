@@ -160,11 +160,6 @@ public:
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
 
-    virtual void drawBitmap(
-                const SalTwoRect& rPosAry,
-                const SalBitmap& rSalBitmap,
-                const SalBitmap& rMaskBitmap ) override;
-
     virtual void drawMask(
                 const SalTwoRect& rPosAry,
                 const SalBitmap& rSalBitmap,

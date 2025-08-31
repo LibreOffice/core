@@ -480,11 +480,6 @@ protected:
 
     virtual void                drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
 
-    virtual void                drawBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rMaskBitmap ) = 0;
-
     virtual void                drawMask(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
@@ -781,11 +776,6 @@ public:
     void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override
     {
         GetImpl()->drawBitmap(rPosAry, rSalBitmap);
-    }
-
-    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rMaskBitmap) override
-    {
-        GetImpl()->drawBitmap(rPosAry, rSalBitmap, rMaskBitmap);
     }
 
     void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, Color nMaskColor) override

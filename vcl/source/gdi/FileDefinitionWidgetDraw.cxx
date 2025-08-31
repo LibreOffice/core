@@ -233,13 +233,6 @@ void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRe
     rGraphics.drawBitmap(rPosAry, rSalBitmap);
 }
 
-void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
-                                          const SalBitmap& rSalBitmap,
-                                          const SalBitmap& rTransparentBitmap)
-{
-    rGraphics.drawBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
-}
-
 void FileDefinitionWidgetDraw::implDrawGradient(SalGraphics& rGraphics,
                                                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                 const SalGradient& rGradient)
@@ -488,21 +481,8 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                                nImageHeight / nScaleFactor);
                 if (!aBitmap.IsEmpty())
                 {
-                    if (aBitmap.HasAlpha())
-                    {
-                        BitmapEx aTmp(aBitmap);
-                        const std::shared_ptr<SalBitmap> pSalBitmap
-                            = aTmp.GetBitmap().ImplGetSalBitmap();
-                        const std::shared_ptr<SalBitmap> pSalBitmapAlpha
-                            = aTmp.GetAlphaMask().GetBitmap().ImplGetSalBitmap();
-                        FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap,
-                                                             *pSalBitmapAlpha);
-                    }
-                    else
-                    {
-                        const std::shared_ptr<SalBitmap> pSalBitmap = aBitmap.ImplGetSalBitmap();
-                        FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap);
-                    }
+                    const std::shared_ptr<SalBitmap> pSalBitmap = aBitmap.ImplGetSalBitmap();
+                    FileDefinitionWidgetDraw::drawBitmap(rGraphics, aTR, *pSalBitmap);
                 }
             }
             break;

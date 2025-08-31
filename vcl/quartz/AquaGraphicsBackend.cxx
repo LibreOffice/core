@@ -920,25 +920,6 @@ void AquaGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     refreshRect(aDstRect);
 }
 
-void AquaGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                                     const SalBitmap& rTransparentBitmap)
-{
-    if (!mrShared.checkContext())
-        return;
-
-    CGImageRef xMaskedImage(rSalBitmap.CreateWithMask(rTransparentBitmap, rPosAry.mnSrcX,
-                                                      rPosAry.mnSrcY, rPosAry.mnSrcWidth,
-                                                      rPosAry.mnSrcHeight));
-    if (!xMaskedImage)
-        return;
-
-    const CGRect aDstRect
-        = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
-    CGContextDrawImage(mrShared.maContextHolder.get(), aDstRect, xMaskedImage);
-    CGImageRelease(xMaskedImage);
-    refreshRect(aDstRect);
-}
-
 void AquaGraphicsBackend::drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                    Color nMaskColor)
 {

@@ -127,9 +127,6 @@ public:
 
     void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
 
-    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                    const SalBitmap& rMaskBitmap) override;
-
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap

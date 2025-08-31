@@ -174,31 +174,6 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
     }
 }
 
-void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
-                              const SalBitmap& rSSalBitmap,
-                              const SalBitmap& rSTransparentBitmap )
-{
-    assert(&rSSalBitmap && "msvc -analyze gets confused here");
-    if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr
-        && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
-        )
-    {
-        WinSalBitmap aWinSalBitmap;
-        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
-        convertToWinSalBitmap(rConstBitmap, aWinSalBitmap);
-
-        WinSalBitmap aWinTransparentSalBitmap;
-        SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
-        convertToWinSalBitmap(rConstTransparentBitmap, aWinTransparentSalBitmap);
-
-        mpImpl->drawBitmap(rPosAry, aWinSalBitmap, aWinTransparentSalBitmap);
-    }
-    else
-    {
-        mpImpl->drawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
-    }
-}
-
 bool WinSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                     tools::Long nHeight, sal_uInt8 nTransparency )
 {

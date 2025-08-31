@@ -1353,12 +1353,6 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap&
     drawBitmap(rPosAry, rSkiaSourceBitmap);
 }
 
-void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                                     const SalBitmap& rMaskBitmap)
-{
-    drawAlphaBitmap(rPosAry, rSalBitmap, rMaskBitmap);
-}
-
 void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                    Color nMaskColor)
 {

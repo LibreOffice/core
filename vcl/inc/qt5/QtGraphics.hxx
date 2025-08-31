@@ -115,9 +115,6 @@ public:
 
     void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
 
-    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
-                    const SalBitmap& rMaskBitmap) override;
-
     void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                   Color nMaskColor) override;
 

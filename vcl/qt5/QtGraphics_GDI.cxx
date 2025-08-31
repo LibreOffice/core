@@ -500,17 +500,6 @@ void QtGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& r
     drawScaledImage(rPosAry, *pImage);
 }
 
-void QtGraphicsBackend::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBitmap*/,
-                                   const SalBitmap& /*rTransparentBitmap*/)
-{
-    if (rPosAry.mnSrcWidth <= 0 || rPosAry.mnSrcHeight <= 0 || rPosAry.mnDestWidth <= 0
-        || rPosAry.mnDestHeight <= 0)
-        return;
-
-    assert(rPosAry.mnSrcWidth == rPosAry.mnDestWidth);
-    assert(rPosAry.mnSrcHeight == rPosAry.mnDestHeight);
-}
-
 void QtGraphicsBackend::drawMask(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBitmap*/,
                                  Color /*nMaskColor*/)
 {
