@@ -1544,20 +1544,19 @@ static bool convertDurationHelper(util::Duration& rDuration, V string)
 
     if (bSuccess)
     {
-        bSuccess = nYears >= std::numeric_limits<sal_Int16>::min() &&
-                   nYears <= std::numeric_limits<sal_Int16>::max();
+        bSuccess = nYears >= 0 && nYears <= std::numeric_limits<sal_uInt16>::max();
         SAL_WARN_IF(!bSuccess, "sax", "convertDurationHelper: year overflow: " << nYears);
     }
 
     if (bSuccess)
     {
         rDuration.Negative      = bIsNegativeDuration;
-        rDuration.Years         = static_cast<sal_Int16>(nYears);
-        rDuration.Months        = static_cast<sal_Int16>(nMonths);
-        rDuration.Days          = static_cast<sal_Int16>(nDays);
-        rDuration.Hours         = static_cast<sal_Int16>(nHours);
-        rDuration.Minutes       = static_cast<sal_Int16>(nMinutes);
-        rDuration.Seconds       = static_cast<sal_Int16>(nSeconds);
+        rDuration.Years         = static_cast<sal_uInt16>(nYears);
+        rDuration.Months        = static_cast<sal_uInt16>(nMonths);
+        rDuration.Days          = static_cast<sal_uInt16>(nDays);
+        rDuration.Hours         = static_cast<sal_uInt16>(nHours);
+        rDuration.Minutes       = static_cast<sal_uInt16>(nMinutes);
+        rDuration.Seconds       = static_cast<sal_uInt16>(nSeconds);
         rDuration.NanoSeconds   = nNanoSeconds;
     }
 
