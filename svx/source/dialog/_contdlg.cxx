@@ -122,7 +122,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             else
             {
 
-                aBmp = aTmpBmp;
+                aBmp = std::move(aTmpBmp);
                 bContourEdgeDetect = true;
             }
         }

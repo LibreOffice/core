@@ -1558,8 +1558,6 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 // static
 Bitmap AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
 {
-    Bitmap aImage;
-
     std::unique_ptr<SvStream> pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == ERRCODE_NONE ))
     {
@@ -1578,11 +1576,11 @@ Bitmap AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
             if( !aBitmap.HasAlpha() )
                 aBitmap = Bitmap( aBitmap.CreateColorBitmap(), COL_LIGHTMAGENTA );
 
-            aImage = aBitmap;
+            return aBitmap;
         }
     }
 
-    return aImage;
+    return Bitmap();
 }
 
 void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUString& aImageId )

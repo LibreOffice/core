@@ -128,7 +128,7 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
         }
     }
 
-    m_aLastResult = aContent;
+    m_aLastResult = std::move(aContent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

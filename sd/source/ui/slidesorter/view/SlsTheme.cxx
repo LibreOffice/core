@@ -225,8 +225,7 @@ void Theme::InitializeIcon(const IconType eType, const OUString& rResourceId)
 {
     if (size_t(eType)<maIcons.size())
     {
-        const Bitmap aIcon(rResourceId);
-        maIcons[eType] = aIcon;
+        maIcons[eType] = Bitmap(rResourceId);
     }
     else
     {
