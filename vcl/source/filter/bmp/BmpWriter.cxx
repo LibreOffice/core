@@ -32,7 +32,7 @@ bool BmpWriter(SvStream& rStream, const Graphic& rGraphic, FilterConfigItem* pFi
             aBitmap = rGraphic.GetBitmap();
     }
     bool bRleCoding = pFilterConfigItem->ReadBool(u"RLE_Coding"_ustr, true);
-    WriteDIB(BitmapEx(aBitmap), rStream, bRleCoding);
+    WriteDIB(aBitmap, rStream, bRleCoding);
 
     return rStream.good();
 }
