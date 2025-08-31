@@ -98,6 +98,8 @@ public:
     bool                            mbForceFlushScrolling;
     // tdf#164428 force flush after drawing a progress bar
     bool                            mbForceFlushProgressBar;
+    // Force flush after drawing tab items
+    bool                            mbForceFlushTabItems;
 
     // Is window in LibreOffice full screen mode
     bool                            mbInternalFullScreen;

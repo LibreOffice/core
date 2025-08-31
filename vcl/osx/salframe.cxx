@@ -89,6 +89,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnBlinkCursorDelay( nMinBlinkCursorDelay ),
     mbForceFlushScrolling( false ),
     mbForceFlushProgressBar( false ),
+    mbForceFlushTabItems( false ),
     mbInternalFullScreen( false ),
     maInternalFullScreenRestoreRect( NSZeroRect ),
     maInternalFullScreenExpectedRect( NSZeroRect ),
@@ -1185,7 +1186,7 @@ bool AquaSalFrame::doFlush()
 {
     bool bRet = false;
 
-    if( mbForceFlushScrolling || mbForceFlushProgressBar || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    if( mbForceFlushScrolling || mbForceFlushProgressBar || mbForceFlushTabItems || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
         mpGraphics->Flush();
 
@@ -1196,6 +1197,7 @@ bool AquaSalFrame::doFlush()
 
         mbForceFlushScrolling = false;
         mbForceFlushProgressBar = false;
+        mbForceFlushTabItems = false;
     }
 
     return bRet;

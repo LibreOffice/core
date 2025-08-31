@@ -31,6 +31,7 @@
 #include <osx/salnativewidgets.h>
 #include <osx/saldata.hxx>
 #include <osx/salframe.h>
+#include <osx/salframeview.h>
 
 #include <premac.h>
 #include <Carbon/Carbon.h>
@@ -458,6 +459,11 @@ static constexpr int spinButtonWidth()
     else
 #endif
         return 16;
+}
+
+static NSWindow* createControlDrawingWindow()
+{
+    return [[[NSWindow alloc] initWithContentRect: NSMakeRect(0, 0, 1, 1) styleMask: NSWindowStyleMaskBorderless backing: NSBackingStoreBuffered defer: NO] autorelease];
 }
 
 // As seen in macOS 12.3.1. All a bit odd really.
@@ -937,15 +943,74 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                 NSSegmentedControl* pCtrl = [[NSSegmentedControl alloc] initWithFrame: ctrlrect];
                 [pCtrl setSegmentCount: nCells];
                 if (bSolo)
-                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH forSegment: 0];
+                {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                        [pCtrl setWidth: rc.size.width forSegment: 0];
+                    else
+#endif
+                        [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH forSegment: 0];
+                }
                 else
                 {
-                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 0];
-                    [pCtrl setWidth: rc.size.width forSegment: 1];
-                    [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 2];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                    if (@available(macOS 26, *))
+                    {
+                        [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/2 forSegment: 0];
+                        [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/4 forSegment: 1];
+                        [pCtrl setWidth: rc.size.width - FOCUS_RING_WIDTH/2 forSegment: 2];
+                    }
+                    else
+#endif
+                    {
+
+                        [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 0];
+                        [pCtrl setWidth: rc.size.width forSegment: 1];
+                        [pCtrl setWidth: rc.size.width + FOCUS_RING_WIDTH/2 forSegment: 2];
+                    }
                 }
                 [pCtrl setSelected: (nState & ControlState::SELECTED) ? YES : NO forSegment: nPaintIndex];
                 [pCtrl setFocusRingType: NSFocusRingTypeExterior];
+
+                // Fix tab item drawing failures on macOS Tahoe
+                // Starting in macOS Tahoe, there are two issues that affect
+                // drawing of tab items:
+                // 1. When compiled and run on macOS Tahoe, the tab item will
+                //    fail to draw if the NSSegmentedControl is not a subview
+                //    of a window whether the window is visible or not.
+                // 2. The selected tab item has the same bright background
+                //    color as the default push button when the tab item is
+                //    in the key window. In previous versions of macOS, the
+                //    same background color is used for the selected tab
+                //    item whether the tab item is enabled or not.
+                // Both issues are fixed by adding the NSSegmentedControl
+                // as a subview of a window. Note that the window must be
+                // a key window to draw the selected tab item with the new
+                // bright background color.
+                if (@available(macOS 26, *))
+                {
+                    NSWindow *pKeyWindow = nil;
+                    if (mpFrame)
+                    {
+                        // Note: use -[NSWindow isKeyWindow] as it may return
+                        // YES even when +[NSApp keyWindow] is nil.
+                        NSWindow *pFrameWindow = mpFrame->getNSWindow();
+                        if (pFrameWindow && [pFrameWindow isKindOfClass: [SalFrameWindow class]] && [pFrameWindow isKeyWindow])
+                            pKeyWindow = pFrameWindow;
+                    }
+
+                    // Default to adding the NSSegmentedControl to a window
+                    // that is not visible. However, in order to draw selected
+                    // tab items with the new bright background color, the
+                    // window must be visible since only visible windows can
+                    // be the key window. In that case, add the control to
+                    // the key window.
+                    NSWindow *pControlDrawingWindow = pKeyWindow;
+                    if (!pControlDrawingWindow)
+                        pControlDrawingWindow = createControlDrawingWindow();
+                    if (pControlDrawingWindow)
+                        [[pControlDrawingWindow contentView] addSubview: pCtrl positioned: NSWindowBelow relativeTo: nil];
+                }
 
                 NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
                 [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:NO]];
@@ -967,26 +1032,65 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                 [NSGraphicsContext setCurrentContext:savedContext];
 
+                if (@available(macOS 26, *))
+                    [pCtrl removeFromSuperviewWithoutNeedingDisplay];
                 [pCtrl release];
 
                 if (nState & ControlState::FOCUSED)
                 {
-                    if (!bSolo)
+                    if (bSolo)
                     {
-                        if (nPaintIndex == 0)
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                        if (@available(macOS 26, *))
                         {
-                            rc.origin.x += FOCUS_RING_WIDTH / 2;
-                            rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            rc.origin.y += FOCUS_RING_WIDTH / 4;
+                            rc.size.height -= FOCUS_RING_WIDTH / 2;
                         }
-                        else if (nPaintIndex == 2)
+#endif
+                    }
+                    else
+                    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                        if (@available(macOS 26, *))
                         {
-                            rc.size.width -= FOCUS_RING_WIDTH / 2;
-                            rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            if (nPaintIndex == 0)
+                                rc.origin.x += FOCUS_RING_WIDTH / 2;
+                            else
+                                rc.origin.x += FOCUS_RING_WIDTH / 4;
+                            rc.origin.y += FOCUS_RING_WIDTH / 2;
+                            if (nPaintIndex == 1)
+                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            else
+                                rc.size.width -= FOCUS_RING_WIDTH * 3 / 4;
+                            rc.size.height -= FOCUS_RING_WIDTH;
+                        }
+                        else
+#endif
+                        {
+                            if (nPaintIndex == 0)
+                            {
+                                rc.origin.x += FOCUS_RING_WIDTH / 2;
+                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            }
+                            else if (nPaintIndex == 2)
+                            {
+                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                                rc.size.width -= FOCUS_RING_WIDTH / 2;
+                            }
                         }
                     }
 
                     paintFocusRect(4.0, rc, context);
                 }
+
+                // The Skia flushing timer appears to stop when modal windows
+                // (e.g. the native Open or Print dialogs) are displayed
+                if (@available(macOS 26, *))
+                {
+                    if (mpFrame && [NSApp modalWindow])
+                        mpFrame->mbForceFlushTabItems = [NSApp modalWindow];
+                }
+
                 bOK=true;
             }
             break;
@@ -1299,7 +1403,12 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
         case ControlType::TabItem:
             {
                 w = aCtrlBoundRect.GetWidth() + 2 * TAB_TEXT_MARGIN;
-                h = TAB_HEIGHT + 2;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
+                if (@available(macOS 26, *))
+                    h = TAB_HEIGHT + 2 + FOCUS_RING_WIDTH;
+                else
+#endif
+                    h = TAB_HEIGHT + 2;
                 rNativeContentRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 rNativeBoundingRegion = tools::Rectangle(Point(x, y), Size(w, h));
                 toReturn = true;
