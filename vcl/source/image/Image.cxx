@@ -150,19 +150,19 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
 
         if (nStyle & DrawImageFlags::SemiTransparent)
         {
-            BitmapEx aTempBitmapEx(aRenderBmp);
-            if (aTempBitmapEx.IsAlpha())
+            Bitmap aTempBitmap(aRenderBmp);
+            if (aTempBitmap.HasAlpha())
             {
-                Bitmap aAlphaBmp(aTempBitmapEx.GetAlphaMask().GetBitmap());
+                Bitmap aAlphaBmp(aTempBitmap.CreateAlphaMask().GetBitmap());
                 aAlphaBmp.Adjust(50);
-                aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aAlphaBmp));
+                aTempBitmap = Bitmap(aTempBitmap.CreateColorBitmap(), AlphaMask(aAlphaBmp));
             }
             else
             {
                 sal_uInt8 cErase = 128;
-                aTempBitmapEx = BitmapEx(aTempBitmapEx.GetBitmap(), AlphaMask(aTempBitmapEx.GetSizePixel(), &cErase));
+                aTempBitmap = Bitmap(aTempBitmap, AlphaMask(aTempBitmap.GetSizePixel(), &cErase));
             }
-            aRenderBmp = Bitmap(aTempBitmapEx);
+            aRenderBmp = aTempBitmap;
         }
     }
 
