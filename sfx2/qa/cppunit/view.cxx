@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
 #include <test/unoapi_test.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
@@ -119,6 +120,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
 
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
 {
+#if ENABLE_PDFIMPORT
     // Given an unsigned PDF file:
     createTempCopy(u"unsigned.pdf");
     loadFromURL(maTempFile.GetURL());
@@ -151,10 +153,12 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
     uno::Sequence<sal_Int8> aBytes;
     comphelper::Base64::decode(aBytes, aDigest);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), aBytes.getLength());
+#endif
 }
 
 namespace
 {
+#if ENABLE_PDFIMPORT
 OUString GetSignatureHash()
 {
     tools::JsonWriter aWriter;
@@ -171,10 +175,12 @@ OUString GetSignatureHash()
     CPPUNIT_ASSERT(it != aTree.not_found());
     return OUString::fromUtf8(it->second.get_value<std::string>());
 }
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignatureHash)
 {
+#if ENABLE_PDFIMPORT
     // Given an unsigned PDF file:
     loadFromFile(u"unsigned.pdf");
 
@@ -186,6 +192,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignatureHash)
     // In case the test was slow enough that there was 1ms system time difference between the two
     // calls, then this failed.
     CPPUNIT_ASSERT_EQUAL(aHash1, aHash2);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testSignatureSerialize)

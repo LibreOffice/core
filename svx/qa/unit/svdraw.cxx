@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
 #include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -829,6 +830,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
 {
+#if ENABLE_PDFIMPORT
     // Given a read-only document with a just inserted signature line:
     uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
     loadWithParams(createFileURL(u"empty.pdf"), aArgs);
@@ -884,6 +886,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
     // i.e. you could not resize even a just inserted signature line in a read-only view.
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Width);
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Height);
+#endif
 }
 }
 
