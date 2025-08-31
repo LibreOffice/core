@@ -2374,40 +2374,9 @@ bool WinSalGraphicsImpl::TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBi
 
 bool WinSalGraphicsImpl::drawAlphaBitmap(
     const SalTwoRect& rTR,
-    const SalBitmap& rSrcBitmap,
-    const SalBitmap& rAlphaBmp)
+    const SalBitmap& rSrcBitmap)
 {
-    if(!rTR.mnSrcWidth || !rTR.mnSrcHeight || !rTR.mnDestWidth || !rTR.mnDestHeight)
-        return false;
-
-    // neither GDI nor GDI+ can properly blend to a surface that has alpha
-    if (GetBitCount() == 32)
-        return false;
-
-    assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));
-    assert(dynamic_cast<const WinSalBitmap*>(&rAlphaBmp));
-
-    const WinSalBitmap& rSalBitmap = static_cast< const WinSalBitmap& >(rSrcBitmap);
-    const WinSalBitmap& rSalAlpha = static_cast< const WinSalBitmap& >(rAlphaBmp);
-    std::shared_ptr< Gdiplus::Bitmap > aARGB(rSalBitmap.ImplGetGdiPlusBitmap(&rSalAlpha));
-
-    if(!aARGB)
-        return false;
-
-    Gdiplus::Graphics aGraphics(mrParent.getHDC());
-
-    setInterpolationMode(
-        aGraphics,
-        rTR.mnSrcWidth,
-        rTR.mnDestWidth,
-        rTR.mnSrcHeight,
-        rTR.mnDestHeight);
-
-    paintToGdiPlus(
-        aGraphics,
-        rTR,
-        *aARGB);
-
+    drawBitmap(rTR, rSrcBitmap);
     return true;
 }
 

@@ -44,7 +44,7 @@ VCL_DLLPUBLIC Color GetTextColor(Color const& rColor, DrawModeFlags nDrawMode,
 VCL_DLLPUBLIC vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
                                 StyleSettings const& rStyleSettings);
 
-VCL_DLLPUBLIC BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode);
+VCL_DLLPUBLIC Bitmap GetBitmap(Bitmap const& rBitmap, DrawModeFlags nDrawMode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

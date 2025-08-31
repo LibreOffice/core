@@ -334,11 +334,8 @@ void VclDrawModeTest::testDrawModeBitmapEx()
     Bitmap aBmp(Size(1, 1), vcl::PixelFormat::N24_BPP);
     BitmapWriteAccess(aBmp).SetPixel(0, 0, BitmapColor(COL_RED));
 
-    BitmapEx aBmpEx(aBmp);
-
     {
-        BitmapEx aResultBitmapEx(vcl::drawmode::GetBitmapEx(aBmpEx, DrawModeFlags::GrayBitmap));
-        Bitmap aResultBitmap(aResultBitmapEx.GetBitmap());
+        Bitmap aResultBitmap(vcl::drawmode::GetBitmap(aBmp, DrawModeFlags::GrayBitmap));
         BitmapScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor aColor = pReadAccess->GetColor(0, 0);
@@ -347,8 +344,7 @@ void VclDrawModeTest::testDrawModeBitmapEx()
 
     // any other operation other than DrawModeFlags::GrayBitmap is a noop
     {
-        BitmapEx aResultBitmapEx(vcl::drawmode::GetBitmapEx(aBmpEx, DrawModeFlags::NoFill));
-        Bitmap aResultBitmap(aResultBitmapEx.GetBitmap());
+        Bitmap aResultBitmap(vcl::drawmode::GetBitmap(aBmp, DrawModeFlags::NoFill));
         BitmapScopedReadAccess pReadAccess(aResultBitmap);
 
         const BitmapColor aColor = pReadAccess->GetColor(0, 0);

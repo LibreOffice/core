@@ -239,13 +239,13 @@ vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
     return aFont;
 }
 
-BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode)
+Bitmap GetBitmap(Bitmap const& rBitmap, DrawModeFlags nDrawMode)
 {
-    BitmapEx aBmpEx(rBitmapEx);
+    Bitmap aBmp(rBitmap);
 
     if (nDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap))
     {
-        Bitmap aColorBmp(aBmpEx.GetSizePixel(), vcl::PixelFormat::N8_BPP,
+        Bitmap aColorBmp(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP,
                          &Bitmap::GetGreyPalette(256));
         sal_uInt8 cCmpVal;
 
@@ -256,27 +256,27 @@ BitmapEx GetBitmapEx(BitmapEx const& rBitmapEx, DrawModeFlags nDrawMode)
 
         aColorBmp.Erase(Color(cCmpVal, cCmpVal, cCmpVal));
 
-        if (aBmpEx.IsAlpha())
+        if (aBmp.HasAlpha())
         {
             // Create one-bit mask out of alpha channel, by thresholding it at alpha=0.5. As
             // DRAWMODE_BLACK/WHITEBITMAP requires monochrome output, having alpha-induced
             // grey levels is not acceptable
-            BitmapEx aMaskEx(aBmpEx.GetAlphaMask().GetBitmap());
-            aMaskEx.Invert(); // convert to transparency
-            BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(129));
-            aMaskEx.Invert(); // convert to alpha
-            aBmpEx = BitmapEx(aColorBmp, aMaskEx.GetBitmap());
+            Bitmap aMask(aBmp.CreateAlphaMask().GetBitmap());
+            aMask.Invert(); // convert to transparency
+            BitmapFilter::Filter(aMask, BitmapMonochromeFilter(129));
+            aMask.Invert(); // convert to alpha
+            aBmp = Bitmap(aColorBmp, aMask);
         }
         else
         {
-            aBmpEx = BitmapEx(aColorBmp);
+            aBmp = aColorBmp;
         }
     }
 
-    if (nDrawMode & DrawModeFlags::GrayBitmap && !aBmpEx.IsEmpty())
-        aBmpEx.Convert(BmpConversion::N8BitGreys);
+    if (nDrawMode & DrawModeFlags::GrayBitmap && !aBmp.IsEmpty())
+        aBmp.Convert(BmpConversion::N8BitGreys);
 
-    return aBmpEx;
+    return aBmp;
 }
 }
 

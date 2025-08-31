@@ -824,17 +824,16 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
 
 bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
                                    const SalBitmap& rSourceBitmap,
-                                   const SalBitmap& rAlphaBitmap,
                                    const OutputDevice& rOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
     {
         SalTwoRect aPosAry2 = rPosAry;
         mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        return drawAlphaBitmap( aPosAry2, rSourceBitmap, rAlphaBitmap );
+        return drawAlphaBitmap( aPosAry2, rSourceBitmap );
     }
     else
-        return drawAlphaBitmap( rPosAry, rSourceBitmap, rAlphaBitmap );
+        return drawAlphaBitmap( rPosAry, rSourceBitmap );
 }
 
 bool SalGraphics::DrawTransformedBitmap(

@@ -206,10 +206,10 @@ void SvpGraphicsBackend::invert(sal_uInt32 nPoints, const Point* pPtAry, SalInve
     m_rCairoCommon.invert(nPoints, pPtAry, nFlags, getAntiAlias());
 }
 
-bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap)
+bool SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
-    return m_rCairoCommon.drawAlphaBitmap(rTR, rSourceBitmap, rAlphaBitmap, getAntiAlias());
+    m_rCairoCommon.drawAlphaBitmap(rTR, rSourceBitmap, getAntiAlias());
+    return true;
 }
 
 bool SvpGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,

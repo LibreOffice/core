@@ -165,7 +165,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         return;
     }
 
-    Bitmap aBmp(vcl::drawmode::GetBitmapEx(rBitmapEx, GetDrawMode()));
+    Bitmap aBmp(vcl::drawmode::GetBitmap(Bitmap(rBitmapEx), GetDrawMode()));
 
     if (mpMetaFile)
     {
@@ -225,7 +225,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
         return;
     }
 
-    Bitmap aBmp(vcl::drawmode::GetBitmapEx(BitmapEx(rBitmap), GetDrawMode()));
+    Bitmap aBmp(vcl::drawmode::GetBitmap(rBitmap, GetDrawMode()));
 
     if (mpMetaFile)
     {
@@ -272,7 +272,7 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
 
     if (rBitmap.HasAlpha())
     {
-        DrawDeviceAlphaBitmap(rBitmap.CreateColorBitmap(), rBitmap.CreateAlphaMask(),
+        DrawDeviceAlphaBitmap(rBitmap,
                               rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel);
         return;
     }

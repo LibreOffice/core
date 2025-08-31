@@ -69,10 +69,9 @@ bool WinSalGraphics::drawPolyLine(
 
 bool WinSalGraphics::drawAlphaBitmap(
     const SalTwoRect& rTR,
-    const SalBitmap& rSrcBitmap,
-    const SalBitmap& rAlphaBmp)
+    const SalBitmap& rSrcBitmap)
 {
-    return mpImpl->drawAlphaBitmap(rTR, rSrcBitmap, rAlphaBmp);
+    return mpImpl->drawAlphaBitmap(rTR, rSrcBitmap);
 }
 
 bool WinSalGraphics::drawTransformedBitmap(

@@ -139,8 +139,7 @@ public:
         otherwise. In this case, clients should try to emulate alpha
         compositing themselves
      */
-    bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap,
-                         const SalBitmap& rAlphaBitmap) override;
+    bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
 
     void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                   Color nMaskColor) override;

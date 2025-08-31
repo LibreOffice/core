@@ -1727,13 +1727,10 @@ OString SkiaSalGraphicsImpl::makeCachedImageKey(const SkiaSalBitmap& bitmap,
     return key;
 }
 
-bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                          const SalBitmap& rAlphaBitmap)
+bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
-    assert(dynamic_cast<const SkiaSalBitmap*>(&rAlphaBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
-    const SkiaSalBitmap& rSkiaAlphaBitmap = static_cast<const SkiaSalBitmap&>(rAlphaBitmap);
     // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
     // alpha blending or scaling.
     SalTwoRect imagePosAry(rPosAry);
@@ -1748,19 +1745,11 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         imagePosAry.mnSrcHeight = imagePosAry.mnDestHeight;
         imageSize = Size(imagePosAry.mnSrcWidth, imagePosAry.mnSrcHeight);
     }
-    sk_sp<SkImage> image
-        = mergeCacheBitmaps(rSkiaSourceBitmap, &rSkiaAlphaBitmap, imageSize * mScaling);
+    sk_sp<SkImage> image = mergeCacheBitmaps(rSkiaSourceBitmap, nullptr, imageSize * mScaling);
     if (image)
         drawImage(imagePosAry, image, mScaling);
-    else if (rSkiaAlphaBitmap.IsFullyOpaqueAsAlpha()
-             && !rSkiaSourceBitmap.PreferSkShader()) // alpha can be ignored
-        drawBitmap(rPosAry, rSkiaSourceBitmap);
     else
-        drawShader(rPosAry,
-                   SkShaders::Blend(
-                       SkBlendMode::kDstIn,
-                       rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)),
-                       rSkiaAlphaBitmap.GetAlphaSkShader(makeSamplingOptions(rPosAry, mScaling))));
+        drawShader(rPosAry, rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)));
     return true;
 }
 

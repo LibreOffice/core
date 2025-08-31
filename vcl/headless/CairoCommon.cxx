@@ -1680,26 +1680,13 @@ void CairoCommon::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBit
 #endif
 }
 
-bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap,
-                                  const SalBitmap& rAlphaBitmap, bool bAntiAlias)
+bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+                                  bool bAntiAlias)
 {
-    if (rAlphaBitmap.GetBitCount() != 8 && rAlphaBitmap.GetBitCount() != 1)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap alpha depth case: "
-                                << rAlphaBitmap.GetBitCount());
-        return false;
-    }
-
-    if (!rTR.mnSrcWidth || !rTR.mnSrcHeight)
-    {
-        SAL_WARN("vcl.gdi", "not possible to stretch nothing");
-        return true;
-    }
-
     // MM02 try to access buffered BitmapHelper
     std::shared_ptr<BitmapHelper> aSurface;
-    tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    cairo_surface_t* source = aSurface->getSurface(rTR.mnDestWidth, rTR.mnDestHeight);
+    tryToUseSourceBuffer(rSalBitmap, aSurface);
+    cairo_surface_t* source = aSurface->getSurface(rPosAry.mnDestWidth, rPosAry.mnDestHeight);
 
     if (!source)
     {
@@ -1707,60 +1694,7 @@ bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourc
         return false;
     }
 
-    // MM02 try to access buffered MaskHelper
-    std::shared_ptr<MaskHelper> aMask;
-    tryToUseMaskBuffer(rAlphaBitmap, aMask);
-    cairo_surface_t* mask = aMask->getSurface(rTR.mnDestWidth, rTR.mnDestHeight);
-
-    if (!mask)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
-        return false;
-    }
-
-    cairo_t* cr = getCairoContext(false, bAntiAlias);
-    if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
-    {
-        SAL_WARN("vcl.gdi",
-                 "cannot render to surface: " << cairo_status_to_string(cairo_status(cr)));
-        releaseCairoContext(cr, false, basegfx::B2DRange());
-        return true;
-    }
-
-    clipRegion(cr);
-
-    cairo_rectangle(cr, rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
-
-    basegfx::B2DRange extents = getClippedFillDamage(cr);
-
-    cairo_clip(cr);
-
-    cairo_pattern_t* maskpattern = cairo_pattern_create_for_surface(mask);
-    cairo_translate(cr, rTR.mnDestX, rTR.mnDestY);
-    double fXScale = static_cast<double>(rTR.mnDestWidth) / rTR.mnSrcWidth;
-    double fYScale = static_cast<double>(rTR.mnDestHeight) / rTR.mnSrcHeight;
-    cairo_scale(cr, fXScale, fYScale);
-    cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
-
-    cairo_pattern_t* sourcepattern = cairo_get_source(cr);
-
-    //tdf#133716 borders of upscaled images should not be blurred
-    //tdf#114117 when stretching a single or multi pixel width/height source to fit an area
-    //the image will be extended into that size.
-    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
-    cairo_pattern_set_extend(maskpattern, CAIRO_EXTEND_PAD);
-
-    //this block is just "cairo_mask_surface", but we have to make it explicit
-    //because of the cairo_pattern_set_filter etc we may want applied
-    cairo_matrix_t matrix;
-    cairo_matrix_init_translate(&matrix, rTR.mnSrcX, rTR.mnSrcY);
-    cairo_pattern_set_matrix(maskpattern, &matrix);
-    cairo_mask(cr, maskpattern);
-
-    cairo_pattern_destroy(maskpattern);
-
-    releaseCairoContext(cr, false, extents);
-
+    copyWithOperator(rPosAry, source, CAIRO_OPERATOR_OVER, bAntiAlias);
     return true;
 }
 

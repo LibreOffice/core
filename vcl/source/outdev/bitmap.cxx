@@ -274,7 +274,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     return aBmp;
 }
 
-void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& rAlpha,
+void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp,
                                     const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel )
 {
@@ -316,16 +316,13 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             aOutSz.Width(), aOutSz.Height());
 
         Bitmap bitmap(rBmp);
-        AlphaMask alpha(rAlpha);
         if(bHMirr || bVMirr)
         {
             bitmap.Mirror(mirrorFlags);
-            alpha.Mirror(mirrorFlags);
         }
         SalBitmap* pSalSrcBmp = bitmap.ImplGetSalBitmap().get();
-        SalBitmap* pSalAlphaBmp = alpha.GetBitmap().ImplGetSalBitmap().get();
 
-        if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, *this))
+        if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *this))
             return;
 
         // we need to make sure Skia never reaches this slow code path
@@ -344,15 +341,13 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     // HACK: The function is broken with alpha vdev and mirroring, mirror here.
     Bitmap bitmap(rBmp);
-    AlphaMask alpha(rAlpha);
     if(bHMirr || bVMirr)
     {
         bitmap.Mirror(mirrorFlags);
-        alpha.Mirror(mirrorFlags);
         auxOutPt = aOutPt;
         auxOutSz = aOutSz;
     }
-    DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
+    DrawDeviceAlphaBitmapSlowPath(bitmap, aDstRect, aBmpRect, auxOutSz, auxOutPt);
 }
 
 namespace
@@ -416,8 +411,9 @@ sal_uInt8 lcl_CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAl
 
 // blend one color with another color with an alpha value
 
-BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rCol2, const sal_uInt8 nAlpha)
+BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rCol2)
 {
+    const sal_uInt8 nAlpha = rCol1.GetAlpha();
     BitmapColor aCol(rCol2);
 
     // Perform porter-duff compositing 'over' operation
@@ -437,8 +433,7 @@ BitmapColor lcl_AlphaBlendColors(const BitmapColor& rCol1, const BitmapColor& rC
 
 Bitmap lcl_BlendBitmapWithAlpha(
             Bitmap&             aBmp,
-            const Bitmap& rBitmap,
-            const AlphaMask& rAlpha,
+            const Bitmap&       rBitmap,
             const sal_Int32     nDstHeight,
             const sal_Int32     nDstWidth,
             const sal_Int32*    pMapX,
@@ -448,23 +443,21 @@ Bitmap lcl_BlendBitmapWithAlpha(
     Bitmap      res;
 
     BitmapScopedReadAccess pSrcBmp(rBitmap);
-    BitmapScopedReadAccess pSrcAlphaBmp(rAlpha);
 
     {
         BitmapScopedWriteAccess pDstBmp(aBmp);
-        if (pDstBmp && pSrcBmp && pSrcAlphaBmp)
+        if (pDstBmp && pSrcBmp)
         {
             for( int nY = 0; nY < nDstHeight; nY++ )
             {
                 const tools::Long  nMapY = pMapY[ nY ];
-                Scanline pScanlineB = pDstBmp->GetScanline(nY);
+                Scanline pDstScanline = pDstBmp->GetScanline(nY);
 
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
-                    pDstBmp->SetPixelOnData(pScanlineB, nX,
+                    pDstBmp->SetPixelOnData(pDstScanline, nX,
                                             lcl_AlphaBlendColors(pSrcBmp->GetColor(nMapY, pMapX[nX]),
-                                                                 pDstBmp->GetColor(nY, nX),
-                                                                 pSrcAlphaBmp->GetPixelIndex(nMapY, pMapX[nX])));
+                                                                 pDstBmp->GetColor(nY, nX)));
                 }
             }
         }
@@ -479,7 +472,7 @@ Bitmap lcl_BlendBitmapWithAlpha(
 } // end anonymous namespace
 
 void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
-    const AlphaMask& rAlpha, const tools::Rectangle& rDstRect, const tools::Rectangle& rBmpRect, Size const& rOutSize, Point const& rOutPoint)
+    const tools::Rectangle& rDstRect, const tools::Rectangle& rBmpRect, Size const& rOutSize, Point const& rOutPoint)
 {
     assert(!is_double_buffered_window());
 
@@ -518,20 +511,13 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
 
     const TradScaleContext aTradContext(aDstRect, rBmpRect, rOutSize, nOffX, nOffY);
 
-    BitmapScopedReadAccess pCheckAlphaReadAccess(rAlpha);
-
-    SAL_WARN_IF(pCheckAlphaReadAccess->GetScanlineFormat() != ScanlineFormat::N8BitPal, "vcl.gdi", "non-8bit alpha no longer supported!");
-    assert(pCheckAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
-
-    pCheckAlphaReadAccess.reset();
-
     // #i38887# reading from screen may sometimes fail
     if (aDeviceBmp.ImplGetSalBitmap())
     {
         Bitmap aNewBitmap;
 
         aNewBitmap = lcl_BlendBitmapWithAlpha(
-                        aDeviceBmp, rBitmap, rAlpha, aDstRect.GetHeight(), aDstRect.GetWidth(),
+                        aDeviceBmp, rBitmap, aDstRect.GetHeight(), aDstRect.GetWidth(),
                         aTradContext.mpMapX.get(), aTradContext.mpMapY.get() );
 
         DrawBitmap(aDstRect.TopLeft(), aNewBitmap);

@@ -120,8 +120,7 @@ public:
     void Flush();
 
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
-                                         const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap ) override;
+                                         const SalBitmap& rSourceBitmap ) override;
     virtual bool       drawTransformedBitmap(
                            const basegfx::B2DPoint& rNull,
                            const basegfx::B2DPoint& rX,

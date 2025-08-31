@@ -1190,33 +1190,23 @@ bool AquaGraphicsBackend::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools:
 }
 #endif
 
-bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap,
-                                          const SalBitmap& rAlphaBmp)
+bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
-    if (rAlphaBmp.GetBitCount() > 8)
+    if (!mrShared.checkContext())
         return false;
 
-    // are these two tests really necessary? (see vcl/unx/source/gdi/salgdi2.cxx)
-    // horizontal/vertical mirroring not implemented yet
-    if (rTR.mnDestWidth < 0 || rTR.mnDestHeight < 0)
+    CGImageRef xImage = rSalBitmap.CreateCroppedImage(
+        static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
+        static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight));
+    if (!xImage)
         return false;
 
-    CGImageRef xMaskedImage = rSrcBitmap.CreateWithMask(rAlphaBmp, rTR.mnSrcX, rTR.mnSrcY,
-                                                        rTR.mnSrcWidth, rTR.mnSrcHeight);
-    if (!xMaskedImage)
-        return false;
+    const CGRect aDstRect
+        = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    CGContextDrawImage(mrShared.maContextHolder.get(), aDstRect, xImage);
 
-    if (mrShared.checkContext())
-    {
-        const CGRect aDstRect
-            = CGRectMake(rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
-        CGContextDrawImage(mrShared.maContextHolder.get(), aDstRect, xMaskedImage);
-        refreshRect(aDstRect);
-    }
-
-    CGImageRelease(xMaskedImage);
-
+    CGImageRelease(xImage);
+    refreshRect(aDstRect);
     return true;
 }
 

@@ -178,8 +178,7 @@ public:
 
     virtual bool drawAlphaBitmap(
                 const SalTwoRect&,
-                const SalBitmap& rSourceBitmap,
-                const SalBitmap& rAlphaBitmap ) = 0;
+                const SalBitmap& rSourceBitmap ) = 0;
 
     virtual bool drawTransformedBitmap(
                 const basegfx::B2DPoint& rNull,

@@ -356,7 +356,6 @@ public:
     SAL_DLLPRIVATE bool                        DrawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
-                                    const SalBitmap& rAlphaBitmap,
                                     const OutputDevice& rOutDev );
 
     SAL_DLLPRIVATE bool                        DrawTransformedBitmap(
@@ -509,17 +508,13 @@ protected:
         @param rSourceBitmap
         Source bitmap to blit
 
-        @param rAlphaBitmap
-        Alpha channel to use for blitting
-
         @return true, if the operation succeeded, and false
         otherwise. In this case, clients should try to emulate alpha
         compositing themselves
      */
     virtual bool                drawAlphaBitmap(
                                     const SalTwoRect&,
-                                    const SalBitmap& rSourceBitmap,
-                                    const SalBitmap& rAlphaBitmap ) = 0;
+                                    const SalBitmap& rSourceBitmap ) = 0;
 
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system
 
@@ -793,10 +788,9 @@ public:
         return GetImpl()->getPixel(nX, nY);
     }
 
-    bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap) override
+    bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap) override
     {
-        return GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap, rAlphaBitmap);
+        return GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap);
     }
 
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull,
