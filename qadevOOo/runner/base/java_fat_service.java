@@ -147,7 +147,7 @@ public class java_fat_service implements TestBase {
                 try {
                     ifc = (MultiMethodTest) dcl.getInstance(
                                               entry.SubEntries[j].entryName);
-                    res = ifc.run(entry.SubEntries[j],tEnv,param);
+                    res = (tEnv != null) ? ifc.run(entry.SubEntries[j],tEnv,param) : null;
                 } catch (IllegalArgumentException iae) {
                     log.println("Couldn't load class "+entry.SubEntries[j].entryName);
                     log.println("**** "+iae.getMessage()+" ****");
