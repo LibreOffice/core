@@ -126,6 +126,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"modules/BasicIDE/ui/gotolinedialog.ui"_ustr,
         u"modules/BasicIDE/ui/newlibdialog.ui"_ustr,
         u"modules/scalc/ui/definedatabaserangedialog.ui"_ustr,
+        u"modules/scalc/ui/deletecells.ui"_ustr,
         u"modules/scalc/ui/gotosheetdialog.ui"_ustr,
         u"modules/scalc/ui/groupbydate.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
