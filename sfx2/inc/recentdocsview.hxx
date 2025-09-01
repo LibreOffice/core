@@ -104,7 +104,7 @@ private:
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.
-    BitmapEx maWelcomeImage;
+    Bitmap maWelcomeImage;
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
 

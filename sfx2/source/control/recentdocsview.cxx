@@ -266,15 +266,15 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
     tools::Long nTextHeight = rRenderContext.GetTextHeight();
 
-    const Size& rImgSize = maWelcomeImage.GetSizePixel();
+    const Size aImgSize = maWelcomeImage.GetSizePixel();
     const Size& rSize = GetOutputSizePixel();
 
-    const int nX = (rSize.Width() - rImgSize.Width())/2;
-    int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
+    const int nX = (rSize.Width() - aImgSize.Width())/2;
+    int nY = (rSize.Height() - 3 * nTextHeight - aImgSize.Height())/2;
     Point aImgPoint(nX, nY);
-    rRenderContext.DrawBitmapEx(aImgPoint, rImgSize, maWelcomeImage);
+    rRenderContext.DrawBitmapEx(aImgPoint, aImgSize, maWelcomeImage);
 
-    nY = nY + rImgSize.Height();
+    nY = nY + aImgSize.Height();
     rRenderContext.DrawText(tools::Rectangle(0, nY + 1 * nTextHeight, rSize.Width(), nY + nTextHeight),
                             maWelcomeLine1,
                             DrawTextFlags::Center);
