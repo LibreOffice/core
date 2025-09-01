@@ -181,7 +181,7 @@ namespace drawinglayer::primitive2d
 
             Primitive2DReference createFromBuffer() const
             {
-                // create BitmapEx by extracting from VirtualDevices
+                // create Bitmap by extracting from VirtualDevices
                 const Bitmap aMainBitmap(maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel()));
                 bool useAlphaMask = false;
 #if defined(MACOSX) || defined(IOS)
@@ -191,25 +191,25 @@ namespace drawinglayer::primitive2d
                 if( SkiaHelper::isVCLSkiaEnabled())
                     useAlphaMask = true;
 #endif
-                BitmapEx bitmap;
+                Bitmap bitmap;
                 if( useAlphaMask )
                 {
                     const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
-                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
+                    bitmap = Bitmap(aMainBitmap, aMaskBitmap);
                 }
                 else
                 {
                     Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
                     // tdf#156630 invert the alpha mask
                     aMaskBitmap.Invert(); // convert from transparency to alpha
-                    bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
+                    bitmap = Bitmap(aMainBitmap, aMaskBitmap);
                 }
 
                 if (!maFillGraphicAttribute.isDefault())
                 {
                     // need to create FillGraphicPrimitive2D
                     const drawinglayer::attribute::FillGraphicAttribute aAttribute(
-                        Graphic(Bitmap(bitmap)),
+                        Graphic(bitmap),
                         maFillGraphicAttribute.getGraphicRange(),
                         maFillGraphicAttribute.getTiling(),
                         maFillGraphicAttribute.getOffsetX(),
@@ -223,9 +223,9 @@ namespace drawinglayer::primitive2d
 
                 // need to create BitmapAlphaPrimitive2D/BitmapPrimitive2D
                 if (basegfx::fTools::equal(getTransparency(), 0.0))
-                    return new BitmapPrimitive2D(Bitmap(bitmap), getTransform());
+                    return new BitmapPrimitive2D(bitmap, getTransform());
 
-                return new BitmapAlphaPrimitive2D(Bitmap(bitmap), getTransform(), getTransparency());
+                return new BitmapAlphaPrimitive2D(bitmap, getTransform(), getTransparency());
             }
 
             void checkSafeToBuffer(sal_uInt32 nIndex)
@@ -314,7 +314,7 @@ namespace drawinglayer::primitive2d
                             else
                             {
                                 AlphaMask aAlphaMask = rAnimationFrame.maBitmap.CreateAlphaMask();
-                                BitmapEx aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
+                                Bitmap aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
@@ -337,7 +337,7 @@ namespace drawinglayer::primitive2d
                             else
                             {
                                 const AlphaMask aMask(rAnimationFrame.maBitmap.CreateAlphaMask());
-                                BitmapEx aExpandVisibilityMask(aMask.GetBitmap(), aMask);
+                                Bitmap aExpandVisibilityMask(aMask.GetBitmap(), aMask);
                                 maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
