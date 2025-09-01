@@ -359,20 +359,16 @@ class SystemDependentData_ID2D1Bitmap : public basegfx::SystemDependentData
 {
 private:
     sal::systools::COMReference<ID2D1Bitmap> mpD2DBitmap;
-    const std::shared_ptr<SalBitmap> maAssociatedAlpha;
 
 public:
-    SystemDependentData_ID2D1Bitmap(sal::systools::COMReference<ID2D1Bitmap>& rD2DBitmap,
-                                    const std::shared_ptr<SalBitmap>& rAssociatedAlpha)
+    SystemDependentData_ID2D1Bitmap(sal::systools::COMReference<ID2D1Bitmap>& rD2DBitmap)
         : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
                                        basegfx::SDD_Type::SDDType_ID2D1Bitmap)
         , mpD2DBitmap(rD2DBitmap)
-        , maAssociatedAlpha(rAssociatedAlpha)
     {
     }
 
     const sal::systools::COMReference<ID2D1Bitmap>& getID2D1Bitmap() const { return mpD2DBitmap; }
-    const std::shared_ptr<SalBitmap>& getAssociatedAlpha() const { return maAssociatedAlpha; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
 };
@@ -392,40 +388,16 @@ sal_Int64 SystemDependentData_ID2D1Bitmap::estimateUsageInBytes() const
     return aRetval;
 }
 
-sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmapEx)
+sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const Bitmap& rBitmap)
 {
-    const Size& rSizePixel(rBitmapEx.GetSizePixel());
-    const bool bAlpha(rBitmapEx.IsAlpha());
+    const Size& rSizePixel(rBitmap.GetSizePixel());
+    const bool bAlpha(rBitmap.HasAlpha());
     const sal_uInt32 nPixelCount(rSizePixel.Width() * rSizePixel.Height());
     std::unique_ptr<sal_uInt32[]> aData(new sal_uInt32[nPixelCount]);
     sal_uInt32* pTarget = aData.get();
 
-    if (bAlpha)
     {
-        Bitmap aSrcAlpha(rBitmapEx.GetAlphaMask().GetBitmap());
-        BitmapScopedReadAccess pReadAccess(rBitmapEx.GetBitmap());
-        BitmapScopedReadAccess pAlphaReadAccess(aSrcAlpha);
-        const tools::Long nHeight(pReadAccess->Height());
-        const tools::Long nWidth(pReadAccess->Width());
-
-        for (tools::Long y = 0; y < nHeight; ++y)
-        {
-            for (tools::Long x = 0; x < nWidth; ++x)
-            {
-                const BitmapColor aColor(pReadAccess->GetColor(y, x));
-                const BitmapColor aAlpha(pAlphaReadAccess->GetColor(y, x));
-                const sal_uInt16 nAlpha(aAlpha.GetRed());
-
-                *pTarget++ = sal_uInt32(BitmapColor(
-                    ColorAlpha, sal_uInt8((sal_uInt16(aColor.GetRed()) * nAlpha) >> 8),
-                    sal_uInt8((sal_uInt16(aColor.GetGreen()) * nAlpha) >> 8),
-                    sal_uInt8((sal_uInt16(aColor.GetBlue()) * nAlpha) >> 8), aAlpha.GetRed()));
-            }
-        }
-    }
-    else
-    {
-        BitmapScopedReadAccess pReadAccess(const_cast<Bitmap&>(rBitmapEx.GetBitmap()));
+        BitmapScopedReadAccess pReadAccess(rBitmap);
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
 
@@ -466,10 +438,9 @@ sal::systools::COMReference<ID2D1Bitmap> createB2DBitmap(const BitmapEx& rBitmap
 }
 
 sal::systools::COMReference<ID2D1Bitmap>
-getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const BitmapEx& rBitmapEx)
+getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const Bitmap& rBitmap)
 {
-    const basegfx::SystemDependentDataHolder* pHolder(
-        rBitmapEx.GetBitmap().accessSystemDependentDataHolder());
+    const basegfx::SystemDependentDataHolder* pHolder(rBitmap.accessSystemDependentDataHolder());
     std::shared_ptr<SystemDependentData_ID2D1Bitmap> pSystemDependentData_ID2D1Bitmap;
 
     if (nullptr != pHolder)
@@ -478,27 +449,18 @@ getOrCreateB2DBitmap(sal::systools::COMReference<ID2D1RenderTarget>& rRT, const 
         pSystemDependentData_ID2D1Bitmap
             = std::static_pointer_cast<SystemDependentData_ID2D1Bitmap>(
                 pHolder->getSystemDependentData(basegfx::SDD_Type::SDDType_ID2D1Bitmap));
-
-        // check data validity for associated Alpha
-        if (pSystemDependentData_ID2D1Bitmap
-            && pSystemDependentData_ID2D1Bitmap->getAssociatedAlpha()
-                   != rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap())
-        {
-            // AssociatedAlpha did change, data invalid
-            pSystemDependentData_ID2D1Bitmap.reset();
-        }
     }
 
     if (!pSystemDependentData_ID2D1Bitmap)
     {
         // have to create newly
-        sal::systools::COMReference<ID2D1Bitmap> pID2D1Bitmap(createB2DBitmap(rBitmapEx));
+        sal::systools::COMReference<ID2D1Bitmap> pID2D1Bitmap(createB2DBitmap(rBitmap));
 
         if (pID2D1Bitmap)
         {
             // creation worked, create SystemDependentData_ID2D1Bitmap
-            pSystemDependentData_ID2D1Bitmap = std::make_shared<SystemDependentData_ID2D1Bitmap>(
-                pID2D1Bitmap, rBitmapEx.GetAlphaMask().GetBitmap().ImplGetSalBitmap());
+            pSystemDependentData_ID2D1Bitmap
+                = std::make_shared<SystemDependentData_ID2D1Bitmap>(pID2D1Bitmap);
 
             // only add if feasible
             if (nullptr != pHolder
@@ -904,9 +866,9 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
         }
     }
 
-    BitmapEx aBitmapEx(rBitmapCandidate.getBitmap());
+    Bitmap aBitmap(rBitmapCandidate.getBitmap());
 
-    if (aBitmapEx.IsEmpty() || aBitmapEx.GetSizePixel().IsEmpty())
+    if (aBitmap.IsEmpty() || aBitmap.GetSizePixel().IsEmpty())
     {
         // no pixel data, done
         return;
@@ -915,9 +877,9 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
     if (maBColorModifierStack.count())
     {
         // need to apply ColorModifier to Bitmap data
-        aBitmapEx = aBitmapEx.ModifyBitmapEx(maBColorModifierStack);
+        aBitmap = aBitmap.Modify(maBColorModifierStack);
 
-        if (aBitmapEx.IsEmpty())
+        if (aBitmap.IsEmpty())
         {
             // color gets completely replaced, get it (any input works)
             const basegfx::BColor aModifiedColor(
@@ -940,7 +902,7 @@ void D2DPixelProcessor2D::processBitmapPrimitive2D(
 
     bool bDone(false);
     sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
-        getOrCreateB2DBitmap(getRenderTarget(), aBitmapEx));
+        getOrCreateB2DBitmap(getRenderTarget(), aBitmap));
 
     if (pD2DBitmap)
     {
@@ -1107,16 +1069,16 @@ sal::systools::COMReference<ID2D1Bitmap> D2DPixelProcessor2D::implCreateAlpha_B2
     // create needed adapted transformation for alpha brush.
     // We may have to take a corrective scaling into account when the
     // MaximumQuadraticPixel limit was used/triggered
-    const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
+    const Size& rBitmapSizePixel(aAlpha.GetSizePixel());
 
-    if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
-        || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
+    if (static_cast<sal_uInt32>(rBitmapSizePixel.Width()) != nDiscreteClippedWidth
+        || static_cast<sal_uInt32>(rBitmapSizePixel.Height()) != nDiscreteClippedHeight)
     {
         // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
         // so adapt numerically to a single scale value, they are integer rounded values
-        const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
+        const double fScaleX(static_cast<double>(rBitmapSizePixel.Width())
                              / static_cast<double>(nDiscreteClippedWidth));
-        const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
+        const double fScaleY(static_cast<double>(rBitmapSizePixel.Height())
                              / static_cast<double>(nDiscreteClippedHeight));
 
         const double fScale(1.0 / ((fScaleX + fScaleY) * 0.5));
@@ -1391,7 +1353,7 @@ void D2DPixelProcessor2D::processMarkerArrayPrimitive2D(
         return;
     }
 
-    BitmapEx rMarker(rMarkerArrayCandidate.getMarker());
+    Bitmap rMarker(rMarkerArrayCandidate.getMarker());
 
     if (rMarker.IsEmpty())
     {
@@ -1871,7 +1833,7 @@ void D2DPixelProcessor2D::processFillGraphicPrimitive2D(
 
     bool bDone(false);
     sal::systools::COMReference<ID2D1Bitmap> pD2DBitmap(
-        getOrCreateB2DBitmap(getRenderTarget(), BitmapEx(aPreparedBitmap)));
+        getOrCreateB2DBitmap(getRenderTarget(), aPreparedBitmap));
 
     if (pD2DBitmap)
     {
