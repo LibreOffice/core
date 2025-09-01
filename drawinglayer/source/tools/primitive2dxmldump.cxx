@@ -706,22 +706,22 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("bitmap");
                 writeMatrix(rWriter, rBitmapPrimitive2D.getTransform());
 
-                const BitmapEx aBitmapEx(rBitmapPrimitive2D.getBitmap());
-                const Size& rSizePixel(aBitmapEx.GetSizePixel());
+                const Bitmap aBitmap(rBitmapPrimitive2D.getBitmap());
+                const Size aSizePixel(aBitmap.GetSizePixel());
 
-                rWriter.attribute("height", rSizePixel.getHeight());
-                rWriter.attribute("width", rSizePixel.getWidth());
-                rWriter.attribute("checksum", OString(std::to_string(aBitmapEx.GetChecksum())));
+                rWriter.attribute("height", aSizePixel.getHeight());
+                rWriter.attribute("width", aSizePixel.getWidth());
+                rWriter.attribute("checksum", OString(std::to_string(aBitmap.GetChecksum())));
 
-                for (tools::Long y = 0; y < rSizePixel.getHeight(); y++)
+                for (tools::Long y = 0; y < aSizePixel.getHeight(); y++)
                 {
                     rWriter.startElement("data");
                     OUString aBitmapData = u""_ustr;
-                    for (tools::Long x = 0; x < rSizePixel.getWidth(); x++)
+                    for (tools::Long x = 0; x < aSizePixel.getWidth(); x++)
                     {
                         if (x != 0)
                             aBitmapData = aBitmapData + ",";
-                        aBitmapData = aBitmapData + aBitmapEx.GetPixelColor(x, y).AsRGBHexString();
+                        aBitmapData = aBitmapData + aBitmap.GetPixelColor(x, y).AsRGBHexString();
                     }
                     rWriter.attribute("row", aBitmapData);
                     rWriter.endElement();
