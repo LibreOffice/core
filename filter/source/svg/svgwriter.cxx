@@ -1568,12 +1568,12 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             case MetaActionType::BMPSCALE:
             {
                 const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                // The conversion to BitmapEx is needed since at the point
+                // The conversion to Bitmap is needed since at the point
                 // where the bitmap is actually exported a Bitmap object is
-                // converted to BitmapEx before computing the checksum used
+                // converted to Bitmap before computing the checksum used
                 // to generate the <image> element id.
                 // (See GetBitmapChecksum in svgexport.cxx)
-                nChecksum = BitmapEx( pA->GetBitmap() ).GetChecksum();
+                nChecksum = pA->GetBitmap().GetChecksum();
                 aPt = pA->GetPoint();
                 aSz = pA->GetSize();
             }

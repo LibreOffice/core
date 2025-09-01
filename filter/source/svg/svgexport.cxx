@@ -450,10 +450,10 @@ BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
         case MetaActionType::BMPSCALE:
         {
             const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-            // The conversion to BitmapEx is needed since a Bitmap object is
-            // converted to BitmapEx before passing it to SVGActionWriter::ImplWriteBmp
+            // The conversion to Bitmap is needed since a Bitmap object is
+            // converted to Bitmap before passing it to SVGActionWriter::ImplWriteBmp
             // where the checksum is checked for matching.
-            nChecksum = BitmapEx( pA->GetBitmap() ).GetChecksum();
+            nChecksum = pA->GetBitmap().GetChecksum();
         }
         break;
         case MetaActionType::BMPEXSCALE:
