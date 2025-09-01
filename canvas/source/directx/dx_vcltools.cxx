@@ -24,7 +24,6 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/canvastools.hxx>
 
@@ -126,9 +125,9 @@ namespace dxcanvastools
                 return false;
             }
 
-            /** Create a chunk of raw RGBA data GDI+ Bitmap from VCL BitmapEx
+            /** Create a chunk of raw RGBA data GDI+ Bitmap from VCL Bitmap
              */
-            RawRGBABitmap bitmapFromVCLBitmapEx( const ::BitmapEx& rBmpEx )
+            RawRGBABitmap bitmapFromVCLBitmap( const ::Bitmap& rBmp )
             {
                 // TODO(P2): Avoid temporary bitmap generation, maybe
                 // even ensure that created DIBs are copied back to
@@ -136,77 +135,43 @@ namespace dxcanvastools
                 // make the local bitmap copy unique, effectively
                 // duplicating the memory used)
 
-                ENSURE_OR_THROW( rBmpEx.IsAlpha(),
-                                  "::dxcanvastools::bitmapFromVCLBitmapEx(): "
-                                  "BmpEx has no alpha" );
-
                 // convert transparent bitmap to 32bit RGBA
                 // ========================================
 
-                const ::Size aBmpSize( rBmpEx.GetSizePixel() );
+                const ::Size aBmpSize( rBmp.GetSizePixel() );
 
                 RawRGBABitmap aBmpData;
                 aBmpData.mnWidth     = aBmpSize.Width();
                 aBmpData.mnHeight    = aBmpSize.Height();
                 aBmpData.maBitmapData.resize(4*aBmpData.mnWidth*aBmpData.mnHeight);
 
-                Bitmap aBitmap( rBmpEx.GetBitmap() );
-
-                BitmapScopedReadAccess pReadAccess( aBitmap );
+                BitmapScopedReadAccess pReadAccess( rBmp );
 
                 const sal_Int32 nWidth( aBmpSize.Width() );
                 const sal_Int32 nHeight( aBmpSize.Height() );
 
                 ENSURE_OR_THROW( pReadAccess.get() != nullptr,
-                                  "::dxcanvastools::bitmapFromVCLBitmapEx(): "
+                                  "::dxcanvastools::bitmapFromVCLBitmap(): "
                                   "Unable to acquire read access to bitmap" );
 
-                Bitmap aAlpha( rBmpEx.GetAlphaMask().GetBitmap() );
-
-                BitmapScopedReadAccess pAlphaReadAccess( aAlpha );
-
-                // By convention, the access buffer always has
-                // one of the following formats:
-
-                //    ScanlineFormat::N1BitMsbPal
-                //    ScanlineFormat::N8BitPal
-                //    ScanlineFormat::N24BitTcBgr
-
-                // and is always ScanlineFormat::BottomUp
-
-                // This is the way
-                // WinSalBitmap::AcquireBuffer() sets up the
-                // buffer
-
-                ENSURE_OR_THROW( pAlphaReadAccess.get() != nullptr,
-                                "::dxcanvastools::bitmapFromVCLBitmapEx(): "
-                                "Unable to acquire read access to alpha" );
-
-                ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
-                                "::dxcanvastools::bitmapFromVCLBitmapEx(): "
-                                "Unsupported alpha scanline format" );
-
-                BitmapColor     aCol;
                 sal_uInt8*      pCurrOutput(aBmpData.maBitmapData.data());
-                int             x, y;
 
-                for( y=0; y<nHeight; ++y )
+                for( int y=0; y<nHeight; ++y )
                 {
                     switch( pReadAccess->GetScanlineFormat() )
                     {
                         case ScanlineFormat::N8BitPal:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
-                                Scanline pAScan = pAlphaReadAccess->GetScanline( y );
 
-                                for( x=0; x<nWidth; ++x )
+                                for( int x=0; x<nWidth; ++x )
                                 {
-                                    aCol = pReadAccess->GetPaletteColor( *pScan++ );
+                                    BitmapColor aCol = pReadAccess->GetPaletteColor( *pScan++ );
 
                                     *pCurrOutput++ = aCol.GetBlue();
                                     *pCurrOutput++ = aCol.GetGreen();
                                     *pCurrOutput++ = aCol.GetRed();
-                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
+                                    *pCurrOutput++ = 0xff;
                                 }
                             }
                             break;
@@ -214,37 +179,29 @@ namespace dxcanvastools
                         case ScanlineFormat::N24BitTcBgr:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
-                                Scanline pAScan = pAlphaReadAccess->GetScanline( y );
 
-                                for( x=0; x<nWidth; ++x )
+                                for( int x=0; x<nWidth; ++x )
                                 {
                                     // store as RGBA
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
                                     *pCurrOutput++ = *pScan++;
-                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
+                                    *pCurrOutput++ = 0xff;
                                 }
                             }
                             break;
 
-                            // TODO(P2): Might be advantageous
-                            // to hand-formulate the following
-                            // formats, too.
-                        case ScanlineFormat::N1BitMsbPal:
+                        case ScanlineFormat::N32BitTcBgra:
                             {
-                                Scanline pAScan = pAlphaReadAccess->GetScanline( y );
+                                Scanline pScan  = pReadAccess->GetScanline( y );
 
-                                // using fallback for those
-                                // seldom formats
-                                for( x=0; x<nWidth; ++x )
+                                for( int x=0; x<nWidth; ++x )
                                 {
-                                    // yes. x and y are swapped on Get/SetPixel
-                                    aCol = pReadAccess->GetColor(y,x);
-
-                                    *pCurrOutput++ = aCol.GetBlue();
-                                    *pCurrOutput++ = aCol.GetGreen();
-                                    *pCurrOutput++ = aCol.GetRed();
-                                    *pCurrOutput++ = static_cast<BYTE>(*pAScan++);
+                                    // store as RGBA
+                                    *pCurrOutput++ = *pScan++;
+                                    *pCurrOutput++ = *pScan++;
+                                    *pCurrOutput++ = *pScan++;
+                                    *pCurrOutput++ = *pScan++;
                                 }
                             }
                             break;
@@ -252,7 +209,6 @@ namespace dxcanvastools
                         case ScanlineFormat::N24BitTcRgb:
                         case ScanlineFormat::N32BitTcAbgr:
                         case ScanlineFormat::N32BitTcArgb:
-                        case ScanlineFormat::N32BitTcBgra:
                         case ScanlineFormat::N32BitTcRgba:
                         case ScanlineFormat::N32BitTcXbgr:
                         case ScanlineFormat::N32BitTcXrgb:
@@ -260,7 +216,7 @@ namespace dxcanvastools
                         case ScanlineFormat::N32BitTcRgbx:
                         default:
                             ENSURE_OR_THROW( false,
-                                            "::dxcanvastools::bitmapFromVCLBitmapEx(): "
+                                            "::dxcanvastools::bitmapFromVCLBitmap(): "
                                             "Unexpected scanline format - has "
                                             "WinSalBitmap::AcquireBuffer() changed?" );
                     }
@@ -269,19 +225,11 @@ namespace dxcanvastools
                 return aBmpData;
             }
 
-            bool drawVCLBitmapEx( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
-                                  const ::BitmapEx&                               rBmpEx )
+            bool drawVCLBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                const ::Bitmap&                             rBmp )
             {
-                if( !rBmpEx.IsAlpha() )
-                {
-                    Bitmap aBmp( rBmpEx.GetBitmap() );
-                    return drawVCLBitmap( rGraphics, aBmp );
-                }
-                else
-                {
-                    return drawRGBABits( rGraphics,
-                                         bitmapFromVCLBitmapEx( rBmpEx ) );
-                }
+                return drawRGBABits( rGraphics,
+                                     bitmapFromVCLBitmap( rBmp ) );
             }
         }
 
@@ -299,7 +247,7 @@ namespace dxcanvastools
             if( aBmp.IsEmpty() )
                 return false;
 
-            return drawVCLBitmapEx( rGraphics, BitmapEx(aBmp) );
+            return drawVCLBitmap( rGraphics, aBmp );
         }
 }
 
