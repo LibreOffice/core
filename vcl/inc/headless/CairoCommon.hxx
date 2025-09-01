@@ -214,7 +214,7 @@ struct VCL_DLLPUBLIC CairoCommon
 
     void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, bool bAntiAlias);
 
-    bool drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, bool bAntiAlias);
+    void drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap, bool bAntiAlias);
 
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,

@@ -176,7 +176,7 @@ public:
                 void* /*pPtr*/,
                 sal_uInt32 /*nSize*/ ) { return false; }
 
-    virtual bool drawAlphaBitmap(
+    virtual void drawAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap ) = 0;
 

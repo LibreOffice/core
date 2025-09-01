@@ -822,7 +822,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         return forWidget()->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue, OUString(), rNativeBoundingRegion, rNativeContentRegion);
 }
 
-bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
+void SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
                                    const SalBitmap& rSourceBitmap,
                                    const OutputDevice& rOutDev )
 {
@@ -830,10 +830,10 @@ bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
     {
         SalTwoRect aPosAry2 = rPosAry;
         mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        return drawAlphaBitmap( aPosAry2, rSourceBitmap );
+        drawAlphaBitmap( aPosAry2, rSourceBitmap );
     }
     else
-        return drawAlphaBitmap( rPosAry, rSourceBitmap );
+        drawAlphaBitmap( rPosAry, rSourceBitmap );
 }
 
 bool SalGraphics::DrawTransformedBitmap(

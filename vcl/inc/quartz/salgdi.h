@@ -340,7 +340,7 @@ public:
     bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                  void* pPtr, sal_uInt32 nSize) override;
 
-    bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
+    void drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
 
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,

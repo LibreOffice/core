@@ -1727,7 +1727,7 @@ OString SkiaSalGraphicsImpl::makeCachedImageKey(const SkiaSalBitmap& bitmap,
     return key;
 }
 
-bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
+void SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
 {
     assert(dynamic_cast<const SkiaSalBitmap*>(&rSourceBitmap));
     const SkiaSalBitmap& rSkiaSourceBitmap = static_cast<const SkiaSalBitmap&>(rSourceBitmap);
@@ -1750,7 +1750,6 @@ bool SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         drawImage(imagePosAry, image, mScaling);
     else
         drawShader(rPosAry, rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)));
-    return true;
 }
 
 void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,

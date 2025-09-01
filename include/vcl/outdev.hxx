@@ -1469,11 +1469,6 @@ private:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel );
 
-    SAL_DLLPRIVATE void DrawDeviceAlphaBitmapSlowPath(
-                                const Bitmap& rBitmap,
-                                const tools::Rectangle& rDstRect, const tools::Rectangle& rBmpRect,
-                                Size const& rOutSz, Point const& rOutPt);
-
     ///@}
 
 

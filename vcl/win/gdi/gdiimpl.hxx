@@ -181,12 +181,8 @@ public:
 
         @param rSourceBitmap
         Source bitmap to blit
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
      */
-    virtual bool drawAlphaBitmap(
+    virtual void drawAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap ) override;
 

@@ -572,10 +572,9 @@ static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAl
     return aImage;
 }
 
-bool QtGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
+void QtGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
 {
     drawBitmap(rPosAry, rSourceBitmap);
-    return true;
 }
 
 bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,

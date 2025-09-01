@@ -353,7 +353,7 @@ public:
      */
     inline bool UpdateSettings(AllSettings&);
 
-    SAL_DLLPRIVATE bool                        DrawAlphaBitmap(
+    SAL_DLLPRIVATE void                        DrawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
                                     const OutputDevice& rOutDev );
@@ -507,12 +507,8 @@ protected:
 
         @param rSourceBitmap
         Source bitmap to blit
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
      */
-    virtual bool                drawAlphaBitmap(
+    virtual void                drawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap ) = 0;
 
@@ -788,9 +784,9 @@ public:
         return GetImpl()->getPixel(nX, nY);
     }
 
-    bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap) override
+    void drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap) override
     {
-        return GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap);
+        GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap);
     }
 
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull,

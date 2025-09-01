@@ -134,12 +134,8 @@ public:
 
         @param rAlphaBitmap
         Alpha channel to use for blitting
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
      */
-    bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
+    void drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
 
     void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                   Color nMaskColor) override;

@@ -1190,16 +1190,20 @@ bool AquaGraphicsBackend::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools:
 }
 #endif
 
-bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+void AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
     if (!mrShared.checkContext())
-        return false;
+    {
+        assert(false);
+        return;
+    }
 
     CGImageRef xImage = rSalBitmap.CreateCroppedImage(
         static_cast<int>(rPosAry.mnSrcX), static_cast<int>(rPosAry.mnSrcY),
         static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight));
+    assert(xImage);
     if (!xImage)
-        return false;
+        return;
 
     const CGRect aDstRect
         = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
@@ -1207,7 +1211,6 @@ bool AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 
     CGImageRelease(xImage);
     refreshRect(aDstRect);
-    return true;
 }
 
 bool AquaGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,

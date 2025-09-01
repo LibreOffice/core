@@ -1680,7 +1680,7 @@ void CairoCommon::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBit
 #endif
 }
 
-bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
+void CairoCommon::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                   bool bAntiAlias)
 {
     // MM02 try to access buffered BitmapHelper
@@ -1691,11 +1691,10 @@ bool CairoCommon::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rS
     if (!source)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaBitmap case");
-        return false;
+        return;
     }
 
     copyWithOperator(rPosAry, source, CAIRO_OPERATOR_OVER, bAntiAlias);
-    return true;
 }
 
 bool CairoCommon::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,

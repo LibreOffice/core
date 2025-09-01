@@ -144,12 +144,8 @@ public:
 
         @param rSourceBitmap
         Source bitmap to blit
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
      */
-    virtual bool drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
+    virtual void drawAlphaBitmap(const SalTwoRect&, const SalBitmap& rSourceBitmap) override;
 
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     virtual bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,

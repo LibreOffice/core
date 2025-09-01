@@ -67,11 +67,11 @@ bool WinSalGraphics::drawPolyLine(
         bPixelSnapHairline);
 }
 
-bool WinSalGraphics::drawAlphaBitmap(
+void WinSalGraphics::drawAlphaBitmap(
     const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap)
 {
-    return mpImpl->drawAlphaBitmap(rTR, rSrcBitmap);
+    mpImpl->drawAlphaBitmap(rTR, rSrcBitmap);
 }
 
 bool WinSalGraphics::drawTransformedBitmap(

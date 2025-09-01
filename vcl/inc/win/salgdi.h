@@ -119,7 +119,7 @@ public:
     void setHWND(HWND hWnd);
     void Flush();
 
-    virtual bool        drawAlphaBitmap( const SalTwoRect&,
+    virtual void       drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap ) override;
     virtual bool       drawTransformedBitmap(
                            const basegfx::B2DPoint& rNull,

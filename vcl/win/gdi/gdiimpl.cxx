@@ -2372,12 +2372,11 @@ bool WinSalGraphicsImpl::TryDrawBitmapGDIPlus(const SalTwoRect& rTR, const SalBi
     return true;
 }
 
-bool WinSalGraphicsImpl::drawAlphaBitmap(
+void WinSalGraphicsImpl::drawAlphaBitmap(
     const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap)
 {
     drawBitmap(rTR, rSrcBitmap);
-    return true;
 }
 
 bool WinSalGraphicsImpl::drawTransformedBitmap(
