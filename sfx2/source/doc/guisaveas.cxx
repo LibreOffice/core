@@ -960,9 +960,12 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
 
     // Fall back to the document base URL - but only if the document is not based on a template.
     // Otherwise the template's directory would be used, which is not what we want.
-    SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
-    if (sPreselectedDir.isEmpty() && pDocShell && !pDocShell->IsBasedOnTemplate())
-        sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        SfxObjectShell* pDocShell = pViewShell->GetObjectShell();
+        if (sPreselectedDir.isEmpty() && pDocShell && !pDocShell->IsBasedOnTemplate())
+            sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+    }
     INetURLObject aObj(sPreselectedDir);
     aObj.removeSegment(); // remove file name from URL
     sPreselectedDir = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
