@@ -296,7 +296,11 @@ void vcl::Cursor::LOKNotify(vcl::Window* pWindow, const OUString& rAction)
 
             OutputDevice* pDevice = mpData->mpWindow->GetOutDev();
             const tools::Rectangle aRectTwip = pDevice->PixelToLogic(aRect, MapMode(MapUnit::MapTwip));
-            pNotifier->notifyCursorInvalidation(&aRectTwip, true);
+
+            if (pWindow->IsFormControl())
+                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetLOKWindowId());
+            else
+                pNotifier->notifyCursorInvalidation(&aRectTwip, true, pWindow->GetParent()->GetLOKWindowId());
         }
     }
     else
