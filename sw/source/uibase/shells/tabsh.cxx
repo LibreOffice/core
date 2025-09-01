@@ -1749,9 +1749,35 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
         case SID_FRAME_LINECOLOR:
             if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
             {
-                const SvxLineItem &rLineItem = pArgs->Get( SID_FRAME_LINESTYLE );
-                const SvxBorderLine* pBorderLine = rLineItem.GetLine();
-                rSh.SetTabLineStyle( nullptr, true, pBorderLine);
+                ::editeng::SvxBorderLine aLine;
+                const ::editeng::SvxBorderLine* pLine = nullptr;
+                const SfxInt16Item* lineStyleItem = rReq.GetArg<SfxInt16Item>(FN_PARAM_1);
+
+                if (lineStyleItem)
+                {
+                    const SfxInt16Item* InnerLineWidthItem
+                        = rReq.GetArg<SfxInt16Item>(FN_PARAM_2);
+                    const SfxInt16Item* OuterLineWidthItem
+                        = rReq.GetArg<SfxInt16Item>(FN_PARAM_3);
+                    const SfxInt16Item* LineDistanceItem
+                        = rReq.GetArg<SfxInt16Item>(FN_PARAM_4);
+
+                    sal_uInt16 InnerLineWidth, OuterLineWidth, LineDistance;
+                    SvxBorderLineStyle lineStyle
+                        = static_cast<SvxBorderLineStyle>(lineStyleItem->GetValue());
+                    InnerLineWidth = InnerLineWidthItem ? InnerLineWidthItem->GetValue() : 0;
+                    OuterLineWidth = OuterLineWidthItem ? OuterLineWidthItem->GetValue() : 0;
+                    LineDistance = LineDistanceItem ? LineDistanceItem->GetValue() : 0;
+
+                    aLine.GuessLinesWidths(lineStyle, InnerLineWidth, OuterLineWidth, LineDistance);
+                    pLine = &aLine;
+                }
+                else
+                {
+                    pLine = pArgs->Get(SID_FRAME_LINESTYLE).GetLine();
+                }
+
+                rSh.SetTabLineStyle( nullptr, true, pLine);
             }
             else
             {
