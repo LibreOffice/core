@@ -55,10 +55,10 @@ class GridWindow : public weld::CustomWidgetController
             return (maPos.X() < rComp.maPos.X());
         }
 
-        void draw(vcl::RenderContext& rRenderContext, const BitmapEx& rBitmapEx)
+        void draw(vcl::RenderContext& rRenderContext, const Bitmap& rBitmap)
         {
             const Point aOffset(rRenderContext.PixelToLogic(Point(mnOffX, mnOffY)));
-            rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmapEx);
+            rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmap);
         }
 
         bool isHit(OutputDevice const & rWin, const Point& rPos)
@@ -97,7 +97,7 @@ class GridWindow : public weld::CustomWidgetController
     Handles m_aHandles;
     Handles::size_type m_nDragIndex;
 
-    BitmapEx        m_aMarkerBitmap;
+    Bitmap          m_aMarkerBitmap;
 
     Point transform( double x, double y );
     void transform( const Point& rOriginal, double& x, double& y );
@@ -126,7 +126,7 @@ class GridWindow : public weld::CustomWidgetController
     void drawLine(vcl::RenderContext& rRenderContext, double x1, double y1, double x2, double y2);
 public:
     GridWindow();
-    void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
+    void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const Bitmap &rMarkerBitmap);
     virtual ~GridWindow() override;
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
@@ -158,7 +158,7 @@ GridWindow::GridWindow()
 {
 }
 
-void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap)
+void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const Bitmap &rMarkerBitmap)
 {
     m_aMarkerBitmap = rMarkerBitmap;
     m_pXValues = pXValues;
@@ -211,7 +211,7 @@ GridDialog::GridDialog(weld::Window* pParent, double* pXValues, double* pYValues
     , m_xGridWindow(new GridWindow)
     , m_xGridWindowWND(new weld::CustomWeld(*m_xBuilder, u"gridwindow"_ustr, *m_xGridWindow))
 {
-    m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, BitmapEx(Bitmap(RID_SCANNER_HANDLE)));
+    m_xGridWindow->Init(pXValues, pYValues, nValues, true/*bCutValues*/, Bitmap(RID_SCANNER_HANDLE));
     m_xResetTypeBox->set_active(0);
     m_xResetButton->connect_clicked( LINK( this, GridDialog, ClickButtonHdl ) );
 }

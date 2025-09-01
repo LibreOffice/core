@@ -100,7 +100,7 @@ private:
     enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
                          BottomLeft, Left };
 
-    BitmapEx  maPreviewBitmapEx;
+    Bitmap    maPreviewBitmap;
     tools::Rectangle maPreviewRect;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
@@ -206,7 +206,7 @@ public:
     void UpdatePreviewBounds();
     void SetBitmap(SvStream &rStream)
     {
-        ReadDIBBitmapEx(maPreviewBitmapEx, rStream, true);
+        ReadDIBBitmapEx(maPreviewBitmap, rStream, true);
     }
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
@@ -917,7 +917,7 @@ void ScanPreview::UpdatePreviewBounds()
     }
     else
     {
-        Size aBMSize( maPreviewBitmapEx.GetSizePixel() );
+        Size aBMSize( maPreviewBitmap.GetSizePixel() );
         if( aBMSize.Width() > aBMSize.Height() && aBMSize.Width() )
         {
             int nVHeight = (maBottomRight.X() - maTopLeft.X()) * aBMSize.Height() / aBMSize.Width();
@@ -944,7 +944,7 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     // check for sane values
-    rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmapEx);
+    rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
 
     DrawDrag(rRenderContext);
 }
