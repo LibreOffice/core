@@ -43,7 +43,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
@@ -314,7 +314,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         // TODO(F1): extract pixel from XBitmap interface
         ENSURE_OR_THROW( false,
-                         "bitmapFromXBitmap(): could not extract BitmapEx" );
+                         "bitmapFromXBitmap(): could not extract Bitmap" );
 
         return ::Bitmap();
     }

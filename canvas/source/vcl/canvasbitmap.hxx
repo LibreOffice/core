@@ -26,7 +26,7 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <base/bitmapcanvasbase.hxx>
 #include <base/basemutexhelper.hxx>
@@ -94,12 +94,12 @@ namespace vclcanvas
         ::Bitmap getBitmap() const;
 
         // XFastPropertySet
-        // used to retrieve BitmapEx pointer or X Pixmap handles for this bitmap
+        // used to retrieve Bitmap pointer or X Pixmap handles for this bitmap
         // handle values have these meanings:
-        // 0 ... get pointer to BitmapEx
+        // 0 ... get pointer to Bitmap
         // 1 ... get X pixmap handle to rgb content
         // 2 ... get X pixmap handle to alpha mask
-        // returned any contains either BitmapEx pointer or array of three Any value
+        // returned any contains either Bitmap pointer or array of three Any value
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle (sal_Int64)
         //     3rd the pixmap depth

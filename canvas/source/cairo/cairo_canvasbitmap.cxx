@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <utility>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 
 #include <cairo.h>
@@ -107,7 +107,7 @@ namespace cairocanvas
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         uno::Any aRV( sal_Int32(0) );
-        // 0 ... get BitmapEx
+        // 0 ... get Bitmap
         // 1 ... get Pixbuf with bitmap RGB content
         // 2 ... return nothing (empty Any)
         switch( nHandle )

@@ -350,12 +350,12 @@ class DemoRenderer
             // mxCanvas->drawBitmap(xBitmap2, maViewState, maRenderState); //yes, but where?
             //cairo-canvas says:
             //called CanvasHelper::getScaledBitmap, we return NULL, TODO
-            //Exception 'BitmapEx vclcanvastools::bitmapExFromXBitmap(const css::uno::Reference<css::rendering::XBitmap>&),
-            //bitmapExFromXBitmap(): could not extract BitmapEx' thrown
+            //Exception 'Bitmap vclcanvastools::bitmapFromXBitmap(const css::uno::Reference<css::rendering::XBitmap>&),
+            //bitmapFromXBitmap(): could not extract Bitmap' thrown
 
             //vcl-canvas says:
-            //Exception 'BitmapEx vclcanvastools::bitmapExFromXBitmap(const css::uno::Reference<css::rendering::XBitmap>&),
-            //bitmapExFromXBitmap(): could not extract bitmap' thrown
+            //Exception 'Bitmap vclcanvastools::bitmapFromXBitmap(const css::uno::Reference<css::rendering::XBitmap>&),
+            //bitmapFromXBitmap(): could not extract bitmap' thrown
             //  Thorsten says that this is a bug, and Thorsten never lies.
 
             maRenderState = std::move(aOldRenderState); // pop
