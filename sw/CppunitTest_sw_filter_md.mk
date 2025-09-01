@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filter_md, \
     utl \
     svl \
     sfx \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_filter_md,\

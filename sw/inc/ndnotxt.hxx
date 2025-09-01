@@ -62,7 +62,7 @@ public:
     virtual bool RestorePersistentData();
 
     SW_DLLPUBLIC OUString GetTitle() const;
-    void SetTitle( const OUString& rTitle );
+    SW_DLLPUBLIC void SetTitle( const OUString& rTitle );
     SW_DLLPUBLIC OUString GetDescription() const;
     void SetDescription( const OUString& rDescription );
 
