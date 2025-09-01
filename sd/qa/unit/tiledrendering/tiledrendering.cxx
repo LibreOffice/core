@@ -2696,12 +2696,12 @@ void debugWriteImageToFile(unsigned step, const std::vector<sal_uInt8>& pBuffer,
 #if false
     printf ("%u %s\n\n", step, sJSON);
 
-    BitmapEx aBitmapEx = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
+    Bitmap aBitmap = vcl::bitmap::CreateFromData(pBuffer.data(), nViewWidth, nViewHeight, nViewWidth * 4, /*nBitsPerPixel*/32, true, true);
 
     OUString sFileName = "/tmp/slideshow_" + OUString::number(step) + ".png";
     SvFileStream aStream(sFileName, StreamMode::WRITE | StreamMode::TRUNC);
     vcl::PngImageWriter aPNGWriter(aStream);
-    aPNGWriter.write(aBitmapEx);
+    aPNGWriter.write(aBitmap);
 #endif
 }
 

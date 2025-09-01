@@ -3835,7 +3835,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
 #ifdef DBGDUMP
     SvFileStream aNew("/tmp/dump.png", StreamMode::WRITE | StreamMode::TRUNC);
     vcl::PngImageWriter aPNGWriter(aNew);
-    aPNGWriter.write(BitmapEx(aBitmap));
+    aPNGWriter.write(aBitmap);
 #endif
 
     int nBlackPixels = 0;

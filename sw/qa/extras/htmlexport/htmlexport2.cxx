@@ -221,9 +221,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
     Bitmap aBitmap;
     ReadDIB(aBitmap, aBitmapStream, /*bFileHeader=*/true);
     Size aBitmapSize = aBitmap.GetSizePixel();
-    BitmapEx aBitmapEx(aBitmap);
     Color nActualColor
-        = aBitmapEx.GetPixelColor(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1);
+        = aBitmap.GetPixelColor(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Color: R:255 G:255 B:255 A:0
     // - Actual  : Color: R:0 G:0 B:0 A:0

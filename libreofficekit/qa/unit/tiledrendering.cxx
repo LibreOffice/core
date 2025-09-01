@@ -308,8 +308,8 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
     BitmapScopedWriteAccess pWriteAccess( aBitmap );
     memcpy( pWriteAccess->GetBuffer(), pBuffer, 4*nWidth*nHeight );
 
-    BitmapEx aBitmapEx( aBitmap );
-    vcl::PNGWriter aWriter( aBitmapEx );
+    Bitmap aBitmap( aBitmap );
+    vcl::PNGWriter aWriter( aBitmap );
     SvFileStream sOutput( rPath, StreamMode::WRITE );
     aWriter.Write( sOutput );
     sOutput.Close();
