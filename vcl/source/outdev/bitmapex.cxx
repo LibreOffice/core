@@ -31,25 +31,6 @@
 #include <salgdi.hxx>
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt,
-                                 const BitmapEx& rBitmapEx )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if( !rBitmapEx.IsAlpha() )
-    {
-        DrawBitmap(rDestPt, rBitmapEx.GetBitmap());
-        return;
-    }
-
-    const Size& rSizePx = rBitmapEx.GetSizePixel();
-    DrawBitmapEx(rDestPt, PixelToLogic(rSizePx), Point(), rSizePx, rBitmapEx,
-                 MetaActionType::BMPEX);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                                  const Bitmap& rBitmap )
 {
     assert(!is_double_buffered_window());
@@ -65,24 +46,6 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     const Size aSizePx = rBitmap.GetSizePixel();
     DrawBitmapEx(rDestPt, PixelToLogic(aSizePx), Point(), aSizePx, rBitmap,
                  MetaActionType::BMPEX);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const BitmapEx& rBitmapEx )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if ( !rBitmapEx.IsAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rBitmapEx.GetBitmap());
-        return;
-    }
-
-    DrawBitmapEx(rDestPt, rDestSize, Point(), rBitmapEx.GetSizePixel(),
-                 rBitmapEx, MetaActionType::BMPEXSCALE);
 }
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
@@ -105,26 +68,6 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const BitmapEx& rBitmapEx)
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if ( !rBitmapEx.IsAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel,
-                   rBitmapEx.GetBitmap());
-        return;
-    }
-
-    DrawBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx,
-                 MetaActionType::BMPEXSCALEPART);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                  const Bitmap& rBitmap)
 {
     assert(!is_double_buffered_window());
@@ -141,67 +84,6 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
     DrawBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmap,
                  MetaActionType::BMPEXSCALEPART);
-}
-
-void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
-                                 const Point& rSrcPtPixel, const Size& rSrcSizePixel,
-                                 const BitmapEx& rBitmapEx, const MetaActionType nAction )
-{
-    assert(!is_double_buffered_window());
-
-    if( ImplIsRecordLayout() )
-        return;
-
-    if( !rBitmapEx.IsAlpha() )
-    {
-        DrawBitmap(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel,
-                   rBitmapEx.GetBitmap());
-        return;
-    }
-
-    if (RasterOp::Invert == meRasterOp)
-    {
-        DrawRect(tools::Rectangle(rDestPt, rDestSize));
-        return;
-    }
-
-    Bitmap aBmp(vcl::drawmode::GetBitmap(Bitmap(rBitmapEx), GetDrawMode()));
-
-    if (mpMetaFile)
-    {
-        switch(nAction)
-        {
-            case MetaActionType::BMPEX:
-                mpMetaFile->AddAction(new MetaBmpExAction(rDestPt, aBmp));
-                break;
-
-            case MetaActionType::BMPEXSCALE:
-                mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmp));
-                break;
-
-            case MetaActionType::BMPEXSCALEPART:
-                mpMetaFile->AddAction(new MetaBmpExScalePartAction(rDestPt, rDestSize,
-                                                                   rSrcPtPixel, rSrcSizePixel, aBmp));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    if (!IsDeviceOutputNecessary())
-        return;
-
-    if (!mpGraphics && !AcquireGraphics())
-        return;
-
-    if (mbInitClipRegion)
-        InitClipRegion();
-
-    if (mbOutputClipped)
-        return;
-
-    DrawDeviceBitmapEx(rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, aBmp);
 }
 
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
@@ -555,7 +437,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             EnableMapMode(false);
         }
 
-        DrawBitmapEx(aDestPt, aDestSize, bitmapEx);
+        DrawBitmapEx(aDestPt, aDestSize, Bitmap(bitmapEx));
         if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
@@ -579,7 +461,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
-        DrawBitmapEx(aDestPt, aDestSize, bitmapEx);
+        DrawBitmapEx(aDestPt, aDestSize, Bitmap(bitmapEx));
         return;
     }
 
@@ -676,7 +558,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::fround<tools::Long>(aVisibleRange.getMaxX()) - aDestPt.X(),
         basegfx::fround<tools::Long>(aVisibleRange.getMaxY()) - aDestPt.Y());
 
-    DrawBitmapEx(aDestPt, aDestSize, aTransformed);
+    DrawBitmapEx(aDestPt, aDestSize, Bitmap(aTransformed));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

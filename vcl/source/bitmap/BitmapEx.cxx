@@ -446,17 +446,6 @@ bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,
                                         fGamma, bInvert, msoBrightness );
 }
 
-void BitmapEx::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
-{
-    pOutDev->DrawBitmapEx( rDestPt, *this );
-}
-
-void BitmapEx::Draw( OutputDevice* pOutDev,
-                     const Point& rDestPt, const Size& rDestSize ) const
-{
-    pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
-}
-
 sal_uInt8 BitmapEx::GetAlpha(sal_Int32 nX, sal_Int32 nY) const
 {
     if(maBitmap.IsEmpty())

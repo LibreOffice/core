@@ -489,7 +489,7 @@ void impBufferDevice::paint(double fTrans)
 #endif
 
         Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
-        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
     }
     else if (0.0 != fTrans)
     {
@@ -554,7 +554,7 @@ void impBufferDevice::paint(double fTrans)
                 // "Former" method using a temporary AlphaMask & DrawBitmapEx
                 sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
                 const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), Bitmap(aContent, aAlphaMask));
             }
         }
     }

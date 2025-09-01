@@ -54,11 +54,6 @@ public:
     SAL_DLLPRIVATE void Clear();
     SAL_DLLPRIVATE void ClearAlpha();
 
-    SAL_DLLPRIVATE void Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt ) const;
-    void                Draw( OutputDevice* pOutDev,
-                              const Point& rDestPt, const Size& rDestSize ) const;
-
     Bitmap              GetBitmap( Color aTransparentReplaceColor ) const;
     /// Gives direct access to the contained bitmap.
     const Bitmap&       GetBitmap() const;

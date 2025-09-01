@@ -1318,31 +1318,18 @@ public:
                                     const Bitmap& rBitmap,
                                     MetaActionType nAction );
 
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const BitmapEx& rBitmapEx );
     // draw bitmap (potentially with alpha)
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Bitmap& rBitmap );
 
 
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const BitmapEx& rBitmapEx );
     // draw bitmap (potentially with alpha)
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const Bitmap& rBitmapEx );
 
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const Point& rSrcPtPixel,
-                                    const Size& rSrcSizePixel,
-                                    const BitmapEx& rBitmapEx);
     // draw bitmap (potentially with alpha)
     void                        DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1351,13 +1338,6 @@ public:
                                     const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap);
 
-    SAL_DLLPRIVATE void         DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const Point& rSrcPtPixel,
-                                    const Size& rSrcSizePixel,
-                                    const BitmapEx& rBitmapEx,
-                                    MetaActionType nAction );
     // draw bitmap, potentially with alpha information
     SAL_DLLPRIVATE void         DrawBitmapEx(
                                     const Point& rDestPt,
@@ -1395,15 +1375,15 @@ public:
      */
     virtual bool HasAlpha() const = 0;
 
-    /** Draw BitmapEx transformed
+    /** Draw Bitmap transformed
 
         @param rTransformation
         The transformation describing the target positioning of the given bitmap. Transforming
         the unit object coordinates (0, 0, 1, 1) with this matrix is the transformation to
         discrete coordinates
 
-        @param rBitmapEx
-        The BitmapEx to be painted
+        @param rBitmap
+        The Bitmap to be painted
 
         @param fAlpha
         Optional additional alpha to use for drawing (0 to 1, 1 being no change).

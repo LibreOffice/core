@@ -4839,7 +4839,7 @@ namespace
         return pRet;
     }
 
-    GdkPixbuf* getPixbuf(const BitmapEx& rBitmap)
+    GdkPixbuf* getPixbuf(const Bitmap& rBitmap)
     {
         ScopedVclPtr<VirtualDevice> pVDevice(VclPtr<VirtualDevice>::Create());
         pVDevice->SetOutputSizePixel(rBitmap.GetSizePixel());
@@ -16859,7 +16859,7 @@ private:
                                           -1);
         if (pIcon)
         {
-            GdkPixbuf* pixbuf = getPixbuf(BitmapEx(*pIcon));
+            GdkPixbuf* pixbuf = getPixbuf(*pIcon);
             gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
             if (pixbuf)
                 g_object_unref(pixbuf);

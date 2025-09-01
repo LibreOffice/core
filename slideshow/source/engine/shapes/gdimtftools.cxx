@@ -309,7 +309,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                     else
                     {
                         AlphaMask aMask = rAnimationFrame.maBitmap.CreateAlphaMask();
-                        BitmapEx aTmpMask(aMask.GetBitmap(), aMask);
+                        Bitmap aTmpMask(aMask.GetBitmap(), aMask);
                         pVDevMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aTmpMask);
                     }
                     break;
