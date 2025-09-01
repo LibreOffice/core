@@ -457,7 +457,7 @@ Bitmap lcl_BlendBitmapWithAlpha(
             for( int nY = 0; nY < nDstHeight; nY++ )
             {
                 const tools::Long  nMapY = pMapY[ nY ];
-                Scanline pScanlineB = pSrcBmp->GetScanline(nY);
+                Scanline pScanlineB = pDstBmp->GetScanline(nY);
 
                 for( int nX = 0; nX < nDstWidth; nX++ )
                 {
