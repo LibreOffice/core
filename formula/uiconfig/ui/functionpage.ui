@@ -73,11 +73,11 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label1">
+      <object class="GtkLabel" id="label_category">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes" context="functionpage|label1">_Category:</property>
+        <property name="label" translatable="yes" context="functionpage|label_category">_Category:</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">category</property>
       </object>
@@ -108,11 +108,11 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label2">
+      <object class="GtkLabel" id="label_function">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="label" translatable="yes" context="functionpage|label2">_Function:</property>
+        <property name="label" translatable="yes" context="functionpage|label_function">_Function:</property>
         <property name="use-underline">True</property>
         <property name="mnemonic-widget">function</property>
       </object>
