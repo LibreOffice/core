@@ -52,6 +52,7 @@ private:
     std::unique_ptr<weld::Label> mxFormLabel;
     std::unique_ptr<weld::Label> mxNameLabel;
     std::unique_ptr<weld::Label> mxIndicationLabel;
+    std::unique_ptr<weld::Label> mxTabLabel;
     std::unique_ptr<weld::Label> mxFurtherSettings;
 
     bool                        mbIsCloseDisabled;
