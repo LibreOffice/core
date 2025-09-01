@@ -726,12 +726,14 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s);
 }
 
-void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent)
+void SfxLokHelper::notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect, bool bControlEvent, int windowID)
 {
     int nViewId = SfxLokHelper::getView(*pThisView);
     OString sPayload = OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) + "\", \"rectangle\": \"" + pRect->toString();
     if (bControlEvent)
-        sPayload += "\", \"controlEvent\": true";
+    {
+        sPayload += "\", \"controlEvent\": true, \"windowId\": \"" + OString::number(windowID) + "\"";
+    }
     sPayload += " }";
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sPayload);
 }

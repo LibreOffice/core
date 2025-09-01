@@ -1099,6 +1099,9 @@ public:
     const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() const;
     vcl::LOKWindowId                    GetLOKWindowId() const;
 
+    /// This sets the lokWindowId without setting a notifier.
+    void                                SetLOKWindowId();
+
     /// Find the nearest parent with LOK Notifier; can be itself if this Window has LOK notifier set.
     VclPtr<vcl::Window>                 GetParentWithLOKNotifier();
 

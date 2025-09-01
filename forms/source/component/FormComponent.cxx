@@ -56,6 +56,8 @@
 #include <algorithm>
 #include <vcl/window.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#include <comphelper/lok.hxx>
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -275,6 +277,9 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
 
         VclPtr<vcl::Window> pVclPeer = VCLUnoHelper::GetWindow(getPeer());
         pVclPeer->SetFormControl(true);
+
+        if (comphelper::LibreOfficeKit::isActive())
+            pVclPeer->SetLOKWindowId();
     }
 }
 

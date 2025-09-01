@@ -341,7 +341,7 @@ void Application::notifyInvalidation(tools::Rectangle const* /*pRect*/) const
 {
 }
 
-void Application::notifyCursorInvalidation(tools::Rectangle const* /*pRect*/, bool /*bControlEvent*/) const
+void Application::notifyCursorInvalidation(tools::Rectangle const* /*pRect*/, bool /*bControlEvent*/, int /*windowID*/) const
 {
 }
 

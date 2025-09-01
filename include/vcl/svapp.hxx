@@ -1339,7 +1339,7 @@ public:
                               const std::vector<vcl::LOKPayloadItem>& rPayload = std::vector<vcl::LOKPayloadItem>()) const override;
     virtual void libreOfficeKitViewCallback(int nType, const OString& pPayload) const override;
     virtual void notifyInvalidation(tools::Rectangle const* pRect) const override;
-    virtual void notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent) const override;
+    virtual void notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const override;
     virtual OString dumpNotifyState() const override;
 
 private:

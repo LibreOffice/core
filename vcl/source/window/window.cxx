@@ -3173,6 +3173,9 @@ LOKWindowsMap& GetLOKWindowsMap()
 
 }
 
+// Counter to be able to have unique id's for each window.
+static vcl::LOKWindowId sLastLOKWindowId = 1;
+
 void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool bParent)
 {
     // don't allow setting this twice
@@ -3183,9 +3186,6 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
 
     if (!bParent)
     {
-        // Counter to be able to have unique id's for each window.
-        static vcl::LOKWindowId sLastLOKWindowId = 1;
-
         // assign the LOK window id
         assert(mpWindowImpl->mnLOKWindowId == 0);
         mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
@@ -3193,6 +3193,17 @@ void Window::SetLOKNotifier(const vcl::ILibreOfficeKitNotifier* pNotifier, bool 
     }
 
     mpWindowImpl->mpLOKNotifier = pNotifier;
+}
+
+void Window::SetLOKWindowId()
+{
+    // never use this in the desktop case
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    // assign the LOK window id
+    assert(mpWindowImpl->mnLOKWindowId == 0);
+    mpWindowImpl->mnLOKWindowId = sLastLOKWindowId++;
+    GetLOKWindowsMap().emplace(mpWindowImpl->mnLOKWindowId, this);
 }
 
 VclPtr<Window> Window::FindLOKWindow(vcl::LOKWindowId nWindowId)
@@ -3367,6 +3378,7 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("text", GetText());
     rJsonWriter.put("enabled", IsEnabled());
     rJsonWriter.put("canFocus", bool(GetStyle() & WB_TABSTOP));
+    rJsonWriter.put("lokWindowId", GetLOKWindowId());
     if (!IsVisible())
         rJsonWriter.put("visible", false);
 

@@ -3588,9 +3588,9 @@ void SfxViewShell::notifyInvalidation(tools::Rectangle const* pRect) const
     SfxLokHelper::notifyInvalidation(this, pRect);
 }
 
-void SfxViewShell::notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent) const
+void SfxViewShell::notifyCursorInvalidation(tools::Rectangle const* pRect, bool bControlEvent, int windowID) const
 {
-    SfxLokHelper::notifyCursorInvalidation(this, pRect, bControlEvent);
+    SfxLokHelper::notifyCursorInvalidation(this, pRect, bControlEvent, windowID);
 }
 
 void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload)
