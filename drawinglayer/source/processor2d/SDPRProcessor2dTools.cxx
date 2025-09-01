@@ -240,7 +240,7 @@ bool prepareBitmapForDirectRender(
             // The Bitmap may be created here exactly for the needed target size
             // (using local D2DBitmapPixelProcessor2D and the vector data),
             // but since we have a HW renderer and re-use of system-dependent data
-            // at BitmapEx is possible, just get the default fallback Bitmap from the
+            // at Bitmap is possible, just get the default fallback Bitmap from the
             // vector data to continue. Trust the existing converters for now to
             // do something with good quality.
             rTarget = rGraphic.GetBitmap();

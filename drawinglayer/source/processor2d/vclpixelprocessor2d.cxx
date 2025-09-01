@@ -214,7 +214,7 @@ void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitiv
         }
         case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
         {
-            // direct draw of transformed BitmapEx primitive
+            // direct draw of transformed Bitmap primitive
             processBitmapPrimitive2D(
                 static_cast<const primitive2d::BitmapPrimitive2D&>(rCandidate));
             break;

@@ -148,8 +148,8 @@ namespace drawinglayer::processor2d
         {
             if(!getHitTextOnly())
             {
-                // The recently added BitmapEx::GetTransparency() makes it easy to extend
-                // the BitmapPrimitive2D HitTest to take the contained BitmapEx and it's
+                // The recently added Bitmap::GetTransparency() makes it easy to extend
+                // the BitmapPrimitive2D HitTest to take the contained Bitmap and it's
                 // transparency into account
                 if(!aRange.isEmpty())
                 {

@@ -176,7 +176,7 @@ Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
         // render content
         pRGBAProcessor->process(aSequence);
 
-        // create final BitmapEx result (content)
+        // create final Bitmap result (content)
         const Bitmap aRetval(processor2d::extractBitmapFromBaseProcessor2D(pRGBAProcessor));
 
         // check if we have a result and return if so
@@ -243,7 +243,7 @@ Bitmap convertToBitmap(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
     // render content
     pContentProcessor->process(aSequence);
 
-    // create final BitmapEx result (content)
+    // create final Bitmap result (content)
     Bitmap aRetval(pContent->GetBitmap(aEmptyPoint, aSizePixel));
 
 #ifdef DBG_UTIL

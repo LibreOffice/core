@@ -175,7 +175,7 @@ Bitmap extractBitmapFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& 
     // avoid unused parameter errors
     (void)rProcessor;
 
-    // default: return empty BitmapEx
+    // default: return empty Bitmap
     return aRetval;
 }
 

@@ -79,7 +79,7 @@ GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&) co
     const bool isDrawMode(GraphicDrawMode::Standard != getGraphicAttr().GetDrawMode());
 
     // I have now added buffering BColorModifierStack-adapted Bitmaps,
-    // see BitmapEx::ModifyBitmapEx, thus the primitive case is fast now.
+    // see Bitmap::Modify, thus the primitive case is fast now.
     // It buffers the adapted bitmap and at that the SDPRs can then buffer
     // the system-dependent representation.
     // I keep the code below (adding a static switch). It modifies the

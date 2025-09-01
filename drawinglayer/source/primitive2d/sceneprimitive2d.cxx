@@ -493,7 +493,7 @@ namespace drawinglayer::primitive2d
             }
             else
             {
-                // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
+                // use default 3D primitive processor to create Bitmap for aUnitVisiblePart and process
                 processor3d::ZBufferProcessor3D aZBufferProcessor3D(
                     aViewInformation3D,
                     getSdrSceneAttribute(),

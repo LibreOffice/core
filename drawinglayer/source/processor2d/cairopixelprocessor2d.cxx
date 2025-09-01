@@ -425,7 +425,7 @@ class CairoSurfaceHelper
     // evtl. MipMapped data (pre-scale to reduce data processing load)
     mutable std::unordered_map<sal_uInt64, cairo_surface_t*> maDownscaled;
 
-    // create 32bit RGBA data for given BitmapEx
+    // create 32bit RGBA data for given Bitmap
     void createRGBA(const Bitmap& rBitmap)
     {
         BitmapScopedReadAccess pReadAccess(rBitmap);
@@ -461,7 +461,7 @@ class CairoSurfaceHelper
         cairo_surface_mark_dirty(mpCairoSurface);
     }
 
-    // create 32bit RGB data for given BitmapEx
+    // create 32bit RGB data for given Bitmap
     void createRGB(const Bitmap& rBitmap)
     {
         BitmapScopedReadAccess pReadAccess(rBitmap);
@@ -498,8 +498,8 @@ class CairoSurfaceHelper
 
 // #define TEST_RGB16
 #ifdef TEST_RGB16
-    // experimental: create 16bit RGB data for given BitmapEx
-    void createRGB16(const BitmapEx& rBitmap)
+    // experimental: create 16bit RGB data for given Bitmap
+    void createRGB16(const Bitmap& rBitmap)
     {
         BitmapScopedReadAccess pReadAccess(rBitmap);
         const tools::Long nHeight(pReadAccess->Height());
@@ -1129,7 +1129,7 @@ CairoPixelProcessor2D::~CairoPixelProcessor2D()
 
 Bitmap CairoPixelProcessor2D::extractBitmap() const
 {
-    // default is empty BitmapEx
+    // default is empty Bitmap
     Bitmap aRetval;
 
     if (nullptr == mpRT)
@@ -1345,14 +1345,14 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const Bitmap& rBitmap,
     std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(getOrCreateCairoSurfaceHelper(aBitmap));
     if (!aCairoSurfaceHelper)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from Bitmap (!)");
         return;
     }
 
     cairo_surface_t* pTarget(aCairoSurfaceHelper->getCairoSurface(nDestWidth, nDestHeight));
     if (nullptr == pTarget)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from BitmapEx SurfaceHelper (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from Bitmap SurfaceHelper (!)");
         return;
     }
 
@@ -2133,7 +2133,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
     std::shared_ptr<CairoSurfaceHelper> aCairoSurfaceHelper(getOrCreateCairoSurfaceHelper(aBitmap));
     if (!aCairoSurfaceHelper)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from Bitmap (!)");
         return;
     }
 
@@ -2141,7 +2141,7 @@ void CairoPixelProcessor2D::processMarkerArrayPrimitive2D(
     cairo_surface_t* pTarget(aCairoSurfaceHelper->getCairoSurface());
     if (nullptr == pTarget)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from BitmapEx SurfaceHelper (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from Bitmap SurfaceHelper (!)");
         return;
     }
 
@@ -2590,14 +2590,14 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
         getOrCreateCairoSurfaceHelper(aPreparedBitmap));
     if (!aCairoSurfaceHelper)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from BitmapEx (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No SurfaceHelper from Bitmap (!)");
         return;
     }
 
     cairo_surface_t* pTarget(aCairoSurfaceHelper->getCairoSurface(nDestWidth, nDestHeight));
     if (nullptr == pTarget)
     {
-        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from BitmapEx SurfaceHelper (!)");
+        SAL_WARN("drawinglayer", "SDPRCairo: No CairoSurface from Bitmap SurfaceHelper (!)");
         return;
     }
 

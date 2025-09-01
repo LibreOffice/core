@@ -512,7 +512,7 @@ void VclProcessor2D::RenderPolygonHairlinePrimitive2D(
     mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
 }
 
-// direct draw of transformed BitmapEx primitive
+// direct draw of transformed Bitmap primitive
 void VclProcessor2D::RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate)
 {
     Bitmap aBitmap(rBitmapCandidate.getBitmap());
