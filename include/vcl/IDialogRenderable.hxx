@@ -41,7 +41,7 @@ public:
     virtual void notifyInvalidation(tools::Rectangle const *) const = 0;
 
     /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR.
-    virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent) const = 0;
+    virtual void notifyCursorInvalidation(tools::Rectangle const *, bool bControlEvent, int windowID) const = 0;
 
     /// Debugging
     virtual OString dumpNotifyState() const = 0;
