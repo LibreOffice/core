@@ -633,7 +633,7 @@ namespace wmfemfhelper
         which use a bitmap without transparence but define one of the colors as
         transparent)
      */
-    static BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
+    static Bitmap createMaskBmp(const Bitmap& rBitmap, const Color& rMaskColor)
     {
         const Color aWhite(COL_WHITE);
         BitmapPalette aBiLevelPalette {
@@ -645,7 +645,7 @@ namespace wmfemfhelper
 
         aSolid.Erase(rMaskColor);
 
-        return BitmapEx(aSolid, aMask);
+        return Bitmap(aSolid, aMask);
     }
 
     /** helper to convert from a VCL Gradient definition to the corresponding
@@ -1910,9 +1910,9 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
-                    const BitmapEx aBitmapEx(pA->GetBitmap());
+                    const Bitmap aBitmap(pA->GetBitmap());
 
-                    createBitmapPrimitive(Bitmap(aBitmapEx), pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(aBitmap, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }
@@ -1993,9 +1993,9 @@ namespace wmfemfhelper
                     /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMP */
                     /** Huh, no it isn't!? */
                     const MetaMaskAction* pA = static_cast<const MetaMaskAction*>(pAction);
-                    const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
+                    const Bitmap aBitmap(createMaskBmp(pA->GetBitmap(), pA->GetColor()));
 
-                    createBitmapPrimitive(Bitmap(aBitmapEx), pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
+                    createBitmapPrimitive(aBitmap, pA->GetPoint(), rTargetHolders.Current(), rPropertyHolders.Current());
 
                     break;
                 }
@@ -2003,7 +2003,7 @@ namespace wmfemfhelper
                 {
                     /** CHECKED, WORKS WELL: Simply same as MetaActionType::BMPSCALE */
                     const MetaMaskScaleAction* pA = static_cast<const MetaMaskScaleAction*>(pAction);
-                    const Bitmap aBitmap(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
+                    const Bitmap aBitmap(createMaskBmp(pA->GetBitmap(), pA->GetColor()));
 
                     createBitmapPrimitive(aBitmap, pA->GetPoint(), pA->GetSize(), rTargetHolders.Current(), rPropertyHolders.Current());
 
@@ -2025,7 +2025,7 @@ namespace wmfemfhelper
                             aCroppedBitmap.Crop(aCropRectangle);
                         }
 
-                        const Bitmap aCroppedBitmap2(createMaskBmpEx(aCroppedBitmap, pA->GetColor()));
+                        const Bitmap aCroppedBitmap2(createMaskBmp(aCroppedBitmap, pA->GetColor()));
                         createBitmapPrimitive(aCroppedBitmap2, pA->GetDestPoint(), pA->GetDestSize(), rTargetHolders.Current(), rPropertyHolders.Current());
                     }
 
