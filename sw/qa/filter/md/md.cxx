@@ -19,6 +19,10 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
 #include <charatr.hxx>
+#include <fmtanchr.hxx>
+#include <IDocumentContentOperations.hxx>
+#include <fmtcntnt.hxx>
+#include <ndgrf.hxx>
 
 namespace
 {
@@ -38,6 +42,14 @@ public:
     Test()
         : SwModelTestBase(u"/sw/qa/filter/md/data/"_ustr, u"Markdown"_ustr)
     {
+    }
+
+    std::string TempFileToString()
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+        std::vector<char> aBuffer(aStream.remainingSize());
+        aStream.ReadBytes(aBuffer.data(), aBuffer.size());
+        return std::string(aBuffer.data(), aBuffer.size());
     }
 };
 }
@@ -206,15 +218,12 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingCodeSpan)
     save(mpFilter);
 
     // Then make sure the format of B is exported:
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    std::vector<char> aBuffer(aStream.remainingSize());
-    aStream.ReadBytes(aBuffer.data(), aBuffer.size());
-    std::string_view aActual(aBuffer.data(), aBuffer.size());
+    std::string aActual = TempFileToString();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: A `B` C
     // - Actual  : A B C
     // i.e. the code formatting was lost.
-    std::string_view aExpected("A `B` C" SAL_NEWLINE_STRING);
+    std::string aExpected("A `B` C" SAL_NEWLINE_STRING);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -247,11 +256,8 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingList)
     save(mpFilter);
 
     // Then make sure list type and level is exported:
-    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
-    std::vector<char> aBuffer(aStream.remainingSize());
-    aStream.ReadBytes(aBuffer.data(), aBuffer.size());
-    std::string_view aActual(aBuffer.data(), aBuffer.size());
-    std::string_view aExpected(
+    std::string aActual = TempFileToString();
+    std::string aExpected(
         // clang-format off
         "A" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
         "- B" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
@@ -266,6 +272,42 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingList)
     );
     // Without the accompanying fix in place, this test would have failed, all the "- " and "1. "
     // style prefixes were lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
+{
+    // Given a document with an inline, linked image:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A "_ustr);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+    aFrameSet.Put(aAnchor);
+    Graphic aGraphic;
+    OUString aGraphicURL(u"./test.png"_ustr);
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwFlyFrameFormat* pFlyFormat
+        = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
+                              /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
+    SwNodeOffset nContentOffset = pFlyFormat->GetContent().GetContentIdx()->GetIndex();
+    SwGrfNode* pGrfNode = pDoc->GetNodes()[nContentOffset + 1]->GetGrfNode();
+    pGrfNode->SetTitle(u"mytitle"_ustr);
+    pWrtShell->Insert(u" B"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the image is exported:
+    std::string aActual = TempFileToString();
+    std::string aExpected("A ![mytitle](./test.png) B" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A ![mytitle](./test.png) B
+    // - Actual  : A  B
+    // i.e. the image was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

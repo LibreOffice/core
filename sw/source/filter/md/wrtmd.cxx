@@ -30,6 +30,7 @@
 #include <svl/itemiter.hxx>
 #include <editeng/fontitem.hxx>
 #include <comphelper/string.hxx>
+#include <svl/urihelper.hxx>
 
 #include <officecfg/Office/Writer.hxx>
 
@@ -44,6 +45,8 @@
 #include <strings.hrc>
 #include <txatbase.hxx>
 #include <charatr.hxx>
+#include <fmtcntnt.hxx>
+#include <ndgrf.hxx>
 #include "wrtmd.hxx"
 
 #include <algorithm>
@@ -52,6 +55,28 @@
 
 namespace
 {
+/// Stores information about a to-be-exported linked image.
+struct SwMDImageInfo
+{
+    OUString aURL;
+    OUString aTitle;
+
+    SwMDImageInfo(const OUString& rURL, const OUString& rTitle)
+        : aURL(rURL)
+        , aTitle(rTitle)
+    {
+    }
+
+    bool operator<(const SwMDImageInfo& rOther) const
+    {
+        if (aURL < rOther.aURL)
+            return true;
+        if (rOther.aURL < aURL)
+            return false;
+        return aTitle < rOther.aTitle;
+    }
+};
+
 struct FormattingStatus
 {
     int nCrossedOutChange = 0;
@@ -61,6 +86,7 @@ struct FormattingStatus
     int nCodeChange = 0;
     std::unordered_map<OUString, int> aHyperlinkChanges;
     std::unordered_map<const SwRangeRedline*, int> aRedlineChanges;
+    std::set<SwMDImageInfo> aImages;
 };
 
 template <typename T> struct PosData
@@ -159,6 +185,33 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             }
             break;
         }
+        case RES_TXTATR_FLYCNT:
+        {
+            // Inline image.
+            const SwFormatFlyCnt& rFormatFlyCnt = rItem.StaticWhichCast(RES_TXTATR_FLYCNT);
+            const SwFrameFormat& rFrameFormat = *rFormatFlyCnt.GetFrameFormat();
+            const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
+            SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
+            SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
+            Graphic aGraphic = pGrfNode->GetGraphic();
+            if (!pGrfNode->IsLinkedFile())
+            {
+                // Not linked, ignore for now.
+                break;
+            }
+
+            // Try to extract a relative URL and a title.
+            OUString aGraphicURL;
+            pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
+            const OUString& rBaseURL = rWrt.GetBaseURL();
+            if (!rBaseURL.isEmpty())
+            {
+                aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
+            }
+            OUString aTitle = pGrfNode->GetTitle();
+            rChange.aImages.emplace(aGraphicURL, aTitle);
+            break;
+        }
     }
 }
 
@@ -199,6 +252,7 @@ FormattingStatus CalculateFormattingChange(SwMDWriter& rWrt, NodePositions& posi
 bool ShouldCloseIt(int prev, int curr) { return prev != curr && prev >= 0 && curr <= 0; }
 bool ShouldOpenIt(int prev, int curr) { return prev != curr && prev <= 0 && curr > 0; }
 
+void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars);
 void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 pos,
                          FormattingStatus& current)
 {
@@ -303,6 +357,23 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
     if (ShouldOpenIt(current.nCodeChange, result.nCodeChange))
     {
         rWrt.Strm().WriteUnicodeOrByteText(u"`");
+    }
+
+    // Images: write the complete markup on start.
+    for (const auto& rImageInfo : result.aImages)
+    {
+        // 'current' is the old state and 'result' is the new state, so only write images which are
+        // new in 'result'.
+        if (current.aImages.contains(rImageInfo))
+        {
+            continue;
+        }
+
+        rWrt.Strm().WriteUnicodeOrByteText(u"![");
+        OutEscapedChars(rWrt, rImageInfo.aTitle);
+        rWrt.Strm().WriteUnicodeOrByteText(u"](");
+        rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
+        rWrt.Strm().WriteUnicodeOrByteText(u")");
     }
 
     current = result;
@@ -454,7 +525,13 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             if (nHintStart >= nEnd)
                 break;
             const sal_Int32 nHintEnd = pHint->GetAnyEnd();
-            if (nHintEnd == nHintStart || nHintEnd <= nStrPos)
+            if (nHintStart >= nStrPos && pHint->Which() == RES_TXTATR_FLYCNT)
+            {
+                // SwTextFlyCnt is a hint that has no end, but still output it.
+                positions.hintStarts.add(std::max(nHintStart, nStrPos), &pHint->GetAttr());
+                continue;
+            }
+            else if (nHintEnd == nHintStart || nHintEnd <= nStrPos)
                 continue; // no output of zero-length hints and hints ended before output started yet
             positions.hintStarts.add(std::max(nHintStart, nStrPos), &pHint->GetAttr());
             positions.hintEnds.add(std::min(nHintEnd, nEnd), &pHint->GetAttr());
