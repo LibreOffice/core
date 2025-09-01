@@ -67,12 +67,12 @@ public:
     virtual sal_UCS4        GetCharFromIndex(int index) const;
     void                    createContextMenu(const Point& rPosition);
 
-    void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
+    void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { maDoubleClkHdl = rLink; }
     void            SetReturnKeyPressHdl( const Link<SvxShowCharSet*,void>& rLink ) { m_aReturnKeypressHdl = rLink; }
-    void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aSelectHdl = rHdl; }
-    void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aHighHdl = rHdl; }
-    void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aPreSelectHdl = rHdl; }
-    void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aFavClickHdl = rHdl; }
+    void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maSelectHdl = rHdl; }
+    void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maHighHdl = rHdl; }
+    void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maPreSelectHdl = rHdl; }
+    void            SetFavClickHdl( const Link<SvxShowCharSet*,void>& rHdl ) { maFavClickHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     SVX_DLLPUBLIC void SetFont( const vcl::Font& rFont );
     vcl::Font const & GetFont() const { return maFont; }
@@ -89,8 +89,8 @@ public:
     void                        OutputIndex( int index );
     void                        DeSelect();
     static void                 CopyToClipboard(const OUString& str);
-    bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
-    sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
+    bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == mnSelectedIndex; }
+    sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(mnSelectedIndex); }
     static sal_uInt16           GetRowPos(sal_uInt16 _nPos);
     static sal_uInt16           GetColumnPos(sal_uInt16 _nPos);
 
@@ -118,24 +118,24 @@ private:
 protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
-    Link<SvxShowCharSet*,void>     aDoubleClkHdl;
+    Link<SvxShowCharSet*,void>     maDoubleClkHdl;
     Link<SvxShowCharSet*,void>     m_aReturnKeypressHdl;
-    Link<SvxShowCharSet*,void>     aSelectHdl;
-    Link<SvxShowCharSet*,void>     aFavClickHdl;
-    Link<SvxShowCharSet*,void>     aHighHdl;
-    Link<SvxShowCharSet*,void>     aPreSelectHdl;
+    Link<SvxShowCharSet*,void>     maSelectHdl;
+    Link<SvxShowCharSet*,void>     maFavClickHdl;
+    Link<SvxShowCharSet*,void>     maHighHdl;
+    Link<SvxShowCharSet*,void>     maPreSelectHdl;
 
     std::deque<OUString>           maFavCharList;
     std::deque<OUString>           maFavCharFontList;
 
     rtl::Reference<svx::SvxShowCharSetAcc> m_xAccessible;
-    tools::Long            nX;
-    tools::Long            nY;
+    tools::Long            mnX;
+    tools::Long            mnY;
     tools::Long            m_nXGap;
     tools::Long            m_nYGap;
-    bool            bDrag;
+    bool            mbDrag;
 
-    sal_Int32       nSelectedIndex;
+    sal_Int32       mnSelectedIndex;
 
     FontCharMapRef  mxFontCharMap;
     Size            maFontSize;

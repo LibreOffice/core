@@ -53,7 +53,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
     if (aCode.GetModifier())
         return false;
 
-    int tmpSelected = nSelectedIndex;
+    int tmpSelected = mnSelectedIndex;
 
     bool bRet = true;
 
@@ -62,7 +62,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
         case KEY_RETURN:
             return SvxShowCharSet::KeyInput(rKEvt);
         case KEY_SPACE:
-            aDoubleClkHdl.Call(this);
+            maDoubleClkHdl.Call(this);
             return true;
         case KEY_LEFT:
             --tmpSelected;
@@ -102,7 +102,7 @@ bool SvxSearchCharSet::KeyInput(const KeyEvent& rKEvt)
     if ( tmpSelected >= 0 )
     {
         SelectIndex( tmpSelected, true );
-        aPreSelectHdl.Call( this );
+        maPreSelectHdl.Call( this );
     }
 
     return bRet;
@@ -130,7 +130,7 @@ void SvxSearchCharSet::SelectCharacter( const Subset* sub )
         SelectIndex( 0 );
     else
         SelectIndex( nMapIndex );
-    aHighHdl.Call(this);
+    maHighHdl.Call(this);
     // move selected item to top row if not in focus
     //TO.DO aVscrollSB->SetThumbPos( nMapIndex / COLUMN_COUNT );
     Invalidate();
@@ -151,9 +151,9 @@ void SvxSearchCharSet::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
 sal_UCS4 SvxSearchCharSet::GetSelectCharacter() const
 {
-    if( nSelectedIndex >= 0 )
+    if( mnSelectedIndex >= 0 )
     {
-        std::unordered_map<sal_Int32,sal_UCS4>::const_iterator got = m_aItemList.find (nSelectedIndex);
+        std::unordered_map<sal_Int32,sal_UCS4>::const_iterator got = m_aItemList.find (mnSelectedIndex);
 
         if(got == m_aItemList.end())
             return 1;
@@ -182,13 +182,13 @@ void SvxSearchCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     m_aItems.clear();
     getFavCharacterList();
 
-    nX = aSize.Width() / COLUMN_COUNT;
-    nY = aSize.Height() / ROW_COUNT;
+    mnX = aSize.Width() / COLUMN_COUNT;
+    mnY = aSize.Height() / ROW_COUNT;
 
     UpdateScrollRange();
 
     // rearrange CharSet element in sync with nX- and nY-multiples
-    Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
+    Size aDrawSize(mnX * COLUMN_COUNT, mnY * ROW_COUNT);
     m_nXGap = (aSize.Width() - aDrawSize.Width()) / 2;
     m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
 
@@ -211,7 +211,7 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
     if( nNewIndex < 0 )
     {
         mxScrollArea->vadjustment_set_value(0);
-        nSelectedIndex = bFocus ? 0 : -1;
+        mnSelectedIndex = bFocus ? 0 : -1;
         Invalidate();
     }
     else if( nNewIndex < FirstInView() )
@@ -220,7 +220,7 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
         int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
         mxScrollArea->vadjustment_set_value(nOldPos - nDelta);
-        nSelectedIndex = nNewIndex;
+        mnSelectedIndex = nNewIndex;
         Invalidate();
     }
     else if( nNewIndex > LastInView() )
@@ -232,7 +232,7 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
 
         if (nNewIndex < getMaxCharCount())
         {
-            nSelectedIndex = nNewIndex;
+            mnSelectedIndex = nNewIndex;
             Invalidate();
         }
         else if (nOldPos != mxScrollArea->vadjustment_get_value())
@@ -242,11 +242,11 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
     }
     else
     {
-        nSelectedIndex = nNewIndex;
+        mnSelectedIndex = nNewIndex;
         Invalidate();
     }
 
-    if( nSelectedIndex >= 0 )
+    if( mnSelectedIndex >= 0 )
     {
 #if 0
         if( m_xAccessible.is() )
@@ -269,9 +269,9 @@ void SvxSearchCharSet::SelectIndex(int nNewIndex, bool bFocus)
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
 #endif
-        aSelectHdl.Call(this);
+        maSelectHdl.Call(this);
     }
-    aHighHdl.Call( this );
+    maHighHdl.Call( this );
 }
 
 SvxSearchCharSet::~SvxSearchCharSet()
@@ -295,7 +295,7 @@ svx::SvxShowCharSetItem* SvxSearchCharSet::ImplGetItem( int _nPos )
             buf.appendUtf32(got->second);
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
-        aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
+        aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(mnX-1,mnY-1) );
     }
 
     return aFind->second.get();

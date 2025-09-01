@@ -67,8 +67,8 @@ FactoryFunction SvxShowCharSet::GetUITestFactory() const
 SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
     , mxScrollArea(std::move(pScrolledWindow))
-    , nX(0)
-    , nY(0)
+    , mnX(0)
+    , mnY(0)
     , maFontSize(0, 0)
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
@@ -84,17 +84,17 @@ void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Size aSize(COLUMN_COUNT * pDrawingArea->get_approximate_digit_width() * 5.25,
                ROW_COUNT * pDrawingArea->get_text_height() * 2);
 
-    nX = aSize.Width() / COLUMN_COUNT;
-    nY = aSize.Height() / ROW_COUNT;
+    mnX = aSize.Width() / COLUMN_COUNT;
+    mnY = aSize.Height() / ROW_COUNT;
 
     // tdf#121232 set a size request that will result in a 0 m_nXGap by default
-    mxScrollArea->set_size_request(COLUMN_COUNT * nX + mxScrollArea->get_scroll_thickness() + 2,
-                                   ROW_COUNT * nY);
+    mxScrollArea->set_size_request(COLUMN_COUNT * mnX + mxScrollArea->get_scroll_thickness() + 2,
+                                   ROW_COUNT * mnY);
 }
 
 void SvxShowCharSet::init()
 {
-    nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
+    mnSelectedIndex = -1;    // TODO: move into init list when it is no longer static
     m_nXGap = 0;
     m_nYGap = 0;
 
@@ -102,7 +102,7 @@ void SvxShowCharSet::init()
     getFavCharacterList();
     // other settings depend on selected font => see RecalculateFont
 
-    bDrag = false;
+    mbDrag = false;
 }
 
 void SvxShowCharSet::Resize()
@@ -112,12 +112,12 @@ void SvxShowCharSet::Resize()
 
 void SvxShowCharSet::GetFocus()
 {
-    SelectIndex(nSelectedIndex, true);
+    SelectIndex(mnSelectedIndex, true);
 }
 
 void SvxShowCharSet::LoseFocus()
 {
-    SelectIndex(nSelectedIndex);
+    SelectIndex(mnSelectedIndex);
 }
 
 bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
@@ -127,7 +127,7 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
         if ( rMEvt.GetClicks() == 1 )
         {
             GrabFocus();
-            bDrag = true;
+            mbDrag = true;
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
@@ -136,7 +136,7 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         if ( !(rMEvt.GetClicks() % 2) )
-            aDoubleClkHdl.Call( this );
+            maDoubleClkHdl.Call( this );
 
         return true;
     }
@@ -146,13 +146,13 @@ bool SvxShowCharSet::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if ( bDrag && rMEvt.IsLeft() )
+    if ( mbDrag && rMEvt.IsLeft() )
     {
         // released mouse over character map
         if ( tools::Rectangle(Point(), GetOutputSizePixel()).Contains(rMEvt.GetPosPixel()))
-            aSelectHdl.Call( this );
+            maSelectHdl.Call( this );
         ReleaseMouse();
-        bDrag = false;
+        mbDrag = false;
     }
 
     return true;
@@ -160,7 +160,7 @@ bool SvxShowCharSet::MouseButtonUp(const MouseEvent& rMEvt)
 
 bool SvxShowCharSet::MouseMove(const MouseEvent& rMEvt)
 {
-    if ( rMEvt.IsLeft() && bDrag )
+    if ( rMEvt.IsLeft() && mbDrag )
     {
         Point aPos  = rMEvt.GetPosPixel();
         Size  aSize = GetOutputSizePixel();
@@ -196,12 +196,12 @@ bool SvxShowCharSet::Command(const CommandEvent& rCEvt)
         }
         else
         {
-            svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            svx::SvxShowCharSetItem* pItem = ImplGetItem(mnSelectedIndex);
             if (!pItem)
                 return true;
 
             // position context menu at centre of currently selected item
-            aPosition = MapIndexToPixel(nSelectedIndex);
+            aPosition = MapIndexToPixel(mnSelectedIndex);
             aPosition.AdjustX(pItem->maRect.GetWidth() / 2);
             aPosition.AdjustY(pItem->maRect.GetHeight() / 2);
         }
@@ -263,11 +263,11 @@ void SvxShowCharSet::ContextMenuSelect(std::u16string_view rIdent)
     OUString aOUStr(&cChar, 1);
 
     if (rIdent == u"insert")
-        aDoubleClkHdl.Call(this);
+        maDoubleClkHdl.Call(this);
     else if (rIdent == u"add" || rIdent == u"remove")
     {
         updateFavCharacterList(aOUStr, mxVirDev->GetFont().GetFamilyName());
-        aFavClickHdl.Call(this);
+        maFavClickHdl.Call(this);
     }
     else if (rIdent == u"copy")
         CopyToClipboard(aOUStr);
@@ -365,8 +365,8 @@ int SvxShowCharSet::LastInView() const
 Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
     const int nBase = FirstInView();
-    int x = ((nIndex - nBase) % COLUMN_COUNT) * nX;
-    int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
+    int x = ((nIndex - nBase) % COLUMN_COUNT) * mnX;
+    int y = ((nIndex - nBase) / COLUMN_COUNT) * mnY;
     return Point( x + m_nXGap, y + m_nYGap );
 }
 
@@ -374,10 +374,10 @@ Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
     int nBase = FirstInView();
-    assert(nX != 0);
-    int x = nX == 0 ? 0 : (point.X() - m_nXGap)/nX;
-    assert(nY != 0);
-    int y = nY == 0 ? 0 : (point.Y() - m_nYGap)/nY;
+    assert(mnX != 0);
+    int x = mnX == 0 ? 0 : (point.X() - m_nXGap)/mnX;
+    assert(mnY != 0);
+    int y = mnY == 0 ? 0 : (point.Y() - m_nYGap)/mnY;
     return (nBase + x + y * COLUMN_COUNT);
 }
 
@@ -390,7 +390,7 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
 
     bool bRet = true;
 
-    int tmpSelected = nSelectedIndex;
+    int tmpSelected = mnSelectedIndex;
 
     switch (aCode.GetCode())
     {
@@ -398,7 +398,7 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
             m_aReturnKeypressHdl.Call(this);
             return true;
         case KEY_SPACE:
-            aDoubleClkHdl.Call(this);
+            maDoubleClkHdl.Call(this);
             return true;
         case KEY_LEFT:
             --tmpSelected;
@@ -446,7 +446,7 @@ bool SvxShowCharSet::KeyInput(const KeyEvent& rKEvt)
     if ( tmpSelected >= 0 )
     {
         SelectIndex( tmpSelected, true );
-        aPreSelectHdl.Call( this );
+        maPreSelectHdl.Call( this );
     }
 
     return bRet;
@@ -477,7 +477,7 @@ tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const S
     tools::Long x = rPointUL.X() - 1;
     tools::Long y = rPointUL.Y() - 1;
     Point aPointUL(x+1, y+1);
-    Size aGridSize(nX-1, nY-1);
+    Size aGridSize(mnX-1, mnY-1);
 
     tools::Long nXDistFromLeft = x - m_nXGap;
     if (nXDistFromLeft <= 1)
@@ -485,7 +485,7 @@ tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const S
         aPointUL.setX( 1 );
         aGridSize.AdjustWidth(m_nXGap + nXDistFromLeft );
     }
-    tools::Long nXDistFromRight = rOutputSize.Width() - m_nXGap - nX - x;
+    tools::Long nXDistFromRight = rOutputSize.Width() - m_nXGap - mnX - x;
     if (nXDistFromRight <= 1)
         aGridSize.AdjustWidth(m_nXGap + nXDistFromRight );
 
@@ -495,7 +495,7 @@ tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const S
         aPointUL.setY( 1 );
         aGridSize.AdjustHeight(m_nYGap + nXDistFromTop );
     }
-    tools::Long nXDistFromBottom = rOutputSize.Height() - m_nYGap - nY - y;
+    tools::Long nXDistFromBottom = rOutputSize.Height() - m_nYGap - mnY - y;
     if (nXDistFromBottom <= 1)
         aGridSize.AdjustHeight(m_nYGap + nXDistFromBottom );
 
@@ -521,13 +521,13 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     rRenderContext.SetLineColor(aShadowColor);
     for (i = 1; i < COLUMN_COUNT; ++i)
     {
-        rRenderContext.DrawLine(Point(nX * i + m_nXGap, 0),
-                          Point(nX * i + m_nXGap, aOutputSize.Height()));
+        rRenderContext.DrawLine(Point(mnX * i + m_nXGap, 0),
+                          Point(mnX * i + m_nXGap, aOutputSize.Height()));
     }
     for (i = 1; i < ROW_COUNT; ++i)
     {
-        rRenderContext.DrawLine(Point(0, nY * i + m_nYGap),
-                                Point(aOutputSize.Width(), nY * i + m_nYGap));
+        rRenderContext.DrawLine(Point(0, mnY * i + m_nYGap),
+                                Point(aOutputSize.Width(), mnY * i + m_nYGap));
     }
 
     int nTextHeight = rRenderContext.GetTextHeight();
@@ -546,8 +546,8 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         int y = pix.Y();
 
         int nTextWidth = rRenderContext.GetTextWidth(aCharStr);
-        int tx = x + (nX - nTextWidth + 1) / 2;
-        int ty = y + (nY - nTextHeight + 1) / 2;
+        int tx = x + (mnX - nTextWidth + 1) / 2;
+        int ty = y + (mnY - nTextHeight + 1) / 2;
         Point aPointTxTy(tx, ty);
 
         // adjust position before it gets out of bounds
@@ -556,14 +556,14 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
             // zero advance width => use ink width to center glyph
             if (!nTextWidth)
             {
-                aPointTxTy.setX( x - aBoundRect.Left() + (nX - aBoundRect.GetWidth() + 1) / 2 );
+                aPointTxTy.setX( x - aBoundRect.Left() + (mnX - aBoundRect.GetWidth() + 1) / 2 );
             }
 
             aBoundRect += aPointTxTy;
 
             // shift back vertically if needed
             int nYLDelta = aBoundRect.Top() - y;
-            int nYHDelta = (y + nY) - aBoundRect.Bottom();
+            int nYHDelta = (y + mnY) - aBoundRect.Bottom();
             if (nYLDelta <= 0)
                 aPointTxTy.AdjustY( -(nYLDelta - 1) );
             else if (nYHDelta <= 0)
@@ -571,7 +571,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
 
             // shift back horizontally if needed
             int nXLDelta = aBoundRect.Left() - x;
-            int nXHDelta = (x + nX) - aBoundRect.Right();
+            int nXHDelta = (x + mnX) - aBoundRect.Right();
             if (nXLDelta <= 0)
                 aPointTxTy.AdjustX( -(nXLDelta - 1) );
             else if (nXHDelta <= 0)
@@ -585,14 +585,14 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
             rRenderContext.SetLineColor(aHighlightColor);
             rRenderContext.SetFillColor();
             // Outer border
-            rRenderContext.DrawRect(tools::Rectangle(Point(x - 1, y - 1), Size(nX + 3, nY + 3)), 1, 1);
+            rRenderContext.DrawRect(tools::Rectangle(Point(x - 1, y - 1), Size(mnX + 3, mnY + 3)), 1, 1);
             // Inner border
-            rRenderContext.DrawRect(tools::Rectangle(Point(x, y), Size(nX + 1, nY + 1)), 1, 1);
+            rRenderContext.DrawRect(tools::Rectangle(Point(x, y), Size(mnX + 1, mnY + 1)), 1, 1);
             rRenderContext.SetLineColor(aLineCol);
         }
 
         Color aTextCol = rRenderContext.GetTextColor();
-        if (i != nSelectedIndex)
+        if (i != mnSelectedIndex)
         {
             rRenderContext.SetTextColor(aWindowTextColor);
             rRenderContext.DrawText(aPointTxTy, aCharStr);
@@ -616,12 +616,12 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
                 rRenderContext.DrawRect(getGridRectangle(aPointUL, aOutputSize));
 
                 rRenderContext.SetLineColor(aLightColor);
-                rRenderContext.DrawLine(aPointUL, Point(x + nX - 1, y + 1));
-                rRenderContext.DrawLine(aPointUL, Point(x + 1, y + nY - 1));
+                rRenderContext.DrawLine(aPointUL, Point(x + mnX - 1, y + 1));
+                rRenderContext.DrawLine(aPointUL, Point(x + 1, y + mnY - 1));
 
                 rRenderContext.SetLineColor(aShadowColor);
-                rRenderContext.DrawLine(Point(x + 1, y + nY - 1), Point(x + nX - 1, y + nY - 1));
-                rRenderContext.DrawLine(Point(x + nX - 1, y + nY - 1), Point(x + nX - 1, y + 1));
+                rRenderContext.DrawLine(Point(x + 1, y + mnY - 1), Point(x + mnX - 1, y + mnY - 1));
+                rRenderContext.DrawLine(Point(x + mnX - 1, y + mnY - 1), Point(x + mnX - 1, y + 1));
 
                 rRenderContext.DrawText(aPointTxTy, aCharStr);
             }
@@ -637,7 +637,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
         for (i = n2 - n1 + 1; i < ROW_COUNT * COLUMN_COUNT; i++)
         {
             rRenderContext.DrawRect(
-                tools::Rectangle(MapIndexToPixel(i + n1), Size(nX + 2, nY + 2)));
+                tools::Rectangle(MapIndexToPixel(i + n1), Size(mnX + 2, mnY + 2)));
         }
     }
 }
@@ -670,8 +670,8 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
-    if( nSelectedIndex >= 0 )
-        getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
+    if( mnSelectedIndex >= 0 )
+        getSelectedChar() = mxFontCharMap->GetCharFromIndex( mnSelectedIndex );
     return getSelectedChar();
 }
 
@@ -686,8 +686,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
         return;
 
     // save last selected unicode
-    if (nSelectedIndex >= 0)
-        getSelectedChar() = mxFontCharMap->GetCharFromIndex(nSelectedIndex);
+    if (mnSelectedIndex >= 0)
+        getSelectedChar() = mxFontCharMap->GetCharFromIndex(mnSelectedIndex);
 
     Size aSize(GetOutputSizePixel());
 
@@ -703,8 +703,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     m_aItems.clear();
     getFavCharacterList();
 
-    nX = aSize.Width() / COLUMN_COUNT;
-    nY = aSize.Height() / ROW_COUNT;
+    mnX = aSize.Width() / COLUMN_COUNT;
+    mnY = aSize.Height() / ROW_COUNT;
 
     const int nLastRow = (mxFontCharMap->GetCharCount() - 1 + COLUMN_COUNT) / COLUMN_COUNT;
     mxScrollArea->vadjustment_configure(mxScrollArea->vadjustment_get_value(), nLastRow, 1,
@@ -712,11 +712,11 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     // restore last selected unicode
     int nMapIndex = mxFontCharMap->GetIndexFromChar(getSelectedChar());
-    if (nMapIndex != nSelectedIndex)
+    if (nMapIndex != mnSelectedIndex)
         SelectIndex(nMapIndex);
 
     // rearrange CharSet element in sync with nX- and nY-multiples
-    Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
+    Size aDrawSize(mnX * COLUMN_COUNT, mnY * ROW_COUNT);
     m_nXGap = (aSize.Width() - aDrawSize.Width()) / 2;
     m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
 
@@ -735,7 +735,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
         int nMapIndex = mxFontCharMap->GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
         mxScrollArea->vadjustment_set_value(nNewPos);
-        nSelectedIndex = bFocus ? nMapIndex+1 : -1;
+        mnSelectedIndex = bFocus ? nMapIndex+1 : -1;
         Invalidate();
     }
     else if( nNewIndex < FirstInView() )
@@ -744,7 +744,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
         int nOldPos = mxScrollArea->vadjustment_get_value();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
         mxScrollArea->vadjustment_set_value(nOldPos - nDelta);
-        nSelectedIndex = nNewIndex;
+        mnSelectedIndex = nNewIndex;
         Invalidate();
     }
     else if( nNewIndex > LastInView() )
@@ -755,7 +755,7 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
         mxScrollArea->vadjustment_set_value(nOldPos + nDelta);
         if( nNewIndex < mxFontCharMap->GetCharCount() )
         {
-            nSelectedIndex = nNewIndex;
+            mnSelectedIndex = nNewIndex;
             Invalidate();
         }
         else if (nOldPos != mxScrollArea->vadjustment_get_value())
@@ -765,17 +765,17 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
     }
     else
     {
-        nSelectedIndex = nNewIndex;
+        mnSelectedIndex = nNewIndex;
         Invalidate();
     }
 
-    if( nSelectedIndex >= 0 )
+    if( mnSelectedIndex >= 0 )
     {
-        getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
+        getSelectedChar() = mxFontCharMap->GetCharFromIndex( mnSelectedIndex );
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
-            svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            svx::SvxShowCharSetItem* pItem = ImplGetItem(mnSelectedIndex);
             rtl::Reference<svx::SvxShowCharSetItemAcc> xItemAcc = pItem->GetAccessible();
             // Don't fire the focus event.
             if ( bFocus )
@@ -795,16 +795,16 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
             aNewAny <<= AccessibleStateType::SELECTED;
             pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
-        aSelectHdl.Call(this);
+        maSelectHdl.Call(this);
 #endif
     }
-    aHighHdl.Call( this );
+    maHighHdl.Call( this );
 }
 
 void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
-    aSelectHdl.Call( this );
+    maSelectHdl.Call( this );
 }
 
 
@@ -825,25 +825,25 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
 
 IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
 {
-    if( nSelectedIndex < FirstInView() )
+    if( mnSelectedIndex < FirstInView() )
     {
-        SelectIndex( FirstInView() + (nSelectedIndex % COLUMN_COUNT) );
+        SelectIndex( FirstInView() + (mnSelectedIndex % COLUMN_COUNT) );
     }
-    else if( nSelectedIndex > LastInView() )
+    else if( mnSelectedIndex > LastInView() )
     {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
         if( m_xAccessible.is() )
         {
             css::uno::Any aOldAny, aNewAny;
             int nLast = LastInView();
-            for ( ; nLast != nSelectedIndex; ++nLast)
+            for ( ; nLast != mnSelectedIndex; ++nLast)
             {
                 aOldAny <<= uno::Reference<XAccessible>(ImplGetItem(nLast)->GetAccessible());
                 m_xAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }
 #endif
-        SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
+        SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (mnSelectedIndex % COLUMN_COUNT) );
     }
 
     Invalidate();
@@ -885,7 +885,7 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
         buf.appendUtf32( mxFontCharMap->GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );
-        aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(nX-1,nY-1) );
+        aFind->second->maRect = tools::Rectangle( Point( pix.X() + 1, pix.Y() + 1 ), Size(mnX-1,mnY-1) );
     }
 
     return aFind->second.get();
