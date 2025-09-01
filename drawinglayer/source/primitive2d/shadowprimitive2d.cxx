@@ -204,7 +204,7 @@ void ShadowPrimitive2D::create2DDecomposition(
         new primitive2d::TransformPrimitive2D(aEmbedding, std::move(aEmbedded)));
     primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
-    // Create BitmapEx using drawinglayer tooling, including a MaximumQuadraticPixel
+    // Create Bitmap using drawinglayer tooling, including a MaximumQuadraticPixel
     // limitation to be safe and not go runtime/memory havoc. Use a pretty small
     // limit due to this is Blurred Shadow functionality and will look good with bitmap
     // scaling anyways. The value of 250.000 square pixels below maybe adapted as needed.
@@ -253,7 +253,7 @@ void ShadowPrimitive2D::create2DDecomposition(
     // The end result is the bitmap filled with blur color and blurred 8-bit alpha mask
     Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
     bmp.Erase(Color(getShadowColor()));
-    BitmapEx result(bmp, mask);
+    Bitmap result(bmp, mask);
 
 #ifdef DBG_UTIL
     static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
@@ -266,7 +266,7 @@ void ShadowPrimitive2D::create2DDecomposition(
             SvFileStream aNew(sDumpPath + "test_shadowblur.png",
                               StreamMode::WRITE | StreamMode::TRUNC);
             vcl::PngImageWriter aPNGWriter(aNew);
-            aPNGWriter.write(Bitmap(result));
+            aPNGWriter.write(result);
         }
     }
 #endif
@@ -274,10 +274,10 @@ void ShadowPrimitive2D::create2DDecomposition(
     // Independent from discrete sizes of blur alpha creation, always
     // map and project blur result to geometry range extended by blur
     // radius, but to the eventually clipped instance (ClippedRange)
-    const primitive2d::Primitive2DReference xEmbedRefBitmap(new BitmapPrimitive2D(
-        Bitmap(result), basegfx::utils::createScaleTranslateB2DHomMatrix(
-                            aClippedRange.getWidth(), aClippedRange.getHeight(),
-                            aClippedRange.getMinX(), aClippedRange.getMinY())));
+    const primitive2d::Primitive2DReference xEmbedRefBitmap(
+        new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                          aClippedRange.getWidth(), aClippedRange.getHeight(),
+                                          aClippedRange.getMinX(), aClippedRange.getMinY())));
 
     rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 }
