@@ -90,7 +90,6 @@ bool SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& /* rX */,
     const basegfx::B2DPoint& /* rY */,
     const SalBitmap& /* rSourceBitmap */,
-    const SalBitmap* /* pAlphaBitmap */,
     double /* fAlpha */)
 {
     // here direct support for transformed bitmaps can be implemented
@@ -841,7 +840,6 @@ bool SalGraphics::DrawTransformedBitmap(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY,
     const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap,
     double fAlpha,
     const OutputDevice& rOutDev)
 {
@@ -859,11 +857,11 @@ bool SalGraphics::DrawTransformedBitmap(
             basegfx::B2DPoint aX = aTranslateToMirroredBounds * rX;
             basegfx::B2DPoint aY = aTranslateToMirroredBounds * rY;
 
-            return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, pAlphaBitmap, fAlpha);
+            return drawTransformedBitmap(aNull, aX, aY, rSourceBitmap, fAlpha);
         }
     }
 
-    return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+    return drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, fAlpha);
 }
 
 bool SalGraphics::HasFastDrawTransformedBitmap() const

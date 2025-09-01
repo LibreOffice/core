@@ -50,7 +50,7 @@ public:
     void*               ImplGethDIB() const { return mpDIB; }
     HBITMAP             ImplGethDDB() const { return mhDDB; }
 
-    std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = nullptr) const;
+    std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap() const;
 
     static void         ImplCreateDIB( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal,
                                        void*& rpDIB, sal_Int32 &rnDIBSize );

@@ -74,14 +74,11 @@ class SystemDependentData_GdiPlusBitmap : public basegfx::SystemDependentData
 {
 private:
     std::shared_ptr<Gdiplus::Bitmap>    mpGdiPlusBitmap;
-    const WinSalBitmap*                 mpAssociatedAlpha;
 
 public:
     SystemDependentData_GdiPlusBitmap(
-        const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap,
-        const WinSalBitmap* pAssociatedAlpha);
+        const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap);
 
-    const WinSalBitmap* getAssociatedAlpha() const { return mpAssociatedAlpha; }
     const std::shared_ptr<Gdiplus::Bitmap>& getGdiPlusBitmap() const { return mpGdiPlusBitmap; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
@@ -90,13 +87,11 @@ public:
 }
 
 SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
-    const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap,
-    const WinSalBitmap* pAssociatedAlpha)
+    const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap)
 :   basegfx::SystemDependentData(
         Application::GetSystemDependentDataManager(),
         basegfx::SDD_Type::SDDType_GdiPlusBitmap),
-    mpGdiPlusBitmap(rGdiPlusBitmap),
-    mpAssociatedAlpha(pAssociatedAlpha)
+    mpGdiPlusBitmap(rGdiPlusBitmap)
 {
 }
 
@@ -151,7 +146,7 @@ sal_Int64 SystemDependentData_GdiPlusBitmap::estimateUsageInBytes() const
     return nRetval;
 }
 
-std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
+std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap() const
 {
     std::shared_ptr< Gdiplus::Bitmap > aRetval;
 
@@ -161,43 +156,14 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
 
     if(pSystemDependentData_GdiPlusBitmap)
     {
-        // check data validity
-        if(pSystemDependentData_GdiPlusBitmap->getAssociatedAlpha() != pAlphaSource
-            || 0 == maSize.Width()
-            || 0 == maSize.Height())
-        {
-            // #122350# if associated alpha with which the GDIPlus was constructed has changed
-            // it is necessary to remove it from buffer, reset reference to it and reconstruct
-            // data invalid, forget
-            pSystemDependentData_GdiPlusBitmap.reset();
-        }
-    }
-
-    if(pSystemDependentData_GdiPlusBitmap)
-    {
         // use from buffer
         aRetval = pSystemDependentData_GdiPlusBitmap->getGdiPlusBitmap();
     }
     else if(!maSize.IsEmpty())
     {
-        // create and set data
-        const WinSalBitmap* pAssociatedAlpha(nullptr);
-
-        if(pAlphaSource)
-        {
-            aRetval = const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap(*pAlphaSource);
-            pAssociatedAlpha = pAlphaSource;
-        }
-        else
-        {
-            aRetval = const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap();
-            pAssociatedAlpha = nullptr;
-        }
-
         // add to buffering mechanism
         addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
-            aRetval,
-            pAssociatedAlpha);
+            aRetval);
     }
 
     return aRetval;

@@ -1699,16 +1699,8 @@ void CairoCommon::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rS
 
 bool CairoCommon::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                         const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
-                                        const SalBitmap* pAlphaBitmap, double fAlpha,
-                                        bool bAntiAlias)
+                                        double fAlpha, bool bAntiAlias)
 {
-    if (pAlphaBitmap && pAlphaBitmap->GetBitCount() != 8 && pAlphaBitmap->GetBitCount() != 1)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap alpha depth case: "
-                                << pAlphaBitmap->GetBitCount());
-        return false;
-    }
-
     if (fAlpha != 1.0)
         return false;
 
@@ -1720,26 +1712,6 @@ bool CairoCommon::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const ba
     cairo_surface_t* source(aSurface->getSurface(nDestWidth, nDestHeight));
 
     if (!source)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
-        return false;
-    }
-
-    // MM02 try to access buffered MaskHelper
-    std::shared_ptr<MaskHelper> aMask;
-    if (nullptr != pAlphaBitmap)
-    {
-        tryToUseMaskBuffer(*pAlphaBitmap, aMask);
-    }
-
-    // access cairo_surface_t from MaskHelper
-    cairo_surface_t* mask(nullptr);
-    if (aMask)
-    {
-        mask = aMask->getSurface(nDestWidth, nDestHeight);
-    }
-
-    if (nullptr != pAlphaBitmap && nullptr == mask)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawTransformedBitmap case");
         return false;
@@ -1765,10 +1737,7 @@ bool CairoCommon::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const ba
     cairo_clip(cr);
 
     cairo_set_source_surface(cr, source, 0, 0);
-    if (mask)
-        cairo_mask_surface(cr, mask, 0, 0);
-    else
-        cairo_paint(cr);
+    cairo_paint(cr);
 
     releaseCairoContext(cr, false, extents);
 

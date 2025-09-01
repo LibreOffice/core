@@ -363,7 +363,6 @@ public:
                                     const basegfx::B2DPoint& rX,
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
-                                    const SalBitmap* pAlphaBitmap,
                                     double fAlpha,
                                     const OutputDevice& rOutDev );
 
@@ -521,7 +520,6 @@ protected:
                                     const basegfx::B2DPoint& rX,
                                     const basegfx::B2DPoint& rY,
                                     const SalBitmap& rSourceBitmap,
-                                    const SalBitmap* pAlphaBitmap,
                                     double fAlpha) = 0;
 
     /// Returns true if the drawTransformedBitmap() call is fast, and so it should
@@ -793,9 +791,9 @@ public:
                                                  const basegfx::B2DPoint& rX,
                                                  const basegfx::B2DPoint& rY,
                                                  const SalBitmap& rSourceBitmap,
-                                                 const SalBitmap* pAlphaBitmap, double fAlpha) override
+                                                 double fAlpha) override
     {
-        return GetImpl()->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
+        return GetImpl()->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, fAlpha);
     }
 
     bool hasFastDrawTransformedBitmap() const override

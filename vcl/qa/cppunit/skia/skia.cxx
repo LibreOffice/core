@@ -149,7 +149,7 @@ void SkiaTest::testDrawShaders()
     basegfx::B2DHomMatrix matrix;
     matrix.scale(10, 10);
     matrix.rotate(M_PI / 4);
-    device->DrawTransformedBitmapEx(matrix, BitmapEx(bitmap, alpha));
+    device->DrawTransformedBitmapEx(matrix, Bitmap(bitmap, alpha));
     //savePNG("/tmp/a3.png", device);
     CPPUNIT_ASSERT_EQUAL(resultRed, device->GetPixel(Point(0, 1)));
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(1, 0)));

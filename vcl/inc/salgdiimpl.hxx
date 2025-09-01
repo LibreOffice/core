@@ -185,7 +185,6 @@ public:
                 const basegfx::B2DPoint& rX,
                 const basegfx::B2DPoint& rY,
                 const SalBitmap& rSourceBitmap,
-                const SalBitmap* pAlphaBitmap,
                 double fAlpha) = 0;
 
     /// Only currently true for SkiaSalGraphicsImpl

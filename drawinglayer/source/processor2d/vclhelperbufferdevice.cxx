@@ -547,7 +547,7 @@ void impBufferDevice::paint(double fTrans)
                                                      aSizePixel.Width(), aSizePixel.Height(),
                                                      maDestPixel.TopLeft().X(),
                                                      maDestPixel.TopLeft().Y()),
-                                                 BitmapEx(aContent), 1 - fTrans);
+                                                 aContent, 1 - fTrans);
             }
             else
             {

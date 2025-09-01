@@ -356,7 +356,6 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
             }
         }
     }
-    BitmapEx aBitmapEx(aBitmap);
     basegfx::B2DHomMatrix aMatrix;
     aMatrix.scale(8, 8);
     // Rotate 90 degrees clockwise, so the black part goes to the top right.
@@ -365,7 +364,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)
     aMtf.Record(pVDev.get());
 
     // Draw the rotated bitmap on the vdev.
-    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
+    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
@@ -420,7 +419,6 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExFlip)
             }
         }
     }
-    BitmapEx aBitmapEx(aBitmap);
     basegfx::B2DHomMatrix aMatrix;
     // Negative y scale: bitmap should be upside down, so the black part goes to the bottom left.
     aMatrix.scale(8, -8);
@@ -430,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExFlip)
     aMtf.Record(pVDev.get());
 
     // Draw the scaled and rotated bitmap on the vdev.
-    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmapEx);
+    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());

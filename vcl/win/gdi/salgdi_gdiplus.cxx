@@ -79,11 +79,10 @@ bool WinSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY,
     const SalBitmap& rSourceBitmap,
-    const SalBitmap* pAlphaBitmap,
     double fAlpha)
 {
     return mpImpl->drawTransformedBitmap(rNull, rX, rY,
-            rSourceBitmap, pAlphaBitmap, fAlpha);
+            rSourceBitmap, fAlpha);
 }
 
 bool WinSalGraphics::hasFastDrawTransformedBitmap() const

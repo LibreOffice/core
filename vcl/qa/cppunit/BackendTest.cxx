@@ -653,12 +653,11 @@ public:
                 for (int j = 0; j < 8; ++j)
                     pWriteAccess->SetPixel(j, i, COL_BLACK);
         }
-        BitmapEx aBitmapEx(aBitmap);
         basegfx::B2DHomMatrix aMatrix;
         // Draw with no transformation, only alpha change.
         aMatrix.scale(16, 16);
-        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
-        BitmapEx result(device->GetBitmap(Point(0, 0), Size(16, 16)));
+        device->DrawTransformedBitmapEx(aMatrix, aBitmap, 0.5);
+        Bitmap result(device->GetBitmap(Point(0, 0), Size(16, 16)));
         CPPUNIT_ASSERT_EQUAL(COL_GRAY, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(15, 15));
         // Draw rotated and move to the bottom-left corner.
@@ -667,7 +666,7 @@ public:
         aMatrix.scale(16, 16);
         aMatrix.rotate(M_PI / 2);
         aMatrix.translate(8, 8);
-        device->DrawTransformedBitmapEx(aMatrix, aBitmapEx, 0.5);
+        device->DrawTransformedBitmapEx(aMatrix, aBitmap, 0.5);
         result = device->GetBitmap(Point(0, 0), Size(16, 16));
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, result.GetPixelColor(0, 0));
         CPPUNIT_ASSERT_EQUAL(COL_GRAY, result.GetPixelColor(0, 15));
@@ -1401,7 +1400,7 @@ public:
                      bitmap.GetSizePixel().Height()); // draw as 10x10
         // Draw a blue bitmap to the device. The bug was that there was no alpha, but OutputDevice::DrawTransformBitmapExDirect()
         // supplied a fully opaque alpha done with Erase() on the alpha bitmap, and Skia backend didn't handle such alpha correctly.
-        device->DrawTransformedBitmapEx(matrix, BitmapEx(bitmap));
+        device->DrawTransformedBitmapEx(matrix, bitmap);
         exportDevice(u"tdf136171.png"_ustr, device);
         // The whole virtual device content now should be blue.
         CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(0, 0)));

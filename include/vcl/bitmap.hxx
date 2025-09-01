@@ -183,6 +183,48 @@ public:
                             sal_Int32 nX,
                             sal_Int32 nY) const;
 
+    /** Create transformed Bitmap
+
+        @param fWidth
+        The target width in pixels
+
+        @param fHeight
+        The target height in pixels
+
+        @param rTransformation
+        The back transformation for each pixel in (0 .. fWidth),(0 .. fHeight) to
+        local pixel coordinates
+    */
+    [[nodiscard]]
+    Bitmap              TransformBitmap(
+                            double fWidth,
+                            double fHeight,
+                            const basegfx::B2DHomMatrix& rTransformation) const;
+
+    /** Create transformed Bitmap
+
+        @param rTransformation
+        The transformation from unit coordinates to the unit range
+
+        @param rVisibleRange
+        The relative visible range in unit coordinates, relative to (0,0,1,1) which
+        defines the whole target area
+
+        @param fMaximumArea
+        A limitation for the maximum size of pixels to use for the result
+
+        The target size of the result bitmap is defined by transforming the given
+        rTargetRange with the given rTransformation; the area of the result is
+        linearly scaled to not exceed the given fMaximumArea
+
+        @return The transformed bitmap
+    */
+    [[nodiscard]]
+    SAL_DLLPRIVATE Bitmap getTransformed(
+                            const basegfx::B2DHomMatrix& rTransformation,
+                            const basegfx::B2DRange& rVisibleRange,
+                            double fMaximumArea) const;
+
     /** Convert bitmap format
 
         @param eConversion

@@ -559,19 +559,6 @@ void QtGraphicsBackend::invert(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,
 {
 }
 
-static QImage getAlphaImage(const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap)
-{
-    assert(rSourceBitmap.GetSize() == rAlphaBitmap.GetSize());
-    assert(rAlphaBitmap.GetBitCount() == 8 || rAlphaBitmap.GetBitCount() == 1);
-
-    QImage aAlphaMask = *static_cast<const QtBitmap*>(&rAlphaBitmap)->GetQImage();
-
-    const QImage* pBitmap = static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
-    QImage aImage = pBitmap->convertToFormat(Qt_DefaultFormat32);
-    aImage.setAlphaChannel(aAlphaMask);
-    return aImage;
-}
-
 void QtGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap)
 {
     drawBitmap(rPosAry, rSourceBitmap);
@@ -580,14 +567,9 @@ void QtGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitm
 bool QtGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                               const basegfx::B2DPoint& rX,
                                               const basegfx::B2DPoint& rY,
-                                              const SalBitmap& rSourceBitmap,
-                                              const SalBitmap* pAlphaBitmap, double fAlpha)
+                                              const SalBitmap& rSourceBitmap, double fAlpha)
 {
-    QImage aImage;
-    if (!pAlphaBitmap)
-        aImage = *static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
-    else
-        aImage = getAlphaImage(rSourceBitmap, *pAlphaBitmap);
+    QImage aImage = *static_cast<const QtBitmap*>(&rSourceBitmap)->GetQImage();
 
     const basegfx::B2DVector aXRel = rX - rNull;
     const basegfx::B2DVector aYRel = rY - rNull;

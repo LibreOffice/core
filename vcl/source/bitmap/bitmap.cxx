@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/helpers.hxx>
@@ -2717,6 +2718,194 @@ tools::Polygon  Bitmap::GetContour( bool bContourEdgeDetect,
         aRetPoly.Scale( fFactorX, fFactorY );
 
     return aRetPoly;
+}
+
+static Bitmap impTransformBitmap(
+    const Bitmap& rSource,
+    const Size& rDestinationSize,
+    const basegfx::B2DHomMatrix& rTransform,
+    bool bSmooth)
+{
+    Bitmap aDestination(rDestinationSize, rSource.getPixelFormat());
+    BitmapScopedWriteAccess xWrite(aDestination);
+
+    if(xWrite)
+    {
+        BitmapScopedReadAccess xRead(rSource);
+
+        if (xRead)
+        {
+            const Size aDestinationSizePixel(aDestination.GetSizePixel());
+
+            // tdf#157795 set color to black outside of bitmap bounds
+            // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+            // transparent areas are now black instead of white.
+            // tdf#160831 only set outside color to black for alpha masks
+            // The outside color still needs to be white for the content
+            // so only apply the fix for tdf#157795 to the alpha mask.
+            const BitmapColor aOutside(ColorAlpha, 0xff, 0xff, 0xff, 0x00);
+
+            for(tools::Long y(0); y < aDestinationSizePixel.getHeight(); y++)
+            {
+                Scanline pScanline = xWrite->GetScanline( y );
+                for(tools::Long x(0); x < aDestinationSizePixel.getWidth(); x++)
+                {
+                    const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
+
+                    if(bSmooth)
+                    {
+                        xWrite->SetPixelOnData(
+                            pScanline,
+                            x,
+                            xRead->GetInterpolatedColorWithFallback(
+                                aSourceCoor.getY(),
+                                aSourceCoor.getX(),
+                                aOutside));
+                    }
+                    else
+                    {
+                        // this version does the correct <= 0.0 checks, so no need
+                        // to do the static_cast< sal_Int32 > self and make an error
+                        xWrite->SetPixelOnData(
+                            pScanline,
+                            x,
+                            xRead->GetColorWithFallback(
+                                aSourceCoor.getY(),
+                                aSourceCoor.getX(),
+                                aOutside));
+                    }
+                }
+            }
+        }
+    }
+    xWrite.reset();
+
+    rSource.AdaptBitCount(aDestination);
+
+    return aDestination;
+}
+
+/// Decides if rTransformation needs smoothing or not (e.g. 180 deg rotation doesn't need it).
+static bool implTransformNeedsSmooth(const basegfx::B2DHomMatrix& rTransformation)
+{
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+    rTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
+    if (aScale != basegfx::B2DVector(1, 1))
+    {
+        return true;
+    }
+
+    fRotate = fmod( fRotate, 2 * M_PI );
+    if (fRotate < 0)
+    {
+        fRotate += 2 * M_PI;
+    }
+    if (!rtl::math::approxEqual(fRotate, 0)
+        && !rtl::math::approxEqual(fRotate, M_PI_2)
+        && !rtl::math::approxEqual(fRotate, M_PI)
+        && !rtl::math::approxEqual(fRotate, 3 * M_PI_2))
+    {
+        return true;
+    }
+
+    if (!rtl::math::approxEqual(fShearX, 0))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+Bitmap Bitmap::TransformBitmap(
+    double fWidth,
+    double fHeight,
+    const basegfx::B2DHomMatrix& rTransformation) const
+{
+    if(fWidth <= 1 || fHeight <= 1)
+        return Bitmap();
+
+    // force destination to 24 bit, we want to smooth output
+    const Size aDestinationSize(basegfx::fround<tools::Long>(fWidth), basegfx::fround<tools::Long>(fHeight));
+    bool bSmooth = implTransformNeedsSmooth(rTransformation);
+    const Bitmap aDestination(impTransformBitmap(*this, aDestinationSize, rTransformation, bSmooth));
+
+    return aDestination;
+}
+
+Bitmap Bitmap::getTransformed(
+    const basegfx::B2DHomMatrix& rTransformation,
+    const basegfx::B2DRange& rVisibleRange,
+    double fMaximumArea) const
+{
+    if (IsEmpty())
+        return Bitmap();
+
+    const sal_uInt32 nSourceWidth(GetSizePixel().Width());
+    const sal_uInt32 nSourceHeight(GetSizePixel().Height());
+
+    if (!nSourceWidth || !nSourceHeight)
+        return Bitmap();
+
+    // Get aOutlineRange
+    basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+
+    aOutlineRange.transform(rTransformation);
+
+    // create visible range from it by moving from relative to absolute
+    basegfx::B2DRange aVisibleRange(rVisibleRange);
+
+    aVisibleRange.transform(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            aOutlineRange.getRange(),
+            aOutlineRange.getMinimum()));
+
+    // get target size (which is visible range's size)
+    double fWidth(aVisibleRange.getWidth());
+    double fHeight(aVisibleRange.getHeight());
+
+    if (fWidth < 1.0 || fHeight < 1.0)
+        return Bitmap();
+
+    // test if discrete size (pixel) maybe too big and limit it
+    const double fArea(fWidth * fHeight);
+    const bool bNeedToReduce(basegfx::fTools::more(fArea, fMaximumArea));
+    double fReduceFactor(1.0);
+
+    if(bNeedToReduce)
+    {
+        fReduceFactor = sqrt(fMaximumArea / fArea);
+        fWidth *= fReduceFactor;
+        fHeight *= fReduceFactor;
+    }
+
+    // Build complete transform from source pixels to target pixels.
+    // Start by scaling from source pixel size to unit coordinates
+    basegfx::B2DHomMatrix aTransform(
+        basegfx::utils::createScaleB2DHomMatrix(
+            1.0 / nSourceWidth,
+            1.0 / nSourceHeight));
+
+    // multiply with given transform which leads from unit coordinates inside
+    // aOutlineRange
+    aTransform = rTransformation * aTransform;
+
+    // subtract top-left of absolute VisibleRange
+    aTransform.translate(
+        -aVisibleRange.getMinX(),
+        -aVisibleRange.getMinY());
+
+    // scale to target pixels (if needed)
+    if(bNeedToReduce)
+    {
+        aTransform.scale(fReduceFactor, fReduceFactor);
+    }
+
+    // invert to get transformation from target pixel coordinates to source pixels
+    aTransform.invert();
+
+    // create bitmap using source, destination and linear back-transformation
+    return TransformBitmap(fWidth, fHeight, aTransform);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

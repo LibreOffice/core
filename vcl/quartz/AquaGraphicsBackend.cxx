@@ -1216,8 +1216,7 @@ void AquaGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
 bool AquaGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                 const basegfx::B2DPoint& rX,
                                                 const basegfx::B2DPoint& rY,
-                                                const SalBitmap& rSrcBitmap,
-                                                const SalBitmap* pAlphaBmp, double fAlpha)
+                                                const SalBitmap& rSrcBitmap, double fAlpha)
 {
     if (!mrShared.checkContext())
         return true;
@@ -1226,14 +1225,9 @@ bool AquaGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         return false;
 
     // get the Quartz image
-    CGImageRef xImage = nullptr;
     const Size aSize = rSrcBitmap.GetSize();
-
-    if (!pAlphaBmp)
-        xImage = rSrcBitmap.CreateCroppedImage(0, 0, int(aSize.Width()), int(aSize.Height()));
-    else
-        xImage
-            = rSrcBitmap.CreateWithMask(*pAlphaBmp, 0, 0, int(aSize.Width()), int(aSize.Height()));
+    CGImageRef xImage
+        = rSrcBitmap.CreateCroppedImage(0, 0, int(aSize.Width()), int(aSize.Height()));
 
     if (!xImage)
         return false;

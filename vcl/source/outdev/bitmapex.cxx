@@ -186,7 +186,7 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
 
 bool OutputDevice::DrawTransformBitmapExDirect(
         const basegfx::B2DHomMatrix& aFullTransform,
-        const BitmapEx& rBitmapEx,
+        const Bitmap& rBitmap,
         double fAlpha)
 {
     assert(!is_double_buffered_window());
@@ -195,22 +195,13 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     const basegfx::B2DPoint aNull(aFullTransform * basegfx::B2DPoint(0.0, 0.0));
     const basegfx::B2DPoint aTopX(aFullTransform * basegfx::B2DPoint(1.0, 0.0));
     const basegfx::B2DPoint aTopY(aFullTransform * basegfx::B2DPoint(0.0, 1.0));
-    SalBitmap* pSalSrcBmp = rBitmapEx.GetBitmap().ImplGetSalBitmap().get();
-    AlphaMask aAlphaBitmap;
-
-    if(rBitmapEx.IsAlpha())
-    {
-        aAlphaBitmap = rBitmapEx.GetAlphaMask();
-    }
-
-    SalBitmap* pSalAlphaBmp = aAlphaBitmap.GetBitmap().ImplGetSalBitmap().get();
+    SalBitmap* pSalSrcBmp = rBitmap.ImplGetSalBitmap().get();
 
     return mpGraphics->DrawTransformedBitmap(
         aNull,
         aTopX,
         aTopY,
         *pSalSrcBmp,
-        pSalAlphaBmp,
         fAlpha,
         *this);
 };
@@ -327,20 +318,12 @@ void OutputDevice::DrawTransformedBitmapEx(
     const Bitmap& rBitmap,
     double fAlpha)
 {
-    DrawTransformedBitmapEx(rTransformation, BitmapEx(rBitmap), fAlpha);
-}
-
-void OutputDevice::DrawTransformedBitmapEx(
-    const basegfx::B2DHomMatrix& rTransformation,
-    const BitmapEx& rBitmapEx,
-    double fAlpha)
-{
     assert(!is_double_buffered_window());
 
     if( ImplIsRecordLayout() )
         return;
 
-    if(rBitmapEx.IsEmpty())
+    if(rBitmap.IsEmpty())
         return;
 
     if( fAlpha == 0.0 )
@@ -378,7 +361,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         : nullptr);
 #endif
 
-    BitmapEx bitmapEx = rBitmapEx;
+    Bitmap bitmap = rBitmap;
 
     const bool bInvert(RasterOp::Invert == meRasterOp);
     const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
@@ -393,7 +376,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     {
         if(bTryDirectPaint)
         {
-            if(DrawTransformBitmapExDirect(aFullTransform, bitmapEx, fAlpha))
+            if(DrawTransformBitmapExDirect(aFullTransform, bitmap, fAlpha))
             {
                 // we are done
                 return;
@@ -401,15 +384,15 @@ void OutputDevice::DrawTransformedBitmapEx(
         }
         // Apply the alpha manually.
         sal_uInt8 nTransparency( static_cast<sal_uInt8>( ::basegfx::fround( 255.0*(1.0 - fAlpha) + .5) ) );
-        AlphaMask aAlpha( bitmapEx.GetSizePixel(), &nTransparency );
-        if( bitmapEx.IsAlpha())
-            aAlpha.BlendWith( bitmapEx.GetAlphaMask());
-        bitmapEx = BitmapEx( bitmapEx.GetBitmap(), aAlpha );
+        AlphaMask aAlpha( bitmap.GetSizePixel(), &nTransparency );
+        if( bitmap.HasAlpha())
+            aAlpha.BlendWith( bitmap.CreateAlphaMask());
+        bitmap = Bitmap( bitmap.CreateColorBitmap(), aAlpha );
     }
 
     // If the backend's implementation is known to not need any optimizations here, pass to it directly.
     // With most backends it's more performant to try to simplify to DrawBitmapEx() first.
-    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
+    if(bTryDirectPaint && mpGraphics->HasFastDrawTransformedBitmap() && DrawTransformBitmapExDirect(aFullTransform, bitmap))
         return;
 
     // decompose matrix to check rotation and shear
@@ -437,7 +420,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             EnableMapMode(false);
         }
 
-        DrawBitmapEx(aDestPt, aDestSize, Bitmap(bitmapEx));
+        DrawBitmapEx(aDestPt, aDestSize, bitmap);
         if (!bMetafile && comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
@@ -447,7 +430,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     }
 
     // Try the backend's implementation before resorting to the slower fallback here.
-    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmapEx))
+    if(bTryDirectPaint && DrawTransformBitmapExDirect(aFullTransform, bitmap))
         return;
 
     // take the fallback when no rotate and shear, but mirror (else we would have done this above)
@@ -461,7 +444,7 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround<tools::Long>(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround<tools::Long>(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
 
-        DrawBitmapEx(aDestPt, aDestSize, Bitmap(bitmapEx));
+        DrawBitmapEx(aDestPt, aDestSize, bitmap);
         return;
     }
 
@@ -476,8 +459,8 @@ void OutputDevice::DrawTransformedBitmapEx(
     // by using a fixed minimum (allow at least, but no need to utilize) for good smoothing and an area
     // dependent of original size for good quality when e.g. rotated/sheared. Still, limit to a maximum
     // to avoid crashes/resource problems (ca. 1500x3000 here)
-    const Size& rOriginalSizePixel(bitmapEx.GetSizePixel());
-    const double fOrigArea(rOriginalSizePixel.Width() * rOriginalSizePixel.Height() * 0.5);
+    const Size aOriginalSizePixel(bitmap.GetSizePixel());
+    const double fOrigArea(aOriginalSizePixel.Width() * aOriginalSizePixel.Height() * 0.5);
     const double fOrigAreaScaled(fOrigArea * 1.44);
     double fMaximumArea(std::clamp(fOrigAreaScaled, 1000000.0, 4500000.0));
 
@@ -490,20 +473,20 @@ void OutputDevice::DrawTransformedBitmapEx(
     if(aVisibleRange.isEmpty())
         return;
 
-    BitmapEx aTransformed(bitmapEx);
+    Bitmap aTransformed(bitmap);
 
     // #122923# when the result needs an alpha channel due to being rotated or sheared
     // and thus uncovering areas, add these channels so that the own transformer (used
     // in getTransformed) also creates a transformed alpha channel
-    if(!aTransformed.IsAlpha() && (bSheared || bRotated))
+    if(!aTransformed.HasAlpha() && (bSheared || bRotated))
     {
         // parts will be uncovered, extend aTransformed with a mask bitmap
-        const Bitmap aContent(aTransformed.GetBitmap());
+        const Bitmap aContent(aTransformed.CreateColorBitmap());
 
         AlphaMask aMaskBmp(aContent.GetSizePixel());
         aMaskBmp.Erase(0);
 
-        aTransformed = BitmapEx(aContent, aMaskBmp);
+        aTransformed = Bitmap(aContent, aMaskBmp);
     }
 
     basegfx::B2DVector aFullScale, aFullTranslate;
@@ -511,9 +494,9 @@ void OutputDevice::DrawTransformedBitmapEx(
     aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
 
     double fSourceRatio = 1.0;
-    if (rOriginalSizePixel.getHeight() != 0)
+    if (aOriginalSizePixel.getHeight() != 0)
     {
-        fSourceRatio = rOriginalSizePixel.getWidth() / rOriginalSizePixel.getHeight();
+        fSourceRatio = aOriginalSizePixel.getWidth() / aOriginalSizePixel.getHeight();
     }
     double fTargetRatio = 1.0;
     if (aFullScale.getY() != 0)
@@ -558,7 +541,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         basegfx::fround<tools::Long>(aVisibleRange.getMaxX()) - aDestPt.X(),
         basegfx::fround<tools::Long>(aVisibleRange.getMaxY()) - aDestPt.Y());
 
-    DrawBitmapEx(aDestPt, aDestSize, Bitmap(aTransformed));
+    DrawBitmapEx(aDestPt, aDestSize, aTransformed);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1390,10 +1390,6 @@ public:
     */
     void                        DrawTransformedBitmapEx(
                                     const basegfx::B2DHomMatrix& rTransformation,
-                                    const BitmapEx& rBitmapEx,
-                                    double fAlpha = 1.0);
-    void                        DrawTransformedBitmapEx(
-                                    const basegfx::B2DHomMatrix& rTransformation,
                                     const Bitmap& rBitmap,
                                     double fAlpha = 1.0);
 
@@ -1415,13 +1411,13 @@ protected:
     /** Transform and draw a bitmap directly
 
      @param     aFullTransform      The B2DHomMatrix used for the transformation
-     @param     rBitmapEx           Reference to the bitmap to be transformed and drawn
+     @param     rBitmap             Reference to the bitmap to be transformed and drawn
 
      @return true if it was able to draw the bitmap, false if not
      */
     virtual bool                DrawTransformBitmapExDirect(
                                     const basegfx::B2DHomMatrix& aFullTransform,
-                                    const BitmapEx& rBitmapEx,
+                                    const Bitmap& rBitmap,
                                     double fAlpha = 1.0);
 
     /** Transform and reduce the area that needs to be drawn of the bitmap and return the new

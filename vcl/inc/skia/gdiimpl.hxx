@@ -150,7 +150,7 @@ public:
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     virtual bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                        const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,
-                                       const SalBitmap* pAlphaBitmap, double fAlpha) override;
+                                       double fAlpha) override;
 
     virtual bool hasFastDrawTransformedBitmap() const override;
 
@@ -251,12 +251,10 @@ protected:
     void setCanvasScalingAndClipping();
     void resetCanvasScalingAndClipping();
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
-    sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
-                                     const Size& targetSize);
+    sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const Size& targetSize);
     using DirectImage = SkiaHelper::DirectImage;
-    static OString makeCachedImageKey(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
-                                      const Size& targetSize, DirectImage bitmapType,
-                                      DirectImage alphaBitmapType);
+    static OString makeCachedImageKey(const SkiaSalBitmap& bitmap, const Size& targetSize,
+                                      DirectImage bitmapType);
 
     // Skia uses floating point coordinates, so when we use integer coordinates, sometimes
     // rounding results in off-by-one errors (down), especially when drawing using GPU,

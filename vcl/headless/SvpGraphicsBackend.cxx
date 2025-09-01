@@ -214,10 +214,9 @@ void SvpGraphicsBackend::drawAlphaBitmap(const SalTwoRect& rTR, const SalBitmap&
 bool SvpGraphicsBackend::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                const basegfx::B2DPoint& rX,
                                                const basegfx::B2DPoint& rY,
-                                               const SalBitmap& rSourceBitmap,
-                                               const SalBitmap* pAlphaBitmap, double fAlpha)
+                                               const SalBitmap& rSourceBitmap, double fAlpha)
 {
-    return m_rCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha,
+    return m_rCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, fAlpha,
                                                 getAntiAlias());
 }
 

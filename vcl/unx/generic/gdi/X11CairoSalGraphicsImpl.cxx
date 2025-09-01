@@ -204,10 +204,9 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32
 bool X11CairoSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
                                                     const basegfx::B2DPoint& rX,
                                                     const basegfx::B2DPoint& rY,
-                                                    const SalBitmap& rSourceBitmap,
-                                                    const SalBitmap* pAlphaBitmap, double fAlpha)
+                                                    const SalBitmap& rSourceBitmap, double fAlpha)
 {
-    return mrCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha,
+    return mrCairoCommon.drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, fAlpha,
                                                getAntiAlias());
 }
 
