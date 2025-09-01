@@ -46,6 +46,7 @@ void CellLineStyleValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     SetColCount();
     SetLineCount(CELL_LINE_STYLE_ENTRIES);
+    SetColor(Application::GetSettings().GetStyleSettings().GetListBoxWindowBackgroundColor());
 }
 
 void CellLineStyleValueSet::SetUnit(const OUString* str)
@@ -107,11 +108,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         aBackRect.AdjustBottom( -2 );
         pDev->SetFillColor(Color(50,107,197));
         pDev->DrawRect(aBackRect);
-    }
-    else
-    {
-        pDev->SetFillColor( COL_TRANSPARENT );
-        pDev->DrawRect(aRect);
     }
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

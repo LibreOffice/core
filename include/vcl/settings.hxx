@@ -409,7 +409,7 @@ public:
     const Color&                    GetMenuHighlightTextColor() const;
 
     void                            SetListBoxWindowBackgroundColor( const Color& rColor );
-    SAL_DLLPRIVATE const Color&     GetListBoxWindowBackgroundColor() const;
+    const Color&                    GetListBoxWindowBackgroundColor() const;
 
     void                            SetListBoxWindowTextColor( const Color& rColor );
     SAL_DLLPRIVATE const Color&     GetListBoxWindowTextColor() const;
