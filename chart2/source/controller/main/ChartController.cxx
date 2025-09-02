@@ -1150,6 +1150,44 @@ void SAL_CALL ChartController::dispatch(
         this->executeDispatch_EditData();
     else if( aCommand == "ManageThemes")
         this->executeDispatch_ManageThemes();
+    else if (aCommand == "SelectTheme")
+    {
+        this->executeDispatch_ManageThemes(true);
+        // Todo: try to make a popup window only
+        // it did something but not displayed anything.
+
+        //static std::shared_ptr<sidebar::ChartThemeControl> pThemeControl
+        //    = std::make_shared<sidebar::ChartThemeControl>(m_xCC);
+        //assert(pThemeControl);
+        //std::shared_ptr<sidebar::IThemeHandler> mxThemeWrapper
+        //    = sidebar::createThemeWrapper(getChartModel(), pThemeControl.get(), this);
+        //pThemeControl->setThemeHandler(mxThemeWrapper);
+        //pThemeControl->weldPopupWindow();
+
+        // it need addition includes:
+        //#include <../sidebar/ChartThemePanel.hxx>
+        //#include <../sidebar/ChartThemeControl.hxx>
+
+        // it need createThemeWrapper a ChartThemePanel.cxx:
+        //std::shared_ptr<sidebar::IThemeHandler> createThemeWrapper(
+        //    rtl::Reference<ChartModel> xModel, ChartThemeControl * pControl,
+        //    ChartController * pController)
+        //{
+        //    return std::make_shared<sidebar::ThemeWrapper>(xModel, pControl, pController);
+        //}
+
+        // and in a ChartThemePanel.hxx:
+        //struct IThemeHandler;
+        //class ChartThemeControl;
+        //
+        //std::shared_ptr<sidebar::IThemeHandler> createThemeWrapper(
+        //    rtl::Reference<ChartModel> xModel, ChartThemeControl * pControl,
+        //    ChartController * pController);
+    }
+    else if (aCommand == "ChartSaveToNewTheme")
+    {
+        this->executeDispatch_SaveToNewTheme();
+    }
     //insert objects
     else if( aCommand == "InsertTitles"
         || aCommand == "InsertMenuTitles")
@@ -1590,7 +1628,7 @@ void ChartController::executeDispatch_ChartType()
     });
 }
 
-void ChartController::executeDispatch_ManageThemes()
+void ChartController::executeDispatch_ManageThemes(bool bSelectOnly)
 {
     SolarMutexGuard aSolarGuard;
     auto xUndoGuard = std::make_shared<UndoGuard>(
@@ -1600,7 +1638,7 @@ void ChartController::executeDispatch_ManageThemes()
 
     try
     {
-        auto aDlg = std::make_shared<SchThemeDlg>(GetChartFrame(), this);
+        auto aDlg = std::make_shared<SchThemeDlg>(GetChartFrame(), this, bSelectOnly);
         weld::DialogController::runAsync(
             aDlg,
             [aDlg, xUndoGuard = std::move(xUndoGuard)](int nResult) {
@@ -1616,6 +1654,18 @@ void ChartController::executeDispatch_ManageThemes()
     }
 }
 
+void ChartController::executeDispatch_SaveToNewTheme()
+{
+    ChartThemesType& aChartTypes = ChartThemesType::getInstance();
+    int nIndex = aChartTypes.m_aThemes.size();
+    // maximum 256 chart styles
+    // Todo: maybe we could figure out some other way to limit this.
+    if (nIndex >= 256)
+    {
+        return;
+    }
+    saveTheme(nIndex);
+}
 
 void ChartController::executeDispatch_SourceData()
 {
@@ -1849,6 +1899,8 @@ const o3tl::sorted_vector< std::u16string_view >& ChartController::impl_getAvail
         // toolbar commands
         u"ChartElementSelector",
         u"ManageThemes",
+        u"SelectTheme",
+        u"ChartSaveToNewTheme",
 
         // LOK commands
         u"LOKSetTextSelection", u"LOKTransform",
@@ -2342,7 +2394,7 @@ ChartThemesType::ChartThemesType()
         ChartThemeElementID nElementType = ChartThemeElementID(i % ElementCount);
 
         sal_uInt32 nHeight = 240 + i * 10;
-        sal_uInt32 nColor = 170 << (i % 15);
+        sal_uInt32 nColor = 0xff000000 + (170 << (i % 15));
         const Color aColor(ColorAlpha, nColor);
         short nKerning = 0;
         FontWeight nBold = WEIGHT_NORMAL;

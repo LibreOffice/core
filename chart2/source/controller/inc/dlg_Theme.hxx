@@ -30,23 +30,27 @@ class SchThemeDlg final : public weld::GenericDialogController
 private:
     rtl::Reference<ChartModel> mxModel;
     ChartController* mpController;
+    bool mbSelectOnly;
 
     std::unique_ptr<weld::IconView> mxThemeIconView;
     std::unique_ptr<weld::Button> mxSaveTheme;
     std::unique_ptr<weld::Button> mxLoadTheme;
     std::unique_ptr<weld::Button> mxDeleteTheme;
     std::unique_ptr<weld::Button> mxSaveToNewTheme;
+    std::unique_ptr<weld::Button> mxChangeToManage;
 
     DECL_LINK(ClickSaveHdl, weld::Button&, void);
     DECL_LINK(ClickLoadHdl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl, weld::Button&, void);
     DECL_LINK(ClickSaveToNewHdl, weld::Button&, void);
+    DECL_LINK(ClickChangeToManageHdl, weld::Button&, void);
     DECL_LINK(ThemeSelectedHdl, weld::IconView&, void);
+    DECL_LINK(ThemeItemActivatedHdl, weld::IconView&, bool);
 
     VclPtr<VirtualDevice> makeImage(int nIndex);
 
 public:
-    SchThemeDlg(weld::Window* pParent, ChartController* pController);
+    SchThemeDlg(weld::Window* pParent, ChartController* pController, bool bSelectOnly);
 };
 
 } //namespace chart

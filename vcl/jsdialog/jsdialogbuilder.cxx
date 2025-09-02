@@ -1924,6 +1924,18 @@ void JSIconView::insert_separator(int pos, const OUString* pId)
     sendUpdate();
 }
 
+void JSIconView::remove(int pos)
+{
+    SalInstanceIconView::remove(pos);
+    sendUpdate();
+}
+
+void JSIconView::set_image(int pos, VirtualDevice* pIcon)
+{
+    SalInstanceIconView::set_image(pos, pIcon);
+    sendUpdate();
+}
+
 void JSIconView::clear()
 {
     SalInstanceIconView::clear();

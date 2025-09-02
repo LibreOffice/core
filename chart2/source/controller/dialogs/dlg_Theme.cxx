@@ -30,31 +30,36 @@ using namespace css;
 
 namespace chart
 {
-SchThemeDlg::SchThemeDlg(weld::Window* pWindow, ChartController* pController)
+SchThemeDlg::SchThemeDlg(weld::Window* pWindow, ChartController* pController, bool bSelectOnly)
     : GenericDialogController(pWindow, u"modules/schart/ui/dlg_Theme.ui"_ustr,
                               u"ChartThemeDialog"_ustr)
     , mxModel(pController->getChartModel())
     , mpController(pController)
+    , mbSelectOnly(bSelectOnly)
     , mxThemeIconView(m_xBuilder->weld_icon_view(u"themeview"_ustr))
-    , mxSaveTheme(m_xBuilder->weld_button(u"save"_ustr))
-    , mxLoadTheme(m_xBuilder->weld_button(u"load"_ustr))
-    , mxDeleteTheme(m_xBuilder->weld_button(u"delete"_ustr))
-    , mxSaveToNewTheme(m_xBuilder->weld_button(u"savetonew"_ustr))
+    , mxSaveTheme(m_xBuilder->weld_button(u"chartsave"_ustr))
+    , mxLoadTheme(m_xBuilder->weld_button(u"chartload"_ustr))
+    , mxDeleteTheme(m_xBuilder->weld_button(u"chartdelete"_ustr))
+    , mxSaveToNewTheme(m_xBuilder->weld_button(u"chartsavetonew"_ustr))
+    , mxChangeToManage(m_xBuilder->weld_button(u"chartmanage"_ustr))
 {
     mxThemeIconView->connect_selection_changed(LINK(this, SchThemeDlg, ThemeSelectedHdl));
+    mxThemeIconView->connect_item_activated(LINK(this, SchThemeDlg, ThemeItemActivatedHdl));
 
     mxSaveTheme->connect_clicked(LINK(this, SchThemeDlg, ClickSaveHdl));
     mxLoadTheme->connect_clicked(LINK(this, SchThemeDlg, ClickLoadHdl));
     mxDeleteTheme->connect_clicked(LINK(this, SchThemeDlg, ClickDeleteHdl));
     mxSaveToNewTheme->connect_clicked(LINK(this, SchThemeDlg, ClickSaveToNewHdl));
+    mxChangeToManage->connect_clicked(LINK(this, SchThemeDlg, ClickChangeToManageHdl));
 
     mxSaveTheme->set_sensitive(false);
     mxDeleteTheme->set_sensitive(false);
 
-    mxSaveTheme->set_visible(true);
-    mxLoadTheme->set_visible(true);
-    mxDeleteTheme->set_visible(true);
-    mxSaveToNewTheme->set_visible(true);
+    mxChangeToManage->set_visible(mbSelectOnly);
+    mxSaveTheme->set_visible(!mbSelectOnly);
+    mxLoadTheme->set_visible(!mbSelectOnly);
+    mxDeleteTheme->set_visible(!mbSelectOnly);
+    mxSaveToNewTheme->set_visible(!mbSelectOnly);
 
     mxThemeIconView->set_item_width(200);
 
@@ -163,20 +168,20 @@ IMPL_LINK_NOARG(SchThemeDlg, ClickDeleteHdl, weld::Button&, void)
     if (sId.isEmpty())
         return;
     int nIndex = sId.toInt32();
+    // fix the numbers in the list, before the delete
+    int nThemeCount = ChartThemesType::getInstance().getThemesCount();
+    for (int i = nIndex + 1; i < nThemeCount; i++)
+    {
+        sId = OUString::number(i - 1);
+        OUString sLayoutName = OUString::number(i - 1);
+        mxThemeIconView->set_id(i, sId);
+        mxThemeIconView->set_text(i, sLayoutName);
+    }
     // remove it from the themes
     ChartThemesType& aChartTypes = ChartThemesType::getInstance();
     aChartTypes.m_aThemes.erase(aChartTypes.m_aThemes.begin() + nIndex);
     // remove it from the list
     mxThemeIconView->remove(nIndex);
-    // fix the numbers in the list.
-    int nThemeCount = ChartThemesType::getInstance().getThemesCount();
-    for (int i = nIndex; i < nThemeCount; i++)
-    {
-        sId = OUString::number(i);
-        OUString sLayoutName = OUString::number(i);
-        mxThemeIconView->set_id(i, sId);
-        mxThemeIconView->set_text(i, sLayoutName);
-    }
 }
 
 IMPL_LINK_NOARG(SchThemeDlg, ClickSaveToNewHdl, weld::Button&, void)
@@ -199,6 +204,17 @@ IMPL_LINK_NOARG(SchThemeDlg, ClickSaveToNewHdl, weld::Button&, void)
     device1.disposeAndClear();
 }
 
+IMPL_LINK_NOARG(SchThemeDlg, ClickChangeToManageHdl, weld::Button&, void)
+{
+    mbSelectOnly = false;
+    mxChangeToManage->set_visible(mbSelectOnly);
+    mxSaveTheme->set_visible(!mbSelectOnly);
+    mxLoadTheme->set_visible(!mbSelectOnly);
+    mxDeleteTheme->set_visible(!mbSelectOnly);
+    mxSaveToNewTheme->set_visible(!mbSelectOnly);
+    // Todo: resize window.
+}
+
 IMPL_LINK_NOARG(SchThemeDlg, ThemeSelectedHdl, weld::IconView&, void)
 {
     // enable / disable buttons based on the selected theme
@@ -217,6 +233,20 @@ IMPL_LINK_NOARG(SchThemeDlg, ThemeSelectedHdl, weld::IconView&, void)
     mxSaveTheme->set_sensitive(bSelCustomizable);
     mxDeleteTheme->set_sensitive(bSelCustomizable);
     mxLoadTheme->set_sensitive(bSelected);
+}
+
+IMPL_LINK_NOARG(SchThemeDlg, ThemeItemActivatedHdl, weld::IconView&, bool)
+{
+    if (mbSelectOnly)
+    {
+        OUString sId = mxThemeIconView->get_selected_id();
+        if (sId.isEmpty())
+            return false;
+        int nIndex = sId.toInt32();
+        mpController->setTheme(nIndex);
+        return true;
+    }
+    return false;
 }
 
 } //namespace chart

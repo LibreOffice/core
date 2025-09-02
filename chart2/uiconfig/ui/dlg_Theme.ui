@@ -2,10 +2,18 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="ChartThemeDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="dlg_Theme|ChartThemeDialog">Manage Chart Themes</property>
+    <property name="title" translatable="yes" context="dlg_Theme|ChartThemeDialog">Manage Chart Styles</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
@@ -35,12 +43,12 @@
               <object class="GtkLabel" id="iconviewlabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="dlg_Theme|iconviewlabel|tooltip_text">Selectable chart themes list.</property>
+                <property name="tooltip-text" translatable="yes" context="dlg_Theme|iconviewlabel|tooltip_text">Selectable chart styles list.</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="hexpand">False</property>
                 <property name="vexpand">False</property>
-                <property name="label" translatable="yes" context="dlg_Theme|iconviewlabel">_Chart themes:</property>
+                <property name="label" translatable="yes" context="dlg_Theme|iconviewlabel">_Chart styles:</property>
                 <property name="use-underline">True</property>
                 <property name="xalign">0</property>
                 <accessibility>
@@ -81,6 +89,7 @@
                         <property name="can-focus">True</property>
                         <property name="margin">0</property>
                         <property name="model">liststore1</property>
+                        <property name="pixbuf-column">0</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="columns">1</property>
@@ -109,8 +118,8 @@
                     <property name="row-spacing">3</property>
                     <property name="column-spacing">6</property>
                     <child>
-                      <object class="GtkButton" id="load">
-                        <property name="label" translatable="yes" context="dlg_Theme|themeload">_Load theme to chart</property>
+                      <object class="GtkButton" id="chartload">
+                        <property name="label" translatable="yes" context="dlg_Theme|chartload">_Load style to chart</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="use-underline">True</property>
@@ -121,8 +130,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="save">
-                        <property name="label" translatable="yes" context="dlg_Theme|themesave">_Save to theme</property>
+                      <object class="GtkButton" id="chartsave">
+                        <property name="label" translatable="yes" context="dlg_Theme|chartsave">_Save to styles</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="use-underline">True</property>
@@ -133,8 +142,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="delete">
-                        <property name="label" translatable="yes" context="dlg_Theme|themedelete">_Delete theme</property>
+                      <object class="GtkButton" id="chartdelete">
+                        <property name="label" translatable="yes" context="dlg_Theme|chartdelete">_Delete style</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="use-underline">True</property>
@@ -145,8 +154,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="savetonew">
-                        <property name="label" translatable="yes" context="dlg_Theme|themesavenew">_Save to new theme</property>
+                      <object class="GtkButton" id="chartsavetonew">
+                        <property name="label" translatable="yes" context="dlg_Theme|chartsavenew">Save to _new style</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="use-underline">True</property>
@@ -167,6 +176,19 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="chartmanage">
+                <property name="label" translatable="yes" context="dlg_Theme|chartmanage">_Manage chart styles</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

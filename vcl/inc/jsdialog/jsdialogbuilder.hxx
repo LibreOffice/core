@@ -780,6 +780,8 @@ public:
                         const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
 
     virtual void insert_separator(int pos, const OUString* pId) override;
+    virtual void remove(int pos) override;
+    virtual void set_image(int pos, VirtualDevice* pIcon) override;
 
     virtual void clear() override;
     virtual void select(int pos) override;

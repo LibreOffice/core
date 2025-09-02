@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <memory>
 #include <utility>
@@ -164,10 +165,16 @@ ChartThemePopup::ChartThemePopup(ChartThemeControl* pControl, weld::Widget* pPar
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent,
                        "modules/schart/ui/chartthemepopup.ui", "ThemeWindow")
     , mxControl(pControl)
-    , mxThemesIconView(m_xBuilder->weld_icon_view(u"themeview"_ustr))
+    , mxThemesIconView(m_xBuilder->weld_icon_view(u"themeview1col"_ustr))
+    , mxManageChartStylesButton(m_xBuilder->weld_button(u"managechartstyle"_ustr))
 {
     mxThemesIconView->connect_item_activated(LINK(this, ChartThemePopup, ThemeSelectedHdl));
     mxThemesIconView->set_item_width(ChartThemeThumbSizeX);
+
+    mxManageChartStylesButton->set_visible(true);
+    mxManageChartStylesButton->set_sensitive(true);
+    mxManageChartStylesButton->connect_clicked(
+        LINK(this, ChartThemePopup, ClickManageChartStyleHdl));
 
     int nThemeCount = ChartThemesType::getInstance().getThemesCount();
     for (int i = 0; i < nThemeCount; i++)
@@ -181,7 +188,11 @@ ChartThemePopup::ChartThemePopup(ChartThemeControl* pControl, weld::Widget* pPar
     }
 }
 
-ChartThemePopup::~ChartThemePopup() { mxThemesIconView.reset(); }
+ChartThemePopup::~ChartThemePopup()
+{
+    mxThemesIconView.reset();
+    mxManageChartStylesButton.reset();
+}
 
 VclPtr<VirtualDevice> ChartThemePopup::makeImage(int nIndex)
 {
@@ -214,6 +225,12 @@ IMPL_LINK_NOARG(ChartThemePopup, ThemeSelectedHdl, weld::IconView&, bool)
     mxControl->mpHandler->select(nIndex);
 
     return true;
+}
+
+IMPL_LINK_NOARG(ChartThemePopup, ClickManageChartStyleHdl, weld::Button&, void)
+{
+    comphelper::dispatchCommand(u".uno:ManageThemes"_ustr, mxControl->getFrameInterface(), {});
+    mxControl->EndPopupMode();
 }
 
 } // end namespace chart::sidebar

@@ -2,6 +2,14 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="ThemeWindow">
     <property name="can-focus">False</property>
     <child>
@@ -21,16 +29,35 @@
             <property name="shadow-type">in</property>
             <property name="min-content-width">192</property>
             <child>
-              <object class="GtkIconView" id="themeview">
+              <object class="GtkIconView" id="themeview1col">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="margin">0</property>
                 <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
                 <property name="columns">1</property>
                 <property name="item-width">192</property>
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="managechartstyle">
+            <property name="label" translatable="yes" context="chartthemepopup|managechartstyle">_Manage chart styles</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
     </child>

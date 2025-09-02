@@ -759,6 +759,27 @@ bool lcl_isStarMath(SdrObject* pO)
     return false;
 }
 
+bool lcl_isChartPage(std::u16string_view aCID)
+{
+    size_t nLastSign = aCID.rfind(':'); //last sign before the type string
+    if (nLastSign == std::u16string_view::npos)
+        nLastSign = aCID.rfind('/');
+    if (nLastSign == std::u16string_view::npos && aCID.rfind('=') != std::u16string_view::npos)
+        nLastSign = 0;
+
+    if (nLastSign < std::u16string_view::npos)
+    {
+        if (nLastSign > 0)
+            nLastSign++;
+
+        if (o3tl::starts_with(aCID.substr(nLastSign), u"Page"))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 } // anonymous namespace
 
 bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
@@ -1032,6 +1053,11 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     OUString aValue;
                     if (aSel >>= aValue)
                     {
+                        if (lcl_isChartPage(aValue))
+                        {
+                            aExtraInfo.append(", \"isChartPage\": true");
+                        }
+
                         OString aObjectCID(aValue.getStr(), aValue.getLength(), osl_getThreadTextEncoding());
                         const std::vector<OString> aProps{"Draggable"_ostr, "Resizable"_ostr, "Rotatable"_ostr};
                         for (const auto& rProp: aProps)

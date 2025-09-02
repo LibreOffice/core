@@ -123,7 +123,7 @@ VclPtr<VirtualDevice> ThemeWrapper::makePictureFromThemedChart(sal_uInt32 nIndex
             aRSP.toggleAutoResizeState();
         }
 
-        int scale = 4;
+        int scale = 1;
         mxModel2->setVisualAreaSize(1, awt::Size(aSize.Width / scale, aSize.Height / scale));
         device1->SetOutputSize(Size(aSize.Width / scale, aSize.Height / scale));
 

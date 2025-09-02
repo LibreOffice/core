@@ -598,6 +598,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
         bShapeContext || ( bIsWritable && bControllerStateIsValid && ( m_apControllerState->bMayMoveSeriesForward || m_apControllerState->bMayMoveSeriesBackward ) );
 
     m_aCommandAvailability[ u".uno:ManageThemes"_ustr] = true;
+    m_aCommandAvailability[ u".uno:SelectTheme"_ustr] = true;
+    m_aCommandAvailability[ u".uno:ChartSaveToNewTheme"_ustr] = true;
 
     // insert objects
     m_aCommandAvailability[ u".uno:InsertTitles"_ustr ] = m_aCommandAvailability[ u".uno:InsertMenuTitles"_ustr ] = bIsWritable;

@@ -439,7 +439,8 @@ private:
     void executeDlg_ObjectProperties_withUndoGuard( std::shared_ptr<UndoGuard> aUndoGuard, const OUString& rObjectCID, bool bSuccessOnUnchanged );
 
     void executeDispatch_ChartType();
-    void executeDispatch_ManageThemes();
+    void executeDispatch_ManageThemes(bool bSelectOnly = false);
+    void executeDispatch_SaveToNewTheme();
 
     void executeDispatch_InsertTitles();
     void executeDispatch_InsertLegend();
