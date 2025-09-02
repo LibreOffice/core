@@ -1249,11 +1249,19 @@ void PDFOutDev::setSkipImages( bool bSkipImages )
 
 #if POPPLER_CHECK_VERSION(21, 3, 0)
 poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
+#if POPPLER_CHECK_VERSION(25, 9, 0)
+                                          GfxTilingPattern *tPat, const std::array<double, 6> &mat,
+#else
                                           GfxTilingPattern *tPat, const double *mat,
+#endif
                                           int x0, int y0, int x1, int y1,
                                           double xStep, double yStep)
 {
+#if POPPLER_CHECK_VERSION(25, 9, 0)
+    const std::array<double, 4> pBbox = tPat->getBBox();
+#else
     const double *pBbox = tPat->getBBox();
+#endif
     const int nPaintType = tPat->getPaintType();
     Dict *pResDict = tPat->getResDict();
     Object *aStr = tPat->getContentStream();

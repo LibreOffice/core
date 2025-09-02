@@ -287,7 +287,11 @@ namespace pdfi
 #if POPPLER_CHECK_VERSION(21, 3, 0)
         poppler_bool useTilingPatternFill() override { return true; };
         poppler_bool tilingPatternFill(GfxState *state, Gfx *gfx, Catalog *cat,
+#if POPPLER_CHECK_VERSION(25, 9, 0)
+                                       GfxTilingPattern *tPat, const std::array<double, 6> &mat,
+#else
                                        GfxTilingPattern *tPat, const double *mat,
+#endif
                                        int x0, int y0, int x1, int y1,
                                        double xStep, double yStep) override;
 #endif
