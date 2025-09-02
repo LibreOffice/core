@@ -279,21 +279,11 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
         mxLbForm->append_text( aStrFormButton );
         mxLbForm->set_active( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
 
-        if (pHyperlinkItem->GetShowName()) {
-            mxNameLabel->show();
-            mxEdText->show();
-        } else {
-            mxNameLabel->hide();
-            mxEdText->hide();
-        }
+        mxNameLabel->set_visible(m_showName);
+        mxEdText->set_visible(m_showName);
 
-        if (pHyperlinkItem->GetShowText()) {
-            mxEdIndication->show();
-            mxIndicationLabel->show();
-        } else {
-            mxEdIndication->hide();
-            mxIndicationLabel->hide();
-        }
+        mxEdIndication->set_visible(m_showText);
+        mxIndicationLabel->set_visible(m_showText);
     }
 
     // Text
