@@ -94,7 +94,7 @@ void ChartColorPalettes::Fill()
         OUString sName = "Palette " + OUString::number(i + 1);
 
         Bitmap aBitmap(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
-        mxIconView->insert(-1, &sName, &sId, &aBitmap, nullptr);
+        mxIconView->insert(-1, nullptr, &sId, &aBitmap, nullptr);
         mxIconView->set_item_accessible_name(i, sName);
     }
 
