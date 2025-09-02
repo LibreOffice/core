@@ -63,7 +63,7 @@ public:
      *  object and initialize its `aAutoScaling` member to the `ScaleData`
      *  object of the current axis.
      */
-    void initAxisUsageList(const Date& rNullDate, ChartModel& rChartModel);
+    void initAxisUsageList(const Date& rNullDate);
 
     /**
      * Perform automatic axis scaling and determine the amount and spacing of
