@@ -159,7 +159,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
             new primitive2d::TransformPrimitive2D(aEmbedding, Primitive2DContainer(getChildren())));
         primitive2d::Primitive2DContainer xEmbedSeq{ xEmbedRef };
 
-        // Create BitmapEx using drawinglayer tooling, including a MaximumQuadraticPixel
+        // Create Bitmap using drawinglayer tooling, including a MaximumQuadraticPixel
         // limitation to be safe and not go runtime/memory havoc. Use a pretty small
         // limit due to this is softEdge functionality and will look good with bitmap scaling
         // anyways. The value of 250.000 square pixels below maybe adapted as needed.
@@ -181,7 +181,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         if (aBitmap.IsEmpty())
             break;
 
-        // Get BitmapEx and check size. If no content, we are done
+        // Get Bitmap and check size. If no content, we are done
         const Size aBitmapSizePixel(aBitmap.GetSizePixel());
         if (!(aBitmapSizePixel.Width() > 0 && aBitmapSizePixel.Height() > 0))
             break;
@@ -212,7 +212,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
-        BitmapEx result(aBitmap.CreateColorBitmap(), aMask);
+        Bitmap result(aBitmap.CreateColorBitmap(), aMask);
 
 #ifdef DBG_UTIL
         static bool bDoSaveForVisualControl(false); // loplugin:constvars:ignore
@@ -225,7 +225,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
                 SvFileStream aNew(sDumpPath + "test_softedge.png",
                                   StreamMode::WRITE | StreamMode::TRUNC);
                 vcl::PngImageWriter aPNGWriter(aNew);
-                aPNGWriter.write(Bitmap(result));
+                aPNGWriter.write(result);
             }
         }
 #endif
@@ -233,10 +233,10 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         // Independent from discrete sizes of soft alpha creation, always
         // map and project soft result to geometry range extended by soft
         // radius, but to the eventually clipped instance (ClippedRange)
-        const primitive2d::Primitive2DReference xEmbedRefBitmap(new BitmapPrimitive2D(
-            Bitmap(result), basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                aClippedRange.getWidth(), aClippedRange.getHeight(),
-                                aClippedRange.getMinX(), aClippedRange.getMinY())));
+        const primitive2d::Primitive2DReference xEmbedRefBitmap(
+            new BitmapPrimitive2D(result, basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                              aClippedRange.getWidth(), aClippedRange.getHeight(),
+                                              aClippedRange.getMinX(), aClippedRange.getMinY())));
 
         rContainer = primitive2d::Primitive2DContainer{ xEmbedRefBitmap };
 
