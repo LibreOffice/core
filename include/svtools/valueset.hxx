@@ -259,6 +259,7 @@ private:
 
 protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+    weld::ScrolledWindow* GetScrollBar() const { return mxScrolledWindow.get(); }
 
 public:
     ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
@@ -344,6 +345,8 @@ public:
         return mbNoSelection;
     }
     sal_uInt16 GetHighlightedItemId() const { return mnHighItemId; }
+
+    void            RecalculateItemSizes();
 
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;

@@ -35,22 +35,14 @@ namespace sd::tools { class EventMultiplexerEvent; }
 
 namespace sd
 {
-class TransitionPreset;
+
+class TransitionPane;
 class ViewShellBase;
 
 namespace impl
 {
     struct TransitionEffect;
 }
-
-struct TransitionEntry
-{
-    OUString msIcon;
-    OUString msLabel;
-    size_t mnIndex = 0;
-    std::vector<OUString> mnVariants;
-    std::shared_ptr<TransitionPreset> mpPreset;
-};
 
 class SlideTransitionPane final : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
@@ -70,7 +62,7 @@ public:
 private:
     void updateControls();
     void updateControlState();
-    void updateVariants(std::shared_ptr<TransitionPreset> const& pPreset);
+    void updateVariants(size_t nPresetOffset);
 
     void updateSoundList();
     void openSoundFileDialog();
@@ -91,7 +83,7 @@ private:
     DECL_LINK( PlayButtonClicked, weld::Button&, void );
     DECL_LINK( AutoPreviewClicked, weld::Toggleable&, void );
 
-    DECL_LINK( TransitionSelected, weld::IconView&, bool );
+    DECL_LINK( TransitionSelected, ValueSet*, void );
     DECL_LINK( AdvanceSlideRadioButtonToggled, weld::Toggleable&, void );
     DECL_LINK( RepeatAfterRadioButtonToggled, weld::Toggleable&, void );
     DECL_LINK( AdvanceTimeModified, weld::MetricSpinButton&, void );
@@ -107,8 +99,8 @@ private:
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
 
-    std::unique_ptr<weld::IconView> mxTransitionsIconView;
-    std::unique_ptr<weld::ScrolledWindow> mxTransitionsScrollWindow;
+    std::unique_ptr<TransitionPane> mxVS_TRANSITION_ICONS;
+    std::unique_ptr<weld::CustomWeld> mxVS_TRANSITION_ICONSWin;
     std::unique_ptr<weld::Frame> mxRepeatAutoFrame;
     std::unique_ptr<weld::ComboBox> mxLB_VARIANT;
     std::unique_ptr<weld::MetricSpinButton> mxCBX_duration;
@@ -128,14 +120,15 @@ private:
     css::uno::Reference< css::drawing::XDrawView >             mxView;
     rtl::Reference< SdXImpressDocument >                  mxModel;
 
-    std::unordered_map<OUString, std::unique_ptr<TransitionEntry>> maTranstionMap;
-
     bool         mbHasSelection;
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
 
     std::vector<OUString>  maSoundList;
     mutable OUString maCurrentSoundFile;
+
+    // How many variants each transition set has
+    std::map< OUString, int > m_aNumVariants;
 
     Timer maLateInitTimer;
 };
