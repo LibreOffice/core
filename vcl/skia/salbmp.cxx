@@ -140,18 +140,6 @@ void SkiaSalBitmap::CreateBitmapData()
 
 bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
 {
-    return Create(rSalBmp, vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount()));
-}
-
-bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics& rGraphics)
-{
-    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rGraphics.GetBitCount());
-
-    return Create(rSalBmp, ePixelFormat);
-}
-
-bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat)
-{
     assert(mReadAccessCount == 0);
     assert(&rSalBmp != this);
     ResetAllData();
@@ -168,14 +156,29 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelF
     mScaleQuality = src.mScaleQuality;
     mEraseColorSet = src.mEraseColorSet;
     mEraseColor = src.mEraseColor;
-    if (vcl::pixelFormatBitCount(eNewPixelFormat) != src.GetBitCount())
-    {
-        // This appears to be unused(?). Implement this just in case, but be lazy
-        // about it and rely on EnsureBitmapData() doing the conversion from mImage
-        // if needed, even if that may need unnecessary to- and from- SkImage
-        // conversion.
-        ResetToSkImage(GetSkImage());
-    }
+    SAL_INFO("vcl.skia.trace", "create(" << this << "): (" << &src << ")");
+    return true;
+}
+
+bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, [[maybe_unused]] SalGraphics& rGraphics)
+{
+    const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
+    assert(mReadAccessCount == 0);
+    assert(&rSalBmp != this);
+    assert(rGraphics.GetBitCount() == src.mBitCount);
+    ResetAllData();
+    mImage = src.mImage;
+    mImageImmutable = src.mImageImmutable;
+    mAlphaImage = src.mAlphaImage;
+    mBuffer = src.mBuffer;
+    mPalette = src.mPalette;
+    mBitCount = src.mBitCount;
+    mSize = src.mSize;
+    mPixelsSize = src.mPixelsSize;
+    mScanlineSize = src.mScanlineSize;
+    mScaleQuality = src.mScaleQuality;
+    mEraseColorSet = src.mEraseColorSet;
+    mEraseColor = src.mEraseColor;
     SAL_INFO("vcl.skia.trace", "create(" << this << "): (" << &src << ")");
     return true;
 }

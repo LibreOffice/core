@@ -439,7 +439,7 @@ BitmapChecksum Bitmap::GetChecksum() const
         // so, we need to update the imp bitmap for this bitmap instance
         // as we do in BitmapInfoAccess::ImplCreate
         std::shared_ptr<SalBitmap> xNewImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-        if (xNewImpBmp->Create(*mxSalBmp, getPixelFormat()))
+        if (xNewImpBmp->Create(*mxSalBmp))
         {
             Bitmap* pThis = const_cast<Bitmap*>(this);
             pThis->mxSalBmp = std::move(xNewImpBmp);

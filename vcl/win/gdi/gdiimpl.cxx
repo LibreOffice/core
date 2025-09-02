@@ -469,7 +469,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     if( bPrintDDB )
     {
         xTmpSalBmp.emplace();
-        xTmpSalBmp->Create(rSalBitmap, vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()));
+        xTmpSalBmp->Create(rSalBitmap);
         hDrawDIB = xTmpSalBmp->ImplGethDIB();
     }
     else

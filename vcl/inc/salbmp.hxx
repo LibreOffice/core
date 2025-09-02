@@ -65,8 +65,6 @@ public:
     virtual bool            Create( const SalBitmap& rSalBmp ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics& rGraphics ) = 0;
-    virtual bool            Create( const SalBitmap& rSalBmp,
-                                    vcl::PixelFormat eNewPixelFormat) = 0;
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize ) = 0;
     virtual void            Destroy() = 0;

@@ -213,7 +213,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalRGB.emplace();
-        pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
+        pExtraWinSalRGB->Create(*pSalRGB);
         pSalRGB = &*pExtraWinSalRGB;
     }
 
@@ -295,7 +295,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalRGB.emplace();
-        pExtraWinSalRGB->Create(*pSalRGB, vcl::bitDepthToPixelFormat(pSalRGB->GetBitCount()));
+        pExtraWinSalRGB->Create(*pSalRGB);
         pSalRGB = &*pExtraWinSalRGB;
     }
 
@@ -322,7 +322,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
     {
         // we need DIB for success with AcquireBuffer, create a replacement WinSalBitmap
         pExtraWinSalA.emplace();
-        pExtraWinSalA->Create(*pSalA, vcl::bitDepthToPixelFormat(pSalA->GetBitCount()));
+        pExtraWinSalA->Create(*pSalA);
         pSalA = &*pExtraWinSalA;
     }
 
@@ -532,50 +532,6 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics& rSGraphics )
     }
     else if( hNewDDB )
         DeleteObject( hNewDDB );
-
-    return bRet;
-}
-
-bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelFormat)
-{
-    assert(!mpDIB && "already created");
-    assert(!mhDDB && "already created");
-
-    const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
-
-    assert( rSalBmp.mhDDB && "why copy an empty WinSalBitmap");
-
-    if( !rSalBmp.mhDDB )
-        return false;
-
-    ImplCreateDIB( rSalBmp.maSize, eNewPixelFormat, BitmapPalette(), mpDIB, mnDIBSize );
-
-    if( !mpDIB )
-        return false;
-
-    PBITMAPINFO pBI = static_cast<PBITMAPINFO>(mpDIB);
-    if (!pBI)
-        return false;
-
-    bool bRet = false;
-    const int   nLines = static_cast<int>(rSalBmp.maSize.Height());
-    HDC         hDC = GetDC( nullptr );
-    PBYTE       pBits = reinterpret_cast<PBYTE>(pBI) + pBI->bmiHeader.biSize +
-                        ImplGetDIBColorCount( mpDIB ) * sizeof( RGBQUAD );
-
-    if( GetDIBits( hDC, rSalBmp.mhDDB, 0, nLines, pBits, pBI, DIB_RGB_COLORS ) == nLines )
-    {
-        maSize = rSalBmp.maSize;
-        mnBitCount = vcl::pixelFormatBitCount(eNewPixelFormat);
-        bRet = true;
-    }
-    else
-    {
-        free( mpDIB );
-        mpDIB = nullptr;
-    }
-
-    ReleaseDC( nullptr, hDC );
 
     return bRet;
 }

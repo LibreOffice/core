@@ -73,24 +73,34 @@ bool QuartzSalBitmap::Create( const Size& rSize, vcl::PixelFormat ePixelFormat, 
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
-    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
-    return Create( rSalBmp, ePixelFormat);
+    const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
+
+    if (rSourceBitmap.m_pUserBuffer)
+    {
+        mnBits = rSourceBitmap.mnBits;
+        mnWidth = rSourceBitmap.mnWidth;
+        mnHeight = rSourceBitmap.mnHeight;
+        maPalette = rSourceBitmap.maPalette;
+
+        if( AllocateUserData() )
+        {
+            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette,
+                               m_pUserBuffer.get(), rSourceBitmap.mnBits,
+                               rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette,
+                               rSourceBitmap.m_pUserBuffer.get() );
+            return true;
+        }
+    }
+    return false;
 }
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics )
 {
-    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rGraphics.GetBitCount());
-
-    return Create( rSalBmp, ePixelFormat);
-}
-
-bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelFormat )
-{
     const QuartzSalBitmap& rSourceBitmap = static_cast<const QuartzSalBitmap&>(rSalBmp);
 
-    if (eNewPixelFormat != vcl::PixelFormat::INVALID && rSourceBitmap.m_pUserBuffer)
+    if (rSourceBitmap.m_pUserBuffer)
     {
-        mnBits = vcl::pixelFormatBitCount(eNewPixelFormat);
+        mnBits = rGraphics.GetBitCount();
         mnWidth = rSourceBitmap.mnWidth;
         mnHeight = rSourceBitmap.mnHeight;
         maPalette = rSourceBitmap.maPalette;
