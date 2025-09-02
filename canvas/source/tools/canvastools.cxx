@@ -1133,8 +1133,7 @@ namespace canvastools
 
         void clipOutDev(const rendering::ViewState& viewState,
                         const rendering::RenderState& renderState,
-                        OutputDevice& rOutDev,
-                        OutputDevice* p2ndOutDev)
+                        OutputDevice& rOutDev)
         {
             // accumulate non-empty clips into one region
             vcl::Region aClipRegion(true);
@@ -1189,19 +1188,9 @@ namespace canvastools
             // are empty, aClipRegion remains default-constructed,
             // i.e. empty, too.
             if( aClipRegion.IsNull() )
-            {
                 rOutDev.SetClipRegion();
-
-                if( p2ndOutDev )
-                    p2ndOutDev->SetClipRegion();
-            }
             else
-            {
                 rOutDev.SetClipRegion( aClipRegion );
-
-                if( p2ndOutDev )
-                    p2ndOutDev->SetClipRegion( aClipRegion );
-            }
         }
 
         void extractExtraFontProperties(const uno::Sequence<beans::PropertyValue>& rExtraFontProperties,

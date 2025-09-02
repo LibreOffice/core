@@ -534,8 +534,7 @@ namespace canvastools
 
         CANVASTOOLS_DLLPUBLIC void clipOutDev(const css::rendering::ViewState& viewState,
                         const css::rendering::RenderState& renderState,
-                        OutputDevice& rOutDev,
-                        OutputDevice* p2ndOutDev=nullptr);
+                        OutputDevice& rOutDev);
 
         CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32& rEmphasisMark);

@@ -910,7 +910,6 @@ namespace vclcanvas
                                       eColorType == IGNORE_COLOR ? 0 : 3 );
 
         OutputDevice& rOutDev( mpOutDevProvider->getOutDev() );
-        OutputDevice* p2ndOutDev = nullptr;
 
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
@@ -919,7 +918,7 @@ namespace vclcanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-        ::canvastools::clipOutDev(viewState, renderState, rOutDev, p2ndOutDev);
+        ::canvastools::clipOutDev(viewState, renderState, rOutDev);
 
         Color aColor( COL_WHITE );
 
@@ -941,30 +940,15 @@ namespace vclcanvas
                 case LINE_COLOR:
                     rOutDev.SetLineColor( aColor );
                     rOutDev.SetFillColor();
-
-                    if( p2ndOutDev )
-                    {
-                        p2ndOutDev->SetLineColor( aColor );
-                        p2ndOutDev->SetFillColor();
-                    }
                     break;
 
                 case FILL_COLOR:
                     rOutDev.SetFillColor( aColor );
                     rOutDev.SetLineColor();
-
-                    if( p2ndOutDev )
-                    {
-                        p2ndOutDev->SetFillColor( aColor );
-                        p2ndOutDev->SetLineColor();
-                    }
                     break;
 
                 case TEXT_COLOR:
                     rOutDev.SetTextColor( aColor );
-
-                    if( p2ndOutDev )
-                        p2ndOutDev->SetTextColor( aColor );
                     break;
 
                 default:
@@ -1008,7 +992,6 @@ namespace vclcanvas
         aVCLFont.SetColor( aColor );
         aVCLFont.SetFillColor( aColor );
 
-        // no need to replicate this for mp2ndOutDev, we're modifying only aVCLFont here.
         if( !vclcanvastools::setupFontTransform( o_rOutPos, aVCLFont, viewState, renderState, rOutDev ) )
             return false;
 
