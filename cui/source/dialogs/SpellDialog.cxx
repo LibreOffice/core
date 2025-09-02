@@ -1492,6 +1492,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             case SelectionType::OUTSIDE_YES:
                 nAction = Action::UNDOEDIT;
             break;
+            // coverity[dead_error_condition : SUPPRESS] 2024.6.1 - we know its deadcode, but some compilers warn
             case SelectionType::INVALID:
                 assert(false && "selection type not set");
             break;
