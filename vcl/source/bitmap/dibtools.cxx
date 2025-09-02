@@ -490,7 +490,6 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     // Is native format?
     switch(rAcc.GetScanlineFormat())
     {
-        case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N24BitTcBgr:
         {
             // we can't trust arbitrary-sourced index based formats to have correct indexes, so we exclude the pal formats
@@ -1281,7 +1280,6 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, sal_uLong 
 
         switch(rAcc.GetScanlineFormat())
         {
-            case ScanlineFormat::N1BitMsbPal:
             case ScanlineFormat::N8BitPal:
             case ScanlineFormat::N24BitTcBgr:
             {

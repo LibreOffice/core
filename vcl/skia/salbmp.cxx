@@ -204,8 +204,6 @@ ScanlineFormat SkiaSalBitmap::GetScanlineFormat() const
 {
     switch (mBitCount)
     {
-        case 1:
-            return ScanlineFormat::N1BitMsbPal;
         case 8:
             return ScanlineFormat::N8BitPal;
         case 24:

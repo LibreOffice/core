@@ -57,8 +57,6 @@ FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
 {
     switch (nFormat)
     {
-        case ScanlineFormat::N1BitMsbPal:
-            return GetPixelForN1BitMsbPal;
         case ScanlineFormat::N8BitPal:
             return GetPixelForN8BitPal;
         case ScanlineFormat::N24BitTcBgr:
@@ -91,8 +89,6 @@ FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
 {
     switch (nFormat)
     {
-        case ScanlineFormat::N1BitMsbPal:
-            return SetPixelForN1BitMsbPal;
         case ScanlineFormat::N8BitPal:
             return SetPixelForN8BitPal;
         case ScanlineFormat::N24BitTcBgr:
@@ -216,22 +212,6 @@ BitmapColor BitmapReadAccess::GetColorWithFallback(double fY, double fX,
         return rFallback;
 
     return GetColor(nY, nX);
-}
-
-BitmapColor BitmapReadAccess::GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX)
-{
-    return BitmapColor(pScanline[nX >> 3] & (1 << (7 - (nX & 7))) ? 1 : 0);
-}
-
-void BitmapReadAccess::SetPixelForN1BitMsbPal(const Scanline pScanline, tools::Long nX,
-                                              const BitmapColor& rBitmapColor)
-{
-    sal_uInt8& rByte = pScanline[nX >> 3];
-
-    if (rBitmapColor.GetIndex() & 1)
-        rByte |= 1 << (7 - (nX & 7));
-    else
-        rByte &= ~(1 << (7 - (nX & 7)));
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX)

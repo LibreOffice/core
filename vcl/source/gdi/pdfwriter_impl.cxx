@@ -9726,11 +9726,6 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject )
         return false;
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
-    if (!g_bDebugDisableCompression && nBitsPerComponent == 1)
-    {
-        writeG4Stream(pAccess.get());
-    }
-    else
     {
         beginCompression();
         if( ! bTrueColor || pAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )

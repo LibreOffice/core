@@ -463,14 +463,6 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor) const
     // it anymore.
     // TODO: Possibly remove the 1bpp code later.
 
-    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
-        && pReadAcc->GetBestMatchingColor(COL_WHITE) == pReadAcc->GetBestMatchingColor(rTransColor))
-    {
-        // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
-        // already, then just return a copy
-        return *this;
-    }
-
     auto ePixelFormat = vcl::PixelFormat::N8_BPP;
     Bitmap aNewBmp(GetSizePixel(), ePixelFormat, &Bitmap::GetGreyPalette(256));
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);
@@ -484,20 +476,7 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor) const
 
     const BitmapColor aTest(pReadAcc->GetBestMatchingColor(rTransColor));
 
-    if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat() && aWhite.GetIndex() == 1
-        && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
-    {
-        for (tools::Long nY = 0; nY < nHeight; ++nY)
-        {
-            Scanline pSrc = pReadAcc->GetScanline(nY);
-            Scanline pDst = pWriteAcc->GetScanline(nY);
-            assert(pWriteAcc->GetScanlineSize() == pReadAcc->GetScanlineSize());
-            const tools::Long nScanlineSize = pWriteAcc->GetScanlineSize();
-            for (tools::Long nX = 0; nX < nScanlineSize; ++nX)
-                pDst[nX] = ~pSrc[nX];
-        }
-    }
-    else if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
+    if (pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal)
     {
         // optimized for 8Bit source palette
         const sal_uInt8 cTest = aTest.GetIndex();
@@ -644,15 +623,6 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor) const
     // Historically LO used 1bpp masks, but 8bpp masks are much faster,
     // better supported by hardware, and the memory savings are not worth
     // it anymore.
-
-    if ((pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
-        && pReadAcc->GetBestMatchingColor(COL_ALPHA_TRANSPARENT)
-               == pReadAcc->GetBestMatchingColor(rTransColor))
-    {
-        // if we're a 1 bit pixel already, and the transcolor matches the color that would replace it
-        // already, then just return a copy
-        return AlphaMask(*this);
-    }
 
     AlphaMask aNewBmp(GetSizePixel());
     BitmapScopedWriteAccess pWriteAcc(aNewBmp);

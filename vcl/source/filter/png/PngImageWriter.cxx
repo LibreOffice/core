@@ -176,14 +176,6 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
         auto eScanlineFormat = pAccess->GetScanlineFormat();
         switch (eScanlineFormat)
         {
-            case ScanlineFormat::N1BitMsbPal:
-            {
-                assert(!aBitmap.HasAlpha());
-                assert(pAccess->HasPalette());
-                colorType = PNG_COLOR_TYPE_PALETTE;
-                bitDepth = 1;
-                break;
-            }
             case ScanlineFormat::N8BitPal:
             {
                 assert(!aBitmap.HasAlpha());

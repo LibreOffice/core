@@ -64,7 +64,6 @@
 
 class FontSubsetInfo;
 class ZCodec;
-struct BitStreamState;
 
 namespace vcl::pdf
 {
@@ -1095,11 +1094,6 @@ private:
                             VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const Bitmap& rBitmap, const Graphic& i_pGraphic,
                            VirtualDevice const * pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
-
-    // helpers for CCITT 1bit bitmap stream
-    void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
-    void putG4Span( tools::Long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
-    void writeG4Stream( BitmapReadAccess const * i_pBitmap );
 
     // color helper functions
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );

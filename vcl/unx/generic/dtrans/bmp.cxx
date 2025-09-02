@@ -114,16 +114,13 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     // determine header and scanline size
     switch( pImage->depth )
     {
-        case 1:
-            nHeaderSize = 64;
-            nScanlineSize = (pImage->width+31)/32;
-            nBitCount = 1;
-            break;
         case 4:
             nHeaderSize = 72;
             nScanlineSize = (pImage->width+1)/2;
             nBitCount = 4;
             break;
+        case 1:
+            assert(false);
         default:
         case 8:
             nHeaderSize = 1084;

@@ -46,34 +46,18 @@ void SalBitmap::updateChecksum() const
         nCrc = pBuf->maPalette.GetChecksum();
         const int lineBitsCount = pBuf->mnWidth * pBuf->mnBitCount;
         // With 1bpp/4bpp format we need to check only used bits in the last byte.
-        sal_uInt8 extraBitsMask = 0;
-        if( lineBitsCount % 8 != 0 )
-        {
-            const int extraBitsCount = lineBitsCount % 8;
-            switch (pBuf->meFormat)
-            {
-                case ScanlineFormat::N1BitMsbPal:
-                {
-                    static const sal_uInt8 mask1Bit[] = { 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff };
-                    extraBitsMask = mask1Bit[ extraBitsCount ];
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
         if (pBuf->meDirection == ScanlineDirection::TopDown)
         {
             if( pBuf->mnScanlineSize == lineBitsCount / 8 )
                 nCrc = rtl_crc32(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             else // Do not include padding with undefined content in the checksum.
                 for( tools::Long y = 0; y < pBuf->mnHeight; ++y )
-                    nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
+                    nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, 0);
         }
         else // Compute checksum in the order of scanlines, to make it consistent between different bitmap implementations.
         {
             for( tools::Long y = pBuf->mnHeight - 1; y >= 0; --y )
-                nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
+                nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, 0);
         }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
         pThis->mnChecksum = nCrc;
@@ -90,7 +74,6 @@ sal_uInt16 SalBitmap::GetBitCount() const
     switch (GetScanlineFormat())
     {
         case ScanlineFormat::NONE: return 0;
-        case ScanlineFormat::N1BitMsbPal: return 1;
         case ScanlineFormat::N8BitPal: return 8;
         case ScanlineFormat::N24BitTcBgr: return 24;
         case ScanlineFormat::N24BitTcRgb: return 24;
@@ -207,73 +190,12 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     return nullptr;
 }
 
-// Optimized conversion from 1bpp. Currently LO uses 1bpp bitmaps for masks, which is nowadays
-// a lousy obsolete format, as the memory saved is just not worth the cost of fiddling with the bits.
-// Ideally LO should move to RGBA bitmaps. Until then, try to be faster with 1bpp bitmaps.
-typedef void(*WriteColorFunction)( sal_uInt8 color8Bit, sal_uInt8*& dst );
-void writeColorA8(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; };
-void writeColorRGBA(sal_uInt8 color8Bit, sal_uInt8*& dst ) { *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = color8Bit; *dst++ = 0xff; };
-typedef void(*WriteBlackWhiteFunction)( sal_uInt8*& dst, int count );
-void writeBlackA8(sal_uInt8*& dst, int count ) { memset( dst, 0, count ); dst += count; };
-void writeWhiteA8(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count ); dst += count; };
-void writeWhiteRGBA(sal_uInt8*& dst, int count ) { memset( dst, 0xff, count * 4 ); dst += count * 4; };
-void writeBlackRGBA(sal_uInt8*& dst, int count )
-{
-    for( int i = 0; i < count; ++i )
-    {
-        dst[0] = 0x00;
-        dst[1] = 0x00;
-        dst[2] = 0x00;
-        dst[3] = 0xff;
-        dst += 4;
-    }
-};
-
-template< WriteColorFunction func, WriteBlackWhiteFunction funcBlack, WriteBlackWhiteFunction funcWhite >
-void writeBlackWhiteData( const sal_uInt8* src, sal_uInt8* dst, int width, int height, int bytesPerRow )
-{
-    for( int y = 0; y < height; ++y )
-    {
-        const sal_uInt8* srcLine = src;
-        int xsize = width;
-        while( xsize >= 64 )
-        {
-            // TODO alignment?
-            const sal_uInt64* src64 = reinterpret_cast< const sal_uInt64* >( src );
-            if( *src64 == 0x00 )
-                funcBlack( dst, 64 );
-            else if( *src64 == static_cast< sal_uInt64 >( -1 ))
-                funcWhite( dst, 64 );
-            else
-                break;
-            src += sizeof( sal_uInt64 );
-            xsize -= 64;
-        }
-        while( xsize >= 8 )
-        {
-            if( *src == 0x00 ) // => eight black pixels
-                funcBlack( dst, 8 );
-            else if( *src == 0xff ) // => eight white pixels
-                funcWhite( dst, 8 );
-            else
-                for( int bit = 7; bit >= 0; --bit )
-                    func(( *src >> bit ) & 1 ? 0xff : 0, dst );
-            ++src;
-            xsize -= 8;
-        }
-        for( int bit = 7; bit > 7 - xsize; --bit )
-            func(( *src >> bit ) & 1 ? 0xff : 0, dst );
-        ++src;
-        src = srcLine + bytesPerRow;
-    }
-}
-
 } // namespace
 
 std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* src,
     int width, int height, int bitCount, int bytesPerRow, const BitmapPalette& palette, BitConvert type )
 {
-    assert( bitCount == 1 || bitCount == 4 || bitCount == 8 );
+    assert( bitCount == 4 || bitCount == 8 );
     static const o3tl::enumarray<BitConvert, int> bpp = { 1, 4, 4 };
     std::unique_ptr< sal_uInt8[] > data( new sal_uInt8[width * height * bpp[ type ]] );
 
@@ -282,23 +204,6 @@ std::unique_ptr< sal_uInt8[] > SalBitmap::convertDataBitCount( const sal_uInt8* 
         for( int y = 0; y < height; ++y )
             memcpy( data.get() + y * width, src + y * bytesPerRow, width );
         return data;
-    }
-
-    if(bitCount == 1 && palette.GetEntryCount() == 2 && palette[ 0 ] == COL_BLACK && palette[ 1 ] == COL_WHITE)
-    {
-        switch( type )
-        {
-            case BitConvert::A8 :
-                writeBlackWhiteData< writeColorA8, writeBlackA8, writeWhiteA8 >
-                    ( src, data.get(), width, height, bytesPerRow );
-                return data;
-            case BitConvert::BGRA :
-            case BitConvert::RGBA :
-                // BGRA/RGBA is the same, all 3 values get the same value
-                writeBlackWhiteData< writeColorRGBA, writeBlackRGBA, writeWhiteRGBA >
-                    ( src, data.get(), width, height, bytesPerRow );
-                return data;
-        }
     }
 
     std::unique_ptr<ImplPixelFormat> pSrcFormat(ImplPixelFormat::GetFormat(bitCount, palette));

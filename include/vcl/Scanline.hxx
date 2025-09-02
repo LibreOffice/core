@@ -28,8 +28,6 @@ typedef const sal_uInt8*  ConstScanline;
 enum class ScanlineFormat : sal_uInt8
 {
     NONE,
-    // 1 Bit - still needed?
-    N1BitMsbPal,
     // 8 Bit Palette
     N8BitPal,
     // 24 Bit

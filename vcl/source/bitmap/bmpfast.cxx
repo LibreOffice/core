@@ -289,7 +289,6 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     // select the matching instantiation for the destination's bitmap format
     switch (rDst.meFormat)
     {
-        case ScanlineFormat::N1BitMsbPal:
         case ScanlineFormat::N8BitPal:
             break;
 
@@ -373,9 +372,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     // select the matching instantiation for the source's bitmap format
     switch( nSrcFormat )
     {
-        case ScanlineFormat::N1BitMsbPal:
-            break;
-
         case ScanlineFormat::N8BitPal:
             if(rSrc.maPalette.IsGreyPalette8Bit())
                 return ImplConvertFromBitmap<ScanlineFormat::N8BitPal>( rDst, rSrc );
@@ -522,10 +518,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 
     switch (rDst.meFormat)
     {
-        case ScanlineFormat::N1BitMsbPal:
-            nFillByte = rColor.GetIndex();
-            nFillByte = static_cast<sal_uInt8>( -(nFillByte & 1) ); // 0x00 or 0xFF
-            break;
         case ScanlineFormat::N8BitPal:
             nFillByte = rColor.GetIndex();
             break;

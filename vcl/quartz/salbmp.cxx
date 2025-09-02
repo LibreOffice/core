@@ -330,8 +330,6 @@ ScanlineFormat QuartzSalBitmap::GetScanlineFormat() const
 {
     switch( mnBits )
     {
-        case 1:
-            return ScanlineFormat::N1BitMsbPal;
         case 8:
             return ScanlineFormat::N8BitPal;
         case 24:

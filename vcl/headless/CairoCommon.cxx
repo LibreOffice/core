@@ -1882,9 +1882,9 @@ cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
 {
     cairo_format_t nFormat;
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-    assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 24 || rBuffer.mnBitCount == 1);
+    assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 24);
 #else
-    assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
+    assert(rBuffer.mnBitCount == 32);
 #endif
 
     if (rBuffer.mnBitCount == 32)
@@ -1907,9 +1907,9 @@ bool isCairoCompatible(const BitmapBuffer* pBuffer)
 
         // We use Cairo that supports 24-bit RGB.
 #ifdef HAVE_CAIRO_FORMAT_RGB24_888
-    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24 && pBuffer->mnBitCount != 1)
+    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 24)
 #else
-    if (pBuffer->mnBitCount != 32 && pBuffer->mnBitCount != 1)
+    if (pBuffer->mnBitCount != 32)
 #endif
         return false;
 

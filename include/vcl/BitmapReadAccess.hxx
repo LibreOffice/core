@@ -131,7 +131,6 @@ protected:
 public:
     BitmapBuffer* ImplGetBitmapBuffer() const { return mpBuffer; }
 
-    static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX);
     static BitmapColor GetPixelForN8BitPal(ConstScanline pScanline, tools::Long nX);
     static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, tools::Long nX);
     static BitmapColor GetPixelForN24BitTcRgb(ConstScanline pScanline, tools::Long nX);
@@ -144,8 +143,6 @@ public:
     static BitmapColor GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX);
     static BitmapColor GetPixelForN32BitTcRgbx(ConstScanline pScanline, tools::Long nX);
 
-    static void SetPixelForN1BitMsbPal(Scanline pScanline, tools::Long nX,
-                                       const BitmapColor& rBitmapColor);
     static void SetPixelForN8BitPal(Scanline pScanline, tools::Long nX,
                                     const BitmapColor& rBitmapColor);
     static void SetPixelForN24BitTcBgr(Scanline pScanline, tools::Long nX,

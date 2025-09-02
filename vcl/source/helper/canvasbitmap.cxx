@@ -135,12 +135,6 @@ VclCanvasBitmap::VclCanvasBitmap( const Bitmap& rBitmap ) :
 
     switch( m_pBmpAcc->GetScanlineFormat() )
     {
-        case ScanlineFormat::N1BitMsbPal:
-            m_bPalette           = true;
-            m_nBitsPerInputPixel = 1;
-            m_aLayout.IsMsbFirst = true;
-            break;
-
         case ScanlineFormat::N8BitPal:
             m_bPalette           = true;
             m_nBitsPerInputPixel = 8;

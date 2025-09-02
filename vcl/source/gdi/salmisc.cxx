@@ -88,28 +88,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer const & rD
     const tools::Long          nHeight1 = rDstBuffer.mnHeight - 1;
     const BitmapColor*  pColBuf = rSrcBuffer.maPalette.ImplGetColorBuffer();
 
-    if (rSrcBuffer.meFormat == ScanlineFormat::N1BitMsbPal)
-    {
-        const BitmapColor   aCol0( pColBuf[ 0 ] );
-        const BitmapColor   aCol1( pColBuf[ 1 ] );
-        tools::Long                nMapX;
-
-        for (tools::Long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
-        {
-            tools::Long nMapY = pMapY[nActY];
-            Scanline pSrcScan(pSrcScanMap[nMapY]), pDstScan(pDstScanMap[nActY]);
-
-            for (tools::Long nX = 0; nX < rDstBuffer.mnWidth;)
-            {
-                nMapX = pMapX[ nX ];
-                pFncSetPixel( pDstScan, nX++,
-                              pSrcScan[ nMapX >> 3 ] & ( 1 << ( 7 - ( nMapX & 7 ) ) ) ? aCol1 : aCol0 );
-            }
-
-            DOUBLE_SCANLINES();
-        }
-    }
-    else if (rSrcBuffer.meFormat == ScanlineFormat::N8BitPal)
+    if (rSrcBuffer.meFormat == ScanlineFormat::N8BitPal)
     {
         for (tools::Long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
         {
@@ -234,14 +213,13 @@ std::optional<BitmapBuffer> StretchAndConvert(
         // should never come here
         // initialize pFncGetPixel to something valid that is
         // least likely to crash
-        pFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;
+        pFncGetPixel = BitmapReadAccess::GetPixelForN8BitPal;
         OSL_FAIL( "unknown read format" );
     }
 
     // set function for setting pixels
     switch (nDstBitmapFormat)
     {
-        IMPL_CASE_SET_FORMAT( N1BitMsbPal, 1 );
         IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
@@ -258,8 +236,8 @@ std::optional<BitmapBuffer> StretchAndConvert(
             // should never come here
             // initialize pFncSetPixel to something valid that is
             // least likely to crash
-            pFncSetPixel = BitmapReadAccess::SetPixelForN1BitMsbPal;
-            pDstBuffer->mnBitCount = 1;
+            pFncSetPixel = BitmapReadAccess::SetPixelForN8BitPal;
+            pDstBuffer->mnBitCount = 8;
             assert(false && "unknown write format" );
         break;
     }
@@ -295,8 +273,7 @@ std::optional<BitmapBuffer> StretchAndConvert(
     }
 
     // do we need a destination palette or color mask?
-    if (nDstBitmapFormat == ScanlineFormat::N1BitMsbPal ||
-        nDstBitmapFormat == ScanlineFormat::N8BitPal)
+    if (nDstBitmapFormat == ScanlineFormat::N8BitPal)
     {
         assert(pDstPal && "destination buffer requires palette");
         if (!pDstPal)

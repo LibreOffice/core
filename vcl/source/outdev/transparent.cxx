@@ -354,9 +354,6 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         const BitmapColor aBlack( pR->GetBestMatchingColor( COL_BLACK ) );
                         const tools::Long nWidth = pW->Width();
                         const tools::Long nHeight = pW->Height();
-                        const tools::Long nR = aFillCol.GetRed();
-                        const tools::Long nG = aFillCol.GetGreen();
-                        const tools::Long nB = aFillCol.GetBlue();
                         tools::Long nX, nY;
 
                         if (vcl::isPalettePixelFormat(aPaint.getPixelFormat()))
@@ -373,90 +370,32 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                 pMap[ i ] = BitmapColor( static_cast<sal_uInt8>(rPal.GetBestIndex( aCol )) );
                             }
 
-                            if( pR->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
-                                pW->GetScanlineFormat() == ScanlineFormat::N8BitPal )
+                            for( nY = 0; nY < nHeight; nY++ )
                             {
-                                const sal_uInt8 cBlack = aBlack.GetIndex();
-
-                                for( nY = 0; nY < nHeight; nY++ )
+                                Scanline pScanline = pW->GetScanline(nY);
+                                Scanline pScanlineRead = pR->GetScanline(nY);
+                                for( nX = 0; nX < nWidth; nX++ )
                                 {
-                                    Scanline pWScan = pW->GetScanline( nY );
-                                    Scanline pRScan = pR->GetScanline( nY );
-                                    sal_uInt8 cBit = 128;
-
-                                    for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
+                                    if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
                                     {
-                                        if( !cBit )
-                                        {
-                                            cBit = 128;
-                                            pRScan += 1;
-                                        }
-                                        if( ( *pRScan & cBit ) == cBlack )
-                                        {
-                                            *pWScan = pMap[ *pWScan ].GetIndex();
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                for( nY = 0; nY < nHeight; nY++ )
-                                {
-                                    Scanline pScanline = pW->GetScanline(nY);
-                                    Scanline pScanlineRead = pR->GetScanline(nY);
-                                    for( nX = 0; nX < nWidth; nX++ )
-                                    {
-                                        if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
-                                        {
-                                            pW->SetPixelOnData( pScanline, nX, pMap[ pW->GetIndexFromData( pScanline, nX ) ] );
-                                        }
+                                        pW->SetPixelOnData( pScanline, nX, pMap[ pW->GetIndexFromData( pScanline, nX ) ] );
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            if( pR->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
-                                pW->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
+                            for( nY = 0; nY < nHeight; nY++ )
                             {
-                                const sal_uInt8 cBlack = aBlack.GetIndex();
-
-                                for( nY = 0; nY < nHeight; nY++ )
+                                Scanline pScanline = pW->GetScanline(nY);
+                                Scanline pScanlineRead = pR->GetScanline(nY);
+                                for( nX = 0; nX < nWidth; nX++ )
                                 {
-                                    Scanline pWScan = pW->GetScanline( nY );
-                                    Scanline pRScan = pR->GetScanline( nY );
-                                    sal_uInt8 cBit = 128;
-
-                                    for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
+                                    if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
                                     {
-                                        if( !cBit )
-                                        {
-                                            cBit = 128;
-                                            pRScan += 1;
-                                        }
-                                        if( ( *pRScan & cBit ) == cBlack )
-                                        {
-                                            pWScan[ 0 ] = color::ColorChannelMerge( pWScan[ 0 ], nB, cTrans );
-                                            pWScan[ 1 ] = color::ColorChannelMerge( pWScan[ 1 ], nG, cTrans );
-                                            pWScan[ 2 ] = color::ColorChannelMerge( pWScan[ 2 ], nR, cTrans );
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                for( nY = 0; nY < nHeight; nY++ )
-                                {
-                                    Scanline pScanline = pW->GetScanline(nY);
-                                    Scanline pScanlineRead = pR->GetScanline(nY);
-                                    for( nX = 0; nX < nWidth; nX++ )
-                                    {
-                                        if( pR->GetPixelFromData( pScanlineRead, nX ) == aBlack )
-                                        {
-                                            aPixCol = pW->GetColor( nY, nX );
-                                            aPixCol.Merge(aFillCol, cTrans);
-                                            pW->SetPixelOnData(pScanline, nX, aPixCol);
-                                        }
+                                        aPixCol = pW->GetColor( nY, nX );
+                                        aPixCol.Merge(aFillCol, cTrans);
+                                        pW->SetPixelOnData(pScanline, nX, aPixCol);
                                     }
                                 }
                             }

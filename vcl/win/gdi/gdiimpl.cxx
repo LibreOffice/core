@@ -498,32 +498,6 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     {
         ScopedCachedHDC<CACHED_HDC_DRAW> hBmpDC(hDrawDDB);
 
-        COLORREF    nOldBkColor = RGB(0xFF,0xFF,0xFF);
-        COLORREF    nOldTextColor = RGB(0,0,0);
-        bool        bMono = ( rSalBitmap.GetBitCount() == 1 );
-
-        if( bMono )
-        {
-            COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
-            COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
-            //fdo#33455 handle 1 bit depth pngs with palette entries
-            //to set fore/back colors
-            if (BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BitmapAccessMode::Info))
-            {
-                const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
-                if (rPalette.GetEntryCount() == 2)
-                {
-                    Color nCol = rPalette[0];
-                    nTextColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
-                    nCol = rPalette[1];
-                    nBkColor = RGB( nCol.GetRed(), nCol.GetGreen(), nCol.GetBlue() );
-                }
-                const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BitmapAccessMode::Info);
-            }
-            nOldBkColor = SetBkColor( hDC, nBkColor );
-            nOldTextColor = ::SetTextColor( hDC, nTextColor );
-        }
-
         if ( (rPosAry.mnSrcWidth  == rPosAry.mnDestWidth) &&
              (rPosAry.mnSrcHeight == rPosAry.mnDestHeight) )
         {
@@ -547,12 +521,6 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                         nDrawMode );
 
             SetStretchBltMode( hDC, nOldStretchMode );
-        }
-
-        if( bMono )
-        {
-            SetBkColor( hDC, nOldBkColor );
-            ::SetTextColor( hDC, nOldTextColor );
         }
     }
 }
@@ -630,17 +598,7 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
                                                           nMaskColor.GetGreen(),
                                                           nMaskColor.GetBlue())));
 
-    // WIN/WNT seems to have a minor problem mapping the correct color of the
-    // mask to the palette if we draw the DIB directly ==> draw DDB
-    if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
-    {
-        WinSalBitmap aTmp;
-
-        if( aTmp.Create( rSalBitmap, mrParent ) )
-            ImplDrawBitmap( hDC, aPosAry, aTmp, false, 0x00B8074AUL ); // raster operation PSDPxax
-    }
-    else
-        ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );// raster operation PSDPxax
+    ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );// raster operation PSDPxax
 }
 
 std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY, bool bWithoutAlpha )
