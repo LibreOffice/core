@@ -427,24 +427,6 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
 
 static RecentMenuDelegate* pRecentDelegate = nil;
 
-static OUString getShortCut( const OUString& i_rTitle )
-{
-    // create shortcut
-    OUString aKeyEquiv;
-    for( sal_Int32 nIndex = 0; nIndex < i_rTitle.getLength(); nIndex++ )
-    {
-        OUString aShortcut( i_rTitle.copy( nIndex, 1 ).toAsciiLowerCase() );
-        if( aShortcuts.find( aShortcut ) == aShortcuts.end() )
-        {
-            aShortcuts.insert( aShortcut );
-            aKeyEquiv = aShortcut;
-            break;
-        }
-    }
-
-    return aKeyEquiv;   
-}
-
 static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString& i_rTitle, int i_nTag, const OUString& i_rKeyEquiv )
 {
     if( ! i_rTitle.getLength() )
@@ -532,6 +514,12 @@ void setKeyEquivalent( const vcl::KeyCode &rKeyCode, NSMenuItem *pNSMenuItem )
     if ( nModifier & KEY_MOD3 )
         nItemModifier |= NSEventModifierFlagControl;
 
+    // Don’t allow setting the ⌘N shortcut because it would conflict
+    // with the “Startcenter” menu item which is added explicitly in
+    // getNSMenuForVCLMenu
+    if ( nCommandKey == 'n' && nItemModifier == NSEventModifierFlagCommand )
+        return;
+
     OUString aCommandKey( &nCommandKey, 1 );
     NSString *pCommandKey = [NSString stringWithCharacters: reinterpret_cast< unichar const* >(aCommandKey.getStr()) length: aCommandKey.getLength()];
     [pNSMenuItem setKeyEquivalent: pCommandKey];
@@ -601,21 +589,7 @@ static NSMenu *getNSMenuForVCLMenu( Menu *pMenu )
                     [pNSMenuItem setTarget: pNSMenuItem];
                     [pNSMenuItem setCommand: aCommand];
 
-                    // Use the default menu's special "open new file" shortcuts
-                    if ( aCommand == WRITER_URL )
-                        [pNSMenuItem setKeyEquivalent: @"t"];
-                    else if ( aCommand == CALC_URL )
-                        [pNSMenuItem setKeyEquivalent: @"s"];
-                    else if ( aCommand == IMPRESS_WIZARD_URL )
-                        [pNSMenuItem setKeyEquivalent: @"p"];
-                    else if ( aCommand == DRAW_URL )
-                        [pNSMenuItem setKeyEquivalent: @"d"];
-                    else if ( aCommand == MATH_URL )
-                        [pNSMenuItem setKeyEquivalent: @"f"];
-                    else if ( aCommand == BASE_URL )
-                        [pNSMenuItem setKeyEquivalent: @"a"];
-                    else
-                        setKeyEquivalent( pMenu->GetAccelKey( nId ), pNSMenuItem );
+                    setKeyEquivalent( pMenu->GetAccelKey( nId ), pNSMenuItem );
                 }
 
                 [pRet addItem: pNSMenuItem];
@@ -775,9 +749,7 @@ void aqua_init_systray()
                     // menu => also let not appear it in the quickstarter
                     continue;
 
-                OUString aKeyEquiv( getShortCut( ShutdownIcon::GetUrlDescription( sURL ) ) );
-
-                appendMenuItem( pMenu, pDockMenu, ShutdownIcon::GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, aKeyEquiv );
+                appendMenuItem( pMenu, pDockMenu, ShutdownIcon::GetUrlDescription( sURL ), aMenuItems[i].nMenuTag, "" );
             }
 
             // insert the remaining menu entries
@@ -786,11 +758,9 @@ void aqua_init_systray()
             appendRecentMenu( pMenu, SfxResId(STR_QUICKSTART_RECENTDOC) );
 
             OUString aTitle( SfxResId(STR_QUICKSTART_FROMTEMPLATE) );
-            OUString aKeyEquiv( getShortCut( aTitle ) );
-            appendMenuItem( pMenu, pDockMenu, aTitle, MI_TEMPLATE, aKeyEquiv );
+            appendMenuItem( pMenu, pDockMenu, aTitle, MI_TEMPLATE, "" );
             aTitle = SfxResId(STR_QUICKSTART_FILEOPEN);
-            aKeyEquiv = getShortCut( aTitle );
-            appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, aKeyEquiv );
+            appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, "" );
 
             [pDefMenu setSubmenu: pMenu];
             resetMenuBar();
