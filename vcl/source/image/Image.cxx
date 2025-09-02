@@ -162,7 +162,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
                 sal_uInt8 cErase = 128;
                 aTempBitmap = Bitmap(aTempBitmap, AlphaMask(aTempBitmap.GetSizePixel(), &cErase));
             }
-            aRenderBmp = aTempBitmap;
+            aRenderBmp = std::move(aTempBitmap);
         }
     }
 
