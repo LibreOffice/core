@@ -860,7 +860,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll)
         rSet.DisableItem(SID_OUTLINE_COLLAPSE_ALL);
 
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PASTE ) )
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_PASTE)
+        || SfxItemState::DEFAULT == rSet.GetItemState(SID_PASTE_UNFORMATTED))
     {
         if ( !mxClipEvtLstnr.is() )
         {
@@ -880,6 +881,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         if( !bPastePossible )
         {
             rSet.DisableItem( SID_PASTE );
+            rSet.DisableItem(SID_PASTE_UNFORMATTED);
         }
     }
 
