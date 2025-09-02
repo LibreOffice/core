@@ -12,6 +12,7 @@
 
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <sfx2/weldutils.hxx>
 
 namespace chart
 {
@@ -59,8 +60,10 @@ class ChartThemePopup final : public WeldToolbarPopup
 {
     rtl::Reference<ChartThemeControl> mxControl;
     std::unique_ptr<weld::IconView> mxThemesIconView;
+    std::unique_ptr<weld::Button> mxManageChartStylesButton;
 
     DECL_LINK(ThemeSelectedHdl, weld::IconView&, bool);
+    DECL_LINK(ClickManageChartStyleHdl, weld::Button&, void);
 
     void GrabFocus() override;
 

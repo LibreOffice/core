@@ -785,6 +785,8 @@ public:
                            weld::TreeIter* pRet) override;
 
     virtual void insert_separator(int pos, const OUString* pId) override;
+    virtual void do_remove(int pos) override;
+    virtual void set_image(int pos, VirtualDevice& rIcon) override;
 
     virtual void do_clear() override;
     virtual void do_select(int pos) override;
