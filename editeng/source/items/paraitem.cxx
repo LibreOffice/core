@@ -334,7 +334,9 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     nPropWordSpacingMinimum(100),
     nPropWordSpacingMaximum(100),
     nPropLetterSpacingMinimum(0),
-    nPropLetterSpacingMaximum(0)
+    nPropLetterSpacingMaximum(0),
+    nPropScaleWidthMinimum(100),
+    nPropScaleWidthMaximum(100)
 {
     SetAdjust( eAdjst );
 }
@@ -352,7 +354,9 @@ bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
            nPropWordSpacingMaximum == rItem.nPropWordSpacingMaximum &&
            nPropWordSpacing == rItem.nPropWordSpacing &&
            nPropLetterSpacingMinimum == rItem.nPropLetterSpacingMinimum &&
-           nPropLetterSpacingMaximum == rItem.nPropLetterSpacingMaximum;
+           nPropLetterSpacingMaximum == rItem.nPropLetterSpacingMaximum &&
+           nPropScaleWidthMinimum == rItem.nPropScaleWidthMinimum &&
+           nPropScaleWidthMaximum == rItem.nPropScaleWidthMaximum;
 }
 
 size_t SvxAdjustItem::hashCode() const
@@ -367,6 +371,8 @@ size_t SvxAdjustItem::hashCode() const
     o3tl::hash_combine(seed, nPropWordSpacingMaximum);
     o3tl::hash_combine(seed, nPropLetterSpacingMinimum);
     o3tl::hash_combine(seed, nPropLetterSpacingMaximum);
+    o3tl::hash_combine(seed, nPropScaleWidthMinimum);
+    o3tl::hash_combine(seed, nPropScaleWidthMaximum);
     return seed;
 }
 
@@ -382,6 +388,8 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_WORD_SPACING_MAX : rVal <<= static_cast<sal_Int16>(GetPropWordSpacingMaximum()); break;
         case MID_LETTER_SPACING_MIN : rVal <<= GetPropLetterSpacingMinimum(); break;
         case MID_LETTER_SPACING_MAX : rVal <<= GetPropLetterSpacingMaximum(); break;
+        case MID_SCALE_WIDTH_MIN : rVal <<= GetPropScaleWidthMinimum(); break;
+        case MID_SCALE_WIDTH_MAX : rVal <<= GetPropScaleWidthMaximum(); break;
         case MID_EXPAND_SINGLE    :
         {
             rVal <<= bOneBlock;
@@ -448,6 +456,20 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nVal = -1;
             rVal >>= nVal;
             SetPropLetterSpacingMaximum(nVal);
+        }
+        break;
+        case MID_SCALE_WIDTH_MIN :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropScaleWidthMinimum(nVal);
+        }
+        break;
+        case MID_SCALE_WIDTH_MAX :
+        {
+            sal_Int16 nVal = -1;
+            rVal >>= nVal;
+            SetPropScaleWidthMaximum(nVal);
         }
         break;
         case MID_EXPAND_SINGLE :

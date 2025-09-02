@@ -243,6 +243,8 @@
 #define RID_PARA_SPLIT                                      NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Split")
 #define RID_PARA_STYLE_NAME                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Style Name")
 #define RID_PARA_TAB_STOPS                                  NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Tab Stops")
+#define RID_PARA_SCALE_WIDTH_MIN                            NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Scale Width Minimum")
+#define RID_PARA_SCALE_WIDTH_MAX                            NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Scale Width Maximum")
 #define RID_PARA_TOP_MARGIN                                 NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Top Margin")
 #define RID_PARA_TOP_MARGIN_RELATIVE                        NC_("RID_ATTRIBUTE_NAMES_MAP", "Para Top Margin Relative")
 #define RID_PARA_USER_DEFINED_ATTRIBUTES                    NC_("RID_ATTRIBUTE_NAMES_MAP", "Para User Defined Attributes")

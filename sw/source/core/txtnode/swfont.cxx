@@ -1140,6 +1140,13 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
     if( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
+    // change glyph scaling, if needed
+    if ( GetPropWidth() != rInf.GetScaleWidth() )
+    {
+        SetPropWidth( rInf.GetScaleWidth() );
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
+    }
+
     SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
                                            SwModule::get()->GetCTLTextNumerals());
 

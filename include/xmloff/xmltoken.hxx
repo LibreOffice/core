@@ -2021,6 +2021,8 @@ namespace xmloff::token {
         XML_TEXT_ROTATION_ANGLE,
         XML_TEXT_ROTATION_SCALE,
         XML_TEXT_SCALE,
+        XML_TEXT_SCALE_MAXIMUM,
+        XML_TEXT_SCALE_MINIMUM,
         XML_TEXT_SHADOW,
         XML_TEXT_STYLE,
         XML_TEXT_TRANSFORM,

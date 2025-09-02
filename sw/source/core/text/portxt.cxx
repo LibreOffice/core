@@ -306,6 +306,8 @@ void SwTextPortion::BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess 
         ExtraShrunkWidth( 0 );
         ExtraSpaceSize( 0 );
         SetLetterSpacing( 0 );
+        SetScaleWidth( 100 );
+        SetScaleWidthSpacing( 0 );
     }
 }
 
@@ -317,6 +319,8 @@ void SwTextPortion::BreakUnderflow( SwTextFormatInfo &rInf )
     ExtraShrunkWidth( 0 );
     ExtraSpaceSize( 0 );
     SetLetterSpacing( 0 );
+    SetScaleWidth( 100 );
+    SetScaleWidthSpacing( 0 );
     SetLen( TextFrameIndex(0) );
     SetAscent( 0 );
     rInf.SetUnderflow( this );
@@ -359,9 +363,28 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBr
     // final letter spacing/character based on the desired word spacing and maximum letter spacing
     // TODO fix resolution applying 1/100 twips instead of 1 twip
     SwTwips nLetterSpacing = std::min( fLetterSpacingForDesiredWordSpacing, fMaximumLetterSpacing );
+    // at shrinking by letter spacing, avoid overshrinking
+    if ( nLetterSpacing < 0 )
+    {
+        float fMinimumLetterSpacing =
+            nWidthOf10Spaces / 10.0 * aAdjustItem.GetPropLetterSpacingMinimum() / 100.0;
+        nLetterSpacing = std::max( fLetterSpacingForDesiredWordSpacing, fMinimumLetterSpacing );
+    }
     // full width of the extra (rounded) letter spacing within the line
+    // to adjust word spacing in SwTextAdjuster::CalcNewBlock()
     SetLetterSpacing( SwTwips(nLetterSpacing * nLetterCount) );
     SetSpaceCount( TextFrameIndex(nSpaces) );
+
+    // limit glyph scaling without optical sizing:
+    // apply it only after applying maximum letter spacing
+    // TODO: change this after variable font support
+    if ( aAdjustItem.GetPropScaleWidthMaximum() != 100 )
+        SetScaleWidth( 100.0 * rInf.GetLineWidth() / (rInf.GetBreakWidth() + GetLetterSpacing()) );
+    if ( GetScaleWidth() > aAdjustItem.GetPropScaleWidthMaximum() )
+        SetScaleWidth( aAdjustItem.GetPropScaleWidthMaximum() );
+    // space used by glyph scaling to adjust word spacing
+    if ( aAdjustItem.GetPropScaleWidthMaximum() != 100 )
+        SetScaleWidthSpacing( rInf.GetBreakWidth() * (GetScaleWidth() - 100.0) / 100.0 );
 }
 
 bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
@@ -391,6 +414,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     ExtraShrunkWidth( 0 );
     ExtraSpaceSize( 0 );
     SetLetterSpacing( 0 );
+    SetScaleWidth( 100 );
+    SetScaleWidthSpacing( 0 );
     std::optional<SwTextGuess> pGuess(std::in_place);
     bool bFull = !pGuess->Guess( *this, rInf, Height() );
 
@@ -406,6 +431,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     bool bNoWordSpacing = aAdjustItem.GetPropWordSpacing() == 100 &&
                     aAdjustItem.GetPropWordSpacingMinimum() == 100 &&
                     aAdjustItem.GetPropWordSpacingMaximum() == 100 &&
+                    aAdjustItem.GetPropScaleWidthMinimum() == 100 &&
+                    aAdjustItem.GetPropScaleWidthMaximum() == 100 &&
                     aAdjustItem.GetPropLetterSpacingMinimum() == 0 &&
                     aAdjustItem.GetPropLetterSpacingMaximum() == 0;
     // support old ODT documents, where only JustifyLinesWithShrinking was set
@@ -746,6 +773,8 @@ bool SwTextPortion::Format( SwTextFormatInfo &rInf )
         ExtraShrunkWidth( 0 );
         ExtraSpaceSize( 0 );
         SetLetterSpacing( 0 );
+        SetScaleWidth( 100 );
+        SetScaleWidthSpacing( 0 );
         SetLen( TextFrameIndex(0) );
         SetAscent( 0 );
         SetNextPortion( nullptr );  // ????

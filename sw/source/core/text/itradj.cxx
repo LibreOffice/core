@@ -370,11 +370,16 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                             : 0;
 
                     SwLinePortion *pPortion = pCurrent->GetFirstPortion();
-                    tools::Long nSpaceKern = pPortion->GetSpaceCount()
-                        ? tools::Long(pPortion->GetLetterSpacing()) / sal_Int32(pPortion->GetSpaceCount()) * 100
+                    // word spacing filled by letter spacing and glyph scaling (at expansion) or
+                    // word spacing shrunk by them (at shrinking)
+                    tools::Long nSpaceKernAndScale = pPortion->GetSpaceCount()
+                        ? ( pPortion->GetLetterSpacing() + pPortion->GetScaleWidthSpacing() ) * 100.0 /
+                                                                            sal_Int32(pPortion->GetSpaceCount())
                         : 0;
                     // set expansion in 1/100 twips/space
-                    pCurrent->SetLLSpaceAdd( nSpaceSub ? nSpaceSub + nSpaceKern : (nSpaceAdd > nSpaceKern ? nSpaceAdd - nSpaceKern : 0), nSpaceIdx );
+                    pCurrent->SetLLSpaceAdd( nSpaceSub
+                        ? ( nSpaceSub + nSpaceKernAndScale <= LONG_MAX/2 ? 0 : nSpaceSub + nSpaceKernAndScale )
+                        : ( nSpaceAdd > nSpaceKernAndScale ? nSpaceAdd - nSpaceKernAndScale : 0 ), nSpaceIdx );
                     pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
                 }
                 else if (IsOneBlock() && nCharCnt > TextFrameIndex(1))

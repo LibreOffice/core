@@ -34,6 +34,20 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustmentPercent6">
+    <property name="upper">100</property>
+    <property name="lower">50</property>
+    <property name="value">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPercent7">
+    <property name="upper">200</property>
+    <property name="lower">100</property>
+    <property name="value">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
   <!-- n-columns=2 n-rows=1 -->
   <object class="GtkGrid" id="ParaAlignPage">
     <property name="visible">True</property>
@@ -594,6 +608,56 @@
                     <property name="top-attach">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="labelGlyphScaling">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="paragalignpage|labelGlyphScaling">_Glyph scaling:</property>
+                    <property name="use-underline">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spin_GLYPH_SCALING_MIN">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustmentPercent6</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spin_GLYPH_SCALING_MIN-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|GLYPH-SCALING-MIN">Adjusts the minimum glyph scaling. Enter a number between 50% (ultra-condensed) and 100% (regular).</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spin_GLYPH_SCALING_MAX">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="truncate-multiline">True</property>
+                    <property name="adjustment">adjustmentPercent7</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="spin_GLYPH_SCALING_MAX-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="paralignpage|extended_tip|GLYPH-SCALING-MMAX">Adjusts the maximum glyph scaling. Enter a number between 100% (regular) and 200% (ultra-expanded).</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">3</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
+
                 <child>
                   <placeholder/>
                 </child>

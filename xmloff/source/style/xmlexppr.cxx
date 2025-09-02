@@ -947,10 +947,12 @@ sal_Int8 CheckExtendedNamespace(std::u16string_view sXMLAttributeName, std::u16s
         || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_PAGE)
         || IsXMLToken(sXMLAttributeName, XML_HYPHENATION_ZONE_SPREAD))
         return IsXMLToken(sValue, XML_NO_LIMIT) ? -1 : 1;
-    // don't export word spacing when they have the default 100% value
+    // don't export word spacing and glyph scaling when they have the default 100% value
     else if (IsXMLToken(sXMLAttributeName, XML_WORD_SPACING)
         || IsXMLToken(sXMLAttributeName, XML_WORD_SPACING_MINIMUM)
-        || IsXMLToken(sXMLAttributeName, XML_WORD_SPACING_MAXIMUM))
+        || IsXMLToken(sXMLAttributeName, XML_WORD_SPACING_MAXIMUM)
+        || IsXMLToken(sXMLAttributeName, XML_TEXT_SCALE_MINIMUM)
+        || IsXMLToken(sXMLAttributeName, XML_TEXT_SCALE_MAXIMUM))
     {
         static constexpr OUString s100PercentCompare( u"100%"_ustr );
         size_t nBegin = sValue.find( s100PercentCompare );

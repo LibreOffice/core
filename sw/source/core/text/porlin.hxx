@@ -54,6 +54,8 @@ private:
     SwTwips m_nExtraSpaceSize = 0;     // extra space over normal space width
     SwTwips m_nLetterSpacing = 0;      // letter spacing, TODO: add better resolution
     TextFrameIndex m_nSpaceCount;      // space count for letter spacing
+    SwTwips m_nScaleWidth = 100;       // glyph scaling (good resolution to limit font generation)
+    float m_fScaleWidthSpacing = 0.0;  // extra space filled by glyph scaling
 
     std::optional<SwLinePortionLayoutContext> m_nLayoutContext;
 
@@ -85,6 +87,10 @@ public:
     SwTwips GetLetterSpacing() const { return m_nLetterSpacing; }
     void SetLetterSpacing(const SwTwips nNew) { m_nLetterSpacing = nNew; }
     TextFrameIndex GetSpaceCount() const { return m_nSpaceCount; }
+    SwTwips GetScaleWidth() const { return m_nScaleWidth; }
+    void SetScaleWidth(const SwTwips nNew) { m_nScaleWidth = nNew; }
+    float GetScaleWidthSpacing() const { return m_fScaleWidthSpacing; }
+    void SetScaleWidthSpacing(const float fNew) { m_fScaleWidthSpacing = fNew; }
     void SetSpaceCount(TextFrameIndex const nSpaceCount) { m_nSpaceCount = nSpaceCount; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
@@ -205,6 +211,8 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     m_nExtraSpaceSize = rPortion.m_nExtraSpaceSize;
     m_nLetterSpacing = rPortion.m_nLetterSpacing;
     m_nSpaceCount = rPortion.m_nSpaceCount;
+    m_nScaleWidth = rPortion.m_nScaleWidth;
+    m_fScaleWidthSpacing = rPortion.m_fScaleWidthSpacing;
     m_nLayoutContext = rPortion.m_nLayoutContext;
     return *this;
 }
@@ -224,6 +232,8 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     m_nExtraSpaceSize(rPortion.m_nExtraSpaceSize),
     m_nLetterSpacing(rPortion.m_nLetterSpacing),
     m_nSpaceCount(rPortion.m_nSpaceCount),
+    m_nScaleWidth(rPortion.m_nScaleWidth),
+    m_fScaleWidthSpacing(rPortion.m_fScaleWidthSpacing),
     m_nLayoutContext(rPortion.m_nLayoutContext)
 {
 }

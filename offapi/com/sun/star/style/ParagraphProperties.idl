@@ -580,6 +580,34 @@ published service ParagraphProperties
             @since LibreOffice 26.3
          */
         [optional, property] long ParaLetterSpacingMaximum;
+
+        /** specifies the minimum glyph scale width as percentage value relative
+            to the width of the glyph.
+
+            <p>It takes a percent value between [50, 100], where the original
+            width is denoted by 100.</p>
+
+            @see CharScaleWidth
+
+            @see ParaScaleWidthMaximum
+
+            @since LibreOffice 26.3
+         */
+        [optional, property] long ParaScaleWidthMinimum;
+
+        /** specifies the maximum glyph scale width as percentage value relative
+            to the width of the glyph.
+
+            <p>It takes a percent value between [100, 200], where the original
+            width is denoted by 100.</p>
+
+            @see CharScaleWidth
+
+            @see ParaScaleWidthMininum
+
+            @since LibreOffice 26.3
+         */
+        [optional, property] long ParaScaleWidthMaximum;
 };
 
 

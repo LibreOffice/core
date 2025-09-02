@@ -164,6 +164,11 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMinimum;
     std::unique_ptr<weld::MetricSpinButton> m_xLetterSpacingMaximum;
 
+    /// glyph scaling
+    std::unique_ptr<weld::Label> m_xLabelGlyphScaling;
+    std::unique_ptr<weld::MetricSpinButton> m_xGlyphScalingMinimum;
+    std::unique_ptr<weld::MetricSpinButton> m_xGlyphScalingMaximum;
+
     DECL_LINK(AlignHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
     DECL_LINK(TextDirectionHdl_Impl, weld::ComboBox&, void);

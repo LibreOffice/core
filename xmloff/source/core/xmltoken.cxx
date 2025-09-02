@@ -2034,6 +2034,8 @@ namespace xmloff::token {
         TOKEN( "text-rotation-angle",             XML_TEXT_ROTATION_ANGLE ),
         TOKEN( "text-rotation-scale",             XML_TEXT_ROTATION_SCALE ),
         TOKEN( "text-scale",                      XML_TEXT_SCALE ),
+        TOKEN( "text-scale-maximum",              XML_TEXT_SCALE_MAXIMUM ),
+        TOKEN( "text-scale-minimum",              XML_TEXT_SCALE_MINIMUM ),
         TOKEN( "text-shadow",                     XML_TEXT_SHADOW ),
         TOKEN( "text-style",                      XML_TEXT_STYLE ),
         TOKEN( "text-transform",                  XML_TEXT_TRANSFORM ),

@@ -1934,6 +1934,8 @@ text-position
 text-rotation-angle
 text-rotation-scale
 text-scale
+text-scale-maximum
+text-scale-minimum
 text-shadow
 text-style
 text-transform

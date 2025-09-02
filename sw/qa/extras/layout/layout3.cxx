@@ -629,6 +629,74 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf167648_minimum)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168251)
+{
+    createSwDoc("tdf168251.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 39 characters on the first line
+            // This was 27 characters, but setting minimum glyph scaling
+            // to 99% allows more words in the line
+            CPPUNIT_ASSERT_EQUAL(size_t(39), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged letter-spacing
+            // This was 286, now 266, according to the -25% minimum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(270), sal_Int32(pDXArray[1]));
+
+            break;
+        }
+    }
+
+    // Find the fourth text array action
+    int nLine = 0;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            if (++nLine < 6)
+                continue;
+
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 35 characters on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(35), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // second character of the first word with enlarged glyph width
+            // This was 238, now 251, according to the 110% maximum glyph scaling
+            // (and no changes in letter spacing)
+            CPPUNIT_ASSERT_GREATER(sal_Int32(245), sal_Int32(pDXArray[1]));
+
+            // Assert we are using the expected position for the
+            // first character of the last word with enlarged glyph width
+            // This was 3689, now 3659, according to the 110% maximum glyph scaling
+            CPPUNIT_ASSERT_LESS(sal_Int32(3665), sal_Int32(pDXArray[30]));
+
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164499)
 {
     createSwDoc("tdf164499.docx");

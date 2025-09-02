@@ -499,6 +499,17 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
 
+        // tdf#168251 minimum glyph scaling allows more text in the line
+        // TODO don't be greedy, allow only an extra word or word part
+        const sal_Int16 nScaleWidthMinimum = aAdjustItem.GetPropScaleWidthMinimum();
+        if ( nScaleWidthMinimum < 100 )
+        {
+            SwTwips nExtraSpace = nLineWidth / (nScaleWidthMinimum / 100.0) - nLineWidth;
+            nLineWidth += nExtraSpace;
+            rInf.SetExtraSpace( rInf.GetExtraSpace() + nExtraSpace );
+            m_nCutPos = rInf.GetTextBreak( nLineWidth, nMaxLen, nMaxComp, rInf.GetCachedVclData().get() );
+        }
+
         // tdf#167648 minimum letter spacing allows more text in the line
         // TODO don't be greedy, allow only an extra word or word part
         if ( const sal_Int16 nLetterSpacingMinimum = aAdjustItem.GetPropLetterSpacingMinimum() )

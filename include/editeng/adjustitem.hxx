@@ -55,6 +55,10 @@ class EDITENG_DLLPUBLIC SvxAdjustItem final : public SfxPoolItem
     sal_Int16 nPropLetterSpacingMinimum;
     sal_Int16 nPropLetterSpacingMaximum;
 
+    // minimum and maximum glyph scaling values in percent
+    sal_Int16 nPropScaleWidthMinimum;
+    sal_Int16 nPropScaleWidthMaximum;
+
 protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
@@ -206,6 +210,27 @@ public:
     void SetPropLetterSpacingMaximum( sal_Int16 nVal )
     {
         nPropLetterSpacingMaximum = nVal;
+    }
+
+
+    sal_Int16 GetPropScaleWidthMaximum() const
+    {
+        return nPropScaleWidthMaximum;
+    }
+
+    void SetPropScaleWidthMaximum( sal_Int16 nVal )
+    {
+        nPropScaleWidthMaximum = nVal;
+    }
+
+    sal_Int16 GetPropScaleWidthMinimum() const
+    {
+        return nPropScaleWidthMinimum;
+    }
+
+    void SetPropScaleWidthMinimum( sal_Int16 nVal )
+    {
+        nPropScaleWidthMinimum = nVal;
     }
 };
 

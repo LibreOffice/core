@@ -303,6 +303,8 @@ static OUString PropertyNametoRID(const OUString& rName)
         { "ParaRegisterModeActive", RID_PARA_REGISTER_MODE_ACTIVE },
         { "ParaRightMargin", RID_PARA_RIGHT_MARGIN },
         { "ParaRightMarginRelative", RID_PARA_RIGHT_MARGIN_RELATIVE },
+        { "ParaScaleWidthMinimum", RID_PARA_SCALE_WIDTH_MIN },
+        { "ParaScaleWidthMaximum", RID_PARA_SCALE_WIDTH_MAX },
         { "ParaShadowFormat", RID_PARA_SHADOW_FORMAT },
         { "ParaSplit", RID_PARA_SPLIT },
         { "ParaStyleName", RID_PARA_STYLE_NAME },
