@@ -910,10 +910,13 @@ MetaBmpAction::MetaBmpAction( const Point& rPt, const Bitmap& rBmp ) :
     MetaAction  ( MetaActionType::BMP ),
     maBmp       ( rBmp ),
     maPt        ( rPt )
-{}
+{
+    assert(!rBmp.HasAlpha() && "caller should be using MetaBmpExAction");
+}
 
 void MetaBmpAction::Execute( OutputDevice* pOut )
 {
+    assert(!maBmp.HasAlpha() && "caller should be using MetaBmpExAction");
     pOut->DrawBitmap( maPt, maBmp );
 }
 
@@ -945,7 +948,9 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
     maBmp       ( rBmp ),
     maPt        ( rPt ),
     maSz        ( rSz )
-{}
+{
+    assert(!rBmp.HasAlpha() && "caller should be using MetaBmpExScaleAction");
+}
 
 static bool AllowScale(const Size& rSource, const Size& rDest)
 {
@@ -988,6 +993,7 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
+    assert(!maBmp.HasAlpha() && "caller should be using MetaBmpExScaleAction");
     Size aPixelSize(pOut->LogicToPixel(maSz));
     if (!AllowRect(tools::Rectangle(pOut->LogicToPixel(maPt), aPixelSize)) ||
         !AllowScale(maBmp.GetSizePixel(), aPixelSize))
@@ -1032,10 +1038,13 @@ MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size&
     maDstSz     ( rDstSz ),
     maSrcPt     ( rSrcPt ),
     maSrcSz     ( rSrcSz )
-{}
+{
+    assert(!rBmp.HasAlpha() && "caller should be using MetaBmpExScalePartAction");
+}
 
 void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
 {
+    assert(!maBmp.HasAlpha() && "caller should be using MetaBmpExScalePartAction");
     if (!AllowRect(pOut->LogicToPixel(tools::Rectangle(maDstPt, maDstSz))))
         return;
 
