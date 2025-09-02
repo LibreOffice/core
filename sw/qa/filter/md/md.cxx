@@ -23,6 +23,7 @@
 #include <IDocumentContentOperations.hxx>
 #include <fmtcntnt.hxx>
 #include <ndgrf.hxx>
+#include <itabenum.hxx>
 
 namespace
 {
@@ -308,6 +309,61 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
     // - Expected: A ![mytitle](./test.png) B
     // - Actual  : A  B
     // i.e. the image was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testExportingTable)
+{
+    // Given a document that has a table:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"before"_ustr);
+    SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
+                                             /*nRowsToRepeat=*/0);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/3, /*nCols=*/3);
+    pWrtShell->Insert(u"after"_ustr);
+    pWrtShell->SttPara();
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->Insert(u"A1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A3"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B3"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C3"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the table content is not lost:
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        "before" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "| A1 | B1 | C1 |" SAL_NEWLINE_STRING
+        // Delimiter row consists of cells whose only content are hyphens (-).
+        "|-|-|-|" SAL_NEWLINE_STRING
+        "| A2 | B2 | C2 |" SAL_NEWLINE_STRING
+        "| A3 | B3 | C3 |" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "after" SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Actual  : before\n\nafter\n
+    // i.e. the table content was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

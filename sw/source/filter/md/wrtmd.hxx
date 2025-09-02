@@ -22,11 +22,30 @@
 #include <sal/config.h>
 
 #include <map>
+#include <stack>
 
 #include <rtl/ustring.hxx>
 
 #include <shellio.hxx>
 #include <swdllapi.h>
+
+/// Stores information about an SwNode that is at the start or end of a table cell.
+struct SwMDCellInfo
+{
+    bool bCellStart = false;
+    bool bRowStart = false;
+    bool bRowEnd = false;
+    bool bFirstRowEnd = false;
+    size_t nFirstRowBoxCount = 0;
+};
+
+/// Tracks information about one SwTableNode, the instance is alive while the write of the table is
+/// in progress.
+struct SwMDTableInfo
+{
+    std::map<SwNodeOffset, SwMDCellInfo> aCellInfos;
+    const SwEndNode* pEndNode = nullptr;
+};
 
 class SwMDWriter : public Writer
 {
@@ -37,6 +56,7 @@ public:
     SwNodeOffset StartNodeIndex() const { return m_nStartNodeIndex; }
     void SetListLevelPrefixSize(int nListLevel, int nPrefixSize);
     const std::map<int, int>& GetListLevelPrefixSizes() const { return m_aListLevelPrefixSizes; }
+    std::stack<SwMDTableInfo>& GetTableInfos() { return m_aTableInfos; }
 
 protected:
     ErrCode WriteStream() override;
@@ -48,6 +68,7 @@ private:
     SwNodeOffset m_nStartNodeIndex{ 0 };
     /// List level -> prefix size map, e.g. "1. " size is 3.
     std::map<int, int> m_aListLevelPrefixSizes;
+    std::stack<SwMDTableInfo> m_aTableInfos;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
