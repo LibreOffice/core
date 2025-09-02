@@ -443,11 +443,36 @@ void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars)
 /* Output of the nodes*/
 void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFirst)
 {
+    std::optional<SwMDCellInfo> oCellInfo;
+    std::stack<SwMDTableInfo>& rTableInfos = rWrt.GetTableInfos();
+    if (!rTableInfos.empty())
+    {
+        SwMDTableInfo& aTableInfo = rTableInfos.top();
+        auto it = aTableInfo.aCellInfos.find(rNode.GetIndex());
+        if (it != aTableInfo.aCellInfos.end())
+        {
+            // This text node is at the start or end of a table cell.
+            oCellInfo = it->second;
+        }
+    }
+
+    if (oCellInfo && oCellInfo->bCellStart)
+    {
+        // Cell start, separate by " | " from the previous cell, see
+        // <https://github.github.com/gfm/#tables-extension->.
+        if (!oCellInfo->bRowStart)
+        {
+            rWrt.Strm().WriteUnicodeOrByteText(u" ");
+        }
+
+        rWrt.Strm().WriteUnicodeOrByteText(u"| ");
+    }
+
     const OUString& rNodeText = rNode.GetText();
     if (!rNodeText.isEmpty())
     {
         // Paragraphs separate by empty lines
-        if (!bFirst)
+        if (!bFirst && !oCellInfo)
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
         int nHeadingLevel = 0;
@@ -609,23 +634,69 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         // Output final closing attributes
         OutFormattingChange(rWrt, positions, nEnd, currentStatus);
     }
-    rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+
+    bool bRowEnd = oCellInfo && oCellInfo->bRowEnd;
+    if (bRowEnd)
+    {
+        // Cell ends are implicit, but row end has its own marker.
+        rWrt.Strm().WriteUnicodeOrByteText(u" |");
+
+        if (oCellInfo->bFirstRowEnd)
+        {
+            // First row has a separator from the remaining rows, which is written even for
+            // single-row tables.
+            rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+            for (size_t nBox = 0; nBox < oCellInfo->nFirstRowBoxCount; ++nBox)
+            {
+                rWrt.Strm().WriteUnicodeOrByteText(u"|-");
+            }
+            rWrt.Strm().WriteUnicodeOrByteText(u"|");
+        }
+    }
+
+    if (!oCellInfo || bRowEnd)
+    {
+        rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+    }
 }
 
-void OutMarkdown_SwTableNode(SwMDWriter& /*rWrt*/, const SwTableNode& /*rNode*/)
+void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
 {
-    // TODO
+    // Scan the SwTable for the interesting start/end nodes, so we know when to write the various
+    // separators when the caller will actually traverse the content of the table.
+    SwMDTableInfo aTableInfo;
+    const SwTable& rTable = rTableNode.GetTable();
+    for (size_t nLine = 0; nLine < rTable.GetTabLines().size(); ++nLine)
+    {
+        const SwTableLine* pLine = rTable.GetTabLines()[nLine];
+        for (size_t nBox = 0; nBox < pLine->GetTabBoxes().size(); ++nBox)
+        {
+            const SwTableBox* pBox = pLine->GetTabBoxes()[nBox];
+            const SwStartNode* pStart = pBox->GetSttNd();
+            SwMDCellInfo& rStartInfo = aTableInfo.aCellInfos[pStart->GetIndex() + 1];
+            const SwEndNode* pEnd = pStart->EndOfSectionNode();
+            rStartInfo.bCellStart = true;
+            if (nBox == 0)
+            {
+                rStartInfo.bRowStart = true;
+            }
+            if (nBox == pLine->GetTabBoxes().size() - 1)
+            {
+                SwMDCellInfo& rEndInfo = aTableInfo.aCellInfos[pEnd->GetIndex() - 1];
+                rEndInfo.bRowEnd = true;
+                if (nLine == 0)
+                {
+                    rEndInfo.bFirstRowEnd = true;
+                    rEndInfo.nFirstRowBoxCount = pLine->GetTabBoxes().size();
+                }
+            }
+        }
+    }
+    aTableInfo.pEndNode = rTableNode.EndOfSectionNode();
+    rWrt.GetTableInfos().push(aTableInfo);
 
-    //const SwTable& rTable = rNode.GetTable();
-
-    //WriterRef pHtmlWrt;
-    //GetHTMLWriter({}, {}, pHtmlWrt);
-    //SvMemoryStream stream;
-    //SwPaM pam(*rNode.EndOfSectionNode(), rNode);
-    //pam.End()->Adjust(SwNodeOffset(+1));
-    //pHtmlWrt->Write(pam, stream, nullptr);
-
-    //...
+    // Separator between the table and the previous content.
+    rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 }
 }
 
@@ -705,7 +776,11 @@ void SwMDWriter::Out_SwDoc(SwPaM* pPam)
             else if (rNd.IsTableNode())
             {
                 OutMarkdown_SwTableNode(*this, *rNd.GetTableNode());
-                m_pCurrentPam->GetPoint()->Assign(*rNd.EndOfSectionNode());
+            }
+            else if (rNd.IsEndNode() && !m_aTableInfos.empty()
+                     && &rNd == m_aTableInfos.top().pEndNode)
+            {
+                m_aTableInfos.pop();
             }
             else if (rNd.IsSectionNode())
             {
