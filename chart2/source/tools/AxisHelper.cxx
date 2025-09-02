@@ -111,7 +111,8 @@ chart2::ScaleData AxisHelper::getDateCheckedScale( const rtl::Reference< Axis >&
     }
     if( aScale.AxisType == AxisType::DATE )
     {
-        if( !xCooSys || !xCooSys->getExplicitCategoriesProvider(rModel).isDateAxis() )
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, rModel );
+        if( !aExplicitCategoriesProvider.isDateAxis() )
             aScale.AxisType = AxisType::CATEGORY;
     }
     return aScale;

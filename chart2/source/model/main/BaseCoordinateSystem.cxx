@@ -24,7 +24,6 @@
 #include <ModifyListenerHelper.hxx>
 #include <Axis.hxx>
 #include <ChartType.hxx>
-#include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -317,13 +316,6 @@ void BaseCoordinateSystem::setChartTypes( const std::vector< rtl::Reference< Cha
     for (auto const & aChartType : m_aChartTypes)
         aChartType->addModifyListener( m_xModifyEventForwarder );
     fireModifyEvent();
-}
-
-ExplicitCategoriesProvider& BaseCoordinateSystem::getExplicitCategoriesProvider(ChartModel& rModel)
-{
-    if (!mxExplicitCategoriesProvider)
-        mxExplicitCategoriesProvider = std::make_unique<ExplicitCategoriesProvider>(this, rModel);
-    return *mxExplicitCategoriesProvider;
 }
 
 // ____ XModifyBroadcaster ____

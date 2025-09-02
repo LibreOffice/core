@@ -534,7 +534,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     // - prepare list of all axis and how they are used
     Date aNullDate = NumberFormatterWrapper( xNumberFormatsSupplier ).getNullDate();
-    rParam.mpSeriesPlotterContainer->initAxisUsageList(aNullDate, mrChartModel);
+    rParam.mpSeriesPlotterContainer->initAxisUsageList(aNullDate);
     rParam.mpSeriesPlotterContainer->doAutoScaling( mrChartModel );
     rParam.mpSeriesPlotterContainer->setScalesFromCooSysToPlotter();
     rParam.mpSeriesPlotterContainer->setNumberFormatsFromAxes();

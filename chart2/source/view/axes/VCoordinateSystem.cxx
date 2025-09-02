@@ -24,6 +24,7 @@
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
 #include <BaseCoordinateSystem.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 #include <GridProperties.hxx>
 #include <ChartModel.hxx>
 #include <ScaleAutomatism.hxx>
@@ -217,6 +218,16 @@ void VCoordinateSystem::impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex
 
     if( rAxisIndex < 0 || rAxisIndex > getMaximumAxisIndexByDimension(rDimensionIndex) )
         rAxisIndex = 0;
+}
+
+void VCoordinateSystem::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider /*takes ownership*/ )
+{
+    m_apExplicitCategoriesProvider.reset(pExplicitCategoriesProvider);
+}
+
+ExplicitCategoriesProvider* VCoordinateSystem::getExplicitCategoriesProvider()
+{
+    return m_apExplicitCategoriesProvider.get();
 }
 
 std::vector< ExplicitScaleData > VCoordinateSystem::getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const

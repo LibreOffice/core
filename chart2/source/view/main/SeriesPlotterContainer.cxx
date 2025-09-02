@@ -123,6 +123,7 @@ VCoordinateSystem* SeriesPlotterContainer::addCooSysToList(
         ObjectIdentifier::createParticleForCoordinateSystem(xCooSys, &rChartModel));
     pVCooSys->setParticle(aCooSysParticle);
 
+    pVCooSys->setExplicitCategoriesProvider(new ExplicitCategoriesProvider(xCooSys, rChartModel));
     rVCooSysList.push_back(std::move(pVCooSys));
     return rVCooSysList.back().get();
 }
@@ -259,8 +260,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
             pPlotter->setNumberFormatsSupplier(xNumberFormatsSupplier);
             pPlotter->setColorScheme(xColorScheme);
             if (pVCooSys)
-                pPlotter->setExplicitCategoriesProvider(
-                    &xCooSys->getExplicitCategoriesProvider(rChartModel));
+                pPlotter->setExplicitCategoriesProvider(pVCooSys->getExplicitCategoriesProvider());
             sal_Int32 nMissingValueTreatment
                 = xDiagram->getCorrectedMissingValueTreatment(xChartType);
 
@@ -378,7 +378,7 @@ bool SeriesPlotterContainer::isCategoryPositionShifted(const chart2::ScaleData& 
     return rSourceScale.AxisType == AxisType::SERIES;
 }
 
-void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate, ChartModel& rChartModel)
+void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 {
     m_aAxisUsageList.clear();
 
@@ -411,13 +411,13 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate, ChartModel
                     // Create axis usage object for this axis.
 
                     chart2::ScaleData aSourceScale = xAxis->getScaleData();
-                    ExplicitCategoriesProvider& rCatProvider
-                        = xCooSys->getExplicitCategoriesProvider(rChartModel);
+                    ExplicitCategoriesProvider* pCatProvider
+                        = pVCooSys->getExplicitCategoriesProvider();
                     if (nDimIndex == 0)
-                        AxisHelper::checkDateAxis(aSourceScale, &rCatProvider, bDateAxisAllowed);
+                        AxisHelper::checkDateAxis(aSourceScale, pCatProvider, bDateAxisAllowed);
 
-                    bool bHasComplexCat
-                        = rCatProvider.hasComplexCategories() && bComplexCategoryAllowed;
+                    bool bHasComplexCat = pCatProvider && pCatProvider->hasComplexCategories()
+                                          && bComplexCategoryAllowed;
                     aSourceScale.ShiftedCategoryPosition
                         = isCategoryPositionShifted(aSourceScale, bHasComplexCat);
 
