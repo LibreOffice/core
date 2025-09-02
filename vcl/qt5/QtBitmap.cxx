@@ -63,10 +63,10 @@ bool QtBitmap::Create(const SalBitmap& rSalBmp)
     return true;
 }
 
-bool QtBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pSalGraphics)
+bool QtBitmap::Create(const SalBitmap& rSalBmp, SalGraphics& rSalGraphics)
 {
     const QtBitmap* pBitmap = static_cast<const QtBitmap*>(&rSalBmp);
-    QtGraphics* pGraphics = static_cast<QtGraphics*>(pSalGraphics);
+    QtGraphics* pGraphics = static_cast<QtGraphics*>(&rSalGraphics);
     QImage* pImage = pGraphics->getQImage();
     m_pImage.reset(new QImage(pBitmap->m_pImage->convertToFormat(pImage->format())));
     return true;

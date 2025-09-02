@@ -43,7 +43,7 @@ public:
                                    const BitmapPalette& rPalette) override;
     SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp ) override;
     SAL_DLLPRIVATE virtual bool            Create( const SalBitmap& rSalBmp,
-                                    SalGraphics* pGraphics ) override;
+                                    SalGraphics& rGraphics ) override;
     SAL_DLLPRIVATE virtual bool            Create(const SalBitmap& rSalBmp,
                                    vcl::PixelFormat eNewPixelFormat) override;
     SAL_DLLPRIVATE virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,

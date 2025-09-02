@@ -77,13 +77,9 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
     return Create( rSalBmp, ePixelFormat);
 }
 
-bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
+bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics& rGraphics )
 {
-    vcl::PixelFormat ePixelFormat = vcl::PixelFormat::INVALID;
-    if (pGraphics)
-        ePixelFormat = vcl::bitDepthToPixelFormat(pGraphics->GetBitCount());
-    else
-        ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
+    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rGraphics.GetBitCount());
 
     return Create( rSalBmp, ePixelFormat);
 }

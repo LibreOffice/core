@@ -636,7 +636,7 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
     {
         WinSalBitmap aTmp;
 
-        if( aTmp.Create( rSalBitmap, &mrParent ) )
+        if( aTmp.Create( rSalBitmap, mrParent ) )
             ImplDrawBitmap( hDC, aPosAry, aTmp, false, 0x00B8074AUL ); // raster operation PSDPxax
     }
     else

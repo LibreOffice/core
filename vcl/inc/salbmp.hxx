@@ -64,7 +64,7 @@ public:
                                     const BitmapPalette& rPal ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    SalGraphics* pGraphics ) = 0;
+                                    SalGraphics& rGraphics ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     vcl::PixelFormat eNewPixelFormat) = 0;
     virtual bool            Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,

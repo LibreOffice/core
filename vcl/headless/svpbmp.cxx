@@ -185,7 +185,7 @@ bool SvpSalBitmap::Create(const SalBitmap& rBmp)
 }
 
 bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
-                           SalGraphics* /*pGraphics*/ )
+                           SalGraphics& /*rGraphics*/ )
 {
     return false;
 }

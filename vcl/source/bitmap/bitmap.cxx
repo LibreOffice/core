@@ -932,7 +932,7 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay ) const
     if( mxSalBmp && pDispGraphics )
     {
         std::shared_ptr<SalBitmap> xImpDispBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-        if (xImpDispBmp->Create(*mxSalBmp, pDispGraphics))
+        if (xImpDispBmp->Create(*mxSalBmp, *pDispGraphics))
             aDispBmp.ImplSetSalBitmap(xImpDispBmp);
     }
 

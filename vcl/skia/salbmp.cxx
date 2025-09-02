@@ -143,13 +143,9 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp)
     return Create(rSalBmp, vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount()));
 }
 
-bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics* pGraphics)
+bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, SalGraphics& rGraphics)
 {
-    auto ePixelFormat = vcl::PixelFormat::INVALID;
-    if (pGraphics)
-        ePixelFormat = vcl::bitDepthToPixelFormat(pGraphics->GetBitCount());
-    else
-        ePixelFormat = vcl::bitDepthToPixelFormat(rSalBmp.GetBitCount());
+    vcl::PixelFormat ePixelFormat = vcl::bitDepthToPixelFormat(rGraphics.GetBitCount());
 
     return Create(rSalBmp, ePixelFormat);
 }

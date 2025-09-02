@@ -73,7 +73,7 @@ public:
     bool                        Create( HBITMAP hBitmap );
     virtual bool                Create( const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal ) override;
     virtual bool                Create( const SalBitmap& rSalBmpImpl ) override;
-    virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics ) override;
+    virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics& rGraphics ) override;
     virtual bool                Create( const SalBitmap& rSalBmpImpl, vcl::PixelFormat eNewPixelFormat ) override;
     virtual bool                Create( const css::uno::Reference< css::rendering::XBitmapCanvas >& rBitmapCanvas,
                                            Size& rSize ) override;

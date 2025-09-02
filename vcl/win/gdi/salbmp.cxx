@@ -500,7 +500,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
         return false;
 }
 
-bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
+bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics& rSGraphics )
 {
     assert(!mpDIB && "already created");
     assert(!mhDDB && "already created");
@@ -514,7 +514,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
         return false;
 
     bool bRet = false;
-    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+    WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(&rSGraphics);
 
     HDC                 hDC  = pGraphics->getHDC();
     BITMAP              aDDBInfo;
