@@ -93,7 +93,8 @@ public:
                 continue;
             if (!lvalueType->getPointeeType().isConstQualified())
                 continue;
-            auto paramClassOrStructType = lvalueType->getPointeeType()->getAs<RecordType>();
+            auto paramClassOrStructType
+                = lvalueType->getPointeeType().getCanonicalType()->getAs<RecordType>();
             if (!paramClassOrStructType)
                 continue;
             // check for temporary and functional cast in argument expression
@@ -155,7 +156,8 @@ public:
                     continue;
             }
             auto valueType = param->getType()->getAs<ReferenceType>();
-            auto paramClassOrStructType = valueType->getPointeeType()->getAs<RecordType>();
+            auto paramClassOrStructType
+                = valueType->getPointeeType().getCanonicalType()->getAs<RecordType>();
             if (!paramClassOrStructType)
                 continue;
             // check for temporary and functional cast in argument expression
