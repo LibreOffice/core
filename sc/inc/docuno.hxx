@@ -313,6 +313,9 @@ public:
     /// @see vcl::ITiledRenderable::getDataArea().
     virtual Size getDataArea(long nPart) override;
 
+    /// @see vcl::ITiledRenderable::getPrintRanges().
+    virtual OUString getPrintRanges() override;
+
     /// @see vcl::ITiledRenderable::setPart().
     virtual void setPart(int nPart, bool bAllowChangeFocus = true) override;
 
