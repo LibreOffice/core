@@ -92,9 +92,13 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRB_Stack_Z;
 };
 
-#define POS_LINETYPE_STRAIGHT 0
-#define POS_LINETYPE_SMOOTH 1
-#define POS_LINETYPE_STEPPED 2
+enum class PosLineType
+{
+    None = -1,
+    Straight = 0,
+    Smooth = 1,
+    Stepped = 2
+};
 
 class SplineResourceGroup final : public ChangingResource
 {
@@ -105,6 +109,9 @@ public:
 
     void fillControls(const ChartTypeParameter& rParameter);
     void fillParameter(ChartTypeParameter& rParameter);
+
+    void setActiveLineType(PosLineType type);
+    PosLineType getActiveLineType() const;
 
 private:
     DECL_LINK(LineTypeChangeHdl, weld::ComboBox&, void);

@@ -228,17 +228,27 @@ void SplineResourceGroup::showControls(bool bShow)
     m_xPB_DetailsDialog->set_visible(bShow);
 }
 
+void SplineResourceGroup::setActiveLineType(PosLineType type)
+{
+    m_xLB_LineType->set_active(static_cast<sal_Int32>(type));
+}
+
+PosLineType SplineResourceGroup::getActiveLineType() const
+{
+    return static_cast<PosLineType>(m_xLB_LineType->get_active());
+}
+
 void SplineResourceGroup::fillControls(const ChartTypeParameter& rParameter)
 {
     switch (rParameter.eCurveStyle)
     {
         case CurveStyle_LINES:
-            m_xLB_LineType->set_active(POS_LINETYPE_STRAIGHT);
+            setActiveLineType(PosLineType::Straight);
             m_xPB_DetailsDialog->set_sensitive(false);
             break;
         case CurveStyle_CUBIC_SPLINES:
         case CurveStyle_B_SPLINES:
-            m_xLB_LineType->set_active(POS_LINETYPE_SMOOTH);
+            setActiveLineType(PosLineType::Smooth);
             m_xPB_DetailsDialog->set_sensitive(true);
             m_xPB_DetailsDialog->connect_clicked(
                 LINK(this, SplineResourceGroup, SplineDetailsDialogHdl));
@@ -249,7 +259,7 @@ void SplineResourceGroup::fillControls(const ChartTypeParameter& rParameter)
         case CurveStyle_STEP_END:
         case CurveStyle_STEP_CENTER_X:
         case CurveStyle_STEP_CENTER_Y:
-            m_xLB_LineType->set_active(POS_LINETYPE_STEPPED);
+            setActiveLineType(PosLineType::Stepped);
             m_xPB_DetailsDialog->set_sensitive(true);
             m_xPB_DetailsDialog->connect_clicked(
                 LINK(this, SplineResourceGroup, SteppedDetailsDialogHdl));
@@ -257,18 +267,18 @@ void SplineResourceGroup::fillControls(const ChartTypeParameter& rParameter)
             getSteppedPropertiesDialog()->fillControls(rParameter);
             break;
         default:
-            m_xLB_LineType->set_active(-1);
+            setActiveLineType(PosLineType::None);
             m_xPB_DetailsDialog->set_sensitive(false);
     }
 }
 void SplineResourceGroup::fillParameter(ChartTypeParameter& rParameter)
 {
-    switch (m_xLB_LineType->get_active())
+    switch (getActiveLineType())
     {
-        case POS_LINETYPE_SMOOTH:
+        case PosLineType::Smooth:
             getSplinePropertiesDialog()->fillParameter(rParameter, true);
             break;
-        case POS_LINETYPE_STEPPED:
+        case PosLineType::Stepped:
             getSteppedPropertiesDialog()->fillParameter(rParameter, true);
             break;
         default: // includes POS_LINETYPE_STRAIGHT
@@ -287,41 +297,41 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, weld::Button&, void
 {
     ChartTypeParameter aOldParameter;
     std::shared_ptr<SplinePropertiesDialog> xDlg = getSplinePropertiesDialog();
-    xDlg->fillParameter(aOldParameter, m_xLB_LineType->get_active() == POS_LINETYPE_SMOOTH);
+    xDlg->fillParameter(aOldParameter, getActiveLineType() == PosLineType::Smooth);
 
     const sal_Int32 iOldLineTypePos = m_xLB_LineType->get_active();
-    m_xLB_LineType->set_active(POS_LINETYPE_SMOOTH);
-    weld::GenericDialogController::runAsync(xDlg, [this, xDlg, aOldParameter,
-                                                   iOldLineTypePos](sal_Int32 nResult) {
-        m_xSplinePropertiesDialog = nullptr;
-        auto xNewDlg = getSplinePropertiesDialog();
+    setActiveLineType(PosLineType::Smooth);
+    weld::GenericDialogController::runAsync(
+        xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](sal_Int32 nResult) {
+            m_xSplinePropertiesDialog = nullptr;
+            auto xNewDlg = getSplinePropertiesDialog();
 
-        if (nResult == RET_OK)
-        {
-            ChartTypeParameter aNewParameter;
-            xDlg->fillParameter(aNewParameter, m_xLB_LineType->get_active() == POS_LINETYPE_SMOOTH);
-            xNewDlg->fillControls(aNewParameter);
+            if (nResult == RET_OK)
+            {
+                ChartTypeParameter aNewParameter;
+                xDlg->fillParameter(aNewParameter, getActiveLineType() == PosLineType::Smooth);
+                xNewDlg->fillControls(aNewParameter);
 
-            if (m_pChangeListener)
-                m_pChangeListener->stateChanged();
-        }
-        else
-        {
-            //restore old state:
-            m_xLB_LineType->set_active(iOldLineTypePos);
-            xNewDlg->fillControls(aOldParameter);
-        }
-    });
+                if (m_pChangeListener)
+                    m_pChangeListener->stateChanged();
+            }
+            else
+            {
+                //restore old state:
+                m_xLB_LineType->set_active(iOldLineTypePos);
+                xNewDlg->fillControls(aOldParameter);
+            }
+        });
 }
 
 IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, void)
 {
     ChartTypeParameter aOldParameter;
     std::shared_ptr<SteppedPropertiesDialog> xDlg = getSteppedPropertiesDialog();
-    xDlg->fillParameter(aOldParameter, m_xLB_LineType->get_active() == POS_LINETYPE_STEPPED);
+    xDlg->fillParameter(aOldParameter, getActiveLineType() == PosLineType::Stepped);
 
     const sal_Int32 iOldLineTypePos = m_xLB_LineType->get_active();
-    m_xLB_LineType->set_active(POS_LINETYPE_STEPPED);
+    setActiveLineType(PosLineType::Stepped);
 
     weld::GenericDialogController::runAsync(
         xDlg, [this, xDlg, aOldParameter, iOldLineTypePos](sal_Int32 nResult) {
@@ -331,8 +341,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, weld::Button&, voi
             if (nResult == RET_OK)
             {
                 ChartTypeParameter aNewParameter;
-                xDlg->fillParameter(aNewParameter,
-                                    m_xLB_LineType->get_active() == POS_LINETYPE_STEPPED);
+                xDlg->fillParameter(aNewParameter, getActiveLineType() == PosLineType::Stepped);
                 xNewDlg->fillControls(aNewParameter);
 
                 if (m_pChangeListener)
