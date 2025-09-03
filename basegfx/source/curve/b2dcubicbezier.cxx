@@ -29,8 +29,8 @@
 #include <cmath>
 #include <limits>
 
+constexpr double FACTOR_FOR_UNSHARPEN = 1.6;
 // #i37443#
-#define FACTOR_FOR_UNSHARPEN    (1.6)
 #ifdef DBG_UTIL
 const double fMultFactUnsharpen = FACTOR_FOR_UNSHARPEN;
 #endif
