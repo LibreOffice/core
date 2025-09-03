@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <editeng/fhgtitem.hxx>
+
 #include <frameformats.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
@@ -154,6 +156,44 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatCharStyleChangeOdtImport)
     const SwFormatCharFormat& rOldCharFormat = pRedlineSet->Get(RES_TXTATR_CHARFMT);
     CPPUNIT_ASSERT_EQUAL(u"Strong Emphasis"_ustr,
                          rOldCharFormat.GetCharFormat()->GetName().toString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatCharstyleDirectOdtImport)
+{
+    // Given a document with a format redline, containing a char style change (strong -> quote) and
+    // a font size change (24 -> 36pt):
+    // When importing that document:
+    createSwDoc("format-charstyle-direct.odt");
+
+    // Then make sure the model has the new style name & new font size, the redline has the old
+    // style name & old font size:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_TXTATR_CHARFMT> aSet(pDoc->GetAttrPool());
+    pWrtShell->GetCurAttr(aSet);
+    const SwFormatCharFormat& rNewCharFormat = aSet.Get(RES_TXTATR_CHARFMT);
+    CPPUNIT_ASSERT_EQUAL(u"Quote Char"_ustr, rNewCharFormat.GetCharFormat()->GetName().toString());
+    const SvxFontHeightItem& rNewFontSize = aSet.Get(RES_CHRATR_FONTSIZE);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(36 * 20), rNewFontSize.GetHeight());
+    const IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    const SwRedlineTable& rRedlineTable = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlineTable.size());
+    const SwRangeRedline* pRedline = rRedlineTable[0];
+    auto pExtraData = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pRedline->GetExtraData());
+    CPPUNIT_ASSERT(pExtraData);
+    std::shared_ptr<SfxItemSet> pRedlineSet = pExtraData->GetItemSet();
+    CPPUNIT_ASSERT(pRedlineSet);
+    const SwFormatCharFormat& rOldCharFormat = pRedlineSet->Get(RES_TXTATR_CHARFMT);
+    CPPUNIT_ASSERT_EQUAL(u"Strong Emphasis"_ustr,
+                         rOldCharFormat.GetCharFormat()->GetName().toString());
+    const SvxFontHeightItem& rOldFontSize = pRedlineSet->Get(RES_CHRATR_FONTSIZE);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 480
+    // - Actual  : 240
+    // i.e. the redline didn't contain a correct old font size (direct format).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(24 * 20), rOldFontSize.GetHeight());
 }
 }
 

@@ -798,22 +798,32 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // Create the redline's extra data if we have a matching autostyle.
-        std::shared_ptr<SfxItemSet> pAutoStyle;
         IStyleAccess& rStyleAccess = pDoc->GetIStyleAccess();
+        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1, RES_UNKNOWNATR_BEGIN,
+                        RES_UNKNOWNATR_END - 1>
+            aItemSet(pDoc->GetAttrPool());
         if (!pRedlineInfo->m_aStyleName.isEmpty())
         {
             // Named character style.
-            SfxItemSetFixed<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> aItemSet(pDoc->GetAttrPool());
             uno::Any aStyleName;
             aStyleName <<= pRedlineInfo->m_aStyleName;
             SwUnoCursorHelper::SetCharStyle(*pDoc, aStyleName, aItemSet);
-            pAutoStyle = rStyleAccess.getAutomaticStyle(aItemSet, IStyleAccess::AUTO_STYLE_CHAR);
         }
-        else if (!pRedlineInfo->m_aAutoName.isEmpty())
+        if (!pRedlineInfo->m_aAutoName.isEmpty())
         {
             // Just a set of character properties with an automatic name.
-            pAutoStyle
+            std::shared_ptr<SfxItemSet> pAutoStyle
                 = rStyleAccess.getByName(pRedlineInfo->m_aAutoName, IStyleAccess::AUTO_STYLE_CHAR);
+            if (pAutoStyle)
+            {
+                aItemSet.Put(*pAutoStyle);
+            }
+        }
+        std::shared_ptr<SfxItemSet> pAutoStyle;
+        if (aItemSet.Count() > 0)
+        {
+            // Have a named style or direct format, create an automatic style.
+            pAutoStyle = rStyleAccess.getAutomaticStyle(aItemSet, IStyleAccess::AUTO_STYLE_CHAR);
         }
         if (pAutoStyle)
         {
