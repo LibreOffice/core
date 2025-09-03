@@ -325,7 +325,7 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
     sal_uInt16 nSlotId  = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-    if(nSlotId != SID_CURSORTOPOFSCREEN && nSlotId != SID_CURSORENDOFSCREEN)
+    if(nSlotId != SID_CURSORTOPOFSCREEN && nSlotId != SID_CURSORENDOFSCREEN && nSlotId != SID_SETINPUTMODE)
         pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
@@ -409,7 +409,16 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_SETINPUTMODE:
-            ScModule::get()->SetInputMode(SC_INPUT_TABLE);
+            if (ScInputHandler* pHdl = ScModule::get()->GetInputHdl(pTabViewShell))
+            {
+                // We don’t want to call ExecuteInputDirect if we’re
+                // actually trying to toggle between TABLE and TYPE
+                // modes because it would reset the mode back to NONE
+                // and the toggle won’t work.
+                if (!pHdl->IsInputMode() || pHdl->IsTopMode())
+                    pTabViewShell->ExecuteInputDirect();
+                pHdl->StartOrToggleEditMode();
+            }
             break;
 
         case SID_FOCUS_INPUTLINE:

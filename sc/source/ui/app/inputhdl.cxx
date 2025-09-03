@@ -3097,6 +3097,18 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
     bInOwnChange = false;
 }
 
+void ScInputHandler::StartOrToggleEditMode()
+{
+    // Switch to SC_INPUT_TABLE mode unless we’re already in that mode
+    // in which case we’ll switch to SC_INPUT_TYPE. This has the
+    // effect of toggling between those two modes if this is called
+    // multiple times.
+    ScInputMode eNewMode = eMode == SC_INPUT_TABLE
+        ? SC_INPUT_TYPE
+        : SC_INPUT_TABLE;
+    SetMode(eNewMode);
+}
+
 /**
  * @return true if rString only contains digits (no autocorrect then)
  */
@@ -3930,13 +3942,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             }
             else
                 bSkip = true;
-            break;
-        case KEY_F2:
-            if ( !bShift && !bControl && !bAlt && eMode == SC_INPUT_TABLE )
-            {
-                eMode = SC_INPUT_TYPE;
-                bUsed = true;
-            }
             break;
     }
 
