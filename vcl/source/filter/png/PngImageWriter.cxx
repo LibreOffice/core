@@ -20,15 +20,16 @@ namespace
 {
 void combineScanlineChannels(BitmapScopedReadAccess& pAccess, Scanline pScanline,
                              std::vector<std::remove_pointer_t<Scanline>>& pResult,
-                             sal_uInt32 nBitmapWidth)
+                             sal_uInt32 nBitmapWidth, int nChannels)
 {
     for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
     {
         BitmapColor aCol = pAccess->GetPixelFromData(pScanline, i);
-        pResult[i * 4] = aCol.GetRed(); // R
-        pResult[i * 4 + 1] = aCol.GetGreen(); // G
-        pResult[i * 4 + 2] = aCol.GetBlue(); // B
-        pResult[i * 4 + 3] = aCol.GetAlpha(); // A
+        pResult[i * nChannels] = aCol.GetRed(); // R
+        pResult[i * nChannels + 1] = aCol.GetGreen(); // G
+        pResult[i * nChannels + 2] = aCol.GetBlue(); // B
+        if (nChannels == 4)
+            pResult[i * 4 + 3] = aCol.GetAlpha(); // A
     }
 }
 }
@@ -216,9 +217,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N32BitTcBgrx:
             {
                 assert(!aBitmap.HasAlpha());
-                colorType = PNG_COLOR_TYPE_RGBA;
+                colorType = PNG_COLOR_TYPE_RGB;
                 bitDepth = 8;
-                png_set_bgr(pPng);
+                bCombineChannels = true;
                 break;
             }
             case ScanlineFormat::N32BitTcRgba:
@@ -232,8 +233,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N32BitTcRgbx:
             {
                 assert(!aBitmap.HasAlpha());
-                colorType = PNG_COLOR_TYPE_RGBA;
+                colorType = PNG_COLOR_TYPE_RGB;
                 bitDepth = 8;
+                bCombineChannels = true;
                 break;
             }
             default:
@@ -325,6 +327,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
 
         tools::Long nHeight = pAccess->Height();
 
+        auto nChannels = png_get_channels(pPng, pInfo);
         for (int nPass = 0; nPass < nNumberOfPasses; nPass++)
         {
             for (tools::Long y = 0; y < nHeight; y++)
@@ -336,10 +339,10 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                 {
                     auto nBitmapWidth = pAccess->Width();
                     // Allocate enough size to fit all channels
-                    aCombinedChannels.resize(nBitmapWidth * png_get_channels(pPng, pInfo));
+                    aCombinedChannels.resize(nBitmapWidth * nChannels);
                     // Combine color and alpha channels
                     combineScanlineChannels(pAccess, pSourcePointer, aCombinedChannels,
-                                            nBitmapWidth);
+                                            nBitmapWidth, nChannels);
                     pFinalPointer = aCombinedChannels.data();
                 }
                 png_write_row(pPng, pFinalPointer);
