@@ -26,7 +26,7 @@ class SheetViewTest : public ScTiledRenderingTest
 /** Check auto-filter sorting.
  *
  * Auto filter sorting should only influence the values in the
- * current sheet view and not in the other viewes.
+ * current sheet view and not in the other views.
  */
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
 {
