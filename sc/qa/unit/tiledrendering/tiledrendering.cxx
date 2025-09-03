@@ -3655,6 +3655,20 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPivotFilterPosition)
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrintRanges)
+{
+    ScModelObj* pModelObj = createDoc("PrintRanges.ods");
+    ScTestViewCallback aView;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    /*
+        Expected output: { \"printranges\": [ { \"sheet\": 0, \"ranges\": [ [ 2, 6, 2, 6]]}]}
+    */
+    OUString printRanges = pModelObj->getPrintRanges().replaceAll(" ", "");
+
+    CPPUNIT_ASSERT_EQUAL(u"{\"printranges\":[{\"sheet\":0,\"ranges\":[[2,6,2,6]]}]}"_ustr, printRanges);
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLOKLanguageStatus)
 {
     ScModelObj* pModelObj = createDoc("pivotfr.ods");

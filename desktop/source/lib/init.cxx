@@ -6720,6 +6720,19 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
     return pJson;
 }
 
+/// Returns the JSON representation of print ranges in the document
+static char* getPrintRanges(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return nullptr;
+    }
+
+    return convertOString(rtl::OUStringToOString(pDoc->getPrintRanges(), RTL_TEXTENCODING_UTF8));
+}
+
 /// Returns only the number of the undo or redo elements
 static char* getUndoOrRedoCount(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
 {
@@ -6861,6 +6874,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:Redo")
     {
         return getUndoOrRedo(pThis, UndoOrRedo::REDO);
+    }
+    else if (aCommand == ".uno:DefinePrintArea")
+    {
+        return getPrintRanges(pThis);
     }
     else if (aCommand == ".uno:UndoCount")
     {

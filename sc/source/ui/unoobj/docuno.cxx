@@ -141,6 +141,8 @@
 
 #include <strings.hrc>
 
+#include <prnsave.hxx>
+
 using namespace com::sun::star;
 
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
@@ -801,6 +803,18 @@ Size ScModelObj::getDataArea(long nPart)
     aSize = Size(nEndCol, nEndRow);
 
     return aSize;
+}
+
+OUString ScModelObj::getPrintRanges()
+{
+    const ScDocument& rDoc = pDocShell->GetDocument();
+
+    std::unique_ptr<ScPrintRangeSaver> pSaver = rDoc.CreatePrintRangeSaver();
+
+    tools::JsonWriter aJsonWriter;
+    pSaver->GetPrintRangesInfo(aJsonWriter);
+
+    return OStringToOUString(aJsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
 
 void ScModelObj::postKeyEvent(int nType, int nCharCode, int nKeyCode)

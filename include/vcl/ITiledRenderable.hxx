@@ -95,6 +95,11 @@ public:
         return Size(1, 1);
     }
 
+    virtual OUString getPrintRanges()
+    {
+        return OUString();
+    }
+
     /**
      * Set the document "part", i.e. slide for a slideshow, and
      * tab for a spreadsheet.
