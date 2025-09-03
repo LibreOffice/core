@@ -227,6 +227,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                 assert(!aBitmap.HasAlpha());
                 colorType = PNG_COLOR_TYPE_RGBA;
                 bitDepth = 8;
+                png_set_bgr(pPng);
                 break;
             }
             case ScanlineFormat::N32BitTcRgba:
