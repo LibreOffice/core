@@ -20,11 +20,8 @@ namespace
 {
 void combineScanlineChannels(BitmapScopedReadAccess& pAccess, Scanline pScanline,
                              std::vector<std::remove_pointer_t<Scanline>>& pResult,
-                             sal_uInt32 nBitmapWidth, int colorType)
+                             sal_uInt32 nBitmapWidth)
 {
-    assert(colorType != PNG_COLOR_TYPE_GRAY_ALPHA);
-    (void)colorType;
-
     for (sal_uInt32 i = 0; i < nBitmapWidth; ++i)
     {
         BitmapColor aCol = pAccess->GetPixelFromData(pScanline, i);
@@ -182,6 +179,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N1BitMsbPal:
             {
                 assert(!aBitmap.HasAlpha());
+                assert(pAccess->HasPalette());
                 colorType = PNG_COLOR_TYPE_PALETTE;
                 bitDepth = 1;
                 break;
@@ -189,10 +187,11 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N8BitPal:
             {
                 assert(!aBitmap.HasAlpha());
+                assert(pAccess->HasPalette());
                 // Calling aBitmap.HasGreyPalette8Bit() hits an assert when
                 // using Skia in a debug build so query the palette through
                 // the bitmap read access object.
-                if (!pAccess->HasPalette() || !pAccess->GetPalette().IsGreyPalette8Bit())
+                if (!pAccess->GetPalette().IsGreyPalette8Bit())
                     colorType = PNG_COLOR_TYPE_PALETTE;
                 else
                     colorType = PNG_COLOR_TYPE_GRAY;
@@ -247,6 +246,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             }
             default:
             {
+                assert(false);
                 return false;
             }
         }
@@ -347,7 +347,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                     aCombinedChannels.resize(nBitmapWidth * png_get_channels(pPng, pInfo));
                     // Combine color and alpha channels
                     combineScanlineChannels(pAccess, pSourcePointer, aCombinedChannels,
-                                            nBitmapWidth, colorType);
+                                            nBitmapWidth);
                     pFinalPointer = aCombinedChannels.data();
                 }
                 png_write_row(pPng, pFinalPointer);
