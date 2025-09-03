@@ -1842,8 +1842,8 @@ bool SwFrame::OnFirstPage() const
         if (pPrevFrame)
         {
             // first page of layout may be empty page, but only if it starts with "Left Page" style
-            const SwPageDesc* pDesc = pPage->GetPageDesc();
-            bRet = pPrevFrame->GetPageDesc() != pDesc;
+            const SwPageDesc* pDesc = const_cast<SwPageFrame*>(pPage)->FindPageDesc();
+            bRet = const_cast<SwPageFrame*>(pPrevFrame)->FindPageDesc() != pDesc;
         }
         else
             bRet = true;
