@@ -176,7 +176,6 @@ properties:
           #--disable-dependency-tracking
           #--enable-dbgutil
           #--with-lang=fr ja
-          PKG_CONFIG=pkgconf-2.4.3.exe
           "
     - resource: xPSDesiredStateConfiguration/xScript
       id: cloud-init-dir
