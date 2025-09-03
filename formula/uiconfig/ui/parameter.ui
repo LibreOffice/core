@@ -28,6 +28,11 @@
             <property name="wrap">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="editdesc-atkobject">
+                <property name="AtkObject::accessible-role">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -41,6 +46,11 @@
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="hexpand">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="parname-atkobject">
+                <property name="AtkObject::accessible-role">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -58,6 +68,11 @@
             <property name="wrap">True</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="pardesc-atkobject">
+                <property name="AtkObject::accessible-role">static</property>
+              </object>
+            </child>
             <attributes>
               <attribute name="scale" value="0.9"/>
             </attributes>

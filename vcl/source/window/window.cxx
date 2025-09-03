@@ -62,6 +62,7 @@
 #include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -3401,6 +3402,12 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             pChild = pChild->mpWindowImpl->mpNext;
         }
     }
+
+    // If GtkLabel has a static accessibility role, mark renderAsStatic.
+    // so LOK renders it as <span> instead of <label> for correct accessibility.
+    sal_uInt16 nAccessibleRole = GetAccessibleRole();
+    if (nAccessibleRole == css::accessibility::AccessibleRole::STATIC && GetType() == WindowType::FIXEDTEXT)
+        rJsonWriter.put("renderAsStatic", true);
 
     vcl::Window* pAccLabelFor = getAccessibleRelationLabelFor();
     if (pAccLabelFor)
