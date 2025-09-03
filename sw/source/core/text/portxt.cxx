@@ -354,7 +354,7 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBr
         fSpaceNormal - nWidthOf10Spaces / 10.0 * aAdjustItem.GetPropWordSpacingMaximum() / 100.0;
     ExtraSpaceSize( fExpansionOverMax > 0 ? fExpansionOverMax : 0 );
     int nLetterCount = sal_Int32(nBreakPos) - sal_Int32(rInf.GetIdx());
-    // letter spacing/character to be added or substracted to get the desired word spacing
+    // letter spacing/character to be added or subtracted to get the desired word spacing
     float fLetterSpacingForDesiredWordSpacing =
         nLetterCount > 0 ? (((fSpaceNormal - nWidthOf10Spaces/10.0) * nSpaces) / nLetterCount) : 0;
     // letter spacing/character allowed by maximum letter spacing
