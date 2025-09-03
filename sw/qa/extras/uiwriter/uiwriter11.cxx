@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)
     createSwDoc("tdf108791_comments_with_tracked_changes.fodt");
 
     {
-        // Test "Delete Comment Tread": the comment, and all its thread, must be marked as deleted
+        // Test "Delete Comment Thread": the comment, and all its thread, must be marked as deleted
 
         SwPostItMgr* pPostItMgr = getPostItMgr(getSwDocShell());
         auto& aPostItFields = pPostItMgr->GetPostItFields();
@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)
     createSwDoc("tdf108791_comments_with_tracked_changes.docx");
 
     {
-        // Test "Delete Comment Tread": the comment, and all its thread, must be deleted
+        // Test "Delete Comment Thread": the comment, and all its thread, must be deleted
 
         SwPostItMgr* pPostItMgr = getPostItMgr(getSwDocShell());
         auto& aPostItFields = pPostItMgr->GetPostItFields();
