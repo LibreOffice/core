@@ -20871,11 +20871,6 @@ public:
         return signal_custom_get_size(rOutput);
     }
 
-    VclPtr<VirtualDevice> create_render_virtual_device() const override
-    {
-        return create_virtual_device();
-    }
-
     virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) override
     {
 #if 0
@@ -22769,11 +22764,6 @@ public:
         return signal_custom_get_size(rOutput);
     }
 
-    VclPtr<VirtualDevice> create_render_virtual_device() const override
-    {
-        return create_virtual_device();
-    }
-
     virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) override
     {
         m_xCustomMenuButtonHelper.reset();
@@ -23145,11 +23135,6 @@ public:
     virtual bool changed_by_direct_pick() const override
     {
         return m_bTreeChange;
-    }
-
-    VclPtr<VirtualDevice> create_render_virtual_device() const override
-    {
-        return create_virtual_device();
     }
 
     virtual ~GtkInstanceEntryTreeView() override

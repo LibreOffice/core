@@ -919,8 +919,6 @@ public:
     void connect_custom_render(const Link<render_args, void>& rLink) { m_aRenderHdl = rLink; }
     // call set_custom_renderer after setting custom callbacks
     virtual void set_custom_renderer(bool bOn) = 0;
-    // create a virtual device compatible with the device passed in render_args wrt alpha
-    virtual VclPtr<VirtualDevice> create_render_virtual_device() const = 0;
     // set a sub menu for a entry, only works with custom rendering
     virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) = 0;
     // get the width needed to show the menu launcher in a custom row

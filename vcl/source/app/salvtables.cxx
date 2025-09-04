@@ -6861,11 +6861,6 @@ public:
 
     virtual bool changed_by_direct_pick() const override { return m_bTreeChange; }
 
-    VclPtr<VirtualDevice> create_render_virtual_device() const override
-    {
-        return VclPtr<VirtualDevice>::Create();
-    }
-
     virtual ~SalInstanceEntryTreeView() override
     {
         Edit& rEntry = m_pEntry->getEntry();

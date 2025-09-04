@@ -35,7 +35,6 @@ public:
     virtual void make_sorted() override;
     virtual bool changed_by_direct_pick() const override;
     virtual void set_entry_completion(bool bEnable, bool bCaseSensitive = false) override;
-    virtual VclPtr<VirtualDevice> create_render_virtual_device() const override;
 
     virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 

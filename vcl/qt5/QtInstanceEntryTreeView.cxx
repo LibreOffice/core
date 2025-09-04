@@ -66,11 +66,6 @@ void QtInstanceEntryTreeView::set_entry_completion(bool bEnable, bool bCaseSensi
     });
 }
 
-VclPtr<VirtualDevice> QtInstanceEntryTreeView::create_render_virtual_device() const
-{
-    return create_virtual_device();
-}
-
 bool QtInstanceEntryTreeView::eventFilter(QObject* pObject, QEvent* pEvent)
 {
     if (pObject != m_pLineEdit)

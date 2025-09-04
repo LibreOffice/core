@@ -72,7 +72,6 @@ public:
     virtual bool get_popup_shown() const override;
 
     virtual void set_custom_renderer(bool bOn) override;
-    virtual VclPtr<VirtualDevice> create_render_virtual_device() const override;
     virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) override;
     virtual int get_menu_button_width() const override;
 

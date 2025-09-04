@@ -341,12 +341,6 @@ bool QtInstanceComboBox::get_popup_shown() const
 
 void QtInstanceComboBox::set_custom_renderer(bool) { assert(false && "Not implemented yet"); }
 
-VclPtr<VirtualDevice> QtInstanceComboBox::create_render_virtual_device() const
-{
-    assert(false && "Not implemented yet");
-    return nullptr;
-}
-
 void QtInstanceComboBox::set_item_menu(const OUString&, weld::Menu*)
 {
     assert(false && "Not implemented yet");

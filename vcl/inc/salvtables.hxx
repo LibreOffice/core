@@ -885,13 +885,6 @@ public:
         }
     }
 
-    VclPtr<VirtualDevice> create_render_virtual_device() const override
-    {
-        auto xRet = VclPtr<VirtualDevice>::Create();
-        xRet->SetBackground(Application::GetSettings().GetStyleSettings().GetFieldColor());
-        return xRet;
-    }
-
     virtual void set_item_menu(const OUString& rIdent, weld::Menu* pMenu) override
     {
         SalInstanceMenu* pInstanceMenu = dynamic_cast<SalInstanceMenu*>(pMenu);
