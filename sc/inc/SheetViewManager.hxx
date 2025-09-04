@@ -28,6 +28,10 @@ private:
     std::vector<std::shared_ptr<SheetView>> maViews;
     sal_Int32 maNameCounter = 0;
 
+    std::vector<SCCOLROW> maOrder;
+    SCROW mnFirstRow;
+    SCROW mnLastRow;
+
     bool isValidSheetViewID(SheetViewID nID) const
     {
         return nID >= 0 && o3tl::make_unsigned(nID) < maViews.size();
@@ -65,6 +69,9 @@ public:
     void unsyncAllSheetViews();
 
     static OUString defaultViewName();
+
+    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+    SCROW unsort(SCROW nRow);
 };
 }
 

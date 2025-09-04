@@ -846,7 +846,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         continue;
 
                     SCTAB nSheetViewTab = pSheetView->getTableNumber();
-                    applyText(*this, nCol, nRow, nSheetViewTab, rString, bNumFmtChanged);
+                    SCROW nUnsortedRow = pManager->unsort(nRow);
+                    applyText(*this, nCol, nUnsortedRow, nSheetViewTab, rString, bNumFmtChanged);
                 }
             }
             applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
