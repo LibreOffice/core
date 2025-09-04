@@ -116,13 +116,13 @@ public:
     Bitmap setupDrawBitmap(vcl::PixelFormat aBitmapFormat, bool isBitmapGreyScale = false);
     Bitmap setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitmapFormat);
     Bitmap setupDrawMask(vcl::PixelFormat aBitmapFormat);
-    BitmapEx setupDrawBlend(vcl::PixelFormat aBitmapFormat);
+    Bitmap setupDrawBlend(vcl::PixelFormat aBitmapFormat);
 
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkComplexTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
-    static TestResult checkBlend(const BitmapEx& rBitmap);
+    static TestResult checkBlend(const Bitmap& rBitmap);
 
     static TestResult checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap);
 };

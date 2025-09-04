@@ -832,17 +832,17 @@ void GraphicsRenderTests::testDrawBlend24bpp()
     OUString aTestName = u"testDrawBlend24bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
-                     (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
+                     (m_aStoreResultantBitmap ? aBitmap.CreateColorBitmap() : Bitmap()));
     if (m_aStoreResultantBitmap)
-        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", Bitmap(aBitmapEx));
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
 }
 
 void GraphicsRenderTests::testDrawXor()
@@ -1621,18 +1621,18 @@ void GraphicsRenderTests::testDrawBlend32bpp()
     OUString aTestName = u"testDrawBlend32bpp"_ustr;
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
+    Bitmap aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
-                     (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
+                     (m_aStoreResultantBitmap ? aBitmap.CreateColorBitmap() : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", Bitmap(aBitmapEx));
+        exportBitmapToImage(m_aUserInstallPath + aTestName + ".png", aBitmap);
     }
 }
 

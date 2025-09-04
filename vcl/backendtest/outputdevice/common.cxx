@@ -1650,7 +1650,7 @@ TestResult OutputDeviceTestBitmap::checkMask(Bitmap& rBitmap)
     return checkRectangle(rBitmap);
 }
 
-TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
+TestResult OutputDeviceTestBitmap::checkBlend(const Bitmap& rBitmap)
 {
     const Color aBlendedColor(0xEE, 0xEE, 0x33);
 
@@ -1659,7 +1659,7 @@ TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
         COL_BLACK, COL_BLACK, COL_YELLOW, constBackgroundColor,
         constBackgroundColor, aBlendedColor, constBackgroundColor
     };
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    Bitmap aBitmap(rBitmap.CreateColorBitmap());
     return checkRectangles(aBitmap, aExpected);
 }
 

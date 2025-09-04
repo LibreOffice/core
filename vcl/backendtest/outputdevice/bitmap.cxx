@@ -139,7 +139,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask(vcl::PixelFormat aBitmapFormat)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
+Bitmap OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
 {
     Size aBitmapSize(9, 9);
     Bitmap aBitmap(aBitmapSize, aBitmapFormat);
@@ -172,7 +172,7 @@ BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
 
     mpVirtualDevice->DrawBitmapEx(aPoint, Bitmap(aBitmap, aAlpha));
 
-    return BitmapEx(mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize()));
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
 } // end namespace vcl::test

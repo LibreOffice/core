@@ -29,17 +29,6 @@ class BackendTest : public test::BootstrapFixture
     // "xdg-open ./workdir/CppunitTest/vcl_backend_test.test.core/"
     static constexpr const bool mbExportBitmap = false;
 
-    void exportImage(OUString const& rsFilename, BitmapEx const& rBitmapEx)
-    {
-        if (mbExportBitmap)
-        {
-            Bitmap aBitmap(rBitmapEx);
-            aBitmap.Scale(Size(128, 128), BmpScaleFlag::Fast);
-            SvFileStream aStream(rsFilename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmap, aStream);
-        }
-    }
-
     void exportImage(OUString const& rsFilename, Bitmap const& rBitmap)
     {
         if (mbExportBitmap)
@@ -526,9 +515,9 @@ public:
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
-        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage(u"08-06_blend_test_24bpp.png"_ustr, aBitmapEx);
+        Bitmap aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap);
+        exportImage(u"08-06_blend_test_24bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -586,9 +575,9 @@ public:
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
-        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage(u"09-05_blend_test_32bpp.png"_ustr, aBitmapEx);
+        Bitmap aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap);
+        exportImage(u"09-05_blend_test_32bpp.png"_ustr, aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }

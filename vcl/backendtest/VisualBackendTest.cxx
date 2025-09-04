@@ -510,9 +510,9 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            BitmapEx aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
+            Bitmap aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap), aRectangle, rRenderContext);
-            drawBitmapScaledAndCentered(aRectangle, aBitmap.GetBitmap(), rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap.CreateColorBitmap(), rRenderContext);
         }
     }
 
