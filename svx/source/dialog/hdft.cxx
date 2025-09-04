@@ -143,6 +143,10 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
     , m_xFrame(m_xBuilder->weld_frame(u"frame1"_ustr))
     , m_xBspWin(new weld::CustomWeld(*m_xBuilder, u"drawingareaPageHF"_ustr, m_aBspWin))
 {
+    const SfxPoolItem* pExt1 = GetItem(rSet, SID_ATTR_PAGE_EXT1);
+    const SfxPoolItem* pExt2 = GetItem(rSet, SID_ATTR_PAGE_EXT2);
+    m_bIsCalc = dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2);
+
     //swap header <-> footer in UI
     if (nId == SID_ATTR_PAGE_FOOTERSET)
     {
@@ -349,9 +353,6 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) );
             const SfxBoolItem& rShared =
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED ) );
-            const SfxBoolItem* pSharedFirst = nullptr;
-            if (rHeaderSet.HasItem(GetWhich(SID_ATTR_PAGE_SHARED_FIRST)))
-                pSharedFirst = static_cast<const SfxBoolItem*>(&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) ));
             const SvxSizeItem& rSize =
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
             const SvxULSpaceItem& rUL = rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
@@ -379,22 +380,14 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
             SetMetricValue(*m_xLMEdit, rLR.ResolveLeft({}), eUnit);
             SetMetricValue(*m_xRMEdit, rLR.ResolveRight({}), eUnit);
             m_xCntSharedBox->set_active(rShared.GetValue());
-            if (pSharedFirst)
-                m_xCntSharedFirstBox->set_active(pSharedFirst->GetValue());
         }
         else
             pSetItem = nullptr;
     }
     else
     {
-        bool bIsCalc = false;
-        const SfxPoolItem* pExt1 = GetItem(*rSet, SID_ATTR_PAGE_EXT1);
-        const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
-        if (dynamic_cast<const SfxBoolItem*>(pExt1) && dynamic_cast<const SfxBoolItem*>(pExt2) )
-            bIsCalc = true;
-
         // defaults for distance and height
-        tools::Long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
+        tools::Long nDefaultDist = m_bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
         SetMetricValue( *m_xDistEdit, nDefaultDist, MapUnit::Map100thMM );
         SetMetricValue( *m_xHeightEdit, 500, MapUnit::Map100thMM );
     }
@@ -404,7 +397,6 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
         m_xTurnOnBox->set_active(false);
         m_xHeightDynBtn->set_active(true);
         m_xCntSharedBox->set_active(true);
-        m_xCntSharedFirstBox->set_active(true);
     }
 
     TurnOn(nullptr);
@@ -848,6 +840,12 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         m_aBspWin.SetSize( rSize.GetSize() );
     }
 
+    // For Writer, either header OR footer can indicate that first H/F will have different contents.
+    // Prioritize the non-activated tab's setting (in case the value was already changed there).
+    std::optional<bool> oNonActivatedFirstShared; // only used by Writer
+    bool bActivatedFirstShared = true; // default value
+    const sal_uInt16 nSidAttrPageSharedFirst = GetWhich(SID_ATTR_PAGE_SHARED_FIRST);
+
     // Evaluate Header attribute
     const SvxSetItem* pSetItem = nullptr;
 
@@ -872,6 +870,17 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_aBspWin.SetHdLeft(rLR.ResolveLeft({}));
             m_aBspWin.SetHdRight(rLR.ResolveRight({}));
             m_aBspWin.SetHeader( true );
+            const SfxBoolItem* pSharedFirst = nullptr;
+            if (rHeaderSet.HasItem(nSidAttrPageSharedFirst))
+                 pSharedFirst
+                    = static_cast<const SfxBoolItem*>(&rHeaderSet.Get(nSidAttrPageSharedFirst));
+            if (pSharedFirst)
+            {
+                if (SID_ATTR_PAGE_HEADERSET == nId || m_bIsCalc)
+                    bActivatedFirstShared = pSharedFirst->GetValue();
+                else
+                    oNonActivatedFirstShared = pSharedFirst->GetValue();
+            }
         }
         else
             pSetItem = nullptr;
@@ -910,6 +919,17 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_aBspWin.SetFtLeft(rLR.ResolveLeft({}));
             m_aBspWin.SetFtRight(rLR.ResolveRight({}));
             m_aBspWin.SetFooter( true );
+            const SfxBoolItem* pSharedFirst = nullptr;
+            if (rFooterSet.HasItem(nSidAttrPageSharedFirst))
+                 pSharedFirst
+                    = static_cast<const SfxBoolItem*>(&rFooterSet.Get(nSidAttrPageSharedFirst));
+            if (pSharedFirst)
+            {
+                if (SID_ATTR_PAGE_FOOTERSET == nId || m_bIsCalc)
+                    bActivatedFirstShared = pSharedFirst->GetValue();
+                else
+                    oNonActivatedFirstShared = pSharedFirst->GetValue();
+            }
         }
         else
             pSetItem = nullptr;
@@ -925,6 +945,10 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
             m_xCntSharedFirstBox->set_sensitive(false);
         }
     }
+
+    // Priority: non-active tab's FirstBox - then this tab's First - otherwise default is shared
+    m_xCntSharedFirstBox->set_active(
+        oNonActivatedFirstShared.has_value() ? *oNonActivatedFirstShared : bActivatedFirstShared);
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
 
