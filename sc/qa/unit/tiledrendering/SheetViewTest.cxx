@@ -31,7 +31,7 @@ class SheetViewTest : public ScTiledRenderingTest
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
 {
     // Create two views, and leave the second one current.
-    ScModelObj* pModelObj = createDoc("AutoFilter.ods");
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // Setup 2 views
