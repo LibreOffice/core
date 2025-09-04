@@ -843,9 +843,15 @@ ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 
 ScDBFunc* ScViewData::GetView() const { return pView; }
 
+bool ScViewData::IsValidTabNumber(SCTAB nTabNumber) const
+{
+    return nTabNumber >= 0 || o3tl::make_unsigned(nTabNumber) < maTabData.size();
+}
+
 void ScViewData::UpdateCurrentTab()
 {
-    assert(0 <= mnTabNumber && o3tl::make_unsigned(mnTabNumber) < maTabData.size());
+    assert(IsValidTabNumber(GetTabNumber()));
+
     pThisTab = maTabData[mnTabNumber].get();
     while (!pThisTab)
     {
@@ -894,7 +900,8 @@ void ScViewData::InsertTabs( SCTAB nTab, SCTAB nNewSheets )
 
 void ScViewData::DeleteTab( SCTAB nTab )
 {
-    assert(nTab < static_cast<SCTAB>(maTabData.size()));
+    assert(IsValidTabNumber(nTab));
+
     maTabData.erase(maTabData.begin() + nTab);
 
     if (o3tl::make_unsigned(GetTabNumber()) >= maTabData.size())
@@ -1090,7 +1097,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAl
 void ScViewData::SetShowGrid( bool bShow )
 {
     CreateSelectedTabData();
-    maTabData[CurrentTabForData()]->bShowGrid = bShow;
+    maTabData[GetTabNumber()]->bShowGrid = bShow;
 }
 
 void ScViewData::RefreshZoom()
@@ -1411,7 +1418,7 @@ SCROW ScViewData::GetPosY( ScVSplitPos eWhich, SCTAB nForTab ) const
 
 ScViewDataTable* ScViewData::FetchTableData(SCTAB nTabIndex) const
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
+    if (!ValidTab(nTabIndex) || !IsValidTabNumber(nTabIndex))
         return nullptr;
     ScViewDataTable* pRet = maTabData[nTabIndex].get();
     SAL_WARN_IF(!pRet, "sc.viewdata", "ScViewData::FetchTableData: hidden sheet = " << nTabIndex);
@@ -2429,12 +2436,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
     }
 
     if (nForTab == -1)
-        nForTab = CurrentTabForData();
-    bool bForCurTab = (nForTab == CurrentTabForData());
+        nForTab = GetTabNumber();
+    bool bForCurTab = (nForTab == GetTabNumber());
     if (!bForCurTab && (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size()))))
     {
         SAL_WARN("sc.viewdata", "ScViewData::GetScrPos :  invalid nForTab = " << nForTab);
-        nForTab = CurrentTabForData();
+        nForTab = GetTabNumber();
         bForCurTab = true;
     }
 
@@ -4070,7 +4077,7 @@ bool ScViewData::IsOle() const
 bool ScViewData::UpdateFixX( SCTAB nTab ) // true = value changed
 {
     if (!ValidTab(nTab)) // Default
-        nTab = CurrentTabForData(); // current table
+        nTab = GetTabNumber(); // current table
 
     if (!pView || maTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
         return false;
@@ -4094,7 +4101,7 @@ bool ScViewData::UpdateFixX( SCTAB nTab ) // true = value changed
     if (nNewPos != maTabData[nTab]->nHSplitPos)
     {
         maTabData[nTab]->nHSplitPos = nNewPos;
-        if (nTab == CurrentTabForData())
+        if (nTab == GetTabNumber())
             RecalcPixPos();                 // should not be needed
         return true;
     }
@@ -4105,7 +4112,7 @@ bool ScViewData::UpdateFixX( SCTAB nTab ) // true = value changed
 bool ScViewData::UpdateFixY( SCTAB nTab ) // true = value changed
 {
     if (!ValidTab(nTab)) // Default
-        nTab = CurrentTabForData(); // current table
+        nTab = GetTabNumber(); // current table
 
     if (!pView || maTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
         return false;
@@ -4129,7 +4136,7 @@ bool ScViewData::UpdateFixY( SCTAB nTab ) // true = value changed
     if (nNewPos != maTabData[nTab]->nVSplitPos)
     {
         maTabData[nTab]->nVSplitPos = nNewPos;
-        if (nTab == CurrentTabForData())
+        if (nTab == GetTabNumber())
             RecalcPixPos();                 // should not be needed
         return true;
     }
@@ -4277,7 +4284,7 @@ bool ScViewData::SetLOKSheetFreezeIndex(const SCCOLROW nFreezeIndex, bool bIsCol
     {
         nForTab = CurrentTabForData();
     }
-    else if (!ValidTab(nForTab) || (nForTab >= static_cast<SCTAB>(maTabData.size())))
+    else if (!ValidTab(nForTab) || !IsValidTabNumber(nForTab))
     {
         SAL_WARN("sc.viewdata", "ScViewData::SetLOKSheetFreezeIndex :  invalid nForTab = " << nForTab);
         return false;

@@ -349,6 +349,8 @@ private:
     void          UpdateCurrentTab();
     ScViewDataTable* FetchTableData(SCTAB) const;
 
+    bool IsValidTabNumber(SCTAB nTabNumber) const;
+
 public:
     ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
     ~ScViewData() COVERITY_NOEXCEPT_FALSE;
