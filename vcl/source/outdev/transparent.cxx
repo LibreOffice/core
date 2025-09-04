@@ -558,7 +558,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     // get content bitmap from buffer
                     xVDev->EnableMapMode(false);
 
-                    const BitmapEx aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                    const Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
 
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
@@ -573,7 +573,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev->EnableMapMode(false);
 
                     AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
-                    const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
+                    const AlphaMask aPaintAlpha(aPaint.CreateAlphaMask());
                     // The alpha mask is inverted from what
                     // is expected so invert it again
                     aAlpha.Invert(); // convert to alpha
@@ -582,7 +582,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev.disposeAndClear();
 
                     // draw masked content to target and restore MapMode
-                    DrawBitmapEx(aDstRect.TopLeft(), Bitmap(aPaint.GetBitmap(), aAlpha));
+                    DrawBitmapEx(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
                     EnableMapMode(bOrigMapModeEnabled);
                 }
                 else
@@ -600,7 +600,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rMtfPos, rMtfSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
-                    BitmapEx aPaint(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
+                    Bitmap aPaint(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
                     xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
@@ -610,7 +610,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev->EnableMapMode( false );
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
+                    const AlphaMask aPaintAlpha(aPaint.CreateAlphaMask());
                     // The alpha mask is inverted from what
                     // is expected so invert it again
                     aAlpha.Invert(); // convert to alpha
@@ -619,7 +619,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev.disposeAndClear();
 
                     EnableMapMode( false );
-                    DrawBitmapEx(aDstRect.TopLeft(), Bitmap(aPaint.GetBitmap(), aAlpha));
+                    DrawBitmapEx(aDstRect.TopLeft(), Bitmap(aPaint.CreateColorBitmap(), aAlpha));
                     EnableMapMode( bOldMap );
                 }
             }
@@ -754,17 +754,17 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
     }
     else
     {
-        BitmapEx aBmpEx;
+        Bitmap aBmp;
 
         switch (rAct.GetType())
         {
             case MetaActionType::BMPEX:
-                aBmpEx = static_cast<const MetaBmpExAction&>(rAct).GetBitmap();
+                aBmp = static_cast<const MetaBmpExAction&>(rAct).GetBitmap();
                 break;
 
             case MetaActionType::BMPEXSCALE:
             case MetaActionType::BMPEXSCALEPART:
-                aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmap();
+                aBmp = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmap();
                 break;
 
             case MetaActionType::Transparent:
@@ -774,12 +774,12 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                 break;
         }
 
-        Bitmap aBmp(aBmpEx.GetBitmap());
-        if (aBmpEx.IsAlpha())
+        if (aBmp.HasAlpha())
         {
+            AlphaMask aMask = aBmp.CreateAlphaMask();
             // blend with alpha channel
             aBmp.Convert(BmpConversion::N24Bit);
-            aBmp.Blend(aBmpEx.GetAlphaMask(), aBgColor);
+            aBmp.Blend(aMask, aBgColor);
         }
 
         // add corresponding action
