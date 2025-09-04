@@ -315,7 +315,7 @@ void doSpeedCompare(double fTrans, const Bitmap& rContent, const tools::Rectangl
         // "Former" method using a temporary AlphaMask & DrawBitmapEx
         sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
         const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-        rOutDev.DrawBitmapEx(rDestPixel.TopLeft(), BitmapEx(rContent, aAlphaMask));
+        rOutDev.DrawBitmapEx(rDestPixel.TopLeft(), Bitmap(rContent, aAlphaMask));
     }
 
     // get intermediate time
@@ -328,7 +328,7 @@ void doSpeedCompare(double fTrans, const Bitmap& rContent, const tools::Rectangl
         rOutDev.DrawTransformedBitmapEx(basegfx::utils::createScaleTranslateB2DHomMatrix(
                                             aSizePixel.Width(), aSizePixel.Height(),
                                             rDestPixel.TopLeft().X(), rDestPixel.TopLeft().Y()),
-                                        BitmapEx(rContent), 1 - fTrans);
+                                        rContent, 1 - fTrans);
     }
 
     // get end time
@@ -375,7 +375,7 @@ void doSpeedCompare(double fTrans, const Bitmap& rContent, const tools::Rectangl
 #endif
 }
 
-// support for rendering Bitmap and BitmapEx contents
+// support for rendering Bitmap contents
 namespace drawinglayer
 {
 // static global VDev buffer for VclProcessor2D/VclPixelProcessor2D
