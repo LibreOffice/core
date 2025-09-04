@@ -897,18 +897,18 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                 if ( aWallpaper.IsBitmap() )
                 {
-                    BitmapEx aBitmapEx(aWallpaper.GetBitmap());
-                    const Bitmap& aBitmap( aBitmapEx.GetBitmap() );
-                    if ( aBitmapEx.IsAlpha() )
+                    Bitmap aBitmap(aWallpaper.GetBitmap());
+                    if ( aBitmap.HasAlpha() )
                     {
+                        const Bitmap aBitmap2( aBitmap.CreateColorBitmap() );
                         if ( aWallpaper.IsGradient() )
                         {
 
                         // gradient action
 
                         }
-                        const AlphaMask& aMask( aBitmapEx.GetAlphaMask() );
-                        ImplBmp( &aBitmap, &aMask, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
+                        const AlphaMask aMask( aBitmap.CreateAlphaMask() );
+                        ImplBmp( &aBitmap2, &aMask, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );
                     }
                     else
                         ImplBmp( &aBitmap, nullptr, Point( aRect.Left(), aRect.Top() ), aRect.GetWidth(), aRect.GetHeight() );

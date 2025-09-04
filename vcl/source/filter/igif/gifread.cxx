@@ -664,7 +664,7 @@ void GIFReader::CreateNewBitmaps()
         AlphaMask aAlphaMask(aBmp1);
         // No need to convert from transparency to alpha
         // aBmp1 is already inverted
-        aAnimationFrame.maBitmap = Bitmap(BitmapEx( aBmp8, aAlphaMask ));
+        aAnimationFrame.maBitmap = Bitmap( aBmp8, aAlphaMask );
     }
     else if( nPaletteSize > 2 )
     {
@@ -676,7 +676,7 @@ void GIFReader::CreateNewBitmaps()
         // and create a completely opaque bitmap instead.
         // Note: this fix also fixes tdf#157576, tdf#157635, and tdf#157793.
         AlphaMask aAlphaMask(aBmp8.GetSizePixel());
-        aAnimationFrame.maBitmap = Bitmap(BitmapEx( aBmp8, aAlphaMask ));
+        aAnimationFrame.maBitmap = Bitmap( aBmp8, aAlphaMask );
     }
     else
     {

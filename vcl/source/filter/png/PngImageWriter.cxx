@@ -143,7 +143,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     if (!bTranslucent && aBitmap.HasAlpha())
     {
         // strip out the alpha layer
-        aBitmap = BitmapEx(aBitmap).GetBitmap();
+        aBitmap = aBitmap.CreateColorBitmap();
     }
 
     BitmapScopedReadAccess pAccess(aBitmap);

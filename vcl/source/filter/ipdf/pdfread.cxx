@@ -94,7 +94,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         }
         else
         {
-            rBitmaps.emplace_back(BitmapEx(aBitmap).GetBitmap());
+            rBitmaps.emplace_back(aBitmap.CreateColorBitmap());
         }
     }
 
