@@ -91,13 +91,6 @@ namespace drawinglayer::texture
         {
         }
 
-        //static
-        sal_uInt8 GeoTexSvxBitmapEx::impGetAlpha(const BitmapReadAccess& readTransparence, sal_Int32 rX, sal_Int32 rY)
-        {
-            const BitmapColor aBitmapColor(readTransparence.GetPixel(rY, rX));
-            return aBitmapColor.GetIndex();
-        }
-
         bool GeoTexSvxBitmapEx::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
         {
             if(mpReadBitmap)

@@ -258,10 +258,6 @@ public:
     {
         return maBColorModifierStack;
     }
-    void setBColorModifierStack(const basegfx::BColorModifierStack& rStack)
-    {
-        maBColorModifierStack = rStack;
-    }
 
     // try to extract current content as Bitmap
     Bitmap extractBitmap() const;

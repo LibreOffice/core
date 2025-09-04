@@ -61,7 +61,6 @@ namespace drawinglayer::texture
 
             // helpers
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
-            static sal_uInt8 impGetAlpha(const BitmapReadAccess& readTransparence, sal_Int32 rX, sal_Int32 rY);
 
         public:
             GeoTexSvxBitmapEx(

@@ -38,7 +38,6 @@ private:
 
     DECL_LINK(TB1SelectHdl, const OUString&, void);
     DECL_LINK(TB2and3SelectHdl, const OUString&, void);
-    DECL_LINK(TB4SelectHdl, const OUString&, void);
 
 public:
     CellBorderStylePopup(weld::Toolbar* pParent, const OUString& rId, SfxDispatcher* pDispatcher);
