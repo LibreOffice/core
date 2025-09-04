@@ -104,9 +104,8 @@ void BitmapFilterTest::testClampAlpha()
         aWriteAccess->Erase(COL_RED);
     }
 
-    BitmapEx aBitmapEx24Bit(aBitmap24Bit);
-    BitmapFilter::Filter(aBitmapEx24Bit, BitmapAlphaClampFilter(0x7F));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0xFF), aBitmapEx24Bit.GetAlpha(0, 0));
+    BitmapFilter::Filter(aBitmap24Bit, BitmapAlphaClampFilter(0x7F));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0xFF), aBitmap24Bit.GetPixelColor(0, 0).GetAlpha());
 }
 
 void BitmapFilterTest::testBlurCorrectness()
@@ -636,24 +635,24 @@ void BitmapFilterTest::testArithmeticBlendFilter()
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmap);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0, 0.5));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aRedBitmap, 0, 0, 0, 0.5));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x7F, 0xFF, 0xFF, 0xFF),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     // Different colors
     {
-        BitmapEx aResBitmapEx(aRedBitmap);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 0, 0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
-                             aResBitmapEx.GetPixelColor(0, 0));
+                             aResBitmap.GetPixelColor(0, 0));
     }
 
     {
-        BitmapEx aResBitmapEx(aRedBitmap);
-        BitmapFilter::Filter(aResBitmapEx, BitmapArithmeticBlendFilter(aGreenBitmap, 1, 0, 0, 0));
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aResBitmapEx.GetPixelColor(0, 0));
+        Bitmap aResBitmap(aRedBitmap);
+        BitmapFilter::Filter(aResBitmap, BitmapArithmeticBlendFilter(aGreenBitmap, 1, 0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, aResBitmap.GetPixelColor(0, 0));
     }
 
     {

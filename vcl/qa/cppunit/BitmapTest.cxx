@@ -175,9 +175,7 @@ void BitmapTest::testMonochrome()
 {
     Bitmap aBmp = createTestBitmap();
 
-    BitmapEx aBmpEx(aBmp);
-    BitmapFilter::Filter(aBmpEx, BitmapMonochromeFilter(63));
-    aBmp = aBmpEx.GetBitmap();
+    BitmapFilter::Filter(aBmp, BitmapMonochromeFilter(63));
     BitmapReadAccess aBmpReadAccess(aBmp);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Black pixel wrong monochrome value", BitmapColor(COL_BLACK),

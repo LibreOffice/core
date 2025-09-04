@@ -38,8 +38,7 @@ void BitmapProcessorTest::testDisabledImage()
             pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0x00, 0xFF, 0x00));
         }
         BitmapDisabledImageFilter aDisabledImageFilter;
-        BitmapEx aDisabledBitmapEx(aDisabledImageFilter.execute(aBitmap));
-        Bitmap aDisabledBitmap(aDisabledBitmapEx.GetBitmap());
+        Bitmap aDisabledBitmap(aDisabledImageFilter.execute(aBitmap));
         {
             BitmapScopedReadAccess pReadAccess(aDisabledBitmap);
             Color aColor(pReadAccess->GetPixel(0, 0));
@@ -59,9 +58,9 @@ void BitmapProcessorTest::testDisabledImage()
             pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
         }
 
-        BitmapEx aBitmapEx(aBitmap, aMask);
+        Bitmap aBitmap2(aBitmap, aMask);
         BitmapDisabledImageFilter aDisabledImageFilter;
-        Bitmap aDisabledBitmap(aDisabledImageFilter.execute(Bitmap(aBitmapEx)));
+        Bitmap aDisabledBitmap(aDisabledImageFilter.execute(aBitmap2));
         {
             BitmapScopedReadAccess pReadAccess(aDisabledBitmap);
             Color aColor(pReadAccess->GetPixel(0, 0));

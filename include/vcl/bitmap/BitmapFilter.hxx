@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <functional>
 
 class Animation;
@@ -50,8 +50,8 @@ void generateStripRanges(
     your new filter from this and implement the filtering functionality in the execute()
     function.
 
-    The execute function takes the bitmapex that you want to apply the filter to, and
-    returns a brand new, filtered, BitmapEx instance.
+    The execute function takes the Bitmap that you want to apply the filter to, and
+    returns a brand new, filtered, Bitmap instance.
 
     The actual filters parameterisation is expected to be done in the constructor. So, to
     take a simple example, if you want to make every fourth pixel a different color you
@@ -59,9 +59,9 @@ void generateStripRanges(
     member variable that the Bitmap4thColorReplaceFilter would then use in its execute()
     statement.
 
-    The BitmapFilter class has a static convenience Filter function that takes a BitmapEx
-    and the desired filter, which filters the BitmapEx parameter, then overwrite this BitmapEx
-    instance. If the filter fails (BitmapEx is empty) then it returns false.
+    The BitmapFilter class has a static convenience Filter function that takes a Bitmap
+    and the desired filter, which filters the Bitmap parameter, then overwrite this Bitmap
+    instance. If the filter fails (Bitmap is empty) then it returns false.
 */
 
 class VCL_DLLPUBLIC BitmapFilter
@@ -72,7 +72,6 @@ public:
 
     virtual Bitmap execute(Bitmap const& rBitmap) const = 0;
 
-    static bool Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter);
     static bool Filter(Bitmap& rBmp, BitmapFilter const& rFilter);
     static bool Filter(Animation& rBmpEx, BitmapFilter const& rFilter);
 };

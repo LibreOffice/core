@@ -11,6 +11,7 @@
 #pragma once
 
 #include <vcl/bitmap/BitmapFilter.hxx>
+#include <tools/color.hxx>
 
 /** If the alpha is beyond a certain threshold, make it fully transparent
  */

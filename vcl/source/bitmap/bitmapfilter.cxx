@@ -17,15 +17,6 @@ BitmapFilter::BitmapFilter() {}
 
 BitmapFilter::~BitmapFilter() {}
 
-bool BitmapFilter::Filter(BitmapEx& rBmpEx, BitmapFilter const& rFilter)
-{
-    Bitmap aBitmap(rBmpEx);
-    bool bRet = Filter(aBitmap, rFilter);
-    if (bRet)
-        rBmpEx = BitmapEx(aBitmap);
-    return bRet;
-}
-
 bool BitmapFilter::Filter(Bitmap& rBmp, BitmapFilter const& rFilter)
 {
     Bitmap aTmpBmp(rFilter.execute(rBmp));
