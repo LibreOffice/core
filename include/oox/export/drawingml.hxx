@@ -292,6 +292,8 @@ private:
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;
 
+    static constexpr const sal_Int32 mconstDefaultLeftRightInset = 254;
+    static constexpr const sal_Int32 mconstDefaultTopBottomInset = 127;
 
 protected:
     css::uno::Any                             mAny;
@@ -450,6 +452,11 @@ public:
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
+
+    void WriteBodyProps(
+            const css::uno::Reference< css::uno::XInterface >& rXIface,
+            sal_Int32 nXmlNamespace, bool bIsFontworkShape,
+            sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight);
 
     /** Populates the lstStyle with the shape's text run and paragraph properties */
     void WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,

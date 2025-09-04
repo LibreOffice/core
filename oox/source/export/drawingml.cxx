@@ -2651,11 +2651,11 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             usLanguage = aLanguageTag.getBcp47MS();
     }
 
-    if (GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapement"_ustr, eState)
+    if (bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapement"_ustr, eState)
         && eState == beans::PropertyState_DIRECT_VALUE)
         mAny >>= nCharEscapement;
 
-    if (GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapementHeight"_ustr, eState)
+    if (bCheckDirect && GetPropertyAndState(rXPropSet, rXPropState, u"CharEscapementHeight"_ustr, eState)
         && eState == beans::PropertyState_DIRECT_VALUE)
         mAny >>= nCharEscapementHeight;
 
@@ -2851,12 +2851,12 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                                XML_charset, charset );
     }
 
-    if ((bComplex
+    if (bCheckDirect && ((bComplex
          && (GetPropertyAndState(rXPropSet, rXPropState, u"CharFontNameComplex"_ustr, eState)
              && eState == beans::PropertyState_DIRECT_VALUE))
         || (!bComplex
             && (GetPropertyAndState(rXPropSet, rXPropState, u"CharFontNameAsian"_ustr, eState)
-                && eState == beans::PropertyState_DIRECT_VALUE)))
+                && eState == beans::PropertyState_DIRECT_VALUE))))
     {
         const char* const pitch = nullptr;
         const char* const charset = nullptr;
@@ -3772,61 +3772,13 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
     return bResult;
 }
 
-void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
-                          sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles)
+// Output text body properties
+void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >& rXIface,
+        sal_Int32 nXmlNamespace, bool bIsFontworkShape,
+        sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight)
 {
-    // ToDo: Fontwork in DOCX
-    uno::Reference<XText> xXText(rXIface, UNO_QUERY);
-    if( !xXText.is() )
-        return;
-
     uno::Reference<drawing::XShape> xShape(rXIface, UNO_QUERY);
     uno::Reference<XPropertySet> rXPropSet(rXIface, UNO_QUERY);
-
-    constexpr const sal_Int32 constDefaultLeftRightInset = 254;
-    constexpr const sal_Int32 constDefaultTopBottomInset = 127;
-    sal_Int32 nLeft = constDefaultLeftRightInset;
-    sal_Int32 nRight = constDefaultLeftRightInset;
-    sal_Int32 nTop = constDefaultTopBottomInset;
-    sal_Int32 nBottom = constDefaultTopBottomInset;
-
-    // top inset looks a bit different compared to ppt export
-    // check if something related doesn't work as expected
-    if (GetProperty(rXPropSet, u"TextLeftDistance"_ustr))
-        mAny >>= nLeft;
-    if (GetProperty(rXPropSet, u"TextRightDistance"_ustr))
-        mAny >>= nRight;
-    if (GetProperty(rXPropSet, u"TextUpperDistance"_ustr))
-        mAny >>= nTop;
-    if (GetProperty(rXPropSet, u"TextLowerDistance"_ustr))
-        mAny >>= nBottom;
-
-    // Transform the text distance values so they are compatible with OOXML insets
-    if (xShape.is())
-    {
-        sal_Int32 nTextHeight = xShape->getSize().Height; // Hmm, default
-
-        // CustomShape can have text area different from shape rectangle
-        auto* pCustomShape
-            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
-        if (pCustomShape)
-        {
-            const EnhancedCustomShape2d aCustomShape2d(*pCustomShape);
-            nTextHeight = aCustomShape2d.GetTextRect().getOpenHeight();
-            if (DOCUMENT_DOCX == meDocumentType)
-                nTextHeight = convertTwipToMm100(nTextHeight);
-        }
-
-        if (nTop + nBottom >= nTextHeight)
-        {
-            // Effective bottom would be above effective top of text area. LO normalizes the
-            // effective text area in such case implicitly for rendering. MS needs indents so that
-            // the result is the normalized effective text area.
-            std::swap(nTop, nBottom);
-            nTop = nTextHeight - nTop;
-            nBottom = nTextHeight - nBottom;
-        }
-    }
 
     std::optional<OString> sWritingMode;
     if (GetProperty(rXPropSet, u"TextWritingMode"_ustr))
@@ -3963,7 +3915,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-    bool bIsFontworkShape(IsFontworkShape(rXPropSet));
     OUString sPresetWarp(PresetGeometryTypeNames::GetMsoName(sShapeType));
     // ODF may have user defined TextPath, use "textPlain" as ersatz.
     if (sPresetWarp.isEmpty())
@@ -3972,15 +3923,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     bool bFromWordArt = !bScaleX
                         && ( sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
                             || sPresetWarp == "textButton" || sPresetWarp == "textCircle");
-
-    // Fontwork shapes in LO ignore insets in rendering, Word interprets them.
-    if (GetDocumentType() == DOCUMENT_DOCX && bIsFontworkShape)
-    {
-        nLeft = 0;
-        nRight = 0;
-        nTop = 0;
-        nBottom = 0;
-    }
 
     if (bUpright)
     {
@@ -4076,7 +4018,6 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
         }
     }
 
-
     std::optional<OString> sTextRotateAngleMSUnit;
     if (nTextRotateAngleDeg100.has_value())
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
@@ -4130,32 +4071,33 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     bool bHasWrap = false;
     bool bWrap = false;
-    // Only custom shapes obey the TextWordWrap option, normal text always wraps.
-    if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextWordWrap"_ustr))
-    {
-        mAny >>= bWrap;
-        bHasWrap = true;
-    }
+    const char* pWrap = nullptr;
 
-    // tdf#134401: If AUTOGROWWIDTH and AUTOGROWHEIGHT are set, then export it as TextWordWrap
-    if (SvxShapeText* pShpTxt = dynamic_cast<SvxShapeText*>(rXIface.get()))
-    {
-        const sdr::properties::BaseProperties& rProperties
-            = pShpTxt->GetSdrObject()->GetProperties();
-
-        const SdrOnOffItem& rSdrTextFitWidth = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWWIDTH);
-        const SdrOnOffItem& rSdrTextFitHeight = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT);
-
-        if (rSdrTextFitWidth.GetValue() == true && rSdrTextFitHeight.GetValue() == true)
+    if (xShape) {
+        // Only custom shapes obey the TextWordWrap option, normal text always wraps.
+        if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextWordWrap"_ustr))
         {
+            mAny >>= bWrap;
             bHasWrap = true;
-            bWrap = false;
         }
-    }
 
-    if (bBodyPr)
-    {
-        const char* pWrap = (bHasWrap && !bWrap) || bIsFontworkShape ? "none" : nullptr;
+        // tdf#134400: If AUTOGROWWIDTH and AUTOGROWHEIGHT are set, then export it as TextWordWrap
+        if (SvxShapeText* pShpTxt = dynamic_cast<SvxShapeText*>(rXIface.get()))
+        {
+            const sdr::properties::BaseProperties& rProperties
+                = pShpTxt->GetSdrObject()->GetProperties();
+
+            const SdrOnOffItem& rSdrTextFitWidth = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWWIDTH);
+            const SdrOnOffItem& rSdrTextFitHeight = rProperties.GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT);
+
+            if (rSdrTextFitWidth.GetValue() == true && rSdrTextFitHeight.GetValue() == true)
+            {
+                bHasWrap = true;
+                bWrap = false;
+            }
+        }
+
+        pWrap = (bHasWrap && !bWrap) || bIsFontworkShape ? "none" : nullptr;
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
             // In case of DOCX, if we want to have the same effect as
@@ -4166,204 +4108,275 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                 || bIsFontworkShape)
                 pWrap = "square";
         }
+    }
 
-        sal_Int16 nCols = 0;
-        sal_Int32 nColSpacing = -1;
-        if (GetProperty(rXPropSet, u"TextColumns"_ustr))
+    sal_Int16 nCols = 0;
+    sal_Int32 nColSpacing = -1;
+    if (GetProperty(rXPropSet, u"TextColumns"_ustr))
+    {
+        if (css::uno::Reference<css::text::XTextColumns> xCols{ mAny, css::uno::UNO_QUERY })
         {
-            if (css::uno::Reference<css::text::XTextColumns> xCols{ mAny, css::uno::UNO_QUERY })
+            nCols = xCols->getColumnCount();
+            if (css::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
+                                                                      css::uno::UNO_QUERY })
             {
-                nCols = xCols->getColumnCount();
-                if (css::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
-                                                                          css::uno::UNO_QUERY })
-                {
-                    if (GetProperty(xProps, u"AutomaticDistance"_ustr))
-                        mAny >>= nColSpacing;
-                }
+                if (GetProperty(xProps, u"AutomaticDistance"_ustr))
+                    mAny >>= nColSpacing;
             }
         }
+    }
 
-        if (!sVertOverflow && GetProperty(rXPropSet, u"TextClipVerticalOverflow"_ustr) && mAny.get<bool>())
+    if (!sVertOverflow && GetProperty(rXPropSet, u"TextClipVerticalOverflow"_ustr) && mAny.get<bool>())
+    {
+        sVertOverflow = "clip";
+    }
+
+    // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
+    bool bRequireInset = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && rXPropSet->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
+
+    mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
+                           XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
+                           XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
+                           XML_wrap, pWrap,
+                           XML_horzOverflow, sHorzOverflow,
+                           XML_vertOverflow, sVertOverflow,
+                           XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
+                           XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
+                                                           bRequireInset || nLeft != mconstDefaultLeftRightInset),
+                           XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)),
+                                                           bRequireInset || nRight != mconstDefaultLeftRightInset),
+                           XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
+                                                           bRequireInset || nTop != mconstDefaultTopBottomInset),
+                           XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
+                                                           bRequireInset || nBottom != mconstDefaultTopBottomInset),
+                           XML_anchor, sAnchor,
+                           XML_anchorCtr, sax_fastparser::UseIf("1", bAnchorCtr),
+                           XML_vert, sWritingMode,
+                           XML_upright, isUpright,
+                           XML_rot, sTextRotateAngleMSUnit);
+
+    if (bIsFontworkShape)
+    {
+        if (aAdjustmentSeq.hasElements())
         {
-            sVertOverflow = "clip";
-        }
-
-        // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
-        bool bRequireInset = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && rXPropSet->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
-
-        mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
-                               XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
-                               XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
-                               XML_wrap, pWrap,
-                               XML_horzOverflow, sHorzOverflow,
-                               XML_vertOverflow, sVertOverflow,
-                               XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
-                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
-                                                               bRequireInset || nLeft != constDefaultLeftRightInset),
-                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)),
-                                                               bRequireInset || nRight != constDefaultLeftRightInset),
-                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
-                                                               bRequireInset || nTop != constDefaultTopBottomInset),
-                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
-                                                               bRequireInset || nBottom != constDefaultTopBottomInset),
-                               XML_anchor, sAnchor,
-                               XML_anchorCtr, sax_fastparser::UseIf("1", bAnchorCtr),
-                               XML_vert, sWritingMode,
-                               XML_upright, isUpright,
-                               XML_rot, sTextRotateAngleMSUnit);
-
-        if (bIsFontworkShape)
-        {
-            if (aAdjustmentSeq.hasElements())
+            mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
+            mpFS->startElementNS(XML_a, XML_avLst);
+            bool bHasTwoHandles(
+                sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
+                || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour"
+                || sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
+                || sPresetWarp == "textWave2" || sPresetWarp == "textWave4");
+            for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
             {
-                mpFS->startElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
-                mpFS->startElementNS(XML_a, XML_avLst);
-                bool bHasTwoHandles(
-                    sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
-                    || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour"
-                    || sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
-                    || sPresetWarp == "textWave2" || sPresetWarp == "textWave4");
-                for (sal_Int32 i = 0, nElems = aAdjustmentSeq.getLength(); i < nElems; ++i )
+                OString sName = "adj" + (bHasTwoHandles ? OString::number(i + 1) : OString());
+                double fValue(0.0);
+                if (aAdjustmentSeq[i].Value.getValueTypeClass() == TypeClass_DOUBLE)
+                    aAdjustmentSeq[i].Value >>= fValue;
+                else
                 {
-                    OString sName = "adj" + (bHasTwoHandles ? OString::number(i + 1) : OString());
-                    double fValue(0.0);
-                    if (aAdjustmentSeq[i].Value.getValueTypeClass() == TypeClass_DOUBLE)
-                        aAdjustmentSeq[i].Value >>= fValue;
-                    else
-                    {
-                        sal_Int32 nNumber(0);
-                        aAdjustmentSeq[i].Value >>= nNumber;
-                        fValue = static_cast<double>(nNumber);
-                    }
-                    // Convert from binary coordinate system with viewBox "0 0 21600 21600" and simple degree
-                    // to DrawingML with coordinate range 0..100000 and angle in 1/60000 degree.
-                    // Reverse to conversion in lcl_createPresetShape in drawingml/shape.cxx on import.
-                    if (sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
-                        || sPresetWarp == "textButton" || sPresetWarp == "textCircle"
-                        || ((i == 0)
-                            && (sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
-                                || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour")))
-                    {
-                        fValue *= 60000.0;
-                        if (fValue < 0)
-                            fValue += 21600000;
-                    }
-                    else if ((i == 1)
-                             && (sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
-                            || sPresetWarp == "textWave2" || sPresetWarp == "textWave4"))
-                    {
-                        fValue = fValue / 0.216 - 50000.0;
-                    }
-                    else if ((i == 1)
-                             && (sPresetWarp == "textArchDownPour"
-                                 || sPresetWarp == "textArchUpPour"
-                                 || sPresetWarp == "textButtonPour"
-                                 || sPresetWarp == "textCirclePour"))
-                    {
-                        fValue /= 0.108;
-                    }
-                    else
-                    {
-                        fValue /= 0.216;
-                    }
-                    OString sFmla = "val " + OString::number(std::lround(fValue));
-                    mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
-                    // There exists faulty Favorite shapes with one handle but two adjustment values.
-                    if (!bHasTwoHandles)
+                    sal_Int32 nNumber(0);
+                    aAdjustmentSeq[i].Value >>= nNumber;
+                    fValue = static_cast<double>(nNumber);
+                }
+                // Convert from binary coordinate system with viewBox "0 0 21600 21600" and simple degree
+                // to DrawingML with coordinate range 0..100000 and angle in 1/60000 degree.
+                // Reverse to conversion in lcl_createPresetShape in drawingml/shape.cxx on import.
+                if (sPresetWarp == "textArchDown" || sPresetWarp == "textArchUp"
+                    || sPresetWarp == "textButton" || sPresetWarp == "textCircle"
+                    || ((i == 0)
+                        && (sPresetWarp == "textArchDownPour" || sPresetWarp == "textArchUpPour"
+                            || sPresetWarp == "textButtonPour" || sPresetWarp == "textCirclePour")))
+                {
+                    fValue *= 60000.0;
+                    if (fValue < 0)
+                        fValue += 21600000;
+                }
+                else if ((i == 1)
+                         && (sPresetWarp == "textDoubleWave1" || sPresetWarp == "textWave1"
+                        || sPresetWarp == "textWave2" || sPresetWarp == "textWave4"))
+                {
+                    fValue = fValue / 0.216 - 50000.0;
+                }
+                else if ((i == 1)
+                         && (sPresetWarp == "textArchDownPour"
+                             || sPresetWarp == "textArchUpPour"
+                             || sPresetWarp == "textButtonPour"
+                             || sPresetWarp == "textCirclePour"))
+                {
+                    fValue /= 0.108;
+                }
+                else
+                {
+                    fValue /= 0.216;
+                }
+                OString sFmla = "val " + OString::number(std::lround(fValue));
+                mpFS->singleElementNS(XML_a, XML_gd, XML_name, sName, XML_fmla, sFmla);
+                // There exists faulty Favorite shapes with one handle but two adjustment values.
+                if (!bHasTwoHandles)
+                    break;
+            }
+            mpFS->endElementNS(XML_a, XML_avLst);
+            mpFS->endElementNS(XML_a, XML_prstTxWarp);
+        }
+        else
+        {
+            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
+        }
+    }
+    else if (GetDocumentType() == DOCUMENT_DOCX)
+    {
+        // interim solution for fdo#80897, roundtrip DOCX > LO > DOCX
+        if (!sMSWordPresetTextWarp.isEmpty())
+            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sMSWordPresetTextWarp);
+    }
+
+    if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
+    {
+        // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
+        bool bTextAutoGrowHeight = false;
+        auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
+        if (pSdrObjCustomShape && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
+        {
+            mAny >>= bTextAutoGrowHeight;
+        }
+        mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
+    }
+    if (GetDocumentType() == DOCUMENT_PPTX)
+    {
+        TextFitToSizeType eFit = TextFitToSizeType_NONE;
+        if (GetProperty(rXPropSet, u"TextFitToSize"_ustr))
+            mAny >>= eFit;
+
+        if (eFit == TextFitToSizeType_AUTOFIT)
+        {
+            const sal_Int32 MAX_SCALE_VAL = 100000;
+            sal_Int32 nFontScale = MAX_SCALE_VAL;
+            sal_Int32 nSpacingReduction = 0;
+            SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXIface.get());
+            if (pTextShape)
+            {
+                SdrTextObj* pTextObject = DynCastSdrTextObj(pTextShape->GetSdrObject());
+                if (pTextObject)
+                {
+                    nFontScale = sal_Int32(pTextObject->GetFontScale() * 100000.0);
+                    nSpacingReduction = sal_Int32((1.0 - pTextObject->GetSpacingScale()) * 100000.0);
+                }
+            }
+
+            bool bExportFontScale = false;
+            if (nFontScale < MAX_SCALE_VAL && nFontScale > 0)
+                bExportFontScale = true;
+
+            bool bExportSpaceReduction = false;
+            if (nSpacingReduction < MAX_SCALE_VAL && nSpacingReduction > 0)
+                bExportSpaceReduction = true;
+
+            mpFS->singleElementNS(XML_a, XML_normAutofit,
+                XML_fontScale, sax_fastparser::UseIf(OString::number(nFontScale), bExportFontScale),
+                XML_lnSpcReduction, sax_fastparser::UseIf(OString::number(nSpacingReduction), bExportSpaceReduction));
+        }
+        else
+        {
+            bool bAutoGrowHeightEnabled = false;
+            const SdrObject* pObj = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
+            if (pObj)
+            {
+                switch (pObj->GetObjIdentifier())
+                {
+                    case SdrObjKind::NONE:
+                    case SdrObjKind::Text:
+                    case SdrObjKind::TitleText:
+                    case SdrObjKind::OutlineText:
+                    case SdrObjKind::Caption:
+                    case SdrObjKind::CustomShape:
+                        bAutoGrowHeightEnabled = true;
                         break;
+                    default:
+                        bAutoGrowHeightEnabled = false;
                 }
-                mpFS->endElementNS(XML_a, XML_avLst);
-                mpFS->endElementNS(XML_a, XML_prstTxWarp);
             }
-            else
-            {
-                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sPresetWarp);
-            }
-        }
-        else if (GetDocumentType() == DOCUMENT_DOCX)
-        {
-            // interim solution for fdo#80897, roundtrip DOCX > LO > DOCX
-            if (!sMSWordPresetTextWarp.isEmpty())
-                mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, sMSWordPresetTextWarp);
-        }
 
-        if (GetDocumentType() == DOCUMENT_DOCX || GetDocumentType() == DOCUMENT_XLSX)
-        {
-            // tdf#112312: only custom shapes obey the TextAutoGrowHeight option
             bool bTextAutoGrowHeight = false;
-            auto pSdrObjCustomShape = xShape.is() ? dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)) : nullptr;
-            if (pSdrObjCustomShape && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
-            {
+            if (bAutoGrowHeightEnabled && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
                 mAny >>= bTextAutoGrowHeight;
-            }
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
         }
-        if (GetDocumentType() == DOCUMENT_PPTX)
+    }
+
+    Write3DEffects( rXPropSet, /*bIsText=*/true );
+
+    mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
+}
+
+void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
+                          sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles)
+{
+    // ToDo: Fontwork in DOCX
+    uno::Reference<XText> xXText(rXIface, UNO_QUERY);
+    if( !xXText.is() )
+        return;
+
+    uno::Reference<drawing::XShape> xShape(rXIface, UNO_QUERY);
+    uno::Reference<XPropertySet> rXPropSet(rXIface, UNO_QUERY);
+
+    bool bIsFontworkShape(IsFontworkShape(rXPropSet));
+
+    sal_Int32 nLeft = mconstDefaultLeftRightInset;
+    sal_Int32 nRight = mconstDefaultLeftRightInset;
+    sal_Int32 nTop = mconstDefaultTopBottomInset;
+    sal_Int32 nBottom = mconstDefaultTopBottomInset;
+
+    // top inset looks a bit different compared to ppt export
+    // check if something related doesn't work as expected
+    if (GetProperty(rXPropSet, u"TextLeftDistance"_ustr))
+        mAny >>= nLeft;
+    if (GetProperty(rXPropSet, u"TextRightDistance"_ustr))
+        mAny >>= nRight;
+    if (GetProperty(rXPropSet, u"TextUpperDistance"_ustr))
+        mAny >>= nTop;
+    if (GetProperty(rXPropSet, u"TextLowerDistance"_ustr))
+        mAny >>= nBottom;
+
+    // Fontwork shapes in LO ignore insets in rendering, Word interprets them.
+    if (GetDocumentType() == DOCUMENT_DOCX && bIsFontworkShape)
+    {
+        nLeft = 0;
+        nRight = 0;
+        nTop = 0;
+        nBottom = 0;
+    }
+
+    // Transform the text distance values so they are compatible with OOXML insets
+    if (xShape.is())
+    {
+        sal_Int32 nTextHeight = xShape->getSize().Height; // Hmm, default
+
+        // CustomShape can have text area different from shape rectangle
+        auto* pCustomShape
+            = dynamic_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape));
+        if (pCustomShape)
         {
-            TextFitToSizeType eFit = TextFitToSizeType_NONE;
-            if (GetProperty(rXPropSet, u"TextFitToSize"_ustr))
-                mAny >>= eFit;
-
-            if (eFit == TextFitToSizeType_AUTOFIT)
-            {
-                const sal_Int32 MAX_SCALE_VAL = 100000;
-                sal_Int32 nFontScale = MAX_SCALE_VAL;
-                sal_Int32 nSpacingReduction = 0;
-                SvxShapeText* pTextShape = dynamic_cast<SvxShapeText*>(rXIface.get());
-                if (pTextShape)
-                {
-                    SdrTextObj* pTextObject = DynCastSdrTextObj(pTextShape->GetSdrObject());
-                    if (pTextObject)
-                    {
-                        nFontScale = sal_Int32(pTextObject->GetFontScale() * 100000.0);
-                        nSpacingReduction = sal_Int32((1.0 - pTextObject->GetSpacingScale()) * 100000.0);
-                    }
-                }
-
-                bool bExportFontScale = false;
-                if (nFontScale < MAX_SCALE_VAL && nFontScale > 0)
-                    bExportFontScale = true;
-
-                bool bExportSpaceReduction = false;
-                if (nSpacingReduction < MAX_SCALE_VAL && nSpacingReduction > 0)
-                    bExportSpaceReduction = true;
-
-                mpFS->singleElementNS(XML_a, XML_normAutofit,
-                    XML_fontScale, sax_fastparser::UseIf(OString::number(nFontScale), bExportFontScale),
-                    XML_lnSpcReduction, sax_fastparser::UseIf(OString::number(nSpacingReduction), bExportSpaceReduction));
-            }
-            else
-            {
-                bool bAutoGrowHeightEnabled = false;
-                const SdrObject* pObj = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
-                if (pObj)
-                {
-                    switch (pObj->GetObjIdentifier())
-                    {
-                        case SdrObjKind::NONE:
-                        case SdrObjKind::Text:
-                        case SdrObjKind::TitleText:
-                        case SdrObjKind::OutlineText:
-                        case SdrObjKind::Caption:
-                        case SdrObjKind::CustomShape:
-                            bAutoGrowHeightEnabled = true;
-                            break;
-                        default:
-                            bAutoGrowHeightEnabled = false;
-                    }
-                }
-
-                bool bTextAutoGrowHeight = false;
-                if (bAutoGrowHeightEnabled && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
-                    mAny >>= bTextAutoGrowHeight;
-                mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
-            }
+            const EnhancedCustomShape2d aCustomShape2d(*pCustomShape);
+            nTextHeight = aCustomShape2d.GetTextRect().getOpenHeight();
+            if (DOCUMENT_DOCX == meDocumentType)
+                nTextHeight = convertTwipToMm100(nTextHeight);
         }
 
-        Write3DEffects( rXPropSet, /*bIsText=*/true );
-
-        mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
+        if (nTop + nBottom >= nTextHeight)
+        {
+            // Effective bottom would be above effective top of text area. LO normalizes the
+            // effective text area in such case implicitly for rendering. MS needs indents so that
+            // the result is the normalized effective text area.
+            std::swap(nTop, nBottom);
+            nTop = nTextHeight - nTop;
+            nBottom = nTextHeight - nBottom;
+        }
     }
+
+    if (bBodyPr)
+    {
+        WriteBodyProps(rXIface, nXmlNamespace, bIsFontworkShape, nTop, nBottom, nLeft, nRight);
+    } // end of bodyPr
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
     if( !access.is() || !bText )
