@@ -90,6 +90,7 @@ protected:
 
 private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );
+    bool m_bIsCalc;
 };
 
 class SVX_DLLPUBLIC SvxHeaderPage final : public SvxHFPage

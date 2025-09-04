@@ -34,11 +34,11 @@ class tdf144940(UITestCase):
 
                     self.assertEqual("true", get_state_as_dict(xCheckHeaderOn)["Selected"])
                     self.assertEqual("true", get_state_as_dict(xCheckSameLR)["Selected"])
-                    self.assertEqual("false", get_state_as_dict(xCheckSameFP)["Selected"])
+                    self.assertEqual("true", get_state_as_dict(xCheckSameFP)["Selected"])
 
                     xCheckSameFP.executeAction("CLICK", tuple())
 
-                    self.assertEqual("true", get_state_as_dict(xCheckSameFP)["Selected"])
+                    self.assertEqual("false", get_state_as_dict(xCheckSameFP)["Selected"])
 
                 with self.ui_test.execute_dialog_through_command(".uno:Save", close_button="open") as xSaveDialog:
                     xFileName = xSaveDialog.getChild("file_name")
@@ -55,7 +55,7 @@ class tdf144940(UITestCase):
                 # AssertionError: False is not true
                 self.assertTrue(xDefaultPageStyle.HeaderOn)
                 self.assertTrue(xDefaultPageStyle.FooterOn)
-                self.assertTrue(xDefaultPageStyle.FirstPageHeaderIsShared)
+                self.assertFalse(xDefaultPageStyle.FirstPageHeaderIsShared)
                 self.assertTrue(xDefaultPageStyle.FirstPageFooterIsShared)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
