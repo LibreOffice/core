@@ -62,11 +62,7 @@ public:
 
     bool IsEmpty() const { return maBitmap.IsEmpty(); }
 
-    void SetEmpty() { maBitmap.SetEmpty(); }
-
     vcl::PixelFormat getPixelFormat() const { return maBitmap.getPixelFormat(); }
-
-    sal_Int64 GetSizeBytes() const { return maBitmap.GetSizeBytes(); }
 
     Size GetSizePixel() const { return maBitmap.GetSizePixel(); }
 
@@ -78,33 +74,11 @@ public:
 
     bool Invert();
 
-    bool Mirror( BmpMirrorFlags nMirrorFlags ) { return maBitmap.Mirror(nMirrorFlags); }
-
     bool Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default ) { return maBitmap.Scale(rNewSize, nScaleFlag); }
-
-    bool Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag = BmpScaleFlag::Default )
-    { return maBitmap.Scale(rScaleX, rScaleY, nScaleFlag); }
 
     bool Convert( BmpConversion eConversion ) { return maBitmap.Convert(eConversion); }
 
     vcl::Region CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const { return maBitmap.CreateRegion(rColor, rRect); }
-
-    bool Rotate( Degree10 nAngle10, const Color& rFillColor ) { return maBitmap.Rotate(nAngle10, rFillColor); }
-
-    bool Crop( const tools::Rectangle& rRectPixel ) { return maBitmap.Crop(rRectPixel); }
-
-    bool Expand( sal_Int32 nDX, sal_Int32 nDY, const Color* pInitColor = nullptr ) { return maBitmap.Expand(nDX, nDY, pInitColor); }
-
-    bool CopyPixel( const tools::Rectangle& rRectDst,
-                    const tools::Rectangle& rRectSrc,
-                    const AlphaMask& rBmpSrc )
-    { return maBitmap.CopyPixel(rRectDst, rRectSrc, rBmpSrc.maBitmap); }
-
-    bool CopyPixel_AlphaOptimized(
-                    const tools::Rectangle& rRectDst,
-                    const tools::Rectangle& rRectSrc,
-                    const AlphaMask& rBmpSrc )
-    { return maBitmap.CopyPixel_AlphaOptimized(rRectDst, rRectSrc, rBmpSrc); }
 
 private:
     friend class ::OutputDevice;

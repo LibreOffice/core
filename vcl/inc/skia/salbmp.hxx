@@ -91,16 +91,9 @@ public:
 
     // Key for caching/hashing.
     OString GetImageKey(DirectImage direct = DirectImage::No) const;
-    OString GetAlphaImageKey(DirectImage direct = DirectImage::No) const;
 
-    // Returns true if it is known that this bitmap can be ignored if it's to be used
-    // as an alpha bitmap. An optimization, not guaranteed to return true for all such cases.
-    bool IsFullyOpaqueAsAlpha() const;
     // Alpha type best suitable for the content.
     SkAlphaType alphaType() const;
-
-    // Tries to create direct GetAlphaSkImage() from direct GetSkImage().
-    void TryDirectConvertToAlphaNoScaling();
 
     // Dump contents to a file for debugging.
     void dump(const char* file) const;

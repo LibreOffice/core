@@ -334,15 +334,6 @@ public:
                                 const tools::Rectangle& rRectDst,
                                 const tools::Rectangle& rRectSrc );
 
-    SAL_DLLPRIVATE bool CopyPixel_AlphaOptimized(
-                                const tools::Rectangle& rRectDst,
-                                const tools::Rectangle& rRectSrc,
-                                const AlphaMask& rBmpSrc );
-
-    SAL_DLLPRIVATE bool CopyPixel_AlphaOptimized(
-                                const tools::Rectangle& rRectDst,
-                                const tools::Rectangle& rRectSrc );
-
     /** Alpha-blend the given bitmap against a specified uniform
           background color.
 

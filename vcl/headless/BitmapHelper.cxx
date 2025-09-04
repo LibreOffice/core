@@ -81,17 +81,6 @@ unsigned char* BitmapHelper::getBits(sal_Int32& rStride)
     return mask_data;
 }
 
-MaskHelper::MaskHelper(const SalBitmap& rAlphaBitmap)
-{
-    const SvpSalBitmap& rMask = static_cast<const SvpSalBitmap&>(rAlphaBitmap);
-    const BitmapBuffer* pMaskBuf = rMask.GetBuffer();
-    assert(rAlphaBitmap.GetBitCount() == 8 && "we only support 8-bit masks now");
-
-    implSetSurface(cairo_image_surface_create_for_data(pMaskBuf->mpBits, CAIRO_FORMAT_A8,
-                                                       pMaskBuf->mnWidth, pMaskBuf->mnHeight,
-                                                       pMaskBuf->mnScanlineSize));
-}
-
 namespace
 {
 // check for env var that decides for using downscale pattern
@@ -141,19 +130,6 @@ sal_Int64 SystemDependentData_BitmapHelper::estimateUsageInBytes() const
     return estimateUsageInBytesForSurfaceHelper(maBitmapHelper.get());
 }
 
-SystemDependentData_MaskHelper::SystemDependentData_MaskHelper(
-    std::shared_ptr<MaskHelper> xMaskHelper)
-    : basegfx::SystemDependentData(Application::GetSystemDependentDataManager(),
-                                   basegfx::SDD_Type::SDDType_MaskHelper)
-    , maMaskHelper(std::move(xMaskHelper))
-{
-}
-
-sal_Int64 SystemDependentData_MaskHelper::estimateUsageInBytes() const
-{
-    return estimateUsageInBytesForSurfaceHelper(maMaskHelper.get());
-}
-
 namespace
 {
 // MM02 decide to use buffers or not
@@ -193,40 +169,6 @@ void tryToUseSourceBuffer(const SalBitmap& rSourceBitmap, std::shared_ptr<Bitmap
     {
         // add to buffering mechanism to potentially reuse next time
         rSourceBitmap.addOrReplaceSystemDependentData<SystemDependentData_BitmapHelper>(rSurface);
-    }
-}
-
-void tryToUseMaskBuffer(const SalBitmap& rMaskBitmap, std::shared_ptr<MaskHelper>& rMask)
-{
-    // MM02 try to access buffered MaskHelper
-    std::shared_ptr<SystemDependentData_MaskHelper> pSystemDependentData_MaskHelper;
-    const bool bBufferMask(bUseBuffer
-                           && rMaskBitmap.GetSize().Width() * rMaskBitmap.GetSize().Height()
-                                  > nMinimalSquareSizeToBuffer);
-
-    if (bBufferMask)
-    {
-        pSystemDependentData_MaskHelper
-            = rMaskBitmap.getSystemDependentData<SystemDependentData_MaskHelper>(
-                basegfx::SDD_Type::SDDType_MaskHelper);
-
-        if (pSystemDependentData_MaskHelper)
-        {
-            // reuse buffered data
-            rMask = pSystemDependentData_MaskHelper->getMaskHelper();
-        }
-    }
-
-    if (rMask)
-        return;
-
-    // create data on-demand
-    rMask = std::make_shared<MaskHelper>(rMaskBitmap);
-
-    if (bBufferMask)
-    {
-        // add to buffering mechanism to potentially reuse next time
-        rMaskBitmap.addOrReplaceSystemDependentData<SystemDependentData_MaskHelper>(rMask);
     }
 }
 

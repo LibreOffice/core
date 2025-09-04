@@ -48,9 +48,7 @@ namespace basegfx
         SDDType_ID2D1PathGeometry,
         SDDType_ID2D1Bitmap,
         SDDType_BitmapHelper,
-        SDDType_MaskHelper,
         SDDType_CairoPath,
-        SDDType_ModifiedBitmapEx,
         SDDType_ModifiedBitmap,
         SDDType_GraphicsPath,
         SDDType_GdiPlusBitmap
