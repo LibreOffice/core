@@ -2146,6 +2146,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
+            if (comphelper::LibreOfficeKit::isActive())
+                sendLOKCursorUpdates();
             return;
         }
     }
