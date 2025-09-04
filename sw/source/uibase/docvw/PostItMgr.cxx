@@ -102,7 +102,7 @@ using namespace sw::annotation;
 
 namespace {
 
-    enum class CommentNotificationType { Add, Remove, Modify, Resolve, RedlinedDeletion };
+    enum class CommentNotificationType { Add, Remove, Modify, Resolve, SearchHighlight, RedlinedDeletion };
 
     bool comp_pos(const std::unique_ptr<SwSidebarItem>& a, const std::unique_ptr<SwSidebarItem>& b)
     {
@@ -147,7 +147,8 @@ namespace {
                                    (nType == CommentNotificationType::Remove ? "Remove" :
                                     (nType == CommentNotificationType::Modify ? "Modify" :
                                      (nType == CommentNotificationType::RedlinedDeletion ? "RedlinedDeletion" :
-                                      (nType == CommentNotificationType::Resolve ? "Resolve" : "???"))))));
+                                      (nType == CommentNotificationType::SearchHighlight ? "SearchHighlight" :
+                                       (nType == CommentNotificationType::Resolve ? "Resolve" : "???")))))));
 
         aAnnotation.put("id", nPostItId);
         if (nType != CommentNotificationType::Remove && pItem != nullptr)
@@ -185,6 +186,15 @@ namespace {
             aAnnotation.put("anchorPos", aSVRect.toString());
             aAnnotation.put("textRange", sRects.getStr());
             aAnnotation.put("layoutStatus", pItem->mLayoutStatus);
+            if (nType == CommentNotificationType::SearchHighlight)
+            {
+                ESelection aSel = pWin->GetOutlinerView()->GetSelection();
+                OString sSelStr = OString::Concat(OString::number(aSel.start.nPara)) + ","
+                                  + OString::number(aSel.start.nIndex) + ","
+                                  + OString::number(aSel.end.nPara) + ","
+                                  + OString::number(aSel.end.nIndex);
+                aAnnotation.put("searchSelection", sSelStr);
+            }
         }
         if (nType == CommentNotificationType::Remove && comphelper::LibreOfficeKit::isActive())
         {
@@ -2596,6 +2606,8 @@ sal_uInt16 SwPostItMgr::FinishSearchReplace(const i18nutil::SearchOptions2& rSea
     sal_uInt16 aResult = pWin->GetOutlinerView()->StartSearchAndReplace( aItem );
     if (!aResult)
         SetActiveSidebarWin(nullptr);
+    else
+        lcl_CommentNotification(mpView, CommentNotificationType::SearchHighlight, &pWin->GetSidebarItem(), 0);
     return aResult;
 }
 
@@ -2620,6 +2632,7 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const i18nuti
         {
             SetActiveSidebarWin(pWin);
             MakeVisible(pWin);
+            lcl_CommentNotification(mpView, CommentNotificationType::SearchHighlight, &pWin->GetSidebarItem(), 0);
         }
     }
     return aResult;
