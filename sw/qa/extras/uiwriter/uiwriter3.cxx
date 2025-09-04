@@ -11,6 +11,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
@@ -19,6 +20,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <swdtflvr.hxx>
@@ -2533,6 +2536,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+
+    // On MacOS Alt+Up is defined as a keyboard accelerator to move
+    // between paragraphs. Let’s remove the accelerator so that the
+    // table handling code can see the key which will make it try to
+    // change the row size instead.
+    const uno::Reference<uno::XComponentContext>& xContext
+        = comphelper::getProcessComponentContext();
+    css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> confSupplier
+        = ui::theModuleUIConfigurationManagerSupplier::get(xContext);
+    css::uno::Reference<ui::XUIConfigurationManager> xManager
+        = confSupplier->getUIConfigurationManager("com.sun.star.text.TextDocument");
+    awt::KeyEvent keyEvent;
+    keyEvent.KeyCode = css::awt::Key::UP;
+    keyEvent.Modifiers = css::awt::KeyModifier::MOD2;
+    try
+    {
+        xManager->getShortCutManager()->removeKeyEvent(keyEvent);
+    }
+    catch (com::sun::star::container::NoSuchElementException&)
+    {
+    }
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP | KEY_MOD2);
     Scheduler::ProcessEventsToIdle();

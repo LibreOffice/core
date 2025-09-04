@@ -2285,7 +2285,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -2303,7 +2310,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -2869,7 +2877,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -2887,7 +2902,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
@@ -3807,7 +3823,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -3825,7 +3848,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -4391,7 +4415,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -4409,7 +4440,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
@@ -4594,7 +4626,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -4612,7 +4651,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -5201,7 +5241,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -5219,7 +5266,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
@@ -5386,7 +5434,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -5404,7 +5459,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -5963,7 +6019,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -5981,7 +6044,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
@@ -6262,13 +6326,21 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_SHIFT_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:MoveDown</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:MoveDown</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfParaSel</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -6286,7 +6358,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -6895,13 +6968,21 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_SHIFT_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:MoveUp</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:MoveUp</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfParaSel</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -6919,7 +7000,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
@@ -7140,7 +7222,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToNextPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToEndOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="DOWN_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToNextPara</value>
           </prop>
         </node>
         <node oor:name="DOWN_MOD1_MOD2" oor:op="replace">
@@ -7158,7 +7247,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="DOWN_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:EndOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:EndOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="D_MOD1" oor:op="replace">
@@ -7724,7 +7814,14 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:GoToStartOfPara</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfDoc</value>
+          </prop>
+        </node>
+        <node oor:name="UP_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:GoToStartOfPara</value>
           </prop>
         </node>
         <node oor:name="UP_MOD1_MOD2" oor:op="replace">
@@ -7742,7 +7839,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="UP_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:StartOfParaSel</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:StartOfDocumentSel</value>
           </prop>
         </node>
         <node oor:name="U_MOD1" oor:op="replace">
