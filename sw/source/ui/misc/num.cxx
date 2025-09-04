@@ -874,9 +874,9 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     pButton->set_sensitive(m_rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
     weld::Button& pCancelButton = GetCancelButton();
     pCancelButton.connect_clicked(LINK(this, SwSvxNumBulletTabDialog, CancelHdl));
-    AddTabPage(u"singlenum"_ustr, TabResId(RID_TAB_UNOORDERED.aLabel), RID_SVXPAGE_PICK_SINGLE_NUM,
+    AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_UNOORDERED.aLabel), RID_SVXPAGE_PICK_BULLET,
                RID_M + RID_TAB_UNOORDERED.sIconName);
-    AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_ORDERED.aLabel), RID_SVXPAGE_PICK_BULLET,
+    AddTabPage(u"singlenum"_ustr, TabResId(RID_TAB_ORDERED.aLabel), RID_SVXPAGE_PICK_SINGLE_NUM,
                RID_M + RID_TAB_ORDERED.sIconName);
     AddTabPage(u"outlinenum"_ustr, TabResId(RID_TAB_OUTLINE.aLabel), RID_SVXPAGE_PICK_NUM,
                RID_M + RID_TAB_OUTLINE.sIconName);
