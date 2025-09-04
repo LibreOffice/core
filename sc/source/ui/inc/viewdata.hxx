@@ -352,6 +352,8 @@ private:
 
     ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh);
 
+    bool IsValidTabNumber(SCTAB nTabNumber) const;
+
 public:
     ScViewData( ScDocShell& rDocSh, ScTabViewShell* pViewSh );
     ScViewData( ScDocument& rDoc );
