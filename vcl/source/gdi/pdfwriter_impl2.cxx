@@ -19,6 +19,7 @@
 #include <pdf/pdfwriter_impl.hxx>
 #include <pdf/EncryptionHashTransporter.hxx>
 
+#include <vcl/dibtools.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
@@ -82,7 +83,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
     Size            aSize( i_rSize );
 
     // #i19065# Negative sizes have mirror semantics on
-    // OutputDevice. BitmapEx and co. have no idea about that, so
+    // OutputDevice. Bitmap and co. have no idea about that, so
     // perform that _before_ doing anything with aBitmapEx.
     BmpMirrorFlags nMirrorFlags(BmpMirrorFlags::NONE);
     if( aSize.Width() < 0 )
@@ -195,7 +196,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             SvMemoryStream aTemp;
             aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
             aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
-            WriteDIBBitmapEx(BitmapEx(aBitmap), aTemp); // is capable of zlib stream compression
+            WriteDIBBitmapEx(aBitmap, aTemp); // is capable of zlib stream compression
             nZippedFileSize = aTemp.TellEnd();
         }
         if ( aBitmap.HasAlpha() )
@@ -488,7 +489,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.Play(*xVDev, aPoint, aDstSize);
                                 aTmpMtf.WindStart();
                                 xVDev->EnableMapMode( false );
-                                BitmapEx aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
+                                Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
                                 xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                                 // create alpha mask from gradient
@@ -515,12 +516,12 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     //   https://bugs.documentfoundation.org/attachment.cgi?id=188084
                                     aAlpha.Invert(); // convert to alpha
                                 }
-                                aAlpha.BlendWith(aPaint.GetAlphaMask());
+                                aAlpha.BlendWith(aPaint.CreateAlphaMask());
 
                                 xVDev.disposeAndClear();
 
                                 Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                                implWriteBitmapEx( rPos, rSize, Bitmap(aPaint.GetBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
+                                implWriteBitmapEx( rPos, rSize, Bitmap(aPaint.CreateColorBitmap(), aAlpha ), aGraphic, pDummyVDev, i_rContext );
                             }
                         }
                     }
@@ -732,14 +733,14 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case MetaActionType::BMP:
                 {
                     const MetaBmpAction* pA = static_cast<const MetaBmpAction*>(pAction);
-                    BitmapEx aBitmapEx( pA->GetBitmap() );
-                    Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
-                                                            aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
+                    Bitmap aBitmap( pA->GetBitmap() );
+                    Size aSize( OutputDevice::LogicToLogic( aBitmap.GetPrefSize(),
+                                                            aBitmap.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
                     if( ! ( aSize.Width() && aSize.Height() ) )
-                        aSize = pDummyVDev->PixelToLogic( aBitmapEx.GetSizePixel() );
+                        aSize = pDummyVDev->PixelToLogic( aBitmap.GetSizePixel() );
 
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), aSize, Bitmap(aBitmapEx), aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), aSize, aBitmap, aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 

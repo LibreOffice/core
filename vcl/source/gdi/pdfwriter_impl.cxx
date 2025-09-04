@@ -9921,8 +9921,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         if( !rAlphaMask.IsEmpty() && rAlphaMask.GetSizePixel() == aGraphic.GetSizePixel() )
         {
             Bitmap aBmp( aGraphic.GetBitmap().CreateColorBitmap() );
-            BitmapEx aBmpEx( aBmp, rAlphaMask );
-            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), Bitmap(aBmpEx) );
+            Bitmap aBmp2( aBmp, rAlphaMask );
+            drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aBmp2 );
         }
         else
             drawBitmap( rTargetArea.TopLeft(), rTargetArea.GetSize(), aGraphic.GetBitmap() );
@@ -10029,7 +10029,7 @@ const BitmapEmit& PDFWriterImpl::createBitmapEmit(const Bitmap& i_rBitmap, const
     BitmapID aID;
     aID.m_aPixelSize        = aBitmap.GetSizePixel();
     aID.m_nSize             = vcl::pixelFormatBitCount(ePixelFormat);
-    aID.m_nChecksum         = BitmapEx(aBitmap).GetBitmap().GetChecksum();
+    aID.m_nChecksum         = aBitmap.CreateColorBitmap().GetChecksum();
     aID.m_nMaskChecksum     = 0;
     if( aBitmap.HasAlpha() )
         aID.m_nMaskChecksum = aBitmap.CreateAlphaMask().GetChecksum();
@@ -10072,7 +10072,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    MARK( "drawBitmap (BitmapEx)" );
+    MARK( "drawBitmap (Bitmap)" );
 
     // #i40055# sanity check
     if( ! (rDestSize.Width() && rDestSize.Height()) )
