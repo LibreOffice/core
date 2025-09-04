@@ -1602,11 +1602,11 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
         {
             case GraphicContentType::Bitmap:
             {
-                BitmapEx aBitmapEx;
-                ReadDIBBitmapEx(aBitmapEx, rStream);
+                Bitmap aBitmap;
+                ReadDIBBitmapEx(aBitmap, rStream);
                 if (!rStream.GetError())
                 {
-                    mpBitmapContainer = std::make_shared<BitmapContainer>(Bitmap(aBitmapEx));
+                    mpBitmapContainer = std::make_shared<BitmapContainer>(aBitmap);
                     bReturn = true;
                 }
             }
