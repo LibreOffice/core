@@ -50,6 +50,8 @@
 #include <vcl/mapmod.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <basegfx/utils/bgradient.hxx>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+
 
 class Graphic;
 class SdrObjCustomShape;
@@ -291,6 +293,28 @@ struct WriteRunInput
     css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
 };
 
+struct WriteBodyPropsInput
+{
+    bool bIsFontworkShape = false;
+    bool bHasWrap = false;
+    bool bWrap = false;
+    bool bFromWordArt = false;
+    sal_Int32 nTop = 0;
+    sal_Int32 nBottom = 0;
+    sal_Int32 nLeft = 0;
+    sal_Int32 nRight = 0;
+    std::optional<OUString> sHorzOverflow;
+    std::optional<OUString> sVertOverflow;
+    const char *sAnchor = nullptr;
+    bool bAnchorCtr = false;
+    std::optional<OString> sWritingMode;
+    std::optional<OString> sIsUpright;
+    std::optional<OString> sTextRotateAngleMSUnit;
+    css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    OUString sPresetWarp;
+    OUString sMSWordPresetTextWarp;
+};
+
 class DrawingML
 {
 
@@ -303,6 +327,8 @@ private:
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;
 
+    static constexpr const sal_Int32 mconstDefaultLeftRightInset = 254;
+    static constexpr const sal_Int32 mconstDefaultTopBottomInset = 127;
 
 protected:
     css::uno::Any                             mAny;
@@ -470,6 +496,12 @@ public:
                        bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                        const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
                        sal_Int32 nElement);
+    void WriteBodyProps(
+            const css::uno::Reference< css::uno::XInterface >& rXIface,
+            const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+            const css::uno::Reference<css::drawing::XShape>& xShape,
+            sal_Int32 nXmlNamespace, const WriteBodyPropsInput& aWBPInput);
+
     /** Populates the lstStyle with the shape's text run and paragraph properties */
     void WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
                        bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,

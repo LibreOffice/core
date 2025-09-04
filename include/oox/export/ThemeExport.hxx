@@ -40,9 +40,11 @@ private:
     sax_fastparser::FSHelperPtr mpFS;
 
 public:
-    ThemeExport(oox::core::XmlFilterBase* pFilterBase, oox::drawingml::DocumentType eDocumentType);
+    ThemeExport(oox::core::XmlFilterBase* pFilterBase, oox::drawingml::DocumentType eDocumentType,
+                sax_fastparser::FSHelperPtr pFS = nullptr);
 
     void write(OUString const& rPath, model::Theme const& rTheme);
+    void writeComplexColor(model::ComplexColor const& rComplexColor);
 
 private:
     bool writeColorSet(model::Theme const& rTheme);
@@ -58,7 +60,6 @@ private:
     void writePatternFill(model::PatternFill const& rPatternFill);
     void writeGradientFill(model::GradientFill const& rGradientFill);
     void writeSolidFill(model::SolidFill const& rSolidFill);
-    void writeComplexColor(model::ComplexColor const& rComplexColor);
     void writeColorPlaceholder(model::ComplexColor const& rComplexColor);
     void writeColorSystem(model::ComplexColor const& rComplexColor);
     void writeColorTheme(model::ComplexColor const& rComplexColor);

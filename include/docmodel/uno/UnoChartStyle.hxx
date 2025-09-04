@@ -47,7 +47,7 @@ namespace model::style
 {
 DOCMODEL_DLLPUBLIC css::uno::Reference<css::chart2::XChartStyle>
 createXChartStyle(model::StyleSet const& rStyle);
-DOCMODEL_DLLPUBLIC model::StyleSet
+DOCMODEL_DLLPUBLIC model::StyleSet*
 getFromXChartStyle(css::uno::Reference<css::chart2::XChartStyle> const& rxStyle);
 }
 

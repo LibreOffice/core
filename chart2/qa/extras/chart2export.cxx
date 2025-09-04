@@ -1396,6 +1396,20 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testInvertNegative)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStyleImportExport)
+{
+    // column-style.xlsx is a hand-edited test that includes an axisTitle style
+    // with run property text size 777 (chosen simply as a distinctive number).
+    // Test that this value round-trips successfully.
+    loadFromFile(std::u16string_view(u"xlsx/column-style.xlsx"));
+
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/style1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/cs:chartStyle");
+    assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle");
+    assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle/a:defRPr", "sz", std::u16string_view(u"777"));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -20,15 +20,18 @@ uno::Reference<chart2::XChartStyle> createXChartStyle(model::StyleSet const& rSt
     return new UnoChartStyle(rStyle);
 }
 
-model::StyleSet getFromXChartStyle(uno::Reference<chart2::XChartStyle> const& rxStyle)
+model::StyleSet* getFromXChartStyle(uno::Reference<chart2::XChartStyle> const& rxStyle)
 {
-    model::StyleSet aChartStyle;
     UnoChartStyle* pUnoChartStyle = static_cast<UnoChartStyle*>(rxStyle.get());
+
     if (pUnoChartStyle)
     {
-        aChartStyle = pUnoChartStyle->getChartStyle();
+        return &pUnoChartStyle->getChartStyle();
     }
-    return aChartStyle;
+    else
+    {
+        return nullptr;
+    }
 }
 
 } // end model::style

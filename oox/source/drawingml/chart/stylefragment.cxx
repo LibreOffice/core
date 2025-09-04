@@ -43,8 +43,8 @@ using namespace model;
 // StyleReferenceContext
 //=======
 StyleReferenceContext::StyleReferenceContext(ContextHandler2Helper& rParent, sal_Int32 nIdx,
-                                             model::StyleColor& rModel)
-    : ContextBase<StyleColor>(rParent, rModel)
+                                             model::FontOrStyleRef& rModel)
+    : ContextBase<FontOrStyleRef>(rParent, rModel)
 {
     mrModel.mnIdx = nIdx;
 }
@@ -75,7 +75,7 @@ ContextHandlerRef StyleReferenceContext::onCreateContext(sal_Int32 nElement,
                 std::optional<OUString> str = rAttribs.getString(XML_val);
                 if (str)
                 {
-                    StyleColor::StyleColorVal v;
+                    FontOrStyleRef::StyleColorVal v;
 
                     const sal_Unicode* pRawStr = str->getStr();
                     std::wstring sBStr;
@@ -96,14 +96,14 @@ ContextHandlerRef StyleReferenceContext::onCreateContext(sal_Int32 nElement,
                         // Not an integer, so see if it's the fixed enum
                         if (*str == "auto")
                         {
-                            v = StyleColor::StyleColorEnum::AUTO;
+                            v = FontOrStyleRef::StyleColorEnum::AUTO;
                         }
                         else
                         {
                             v = *str;
                         }
                     }
-                    mrModel.maStyleClr.push_back(v);
+                    mrModel.maStyleClr = std::make_unique<FontOrStyleRef::StyleColorVal>(v);
                 }
                 return nullptr;
             }

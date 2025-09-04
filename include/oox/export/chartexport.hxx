@@ -69,6 +69,11 @@ namespace core {
     class XmlFilterBase;
 }}
 
+namespace model {
+    struct FontOrStyleRef;
+    struct StyleEntry;
+}
+
 namespace oox::drawingml {
 
 struct LabelPlacementParam;
@@ -237,7 +242,7 @@ private:
     void exportSeriesValues(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq, sal_Int32 nValueType = XML_val );
     void exportShapeProps( const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
-            bool bIsChartex);
+            sal_Int32 nNS);
     void exportDataPoints(
         const css::uno::Reference< css::beans::XPropertySet >& xSeriesProperties,
         sal_Int32 nSeriesLength, sal_Int32 eChartType );
@@ -288,6 +293,11 @@ private:
         const css::uno::Reference<css::beans::XPropertySet>& xPropSet, const LabelPlacementParam& rLabelParam,
         sal_Int32 nLabelIndex, DataLabelsRange& rDLblsRange,
         bool bIsChartex);
+    // Functions for style file output
+    void outputStyleEntry(::sax_fastparser::FSHelperPtr pFS,
+            sal_Int32 nElTokenId, model::StyleEntry& aEntry);
+    void outputFontOrStyleRef(::sax_fastparser::FSHelperPtr pFS,
+            sal_Int32 nElTokenId, const model::FontOrStyleRef& aColor);
 
 public:
 

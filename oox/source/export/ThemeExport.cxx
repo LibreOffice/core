@@ -38,9 +38,11 @@ void writeRelativeRectangle(sax_fastparser::FSHelperPtr pFS, sal_Int32 nToken,
 } // end anonymous namespace
 
 ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase,
-                         oox::drawingml::DocumentType eDocumentType)
+                         oox::drawingml::DocumentType eDocumentType,
+                         sax_fastparser::FSHelperPtr pFS)
     : mpFilterBase(pFilterBase)
     , meDocumentType(eDocumentType)
+    , mpFS(pFS)
 {
 }
 
