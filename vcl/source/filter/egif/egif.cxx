@@ -56,11 +56,11 @@ class GIFWriter
     void                WriteAccess();
     void                WriteTerminator();
 
-    bool                CreateAccess( const BitmapEx& rBmpEx );
+    bool                CreateAccess( const Bitmap& rBmp );
     void                DestroyAccess();
 
     void                WriteAnimation( const Animation& rAnimation );
-    void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, bool bExtended,
+    void                WriteBitmap( const Bitmap& rBmp, const Point& rPoint, bool bExtended,
                                        tools::Long nTimer = 0, Disposal eDisposal = Disposal::Not );
 
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
@@ -139,7 +139,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
     {
         const bool bGrafTrans = rGraphic.IsTransparent();
 
-        BitmapEx aBmpEx(rGraphic.GetBitmap());
+        Bitmap aBmp(rGraphic.GetBitmap());
 
         nMinPercent = 0;
         nMaxPercent = 100;
@@ -148,10 +148,10 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 
         if( bStatus )
         {
-            WriteGlobalHeader( aBmpEx.GetSizePixel() );
+            WriteGlobalHeader( aBmp.GetSizePixel() );
 
             if( bStatus )
-                WriteBitmapEx( aBmpEx, Point(), bGrafTrans );
+                WriteBitmap( aBmp, Point(), bGrafTrans );
         }
     }
 
@@ -170,10 +170,10 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 }
 
 
-void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
+void GIFWriter::WriteBitmap( const Bitmap& rBmp, const Point& rPoint,
                                bool bExtended, tools::Long nTimer, Disposal eDisposal )
 {
-    if( !CreateAccess( rBmpEx ) )
+    if( !CreateAccess( rBmp ) )
         return;
 
     nActX = rPoint.X();
@@ -215,7 +215,7 @@ void GIFWriter::WriteAnimation( const Animation& rAnimation )
     {
         const AnimationFrame& rAnimationFrame = rAnimation.Get( i );
 
-        WriteBitmapEx(BitmapEx(rAnimationFrame.maBitmap), rAnimationFrame.maPositionPixel, true,
+        WriteBitmap(rAnimationFrame.maBitmap, rAnimationFrame.maPositionPixel, true,
                        rAnimationFrame.mnWait, rAnimationFrame.meDisposal );
         nMinPercent = nMaxPercent;
         nMaxPercent = static_cast<sal_uInt32>(nMaxPercent + fStep);
@@ -237,17 +237,17 @@ void GIFWriter::MayCallback(sal_uInt32 nPercent)
 }
 
 
-bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
+bool GIFWriter::CreateAccess( const Bitmap& rBmp )
 {
     if( bStatus )
     {
-        AlphaMask aMask( rBmpEx.GetAlphaMask() );
-
-        aAccBmp = rBmpEx.GetBitmap();
+        aAccBmp = rBmp.CreateColorBitmap();
         bTransparent = false;
 
-        if( !aMask.IsEmpty() )
+        if( rBmp.HasAlpha() )
         {
+            AlphaMask aMask( rBmp.CreateAlphaMask() );
+
             if( aAccBmp.Convert( BmpConversion::N8BitTrans ) )
             {
                 aMask.Convert( BmpConversion::N1BitThreshold );
