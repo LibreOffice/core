@@ -150,7 +150,6 @@ bool MenuButton::InPopupMode() const
 MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
     : PushButton(WindowType::MENUBUTTON)
     , mnCurItemId(0)
-    , mbDelayMenu(false)
     , mbStartingMenu(false)
 {
     mnDDStyle = PushButtonDropdownStyle::MenuButton;
@@ -185,33 +184,11 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
 
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bool bExecute = true;
-    if (mbDelayMenu)
+    if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
     {
-        // If the separated dropdown symbol is not hit, delay the popup execution
-        if( rMEvt.GetPosPixel().X() <= ImplGetSeparatorX() )
-        {
-            if ( !mpMenuTimer )
-            {
-                mpMenuTimer.reset(new Timer("MenuTimer"));
-                mpMenuTimer->SetInvokeHandler( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
-            }
-
-            mpMenuTimer->SetTimeout( MouseSettings::GetActionDelay() );
-            mpMenuTimer->Start();
-
-            PushButton::MouseButtonDown( rMEvt );
-            bExecute = false;
-        }
-    }
-    if( bExecute )
-    {
-        if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
-        {
-            if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
-                GrabFocus();
-            ExecuteMenu();
-        }
+        if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
+            GrabFocus();
+        ExecuteMenu();
     }
 }
 
@@ -221,8 +198,7 @@ void MenuButton::KeyInput( const KeyEvent& rKEvt )
     sal_uInt16 nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
         ExecuteMenu();
-    else if ( !mbDelayMenu &&
-              !aKeyCode.GetModifier() &&
+    else if ( !aKeyCode.GetModifier() &&
               ((nCode == KEY_RETURN) || (nCode == KEY_SPACE)) )
         ExecuteMenu();
     else

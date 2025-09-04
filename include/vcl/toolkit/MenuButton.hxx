@@ -43,7 +43,6 @@ private:
     sal_uInt16      mnCurItemId;
     // whether the MenuButton is the owner of mpMenu
     bool mbOwnPopupMenu = false;
-    bool            mbDelayMenu;
     bool            mbStartingMenu;
     Link<MenuButton*,void> maActivateHdl;
     Link<MenuButton*,void> maSelectHdl;
@@ -73,14 +72,6 @@ public:
     void            ExecuteMenu();
     bool            InPopupMode() const;
     void            CancelMenu();
-
-    //if false then the whole button launches the menu
-    //if true, then the button has a separator
-    //where the right portion launches the menu immediately
-    //where the left portion activates the underlying Button handlers
-    //before launching the menu in an idle, allowing it to be cancelled
-    //before being shown
-    void            SetDelayMenu(bool bDelay) { mbDelayMenu = bDelay; }
 
     void            SetPopupMenu(PopupMenu* pNewMenu, bool bTakeOwnership);
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
