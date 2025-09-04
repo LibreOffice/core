@@ -737,16 +737,6 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     }
 }
 
-void MetaTextArrayAction::SetDXArray(KernArray aArray)
-{
-    maDXAry = std::move(aArray);
-}
-
-void MetaTextArrayAction::SetKashidaArray(std::vector<sal_Bool> aArray)
-{
-    maKashidaAry = std::move(aArray);
-}
-
 MetaStretchTextAction::MetaStretchTextAction() :
     MetaAction  ( MetaActionType::STRETCHTEXT ),
     mnWidth     ( 0 ),
@@ -1954,12 +1944,14 @@ MetaFloatTransparentAction::~MetaFloatTransparentAction()
 {}
 
 MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
-                                                        const Size& rSize, Gradient aGradient ) :
+                                                        const Size& rSize, Gradient aGradient,
+                                                        std::optional<basegfx::BColorStops> oStops ) :
     MetaAction      ( MetaActionType::FLOATTRANSPARENT ),
     maMtf           ( rMtf ),
     maPoint         ( rPos ),
     maSize          ( rSize ),
-    maGradient      (std::move( aGradient ))
+    maGradient      (std::move( aGradient )),
+    maSVGTransparencyColorStops (std::move(oStops))
 {}
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
@@ -1983,11 +1975,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();
-}
-
-void MetaFloatTransparentAction::addSVGTransparencyColorStops(const basegfx::BColorStops& rSVGTransparencyColorStops)
-{
-    maSVGTransparencyColorStops = rSVGTransparencyColorStops;
 }
 
 MetaEPSAction::MetaEPSAction() :

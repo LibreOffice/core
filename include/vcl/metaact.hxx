@@ -122,8 +122,6 @@ public:
 
     const Point&        GetPoint() const { return maPt; }
     const Color&        GetColor() const { return maColor; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
-    void                SetColor(Color rColor) { maColor = rColor; }
 };
 
 class VCL_DLLPUBLIC MetaPointAction final : public MetaAction
@@ -149,7 +147,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
 };
 
 class VCL_DLLPUBLIC MetaLineAction final : public MetaAction
@@ -182,9 +179,6 @@ public:
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
-    void                SetStartPoint(const Point& rPoint) { maStartPt = rPoint; }
-    void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
-    void                SetLineInfo(const LineInfo& rLineInfo) { maLineInfo = rLineInfo; }
 };
 
 class VCL_DLLPUBLIC MetaRectAction final : public MetaAction
@@ -211,7 +205,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class VCL_DLLPUBLIC MetaRoundRectAction final : public MetaAction
@@ -243,9 +236,6 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
     sal_uInt32          GetVertRound() const { return mnVertRound; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
-    void                SetHorzRound(sal_uInt32 rHorzRound) { mnHorzRound = rHorzRound; }
-    void                SetVertRound(sal_uInt32 rVertRound) { mnVertRound = rVertRound; }
 };
 
 class VCL_DLLPUBLIC MetaEllipseAction final : public MetaAction
@@ -272,7 +262,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class VCL_DLLPUBLIC MetaArcAction final : public MetaAction
@@ -304,9 +293,6 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
-    void                SetStartPoint(const Point& rPoint) { maStartPt = rPoint; }
-    void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
 class VCL_DLLPUBLIC MetaPieAction final : public MetaAction
@@ -338,9 +324,6 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
-    void                SetStartPoint(const Point& rPoint) { maStartPt = rPoint; }
-    void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
 class VCL_DLLPUBLIC MetaChordAction final : public MetaAction
@@ -372,9 +355,6 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
-    void                SetStartPoint(const Point& rPoint) { maStartPt = rPoint; }
-    void                SetEndPoint(const Point& rPoint) { maEndPt = rPoint; }
 };
 
 class VCL_DLLPUBLIC MetaPolyLineAction final : public MetaAction
@@ -404,8 +384,6 @@ public:
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
-    void                SetLineInfo(const LineInfo& rLineInfo) { maLineInfo = rLineInfo; }
-    void                SetPolygon(const tools::Polygon& rPoly) { maPoly = rPoly; }
 };
 
 class VCL_DLLPUBLIC MetaPolygonAction final : public MetaAction
@@ -432,7 +410,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
-    void                SetPolygon(const tools::Polygon& rPoly) { maPoly = rPoly; }
 };
 
 class VCL_DLLPUBLIC MetaPolyPolygonAction final : public MetaAction
@@ -459,7 +436,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
-    void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextAction final : public MetaAction
@@ -493,10 +469,6 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    void            SetPoint(const Point& rPt) { maPt = rPt; }
-    void            SetText(const OUString& rStr) { maStr = rStr; }
-    void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
-    void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
 };
 
 class VCL_DLLPUBLIC MetaTextArrayAction final : public MetaAction
@@ -546,20 +518,6 @@ public:
     sal_Int32 GetLayoutContextLen() const { return mnLayoutContextLen; }
     const KernArray& GetDXArray() const { return maDXAry; }
     const std::vector<sal_Bool> & GetKashidaArray() const { return maKashidaAry; }
-    void            SetPoint(const Point& rPt) { maStartPt = rPt; }
-    void            SetText(const OUString& rStr) { maStr = rStr; }
-    void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
-    void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
-    void SetLayoutContextIndex(sal_Int32 nLayoutContextIndex)
-    {
-        mnLayoutContextIndex = nLayoutContextIndex;
-    }
-    void SetLayoutContextLen(sal_Int32 nLayoutContextLen)
-    {
-        mnLayoutContextLen = nLayoutContextLen;
-    }
-    SAL_DLLPRIVATE void            SetDXArray(KernArray aArray);
-    SAL_DLLPRIVATE void            SetKashidaArray(std::vector<sal_Bool> aArray);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
@@ -596,11 +554,6 @@ public:
     sal_uInt32      GetWidth() const { return mnWidth; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    void            SetPoint(const Point& rPt) { maPt = rPt; }
-    void            SetText(const OUString& rStr) { maStr = rStr; }
-    void            SetWidth(sal_uInt32 rWidth) { mnWidth = rWidth; }
-    void            SetIndex(sal_uInt32 rIndex) { mnIndex = rIndex; }
-    void            SetLen(sal_uInt32 rLen) { mnLen = rLen; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextRectAction final : public MetaAction
@@ -632,9 +585,6 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const OUString&     GetText() const { return maStr; }
     DrawTextFlags       GetStyle() const { return mnStyle; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
-    void                SetText(const OUString& rStr) { maStr = rStr; }
-    void                SetStyle(DrawTextFlags rStyle) { mnStyle = rStyle; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextLineAction final : public MetaAction
@@ -671,11 +621,6 @@ public:
     FontStrikeout       GetStrikeout() const { return meStrikeout; }
     FontLineStyle       GetUnderline() const { return meUnderline; }
     FontLineStyle       GetOverline()  const { return meOverline; }
-    void                SetStartPoint(const Point& rPos) { maPos = rPos; }
-    void                SetWidth(tools::Long rWidth) { mnWidth = rWidth; }
-    void                SetStrikeout(FontStrikeout eStrikeout) { meStrikeout = eStrikeout; }
-    void                SetUnderline(FontLineStyle eUnderline) { meUnderline = eUnderline; }
-    void                SetOverline(FontLineStyle eOverline) { meOverline = eOverline; }
 };
 
 class VCL_DLLPUBLIC MetaBmpAction final : public MetaAction
@@ -704,8 +649,6 @@ public:
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
 };
 
 class VCL_DLLPUBLIC MetaBmpScaleAction final : public MetaAction
@@ -737,9 +680,6 @@ public:
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
-    void                SetSize(const Size& rSz) { maSz = rSz; }
 };
 
 class VCL_DLLPUBLIC MetaBmpScalePartAction final : public MetaAction
@@ -776,11 +716,6 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetDestPoint(const Point& rPt) { maDstPt = rPt; }
-    void                SetDestSize(const Size& rSz) { maDstSz = rSz; }
-    void                SetSrcPoint(const Point& rPt) { maSrcPt = rPt; }
-    void                SetSrcSize(const Size& rSz) { maSrcSz = rSz; }
 };
 
 class VCL_DLLPUBLIC MetaBmpExAction final : public MetaAction
@@ -809,8 +744,6 @@ public:
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
     bool                IsTransparent() const override { return GetBitmap().HasAlpha(); }
 };
 
@@ -843,9 +776,6 @@ public:
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
-    void                SetSize(const Size& rSz) { maSz = rSz; }
     bool                IsTransparent() const override { return GetBitmap().HasAlpha(); }
 };
 
@@ -883,11 +813,6 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetDestPoint(const Point& rDstPt) { maDstPt = rDstPt; }
-    void                SetDestSize(const Size& rDstSz) { maDstSz = rDstSz; }
-    void                SetSrcPoint(const Point& rSrcPt) { maSrcPt = rSrcPt; }
-    void                SetSrcSize(const Size& rSrcSz) { maSrcSz = rSrcSz; }
     bool                IsTransparent() const override { return GetBitmap().HasAlpha(); }
 };
 
@@ -921,8 +846,6 @@ public:
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Color&        GetColor() const { return maColor; }
     const Point&        GetPoint() const { return maPt; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskScaleAction final : public MetaAction
@@ -957,9 +880,6 @@ public:
     const Color&        GetColor() const { return maColor; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetPoint(const Point& rPt) { maPt = rPt; }
-    void                SetSize(const Size& rSz) { maSz = rSz; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskScalePartAction final : public MetaAction
@@ -999,12 +919,6 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
-    void                SetBitmap(const Bitmap& rBmp) { maBmp = rBmp; }
-    void                SetColor(Color rColor) { maColor = rColor; }
-    void                SetDestPoint(const Point& rPt) { maDstPt = rPt; }
-    void                SetDestSize(const Size& rSz) { maDstSz = rSz; }
-    void                SetSrcPoint(const Point& rPt) { maSrcPt = rPt; }
-    void                SetSrcSize(const Size& rSz) { maSrcSz = rSz; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaGradientAction final : public MetaAction
@@ -1033,8 +947,6 @@ public:
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
-    void                SetGradient(const Gradient& rGradient) { maGradient = rGradient; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class VCL_DLLPUBLIC MetaGradientExAction final : public MetaAction
@@ -1063,8 +975,6 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
-    void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
-    void                SetGradient(const Gradient& rGradient) { maGradient = rGradient; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaHatchAction final : public MetaAction
@@ -1093,8 +1003,6 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
-    void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
-    void                SetHatch(const Hatch& rHatch) { maHatch = rHatch; }
 };
 
 class VCL_DLLPUBLIC MetaWallpaperAction final : public MetaAction
@@ -1124,7 +1032,6 @@ public:
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
-    void                SetWallpaper(const Wallpaper& rWallpaper) { maWallpaper = rWallpaper; }
 };
 
 class VCL_DLLPUBLIC MetaClipRegionAction final : public MetaAction
@@ -1153,8 +1060,6 @@ public:
 
     const vcl::Region&  GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
-    void                SetRegion(const vcl::Region& rRegion) { maRegion = rRegion; }
-    void                SetClipping(bool bClip) { mbClip = bClip; }
 };
 
 class VCL_DLLPUBLIC MetaISectRectClipRegionAction final : public MetaAction
@@ -1181,7 +1086,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
-    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class VCL_DLLPUBLIC MetaISectRegionClipRegionAction final : public MetaAction
@@ -1208,7 +1112,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
-    void                SetRegion(const vcl::Region& rRegion) { maRegion = rRegion; }
 };
 
 class VCL_DLLPUBLIC MetaMoveClipRegionAction final : public MetaAction
@@ -1236,8 +1139,6 @@ public:
 
     tools::Long                GetHorzMove() const { return mnHorzMove; }
     tools::Long                GetVertMove() const { return mnVertMove; }
-    void                SetHorzMove(tools::Long nHorzMove) { mnHorzMove = nHorzMove; }
-    void                SetVertMove(tools::Long nVertMove) { mnVertMove = nVertMove; }
 };
 
 class VCL_DLLPUBLIC MetaLineColorAction final : public MetaAction
@@ -1263,8 +1164,6 @@ public:
 
     const Color&        GetColor() const { return maColor; }
     bool                IsSetting() const { return mbSet; }
-    void                SetColor(const Color& rColor) { maColor = rColor; }
-    void                SetSetting(bool rSet) { mbSet = rSet; }
 };
 
 class VCL_DLLPUBLIC MetaFillColorAction final : public MetaAction
@@ -1290,8 +1189,6 @@ public:
 
     const Color&        GetColor() const { return maColor; }
     bool                IsSetting() const { return mbSet; }
-    void                SetSetting(bool rSet) { mbSet = rSet; }
-    void                SetColor(Color rColor) { maColor = rColor; }
 
 };
 
@@ -1316,7 +1213,6 @@ public:
     explicit            MetaTextColorAction( const Color& );
 
     const Color&        GetColor() const { return maColor; }
-    void                SetColor(Color rColor) { maColor = rColor; }
 };
 
 class VCL_DLLPUBLIC MetaTextFillColorAction final : public MetaAction
@@ -1341,8 +1237,6 @@ public:
                         MetaTextFillColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    void                SetColor(Color rColor) { maColor = rColor; }
-    void                SetSetting(bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 
 };
@@ -1369,8 +1263,6 @@ public:
     SAL_DLLPRIVATE                     MetaTextLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    void                SetColor(const Color& rColor) { maColor = rColor; }
-    void                SetSetting(bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
@@ -1396,8 +1288,6 @@ public:
     SAL_DLLPRIVATE                     MetaOverlineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    void                SetColor(const Color& rColor) { maColor = rColor; }
-    void                SetSetting(bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
@@ -1422,7 +1312,6 @@ public:
     explicit            MetaTextAlignAction( TextAlign eAlign );
 
     TextAlign           GetTextAlign() const { return maAlign; }
-    void                SetTextAlign(TextAlign eAlign) { maAlign = eAlign; }
 };
 
 class VCL_DLLPUBLIC MetaMapModeAction final : public MetaAction
@@ -1448,7 +1337,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const MapMode&      GetMapMode() const { return maMapMode; }
-    void                SetMapMode(const MapMode& rMapMode) { maMapMode = rMapMode; }
 };
 
 // tdf#127471 decl for friend below
@@ -1482,7 +1370,6 @@ public:
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Font&    GetFont() const { return maFont; }
-    void                SetFont(const vcl::Font& rFont) { maFont = rFont; }
 
 };
 
@@ -1507,7 +1394,6 @@ public:
     explicit            MetaPushAction( vcl::PushFlags nFlags );
 
     vcl::PushFlags           GetFlags() const { return mnFlags; }
-    void                SetPushFlags(const vcl::PushFlags nFlags) { mnFlags = nFlags; }
 };
 
 class VCL_DLLPUBLIC MetaPopAction final : public MetaAction
@@ -1547,7 +1433,6 @@ public:
     explicit            MetaRasterOpAction( RasterOp eRasterOp );
 
     RasterOp            GetRasterOp() const { return meRasterOp; }
-    void                SetRasterOp(const RasterOp eRasterOp) { meRasterOp = eRasterOp; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTransparentAction final : public MetaAction
@@ -1576,8 +1461,6 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
-    void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
-    void                SetTransparence(const sal_uInt16 nTransPercent) { mnTransPercent = nTransPercent; }
 
     bool                IsTransparent() const override { return true; }
 };
@@ -1607,7 +1490,8 @@ public:
     SAL_DLLPRIVATE virtual rtl::Reference<MetaAction> Clone() const override;
 
                         MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
-                                                    const Size& rSize, Gradient aGradient );
+                                                    const Size& rSize, Gradient aGradient,
+                                                    std::optional<basegfx::BColorStops> oStops = std::nullopt);
 
     SAL_DLLPRIVATE virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     SAL_DLLPRIVATE virtual void        Scale( double fScaleX, double fScaleY ) override;
@@ -1616,16 +1500,11 @@ public:
     const Point&        GetPoint() const { return maPoint; }
     const Size&         GetSize() const { return maSize; }
     const Gradient&     GetGradient() const { return maGradient; }
-    void                SetGDIMetaFile(const GDIMetaFile &rMtf) { maMtf  = rMtf; }
-    void                SetPoint(const Point& rPoint) { maPoint = rPoint; }
-    void                SetSize(const Size& rSize) { maSize = rSize; }
-    void                SetGradient(const Gradient& rGradient) { maGradient = rGradient; }
     bool                IsTransparent() const override { return true; }
 
     // tdf#155479 allow holding MCGR infos
     const basegfx::BColorStops* getSVGTransparencyColorStops() const
     { return !maSVGTransparencyColorStops ? nullptr : &(*maSVGTransparencyColorStops); }
-    void addSVGTransparencyColorStops(const basegfx::BColorStops& rSVGTransparencyColorStops);
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaEPSAction final : public MetaAction
@@ -1659,10 +1538,6 @@ public:
     const GDIMetaFile&  GetSubstitute() const { return maSubst; }
     const Point&        GetPoint() const { return maPoint; }
     const Size&         GetSize() const { return maSize; }
-    void                SetLink(const GfxLink& rGfxLink) { maGfxLink = rGfxLink; }
-    void                SetSubstitute(const GDIMetaFile& rSubst) { maSubst = rSubst; }
-    void                SetPoint(const Point& rPoint) { maPoint = rPoint; }
-    void                SetSize(const Size& rSize) { maSize = rSize; }
 };
 
 class VCL_DLLPUBLIC MetaRefPointAction final : public MetaAction
@@ -1687,8 +1562,6 @@ public:
     SAL_DLLPRIVATE                     MetaRefPointAction( const Point& rRefPoint, bool bSet );
 
     const Point&        GetRefPoint() const { return maRefPoint; }
-    void                SetRefPoint(const Point& rRefPoint) { maRefPoint = rRefPoint; }
-    void                SetSetting(const bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
@@ -1722,10 +1595,6 @@ public:
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
     const sal_uInt8*    GetData() const { return mpData.get(); }
-    void                SetComment(const OString& rComment) { maComment = rComment; }
-    void                SetValue(const sal_Int32 nValue) { mnValue = nValue; }
-    void                SetDataSize(const sal_Int32 nDataSize) { mnDataSize = nDataSize; }
-    void                SetData(const sal_uInt8* pData, const sal_uInt32 nDataSize) { ImplInitDynamicData(pData, nDataSize); }
 };
 
 class VCL_DLLPUBLIC MetaLayoutModeAction final : public MetaAction
@@ -1749,7 +1618,6 @@ public:
     explicit            MetaLayoutModeAction( vcl::text::ComplexTextLayoutFlags nLayoutMode );
 
     vcl::text::ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
-    void                SetLayoutMode(const vcl::text::ComplexTextLayoutFlags nLayoutMode) { mnLayoutMode = nLayoutMode; }
 };
 
 class VCL_DLLPUBLIC MetaTextLanguageAction final : public MetaAction
@@ -1773,7 +1641,6 @@ public:
     SAL_DLLPRIVATE explicit            MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
-    void                SetTextLanguage(const LanguageType eTextLanguage) { meTextLanguage = eTextLanguage; }
 };
 
 #endif // INCLUDED_VCL_METAACT_HXX

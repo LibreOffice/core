@@ -288,24 +288,18 @@ void SvmReader::ReadColor(Color& rColor)
 
 rtl::Reference<MetaAction> SvmReader::LineColorHandler()
 {
-    rtl::Reference<MetaLineColorAction> pAction(new MetaLineColorAction);
-
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
     bool aBool(false);
     mrStream.ReadCharAsBool(aBool);
 
-    pAction->SetSetting(aBool);
-    pAction->SetColor(aColor);
-
+    rtl::Reference<MetaLineColorAction> pAction(new MetaLineColorAction(aColor, aBool));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::FillColorHandler()
 {
-    rtl::Reference<MetaFillColorAction> pAction(new MetaFillColorAction);
-
     VersionCompatRead aCompat(mrStream);
 
     Color aColor;
@@ -313,44 +307,36 @@ rtl::Reference<MetaAction> SvmReader::FillColorHandler()
     bool aBool(false);
     mrStream.ReadCharAsBool(aBool);
 
-    pAction->SetColor(aColor);
-    pAction->SetSetting(aBool);
-
+    rtl::Reference<MetaFillColorAction> pAction(new MetaFillColorAction(aColor, aBool));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::RectHandler()
 {
-    rtl::Reference<MetaRectAction> pAction(new MetaRectAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     tools::Rectangle aRectangle;
     aSerializer.readRectangle(aRectangle);
-    pAction->SetRect(aRectangle);
 
+    rtl::Reference<MetaRectAction> pAction(new MetaRectAction(aRectangle));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::PointHandler()
 {
-    rtl::Reference<MetaPointAction> pAction(new MetaPointAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    pAction->SetPoint(aPoint);
 
+    rtl::Reference<MetaPointAction> pAction(new MetaPointAction(aPoint));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::PixelHandler()
 {
-    rtl::Reference<MetaPixelAction> pAction(new MetaPixelAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -359,16 +345,12 @@ rtl::Reference<MetaAction> SvmReader::PixelHandler()
     Color aColor;
     ReadColor(aColor);
 
-    pAction->SetPoint(aPoint);
-    pAction->SetColor(aColor);
-
+    rtl::Reference<MetaPixelAction> pAction(new MetaPixelAction(aPoint, aColor));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::LineHandler()
 {
-    rtl::Reference<MetaLineAction> pAction(new MetaLineAction);
-
     VersionCompatRead aCompat(mrStream);
 
     // Version 1
@@ -378,24 +360,19 @@ rtl::Reference<MetaAction> SvmReader::LineHandler()
     aSerializer.readPoint(aPoint);
     aSerializer.readPoint(aEndPoint);
 
-    pAction->SetStartPoint(aPoint);
-    pAction->SetEndPoint(aEndPoint);
-
     // Version 2
     if (aCompat.GetVersion() >= 2)
     {
         LineInfo aLineInfo;
         ReadLineInfo(mrStream, aLineInfo);
-        pAction->SetLineInfo(aLineInfo);
+        return new MetaLineAction(aPoint, aEndPoint, aLineInfo);
     }
-
-    return pAction;
+    else
+        return new MetaLineAction(aPoint, aEndPoint);
 }
 
 rtl::Reference<MetaAction> SvmReader::RoundRectHandler()
 {
-    rtl::Reference<MetaRoundRectAction> pAction(new MetaRoundRectAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -405,32 +382,25 @@ rtl::Reference<MetaAction> SvmReader::RoundRectHandler()
     sal_uInt32 VertRound(0);
     mrStream.ReadUInt32(HorzRound).ReadUInt32(VertRound);
 
-    pAction->SetRect(aRectangle);
-    pAction->SetHorzRound(HorzRound);
-    pAction->SetVertRound(VertRound);
-
+    rtl::Reference<MetaRoundRectAction> pAction(
+        new MetaRoundRectAction(aRectangle, HorzRound, VertRound));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::EllipseHandler()
 {
-    rtl::Reference<MetaEllipseAction> pAction(new MetaEllipseAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
     tools::Rectangle aRectangle;
     aSerializer.readRectangle(aRectangle);
 
-    pAction->SetRect(aRectangle);
-
+    rtl::Reference<MetaEllipseAction> pAction(new MetaEllipseAction(aRectangle));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::ArcHandler()
 {
-    rtl::Reference<MetaArcAction> pAction(new MetaArcAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -441,17 +411,12 @@ rtl::Reference<MetaAction> SvmReader::ArcHandler()
     Point aEndPoint;
     aSerializer.readPoint(aEndPoint);
 
-    pAction->SetRect(aRectangle);
-    pAction->SetStartPoint(aPoint);
-    pAction->SetEndPoint(aEndPoint);
-
+    rtl::Reference<MetaArcAction> pAction(new MetaArcAction(aRectangle, aPoint, aEndPoint));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::PieHandler()
 {
-    rtl::Reference<MetaPieAction> pAction(new MetaPieAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -462,17 +427,12 @@ rtl::Reference<MetaAction> SvmReader::PieHandler()
     Point aEndPoint;
     aSerializer.readPoint(aEndPoint);
 
-    pAction->SetRect(aRectangle);
-    pAction->SetStartPoint(aPoint);
-    pAction->SetEndPoint(aEndPoint);
-
+    rtl::Reference<MetaPieAction> pAction(new MetaPieAction(aRectangle, aPoint, aEndPoint));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::ChordHandler()
 {
-    rtl::Reference<MetaChordAction> pAction(new MetaChordAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -483,17 +443,12 @@ rtl::Reference<MetaAction> SvmReader::ChordHandler()
     Point aEndPoint;
     aSerializer.readPoint(aEndPoint);
 
-    pAction->SetRect(aRectangle);
-    pAction->SetStartPoint(aPoint);
-    pAction->SetEndPoint(aEndPoint);
-
+    rtl::Reference<MetaChordAction> pAction(new MetaChordAction(aRectangle, aPoint, aEndPoint));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::PolyLineHandler()
 {
-    rtl::Reference<MetaPolyLineAction> pAction(new MetaPolyLineAction);
-
     VersionCompatRead aCompat(mrStream);
 
     // Version 1
@@ -501,11 +456,10 @@ rtl::Reference<MetaAction> SvmReader::PolyLineHandler()
     ReadPolygon(mrStream, aPolygon);
 
     // Version 2
+    LineInfo aLineInfo;
     if (aCompat.GetVersion() >= 2)
     {
-        LineInfo aLineInfo;
         ReadLineInfo(mrStream, aLineInfo);
-        pAction->SetLineInfo(aLineInfo);
     }
     if (aCompat.GetVersion() >= 3)
     {
@@ -514,15 +468,15 @@ rtl::Reference<MetaAction> SvmReader::PolyLineHandler()
         if (bHasPolyFlags)
             aPolygon.Read(mrStream);
     }
-    pAction->SetPolygon(aPolygon);
 
-    return pAction;
+    if (aCompat.GetVersion() < 2)
+        return new MetaPolyLineAction(aPolygon);
+    else
+        return new MetaPolyLineAction(aPolygon, aLineInfo);
 }
 
 rtl::Reference<MetaAction> SvmReader::PolygonHandler()
 {
-    rtl::Reference<MetaPolygonAction> pAction(new MetaPolygonAction);
-
     VersionCompatRead aCompat(mrStream);
 
     tools::Polygon aPolygon;
@@ -536,23 +490,18 @@ rtl::Reference<MetaAction> SvmReader::PolygonHandler()
             aPolygon.Read(mrStream);
     }
 
-    pAction->SetPolygon(aPolygon);
-
-    return pAction;
+    return new MetaPolygonAction(aPolygon);
 }
 
 rtl::Reference<MetaAction> SvmReader::PolyPolygonHandler()
 {
-    rtl::Reference<MetaPolyPolygonAction> pAction(new MetaPolyPolygonAction);
-
     VersionCompatRead aCompat(mrStream);
     tools::PolyPolygon aPolyPolygon;
     ReadPolyPolygon(mrStream, aPolyPolygon); // Version 1
 
     if (aCompat.GetVersion() < 2) // Version 2
     {
-        pAction->SetPolyPolygon(aPolyPolygon);
-        return pAction;
+        return new MetaPolyPolygonAction(aPolyPolygon);
     }
 
     sal_uInt16 nNumberOfComplexPolygons(0);
@@ -582,15 +531,12 @@ rtl::Reference<MetaAction> SvmReader::PolyPolygonHandler()
         aPolyPolygon.Replace(aPoly, nIndex);
     }
 
-    pAction->SetPolyPolygon(aPolyPolygon);
-
+    rtl::Reference<MetaPolyPolygonAction> pAction(new MetaPolyPolygonAction(aPolyPolygon));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaTextAction> pAction(new MetaTextAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -601,8 +547,6 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
     mrStream.ReadUInt16(nTmpIndex);
     sal_uInt16 nTmpLen(0);
     mrStream.ReadUInt16(nTmpLen);
-
-    pAction->SetPoint(aPoint);
 
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
@@ -619,18 +563,12 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(const ImplMetaReadData* pData)
         nTmpLen = aStr.getLength() - nTmpIndex;
     }
 
-    pAction->SetIndex(nTmpIndex);
-    pAction->SetLen(nTmpLen);
-
-    pAction->SetText(aStr);
-
+    rtl::Reference<MetaTextAction> pAction(new MetaTextAction(aPoint, aStr, nTmpIndex, nTmpLen));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaTextArrayAction> pAction(new MetaTextArrayAction);
-
     KernArray aArray;
 
     VersionCompatRead aCompat(mrStream);
@@ -638,35 +576,29 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    pAction->SetPoint(aPoint);
 
     OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
-    pAction->SetText(aStr);
 
-    sal_uInt16 nTmpIndex(0);
-    mrStream.ReadUInt16(nTmpIndex);
+    sal_uInt16 nStrIndex(0);
+    mrStream.ReadUInt16(nStrIndex);
 
-    sal_uInt16 nTmpLen(0);
-    mrStream.ReadUInt16(nTmpLen);
+    sal_uInt16 nStrLen(0);
+    mrStream.ReadUInt16(nStrLen);
 
     sal_Int32 nAryLen(0);
     mrStream.ReadInt32(nAryLen);
 
-    if (nTmpLen > aStr.getLength() - nTmpIndex)
+    if (nStrLen > aStr.getLength() - nStrIndex)
     {
         SAL_WARN("vcl.gdi", "inconsistent offset and len");
-        pAction->SetIndex(0);
-        pAction->SetLen(aStr.getLength());
-        return pAction;
+        return new MetaTextArrayAction(aPoint, aStr, KernArray(), std::vector<sal_Bool>(), 0,
+                                       aStr.getLength());
     }
-
-    pAction->SetIndex(nTmpIndex);
-    pAction->SetLen(nTmpLen);
 
     if (nAryLen)
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
-        if (nTmpLen >= nAryLen)
+        if (nStrLen >= nAryLen)
         {
             try
             {
@@ -678,7 +610,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
                     aArray.push_back(val);
                 }
                 // #106172# setup remainder
-                for (; i < nTmpLen; i++)
+                for (; i < nStrLen; i++)
                     aArray.push_back(0);
             }
             catch (std::bad_alloc&)
@@ -687,45 +619,44 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
         }
         else
         {
-            return pAction;
+            return new MetaTextArrayAction(aPoint, aStr, KernArray(), std::vector<sal_Bool>(),
+                                           nStrIndex, nStrLen);
         }
     }
 
     if (aCompat.GetVersion() >= 2) // Version 2
     {
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
-        pAction->SetText(aStr);
 
-        if (nTmpLen > aStr.getLength() - nTmpIndex)
+        if (nStrLen > aStr.getLength() - nStrIndex)
         {
             SAL_WARN("vcl.gdi", "inconsistent offset and len");
-            pAction->SetIndex(0);
-            pAction->SetLen(aStr.getLength());
+            nStrIndex = 0;
+            nStrLen = aStr.getLength();
             aArray.clear();
         }
     }
 
-    if (!aArray.empty())
-        pAction->SetDXArray(std::move(aArray));
-
+    std::vector<sal_Bool> aKashidaArray;
     if (aCompat.GetVersion() >= 3) // Version 3
     {
         sal_uInt32 nKashidaAryLen(0);
         mrStream.ReadUInt32(nKashidaAryLen);
-        nTmpLen = std::min(nKashidaAryLen, static_cast<sal_uInt32>(pAction->GetDXArray().size()));
+        sal_uInt32 nTmpLen = std::min(nKashidaAryLen, static_cast<sal_uInt32>(aArray.size()));
         if (nTmpLen)
         {
             // aKashidaArray, if not empty, must be the same size as aArray
-            std::vector<sal_Bool> aKashidaArray(pAction->GetDXArray().size(), 0);
+            aKashidaArray.resize(aArray.size(), 0);
 
             for (sal_uInt32 i = 0; i < nTmpLen; i++)
             {
                 mrStream.ReadUChar(aKashidaArray[i]);
             }
-            pAction->SetKashidaArray(std::move(aKashidaArray));
         }
     }
 
+    sal_Int32 nLayoutContextIndex = -1;
+    sal_Int32 nLayoutContextLen = -1;
     if (aCompat.GetVersion() >= 4) // Version 4
     {
         bool bTmpHasContext = false;
@@ -733,34 +664,33 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
 
         if (bTmpHasContext)
         {
-            sal_uInt16 nTmpContextIndex = 0;
-            mrStream.ReadUInt16(nTmpContextIndex);
+            sal_uInt16 nTmp = 0;
+            mrStream.ReadUInt16(nTmp);
+            nLayoutContextIndex = nTmp;
+            mrStream.ReadUInt16(nTmp);
+            nLayoutContextLen = nTmp;
 
-            sal_uInt16 nTmpContextLen = 0;
-            mrStream.ReadUInt16(nTmpContextLen);
-
-            sal_uInt16 nTmpEnd = nTmpIndex + nTmpLen;
-            sal_uInt16 nTmpContextEnd = nTmpContextIndex + nTmpContextLen;
-            if ((nTmpContextEnd <= aStr.getLength()) && (nTmpContextIndex <= nTmpIndex)
+            sal_uInt16 nTmpEnd = nStrIndex + nStrLen;
+            sal_uInt16 nTmpContextEnd = nLayoutContextIndex + nLayoutContextLen;
+            if ((nTmpContextEnd <= aStr.getLength()) && (nLayoutContextIndex <= nStrIndex)
                 && (nTmpContextEnd >= nTmpEnd))
             {
-                pAction->SetLayoutContextIndex(nTmpContextIndex);
-                pAction->SetLayoutContextLen(nTmpContextLen);
             }
             else
             {
+                nLayoutContextIndex = -1;
+                nLayoutContextLen = -1;
                 SAL_WARN("vcl.gdi", "inconsistent layout context offset and len");
             }
         }
     }
 
-    return pAction;
+    return new MetaTextArrayAction(aPoint, aStr, std::move(aArray), std::move(aKashidaArray),
+                                   nStrIndex, nStrLen, nLayoutContextIndex, nLayoutContextLen);
 }
 
 rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaStretchTextAction> pAction(new MetaStretchTextAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -774,9 +704,6 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData*
     sal_uInt16 nTmpLen(0);
     mrStream.ReadUInt16(nTmpLen);
 
-    pAction->SetPoint(aPoint);
-    pAction->SetWidth(nTmpWidth);
-
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
 
@@ -792,18 +719,13 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData*
         nTmpLen = aStr.getLength() - nTmpIndex;
     }
 
-    pAction->SetIndex(nTmpIndex);
-    pAction->SetLen(nTmpLen);
-
-    pAction->SetText(aStr);
-
+    rtl::Reference<MetaStretchTextAction> pAction(
+        new MetaStretchTextAction(aPoint, nTmpWidth, aStr, nTmpIndex, nTmpLen));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaTextRectAction> pAction(new MetaTextRectAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -813,27 +735,20 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(const ImplMetaReadData* pD
     sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
-    pAction->SetRect(aRect);
-
     DrawTextFlags nFlags(static_cast<DrawTextFlags>(nTmp));
     const static bool bFuzzing = comphelper::IsFuzzing();
     if (bFuzzing)
         nFlags = nFlags & ~DrawTextFlags::MultiLine;
 
-    pAction->SetStyle(nFlags);
-
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
 
-    pAction->SetText(aStr);
-
+    rtl::Reference<MetaTextRectAction> pAction(new MetaTextRectAction(aRect, aStr, nFlags));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::TextLineHandler()
 {
-    rtl::Reference<MetaTextLineAction> pAction(new MetaTextLineAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -842,36 +757,31 @@ rtl::Reference<MetaAction> SvmReader::TextLineHandler()
     sal_Int32 nTempWidth(0);
     mrStream.ReadInt32(nTempWidth);
 
-    pAction->SetStartPoint(aPos);
     if (nTempWidth < 0)
     {
         SAL_WARN("vcl.gdi", "negative width");
         nTempWidth = 0;
     }
-    pAction->SetWidth(nTempWidth);
 
     sal_uInt32 nTempStrikeout(0);
     mrStream.ReadUInt32(nTempStrikeout);
     sal_uInt32 nTempUnderline(0);
     mrStream.ReadUInt32(nTempUnderline);
 
-    pAction->SetStrikeout(static_cast<FontStrikeout>(nTempStrikeout & SAL_MAX_ENUM));
-    pAction->SetUnderline(static_cast<FontLineStyle>(nTempUnderline & SAL_MAX_ENUM));
-
+    sal_uInt32 nTempOverline(0);
     if (aCompat.GetVersion() >= 2)
     {
-        sal_uInt32 nTempOverline(0);
         mrStream.ReadUInt32(nTempOverline);
-        pAction->SetOverline(static_cast<FontLineStyle>(nTempOverline & SAL_MAX_ENUM));
     }
 
-    return pAction;
+    return new MetaTextLineAction(aPos, nTempWidth,
+                                  static_cast<FontStrikeout>(nTempStrikeout & SAL_MAX_ENUM),
+                                  static_cast<FontLineStyle>(nTempUnderline & SAL_MAX_ENUM),
+                                  static_cast<FontLineStyle>(nTempOverline & SAL_MAX_ENUM));
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpHandler()
 {
-    rtl::Reference<MetaBmpAction> pAction(new MetaBmpAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -879,16 +789,12 @@ rtl::Reference<MetaAction> SvmReader::BmpHandler()
     Point aPoint;
     aSerializer.readPoint(aPoint);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetPoint(aPoint);
-
+    rtl::Reference<MetaBmpAction> pAction(new MetaBmpAction(aPoint, aBmp));
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpScaleHandler()
 {
-    rtl::Reference<MetaBmpScaleAction> pAction(new MetaBmpScaleAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -899,17 +805,13 @@ rtl::Reference<MetaAction> SvmReader::BmpScaleHandler()
     Size aSz;
     aSerializer.readSize(aSz);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetPoint(aPoint);
-    pAction->SetSize(aSz);
+    rtl::Reference<MetaBmpScaleAction> pAction(new MetaBmpScaleAction(aPoint, aSz, aBmp));
 
     return pAction;
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpScalePartHandler()
 {
-    rtl::Reference<MetaBmpScalePartAction> pAction(new MetaBmpScalePartAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -923,19 +825,11 @@ rtl::Reference<MetaAction> SvmReader::BmpScalePartHandler()
     Size aSrcSize;
     aSerializer.readSize(aSrcSize);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetDestPoint(aDestPoint);
-    pAction->SetDestSize(aDestSize);
-    pAction->SetSrcPoint(aSrcPoint);
-    pAction->SetSrcSize(aSrcSize);
-
-    return pAction;
+    return new MetaBmpScalePartAction(aDestPoint, aDestSize, aSrcPoint, aSrcSize, aBmp);
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpExHandler()
 {
-    rtl::Reference<MetaBmpExAction> pAction(new MetaBmpExAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIBBitmapEx(aBmp, mrStream);
@@ -943,16 +837,11 @@ rtl::Reference<MetaAction> SvmReader::BmpExHandler()
     Point aPoint;
     aSerializer.readPoint(aPoint);
 
-    pAction->SetPoint(aPoint);
-    pAction->SetBitmap(aBmp);
-
-    return pAction;
+    return new MetaBmpExAction(aPoint, aBmp);
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpExScaleHandler()
 {
-    rtl::Reference<MetaBmpExScaleAction> pAction(new MetaBmpExScaleAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIBBitmapEx(aBmp, mrStream);
@@ -963,17 +852,11 @@ rtl::Reference<MetaAction> SvmReader::BmpExScaleHandler()
     Size aSize;
     aSerializer.readSize(aSize);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetPoint(aPoint);
-    pAction->SetSize(aSize);
-
-    return pAction;
+    return new MetaBmpExScaleAction(aPoint, aSize, aBmp);
 }
 
 rtl::Reference<MetaAction> SvmReader::BmpExScalePartHandler()
 {
-    rtl::Reference<MetaBmpExScalePartAction> pAction(new MetaBmpExScalePartAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIBBitmapEx(aBmp, mrStream);
@@ -987,19 +870,11 @@ rtl::Reference<MetaAction> SvmReader::BmpExScalePartHandler()
     Size aSrcSize;
     aSerializer.readSize(aSrcSize);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetDestPoint(aDstPoint);
-    pAction->SetDestSize(aDstSize);
-    pAction->SetSrcPoint(aSrcPoint);
-    pAction->SetSrcSize(aSrcSize);
-
-    return pAction;
+    return new MetaBmpExScalePartAction(aDstPoint, aDstSize, aSrcPoint, aSrcSize, aBmp);
 }
 
 rtl::Reference<MetaAction> SvmReader::MaskHandler()
 {
-    rtl::Reference<MetaMaskAction> pAction(new MetaMaskAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -1007,16 +882,11 @@ rtl::Reference<MetaAction> SvmReader::MaskHandler()
     Point aPoint;
     aSerializer.readPoint(aPoint);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetPoint(aPoint);
-
-    return pAction;
+    return new MetaMaskAction(aPoint, aBmp, Color());
 }
 
 rtl::Reference<MetaAction> SvmReader::MaskScaleHandler()
 {
-    rtl::Reference<MetaMaskScaleAction> pAction(new MetaMaskScaleAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -1026,17 +896,11 @@ rtl::Reference<MetaAction> SvmReader::MaskScaleHandler()
     Size aSize;
     aSerializer.readSize(aSize);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetPoint(aPoint);
-    pAction->SetSize(aSize);
-
-    return pAction;
+    return new MetaMaskScaleAction(aPoint, aSize, aBmp, Color());
 }
 
 rtl::Reference<MetaAction> SvmReader::MaskScalePartHandler()
 {
-    rtl::Reference<MetaMaskScalePartAction> pAction(new MetaMaskScalePartAction);
-
     VersionCompatRead aCompat(mrStream);
     Bitmap aBmp;
     ReadDIB(aBmp, mrStream, true);
@@ -1052,20 +916,11 @@ rtl::Reference<MetaAction> SvmReader::MaskScalePartHandler()
     Size aSrcSz;
     aSerializer.readSize(aSrcSz);
 
-    pAction->SetBitmap(aBmp);
-    pAction->SetColor(aColor);
-    pAction->SetDestPoint(aDstPt);
-    pAction->SetDestSize(aDstSz);
-    pAction->SetSrcPoint(aSrcPt);
-    pAction->SetSrcSize(aSrcSz);
-
-    return pAction;
+    return new MetaMaskScalePartAction(aDstPt, aDstSz, aSrcPt, aSrcSz, aBmp, aColor);
 }
 
 rtl::Reference<MetaAction> SvmReader::GradientHandler()
 {
-    rtl::Reference<MetaGradientAction> pAction(new MetaGradientAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -1074,16 +929,11 @@ rtl::Reference<MetaAction> SvmReader::GradientHandler()
     Gradient aGradient;
     aSerializer.readGradient(aGradient);
 
-    pAction->SetRect(aRect);
-    pAction->SetGradient(aGradient);
-
-    return pAction;
+    return new MetaGradientAction(aRect, aGradient);
 }
 
 rtl::Reference<MetaAction> SvmReader::GradientExHandler()
 {
-    rtl::Reference<MetaGradientExAction> pAction(new MetaGradientExAction);
-
     VersionCompatRead aCompat(mrStream);
     tools::PolyPolygon aPolyPoly;
     ReadPolyPolygon(mrStream, aPolyPoly);
@@ -1091,169 +941,117 @@ rtl::Reference<MetaAction> SvmReader::GradientExHandler()
     Gradient aGradient;
     aSerializer.readGradient(aGradient);
 
-    pAction->SetGradient(aGradient);
-    pAction->SetPolyPolygon(aPolyPoly);
-
-    return pAction;
+    return new MetaGradientExAction(aPolyPoly, aGradient);
 }
 
 rtl::Reference<MetaAction> SvmReader::HatchHandler()
 {
-    rtl::Reference<MetaHatchAction> pAction(new MetaHatchAction);
-
     VersionCompatRead aCompat(mrStream);
     tools::PolyPolygon aPolyPoly;
     ReadPolyPolygon(mrStream, aPolyPoly);
     Hatch aHatch;
     ReadHatch(mrStream, aHatch);
 
-    pAction->SetPolyPolygon(aPolyPoly);
-    pAction->SetHatch(aHatch);
-
-    return pAction;
+    return new MetaHatchAction(aPolyPoly, aHatch);
 }
 
 rtl::Reference<MetaAction> SvmReader::WallpaperHandler()
 {
-    rtl::Reference<MetaWallpaperAction> pAction(new MetaWallpaperAction);
-
     VersionCompatRead aCompat(mrStream);
     Wallpaper aWallpaper;
     ReadWallpaper(mrStream, aWallpaper);
 
-    pAction->SetWallpaper(aWallpaper);
-
-    return pAction;
+    return new MetaWallpaperAction(tools::Rectangle(), aWallpaper);
 }
 
 rtl::Reference<MetaAction> SvmReader::ClipRegionHandler()
 {
-    rtl::Reference<MetaClipRegionAction> pAction(new MetaClipRegionAction);
-
     VersionCompatRead aCompat(mrStream);
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
     bool aClip(false);
     mrStream.ReadCharAsBool(aClip);
 
-    pAction->SetRegion(aRegion);
-    pAction->SetClipping(aClip);
-
-    return pAction;
+    return new MetaClipRegionAction(aRegion, aClip);
 }
 
 rtl::Reference<MetaAction> SvmReader::ISectRectClipRegionHandler()
 {
-    rtl::Reference<MetaISectRectClipRegionAction> pAction(new MetaISectRectClipRegionAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
     tools::Rectangle aRect;
     aSerializer.readRectangle(aRect);
 
-    pAction->SetRect(aRect);
-
-    return pAction;
+    return new MetaISectRectClipRegionAction(aRect);
 }
 
 rtl::Reference<MetaAction> SvmReader::ISectRegionClipRegionHandler()
 {
-    rtl::Reference<MetaISectRegionClipRegionAction> pAction(new MetaISectRegionClipRegionAction);
-
     VersionCompatRead aCompat(mrStream);
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
-    pAction->SetRegion(aRegion);
 
-    return pAction;
+    return new MetaISectRegionClipRegionAction(aRegion);
 }
 
 rtl::Reference<MetaAction> SvmReader::MoveClipRegionHandler()
 {
-    rtl::Reference<MetaMoveClipRegionAction> pAction(new MetaMoveClipRegionAction);
-
     VersionCompatRead aCompat(mrStream);
     sal_Int32 nTmpHM(0), nTmpVM(0);
     mrStream.ReadInt32(nTmpHM).ReadInt32(nTmpVM);
 
-    pAction->SetHorzMove(nTmpHM);
-    pAction->SetVertMove(nTmpVM);
-
-    return pAction;
+    return new MetaMoveClipRegionAction(nTmpHM, nTmpVM);
 }
 
 rtl::Reference<MetaAction> SvmReader::TextColorHandler()
 {
-    rtl::Reference<MetaTextColorAction> pAction(new MetaTextColorAction);
-
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
 
-    pAction->SetColor(aColor);
-
-    return pAction;
+    return new MetaTextColorAction(aColor);
 }
 
 rtl::Reference<MetaAction> SvmReader::TextFillColorHandler()
 {
-    rtl::Reference<MetaTextFillColorAction> pAction(new MetaTextFillColorAction);
-
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
     bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
-    pAction->SetColor(aColor);
-    pAction->SetSetting(bSet);
-
-    return pAction;
+    return new MetaTextFillColorAction(aColor, bSet);
 }
 
 rtl::Reference<MetaAction> SvmReader::TextLineColorHandler()
 {
-    rtl::Reference<MetaTextLineColorAction> pAction(new MetaTextLineColorAction);
-
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
     bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
-    pAction->SetColor(aColor);
-    pAction->SetSetting(bSet);
-
-    return pAction;
+    return new MetaTextLineColorAction(aColor, bSet);
 }
 
 rtl::Reference<MetaAction> SvmReader::OverlineColorHandler()
 {
-    rtl::Reference<MetaOverlineColorAction> pAction(new MetaOverlineColorAction);
-
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
     bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
-    pAction->SetColor(aColor);
-    pAction->SetSetting(bSet);
-
-    return pAction;
+    return new MetaOverlineColorAction(aColor, bSet);
 }
 
 rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
 {
-    rtl::Reference<MetaTextAlignAction> pAction(new MetaTextAlignAction);
-
     VersionCompatRead aCompat(mrStream);
     sal_uInt16 nTmp16(0);
     mrStream.ReadUInt16(nTmp16);
 
-    pAction->SetTextAlign(static_cast<TextAlign>(nTmp16));
-
-    return pAction;
+    return new MetaTextAlignAction(static_cast<TextAlign>(nTmp16));
 }
 
 rtl::Reference<MetaAction> SvmReader::MapModeHandler()
@@ -1266,15 +1064,11 @@ rtl::Reference<MetaAction> SvmReader::MapModeHandler()
     if (!bSuccess)
         return nullptr;
 
-    rtl::Reference<MetaMapModeAction> pAction(new MetaMapModeAction);
-    pAction->SetMapMode(aMapMode);
-    return pAction;
+    return new MetaMapModeAction(aMapMode);
 }
 
 rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaFontAction> pAction(new MetaFontAction);
-
     VersionCompatRead aCompat(mrStream);
     vcl::Font aFont;
     ReadFont(mrStream, aFont);
@@ -1282,22 +1076,16 @@ rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData* pData)
     if (pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
         pData->meActualCharSet = osl_getThreadTextEncoding();
 
-    pAction->SetFont(aFont);
-
-    return pAction;
+    return new MetaFontAction(aFont);
 }
 
 rtl::Reference<MetaAction> SvmReader::PushHandler()
 {
-    rtl::Reference<MetaPushAction> pAction(new MetaPushAction);
-
     VersionCompatRead aCompat(mrStream);
     sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
-    pAction->SetPushFlags(static_cast<vcl::PushFlags>(nTmp));
-
-    return pAction;
+    return new MetaPushAction(static_cast<vcl::PushFlags>(nTmp));
 }
 
 rtl::Reference<MetaAction> SvmReader::PopHandler()
@@ -1311,38 +1099,27 @@ rtl::Reference<MetaAction> SvmReader::PopHandler()
 
 rtl::Reference<MetaAction> SvmReader::RasterOpHandler()
 {
-    rtl::Reference<MetaRasterOpAction> pAction(new MetaRasterOpAction);
-
     sal_uInt16 nTmp16(0);
 
     VersionCompatRead aCompat(mrStream);
     mrStream.ReadUInt16(nTmp16);
 
-    pAction->SetRasterOp(static_cast<RasterOp>(nTmp16));
-
-    return pAction;
+    return new MetaRasterOpAction(static_cast<RasterOp>(nTmp16));
 }
 
 rtl::Reference<MetaAction> SvmReader::TransparentHandler()
 {
-    rtl::Reference<MetaTransparentAction> pAction(new MetaTransparentAction);
-
     VersionCompatRead aCompat(mrStream);
     tools::PolyPolygon aPolyPoly;
     ReadPolyPolygon(mrStream, aPolyPoly);
     sal_uInt16 nTransPercent(0);
     mrStream.ReadUInt16(nTransPercent);
 
-    pAction->SetPolyPolygon(aPolyPoly);
-    pAction->SetTransparence(nTransPercent);
-
-    return pAction;
+    return new MetaTransparentAction(aPolyPoly, nTransPercent);
 }
 
 rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* pData)
 {
-    rtl::Reference<MetaFloatTransparentAction> pAction(new MetaFloatTransparentAction);
-
     VersionCompatRead aCompat(mrStream);
     GDIMetaFile aMtf;
     SvmReader aReader(mrStream);
@@ -1357,15 +1134,10 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     Gradient aGradient;
     aSerializer.readGradient(aGradient);
 
-    pAction->SetGDIMetaFile(aMtf);
-    pAction->SetPoint(aPoint);
-    pAction->SetSize(aSize);
-    pAction->SetGradient(aGradient);
-
     // tdf#155479 add support for MCGR and SVG export
+    basegfx::BColorStops aColorStops;
     if (aCompat.GetVersion() > 1)
     {
-        basegfx::BColorStops aColorStops;
         sal_uInt16 nTmp(0);
         double fOff, fR, fG, fB;
         mrStream.ReadUInt16(nTmp);
@@ -1388,17 +1160,13 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
 
             aColorStops.emplace_back(fOff, basegfx::BColor(fR, fG, fB));
         }
-
-        pAction->addSVGTransparencyColorStops(aColorStops);
     }
 
-    return pAction;
+    return new MetaFloatTransparentAction(aMtf, aPoint, aSize, aGradient, aColorStops);
 }
 
 rtl::Reference<MetaAction> SvmReader::EPSHandler()
 {
-    rtl::Reference<MetaEPSAction> pAction(new MetaEPSAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
     GfxLink aGfxLink;
@@ -1410,18 +1178,11 @@ rtl::Reference<MetaAction> SvmReader::EPSHandler()
     GDIMetaFile aSubst;
     Read(aSubst);
 
-    pAction->SetLink(aGfxLink);
-    pAction->SetPoint(aPoint);
-    pAction->SetSize(aSize);
-    pAction->SetSubstitute(aSubst);
-
-    return pAction;
+    return new MetaEPSAction(aPoint, aSize, aGfxLink, aSubst);
 }
 
 rtl::Reference<MetaAction> SvmReader::RefPointHandler()
 {
-    rtl::Reference<MetaRefPointAction> pAction(new MetaRefPointAction);
-
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
 
@@ -1430,16 +1191,11 @@ rtl::Reference<MetaAction> SvmReader::RefPointHandler()
     bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
-    pAction->SetRefPoint(aRefPoint);
-    pAction->SetSetting(bSet);
-
-    return pAction;
+    return new MetaRefPointAction(aRefPoint, bSet);
 }
 
 rtl::Reference<MetaAction> SvmReader::CommentHandler()
 {
-    rtl::Reference<MetaCommentAction> pAction(new MetaCommentAction);
-
     VersionCompatRead aCompat(mrStream);
     OString aComment;
     aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(mrStream);
@@ -1465,38 +1221,25 @@ rtl::Reference<MetaAction> SvmReader::CommentHandler()
         mrStream.ReadBytes(pData.get(), nDataSize);
     }
 
-    pAction->SetComment(aComment);
-    pAction->SetDataSize(nDataSize);
-    pAction->SetValue(nValue);
-    pAction->SetData(pData.get(), nDataSize);
-
-    return pAction;
+    return new MetaCommentAction(aComment, nValue, pData.get(), nDataSize);
 }
 
 rtl::Reference<MetaAction> SvmReader::LayoutModeHandler()
 {
-    rtl::Reference<MetaLayoutModeAction> pAction(new MetaLayoutModeAction);
-
     VersionCompatRead aCompat(mrStream);
     sal_uInt32 tmp(0);
     mrStream.ReadUInt32(tmp);
 
-    pAction->SetLayoutMode(static_cast<vcl::text::ComplexTextLayoutFlags>(tmp));
-
-    return pAction;
+    return new MetaLayoutModeAction(static_cast<vcl::text::ComplexTextLayoutFlags>(tmp));
 }
 
 rtl::Reference<MetaAction> SvmReader::TextLanguageHandler()
 {
-    rtl::Reference<MetaTextLanguageAction> pAction(new MetaTextLanguageAction);
-
     VersionCompatRead aCompat(mrStream);
     sal_uInt16 nTmp = 0;
     mrStream.ReadUInt16(nTmp);
 
-    pAction->SetTextLanguage(static_cast<LanguageType>(nTmp));
-
-    return pAction;
+    return new MetaTextLanguageAction(static_cast<LanguageType>(nTmp));
 }
 
 rtl::Reference<MetaAction> SvmReader::DefaultHandler()

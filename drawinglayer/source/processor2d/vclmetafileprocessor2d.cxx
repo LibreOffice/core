@@ -2637,9 +2637,8 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             GDIMetaFile* pMetaFile(mpOutputDevice->GetConnectMetaFile());
             rtl::Reference<::MetaFloatTransparentAction> pAction(new MetaFloatTransparentAction(
                 aContentMetafile, aPrimitiveRectangle.TopLeft(), aPrimitiveRectangle.GetSize(),
-                std::move(aVCLGradient)));
+                std::move(aVCLGradient), std::move(aSVGTransparencyColorStops)));
 
-            pAction->addSVGTransparencyColorStops(aSVGTransparencyColorStops);
             pMetaFile->AddAction(pAction);
         }
         else
