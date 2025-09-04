@@ -145,7 +145,7 @@ std::unique_ptr<XFBGImage> LwpBackgroundStuff::GetFillPattern()
     // transfer image data from XOBitmap->SvStream->BYTE-Array
     SvMemoryStream aPicMemStream;
     aXOBitmap.Array2Bitmap();
-    WriteDIB(BitmapEx(aXOBitmap.GetBitmap()), aPicMemStream);
+    WriteDIB(aXOBitmap.GetBitmap(), aPicMemStream);
     sal_uInt32 nSize = aPicMemStream.GetEndOfData();
     std::unique_ptr<sal_uInt8[]> pImageBuff(new sal_uInt8[nSize]);
     memcpy(pImageBuff.get(), aPicMemStream.GetData(), nSize);
