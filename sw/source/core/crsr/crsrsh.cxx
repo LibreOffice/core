@@ -2170,6 +2170,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd, ScrollSizeMo
             if (Imp()->IsAccessible() && m_bSendAccessibleCursorEvents)
                 Imp()->InvalidateAccessibleCursorPosition( pTableFrame );
 #endif
+            if (comphelper::LibreOfficeKit::isActive())
+                sendLOKCursorUpdates();
             return;
         }
     }
