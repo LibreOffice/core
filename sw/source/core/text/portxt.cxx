@@ -344,6 +344,10 @@ sal_uInt16 SwTextPortion::GetMaxComp(const SwTextFormatInfo& rInf) const
 void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBreakPos,
                 const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces )
 {
+    // TODO allow letter spacing and glyph scaling in single word lines, too
+    if ( nSpaces == 0 )
+        return;
+
     SvxAdjustItem aAdjustItem =
         rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     // width of a single expanded space without letter spacing and glyph scaling
