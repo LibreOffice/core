@@ -39,11 +39,7 @@ private:
     void*               mpDIB;
     sal_Int32           mnDIBSize { 0 };
     HBITMAP             mhDDB;
-
     sal_uInt16          mnBitCount;
-
-    std::shared_ptr<Gdiplus::Bitmap>    ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
-    std::shared_ptr<Gdiplus::Bitmap> ImplCreateGdiPlusBitmap();
 
 public:
 
