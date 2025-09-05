@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -22,16 +22,21 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+
 using namespace ::com::sun::star;
 
 namespace
 {
 /// Tests for sw/source/writerfilter/dmapper/PropertyMap.cxx.
-class Test : public UnoApiTest
+class Test : public SwModelTestBase
 {
 public:
     Test()
-        : UnoApiTest(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
+        : SwModelTestBase(u"/sw/qa/writerfilter/dmapper/data/"_ustr)
     {
     }
 };
@@ -216,6 +221,23 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderEmptied)
     uno::Reference<text::XTextRange> xFooterText(xStyle->getPropertyValue(u"FooterText"_ustr),
                                                  uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Odd page footer"_ustr, xFooterText->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAltChunkHeader)
+{
+    // Given a document with an altChunk and a header:
+    // When loading that document:
+    createSwDoc("alt-chunk-header.docx");
+
+    // Then make sure the first page has a header:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    SwFrame* pFrame = pPage1->GetLower();
+    // Without the accompanying fix in place, this test would have failed, the first page had only a
+    // body frame, not a header-body-footer chain.
+    CPPUNIT_ASSERT(pFrame->IsHeaderFrame());
 }
 }
 
