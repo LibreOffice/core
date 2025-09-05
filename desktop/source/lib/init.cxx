@@ -8494,7 +8494,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
 #ifdef IOS
-            if (InitVCL() && [NSThread isMainThread])
+            if (InitVCL())
             {
                 static bool bFirstTime = true;
                 if (bFirstTime)
