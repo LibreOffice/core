@@ -662,7 +662,7 @@ public:
         so it gets blended against the start condition of the target device which
         is blank (usually white background, but others may be used).
         Usually rendering to RGB is sufficient (e.g. EditViews), but for conversion
-        to BitmapEx the alpha channel is needed to e.g. allow export/conversion to
+        to Bitmap the alpha channel is needed to e.g. allow export/conversion to
         pixel target formats which support Alpha, e.g. PNG.
         It is possible though to create the fully valid and correct AlphaChannel.
         If the content, the start condition and the alpha values are known it is
@@ -688,7 +688,7 @@ public:
     */
     std::pair<Bitmap, AlphaMask> SplitIntoColorAndAlpha() const;
 
-   /** Create ColorStack-modified version of this BitmapEx
+   /** Create ColorStack-modified version of this Bitmap
 
         @param rBColorModifierStack
         A ColrModifierStack which defines how each pixel has to be modified

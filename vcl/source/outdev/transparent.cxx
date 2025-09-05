@@ -711,7 +711,7 @@ bool checkRect( tools::Rectangle&       io_rPrevRect,
     return bRet;
 }
 
-/** #107169# Convert BitmapEx to Bitmap with appropriately blended
+/** #107169# Convert to Bitmap with appropriately blended
     color. Convert MetaTransparentAction to plain polygon,
     appropriately colored
 

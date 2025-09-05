@@ -195,7 +195,7 @@ Graphic::Graphic(const Bitmap& rBitmap)
 // We use XGraphic for passing toolbar images across app UNO aps
 // and we need to be able to see and preserve 'stock' images too.
 Graphic::Graphic(const Image& rImage)
-    // FIXME: should really defer the BitmapEx load.
+    // FIXME: should really defer the Bitmap load.
     : mxImpGraphic(new ImpGraphic(rImage.GetBitmap()))
 {
     const OUString& aStock = rImage.GetStock();

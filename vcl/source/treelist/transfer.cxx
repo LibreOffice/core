@@ -1585,13 +1585,13 @@ bool TransferableDataHelper::GetBitmap(const DataFlavor& rFlavor, Bitmap& rBmp) 
     {
         if(!bSuppressPNG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
-            // it's a PNG, import to BitmapEx
+            // it's a PNG, import to Bitmap
             vcl::PngImageReader aPNGReader(*xStm);
             rBmp = aPNGReader.read();
         }
         else if(!bSuppressJPEG && rFlavor.MimeType.equalsIgnoreAsciiCase("image/jpeg"))
         {
-            // it's a JPEG, import to BitmapEx
+            // it's a JPEG, import to Bitmap
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             Graphic aGraphic;
             if (rFilter.ImportGraphic(aGraphic, u"", *xStm) == ERRCODE_NONE)

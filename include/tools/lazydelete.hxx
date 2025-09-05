@@ -30,8 +30,8 @@ namespace tools
 {
     /*
     You may not access some objects after DeInitVCL has been called this includes their destruction
-    therefore disallowing the existence of static object like e.g. a static BitmapEx
-    To work around this use DeleteOnDeinit<BitmapEx> which will allow you to have a static object container,
+    therefore disallowing the existence of static object like e.g. a static Bitmap
+    To work around this use DeleteOnDeinit<Bitmap> which will allow you to have a static object container,
     that will have its contents destroyed on DeinitVCL. The single drawback is that you need to check on the
     container object whether it still contains content before actually accessing it.
 
@@ -40,13 +40,13 @@ namespace tools
     In these cases make judicious use of the set() method of DeleteOnDeinit, but beware of the changing
     ownership.
 
-    example use case: use a lazy initialized on call BitmapEx in a paint method. Of course a paint method
+    example use case: use a lazy initialized on call Bitmap in a paint method. Of course a paint method
     would not normally be called after DeInitVCL anyway, so the check might not be necessary in a
     Window::Paint implementation, but always checking is a good idea.
 
     SomeWindow::Paint()
     {
-        static tools::DeleteOnDeinit< BitmapEx > aBmp( ... );
+        static tools::DeleteOnDeinit< Bitmap > aBmp( ... );
 
         if( aBmp.get() ) // check whether DeInitVCL has been called already
             DrawBitmapEx( Point( 10, 10 ), *aBmp );

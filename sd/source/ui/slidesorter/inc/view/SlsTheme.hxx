@@ -46,8 +46,6 @@ public:
     void Update (
         const std::shared_ptr<controller::Properties>& rpProperties);
 
-    //    BitmapEx GetInsertIndicatorIcon() const;
-
     enum FontType {
         Font_PageNumber,
         Font_PageCount

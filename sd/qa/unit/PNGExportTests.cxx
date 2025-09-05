@@ -872,7 +872,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     // diagonal line causes many logical pixels on the edge of the
     // diagonal line to have a mixture of white and blue physical
     // pixels. Then, when such logical pixels are fetched via
-    // BitmapEx::GetPixelColor(), their underlying 4 white and blue
+    // Bitmap::GetPixelColor(), their underlying 4 white and blue
     // physical pixels are combined into blended shades of white
     // and blue.
 #else

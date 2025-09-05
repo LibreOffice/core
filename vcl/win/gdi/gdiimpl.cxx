@@ -534,7 +534,7 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
     if(bTryDirectPaint)
     {
         // only paint direct when no scaling and no MapMode, else the
-        // more expensive conversions may be done for short-time Bitmap/BitmapEx
+        // more expensive conversions may be done for short-time Bitmap
         // used for buffering only
         if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
         {

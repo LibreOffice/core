@@ -26,7 +26,7 @@ namespace drawinglayer
 {
 // Helper that just creates the AlphaMask for a given Seq of Primitives.
 // If only the mask is needed this can be significantly faster then
-// creating content & mask in a BitmapEx (since the creation uses
+// creating content & mask in a Bitmap (since the creation uses
 // e.g. a unified color for gradients instead of having to fully paint
 // these)
 // New mode: bUseLuminance allows simple creation of alpha channels

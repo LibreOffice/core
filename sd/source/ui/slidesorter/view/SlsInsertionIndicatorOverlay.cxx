@@ -126,7 +126,7 @@ void InsertionIndicatorOverlay::Create (
         aPreviewSize.Height() + 2 * gnShadowBorder + nCount*nOffset);
 
     // Create virtual devices for bitmap and mask whose bitmaps later be
-    // combined to form the BitmapEx of the icon.
+    // combined to form the Bitmap of the icon.
     ScopedVclPtrInstance<VirtualDevice> pContent(
         *mrSlideSorter.GetContentWindow()->GetOutDev(), DeviceFormat::WITH_ALPHA);
     pContent->SetOutputSizePixel(aIconSize);

@@ -80,12 +80,12 @@ namespace dxcanvas
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         uno::Any aRes;
-        // 0 ... get BitmapEx
+        // 0 ... get Bitmap
         // 1 ... get Pixbuf with bitmap RGB content
         // 2 ... get Pixbuf with bitmap alpha mask
         switch( nHandle )
         {
-            // sorry, no BitmapEx here...
+            // sorry, no Bitmap here...
             case 0:
                 aRes <<= reinterpret_cast<sal_Int64>( nullptr );
                 break;

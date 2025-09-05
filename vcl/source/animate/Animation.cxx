@@ -407,7 +407,7 @@ bool Animation::Insert(const AnimationFrame& rStepBmp)
               .GetSize();
     maFrames.emplace_back(new AnimationFrame(rStepBmp));
 
-    // As a start, we make the first BitmapEx the replacement BitmapEx
+    // As a start, we make the first Bitmap the replacement Bitmap
     if (maFrames.size() == 1)
         maBitmap = rStepBmp.maBitmap;
 
@@ -427,7 +427,7 @@ void Animation::Replace(const AnimationFrame& rNewAnimationFrame, sal_uInt16 nAn
     maFrames[nAnimation].reset(new AnimationFrame(rNewAnimationFrame));
 
     // If we insert at first position we also need to
-    // update the replacement BitmapEx
+    // update the replacement Bitmap
     if ((!nAnimation && (!mbLoopTerminated || (maFrames.size() == 1)))
         || ((nAnimation == maFrames.size() - 1) && mbLoopTerminated))
     {
@@ -564,7 +564,7 @@ SvStream& WriteAnimation(SvStream& rOStm, const Animation& rAnimation)
 
     const sal_uInt32 nDummy32 = 0;
 
-    // If no BitmapEx was set we write the first Bitmap of
+    // If no Bitmap was set we write the first Bitmap of
     // the Animation
     if (rAnimation.GetBitmap().IsEmpty())
         WriteDIBBitmapEx(rAnimation.Get(0).maBitmap, rOStm);
@@ -614,7 +614,7 @@ SvStream& ReadAnimation(SvStream& rIStm, Animation& rAnimation)
 
     rAnimation.Clear();
 
-    // If the BitmapEx at the beginning have already been read (by Graphic)
+    // If the Bitmap at the beginning have already been read (by Graphic)
     // we can start reading the AnimationFrames right away
     if ((nAnimMagic1 == 0x5344414e) && (nAnimMagic2 == 0x494d4931) && !rIStm.GetError())
     {

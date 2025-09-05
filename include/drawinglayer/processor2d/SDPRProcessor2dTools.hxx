@@ -47,7 +47,7 @@ namespace drawinglayer::processor2d
         e.g. in SDPRs all impls would need to handle the FillGraphicAttribute
         settings and the type of Graphic. Unify this by this helper in one place
         since this may get complicated (many cases to cover).
-        It will create and return a BitmapEx when direct tiled rendering is
+        It will create and return a Bitmap when direct tiled rendering is
         preferable and suggested.
         Of course every impl may still do what it wants, this is just to make
         implementations easier.

@@ -411,7 +411,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // Skia, at least on macOS, will fail to create a surface.
             // Even if there is ample free memory, Skia/Raster will fail.
             // The second problem is that even if you disable Skia, the
-            // crash is just delayed when a BitmapEx is created from the
+            // crash is just delayed when a Bitmap is created from the
             // VirtualDevice and malloc() fails.
             // Since this data flavor really triggers one or more system
             // memory limits, lower the resolution of the bitmap by keeping
