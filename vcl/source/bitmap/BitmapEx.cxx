@@ -1311,21 +1311,4 @@ void  BitmapEx::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
     rnBitCount = pReadAccess->GetBitCount();
 }
 
-void BitmapEx::DumpAsPng(const char* pFileName) const
-{
-    OUString sPath(u"file:///tmp/bitmap.png"_ustr);
-    if (pFileName)
-    {
-        sPath = OUString::fromUtf8(pFileName);
-    }
-    else if (OUString env = o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr); !env.isEmpty())
-    {
-        sPath = env;
-    }
-    SvFileStream aStream(sPath, StreamMode::STD_READWRITE | StreamMode::TRUNC);
-    assert(aStream.good());
-    vcl::PngImageWriter aWriter(aStream);
-    aWriter.write(Bitmap(*this));
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

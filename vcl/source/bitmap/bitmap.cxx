@@ -26,7 +26,6 @@
 
 #include <utility>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>
@@ -141,26 +140,25 @@ Bitmap::Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const Bit
     mxSalBmp->Create(rSizePixel, ePixelFormat, *pPal);
 }
 
-Bitmap::Bitmap(const BitmapEx& rBitmapEx)
-    : maPrefMapMode(rBitmapEx.GetPrefMapMode())
-    , maPrefSize(rBitmapEx.GetPrefSize())
+static Bitmap createBitmapFromColorAndAlpha(const Bitmap& rColorBitmap, const Bitmap& rAlphaBitmap)
 {
-    if (!rBitmapEx.IsAlpha())
-        mxSalBmp = rBitmapEx.GetBitmap().mxSalBmp;
+    if (rAlphaBitmap.IsEmpty())
+        return rColorBitmap;
     else
     {
-        Size aSize = rBitmapEx.GetSizePixel();
+        Size aSize = rColorBitmap.GetSizePixel();
         static const BitmapPalette aPalEmpty;
-        mxSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-        const bool bSuccess = mxSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
+        std::shared_ptr<SalBitmap> xSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+        const bool bSuccess = xSalBmp->Create(aSize, vcl::PixelFormat::N32_BPP, aPalEmpty);
         if (!bSuccess)
         {
             SAL_WARN("vcl", "Bitmap::Bitmap(): could not create image");
-            return;
+            return Bitmap(xSalBmp);
         }
-        BitmapScopedReadAccess pReadColorAcc(rBitmapEx.GetBitmap());
-        BitmapScopedReadAccess pReadAlphaAcc(rBitmapEx.GetAlphaMask());
-        BitmapScopedWriteAccess pWriteAcc(*this);
+        Bitmap aRetBmp(xSalBmp);
+        BitmapScopedReadAccess pReadColorAcc(rColorBitmap);
+        BitmapScopedReadAccess pReadAlphaAcc(rAlphaBitmap);
+        BitmapScopedWriteAccess pWriteAcc(aRetBmp);
         auto nHeight = pReadColorAcc->Height();
         auto nWidth = pReadColorAcc->Width();
         bool bPalette = pReadColorAcc->HasPalette();
@@ -182,6 +180,7 @@ Bitmap::Bitmap(const BitmapEx& rBitmapEx)
                 pWriteAcc->SetPixelOnData(pScanlineWrite, nX, aCol);
             }
         }
+        return aRetBmp;
 
 // So.... in theory the following code should work, and be much more efficient. In practice, the gen/cairo
 // code is doing something weird involving masks that results in alpha not doing the same thing as on the other
@@ -227,23 +226,73 @@ void Bitmap::loadFromIconTheme( const OUString& rIconName )
         bSuccess = false;
     }
 
-    SAL_WARN_IF( !bSuccess, "vcl", "BitmapEx::BitmapEx(): could not load image " << rIconName << " via icon theme " << aIconTheme);
+    SAL_WARN_IF( !bSuccess, "vcl", "Bitmap::Bitmap(): could not load image " << rIconName << " via icon theme " << aIconTheme);
 }
 
 Bitmap::Bitmap( const Bitmap& rBmp, const Bitmap& rMask )
 {
-    *this = Bitmap(BitmapEx(rBmp, rMask));
+    if (rMask.IsEmpty())
+    {
+        *this = rBmp;
+        return;
+    }
+
+    assert(typeid(rMask) != typeid(AlphaMask)
+        && "If this mask is actually an AlphaMask, then it will be inverted unnecessarily "
+           "and the alpha channel will be wrong");
+
+    AlphaMask aAlphaMask;
+    if( rMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && rMask.HasGreyPalette8Bit() )
+    {
+        aAlphaMask = rMask;
+        aAlphaMask.Invert();
+    }
+    else if( rMask.getPixelFormat() == vcl::PixelFormat::N8_BPP )
+    {
+        Bitmap aMask(rMask);
+        BitmapFilter::Filter(aMask, BitmapMonochromeFilter(255));
+        aMask.Invert();
+        aAlphaMask = aMask;
+    }
+    else
+    {
+        // convert to alpha bitmap
+        SAL_WARN("vcl", "Bitmap: forced mask to monochrome");
+        Bitmap aMask(rMask);
+        BitmapFilter::Filter(aMask, BitmapMonochromeFilter(255));
+        aMask.Invert();
+        aAlphaMask = aMask;
+    }
+
+    if (!rBmp.IsEmpty() && rBmp.GetSizePixel() != aAlphaMask.GetSizePixel())
+    {
+        SAL_WARN("vcl", "Mask size differs from Bitmap size, corrected Mask (!)");
+        aAlphaMask.Scale(rBmp.GetSizePixel(), BmpScaleFlag::Fast);
+    }
+    *this = createBitmapFromColorAndAlpha(rBmp, aAlphaMask.GetBitmap());
 }
 
 Bitmap::Bitmap( const Bitmap& rBmp, const AlphaMask& rAlphaMask )
 {
-    *this = Bitmap(BitmapEx(rBmp, rAlphaMask));
+    if (!rBmp.IsEmpty() && !rAlphaMask.IsEmpty() && rBmp.GetSizePixel() != rAlphaMask.GetSizePixel())
+    {
+        SAL_WARN("vcl", "Alpha size differs from Bitmap size, corrected Mask (!)");
+        AlphaMask aNewMask = rAlphaMask;
+        aNewMask.Scale(rBmp.GetSizePixel(), BmpScaleFlag::Fast);
+        *this = createBitmapFromColorAndAlpha(rBmp, aNewMask.GetBitmap());
+    }
+    else
+        *this = createBitmapFromColorAndAlpha(rBmp, rAlphaMask.GetBitmap());
 }
 
 
 Bitmap::Bitmap( const Bitmap& rBmp, const Color& rTransparentColor )
 {
-    *this = Bitmap(BitmapEx(rBmp, rTransparentColor));
+    AlphaMask aAlphaMask = rBmp.CreateAlphaMask( rTransparentColor );
+
+    SAL_WARN_IF(rBmp.GetSizePixel() != aAlphaMask.GetSizePixel(), "vcl",
+                "Bitmap::Bitmap(): size mismatch for bitmap and alpha mask.");
+    *this = createBitmapFromColorAndAlpha(rBmp, aAlphaMask.GetBitmap());
 }
 
 
@@ -2051,7 +2100,7 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
     {
         // at the top of the stack we have a BColorModifier_replace -> no Bitmap needed,
         // representation can be replaced by filled colored polygon. signal the caller
-        // about that by returning empty BitmapEx
+        // about that by returning empty Bitmap
         return Bitmap();
     }
 
@@ -2109,7 +2158,7 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
             AlphaMask aAlphaMask(CreateAlphaMask());
             Bitmap aTmpBitmap(CreateColorBitmap());
             aTmpBitmap.Erase(Color(pLastModifierReplace->getBColor()));
-            aChangedBitmap = Bitmap(BitmapEx(aTmpBitmap, aAlphaMask));
+            aChangedBitmap = createBitmapFromColorAndAlpha(aTmpBitmap, aAlphaMask.GetBitmap());
         }
         else
         {
@@ -2205,7 +2254,7 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
 
     if (nullptr != pHolder)
     {
-        // create new BufferedData_ModifiedBitmapEx (should be nullptr here)
+        // create new BufferedData_ModifiedBitmap (should be nullptr here)
         if (nullptr == pBufferedData_ModifiedBitmap)
         {
             pBufferedData_ModifiedBitmap = std::make_shared<BufferedData_ModifiedBitmap>(aChangedBitmap, rBColorModifierStack);
@@ -2236,14 +2285,16 @@ AlphaMask Bitmap::CreateAlphaMask() const
     assert(HasAlpha());
     if (!HasAlpha())
         return AlphaMask();
-    return BitmapEx(*this).GetAlphaMask();
+    std::pair<Bitmap, AlphaMask> aPair = SplitIntoColorAndAlpha();
+    return aPair.second;
 }
 
 Bitmap Bitmap::CreateColorBitmap() const
 {
     if (!HasAlpha())
         return *this;
-    return BitmapEx(*this).GetBitmap();
+    std::pair<Bitmap, AlphaMask> aPair = SplitIntoColorAndAlpha();
+    return aPair.first;
 }
 
 void Bitmap::ChangeColorAlpha( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
@@ -2278,8 +2329,7 @@ void Bitmap::AdjustTransparency(sal_uInt8 cTrans)
     if (!HasAlpha())
     {
         AlphaMask aAlpha(GetSizePixel(), &cTrans);
-        BitmapEx aNew( *this, aAlpha );
-        *this = Bitmap(aNew);
+        *this = createBitmapFromColorAndAlpha(*this, aAlpha.GetBitmap());
     }
     else
     {
@@ -2344,7 +2394,7 @@ void Bitmap::BlendAlpha(sal_uInt8 nAlpha)
     if (!HasAlpha())
     {
         sal_uInt8 cTrans = 255 - nAlpha;
-        *this = Bitmap(BitmapEx( *this, AlphaMask(GetSizePixel(), &cTrans) ));
+        *this = createBitmapFromColorAndAlpha( *this, AlphaMask(GetSizePixel(), &cTrans).GetBitmap() );
     }
     else
     {
@@ -2474,7 +2524,7 @@ void Bitmap::CombineMaskOr(Color rTransColor, sal_uInt8 nTol)
     const MapMode aMap( maPrefMapMode );
     const Size aSize( maPrefSize );
 
-    *this = Bitmap(BitmapEx(aColBmp, aNewMask));
+    *this = createBitmapFromColorAndAlpha(aColBmp, aNewMask.GetBitmap());
 
     maPrefMapMode = aMap;
     maPrefSize = aSize;

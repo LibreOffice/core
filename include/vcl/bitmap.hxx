@@ -38,7 +38,6 @@
 #include <memory>
 
 class AlphaMask;
-class BitmapEx;
 namespace basegfx { class BColorModifierStack; }
 namespace com::sun::star::rendering {
     class XBitmapCanvas;
@@ -119,7 +118,6 @@ public:
     explicit                Bitmap( const OUString& rIconName );
                             Bitmap( const Bitmap& rBitmap );
                             Bitmap( const Bitmap& rBitmap, Point aSrc, Size aSize );
-    explicit                Bitmap( const BitmapEx& rBitmapEx );
                             Bitmap( const Size& rSizePixel, vcl::PixelFormat ePixelFormat, const BitmapPalette* pPal = nullptr );
                             Bitmap( const Bitmap& rBmp, const Bitmap& rMask );
                             Bitmap( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
@@ -658,7 +656,7 @@ public:
 
     /** Remove existing blending against COL_WHITE based on given AlphaMask
 
-        Inside convertToBitmapEx the content gets rendered to RGB target (no 'A'),
+        Inside convertToBitmap the content gets rendered to RGB target (no 'A'),
         so it gets blended against the start condition of the target device which
         is blank (usually white background, but others may be used).
         Usually rendering to RGB is sufficient (e.g. EditViews), but for conversion
