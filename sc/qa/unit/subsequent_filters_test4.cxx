@@ -440,6 +440,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowHeightODS)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowHeightTdf165003)
 {
+    // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
+    // non-default DPI; or (2) unit tests on Windows are made to use svp VCL plugin.
+    if (!IsDefaultDPI())
+        return;
     createScDoc("ods/RowHeightTdf165003.ods");
 
     SCTAB nTab = 0;
