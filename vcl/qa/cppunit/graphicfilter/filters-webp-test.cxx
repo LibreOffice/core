@@ -101,7 +101,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
         pAccessAlpha->SetFillColor(BitmapColor(64, 64, 64));
         pAccessAlpha->FillRect(tools::Rectangle(Point(10, 10), Size(10, 10)));
     }
-    BitmapEx aBitmapEx(aBitmap, aAlpha);
+    Bitmap aBitmap2(aBitmap, aAlpha);
 
     SvMemoryStream aStream;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
@@ -110,8 +110,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
         comphelper::makePropertyValue(u"Lossless"_ustr, !lossy),
         comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(100))
     };
-    rFilter.ExportGraphic(Graphic(Bitmap(aBitmapEx)), u"none", aStream, nFilterFormat,
-                          &aFilterData);
+    rFilter.ExportGraphic(Graphic(aBitmap2), u"none", aStream, nFilterFormat, &aFilterData);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;

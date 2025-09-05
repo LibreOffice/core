@@ -37,6 +37,7 @@
 #endif
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -50,6 +51,7 @@
 #include <bitmap/BlendFrameCache.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/environment.hxx>
 
 #include "floyd.hxx"
 
@@ -2906,6 +2908,23 @@ Bitmap Bitmap::getTransformed(
 
     // create bitmap using source, destination and linear back-transformation
     return TransformBitmap(fWidth, fHeight, aTransform);
+}
+
+void Bitmap::DumpAsPng(const char* pFileName) const
+{
+    OUString sPath(u"file:///tmp/bitmap.png"_ustr);
+    if (pFileName)
+    {
+        sPath = OUString::fromUtf8(pFileName);
+    }
+    else if (OUString env = o3tl::getEnvironment(u"VCL_DUMP_BMP_PATH"_ustr); !env.isEmpty())
+    {
+        sPath = env;
+    }
+    SvFileStream aStream(sPath, StreamMode::STD_READWRITE | StreamMode::TRUNC);
+    assert(aStream.good());
+    vcl::PngImageWriter aWriter(aStream);
+    aWriter.write(*this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

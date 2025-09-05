@@ -43,7 +43,7 @@ struct Case
     bool mbHasPalette;
     bool mbIsAlpha;
 };
-// Checks that a pngs BitmapEx is the same after reading and
+// Checks that a pngs Bitmap is the same after reading and
 // after writing. Takes a vector of function pointers if there's need to test
 // special cases
 void checkImportExportPng(const OUString& sFilePath, const Case& aCase)
@@ -386,11 +386,10 @@ void PngFilterTest::testPngSuite()
     // Some notes about the cases:
     // - RGB palette PNGs get converted to a bitmap with png_set_palette_to_rgb
     // - Grayscale PNGs with alpha also do with png_set_gray_to_rgb
-    // - Grayscale PNGs without alpha use BitmapEx palette utilities
+    // - Grayscale PNGs without alpha use Bitmap palette utilities
     // - 1, 2, 4 bit grayscale w/o alpha gets converted to 8 bit with png_set_expand_gray_1_2_4_to_8
     // - 16 bit per channel gets converted to 8 bit per channel with png_set_scale_16
     // - PNGs that are not size related have size 32x32
-    // - Internally BitmapEx is never 32 bpp, instead it's 24 bpp (rgb) and uses an 8 bpp alpha mask
     std::pair<std::u16string_view, Case> aCases[] = {
         // Basic formats, not interlaced
         { u"basn0g01.png",
@@ -1885,9 +1884,9 @@ void PngFilterTest::testPngRoundtrip24_8()
                 }
             }
         }
-        BitmapEx aBitmapEx(aBitmap, aAlpha);
+        Bitmap aBitmap2(aBitmap, aAlpha);
         vcl::PngImageWriter aPngWriter(rStream);
-        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(Bitmap(aBitmapEx)));
+        CPPUNIT_ASSERT_EQUAL(true, aPngWriter.write(aBitmap2));
     }
     {
         SvStream& rStream = *aTempFile.GetStream(StreamMode::READ);
@@ -2015,8 +2014,7 @@ void PngFilterTest::testDump()
         BitmapScopedWriteAccess pWriteAccessBitmap(aBitmap);
         pWriteAccessBitmap->SetPixel(0, 0, BitmapColor());
     }
-    BitmapEx aBitmapEx(aBitmap);
-    aBitmapEx.DumpAsPng(aTempFile.GetURL().toUtf8().getStr());
+    aBitmap.DumpAsPng(aTempFile.GetURL().toUtf8().getStr());
     SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), pStream->remainingSize());
 }

@@ -94,11 +94,10 @@ void VclFiltersTest::testScaling()
     for (BmpScaleFlag i = BmpScaleFlag::Default; i <= BmpScaleFlag::BiLinear; i = static_cast<BmpScaleFlag>(static_cast<int>(i) + 1))
     {
         Bitmap aBitmap(Size(413, 409), vcl::PixelFormat::N24_BPP);
-        BitmapEx aBitmapEx( aBitmap );
 
         fprintf( stderr, "scale with type %d\n", int( i ) );
-        CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
-        Size aAfter( aBitmapEx.GetSizePixel() );
+        CPPUNIT_ASSERT( aBitmap.Scale( 0.1937046, 0.193154, i ) );
+        Size aAfter( aBitmap.GetSizePixel() );
         fprintf( stderr, "size %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 "\n", sal_Int64(aAfter.Width()), sal_Int64(aAfter.Height()) );
         CPPUNIT_ASSERT( std::abs (aAfter.Height() - aAfter.Width()) <= 1 );
     }

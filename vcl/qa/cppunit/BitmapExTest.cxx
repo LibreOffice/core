@@ -51,9 +51,9 @@ void BitmapExTest::testGetPixelColor24_8()
         pWriteAccess->Erase(Color(ColorTransparency, 0x00, 0xAA, 0xAA, 0xAA));
     }
 
-    BitmapEx aBitmapEx(aBitmap, aMask);
+    Bitmap aBitmap2(aBitmap, aMask);
 
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0xFF, 0x00), aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xAA, 0x00, 0xFF, 0x00), aBitmap2.GetPixelColor(0, 0));
 }
 
 void BitmapExTest::testGetPixelColor32()
@@ -64,10 +64,8 @@ void BitmapExTest::testGetPixelColor32()
         pWriteAccess->Erase(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00));
     }
 
-    BitmapEx aBitmapEx(aBitmap);
-
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xAA, 0x00, 0xFF, 0x00),
-                         aBitmapEx.GetPixelColor(0, 0));
+                         aBitmap.GetPixelColor(0, 0));
 }
 
 void BitmapExTest::testTransformBitmapEx()
@@ -84,12 +82,11 @@ void BitmapExTest::testTransformBitmapEx()
             }
         }
     }
-    BitmapEx aBitmapEx(aBitmap);
 
     basegfx::B2DHomMatrix aMatrix;
     aMatrix.rotate(M_PI / 2);
-    BitmapEx aTransformed = aBitmapEx.TransformBitmapEx(16, 16, aMatrix);
-    aBitmap = aTransformed.GetBitmap();
+    Bitmap aTransformed = aBitmap.TransformBitmap(16, 16, aMatrix);
+    aBitmap = aTransformed.CreateColorBitmap();
     BitmapScopedReadAccess pAccess(aBitmap);
     for (int i = 0; i < 16; ++i)
     {
@@ -225,18 +222,18 @@ void BitmapExTest::testCombineMaskOr()
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 2));
     }
 
-    BitmapEx aBitmapEx(aBitmap, aAlphaBitmap);
-    aBitmapEx.CombineMaskOr(COL_RED, 1);
+    Bitmap aBitmap2(aBitmap, aAlphaBitmap);
+    aBitmap2.CombineMaskOr(COL_RED, 1);
 
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(0, 1));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(0, 2));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(1, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(1, 1));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(1, 2));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(2, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(2, 1));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(0, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(0, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(1, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(1, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(2, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aBitmap2.GetPixelColor(2, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmap2.GetPixelColor(2, 2));
 }
 
 } // namespace

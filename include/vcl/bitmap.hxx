@@ -719,6 +719,9 @@ public:
     SAL_DLLPRIVATE bool     ImplMakeGreyscales();
     SAL_DLLPRIVATE bool     ImplMake8BitNoConversion();
 
+    /// Dumps the pixels as PNG in bitmap.png.
+    void DumpAsPng(const char* pFileName = nullptr) const;
+
 private:
     SAL_DLLPRIVATE bool ImplConvertUp(vcl::PixelFormat ePixelFormat, Color const* pExtColor = nullptr);
     SAL_DLLPRIVATE bool ImplConvertDown8BPP(Color const* pExtColor = nullptr);

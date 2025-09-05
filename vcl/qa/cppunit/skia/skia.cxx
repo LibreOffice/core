@@ -65,12 +65,11 @@ public:
 
 private:
 #if 0
-    template <class BitmapT> // handle both Bitmap and BitmapEx
-    void savePNG(const OUString& sWhere, const BitmapT& rBmp)
+    void savePNG(const OUString& sWhere, const Bitmap& rBmp)
     {
         SvFileStream aStream(sWhere, StreamMode::WRITE | StreamMode::TRUNC);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.compressAsPNG(BitmapEx(rBmp), aStream);
+        rFilter.compressAsPNG(rBmp, aStream);
     }
     void savePNG(const OUString& sWhere, const ScopedVclPtr<VirtualDevice>& device)
     {
