@@ -1982,7 +1982,10 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 xRangeProperties.set(rDM_Impl.m_xAltChunkStartingRange, uno::UNO_QUERY);
             }
-            if (xRangeProperties.is() && (rDM_Impl.IsNewDoc() || rDM_Impl.IsAltChunk()))
+            // Alt chunk: ignore last section break at the document end to avoid unwanted changes to
+            // the outer page style.
+            bool bNonLastInAltChunk = rDM_Impl.IsAltChunk() && !rDM_Impl.GetIsLastSectionGroup();
+            if (xRangeProperties.is() && (rDM_Impl.IsNewDoc() || bNonLastInAltChunk))
             {
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
