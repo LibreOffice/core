@@ -1050,8 +1050,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     else
     {
-        BitmapEx aBmpEx(aBmp);
-        AlphaMask aAlphaMask( aBmpEx.GetAlphaMask() );
+        AlphaMask aAlphaMask( aBmp.CreateAlphaMask() );
         Bitmap aMask( aAlphaMask.GetBitmap() );
         QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetSalBitmap().get());
         if( pMaskBmp )

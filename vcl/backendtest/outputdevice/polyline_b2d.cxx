@@ -52,8 +52,8 @@ Bitmap OutputDeviceTestPolyLineB2D::setupRectangle(bool bEnableAA)
     drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 2);
     drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 5);
 
-    return BitmapEx(mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize()))
-        .GetBitmap();
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize())
+        .CreateColorBitmap();
 }
 
 Bitmap OutputDeviceTestPolyLineB2D::setupDiamond()
