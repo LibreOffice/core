@@ -15,12 +15,7 @@ Bitmap BitmapDisabledImageFilter::execute(Bitmap const& rBitmap) const
 {
     const Size aSize(rBitmap.GetSizePixel());
 
-    // keep disable image at same depth as original where possible, otherwise
-    // use 8 bit
     auto ePixelFormat = rBitmap.getPixelFormat();
-    if (sal_uInt16(ePixelFormat) < 8)
-        ePixelFormat = vcl::PixelFormat::N8_BPP;
-
     const BitmapPalette* pPal
         = vcl::isPalettePixelFormat(ePixelFormat) ? &Bitmap::GetGreyPalette(256) : nullptr;
     Bitmap aGrey(aSize, ePixelFormat, pPal);
