@@ -28,7 +28,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
 

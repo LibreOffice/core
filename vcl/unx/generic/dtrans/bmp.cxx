@@ -22,7 +22,6 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/bitmap/BitmapSimpleColorQuantizationFilter.hxx>
 
 #include <sal/log.hxx>

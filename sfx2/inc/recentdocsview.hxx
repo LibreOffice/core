@@ -10,7 +10,7 @@
 #pragma once
 
 #include <sfx2/thumbnailview.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <o3tl/typed_flags_set.hxx>
 

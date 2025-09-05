@@ -20,7 +20,7 @@
 #include <svgimagenode.hxx>
 #include <svgdocument.hxx>
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>

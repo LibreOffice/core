@@ -20,7 +20,7 @@
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <bitmap/BitmapFastScaleFilter.hxx>

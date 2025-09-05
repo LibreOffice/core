@@ -20,7 +20,7 @@
 #include "SlsBitmapCompressor.hxx"
 
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 

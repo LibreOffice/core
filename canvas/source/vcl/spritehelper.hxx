@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <base/canvascustomspritehelper.hxx>
 #include <base/spritesurface.hxx>

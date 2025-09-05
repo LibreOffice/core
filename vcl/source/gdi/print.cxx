@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/event.hxx>
 #include <vcl/virdev.hxx>

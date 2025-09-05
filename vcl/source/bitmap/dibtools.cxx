@@ -31,7 +31,7 @@
 #include <tools/helpers.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <comphelper/configuration.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/ColorMask.hxx>

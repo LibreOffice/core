@@ -85,7 +85,6 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/animate/Animation.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <comphelper/errcode.hxx>

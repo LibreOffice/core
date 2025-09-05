@@ -23,7 +23,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 

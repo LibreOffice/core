@@ -32,7 +32,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <tools/stream.hxx>

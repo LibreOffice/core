@@ -9,8 +9,9 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/filter/ImportOutput.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <filter/XpmReader.hxx>
 

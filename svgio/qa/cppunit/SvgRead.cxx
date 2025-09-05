@@ -15,6 +15,7 @@
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>

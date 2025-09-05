@@ -20,7 +20,7 @@
 #include "bitmapcreator.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/stream.hxx>
 

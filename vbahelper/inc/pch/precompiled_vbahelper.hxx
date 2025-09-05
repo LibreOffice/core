@@ -45,7 +45,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/IDialogRenderable.hxx>
-#include <vcl/bitmapex.hxx>
 #include <comphelper/errcode.hxx>
 #include <vcl/region.hxx>
 #include <vcl/svapp.hxx>

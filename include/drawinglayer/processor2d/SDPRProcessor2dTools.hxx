@@ -37,7 +37,6 @@ class B2DRange;
 }
 
 class Bitmap;
-class BitmapEx;
 
 namespace drawinglayer::processor2d
 {

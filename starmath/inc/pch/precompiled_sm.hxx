@@ -68,7 +68,6 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>

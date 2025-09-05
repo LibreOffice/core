@@ -22,6 +22,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include <unotools/mediadescriptor.hxx>
+#include <tools/color.hxx>
 
 #include "WpftFilterFixture.hxx"
 #include "WpftLoader.hxx"

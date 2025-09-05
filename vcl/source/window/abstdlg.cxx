@@ -18,7 +18,7 @@
  */
 
 #include <vcl/abstdlg.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <com/sun/star/cui/GetCreateDialogFactoryService.hpp>
 #include <comphelper/processfactory.hxx>
 

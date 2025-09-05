@@ -6127,7 +6127,6 @@ include/vcl/accessibility/vclxaccessiblecomponent.hxx
 include/vcl/accessibletableprovider.hxx
 include/vcl/alpha.hxx
 include/vcl/bitmap.hxx
-include/vcl/bitmapex.hxx
 include/vcl/builder.hxx
 include/vcl/builderfactory.hxx
 include/vcl/cairo.hxx
@@ -14521,7 +14520,6 @@ vcl/source/bitmap/BitmapSymmetryCheck.cxx
 vcl/source/bitmap/BitmapTools.cxx
 vcl/source/bitmap/alpha.cxx
 vcl/source/bitmap/bitmap.cxx
-vcl/source/bitmap/BitmapEx.cxx
 vcl/source/bitmap/bmpfast.cxx
 vcl/source/bitmap/checksum.cxx
 vcl/source/bitmap/dibtools.cxx

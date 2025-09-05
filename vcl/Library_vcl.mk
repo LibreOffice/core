@@ -382,7 +382,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/Vectorizer \
     vcl/source/bitmap/bitmap \
     vcl/source/bitmap/bitmappalette \
-    vcl/source/bitmap/BitmapEx \
     vcl/source/bitmap/BitmapInfoAccess \
     vcl/source/bitmap/BitmapReadAccess \
     vcl/source/bitmap/BitmapWriteAccess \

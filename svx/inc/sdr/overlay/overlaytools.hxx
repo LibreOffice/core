@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
 namespace drawinglayer::primitive2d {

@@ -19,7 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }

@@ -26,7 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/gradient.hxx>
 

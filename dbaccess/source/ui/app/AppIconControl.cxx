@@ -22,7 +22,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <sfx2/thumbnailviewitem.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>

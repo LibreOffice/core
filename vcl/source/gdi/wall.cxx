@@ -19,7 +19,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/svapp.hxx>

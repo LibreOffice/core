@@ -24,7 +24,7 @@
 #include <tools/poly.hxx>
 #include <utility>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/decoview.hxx>

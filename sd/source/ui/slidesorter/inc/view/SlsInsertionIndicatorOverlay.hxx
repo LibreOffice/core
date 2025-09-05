@@ -23,7 +23,7 @@
 #include <controller/SlsTransferableData.hxx>
 
 #include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <memory>
 #include <vector>
 

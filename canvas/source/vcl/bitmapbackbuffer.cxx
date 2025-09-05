@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
 
 #include "bitmapbackbuffer.hxx"

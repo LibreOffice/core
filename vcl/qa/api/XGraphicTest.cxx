@@ -21,6 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <tools/color.hxx>
 
 namespace
 {

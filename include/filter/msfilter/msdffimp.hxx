@@ -41,6 +41,7 @@
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
 #include <comphelper/errcode.hxx>
+#include <tools/color.hxx>
 #include <tools/degree.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>

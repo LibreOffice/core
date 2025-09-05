@@ -24,9 +24,10 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <utility>
+#include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <sfx2/objsh.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <vcl/svapp.hxx>

@@ -39,7 +39,6 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
-#include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3

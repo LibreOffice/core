@@ -11,7 +11,7 @@
 #define INCLUDED_SFX2_TEMPLATEPROPERTIES_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 struct TemplateItemProperties
 {

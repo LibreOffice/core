@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel3.hpp>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <svl/poolitem.hxx>
 #include <sot/formats.hxx>

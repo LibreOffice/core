@@ -31,6 +31,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/propertyvalue.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

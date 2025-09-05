@@ -16,7 +16,7 @@
 #include <sfx2/app.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>

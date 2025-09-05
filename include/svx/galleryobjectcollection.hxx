@@ -22,7 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <svx/galmisc.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <tools/urlobj.hxx>
 #include <memory>
 #include <optional>

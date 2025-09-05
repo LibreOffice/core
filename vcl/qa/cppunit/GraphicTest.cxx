@@ -18,6 +18,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <tools/stream.hxx>

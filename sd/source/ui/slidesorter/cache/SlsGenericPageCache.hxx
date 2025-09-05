@@ -22,7 +22,7 @@
 #include "SlsRequestQueue.hxx"
 #include <memory>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 namespace sd::slidesorter::cache {
 

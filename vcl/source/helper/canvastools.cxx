@@ -39,7 +39,7 @@
 #include <tools/helpers.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>

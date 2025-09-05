@@ -25,7 +25,7 @@
 #include <tools/helpers.hxx>
 
 #include <vcl/BitmapPalette.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>

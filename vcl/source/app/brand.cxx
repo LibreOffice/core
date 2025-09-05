@@ -30,7 +30,7 @@
 #include <tools/stream.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/filter/PngImageReader.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
 
 namespace {

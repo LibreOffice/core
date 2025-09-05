@@ -26,7 +26,7 @@
 #include <cmath>
 
 #include "grid.hxx"
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

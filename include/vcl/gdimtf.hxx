@@ -32,7 +32,6 @@ class OutputDevice;
 class MetaAction;
 class Color;
 class Bitmap;
-class BitmapEx;
 namespace tools {
     class Polygon;
     class PolyPolygon;

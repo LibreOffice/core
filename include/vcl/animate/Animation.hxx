@@ -23,7 +23,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/animate/AnimationFrame.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L

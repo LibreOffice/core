@@ -28,6 +28,7 @@
 #include <drawinglayer/processor2d/d2dpixelprocessor2d.hxx>
 #include <drawinglayer/processor2d/SDPRProcessor2dTools.hxx>
 #include <sal/log.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

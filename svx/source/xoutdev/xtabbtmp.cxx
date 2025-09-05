@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <vcl/virdev.hxx>
 #include <svx/xtable.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

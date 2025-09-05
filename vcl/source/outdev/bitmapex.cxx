@@ -23,6 +23,7 @@
 #include <comphelper/lok.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>

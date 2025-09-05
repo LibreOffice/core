@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/print.hxx>

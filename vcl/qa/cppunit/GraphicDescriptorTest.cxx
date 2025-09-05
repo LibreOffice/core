@@ -1,4 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -16,6 +17,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vcl/graphicfilter.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 
 using namespace css;

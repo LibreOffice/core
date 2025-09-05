@@ -37,6 +37,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/colritem.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/charscaleitem.hxx>

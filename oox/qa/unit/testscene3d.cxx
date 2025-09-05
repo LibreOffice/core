@@ -25,7 +25,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdview.hxx>
 #include <tools/color.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 using namespace css;
 

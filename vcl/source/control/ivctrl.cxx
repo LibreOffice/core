@@ -21,7 +21,7 @@
 #include <utility>
 #include <vcl/toolkit/ivctrl.hxx>
 #include "imivctl.hxx"
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>

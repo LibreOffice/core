@@ -31,6 +31,7 @@
 #include "contimp.hxx"
 #include "contwnd.hxx"
 #include <svx/svdopath.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>

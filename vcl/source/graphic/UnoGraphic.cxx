@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/BitmapColor.hxx>

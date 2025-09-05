@@ -21,7 +21,7 @@
 
 #include <PreviewRenderer.hxx>
 #include <sdpage.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 namespace sd::slidesorter::view {
 class SlideSorterView;

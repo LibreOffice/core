@@ -22,7 +22,7 @@
 #include <cmath>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>

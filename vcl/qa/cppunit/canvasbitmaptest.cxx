@@ -33,7 +33,7 @@
 #include <sal/log.hxx>
 
 #include <vcl/canvastools.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <canvasbitmap.hxx>
 #include <vcl/BitmapWriteAccess.hxx>

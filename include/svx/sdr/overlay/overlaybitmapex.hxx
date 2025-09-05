@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SDR_OVERLAY_OVERLAYBITMAPEX_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 
 namespace sdr::overlay

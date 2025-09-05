@@ -39,6 +39,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vclpluginapi.h>
 #include <vcl/QueueInfo.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/idle.hxx>

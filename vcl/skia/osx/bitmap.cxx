@@ -18,7 +18,8 @@
 
 #include <skia/osx/bitmap.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 
 #include <skia/salbmp.hxx>

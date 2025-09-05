@@ -116,6 +116,7 @@
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotools/fontdefs.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontsmanager.hxx>

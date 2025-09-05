@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <comphelper/errcode.hxx>
 #include <svl/poolitem.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <tools/link.hxx>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <unordered_map>

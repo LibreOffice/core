@@ -103,7 +103,6 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>

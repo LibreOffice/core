@@ -21,7 +21,7 @@
 #include <o3tl/sprintf.hxx>
 #include <tools/config.hxx>
 #include <unotools/resmgr.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/lineinfo.hxx>

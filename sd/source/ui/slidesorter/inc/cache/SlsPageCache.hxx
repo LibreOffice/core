@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cache/SlsCacheContext.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <memory>
 
 class Size;

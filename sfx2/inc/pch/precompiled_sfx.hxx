@@ -94,7 +94,6 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>

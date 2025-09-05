@@ -11,7 +11,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
 
 namespace com::sun::star::awt

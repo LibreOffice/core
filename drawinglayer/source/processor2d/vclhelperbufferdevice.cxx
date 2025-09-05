@@ -26,7 +26,8 @@
 
 #include "vclhelperbufferdevice.hxx"
 #include <basegfx/range/b2drange.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/timer.hxx>

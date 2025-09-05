@@ -62,7 +62,6 @@ class B2DHomMatrixBufferedOnDemandDecompose;
 }
 
 class Bitmap;
-class BitmapEx;
 class OutputDevice;
 class SalLayout;
 

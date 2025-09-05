@@ -314,7 +314,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapFilter.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/checksum.hxx>

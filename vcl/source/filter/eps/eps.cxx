@@ -24,6 +24,7 @@
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotools/resmgr.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>

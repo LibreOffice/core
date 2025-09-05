@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>

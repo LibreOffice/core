@@ -23,7 +23,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <tools/debug.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <svl/style.hxx>
 #include <editeng/memberids.h>
 #include <svx/strings.hrc>

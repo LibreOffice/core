@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <vcl/mapmod.hxx>
+#include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>

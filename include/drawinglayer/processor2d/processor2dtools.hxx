@@ -20,7 +20,7 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <memory>
 
 namespace drawinglayer::geometry { class ViewInformation2D; }

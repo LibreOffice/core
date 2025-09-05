@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/customweld.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graph.hxx>
 
 // extended page for graphics

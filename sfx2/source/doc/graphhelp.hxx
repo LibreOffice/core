@@ -31,7 +31,6 @@
 
 class SvMemoryStream;
 class GDIMetaFile;
-class BitmapEx;
 enum class ConvertDataFormat;
 
 class GraphicHelper

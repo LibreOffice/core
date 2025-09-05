@@ -20,7 +20,7 @@
 #include <tools/helpers.hxx>
 #include <osl/diagnose.h>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/BitmapFastScaleFilter.hxx>

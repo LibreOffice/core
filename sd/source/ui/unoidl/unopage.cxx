@@ -35,7 +35,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/metaact.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

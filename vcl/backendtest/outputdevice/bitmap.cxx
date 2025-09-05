@@ -9,7 +9,7 @@
  */
 
 #include <test/outputdevice.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 

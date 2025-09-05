@@ -20,9 +20,10 @@
 #pragma once
 
 #include <config_options.h>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <sfx2/dllapi.h>
 #include <rtl/ref.hxx>
 

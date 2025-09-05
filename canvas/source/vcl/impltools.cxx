@@ -29,7 +29,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metric.hxx>

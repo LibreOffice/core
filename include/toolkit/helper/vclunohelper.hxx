@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/font.hxx>
 #include <vcl/region.hxx>
 #include <tools/mapunit.hxx>

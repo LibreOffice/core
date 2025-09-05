@@ -57,7 +57,7 @@
 #include <ndole.hxx>
 #include <ndindex.hxx>
 #include <accmap.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <accessibilityoptions.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>

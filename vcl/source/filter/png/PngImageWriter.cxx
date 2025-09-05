@@ -11,7 +11,6 @@
 #include <png.h>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <sal/log.hxx>
 #include <rtl/crc.h>

@@ -47,7 +47,7 @@
 #include <implimagetree.hxx>
 
 #include <utility>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

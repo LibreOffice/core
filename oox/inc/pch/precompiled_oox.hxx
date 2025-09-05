@@ -89,7 +89,6 @@
 #include <vcl/GraphicExternalLink.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fntstyle.hxx>

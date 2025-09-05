@@ -22,7 +22,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/image.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <texture/texture.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 
 namespace drawinglayer::primitive3d {

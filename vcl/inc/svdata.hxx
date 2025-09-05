@@ -27,7 +27,7 @@
 #include <osl/conditn.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/dropcache.hxx>
 #include <vcl/image.hxx>

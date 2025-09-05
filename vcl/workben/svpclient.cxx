@@ -32,7 +32,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/lstbox.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/graph.hxx>
 #include <comphelper/diagnose_ex.hxx>

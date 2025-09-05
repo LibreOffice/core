@@ -20,7 +20,7 @@
 #pragma once
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/wall.hxx>
 
 

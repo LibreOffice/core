@@ -59,7 +59,6 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/graph.hxx>

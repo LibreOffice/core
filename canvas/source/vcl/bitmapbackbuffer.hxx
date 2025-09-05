@@ -20,7 +20,7 @@
 #pragma once
 
 #include <vcl/virdev.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <vclwrapper.hxx>
 #include "outdevprovider.hxx"

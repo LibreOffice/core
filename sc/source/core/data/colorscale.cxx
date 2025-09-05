@@ -20,7 +20,7 @@
 #include <scitems.hxx>
 
 #include <formula/token.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <algorithm>
 #include <cassert>

@@ -210,7 +210,6 @@ class SvtBroadcaster;
 enum class ScDBDataPortion;
 enum class ScSheetEventId;
 class Bitmap;
-class BitmapEx;
 class ScColumnsRange;
 struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;

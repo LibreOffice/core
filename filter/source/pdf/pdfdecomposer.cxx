@@ -14,7 +14,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

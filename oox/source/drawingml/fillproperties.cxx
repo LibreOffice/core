@@ -23,6 +23,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <drawingml/graphicproperties.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>

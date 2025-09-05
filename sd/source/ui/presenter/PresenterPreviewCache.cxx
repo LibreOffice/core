@@ -21,7 +21,7 @@
 
 #include <cache/SlsPageCache.hxx>
 #include <cache/SlsCacheContext.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -28,7 +28,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/ImageTree.hxx>
 

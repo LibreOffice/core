@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

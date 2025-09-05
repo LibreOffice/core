@@ -22,7 +22,7 @@
 
 #include <canvas/canvastools.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/canvastools.hxx>
 

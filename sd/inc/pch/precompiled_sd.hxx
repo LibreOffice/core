@@ -89,7 +89,6 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>

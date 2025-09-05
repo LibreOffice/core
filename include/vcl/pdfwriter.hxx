@@ -53,7 +53,6 @@ namespace svl::crypto
 class SigningContext;
 }
 class Bitmap;
-class BitmapEx;
 class Gradient;
 class Hatch;
 class Wallpaper;

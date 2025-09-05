@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/alpha.hxx>
 
 #include "canvasbitmap.hxx"
 

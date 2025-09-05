@@ -20,7 +20,7 @@
 #include <vcl/event.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <svdata.hxx>

@@ -28,6 +28,7 @@
 #include <tools/stream.hxx>
 #include <memory>
 #include <comphelper/configuration.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 #include <rtl/bootstrap.hxx>

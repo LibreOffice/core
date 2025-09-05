@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <vcl/alpha.hxx>
 #include <vcl/canvastools.hxx>
 #include <tools/lazydelete.hxx>
 #include <sfx2/docfile.hxx>

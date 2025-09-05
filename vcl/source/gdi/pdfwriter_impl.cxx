@@ -65,7 +65,7 @@
 #include <tools/UnitConversion.hxx>
 #include <tools/zcodec.hxx>
 #include <unotools/configmgr.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/fontcharmap.hxx>

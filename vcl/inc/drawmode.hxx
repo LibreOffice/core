@@ -21,7 +21,7 @@
 
 #include <tools/color.hxx>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/font.hxx>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 

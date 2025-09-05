@@ -27,7 +27,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/builderpage.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

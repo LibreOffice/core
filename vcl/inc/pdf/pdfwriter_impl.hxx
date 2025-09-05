@@ -41,7 +41,8 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/alpha.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/hatch.hxx>

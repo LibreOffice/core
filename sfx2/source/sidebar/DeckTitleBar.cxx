@@ -21,7 +21,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 
 #include <utility>
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>

@@ -35,7 +35,6 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>

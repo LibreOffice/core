@@ -21,6 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/FilterConfigItem.hxx>
