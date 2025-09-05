@@ -1949,9 +1949,59 @@ Color Bitmap::GetPixelColor(sal_Int32 nX, sal_Int32 nY) const
 
 void Bitmap::Expand(sal_Int32 nDX, sal_Int32 nDY, bool bExpandTransparent)
 {
-    BitmapEx aTmpEx(*this);
-    aTmpEx.Expand(nDX, nDY, bExpandTransparent);
-    operator=(Bitmap(aTmpEx));
+    if (IsEmpty())
+        return;
+    if( !nDX && !nDY )
+        return;
+
+    const Size          aSizePixel( GetSizePixel() );
+    const tools::Long   nWidth = aSizePixel.Width();
+    const tools::Long   nHeight = aSizePixel.Height();
+    const Size          aNewSize( nWidth + nDX, nHeight + nDY );
+    BitmapScopedReadAccess pReadAcc(*this);
+    assert(pReadAcc);
+    if( !pReadAcc )
+        return;
+
+    BitmapPalette aBmpPal( pReadAcc->GetPalette() );
+    Bitmap aNewBmp(aNewSize, getPixelFormat(), &aBmpPal);
+    BitmapScopedWriteAccess pWriteAcc(aNewBmp);
+    assert(pWriteAcc);
+    if( !pWriteAcc )
+        return;
+
+    const tools::Long  nNewX = nWidth;
+    const tools::Long  nNewY = nHeight;
+    const tools::Long  nNewWidth = pWriteAcc->Width();
+    const tools::Long  nNewHeight = pWriteAcc->Height();
+
+    Color aInitColor( bExpandTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE );
+    BitmapColor aColor = pWriteAcc->GetBestMatchingColor( aInitColor );
+
+    for( tools::Long nY = 0; nY < nHeight; nY++ )
+    {
+        pWriteAcc->CopyScanline( nY, *pReadAcc );
+
+        if( nDX )
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            for( tools::Long nX = nNewX; nX < nNewWidth; nX++ )
+                pWriteAcc->SetPixelOnData( pScanline, nX, aColor );
+        }
+    }
+
+    if( nDY )
+        for( tools::Long nY = nNewY; nY < nNewHeight; nY++ )
+        {
+            Scanline pScanline = pWriteAcc->GetScanline(nY);
+            for( tools::Long nX = 0; nX < nNewWidth; nX++ )
+                pWriteAcc->SetPixelOnData( pScanline, nX, aColor );
+        }
+
+    pWriteAcc.reset();
+    pReadAcc.reset();
+
+    ReassignWithSize(aNewBmp);
 }
 
 namespace
