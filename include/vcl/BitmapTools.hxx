@@ -13,7 +13,7 @@
 #include <config_cairo_canvas.h>
 #include <config_wasm_strip.h>
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/ImageTree.hxx>
 #if ENABLE_CAIRO_CANVAS
 #include <vcl/cairo.hxx>
@@ -72,7 +72,6 @@ VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixed
 
 VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap, Bitmap & aBmp, basegfx::B2DPolyPolygon const & rClipPath);
 
-VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx);
 VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
 
 /**

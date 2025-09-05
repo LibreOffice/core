@@ -1616,80 +1616,6 @@ bool ReadDIB(
 }
 
 bool ReadDIBBitmapEx(
-    BitmapEx& rTarget,
-    SvStream& rIStm,
-    bool bFileHeader,
-    bool bMSOFormat)
-{
-    Bitmap aBmp;
-    bool bRetval(ImplReadDIB(aBmp, nullptr, rIStm, bFileHeader, bMSOFormat) && !rIStm.GetError());
-
-    if(bRetval)
-    {
-        // base bitmap was read, set as return value and try to read alpha extra-data
-        const sal_uInt64 nStmPos(rIStm.Tell());
-        sal_uInt32 nMagic1(0);
-        sal_uInt32 nMagic2(0);
-
-        rTarget = BitmapEx(aBmp);
-        if (rIStm.remainingSize() >= 4)
-            rIStm.ReadUInt32( nMagic1 ).ReadUInt32( nMagic2 );
-        bRetval = (0x25091962 == nMagic1) && (0xACB20201 == nMagic2) && !rIStm.GetError();
-
-        if(bRetval)
-        {
-            sal_uInt8 tmp = 0;
-            rIStm.ReadUChar( tmp );
-            bRetval = !rIStm.GetError();
-
-            if(bRetval)
-            {
-                switch (tmp)
-                {
-                case 2: // TransparentType::Bitmap
-                    {
-                        Bitmap aMask;
-
-                        bRetval = ImplReadDIB(aMask, nullptr, rIStm, true);
-
-                        if(bRetval && !aMask.IsEmpty())
-                            rTarget = BitmapEx(aBmp, aMask);
-
-                        break;
-                    }
-                case 1: // backwards compat for old option TransparentType::Color
-                    {
-                        Color aTransparentColor;
-
-                        tools::GenericTypeSerializer aSerializer(rIStm);
-                        aSerializer.readColor(aTransparentColor);
-
-                        bRetval = rIStm.good();
-
-                        if(bRetval)
-                        {
-                            rTarget = BitmapEx(aBmp, aTransparentColor);
-                        }
-                        break;
-                    }
-                default: break;
-                }
-            }
-        }
-
-        if(!bRetval)
-        {
-            // alpha extra data could not be read; reset, but use base bitmap as result
-            rIStm.ResetError();
-            rIStm.Seek(nStmPos);
-            bRetval = true;
-        }
-    }
-
-    return bRetval;
-}
-
-bool ReadDIBBitmapEx(
     Bitmap& rTarget,
     SvStream& rIStm,
     bool bFileHeader,
@@ -1774,33 +1700,35 @@ bool ReadDIBV5(
 }
 
 bool ReadRawDIB(
-    BitmapEx& rTarget,
-    const unsigned char* pBuf,
-    const ScanlineFormat nFormat,
-    const int nHeight,
-    const int nStride)
-{
-    BitmapScopedWriteAccess pWriteAccess(rTarget.maBitmap);
-    for (int nRow = 0; nRow < nHeight; ++nRow)
-    {
-        pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);
-    }
-
-    return true;
-}
-
-bool ReadRawDIB(
     Bitmap& rTarget,
     const unsigned char* pBuf,
     const ScanlineFormat nFormat,
     const int nHeight,
     const int nStride)
 {
-    BitmapEx aTmp;
-    bool bRet = ReadRawDIB(aTmp, pBuf, nFormat, nHeight, nStride);
-    if (bRet)
-        rTarget = Bitmap(aTmp);
-    return bRet;
+    if (rTarget.HasAlpha())
+    {
+        // Need to preserve the targets alpha information
+        Bitmap aTmp(rTarget.CreateColorBitmap());
+        AlphaMask aTmpMask(rTarget.CreateAlphaMask());
+        {
+            BitmapScopedWriteAccess pWriteAccess(aTmp);
+            for (int nRow = 0; nRow < nHeight; ++nRow)
+            {
+                pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);
+            }
+        }
+        rTarget = Bitmap(aTmp, aTmpMask);
+    }
+    else
+    {
+        BitmapScopedWriteAccess pWriteAccess(rTarget);
+        for (int nRow = 0; nRow < nHeight; ++nRow)
+        {
+            pWriteAccess->CopyScanline(nRow, pBuf + (nStride * nRow), nFormat, nStride);
+        }
+    }
+    return true;
 }
 
 bool WriteDIB(
@@ -1813,14 +1741,6 @@ bool WriteDIB(
 }
 
 bool WriteDIB(
-    const BitmapEx& rSource,
-    SvStream& rOStm,
-    bool bCompressed)
-{
-    return ImplWriteDIB(rSource.GetBitmap(), rOStm, bCompressed, /*bFileHeader*/true);
-}
-
-bool WriteDIB(
     const Bitmap& rSource,
     SvStream& rOStm,
     bool bCompressed)
@@ -1829,32 +1749,25 @@ bool WriteDIB(
 }
 
 bool WriteDIBBitmapEx(
-    const BitmapEx& rSource,
+    const Bitmap& rSource,
     SvStream& rOStm)
 {
-    if(ImplWriteDIB(rSource.GetBitmap(), rOStm, true, true))
+    if(ImplWriteDIB(rSource.CreateColorBitmap(), rOStm, true, true))
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( rSource.IsAlpha() ? 2 : 0 ); // Used to be TransparentType enum
+        rOStm.WriteUChar( rSource.HasAlpha() ? 2 : 0 ); // Used to be TransparentType enum
 
-        if(rSource.IsAlpha())
+        if(rSource.HasAlpha())
         {
             // invert the alpha because the other routines actually want transparency
-            AlphaMask tmpAlpha = rSource.maAlphaMask;
+            AlphaMask tmpAlpha = rSource.CreateAlphaMask();
             tmpAlpha.Invert();
             return ImplWriteDIB(tmpAlpha.GetBitmap(), rOStm, true, true);
         }
     }
 
     return false;
-}
-
-bool WriteDIBBitmapEx(
-    const Bitmap& rSource,
-    SvStream& rOStm)
-{
-    return WriteDIBBitmapEx(BitmapEx(rSource), rOStm);
 }
 
 sal_uInt32 getDIBV5HeaderSize()

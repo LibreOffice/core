@@ -624,12 +624,12 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitm
     }
 }
 
-css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
+css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
 {
-    if ( aBmpEx.IsAlpha() )
+    if ( aBmp.HasAlpha() )
     {
         SvMemoryStream aMem;
-        AlphaMask aMask = aBmpEx.GetAlphaMask();
+        AlphaMask aMask = aBmp.CreateAlphaMask();
         // for backwards compatibility for extensions, we need to convert from alpha to transparency
         aMask.Invert();
         WriteDIB(aMask.GetBitmap(), aMem, false, true);
@@ -637,11 +637,6 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     }
 
     return css::uno::Sequence< sal_Int8 >();
-}
-
-css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & rBmp)
-{
-    return GetMaskDIB(BitmapEx(rBmp));
 }
 
 /**

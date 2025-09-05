@@ -111,7 +111,6 @@ public:
 private:
     friend class BitmapEx;
     friend class ::OutputDevice;
-    friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm, bool bFileHeader, bool bMSOFormat);
 
     Bitmap maBitmap;
 };

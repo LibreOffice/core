@@ -25,7 +25,6 @@
 // predefines
 
 class SvStream;
-class BitmapEx;
 class Bitmap;
 class AlphaMask;
 
@@ -44,12 +43,6 @@ bool VCL_DLLPUBLIC ReadDIB( // ReadDIB(rBitmap, rIStm, true);
     bool bMSOFormat=false);
 
 bool VCL_DLLPUBLIC ReadDIBBitmapEx(
-    BitmapEx& rTarget,
-    SvStream& rIStm,
-    bool bFileHeader = true,
-    bool bMSOFormat = false);
-
-bool VCL_DLLPUBLIC ReadDIBBitmapEx(
     Bitmap& rTarget,
     SvStream& rIStm,
     bool bFileHeader = true,
@@ -60,12 +53,6 @@ bool VCL_DLLPUBLIC ReadDIBV5(
     AlphaMask& rTargetAlpha,
     SvStream& rIStm);
 
-bool VCL_DLLPUBLIC ReadRawDIB(
-    BitmapEx& rTarget,
-    const unsigned char* pBuf,
-    const ScanlineFormat nFormat,
-    const int nHeight,
-    const int nStride);
 bool VCL_DLLPUBLIC ReadRawDIB(
     Bitmap& rTarget,
     const unsigned char* pBuf,
@@ -82,17 +69,9 @@ bool VCL_DLLPUBLIC WriteDIB(
 
 // compressed, with file header
 bool VCL_DLLPUBLIC WriteDIB(
-    const BitmapEx& rSource,
-    SvStream& rOStm,
-    bool bCompressed = true);
-bool VCL_DLLPUBLIC WriteDIB(
     const Bitmap& rSource,
     SvStream& rOStm,
     bool bCompressed = true);
-
-bool VCL_DLLPUBLIC WriteDIBBitmapEx(
-    const BitmapEx& rSource,
-    SvStream& rOStm);
 
 bool VCL_DLLPUBLIC WriteDIBBitmapEx(
     const Bitmap& rSource,
