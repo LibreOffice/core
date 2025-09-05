@@ -30,6 +30,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdpage.hxx>
 #include <rtl/math.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 class TestSort : public ScUcalcTestBase
 {
@@ -2217,6 +2218,66 @@ CPPUNIT_TEST_FIXTURE(TestSort, testQueryBinarySearch)
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(!it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestSort, testLanguageDependentNaturalSort)
+{
+    // Set the system locale to "en-US" for to have different decimal separator than "de-EN".
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString(u"en-US"_ustr);
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    // Generate test data
+    m_pDoc->InsertTab(0, u"NaturalSortTest"_ustr);
+    m_pDoc->SetString(ScAddress(0,0,0),u"Item"_ustr); // ScAddress(col, row, tab)
+    m_pDoc->SetString(ScAddress(0,1,0),u"K2,5"_ustr);
+    m_pDoc->SetString(ScAddress(0,2,0),u"K2,501"_ustr);
+    m_pDoc->SetString(ScAddress(0,3,0),u"K10"_ustr);
+    m_pDoc->SetString(ScAddress(0,4,0),u"K1,104"_ustr);
+    m_pDoc->SetString(ScAddress(0,5,0),u"K1,2"_ustr);
+    m_pDoc->SetString(ScAddress(0,6,0),u"K2,40"_ustr);
+    m_pDoc->SetAnonymousDBData(
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 6)));
+
+    // Create sort parameters
+    ScSortParam aSortParam;
+    aSortParam.nCol1 = 0;
+    aSortParam.nCol2 = 0;
+    aSortParam.nRow1 = 0;
+    aSortParam.nRow2 = 6;
+    aSortParam.bHasHeader = true;
+    aSortParam.bNaturalSort = true; // needs to be adapted when mode 'integer' is implemented
+    aSortParam.bInplace = false;
+    aSortParam.nDestTab = 0;
+    aSortParam.nDestCol = 2;
+    aSortParam.nDestRow = 0;
+    aSortParam.aCollatorLocale = css::lang::Locale(u"de"_ustr, u"DE"_ustr, u""_ustr);
+    aSortParam.maKeyState[0].bDoSort = true;
+    aSortParam.maKeyState[0].nField = 0;
+    aSortParam.maKeyState[0].bAscending = true;
+    aSortParam.maKeyState[0].aColorSortMode = ScColorSortMode::None;
+
+    // Actually sort
+    ScDBDocFunc aFunc(*m_xDocShell);
+    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Verify sort result. Without fix the comma was treated as ordinary character and thus the order
+    // had been  Item | K1,2 | K1,104 | K2,5 | K2,40 | K2,501 | K10
+    const std::array<OUString, 7> aExpected
+        = { u"Item"_ustr, u"K1,104"_ustr, u"K1,2"_ustr, u"K2,40"_ustr,
+            u"K2,5"_ustr, u"K2,501"_ustr, u"K10"_ustr };
+    for (SCROW nRow = 0; nRow <= 6; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpected[nRow], m_pDoc->GetString(ScAddress(2, nRow, 0)));
     }
 
     m_pDoc->DeleteTab(0);

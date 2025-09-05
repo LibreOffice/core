@@ -23,11 +23,13 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <refdata.hxx>
 #include <table.hxx>
@@ -83,6 +85,9 @@ using namespace ::com::sun::star::i18n;
     @param sWhole
     Original string to be split into pieces
 
+    @param rLanguageTag
+    Contains the language related infos from the sort parameters
+
     @param sPrefix
     Prefix string that consists of the part before the first number token.
     If no number was found, sPrefix is unchanged.
@@ -98,14 +103,15 @@ using namespace ::com::sun::star::i18n;
     @return Returns TRUE if a numeral element is found in a given string, or
     FALSE if no numeral element is found.
 */
-static bool SplitString( const OUString &sWhole,
-    OUString &sPrefix, OUString &sSuffix, double &fNum )
+static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag, OUString &sPrefix,
+                        OUString &sSuffix, double &fNum)
 {
     // Get prefix element, search for any digit and stop.
     sal_Int32 nPos = 0;
+    const CharClass aCharClass(rLanguageTag);
     while (nPos < sWhole.getLength())
     {
-        const sal_uInt16 nType = ScGlobal::getCharClass().getCharacterType( sWhole, nPos);
+        const sal_uInt16 nType = aCharClass.getCharacterType( sWhole, nPos);
         if (nType & KCharacterType::DIGIT)
             break;
         sWhole.iterateCodePoints( &nPos );
@@ -116,10 +122,10 @@ static bool SplitString( const OUString &sWhole,
         return false;
 
     // Get numeral element
-    const OUString& sUser = ScGlobal::getLocaleData().getNumDecimalSep();
-    ParseResult aPRNum = ScGlobal::getCharClass().parsePredefinedToken(
-        KParseType::ANY_NUMBER, sWhole, nPos,
-        KParseTokens::ANY_NUMBER, u""_ustr, KParseTokens::ANY_NUMBER, sUser );
+    const OUString& sUser = LocaleDataWrapper::get(rLanguageTag)->getNumDecimalSep();
+    ParseResult aPRNum = aCharClass.parsePredefinedToken(KParseType::ANY_NUMBER, sWhole, nPos,
+                                                         KParseTokens::ANY_NUMBER, u""_ustr,
+                                                         KParseTokens::ANY_NUMBER, sUser);
 
     if ( aPRNum.EndPos == nPos )
     {
@@ -146,6 +152,10 @@ static bool SplitString( const OUString &sWhole,
     @param sInput2
     Input string 2
 
+    @param rLanguageTag
+    Contains the language related infos from the sort parameters. They are needed
+    in method SplitString.
+
     @param bCaseSens
     Boolean value for case sensitivity
 
@@ -158,16 +168,17 @@ static bool SplitString( const OUString &sWhole,
     @return Returns 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
     sInput2 is greater.
 */
-static short Compare( const OUString &sInput1, const OUString &sInput2,
-               const bool bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
+static short Compare(const OUString &sInput1, const OUString &sInput2,
+                     const LanguageTag& rLanguageTag, const bool bCaseSens,
+                     const ScUserListData* pData, const CollatorWrapper *pCW)
 {
     OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
 
     do
     {
         double nNum1, nNum2;
-        bool bNumFound1 = SplitString( sStr1, sPre1, sSuf1, nNum1 );
-        bool bNumFound2 = SplitString( sStr2, sPre2, sSuf2, nNum2 );
+        bool bNumFound1 = SplitString( sStr1, rLanguageTag, sPre1, sSuf1, nNum1 );
+        bool bNumFound2 = SplitString( sStr2, rLanguageTag, sPre2, sSuf2, nNum2 );
 
         short nPreRes; // Prefix comparison result
         if ( pData )
@@ -1493,6 +1504,7 @@ short ScTable::CompareCell(
                 bool bUserDef     = aSortParam.bUserDef;        // custom sort order
                 bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
                 bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
+                LanguageTag aSortLanguageTag(aSortParam.aCollatorLocale);
 
                 ScUserList& rList = ScGlobal::GetUserList();
                 if (bUserDef && rList.size() > aSortParam.nUserIndex)
@@ -1500,7 +1512,8 @@ short ScTable::CompareCell(
                     const ScUserListData& rData = rList[aSortParam.nUserIndex];
 
                     if ( bNaturalSort )
-                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, &rData, pSortCollator );
+                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
+                                                    &rData, pSortCollator);
                     else
                     {
                         if ( bCaseSens )
@@ -1513,7 +1526,8 @@ short ScTable::CompareCell(
                 if (!bUserDef)
                 {
                     if ( bNaturalSort )
-                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, nullptr, pSortCollator );
+                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
+                                                    nullptr, pSortCollator );
                     else
                         nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
                 }
