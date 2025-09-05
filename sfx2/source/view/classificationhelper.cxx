@@ -13,6 +13,10 @@
 #include <algorithm>
 #include <iterator>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -761,12 +765,12 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
     }
     else if (aScale == "FIPS-199")
     {
-        static std::map<OUString, sal_Int32> const aValues
+        static auto constexpr aValues = frozen::make_unordered_map<std::u16string_view, sal_Int32>(
         {
-            { "Low", 0 },
-            { "Moderate", 1 },
-            { "High", 2 }
-        };
+            { u"Low", 0 },
+            { u"Moderate", 1 },
+            { u"High", 2 }
+        });
         auto itValues = aValues.find(aLevel);
         if (itValues == aValues.end())
             return nRet;
