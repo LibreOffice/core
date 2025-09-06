@@ -56,14 +56,14 @@ struct StyleEntry
                std::shared_ptr<StyleColor> aFontClr, std::shared_ptr<oox::drawingml::Shape> aShape,
                std::shared_ptr<oox::PropertyMap> aCharProps,
                std::shared_ptr<oox::PropertyMap> aBodyProps)
-        : mxLnClr(aLnClr)
+        : mxLnClr(std::move(aLnClr))
         , mfLineWidthScale(fLineScale)
-        , mxFillClr(aFillClr)
-        , mxEffectClr(aEffectClr)
-        , mxFontClr(aFontClr)
-        , mxShapePr(aShape)
-        , mrTextCharacterPr(aCharProps)
-        , mxTextBodyPr(aBodyProps)
+        , mxFillClr(std::move(aFillClr))
+        , mxEffectClr(std::move(aEffectClr))
+        , mxFontClr(std::move(aFontClr))
+        , mxShapePr(std::move(aShape))
+        , mrTextCharacterPr(std::move(aCharProps))
+        , mxTextBodyPr(std::move(aBodyProps))
     {
     }
 };

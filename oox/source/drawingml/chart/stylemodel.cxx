@@ -43,7 +43,7 @@ model::StyleEntry StyleEntryModel::toStyleEntry(oox::core::XmlFilterBase& rFilte
     }
 
     return model::StyleEntry(mxLnRef, mfLineWidthScale, mxFillRef, mxEffectRef, mxFontRef,
-                             mxShapeProp, aCharMap, aBodyMap);
+                             mxShapeProp, std::move(aCharMap), std::move(aBodyMap));
 }
 
 } // namespace oox::drawingml::chart

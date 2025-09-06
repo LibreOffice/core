@@ -270,7 +270,7 @@ Bitmap GetBitmap(Bitmap const& rBitmap, DrawModeFlags nDrawMode)
         }
         else
         {
-            aBmp = aColorBmp;
+            aBmp = std::move(aColorBmp);
         }
     }
 

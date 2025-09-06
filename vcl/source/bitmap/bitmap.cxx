@@ -153,9 +153,9 @@ static Bitmap createBitmapFromColorAndAlpha(const Bitmap& rColorBitmap, const Bi
         if (!bSuccess)
         {
             SAL_WARN("vcl", "Bitmap::Bitmap(): could not create image");
-            return Bitmap(xSalBmp);
+            return Bitmap(std::move(xSalBmp));
         }
-        Bitmap aRetBmp(xSalBmp);
+        Bitmap aRetBmp(std::move(xSalBmp));
         BitmapScopedReadAccess pReadColorAcc(rColorBitmap);
         BitmapScopedReadAccess pReadAlphaAcc(rAlphaBitmap);
         BitmapScopedWriteAccess pWriteAcc(aRetBmp);

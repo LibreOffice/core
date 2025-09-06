@@ -969,10 +969,10 @@ rtl::Reference<MetaAction> SvmReader::ClipRegionHandler()
     VersionCompatRead aCompat(mrStream);
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
-    bool aClip(false);
-    mrStream.ReadCharAsBool(aClip);
+    bool bClip(false);
+    mrStream.ReadCharAsBool(bClip);
 
-    return new MetaClipRegionAction(aRegion, aClip);
+    return new MetaClipRegionAction(std::move(aRegion), bClip);
 }
 
 rtl::Reference<MetaAction> SvmReader::ISectRectClipRegionHandler()
@@ -991,7 +991,7 @@ rtl::Reference<MetaAction> SvmReader::ISectRegionClipRegionHandler()
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
 
-    return new MetaISectRegionClipRegionAction(aRegion);
+    return new MetaISectRegionClipRegionAction(std::move(aRegion));
 }
 
 rtl::Reference<MetaAction> SvmReader::MoveClipRegionHandler()
@@ -1178,7 +1178,7 @@ rtl::Reference<MetaAction> SvmReader::EPSHandler()
     GDIMetaFile aSubst;
     Read(aSubst);
 
-    return new MetaEPSAction(aPoint, aSize, aGfxLink, aSubst);
+    return new MetaEPSAction(aPoint, aSize, std::move(aGfxLink), aSubst);
 }
 
 rtl::Reference<MetaAction> SvmReader::RefPointHandler()
