@@ -15,7 +15,14 @@
 
 namespace vcl
 {
-/** Pixel format of the bitmap in bits per pixel */
+/** Pixel format of the bitmap in bits per pixel.
+
+    The N32_BPP value here is tricky, because some of the backends do not support 3-byte pixels, and will instead
+    use 4-byte pixels and ignore the 4th byte.
+    So, when creating a Bitmap, it means "give me something with 3 8-bit color channels and a 8-bit alpha channel"
+    But when getting the format of a bitmap, just means that the underlying bitmap has 32-bits per pixel,
+    it does not necessarily mean that the underlying bitmap has an active alpha channel.
+*/
 enum class PixelFormat
 {
     INVALID = 0,
