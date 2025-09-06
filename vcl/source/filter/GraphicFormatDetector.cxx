@@ -1150,6 +1150,30 @@ bool GraphicFormatDetector::checkDXF()
         ++i;
     }
 
+    // tdf#168265: pass comment section which begins with 999
+    // see https://help.autodesk.com/view/OARX/2024/ENU/?guid=GUID-3F0380A5-1C15-464D-BC66-2C5F094BCFB9
+    if (i < 256 - 2 && maFirstBytes[i] == '9' && maFirstBytes[i + 1] == '9'
+        && maFirstBytes[i + 2] == '9')
+    {
+        // we're on the 999 line
+        i = i + 3;
+        // we want to pass this line
+        while (i < 256 && maFirstBytes[i] <= 32)
+        {
+            ++i;
+        }
+        // we're on the comment line and we want to go until new line
+        while (i < 256 && maFirstBytes[i] != 10)
+        {
+            ++i;
+        }
+        // we're on the new line
+        while (i < 256 && maFirstBytes[i] <= 32)
+        {
+            ++i;
+        }
+    }
+
     if (i < 256 && maFirstBytes[i] == '0')
     {
         ++i;
