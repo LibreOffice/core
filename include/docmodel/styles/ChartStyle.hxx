@@ -107,7 +107,7 @@ struct DOCMODEL_DLLPUBLIC StyleSet
 
     std::map<enum StyleEntryType, StyleEntry> maEntryMap;
 
-    sal_Int32 mnId;
+    sal_Int32 mnId = -1;
 
     void addEntry(enum StyleEntryType eType, const StyleEntry& aEntry);
 };
