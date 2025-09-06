@@ -948,7 +948,8 @@ bool Bitmap::Convert( BmpConversion eConversion )
 
         case BmpConversion::N32Bit:
         {
-            if( nBitCount < 32 )
+            // check for alpha, because even if we are a 32-bit format, we might not be a 32-bit format with alpha
+            if( !HasAlpha() )
                 bRet = ImplConvertUp(vcl::PixelFormat::N32_BPP);
             else
                 bRet = true;
@@ -1469,7 +1470,9 @@ bool Bitmap::HasFastScale()
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
     // aNew is the result of some operation; adapt it's BitCount to the original (this)
-    if (getPixelFormat() == rNew.getPixelFormat())
+    // Also check HasAlpha() in case we are dealing with one of the 32-bit formats
+    // without an alpha channel.
+    if (getPixelFormat() == rNew.getPixelFormat() && HasAlpha() == rNew.HasAlpha())
         return;
 
     switch (getPixelFormat())
