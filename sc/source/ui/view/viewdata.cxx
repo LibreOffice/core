@@ -4488,7 +4488,9 @@ SCTAB ScViewData::CurrentTabForData() const
     if (nSheetViewID != sc::DefaultSheetViewID)
     {
         SCTAB nTab = mrDoc.GetSheetViewNumber(GetTabNumber(), nSheetViewID);
-        return nTab;
+        if (ValidTab(nTab))
+            return nTab;
+        SAL_WARN("sc.ui","ScViewData::CurrentTabForData - invalid tab: " << nTab);
     }
     return GetTabNumber();
 }
