@@ -261,7 +261,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
     }
     else if ( aBitmap.HasAlpha() )
-        m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmap );
+        m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmap );
     else
         m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmap, i_Graphic );
 

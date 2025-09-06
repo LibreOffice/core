@@ -874,7 +874,7 @@ public:
     void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Bitmap& rBitmap, const Graphic& rGraphic );
 
-    void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
+    void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                       const Bitmap& rBitmap );
 
     void                DrawGradient( const tools::Rectangle& rRect, const Gradient& rGradient );
