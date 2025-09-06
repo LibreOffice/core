@@ -1821,7 +1821,7 @@ const basegfx::SystemDependentDataHolder* Bitmap::accessSystemDependentDataHolde
 
 std::pair<Bitmap, AlphaMask> Bitmap::SplitIntoColorAndAlpha() const
 {
-    assert(getPixelFormat() == vcl::PixelFormat::N32_BPP && "only valid to call this when this is a 32-bit combined color+alpha bitmap");
+    assert(HasAlpha() && "only valid to call this when this is a 32-bit combined color+alpha bitmap");
     Bitmap aColorBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
     aColorBmp.SetPrefSize(GetPrefSize());
     aColorBmp.SetPrefMapMode(GetPrefMapMode());
