@@ -89,9 +89,6 @@ struct SVXCORE_DLLPUBLIC AnnotationData
     OUString m_Initials;
     css::util::DateTime m_DateTime;
     OUString m_Text;
-
-    void get(Annotation& rAnnotation);
-    void set(Annotation& rAnnotation);
 };
 
 /** Annotation object, responsible for handling of the annotation.
@@ -103,6 +100,11 @@ class SVXCORE_DLLPUBLIC Annotation
     : public ::comphelper::WeakComponentImplHelper<css::office::XAnnotation>,
       public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
+private:
+    css::uno::Reference<css::text::XText> getTextRangeImpl(const std::unique_lock<std::mutex>& g);
+    OUString GetTextImpl(const std::unique_lock<std::mutex>& g);
+    void SetTextImpl(OUString const& rText, const std::unique_lock<std::mutex>& g);
+
 protected:
     SdrPage* mpPage;
     UniqueID maUniqueID;
@@ -135,20 +137,8 @@ public:
     }
 
     // Changes without triggering notification broadcast
-    const css::geometry::RealPoint2D& GetPosition() const { return m_Position; }
-    void SetPosition(const css::geometry::RealPoint2D& rValue) { m_Position = rValue; }
-
-    const css::geometry::RealSize2D& GetSize() const { return m_Size; }
-    void SetSize(const css::geometry::RealSize2D& rValue) { m_Size = rValue; }
-
-    const OUString& GetAuthor() const { return m_Author; }
-    void SetAuthor(const OUString& rValue) { m_Author = rValue; }
-
-    const OUString& GetInitials() const { return m_Initials; }
-    void SetInitials(const OUString& rValue) { m_Initials = rValue; }
-
-    const css::util::DateTime& GetDateTime() const { return m_DateTime; }
-    void SetDateTime(const css::util::DateTime& rValue) { m_DateTime = rValue; }
+    void SetPosition(const css::geometry::RealPoint2D& rValue);
+    void SetSize(const css::geometry::RealSize2D& rValue);
 
     virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
 
@@ -160,6 +150,11 @@ public:
 
     OUString GetText();
     void SetText(OUString const& rText);
+
+    OString ToJSON(CommentNotificationType nType);
+    void toData(AnnotationData& rData);
+    void fromData(const AnnotationData& rData);
+
     const rtl::Reference<sdr::annotation::TextApiObject>& getTextApiObject() { return m_TextRange; }
 
     SdrModel* GetModel() const;

@@ -22,42 +22,6 @@ namespace sdr::annotation
 {
 namespace
 {
-OString lcl_LOKGetCommentPayload(CommentNotificationType nType, Annotation& rAnnotation)
-{
-    tools::JsonWriter aJsonWriter;
-    {
-        auto aCommentNode = aJsonWriter.startNode("comment");
-
-        aJsonWriter.put(
-            "action",
-            (nType == CommentNotificationType::Add
-                 ? "Add"
-                 : (nType == CommentNotificationType::Remove
-                        ? "Remove"
-                        : (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
-        aJsonWriter.put("id", rAnnotation.GetId());
-
-        if (nType != CommentNotificationType::Remove)
-        {
-            aJsonWriter.put("id", rAnnotation.GetId());
-            aJsonWriter.put("author", rAnnotation.GetAuthor());
-            aJsonWriter.put("dateTime", utl::toISO8601(rAnnotation.GetDateTime()));
-            aJsonWriter.put("text", rAnnotation.GetText());
-            SdrPage const* pPage = rAnnotation.getPage();
-            aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetUniqueID()) : OString());
-            geometry::RealPoint2D const aPoint = rAnnotation.GetPosition();
-            geometry::RealSize2D const aSize = rAnnotation.GetSize();
-            tools::Rectangle aRectangle(
-                Point(std::round(o3tl::toTwips(aPoint.X, o3tl::Length::mm)),
-                      std::round(o3tl::toTwips(aPoint.Y, o3tl::Length::mm))),
-                Size(std::round(o3tl::toTwips(aSize.Width, o3tl::Length::mm)),
-                     std::round(o3tl::toTwips(aSize.Height, o3tl::Length::mm))));
-            aJsonWriter.put("rectangle", aRectangle.toString());
-        }
-    }
-    return aJsonWriter.finishAndGetAsOString();
-}
-
 /** Undo/redo a modification of an annotation - change of annotation data */
 class UndoAnnotation : public SdrUndoAction
 {
@@ -66,20 +30,20 @@ public:
         : SdrUndoAction(*rAnnotation.GetModel())
         , mrAnnotation(rAnnotation)
     {
-        maUndoData.get(mrAnnotation);
+        mrAnnotation.toData(maUndoData);
     }
 
     void Undo() override
     {
-        maRedoData.get(mrAnnotation);
-        maUndoData.set(mrAnnotation);
+        mrAnnotation.toData(maRedoData);
+        mrAnnotation.fromData(maUndoData);
         LOKCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
     }
 
     void Redo() override
     {
-        maUndoData.get(mrAnnotation);
-        maRedoData.set(mrAnnotation);
+        mrAnnotation.toData(maUndoData);
+        mrAnnotation.fromData(maRedoData);
         LOKCommentNotifyAll(CommentNotificationType::Modify, mrAnnotation);
     }
 
@@ -98,7 +62,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
         return;
 
-    OString aPayload = lcl_LOKGetCommentPayload(nType, rAnnotation);
+    OString aPayload = rAnnotation.ToJSON(nType);
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload);
 }
 
@@ -108,7 +72,7 @@ void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
         return;
 
-    OString aPayload = lcl_LOKGetCommentPayload(nType, rAnnotation);
+    OString aPayload = rAnnotation.ToJSON(nType);
 
     const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -118,24 +82,26 @@ void LOKCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
     }
 }
 
-void AnnotationData::get(Annotation& rAnnotation)
+void Annotation::toData(AnnotationData& rData)
 {
-    m_Position = rAnnotation.GetPosition();
-    m_Size = rAnnotation.GetSize();
-    m_Author = rAnnotation.GetAuthor();
-    m_Initials = rAnnotation.GetInitials();
-    m_DateTime = rAnnotation.GetDateTime();
-    m_Text = rAnnotation.GetText();
+    std::unique_lock g(m_aMutex);
+    rData.m_Position = m_Position;
+    rData.m_Size = m_Size;
+    rData.m_Author = m_Author;
+    rData.m_Initials = m_Initials;
+    rData.m_DateTime = m_DateTime;
+    rData.m_Text = GetTextImpl(g);
 }
 
-void AnnotationData::set(Annotation& rAnnotation)
+void Annotation::fromData(const AnnotationData& rData)
 {
-    rAnnotation.SetPosition(m_Position);
-    rAnnotation.SetSize(m_Size);
-    rAnnotation.SetAuthor(m_Author);
-    rAnnotation.SetInitials(m_Initials);
-    rAnnotation.SetDateTime(m_DateTime);
-    rAnnotation.SetText(m_Text);
+    std::unique_lock g(m_aMutex);
+    m_Position = rData.m_Position;
+    m_Size = rData.m_Size;
+    m_Author = rData.m_Author;
+    m_Initials = rData.m_Initials;
+    m_DateTime = rData.m_DateTime;
+    SetTextImpl(rData.m_Text, g);
 }
 
 Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -163,24 +129,53 @@ std::unique_ptr<SdrUndoAction> Annotation::createUndoAnnotation()
 
 OUString Annotation::GetText()
 {
-    uno::Reference<text::XText> xText(getTextRange());
+    std::unique_lock g(m_aMutex);
+    return GetTextImpl(g);
+}
+
+OUString Annotation::GetTextImpl(const std::unique_lock<std::mutex>& g)
+{
+    uno::Reference<text::XText> xText(getTextRangeImpl(g));
     return xText->getString();
 }
 
 void Annotation::SetText(OUString const& rText)
 {
-    uno::Reference<text::XText> xText(getTextRange());
+    std::unique_lock g(m_aMutex);
+    SetTextImpl(rText, g);
+}
+
+void Annotation::SetTextImpl(OUString const& rText, const std::unique_lock<std::mutex>& g)
+{
+    uno::Reference<text::XText> xText(getTextRangeImpl(g));
     return xText->setString(rText);
 }
 
 uno::Reference<text::XText> SAL_CALL Annotation::getTextRange()
 {
     std::unique_lock g(m_aMutex);
+    return getTextRangeImpl(g);
+}
+
+uno::Reference<text::XText> Annotation::getTextRangeImpl(const std::unique_lock<std::mutex>& /*g*/)
+{
     if (!m_TextRange.is() && mpPage != nullptr)
     {
         m_TextRange = sdr::annotation::TextApiObject::create(&mpPage->getSdrModelFromSdrPage());
     }
     return m_TextRange;
+}
+
+void Annotation::SetPosition(const css::geometry::RealPoint2D& rValue)
+{
+    std::unique_lock g(m_aMutex);
+    m_Position = rValue;
+}
+
+void Annotation::SetSize(const css::geometry::RealSize2D& rValue)
+{
+    std::unique_lock g(m_aMutex);
+    m_Size = rValue;
 }
 
 void Annotation::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
@@ -208,6 +203,44 @@ SdrObject* Annotation::findAnnotationObject()
             return pObject;
     }
     return nullptr;
+}
+
+OString Annotation::ToJSON(CommentNotificationType nType)
+{
+    tools::JsonWriter aJsonWriter;
+
+    {
+        auto aCommentNode = aJsonWriter.startNode("comment");
+
+        aJsonWriter.put(
+            "action",
+            (nType == CommentNotificationType::Add
+                 ? "Add"
+                 : (nType == CommentNotificationType::Remove
+                        ? "Remove"
+                        : (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
+
+        std::unique_lock g(m_aMutex);
+        sal_uInt64 id = maUniqueID.getID();
+        aJsonWriter.put("id", id);
+        if (nType != CommentNotificationType::Remove)
+        {
+            aJsonWriter.put("id", id);
+            aJsonWriter.put("author", m_Author);
+            aJsonWriter.put("dateTime", utl::toISO8601(m_DateTime));
+            aJsonWriter.put("text", GetTextImpl(g));
+            aJsonWriter.put("parthash",
+                            mpPage ? OString::number(mpPage->GetUniqueID()) : OString());
+            tools::Rectangle aRectangle(
+                Point(std::round(o3tl::toTwips(m_Position.X, o3tl::Length::mm)),
+                      std::round(o3tl::toTwips(m_Position.Y, o3tl::Length::mm))),
+                Size(std::round(o3tl::toTwips(m_Size.Width, o3tl::Length::mm)),
+                     std::round(o3tl::toTwips(m_Size.Height, o3tl::Length::mm))));
+            aJsonWriter.put("rectangle", aRectangle.toString());
+        }
+    }
+
+    return aJsonWriter.finishAndGetAsOString();
 }
 
 } // namespace sdr::annotation
