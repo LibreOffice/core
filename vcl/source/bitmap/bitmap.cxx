@@ -60,7 +60,6 @@
 
 #ifdef DBG_UTIL
 #include <cstdlib>
-#include <o3tl/environment.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 #endif
