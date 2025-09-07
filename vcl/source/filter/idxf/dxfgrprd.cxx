@@ -197,7 +197,7 @@ double DXFGroupReader::ReadF()
         bStatus=false;
         return 0.0;
     }
-    return atof(p);
+    return o3tl::toDouble(s);
 }
 
 void DXFGroupReader::ReadS()
