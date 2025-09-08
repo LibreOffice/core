@@ -42,7 +42,7 @@ ContourWindow::ContourWindow(weld::Dialog* pDialog)
 
 void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
 {
-    SdrPage* pPage = pModel->GetPage(0);
+    SdrPage* pPage = mpModel->GetPage(0);
     const sal_uInt16 nPolyCount = rPolyPoly.Count();
 
     // First delete all drawing objects
@@ -50,7 +50,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
 
     // To avoid to have destroyed objects which are still selected, it is necessary to deselect
     // them first (!)
-    pView->UnmarkAllObj();
+    mpView->UnmarkAllObj();
 
     // clear SdrObjects with broadcasting
     pPage->ClearSdrObjList();
@@ -60,11 +60,11 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
         rtl::Reference<SdrPathObj> pPathObj = new SdrPathObj(
-            *pModel,
+            *mpModel,
             SdrObjKind::PathFill,
             std::move(aPolyPolygon));
 
-        SfxItemSet aSet(pModel->GetItemPool());
+        SfxItemSet aSet(mpModel->GetItemPool());
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aSet.Put(XFillColorItem(u""_ustr, TRANSCOL));
@@ -77,18 +77,18 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
 
     if (nPolyCount)
     {
-        pView->MarkAll();
-        pView->CombineMarkedObjects(false);
+        mpView->MarkAll();
+        mpView->CombineMarkedObjects(false);
     }
 
-    pModel->SetChanged(false);
+    mpModel->SetChanged(false);
 }
 
 const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
 {
-    if ( pModel->IsChanged() )
+    if ( mpModel->IsChanged() )
     {
-        SdrPage* pPage = pModel->GetPage( 0 );
+        SdrPage* pPage = mpModel->GetPage( 0 );
 
         aPolyPoly = tools::PolyPolygon();
 
@@ -101,7 +101,7 @@ const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
             aPolyPoly = tools::PolyPolygon(aB2DPolyPolygon);
         }
 
-        pModel->SetChanged( false );
+        mpModel->SetChanged( false );
     }
 
     return aPolyPoly;
@@ -111,27 +111,27 @@ void ContourWindow::InitSdrModel()
 {
     GraphCtrl::InitSdrModel();
 
-    SfxItemSet aSet( pModel->GetItemPool() );
+    SfxItemSet aSet( mpModel->GetItemPool() );
 
     aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
-    pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles();
+    mpView->SetAttributes( aSet );
+    mpView->SetFrameDragSingles();
 }
 
 void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
-    pView->MarkAll();
-    pView->CombineMarkedObjects( false );
+    mpView->MarkAll();
+    mpView->CombineMarkedObjects( false );
 }
 
 bool ContourWindow::IsContourChanged() const
 {
-    SdrPage*    pPage = pModel->GetPage( 0 );
+    SdrPage*    pPage = mpModel->GetPage( 0 );
     bool        bRet = false;
 
     if ( pPage && pPage->GetObjCount() )
-        bRet = static_cast<SdrPathObj*>( pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
+        bRet = static_cast<SdrPathObj*>( pPage->GetObj( 0 ) )->GetPathPoly().count() && mpModel->IsChanged();
 
     return bRet;
 }
@@ -208,10 +208,10 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
             _aPolyPoly.Clip( aWorkRect );
             SetPolyPolygon( _aPolyPoly );
-            pView->SetWorkArea( aWorkRect );
+            mpView->SetWorkArea( aWorkRect );
         }
         else
-            pView->SetWorkArea( aGraphRect );
+            mpView->SetWorkArea( aGraphRect );
 
         Invalidate( aGraphRect );
 
@@ -228,7 +228,7 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     // #i75482#
     // encapsulate the redraw using Begin/End and use the returned
     // data to get the target output device (e.g. when pre-rendering)
-    SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(&rRenderContext);
+    SdrPaintWindow* pPaintWindow = mpView->BeginCompleteRedraw(&rRenderContext);
     pPaintWindow->SetOutputToWindow(true);
     OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
@@ -255,8 +255,8 @@ void ContourWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     // #i75482#
     const vcl::Region aRepaintRegion(rRect);
-    pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
-    pView->EndCompleteRedraw(*pPaintWindow, true);
+    mpView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
+    mpView->EndCompleteRedraw(*pPaintWindow, true);
 }
 
 void ContourWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)

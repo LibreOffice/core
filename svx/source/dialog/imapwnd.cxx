@@ -152,7 +152,7 @@ void IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
             pIMapObj->SetURL( rNewInfo.aMarkURL );
             pIMapObj->SetAltText( rNewInfo.aMarkAltText );
             pIMapObj->SetTarget( rNewInfo.aMarkTarget );
-            pModel->SetChanged();
+            mpModel->SetChanged();
             UpdateInfo( false );
         }
     }
@@ -160,9 +160,9 @@ void IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
 
 const ImageMap& IMapWindow::GetImageMap()
 {
-    if ( pModel->IsChanged() )
+    if ( mpModel->IsChanged() )
     {
-        SdrPage* pPage = pModel->GetPage( 0 );
+        SdrPage* pPage = mpModel->GetPage( 0 );
 
         if ( pPage )
         {
@@ -177,7 +177,7 @@ const ImageMap& IMapWindow::GetImageMap()
             }
         }
 
-        pModel->SetChanged( false );
+        mpModel->SetChanged( false );
     }
 
     return aIMap;
@@ -189,7 +189,7 @@ void IMapWindow::SetTargetList( const TargetList& rTargetList )
     // Fill with the provided list
     aTargetList = rTargetList;
 
-    pModel->SetChanged( false );
+    mpModel->SetChanged( false );
 }
 
 rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
@@ -208,7 +208,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
             // clipped on CanvasPane
             aDrawRect.Intersection( aClipRect );
 
-            pSdrObj = new SdrRectObj(*pModel, aDrawRect);
+            pSdrObj = new SdrRectObj(*mpModel, aDrawRect);
             pCloneIMapObj.reset(static_cast<IMapObject*>(new IMapRectangleObject( *pIMapRectObj )));
         }
         break;
@@ -225,7 +225,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
             aCircle.Intersection( aClipRect );
 
             pSdrObj = new SdrCircObj(
-                    *pModel,
+                    *mpModel,
                     SdrCircKind::Full,
                     aCircle,
                     0_deg100,
@@ -247,7 +247,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 aDrawRect.Intersection( aClipRect );
 
                 pSdrObj = new SdrCircObj(
-                        *pModel,
+                        *mpModel,
                         SdrCircKind::Full,
                         aDrawRect,
                         0_deg100,
@@ -264,7 +264,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
                 basegfx::B2DPolygon aPolygon;
                 aPolygon.append(aDrawPoly.getB2DPolygon());
                 pSdrObj = new SdrPathObj(
-                        *pModel,
+                        *mpModel,
                         SdrObjKind::Polygon,
                         basegfx::B2DPolyPolygon(aPolygon));
             }
@@ -279,7 +279,7 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
 
     if ( pSdrObj )
     {
-        SfxItemSet aSet( pModel->GetItemPool() );
+        SfxItemSet aSet( mpModel->GetItemPool() );
 
         aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
         aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
@@ -308,12 +308,12 @@ void IMapWindow::InitSdrModel()
 {
     GraphCtrl::InitSdrModel();
 
-    SfxItemSet aSet( pModel->GetItemPool() );
+    SfxItemSet aSet( mpModel->GetItemPool() );
 
     aSet.Put( XFillColorItem( u""_ustr, TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
-    pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles();
+    mpView->SetAttributes( aSet );
+    mpView->SetFrameDragSingles();
 }
 
 void IMapWindow::SdrObjCreated( const SdrObject& rObj )
@@ -456,7 +456,7 @@ SdrObject* IMapWindow::GetHitSdrObj( const Point& rPosPixel ) const
 
     if ( tools::Rectangle( Point(), GetGraphicSize() ).Contains( aPt ) )
     {
-        SdrPage* pPage = pModel->GetPage( 0 );
+        SdrPage* pPage = mpModel->GetPage( 0 );
         if ( pPage )
         {
             for ( size_t i = pPage->GetObjCount(); i > 0; )
@@ -498,13 +498,13 @@ bool IMapWindow::Command(const CommandEvent& rCEvt)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetDrawingArea(), u"svx/ui/imapmenu.ui"_ustr));
         mxPopupMenu = xBuilder->weld_menu(u"menu"_ustr);
-        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
+        const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
         const size_t nMarked = rMarkList.GetMarkCount();
 
         mxPopupMenu->set_sensitive(u"url"_ustr, false);
         mxPopupMenu->set_sensitive(u"active"_ustr, false);
         mxPopupMenu->set_sensitive(u"macro"_ustr, false);
-        mxPopupMenu->set_sensitive(u"selectall"_ustr, pModel->GetPage(0)->GetObjCount() != rMarkList.GetMarkCount());
+        mxPopupMenu->set_sensitive(u"selectall"_ustr, mpModel->GetPage(0)->GetObjCount() != rMarkList.GetMarkCount());
 
         if ( !nMarked )
         {
@@ -572,9 +572,9 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             pIMapObj->SetURL( aBookMark.GetURL() );
             pIMapObj->SetAltText( aBookMark.GetDescription() );
-            pModel->SetChanged();
-            pView->UnmarkAll();
-            pView->MarkObj( pSdrObj, pView->GetSdrPageView() );
+            mpModel->SetChanged();
+            mpView->UnmarkAll();
+            mpView->MarkObj( pSdrObj, mpView->GetSdrPageView() );
             UpdateInfo( true );
             nRet =  rEvt.mnAction;
         }
@@ -590,7 +590,7 @@ OUString IMapWindow::RequestHelp(tools::Rectangle& rHelpArea)
     Point aPos = rDevice.PixelToLogic(rHelpArea.TopLeft());
 
     SdrPageView* pPageView = nullptr;
-    SdrObject* pSdrObj = pView->PickObj(aPos, pView->getHitTolLog(), pPageView);
+    SdrObject* pSdrObj = mpView->PickObj(aPos, mpView->getHitTolLog(), pPageView);
     if (pSdrObj)
     {
         const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
@@ -615,7 +615,7 @@ void IMapWindow::SetCurrentObjState( bool bActive )
     if ( !pObj )
         return;
 
-    SfxItemSet aSet( pModel->GetItemPool() );
+    SfxItemSet aSet( mpModel->GetItemPool() );
 
     GetIMapObj( pObj )->SetActive( bActive );
 
@@ -632,7 +632,7 @@ void IMapWindow::SetCurrentObjState( bool bActive )
         aSet.Put( XLineColorItem( u""_ustr, COL_BLACK ) );
     }
 
-    pView->SetAttributes( aSet );
+    mpView->SetAttributes( aSet );
 }
 
 void IMapWindow::UpdateInfo( bool bNewObj )
@@ -696,7 +696,7 @@ void IMapWindow::DoMacroAssign()
             {
                 const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
                 pIMapObj->SetMacroTable( pOutSet->Get( SID_ATTR_MACROITEM ).GetMacroTable() );
-                pModel->SetChanged();
+                mpModel->SetChanged();
                 UpdateInfo( false );
             }
             pMacroDlg->disposeOnce();
@@ -733,7 +733,7 @@ void IMapWindow::DoPropertyDialog()
     pIMapObj->SetDesc( aDlg->GetDesc() );
     pIMapObj->SetTarget( aDlg->GetTarget() );
     pIMapObj->SetName( aDlg->GetName() );
-    pModel->SetChanged();
+    mpModel->SetChanged();
     UpdateInfo( true );
 }
 
@@ -750,17 +750,17 @@ void IMapWindow::MenuSelectHdl(const OUString& rId)
         UpdateInfo( false );
     }
     else if (rId == "front")
-        pView->PutMarkedToTop();
+        mpView->PutMarkedToTop();
     else if (rId == "forward")
-        pView->MovMarkedToTop();
+        mpView->MovMarkedToTop();
     else if (rId == "backward")
-        pView->MovMarkedToBtm();
+        mpView->MovMarkedToBtm();
     else if (rId == "back")
-        pView->PutMarkedToBtm();
+        mpView->PutMarkedToBtm();
     else if (rId == "selectall")
-        pView->MarkAll();
+        mpView->MarkAll();
     else if (rId == "delete")
-        pView->DeleteMarked();
+        mpView->DeleteMarked();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

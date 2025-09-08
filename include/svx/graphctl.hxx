@@ -48,19 +48,19 @@ class SAL_DLLPUBLIC_RTTI GraphCtrl : public weld::CustomWidgetController
     friend class GraphCtrlView;
     friend class GraphCtrlUserCall;
 
-    Graphic             aGraphic;
-    ScopedVclPtrInstance<VirtualDevice> xVD;
-    Idle                aUpdateIdle;
-    Link<GraphCtrl*,void>  aMousePosLink;
-    Link<GraphCtrl*,void>  aGraphSizeLink;
-    Link<GraphCtrl*,void>  aUpdateLink;
-    MapMode             aMap100;
-    Size                aGraphSize;
-    Point               aMousePos;
-    std::unique_ptr<GraphCtrlUserCall> pUserCall;
-    SdrObjKind          eObjKind;
-    sal_uInt16          nPolyEdit;
-    bool                bEditMode;
+    Graphic             maGraphic;
+    ScopedVclPtrInstance<VirtualDevice> mxVD;
+    Idle                maUpdateIdle;
+    Link<GraphCtrl*,void>  maMousePosLink;
+    Link<GraphCtrl*,void>  maGraphSizeLink;
+    Link<GraphCtrl*,void>  maUpdateLink;
+    MapMode             maMap100;
+    Size                maGraphSize;
+    Point               maMousePos;
+    std::unique_ptr<GraphCtrlUserCall> mpUserCall;
+    SdrObjKind          meObjKind;
+    sal_uInt16          mnPolyEdit;
+    bool                mbEditMode;
     bool                mbSdrMode;
     bool                mbInIdleUpdate;
     weld::Dialog*       mpDialog;
@@ -71,8 +71,8 @@ class SAL_DLLPUBLIC_RTTI GraphCtrl : public weld::CustomWidgetController
 
 protected:
 
-    std::unique_ptr<SdrModel>  pModel;
-    std::unique_ptr<SdrView>   pView;
+    std::unique_ptr<SdrModel>  mpModel;
+    std::unique_ptr<SdrView>   mpView;
 
     virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void        Resize() override;
@@ -89,7 +89,7 @@ protected:
 
     void GraphicToVD();
 
-    SdrObjUserCall* GetSdrUserCall() { return pUserCall.get(); }
+    SdrObjUserCall* GetSdrUserCall() { return mpUserCall.get(); }
 
 public:
 
@@ -98,28 +98,28 @@ public:
     SVX_DLLPUBLIC virtual ~GraphCtrl() override;
 
     SVX_DLLPUBLIC void  SetGraphic( const Graphic& rGraphic, bool bNewModel = true );
-    const Graphic&      GetGraphic() const { return aGraphic; }
-    const Size&         GetGraphicSize() const { return aGraphSize; }
+    const Graphic&      GetGraphic() const { return maGraphic; }
+    const Size&         GetGraphicSize() const { return maGraphSize; }
 
-    const Point&        GetMousePos() const { return aMousePos; }
+    const Point&        GetMousePos() const { return maMousePos; }
 
     void                SetEditMode( const bool bEditMode );
 
     void                SetPolyEditMode( const sal_uInt16 nPolyEdit );
-    sal_uInt16          GetPolyEditMode() const { return nPolyEdit; }
+    sal_uInt16          GetPolyEditMode() const { return mnPolyEdit; }
 
     void                SetObjKind( const SdrObjKind eObjKind );
 
-    SdrModel*           GetSdrModel() const { return pModel.get(); }
-    SdrView*            GetSdrView() const { return pView.get(); }
+    SdrModel*           GetSdrModel() const { return mpModel.get(); }
+    SdrView*            GetSdrView() const { return mpView.get(); }
     SdrObject*          GetSelectedSdrObject() const;
-    bool                IsChanged() const { return mbSdrMode && pModel->IsChanged(); }
+    bool                IsChanged() const { return mbSdrMode && mpModel->IsChanged(); }
 
-    void                SetMousePosLink( const Link<GraphCtrl*,void>& rLink ) { aMousePosLink = rLink; }
+    void                SetMousePosLink( const Link<GraphCtrl*,void>& rLink ) { maMousePosLink = rLink; }
 
-    void                SetGraphSizeLink( const Link<GraphCtrl*,void>& rLink ) { aGraphSizeLink = rLink; }
+    void                SetGraphSizeLink( const Link<GraphCtrl*,void>& rLink ) { maGraphSizeLink = rLink; }
 
-    void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
+    void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { maUpdateLink = rLink; }
     void                QueueIdleUpdate();
 
     void                SetSdrMode(bool b);
