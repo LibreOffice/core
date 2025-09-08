@@ -19,13 +19,13 @@ diff -up freetype/builds/unix/configure.dt freetype/builds/unix/configure
        else
  	ld_shlibs=no
        fi
-@@ -9573,7 +9573,7 @@ _LT_EOF
+@@ -9771,7 +9771,7 @@
        ;;
  
      haiku*)
 -      archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags $wl-soname $wl$soname -o $lib'
 +      archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $lib'
-       link_all_deplibs=yes
+       link_all_deplibs=no
        ;;
  
 @@ -9669,13 +9669,13 @@ _LT_EOF
