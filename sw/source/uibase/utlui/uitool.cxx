@@ -42,6 +42,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
@@ -787,6 +788,8 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
 FieldUnit   GetDfltMetric(bool bWeb)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return SwModule::get()->GetFieldUnit();
     return SwModule::get()->GetUsrPref(bWeb)->GetMetric();
 }
 
