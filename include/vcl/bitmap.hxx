@@ -532,7 +532,8 @@ public:
      */
     SAL_DLLPRIVATE bool ReplaceMask( const AlphaMask& rMask, const Color& rReplaceColor );
 
-    /** Replace all pixel having the search color with the specified color
+    /** Replace all pixel having the search color with the specified color.
+        Note that, if present, alpha data is not modified.
 
         @param rSearchColor
         Color specifying which pixel should be replaced
@@ -549,7 +550,8 @@ public:
      */
     bool Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol = 0 );
 
-    /** Replace all pixel having one the search colors with the corresponding replace color
+    /** Replace all pixel having one the search colors with the corresponding replace color.
+        Note that, if present, alpha data is not modified.
 
         @param pSearchColors
         Array of colors specifying which pixel should be replaced
