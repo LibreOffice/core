@@ -372,7 +372,10 @@ void E3dScene::StructureChanged()
 
     if(nullptr != pScene && !pScene->mbSkipSettingDirty)
     {
-        SetBoundAndSnapRectsDirty();
+        // Only set dirty from the root object, since setting dirty is recursive
+        // and we only want to walk the tree once.
+        if(getParentE3dSceneFromE3dObject() == nullptr)
+            SetBoundAndSnapRectsDirty();
     }
 
     ImpCleanup3DDepthMapper();
