@@ -24,6 +24,7 @@
 #include <fmtcntnt.hxx>
 #include <ndgrf.hxx>
 #include <itabenum.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -364,6 +365,56 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingTable)
     // Without the accompanying fix in place, this test would have failed with:
     // - Actual  : before\n\nafter\n
     // i.e. the table content was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdImport)
+{
+    // Given a document with a "block quote" 2nd paragraph:
+    // When importing that document:
+    setImportFilterName("Markdown");
+    createSwDoc("quote.md");
+
+    // Then make sure that the paragraph style is set correctly:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwTextNode* pTextNode = pCursor->GetPointNode().GetTextNode();
+    SwFormatColl* pActual = pTextNode->GetFormatColl();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+    SwFormatColl* pExpected = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_BLOCKQUOTE);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Block Quotation
+    // - Actual  : Body Text
+    // i.e. the paragraph style was not set.
+    CPPUNIT_ASSERT_EQUAL(pExpected->GetName(), pActual->GetName());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdExport)
+{
+    // Given a document where the only paragraph is a block quote:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_BLOCKQUOTE);
+    pDoc->SetTextFormatColl(*pCursor, pColl);
+    pWrtShell->Insert(u"test"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the format of the paragraph is exported:
+    std::string aActual = TempFileToString();
+    std::string aExpected("> test" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: > test
+    // - Actual  : test
+    // i.e. the block quote markup was missing.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

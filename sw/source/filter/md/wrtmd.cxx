@@ -456,6 +456,13 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         if (!bFirst && !oCellInfo)
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
+        const SwFormatColl* pFormatColl = rNode.GetFormatColl();
+        if (pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_BLOCKQUOTE)
+        {
+            // <https://spec.commonmark.org/0.31.2/#block-quotes> first block quote, then heading.
+            rWrt.Strm().WriteUnicodeOrByteText(u"> ");
+        }
+
         int nHeadingLevel = 0;
         for (const SwFormat* pFormat = &rNode.GetAnyFormatColl(); pFormat;
              pFormat = pFormat->DerivedFrom())

@@ -208,11 +208,8 @@ void SwMarkdownParser::AddBlockQuote()
 
     m_nBlockQuoteDepth++;
 
-    sal_Int32 nBaseLeftIndent = pColl->GetTextLeftMargin().ResolveTextLeft({});
-    sal_Int32 nLeftIndent = nBaseLeftIndent + m_nBlockQuoteDepth * nBaseLeftIndent;
-    SvxTextLeftMarginItem aLeftMargin(pColl->GetTextLeftMargin());
-    aLeftMargin.SetTextLeft(SvxIndentValue::twips(nLeftIndent));
-    m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, aLeftMargin);
+    // Set the style on the current paragraph.
+    m_xDoc->SetTextFormatColl(*m_pPam, pColl);
 }
 
 void SwMarkdownParser::EndBlockQuote()
