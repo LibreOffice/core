@@ -347,7 +347,6 @@ public:
     bool ShowDocumentInfoDialog();
 
     static OUString GetRecommendedExtension( const OUString& aTypeName );
-    OUString GetRecommendedDir( const OUString& aSuggestedDir );
     OUString GetRecommendedName( const OUString& aSuggestedName,
                                         const OUString& aTypeName );
 };
@@ -963,9 +962,15 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
     {
         SfxObjectShell* pDocShell = pViewShell->GetObjectShell();
-        if (sPreselectedDir.isEmpty() && pDocShell && !pDocShell->IsBasedOnTemplate())
-            sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+        if (pDocShell && !pDocShell->IsBasedOnTemplate())
+        {
+            if (sPreselectedDir.isEmpty())
+                sPreselectedDir = GetDocProps().getUnpackedValueOrDefault("DocumentBaseURL", OUString());
+            if (sPreselectedDir.isEmpty() && GetStorable()->hasLocation())
+                sPreselectedDir = GetStorable()->getLocation();
+        }
     }
+
     INetURLObject aObj(sPreselectedDir);
     aObj.removeSegment(); // remove file name from URL
     sPreselectedDir = aObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
@@ -1072,9 +1077,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
         }
     }
 
-    const OUString aRecommendedDir {GetRecommendedDir( aSuggestedDir )};
-    if ( !aRecommendedDir.isEmpty() )
-        pFileDlg->SetDisplayFolder( aRecommendedDir );
+    if ( !aSuggestedDir.isEmpty() )
+        pFileDlg->SetDisplayFolder( aSuggestedDir );
     const OUString aRecommendedName {GetRecommendedName( aSuggestedName, aAdjustToType )};
     if ( !aRecommendedName.isEmpty() )
         pFileDlg->SetFileName( aRecommendedName );
@@ -1345,63 +1349,6 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
 
     return OUString();
 }
-
-
-OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
-{
-    if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
-      && !GetMediaDescr().getUnpackedValueOrDefault(u"RepairPackage"_ustr, false ) )
-    {
-        INetURLObject aLocation;
-        if ( !aSuggestedDir.isEmpty() )
-            aLocation = INetURLObject( aSuggestedDir );
-        else
-        {
-            const OUString aOldURL = GetStorable()->getLocation();
-            if ( !aOldURL.isEmpty() )
-            {
-                INetURLObject aTmp( aOldURL );
-                if ( aTmp.removeSegment() )
-                    aLocation = std::move(aTmp);
-            }
-
-            if ( aLocation.HasError() )
-                aLocation = INetURLObject();
-        }
-
-        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-        bool bIsInTempPath( false );
-        OUString sSysTempPath;
-        if( osl::FileBase::getTempDirURL( sSysTempPath ) == osl::FileBase::E_None )
-            bIsInTempPath = !sSysTempPath.isEmpty() && sLocationURL.startsWith( sSysTempPath );
-#ifdef _WIN32
-        if( !bIsInTempPath )
-        {
-            PWSTR sPath;
-            HRESULT hRes = SHGetKnownFolderPath(FOLDERID_InternetCache, 0, nullptr, &sPath);
-            if( SUCCEEDED(hRes) )
-            {
-                OUString sTempINetFiles;
-                if( osl::FileBase::getFileURLFromSystemPath(OUString(o3tl::toU(sPath)), sTempINetFiles) == osl::FileBase::E_None )
-                    bIsInTempPath = !sTempINetFiles.isEmpty() && sLocationURL.startsWith( sTempINetFiles );
-            }
-            CoTaskMemFree(sPath);
-        }
-#endif
-        // Suggest somewhere other than the system's temp directory
-        if( bIsInTempPath )
-            aLocation = INetURLObject();
-
-        aLocation.setFinalSlash();
-        if ( !aLocation.HasError() )
-            return aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-
-        return OUString();
-    }
-
-    return OUString();
-}
-
 
 OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, const OUString& aTypeName )
 {
