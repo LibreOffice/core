@@ -4209,7 +4209,7 @@ SfxBoolItem Marks FN_VIEW_MARKS
     GroupId = SfxGroupId::View;
 ]
 
-SfxBoolItem HighlightCharDF FN_HIGHLIGHT_CHAR_DF
+SfxBoolItem HighlightCharDF SID_SPOTLIGHT_CHAR_DF
 
 [
     AutoUpdate = TRUE,

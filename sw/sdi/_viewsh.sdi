@@ -969,7 +969,7 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
-    FN_HIGHLIGHT_CHAR_DF
+    SID_SPOTLIGHT_CHAR_DF
     [
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
