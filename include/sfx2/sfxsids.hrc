@@ -390,6 +390,7 @@ class SvxZoomItem;
 
 #define SID_SPOTLIGHT_PARASTYLES            TypedWhichId<SfxBoolItem>(SID_SFX_START + 1605)
 #define SID_SPOTLIGHT_CHARSTYLES            TypedWhichId<SfxBoolItem>(SID_SFX_START + 1606)
+#define SID_SPOTLIGHT_CHAR_DF               TypedWhichId<SfxBoolItem>(SID_SFX_START + 1607)
 
 #define SID_TEMPLATE_NAME                   TypedWhichId<SfxStringItem>(SID_SFX_START + 660)
 #define SID_TEMPLATE_REGIONNAME             TypedWhichId<SfxStringItem>(SID_SFX_START + 662)

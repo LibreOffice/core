@@ -63,13 +63,11 @@ private:
 
     std::unique_ptr<weld::Toolbar> mpToolbar;
 
-    sal_uInt16 nSlotDFStyles;
-
     sfx2::sidebar::ControllerItem mParaController;
     sfx2::sidebar::ControllerItem mCharController;
     sfx2::sidebar::ControllerItem mDFController;
 
-    DECL_LINK(ToolbarHdl, const OUString&, void);
+    DECL_STATIC_LINK(InspectorTextPanel, ToolbarHdl, const OUString&, void);
 };
 
 } // end of namespace svx::sidebar

@@ -44,10 +44,9 @@ namespace svx::sidebar
 InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBindings)
     : PanelLayout(pParent, u"InspectorTextPanel"_ustr, u"svx/ui/inspectortextpanel.ui"_ustr)
     , mpListBoxStyles(m_xBuilder->weld_tree_view(u"listbox_fonts"_ustr))
-    , nSlotDFStyles(pBindings->GetDispatcher()->GetSlot(".uno:HighlightCharDF")->GetSlotId())
     , mParaController(SID_SPOTLIGHT_PARASTYLES, *pBindings, *this)
     , mCharController(SID_SPOTLIGHT_CHARSTYLES, *pBindings, *this)
-    , mDFController(nSlotDFStyles, *pBindings, *this)
+    , mDFController(SID_SPOTLIGHT_CHAR_DF, *pBindings, *this)
 {
     mpListBoxStyles->set_size_request(MinimumPanelWidth, -1);
     float fWidth = mpListBoxStyles->get_approximate_digit_width();
@@ -64,7 +63,7 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent, SfxBindings* pBind
     // Setup listening and set initial state
     pBindings->Update(SID_SPOTLIGHT_PARASTYLES);
     pBindings->Update(SID_SPOTLIGHT_CHARSTYLES);
-    pBindings->Update(nSlotDFStyles);
+    pBindings->Update(SID_SPOTLIGHT_CHAR_DF);
 }
 
 static bool GetPropertyValues(std::u16string_view rPropName, const uno::Any& rAny,
@@ -194,7 +193,7 @@ void InspectorTextPanel::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemSt
     }
 }
 
-IMPL_LINK(InspectorTextPanel, ToolbarHdl, const OUString&, rEntry, void)
+IMPL_STATIC_LINK(InspectorTextPanel, ToolbarHdl, const OUString&, rEntry, void)
 {
     SfxDispatcher* pDispatcher = SfxViewFrame::Current()->GetDispatcher();
     if (rEntry == "paragraphstyles")
@@ -207,8 +206,7 @@ IMPL_LINK(InspectorTextPanel, ToolbarHdl, const OUString&, rEntry, void)
     }
     else
     {
-        SfxBoolItem aItem(nSlotDFStyles, mpToolbar->get_item_active(rEntry));
-        pDispatcher->ExecuteList(nSlotDFStyles, SfxCallMode::SYNCHRON, { &aItem });
+        pDispatcher->Execute(SID_SPOTLIGHT_CHAR_DF, SfxCallMode::SYNCHRON);
     }
 }
 
