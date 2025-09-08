@@ -2095,7 +2095,8 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
     }
 
     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-    auto pDlg = pFact->CreateQueryDialog(pWin, SfxResId(STR_QUERY_ALIENFORMAT_TTITLE), sInfoText, sQuestion, true);
+    bool bShowAgain = !officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly();
+    auto pDlg = pFact->CreateQueryDialog(pWin, SfxResId(STR_QUERY_ALIENFORMAT_TTITLE), sInfoText, sQuestion, bShowAgain);
     pDlg->SetYesLabel(SfxResId(STR_QUERY_ALIENFORMAT_YES).replaceAll("%FORMATNAME", aOldUIName)); // "Use %FORMATNAME Format"
     pDlg->SetNoLabel(SfxResId(STR_QUERY_ALIENFORMAT_NO).replaceAll("%DEFAULTEXTENSION", sExtension)); // "Use %DEFAULTEXTENSION _Format"
 
