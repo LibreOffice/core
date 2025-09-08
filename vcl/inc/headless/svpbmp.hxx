@@ -61,7 +61,6 @@ public:
 
     SAL_DLLPRIVATE virtual bool            ScalingSupported() const override;
     SAL_DLLPRIVATE virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) override;
-    SAL_DLLPRIVATE virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

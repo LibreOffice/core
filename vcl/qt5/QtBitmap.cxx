@@ -178,10 +178,4 @@ bool QtBitmap::Scale(const double& /*rScaleX*/, const double& /*rScaleY*/,
     return false;
 }
 
-bool QtBitmap::Replace(const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/,
-                       sal_uInt8 /*nTol*/)
-{
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

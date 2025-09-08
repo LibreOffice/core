@@ -56,8 +56,6 @@ public:
     virtual bool ScalingSupported() const override;
     virtual bool Scale(const double& rScaleX, const double& rScaleY,
                        BmpScaleFlag nScaleFlag) override;
-    virtual bool Replace(const Color& rSearchColor, const Color& rReplaceColor,
-                         sal_uInt8 nTol) override;
     virtual bool InterpretAs8Bit() override;
     virtual bool ConvertToGreyscale() override;
     virtual bool Erase(const Color& color) override;

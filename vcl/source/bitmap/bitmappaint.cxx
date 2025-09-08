@@ -947,19 +947,6 @@ bool Bitmap::Replace(const AlphaMask& rAlpha, const Color& rMergeColor)
 
 bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol)
 {
-    if (mxSalBmp)
-    {
-        // implementation specific replace
-        std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
-        if (xImpBmp->Create(*mxSalBmp) && xImpBmp->Replace(rSearchColor, rReplaceColor, nTol))
-        {
-            ImplSetSalBitmap(xImpBmp);
-            maPrefMapMode = MapMode(MapUnit::MapPixel);
-            maPrefSize = xImpBmp->GetSize();
-            return true;
-        }
-    }
-
     BitmapScopedWriteAccess pAcc(*this);
     if (!pAcc)
         return false;

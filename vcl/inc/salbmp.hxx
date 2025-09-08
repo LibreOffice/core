@@ -80,8 +80,6 @@ public:
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
     void                    DropScaledCache();
 
-    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uInt8 nTol ) = 0;
-
     virtual bool            ConvertToGreyscale()
     {
         return false;

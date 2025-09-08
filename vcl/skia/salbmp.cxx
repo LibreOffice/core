@@ -440,14 +440,6 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     return true;
 }
 
-bool SkiaSalBitmap::Replace(const Color&, const Color&, sal_uInt8)
-{
-#ifdef DBG_UTIL
-    assert(mWriteAccessCount == 0);
-#endif
-    return false;
-}
-
 bool SkiaSalBitmap::ConvertToGreyscale()
 {
 #ifdef DBG_UTIL
