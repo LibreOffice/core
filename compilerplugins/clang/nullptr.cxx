@@ -137,9 +137,11 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
         {
             break; // POSIX locale_t is left unspecified
         }
-        // Hack to handle libc++ and stdlibc++ `std::strong_ordering x; x < 0` etc.:
+        // Hack to handle libc++ and libstdc++ (libstdc++ < 16: __unspec; libstdc++ >= 16:
+        // __literal_zero) `std::strong_ordering x; x < 0` etc.:
         if (tc.MemberPointerOf().ClassOrStruct("_CmpUnspecifiedParam").StdNamespace()
-            || tc.Pointer().ClassOrStruct("__unspec").Namespace("__cmp_cat").StdNamespace())
+            || tc.Pointer().ClassOrStruct("__unspec").Namespace("__cmp_cat").StdNamespace()
+            || tc.Pointer().ClassOrStruct("__literal_zero").Namespace("__cmp_cat").StdNamespace())
         {
             break;
         }
