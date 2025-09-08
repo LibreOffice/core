@@ -1472,7 +1472,6 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
     }
 
     rpURLList.clear();
-    maPath.clear(); // tdf#147202 This should not survive between calls to execute
 
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
