@@ -1458,7 +1458,6 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
     }
 
     rpURLList = {};
-    maPath.clear(); // tdf#165228 This should not survive between calls to execute
 
     if ( ! mxFileDlg.is() )
         return ERRCODE_ABORT;
