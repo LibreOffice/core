@@ -1,11 +1,11 @@
 --- src/truetype/ttgxvar.c
 +++ src/truetype/ttgxvar.c
-@@ -1045,7 +1045,7 @@
-     if ( varData->longWords )
+@@ -1217,7 +1217,7 @@
        per_region_size *= 2;
+     }
  
 -    bytes = varData->deltaSet + per_region_size * innerIndex;
 +    bytes = varData->deltaSet ? varData->deltaSet + per_region_size * innerIndex : NULL;
  
-     if ( varData->longWords )
-     {
+     /* outer loop steps through master designs to be blended */
+     for ( master = 0; master < varData->regionIdxCount; master++ )
