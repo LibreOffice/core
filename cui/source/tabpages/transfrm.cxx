@@ -767,7 +767,9 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(weld::Container* pPage, weld::Dia
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
     m_aCtlPos.SetActualRP(RectPoint::LT);
+    m_aCtlPos.SaveValue();
     m_aCtlSize.SetActualRP(RectPoint::LT);
+    m_aCtlSize.SaveValue();
     meRP = RectPoint::LT; // see above
 
     m_xMtrWidth->connect_value_changed(LINK(this, SvxPositionSizeTabPage, ChangeWidthHdl));
@@ -908,7 +910,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if( !mbPageDisabled )
     {
-        if (m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved())
+        if (m_xMtrPosX->get_value_changed_from_saved() || m_xMtrPosY->get_value_changed_from_saved() || m_aCtlPos.IsValueModified())
         {
             const double fUIScale(double(mpView->GetModel().GetUIScale()));
             double fX((GetCoreValue( *m_xMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
@@ -1081,6 +1083,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
             m_xMtrHeight->set_value(fTmpHeight, FieldUnit::MM_100TH);
         }
     }
+    m_aCtlSize.Reset();
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_SIZE );
     if ( pItem )

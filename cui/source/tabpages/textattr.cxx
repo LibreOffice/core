@@ -252,6 +252,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         m_xTsbFullWidth->set_state(TRISTATE_INDET);
         m_xFlPosition->set_sensitive( false );
     }
+    m_aCtlPosition.SaveValue();
 
     // adjust to border
     if (rAttrs->GetItemState(SDRATTR_TEXT_FITTOSIZE) != SfxItemState::INVALID)

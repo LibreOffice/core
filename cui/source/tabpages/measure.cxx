@@ -320,6 +320,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         m_xTsbAutoPosV->set_state( TRISTATE_INDET );
         m_xTsbAutoPosH->set_state( TRISTATE_INDET );
     }
+    m_aCtlPosition.SaveValue();
 
     // put the attributes to the preview-control,
     // otherwise the control don't know about

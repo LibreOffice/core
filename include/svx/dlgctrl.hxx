@@ -120,6 +120,9 @@ public:
 
     void                SetState( CTL_STATE nState );
 
+    void SaveValue();
+    bool IsValueModified() const;
+
     static const sal_uInt8 NO_CHILDREN = 9;   // returns number of usable radio buttons
 
     tools::Rectangle           CalculateFocusRectangle() const;

@@ -393,6 +393,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         m_xMtrDistance->set_text( u""_ustr );
         m_aCtlPosition.SetActualRP( RectPoint::MM );
     }
+    m_aCtlPosition.SaveValue();
 
     if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::INVALID )
     {

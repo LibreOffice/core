@@ -405,7 +405,6 @@ Point SvxRectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
     bool bRTL = AllSettings::GetLayoutRTL();
     eNewRP = GetRPFromPoint( m_aPtNew, bRTL );
 
-    m_eDefRP = eNewRP;
     m_eRP = eNewRP;
 
     return aPtLast;
@@ -572,6 +571,16 @@ void SvxRectCtl::DoCompletelyDisable(bool bNew)
 {
     mbCompleteDisable = bNew;
     Invalidate();
+}
+
+void SvxRectCtl::SaveValue()
+{
+    m_eDefRP = m_eRP;
+}
+
+bool SvxRectCtl::IsValueModified() const
+{
+    return m_eDefRP != m_eRP;
 }
 
 // Control for editing bitmaps
