@@ -343,7 +343,7 @@ bool QtWidget::handleKeyEvent(QKeyEvent* pEvent) const
         return true;
     }
 
-    QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
+    QGuiApplication::inputMethod()->update(Qt::ImQueryInput);
 
     if (nCode == 0 && pEvent->text().isEmpty())
     {
