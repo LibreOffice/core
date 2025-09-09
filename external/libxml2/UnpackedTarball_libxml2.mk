@@ -23,7 +23,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	$(if $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED), \
 		external/libxml2/libxml2-icu-sym.patch.0, \
 		external/libxml2/libxml2-icu.patch.0) \
-	external/libxml2/9de92ed78d8495527c5d7a4d0cc76c1f83768195.patch.1 \
 	external/libxml2/0001-parser-Pass-userData-to-SAX-text-callbacks-in-xmlPar.patch.1 \
 ))
 
