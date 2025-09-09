@@ -14681,7 +14681,6 @@ vcl/source/gdi/mapmod.cxx
 vcl/source/gdi/metaact.cxx
 vcl/source/gdi/mtfxmldump.cxx
 vcl/source/gdi/oldprintadaptor.cxx
-vcl/source/gdi/pdfextoutdevdata.cxx
 vcl/source/gdi/pdfwriter.cxx
 vcl/source/gdi/pdfwriter_impl.cxx
 vcl/source/gdi/pdfwriter_impl2.cxx
@@ -14745,6 +14744,7 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/pdf/pdfextoutdevdata.cxx
 vcl/source/pdf/pwdinteract.cxx
 vcl/source/text/ImplLayoutRuns.cxx
 vcl/source/text/textlayout.cxx
