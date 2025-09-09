@@ -88,6 +88,8 @@
 #include <o3tl/string_view.hxx>
 #include <o3tl/test_info.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <vcl/GraphicNativeMetadata.hxx>
+#include <vcl/GraphicNativeTransform.hxx>
 
 #include "FilterConfigCache.hxx"
 
@@ -959,6 +961,18 @@ ErrCode GraphicFilter::readJPEG(SvStream & rStream, Graphic & rGraphic, GfxLinkT
             aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
         else
             rLinkType = GfxLinkType::NativeJpg;
+    }
+
+    // Get Orientation from EXIF data
+    GraphicNativeMetadata aMetadata;
+    if (aMetadata.read(rStream))
+    {
+        Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
+        {
+            GraphicNativeTransform aTransform(rGraphic);
+            aTransform.rotate(aRotation);
+        }
     }
 
     return aReturnCode;
