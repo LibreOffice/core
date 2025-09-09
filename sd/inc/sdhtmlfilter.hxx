@@ -21,6 +21,8 @@
 
 #include "sdfilter.hxx"
 
+class SdrOutliner;
+
 // SdHTMLFilter
 class SdHTMLFilter final : public SdFilter
 {
@@ -29,6 +31,7 @@ public:
     virtual ~SdHTMLFilter() override;
 
     virtual bool Export() override;
+    static void ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
