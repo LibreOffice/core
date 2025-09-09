@@ -20,6 +20,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svx/svdoutl.hxx>
 
 #include "htmlex.hxx"
 #include <sdhtmlfilter.hxx>
@@ -39,6 +40,11 @@ bool SdHTMLFilter::Export()
     HtmlExport aExport(mrMedium.GetName(), mrDocument, &mrDocShell);
 
     return true;
+}
+
+void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
+{
+    HtmlExport::ExportPage(pOutliner, pPage, rHtml);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
