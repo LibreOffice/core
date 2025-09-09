@@ -566,6 +566,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/pdfbuildin_fonts \
     vcl/source/pdf/pdfextoutdevdata \
     vcl/source/pdf/pdfwriter \
+    vcl/source/pdf/pdfwriterimpl_utils \
+    vcl/source/pdf/PDFPage \
     vcl/source/pdf/pdfwriter_impl2 \
     vcl/source/pdf/pdfwriter_impl \
     vcl/source/uitest/logger \

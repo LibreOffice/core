@@ -14680,10 +14680,12 @@ vcl/source/outdev/textline.cxx
 vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
+vcl/source/pdf/PDFPage.cxx
 vcl/source/pdf/pdfextoutdevdata.cxx
 vcl/source/pdf/pdfwriter.cxx
 vcl/source/pdf/pdfwriter_impl.cxx
 vcl/source/pdf/pdfwriter_impl2.cxx
+vcl/source/pdf/pdfwriterimpl_utils.cxx
 vcl/source/pdf/pwdinteract.cxx
 vcl/source/text/ImplLayoutRuns.cxx
 vcl/source/text/textlayout.cxx

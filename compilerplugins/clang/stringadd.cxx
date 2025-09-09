@@ -59,6 +59,8 @@ public:
         // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
         if (fn == SRCDIR "/vcl/source/pdf/pdfwriter_impl.cxx")
             return false;
+        if (fn == SRCDIR "/vcl/source/pdf/pdfwriterimpl_utils.cxx")
+            return false;
         return true;
     }
 
