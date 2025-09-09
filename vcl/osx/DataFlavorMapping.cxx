@@ -32,6 +32,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/endian.h>
+#include <o3tl/string_view.hxx>
 
 #include <cassert>
 #include <string.h>
@@ -513,14 +514,20 @@ DataFlavorMapper::~DataFlavorMapper()
 DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDataFlavor) const
 {
     DataFlavor oOOFlavor;
-
+    NSData *utf8Data = [systemDataFlavor dataUsingEncoding:NSUTF8StringEncoding];
+    std::string_view flavorView { static_cast<const char*>([utf8Data bytes]), [utf8Data length] };
     for (size_t i = 0; i < SIZE_FLAVOR_MAP; i++)
     {
-        if ((flavorMap[i].SystemFlavor == nil && ([systemDataFlavor isEqualToString:[NSString stringWithUTF8String:flavorMap[i].OOoFlavor]]
-                                                  ||
-                                                  [systemDataFlavor hasPrefix:[[NSString stringWithUTF8String:flavorMap[i].OOoFlavor] stringByAppendingString:@";"]]))
-            ||
-            (flavorMap[i].SystemFlavor != nil && [systemDataFlavor isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
+        if ((flavorMap[i].SystemFlavor == nil
+                && (flavorView == flavorMap[i].OOoFlavor
+                    || o3tl::starts_with(flavorView, Concat2View(OString::Concat(flavorMap[i].OOoFlavor) + ";"))))
+            || (flavorMap[i].SystemFlavor != nil
+               && [systemDataFlavor isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
+//        if ((flavorMap[i].SystemFlavor == nil && ([systemDataFlavor isEqualToString:[NSString stringWithUTF8String:flavorMap[i].OOoFlavor]]
+//                                                  ||
+//                                                  [systemDataFlavor hasPrefix:[[NSString stringWithUTF8String:flavorMap[i].OOoFlavor] stringByAppendingString:@";"]]))
+//            ||
+//            (flavorMap[i].SystemFlavor != nil && [systemDataFlavor isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
         {
           if (flavorMap[i].SystemFlavor == nil)
               oOOFlavor.MimeType = NSStringToOUString(systemDataFlavor);
