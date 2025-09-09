@@ -1912,17 +1912,20 @@ void ScTabViewShell::HandleDuplicateRecords(const css::uno::Reference<css::sheet
 
     uno::Reference<sheet::XCalculatable> xCalculatable(xModel, uno::UNO_QUERY);
     bool bAutoCalc = xCalculatable->isAutomaticCalculationEnabled();
+    ScDocument& rDoc = GetViewData().GetDocShell().GetDocument();
 
     comphelper::ScopeGuard aUndoContextGuard(
-        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &bRemove] {
+        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &bRemove, &rDoc] {
         xUndoManager->getUndoManager()->leaveUndoContext();
         if (bRemove)
             xCalculatable->enableAutomaticCalculation(bAutoCalc);
         xLockable->removeActionLock();
         if (xModel->hasControllersLocked())
             xModel->unlockControllers();
+        rDoc.UnlockAdjustHeight();
     });
 
+    rDoc.LockAdjustHeight();
     xModel->lockControllers();
     xLockable->addActionLock();
     if (bRemove)
