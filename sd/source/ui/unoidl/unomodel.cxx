@@ -81,10 +81,12 @@
 #include <notifydocumentevent.hxx>
 #include <tpaction.hxx>
 #include <unomodel.hxx>
+#include <sdhtmlfilter.hxx>
 #include "unopool.hxx"
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
+#include <Outliner.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
@@ -4654,6 +4656,16 @@ OString SdXImpressDocument::getPresentationInfo() const
                 {
                     auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
                     aJsonWriter.put("name", aName);
+                    {
+                        OUStringBuffer aHtml;
+                        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+                        if (pOutliner)
+                        {
+                            SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
+                            aJsonWriter.put("ally", aHtml.makeStringAndClear());
+                            pOutliner->Clear();
+                        }
+                    }
                 }
 
                 bool bIsDrawPageEmpty = pSlide->getCount() == 0;
