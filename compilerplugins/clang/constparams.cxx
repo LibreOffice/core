@@ -69,7 +69,7 @@ public:
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/cppuhelper/source/compbase.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/comphelper/source/misc/compbase.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/unotools/source/misc/fontcvt.cxx")
-            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl2.cxx")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/pdf/pdfwriter_impl2.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/source/treelist/treelist.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/unx/gtk3/gloactiongroup.cxx")
             || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/unx/gtk3/customcellrenderer.cxx")

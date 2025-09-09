@@ -112,7 +112,7 @@
 		BEA20DC6216797C00032F67B /* base14.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = base14.cxx; path = ../../vcl/source/gdi/base14.cxx; sourceTree = "<group>"; };
 		BEA20DC7216797C00032F67B /* bmpfast.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpfast.cxx; path = ../../vcl/source/gdi/bmpfast.cxx; sourceTree = "<group>"; };
 		BEA20DC8216797C00032F67B /* vectorgraphicdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectorgraphicdata.cxx; path = ../../vcl/source/gdi/vectorgraphicdata.cxx; sourceTree = "<group>"; };
-		BEA20DC9216797C00032F67B /* pdfwriter_impl2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl2.cxx; path = ../../vcl/source/gdi/pdfwriter_impl2.cxx; sourceTree = "<group>"; };
+		BEA20DC9216797C00032F67B /* pdfwriter_impl2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl2.cxx; path = ../../vcl/source/pdf/pdfwriter_impl2.cxx; sourceTree = "<group>"; };
 		BEA20DCA216797C00032F67B /* mapmod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mapmod.cxx; path = ../../vcl/source/gdi/mapmod.cxx; sourceTree = "<group>"; };
 		BEA20DCB216797C00032F67B /* bitmap3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap3.cxx; path = ../../vcl/source/gdi/bitmap3.cxx; sourceTree = "<group>"; };
 		BEA20DCC216797C00032F67B /* pdfwriter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter.cxx; path = ../../vcl/source/gdi/pdfwriter.cxx; sourceTree = "<group>"; };
@@ -151,14 +151,14 @@
 		BEA20DED216797C20032F67B /* lineinfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lineinfo.cxx; path = ../../vcl/source/gdi/lineinfo.cxx; sourceTree = "<group>"; };
 		BEA20DEE216797C20032F67B /* animate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animate.cxx; path = ../../vcl/source/gdi/animate.cxx; sourceTree = "<group>"; };
 		BEA20DEF216797C20032F67B /* bmpacc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpacc.cxx; path = ../../vcl/source/gdi/bmpacc.cxx; sourceTree = "<group>"; };
-		BEA20DF0216797C20032F67B /* pdfwriter_impl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl.cxx; path = ../../vcl/source/gdi/pdfwriter_impl.cxx; sourceTree = "<group>"; };
+		BEA20DF0216797C20032F67B /* pdfwriter_impl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl.cxx; path = ../../vcl/source/pdf/pdfwriter_impl.cxx; sourceTree = "<group>"; };
 		BEA20DF1216797C20032F67B /* wall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cxx; path = ../../vcl/source/gdi/wall.cxx; sourceTree = "<group>"; };
 		BEA20DF2216797C20032F67B /* impvect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impvect.cxx; path = ../../vcl/source/gdi/impvect.cxx; sourceTree = "<group>"; };
 		BEA20DF3216797C20032F67B /* impanmvw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impanmvw.cxx; path = ../../vcl/source/gdi/impanmvw.cxx; sourceTree = "<group>"; };
 		BEA20DF4216797C20032F67B /* print2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = print2.cxx; path = ../../vcl/source/gdi/print2.cxx; sourceTree = "<group>"; };
 		BEA20DF5216797C20032F67B /* metaact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = metaact.cxx; path = ../../vcl/source/gdi/metaact.cxx; sourceTree = "<group>"; };
 		BEA20DF6216797C20032F67B /* CommonSalLayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommonSalLayout.cxx; path = ../../vcl/source/gdi/CommonSalLayout.cxx; sourceTree = "<group>"; };
-		BEA20DF7216797C20032F67B /* pdfwriter_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pdfwriter_impl.hxx; path = ../../vcl/source/gdi/pdfwriter_impl.hxx; sourceTree = "<group>"; };
+		BEA20DF7216797C20032F67B /* pdfwriter_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pdfwriter_impl.hxx; path = ../../vcl/source/pdf/pdfwriter_impl.hxx; sourceTree = "<group>"; };
 		BEA20DF8216797C20032F67B /* dibtools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dibtools.cxx; path = ../../vcl/source/gdi/dibtools.cxx; sourceTree = "<group>"; };
 		BEA20DF9216797C20032F67B /* sallayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sallayout.cxx; path = ../../vcl/source/gdi/sallayout.cxx; sourceTree = "<group>"; };
 		BEA20DFA216797C20032F67B /* bmpacc2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpacc2.cxx; path = ../../vcl/source/gdi/bmpacc2.cxx; sourceTree = "<group>"; };

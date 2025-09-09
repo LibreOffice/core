@@ -57,7 +57,7 @@ public:
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/OStringBuffer/"))
             return false;
         // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
-        if (fn == SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx")
+        if (fn == SRCDIR "/vcl/source/pdf/pdfwriter_impl.cxx")
             return false;
         return true;
     }

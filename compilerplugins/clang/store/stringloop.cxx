@@ -63,7 +63,7 @@ void StringLoop::run()
         return;
     if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/control/combobox.cxx"))
         return;
-    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx"))
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/pdf/pdfwriter_impl.cxx"))
         return;
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/svtools/"))
         return;

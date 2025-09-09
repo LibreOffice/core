@@ -2581,7 +2581,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         // MCGR extended possibilities. I checked what happens with the
         // MetaFloatTransparentAction added by OutputDevice::DrawTransparent, but
         // in most cases it gets converted to bitmap or even ignored, see e.g.
-        // - vcl/source/gdi/pdfwriter_impl2.cxx for PDF export
+        // - vcl/source/pdf/pdfwriter_impl2.cxx for PDF export
         // - vcl/source/filter/wmf/wmfwr.cxx -> does ignore TransparenceGradient completely
         //   - vcl/source/filter/wmf/emfwr.cxx -> same
         //   - vcl/source/filter/eps/eps.cxx -> same

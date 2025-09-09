@@ -342,8 +342,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/mapmod \
     vcl/source/gdi/metaact \
     vcl/source/gdi/oldprintadaptor \
-    vcl/source/gdi/pdfwriter_impl2 \
-    vcl/source/gdi/pdfwriter_impl \
     vcl/source/gdi/print2 \
     vcl/source/gdi/print3 \
     vcl/source/gdi/print \
@@ -567,6 +565,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/pdfbuildin_fonts \
     vcl/source/pdf/pdfextoutdevdata \
     vcl/source/pdf/pdfwriter \
+    vcl/source/pdf/pdfwriter_impl2 \
+    vcl/source/pdf/pdfwriter_impl \
     vcl/source/uitest/logger \
     vcl/source/uitest/toolboxitemuiobject \
     vcl/source/uitest/toolboxuiobject \
