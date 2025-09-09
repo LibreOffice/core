@@ -5766,7 +5766,14 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
         return nullptr;
     }
 
-    return convertOString(pDoc->getPresentationInfo());
+    bool bAllyState = false;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell)
+    {
+        bAllyState = pViewShell->GetLOKAccessibilityState();
+    }
+
+    return convertOString(pDoc->getPresentationInfo(bAllyState));
 }
 
 static bool doc_createSlideRenderer(

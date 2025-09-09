@@ -395,7 +395,7 @@ public:
     virtual OString getViewRenderState(SfxViewShell* = nullptr) { return rtl::OString(); }
 
     /** Return JSON structure filled with the information about the presentation (Impress only function) */
-    virtual OString getPresentationInfo() const
+    virtual OString getPresentationInfo(bool = false /*bAllyState*/) const
     {
         return {};
     }

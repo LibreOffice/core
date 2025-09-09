@@ -299,7 +299,7 @@ public:
     SD_DLLPUBLIC virtual void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand) override;
 
     /// @see vcl::ITiledRenderable::getPresentationInfo().
-    SD_DLLPUBLIC OString getPresentationInfo() const override;
+    SD_DLLPUBLIC OString getPresentationInfo(bool bAllyState = false) const override;
     /// @see vcl::ITiledRenderable::createSlideRenderer().
     SD_DLLPUBLIC bool createSlideRenderer(
         const OString& rSlideHash,

@@ -4604,7 +4604,7 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
     }
 }
 
-OString SdXImpressDocument::getPresentationInfo() const
+OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
 
@@ -4656,6 +4656,8 @@ OString SdXImpressDocument::getPresentationInfo() const
                 {
                     auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
                     aJsonWriter.put("name", aName);
+
+                    if (bAllyState)
                     {
                         OUStringBuffer aHtml;
                         SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
