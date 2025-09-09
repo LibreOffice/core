@@ -34,6 +34,7 @@ namespace sd { class DrawDocShell; }
 
 class SfxProgress;
 class SdPage;
+class SdrOutliner;
 class HtmlState;
 class SdDrawDocument;
 
@@ -70,6 +71,8 @@ class HtmlExport final
     HtmlExport(OUString aPath,
                SdDrawDocument& rExpDoc,
                sd::DrawDocShell* pDocShell);
+
+    static void ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml);
 
     ~HtmlExport();
 };
