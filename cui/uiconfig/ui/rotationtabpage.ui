@@ -154,30 +154,44 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
-              <object class="GtkGrid" id="grid7">
+              <object class="GtkBox" id="Box_Pivot2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkDrawingArea" id="CTL_RECT">
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid" id="grid7">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="tooltip-text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="pivot_location_label"/>
-                    </accessibility>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="CTL_RECT-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|CTL_RECT">Click where you want to place the pivot point.</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="CTL_RECT">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="tooltip-text" translatable="yes" context="rotationtabpage|CTL_RECT|tooltip_text">Rotation point</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="pivot_location_label"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="CTL_RECT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|CTL_RECT">Click where you want to place the pivot point.</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
@@ -222,50 +236,61 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
-              <object class="GtkGrid" id="grid5">
+              <object class="GtkBox" id="box_angle2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="FT_ANGLE">
+                  <!-- n-columns=2 n-rows=1 -->
+                  <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
-                    <property name="use-underline">True</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="NF_ANGLE"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="NF_ANGLE">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="activates-default">True</property>
-                    <property name="text">0,00</property>
-                    <property name="truncate-multiline">True</property>
-                    <property name="adjustment">adjustmentANGLE</property>
-                    <property name="digits">2</property>
-                    <property name="wrap">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="FT_ANGLE"/>
-                    </accessibility>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="NF_ANGLE-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|NF_ANGLE">Enter the number of degrees that you want to rotate the selected object.</property>
+                    <child>
+                      <object class="GtkLabel" id="FT_ANGLE">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="rotationtabpage|FT_ANGLE">_Angle:</property>
+                        <property name="use-underline">True</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="NF_ANGLE"/>
+                        </accessibility>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="NF_ANGLE">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">adjustmentANGLE</property>
+                        <property name="digits">2</property>
+                        <property name="wrap">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="FT_ANGLE"/>
+                        </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="NF_ANGLE-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="rotationtabpage|extended_tip|NF_ANGLE">Enter the number of degrees that you want to rotate the selected object.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
@@ -298,6 +323,8 @@
               <object class="GtkBox" id="box6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
