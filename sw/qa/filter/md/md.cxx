@@ -418,6 +418,51 @@ CPPUNIT_TEST_FIXTURE(Test, testBlockQuoteMdExport)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCodeBlockMdExport)
+{
+    // Given a document that has a multi-paragraph code block:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"B"_ustr);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentStylePoolAccess& rIDSPA = pDoc->getIDocumentStylePoolAccess();
+    SwTextFormatColl* pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_HTML_PRE);
+    pDoc->SetTextFormatColl(*pCursor, pColl);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"C"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"D"_ustr);
+    pColl = rIDSPA.GetTextCollFromPool(RES_POOLCOLL_STANDARD);
+    pDoc->SetTextFormatColl(*pCursor, pColl);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the code block is exported:
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        "A" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        "B" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "C" SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "D" SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Actual  : A\nB\nC\nD\n
+    // i.e. the code block formatting was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
