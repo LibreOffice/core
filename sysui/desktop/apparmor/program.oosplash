@@ -12,25 +12,23 @@
 #
 # ------------------------------------------------------------------
 
-#include <tunables/global>
+include <tunables/global>
 
-profile libreoffice-oosplash INSTDIR-program/oosplash {
-  #include <abstractions/base>
-  #include <abstractions/X>
+profile libreoffice-oosplash INSTDIR-program/oosplash flags=(complain) {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+  include <abstractions/X>
 
   /etc/libreoffice/                     r,
   /etc/libreoffice/**                   r,
-  /etc/passwd                           r,
-  /etc/nsswitch.conf                    r,
-  /run/nscd/passwd                      r,
   /sys/devices/{virtual,pci[0-9]*}/**/queue/rotational  r, # for isRotational() in desktop/unx/source/pagein.c
   /usr/lib{,32,64}/ure/bin/javaldx      rmpux,
   /usr/share/libreoffice/program/*      r,
-  INSTDIR-program/** 			r,
+  INSTDIR-program/**                    r,
   INSTDIR-program/soffice.bin rmpx,
   INSTDIR-program/javaldx rmpux,
-  owner @{HOME}/.Xauthority             r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
-  unix peer=(addr=@/tmp/.ICE-unix/* label=unconfined),
-  unix peer=(addr=@/tmp/.X11-unix/* label=unconfined),
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/libreoffice-oosplash>
 }
