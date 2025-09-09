@@ -408,8 +408,8 @@ XMLSEC_TARBALL := xmlsec1-1.2.37.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBXML_SHA256SUM := 03d006f3537616833c16c53addcdc32a0eb20e55443cba4038307e3fa7d8d44b
-LIBXML_VERSION_MICRO := 5
+LIBXML_SHA256SUM := 7ce458a0affeb83f0b55f1f4f9e0e55735dbfc1a9de124ee86fb4a66b597203a
+LIBXML_VERSION_MICRO := 6
 LIBXML_TARBALL := libxml2-2.14.$(LIBXML_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
