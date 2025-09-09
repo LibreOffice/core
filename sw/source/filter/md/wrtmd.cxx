@@ -457,7 +457,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
         const SwFormatColl* pFormatColl = rNode.GetFormatColl();
-        if (pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_BLOCKQUOTE)
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_BLOCKQUOTE)
         {
             // <https://spec.commonmark.org/0.31.2/#block-quotes> first block quote, then heading.
             rWrt.Strm().WriteUnicodeOrByteText(u"> ");
@@ -534,6 +534,18 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
                 OUString aPrefix = aLevel + aNumString + " ";
                 rWrt.Strm().WriteUnicodeOrByteText(aPrefix);
                 rWrt.SetListLevelPrefixSize(rNode.GetActualListLevel(), aPrefix.getLength());
+            }
+        }
+
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_PRE)
+        {
+            // Before the first paragraph of a code block, see
+            // <https://spec.commonmark.org/0.31.2/#fenced-code-blocks>.
+            SwTextNode* pPrevNode = rWrt.m_pDoc->GetNodes()[rNode.GetIndex() - 1]->GetTextNode();
+            const SwFormatColl* pPrevColl = pPrevNode ? pPrevNode->GetFormatColl() : nullptr;
+            if (!pPrevColl || pPrevColl->GetPoolFormatId() != RES_POOLCOLL_HTML_PRE)
+            {
+                rWrt.Strm().WriteUnicodeOrByteText(u"```" SAL_NEWLINE_STRING);
             }
         }
 
@@ -621,6 +633,17 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         assert(positions.hintStarts.current() == nullptr);
         // Output final closing attributes
         OutFormattingChange(rWrt, positions, nEnd, currentStatus);
+
+        if (pFormatColl && pFormatColl->GetPoolFormatId() == RES_POOLCOLL_HTML_PRE)
+        {
+            // After the last paragraph of a code block.
+            SwTextNode* pNextNode = rWrt.m_pDoc->GetNodes()[rNode.GetIndex() + 1]->GetTextNode();
+            const SwFormatColl* pNextColl = pNextNode ? pNextNode->GetFormatColl() : nullptr;
+            if (!pNextColl || pNextColl->GetPoolFormatId() != RES_POOLCOLL_HTML_PRE)
+            {
+                rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING "```");
+            }
+        }
     }
 
     bool bRowEnd = oCellInfo && oCellInfo->bRowEnd;
