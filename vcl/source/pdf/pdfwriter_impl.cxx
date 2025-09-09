@@ -415,7 +415,7 @@ void PDFWriterImpl::appendStrokingColor( const Color& rColor, OStringBuffer& rBu
 {
     if( rColor != COL_TRANSPARENT )
     {
-        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        const bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
         appendColor( rColor, rBuffer, bGrey );
         rBuffer.append( bGrey ? " G" : " RG" );
     }
@@ -425,7 +425,7 @@ void PDFWriterImpl::appendNonStrokingColor( const Color& rColor, OStringBuffer& 
 {
     if( rColor != COL_TRANSPARENT )
     {
-        bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
+        const bool bGrey = m_aContext.ColorMode == PDFWriter::DrawGreyscale;
         appendColor( rColor, rBuffer, bGrey );
         rBuffer.append( bGrey ? " g" : " rg" );
     }
