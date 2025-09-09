@@ -720,6 +720,22 @@ void HtmlExport::ExportSingleDocument()
     ResetProgress();
 }
 
+void HtmlExport::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
+{
+    if (!pPage || !pOutliner)
+    {
+        return;
+    }
+
+    // page title
+    OUString sTitleText(CreateTextForTitle(pOutliner, pPage));
+
+    rHtml.append("<h1>" + sTitleText + "</h1>\r\n");
+
+    // write outline text
+    rHtml.append(CreateTextForPage(pOutliner, pPage, true));
+}
+
 void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
 {
     mpProgress.reset(new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nProgrCount ));

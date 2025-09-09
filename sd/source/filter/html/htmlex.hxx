@@ -78,6 +78,8 @@ class HtmlExport final
                SdDrawDocument* pExpDoc,
                sd::DrawDocShell* pDocShell);
 
+    static void ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml);
+
     ~HtmlExport();
 };
 
