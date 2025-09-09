@@ -340,38 +340,20 @@ bool AccessibleEditableTextPara::GetSelection(sal_Int32 &nStartPos, sal_Int32 &n
     if( !GetEditViewForwarder().GetSelection( aSelection ) )
         return false;
 
-    if( aSelection.start.nPara < aSelection.end.nPara )
-    {
-        if( aSelection.start.nPara > nPara ||
-            aSelection.end.nPara < nPara )
-            return false;
+    aSelection.Adjust();
 
-        if( nPara == aSelection.start.nPara )
-            nStartPos = aSelection.start.nIndex;
-        else
-            nStartPos = 0;
+    if (aSelection.start.nPara > nPara || aSelection.end.nPara < nPara)
+        return false;
 
-        if( nPara == aSelection.end.nPara )
-            nEndPos = aSelection.end.nIndex;
-        else
-            nEndPos = GetTextLen();
-    }
+    if (nPara == aSelection.start.nPara)
+        nStartPos = aSelection.start.nIndex;
     else
-    {
-        if( aSelection.start.nPara < nPara ||
-            aSelection.end.nPara > nPara )
-            return false;
+        nStartPos = 0;
 
-        if( nPara == aSelection.start.nPara )
-            nStartPos = aSelection.start.nIndex;
-        else
-            nStartPos = GetTextLen();
-
-        if( nPara == aSelection.end.nPara )
-            nEndPos = aSelection.end.nIndex;
-        else
-            nEndPos = 0;
-    }
+    if (nPara == aSelection.end.nPara)
+        nEndPos = aSelection.end.nIndex;
+    else
+        nEndPos = GetTextLen();
 
     return true;
 }
