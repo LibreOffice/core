@@ -72,7 +72,7 @@ define gb_DotnetTest_DotnetTest
 gb_DotnetTest_$(1)_language := $(2)
 gb_DotnetTest_$(1)_project := $(gb_DotnetTest_workdir)/$(1)/$(1).$(2)proj
 
-$$(gb_DotnetTest_$(1)_project) : DOTNET_PROPERTY_ELEMENTS := <TargetFramework>net$$(shell dotnet --version | cut -d. -f1-2)</TargetFramework>
+$$(gb_DotnetTest_$(1)_project) : DOTNET_PROPERTY_ELEMENTS := <TargetFramework>net$$(shell "$$(DOTNET)" --version | cut -d. -f1-2)</TargetFramework>
 $$(gb_DotnetTest_$(1)_project) : DOTNET_PROPERTY_ELEMENTS += <IsPackable>false</IsPackable>
 $$(gb_DotnetTest_$(1)_project) : DOTNET_PROPERTY_ELEMENTS += <IsTestProject>true</IsTestProject>
 $$(gb_DotnetTest_$(1)_project) : DOTNET_PROPERTY_ELEMENTS += <AssemblyName>$(1)</AssemblyName>
