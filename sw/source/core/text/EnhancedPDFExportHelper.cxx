@@ -1449,10 +1449,13 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // open all parent sections, so that the SEs of sections
                 // are nested in the same way as their SwSectionNodes
                 std::vector<SwSection const*> parents;
-                for (SwSection const* pParent = pSection->GetParent();
-                     pParent != nullptr; pParent = pParent->GetParent())
+                // iterate only *direct* parents - do not leave table cell!
+                for (SwSectionNode const* pSectionNode{pSection->GetFormat()
+                        ->GetSectionNode()->StartOfSectionNode()->GetSectionNode()};
+                    pSectionNode != nullptr;
+                    pSectionNode = pSectionNode->StartOfSectionNode()->GetSectionNode())
                 {
-                    parents.push_back(pParent);
+                    parents.push_back(&pSectionNode->GetSection());
                 }
                 for (auto it = parents.rbegin(); it != parents.rend(); ++it)
                 {
