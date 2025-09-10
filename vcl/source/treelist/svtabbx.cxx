@@ -1100,10 +1100,10 @@ rtl::Reference<comphelper::OAccessible> SvHeaderTabListBox::CreateAccessible()
     if (m_xAccessible.is())
         return m_xAccessible;
 
-    Reference< XAccessible > xAccParent = GetAccessibleParent();
-    if ( xAccParent.is() )
+    rtl::Reference<comphelper::OAccessible> pAccParent = GetAccessibleParent();
+    if (pAccParent.is())
     {
-        m_xAccessible = new AccessibleTabListBox(xAccParent, *this);
+        m_xAccessible = new AccessibleTabListBox(pAccParent, *this);
         return m_xAccessible;
     }
     return nullptr;

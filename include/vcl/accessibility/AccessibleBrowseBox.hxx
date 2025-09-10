@@ -33,7 +33,7 @@ class VCL_DLLPUBLIC AccessibleBrowseBox : public AccessibleBrowseBoxBase
 
 public:
     AccessibleBrowseBox(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        const rtl::Reference<comphelper::OAccessible>& rpParent,
         ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 

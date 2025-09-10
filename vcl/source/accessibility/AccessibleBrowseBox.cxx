@@ -35,9 +35,9 @@ using namespace ::com::sun::star::accessibility;
 // Ctor/Dtor/disposing
 
 AccessibleBrowseBox::AccessibleBrowseBox(
-    const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
+    const rtl::Reference<comphelper::OAccessible>& rpParent,
     ::vcl::IAccessibleTableProvider& _rBrowseBox)
-    : AccessibleBrowseBoxBase(_rxParent, _rBrowseBox, nullptr,
+    : AccessibleBrowseBoxBase(rpParent, _rBrowseBox, nullptr,
                               AccessibleBrowseBoxObjType::BrowseBox)
 {
     m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);

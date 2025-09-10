@@ -69,11 +69,9 @@ rtl::Reference<comphelper::OAccessible> BrowseBox::CreateAccessible()
 {
     if (!m_xAccessible)
     {
-        Reference<XAccessible> xAccParent = GetAccessibleParent();
-        if( xAccParent.is() )
-        {
-            m_xAccessible = new AccessibleBrowseBox(xAccParent, *this);
-        }
+        rtl::Reference<comphelper::OAccessible> pAccParent = GetAccessibleParent();
+        if (pAccParent.is())
+            m_xAccessible = new AccessibleBrowseBox(pAccParent, *this);
     }
 
     return m_xAccessible;
