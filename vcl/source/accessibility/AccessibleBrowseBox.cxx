@@ -190,20 +190,17 @@ AccessibleBrowseBox::getHeaderBar(AccessibleBrowseBoxObjType eObjType)
 css::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
 {
-    css::uno::Reference< css::accessibility::XAccessible > xRet;
     switch( nChildIndex )
     {
         case vcl::BBINDEX_COLUMNHEADERBAR:
-            xRet = getHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar);
-            break;
+            return getHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar);
         case vcl::BBINDEX_ROWHEADERBAR:
-            xRet = getHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar);
-            break;
+            return getHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar);
         case vcl::BBINDEX_TABLE:
-            xRet = getTable();
-            break;
+            return getTable();
     }
-    return xRet;
+
+    return {};
 }
 
 rtl::Reference<AccessibleBrowseBoxTable> AccessibleBrowseBox::createAccessibleTable()
