@@ -32,7 +32,6 @@ BasicManager::SetLibraryContainerInfo(LibraryContainerInfo const&)
 BasicManager::~BasicManager()
 BigInt::BigInt(unsigned int)
 BigInt::operator%=(BigInt const&)
-BitmapAlphaClampFilter::execute(BitmapEx const&) const
 BitmapBasicMorphologyFilter::filter(Bitmap const&) const
 BitmapColorQuantizationFilter::execute(BitmapEx const&) const
 BitmapConvolutionMatrixFilter::execute(BitmapEx const&) const

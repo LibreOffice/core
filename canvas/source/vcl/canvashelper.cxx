@@ -40,7 +40,6 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
