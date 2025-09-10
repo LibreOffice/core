@@ -44,4 +44,22 @@ void QtInstancePopover::popdown()
 
 void QtInstancePopover::resize_to_request() { assert(false && "Not implemented yet"); }
 
+bool QtInstancePopover::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    if (pObject == getQWidget() && pEvent->type() == QEvent::Close)
+    {
+        // signal that the popup was closed when control returns to the
+        // main loop (at which point the event to close the popup has
+        // actually been processed)
+        QMetaObject::invokeMethod(this,
+                                  [this] {
+                                      SolarMutexGuard g;
+                                      signal_closed();
+                                  },
+                                  Qt::QueuedConnection);
+    }
+
+    return QtInstanceWidget::eventFilter(pObject, pEvent);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
