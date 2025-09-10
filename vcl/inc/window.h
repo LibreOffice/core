@@ -437,7 +437,4 @@ bool ImplLOKHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventTyp
 
 void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
 
-VCL_DLLPUBLIC css::uno::Reference<css::accessibility::XAccessibleEditableText>
-FindFocusedEditableText(css::uno::Reference<css::accessibility::XAccessibleContext> const&);
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
