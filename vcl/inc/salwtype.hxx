@@ -210,6 +210,7 @@ struct SalSurroundingTextRequestEvent
     OUString        maText;         // Text
     sal_uLong       mnStart;        // The beginning index of selected range
     sal_uLong       mnEnd;          // The end index of selected range
+    sal_uLong       mnCursorPos;    // The cursor index (either mnStart or mnEnd)
 };
 
 struct SalSurroundingTextSelectionChangeEvent

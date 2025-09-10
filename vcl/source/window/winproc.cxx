@@ -2567,21 +2567,26 @@ static void ImplHandleSalSurroundingTextRequest( vcl::Window *pWindow,
     pEvt->maText = pChild->GetSurroundingText();
     Selection aSelRange = pChild->GetSurroundingTextSelection();
 
-    aSelRange.Normalize();
+    sal_uLong nSelectionAnchorPos = 0;
+    sal_uLong nCursorPos = 0;
 
     if( aSelRange.Min() < 0 )
-        pEvt->mnStart = 0;
+        nSelectionAnchorPos = 0;
     else if( aSelRange.Min() > pEvt->maText.getLength() )
-        pEvt->mnStart = pEvt->maText.getLength();
+        nSelectionAnchorPos = pEvt->maText.getLength();
     else
-        pEvt->mnStart = aSelRange.Min();
+        nSelectionAnchorPos = aSelRange.Min();
 
     if( aSelRange.Max() < 0 )
-        pEvt->mnEnd = 0;
+        nCursorPos = 0;
     else if( aSelRange.Max() > pEvt->maText.getLength() )
-        pEvt->mnEnd = pEvt->maText.getLength();
+        nCursorPos = pEvt->maText.getLength();
     else
-        pEvt->mnEnd = aSelRange.Max();
+        nCursorPos = aSelRange.Max();
+
+    pEvt->mnCursorPos = nCursorPos;
+    pEvt->mnStart = std::min(nSelectionAnchorPos, nCursorPos);
+    pEvt->mnEnd = std::max(nSelectionAnchorPos, nCursorPos);
 }
 
 static void ImplHandleSalDeleteSurroundingTextRequest( vcl::Window *pWindow,
