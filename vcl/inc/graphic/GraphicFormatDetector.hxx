@@ -169,7 +169,7 @@ public:
     SAL_DLLPRIVATE bool checkPCD();
     bool checkPSD();
     bool checkEPS();
-    SAL_DLLPRIVATE bool checkDXF();
+    bool checkDXF();
     SAL_DLLPRIVATE bool checkPCT();
     SAL_DLLPRIVATE bool checkPBM();
     SAL_DLLPRIVATE bool checkPGM();

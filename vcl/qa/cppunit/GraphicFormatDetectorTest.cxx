@@ -54,6 +54,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectWEBP();
     void testDetectEMF();
     void testDetectEMZ();
+    void testDetectDXF();
+    void testDetectDXF2();
     void testMatchArray();
     void testCheckArrayForMatchingStrings();
 
@@ -80,6 +82,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectWEBP);
     CPPUNIT_TEST(testDetectEMF);
     CPPUNIT_TEST(testDetectEMZ);
+    CPPUNIT_TEST(testDetectDXF);
+    CPPUNIT_TEST(testDetectDXF2);
     CPPUNIT_TEST(testMatchArray);
     CPPUNIT_TEST(testCheckArrayForMatchingStrings);
     CPPUNIT_TEST_SUITE_END();
@@ -414,6 +418,36 @@ void GraphicFormatDetectorTest::testDetectEMZ()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(u"EMZ"_ustr, rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectDXF()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.dxf"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"<DXF"_ustr);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkDXF());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(u"DXF"_ustr, rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectDXF2()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample2.dxf"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, u"<DXF"_ustr);
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkDXF());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(u"DXF"_ustr, rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()
