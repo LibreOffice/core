@@ -1701,8 +1701,7 @@ void SkiaSalGraphicsImpl::drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBi
         drawShader(rPosAry, rSkiaSourceBitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)));
 }
 
-void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
-                                     SkBlendMode blendMode)
+void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap)
 {
     // Use mergeCacheBitmaps(), which may decide to cache the result, avoiding repeated
     // scaling.
@@ -1720,15 +1719,15 @@ void SkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBit
     }
     sk_sp<SkImage> image = mergeCacheBitmaps(bitmap, imageSize * mScaling);
     if (image)
-        drawImage(imagePosAry, image, mScaling, blendMode);
+        drawImage(imagePosAry, image, mScaling);
     else if (bitmap.PreferSkShader())
-        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)), blendMode);
+        drawShader(rPosAry, bitmap.GetSkShader(makeSamplingOptions(rPosAry, mScaling)));
     else
-        drawImage(rPosAry, bitmap.GetSkImage(), 1, blendMode);
+        drawImage(rPosAry, bitmap.GetSkImage(), 1);
 }
 
 void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage,
-                                    int srcScaling, SkBlendMode eBlendMode)
+                                    int srcScaling)
 {
     SkRect aSourceRect
         = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
@@ -1738,11 +1737,11 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
                                                rPosAry.mnDestWidth, rPosAry.mnDestHeight);
 
     SkPaint aPaint = makeBitmapPaint();
-    aPaint.setBlendMode(eBlendMode);
+    aPaint.setBlendMode(SkBlendMode::kSrcOver);
 
     preDraw();
-    SAL_INFO("vcl.skia.trace",
-             "drawimage(" << this << "): " << rPosAry << ":" << SkBlendMode_Name(eBlendMode));
+    SAL_INFO("vcl.skia.trace", "drawimage(" << this << "): " << rPosAry << ":"
+                                            << SkBlendMode_Name(SkBlendMode::kSrcOver));
     addUpdateRegion(aDestinationRect);
     getDrawCanvas()->drawImageRect(aImage, aSourceRect, aDestinationRect,
                                    makeSamplingOptions(rPosAry, mScaling, srcScaling), &aPaint,
@@ -1753,8 +1752,7 @@ void SkiaSalGraphicsImpl::drawImage(const SalTwoRect& rPosAry, const sk_sp<SkIma
 
 // SkShader can be used to merge multiple bitmaps with appropriate blend modes (e.g. when
 // merging a bitmap with its alpha mask).
-void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
-                                     SkBlendMode blendMode)
+void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader)
 {
     preDraw();
     SAL_INFO("vcl.skia.trace", "drawshader(" << this << "): " << rPosAry);
@@ -1762,7 +1760,7 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
                                               rPosAry.mnDestHeight);
     addUpdateRegion(destinationRect);
     SkPaint paint = makeBitmapPaint();
-    paint.setBlendMode(blendMode);
+    paint.setBlendMode(SkBlendMode::kSrcOver);
     paint.setShader(shader);
     SkCanvas* canvas = getDrawCanvas();
     // Scaling needs to be done explicitly using a matrix.

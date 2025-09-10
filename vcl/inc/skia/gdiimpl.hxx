@@ -183,14 +183,11 @@ public:
     void dump(const char* file) const;
 
     // Default blend mode for SkPaint is SkBlendMode::kSrcOver
-    void drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap,
-                    SkBlendMode blendMode = SkBlendMode::kSrcOver);
+    void drawBitmap(const SalTwoRect& rPosAry, const SkiaSalBitmap& bitmap);
 
-    void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage, int srcScaling = 1,
-                   SkBlendMode eBlendMode = SkBlendMode::kSrcOver);
+    void drawImage(const SalTwoRect& rPosAry, const sk_sp<SkImage>& aImage, int srcScaling = 1);
 
-    void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader,
-                    SkBlendMode blendMode = SkBlendMode::kSrcOver);
+    void drawShader(const SalTwoRect& rPosAry, const sk_sp<SkShader>& shader);
 
     void drawGenericLayout(const GenericSalLayout& layout, Color textColor, const SkFont& font,
                            const SkFont& verticalFont);
