@@ -1310,7 +1310,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 const Color* pCol;
                                 if(rNumFormatr.GetType(pDBCol->nFormat) & SvNumFormatType::DATE)
                                 {
-                                    ::Date aStandard(1,1,1900);
+                                    ::Date aStandard(30, 12, 1899);
                                     if (rNumFormatr.GetNullDate() != aStandard)
                                         nValue += (aStandard - rNumFormatr.GetNullDate());
                                 }
