@@ -20,8 +20,6 @@
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <utility>
