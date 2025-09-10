@@ -1442,7 +1442,14 @@ public:
     void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
 
     virtual OUString GetSurroundingText() const;
+
+    /**
+     * Return the non-normalized Selection, i.e. calling Selection::Min() on
+     * the returned Selection returns the selection anchor and Selection::Max()
+     * returns the cursor position.
+     */
     virtual Selection GetSurroundingTextSelection() const;
+
     virtual bool DeleteSurroundingText(const Selection& rSelection);
 
     virtual FactoryFunction GetUITestFactory() const;

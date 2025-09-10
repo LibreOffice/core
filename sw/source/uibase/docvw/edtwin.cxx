@@ -6943,7 +6943,11 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     {
         OUString sReturn;
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
-        return Selection(0, sReturn.getLength());
+        const SwCursor* pCursor = rSh.GetCursor();
+        if (pCursor && *pCursor->GetPoint() < *pCursor->GetMark())
+            return Selection(sReturn.getLength(), 0);
+        else
+            return Selection(0, sReturn.getLength());
     }
 
     if (rSh.GetCursor()->GetPoint()->GetNode().GetTextNode())

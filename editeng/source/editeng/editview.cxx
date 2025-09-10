@@ -1735,7 +1735,6 @@ OUString EditView::GetSurroundingText() const
 Selection EditView::GetSurroundingTextSelection() const
 {
     ESelection aSelection( GetSelection() );
-    aSelection.Adjust();
 
     if( HasSelection() )
     {
@@ -1745,7 +1744,13 @@ Selection EditView::GetSurroundingTextSelection() const
 
         // Stop reconversion if the selected text includes a line break.
         if ( aStr.indexOf( 0x0A ) == -1 )
-            return Selection(0, aSelection.end.nIndex - aSelection.start.nIndex);
+        {
+            const tools::Long nLength = std::abs(aSelection.end.nIndex - aSelection.start.nIndex);
+            if (aSelection.start.nIndex < aSelection.end.nIndex)
+                return Selection(0, nLength);
+            else
+                return Selection(nLength, 0);
+        }
         else
             return Selection( 0, 0 );
     }
