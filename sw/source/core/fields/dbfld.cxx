@@ -264,7 +264,7 @@ bool SwDBField::FormatValue( SvNumberFormatter const * pDocFormatter, OUString c
         if( DataType::DATE == nColumnType || DataType::TIME == nColumnType ||
             DataType::TIMESTAMP  == nColumnType )
         {
-            Date aStandard( 1, 1, 1900 );
+            Date aStandard(30, 12, 1899);
             if( pDocFormatter->GetNullDate() != aStandard )
                 aNumber += (aStandard - pDocFormatter->GetNullDate());
         }
