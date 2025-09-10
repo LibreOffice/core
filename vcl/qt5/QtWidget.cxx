@@ -661,52 +661,25 @@ void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
     pEvent->accept();
 }
 
-static bool lcl_retrieveSurrounding(sal_Int32& rPosition, sal_Int32& rAnchor, QString* pText,
-                                    QString* pSelection)
+void QtWidget::retrieveSurrounding(sal_uLong& rPosition, sal_uLong& rAnchor, QString* pText,
+                                   QString* pSelection) const
 {
     SolarMutexGuard aGuard;
-    vcl::Window* pFocusWin = Application::GetFocusWindow();
-    if (!pFocusWin)
-        return false;
 
-    uno::Reference<accessibility::XAccessibleEditableText> xText;
-    try
-    {
-        xText = FindFocusedEditableText(pFocusWin->GetAccessible());
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("vcl.qt", "Exception in getting input method surrounding text");
-    }
+    SalSurroundingTextRequestEvent aEvt;
+    aEvt.mnStart = aEvt.mnEnd = aEvt.mnCursorPos = 0;
+    m_rFrame.CallCallback(SalEvent::SurroundingTextRequest, &aEvt);
 
-    if (xText.is())
-    {
-        rPosition = xText->getCaretPosition();
-        if (rPosition != -1)
-        {
-            if (pText)
-                *pText = toQString(xText->getText());
+    rPosition = aEvt.mnCursorPos;
+    if (pText)
+        *pText = toQString(aEvt.maText);
 
-            sal_Int32 nSelStart = xText->getSelectionStart();
-            sal_Int32 nSelEnd = xText->getSelectionEnd();
-            if (nSelStart == nSelEnd)
-            {
-                rAnchor = rPosition;
-            }
-            else
-            {
-                if (rPosition == nSelStart)
-                    rAnchor = nSelEnd;
-                else
-                    rAnchor = nSelStart;
-                if (pSelection)
-                    *pSelection = toQString(xText->getSelectedText());
-            }
-            return true;
-        }
-    }
-
-    return false;
+    if (rPosition == aEvt.mnStart)
+        rAnchor = aEvt.mnEnd;
+    else
+        rAnchor = aEvt.mnStart;
+    if (pSelection)
+        *pSelection = toQString(aEvt.maText).mid(aEvt.mnStart, aEvt.mnEnd - aEvt.mnStart);
 }
 
 QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
@@ -716,17 +689,15 @@ QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
         case Qt::ImSurroundingText:
         {
             QString aText;
-            sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, &aText, nullptr))
-                return QVariant(aText);
-            return QVariant();
+            sal_uLong nCursorPos, nAnchor;
+            retrieveSurrounding(nCursorPos, nAnchor, &aText, nullptr);
+            return QVariant(aText);
         }
         case Qt::ImCursorPosition:
         {
-            sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
-                return QVariant(static_cast<int>(nCursorPos));
-            return QVariant();
+            sal_uLong nCursorPos, nAnchor;
+            retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr);
+            return QVariant(static_cast<int>(nCursorPos));
         }
         case Qt::ImCursorRectangle:
         {
@@ -745,18 +716,16 @@ QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
         }
         case Qt::ImAnchorPosition:
         {
-            sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr))
-                return QVariant(static_cast<int>(nAnchor));
-            return QVariant();
+            sal_uLong nCursorPos, nAnchor;
+            retrieveSurrounding(nCursorPos, nAnchor, nullptr, nullptr);
+            return QVariant(static_cast<int>(nAnchor));
         }
         case Qt::ImCurrentSelection:
         {
             QString aSelection;
-            sal_Int32 nCursorPos, nAnchor;
-            if (lcl_retrieveSurrounding(nCursorPos, nAnchor, nullptr, &aSelection))
-                return QVariant(aSelection);
-            return QVariant();
+            sal_uLong nCursorPos, nAnchor;
+            retrieveSurrounding(nCursorPos, nAnchor, nullptr, &aSelection);
+            return QVariant(aSelection);
         }
         default:
             return QWidget::inputMethodQuery(property);

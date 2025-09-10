@@ -23,6 +23,7 @@
 #include <QtWidgets/QGestureEvent>
 #include <QtWidgets/QWidget>
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -45,6 +46,8 @@ class QtWidget : public QWidget
 
     void commitText(const QString& aText) const;
     void deleteReplacementText(int nReplacementStart, int nReplacementLength) const;
+    void retrieveSurrounding(sal_uLong& rPosition, sal_uLong& rAnchor, QString* pText,
+                             QString* pSelection) const;
     bool handleEvent(QEvent* pEvent);
     // mouse events are always accepted
     void handleMouseButtonEvent(const QMouseEvent*) const;
