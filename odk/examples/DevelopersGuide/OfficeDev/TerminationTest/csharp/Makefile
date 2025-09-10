@@ -24,6 +24,7 @@ DOTNET_FLAGS = -c Release
 LO_NUPKG_ID = LibreOffice.Bindings
 LO_NUPKG_VERSION = 0.1.0
 LO_NUPKG_DIR = $(abspath $(PRJ)/dotnet)
+TARGET_FRAMEWORK = net$(shell dotnet --version | cut -d. -f1-2)
 
 # Targets
 .PHONY: ALL
@@ -36,7 +37,7 @@ $(APP_PROJ_FILE) :
 	$(ECHO) "<Project Sdk=\"Microsoft.NET.Sdk\">" > $@
 	$(ECHO) "    <PropertyGroup>" >> $@
 	$(ECHO) "        <AssemblyName>$(APP_NAME)</AssemblyName>" >> $@
-	$(ECHO) "        <TargetFramework>net8.0</TargetFramework>" >> $@
+	$(ECHO) "        <TargetFramework>$(TARGET_FRAMEWORK)</TargetFramework>" >> $@
 	$(ECHO) "        <OutputType>exe</OutputType>" >> $@
 	$(ECHO) "        <PublishSingleFile>true</PublishSingleFile>" >> $@
 	$(ECHO) "        <SelfContained>false</SelfContained>" >> $@
