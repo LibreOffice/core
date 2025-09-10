@@ -272,7 +272,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     int m_nMaxOutlineLevelShown = 10;
 
-    bool m_bIsHighlightCharDF = false;
+    bool m_bIsSpotlightCharDF = false;
     bool m_bIsSpotlightParaStyles = false;
     bool m_bIsSpotlightCharStyles = false;
 
@@ -734,7 +734,7 @@ public:
     virtual void flushPendingLOKInvalidateTiles() override;
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
 
-    bool IsHighlightCharDF() const { return m_bIsHighlightCharDF; }
+    bool IsSpotlightCharDF() const { return m_bIsSpotlightCharDF; }
     bool IsSpotlightParaStyles() const { return m_bIsSpotlightParaStyles; }
     bool IsSpotlightCharStyles() const { return m_bIsSpotlightCharStyles; }
 

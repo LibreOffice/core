@@ -1375,7 +1375,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     if (!pView)
         return;
 
-    if (!pView->IsSpotlightCharStyles() && !pView->IsHighlightCharDF())
+    if (!pView->IsSpotlightCharStyles() && !pView->IsSpotlightCharDF())
         return;
 
     SwRect aRect;
@@ -1430,7 +1430,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
         }
     }
     // not character style formatted
-    else if (pView->IsHighlightCharDF())
+    else if (pView->IsSpotlightCharDF())
     {
         const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
                     UNO_NAME_PARA_IS_NUMBERING_RESTART,

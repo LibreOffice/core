@@ -360,7 +360,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
               aBool.SetValue( pOpt->IsShowChangesInMargin() );
             break;
             case SID_SPOTLIGHT_CHAR_DF:
-              aBool.SetValue(m_bIsHighlightCharDF);
+              aBool.SetValue(m_bIsSpotlightCharDF);
             break;
             case SID_SPOTLIGHT_PARASTYLES:
                 aBool.SetValue(m_bIsSpotlightParaStyles);
@@ -596,8 +596,8 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case SID_SPOTLIGHT_CHAR_DF:
         if (STATE_TOGGLE == eState)
-            bFlag = !m_bIsHighlightCharDF;
-        m_bIsHighlightCharDF = bFlag;
+            bFlag = !m_bIsSpotlightCharDF;
+        m_bIsSpotlightCharDF = bFlag;
         break;
 
     case SID_SPOTLIGHT_PARASTYLES:

@@ -105,7 +105,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
     UIName sText;
     SwView& rView = rSh.GetView();
 
-    if (rView.IsHighlightCharDF() || rView.IsSpotlightParaStyles()
+    if (rView.IsSpotlightCharDF() || rView.IsSpotlightParaStyles()
             || rView.IsSpotlightCharStyles())
     {
         SwPosition aPos(rSh.GetDoc()->GetNodes());
@@ -150,7 +150,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                     sText = SwStyleNameMapper::GetUIName(ProgName(sCharStyle), SwGetPoolIdFromName::ChrFmt);
             }
 
-            if (sText.isEmpty() && rView.IsHighlightCharDF())
+            if (sText.isEmpty() && rView.IsSpotlightCharDF())
             {
                 // check if in direct formatting highlighted area
                 const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
