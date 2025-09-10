@@ -432,6 +432,20 @@ CPPUNIT_TEST_FIXTURE(MMTest2, testTdf156061)
                            getXPath(pXmlDoc, "//txt[2]/infos/bounds", "height").toInt32());
 }
 
+// The document has a MM field referencing a date in the data source having a single record.
+// The check ensures that the date arrives correctly to the merged document.
+DECLARE_SHELL_MAILMERGE_TEST(testTdf168252, "mm-single-date.fodt", "single-date.ods", "Sheet1")
+{
+    executeMailMerge();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+
+    // Without the fix, this would fail with
+    // - Expected: 2025-08-31
+    // - Actual  : 2025-09-02
+    // because the DB filed code assumed obsolete null date.
+    CPPUNIT_ASSERT_EQUAL(u"2025-08-31"_ustr, mxSwTextDocument->getText()->getString());
+}
+
 } // end of anonymous namespace
 namespace com::sun::star::table {
 

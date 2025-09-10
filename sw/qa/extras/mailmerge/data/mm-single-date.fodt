@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:settings>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="CurrentDatabaseDataSource" config:type="string">single-date</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommand" config:type="string">Sheet1</config:config-item>
+   <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:automatic-styles>
+  <number:date-style style:name="ISO" number:language="en" number:country="US">
+   <number:year number:style="long"/>
+   <number:text>-</number:text>
+   <number:month number:style="long"/>
+   <number:text>-</number:text>
+   <number:day number:style="long"/>
+  </number:date-style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p><text:database-display text:table-name="Sheet1" text:table-type="table" text:column-name="date" style:data-style-name="ISO" text:database-name="single-date">&lt;date&gt;</text:database-display></text:p>
+  </office:text>
+ </office:body>
+</office:document>
