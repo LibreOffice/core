@@ -87,19 +87,19 @@ CPPUNIT_TEST_FIXTURE(Test, testPolyPolygon)
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]/polypolygon", "path",
                 u"m2574 13194v-12065h15303v12065z");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 44);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 116);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       u"2574,13194 2574,1129");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", u"#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", u"0");
+                       u"2574,13194 2574,1129 17877,1129 17877,13194");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", u"#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", u"35");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       u"2574,1129 2574,1129");
+                       u"2574,13194 2574,1129");
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", u"#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", u"0");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", u"35");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[10]/polygon",
-                       u"8674,1129 8674,1129");
+                       u"8674,13194 8674,1129");
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "color", u"#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "width", u"0");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[10]/line", "width", u"35");
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 28);
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[6]", "width", u"459");
@@ -556,14 +556,13 @@ CPPUNIT_TEST_FIXTURE(Test, testEnglishMapMode)
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", u"424");
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "height", u"424");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 3);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 5);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[1]/polygon",
                        u"-1,-1 29699,-1 29699,21000 -1,21000");
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[2]/polygon",
                        u"1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937");
-    assertXPathContent(
-        pDocument, aXPathPrefix + "mask/polygonhairline[3]/polygon",
-        u"12699,1058 16933,1058 16933,2118 15346,2118 15346,6349 14287,6349 14287,2118 12699,2118");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[3]/polygon",
+                       u"1058,7937 1058,13230 4233,13230 4233,12171 2115,12171 2115,7937");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRectangleWithModifyWorldTransform)
@@ -910,7 +909,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmfPolydraw)
     assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
                        u"50,50 50,50 1000,1000 1000,1000 2000,2500 2000,1000");
     assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color", u"#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/stroke", "dotDashArray", u"30 10 ");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/stroke", "dotDashArray", u"90 30 ");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
@@ -1588,29 +1587,23 @@ CPPUNIT_TEST_FIXTURE(Test, testCreatePen)
 
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygon", "path", u"m0 0h31250v18192h-31250z");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 3);
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke", 758);
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[1]/polygon",
-                       u"17898,5693 20172,5693");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", u"#008000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", u"0");
+                       u"0,0 31225,0 31225,17742 0,17742");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "color", u"#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[1]/line", "width", u"25");
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[2]/polygon",
-                       u"17898,6959 20172,6959");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", u"#000080");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", u"0");
+                       u"25,23 31200,23 31200,17719 25,17719");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "color", u"#ffffff");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[2]/line", "width", u"25");
 
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstroke[3]/polygon",
-                       u"17898,7381 20172,7381");
+                       u"27875,16523 27875,1453");
     assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "color", u"#ff0000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width", u"0");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstroke[3]/line", "width", u"3");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 755);
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[5]", "color", u"#ff0000");
-    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[5]/polygon",
-                       u"27925,16078 27875,16078");
-    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline[10]", "color", u"#ff0000");
-    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonhairline[10]/polygon",
-                       u"27925,14180 27875,14180");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonhairline", 0);
 
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 69);
     assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "width", u"374");

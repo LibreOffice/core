@@ -204,6 +204,8 @@ namespace emfio
     enum PenStyle : sal_uInt32
     {
         PS_COSMETIC          = 0x00000000,
+        PS_GEOMETRIC         = 0x00010000,
+
         PS_SOLID             = 0x00000000,
         PS_DASH              = 0x00000001,
         PS_DOT               = 0x00000002,
@@ -223,9 +225,7 @@ namespace emfio
         PS_JOIN_ROUND        = 0x00000000,
         PS_JOIN_BEVEL        = 0x00001000,
         PS_JOIN_MITER        = 0x00002000,
-        PS_JOIN_STYLE_MASK   = 0x0000F000,
-
-        PS_GEOMETRIC         = 0x00010000
+        PS_JOIN_STYLE_MASK   = 0x0000F000
     };
 
     /* [MS-WMF] - v20210625 - pages 30, 82 */
