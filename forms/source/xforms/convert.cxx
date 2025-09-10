@@ -118,7 +118,7 @@ namespace
 
     css::util::Date lcl_toUNODate( std::u16string_view rString )
     {
-        css::util::Date aDate( 1, 1, 1900 );
+        css::util::Date aDate;
 
         bool bWellformed = ISO8601parseDate(rString, aDate);
 
