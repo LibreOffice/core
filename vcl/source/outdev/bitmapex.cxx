@@ -42,6 +42,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     if( !rBitmap.HasAlpha() )
     {
         DrawBitmap(rDestPt, rBitmap);
+        return;
     }
 
     const Size aSizePx = rBitmap.GetSizePixel();
