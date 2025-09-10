@@ -96,6 +96,10 @@ private:
     DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
 
     void FillSearchFindsList();
+    static OUString CreatePageEntry(sal_Int32 nPageNum);
+    bool IsPageEntry(const weld::TreeIter& rEntry);
+    static bool IsPageEntry(std::u16string_view sEntryId);
+    static OUString ParsePageEntry(const OUString& sEntryId);
     bool UpgradeSearchToSearchDialog();
 };
 

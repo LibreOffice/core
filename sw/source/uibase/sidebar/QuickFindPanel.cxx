@@ -38,6 +38,8 @@
 #include <comphelper/processfactory.hxx>
 
 const int CharactersBeforeAndAfter = 40;
+const OUString LOKPageEntryPrefix = u"-$#~"_ustr;
+const OUString LOKPageEntrySuffix = u"~#$-"_ustr;
 
 namespace
 {
@@ -299,7 +301,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListMousePressHandler, const MouseEvent&, r
     if (std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
         m_xSearchFindsList->get_dest_row_at_pos(rMEvt.GetPosPixel(), xEntry.get(), false, false))
     {
-        return m_xSearchFindsList->get_id(*xEntry)[0] == '-';
+        return IsPageEntry(*xEntry);
     }
     return false;
 }
@@ -310,7 +312,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListCustomGetSizeHandler, weld::TreeView::g
     vcl::RenderContext& rRenderContext = std::get<0>(aPayload);
     const OUString& rId = std::get<1>(aPayload);
 
-    const bool bPageEntry = rId[0] == '-';
+    const bool bPageEntry = IsPageEntry(rId);
 
     OUString aEntry(rId);
     if (!bPageEntry)
@@ -361,7 +363,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     const ::tools::Rectangle& rRect = std::get<1>(aPayload);
     const OUString& rId = std::get<3>(aPayload);
 
-    const bool bPageEntry = rId[0] == '-';
+    const bool bPageEntry = IsPageEntry(rId);
 
     OUString aEntry(rId);
 
@@ -407,7 +409,7 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
     }
     else
     {
-        aEntry = aEntry.copy(1); // remove '-'
+        aEntry = ParsePageEntry(aEntry); // remove '-' or LOKPageEntryPrefix and LOKPageEntrySuffix
         tools::Long aTextWidth = rRenderContext.GetTextWidth(aEntry);
         tools::Long aTextHeight = rRenderContext.GetTextHeight();
 
@@ -435,7 +437,7 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
     OUString sId = m_xSearchFindsList->get_id(*xEntry);
 
     // check for page number entry
-    if (sId[0] == '-')
+    if (IsPageEntry(sId))
         return;
 
     std::unique_ptr<SwPaM>& rxPaM = m_vPaMs[sId.toUInt64()];
@@ -483,7 +485,7 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListRowActivatedHandler, weld::TreeVi
         return false;
 
     // check for page number entry
-    if (m_xSearchFindsList->get_id(*xEntry)[0] == '-')
+    if (IsPageEntry(*xEntry))
         return false;
 
     m_pWrtShell->GetView().GetEditWin().GrabFocus();
@@ -653,16 +655,7 @@ void QuickFindPanel::FillSearchFindsList()
             if (xPaM->GetPageNum() != nPage)
             {
                 nPage = xPaM->GetPageNum();
-                OUString sPageEntry;
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    sPageEntry = u"-$#~"_ustr + SwResId(ST_PGE) + u" "_ustr
-                                 + OUString::number(nPage) + u"~#$-"_ustr;
-                }
-                else
-                {
-                    sPageEntry = u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPage);
-                }
+                OUString sPageEntry = CreatePageEntry(nPage);
                 m_xSearchFindsList->append(sPageEntry, sPageEntry);
             }
 
@@ -692,6 +685,41 @@ void QuickFindPanel::FillSearchFindsList()
     OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes));
     sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
     m_xSearchFindFoundTimesLabel->set_label(sText);
+}
+
+OUString QuickFindPanel::CreatePageEntry(sal_Int32 nPageNum)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return LOKPageEntryPrefix + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum)
+               + LOKPageEntrySuffix;
+    }
+    return u"-"_ustr + SwResId(ST_PGE) + u" "_ustr + OUString::number(nPageNum);
+}
+
+bool QuickFindPanel::IsPageEntry(const weld::TreeIter& rEntry)
+{
+    return IsPageEntry(m_xSearchFindsList->get_id(rEntry));
+}
+
+bool QuickFindPanel::IsPageEntry(std::u16string_view sEntryId)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return sEntryId.starts_with(LOKPageEntryPrefix) && sEntryId.ends_with(LOKPageEntrySuffix);
+    }
+    return sEntryId[0] == '-';
+}
+
+OUString QuickFindPanel::ParsePageEntry(const OUString& sEntryId)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        return sEntryId.copy(LOKPageEntryPrefix.getLength(),
+                             sEntryId.getLength()
+                                 - LOKPageEntrySuffix.getLength()); // remove '-$#~' and '~#$-'
+    }
+    return sEntryId.copy(1); // remove '-'
 }
 }
 // end of namespace ::sw::sidebar
