@@ -803,12 +803,12 @@ namespace emfio
                 break;
                 case StockObject::WHITE_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle(COL_WHITE, PS_COSMETIC, 0);
+                    maLineStyle = WinMtfLineStyle(COL_WHITE, PS_COSMETIC, 1);
                 }
                 break;
                 case StockObject::BLACK_PEN :
                 {
-                    maLineStyle = WinMtfLineStyle(COL_BLACK, PS_COSMETIC, 0);
+                    maLineStyle = WinMtfLineStyle(COL_BLACK, PS_COSMETIC, 1);
                 }
                 break;
                 case StockObject::NULL_PEN :
