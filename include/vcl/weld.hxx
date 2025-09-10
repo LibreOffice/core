@@ -1361,6 +1361,17 @@ public:
             return false;
         return iter_nth_sibling(rIter, nChild);
     }
+    bool iter_nth_from_start(TreeIter& rIter, int nIndex) const
+    {
+        if (!get_iter_first(rIter))
+            return false;
+        for (int i = 0; i < nIndex; ++i)
+        {
+            if (!iter_next(rIter))
+                return false;
+        }
+        return true;
+    }
     virtual bool iter_parent(TreeIter& rIter) const = 0;
     virtual int get_iter_depth(const TreeIter& rIter) const = 0;
     virtual int get_iter_index_in_parent(const TreeIter& rIter) const = 0;

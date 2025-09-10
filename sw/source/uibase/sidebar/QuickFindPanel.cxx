@@ -149,8 +149,11 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
     , m_xFindAndReplaceToolbarDispatch(
           new ToolbarUnoDispatcher(*m_xFindAndReplaceToolbar, *m_xBuilder, rxFrame))
     , m_xTopbar(m_xBuilder->weld_box(u"topbar"_ustr))
+    , m_xQuickFindControls(m_xBuilder->weld_box(u"quickfindcontrols"_ustr))
     , m_xSearchFindsList(m_xBuilder->weld_tree_view(u"searchfinds"_ustr))
     , m_xSearchFindFoundTimesLabel(m_xBuilder->weld_label("numberofsearchfinds"))
+    , m_xFindNextButton(m_xBuilder->weld_button(u"findnext"_ustr))
+    , m_xFindPreviousButton(m_xBuilder->weld_button(u"findprevious"_ustr))
     , m_pWrtShell(::GetActiveWrtShell())
     , m_xAcceleratorExecute(svt::AcceleratorExecute::createAcceleratorHelper())
     , m_pBindings(pBindings)
@@ -198,6 +201,11 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
         LINK(this, QuickFindPanel, SearchFindsListRowActivatedHandler));
     m_xSearchFindsList->connect_mouse_press(
         LINK(this, QuickFindPanel, SearchFindsListMousePressHandler));
+
+    m_xQuickFindControls->set_visible(false);
+
+    m_xFindNextButton->connect_clicked(LINK(this, QuickFindPanel, FindNextClickedHandler));
+    m_xFindPreviousButton->connect_clicked(LINK(this, QuickFindPanel, FindPreviousClickedHandler));
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchOptionsToolbarClickedHandler, const OUString&, void)
@@ -288,6 +296,7 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryChangedHandler, weld::Entry&, voi
     m_xSearchFindEntry->set_message_type(weld::EntryMessageType::Normal);
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
+    m_xQuickFindControls->set_visible(false);
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryActivateHandler, weld::Entry&, bool)
@@ -467,6 +476,8 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
     sText = sText.replaceFirst("%1", OUString::number(sId.toUInt32() + 1));
     sText = sText.replaceFirst("%2", OUString::number(nSearchFindFoundTimes));
     m_xSearchFindFoundTimesLabel->set_label(sText);
+    if (nSearchFindFoundTimes > 1)
+        m_xQuickFindControls->set_visible(true);
 
     SwShellCursor* pShellCursor = m_pWrtShell->GetCursor_();
     std::vector<basegfx::B2DRange> vRanges;
@@ -492,11 +503,73 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListRowActivatedHandler, weld::TreeVi
     return true;
 }
 
+IMPL_LINK_NOARG(QuickFindPanel, FindNextClickedHandler, weld::Button&, void)
+{
+    NavigateSearchFinds(true); // true = next/down
+}
+
+IMPL_LINK_NOARG(QuickFindPanel, FindPreviousClickedHandler, weld::Button&, void)
+{
+    NavigateSearchFinds(false); // false = previous/up
+}
+
+void QuickFindPanel::NavigateSearchFinds(bool bNext)
+{
+    if (!m_xSearchFindsList || m_xSearchFindsList->n_children() == 0)
+        return;
+
+    std::unique_ptr<weld::TreeIter> xEntry(m_xSearchFindsList->make_iterator());
+
+    bool bMoved = false;
+
+    // no current selection, select first/last entry
+    if (!m_xSearchFindsList->get_cursor(xEntry.get()))
+    {
+        bMoved = m_xSearchFindsList->iter_nth_from_start(
+            *xEntry, bNext ? 0 : m_xSearchFindsList->n_children() - 1);
+    }
+    else
+    {
+        if (bNext)
+            bMoved = m_xSearchFindsList->iter_next(*xEntry);
+        else
+            bMoved = m_xSearchFindsList->iter_previous(*xEntry);
+    }
+
+    if (!bMoved)
+    {
+        bMoved = m_xSearchFindsList->iter_nth_from_start(
+            *xEntry, bNext ? 0 : m_xSearchFindsList->n_children() - 1);
+    }
+
+    // Keep going until we find a non-page entry
+    while (IsPageEntry(*xEntry))
+    {
+        // skip page entry
+        if (bNext)
+            bMoved = m_xSearchFindsList->iter_next(*xEntry);
+        else
+            bMoved = m_xSearchFindsList->iter_previous(*xEntry);
+
+        if (!bMoved)
+        {
+            bMoved = m_xSearchFindsList->iter_nth_from_start(
+                *xEntry, bNext ? 0 : m_xSearchFindsList->n_children() - 1);
+        }
+    }
+    m_xSearchFindsList->set_cursor(*xEntry);
+
+    // todo: ideally we dont need to manually call this handler, but select disables event propagation see SalInstanceTreeView::select(const weld::TreeIter& rIter)
+    m_xSearchFindsList->select(*xEntry);
+    SearchFindsListSelectionChangedHandler(*m_xSearchFindsList);
+}
+
 void QuickFindPanel::FillSearchFindsList()
 {
     m_vPaMs.clear();
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
+    m_xQuickFindControls->set_visible(false);
 
     const OUString sFindEntry = m_xSearchFindEntry->get_text();
     if (sFindEntry.isEmpty())
@@ -685,6 +758,8 @@ void QuickFindPanel::FillSearchFindsList()
     OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes));
     sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
     m_xSearchFindFoundTimesLabel->set_label(sText);
+    if (nSearchFindFoundTimes > 1)
+        m_xQuickFindControls->set_visible(true);
 }
 
 OUString QuickFindPanel::CreatePageEntry(sal_Int32 nPageNum)

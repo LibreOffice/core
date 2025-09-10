@@ -65,8 +65,11 @@ private:
     std::unique_ptr<weld::Toolbar> m_xFindAndReplaceToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xFindAndReplaceToolbarDispatch;
     std::unique_ptr<weld::Box> m_xTopbar;
+    std::unique_ptr<weld::Box> m_xQuickFindControls;
     std::unique_ptr<weld::TreeView> m_xSearchFindsList;
     std::unique_ptr<weld::Label> m_xSearchFindFoundTimesLabel;
+    std::unique_ptr<weld::Button> m_xFindNextButton;
+    std::unique_ptr<weld::Button> m_xFindPreviousButton;
 
     SwWrtShell* m_pWrtShell;
     std::unique_ptr<svt::AcceleratorExecute> m_xAcceleratorExecute;
@@ -94,7 +97,10 @@ private:
     DECL_LINK(SearchFindsListMousePressHandler, const MouseEvent&, bool);
     DECL_LINK(SearchOptionsToolbarClickedHandler, const OUString&, void);
     DECL_LINK(FindAndReplaceToolbarClickedHandler, const OUString&, void);
+    DECL_LINK(FindNextClickedHandler, weld::Button&, void);
+    DECL_LINK(FindPreviousClickedHandler, weld::Button&, void);
 
+    void NavigateSearchFinds(bool bNext);
     void FillSearchFindsList();
     static OUString CreatePageEntry(sal_Int32 nPageNum);
     bool IsPageEntry(const weld::TreeIter& rEntry);
