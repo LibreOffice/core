@@ -1281,9 +1281,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                                 {
                                     ::Date aStandard(30, 12, 1899);
-                                    ::Date aCompare(aDBFormatData.aNullDate.Day ,
-                                                    aDBFormatData.aNullDate.Month,
-                                                    aDBFormatData.aNullDate.Year);
+                                    ::Date aCompare(aDBFormatData.aNullDate);
                                     if(aStandard != aCompare)
                                         nValue += (aStandard - aCompare);
                                 }
