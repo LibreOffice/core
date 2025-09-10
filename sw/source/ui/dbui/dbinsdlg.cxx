@@ -1087,7 +1087,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             {
                                 if(rNumFormatr.GetType(aNumFormat.GetValue()) & SvNumFormatType::DATE)
                                 {
-                                    ::Date aStandard(1,1,1900);
+                                    ::Date aStandard(30, 12, 1899);
                                     if (rNumFormatr.GetNullDate() != aStandard)
                                         fVal += (aStandard - rNumFormatr.GetNullDate());
                                 }
