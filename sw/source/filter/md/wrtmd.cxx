@@ -659,7 +659,20 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
             for (size_t nBox = 0; nBox < oCellInfo->nFirstRowBoxCount; ++nBox)
             {
-                rWrt.Strm().WriteUnicodeOrByteText(u"|-");
+                std::u16string aDelimiter(u"| - ");
+                // Decorate with leading or trailing colon if the adjustment is not the default.
+                switch (oCellInfo->aFirstRowBoxAdjustments[nBox])
+                {
+                    case SvxAdjust::Center:
+                        aDelimiter = u"| :-: ";
+                        break;
+                    case SvxAdjust::Right:
+                        aDelimiter = u"| -: ";
+                        break;
+                    default:
+                        break;
+                }
+                rWrt.Strm().WriteUnicodeOrByteText(aDelimiter);
             }
             rWrt.Strm().WriteUnicodeOrByteText(u"|");
         }
@@ -680,13 +693,30 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
     for (size_t nLine = 0; nLine < rTable.GetTabLines().size(); ++nLine)
     {
         const SwTableLine* pLine = rTable.GetTabLines()[nLine];
+        std::vector<SvxAdjust> aBoxAdjustments;
         for (size_t nBox = 0; nBox < pLine->GetTabBoxes().size(); ++nBox)
         {
             const SwTableBox* pBox = pLine->GetTabBoxes()[nBox];
             const SwStartNode* pStart = pBox->GetSttNd();
-            SwMDCellInfo& rStartInfo = aTableInfo.aCellInfos[pStart->GetIndex() + 1];
+            SwNodeOffset nCellStartIndex = pStart->GetIndex() + 1;
+            SwMDCellInfo& rStartInfo = aTableInfo.aCellInfos[nCellStartIndex];
             const SwEndNode* pEnd = pStart->EndOfSectionNode();
             rStartInfo.bCellStart = true;
+
+            if (nLine == 0)
+            {
+                // First row, save the alignment of the first text node, if the cell has one.
+                SwTextNode* pCellStartNode
+                    = rWrt.m_pDoc->GetNodes()[nCellStartIndex]->GetTextNode();
+                SvxAdjust eAdjust{};
+                if (pCellStartNode)
+                {
+                    const SwAttrSet& rCellStartSet = pCellStartNode->GetSwAttrSet();
+                    eAdjust = rCellStartSet.Get(RES_PARATR_ADJUST).GetAdjust();
+                }
+                aBoxAdjustments.push_back(eAdjust);
+            }
+
             if (nBox == 0)
             {
                 rStartInfo.bRowStart = true;
@@ -699,6 +729,7 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
                 {
                     rEndInfo.bFirstRowEnd = true;
                     rEndInfo.nFirstRowBoxCount = pLine->GetTabBoxes().size();
+                    rEndInfo.aFirstRowBoxAdjustments = aBoxAdjustments;
                 }
             }
         }
