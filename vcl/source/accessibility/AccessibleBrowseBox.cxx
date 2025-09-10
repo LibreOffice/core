@@ -158,8 +158,7 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
     return mpBrowseBox->GetWindowExtentsRelative( *pParent );
 }
 
-// internal helper methods
-css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::implGetTable()
+css::uno::Reference<css::accessibility::XAccessible> AccessibleBrowseBox::getTable()
 {
     if( !mxTable.is() )
     {
@@ -201,7 +200,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
             xRet = getHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar);
             break;
         case vcl::BBINDEX_TABLE:
-            xRet = implGetTable();
+            xRet = getTable();
             break;
     }
     return xRet;

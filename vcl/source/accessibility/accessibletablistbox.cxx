@@ -72,7 +72,7 @@ AccessibleTabListBox::getAccessibleChild( sal_Int64 nChildIndex )
     if (nChildIndex != 0)
         throw IndexOutOfBoundsException();
 
-    return implGetTable();
+    return getTable();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

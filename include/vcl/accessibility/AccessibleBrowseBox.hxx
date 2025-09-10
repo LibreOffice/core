@@ -112,12 +112,7 @@ public:
 
     /** returns the accessible object for the table representation
     */
-    css::uno::Reference<
-        css::accessibility::XAccessible >
-        getTable( )
-        {
-            return implGetTable();
-        }
+    css::uno::Reference<css::accessibility::XAccessible> getTable();
 
 protected:
     // internal virtual methods
@@ -127,12 +122,6 @@ protected:
     virtual tools::Rectangle implGetBoundingBox() override;
 
     // internal helper methods
-
-    /** This method creates (once) and returns the accessible data table child.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the data table. */
-    css::uno::Reference<
-        css::accessibility::XAccessible > implGetTable();
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
