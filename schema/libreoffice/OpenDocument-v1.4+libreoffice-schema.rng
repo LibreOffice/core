@@ -4140,10 +4140,42 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
   <rng:define name="text-changed-region" combine="choice">
     <rng:element name="text:changed-region">
       <rng:ref name="text-changed-region-attr"/>
-      <rng:ref name="text-changed-region-content"/>
-      <rng:optional>
-        <rng:ref name="text-changed-region-content"/>
-      </rng:optional>
+      <rng:choice>
+        <rng:ref name="text-changed-region-content-insertion"/>
+        <rng:group>
+          <rng:ref name="text-changed-region-content-deletion"/>
+          <rng:optional>
+            <rng:ref name="text-changed-region-content-insertion"/>
+          </rng:optional>
+        </rng:group>
+        <rng:group>
+          <rng:ref name="text-changed-region-content-format-change"/>
+          <rng:optional>
+            <rng:choice>
+              <rng:ref name="text-changed-region-content-insertion"/>
+              <rng:ref name="text-changed-region-content-deletion"/>
+            </rng:choice>
+          </rng:optional>
+        </rng:group>
+      </rng:choice>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-insertion">
+    <rng:element name="text:insertion">
+      <rng:ref name="office-change-info"/>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-deletion">
+    <rng:element name="text:deletion">
+      <rng:ref name="office-change-info"/>
+      <rng:zeroOrMore>
+        <rng:ref name="text-content"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+  <rng:define name="text-changed-region-content-format-change">
+    <rng:element name="text:format-change">
+      <rng:ref name="office-change-info"/>
     </rng:element>
   </rng:define>
 
