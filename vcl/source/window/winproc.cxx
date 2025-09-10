@@ -2552,32 +2552,20 @@ static bool ImplHandleShowDialog( vcl::Window* pWindow, ShowDialogId nDialogId )
     return ImplCallCommand( pWindow, CommandEventId::ShowDialog, &aCmdData );
 }
 
-static void ImplHandleSurroundingTextRequest( vcl::Window *pWindow,
-                          OUString& rText,
-                          Selection &rSelRange )
-{
-    vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
-
-    if ( !pChild )
-    {
-        rText.clear();
-        rSelRange.setMin( 0 );
-        rSelRange.setMax( 0 );
-    }
-    else
-    {
-        rText = pChild->GetSurroundingText();
-        Selection aSel = pChild->GetSurroundingTextSelection();
-        rSelRange.setMin( aSel.Min() );
-        rSelRange.setMax( aSel.Max() );
-    }
-}
-
 static void ImplHandleSalSurroundingTextRequest( vcl::Window *pWindow,
                          SalSurroundingTextRequestEvent *pEvt )
 {
-    Selection aSelRange;
-    ImplHandleSurroundingTextRequest( pWindow, pEvt->maText, aSelRange );
+    vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if ( !pChild )
+    {
+        pEvt->maText.clear();
+        pEvt->mnStart = 0;
+        pEvt->mnEnd = 0;
+        return;
+    }
+
+    pEvt->maText = pChild->GetSurroundingText();
+    Selection aSelRange = pChild->GetSurroundingTextSelection();
 
     aSelRange.Normalize();
 
