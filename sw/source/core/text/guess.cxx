@@ -561,6 +561,9 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
             m_nBreakWidth += nLeftRightBorderSpace;
 
+            // tdf#168351 store enlarged break width for minimum letter spacing/glyph scaling
+            rInf.SetBreakWidth(m_nBreakWidth);
+
             return bRet;
         }
     }
