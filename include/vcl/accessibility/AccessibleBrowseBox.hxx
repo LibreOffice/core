@@ -107,12 +107,8 @@ public:
 
     /** returns the accessible object for the row or the column header bar
     */
-    css::uno::Reference<
-        css::accessibility::XAccessible >
-        getHeaderBar( AccessibleBrowseBoxObjType _eObjType )
-        {
-            return implGetHeaderBar(_eObjType);
-        }
+    css::uno::Reference<css::accessibility::XAccessible>
+    getHeaderBar(AccessibleBrowseBoxObjType eObjType);
 
     /** returns the accessible object for the table representation
     */
@@ -137,13 +133,6 @@ protected:
         @return  The XAccessible interface of the data table. */
     css::uno::Reference<
         css::accessibility::XAccessible > implGetTable();
-
-    /** This method creates (once) and returns the specified header bar.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the header bar. */
-    css::uno::Reference<
-        css::accessibility::XAccessible >
-        implGetHeaderBar( AccessibleBrowseBoxObjType eObjType );
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.

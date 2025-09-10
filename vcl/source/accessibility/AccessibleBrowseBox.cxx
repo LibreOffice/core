@@ -169,8 +169,8 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::impl
     return mxTable;
 }
 
-css::uno::Reference< css::accessibility::XAccessible >
-AccessibleBrowseBox::implGetHeaderBar(AccessibleBrowseBoxObjType eObjType)
+css::uno::Reference<css::accessibility::XAccessible>
+AccessibleBrowseBox::getHeaderBar(AccessibleBrowseBoxObjType eObjType)
 {
     if( eObjType == AccessibleBrowseBoxObjType::RowHeaderBar )
     {
@@ -195,14 +195,14 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
     switch( nChildIndex )
     {
         case vcl::BBINDEX_COLUMNHEADERBAR:
-            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
-        break;
+            xRet = getHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar);
+            break;
         case vcl::BBINDEX_ROWHEADERBAR:
-            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar );
-        break;
+            xRet = getHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar);
+            break;
         case vcl::BBINDEX_TABLE:
             xRet = implGetTable();
-        break;
+            break;
     }
     return xRet;
 }
