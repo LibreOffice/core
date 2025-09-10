@@ -36,7 +36,10 @@ struct SwMDCellInfo
     bool bRowStart = false;
     bool bRowEnd = false;
     bool bFirstRowEnd = false;
+
+    // These are only set in the bFirstRowEnd == true case.
     size_t nFirstRowBoxCount = 0;
+    std::vector<SvxAdjust> aFirstRowBoxAdjustments;
 };
 
 /// Tracks information about one SwTableNode, the instance is alive while the write of the table is
