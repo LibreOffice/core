@@ -1280,7 +1280,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                     DataType::TIMESTAMP  == eDataType)
 
                                 {
-                                    ::Date aStandard(1,1,1900);
+                                    ::Date aStandard(30, 12, 1899);
                                     ::Date aCompare(aDBFormatData.aNullDate.Day ,
                                                     aDBFormatData.aNullDate.Month,
                                                     aDBFormatData.aNullDate.Year);
