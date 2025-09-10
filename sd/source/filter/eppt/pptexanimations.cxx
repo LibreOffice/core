@@ -1189,8 +1189,8 @@ void AnimationExporter::exportAnimPropertyByte( SvStream& rStrm, const sal_uInt1
 
 void AnimationExporter::writeZString( SvStream& rStrm, std::u16string_view aVal )
 {
-    for ( size_t i = 0; i < aVal.size(); i++ )
-        rStrm.WriteUInt16( aVal[ i ] );
+    for ( const sal_uInt16 codeUnit : aVal )
+        rStrm.WriteUInt16( codeUnit );
     rStrm.WriteUInt16( 0 );
 }
 

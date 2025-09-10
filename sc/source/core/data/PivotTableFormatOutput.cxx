@@ -70,9 +70,9 @@ public:
 
 void initLines(std::vector<LineData>& rLines, std::vector<ScDPOutLevelData> const& rFields)
 {
-    for (size_t i = 0; i < rFields.size(); i++)
+    for (const ScDPOutLevelData& rField : rFields)
     {
-        size_t nFieldLength(rFields[i].maResult.getLength());
+        size_t nFieldLength(rField.maResult.getLength());
         if (rLines.size() < nFieldLength)
             rLines.resize(nFieldLength);
 

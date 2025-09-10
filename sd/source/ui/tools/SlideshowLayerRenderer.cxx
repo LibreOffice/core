@@ -237,9 +237,9 @@ void changeBackground(
     drawinglayer::primitive2d::Primitive2DContainer const& rContainer, bool bRenderObject,
     std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
-    for (size_t i = 0; i < rContainer.size(); i++)
+    for (const drawinglayer::primitive2d::Primitive2DReference& rBasePrimitive : rContainer)
     {
-        drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive = rContainer[i].get();
+        drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive = rBasePrimitive.get();
         if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D)
         {
             drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
@@ -255,9 +255,9 @@ drawinglayer::primitive2d::TextHierarchyBlockPrimitive2D*
 findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
               drawinglayer::geometry::ViewInformation2D const& rViewInformation2D)
 {
-    for (size_t i = 0; i < rContainer.size(); i++)
+    for (const drawinglayer::primitive2d::Primitive2DReference& rBasePrimitive : rContainer)
     {
-        drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive = rContainer[i].get();
+        drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive = rBasePrimitive.get();
         if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D)
         {
             auto* pPrimitive
