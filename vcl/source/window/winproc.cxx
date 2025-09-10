@@ -2577,7 +2577,7 @@ static void ImplHandleSalSurroundingTextRequest( vcl::Window *pWindow,
         pEvt->mnStart = aSelRange.Min();
 
     if( aSelRange.Max() < 0 )
-        pEvt->mnStart = 0;
+        pEvt->mnEnd = 0;
     else if( aSelRange.Max() > pEvt->maText.getLength() )
         pEvt->mnEnd = pEvt->maText.getLength();
     else
