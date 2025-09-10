@@ -25,6 +25,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/zlib.patch.0 \
 	external/curl/configurable-z-option.patch.0 \
+	external/curl/0001-cookie-don-t-treat-the-leading-slash-as-trailing.patch \
+	external/curl/0001-ws-get-a-new-mask-for-each-new-outgoing-frame.patch \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
