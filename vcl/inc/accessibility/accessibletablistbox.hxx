@@ -45,8 +45,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
-    css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar()
+    rtl::Reference<comphelper::OAccessible> getHeaderBar()
     {
         return AccessibleBrowseBox::getHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
     }

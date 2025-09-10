@@ -158,7 +158,7 @@ tools::Rectangle AccessibleBrowseBox::implGetBoundingBox()
     return mpBrowseBox->GetWindowExtentsRelative( *pParent );
 }
 
-css::uno::Reference<css::accessibility::XAccessible> AccessibleBrowseBox::getTable()
+rtl::Reference<comphelper::OAccessible> AccessibleBrowseBox::getTable()
 {
     if( !mxTable.is() )
     {
@@ -168,7 +168,7 @@ css::uno::Reference<css::accessibility::XAccessible> AccessibleBrowseBox::getTab
     return mxTable;
 }
 
-css::uno::Reference<css::accessibility::XAccessible>
+rtl::Reference<comphelper::OAccessible>
 AccessibleBrowseBox::getHeaderBar(AccessibleBrowseBoxObjType eObjType)
 {
     if( eObjType == AccessibleBrowseBoxObjType::RowHeaderBar )
@@ -184,11 +184,11 @@ AccessibleBrowseBox::getHeaderBar(AccessibleBrowseBoxObjType eObjType)
         return mxColumnHeaderBar;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessible>();
+    return {};
 }
 
-css::uno::Reference< css::accessibility::XAccessible >
-AccessibleBrowseBox::implGetFixedChild( sal_Int64 nChildIndex )
+rtl::Reference<comphelper::OAccessible>
+AccessibleBrowseBox::implGetFixedChild(sal_Int64 nChildIndex)
 {
     switch( nChildIndex )
     {
