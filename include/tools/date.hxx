@@ -134,6 +134,9 @@ public:
      */
     void            AddDays( sal_Int32 nAddDays );
 
+    // Same as AddDays, but returns false on int overflow cases
+    [[nodiscard]] bool CheckedAddDays(sal_Int32 nAddDays);
+
     /** Obtain the day of the week for the date.
 
         Internally normalizes a copy of values.

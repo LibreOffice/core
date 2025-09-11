@@ -136,8 +136,13 @@ void ScInterpreter::ScGetMonth()
 void ScInterpreter::ScGetDay()
 {
     Date aDate = mrContext.NFGetNullDate();
-    aDate.AddDays( GetFloor32());
-    PushDouble(static_cast<double>(aDate.GetDay()));
+    if (aDate.CheckedAddDays(GetFloor32()))
+        PushDouble(static_cast<double>(aDate.GetDay()));
+    else
+    {
+        SetError(FormulaError::IllegalArgument);
+        PushDouble(HUGE_VAL);
+    }
 }
 
 void ScInterpreter::ScGetMin()

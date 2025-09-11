@@ -376,6 +376,17 @@ void Date::AddDays( sal_Int32 nDays )
         *this = lcl_DaysToDate( GetAsNormalizedDays() + nDays );
 }
 
+bool Date::CheckedAddDays( sal_Int32 nDays )
+{
+    if (nDays == 0)
+        return true;
+    sal_Int32 nTotalDays;
+    if (o3tl::checked_add(GetAsNormalizedDays(), nDays, nTotalDays))
+        return false;
+    *this = lcl_DaysToDate(nTotalDays);
+    return true;
+}
+
 Date& Date::operator ++()
 {
     *this = lcl_DaysToDate( GetAsNormalizedDays() + 1 );
