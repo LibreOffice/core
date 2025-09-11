@@ -301,52 +301,47 @@ bool CellValueConversion::ensureNumberFormatter()
 
 const StandardFormatNormalizer* CellValueConversion::getValueNormalizer(Type const& i_valueType)
 {
-    auto pos = aNormalizers.find(i_valueType.getTypeName());
-    if (pos == aNormalizers.end())
+    auto [pos, inserted] = aNormalizers.try_emplace(i_valueType.getTypeName());
+    if (inserted)
     {
         // never encountered this type before
-        std::unique_ptr<StandardFormatNormalizer> o_formatter;
-
         OUString const sTypeName(i_valueType.getTypeName());
         TypeClass const eTypeClass = i_valueType.getTypeClass();
 
         if (sTypeName == ::cppu::UnoType<DateTime>::get().getTypeName())
         {
-            o_formatter = std::make_unique<DateTimeNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<DateTimeNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<css::util::Date>::get().getTypeName())
         {
-            o_formatter = std::make_unique<DateNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<DateNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<css::util::Time>::get().getTypeName())
         {
-            o_formatter = std::make_unique<TimeNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<TimeNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<sal_Bool>::get().getTypeName())
         {
-            o_formatter = std::make_unique<BooleanNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<BooleanNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<double>::get().getTypeName()
                  || sTypeName == ::cppu::UnoType<float>::get().getTypeName())
         {
-            o_formatter = std::make_unique<DoubleNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<DoubleNormalization>(xNumberFormatter);
         }
         else if ((eTypeClass == TypeClass_BYTE) || (eTypeClass == TypeClass_SHORT)
                  || (eTypeClass == TypeClass_UNSIGNED_SHORT) || (eTypeClass == TypeClass_LONG)
                  || (eTypeClass == TypeClass_UNSIGNED_LONG) || (eTypeClass == TypeClass_HYPER))
         {
-            o_formatter = std::make_unique<IntegerNormalization>(xNumberFormatter);
+            pos->second = std::make_unique<IntegerNormalization>(xNumberFormatter);
         }
         else
         {
             SAL_WARN("svtools.table", "unsupported type '" << sTypeName << "'!");
         }
-        auto& newValue = aNormalizers[sTypeName];
-        newValue = std::move(o_formatter);
-        return newValue.get();
     }
-    else
-        return pos->second.get();
+
+    return pos->second.get();
 }
 
 //= CellValueConversion
