@@ -722,12 +722,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if (ShouldTry(SotClipboardFormatId::EMBED_SOURCE))
     {
-        sd::slidesorter::SlideSorter& xSlideSorter
-            = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
-                  mrDoc.GetDocSh()->GetViewShell()->GetViewShellBase())
-                  ->GetSlideSorter();
-        if (xSlideSorter.GetController().GetClipboard().PasteSlidesFromSystemClipboard())
-            return true;
+        if (::sd::slidesorter::SlideSorterViewShell* pSlideSorterViewShell =
+                ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(
+                    mrDoc.GetDocSh()->GetViewShell()->GetViewShellBase()))
+        {
+            if (pSlideSorterViewShell->GetSlideSorter().GetController().GetClipboard().PasteSlidesFromSystemClipboard())
+                return true;
+        }
     }
 
     if (ShouldTry(SotClipboardFormatId::DRAWING))
