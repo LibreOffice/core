@@ -47,6 +47,7 @@
 #include <charatr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndgrf.hxx>
+#include <fmturl.hxx>
 #include "wrtmd.hxx"
 
 #include <algorithm>
@@ -60,10 +61,12 @@ struct SwMDImageInfo
 {
     OUString aURL;
     OUString aTitle;
+    OUString aLink;
 
-    SwMDImageInfo(const OUString& rURL, const OUString& rTitle)
+    SwMDImageInfo(const OUString& rURL, const OUString& rTitle, const OUString& rLink)
         : aURL(rURL)
         , aTitle(rTitle)
+        , aLink(rLink)
     {
     }
 
@@ -73,7 +76,11 @@ struct SwMDImageInfo
             return true;
         if (rOther.aURL < aURL)
             return false;
-        return aTitle < rOther.aTitle;
+        if (aLink < rOther.aLink)
+            return true;
+        if (rOther.aLink < aLink)
+            return false;
+        return aLink < rOther.aLink;
     }
 };
 
@@ -209,7 +216,13 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
                 aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
             }
             OUString aTitle = pGrfNode->GetTitle();
-            rChange.aImages.emplace(aGraphicURL, aTitle);
+            OUString aLink;
+            if (rFrameFormat.GetAttrSet().HasItem(RES_URL))
+            {
+                const SwFormatURL& rLink = rFrameFormat.GetURL();
+                aLink = rLink.GetURL();
+            }
+            rChange.aImages.emplace(aGraphicURL, aTitle, aLink);
             break;
         }
     }
@@ -369,11 +382,25 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
             continue;
         }
 
+        if (!rImageInfo.aLink.isEmpty())
+        {
+            // Start image link.
+            rWrt.Strm().WriteUnicodeOrByteText(u"[");
+        }
+
         rWrt.Strm().WriteUnicodeOrByteText(u"![");
         OutEscapedChars(rWrt, rImageInfo.aTitle);
         rWrt.Strm().WriteUnicodeOrByteText(u"](");
         rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
         rWrt.Strm().WriteUnicodeOrByteText(u")");
+
+        if (!rImageInfo.aLink.isEmpty())
+        {
+            // End image link.
+            rWrt.Strm().WriteUnicodeOrByteText(u"](");
+            rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aLink);
+            rWrt.Strm().WriteUnicodeOrByteText(u")");
+        }
     }
 
     current = result;

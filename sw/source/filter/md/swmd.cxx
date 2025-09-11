@@ -46,6 +46,7 @@
 #include <ndgrf.hxx>
 #include <fmtcntnt.hxx>
 #include <swtypes.hxx>
+#include <fmturl.hxx>
 
 #include "swmd.hxx"
 
@@ -592,7 +593,8 @@ void SwMarkdownParser::SetAttrs(SwPaM& rRange)
 
 void SwMarkdownParser::ClearAttrs() { m_xDoc->ResetAttrs(*m_pPam, true); }
 
-void SwMarkdownParser::InsertImage(const OUString& aURL, const OUString& rTitle)
+void SwMarkdownParser::InsertImage(const OUString& aURL, const OUString& rTitle,
+                                   const SwFormatINetFormat* pINetFormat)
 {
     OUString sGrfNm = INetURLObject::GetAbsURL(m_sBaseURL, aURL);
 
@@ -636,14 +638,21 @@ void SwMarkdownParser::InsertImage(const OUString& aURL, const OUString& rTitle)
     }
 
     SfxItemSet aFlySet(
-        SfxItemSet::makeFixedSfxItemSet<RES_FRM_SIZE, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR>(
-            m_xDoc->GetAttrPool()));
+        SfxItemSet::makeFixedSfxItemSet<RES_FRMATR_BEGIN, RES_FRMATR_END>(m_xDoc->GetAttrPool()));
 
     aFlySet.Put(SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
     aFlySet.Put(SwFormatFrameSize(SwFrameSize::Fixed, nWidth, nHeight));
     aFlySet.Put(SwFormatHoriOrient(0, text::HoriOrientation::NONE, text::RelOrientation::CHAR));
     aFlySet.Put(
         SwFormatVertOrient(0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::CHAR));
+
+    if (pINetFormat)
+    {
+        // Have a link, set that on the image.
+        SwFormatURL aFormatURL;
+        aFormatURL.SetURL(pINetFormat->GetValue(), /*bServerMap=*/false);
+        aFlySet.Put(aFormatURL);
+    }
 
     SanitizeAnchor(aFlySet);
 

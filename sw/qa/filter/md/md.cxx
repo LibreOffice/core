@@ -25,6 +25,7 @@
 #include <ndgrf.hxx>
 #include <itabenum.hxx>
 #include <ndtxt.hxx>
+#include <fmturl.hxx>
 
 namespace
 {
@@ -502,6 +503,66 @@ CPPUNIT_TEST_FIXTURE(Test, testTableColumnAdjustMdExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - Actual  : | - | - | - |
     // i.e. the delimiter row's cell adjustments were lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdImport)
+{
+    // Given a document with an image which has a link on it:
+    // When importing that document:
+    setImportFilterName("Markdown");
+    createSwDoc("image-and-link.md");
+
+    // Then make sure the link is not lost:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    sw::FrameFormats<sw::SpzFrameFormat*>& rFlys = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFlys.size());
+    sw::SpzFrameFormat& rFly = *rFlys[0];
+    const SwFormatURL& rURL = rFly.GetURL();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: https://www.example.com/
+    // - Actual  :
+    // i.e. the image's item set didn't have a URL.
+    CPPUNIT_ASSERT_EQUAL(u"https://www.example.com/"_ustr, rURL.GetURL());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
+{
+    // Given a document with an inline, linked image + link on it:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A "_ustr);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+    aFrameSet.Put(aAnchor);
+    Graphic aGraphic;
+    OUString aGraphicURL(u"./test.png"_ustr);
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwFlyFrameFormat* pFlyFormat
+        = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
+                              /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
+    SwNodeOffset nContentOffset = pFlyFormat->GetContent().GetContentIdx()->GetIndex();
+    SwGrfNode* pGrfNode = pDoc->GetNodes()[nContentOffset + 1]->GetGrfNode();
+    pGrfNode->SetTitle(u"mytitle"_ustr);
+    SwFormatURL aFormatURL;
+    aFormatURL.SetURL(u"https://x.com"_ustr, /*bServerMap=*/false);
+    pFlyFormat->SetFormatAttr(aFormatURL);
+    pWrtShell->Insert(u" B"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the image is exported and the link is not lost:
+    std::string aActual = TempFileToString();
+    std::string aExpected("A [![mytitle](./test.png)](https://x.com) B" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A [![mytitle](./test.png)](https://x.com) B
+    // - Actual  : A ![mytitle](./test.png) B
+    // i.e. the image link was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
