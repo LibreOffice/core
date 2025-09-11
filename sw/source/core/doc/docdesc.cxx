@@ -591,7 +591,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
     CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
 
-    if (pStashedLeftFormat)
+    if (pStashedLeftFoot)
         rDesc.RemoveStashedFormat(false, true, false);
 
     if (pStashedFirstMasterFoot)
