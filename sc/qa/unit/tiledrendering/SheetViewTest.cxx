@@ -252,8 +252,9 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     dispatchCommand(mxComponent, u".uno:RemoveSheetView"_ustr, {});
     Scheduler::ProcessEventsToIdle();
 
-    // No more sheet view
-    CPPUNIT_ASSERT_EQUAL(size_t(0), pSheetViewManager->getSheetViews().size());
+    // Sheet view is retained, but null
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pSheetViewManager->getSheetViews().size());
+    CPPUNIT_ASSERT(!pSheetViewManager->getSheetViews().at(0));
 
     // Only 1 table left
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), pDocument->GetTableCount());
