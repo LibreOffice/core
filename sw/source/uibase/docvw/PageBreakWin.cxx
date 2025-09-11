@@ -305,20 +305,17 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
             ? *static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
             : *static_cast<SwNoTextFrame*>(pCnt)->GetNode();
 
+        rSh.Push();
+        rSh.ClearMark();
+        rSh.SetSelection(SwPaM(rNd));
+
         if ( pCnt->IsInTab() )
         {
-            rSh.Push( );
-            rSh.ClearMark();
-
-            rSh.SetSelection( SwPaM(rNd) );
-
             SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhichIDFromSlotID(FN_FORMAT_TABLE_DLG), u"textflow"_ustr);
             m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     FN_FORMAT_TABLE_DLG,
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                     { &aItem });
-
-            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
         else
         {
@@ -330,6 +327,9 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
                     SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                     { &aItem, &aPaMItem });
         }
+
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+
         rSh.LockView( bOldLock );
         m_pEditWin->GrabFocus( );
     }
