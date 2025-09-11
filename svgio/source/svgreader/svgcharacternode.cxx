@@ -205,12 +205,12 @@ namespace svgio::svgreader
             // get current TextPosition and TextWidth in units
             basegfx::B2DPoint aPosition(rSvgTextPosition.getPosition());
             double fTextWidth(aTextLayouterDevice.getTextWidth(getText(), nIndex, nLength) / sizeFactor);
+            double fSvgTextLength(rSvgTextPosition.getTextLength());
 
             // check for user-given TextLength
-            if(0.0 != rSvgTextPosition.getTextLength()
-                && !basegfx::fTools::equal(fTextWidth, rSvgTextPosition.getTextLength()))
+            if(0.0 != fSvgTextLength && 0.0 != fTextWidth && !basegfx::fTools::equal(fTextWidth, fSvgTextLength))
             {
-                const double fFactor(rSvgTextPosition.getTextLength() / fTextWidth);
+                const double fFactor(fSvgTextLength / fTextWidth);
 
                 if(rSvgTextPosition.getLengthAdjust())
                 {
@@ -234,7 +234,7 @@ namespace svgio::svgreader
                     fFontWidth *= fFactor;
                 }
 
-                fTextWidth = rSvgTextPosition.getTextLength();
+                fTextWidth = fSvgTextLength;
             }
 
             // get TextAlign
