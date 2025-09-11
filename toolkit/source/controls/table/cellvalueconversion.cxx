@@ -75,6 +75,27 @@ double lcl_convertTimeToDays(tools::Long const i_hours, tools::Long const i_minu
 
 //= StandardFormatNormalizer
 
+class StandardFormatNormalizer
+{
+public:
+    virtual ~StandardFormatNormalizer() = default;
+
+    /** converts the given <code>Any</code> into a <code>double</code> value to be fed into a number formatter
+        */
+    virtual double convertToDouble(css::uno::Any const& i_value) const = 0;
+
+    /** returns the format key to be used for formatting values
+        */
+    sal_Int32 getFormatKey() const { return m_nFormatKey; }
+
+protected:
+    StandardFormatNormalizer(css::uno::Reference<css::util::XNumberFormatter> const& i_formatter,
+                             ::sal_Int32 const i_numberFormatType);
+
+private:
+    ::sal_Int32 m_nFormatKey;
+};
+
 StandardFormatNormalizer::StandardFormatNormalizer(Reference<XNumberFormatter> const& i_formatter,
                                                    ::sal_Int32 const i_numberFormatType)
     : m_nFormatKey(0)
@@ -278,55 +299,54 @@ bool CellValueConversion::ensureNumberFormatter()
     return xNumberFormatter.is();
 }
 
-bool CellValueConversion::getValueNormalizer(Type const& i_valueType,
-                                             std::shared_ptr<StandardFormatNormalizer>& o_formatter)
+const StandardFormatNormalizer* CellValueConversion::getValueNormalizer(Type const& i_valueType)
 {
     auto pos = aNormalizers.find(i_valueType.getTypeName());
     if (pos == aNormalizers.end())
     {
         // never encountered this type before
-        o_formatter.reset();
+        std::unique_ptr<StandardFormatNormalizer> o_formatter;
 
         OUString const sTypeName(i_valueType.getTypeName());
         TypeClass const eTypeClass = i_valueType.getTypeClass();
 
         if (sTypeName == ::cppu::UnoType<DateTime>::get().getTypeName())
         {
-            o_formatter = std::make_shared<DateTimeNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<DateTimeNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<css::util::Date>::get().getTypeName())
         {
-            o_formatter = std::make_shared<DateNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<DateNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<css::util::Time>::get().getTypeName())
         {
-            o_formatter = std::make_shared<TimeNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<TimeNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<sal_Bool>::get().getTypeName())
         {
-            o_formatter = std::make_shared<BooleanNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<BooleanNormalization>(xNumberFormatter);
         }
         else if (sTypeName == ::cppu::UnoType<double>::get().getTypeName()
                  || sTypeName == ::cppu::UnoType<float>::get().getTypeName())
         {
-            o_formatter = std::make_shared<DoubleNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<DoubleNormalization>(xNumberFormatter);
         }
         else if ((eTypeClass == TypeClass_BYTE) || (eTypeClass == TypeClass_SHORT)
                  || (eTypeClass == TypeClass_UNSIGNED_SHORT) || (eTypeClass == TypeClass_LONG)
                  || (eTypeClass == TypeClass_UNSIGNED_LONG) || (eTypeClass == TypeClass_HYPER))
         {
-            o_formatter = std::make_shared<IntegerNormalization>(xNumberFormatter);
+            o_formatter = std::make_unique<IntegerNormalization>(xNumberFormatter);
         }
         else
         {
             SAL_WARN("svtools.table", "unsupported type '" << sTypeName << "'!");
         }
-        aNormalizers[sTypeName] = o_formatter;
+        auto& newValue = aNormalizers[sTypeName];
+        newValue = std::move(o_formatter);
+        return newValue.get();
     }
     else
-        o_formatter = pos->second;
-
-    return bool(o_formatter);
+        return pos->second.get();
 }
 
 //= CellValueConversion
@@ -350,8 +370,7 @@ OUString CellValueConversion::convertToString(const Any& i_value)
     {
         if (ensureNumberFormatter())
         {
-            std::shared_ptr<StandardFormatNormalizer> pNormalizer;
-            if (getValueNormalizer(i_value.getValueType(), pNormalizer))
+            if (auto* pNormalizer = getValueNormalizer(i_value.getValueType()))
             {
                 try
                 {

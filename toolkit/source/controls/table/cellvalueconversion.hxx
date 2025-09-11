@@ -26,26 +26,7 @@
 
 namespace svt
 {
-class StandardFormatNormalizer
-{
-public:
-    /** converts the given <code>Any</code> into a <code>double</code> value to be fed into a number formatter
-        */
-    virtual double convertToDouble(css::uno::Any const& i_value) const = 0;
-
-    /** returns the format key to be used for formatting values
-        */
-    sal_Int32 getFormatKey() const { return m_nFormatKey; }
-
-protected:
-    StandardFormatNormalizer(css::uno::Reference<css::util::XNumberFormatter> const& i_formatter,
-                             ::sal_Int32 const i_numberFormatType);
-
-    virtual ~StandardFormatNormalizer() {}
-
-private:
-    ::sal_Int32 m_nFormatKey;
-};
+class StandardFormatNormalizer;
 
 class CellValueConversion
 {
@@ -57,14 +38,11 @@ public:
 
 private:
     bool ensureNumberFormatter();
-    bool getValueNormalizer(css::uno::Type const& i_valueType,
-                            std::shared_ptr<StandardFormatNormalizer>& o_formatter);
-
-    typedef std::unordered_map<OUString, std::shared_ptr<StandardFormatNormalizer>> NormalizerCache;
+    const StandardFormatNormalizer* getValueNormalizer(css::uno::Type const& i_valueType);
 
     css::uno::Reference<css::util::XNumberFormatter> xNumberFormatter;
     bool bAttemptedFormatterCreation;
-    NormalizerCache aNormalizers;
+    std::unordered_map<OUString, std::unique_ptr<StandardFormatNormalizer>> aNormalizers;
 };
 
 } // namespace svt
