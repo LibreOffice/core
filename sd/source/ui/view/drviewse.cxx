@@ -957,10 +957,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PASTE_SLIDE:
         case SID_COPY_SLIDE:
         {
-            sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())
-                ->GetSlideSorter()
-                .GetController()
-                .FuSupport(rReq);
+            if (::sd::slidesorter::SlideSorterViewShell* pSlideSorterViewShell =
+                sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase()))
+                    pSlideSorterViewShell->GetSlideSorter().GetController().FuSupport(rReq);
             Cancel();
             rReq.Done();
         }
