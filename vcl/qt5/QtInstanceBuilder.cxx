@@ -234,6 +234,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/textanimtabpage.ui"_ustr,
         u"cui/ui/textcolumnstabpage.ui"_ustr,
         u"modules/scalc/ui/statisticsinfopage.ui"_ustr,
+        u"modules/simpress/ui/annotationtagmenu.ui"_ustr,
         u"modules/swriter/ui/printoptionspage.ui"_ustr,
         u"modules/swriter/ui/statisticsinfopage.ui"_ustr,
         u"sfx/ui/custominfopage.ui"_ustr,
