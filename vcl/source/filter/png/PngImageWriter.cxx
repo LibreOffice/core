@@ -208,7 +208,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N32BitTcBgra:
             {
                 assert(aBitmap.HasAlpha());
-                colorType = PNG_COLOR_TYPE_RGBA;
+                colorType = PNG_COLOR_TYPE_RGB_ALPHA;
                 bitDepth = 8;
                 bCombineChannels = true;
                 break;
@@ -224,7 +224,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
             case ScanlineFormat::N32BitTcRgba:
             {
                 assert(aBitmap.HasAlpha());
-                colorType = PNG_COLOR_TYPE_RGBA;
+                colorType = PNG_COLOR_TYPE_RGB_ALPHA;
                 bitDepth = 8;
                 bCombineChannels = true;
                 break;

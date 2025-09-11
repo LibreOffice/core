@@ -457,7 +457,7 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
                 case PNG_COLOR_TYPE_RGB:
                     aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
                     break;
-                case PNG_COLOR_TYPE_RGBA:
+                case PNG_COLOR_TYPE_RGB_ALPHA:
                     aBitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
                     break;
                 case PNG_COLOR_TYPE_GRAY:
