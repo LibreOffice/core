@@ -302,8 +302,8 @@ FREEHAND_TARBALL := libfreehand-0.1.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FREETYPE_SHA256SUM := f8dfa8f15ef0576738dfb55b2e6e6b172fd5d09b6f03785a1df03239549f64d2
-FREETYPE_TARBALL := freetype-2.14.0.tar.xz
+FREETYPE_SHA256SUM := 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
+FREETYPE_TARBALL := freetype-2.14.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
