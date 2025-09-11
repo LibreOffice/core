@@ -12,9 +12,11 @@
 #
 # ------------------------------------------------------------------
 
+@{libo_inst_dir} = @INSTDIR@
+
 include <tunables/global>
 
-profile libreoffice-oosplash INSTDIR-program/oosplash flags=(complain) {
+profile libreoffice-oosplash @{libo_inst_dir}/program/oosplash flags=(complain) {
   include <abstractions/base>
   include <abstractions/nameservice>
   include <abstractions/X>
@@ -24,9 +26,9 @@ profile libreoffice-oosplash INSTDIR-program/oosplash flags=(complain) {
   /sys/devices/{virtual,pci[0-9]*}/**/queue/rotational  r, # for isRotational() in desktop/unx/source/pagein.c
   /usr/lib{,32,64}/ure/bin/javaldx      rmpux,
   /usr/share/libreoffice/program/*      r,
-  INSTDIR-program/**                    r,
-  INSTDIR-program/soffice.bin rmpx,
-  INSTDIR-program/javaldx rmpux,
+  @{libo_inst_dir}/program/**           r,
+  @{libo_inst_dir}/program/soffice.bin  rmpx,
+  @{libo_inst_dir}/program/javaldx      rmpux,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
 
   # Site-specific additions and overrides. See local/README for details.

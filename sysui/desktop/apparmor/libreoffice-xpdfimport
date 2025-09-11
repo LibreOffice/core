@@ -12,28 +12,23 @@
 #
 # ------------------------------------------------------------------
 
+@{libo_inst_dir} = @INSTDIR@
+
 include <tunables/global>
 
-profile libreoffice-senddoc INSTDIR-program/senddoc {
+profile libreoffice-xpdfimport @{libo_inst_dir}/program/xpdfimport {
   include <abstractions/base>
   include <abstractions/user-tmp>
 
-  /{usr/,}bin/sh        rmix,
-  /{usr/,}bin/bash      rmix,
-  /{usr/,}bin/dash      rmix,
-  /{usr/,}bin/sed       rmix,
-  /usr/bin/dirname      rmix,
-  /usr/bin/basename     rmix,
-  /{usr/,}bin/grep      rmix,
-  /{usr/,}bin/uname     rmix,
-  /usr/bin/xdg-open     rPUx,
-  /usr/bin/xdg-email    rPUx,
-  /dev/null             rw,
-  INSTDIR-program/uri-encode rmpux,
+  /usr/share/poppler/**     r,
   /usr/share/libreoffice/share/config/* r,
   owner @{HOME}/.config/libreoffice{,dev}/?/user/uno_packages/cache/log.txt rw,
 
-  # Site-specific additions and overrides. See local/README for details.
-  include if exists <local/libreoffice-senddoc>
-}
+  @{libo_inst_dir}/program/xpdfimport pxm,
 
+  #Uncomment for build testing (should be one directory <- of instdir)
+  #/mnt/store/git/libo/**    r,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/libreoffice-xpdfimport>
+}

@@ -72,11 +72,13 @@
 #Math
 @{libreoffice_ext} += [mM][mM][lL]
 
+@{libo_inst_dir} = @INSTDIR@
+
 @{libo_user_dirs} = @{HOME} /mnt /media
 
 include <tunables/global>
 
-profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
+profile libreoffice-soffice @{libo_inst_dir}/program/soffice.bin flags=(complain) {
   include <abstractions/private-files>
 
   include <abstractions/audio>
@@ -161,12 +163,12 @@ profile libreoffice-soffice INSTDIR-program/soffice.bin flags=(complain) {
   /usr/lib{,32,64}/jvm/**                       r,
   /usr/lib{,32,64}/jvm/**/jre/bin/java          mix,
   /usr/lib{,32,64}/jvm/**/bin/java              mix,
-  INSTDIR-**                        rw,
-  INSTDIR-**.so                     m,
-  INSTDIR-program/soffice.bin       mix,
-  INSTDIR-program/xpdfimport        px,
-  INSTDIR-program/senddoc           px,
-  /usr/bin/xdg-open                 rPUx,
+  @{libo_inst_dir}/**                           rw,
+  @{libo_inst_dir}/**.so                        m,
+  @{libo_inst_dir}/program/soffice.bin          mix,
+  @{libo_inst_dir}/program/xpdfimport           px,
+  @{libo_inst_dir}/program/senddoc              px,
+  /usr/bin/xdg-open                             rPUx,
 
   /usr/share/java/**.jar                r,
   /usr/share/hunspell/**                r,
