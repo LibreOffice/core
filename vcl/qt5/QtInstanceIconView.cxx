@@ -162,7 +162,14 @@ void QtInstanceIconView::select(int nPos)
         [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
 }
 
-void QtInstanceIconView::unselect(int) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::unselect(int nPos)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Deselect);
+    });
+}
 
 void QtInstanceIconView::set_image(int nPos, VirtualDevice& rDevice)
 {
