@@ -807,12 +807,12 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             auto pManager = rDoc.GetSheetViewManager(nSelectedTab);
 
-            for (auto const& rSheetView : pManager->getSheetViews())
+            for (auto const& pSheetView : pManager->getSheetViews())
             {
-                if (!rSheetView.isValid())
+                if (!pSheetView)
                     continue;
 
-                SCTAB nSheetViewTab = rSheetView.getTableNumber();
+                SCTAB nSheetViewTab = pSheetView->getTableNumber();
 
                 ScMarkData aSheetViewMark(rDoc.GetSheetLimits());
                 aSheetViewMark.SelectTable(nSheetViewTab, false);
@@ -832,12 +832,12 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if (!rDoc.IsSheetView(rTab))
             {
                 auto pManager = rDoc.GetSheetViewManager(rTab);
-                for (auto const& rSheetView : pManager->getSheetViews())
+                for (auto const& pSheetView : pManager->getSheetViews())
                 {
-                    if (!rSheetView.isValid())
+                    if (!pSheetView)
                         continue;
 
-                    SCTAB nSheetViewTab = rSheetView.getTableNumber();
+                    SCTAB nSheetViewTab = pSheetView->getTableNumber();
                     applyText(*this, nCol, nRow, nSheetViewTab, rString, bNumFmtChanged);
                 }
             }

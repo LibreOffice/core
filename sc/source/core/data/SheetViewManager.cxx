@@ -16,9 +16,9 @@ SheetViewManager::SheetViewManager() {}
 
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
-    sal_Int32 nID = maViews.size();
-    maViews.emplace_back(pSheetViewTable);
-    return SheetViewID(nID);
+    SheetViewID nID(maViews.size());
+    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable));
+    return nID;
 }
 
 bool SheetViewManager::remove(SheetViewID nID)
@@ -31,14 +31,13 @@ bool SheetViewManager::remove(SheetViewID nID)
     return false;
 }
 
-SheetView SheetViewManager::get(SheetViewID nID) const
+std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 {
     if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
     {
-        if (maViews[nID].isValid())
-            return maViews[nID];
+        return maViews[nID];
     }
-    return SheetView();
+    return std::shared_ptr<SheetView>();
 }
 
 /// Calculate the next existing sheet view to use.
@@ -64,7 +63,7 @@ SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
 
     for (size_t nIndex = startIndex; nIndex < maViews.size(); ++nIndex)
     {
-        if (maViews[nIndex].isValid())
+        if (maViews[nIndex])
             return SheetViewID(nIndex);
     }
 

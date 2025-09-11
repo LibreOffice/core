@@ -1194,10 +1194,10 @@ SCTAB ScDocument::GetSheetViewNumber(SCTAB nTab, sc::SheetViewID nID)
         if (pMainSheet->IsSheetView() || nID == sc::DefaultSheetViewID)
             return nTab;
 
-        sc::SheetView aView = pMainSheet->GetSheetViewManager()->get(nID);
-        if (aView.isValid())
+        std::shared_ptr<sc::SheetView> pView = pMainSheet->GetSheetViewManager()->get(nID);
+        if (pView)
         {
-            return aView.getTablePointer()->GetTab();
+            return pView->getTablePointer()->GetTab();
         }
         assert(false && "a non valid sheet view is unexpected...");
     }
