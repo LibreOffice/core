@@ -142,7 +142,7 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        QAction* pAction = new QAction(toQString(rStr));
+        QAction* pAction = new QAction(vclToQtStringWithAccelerator(rStr));
 
         insertAction(*pAction, rId, nPos);
 
