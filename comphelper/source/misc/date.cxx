@@ -36,11 +36,13 @@ namespace comphelper::date
 /* XXX can that dbconversion cope with years > 9999 or negative years at all?
  * Database fields may be limited to positive 4 digits. */
 
-constexpr sal_Int32 MIN_DAYS = -11968265; // -32768-01-01
-constexpr sal_Int32 MAX_DAYS = 11967900; //  32767-12-31
-
 constexpr sal_Int16 kYearMax = SAL_MAX_INT16;
 constexpr sal_Int16 kYearMin = SAL_MIN_INT16;
+
+constexpr sal_Int32 MIN_DAYS = convertDateToDays(1, 1, kYearMin); // -32768-01-01
+static_assert(MIN_DAYS == -11968265);
+constexpr sal_Int32 MAX_DAYS = convertDateToDays(31, 12, kYearMax); // 32767-12-31
+static_assert(MAX_DAYS == 11967900);
 
 constexpr sal_Int32 nNullDateDays = convertDateToDays(30, 12, 1899);
 static_assert(nNullDateDays == 693594);
