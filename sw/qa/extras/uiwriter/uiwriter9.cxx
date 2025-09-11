@@ -62,6 +62,7 @@
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 #include <svx/svxids.hrc>
+#include <pagefrm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
 
@@ -1643,6 +1644,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167006)
     selectShape(1);
     // attempt to edit the OLE object. This must not crash.
     getSwDocShell()->GetWrtShell()->LaunchOLEObj();
+}
+
+// tdf#168355 Page break with page style with page number in table properties is wrong
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf168355)
+{
+    createSwDoc("tdf168355.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    const SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    const SwPageFrame* pPageFrm = static_cast<const SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pPageFrm->GetVirtPageNum());
+    pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pPageFrm->GetVirtPageNum());
+    pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
+    // this used to be page 3
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pPageFrm->GetVirtPageNum());
 }
 
 } // end of anonymous namespace
