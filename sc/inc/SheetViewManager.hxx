@@ -12,6 +12,7 @@
 #include "SheetView.hxx"
 #include "types.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <vector>
 #include <memory>
 
@@ -24,6 +25,11 @@ class SheetViewManager
 {
 private:
     std::vector<std::shared_ptr<SheetView>> maViews;
+
+    bool isValidSheetViewID(SheetViewID nID) const
+    {
+        return nID >= 0 && o3tl::make_unsigned(nID) < maViews.size();
+    }
 
 public:
     SheetViewManager();

@@ -23,9 +23,12 @@ SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 
 bool SheetViewManager::remove(SheetViewID nID)
 {
-    if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
+    if (isValidSheetViewID(nID))
     {
-        maViews.erase(maViews.begin() + nID);
+        // We only reset the value and not actually remove if from the vector, because the SheetViewID
+        // also represents the index in the vector. If we removed the value it would make all the
+        // following indices / SheetViewIDs returning the wrong SheetView.
+        maViews[nID].reset();
         return true;
     }
     return false;
@@ -33,7 +36,7 @@ bool SheetViewManager::remove(SheetViewID nID)
 
 std::shared_ptr<SheetView> SheetViewManager::get(SheetViewID nID) const
 {
-    if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
+    if (isValidSheetViewID(nID))
     {
         return maViews[nID];
     }
@@ -56,7 +59,7 @@ SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
     }
     // If we assume currnet ID is valid, so set the start to current + 1 to search
     // for then next valid sheet view in the for loop.
-    else if (nID >= 0 && o3tl::make_unsigned(nID) < maViews.size())
+    else if (isValidSheetViewID(nID))
     {
         startIndex = size_t(nID) + 1;
     }
