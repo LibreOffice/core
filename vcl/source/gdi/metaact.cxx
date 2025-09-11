@@ -113,10 +113,6 @@ void MetaAction::Scale( double, double )
 {
 }
 
-MetaPixelAction::MetaPixelAction() :
-    MetaAction(MetaActionType::PIXEL)
-{}
-
 MetaPixelAction::~MetaPixelAction()
 {}
 
@@ -146,10 +142,6 @@ void MetaPixelAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-MetaPointAction::MetaPointAction() :
-    MetaAction(MetaActionType::POINT)
-{}
-
 MetaPointAction::~MetaPointAction()
 {}
 
@@ -177,10 +169,6 @@ void MetaPointAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
-
-MetaLineAction::MetaLineAction() :
-    MetaAction(MetaActionType::LINE)
-{}
 
 MetaLineAction::~MetaLineAction()
 {}
@@ -224,10 +212,6 @@ void MetaLineAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
 }
-
-MetaRectAction::MetaRectAction() :
-    MetaAction(MetaActionType::RECT)
-{}
 
 MetaRectAction::~MetaRectAction()
 {}
@@ -284,12 +268,6 @@ void MetaRectAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-MetaRoundRectAction::MetaRoundRectAction() :
-    MetaAction  ( MetaActionType::ROUNDRECT ),
-    mnHorzRound ( 0 ),
-    mnVertRound ( 0 )
-{}
-
 MetaRoundRectAction::~MetaRoundRectAction()
 {}
 
@@ -323,10 +301,6 @@ void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
     mnVertRound = basegfx::fround<sal_uInt32>(mnVertRound * fabs(fScaleY));
 }
 
-MetaEllipseAction::MetaEllipseAction() :
-    MetaAction(MetaActionType::ELLIPSE)
-{}
-
 MetaEllipseAction::~MetaEllipseAction()
 {}
 
@@ -354,10 +328,6 @@ void MetaEllipseAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
-
-MetaArcAction::MetaArcAction() :
-    MetaAction(MetaActionType::ARC)
-{}
 
 MetaArcAction::~MetaArcAction()
 {}
@@ -397,10 +367,6 @@ void MetaArcAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-MetaPieAction::MetaPieAction() :
-    MetaAction(MetaActionType::PIE)
-{}
-
 MetaPieAction::~MetaPieAction()
 {}
 
@@ -439,10 +405,6 @@ void MetaPieAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-MetaChordAction::MetaChordAction() :
-    MetaAction(MetaActionType::CHORD)
-{}
-
 MetaChordAction::~MetaChordAction()
 {}
 
@@ -477,10 +439,6 @@ void MetaChordAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maStartPt, fScaleX, fScaleY );
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
-
-MetaPolyLineAction::MetaPolyLineAction() :
-    MetaAction(MetaActionType::POLYLINE)
-{}
 
 MetaPolyLineAction::~MetaPolyLineAction()
 {}
@@ -523,10 +481,6 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
 }
 
-MetaPolygonAction::MetaPolygonAction() :
-    MetaAction(MetaActionType::POLYGON)
-{}
-
 MetaPolygonAction::~MetaPolygonAction()
 {}
 
@@ -554,10 +508,6 @@ void MetaPolygonAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoly( maPoly, fScaleX, fScaleY );
 }
-
-MetaPolyPolygonAction::MetaPolyPolygonAction() :
-    MetaAction(MetaActionType::POLYPOLYGON)
-{}
 
 MetaPolyPolygonAction::~MetaPolyPolygonAction()
 {}
@@ -587,12 +537,6 @@ void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
-
-MetaTextAction::MetaTextAction() :
-    MetaAction  ( MetaActionType::TEXT ),
-    mnIndex     ( 0 ),
-    mnLen       ( 0 )
-{}
 
 MetaTextAction::~MetaTextAction()
 {}
@@ -628,12 +572,6 @@ void MetaTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
-
-MetaTextArrayAction::MetaTextArrayAction() :
-    MetaAction  ( MetaActionType::TEXTARRAY ),
-    mnIndex     ( 0 ),
-    mnLen       ( 0 )
-{}
 
 MetaTextArrayAction::MetaTextArrayAction(const MetaTextArrayAction& rAction)
     : MetaAction(MetaActionType::TEXTARRAY)
@@ -737,13 +675,6 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     }
 }
 
-MetaStretchTextAction::MetaStretchTextAction() :
-    MetaAction  ( MetaActionType::STRETCHTEXT ),
-    mnWidth     ( 0 ),
-    mnIndex     ( 0 ),
-    mnLen       ( 0 )
-{}
-
 MetaStretchTextAction::~MetaStretchTextAction()
 {}
 
@@ -798,10 +729,6 @@ void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
     mnWidth = basegfx::fround<sal_uInt32>(mnWidth * fabs(fScaleX));
 }
-MetaTextRectAction::MetaTextRectAction() :
-    MetaAction  ( MetaActionType::TEXTRECT ),
-    mnStyle     ( DrawTextFlags::NONE )
-{}
 
 MetaTextRectAction::~MetaTextRectAction()
 {}
@@ -836,14 +763,6 @@ void MetaTextRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
-
-MetaTextLineAction::MetaTextLineAction() :
-    MetaAction  ( MetaActionType::TEXTLINE ),
-    mnWidth     ( 0 ),
-    meStrikeout ( STRIKEOUT_NONE ),
-    meUnderline ( LINESTYLE_NONE ),
-    meOverline  ( LINESTYLE_NONE )
-{}
 
 MetaTextLineAction::~MetaTextLineAction()
 {}
@@ -889,10 +808,6 @@ void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
     mnWidth = basegfx::fround<tools::Long>(mnWidth * fabs(fScaleX));
 }
 
-MetaBmpAction::MetaBmpAction() :
-    MetaAction(MetaActionType::BMP)
-{}
-
 MetaBmpAction::~MetaBmpAction()
 {}
 
@@ -924,10 +839,6 @@ void MetaBmpAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
-
-MetaBmpScaleAction::MetaBmpScaleAction() :
-    MetaAction(MetaActionType::BMPSCALE)
-{}
 
 MetaBmpScaleAction::~MetaBmpScaleAction()
 {}
@@ -1012,10 +923,6 @@ void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
     maSz = aRectangle.GetSize();
 }
 
-MetaBmpScalePartAction::MetaBmpScalePartAction() :
-    MetaAction(MetaActionType::BMPSCALEPART)
-{}
-
 MetaBmpScalePartAction::~MetaBmpScalePartAction()
 {}
 
@@ -1059,10 +966,6 @@ void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-MetaBmpExAction::MetaBmpExAction() :
-    MetaAction(MetaActionType::BMPEX)
-{}
-
 MetaBmpExAction::~MetaBmpExAction()
 {}
 
@@ -1091,10 +994,6 @@ void MetaBmpExAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
-
-MetaBmpExScaleAction::MetaBmpExScaleAction() :
-    MetaAction(MetaActionType::BMPEXSCALE)
-{}
 
 MetaBmpExScaleAction::~MetaBmpExScaleAction()
 {}
@@ -1134,10 +1033,6 @@ void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
 }
-
-MetaBmpExScalePartAction::MetaBmpExScalePartAction() :
-    MetaAction(MetaActionType::BMPEXSCALEPART)
-{}
 
 MetaBmpExScalePartAction::~MetaBmpExScalePartAction()
 {}
@@ -1179,10 +1074,6 @@ void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-MetaMaskAction::MetaMaskAction() :
-    MetaAction(MetaActionType::MASK)
-{}
-
 MetaMaskAction::~MetaMaskAction()
 {}
 
@@ -1216,10 +1107,6 @@ void MetaMaskAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
-
-MetaMaskScaleAction::MetaMaskScaleAction() :
-    MetaAction(MetaActionType::MASKSCALE)
-{}
 
 MetaMaskScaleAction::~MetaMaskScaleAction()
 {}
@@ -1258,10 +1145,6 @@ void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
 }
-
-MetaMaskScalePartAction::MetaMaskScalePartAction() :
-    MetaAction(MetaActionType::MASKSCALEPART)
-{}
 
 MetaMaskScalePartAction::~MetaMaskScalePartAction()
 {}
@@ -1305,10 +1188,6 @@ void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-MetaGradientAction::MetaGradientAction() :
-    MetaAction(MetaActionType::GRADIENT)
-{}
-
 MetaGradientAction::~MetaGradientAction()
 {}
 
@@ -1337,10 +1216,6 @@ void MetaGradientAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
-
-MetaGradientExAction::MetaGradientExAction() :
-    MetaAction  ( MetaActionType::GRADIENTEX )
-{}
 
 MetaGradientExAction::MetaGradientExAction( tools::PolyPolygon aPolyPoly, Gradient aGradient ) :
     MetaAction  ( MetaActionType::GRADIENTEX ),
@@ -1374,10 +1249,6 @@ void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
-
-MetaHatchAction::MetaHatchAction() :
-    MetaAction(MetaActionType::HATCH)
-{}
 
 MetaHatchAction::~MetaHatchAction()
 {}
@@ -1414,10 +1285,6 @@ void MetaHatchAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-MetaWallpaperAction::MetaWallpaperAction() :
-    MetaAction(MetaActionType::WALLPAPER)
-{}
-
 MetaWallpaperAction::~MetaWallpaperAction()
 {}
 
@@ -1447,11 +1314,6 @@ void MetaWallpaperAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
-
-MetaClipRegionAction::MetaClipRegionAction() :
-    MetaAction  ( MetaActionType::CLIPREGION ),
-    mbClip      ( false )
-{}
 
 MetaClipRegionAction::~MetaClipRegionAction()
 {}
@@ -1485,10 +1347,6 @@ void MetaClipRegionAction::Scale( double fScaleX, double fScaleY )
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-MetaISectRectClipRegionAction::MetaISectRectClipRegionAction() :
-    MetaAction(MetaActionType::ISECTRECTCLIPREGION)
-{}
-
 MetaISectRectClipRegionAction::~MetaISectRectClipRegionAction()
 {}
 
@@ -1516,10 +1374,6 @@ void MetaISectRectClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
-
-MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction() :
-    MetaAction(MetaActionType::ISECTREGIONCLIPREGION)
-{}
 
 MetaISectRegionClipRegionAction::~MetaISectRegionClipRegionAction()
 {}
@@ -1553,12 +1407,6 @@ void MetaISectRegionClipRegionAction::Scale( double fScaleX, double fScaleY )
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
-    MetaAction  ( MetaActionType::MOVECLIPREGION ),
-    mnHorzMove  ( 0 ),
-    mnVertMove  ( 0 )
-{}
-
 MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
 {}
 
@@ -1586,11 +1434,6 @@ void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
     mnVertMove = basegfx::fround<tools::Long>(mnVertMove * fScaleY);
 }
 
-MetaLineColorAction::MetaLineColorAction() :
-    MetaAction  ( MetaActionType::LINECOLOR ),
-    mbSet       ( false )
-{}
-
 MetaLineColorAction::~MetaLineColorAction()
 {}
 
@@ -1612,11 +1455,6 @@ rtl::Reference<MetaAction> MetaLineColorAction::Clone() const
 {
     return new MetaLineColorAction( *this );
 }
-
-MetaFillColorAction::MetaFillColorAction() :
-    MetaAction  ( MetaActionType::FILLCOLOR ),
-    mbSet       ( false )
-{}
 
 MetaFillColorAction::~MetaFillColorAction()
 {}
@@ -1640,10 +1478,6 @@ rtl::Reference<MetaAction> MetaFillColorAction::Clone() const
     return new MetaFillColorAction( *this );
 }
 
-MetaTextColorAction::MetaTextColorAction() :
-    MetaAction(MetaActionType::TEXTCOLOR)
-{}
-
 MetaTextColorAction::~MetaTextColorAction()
 {}
 
@@ -1661,11 +1495,6 @@ rtl::Reference<MetaAction> MetaTextColorAction::Clone() const
 {
     return new MetaTextColorAction( *this );
 }
-
-MetaTextFillColorAction::MetaTextFillColorAction() :
-    MetaAction  ( MetaActionType::TEXTFILLCOLOR ),
-    mbSet       ( false )
-{}
 
 MetaTextFillColorAction::~MetaTextFillColorAction()
 {}
@@ -1689,11 +1518,6 @@ rtl::Reference<MetaAction> MetaTextFillColorAction::Clone() const
     return new MetaTextFillColorAction( *this );
 }
 
-MetaTextLineColorAction::MetaTextLineColorAction() :
-    MetaAction  ( MetaActionType::TEXTLINECOLOR ),
-    mbSet       ( false )
-{}
-
 MetaTextLineColorAction::~MetaTextLineColorAction()
 {}
 
@@ -1716,11 +1540,6 @@ rtl::Reference<MetaAction> MetaTextLineColorAction::Clone() const
     return new MetaTextLineColorAction( *this );
 }
 
-MetaOverlineColorAction::MetaOverlineColorAction() :
-    MetaAction  ( MetaActionType::OVERLINECOLOR ),
-    mbSet       ( false )
-{}
-
 MetaOverlineColorAction::~MetaOverlineColorAction()
 {}
 
@@ -1742,11 +1561,6 @@ rtl::Reference<MetaAction> MetaOverlineColorAction::Clone() const
 {
     return new MetaOverlineColorAction( *this );
 }
-
-MetaTextAlignAction::MetaTextAlignAction() :
-    MetaAction  ( MetaActionType::TEXTALIGN ),
-    maAlign     ( ALIGN_TOP )
-{}
 
 MetaTextAlignAction::~MetaTextAlignAction()
 {}
@@ -1796,10 +1610,6 @@ void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
     maMapMode.SetOrigin( aPoint );
 }
 
-MetaFontAction::MetaFontAction() :
-    MetaAction(MetaActionType::FONT)
-{}
-
 MetaFontAction::~MetaFontAction()
 {}
 
@@ -1837,11 +1647,6 @@ void MetaFontAction::Scale( double fScaleX, double fScaleY )
     maFont.SetFontSize( aSize );
 }
 
-MetaPushAction::MetaPushAction() :
-    MetaAction  ( MetaActionType::PUSH ),
-    mnFlags     ( vcl::PushFlags::NONE )
-{}
-
 MetaPushAction::~MetaPushAction()
 {}
 
@@ -1877,11 +1682,6 @@ rtl::Reference<MetaAction> MetaPopAction::Clone() const
     return new MetaPopAction( *this );
 }
 
-MetaRasterOpAction::MetaRasterOpAction() :
-    MetaAction  ( MetaActionType::RASTEROP ),
-    meRasterOp  ( RasterOp::OverPaint )
-{}
-
 MetaRasterOpAction::~MetaRasterOpAction()
 {}
 
@@ -1900,11 +1700,6 @@ rtl::Reference<MetaAction> MetaRasterOpAction::Clone() const
 {
     return new MetaRasterOpAction( *this );
 }
-
-MetaTransparentAction::MetaTransparentAction() :
-    MetaAction      ( MetaActionType::Transparent ),
-    mnTransPercent  ( 0 )
-{}
 
 MetaTransparentAction::~MetaTransparentAction()
 {}
@@ -1935,10 +1730,6 @@ void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
-
-MetaFloatTransparentAction::MetaFloatTransparentAction() :
-    MetaAction(MetaActionType::FLOATTRANSPARENT)
-{}
 
 MetaFloatTransparentAction::~MetaFloatTransparentAction()
 {}
@@ -1977,10 +1768,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-MetaEPSAction::MetaEPSAction() :
-    MetaAction(MetaActionType::EPS)
-{}
-
 MetaEPSAction::~MetaEPSAction()
 {}
 
@@ -2016,11 +1803,6 @@ void MetaEPSAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-MetaRefPointAction::MetaRefPointAction() :
-    MetaAction  ( MetaActionType::REFPOINT ),
-    mbSet       ( false )
-{}
-
 MetaRefPointAction::~MetaRefPointAction()
 {}
 
@@ -2041,13 +1823,6 @@ void MetaRefPointAction::Execute( OutputDevice* pOut )
 rtl::Reference<MetaAction> MetaRefPointAction::Clone() const
 {
     return new MetaRefPointAction( *this );
-}
-
-MetaCommentAction::MetaCommentAction() :
-    MetaAction  ( MetaActionType::COMMENT ),
-    mnValue     ( 0 )
-{
-    ImplInitDynamicData( nullptr, 0UL );
 }
 
 MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
@@ -2215,11 +1990,6 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
     }
 }
 
-MetaLayoutModeAction::MetaLayoutModeAction() :
-    MetaAction  ( MetaActionType::LAYOUTMODE ),
-    mnLayoutMode( vcl::text::ComplexTextLayoutFlags::Default )
-{}
-
 MetaLayoutModeAction::~MetaLayoutModeAction()
 {}
 
@@ -2237,11 +2007,6 @@ rtl::Reference<MetaAction> MetaLayoutModeAction::Clone() const
 {
     return new MetaLayoutModeAction( *this );
 }
-
-MetaTextLanguageAction::MetaTextLanguageAction() :
-    MetaAction  ( MetaActionType::TEXTLANGUAGE ),
-    meTextLanguage( LANGUAGE_DONTKNOW )
-{}
 
 MetaTextLanguageAction::~MetaTextLanguageAction()
 {}

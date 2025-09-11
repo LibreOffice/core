@@ -123,8 +123,6 @@ public:
     void                            SetButtonRepeat( sal_Int32 nRepeat );
     sal_Int32                       GetButtonRepeat() const;
 
-    SAL_DLLPRIVATE static sal_Int32                GetActionDelay();
-
     void                            SetMenuDelay( sal_Int32 nDelay );
     sal_Int32                       GetMenuDelay() const;
 

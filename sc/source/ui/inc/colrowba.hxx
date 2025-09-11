@@ -71,7 +71,6 @@ public:
     virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) const override;
     virtual OUString    GetEntryText( SCCOLROW nEntryNo ) const override;
 
-    virtual bool        IsMirrored() const override;
     virtual SCCOLROW    GetHiddenCount( SCCOLROW nEntryNo ) const override;
 
     virtual void        SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize ) override;

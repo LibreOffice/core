@@ -1073,11 +1073,6 @@ bool ScHeaderControl::IsLayoutRTL() const
     return false;
 }
 
-bool ScHeaderControl::IsMirrored() const
-{
-    return false;
-}
-
 bool ScHeaderControl::IsDisabled() const
 {
     return false;

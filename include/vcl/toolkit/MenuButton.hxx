@@ -47,8 +47,6 @@ private:
     Link<MenuButton*,void> maActivateHdl;
     Link<MenuButton*,void> maSelectHdl;
 
-    DECL_DLLPRIVATE_LINK( ImplMenuTimeoutHdl, Timer*, void );
-
                            MenuButton( const MenuButton & ) = delete;
                            MenuButton& operator=( const MenuButton & ) = delete;
 

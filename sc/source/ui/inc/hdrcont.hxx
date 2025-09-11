@@ -97,7 +97,6 @@ protected:
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo ) const;
     virtual bool     IsLayoutRTL() const;
-    virtual bool     IsMirrored() const;
 
     virtual void    SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewWidth ) = 0;
     virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;

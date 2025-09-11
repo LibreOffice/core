@@ -104,7 +104,6 @@ private:
     Color               maColor;
 
 public:
-    SAL_DLLPRIVATE MetaPixelAction();
     MetaPixelAction(MetaPixelAction const &) = default;
     MetaPixelAction(MetaPixelAction &&) = default;
     MetaPixelAction & operator =(MetaPixelAction const &) = delete; // due to MetaAction
@@ -130,7 +129,6 @@ private:
     Point               maPt;
 
 public:
-    SAL_DLLPRIVATE   MetaPointAction();
     MetaPointAction(MetaPointAction const &) = default;
     MetaPointAction(MetaPointAction &&) = default;
     MetaPointAction & operator =(MetaPointAction const &) = delete; // due to MetaAction
@@ -158,7 +156,6 @@ private:
     Point               maEndPt;
 
 public:
-    SAL_DLLPRIVATE      MetaLineAction();
     MetaLineAction(MetaLineAction const &) = default;
     MetaLineAction(MetaLineAction &&) = default;
     MetaLineAction & operator =(MetaLineAction const &) = delete; // due to MetaAction
@@ -188,7 +185,6 @@ private:
     tools::Rectangle           maRect;
 
 public:
-    SAL_DLLPRIVATE                     MetaRectAction();
     MetaRectAction(MetaRectAction const &) = default;
     MetaRectAction(MetaRectAction &&) = default;
     MetaRectAction & operator =(MetaRectAction const &) = delete; // due to MetaAction
@@ -216,7 +212,6 @@ private:
     sal_uInt32          mnVertRound;
 
 public:
-    SAL_DLLPRIVATE                     MetaRoundRectAction();
     MetaRoundRectAction(MetaRoundRectAction const &) = default;
     MetaRoundRectAction(MetaRoundRectAction &&) = default;
     MetaRoundRectAction & operator =(MetaRoundRectAction const &) = delete; // due to MetaAction
@@ -245,7 +240,6 @@ private:
     tools::Rectangle           maRect;
 
 public:
-    SAL_DLLPRIVATE                     MetaEllipseAction();
     MetaEllipseAction(MetaEllipseAction const &) = default;
     MetaEllipseAction(MetaEllipseAction &&) = default;
     MetaEllipseAction & operator =(MetaEllipseAction const &) = delete; // due to MetaAction
@@ -273,7 +267,6 @@ private:
     Point               maEndPt;
 
 public:
-    SAL_DLLPRIVATE MetaArcAction();
     MetaArcAction(MetaArcAction const &) = default;
     MetaArcAction(MetaArcAction &&) = default;
     MetaArcAction & operator =(MetaArcAction const &) = delete; // due to MetaAction
@@ -304,7 +297,6 @@ private:
     Point               maEndPt;
 
 public:
-    SAL_DLLPRIVATE                     MetaPieAction();
     MetaPieAction(MetaPieAction const &) = default;
     MetaPieAction(MetaPieAction &&) = default;
     MetaPieAction & operator =(MetaPieAction const &) = delete; // due to MetaAction
@@ -335,7 +327,6 @@ private:
     Point               maEndPt;
 
 public:
-    SAL_DLLPRIVATE                    MetaChordAction();
     MetaChordAction(MetaChordAction const &) = default;
     MetaChordAction(MetaChordAction &&) = default;
     MetaChordAction & operator =(MetaChordAction const &) = delete; // due to MetaAction
@@ -365,7 +356,6 @@ private:
     tools::Polygon      maPoly;
 
 public:
-    SAL_DLLPRIVATE                     MetaPolyLineAction();
     MetaPolyLineAction(MetaPolyLineAction const &) = default;
     MetaPolyLineAction(MetaPolyLineAction &&) = default;
     MetaPolyLineAction & operator =(MetaPolyLineAction const &) = delete; // due to MetaAction
@@ -393,7 +383,6 @@ private:
     tools::Polygon      maPoly;
 
 public:
-    SAL_DLLPRIVATE                     MetaPolygonAction();
     MetaPolygonAction(MetaPolygonAction const &) = default;
     MetaPolygonAction(MetaPolygonAction &&) = default;
     MetaPolygonAction & operator =(MetaPolygonAction const &) = delete; // due to MetaAction
@@ -419,7 +408,6 @@ private:
     tools::PolyPolygon  maPolyPoly;
 
 public:
-    SAL_DLLPRIVATE                     MetaPolyPolygonAction();
     MetaPolyPolygonAction(MetaPolyPolygonAction const &) = default;
     MetaPolyPolygonAction(MetaPolyPolygonAction &&) = default;
     MetaPolyPolygonAction & operator =(MetaPolyPolygonAction const &) = delete; // due to MetaAction
@@ -448,7 +436,6 @@ private:
     sal_Int32       mnLen;
 
 public:
-                        MetaTextAction();
     MetaTextAction(MetaTextAction const &) = default;
     MetaTextAction(MetaTextAction &&) = default;
     MetaTextAction & operator =(MetaTextAction const &) = delete; // due to MetaAction
@@ -487,7 +474,6 @@ private:
     SAL_DLLPRIVATE virtual             ~MetaTextArrayAction() override;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextArrayAction();
     SAL_DLLPRIVATE                     MetaTextArrayAction( const MetaTextArrayAction& rAction );
     SAL_DLLPRIVATE MetaTextArrayAction( const Point& rStartPt, OUString aStr,
                          KernArray rDXAry,
@@ -531,7 +517,6 @@ private:
     sal_Int32   mnLen;
 
 public:
-                        MetaStretchTextAction();
     MetaStretchTextAction(MetaStretchTextAction const &) = default;
     MetaStretchTextAction(MetaStretchTextAction &&) = default;
     MetaStretchTextAction & operator =(MetaStretchTextAction const &) = delete; // due to MetaAction
@@ -565,7 +550,6 @@ private:
     DrawTextFlags       mnStyle;
 
 public:
-                        MetaTextRectAction();
     MetaTextRectAction(MetaTextRectAction const &) = default;
     MetaTextRectAction(MetaTextRectAction &&) = default;
     MetaTextRectAction & operator =(MetaTextRectAction const &) = delete; // due to MetaAction
@@ -598,7 +582,6 @@ private:
     FontLineStyle       meOverline;
 
 public:
-                        MetaTextLineAction();
     MetaTextLineAction(MetaTextLineAction const &) = default;
     MetaTextLineAction(MetaTextLineAction &&) = default;
     MetaTextLineAction & operator =(MetaTextLineAction const &) = delete; // due to MetaAction
@@ -631,7 +614,6 @@ private:
     Point               maPt;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpAction();
     MetaBmpAction(MetaBmpAction const &) = default;
     MetaBmpAction(MetaBmpAction &&) = default;
     MetaBmpAction & operator =(MetaBmpAction const &) = delete; // due to MetaAction
@@ -660,7 +642,6 @@ private:
     Size                maSz;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpScaleAction();
     MetaBmpScaleAction(MetaBmpScaleAction const &) = default;
     MetaBmpScaleAction(MetaBmpScaleAction &&) = default;
     MetaBmpScaleAction & operator =(MetaBmpScaleAction const &) = delete; // due to MetaAction
@@ -693,7 +674,6 @@ private:
     Size                maSrcSz;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpScalePartAction();
     MetaBmpScalePartAction(MetaBmpScalePartAction const &) = default;
     MetaBmpScalePartAction(MetaBmpScalePartAction &&) = default;
     MetaBmpScalePartAction & operator =(MetaBmpScalePartAction const &) = delete; // due to MetaAction
@@ -726,7 +706,6 @@ private:
     Point               maPt;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpExAction();
     MetaBmpExAction(MetaBmpExAction const &) = default;
     MetaBmpExAction(MetaBmpExAction &&) = default;
     MetaBmpExAction & operator =(MetaBmpExAction const &) = delete; // due to MetaAction
@@ -756,7 +735,6 @@ private:
     Size                maSz;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpExScaleAction();
     MetaBmpExScaleAction(MetaBmpExScaleAction const &) = default;
     MetaBmpExScaleAction(MetaBmpExScaleAction &&) = default;
     MetaBmpExScaleAction & operator =(MetaBmpExScaleAction const &) = delete; // due to MetaAction
@@ -790,7 +768,6 @@ private:
     Size                maSrcSz;
 
 public:
-    SAL_DLLPRIVATE                     MetaBmpExScalePartAction();
     MetaBmpExScalePartAction(MetaBmpExScalePartAction const &) = default;
     MetaBmpExScalePartAction(MetaBmpExScalePartAction &&) = default;
     MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction const &) = delete; // due to MetaAction
@@ -825,7 +802,6 @@ private:
     Point               maPt;
 
 public:
-                        MetaMaskAction();
     MetaMaskAction(MetaMaskAction const &) = default;
     MetaMaskAction(MetaMaskAction &&) = default;
     MetaMaskAction & operator =(MetaMaskAction const &) = delete; // due to MetaAction
@@ -858,7 +834,6 @@ private:
     Size                maSz;
 
 public:
-                        MetaMaskScaleAction();
     MetaMaskScaleAction(MetaMaskScaleAction const &) = default;
     MetaMaskScaleAction(MetaMaskScaleAction &&) = default;
     MetaMaskScaleAction & operator =(MetaMaskScaleAction const &) = delete; // due to MetaAction
@@ -894,7 +869,6 @@ private:
     Size                maSrcSz;
 
 public:
-                        MetaMaskScalePartAction();
     MetaMaskScalePartAction(MetaMaskScalePartAction const &) = default;
     MetaMaskScalePartAction(MetaMaskScalePartAction &&) = default;
     MetaMaskScalePartAction & operator =(MetaMaskScalePartAction const &) = delete; // due to MetaAction
@@ -929,7 +903,6 @@ private:
     Gradient            maGradient;
 
 public:
-                        MetaGradientAction();
     MetaGradientAction(MetaGradientAction const &) = default;
     MetaGradientAction(MetaGradientAction &&) = default;
     MetaGradientAction & operator =(MetaGradientAction const &) = delete; // due to MetaAction
@@ -957,7 +930,6 @@ private:
     Gradient            maGradient;
 
 public:
-    SAL_DLLPRIVATE                     MetaGradientExAction();
     MetaGradientExAction(MetaGradientExAction const &) = default;
     MetaGradientExAction(MetaGradientExAction &&) = default;
     MetaGradientExAction & operator =(MetaGradientExAction const &) = delete; // due to MetaAction
@@ -985,7 +957,6 @@ private:
     Hatch               maHatch;
 
 public:
-                        MetaHatchAction();
     MetaHatchAction(MetaHatchAction const &) = default;
     MetaHatchAction(MetaHatchAction &&) = default;
     MetaHatchAction & operator =(MetaHatchAction const &) = delete; // due to MetaAction
@@ -1013,7 +984,6 @@ private:
     Wallpaper           maWallpaper;
 
 public:
-    SAL_DLLPRIVATE                     MetaWallpaperAction();
     MetaWallpaperAction(MetaWallpaperAction const &) = default;
     MetaWallpaperAction(MetaWallpaperAction &&) = default;
     MetaWallpaperAction & operator =(MetaWallpaperAction const &) = delete; // due to MetaAction
@@ -1042,7 +1012,6 @@ private:
     bool                mbClip;
 
 public:
-    SAL_DLLPRIVATE                     MetaClipRegionAction();
     MetaClipRegionAction(MetaClipRegionAction const &) = default;
     MetaClipRegionAction(MetaClipRegionAction &&) = default;
     MetaClipRegionAction & operator =(MetaClipRegionAction const &) = delete; // due to MetaAction
@@ -1069,7 +1038,6 @@ private:
     tools::Rectangle           maRect;
 
 public:
-    SAL_DLLPRIVATE                     MetaISectRectClipRegionAction();
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction const &) = default;
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction &&) = default;
     MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction const &) = delete; // due to MetaAction
@@ -1095,7 +1063,6 @@ private:
     vcl::Region          maRegion;
 
 public:
-    SAL_DLLPRIVATE                     MetaISectRegionClipRegionAction();
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction const &) = default;
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction &&) = default;
     MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction const &) = delete; // due to MetaAction
@@ -1122,7 +1089,6 @@ private:
     tools::Long                mnVertMove;
 
 public:
-    SAL_DLLPRIVATE                     MetaMoveClipRegionAction();
     MetaMoveClipRegionAction(MetaMoveClipRegionAction const &) = default;
     MetaMoveClipRegionAction(MetaMoveClipRegionAction &&) = default;
     MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction const &) = delete; // due to MetaAction
@@ -1149,7 +1115,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaLineColorAction();
     MetaLineColorAction(MetaLineColorAction const &) = default;
     MetaLineColorAction(MetaLineColorAction &&) = default;
     MetaLineColorAction & operator =(MetaLineColorAction const &) = delete; // due to MetaAction
@@ -1174,7 +1139,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaFillColorAction();
     MetaFillColorAction(MetaFillColorAction const &) = default;
     MetaFillColorAction(MetaFillColorAction &&) = default;
     MetaFillColorAction & operator =(MetaFillColorAction const &) = delete; // due to MetaAction
@@ -1199,7 +1163,6 @@ private:
     Color               maColor;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextColorAction();
     MetaTextColorAction(MetaTextColorAction const &) = default;
     MetaTextColorAction(MetaTextColorAction &&) = default;
     MetaTextColorAction & operator =(MetaTextColorAction const &) = delete; // due to MetaAction
@@ -1223,7 +1186,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextFillColorAction();
     MetaTextFillColorAction(MetaTextFillColorAction const &) = default;
     MetaTextFillColorAction(MetaTextFillColorAction &&) = default;
     MetaTextFillColorAction & operator =(MetaTextFillColorAction const &) = delete; // due to MetaAction
@@ -1249,7 +1211,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextLineColorAction();
     MetaTextLineColorAction(MetaTextLineColorAction const &) = default;
     MetaTextLineColorAction(MetaTextLineColorAction &&) = default;
     MetaTextLineColorAction & operator =(MetaTextLineColorAction const &) = delete; // due to MetaAction
@@ -1274,7 +1235,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaOverlineColorAction();
     MetaOverlineColorAction(MetaOverlineColorAction const &) = default;
     MetaOverlineColorAction(MetaOverlineColorAction &&) = default;
     MetaOverlineColorAction & operator =(MetaOverlineColorAction const &) = delete; // due to MetaAction
@@ -1298,7 +1258,6 @@ private:
     TextAlign           maAlign;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextAlignAction();
     MetaTextAlignAction(MetaTextAlignAction const &) = default;
     MetaTextAlignAction(MetaTextAlignAction &&) = default;
     MetaTextAlignAction & operator =(MetaTextAlignAction const &) = delete; // due to MetaAction
@@ -1354,7 +1313,6 @@ private:
     void correctFontScale(tools::Long nNewFontScale) { maFont.SetAverageFontWidth(nNewFontScale); }
 
 public:
-    SAL_DLLPRIVATE                     MetaFontAction();
     MetaFontAction(MetaFontAction const &) = default;
     MetaFontAction(MetaFontAction &&) = default;
     MetaFontAction & operator =(MetaFontAction const &) = delete; // due to MetaAction
@@ -1380,7 +1338,6 @@ private:
     vcl::PushFlags           mnFlags;
 
 public:
-    SAL_DLLPRIVATE                     MetaPushAction();
     MetaPushAction(MetaPushAction const &) = default;
     MetaPushAction(MetaPushAction &&) = default;
     MetaPushAction & operator =(MetaPushAction const &) = delete; // due to MetaAction
@@ -1419,7 +1376,6 @@ private:
     RasterOp            meRasterOp;
 
 public:
-    SAL_DLLPRIVATE                     MetaRasterOpAction();
     MetaRasterOpAction(MetaRasterOpAction const &) = default;
     MetaRasterOpAction(MetaRasterOpAction &&) = default;
     MetaRasterOpAction & operator =(MetaRasterOpAction const &) = delete; // due to MetaAction
@@ -1443,7 +1399,6 @@ private:
     sal_uInt16          mnTransPercent;
 
 public:
-                        MetaTransparentAction();
     MetaTransparentAction(MetaTransparentAction const &) = default;
     MetaTransparentAction(MetaTransparentAction &&) = default;
     MetaTransparentAction & operator =(MetaTransparentAction const &) = delete; // due to MetaAction
@@ -1478,7 +1433,6 @@ private:
     std::optional<basegfx::BColorStops> maSVGTransparencyColorStops;
 
 public:
-                        MetaFloatTransparentAction();
     MetaFloatTransparentAction(MetaFloatTransparentAction const &) = default;
     MetaFloatTransparentAction(MetaFloatTransparentAction &&) = default;
     MetaFloatTransparentAction & operator =(MetaFloatTransparentAction const &) = delete; // due to MetaAction
@@ -1517,7 +1471,6 @@ private:
     Size                maSize;
 
 public:
-                        MetaEPSAction();
     MetaEPSAction(MetaEPSAction const &) = default;
     MetaEPSAction(MetaEPSAction &&) = default;
     MetaEPSAction & operator =(MetaEPSAction const &) = delete; // due to MetaAction
@@ -1548,7 +1501,6 @@ private:
     bool                mbSet;
 
 public:
-    SAL_DLLPRIVATE                     MetaRefPointAction();
     MetaRefPointAction(MetaRefPointAction const &) = default;
     MetaRefPointAction(MetaRefPointAction &&) = default;
     MetaRefPointAction & operator =(MetaRefPointAction const &) = delete; // due to MetaAction
@@ -1581,7 +1533,6 @@ private:
     SAL_DLLPRIVATE virtual             ~MetaCommentAction() override;
 
 public:
-    SAL_DLLPRIVATE explicit            MetaCommentAction();
     SAL_DLLPRIVATE explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( OString aComment, sal_Int32 nValue = 0, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0 );
 
@@ -1604,7 +1555,6 @@ private:
     vcl::text::ComplexTextLayoutFlags  mnLayoutMode;
 
 public:
-    SAL_DLLPRIVATE                     MetaLayoutModeAction();
     MetaLayoutModeAction(MetaLayoutModeAction const &) = default;
     MetaLayoutModeAction(MetaLayoutModeAction &&) = default;
     MetaLayoutModeAction & operator =(MetaLayoutModeAction const &) = delete; // due to MetaAction
@@ -1627,7 +1577,6 @@ private:
     LanguageType        meTextLanguage;
 
 public:
-    SAL_DLLPRIVATE                     MetaTextLanguageAction();
     MetaTextLanguageAction(MetaTextLanguageAction const &) = default;
     MetaTextLanguageAction(MetaTextLanguageAction &&) = default;
     MetaTextLanguageAction & operator =(MetaTextLanguageAction const &) = delete; // due to MetaAction

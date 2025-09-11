@@ -81,7 +81,6 @@ public:
     ImplCommonButtonData();
 
     tools::Rectangle       maFocusRect;
-    tools::Long            mnSeparatorX;
     DrawButtonFlags mnButtonState;
     bool            mbSmallSymbol;
     bool            mbGeneratedTooltip;
@@ -96,7 +95,7 @@ public:
     rtl::Reference<VclStatusListener<Button>> mpStatusListener;
 };
 
-ImplCommonButtonData::ImplCommonButtonData() :  mnSeparatorX(0), mnButtonState(DrawButtonFlags::NONE),
+ImplCommonButtonData::ImplCommonButtonData() :  mnButtonState(DrawButtonFlags::NONE),
 mbSmallSymbol(false), mbGeneratedTooltip(false),  meImageAlign(ImageAlign::Top), meSymbolAlign(SymbolAlign::LEFT)
 {
 }
@@ -179,16 +178,6 @@ void Button::SetCustomButtonImage(const Image& rImage)
 Image const & Button::GetCustomButtonImage() const
 {
     return mpButtonData->maCustomContentImage;
-}
-
-tools::Long Button::ImplGetSeparatorX() const
-{
-    return mpButtonData->mnSeparatorX;
-}
-
-void Button::ImplSetSeparatorX( tools::Long nX )
-{
-    mpButtonData->mnSeparatorX = nX;
 }
 
 DrawTextFlags Button::ImplGetTextStyle( WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags ) const
@@ -963,7 +952,6 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
             Point aEndPt( nSeparatorX, aSymbolRect.Bottom()-nDistance );
             aDecoView.DrawSeparator( aStartPt, aEndPt );
         }
-        ImplSetSeparatorX( nSeparatorX );
 
         aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN, aColor, nStyle );
 

@@ -372,10 +372,4 @@ SCCOLROW ScRowBar::GetHiddenCount( SCCOLROW nEntryNo ) const // override only fo
     return rDoc.GetHiddenRowCount( nEntryNo, nTab );
 }
 
-bool ScRowBar::IsMirrored() const // override only for rows
-{
-    const ScViewData& rViewData = pTabView->GetViewData();
-    return rViewData.GetDocument().IsLayoutRTL( rViewData.CurrentTabForData() );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

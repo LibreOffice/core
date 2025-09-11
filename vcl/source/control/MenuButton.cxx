@@ -171,17 +171,6 @@ void MenuButton::dispose()
     PushButton::dispose();
 }
 
-IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
-{
-    // See if Button Tracking is still active, as it could've been cancelled earlier
-    if ( IsTracking() )
-    {
-        if ( !(GetStyle() & WB_NOPOINTERFOCUS) )
-            GrabFocus();
-        ExecuteMenu();
-    }
-}
-
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
@@ -276,16 +265,6 @@ MenuToggleButton::MenuToggleButton( vcl::Window* pParent, WinBits nWinBits )
 MenuToggleButton::~MenuToggleButton()
 {
     disposeOnce();
-}
-
-void MenuToggleButton::SetActive( bool bSel )
-{
-    mbIsActive = bSel;
-}
-
-bool MenuToggleButton::GetActive() const
-{
-    return mbIsActive;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

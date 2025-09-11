@@ -404,12 +404,6 @@ MouseSettings::GetButtonRepeat() const
     return mxData->mnButtonRepeat;
 }
 
-sal_Int32
-MouseSettings::GetActionDelay()
-{
-    return 250;
-}
-
 void
 MouseSettings::SetMenuDelay( sal_Int32 nDelay )
 {
