@@ -237,7 +237,7 @@ static void FillHdFt(SfxPoolItem& rFormat, const SfxItemSet& rSet, SwPageDesc& r
         pFormat = pHeader->GetHeaderFormat();
     else
         pFormat = pFooter->GetFooterFormat();
-    OSL_ENSURE(pFormat != nullptr, "no header or footer format");
+    assert(pFormat && "no header or footer format");
 
     SwAttrSet aSet(pFormat->GetAttrSet());
     aSet.Put(rSet);
