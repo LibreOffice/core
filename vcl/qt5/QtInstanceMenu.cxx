@@ -135,8 +135,8 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
                             const css::uno::Reference<css::graphic::XGraphic>& rImage,
                             TriState eCheckRadioFalse)
 {
-    assert(eCheckRadioFalse == TRISTATE_INDET && "Not implemented yet");
-    (void)eCheckRadioFalse;
+    assert(eCheckRadioFalse != TRISTATE_FALSE
+           && "Support for radio menu items not implemented yet");
 
     SolarMutexGuard g;
 
@@ -150,6 +150,9 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
         m_pMenu->insertAction(pInsertBefore, pAction);
 
         pAction->setObjectName(toQString(rId));
+
+        if (eCheckRadioFalse == TRISTATE_TRUE)
+            pAction->setCheckable(true);
 
         if (pIconName && !pIconName->isEmpty())
             pAction->setIcon(loadQPixmapIcon(*pIconName));
