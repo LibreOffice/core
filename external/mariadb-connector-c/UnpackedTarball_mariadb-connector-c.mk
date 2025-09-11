@@ -31,7 +31,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb-connector-c,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
     external/mariadb-connector-c/clang-cl.patch.0 \
-    external/mariadb-connector-c/c23.patch.0 \
     external/mariadb-connector-c/0001-const-up-my_uca1400_collation_definitions.patch \
     external/mariadb-connector-c/0001-const-up-mariadb_defaults-and-MADB_OS_CHARSET.patch \
 ))
