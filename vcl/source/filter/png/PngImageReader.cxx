@@ -515,44 +515,26 @@ bool reader(SvStream& rStream, ImportOutput& rImportOutput,
         {
             size_t aRowSizeBytes = png_get_rowbytes(pPng, pInfo);
 
-            if (nNumberOfPasses == 1)
+            // Reuse the bitmap data as a buffer for reading the png data. The
+            // order is possibly incorrect from what it should finally be and
+            // in any case the result is not premultiplied.
+            for (int pass = 0; pass < nNumberOfPasses; pass++)
             {
-                // optimise the common case, where we can use a buffer of only a single row
-                std::vector<png_byte> aRow(aRowSizeBytes, 0);
                 for (png_uint_32 y = 0; y < height; y++)
                 {
                     Scanline pScanline = pWriteAccess->GetScanline(y);
-                    png_bytep pRow = aRow.data();
-                    png_read_row(pPng, pRow, nullptr);
-                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                    {
-                        Color aCol(ColorAlpha, pRow[i + 3], pRow[i + 0], pRow[i + 1], pRow[i + 2]);
-                        pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
-                    }
+                    png_read_row(pPng, pScanline, nullptr);
                 }
             }
-            else
+            // Fix order and do premultiplication
+            for (png_uint_32 y = 0; y < height; y++)
             {
-                std::vector<std::vector<png_byte>> aRows(height);
-                for (auto& rRow : aRows)
-                    rRow.resize(aRowSizeBytes, 0);
-                for (int pass = 0; pass < nNumberOfPasses; pass++)
+                Scanline pScanline = pWriteAccess->GetScanline(y);
+                for (size_t i = 0; i < aRowSizeBytes; i += 4)
                 {
-                    for (png_uint_32 y = 0; y < height; y++)
-                    {
-                        png_bytep pRow = aRows[y].data();
-                        png_read_row(pPng, pRow, nullptr);
-                    }
-                }
-                for (png_uint_32 y = 0; y < height; y++)
-                {
-                    Scanline pScanline = pWriteAccess->GetScanline(y);
-                    png_bytep pRow = aRows[y].data();
-                    for (size_t i = 0; i < aRowSizeBytes; i += 4)
-                    {
-                        Color aCol(ColorAlpha, pRow[i + 3], pRow[i + 0], pRow[i + 1], pRow[i + 2]);
-                        pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
-                    }
+                    Color aCol(ColorAlpha, pScanline[i + 3], pScanline[i + 0], pScanline[i + 1],
+                               pScanline[i + 2]);
+                    pWriteAccess->SetPixelOnData(pScanline, i / 4, aCol);
                 }
             }
         }
