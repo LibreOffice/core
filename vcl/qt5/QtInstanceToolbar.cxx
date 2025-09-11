@@ -29,15 +29,29 @@ QtInstanceToolbar::QtInstanceToolbar(QToolBar* pToolBar)
     }
 }
 
-void QtInstanceToolbar::set_item_sensitive(const OUString&, bool)
+void QtInstanceToolbar::set_item_sensitive(const OUString& rIdent, bool bSensitive)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_pToolBar->findChild<QWidget*>(toQString(rIdent));
+        assert(pWidget && "No toolbar child for the given ID found");
+        pWidget->setEnabled(bSensitive);
+    });
 }
 
-bool QtInstanceToolbar::get_item_sensitive(const OUString&) const
+bool QtInstanceToolbar::get_item_sensitive(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bSensitive = false;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pWidget = m_pToolBar->findChild<QWidget*>(toQString(rIdent));
+        assert(pWidget && "No toolbar child for the given ID found");
+        bSensitive = pWidget->isEnabled();
+    });
+
+    return bSensitive;
 }
 void QtInstanceToolbar::set_item_active(const OUString& rIdent, bool bActive)
 {
