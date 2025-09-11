@@ -1894,6 +1894,30 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
                     break;
                 }
             }
+            // might have to search tables too, they may set page number in their text flow properties
+            const SwLayoutFrame* pParentFrame = pContentFrame->GetUpper();
+            while (pParentFrame)
+            {
+                if (const SwTabFrame* pTabFrame = pParentFrame->FindTabFrame())
+                    if (const SwTable* pTable = pTabFrame->GetTable())
+                        if (const SwTableFormat* pTableFormat = pTable->GetFrameFormat())
+                        {
+                            const SwFormatPageDesc& rFormatPageDesc2 = pTableFormat->GetPageDesc();
+
+                            if ( rFormatPageDesc2.GetNumOffset() && rFormatPageDesc2.GetDefinedIn() )
+                            {
+                                const sw::BroadcastingModify* pMod = rFormatPageDesc2.GetDefinedIn();
+                                sw::VirtPageNumHint aHint(pPage);
+                                pMod->CallSwClientNotify(aHint);
+                                if(aHint.GetPage())
+                                {
+                                    pFoundFrame = aHint.GetFrame();
+                                    break;
+                                }
+                            }
+                        }
+                pParentFrame = pParentFrame->GetUpper();
+            }
         }
         pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
     }
