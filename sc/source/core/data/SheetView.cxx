@@ -18,7 +18,7 @@ SheetView::SheetView(ScTable* pTable)
 }
 
 ScTable* SheetView::getTablePointer() const { return mpTable; }
-bool SheetView::isValid() const { return mpTable; }
+
 SCTAB SheetView::getTableNumber() const
 {
     assert(mpTable);

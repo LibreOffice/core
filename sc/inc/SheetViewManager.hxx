@@ -13,6 +13,7 @@
 #include "types.hxx"
 
 #include <vector>
+#include <memory>
 
 class ScTable;
 
@@ -22,7 +23,7 @@ namespace sc
 class SheetViewManager
 {
 private:
-    std::vector<SheetView> maViews;
+    std::vector<std::shared_ptr<SheetView>> maViews;
 
 public:
     SheetViewManager();
@@ -31,7 +32,7 @@ public:
     SheetViewID create(ScTable* pSheetViewTable);
 
     /** Returns a sheet view for the ID. */
-    SheetView get(SheetViewID nID) const;
+    std::shared_ptr<SheetView> get(SheetViewID nID) const;
 
     /** True if there are no sheet views. */
     bool isEmpty() const { return maViews.empty(); }
@@ -40,7 +41,7 @@ public:
     bool remove(SheetViewID nID);
 
     /** Return the list of sheet views. */
-    std::vector<SheetView> const& getSheetViews() const { return maViews; }
+    std::vector<std::shared_ptr<SheetView>> const& getSheetViews() const { return maViews; }
 
     /** Calculate the next sheet view ID from the current ID. */
     SheetViewID getNextSheetView(SheetViewID nID);
