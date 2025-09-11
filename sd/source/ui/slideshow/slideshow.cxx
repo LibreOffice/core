@@ -227,11 +227,9 @@ bool SlideShow::IsRunning( const ViewShell& rViewShell )
 }
 
 /// returns true if the interactive slideshow mode is activated
-bool SlideShow::IsInteractiveSlideshow(const ViewShellBase* pViewShellBase)
+bool SlideShow::IsInteractiveSlideshow(const ViewShellBase& rViewShellBase)
 {
-    if (nullptr == pViewShellBase)
-        return false;
-    rtl::Reference< SlideShow > xSlideShow(GetSlideShow(*pViewShellBase));
+    rtl::Reference< SlideShow > xSlideShow(GetSlideShow(rViewShellBase));
     if (!xSlideShow.is())
         return false;
     return xSlideShow->IsInteractiveSlideshow();

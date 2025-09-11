@@ -57,7 +57,7 @@ rtl::Reference<FuPoor> FuNavigation::Create( ViewShell& rViewSh, ::sd::Window* p
 void FuNavigation::DoExecute( SfxRequest& rReq )
 {
     bool bSlideShow = SlideShow::IsRunning( mrViewShell.GetViewShellBase() )
-        && !SlideShow::IsInteractiveSlideshow( &mrViewShell.GetViewShellBase() ); // IASS
+        && !SlideShow::IsInteractiveSlideshow( mrViewShell.GetViewShellBase() ); // IASS
 
     switch ( rReq.GetSlot() )
     {

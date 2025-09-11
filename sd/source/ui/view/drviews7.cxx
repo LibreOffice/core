@@ -1649,7 +1649,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
     const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase()); // IASS
+        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase()); // IASS
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     const bool bIsInPlace = pViewFrame && pViewFrame->GetFrame().IsInPlace() ? true : false;
@@ -1945,7 +1945,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 void DrawViewShell::Execute (SfxRequest& rReq)
 {
     if(SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
+        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
     {
         // Do not execute anything during a native slide show.
         return;

@@ -900,7 +900,7 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
     {
         if (aEffect.mnType) // mnType = 0 denotes no transition
             playCurrentEffect();
-        else if( mxView.is() && !SlideShow::IsInteractiveSlideshow(&mrBase)) // IASS
+        else if( mxView.is() && !SlideShow::IsInteractiveSlideshow(mrBase)) // IASS
             SlideShow::Stop( mrBase );
     }
 

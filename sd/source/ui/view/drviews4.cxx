@@ -527,7 +527,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         return;
 
     const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase())
-        && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())); // IASS
+        && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())); // IASS
 
     if( rCEvt.GetCommand() == CommandEventId::PasteSelection && !bNativeShow )
     {

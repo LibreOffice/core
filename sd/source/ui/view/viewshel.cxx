@@ -933,7 +933,7 @@ void ViewShell::SetupRulers()
     if(!mbHasRulers || !mpContentWindow )
         return;
 
-    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
+    if( SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
         return;
 
     ::tools::Long nHRulerOfs = 0;

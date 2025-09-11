@@ -385,7 +385,7 @@ void DrawViewShell::Shutdown()
     ViewShell::Shutdown();
 
     if(SlideShow::IsRunning( GetViewShellBase() )
-        && !SlideShow::IsInteractiveSlideshow( &GetViewShellBase() )) // IASS
+        && !SlideShow::IsInteractiveSlideshow( GetViewShellBase() )) // IASS
     {
         // Turn off effects.
         GetDrawView()->SetAnimationMode(SdrAnimationMode::Disable);
@@ -566,7 +566,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
         if (GetDocSh()->IsUIActive()
-            || (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(&GetViewShellBase())) // IASS
+            || (SlideShow::IsRunning(GetViewShellBase()) && !SlideShow::IsInteractiveSlideshow(GetViewShellBase())) // IASS
             || !GetActiveWindow())
         {
             rSet.DisableItem( SID_ATTR_ZOOM );

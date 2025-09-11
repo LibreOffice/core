@@ -1870,7 +1870,7 @@ void CustomAnimationPane::onAdd()
 
     updateControls();
 
-    if (!SlideShow::IsInteractiveSlideshow(&mrBase)) // IASS
+    if (!SlideShow::IsInteractiveSlideshow(mrBase)) // IASS
         SlideShow::Stop( mrBase );
 }
 
