@@ -980,8 +980,8 @@ namespace xforms
             ::DateTime aToolsValue(_rValue);
 
             double fValue = 0;
-            // days since 1.1.1900 (which is relatively arbitrary but fixed date)
-            fValue += ::Date( aToolsValue ) - ::Date( 1, 1, 1900 );
+            // days since 1899-12-30 (which is relatively arbitrary but fixed date)
+            fValue += ::Date( aToolsValue ) - ::Date( 30, 12, 1899 );
             // time
             fValue += aToolsValue.GetTimeInDays();
             return fValue;
