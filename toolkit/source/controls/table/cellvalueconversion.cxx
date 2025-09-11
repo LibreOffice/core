@@ -60,7 +60,7 @@ namespace
 double lcl_convertDateToDays(sal_uInt16 const i_day, sal_uInt16 const i_month,
                              sal_Int16 const i_year)
 {
-    tools::Long const nNullDateDays = ::Date::DateToDays(1, 1, 1900);
+    tools::Long const nNullDateDays = ::Date::DateToDays(30, 12, 1899);
     tools::Long const nValueDateDays = ::Date::DateToDays(i_day, i_month, i_year);
 
     return nValueDateDays - nNullDateDays;
@@ -280,7 +280,7 @@ bool CellValueConversion::ensureNumberFormatter()
             = NumberFormatsSupplier::createWithLocale(xContext, aLocale);
 
         // ensure a NullDate we will assume later on
-        css::util::Date const aNullDate(1, 1, 1900);
+        css::util::Date const aNullDate(30, 12, 1899);
         Reference<XPropertySet> const xFormatSettings(xSupplier->getNumberFormatSettings(),
                                                       UNO_SET_THROW);
         xFormatSettings->setPropertyValue(u"NullDate"_ustr, Any(aNullDate));
