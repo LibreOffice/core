@@ -118,7 +118,8 @@ class SwMarkdownParser
     void SetAttrs(SwPaM& rRange);
     void ClearAttrs();
 
-    void InsertImage(const OUString& aURL, const OUString& rTitle);
+    void InsertImage(const OUString& aURL, const OUString& rTitle,
+                     const SwFormatINetFormat* pINetFormat);
 
     void StartTable(sal_Int32 nRow, sal_Int32 nCol);
     void EndTable();

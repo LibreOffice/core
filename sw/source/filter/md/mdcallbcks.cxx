@@ -180,7 +180,17 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
                                                    RTL_TEXTENCODING_UTF8);
             OUString aTitle = rtl::OStringToOUString(std::string_view(rTitle.text, rTitle.size),
                                                      RTL_TEXTENCODING_UTF8);
-            parser->InsertImage(aURL, aTitle);
+
+            const SwFormatINetFormat* pINetFormat = nullptr;
+            if (!parser->m_aAttrStack.empty()
+                && parser->m_aAttrStack.back()->Which() == RES_TXTATR_INETFMT)
+            {
+                // Copy the link to the image, so it won't be lost for empty spans.
+                const SfxPoolItem* pTopItem = parser->m_aAttrStack.back().get();
+                pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pTopItem);
+            }
+
+            parser->InsertImage(aURL, aTitle, pINetFormat);
             parser->m_bInsideImage = true;
             break;
         }
