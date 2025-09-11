@@ -14,6 +14,7 @@
 #include <QtInstanceWidget.hxx>
 #include <QtTools.hxx>
 
+#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
@@ -141,15 +142,9 @@ void QtInstanceMenu::insert(int nPos, const OUString& rId, const OUString& rStr,
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        const int nCount = m_pMenu->actions().size();
-        if (nPos == -1)
-            nPos = nCount;
-
         QAction* pAction = new QAction(toQString(rStr));
-        QAction* pInsertBefore = nPos < nCount ? m_pMenu->actions().at(nPos) : nullptr;
-        m_pMenu->insertAction(pInsertBefore, pAction);
 
-        pAction->setObjectName(toQString(rId));
+        insertAction(*pAction, rId, nPos);
 
         if (eCheckRadioFalse == TRISTATE_TRUE)
             pAction->setCheckable(true);
@@ -184,9 +179,16 @@ void QtInstanceMenu::clear()
     GetQtInstance().RunInMainThread([&] { m_pMenu->clear(); });
 }
 
-void QtInstanceMenu::insert_separator(int, const OUString&)
+void QtInstanceMenu::insert_separator(int nPos, const OUString& rId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QAction* pAction = new QAction;
+        insertAction(*pAction, rId, nPos);
+
+        pAction->setSeparator(true);
+    });
 }
 
 int QtInstanceMenu::n_children() const
@@ -216,6 +218,20 @@ OUString QtInstanceMenu::get_id(int nPos) const
 void QtInstanceMenu::setActionName(QAction& rAction, const OUString& rActionName)
 {
     rAction.setProperty(PROPERTY_ACTION_NAME, toQString(rActionName));
+}
+
+void QtInstanceMenu::insertAction(QAction& rAction, const OUString& rId, int nPos)
+{
+    assert(GetQtInstance().IsMainThread() && "must be run in main thread");
+
+    const int nCount = m_pMenu->actions().size();
+    if (nPos == -1)
+        nPos = nCount;
+
+    QAction* pInsertBefore = nPos < nCount ? m_pMenu->actions().at(nPos) : nullptr;
+    m_pMenu->insertAction(pInsertBefore, &rAction);
+
+    rAction.setObjectName(toQString(rId));
 }
 
 QAction* QtInstanceMenu::getAction(const OUString& rIdent) const

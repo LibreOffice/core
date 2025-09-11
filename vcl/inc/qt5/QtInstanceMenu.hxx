@@ -43,7 +43,7 @@ public:
 
     virtual void clear() override;
 
-    virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void insert_separator(int nPos, const OUString& rId) override;
 
     virtual int n_children() const override;
 
@@ -52,6 +52,7 @@ public:
     static void setActionName(QAction& rAction, const OUString& rActionName);
 
 private:
+    void insertAction(QAction& rAction, const OUString& rId, int nPos);
     // get action with the given ID
     QAction* getAction(const OUString& rIdent) const;
 };
