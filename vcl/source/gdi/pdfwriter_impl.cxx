@@ -8677,8 +8677,16 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
             case PDFWriter::joinMiter:
             {
                 double fLimit = rInfo.m_fMiterLimit;
-                if( rInfo.m_fLineWidth < rInfo.m_fMiterLimit )
-                    fLimit = fLimit / rInfo.m_fLineWidth;
+                if (rInfo.m_fLineWidth < rInfo.m_fMiterLimit)
+                {
+                    if (rInfo.m_fLineWidth != 0.0)
+                        fLimit = fLimit / rInfo.m_fLineWidth;
+                    else
+                    {
+                        SAL_WARN("vcl.pdfwriter", "PDFWriterImpl::drawPolyLine divide by zero attempt");
+                        fLimit = 1.0;
+                    }
+                }
                 if( fLimit < 1.0 )
                     fLimit = 1.0;
                 aLine.append( " 0 j " );
