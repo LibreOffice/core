@@ -4570,9 +4570,9 @@ void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
     // duplication alters the selection.
     sal_Int32 nInsertPosition (0);
     ::std::vector<SdPage*> aPagesToDuplicate;
-    sd::slidesorter::SlideSorter &mrSlideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetSlideSorter();
+    sd::slidesorter::SlideSorter &rSlideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetSlideSorter();
     sd::slidesorter::model::PageEnumeration aSelectedPages (
-        sd::slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
+        sd::slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(rSlideSorter.GetModel()));
     while (aSelectedPages.HasMoreElements())
     {
         sd::slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
@@ -4585,9 +4585,9 @@ void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
 
     // Duplicate the pages in aPagesToDuplicate and collect the newly
     // created pages in aPagesToSelect.
-    const bool bUndo (aPagesToDuplicate.size()>1 && mrSlideSorter.GetView().IsUndoEnabled());
+    const bool bUndo (aPagesToDuplicate.size()>1 && rSlideSorter.GetView().IsUndoEnabled());
     if (bUndo)
-        mrSlideSorter.GetView().BegUndo(SdResId(STR_INSERTPAGE));
+        rSlideSorter.GetView().BegUndo(SdResId(STR_INSERTPAGE));
 
     ::std::vector<SdPage*> aPagesToSelect;
     for(::std::vector<SdPage*>::const_iterator
@@ -4597,16 +4597,16 @@ void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
         ++iPage, nInsertPosition+=2)
     {
         aPagesToSelect.push_back(
-            mrSlideSorter.GetViewShell().CreateOrDuplicatePage(
+            rSlideSorter.GetViewShell().CreateOrDuplicatePage(
                 rRequest, PageKind::Standard, *iPage, nInsertPosition));
     }
     aPagesToDuplicate.clear();
 
     if (bUndo)
-        mrSlideSorter.GetView().EndUndo();
+        rSlideSorter.GetView().EndUndo();
 
     // Set the selection to the pages in aPagesToSelect.
-    sd::slidesorter::controller::PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
+    sd::slidesorter::controller::PageSelector& rSelector (rSlideSorter.GetController().GetPageSelector());
     rSelector.DeselectAllPages();
     for (auto const& it: aPagesToSelect)
     {
