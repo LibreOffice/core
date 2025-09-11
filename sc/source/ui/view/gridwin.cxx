@@ -1532,6 +1532,7 @@ void ScGridWindow::LaunchDataSelectMenu(const SCCOL nCol, const SCROW nRow)
         // client (effective double scaling) causing wrong positioning/size.
         double fZoomX(mrViewData.GetZoomX());
         double fZoomY(mrViewData.GetZoomY());
+        assert(fZoomX != 0.0 && fZoomY != 0.0 && "cannot be zero");
         aPos.setX(aPos.getX() / fZoomX);
         aPos.setY(aPos.getY() / fZoomY);
         nSizeX = nSizeX / fZoomX;
