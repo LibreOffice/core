@@ -646,6 +646,16 @@ void ImpEditEngine::populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine)
     for (sal_Int32 nP = pLine->GetStartPortion(); pNextRubyAttr && nP <= pLine->GetEndPortion();
          ++nP)
     {
+        const auto* pRuby = static_cast<const SvxRubyItem*>(pNextRubyAttr->GetItem());
+        if (pRuby->GetText().isEmpty())
+        {
+            // Skip processing blank ruby spans
+            pNextRubyAttr
+                = rParaPortion.GetNode()->GetCharAttribs().FindNextAttrib(EE_CHAR_RUBY, nTextPos);
+            pTPRubyStart = nullptr;
+            continue;
+        }
+
         SeekCursor(pNode, nTextPos, aTmpFont);
 
         TextPortion& rTP = rParaPortion.GetTextPortions()[nP];
@@ -673,7 +683,6 @@ void ImpEditEngine::populateRubyInfo(ParaPortion& rParaPortion, EditLine* pLine)
             auto pRubyInfo = std::make_unique<RubyPortionInfo>();
 
             // Get ruby text width
-            const auto* pRuby = static_cast<const SvxRubyItem*>(pNextRubyAttr->GetItem());
 
             // TODO: Style support is unimplemented. For now, use a hard-coded 50% scale
             aRubyStartFont.SetFontSize(aRubyStartFont.GetFontSize() / 2);
