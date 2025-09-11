@@ -2983,10 +2983,10 @@ tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, tool
             SvLBoxTab* pLastTab = nullptr; // default to select whole width
 
             sal_uInt16 nLastTab;
-            GetLastTab(SvLBoxTabFlags::SHOW_SELECTION,nLastTab);
-            nLastTab++;
-            if( nLastTab < aTabs.size() ) // is there another one?
-                pLastTab = aTabs[ nLastTab ].get();
+            GetLastTab(SvLBoxTabFlags::SHOW_SELECTION, nLastTab);
+            sal_uInt32 nTrailingTab = nLastTab + 1;
+            if( nTrailingTab < aTabs.size() ) // is there another one?
+                pLastTab = aTabs[nTrailingTab].get();
 
             aSize.setWidth( pLastTab ? pLastTab->GetPos() : 0x0fffffff );
             nFocusWidth = static_cast<short>(aSize.Width());
