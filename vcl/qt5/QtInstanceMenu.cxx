@@ -236,7 +236,7 @@ void QtInstanceMenu::insertAction(QAction& rAction, const OUString& rId, int nPo
 
 QAction* QtInstanceMenu::getAction(const OUString& rIdent) const
 {
-    QList<QAction*> aActions = m_pMenu->actions();
+    const QList<QAction*> aActions = m_pMenu->actions();
     for (QAction* pAction : aActions)
     {
         if (pAction && pAction->objectName() == toQString(rIdent))
