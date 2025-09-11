@@ -65,7 +65,7 @@ public:
         returned.
     */
     // Exported for unit test
-    SD_DLLPUBLIC static SlideSorterViewShell* GetSlideSorter(ViewShellBase& rBase);
+    SD_DLLPUBLIC SAL_RET_MAYBENULL static SlideSorterViewShell* GetSlideSorter(ViewShellBase& rBase);
 
     virtual SdPage* GetActualPage() override;
 

@@ -4558,11 +4558,16 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
 
 void DrawViewShell::DuplicateSelectedSlides (SfxRequest& rRequest)
 {
+    ::sd::slidesorter::SlideSorterViewShell* pSlideSorterViewShell =
+        sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (!pSlideSorterViewShell)
+        return;
+
     // Create a list of the pages that are to be duplicated.  The process of
     // duplication alters the selection.
     sal_Int32 nInsertPosition (0);
     ::std::vector<SdPage*> aPagesToDuplicate;
-    sd::slidesorter::SlideSorter &mrSlideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase())->GetSlideSorter();
+    sd::slidesorter::SlideSorter &mrSlideSorter = pSlideSorterViewShell->GetSlideSorter();
     sd::slidesorter::model::PageEnumeration aSelectedPages (
         sd::slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
     while (aSelectedPages.HasMoreElements())
