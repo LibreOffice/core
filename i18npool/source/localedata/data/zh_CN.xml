@@ -406,6 +406,13 @@
     <Transliteration unoid="IGNORE_WIDTH"/>
   </LC_TRANSLITERATION>
   <LC_MISC>
+    <BreakIteratorRules>
+      <EditMode/>
+      <DictionaryMode/>
+      <WordCountMode/>
+      <CharacterMode/>
+      <LineMode>line_cj</LineMode>
+    </BreakIteratorRules>
     <ForbiddenCharacters>
       <ForbiddenLineBeginCharacters>:!),.:;?]}¢'"、。〉》」』】〕〗〞︰︱︳﹐､﹒﹔﹕﹖﹗﹚﹜﹞！），．：；？｜｝︴︶︸︺︼︾﹀﹂﹄﹏､～￠々‖•·ˇˉ―--′’”</ForbiddenLineBeginCharacters>
       <ForbiddenLineEndCharacters>([{£¥'"‵〈《「『【〔〖（［｛￡￥〝︵︷︹︻︽︿﹁﹃﹙﹛﹝（｛“‘</ForbiddenLineEndCharacters>
