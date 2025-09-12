@@ -68,6 +68,10 @@ certain functionality.
 @li @c chart2.template
 @li @c chart2.tools
 
+@section codemaker
+
+@li @c codemaker
+
 @section connectivity
 
 @li @c connectivity.ado
@@ -355,6 +359,10 @@ certain functionality.
 @section pyuno
 
 @li @c pyuno.runtime
+
+@section rustuno
+
+@li @c rustuno - Rust UNO bindings
 
 @section sdext
 

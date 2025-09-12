@@ -35,51 +35,50 @@ extern "C" {
  */
 SAL_DLLPUBLIC_EXPORT void* defaultBootstrap_InitialComponentContext()
 {
-    SAL_INFO("rust_uno", "Initializing UNO component context for Rust binding");
+    SAL_INFO("rustuno", "Initializing UNO component context for Rust binding");
 
     try
     {
         // Call the actual LibreOffice bootstrap function
-        SAL_INFO("rust_uno", "Calling cppu::defaultBootstrap_InitialComponentContext");
+        SAL_INFO("rustuno", "Calling cppu::defaultBootstrap_InitialComponentContext");
         Reference<XComponentContext> xContext = cppu::defaultBootstrap_InitialComponentContext();
 
         if (!xContext.is())
         {
-            SAL_WARN("rust_uno", "LibreOffice bootstrap failed - component context is invalid");
+            SAL_WARN("rustuno", "LibreOffice bootstrap failed - component context is invalid");
             return nullptr;
         }
 
-        SAL_INFO("rust_uno", "Component context created successfully");
+        SAL_INFO("rustuno", "Component context created successfully");
 
         auto res = new Reference<XComponentContext>(xContext);
 
         if (!res->is())
         {
-            SAL_WARN("rust_uno", "Reference wrapper creation failed - context became invalid");
+            SAL_WARN("rustuno", "Reference wrapper creation failed - context became invalid");
             delete res;
             return nullptr;
         }
 
-        SAL_INFO("rust_uno", "Reference wrapper created successfully - returning context to Rust");
+        SAL_INFO("rustuno", "Reference wrapper created successfully - returning context to Rust");
         // Return as opaque XComponentContext pointer for Rust
         // Note: This creates a new Reference that transfers ownership to caller
         return res;
     }
     catch (const Exception& e)
     {
-        SAL_WARN("rust_uno",
-                 "UNO exception during component context initialization: " << e.Message);
+        SAL_WARN("rustuno", "UNO exception during component context initialization: " << e.Message);
         return nullptr;
     }
     catch (const std::exception& e)
     {
-        SAL_WARN("rust_uno",
+        SAL_WARN("rustuno",
                  "Standard exception during component context initialization: " << e.what());
         return nullptr;
     }
     catch (...)
     {
-        SAL_WARN("rust_uno", "Unknown exception during component context initialization");
+        SAL_WARN("rustuno", "Unknown exception during component context initialization");
         return nullptr;
     }
 }
