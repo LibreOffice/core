@@ -1757,7 +1757,15 @@ void ScTable::Sort(
             bool bAutoFilter = GetDoc().HasAutoFilter(rSortParam.nCol1, nRow1, GetTab());
             if (bAutoFilter)
             {
-                GetSheetViewManager()->addOrderIndices(pArray->GetOrderIndices(), nRow1, nLastRow);
+                if (IsSheetViewHolder())
+                {
+                    auto pSheetView = mpSheetViewFor->GetSheetViewManager()->get(mnSheetViewID);
+                    pSheetView->addOrderIndices(pArray->GetOrderIndices(), nRow1, nLastRow);
+                }
+                else
+                {
+                    GetSheetViewManager()->addOrderIndices(pArray->GetOrderIndices(), nRow1, nLastRow);
+                }
             }
         }
     }

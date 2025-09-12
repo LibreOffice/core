@@ -12,6 +12,7 @@
 #include "scdllapi.h"
 #include "types.hxx"
 #include <rtl/ustring.hxx>
+#include "SheetViewTypes.hxx"
 
 class ScTable;
 
@@ -29,11 +30,17 @@ private:
     bool mbSynced = true;
     OUString maName;
 
+    SCROW mnFirstRow;
+    SCROW mnLastRow;
+    std::vector<SCCOLROW> maOrder;
+    SheetViewID mnID;
+
 public:
-    SheetView(ScTable* pTable, OUString const& rName);
+    SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID);
 
     ScTable* getTablePointer() const;
     SCTAB getTableNumber() const;
+    SheetViewID getID() const { return mnID; }
 
     OUString const& GetName() { return maName; }
 
@@ -45,6 +52,9 @@ public:
 
     /** Is the sheet view synced with its default view. */
     bool isSynced() const { return mbSynced; }
+
+    void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
+    SCROW unsort(SCROW nRow) const;
 };
 }
 
