@@ -158,6 +158,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     // Now that we have got the link data, we can reset
     // all the pages with the correct information
+    assert(pSet);
     for (std::unique_ptr<IconChoicePageData>& page: maPageList) {
         page->xPage->Reset(*pSet);
     }
