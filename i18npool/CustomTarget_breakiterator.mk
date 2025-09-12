@@ -21,7 +21,8 @@ i18npool_BRKTXTS := \
     dict_word.brk \
     $(call gb_Helper_optional_locale,hu,edit_word_hu.brk) \
     edit_word.brk \
-    line.brk
+    line.brk \
+    line_cj.brk
 
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
