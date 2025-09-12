@@ -523,11 +523,6 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
                     || o3tl::starts_with(flavorView, Concat2View(OString::Concat(flavorMap[i].OOoFlavor) + ";"))))
             || (flavorMap[i].SystemFlavor != nil
                && [systemDataFlavor isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
-//        if ((flavorMap[i].SystemFlavor == nil && ([systemDataFlavor isEqualToString:[NSString stringWithUTF8String:flavorMap[i].OOoFlavor]]
-//                                                  ||
-//                                                  [systemDataFlavor hasPrefix:[[NSString stringWithUTF8String:flavorMap[i].OOoFlavor] stringByAppendingString:@";"]]))
-//            ||
-//            (flavorMap[i].SystemFlavor != nil && [systemDataFlavor isEqualToString:const_cast<NSString*>(flavorMap[i].SystemFlavor)]))
         {
           if (flavorMap[i].SystemFlavor == nil)
               oOOFlavor.MimeType = NSStringToOUString(systemDataFlavor);
