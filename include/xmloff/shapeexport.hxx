@@ -39,6 +39,7 @@ namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
+namespace com::sun::star::lang { class XComponent; }
 
 class XMLTableExport;
 namespace comphelper { class AttributeList; }
@@ -135,6 +136,7 @@ struct ImplXMLShapeExportInfo
     XmlShapeType    meShapeType;
 
     css::uno::Reference< css::drawing::XShape > xCustomShapeReplacement;
+    css::uno::Reference<css::lang::XComponent> xPDFModelReplacement;
 
     ImplXMLShapeExportInfo() : mnFamily( XmlStyleFamily::SD_GRAPHICS_ID ), meShapeType( XmlShapeType::NotYetSet ) {}
 };
@@ -288,6 +290,10 @@ public:
     /** sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format */
     css::uno::Reference < css::drawing::XShape > checkForCustomShapeReplacement(
         const css::uno::Reference < css::drawing::XShape >& );
+
+    /** replacing PDF with drawing objects */
+    css::uno::Reference<css::lang::XComponent> checkForPDFShapeReplacement(
+        const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** helper to export the style for graphic defaults */
     void ExportGraphicDefaults();

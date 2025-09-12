@@ -65,7 +65,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/stream.hxx>
 
-
 #include <memory>
 
 using namespace ::cppu;
@@ -1449,6 +1448,12 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
             rValue <<= pGrafObj->GetGraphic().GetXGraphic();
         }
 
+        break;
+    }
+
+    case OWN_ATTR_REPLACEMENT_MODEL:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->GetReplacementGraphicModel();
         break;
     }
 
