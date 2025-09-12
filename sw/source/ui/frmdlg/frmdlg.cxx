@@ -85,14 +85,11 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
         AddTabPage(u"crop"_ustr, TabResId(RID_TAB_CROP.aLabel), RID_SVXPAGE_GRFCROP,
                    RID_M + RID_TAB_CROP.sIconName);
     }
-    if (m_sDlgType == "FrameDialog")
-    {
-        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
-                   RID_M + RID_TAB_COLUMNS.sIconName);
-    }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     // add Area and Transparence TabPages
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER.sIconName);
     AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA),
                pFact->GetTabPageRangesFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA.sIconName);
@@ -100,11 +97,13 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
                pFact->GetTabPageRangesFunc(RID_SVXPAGE_TRANSPARENCE),
                RID_M + RID_TAB_TRANSPARENCE.sIconName);
-
+    if (m_sDlgType == "FrameDialog")
+    {
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
+                   RID_M + RID_TAB_COLUMNS.sIconName);
+    }
     AddTabPage(u"macro"_ustr, TabResId(RID_TAB_MACRO.aLabel), RID_SVXPAGE_MACROASSIGN,
                RID_M + RID_TAB_MACRO.sIconName);
-    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
-               RID_M + RID_TAB_BORDER.sIconName);
 
     if(bHTMLMode)
     {
