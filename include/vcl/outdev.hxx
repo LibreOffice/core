@@ -1337,8 +1337,8 @@ public:
                                     const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap);
 
-    // draw bitmap, potentially with alpha information
-    SAL_DLLPRIVATE void         DrawBitmapEx(
+    // draw bitmap with alpha information
+    SAL_DLLPRIVATE void         DrawAlphaBitmap(
                                     const Point& rDestPt,
                                     const Size& rDestSize,
                                     const Point& rSrcPtPixel,

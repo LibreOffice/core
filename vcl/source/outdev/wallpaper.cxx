@@ -316,7 +316,7 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                         if( !aBmp.HasAlpha() )
                             DrawBitmap( Point( nBmpX, nBmpY ), PixelToLogic( aSizePx ), Point(), aSizePx, aBmp, MetaActionType::BMP );
                         else
-                            DrawBitmapEx(Point( nBmpX, nBmpY ), PixelToLogic(aSizePx), Point(), aSizePx, aBmp,
+                            DrawAlphaBitmap(Point( nBmpX, nBmpY ), PixelToLogic(aSizePx), Point(), aSizePx, aBmp,
                                          MetaActionType::BMPEX);
                     }
                 }
