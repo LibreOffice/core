@@ -1868,15 +1868,19 @@ Point SwFrame::GetRelPos() const
     return aRet;
 }
 
+// See also: sw::HasPageBreakBefore and SwFEShell::GetPageOffset
 static const SwFrame* lcl_FindStartOfVirtualPages(const SwPageFrame *pPage)
 {
     const SwPageFrame* pPageFrameIter = pPage;
     while (pPageFrameIter)
     {
-        const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
-        if (pContentFrame)
+        if (const SwFrame* pFlow = pPageFrameIter->FindFirstBodyContent())
         {
-            const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+            // Since pFlow is obtained from pPageFrameIter->FindFirstBodyContent(),
+            // it (and every upper table frame) must have valid upper.
+            while (const SwFrame* pTable = pFlow->GetUpper()->FindTabFrame())
+                pFlow = pTable;
+            const SwFormatPageDesc& rFormatPageDesc = pFlow->GetPageDescItem();
 
             if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
             {
@@ -1887,29 +1891,6 @@ static const SwFrame* lcl_FindStartOfVirtualPages(const SwPageFrame *pPage)
                 {
                     return aHint.GetFrame();
                 }
-            }
-            // might have to search tables too, they may set page number in their text flow properties
-            const SwLayoutFrame* pParentFrame = pContentFrame->GetUpper();
-            while (pParentFrame)
-            {
-                if (const SwTabFrame* pTabFrame = pParentFrame->FindTabFrame())
-                    if (const SwTable* pTable = pTabFrame->GetTable())
-                        if (const SwTableFormat* pTableFormat = pTable->GetFrameFormat())
-                        {
-                            const SwFormatPageDesc& rFormatPageDesc2 = pTableFormat->GetPageDesc();
-
-                            if ( rFormatPageDesc2.GetNumOffset() && rFormatPageDesc2.GetDefinedIn() )
-                            {
-                                const sw::BroadcastingModify* pMod = rFormatPageDesc2.GetDefinedIn();
-                                sw::VirtPageNumHint aHint(pPage);
-                                pMod->CallSwClientNotify(aHint);
-                                if(aHint.GetPage())
-                                {
-                                    return aHint.GetFrame();
-                                }
-                            }
-                        }
-                pParentFrame = pParentFrame->GetUpper();
             }
         }
         pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
