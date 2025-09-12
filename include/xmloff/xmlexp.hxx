@@ -555,6 +555,10 @@ public:
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool writeOutlineStyleAsNormalListStyle() const;
 
+    // Decompose embedded PDFs to equivalent ODF, requires pdfium support to be enabled
+    // to do anything useful.
+    bool decomposePDF() const;
+
     css::uno::Reference< css::embed::XStorage > const & GetTargetStorage() const;
 
     /// returns value of ODF version attribute
