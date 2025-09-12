@@ -44,7 +44,7 @@ class tdf46561(UITestCase):
                     xTabs = PageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")
 
-                    Button = xTabs.getChild('checkSameLR')
+                    Button = xTabs.getChild('checkSameLR-header')
                     Button.executeAction("CLICK",tuple())
 
             # We should be back to the starting state after 2*k on/off changes

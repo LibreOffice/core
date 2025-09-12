@@ -52,7 +52,7 @@ class tdf140117(UITestCase):
                         select_pos(xTabs, "4")
 
                         # Change option "same content on left and right pages" for the next iteration
-                        Button = xTabs.getChild('checkSameLR')
+                        Button = xTabs.getChild('checkSameLR-header')
                         Button.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

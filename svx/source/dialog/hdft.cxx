@@ -167,6 +167,10 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xHeightEdit->set_help_id( u"SVX_HID_FOOTER_SPINHEIGHT"_ustr );
         m_xHeightDynBtn->set_help_id( u"SVX_HID_FOOTER_CHECKAUTOFIT"_ustr );
         m_xBackgroundBtn->set_help_id( u"SVX_HID_FOOTER_BUTTONMORE"_ustr );
+
+        // uitest
+        m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-footer");
+        m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name() + "-footer");
     }
     else //Header
     {
@@ -174,6 +178,10 @@ SvxHFPage::SvxHFPage(weld::Container* pPage, weld::DialogController* pController
         m_xFrame->set_label(SvxResId(RID_SVXSTR_HEADER));
         m_xFrame->set_help_id(u"svx/ui/headfootformatpage/HFormatPage"_ustr);
         m_xTurnOnBox = m_xBuilder->weld_check_button(u"checkHeaderOn"_ustr);
+
+        // uitest
+        m_xCntSharedBox->set_buildable_name(m_xCntSharedBox->get_buildable_name() + "-header");
+        m_xCntSharedFirstBox->set_buildable_name(m_xCntSharedFirstBox->get_buildable_name() + "-header");
     }
     m_xTurnOnBox->show();
 

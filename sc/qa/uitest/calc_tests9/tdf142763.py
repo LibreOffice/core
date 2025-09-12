@@ -26,7 +26,7 @@ class Tdf142763(UITestCase):
 
                 xHeaderOnBtn = xPageFormatDialog.getChild("checkHeaderOn")
                 xHeaderOnBtn.executeAction("CLICK", tuple())
-                xFirstHeaderSameBtn = xPageFormatDialog.getChild("checkSameFP")
+                xFirstHeaderSameBtn = xPageFormatDialog.getChild("checkSameFP-header")
                 xFirstHeaderSameBtn.executeAction("CLICK", tuple())
 
                 with self.ui_test.execute_dialog_through_command(".uno:EditHeaderAndFooter") as xHeaderDialog:
@@ -53,7 +53,7 @@ class Tdf142763(UITestCase):
 
                 xFooterOnBtn = xPageFormatDialog.getChild("checkFooterOn")
                 xFooterOnBtn.executeAction("CLICK", tuple())
-                xFirstFooterSameBtn = xPageFormatDialog.getChild("checkSameFP")
+                xFirstFooterSameBtn = xPageFormatDialog.getChild("checkSameFP-header")
                 xFirstFooterSameBtn.executeAction("CLICK", tuple())
 
                 with self.ui_test.execute_dialog_through_command(".uno:EditHeaderAndFooter") as xFooterDialog:

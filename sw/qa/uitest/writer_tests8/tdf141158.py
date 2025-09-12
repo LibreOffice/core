@@ -23,7 +23,7 @@ class TestTdf141158(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "4")
                 # make the same left right page header state to off  and apply the setting
-                checkSameLR = xDialog.getChild("checkSameLR")
+                checkSameLR = xDialog.getChild("checkSameLR-header")
                 checkSameLR.executeAction("CLICK",tuple())
 
             # go to the left header

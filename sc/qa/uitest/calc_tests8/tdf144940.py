@@ -29,8 +29,8 @@ class tdf144940(UITestCase):
                     select_pos(xTabs, "4")
 
                     xCheckHeaderOn = xDialog.getChild("checkHeaderOn")
-                    xCheckSameFP = xDialog.getChild("checkSameFP")
-                    xCheckSameLR = xDialog.getChild("checkSameLR")
+                    xCheckSameFP = xDialog.getChild("checkSameFP-header")
+                    xCheckSameLR = xDialog.getChild("checkSameLR-header")
 
                     self.assertEqual("true", get_state_as_dict(xCheckHeaderOn)["Selected"])
                     self.assertEqual("true", get_state_as_dict(xCheckSameLR)["Selected"])
