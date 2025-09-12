@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
@@ -102,6 +103,8 @@
 
 #include <comphelper/xmltools.hxx>
 #include <comphelper/graphicmimetype.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -245,6 +248,8 @@ public:
     OUString                                            msPackageURIScheme;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool                                                mbOutlineStyleAsNormalListStyle;
+    // Decompose embedded PDF pages into equivalent ODF representation during export
+    bool                                                mbDecomposePDF;
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
@@ -279,6 +284,7 @@ SvXMLExport_Impl::SvXMLExport_Impl()
 :    mxUriReferenceFactory( uri::UriReferenceFactory::create(comphelper::getProcessComponentContext()) ),
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbOutlineStyleAsNormalListStyle( false ),
+    mbDecomposePDF( false ),
     mDepth( 0 ),
     mbExportTextNumberElement( false ),
     mbNullDateInitialized( false )
@@ -789,6 +795,8 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             }
         }
 
+        OUString aFilterOptions;
+
         for( const auto& rProp : aDescriptor )
         {
             const OUString& rPropName = rProp.Name;
@@ -809,8 +817,27 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                 if (!(rValue >>= msImgFilterName))
                     return false;
             }
+            else if (rPropName == "FilterOptions")
+                rValue >>= aFilterOptions;
+
         }
 
+        if (aFilterOptions.startsWith("{"))
+        {
+            try
+            {
+                std::vector<beans::PropertyValue> aFilterData = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+                for (const PropertyValue& rProp : aFilterData)
+                {
+                    if (rProp.Name == "DecomposePDF")
+                        rProp.Value >>= mpImpl->mbDecomposePDF;
+                }
+            }
+            catch (const boost::property_tree::json_parser::json_parser_error& e)
+            {
+                SAL_WARN("xmloff.core", "error parsing FilterOptions: " << e.message());
+            }
+        }
 
         exportDoc( meClass );
     }
@@ -2331,6 +2358,11 @@ void SvXMLExport::DisposingModel()
 bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
 {
     return mpImpl->mbOutlineStyleAsNormalListStyle;
+}
+
+bool SvXMLExport::decomposePDF() const
+{
+    return mpImpl->mbDecomposePDF;
 }
 
 uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage() const
