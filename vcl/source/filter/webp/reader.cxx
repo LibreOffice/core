@@ -86,7 +86,6 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     enum class PixelMode
     {
         DirectRead, // read data directly to the bitmap
-        Split, // read to tmp buffer and split to rgb and alpha
         SetPixel // read to tmp buffer and use setPixel()
     };
     PixelMode pixelMode = PixelMode::SetPixel;
@@ -100,11 +99,11 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         {
             case ScanlineFormat::N24BitTcRgb:
                 config.output.colorspace = MODE_RGBA;
-                pixelMode = PixelMode::Split;
+                pixelMode = PixelMode::DirectRead;
                 break;
             case ScanlineFormat::N24BitTcBgr:
                 config.output.colorspace = MODE_BGRA;
-                pixelMode = PixelMode::Split;
+                pixelMode = PixelMode::DirectRead;
                 break;
             default:
                 config.output.colorspace = MODE_RGBA;
@@ -190,21 +189,6 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
                     memcpy(tmp.data(), access->GetScanline(y), lineSize);
                     memcpy(access->GetScanline(y), access->GetScanline(otherY), lineSize);
                     memcpy(access->GetScanline(otherY), tmp.data(), lineSize);
-                }
-            }
-            break;
-        }
-        case PixelMode::Split:
-        {
-            for (tools::Long y = 0, nHeight = access->Height(); y < nHeight; ++y)
-            {
-                const unsigned char* src = tmpRgbaData.data() + width * 4 * y;
-                unsigned char* dst = access->GetScanline(y);
-                for (tools::Long x = 0, nWidth = access->Width(); x < nWidth; ++x)
-                {
-                    memcpy(dst, src, 4);
-                    src += 4;
-                    dst += 4;
                 }
             }
             break;
