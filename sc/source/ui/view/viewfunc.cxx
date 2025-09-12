@@ -877,7 +877,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     if (pSheetView->getSortOrder())
                         nUnsortedRow = pSheetView->getSortOrder()->unsort(nUnsortedRow);
                     if (pManager->getSortOrder())
-                        nUnsortedRow = pManager->getSortOrder()->unsort(nUnsortedRow);
+                        nUnsortedRow = pManager->getSortOrder()->resort(nUnsortedRow);
                 }
                 applyText(*this, nCol, nUnsortedRow, rTab, rString, bNumFmtChanged);
             }

@@ -76,4 +76,27 @@ CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testCombiningSortOrder)
         std::equal(aExpectedOrder.begin(), aExpectedOrder.end(), aReverser.maOrder.begin()));
 }
 
+CPPUNIT_TEST_FIXTURE(SortOrderReverserTest, testResort)
+{
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 4, 3, 2, 1 }, 5, 8);
+
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(5));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(6));
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(7));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(8));
+    }
+
+    {
+        sc::SortOrderReverser aReverser;
+        aReverser.addOrderIndices({ 3, 1, 4, 2 }, 5, 8);
+
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), aReverser.resort(5));
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), aReverser.resort(6));
+        CPPUNIT_ASSERT_EQUAL(SCROW(5), aReverser.resort(7));
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), aReverser.resort(8));
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
