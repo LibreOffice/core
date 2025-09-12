@@ -147,6 +147,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/textunderlinecontrol \
 	svx/uiconfig/ui/themedialog \
 	svx/uiconfig/ui/themecoloreditdialog \
+	svx/uiconfig/ui/themeselectorpanel \
 	svx/uiconfig/ui/toolbarpopover \
 	svx/uiconfig/ui/xmlsecstatmenu \
 	svx/uiconfig/ui/xformspage \
