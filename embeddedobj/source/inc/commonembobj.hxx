@@ -71,7 +71,7 @@ namespace comphelper {
  * document model successfully.
  */
 class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
-                            , public css::embed::EmbeddedUpdate
+                            , public ::embeddedobj::EmbeddedUpdate
                             , public css::embed::XEmbedPersist2
                             , public css::embed::XLinkageSupport
                             , public css::embed::XInplaceObject

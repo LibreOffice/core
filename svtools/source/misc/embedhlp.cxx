@@ -910,7 +910,7 @@ void EmbeddedObjectRef::UpdateReplacement( bool bUpdateOle )
 
 void EmbeddedObjectRef::UpdateOleObject( bool bUpdateOle )
 {
-    embed::EmbeddedUpdate* pObj = dynamic_cast<embed::EmbeddedUpdate*> (GetObject().get());
+    ::embeddedobj::EmbeddedUpdate* pObj = dynamic_cast<::embeddedobj::EmbeddedUpdate*> (GetObject().get());
     if( pObj )
         pObj->SetOleState( bUpdateOle );
 }

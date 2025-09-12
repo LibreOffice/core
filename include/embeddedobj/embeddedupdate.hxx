@@ -11,13 +11,7 @@
 
 #include <embeddedobj/embobjdllapi.h>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace embed
+namespace embeddedobj
 {
 /** This class is only used to tell the OCommonEmbeddedObject class
     that the following call is an Link- / Ole-refresh.
@@ -44,9 +38,7 @@ private:
     EmbeddedUpdate(const EmbeddedUpdate&) = delete;
     EmbeddedUpdate& operator=(const EmbeddedUpdate&) = delete;
 };
-};
-};
-};
-};
+
+} // namespace embeddedobj
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
