@@ -124,6 +124,8 @@ public:
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
     SAL_DLLPRIVATE const GraphicObject*    GetReplacementGraphicObject() const;
+    // An exploded view of a pdf page as a draw document.
+    SAL_DLLPRIVATE css::uno::Reference<css::lang::XComponent> GetReplacementGraphicModel() const;
 
     SAL_DLLPRIVATE void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);

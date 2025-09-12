@@ -29,11 +29,13 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbtmpit.hxx>
@@ -53,6 +55,15 @@
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
+
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <vcl/filter/PDFiumLibrary.hxx>
+#include <svdpdf.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
 
@@ -347,6 +358,67 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
     }
 
     return mpReplacementGraphicObject.get();
+}
+
+css::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicModel() const
+{
+    if (!mpGraphicObject)
+        return nullptr;
+
+    const Graphic& rGraphic = mpGraphicObject->GetGraphic();
+    auto const & rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+    if (!rVectorGraphicDataPtr)
+        return nullptr;
+
+    if (rVectorGraphicDataPtr->getType() != VectorGraphicDataType::Pdf)
+        return nullptr;
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return nullptr;
+
+    // Create an empty Draw component.
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
+    if (!xDesktop)
+        return nullptr;
+    uno::Reference<lang::XComponent> xComponent = xDesktop->loadComponentFromURL(u"private:factory/sdraw"_ustr, u"_default"_ustr, 0, {});
+    uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
+    if (!xModel)
+        return nullptr;
+    uno::Reference<frame::XController> xController(xModel->getCurrentController());
+    SfxViewShell* pViewShell = SfxViewShell::Get(xController);
+    if (!pViewShell)
+        return nullptr;
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
+    if (!xDrawPagesSupplier)
+        return nullptr;
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    if (!xDrawPages)
+        return nullptr;
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    SdrPage* pSdrPage = GetSdrPageFromXDrawPage(xDrawPage);
+    if (!pSdrPage)
+        return nullptr;
+
+    SdrModel& rSdrModel = pSdrPage->getSdrModelFromSdrPage();
+
+    tools::Rectangle aLogicRect = GetLogicRect();
+
+    ImpSdrPdfImport aFilter(rSdrModel, GetLayer(), aLogicRect, rGraphic);
+    if (rGraphic.getPageNumber() < aFilter.GetPageCount())
+    {
+        aFilter.DoImport(*pSdrPage, 0, rGraphic.getPageNumber(), nullptr);
+    }
+
+    if (SdrView* pView = pViewShell->GetDrawView())
+    {
+        // Group shapes together
+        pView->MarkAllObj();
+        pView->GroupMarked();
+    }
+
+    return xComponent;
 }
 
 void SdrGrafObj::NbcSetGraphic(const Graphic& rGraphic)

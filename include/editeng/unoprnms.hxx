@@ -178,6 +178,7 @@ inline constexpr OUString UNO_NAME_HYPERLINK = u"Hyperlink"_ustr;
 
 inline constexpr OUString UNO_NAME_GRAPHOBJ_FILLBITMAP = u"GraphicObjectFillBitmap"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC = u"ReplacementGraphic"_ustr;
+inline constexpr OUString UNO_NAME_GRAPHOBJ_REPLACEMENT_MODEL = u"ReplacementModel"_ustr;
 inline constexpr OUString UNO_NAME_GRAPHOBJ_GRAFSTREAMURL = u"GraphicStreamURL"_ustr;
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX          "vnd.sun.star.Package:"
 inline constexpr OUString UNO_NAME_GRAPHOBJ_GRAPHIC = u"Graphic"_ustr;

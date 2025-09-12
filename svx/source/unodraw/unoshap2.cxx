@@ -1452,6 +1452,12 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         break;
     }
 
+    case OWN_ATTR_REPLACEMENT_MODEL:
+    {
+        rValue <<= static_cast<SdrGrafObj*>(GetSdrObject())->GetReplacementGraphicModel();
+        break;
+    }
+
     case OWN_ATTR_GRAFSTREAMURL:
     {
         const OUString  aStreamURL( static_cast<SdrGrafObj*>( GetSdrObject() )->GetGrafStreamURL() );

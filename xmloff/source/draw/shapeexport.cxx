@@ -60,6 +60,7 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #include <com/sun/star/drawing/BarCode.hpp>
 #include <com/sun/star/drawing/BarCodeErrorCorrection.hpp>
@@ -81,6 +82,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/memorystream.hxx>
@@ -218,6 +220,50 @@ XMLShapeExport::~XMLShapeExport()
 {
 }
 
+static css::uno::Reference<css::drawing::XShape> GetPDFShape(const uno::Reference<lang::XComponent>& xReplacementModel)
+{
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xReplacementModel, uno::UNO_QUERY);
+    if (!xDrawPagesSupplier)
+        return nullptr;
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDrawPagesSupplier->getDrawPages());
+    if (!xDrawPages)
+        return nullptr;
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    if (!xDrawPage)
+        return nullptr;
+    return uno::Reference<drawing::XShape>(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+}
+
+uno::Reference<lang::XComponent> XMLShapeExport::checkForPDFShapeReplacement(const uno::Reference<drawing::XShape>& xShape)
+{
+    if (!GetExport().decomposePDF())
+        return nullptr;
+
+    OUString aType( xShape->getShapeType() );
+    if (aType != "com.sun.star.drawing.GraphicObjectShape")
+        return nullptr;
+
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(!xPropSet.is())
+        return nullptr;
+
+    uno::Reference<graphic::XGraphic> xGraphic;
+    xPropSet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+
+    OUString sOutMimeType;
+    GetExport().GetGraphicMimeTypeFromStream(xGraphic, sOutMimeType);
+
+    if (sOutMimeType != "application/pdf")
+        return nullptr;
+
+    // To export PDF as exploded drawing object replacements
+    uno::Reference<lang::XComponent> xReplacementModel;
+    xPropSet->getPropertyValue(u"ReplacementModel"_ustr) >>= xReplacementModel;
+    SAL_WARN_IF(!xReplacementModel.is(), "xmloff", "no xModel for pdf format");
+
+    return xReplacementModel;
+}
+
 // sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format
 uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement( const uno::Reference< drawing::XShape >& xShape )
 {
@@ -277,9 +323,18 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
-    uno::Reference< drawing::XShape > xCustomShapeReplacement = checkForCustomShapeReplacement( xShape );
-    if ( xCustomShapeReplacement.is() )
-        aShapeInfo.xCustomShapeReplacement = std::move(xCustomShapeReplacement);
+    css::uno::Reference<css::lang::XComponent> xPDFModelReplacement = checkForPDFShapeReplacement(xShape);
+    if (xPDFModelReplacement)
+    {
+        aShapeInfo.xPDFModelReplacement = std::move(xPDFModelReplacement);
+        aShapeInfo.xCustomShapeReplacement = GetPDFShape(aShapeInfo.xPDFModelReplacement);
+    }
+    else
+    {
+        uno::Reference<drawing::XShape> xCustomShapeReplacement = checkForCustomShapeReplacement(xShape);
+        if ( xCustomShapeReplacement.is() )
+            aShapeInfo.xCustomShapeReplacement = std::move(xCustomShapeReplacement);
+    }
 
     // first compute the shapes type
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
@@ -819,7 +874,24 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         case XmlShapeType::DrawGraphicObjectShape:
         case XmlShapeType::PresGraphicObjectShape:
         {
-            ImpExportGraphicObjectShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            if (aShapeInfo.xCustomShapeReplacement.is()) // exploded PDF
+            {
+                ImpExportGroupShape(aShapeInfo.xCustomShapeReplacement, nFeatures, pRefPoint);
+                uno::Reference<css::util::XCloseable> xClose(aShapeInfo.xPDFModelReplacement, uno::UNO_QUERY);
+                if (xClose.is())
+                {
+                    try
+                    {
+                        xClose->close(true);
+                    }
+                    catch (const uno::RuntimeException& e)
+                    {
+                        SAL_WARN("xmloff", "Couldn't close PDF replacement model: " << e.Message);
+                    }
+                }
+            }
+            else
+                ImpExportGraphicObjectShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
 
