@@ -13,6 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_basic_types_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_basic_types_test,\
     sc/qa/unit/types/ScAddressTest \
+    sc/qa/unit/types/SortOrderReverserTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sc_basic_types_test,boost_headers))
@@ -25,7 +26,8 @@ $(eval $(call gb_CppunitTest_set_include,sc_basic_types_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_basic_types_test,\
-    sal \
+    sc \
+    scui \
 ))
 
 # Needed for include/test/cppunitasserthelper.hxx
