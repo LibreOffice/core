@@ -360,7 +360,8 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId,
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject(
+            const uno::Sequence < sal_Int8 >& rClassId,
             const uno::Sequence < beans::PropertyValue >& rArgs, OUString& rNewName, OUString const* pBaseURL )
 {
     if ( rNewName.isEmpty() )
@@ -407,7 +408,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     return CreateEmbeddedObject( rClassId, uno::Sequence < beans::PropertyValue >(), rNewName, pBaseURL );
 }
 
-void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
+void EmbeddedObjectContainer::AddEmbeddedObject(
+            const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Added object doesn't have a name!");
@@ -513,7 +515,9 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
 
     return true;
 }
-bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName,
+bool EmbeddedObjectContainer::InsertEmbeddedObject(
+        const uno::Reference < embed::XEmbeddedObject >& xObj,
+        OUString& rName,
         OUString const* pTargetShellID )
 {
     // store it into the container storage
@@ -530,7 +534,8 @@ bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed
         return false;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < io::XInputStream >& xStm, OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject(
+            const uno::Reference < io::XInputStream >& xStm, OUString& rNewName )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -590,7 +595,9 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xRet;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName, OUString const* pBaseURL )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject(
+        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+        OUString& rNewName, OUString const* pBaseURL )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -628,7 +635,9 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     return xObj;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink( const css::uno::Sequence < css::beans::PropertyValue >& aMedium, OUString& rNewName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink(
+        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+        OUString& rNewName )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -890,7 +899,8 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Embedde
 }
 
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
-bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, bool bKeepToTempStorage )
+bool EmbeddedObjectContainer::RemoveEmbeddedObject(
+        const uno::Reference < embed::XEmbeddedObject >& xObj, bool bKeepToTempStorage )
 {
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     OUString aName;
