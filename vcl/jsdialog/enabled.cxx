@@ -69,6 +69,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/hyperlinkdialog.ui" },
         { u"cui/ui/hyperlinkinternetpage.ui" },
         { u"cui/ui/hyperlinkmailpage.ui" },
+        { u"cui/ui/hyperlinkdocpage.ui" },
         { u"cui/ui/imagetabpage.ui" },
         { u"cui/ui/linedialog.ui" },
         { u"cui/ui/lineendstabpage.ui" },

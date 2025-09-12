@@ -46,7 +46,19 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp(weld::Container* pParent, SvxHpLinkDlg* pDl
 
     InitStdControls();
 
-    m_xCbbPath->show();
+    if (comphelper::LibreOfficeKit::isActive()) {
+        xBuilder->weld_label(u"label3"_ustr)->hide();
+
+        m_xBtFileopen->hide();
+        xBuilder->weld_label(u"path_label"_ustr)->hide();
+        m_xCbbPath->hide();
+
+        xBuilder->weld_label(u"url_label"_ustr)->hide();
+        m_xFtFullURL->hide();
+    } else {
+        m_xCbbPath->show();
+    }
+
     m_xCbbPath->SetBaseURL(INET_FILE_SCHEME);
 
     SetExchangeSupport();
