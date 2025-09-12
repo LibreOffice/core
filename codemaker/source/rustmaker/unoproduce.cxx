@@ -34,7 +34,7 @@ const std::unordered_set<std::string_view> UnoProducer::m_reservedKeywords
 
 const std::unordered_map<std::string_view, OString> UnoProducer::m_baseTypes
     // Maps UNO basic types to their Rust equivalents
-    // TODO: need to edit the core types Implemented manauly
+    // TODO: need to edit the core types Implemented manually
     = { { "boolean", "bool"_ostr },
         { "char", "char"_ostr },
         { "byte", "i8"_ostr },
