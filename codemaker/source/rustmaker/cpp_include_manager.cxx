@@ -135,7 +135,7 @@ OString CppIncludeManager::calculateRelativeIncludePath(const CppFile& file,
     fs::path currentDir = currentFilePath.parent_path();
 
     // Convert target type name to path (dots to slashes)
-    std::string targetTypeStr = std::string(targetType);
+    std::string targetTypeStr(targetType);
     std::replace(targetTypeStr.begin(), targetTypeStr.end(), '.', '/');
 
     // Find the base directory (cpp)
