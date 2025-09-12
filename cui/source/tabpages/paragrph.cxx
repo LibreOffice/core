@@ -1943,7 +1943,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     }
     else if(TRISTATE_TRUE == eState && m_xApplyCollBtn->get_sensitive())
         bIsPageModel = true;
-    else
+    else if (m_xPageBreakBox->get_state() != TRISTATE_INDET)
         rOutSet->Put( SvxPageModelItem( sPage, false, SID_ATTR_PARA_MODEL ) );
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGEBREAK );
