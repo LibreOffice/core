@@ -1730,6 +1730,25 @@ void TestBreakIterator::testChinese()
         auto stBreak4 = m_xBreak->getLineBreak(aTest, 4, stLocale, 0, stHyphOptions, stUserOptions);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), stBreak4.breakIndex);
     }
+
+    // tdf#167873: Simplified Chinese allows European-style quotation marks. The iterator
+    // must create break opportunities between U+201C and U+201D quotation marks and a
+    // trailing CJK ideograph.
+    {
+        i18n::LineBreakHyphenationOptions stHyphOptions;
+        i18n::LineBreakUserOptions stUserOptions;
+
+        auto aTest = u"例例\u201C例例例例\u201D例例"_ustr;
+
+        // Break opportunities should be outside of the quotation marks.
+        // U+201C is a left quotation mark, so the break opportunity should be to the left:
+        auto stBreak1 = m_xBreak->getLineBreak(aTest, 3, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), stBreak1.breakIndex);
+
+        // U+201D is a right quotation mark, so the break opportunity should be to the right:
+        auto stBreak2 = m_xBreak->getLineBreak(aTest, 8, stLocale, 0, stHyphOptions, stUserOptions);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), stBreak2.breakIndex);
+    }
 }
 
 void TestBreakIterator::testKorean()
