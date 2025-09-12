@@ -26,9 +26,7 @@
 #include <com/sun/star/embed/XInplaceObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
-#include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

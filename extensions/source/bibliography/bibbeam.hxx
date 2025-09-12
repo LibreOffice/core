@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include "toolbar.hxx"
 #include "formcontrolcontainer.hxx"

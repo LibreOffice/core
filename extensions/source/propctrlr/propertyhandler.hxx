@@ -22,12 +22,10 @@
 #include "pcrcommon.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

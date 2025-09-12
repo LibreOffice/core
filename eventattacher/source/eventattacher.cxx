@@ -42,8 +42,6 @@
 #include <mutex>
 #include <utility>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;

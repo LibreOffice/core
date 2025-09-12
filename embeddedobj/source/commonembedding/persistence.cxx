@@ -47,8 +47,6 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
-
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>

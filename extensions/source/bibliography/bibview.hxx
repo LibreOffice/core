@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include "formcontrolcontainer.hxx"
 #include "bibshortcuthandler.hxx"
 

@@ -31,11 +31,9 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/diagnose_ex.hxx>

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include "propertyhandler.hxx"
 #include "sqlcommanddesign.hxx"
 #include <comphelper/uno3.hxx>

@@ -23,12 +23,10 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 

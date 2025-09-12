@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -30,7 +29,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 

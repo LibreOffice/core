@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <config_options.h>
 #include <basegfx/utils/b2dclipstate.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>

@@ -30,7 +30,6 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/multicontainer2.hxx>
-#include <comphelper/storagehelper.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -48,8 +47,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include "persistence.hxx"
-
-#include <cassert>
 
 using namespace ::com::sun::star;
 

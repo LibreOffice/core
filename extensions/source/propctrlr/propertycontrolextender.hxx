@@ -24,8 +24,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <memory>
-
 
 namespace pcr
 {
