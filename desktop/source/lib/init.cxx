@@ -5781,7 +5781,9 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
     }
 
     bool bAllyState = false;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    const int nView = SfxLokHelper::getViewId(pDocument->mnDocumentId);
+    SfxViewShell* pViewShell = SfxLokHelper::getViewOfId(nView);
     if (pViewShell)
     {
         bAllyState = pViewShell->GetLOKAccessibilityState();
