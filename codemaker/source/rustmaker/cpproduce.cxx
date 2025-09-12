@@ -1013,7 +1013,7 @@ void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view 
     // UNO interface types start with "com.sun.star" and end with an interface name (typically starting with "X")
     // Examples: "com.sun.star.uno.XInterface", "com.sun.star.text.XText"
     bool isInterfaceType = (unoType.startsWith("com.sun.star.") && (unoType.lastIndexOf('.') != -1)
-                            && (unoType.copy(unoType.lastIndexOf('.') + 1).startsWith("X")));
+                            && (unoType.subView(unoType.lastIndexOf('.') + 1).starts_with('X')));
 
     if (isInterfaceType)
     {
