@@ -60,4 +60,33 @@ class PageNumberWizard(UITestCase):
             self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.HeaderText)
             self.assertIsNotNone(document.StyleFamilies.PageStyles.Standard.FooterText)
 
+    def test_tdf165852(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            self.xUITest.executeCommand(".uno:InsertPagebreak")
+            self.assertEqual("2", get_state_as_dict(xWriterEdit)["Pages"])
+
+            with self.ui_test.execute_dialog_through_command(".uno:PageNumberWizard") as xDialog:
+                xPositionCombo = xDialog.getChild("positionCombo")
+                self.assertEqual("Bottom of page (Footer)", get_state_as_dict(xPositionCombo)["SelectEntryText"])
+
+                xAlignmentCombo = xDialog.getChild("alignmentCombo")
+                select_by_text(xAlignmentCombo, "Right")
+                self.assertEqual("Right", get_state_as_dict(xAlignmentCombo)["SelectEntryText"])
+
+                xMirrorCheckbox = xDialog.getChild("mirrorCheckbox")
+                self.assertEqual("true", get_state_as_dict(xMirrorCheckbox)["Selected"])
+
+            xStandardStyle = document.StyleFamilies.PageStyles.Standard
+            self.assertIsNone(xStandardStyle.HeaderText)
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: '1' != ''
+            self.assertEqual("1", xStandardStyle.FooterText.String)
+            self.assertEqual("1", xStandardStyle.FooterTextFirst.String)
+            self.assertEqual("2", xStandardStyle.FooterTextLeft.String)
+            self.assertEqual("1", xStandardStyle.FooterTextRight.String)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
