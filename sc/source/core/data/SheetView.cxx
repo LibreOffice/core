@@ -49,6 +49,23 @@ SCROW SortOrderReverser::unsort(SCROW nRow) const
     return nRow;
 }
 
+SCROW SortOrderReverser::resort(SCROW nRow) const
+{
+    if (maOrder.empty())
+        return nRow;
+
+    if (nRow >= mnFirstRow && nRow <= mnLastRow)
+    {
+        SCCOLROW nOrderValue = nRow - mnFirstRow + 1;
+        for (size_t nIndex = 0; nIndex < maOrder.size(); ++nIndex)
+        {
+            if (maOrder[nIndex] == nOrderValue)
+                return mnFirstRow + nIndex;
+        }
+    }
+    return nRow;
+}
+
 SheetView::SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID)
     : mpTable(pTable)
     , maName(rName)

@@ -870,6 +870,60 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetView)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabViewSheetView != pTabViewDefaultView);
+    CPPUNIT_ASSERT(aSheetView.getViewID() != aDefaultView.getViewID());
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+    }
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aDefaultView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        // Check values
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"4", u"3" }));
+    }
+
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        typeCharsInCell(std::string("44"), 0, 2, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"44", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"7", u"5", u"44", u"3" }));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

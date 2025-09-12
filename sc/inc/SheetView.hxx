@@ -33,6 +33,7 @@ public:
      * or it will return the input row without modification.
      **/
     SCROW unsort(SCROW nRow) const;
+    SCROW resort(SCROW nRow) const;
 
     /** Adds or combines the order indices.
      *
