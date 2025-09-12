@@ -545,6 +545,13 @@
     <Transliteration unoid="ignoreSpace_ja_JP"/>
   </LC_TRANSLITERATION>
   <LC_MISC>
+    <BreakIteratorRules>
+      <EditMode/>
+      <DictionaryMode/>
+      <WordCountMode/>
+      <CharacterMode/>
+      <LineMode>line_cj</LineMode>
+    </BreakIteratorRules>
     <ForbiddenCharacters>
       <ForbiddenLineBeginCharacters>!%),.:;?]}¢°’”‰′″℃、。々〉》」』】〕ぁぃぅぇぉっゃゅょゎ゛゜ゝゞァィゥェォッャュョヮヵヶ・ーヽヾ！％），．：；？］｝｡｣､･ｧｨｩｪｫｬｭｮｯｰﾞﾟ¢</ForbiddenLineBeginCharacters>
       <ForbiddenLineEndCharacters>$([¥{£¥‘“〈《「『【〔＄（［｛｢£￥</ForbiddenLineEndCharacters>
