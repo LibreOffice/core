@@ -28,9 +28,7 @@ private:
     std::vector<std::shared_ptr<SheetView>> maViews;
     sal_Int32 maNameCounter = 0;
 
-    std::vector<SCCOLROW> maOrder;
-    SCROW mnFirstRow;
-    SCROW mnLastRow;
+    std::optional<SortOrderReverser> moSortOrder;
 
     bool isValidSheetViewID(SheetViewID nID) const
     {
@@ -70,8 +68,8 @@ public:
 
     static OUString defaultViewName();
 
+    std::optional<SortOrderReverser> const& getSortOrder() const { return moSortOrder; }
     void addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow);
-    SCROW unsort(SCROW nRow);
 };
 }
 
