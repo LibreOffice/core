@@ -24,6 +24,7 @@
 #include <xmloff/xmlimp.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include <xmloff/xmltoken.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/extract.hxx>
 #include <sal/log.hxx>
 
@@ -156,6 +157,19 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterCo
     return nullptr;
 }
 
+static void checkHeaderFooter(const uno::Reference<text::XText>& rText, bool bContainsContent)
+{
+    if (!bContainsContent)
+        rText->setString(u""_ustr);
+    else if (comphelper::IsFuzzing())
+    {
+        if (rText->getString().getLength() > 10000)
+        {
+            // discourage very long paragraphs for fuzzing performance
+            rText->setString(u""_ustr);
+        }
+    }
+}
 void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
@@ -173,13 +187,9 @@ void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
         GetImport().GetTextImport()->SetCursor(xOldTextCursor);
     if (xHeaderFooterContent.is())
     {
-        if (!bContainsLeft)
-            xHeaderFooterContent->getLeftText()->setString(u""_ustr);
-        if (!bContainsCenter)
-            xHeaderFooterContent->getCenterText()->setString(u""_ustr);
-        if (!bContainsRight)
-            xHeaderFooterContent->getRightText()->setString(u""_ustr);
-
+        checkHeaderFooter(xHeaderFooterContent->getLeftText(), bContainsLeft);
+        checkHeaderFooter(xHeaderFooterContent->getCenterText(), bContainsCenter);
+        checkHeaderFooter(xHeaderFooterContent->getRightText(), bContainsRight);
         xPropSet->setPropertyValue( sCont, uno::Any(xHeaderFooterContent) );
     }
 }
