@@ -1745,6 +1745,17 @@ void JSTreeView::select(int pos)
     sendAction(std::move(pMap));
 }
 
+void JSTreeView::select(const weld::TreeIter& rIter)
+{
+    SalInstanceTreeView::select(rIter);
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    (*pMap)[ACTION_TYPE ""_ostr] = "select";
+    (*pMap)["position"_ostr] = OUString::number(m_xTreeView->GetEntryPos(rVclIter.iter));
+    sendAction(std::move(pMap));
+}
+
 weld::TreeView* JSTreeView::get_drag_source() const { return g_DragSource; }
 
 void JSTreeView::drag_start() { g_DragSource = this; }

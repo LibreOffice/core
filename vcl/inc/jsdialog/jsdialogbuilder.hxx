@@ -724,6 +724,7 @@ public:
     using SalInstanceTreeView::select;
     /// pos is used differently here, it defines how many steps of iterator we need to perform to take entry
     virtual void select(int pos) override;
+    virtual void select(const weld::TreeIter& rIter) override;
 
     virtual weld::TreeView* get_drag_source() const override;
 
