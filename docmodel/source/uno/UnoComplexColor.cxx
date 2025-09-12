@@ -9,7 +9,6 @@
  */
 
 #include <docmodel/uno/UnoComplexColor.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 using namespace css;
 

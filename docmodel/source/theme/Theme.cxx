@@ -15,13 +15,11 @@
 #include <libxml/xmlwriter.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
-#include <sal/log.hxx>
 #include <sal/types.h>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/XTheme.hpp>
 
 using namespace com::sun::star;

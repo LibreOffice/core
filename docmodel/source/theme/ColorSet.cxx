@@ -10,7 +10,6 @@
 
 #include <docmodel/theme/ColorSet.hxx>
 #include <sstream>
-#include <utility>
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
 

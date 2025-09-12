@@ -10,7 +10,6 @@
 
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <o3tl/enumrange.hxx>
 #include <comphelper/sequence.hxx>
 #include <docmodel/theme/Theme.hxx>

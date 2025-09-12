@@ -12,7 +12,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <sstream>
 #include <utility>
-#include <sal/log.hxx>
 #include <tools/json_writer.hxx>
 
 namespace model::color
