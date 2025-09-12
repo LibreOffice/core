@@ -1844,20 +1844,23 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
     SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
     const PageKind ePageKind = GetPage()->GetPageKind();
 
-    sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
-    for (i = 0; i < nPageCnt; i++)
+    SdPage* pPage = GetPage();
+    if (pPage->TRG_HasMasterPage())
     {
-        SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
-    }
+        SdPage* pMasterPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+        pMasterPage->SetSize(aSize);
 
-    nPageCnt = rDoc.GetSdPageCount(ePageKind);
-
-    for (i = 0; i < nPageCnt; i++)
-    {
-        SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        sal_uInt32 nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        for (sal_uInt32 i = 0; i < nPageCnt; i++)
+        {
+            pPage = rDoc.GetSdPage(i, ePageKind);
+            if (pPage->TRG_HasMasterPage() &&
+                static_cast<SdPage*>(&pPage->TRG_GetMasterPage()) == pMasterPage)
+                pPage->SetSize(aSize);
+        }
     }
+    else
+        pPage->SetSize(aSize);
 
     refreshpage( &rDoc, ePageKind );
 }
@@ -1873,20 +1876,23 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
     const PageKind ePageKind = GetPage()->GetPageKind();
 
-    sal_uInt16 i, nPageCnt = rDoc.GetMasterSdPageCount(ePageKind);
-    for (i = 0; i < nPageCnt; i++)
+    SdPage* pPage = GetPage();
+    if (pPage->TRG_HasMasterPage())
     {
-        SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
-    }
+        SdPage* pMasterPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+        pMasterPage->SetSize(aSize);
 
-    nPageCnt = rDoc.GetSdPageCount(ePageKind);
-
-    for (i = 0; i < nPageCnt; i++)
-    {
-        SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        sal_uInt32 nPageCnt = rDoc.GetSdPageCount(ePageKind);
+        for (sal_uInt32 i = 0; i < nPageCnt; i++)
+        {
+            pPage = rDoc.GetSdPage(i, ePageKind);
+            if (pPage->TRG_HasMasterPage() &&
+                static_cast<SdPage*>(&pPage->TRG_GetMasterPage()) == pMasterPage)
+                pPage->SetSize(aSize);
+        }
     }
+    else
+        pPage->SetSize(aSize);
 
     refreshpage( &rDoc, ePageKind );
 }
