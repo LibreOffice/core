@@ -308,9 +308,26 @@ void QtInstanceScrolledWindow::set_scroll_thickness(int nThickness)
     });
 }
 
-void QtInstanceScrolledWindow::customize_scrollbars(const Color&, const Color&, const Color&)
+void QtInstanceScrolledWindow::customize_scrollbars(const Color& rBackgroundColor,
+                                                    const Color& rShadowColor,
+                                                    const Color& rFaceColor)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        for (QScrollBar* pScrollBar :
+             { m_pScrollArea->horizontalScrollBar(), m_pScrollArea->verticalScrollBar() })
+        {
+            if (pScrollBar)
+            {
+                QPalette aPalette = pScrollBar->palette();
+                aPalette.setColor(QPalette::ColorRole::Base, toQColor(rBackgroundColor));
+                aPalette.setColor(QPalette::ColorRole::Shadow, toQColor(rShadowColor));
+                aPalette.setColor(QPalette::ColorRole::Button, toQColor(rFaceColor));
+                pScrollBar->setPalette(aPalette);
+            }
+        }
+    });
 }
 
 Qt::ScrollBarPolicy QtInstanceScrolledWindow::toQtPolicy(VclPolicyType eVclPolicy)
