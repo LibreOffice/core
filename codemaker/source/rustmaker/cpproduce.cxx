@@ -188,7 +188,7 @@ void CppProducer::generateCBridgeIncludes(CppFile& file, std::string_view name,
     includeManager.dumpIncludes(file, name);
 }
 
-void CppProducer::generateCBridgeTypeDefinitions(CppFile& file, const OString& handleTypeName)
+void CppProducer::generateCBridgeTypeDefinitions(CppFile& file, std::string_view handleTypeName)
 {
     // Opaque handle typedef for type safety
     file.beginLine()
@@ -204,9 +204,9 @@ void CppProducer::generateCBridgeTypeDefinitions(CppFile& file, const OString& h
         .endLine();
 }
 
-void CppProducer::generateCBridgeConstructors(CppFile& file, const OString& className,
-                                              const OString& functionPrefix,
-                                              const OString& handleTypeName)
+void CppProducer::generateCBridgeConstructors(CppFile& file, std::string_view className,
+                                              std::string_view functionPrefix,
+                                              std::string_view handleTypeName)
 {
     // Opaque constructor function - creates interface instance from existing Reference
     file.beginLine()
@@ -348,9 +348,9 @@ void CppProducer::generateCBridgeConstructors(CppFile& file, const OString& clas
         .endBlock();
 }
 
-void CppProducer::generateCBridgeDestructor(CppFile& file, const OString& className,
-                                            const OString& functionPrefix,
-                                            const OString& handleTypeName)
+void CppProducer::generateCBridgeDestructor(CppFile& file, std::string_view className,
+                                            std::string_view functionPrefix,
+                                            std::string_view handleTypeName)
 {
     // Opaque destructor function - destroys interface instance
     file.beginLine()
@@ -379,9 +379,9 @@ void CppProducer::generateCBridgeDestructor(CppFile& file, const OString& classN
         .endBlock();
 }
 
-void CppProducer::generateCBridgeValidation(CppFile& file, const OString& className,
-                                            const OString& functionPrefix,
-                                            const OString& handleTypeName)
+void CppProducer::generateCBridgeValidation(CppFile& file, std::string_view className,
+                                            std::string_view functionPrefix,
+                                            std::string_view handleTypeName)
 {
     // Opaque validity check function
     file.beginLine()
@@ -409,9 +409,9 @@ void CppProducer::generateCBridgeValidation(CppFile& file, const OString& classN
         .endBlock();
 }
 
-void CppProducer::generateCBridgeMethods(CppFile& file, const OString& className,
-                                         const OString& functionPrefix,
-                                         const OString& handleTypeName,
+void CppProducer::generateCBridgeMethods(CppFile& file, std::string_view className,
+                                         std::string_view functionPrefix,
+                                         std::string_view handleTypeName,
                                          const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
 {
     // Opaque method bridge functions - each method gets unique extern "C" function
@@ -824,8 +824,8 @@ void CppProducer::generateStructSourceNamespaces(CppFile& file, std::string_view
     generateSourceNamespaces(file, name);
 }
 
-void CppProducer::generateStructSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
-                                                     const OString& handleTypeName,
+void CppProducer::generateStructSourceBasicFunctions(CppFile& file, std::string_view functionPrefix,
+                                                     std::string_view handleTypeName,
                                                      const std::string& className)
 {
     // Generate struct creation function
@@ -912,7 +912,7 @@ void CppProducer::generateStructSourceBasicFunctions(CppFile& file, const OStrin
 }
 
 void CppProducer::generateStructSourceBaseMembers(
-    CppFile& file, const OString& functionPrefix, const OString& handleTypeName,
+    CppFile& file, std::string_view functionPrefix, std::string_view handleTypeName,
     const std::string& className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
 {
     // Generate getters/setters for base type members (if struct has a base)
@@ -944,7 +944,7 @@ void CppProducer::generateStructSourceBaseMembers(
 }
 
 void CppProducer::generateStructSourceDirectMembers(
-    CppFile& file, const OString& functionPrefix, const OString& handleTypeName,
+    CppFile& file, std::string_view functionPrefix, std::string_view handleTypeName,
     const std::string& className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
 {
     // Generate getters/setters for direct struct members
@@ -956,8 +956,8 @@ void CppProducer::generateStructSourceDirectMembers(
     }
 }
 
-void CppProducer::generateStructMemberAccessors(CppFile& file, const OString& functionPrefix,
-                                                const OString& handleTypeName,
+void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view functionPrefix,
+                                                std::string_view handleTypeName,
                                                 const std::string& className,
                                                 const unoidl::PlainStructTypeEntity::Member& member)
 {
@@ -1463,9 +1463,9 @@ void CppProducer::generateInterfaceSourceNamespaces(CppFile& file, std::string_v
 }
 
 void CppProducer::generateInterfaceSourceBasicFunctions(CppFile& file,
-                                                        const OString& functionPrefix,
-                                                        const OString& className,
-                                                        const OString& handleTypeName)
+                                                        std::string_view functionPrefix,
+                                                        std::string_view className,
+                                                        std::string_view handleTypeName)
 {
     // Interface creation
     file.beginLine()
@@ -1638,8 +1638,8 @@ void CppProducer::generateInterfaceSourceBasicFunctions(CppFile& file,
 }
 
 void CppProducer::generateInterfaceSourceMethodImplementations(
-    CppFile& file, const OString& functionPrefix, const OString& className,
-    const OString& handleTypeName, const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+    CppFile& file, std::string_view functionPrefix, std::string_view className,
+    std::string_view handleTypeName, const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
 {
     // Generate method implementations
     file.beginLine().append("// Method implementations").endLine();
@@ -1654,9 +1654,9 @@ void CppProducer::generateInterfaceSourceMethodImplementations(
     }
 }
 
-void CppProducer::generateSingleInterfaceMethod(CppFile& file, const OString& functionPrefix,
-                                                const OString& className,
-                                                const OString& handleTypeName,
+void CppProducer::generateSingleInterfaceMethod(CppFile& file, std::string_view functionPrefix,
+                                                std::string_view className,
+                                                std::string_view handleTypeName,
                                                 const unoidl::InterfaceTypeEntity::Method& method)
 {
     file.beginLine();

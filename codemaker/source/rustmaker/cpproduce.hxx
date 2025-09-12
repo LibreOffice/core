@@ -173,48 +173,50 @@ private:
     // C Bridge generation helpers
     void generateCBridgeIncludes(CppFile& file, std::string_view name,
                                  const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
-    static void generateCBridgeTypeDefinitions(CppFile& file, const OString& handleTypeName);
-    static void generateCBridgeConstructors(CppFile& file, const OString& className,
-                                            const OString& functionPrefix,
-                                            const OString& handleTypeName);
-    static void generateCBridgeDestructor(CppFile& file, const OString& className,
-                                          const OString& functionPrefix,
-                                          const OString& handleTypeName);
-    static void generateCBridgeValidation(CppFile& file, const OString& className,
-                                          const OString& functionPrefix,
-                                          const OString& handleTypeName);
-    void generateCBridgeMethods(CppFile& file, const OString& className,
-                                const OString& functionPrefix, const OString& handleTypeName,
+    static void generateCBridgeTypeDefinitions(CppFile& file, std::string_view handleTypeName);
+    static void generateCBridgeConstructors(CppFile& file, std::string_view className,
+                                            std::string_view functionPrefix,
+                                            std::string_view handleTypeName);
+    static void generateCBridgeDestructor(CppFile& file, std::string_view className,
+                                          std::string_view functionPrefix,
+                                          std::string_view handleTypeName);
+    static void generateCBridgeValidation(CppFile& file, std::string_view className,
+                                          std::string_view functionPrefix,
+                                          std::string_view handleTypeName);
+    void generateCBridgeMethods(CppFile& file, std::string_view className,
+                                std::string_view functionPrefix, std::string_view handleTypeName,
                                 const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
 
     // Interface generation helpers
-    static void generateInterfaceSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
-                                                      const OString& className,
-                                                      const OString& handleTypeName);
+    static void generateInterfaceSourceBasicFunctions(CppFile& file,
+                                                      std::string_view functionPrefix,
+                                                      std::string_view className,
+                                                      std::string_view handleTypeName);
     void generateInterfaceSourceMethodImplementations(
-        CppFile& file, const OString& functionPrefix, const OString& className,
-        const OString& handleTypeName, const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
-    void generateSingleInterfaceMethod(CppFile& file, const OString& functionPrefix,
-                                       const OString& className, const OString& handleTypeName,
+        CppFile& file, std::string_view functionPrefix, std::string_view className,
+        std::string_view handleTypeName, const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+    void generateSingleInterfaceMethod(CppFile& file, std::string_view functionPrefix,
+                                       std::string_view className, std::string_view handleTypeName,
                                        const unoidl::InterfaceTypeEntity::Method& method);
     void generateActualMethodCall(CppFile& file, const unoidl::InterfaceTypeEntity::Method& method);
     void generateReturnValueConversion(CppFile& file,
                                        const unoidl::InterfaceTypeEntity::Method& method);
 
     // Struct generation helpers
-    static void generateStructSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
-                                                   const OString& handleTypeName,
+    static void generateStructSourceBasicFunctions(CppFile& file, std::string_view functionPrefix,
+                                                   std::string_view handleTypeName,
                                                    const std::string& className);
     void
-    generateStructSourceBaseMembers(CppFile& file, const OString& functionPrefix,
-                                    const OString& handleTypeName, const std::string& className,
+    generateStructSourceBaseMembers(CppFile& file, std::string_view functionPrefix,
+                                    std::string_view handleTypeName, const std::string& className,
                                     const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
     void
-    generateStructSourceDirectMembers(CppFile& file, const OString& functionPrefix,
-                                      const OString& handleTypeName, const std::string& className,
+    generateStructSourceDirectMembers(CppFile& file, std::string_view functionPrefix,
+                                      std::string_view handleTypeName, const std::string& className,
                                       const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
-    void generateStructMemberAccessors(CppFile& file, const OString& functionPrefix,
-                                       const OString& handleTypeName, const std::string& className,
+    void generateStructMemberAccessors(CppFile& file, std::string_view functionPrefix,
+                                       std::string_view handleTypeName,
+                                       const std::string& className,
                                        const unoidl::PlainStructTypeEntity::Member& member);
 
     // ========================================================================
