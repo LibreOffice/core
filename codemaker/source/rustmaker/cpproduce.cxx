@@ -2324,7 +2324,7 @@ OUString CppProducer::resolveTypedef(std::u16string_view unoType) const
     return OUString(unoType);
 }
 
-OString CppProducer::mapUnoPrimitiveToSal(std::u16string_view unoType) const
+OString CppProducer::mapUnoPrimitiveToSal(std::u16string_view unoType)
 {
     // Common primitive type mappings from UNO to SAL types
     if (unoType == u"boolean")
@@ -2479,7 +2479,7 @@ OString CppProducer::getRustFFITypeName(std::u16string_view unoType) const
         return "*mut std::ffi::c_void"_ostr; // Default for unknown types
 }
 
-OString CppProducer::convertBasicType(const OString& typeName) const
+OString CppProducer::convertBasicType(const OString& typeName)
 {
     OString result = typeName;
 
@@ -2576,7 +2576,7 @@ bool CppProducer::isUnoInterface(std::u16string_view typeName) const
     return sort == codemaker::UnoType::Sort::Interface;
 }
 
-OString CppProducer::convertUnoTypeToHandle(std::u16string_view unoType) const
+OString CppProducer::convertUnoTypeToHandle(std::u16string_view unoType)
 {
     // Convert UNO type name to typedef handle name
     // com.sun.star.lang.XMain -> com__sun__star__lang__XMainHandle

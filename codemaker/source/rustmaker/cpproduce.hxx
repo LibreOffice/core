@@ -130,17 +130,17 @@ private:
     //  FILE GENERATION UTILITIES
     // ========================================================================
     // Unified include and namespace generation (eliminates duplication)
-    void generateCommonIncludes(CppFile& file, std::string_view name, bool needsLogging = false,
-                                bool needsUnoTypes = false);
-    void generateSourceNamespaces(CppFile& file, std::string_view name);
+    static void generateCommonIncludes(CppFile& file, std::string_view name,
+                                       bool needsLogging = false, bool needsUnoTypes = false);
+    static void generateSourceNamespaces(CppFile& file, std::string_view name);
 
     // Legacy functions (maintained for existing calls)
-    void generateStructSourceIncludes(CppFile& file, std::string_view name);
-    void generateStructSourceNamespaces(CppFile& file, std::string_view name);
-    void generateEnumIncludes(CppFile& file, std::string_view name);
-    void generateEnumSourceIncludes(CppFile& file, std::string_view name);
-    void generateInterfaceSourceIncludes(CppFile& file, std::string_view name);
-    void generateInterfaceSourceNamespaces(CppFile& file, std::string_view name);
+    static void generateStructSourceIncludes(CppFile& file, std::string_view name);
+    static void generateStructSourceNamespaces(CppFile& file, std::string_view name);
+    static void generateEnumIncludes(CppFile& file, std::string_view name);
+    static void generateEnumSourceIncludes(CppFile& file, std::string_view name);
+    static void generateInterfaceSourceIncludes(CppFile& file, std::string_view name);
+    static void generateInterfaceSourceNamespaces(CppFile& file, std::string_view name);
 
     // ========================================================================
     //  TYPE SYSTEM & CONVERSION UTILITIES
@@ -150,10 +150,10 @@ private:
     std::string convertTemplateArguments(const std::string& unoType) const;
     OString getCppTypeName(std::u16string_view unoType) const;
     OString getRustFFITypeName(std::u16string_view unoType) const;
-    OString mapUnoPrimitiveToSal(std::u16string_view unoType) const;
+    static OString mapUnoPrimitiveToSal(std::u16string_view unoType);
     OUString resolveTypedef(std::u16string_view unoType) const;
-    OString convertBasicType(const OString& typeName) const;
-    OString convertUnoTypeToHandle(std::u16string_view unoType) const;
+    static OString convertBasicType(const OString& typeName);
+    static OString convertUnoTypeToHandle(std::u16string_view unoType);
 
     // Type classification
     bool isUnoType(std::u16string_view typeName) const;
@@ -173,21 +173,24 @@ private:
     // C Bridge generation helpers
     void generateCBridgeIncludes(CppFile& file, std::string_view name,
                                  const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
-    void generateCBridgeTypeDefinitions(CppFile& file, const OString& handleTypeName);
-    void generateCBridgeConstructors(CppFile& file, const OString& className,
-                                     const OString& functionPrefix, const OString& handleTypeName);
-    void generateCBridgeDestructor(CppFile& file, const OString& className,
-                                   const OString& functionPrefix, const OString& handleTypeName);
-    void generateCBridgeValidation(CppFile& file, const OString& className,
-                                   const OString& functionPrefix, const OString& handleTypeName);
+    static void generateCBridgeTypeDefinitions(CppFile& file, const OString& handleTypeName);
+    static void generateCBridgeConstructors(CppFile& file, const OString& className,
+                                            const OString& functionPrefix,
+                                            const OString& handleTypeName);
+    static void generateCBridgeDestructor(CppFile& file, const OString& className,
+                                          const OString& functionPrefix,
+                                          const OString& handleTypeName);
+    static void generateCBridgeValidation(CppFile& file, const OString& className,
+                                          const OString& functionPrefix,
+                                          const OString& handleTypeName);
     void generateCBridgeMethods(CppFile& file, const OString& className,
                                 const OString& functionPrefix, const OString& handleTypeName,
                                 const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
 
     // Interface generation helpers
-    void generateInterfaceSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
-                                               const OString& className,
-                                               const OString& handleTypeName);
+    static void generateInterfaceSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
+                                                      const OString& className,
+                                                      const OString& handleTypeName);
     void generateInterfaceSourceMethodImplementations(
         CppFile& file, const OString& functionPrefix, const OString& className,
         const OString& handleTypeName, const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
@@ -199,9 +202,9 @@ private:
                                        const unoidl::InterfaceTypeEntity::Method& method);
 
     // Struct generation helpers
-    void generateStructSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
-                                            const OString& handleTypeName,
-                                            const std::string& className);
+    static void generateStructSourceBasicFunctions(CppFile& file, const OString& functionPrefix,
+                                                   const OString& handleTypeName,
+                                                   const std::string& className);
     void
     generateStructSourceBaseMembers(CppFile& file, const OString& functionPrefix,
                                     const OString& handleTypeName, const std::string& className,

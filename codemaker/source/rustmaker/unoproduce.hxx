@@ -80,7 +80,7 @@ private:
 
     //
     static OString getBaseUnoName(std::string_view name);
-    OString getBaseUnoName(std::u16string_view name);
+    static OString getBaseUnoName(std::u16string_view name);
 
     // Core data members
     rtl::Reference<TypeManager> m_manager;
