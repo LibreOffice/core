@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="svx">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTreeStore" id="liststore1">
+    <columns>
+      <!-- column-name expander -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkBox" id="ThemeSelectorPanel">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="width-request">360</property>
+        <property name="height-request">65</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="valign">center</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
+        <property name="min-content-width">70</property>
+        <child>
+          <object class="GtkIconView" id="iconview_theme_colors">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="margin">6</property>
+            <property name="model">liststore1</property>
+            <property name="columns">3</property>
+            <property name="item-width">70</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </object>
+</interface>
