@@ -139,7 +139,7 @@ sal_uInt16 DXFGroupReader::Read()
             else if (nG< 210) DXFSkipLine(rIS);
             else if (nG< 240) F = ReadF();
             else if (nG<=369) DXFSkipLine(rIS);
-            else if (nG< 999) DXFSkipLine(rIS);
+            else if (nG<=999) DXFSkipLine(rIS);
             else if (nG<1010) ReadS();
             else if (nG<1060) F = ReadF();
             else if (nG<1072) I = ReadI();
