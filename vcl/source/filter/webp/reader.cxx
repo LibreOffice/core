@@ -97,12 +97,12 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     {
         switch (access->GetScanlineFormat())
         {
-            case ScanlineFormat::N24BitTcRgb:
-                config.output.colorspace = MODE_RGBA;
+            case ScanlineFormat::N32BitTcRgba:
+                config.output.colorspace = MODE_rgbA; // premultiplied
                 pixelMode = PixelMode::DirectRead;
                 break;
-            case ScanlineFormat::N24BitTcBgr:
-                config.output.colorspace = MODE_BGRA;
+            case ScanlineFormat::N32BitTcBgra:
+                config.output.colorspace = MODE_bgrA; // premultiplied
                 pixelMode = PixelMode::DirectRead;
                 break;
             default:
