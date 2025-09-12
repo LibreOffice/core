@@ -20,7 +20,7 @@ class ScTable;
 namespace sc
 {
 /** Stores the sort order and can reverse the sorting of rows (unsorting). */
-struct SortOrderReverser
+struct SC_DLLPUBLIC SortOrderReverser
 {
 public:
     SCROW mnFirstRow;
