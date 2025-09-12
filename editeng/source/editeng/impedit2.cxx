@@ -31,7 +31,6 @@
 #include <editeng/txtrange.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/mieclip.hxx>
-#include <sfx2/viewsh.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -41,7 +40,6 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
-#include <editeng/udlnitem.hxx>
 #include <editeng/scripthintitem.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -75,7 +73,6 @@
 #include <algorithm>
 #include <limits>
 #include <memory>
-#include <string_view>
 #include <fstream>
 #include <outleeng.hxx>
 

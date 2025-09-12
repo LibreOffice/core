@@ -19,7 +19,6 @@
 
 #include <TextPortionList.hxx>
 
-#include <EditLine.hxx>
 #include <osl/diagnose.h>
 
 

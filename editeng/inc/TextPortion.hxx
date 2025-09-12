@@ -19,18 +19,14 @@
 
 #pragma once
 
-#include "editattr.hxx"
-#include "edtspell.hxx"
-#include "eerdll2.hxx"
-#include <editeng/svxfont.hxx>
-#include <editeng/EPaM.hxx>
-#include <svl/itemset.hxx>
-#include <svl/style.hxx>
-#include <svl/itempool.hxx>
-#include <svl/languageoptions.hxx>
-#include <tools/lineend.hxx>
+#include <sal/types.h>
+#include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <string.h>
+#include <memory>
+#include <utility>
 #include <vector>
 
 enum class PortionKind

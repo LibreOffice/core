@@ -22,7 +22,10 @@
 #include <editeng/editobj.hxx>
 #include <editeng/fieldupdater.hxx>
 #include <editeng/outliner.hxx>
-#include <editdoc.hxx>
+#include <svl/itemset.hxx>
+#include <edtspell.hxx>
+#include <EditLineList.hxx>
+#include <TextPortionList.hxx>
 
 #include <svl/sharedstring.hxx>
 #include <svl/languageoptions.hxx>

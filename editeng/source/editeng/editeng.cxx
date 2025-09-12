@@ -21,11 +21,8 @@
 #include <utility>
 
 #include <comphelper/lok.hxx>
-#include <comphelper/processfactory.hxx>
 #include <config_global.h>
 #include <o3tl/safeint.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 
 #include <tools/stream.hxx>
@@ -49,7 +46,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -64,18 +60,11 @@
 #include <sot/formats.hxx>
 
 #include <editeng/numitem.hxx>
-#include <rtl/strbuf.hxx>
-#include <sal/log.hxx>
-#include <vcl/help.hxx>
 #include <tools/lazydelete.hxx>
-#include <vcl/transfer.hxx>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <editeng/frmdiritem.hxx>
 #endif
-#include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

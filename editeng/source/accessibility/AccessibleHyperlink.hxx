@@ -21,7 +21,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 
 #include <memory>

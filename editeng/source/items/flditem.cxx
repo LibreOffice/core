@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <utility>
-#include <vcl/metaact.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>

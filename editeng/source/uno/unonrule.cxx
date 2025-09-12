@@ -27,7 +27,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <utility>
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>

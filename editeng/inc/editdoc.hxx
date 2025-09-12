@@ -21,34 +21,23 @@
 
 #include <config_collab.h>
 
-#include "ParagraphPortionList.hxx"
 #include "editattr.hxx"
-#include "edtspell.hxx"
-#include "eerdll2.hxx"
 #include <editeng/svxfont.hxx>
-#include <editeng/EPaM.hxx>
 #include <svl/itemset.hxx>
-#include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
-#include <o3tl/typed_flags_set.hxx>
-#include "TextPortion.hxx"
-#include "TextPortionList.hxx"
-#include "ItemList.hxx"
 #include "ContentNode.hxx"
-#include "EditLineList.hxx"
 #include "EditPaM.hxx"
-#include "EditSelection.hxx"
 
 #include <cstddef>
 #include <memory>
-#include <string_view>
 #include <vector>
 
 enum class TextRotation;
 
 #if ENABLE_YRS
+#include "EditSelection.hxx"
 class ImpEditEngine;
 class IYrsTransactionSupplier;
 typedef struct TransactionInner YTransaction;

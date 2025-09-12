@@ -29,8 +29,6 @@
 #include <tools/debug.hxx>
 #include <comphelper/configuration.hxx>
 
-#include <comphelper/string.hxx>
-
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/svxrtf.hxx>

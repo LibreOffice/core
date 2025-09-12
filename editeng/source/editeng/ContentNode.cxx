@@ -19,8 +19,9 @@
 
 
 #include <ContentNode.hxx>
+#include <editdoc.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include "impedit.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>

@@ -4,9 +4,6 @@ excludelist:
     editeng/source/editeng/impedit.hxx:
     # Complete type needed for pointer arithmetic
     - editeng/SpellPortions.hxx
-    editeng/source/accessibility/AccessibleContextBase.cxx:
-    # Actually used
-    - com/sun/star/accessibility/XAccessibleEventListener.hpp
     editeng/source/accessibility/AccessibleEditableTextPara.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
@@ -23,6 +20,9 @@ excludelist:
     editeng/source/items/CustomPropertyField.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp
+    editeng/source/editeng/impedit.cxx:
+    # Needed for DNDListenerContainer member access
+    - vcl/dndlistenercontainer.hxx
     editeng/source/misc/SvXMLAutoCorrectExport.cxx:
     # Actually used
     - com/sun/star/xml/sax/XDocumentHandler.hpp

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "ContentNode.hxx"
 #include "EditLineList.hxx"
 #include "TextPortionList.hxx"
 

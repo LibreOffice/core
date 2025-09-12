@@ -19,7 +19,9 @@
 
 
 #include "eehtml.hxx"
+#include <editdoc.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <tools/urlobj.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -29,6 +31,8 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <tools/tenccvt.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/outdev.hxx>
 
 #include <editeng/editeng.hxx>
 #include <utility>

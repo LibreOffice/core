@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 #include <optional>
 #include <tools/color.hxx>

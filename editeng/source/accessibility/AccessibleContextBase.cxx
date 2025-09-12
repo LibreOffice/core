@@ -19,7 +19,6 @@
 
 #include <editeng/AccessibleContextBase.hxx>
 
-#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -28,7 +27,6 @@
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>

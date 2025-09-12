@@ -51,7 +51,6 @@
 #include <editeng/scripthintitem.hxx>
 
 #include "impedit.hxx"
-#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editdoc.hxx>
 

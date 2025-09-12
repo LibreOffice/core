@@ -25,8 +25,6 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
-#include <svl/languageoptions.hxx>
-#include <tools/lineend.hxx>
 
 #include <memory>
 #include <string_view>

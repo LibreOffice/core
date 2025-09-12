@@ -25,9 +25,8 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
-#include <editeng/editdata.hxx>
 
-#include <editdoc.hxx>
+#include <EditSelection.hxx>
 #include <utility>
 
 

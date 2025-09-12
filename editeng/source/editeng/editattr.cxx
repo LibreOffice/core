@@ -19,11 +19,9 @@
 
 #include <vcl/outdev.hxx>
 
-#include <svl/grabbagitem.hxx>
-#include <svl/voiditem.hxx>
 #include <libxml/xmlwriter.h>
+#include <editeng/eeitem.hxx>
 #include <editeng/svxfont.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -39,7 +37,6 @@
 #include <editeng/autokernitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
-#include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/cmapitem.hxx>
 

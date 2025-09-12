@@ -25,10 +25,8 @@
 
 #include <svl/itemset.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unoedhlp.hxx>
-#include <svl/poolitem.hxx>
 
 #include <editeng/unoforou.hxx>
 #include <editeng/outlobj.hxx>

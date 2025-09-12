@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/wghtitem.hxx>
 #include <sfx2/app.hxx>

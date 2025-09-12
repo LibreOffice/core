@@ -18,9 +18,6 @@
  */
 
 
-#include <algorithm>
-#include <cstdlib>
-
 #include <tools/debug.hxx>
 #include <utility>
 #include <vcl/outdev.hxx>

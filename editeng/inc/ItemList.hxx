@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
 #include <vector>
 
 class ItemList

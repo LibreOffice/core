@@ -39,12 +39,9 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#include <vcl/unohelp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -69,8 +66,6 @@
 #include "AccessibleImageBullet.hxx"
 
 #include <svtools/colorcfg.hxx>
-#include <editeng/editrids.hrc>
-#include <editeng/eerdll.hxx>
 #include <editeng/numitem.hxx>
 #include <memory>
 

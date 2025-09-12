@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <editeng/eeitem.hxx>
 #include <editeng/fieldupdater.hxx>
 #include <editeng/flditem.hxx>
 #include "editobj2.hxx"

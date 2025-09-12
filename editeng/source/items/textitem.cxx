@@ -20,7 +20,6 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
-#include <math.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -76,7 +75,6 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charreliefitem.hxx>
-#include <editeng/rubyitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/scripthintitem.hxx>
 #include <editeng/eerdll.hxx>
@@ -84,7 +82,6 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <libxml/xmlwriter.h>
-#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

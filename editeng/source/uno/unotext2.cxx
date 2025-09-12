@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <initializer_list>
-#include <string_view>
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>

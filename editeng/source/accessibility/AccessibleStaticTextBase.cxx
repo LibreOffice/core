@@ -40,7 +40,6 @@
 // Project-local header
 
 
-#include <editeng/editdata.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 
 

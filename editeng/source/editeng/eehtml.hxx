@@ -19,9 +19,8 @@
 
 #pragma once
 
-#include <memory>
 #include <optional>
-#include <editdoc.hxx>
+#include <EditSelection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/parhtml.hxx>
 

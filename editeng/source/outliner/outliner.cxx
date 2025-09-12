@@ -25,7 +25,6 @@
 #include <editeng/editdata.hxx>
 #include <editeng/lrspitem.hxx>
 
-#include <math.h>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include "paralist.hxx"
@@ -40,7 +39,6 @@
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <vcl/GraphicObject.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/itempool.hxx>
@@ -48,7 +46,6 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
-#include <o3tl/temporary.hxx>
 #include <osl/diagnose.h>
 #include <editeng/StripPortionsHelper.hxx>
 

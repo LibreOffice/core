@@ -25,7 +25,6 @@
 #include "paralist.hxx"
 #include <editeng/editrids.hrc>
 #include <optional>
-#include <svl/itemset.hxx>
 #include <editeng/editstat.hxx>
 #include "outlundo.hxx"
 

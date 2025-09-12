@@ -19,9 +19,7 @@
 
 #include <memory>
 
-#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <o3tl/any.hxx>
 #include <xmloff/xmlcnimp.hxx>
 #include <xmloff/unoatrcn.hxx>

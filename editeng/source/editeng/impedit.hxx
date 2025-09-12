@@ -23,6 +23,10 @@
 #include "editsel.hxx"
 #include "editundo.hxx"
 #include "editstt2.hxx"
+#include <EditSelection.hxx>
+#include <ItemList.hxx>
+#include <ParagraphPortionList.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/SpellPortions.hxx>
 #include <editeng/editeng.hxx>

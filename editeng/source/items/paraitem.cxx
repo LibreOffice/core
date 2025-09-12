@@ -27,9 +27,7 @@
 #include <osl/diagnose.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
-#include <svl/itempool.hxx>
 #include <svl/memberid.h>
 #include <editeng/editrids.hrc>
 #include <editeng/lspcitem.hxx>

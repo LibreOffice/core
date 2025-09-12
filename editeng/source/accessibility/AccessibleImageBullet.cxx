@@ -23,19 +23,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/AccessibleEditableTextPara.hxx>
 #include <editeng/eerdll.hxx>
 
-#include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/unoedsrc.hxx>

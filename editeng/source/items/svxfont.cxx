@@ -23,7 +23,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <unotools/charclass.hxx>
@@ -31,7 +30,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/smallcaps.hxx>
 #include <sal/log.hxx>
-#include <limits>
 
 static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, KernArray* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen )

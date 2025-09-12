@@ -19,8 +19,9 @@
 
 
 #include <EditLine.hxx>
-#include <editdoc.hxx>
-#include <algorithm>
+#include <ParagraphPortion.hxx>
+#include <TextPortion.hxx>
+#include <TextPortionList.hxx>
 
 EditLine* EditLine::Clone() const
 {

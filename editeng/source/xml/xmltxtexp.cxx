@@ -21,15 +21,11 @@
 /** this file implements an export of a selected EditEngine content into
     a xml stream. See editeng/source/inc/xmledit.hxx for interface */
 #include <memory>
-#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <xmloff/xmlmetae.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/streamwrap.hxx>
@@ -52,8 +48,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace cppu;
-
-class SvxEditEngineSourceImpl;
 
 class SvxEditEngineSourceImpl : public salhelper::SimpleReferenceObject
 {

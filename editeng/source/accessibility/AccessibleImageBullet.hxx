@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>

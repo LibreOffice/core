@@ -21,7 +21,6 @@
 
 #include <editeng/splwrap.hxx>
 #include <editeng/svxacorr.hxx>
-#include <editeng/svxenum.hxx>
 #include <editeng/misspellrange.hxx>
 
 

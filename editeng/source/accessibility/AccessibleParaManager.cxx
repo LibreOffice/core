@@ -25,7 +25,6 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 // Project-local header

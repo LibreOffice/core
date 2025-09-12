@@ -19,8 +19,9 @@
 #pragma once
 
 #include <editeng/svxrtf.hxx>
+#include <vcl/mapmod.hxx>
 
-#include <editdoc.hxx>
+#include <EditSelection.hxx>
 
 class EditEngine;
 

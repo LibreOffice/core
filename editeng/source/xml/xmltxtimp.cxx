@@ -30,6 +30,7 @@
 #include "editsource.hxx"
 #include <editxml.hxx>
 #include <editdoc.hxx>
+#include <EditSelection.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoprnms.hxx>

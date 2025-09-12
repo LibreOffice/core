@@ -14,7 +14,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <editdoc.hxx>
-#include <impedit.hxx>
+#include <EditSelection.hxx>
+#include <ParagraphPortionList.hxx>
 
 #include <sfx2/app.hxx>
 #include <svl/itempool.hxx>
@@ -22,7 +23,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <editeng/svxacorr.hxx>
 #include <editeng/unofield.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -34,7 +34,11 @@
 #include <svl/voiditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <vcl/salgtype.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <memory>
