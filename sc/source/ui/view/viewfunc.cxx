@@ -811,9 +811,37 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         applyFormulaToCell(*this, nCol, nRow, nTab, rString, pData, xModificator, aMark, bMatrixExpand, bRecord, bNumFmtChanged);
 
-        if (!rDoc.IsSheetViewHolder(nSelectedTab))
+        if (rDoc.IsSheetViewHolder(nSelectedTab))
+            return;
+
+        auto pManager = rDoc.GetSheetViewManager(nSelectedTab);
+
+        for (auto const& pSheetView : pManager->getSheetViews())
         {
-            auto pManager = rDoc.GetSheetViewManager(nSelectedTab);
+            if (!pSheetView)
+                continue;
+
+            SCTAB nSheetViewTab = pSheetView->getTableNumber();
+
+            ScMarkData aSheetViewMark(rDoc.GetSheetLimits());
+            aSheetViewMark.SelectTable(nSheetViewTab, false);
+            ScRange aSheetViewRange(aMark.GetMarkArea());
+            aSheetViewRange.aStart.SetTab(nSheetViewTab);
+            aSheetViewRange.aEnd.SetTab(nSheetViewTab);
+            aSheetViewMark.SetMarkArea(aSheetViewRange);
+
+            applyFormulaToCell(*this, nCol, nRow, nSheetViewTab, rString, pData, xModificator, aSheetViewMark, bMatrixExpand, bRecord, bNumFmtChanged);
+        }
+    }
+    else
+    {
+        sc::SheetViewID nSheetViewID = GetViewData().GetSheetViewID();
+        for (const auto& rTab : aMark)
+        {
+            if (rDoc.IsSheetViewHolder(rTab))
+                continue;
+
+            auto pManager = rDoc.GetSheetViewManager(rTab);
 
             for (auto const& pSheetView : pManager->getSheetViews())
             {
@@ -822,36 +850,34 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
                 SCTAB nSheetViewTab = pSheetView->getTableNumber();
 
-                ScMarkData aSheetViewMark(rDoc.GetSheetLimits());
-                aSheetViewMark.SelectTable(nSheetViewTab, false);
-                ScRange aSheetViewRange(aMark.GetMarkArea());
-                aSheetViewRange.aStart.SetTab(nSheetViewTab);
-                aSheetViewRange.aEnd.SetTab(nSheetViewTab);
-                aSheetViewMark.SetMarkArea(aSheetViewRange);
-
-                applyFormulaToCell(*this, nCol, nRow, nSheetViewTab, rString, pData, xModificator, aSheetViewMark, bMatrixExpand, bRecord, bNumFmtChanged);
-            }
-        }
-    }
-    else
-    {
-        for (const auto& rTab : aMark)
-        {
-            if (!rDoc.IsSheetViewHolder(rTab))
-            {
-                auto pManager = rDoc.GetSheetViewManager(rTab);
-                for (auto const& pSheetView : pManager->getSheetViews())
+                if (GetViewData().GetSheetViewID() == sc::DefaultSheetViewID)
                 {
-                    if (!pSheetView)
-                        continue;
-
-                    SCTAB nSheetViewTab = pSheetView->getTableNumber();
-                    SCROW nUnsortedRow = pManager->unsort(nRow);
+                    SCROW nUnsortedRow = nRow;
+                    nUnsortedRow = pManager->unsort(nUnsortedRow);
                     applyText(*this, nCol, nUnsortedRow, nSheetViewTab, rString, bNumFmtChanged);
                 }
+                else if (GetViewData().GetSheetViewID() == pSheetView->getID())
+                {
+                    applyText(*this, nCol, nRow, nSheetViewTab, rString, bNumFmtChanged);
+                }
+                else
+                {
+                    // TODO - we need to update other sheet views as well, test case needed
+                }
             }
-            applyText(*this, nCol, nRow, rTab, rString, bNumFmtChanged);
+
+            {
+                SCROW nUnsortedRow = nRow;
+
+                if (nSheetViewID != sc::DefaultSheetViewID)
+                {
+                    auto pSheetView = pManager->get(nSheetViewID);
+                    nUnsortedRow = pSheetView->unsort(nUnsortedRow);
+                }
+                applyText(*this, nCol, nUnsortedRow, rTab, rString, bNumFmtChanged);
+            }
         }
+
         performAutoFormatAndUpdate(rString, aMark, nCol, nRow, nTab, bNumFmtChanged, bRecord, xModificator, *this);
     }
 }

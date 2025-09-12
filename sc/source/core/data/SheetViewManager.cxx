@@ -19,7 +19,7 @@ SheetViewManager::SheetViewManager() {}
 SheetViewID SheetViewManager::create(ScTable* pSheetViewTable)
 {
     SheetViewID nID(maViews.size());
-    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName()));
+    maViews.emplace_back(std::make_shared<SheetView>(pSheetViewTable, generateName(), nID));
     return nID;
 }
 
