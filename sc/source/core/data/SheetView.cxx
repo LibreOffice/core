@@ -12,25 +12,12 @@
 
 namespace sc
 {
-SheetView::SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID)
-    : mpTable(pTable)
-    , maName(rName)
-    , mnID(nID)
-{
-}
-
-ScTable* SheetView::getTablePointer() const { return mpTable; }
-
-SCTAB SheetView::getTableNumber() const
-{
-    assert(mpTable);
-    return mpTable->GetTab();
-}
-
-void SheetView::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow)
+void SortOrderReverser::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow,
+                                        SCROW lastRow)
 {
     mnFirstRow = firstRow;
     mnLastRow = lastRow;
+
     if (maOrder.empty())
     {
         maOrder = rOrder;
@@ -48,7 +35,7 @@ void SheetView::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW first
     }
 }
 
-SCROW SheetView::unsort(SCROW nRow) const
+SCROW SortOrderReverser::unsort(SCROW nRow) const
 {
     if (maOrder.empty())
         return nRow;
@@ -60,6 +47,28 @@ SCROW SheetView::unsort(SCROW nRow) const
         return nUnsortedRow;
     }
     return nRow;
+}
+
+SheetView::SheetView(ScTable* pTable, OUString const& rName, SheetViewID nID)
+    : mpTable(pTable)
+    , maName(rName)
+    , mnID(nID)
+{
+}
+
+ScTable* SheetView::getTablePointer() const { return mpTable; }
+
+SCTAB SheetView::getTableNumber() const
+{
+    assert(mpTable);
+    return mpTable->GetTab();
+}
+
+void SheetView::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW firstRow, SCROW lastRow)
+{
+    if (!moSortOrder)
+        moSortOrder.emplace();
+    moSortOrder->addOrderIndices(rOrder, firstRow, lastRow);
 }
 }
 

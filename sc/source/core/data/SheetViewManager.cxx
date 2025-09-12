@@ -133,37 +133,9 @@ OUString SheetViewManager::defaultViewName() { return ScResId(STR_SHEET_VIEW_DEF
 void SheetViewManager::addOrderIndices(std::vector<SCCOLROW> const& rOrder, SCROW nFirstRow,
                                        SCROW nLastRow)
 {
-    mnFirstRow = nFirstRow;
-    mnLastRow = nLastRow;
-    if (maOrder.empty())
-    {
-        maOrder = rOrder;
-    }
-    else
-    {
-        assert(maOrder.size() == rOrder.size());
-        std::vector<SCCOLROW> newOrder(maOrder.size());
-        for (size_t nIndex = 0; nIndex < maOrder.size(); ++nIndex)
-        {
-            size_t nSortedIndex = rOrder[nIndex];
-            newOrder[nIndex] = maOrder[nSortedIndex - 1];
-        }
-        maOrder = newOrder;
-    }
-}
-
-SCROW SheetViewManager::unsort(SCROW nRow)
-{
-    if (maOrder.empty())
-        return nRow;
-
-    if (nRow >= mnFirstRow && nRow <= mnLastRow)
-    {
-        size_t index = nRow - mnFirstRow;
-        auto nUnsortedRow = mnFirstRow + maOrder[index] - 1;
-        return nUnsortedRow;
-    }
-    return nRow;
+    if (!moSortOrder)
+        moSortOrder.emplace();
+    moSortOrder->addOrderIndices(rOrder, nFirstRow, nLastRow);
 }
 }
 
