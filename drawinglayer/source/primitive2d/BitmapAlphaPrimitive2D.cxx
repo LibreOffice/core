@@ -21,7 +21,6 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <com/sun/star/awt/XBitmap.hpp>
 #include <utility>
 
 using namespace com::sun::star;

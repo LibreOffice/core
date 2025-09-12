@@ -20,7 +20,7 @@
 #include <primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/bgradient.hxx>
 #include <utility>
 
 

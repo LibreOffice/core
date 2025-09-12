@@ -26,7 +26,6 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/graph.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 namespace drawinglayer::primitive2d

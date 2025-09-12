@@ -36,7 +36,6 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <comphelper/lok.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 namespace drawinglayer::processor2d
 {

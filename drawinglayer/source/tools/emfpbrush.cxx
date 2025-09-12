@@ -20,7 +20,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include "emfpbrush.hxx"
 #include "emfppath.hxx"

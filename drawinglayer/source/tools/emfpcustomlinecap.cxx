@@ -20,7 +20,6 @@
 #include <sal/log.hxx>
 #include "emfpcustomlinecap.hxx"
 #include "emfppath.hxx"
-#include "emfppen.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;

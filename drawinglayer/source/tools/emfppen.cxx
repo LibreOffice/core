@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 

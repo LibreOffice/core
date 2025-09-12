@@ -22,8 +22,6 @@
 #include "vclprocessor2d.hxx"
 #include <vcl/outdev.hxx>
 
-#include <memory>
-
 namespace drawinglayer::primitive2d
 {
 class PolyPolygonColorPrimitive2D;

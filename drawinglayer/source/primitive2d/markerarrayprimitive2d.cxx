@@ -23,7 +23,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 using namespace com::sun::star;

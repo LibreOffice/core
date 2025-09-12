@@ -13,7 +13,6 @@
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 
-#include <math.h>
 #include <memory>
 #include <libxml/parser.h>
 #include <sal/log.hxx>
@@ -38,7 +37,6 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
@@ -50,9 +48,8 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/bgradient.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/primitive3d/Tools.hxx>

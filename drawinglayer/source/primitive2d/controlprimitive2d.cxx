@@ -38,9 +38,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <vcl/window.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;

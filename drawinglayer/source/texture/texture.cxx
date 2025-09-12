@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <limits>
 
 #include <texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>

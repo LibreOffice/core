@@ -27,7 +27,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/vcllayout.hxx>
 #include <vcl/rendercontext/State.hxx>
-#include <vcl/kernarray.hxx>
 #include <utility>
 #include <osl/diagnose.h>
 

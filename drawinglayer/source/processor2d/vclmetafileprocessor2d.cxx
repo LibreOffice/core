@@ -20,23 +20,21 @@
 #include <cmath>
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
-#include "vclpixelprocessor2d.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/processfactory.hxx>
-#include <config_global.h>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/utils/gradienttools.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graphictools.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx> // for PDFExtOutDevData Graphic support
 #include <vcl/formpdfexport.hxx> // for PDFExtOutDevData Graphic support

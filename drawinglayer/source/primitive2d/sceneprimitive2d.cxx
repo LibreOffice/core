@@ -37,7 +37,6 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <comphelper/threadpool.hxx>
 #include <comphelper/lok.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;

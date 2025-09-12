@@ -27,7 +27,6 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <o3tl/temporary.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <unotools/configmgr.hxx>
 #include <vcl/rendercontext/DrawModeFlags.hxx>
 
 #include <atomic>

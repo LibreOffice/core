@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
-#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/bgradient.hxx>
 
 namespace drawinglayer::attribute
 {

@@ -46,7 +46,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 
 namespace drawinglayer::primitive2d

@@ -22,8 +22,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <rtl/ref.hxx>
 #include <utility>
 

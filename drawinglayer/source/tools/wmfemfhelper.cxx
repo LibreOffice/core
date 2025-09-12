@@ -23,8 +23,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
@@ -50,7 +48,6 @@
 #include <sal/log.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
-#include <tools/UnitConversion.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
@@ -58,7 +55,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <emfplushelper.hxx>
 #include <numeric>
-#include <toolkit/helper/vclunohelper.hxx>
 
 namespace drawinglayer::primitive2d
 {

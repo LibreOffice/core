@@ -21,7 +21,6 @@
 
 #include <comphelper/configuration.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionFlusher.hxx>
 
 namespace drawinglayer::primitive2d

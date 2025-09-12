@@ -27,7 +27,6 @@
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <utility>
-#include <algorithm>
 
 
 using namespace com::sun::star;

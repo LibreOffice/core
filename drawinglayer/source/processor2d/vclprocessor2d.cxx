@@ -22,9 +22,7 @@
 #include "getdigitlanguage.hxx"
 #include "vclhelperbufferdevice.hxx"
 #include <cmath>
-#include <comphelper/string.hxx>
 #include <comphelper/lok.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <utility>
@@ -32,9 +30,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -57,8 +53,6 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-// for support of Title/Description in all apps when embedding pictures
-#include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 // control support
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 

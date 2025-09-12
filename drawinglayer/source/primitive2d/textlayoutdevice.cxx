@@ -30,7 +30,6 @@
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <osl/diagnose.h>
 #include <tools/gen.hxx>
-#include <vcl/canvastools.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>

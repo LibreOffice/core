@@ -27,7 +27,6 @@
 #include <vcl/sysdata.hxx>
 #elif USE_HEADLESS_CODE
 #include <drawinglayer/processor2d/cairopixelprocessor2d.hxx>
-#include <officecfg/Office/Common.hxx>
 #endif
 
 using namespace com::sun::star;

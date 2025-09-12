@@ -27,7 +27,6 @@
 #include "emfpimageattributes.hxx"
 #include "emfpfont.hxx"
 #include "emfpstringformat.hxx"
-#include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
@@ -52,7 +51,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 

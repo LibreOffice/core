@@ -22,7 +22,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <drawinglayer/converters.hxx>
 #include "GlowSoftEgdeShadowTools.hxx"
 

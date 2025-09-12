@@ -26,7 +26,6 @@
 #include <texture/texture.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <drawinglayer/converters.hxx>
 #include <utility>
