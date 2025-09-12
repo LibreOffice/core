@@ -29,6 +29,8 @@
 #include <unotools/tempfile.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1371,6 +1373,24 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharStyleExport)
     // - Actual  : Strong Emphasis
     // i.e. the style name was not encoded.
     CPPUNIT_ASSERT_EQUAL(u"Strong_20_Emphasis"_ustr, aStyleName);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRedlineFormatCharPropsStrictExport)
+{
+    // Given a document with a format redline, the redline contains the old char props:
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_014);
+    comphelper::ScopeGuard g([] { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    loadFromFile(u"redline-format-char-props.docx");
+
+    // When exporting the document to ODT strict:
+    save(u"writer8"_ustr);
+
+    // Then make sure no loext attribute is written:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed in an assertion in
+    // SvXMLNamespaceMap::GetQNameByKey().
+    assertXPathNoAttribute(pXmlDoc, "//text:tracked-changes/text:changed-region/text:format-change",
+                           "style-name");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -262,17 +262,21 @@ void XMLRedlineExport::ExportChangeAutoStyle(
         rExport.GetTextParagraphExport()->collectTextAutoStyles(xText);
     }
 
-    // See if the format redline has an autostyle for old direct formatting: if so, export that as
-    // an autostyle.
-    aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
-    uno::Reference<beans::XPropertySet> xAutoFormat;
-    aAny >>= xAutoFormat;
-    if (xAutoFormat.is())
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+    if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
     {
-        // Check for parent style when declaring the automatic style.
-        rExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xAutoFormat,
-                                              /*aAddStates=*/{},
-                                              /*bCheckParent=*/true);
+        // See if the format redline has an autostyle for old direct formatting: if so, export that as
+        // an autostyle.
+        aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
+        uno::Reference<beans::XPropertySet> xAutoFormat;
+        aAny >>= xAutoFormat;
+        if (xAutoFormat.is())
+        {
+            // Check for parent style when declaring the automatic style.
+            rExport.GetTextParagraphExport()->Add(XmlStyleFamily::TEXT_TEXT, xAutoFormat,
+                    /*aAddStates=*/{},
+                    /*bCheckParent=*/true);
+        }
     }
 }
 
@@ -367,27 +371,31 @@ void XMLRedlineExport::ExportChangedRegion(
         OUString sType;
         aAny >>= sType;
 
-        // See if the format redline has an autostyle for old direct formatting: if so, refer to the
-        // already exported autostyle.
-        aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
-        uno::Reference<beans::XPropertySet> xAutoStyle;
-        aAny >>= xAutoStyle;
-        if (xAutoStyle.is())
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+        if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {
-            bool bIsUICharStyle;
-            bool bHasAutoStyle;
-            OUString aParentName;
-            uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xAutoStyle->getPropertySetInfo();
-            if (xPropSetInfo->hasPropertyByName("CharStyleName"))
+            // See if the format redline has an autostyle for old direct formatting: if so, refer to the
+            // already exported autostyle.
+            aAny = rPropSet->getPropertyValue(u"RedlineAutoFormat"_ustr);
+            uno::Reference<beans::XPropertySet> xAutoStyle;
+            aAny >>= xAutoStyle;
+            if (xAutoStyle.is())
             {
-                // Consider parent style when referring to the declared automatic style.
-                xAutoStyle->getPropertyValue("CharStyleName") >>= aParentName;
-            }
-            OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(
-                xAutoStyle, bIsUICharStyle, bHasAutoStyle, /*pAddState=*/nullptr, &aParentName);
-            if (!sStyle.isEmpty())
-            {
-                rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, rExport.EncodeStyleName(sStyle));
+                bool bIsUICharStyle;
+                bool bHasAutoStyle;
+                OUString aParentName;
+                uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xAutoStyle->getPropertySetInfo();
+                if (xPropSetInfo->hasPropertyByName("CharStyleName"))
+                {
+                    // Consider parent style when referring to the declared automatic style.
+                    xAutoStyle->getPropertyValue("CharStyleName") >>= aParentName;
+                }
+                OUString sStyle = rExport.GetTextParagraphExport()->FindTextStyle(
+                        xAutoStyle, bIsUICharStyle, bHasAutoStyle, /*pAddState=*/nullptr, &aParentName);
+                if (!sStyle.isEmpty())
+                {
+                    rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_STYLE_NAME, rExport.EncodeStyleName(sStyle));
+                }
             }
         }
 
