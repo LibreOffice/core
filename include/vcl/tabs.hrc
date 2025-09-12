@@ -75,7 +75,7 @@ inline constexpr TabData RID_TAB_MACRO{ NC_("RID_TAB_MACRO", "Macro"), u"choosem
 // section
 inline constexpr TabData RID_TAB_SECTION{ NC_("RID_TAB_SECTION", "Section"), u"protectfields.png"_ustr };
 inline constexpr TabData RID_TAB_FOOTENDNOTES{ NC_("RID_TAB_FOOTENDNOTES", "Footnotes/Endnotes"), u"footnotedialog.png"_ustr };
-inline constexpr TabData RID_TAB_INDENTSONLY{ NC_("RID_TAB_INDENTS", "Indents"), u"paraspaceincrease.png"_ustr };
+inline constexpr TabData RID_TAB_INDENTSONLY{ NC_("RID_TAB_INDENTS", "Indents"), u"incrementindent.png"_ustr };
 // ToC
 inline constexpr TabData RID_TAB_TOCTYPE{ NC_("RID_TAB_TOCTYPE", "Type"), u"insertindexesentry.png"_ustr };
 inline constexpr TabData RID_TAB_TOCENTRIES{ NC_("RID_TAB_TOCENTRIES", "Entries"), u"updatecurindex.png"_ustr };
