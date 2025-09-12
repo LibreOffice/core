@@ -499,6 +499,7 @@ constexpr auto NotebookbarList
         { u"svx/ui/fontnamebox.ui" },
         { u"svx/ui/fontsizebox.ui" },
         { u"svx/ui/stylespreview.ui" },
+        { u"svx/ui/themeselectorpanel.ui" },
         // not interim builder, but regular builder:
         { u"modules/simpress/ui/masterpagepanelall.ui" },
         { u"modules/simpress/ui/slidetransitionspanel.ui" }

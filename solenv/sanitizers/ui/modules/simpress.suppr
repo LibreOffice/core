@@ -29,4 +29,5 @@ sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Home-CharFont
 sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Home-FontHeight'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='MasterSlide-MasterSlidePane'] button-no-label
 sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Transitions-SlideTransitionsPane'] button-no-label
+sd/uiconfig/simpress/ui/notebookbar_online.ui://GtkToolButton[@id='Theme-ThemeColorsPane'] button-no-label
 

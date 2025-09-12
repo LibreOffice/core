@@ -176,6 +176,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/svxruler \
     svx/source/dialog/swframeexample \
     svx/source/dialog/swframeposstrings \
+    svx/source/dialog/ThemeColorsPaneBase \
     svx/source/dialog/ThemeDialog \
     svx/source/dialog/ThemeColorEditDialog \
     svx/source/dialog/txencbox \

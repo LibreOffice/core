@@ -1116,6 +1116,17 @@
           <value>com.sun.star.comp.sd.SlideMasterPagesAllToolBoxControl</value>
         </prop>
       </node>
+      <node oor:name="ThemeColorsPane" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ThemeSelectorPanel</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.ThemeColorsToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="BulletsToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:DefaultBullet</value>
