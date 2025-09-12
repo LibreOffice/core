@@ -1104,7 +1104,7 @@ OString CppProducer::getCFunctionPrefix(std::string_view unoName)
 {
     // Convert com.sun.star.lang.XMain to com__sun__star__lang__XMain for function names
     OString temp(unoName);
-    return temp.replaceAll(".", "__");
+    return temp.replaceAll("."_ostr, "__"_ostr);
 }
 
 OString CppProducer::getMethodReturnType(std::u16string_view returnType) const
@@ -1120,13 +1120,13 @@ OString CppProducer::getMethodDefaultReturn(std::u16string_view returnType) cons
 
     // Handle void vs non-void return types properly
     if (resolvedType == u"void")
-        return ""; // void methods don't return anything
+        return ""_ostr; // void methods don't return anything
 
     // Return appropriate default values for different types
     if (resolvedType == u"double")
-        return "0.0";
+        return "0.0"_ostr;
     else if (resolvedType == u"float")
-        return "0.0f";
+        return "0.0f"_ostr;
     else if (resolvedType == u"sal_Int32" || resolvedType == u"long" || resolvedType == u"sal_Int16"
              || resolvedType == u"short" || resolvedType == u"sal_Int8" || resolvedType == u"byte"
              || resolvedType == u"sal_uInt8" || resolvedType == u"sal_uInt16"
@@ -1134,9 +1134,9 @@ OString CppProducer::getMethodDefaultReturn(std::u16string_view returnType) cons
              || resolvedType == u"sal_uInt64" || resolvedType == u"sal_Unicode"
              || resolvedType == u"unsigned short" || resolvedType == u"unsigned long"
              || resolvedType == u"unsigned hyper" || resolvedType == u"hyper")
-        return "0";
+        return "0"_ostr;
     else if (resolvedType == u"sal_Bool" || resolvedType == u"boolean")
-        return "false";
+        return "false"_ostr;
     else
     {
         // Check if it's an enum type
@@ -1154,11 +1154,11 @@ OString CppProducer::getMethodDefaultReturn(std::u16string_view returnType) cons
         else if (isUnoType(resolvedType) && isUnoStruct(resolvedType))
         {
             // Return empty struct for struct types
-            return OString("{}"); // Empty struct literal
+            return "{}"_ostr; // Empty struct literal
         }
         else
         {
-            return "nullptr"; // For pointer/interface/any types
+            return "nullptr"_ostr; // For pointer/interface/any types
         }
     }
 }
@@ -2485,25 +2485,25 @@ OString CppProducer::convertBasicType(const OString& typeName) const
 
     // Convert UNO primitive types to C++ types
     if (result == "long")
-        result = "sal_Int32";
+        result = "sal_Int32"_ostr;
     else if (result == "short")
-        result = "sal_Int16";
+        result = "sal_Int16"_ostr;
     else if (result == "byte")
-        result = "sal_Int8";
+        result = "sal_Int8"_ostr;
     else if (result == "boolean")
-        result = "sal_Bool";
+        result = "sal_Bool"_ostr;
     else if (result == "double")
-        result = "double";
+        result = "double"_ostr;
     else if (result == "float")
-        result = "float";
+        result = "float"_ostr;
     else if (result == "string")
-        result = "OUString";
+        result = "OUString"_ostr;
     else if (result == "any")
-        result = "Any";
+        result = "Any"_ostr;
     else if (result.indexOf('.') != -1)
     {
         // For UNO types with namespace, convert dots to double colons
-        result = result.replaceAll(".", "::");
+        result = result.replaceAll("."_ostr, "::"_ostr);
     }
 
     return result;

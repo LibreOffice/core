@@ -1060,44 +1060,44 @@ OString RustProducer::getRustWrapperTypeName(std::u16string_view unoType) const
 
     // Handle primitive types
     if (rustType == "boolean")
-        return "u8";
+        return "u8"_ostr;
     if (rustType == "byte")
-        return "i8";
+        return "i8"_ostr;
     if (rustType == "short")
-        return "i16";
+        return "i16"_ostr;
     if (rustType == "unsigned short")
-        return "u16";
+        return "u16"_ostr;
     if (rustType == "long")
-        return "i32";
+        return "i32"_ostr;
     if (rustType == "unsigned long")
-        return "u32";
+        return "u32"_ostr;
     if (rustType == "hyper")
-        return "i64";
+        return "i64"_ostr;
     if (rustType == "unsigned hyper")
-        return "u64";
+        return "u64"_ostr;
     if (rustType == "float")
-        return "f32";
+        return "f32"_ostr;
     if (rustType == "double")
-        return "f64";
+        return "f64"_ostr;
     if (rustType == "char")
-        return "u16";
+        return "u16"_ostr;
 
     // Handle special UNO types
     if (rustType == "string")
-        return "Option<crate::core::OUString>";
+        return "Option<crate::core::OUString>"_ostr;
     if (rustType == "any" || rustType == "com.sun.star.uno.Any")
-        return "Option<crate::core::Any>";
+        return "Option<crate::core::Any>"_ostr;
 
     // Handle sequence types (arrays) - return raw pointer for now
     if (rustType.startsWith("[]"))
     {
-        return "*mut c_void";
+        return "*mut c_void"_ostr;
     }
 
     // Handle template types like Pair<T,U> - return raw pointer for now to avoid parsing issues
     if (rustType.indexOf('<') != -1 && rustType.indexOf('>') != -1)
     {
-        return "*mut c_void";
+        return "*mut c_void"_ostr;
     }
 
     // Handle generated UNO types (interface, struct, enum)
@@ -1106,7 +1106,7 @@ OString RustProducer::getRustWrapperTypeName(std::u16string_view unoType) const
         // Skip types that look malformed or have invalid characters
         if (rustType.indexOf('[') != -1 || rustType.indexOf('<') != -1)
         {
-            return "*mut c_void";
+            return "*mut c_void"_ostr;
         }
 
         // First resolve typedefs
@@ -1130,7 +1130,7 @@ OString RustProducer::getRustWrapperTypeName(std::u16string_view unoType) const
     }
 
     // Default to raw pointer for unknown types
-    return "*mut c_void";
+    return "*mut c_void"_ostr;
 }
 
 OString RustProducer::resolveTypedef(std::u16string_view unoType) const
@@ -1159,7 +1159,7 @@ OString RustProducer::getRustReturnType(std::u16string_view unoType) const
     // Handle void returns
     if (unoType == u"void")
     {
-        return "()";
+        return "()"_ostr;
     }
 
     // For interfaces, structs, enums - return Option<TypeWrapper> like services
@@ -1169,7 +1169,7 @@ OString RustProducer::getRustReturnType(std::u16string_view unoType) const
         if (rustType.indexOf('.') != -1)
         {
             // Convert dots to :: for module path
-            OString modulePath = rustType.replaceAll(".", "::");
+            OString modulePath = rustType.replaceAll("."_ostr, "::"_ostr);
 
             // Extract simple type name
             sal_Int32 lastDot = rustType.lastIndexOf('.');
@@ -1191,7 +1191,7 @@ OString RustProducer::getRustFFIReturnType(std::u16string_view unoType) const
     // Handle void returns
     if (unoType == u"void")
     {
-        return "()";
+        return "()"_ostr;
     }
 
     // For interfaces, structs, enums - return their opaque handle typedef
@@ -1204,7 +1204,7 @@ OString RustProducer::getRustFFIReturnType(std::u16string_view unoType) const
     }
 
     // For other types (primitives, sequences, etc) - use void*
-    return "*mut c_void";
+    return "*mut c_void"_ostr;
 }
 
 bool RustProducer::isUnoInterface(std::u16string_view typeName) const
