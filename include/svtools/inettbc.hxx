@@ -64,6 +64,7 @@ public:
 
     void                set_entry_text(const OUString& rStr) { m_xWidget->set_entry_text(rStr); }
     void                show() { m_xWidget->show(); }
+    void                hide() { m_xWidget->hide(); }
     void                clear() { m_xWidget->clear(); }
     void                connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xWidget->connect_entry_activate(rLink); }
     void                connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xWidget->connect_key_press(rLink); }

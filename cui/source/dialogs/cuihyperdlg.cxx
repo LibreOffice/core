@@ -131,11 +131,10 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     AddTabPage(u"internet"_ustr, SvxHyperlinkInternetTp::Create);
     AddTabPage(u"mail"_ustr, SvxHyperlinkMailTp::Create);
+    AddTabPage(u"document"_ustr, SvxHyperlinkDocTp::Create);
+
     if (!comphelper::LibreOfficeKit::isActive())
-    {
-        AddTabPage(u"document"_ustr, SvxHyperlinkDocTp::Create);
         AddTabPage(u"newdocument"_ustr, SvxHyperlinkNewDocTp::Create);
-    }
 
     GetBindings().Update(SID_HYPERLINK_GETLINK);
     GetBindings().Update(SID_READONLY_MODE);
