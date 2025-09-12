@@ -807,6 +807,69 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
+{
+    // Two related scenarios tested:
+    //
+    // 1. Auto-filter is sorted in the sheet view, then the data is changed in a sheet view.
+    //    In this case the default view is unsorted and the sheet view is sorted, so the data
+    //    in the sheet view needs to be first unsorted so we get the correct position of the
+    //    cell that needs to be changed.
+    // 2. Continuation of scenario 1, where the sheet view is sorted again (ascending then
+    //    descending order). In this case the sort orders must be combined correctly.
+
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // Setup views
+    ScTestViewCallback aSheetView;
+    ScTabViewShell* pTabViewSheetView = aSheetView.getTabViewShell();
+
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+
+    ScTestViewCallback aDefaultView;
+    ScTabViewShell* pTabViewDefaultView = aDefaultView.getTabViewShell();
+
+    CPPUNIT_ASSERT(pTabViewSheetView != pTabViewDefaultView);
+    CPPUNIT_ASSERT(aSheetView.getViewID() != aDefaultView.getViewID());
+
+    // Switch to Sheet View and Create
+    {
+        SfxLokHelper::setView(aSheetView.getViewID());
+        Scheduler::ProcessEventsToIdle();
+
+        // New Sheet view
+        dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, {});
+
+        // Check values - Sheet View
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"3", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"3", u"7" }));
+
+        typeCharsInCell(std::string("9"), 0, 1, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"4", u"5", u"7" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        // Scenario 2
+
+        // Sort AutoFilter
+        dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"5", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"5", u"9", u"7" }));
+
+        typeCharsInCell(std::string("6"), 0, 3, pTabViewSheetView, pModelObj);
+
+        CPPUNIT_ASSERT(checkValues(pTabViewSheetView, 0, 1, 4, { u"9", u"7", u"6", u"4" }));
+        CPPUNIT_ASSERT(checkValues(pTabViewDefaultView, 0, 1, 4, { u"4", u"6", u"9", u"7" }));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
