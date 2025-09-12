@@ -891,4 +891,12 @@ bool SalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
     return comphelper::LibreOfficeKit::isActive();
 }
 
+bool SalGraphics::DrawBitmapWallpaper(
+                tools::Long /*nStartX*/, tools::Long /*nStartY*/, tools::Long /*nRight*/,
+                tools::Long /*nBottom*/, tools::Long /*nBmpWidth*/, tools::Long /*nBmpHeight*/,
+                const SalBitmap& /*rBmp*/)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

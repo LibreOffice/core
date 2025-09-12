@@ -374,6 +374,12 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice& rOutDev );
 
+    /** fill/tile with given bitmap
+     *
+     * @returns true if successfully drawn, false if not able to draw
+     */
+    virtual bool                DrawBitmapWallpaper(tools::Long nStartX, tools::Long nStartY, tools::Long nRight, tools::Long nBottom, tools::Long nBmpWidth, tools::Long nBmpHeight, const SalBitmap& aBmp);
+
     SAL_DLLPRIVATE virtual OUString getRenderBackendName() const;
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
@@ -826,6 +832,11 @@ public:
     OUString getRenderBackendName() const override
     {
         return GetImpl()->getRenderBackendName();
+    }
+
+    bool DrawBitmapWallpaper(tools::Long nStartX, tools::Long nStartY, tools::Long nRight, tools::Long nBottom, tools::Long nBmpWidth, tools::Long nBmpHeight, const SalBitmap& rBmp) override
+    {
+        return GetImpl()->DrawBitmapWallpaper(nStartX, nStartY, nRight, nBottom, nBmpWidth, nBmpHeight, rBmp);
     }
 };
 

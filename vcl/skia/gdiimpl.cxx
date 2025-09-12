@@ -2050,6 +2050,37 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
     return true;
 }
 
+bool SkiaSalGraphicsImpl::DrawBitmapWallpaper(tools::Long nStartX, tools::Long nStartY,
+                                              tools::Long nRight, tools::Long nBottom,
+                                              tools::Long nBmpWidth, tools::Long nBmpHeight,
+                                              const SalBitmap& rBmp)
+{
+    assert(dynamic_cast<const SkiaSalBitmap*>(&rBmp));
+    const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(rBmp);
+
+    sk_sp<SkImage> image = rSkiaBitmap.GetSkImage();
+    sk_sp<SkShader> shader;
+    if (nBmpWidth == image->width() && nBmpHeight == image->height())
+        shader = image->makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions());
+    else
+    {
+        SkMatrix matrix;
+        matrix.set(SkMatrix::kMScaleX, 1.0 * nBmpWidth / image->width());
+        matrix.set(SkMatrix::kMScaleY, 1.0 * nBmpHeight / image->height());
+        shader = image->makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions(),
+                                   matrix);
+    }
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrcATop);
+    paint.setAntiAlias(mParent.getAntiAlias());
+    paint.setShader(shader);
+    getDrawCanvas()->drawRect(
+        SkRect::MakeXYWH(toSkX(nStartX), toSkY(nStartY), nRight - nStartX, nBottom - nStartY),
+        paint);
+    postDraw();
+    return true;
+}
+
 static double toRadian(Degree10 degree10th) { return toRadians(3600_deg10 - degree10th); }
 static auto toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10th)); }
 static auto toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }

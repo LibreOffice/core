@@ -199,6 +199,8 @@ public:
     virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) = 0;
 
     virtual bool supportsOperation(OutDevSupportType eType) const = 0;
+
+    virtual bool DrawBitmapWallpaper(tools::Long /*nStartX*/, tools::Long /*nStartY*/, tools::Long /*nRight*/, tools::Long /*nBottom*/, tools::Long /*nBmpWidth*/, tools::Long /*nBmpHeight*/, const SalBitmap& /*rBmp*/) { return false; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

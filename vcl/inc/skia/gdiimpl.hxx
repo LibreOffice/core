@@ -179,6 +179,10 @@ public:
 
     virtual bool supportsOperation(OutDevSupportType eType) const override;
 
+    virtual bool DrawBitmapWallpaper(tools::Long nStartX, tools::Long nStartY, tools::Long nRight,
+                                     tools::Long nBottom, tools::Long nBmpWidth,
+                                     tools::Long nBmpHeight, const SalBitmap& rBmp) override;
+
     // Dump contents to a file for debugging.
     void dump(const char* file) const;
 

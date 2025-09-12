@@ -19,6 +19,7 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <salgdi.hxx>
 
 #include <cassert>
 
@@ -131,6 +132,9 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                                             const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
+
+    if( ImplIsRecordLayout() )
+        return;
 
     const Bitmap* pCached = rWallpaper.ImplGetCachedBitmap();
 
@@ -283,7 +287,6 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
                 nFirstX = aPos.X() + ( ( aSize.Width() - nBmpWidth ) >> 1 );
                 nFirstY = aPos.Y() + ( ( aSize.Height() - nBmpHeight ) >> 1 );
             }
-
             const tools::Long nOffX = ( nFirstX - nX ) % nBmpWidth;
             const tools::Long nOffY = ( nFirstY - nY ) % nBmpHeight;
             tools::Long nStartX = nX + nOffX;
@@ -295,14 +298,30 @@ void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
             if( nOffY > 0 )
                 nStartY -= nBmpHeight;
 
-            for( tools::Long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
+
+            // if possible use accelerated path
+            if( eStyle == WallpaperStyle::Tile
+                && (meRasterOp == RasterOp::OverPaint)
+                && (mnDrawMode == DrawModeFlags::Default)
+                && nWidth > 0 && nHeight > 0 )
+                bDrawn = mpGraphics->DrawBitmapWallpaper(nStartX, nStartY, nRight, nBottom, nBmpWidth, nBmpHeight, *aBmp.ImplGetSalBitmap());
+
+            if (!bDrawn)
             {
-                for( tools::Long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
+                for( tools::Long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
                 {
-                    DrawBitmapEx( Point( nBmpX, nBmpY ), aBmp );
+                    for( tools::Long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
+                    {
+                        const Size aSizePx( aBmp.GetSizePixel() );
+                        if( !aBmp.HasAlpha() )
+                            DrawBitmap( Point( nBmpX, nBmpY ), PixelToLogic( aSizePx ), Point(), aSizePx, aBmp, MetaActionType::BMP );
+                        else
+                            DrawBitmapEx(Point( nBmpX, nBmpY ), PixelToLogic(aSizePx), Point(), aSizePx, aBmp,
+                                         MetaActionType::BMPEX);
+                    }
                 }
+                bDrawn = true;
             }
-            bDrawn = true;
         }
         break;
     }
