@@ -205,18 +205,17 @@ private:
     // Struct generation helpers
     static void generateStructSourceBasicFunctions(CppFile& file, std::string_view functionPrefix,
                                                    std::string_view handleTypeName,
-                                                   const std::string& className);
+                                                   std::string_view className);
     void
     generateStructSourceBaseMembers(CppFile& file, std::string_view functionPrefix,
-                                    std::string_view handleTypeName, const std::string& className,
+                                    std::string_view handleTypeName, std::string_view className,
                                     const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
     void
     generateStructSourceDirectMembers(CppFile& file, std::string_view functionPrefix,
-                                      std::string_view handleTypeName, const std::string& className,
+                                      std::string_view handleTypeName, std::string_view className,
                                       const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
     void generateStructMemberAccessors(CppFile& file, std::string_view functionPrefix,
-                                       std::string_view handleTypeName,
-                                       const std::string& className,
+                                       std::string_view handleTypeName, std::string_view className,
                                        const unoidl::PlainStructTypeEntity::Member& member);
 
     // ========================================================================

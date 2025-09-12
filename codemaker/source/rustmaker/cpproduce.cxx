@@ -826,7 +826,7 @@ void CppProducer::generateStructSourceNamespaces(CppFile& file, std::string_view
 
 void CppProducer::generateStructSourceBasicFunctions(CppFile& file, std::string_view functionPrefix,
                                                      std::string_view handleTypeName,
-                                                     const std::string& className)
+                                                     std::string_view className)
 {
     // Generate struct creation function
     file.beginLine()
@@ -913,7 +913,7 @@ void CppProducer::generateStructSourceBasicFunctions(CppFile& file, std::string_
 
 void CppProducer::generateStructSourceBaseMembers(
     CppFile& file, std::string_view functionPrefix, std::string_view handleTypeName,
-    const std::string& className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
+    std::string_view className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
 {
     // Generate getters/setters for base type members (if struct has a base)
     if (!entity->getDirectBase().isEmpty())
@@ -945,7 +945,7 @@ void CppProducer::generateStructSourceBaseMembers(
 
 void CppProducer::generateStructSourceDirectMembers(
     CppFile& file, std::string_view functionPrefix, std::string_view handleTypeName,
-    const std::string& className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
+    std::string_view className, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
 {
     // Generate getters/setters for direct struct members
     file.beginLine().append("// Getters/setters for direct struct members").endLine();
@@ -958,7 +958,7 @@ void CppProducer::generateStructSourceDirectMembers(
 
 void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view functionPrefix,
                                                 std::string_view handleTypeName,
-                                                const std::string& className,
+                                                std::string_view className,
                                                 const unoidl::PlainStructTypeEntity::Member& member)
 {
     // Generate getter implementation
@@ -1067,15 +1067,13 @@ void CppProducer::generateStructSource(std::string_view name,
     file.beginLine().append("extern \"C\"").endLine().beginBlock();
 
     // Generate basic functions (creation/destruction)
-    generateStructSourceBasicFunctions(file, functionPrefix, handleTypeName, className.getStr());
+    generateStructSourceBasicFunctions(file, functionPrefix, handleTypeName, className);
 
     // Generate accessors for base type members
-    generateStructSourceBaseMembers(file, functionPrefix, handleTypeName, className.getStr(),
-                                    entity);
+    generateStructSourceBaseMembers(file, functionPrefix, handleTypeName, className, entity);
 
     // Generate accessors for direct members
-    generateStructSourceDirectMembers(file, functionPrefix, handleTypeName, className.getStr(),
-                                      entity);
+    generateStructSourceDirectMembers(file, functionPrefix, handleTypeName, className, entity);
 
     file.endBlock().append(" // extern \"C\"").endLine();
 
