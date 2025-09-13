@@ -360,11 +360,16 @@ class SvxConfigPageFunctionDropTarget : public weld::ReorderingDropTarget
 {
 private:
     SvxConfigPage& m_rPage;
+    weld::TreeView& m_rFunctions;
+    Link<int, void> m_aDropHdl;
 
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
 public:
-    SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage, weld::TreeView& rTreeView);
+    SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage,
+            weld::TreeView& rTreeView,
+            weld::TreeView& rFunctions,
+            const Link<int, void>& rDropHdl);
 };
 
 class SvxConfigPage : public SfxTabPage
@@ -449,7 +454,7 @@ protected:
     virtual void            SelectElement() = 0;
 
     int                 AppendEntry(SvxConfigEntry* pNewEntryData,
-                                    int nTarget);
+                                    int nTarget, bool bAfter);
 
     void                AddSubMenusToUI(    std::u16string_view rBaseTitle,
                                         SvxConfigEntry const * pParentData );
@@ -486,7 +491,8 @@ public:
     const OUString& GetFileName() const { return m_sFileName; }
 
     int             AddFunction(int nTarget,
-                                bool bAllowDuplicates);
+                                bool bAllowDuplicates,
+                                bool bAfter);
 
     virtual void    MoveEntry( bool bMoveUp );
 

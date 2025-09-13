@@ -56,8 +56,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
 
     m_xContentsListBox.reset(
         new SvxToolbarEntriesListBox(m_xBuilder->weld_tree_view(u"toolcontents"_ustr), this));
-    m_xDropTargetHelper.reset(
-        new SvxConfigPageFunctionDropTarget(*this, m_xContentsListBox->get_widget()));
+    m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(
+        *this, m_xContentsListBox->get_widget(), m_xFunctions->get_widget(),
+        LINK(this, SvxToolbarConfigPage, DropHdl)));
 
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     Size aSize(m_xFunctions->get_size_request());
@@ -430,7 +431,9 @@ IMPL_LINK_NOARG(SvxToolbarConfigPage, SelectCategory, weld::ComboBox&, void)
     SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
-IMPL_LINK_NOARG(SvxToolbarConfigPage, AddCommandHdl, weld::Button&, void) { AddFunction(); }
+IMPL_LINK(SvxToolbarConfigPage, DropHdl, int, nTarget, void) { AddFunction(nTarget, false); }
+
+IMPL_LINK_NOARG(SvxToolbarConfigPage, AddCommandHdl, weld::Button&, void) { AddFunction(-1, true); }
 
 IMPL_LINK_NOARG(SvxToolbarConfigPage, RemoveCommandHdl, weld::Button&, void)
 {
@@ -447,7 +450,7 @@ IMPL_LINK(SvxToolbarConfigPage, InsertHdl, const OUString&, rIdent, void)
         SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
         pNewEntryData->SetUserDefined();
 
-        int nPos = AppendEntry(pNewEntryData, -1);
+        int nPos = AppendEntry(pNewEntryData, -1, true);
         InsertEntryIntoUI(pNewEntryData, m_xContentsListBox->get_widget(), nPos);
 
         static_cast<ToolbarSaveInData*>(GetSaveInData())->ApplyToolbar(pToolbar);
@@ -771,7 +774,7 @@ void SvxToolbarConfigPage::SelectElement()
     UpdateButtonStates();
 }
 
-void SvxToolbarConfigPage::AddFunction(int nTarget)
+void SvxToolbarConfigPage::AddFunction(int nTarget, bool bAfter)
 {
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
@@ -779,7 +782,7 @@ void SvxToolbarConfigPage::AddFunction(int nTarget)
         return;
 
     // Add the command to the contents listbox of the selected toolbar
-    int nNewLBEntry = SvxConfigPage::AddFunction(nTarget, true /*bAllowDuplicates*/);
+    int nNewLBEntry = SvxConfigPage::AddFunction(nTarget, true /*bAllowDuplicates*/, bAfter);
 
     if (nNewLBEntry == -1)
         return;

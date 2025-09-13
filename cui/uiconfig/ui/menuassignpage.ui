@@ -328,6 +328,7 @@
                 <property name="vexpand">True</property>
                 <property name="model">liststore1</property>
                 <property name="headers-visible">False</property>
+                <property name="reorderable">True</property>
                 <property name="search-column">1</property>
                 <property name="enable-tree-lines">True</property>
                 <child internal-child="selection">

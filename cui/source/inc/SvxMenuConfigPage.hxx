@@ -44,7 +44,10 @@ private:
     DECL_LINK(ModifyItemHdl, const OUString&, void);
     DECL_LINK(ResetMenuHdl, weld::Button&, void);
 
+    DECL_LINK(DropHdl, int, void);
     DECL_LINK(MenuEntriesSizeAllocHdl, const Size&, void);
+
+    void AddCommand(int nTarget, bool bAfter);
 
     virtual void ListModified() override;
 

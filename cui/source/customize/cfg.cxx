@@ -1487,7 +1487,7 @@ bool SvxConfigPage::IsCommandInMenuList(const SvxConfigEntry *pEntryData,
     return toret;
 }
 
-int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
+int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates, bool bAfter)
 {
     int toret = -1;
     OUString aURL = GetScriptURL();
@@ -1508,7 +1508,7 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
     {
         delete pNewEntryData;
     } else {
-        toret = AppendEntry( pNewEntryData, nTarget );
+        toret = AppendEntry( pNewEntryData, nTarget, bAfter );
     }
 
     UpdateButtonStates();
@@ -1517,7 +1517,7 @@ int SvxConfigPage::AddFunction(int nTarget, bool bAllowDuplicates)
 
 int SvxConfigPage::AppendEntry(
     SvxConfigEntry* pNewEntryData,
-    int nTarget)
+    int nTarget, bool bAfter)
 {
     SvxConfigEntry* pTopLevelSelection = GetTopLevelSelection();
 
@@ -1554,9 +1554,12 @@ int SvxConfigPage::AppendEntry(
             ++nPos;
         }
 
-        // Now step past it to the entry after the currently selected one
-        ++iter;
-        ++nPos;
+        if (bAfter)
+        {
+            // Now step past it to the entry after the currently selected one
+            ++iter;
+            ++nPos;
+        }
 
         // Now add the new entry to the UI and to the parent's list
         if ( iter != end )
@@ -3192,15 +3195,36 @@ SvxIconChangeDialog::SvxIconChangeDialog(weld::Window *pWindow, const OUString& 
     m_xLineEditDescription->set_text(rMessage);
 }
 
-SvxConfigPageFunctionDropTarget::SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage, weld::TreeView& rTreeView)
+SvxConfigPageFunctionDropTarget::SvxConfigPageFunctionDropTarget(SvxConfigPage&rPage,
+        weld::TreeView& rTreeView, weld::TreeView& rFunctions,
+        const Link<int, void>& rDropHdl)
     : weld::ReorderingDropTarget(rTreeView)
     , m_rPage(rPage)
+    , m_rFunctions(rFunctions)
+    , m_aDropHdl(rDropHdl)
 {
 }
 
 sal_Int8 SvxConfigPageFunctionDropTarget::ExecuteDrop(const ExecuteDropEvent& rEvt)
 {
-    sal_Int8 nRet = weld::ReorderingDropTarget::ExecuteDrop(rEvt);
+    sal_Int8 nRet;
+    weld::TreeView* pSource = m_rTreeView.get_drag_source();
+    if (pSource && pSource == &m_rFunctions)
+    {
+        if (!m_aDropHdl.IsSet())
+            return DND_ACTION_NONE;
+        std::unique_ptr<weld::TreeIter> xSource(m_rFunctions.make_iterator());
+        if (!m_rFunctions.get_selected(xSource.get()))
+            return DND_ACTION_NONE;
+        std::unique_ptr<weld::TreeIter> xTarget(m_rTreeView.make_iterator());
+        int nTargetPos = -1;
+        if (m_rTreeView.get_dest_row_at_pos(rEvt.maPosPixel, xTarget.get(), true))
+            nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget);
+        m_aDropHdl.Call(nTargetPos);
+        nRet = DND_ACTION_NONE;
+    }
+    else
+        nRet = weld::ReorderingDropTarget::ExecuteDrop(rEvt);
     m_rPage.ListModified();
     return nRet;;
 }
