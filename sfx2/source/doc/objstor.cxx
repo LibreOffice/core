@@ -778,6 +778,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     // The import filter would fail with empty input.
                     bOk = true;
+                    FinishedLoading(); // EnableSetModified(), etc.
                 }
                 else
                 {
