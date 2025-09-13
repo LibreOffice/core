@@ -1223,20 +1223,22 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                 }
             }
 
-            { // export <extLst>
-                if (rModel.mxExtensionList)
-                {
-                    // put <extLst>, it has no attributes
-                    rStrm.GetCurrentStream()->startElement(XML_extLst);
+            // export <extLst>
+            if (rModel.mxExtensionList)
+            {
+                // put <extLst>, it has no attributes
+                rStrm.GetCurrentStream()->startElement(XML_extLst);
 
-                    // export uri attribute of <ext> element
-                    for (auto& uriValue : rModel.mxExtensionList->vExtension)
-                    {
-                        // export <ext> with uri attribute.
-                        rStrm.GetCurrentStream()->startElement(XML_ext, XML_uri, uriValue);
+                // export <ext> with uri attribute and xmlns:x15 namespace.
+                for (auto& uriValue : rModel.mxExtensionList->vExtension)
+                {
+                    rStrm.GetCurrentStream()->startElement(XML_ext, FSNS(XML_xmlns, XML_x15),
+                                                           rStrm.getNamespaceURL(OOX_NS(x15)),
+                                                           XML_uri, uriValue);
 
                     /*
-                        TODO: export child elements of <ext>. We should export "any element in any namespace", which seems challenging.
+                        Export child elements of <ext> here.
+                        We should export "any element in any namespace" when it is needed.
 
                         <extLst>
                             <ext>
@@ -1245,13 +1247,44 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                         </extLst>
                     */
 
-                        // put </ext>
-                        rStrm.GetCurrentStream()->endElement(XML_ext);
+                    // export <x15:connection> if not empty
+                    aSeqs = rModel.mxExtensionList->maXFifteenConnectionSequenceAny;
+                    if (aSeqs.hasElements())
+                    {
+                        rtl::Reference<sax_fastparser::FastAttributeList>
+                            pAttrListXFifteenConnection
+                            = sax_fastparser::FastSerializerHelper::createAttrList();
+
+                        addElemensToAttrList(pAttrListXFifteenConnection, aSeqs);
+
+                        rStrm.GetCurrentStream()->startElement(FSNS(XML_x15, XML_connection),
+                                                               pAttrListXFifteenConnection);
+
+                        // export <x15:rangePr> if not empty
+                        aSeqs = rModel.mxExtensionList->maXFifteenRangePrSequenceAny;
+                        if (aSeqs.hasElements())
+                        {
+                            rtl::Reference<sax_fastparser::FastAttributeList>
+                                pAttrListXFifteenRangePr
+                                = sax_fastparser::FastSerializerHelper::createAttrList();
+
+                            addElemensToAttrList(pAttrListXFifteenRangePr, aSeqs);
+
+                            // put <x15:rangePr />
+                            rStrm.GetCurrentStream()->singleElement(FSNS(XML_x15, XML_rangePr),
+                                                                    pAttrListXFifteenRangePr);
+                        }
+
+                        // put </x15:connection>
+                        rStrm.GetCurrentStream()->endElement(FSNS(XML_x15, XML_connection));
                     }
 
-                    // put </extLst>
-                    rStrm.GetCurrentStream()->endElement(XML_extLst);
+                    // put </ext>
+                    rStrm.GetCurrentStream()->endElement(XML_ext);
                 }
+
+                // put </extLst>
+                rStrm.GetCurrentStream()->endElement(XML_extLst);
             }
 
             // put </connection>

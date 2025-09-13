@@ -2307,6 +2307,28 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166712)
     assertXPath(pConn, "/x:connections/x:connection/x:olapPr", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf167689_x15_namespace)
+{
+    createScDoc("xlsx/tdf167689_x15_namespace.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pConn = parseExport(u"xl/connections.xml"_ustr);
+    CPPUNIT_ASSERT(pConn);
+
+    // test if <ext> has xmlns:x15 namespace.
+    assertXPathNSDef(pConn, "/x:connections/x:connection[3]/x:extLst/x:ext", "x15",
+                     "http://schemas.microsoft.com/office/spreadsheetml/2010/11/main");
+
+    // test id attribute of <x15:connection>
+    assertXPath(pConn, "/x:connections/x:connection[3]/x:extLst/x:ext/x15:connection", "id",
+                u"Tabelle1");
+
+    // test sourceName attribute of <x15:rangePr>
+    assertXPath(pConn, "/x:connections/x:connection[3]/x:extLst/x:ext/x15:connection/x15:rangePr",
+                "sourceName", u"_xlcn.LinkedTable_Tabelle1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf166939)
 {
     // Given a document with a column autostyle name equal to "a" (it could be any single-character
