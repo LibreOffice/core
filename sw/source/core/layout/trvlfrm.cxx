@@ -1880,6 +1880,7 @@ static const SwFrame* lcl_FindStartOfVirtualPages(const SwPageFrame *pPage)
             // it (and every upper table frame) must have valid upper.
             while (const SwFrame* pTable = pFlow->GetUpper()->FindTabFrame())
                 pFlow = pTable;
+            assert(pFlow);
             const SwFormatPageDesc& rFormatPageDesc = pFlow->GetPageDescItem();
 
             if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
