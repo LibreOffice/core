@@ -6103,6 +6103,23 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:EditStyle</value>
+            <!-- tdf#65911 tdf#159035 Alt-P conflicts with some languages' menu shortcuts -->
+            <value xml:lang="bs"></value> <!-- Bosnian View menu: Pogled -->
+            <value xml:lang="cs"></value> <!-- Czech Republic Edit menu: Úpravy -->
+            <value xml:lang="dsb"></value> <!-- Sorbian Help menu: Pomoc -->
+            <value xml:lang="gug"></value> <!-- Guaraní Help menu: Pytyvõ -->
+            <value xml:lang="hr"></value> <!-- Croatian Window menu: Prozor; View NBB: Pogled -->
+            <value xml:lang="hsb"></value> <!-- Sorbian Help menu: Pomoc -->
+            <value xml:lang="kmr-Latn"></value> <!-- Kurdish File menu: Pel -->
+            <value xml:lang="lt"></value> <!-- Lithuanian Tools menu: Priemonės -->
+            <value xml:lang="lv"></value> <!-- Latvian Help menu: Palīdzība -->
+            <value xml:lang="pl"></value> <!-- Polish File menu: Plik -->
+            <value xml:lang="sk"></value> <!-- Slovak Help menu: Pomocník -->
+            <value xml:lang="sl"></value> <!-- Slovenian Help menu: Pomoč -->
+            <value xml:lang="sq"></value> <!-- Albanian View menu: Paraqitja -->
+            <value xml:lang="sr-Latn"></value> <!-- Serbian Help menu: Pomoć -->
+            <value xml:lang="sun"></value> <!-- Sunda Tools menu: Pakakas -->
+            <value xml:lang="vec"></value> <!-- Venetian View menu: Parensa -->
           </prop>
         </node>
         <node oor:name="P_SHIFT_MOD2" oor:op="replace">
