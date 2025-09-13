@@ -9,7 +9,7 @@
 
 //! Build script for rust_uno crate
 //!
-//! Links the generated C++ bridge library (librust_uno-cpp.so) to the Rust cdylib
+//! Links the Rust cdylib against the generated C++ bridge library (librust_uno-cpp.so)
 
 fn main() {
     // Tell cargo to link against the rust_uno-cpp library
