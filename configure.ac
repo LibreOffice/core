@@ -2904,10 +2904,6 @@ AC_ARG_WITH(yrs,
         [Enables very experimental experiments.]),[
     WITH_YRS=$withval
     if test "x$withval" != "xno"; then
-        AC_PATH_PROG([CARGO], [cargo])
-        if test -z "${CARGO}"; then
-            AC_MSG_ERROR([install cargo to build yrs])
-        fi
         BUILD_TYPE="${BUILD_TYPE} YRS"
         AC_DEFINE(ENABLE_YRS)
     fi])
@@ -5939,6 +5935,13 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_RUST_UNO)
+
+if test "$WITH_YRS" = "yes" -o "$ENABLE_RUST_UNO" = "TRUE"; then
+    AC_PATH_PROG([CARGO], [cargo])
+    if test -z "${CARGO}"; then
+        AC_MSG_ERROR([install cargo to build rust components or use --disable-yrs/--disable-rust-uno])
+    fi
+fi
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
