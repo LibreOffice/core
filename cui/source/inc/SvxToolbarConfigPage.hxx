@@ -44,6 +44,7 @@ private:
     DECL_LINK(InsertHdl, const OUString&, void);
     DECL_LINK(ModifyItemHdl, const OUString&, void);
     DECL_LINK(ResetToolbarHdl, weld::Button&, void);
+    DECL_LINK(DropHdl, int, void);
 
     virtual void ListModified() override;
 
@@ -59,7 +60,7 @@ public:
                          const SfxItemSet& rItemSet);
     virtual ~SvxToolbarConfigPage() override;
 
-    void AddFunction(int nTarget = -1);
+    void AddFunction(int nTarget, bool bAfter);
 
     void MoveEntry(bool bMoveUp) override;
 
