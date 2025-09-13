@@ -115,6 +115,23 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
                 return this;
             }
             break;
+
+        case XLS_TOKEN(ext):
+            if (nElement == X15_TOKEN(connection))
+            {
+                // imports <x15:connection> element
+                mrConnection.importXFifteenConnection(rAttribs);
+                return this;
+            }
+            break;
+        case X15_TOKEN(connection):
+            if (nElement == X15_TOKEN(rangePr))
+            {
+                // imports <x15:rangePr> element
+                mrConnection.importXFifteenRangePr(rAttribs);
+                return this;
+            }
+            break;
     }
     return nullptr;
 }

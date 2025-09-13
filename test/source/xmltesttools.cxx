@@ -480,6 +480,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x14"),
                        BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x15"),
+                       BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2010/11/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xm"),
                        BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("x12ac"),

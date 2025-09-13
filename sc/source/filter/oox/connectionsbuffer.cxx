@@ -321,6 +321,20 @@ void Connection::importExtension(const AttributeList& rAttribs)
     maModel.mxExtensionList->vExtension.push_back(sUri);
 }
 
+void Connection::importXFifteenConnection(const AttributeList& rAttribs)
+{
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+        maModel.mxExtensionList->maXFifteenConnectionSequenceAny
+            = getSequenceOfAny(xFastAttributeList);
+}
+
+void Connection::importXFifteenRangePr(const AttributeList& rAttribs)
+{
+    if (auto xFastAttributeList = rAttribs.getFastAttributeList())
+        maModel.mxExtensionList->maXFifteenRangePrSequenceAny
+            = getSequenceOfAny(xFastAttributeList);
+}
+
 css::uno::Sequence<css::uno::Any> Connection::getSequenceOfAny(
     const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
 {

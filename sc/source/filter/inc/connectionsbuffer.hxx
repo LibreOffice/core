@@ -100,6 +100,12 @@ struct ExtensionListModel
     // <ext> has only one attribute:
     // - uri (A token to identify version and application information for the particular extension)
     std::vector<OUString> vExtension; // holds uri (URI) attribute of <ext> (Extension) element.
+
+    // <x15:connection> attributes. A child element of <ext>.
+    css::uno::Sequence<css::uno::Any> maXFifteenConnectionSequenceAny;
+    // <x15:rangePr> attributes. A child element of <x15:connection>.
+    css::uno::Sequence<css::uno::Any> maXFifteenRangePrSequenceAny;
+
 };
 
 /** Common properties of an external data connection. */
@@ -177,6 +183,10 @@ public:
     void                importExtensionList();
     /** Imports extensions to the standard SpreadsheetML feature set, from the ext element. */
     void                importExtension(const AttributeList& rAttribs);
+    /** Imports <x15:connection> element. */
+    void                importXFifteenConnection(const AttributeList& rAttribs);
+    /** Imports <x15:rangePr> element. */
+    void                importXFifteenRangePr(const AttributeList& rAttribs);
 
     /** Imports connection settings from the CONNECTION record. */
     void                importConnection( SequenceInputStream& rStrm );

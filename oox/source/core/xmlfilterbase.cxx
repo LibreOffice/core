@@ -147,6 +147,8 @@ const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
              NMSP_p15},
             {u"http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac"_ustr,
              NMSP_x12ac},
+            {u"http://schemas.microsoft.com/office/spreadsheetml/2010/11/main"_ustr,
+             NMSP_x15},
             {u"http://schemas.microsoft.com/office/drawing/2012/chart"_ustr,
              NMSP_c15},
             {u"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2"_ustr,
