@@ -90,7 +90,7 @@ Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  )
 }
 
 
-Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
+Reference< XConnection > SAL_CALL OEvoabDriver::connect( const OUString& url, const Sequence< css::beans::PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -112,7 +112,7 @@ sal_Bool SAL_CALL OEvoabDriver::acceptsURL( const OUString& url )
 }
 
 
-Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
+Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const OUString& url, const Sequence< css::beans::PropertyValue >& /*info*/ )
 {
     if ( ! acceptsURL(url) )
     {

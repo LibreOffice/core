@@ -171,7 +171,7 @@ void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sa
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ )
+void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const css::util::Date& /*aData*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setDate"_ustr, *this );
 }
@@ -183,7 +183,7 @@ void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, co
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ )
+void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const css::util::DateTime& /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setTimestamp"_ustr, *this );
 }
@@ -280,13 +280,13 @@ void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, c
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ )
+void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setCharacterStream"_ustr, *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ )
+void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( u"XParameters::setBinaryStream"_ustr, *this );
 }
