@@ -48,8 +48,38 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
     return lKeys;
 }
 
+void AcceleratorCache::removeKeyForCommand(const OUString& sCommand, const css::awt::KeyEvent& aKey)
+{
+    // get keylist for that command
+    TCommand2Keys::iterator pCommand = m_lCommand2Keys.find(sCommand);
+    if (pCommand == m_lCommand2Keys.end())
+        return;
+    TKeyList& lKeys = pCommand->second;
+
+    // one or more keys assign
+    if (lKeys.size() == 1)
+        // remove key from optimized command list
+        m_lCommand2Keys.erase(sCommand);
+    else // only remove this key from the keylist
+    {
+        auto pKeys = ::std::find(lKeys.begin(), lKeys.end(), aKey);
+
+        if (pKeys != lKeys.end())
+            lKeys.erase(pKeys);
+    }
+}
+
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey, const OUString& sCommand)
 {
+    // remove any previous binding for the key
+    if (auto oldCommandPos = m_lKey2Commands.find(aKey); oldCommandPos != m_lKey2Commands.end())
+    {
+        // Take another ref to the command because the other string is
+        // the key in the map and it’s going to get destroyed.
+        OUString oldCommand = oldCommandPos->second;
+        removeKeyForCommand(oldCommand, aKey);
+    }
+
     // register command for the specified key
     m_lKey2Commands[aKey] = sCommand;
 
@@ -90,23 +120,7 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
     // remove key from primary list
     m_lKey2Commands.erase(aKey);
 
-    // get keylist for that command
-    TCommand2Keys::iterator pCommand = m_lCommand2Keys.find(sCommand);
-    if (pCommand == m_lCommand2Keys.end())
-        return;
-    TKeyList& lKeys = pCommand->second;
-
-    // one or more keys assign
-    if (lKeys.size() == 1)
-        // remove key from optimized command list
-        m_lCommand2Keys.erase(sCommand);
-    else // only remove this key from the keylist
-    {
-        auto pKeys = ::std::find(lKeys.begin(), lKeys.end(), aKey);
-
-        if (pKeys != lKeys.end())
-            lKeys.erase(pKeys);
-    }
+    removeKeyForCommand(sCommand, aKey);
 }
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)

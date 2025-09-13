@@ -108,6 +108,10 @@ class AcceleratorCache
         OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
         void removeKey(const css::awt::KeyEvent& aKey);
         void removeCommand(const OUString& sCommand);
+
+    private:
+        void removeKeyForCommand(const OUString& sCommand,
+                                 const css::awt::KeyEvent& aKey);
 };
 
 } // namespace framework
