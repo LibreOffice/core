@@ -348,9 +348,10 @@ class ScriptForge(object, metaclass = _Singleton):
                     argslist[i] = argdict.ConvertToPropertyValues()
             return tuple(argslist)
 
-        #
+        # Intercept flags is a tuple
+        flag = (flags[0] if isinstance(flags, tuple) else flags)
         # Intercept dictionary arguments
-        if flags & SFServices.flgDictArg == SFServices.flgDictArg:  # Bits comparison
+        if flag & SFServices.flgDictArg == SFServices.flgDictArg:  # Bits comparison
             args = ConvertDictArgs()
         #
         # Run the basic script
@@ -395,7 +396,7 @@ class ScriptForge(object, metaclass = _Singleton):
             # Intercept empty array
             if isinstance(returnvalue, uno.ByteSequence):
                 return ()
-            if flags & SFServices.flgDateRet == SFServices.flgDateRet:  # Bits comparison
+            if flag & SFServices.flgDateRet == SFServices.flgDateRet:  # Bits comparison
                 # Intercept all UNO dates in the 1D or 2D array
                 if isinstance(returnvalue[0], tuple):   # tuple of tuples
                     arr = []
@@ -555,7 +556,8 @@ class SFServices(object):
     flgArrayArg = 512  # 1st argument can be a 2D array
     flgArrayRet = 1024  # Invoked service method can return a 2D array (standard modules) or any array (class modules)
     flgUno = 256  # Invoked service method/property can return a UNO object
-    flgObject = 2048  # 1st argument may be a Basic object
+    flgObject = 2048  # N-th argument may be a Basic object
+                      # N (default = 0) can be passed as companion in a tuple
     flgHardCode = 4096  # Force hardcoded call to method, avoid CallByName()
     # Basic class type
     moduleClass, moduleStandard = 2, 1

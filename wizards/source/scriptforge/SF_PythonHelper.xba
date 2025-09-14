@@ -603,6 +603,9 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		BasicObject: a module or a class instance - May also be the reserved string: &quot;SF_Services&quot;
 &apos;&apos;&apos;		CallType: one of the constants applicable to a CallByName statement + optional protocol flags
+&apos;&apos;&apos;			When CallType is an array (applicable when CallType includes cstObject)
+&apos;&apos;&apos;				CallType[0] = CallType scalar
+&apos;&apos;&apos;				CallType[1] = argument index on which to apply the scalar value
 &apos;&apos;&apos;		Script: the name of the method or property
 &apos;&apos;&apos;		Args: the arguments to pass to the method. Input arguments can contain symbolic constants for Null, Missing, etc.
 &apos;&apos;&apos;	Returns:
@@ -621,6 +624,8 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 
 Dim vReturn As Variant				&apos;	The value returned by the invoked property or method
 Dim vReturnArray As Variant			&apos;	Return value
+Dim iCallType As Integer			&apos;	Alias of CallType
+Dim iArgIndex As Integer			&apos;	Index companion when CallType is an array
 Dim vBasicObject As Variant			&apos;	Alias of BasicObject to avoid &quot;Object reference not set&quot; error
 Dim iNbArgs As Integer				&apos;	Number of valid input arguments
 Dim vArg As Variant					&apos;	Alias for a single argument
@@ -653,7 +658,8 @@ Const cstDateRet = 128		&apos;	Return value can be a date
 Const cstUno = 256			&apos;	Return value can be a UNO object
 Const cstArgArray = 512		&apos;	Any argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
-Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
+Const cstObject = 2048		&apos;	n-th argument is a Basic object when numeric
+							&apos;	n (default = 0) can be passed as companion in an array
 Const cstHardCode = 4096	&apos;	Method must not be executed with CallByName()
 &apos;	Returned object nature
 Const objMODULE = 1, objCLASS = 2, objDICT = 3, objUNO = 4
@@ -664,6 +670,15 @@ Check:
 
 	&apos;	Ignore Null basic objects (Null = Null or Nothing)
 	If IsNull(BasicObject) Or IsEmpty(BasicObject) Then GoTo Catch
+
+	&apos;	Intercept CallType when the targeted argument should be identified
+	If IsArray(CallType) Then
+		iCallType = CallType(0)
+		iArgIndex = CallType(1)
+	Else
+		iCallType = CallType
+		iArgIndex = 0
+	End If
 
 	&apos;	Reinterpret arguments one by one into vArgs
 	&apos;	- convert UNO dates/times
@@ -680,7 +695,7 @@ Check:
 				If vArg = cstNoArgs Then Exit For
 			End If
 			&apos;	Is 1st argument a reference to a Basic object ?
-			If i = 0 And (( CallType And cstObject ) = cstObject) And SF_Utils._VarTypeExt(vArg) = V_NUMERIC Then
+			If i = iArgIndex And (( iCallType And cstObject ) = cstObject) And SF_Utils._VarTypeExt(vArg) = V_NUMERIC Then
 				If vArg &lt; 0 Or Not IsArray(_SF_.PythonStorage) Then GoTo Catch
 				If vArg &gt; UBound(_SF_.PythonStorage) Then GoTo Catch
 				vArg = _SF_.PythonStorage(vArg)
@@ -695,8 +710,8 @@ Check:
 					Exit For	&apos;	Next arguments must be missing also
 				End If
 			ElseIf  VarType(vArg) = V_OBJECT Then
-				If ( CallType And cstDateArg ) = cstDateArg Then vArg = CDateFromUnoDateTime(vArg)
-			ElseIf ( CallType And cstDictArg ) = cstDictArg Then
+				If ( iCallType And cstDateArg ) = cstDateArg Then vArg = CDateFromUnoDateTime(vArg)
+			ElseIf ( iCallType And cstDictArg ) = cstDictArg Then
 				If IsArray(vArg) Then
 					If UBound(vArg) &gt;= 0 Then
 						If sess.UnoObjectType(vArg(0)) = &quot;com.sun.star.beans.PropertyValue&quot; Then
@@ -776,7 +791,7 @@ Try:
 			sLibrary = Split(sServiceName, &quot;.&quot;)(0)
 
 			&apos;	Methods in standard modules are called by ExecuteBasicScript() when arrays are returned
-			If Not bBasicClass And (CallType And vbMethod) = vbMethod And (CallType And cstRetArray) = cstRetArray Then
+			If Not bBasicClass And (iCallType And vbMethod) = vbMethod And (iCallType And cstRetArray) = cstRetArray Then
 				sScript = sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.&quot; &amp; Script
 				&apos;	Force validation in targeted function, not in ExecuteBasicScript()
 				_SF_.StackLevel = -1
@@ -794,14 +809,14 @@ Try:
 				_SF_.StackLevel = 0
 
 			&apos;	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
-			ElseIf (CallType And vbGet) = vbGet Then	&apos;	In some cases (Calc ...) GetProperty may have an argument
+			ElseIf (iCallType And vbGet) = vbGet Then	&apos;	In some cases (Calc ...) GetProperty may have an argument
 				If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.GetProperty(Script) Else vReturn = vBasicObject.GetProperty(Script, vArgs(0))
-			ElseIf (CallType And vbLet) = vbLet Then
+			ElseIf (iCallType And vbLet) = vbLet Then
 				vReturn = vBasicObject.SetProperty(Script, vArgs(0))
 
 			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions. Bug #138155
-			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
-				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
+			ElseIf ((iCallType And vbMethod) + (iCallType And cstArgArray)) = vbMethod + cstArgArray Or _
+				   ((iCallType And vbMethod) + (iCallType And cstRetArray)) = vbMethod + cstRetArray Then
 				If Script = &quot;Methods&quot; Then
 					vReturn = vBasicObject.Methods()
 				ElseIf Script = &quot;Properties&quot; Then
@@ -875,7 +890,7 @@ Try:
 				End If
 
 			&apos;	Specific methods in class modules may better not be executed with CallByName() because they do not return immediately
-			ElseIf bBasicClass And ((CallType And vbMethod) + (CallType And cstHardCode)) = vbMethod + cstHardCode Then
+			ElseIf bBasicClass And ((iCallType And vbMethod) + (iCallType And cstHardCode)) = vbMethod + cstHardCode Then
 				Select Case sServiceName
 					Case &quot;SFDialogs.Dialog&quot;
 						Select Case Script
@@ -884,7 +899,7 @@ Try:
 				End Select
 
 			&apos;	Methods in all modules are invoked with CallByName
-			ElseIf ((CallType And vbMethod) = vbMethod) Then
+			ElseIf ((iCallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
 					&apos;	Dirty alternatives to process usual and ParamArray cases
 					&apos;	But, up to ... how many ?
@@ -934,7 +949,7 @@ Try:
 			End If
 
 			&apos;	Post processing
-			If (CallType And cstPost) = cstPost Then
+			If (iCallType And cstPost) = cstPost Then
 				If Script = &quot;Dispose&quot; Then
 					&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
 					Set _SF_.PythonStorage(BasicObject) = Nothing
@@ -971,7 +986,7 @@ Try:
 	ElseIf VarType(vReturn) = V_OBJECT And Not IsNull(vReturn) Then
 		&apos;	Uno or not Uno ?
 		bUno = False
-		If (CallType And cstUno) = cstUno Then		&apos;	UNO considered only when pre-announced in CallType
+		If (iCallType And cstUno) = cstUno Then		&apos;	UNO considered only when pre-announced in CallType
 			Set oObjDesc = SF_Utils._VarTypeObj(vReturn)
 			bUno = ( oObjDesc.iVarType = V_UNOOBJECT )
 		End If
