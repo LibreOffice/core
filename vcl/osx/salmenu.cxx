@@ -698,6 +698,8 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;
 
+    AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(pSalMenuItem);
+
     sal_uInt16 nKeyCode=rKeyCode.GetCode();
     if( nKeyCode )
     {
@@ -775,8 +777,13 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
             }
         }
     }
-    else // not even a code ? nonsense -> ignore
+    else
+    {
+        // Zero key-code, used to remove the accelerator
+        [pAquaSalMenuItem->mpMenuItem setKeyEquivalent: @""];
+        [pAquaSalMenuItem->mpMenuItem setKeyEquivalentModifierMask: 0];
         return;
+    }
 
     SAL_WARN_IF( !nCommandKey, "vcl", "unmapped accelerator key" );
 
@@ -801,7 +808,6 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     if(nModifier & KEY_MOD3)
         nItemModifier |= NSEventModifierFlagControl;
 
-    AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(pSalMenuItem);
     NSString* pString = CreateNSString( OUString( &nCommandKey, 1 ) );
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalent: pString];
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalentModifierMask: nItemModifier];
