@@ -124,6 +124,7 @@ void LinePropertyPanelBase::Initialize()
     Graphic aGraf(maIMGWidthIcon[0]);
     mxTBWidth->set_item_image(SELECTWIDTH, aGraf.GetXGraphic());
     mxTBWidth->connect_clicked(LINK(this, LinePropertyPanelBase, ToolboxWidthSelectHdl));
+    mxTBWidth->connect_menu_toggled(LINK(this, LinePropertyPanelBase, ToolboxWidthToggleMenuHdl));
 
     mxMFTransparent->connect_value_changed(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
 
@@ -191,6 +192,12 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
 IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthSelectHdl, const OUString&, void)
 {
     mxTBWidth->set_menu_item_active(SELECTWIDTH, !mxTBWidth->get_menu_item_active(SELECTWIDTH));
+}
+
+IMPL_LINK_NOARG(LinePropertyPanelBase, ToolboxWidthToggleMenuHdl, const OUString&, void)
+{
+    if (mxTBWidth->get_menu_item_active(SELECTWIDTH))
+        mxLineWidthPopup->SetWidthSelect(mnWidthCoreValue, mbWidthValuable, meMapUnit);
 }
 
 void LinePropertyPanelBase::EndLineWidthPopup()
