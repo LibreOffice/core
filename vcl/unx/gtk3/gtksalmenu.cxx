@@ -1231,18 +1231,25 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
 {
     SolarMutexGuard aGuard;
 
+    gchar* aAccelerator;
+
     if ( rKeyName.empty() )
-        return;
+    {
+        // An empty key name means we should remove the accelerator
+        aAccelerator = nullptr;
+    }
+    else
+    {
+        guint nKeyCode;
+        GdkModifierType nModifiers;
+        GtkSalFrame::KeyCodeToGdkKey(rKeyCode, &nKeyCode, &nModifiers);
 
-    guint nKeyCode;
-    GdkModifierType nModifiers;
-    GtkSalFrame::KeyCodeToGdkKey(rKeyCode, &nKeyCode, &nModifiers);
-
-    gchar* aAccelerator = gtk_accelerator_name( nKeyCode, nModifiers );
+        aAccelerator = gtk_accelerator_name( nKeyCode, nModifiers );
+    }
 
     gchar* aCurrentAccel = g_lo_menu_get_accelerator_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
 
-    if ( aCurrentAccel == nullptr && g_strcmp0( aCurrentAccel, aAccelerator ) != 0 )
+    if ( g_strcmp0( aCurrentAccel, aAccelerator ) != 0 )
         g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator );
 
     g_free( aAccelerator );
