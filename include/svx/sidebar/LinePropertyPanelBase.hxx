@@ -119,6 +119,7 @@ private:
     void Initialize();
 
     DECL_DLLPRIVATE_LINK(ToolboxWidthSelectHdl, const OUString&, void);
+    DECL_DLLPRIVATE_LINK(ToolboxWidthToggleMenuHdl, const OUString&, void);
     DECL_DLLPRIVATE_LINK(ChangeTransparentHdl, weld::MetricSpinButton&, void);
 };
 
