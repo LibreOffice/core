@@ -23,6 +23,7 @@
 
 #include <app.hxx>
 #include <dp_shared.hxx>
+#include <initjsunoscripting.hxx>
 #include "cmdlineargs.hxx"
 #include <strings.hrc>
 #include <com/sun/star/lang/XInitialization.hpp>
