@@ -57,6 +57,17 @@ impl OUString {
         }
     }
 
+    /// Utility function to create a slice for the string.
+    ///
+    /// Take len as parameter to avoid double call in PartialEq impl.
+    fn get_ustring_slice(data: &NonNull<rtl_uString>, len: usize) -> &[u16] {
+        unsafe {
+            let data_ptr = rtl_uString_getStr(data.as_ptr());
+            std::slice::from_raw_parts(data_ptr, len)
+        }
+    }
+
+
     /// Create a UNO string from UTF-8 text
     ///
     /// This uses LibreOffice's direct UTF-8 to UString conversion function,
@@ -190,29 +201,28 @@ impl<T: AsRef<str>> From<T> for OUString {
 /// Comparison with other OUString
 impl PartialEq for OUString {
     fn eq(&self, other: &Self) -> bool {
-        unsafe {
-            // Compare lengths first (fast check)
-            let self_len = rtl_uString_getLength(self.inner.as_ptr());
-            let other_len = rtl_uString_getLength(other.inner.as_ptr());
-
-            if self_len != other_len {
-                return false;
-            }
-
-            // If lengths are equal, compare UTF-16 data directly
-            if self_len == 0 {
-                return true; // Both empty strings
-            }
-
-            let self_ptr = rtl_uString_getStr(self.inner.as_ptr());
-            let other_ptr = rtl_uString_getStr(other.inner.as_ptr());
-
-            // Compare UTF-16 data byte by byte
-            let self_slice = std::slice::from_raw_parts(self_ptr, self_len as usize);
-            let other_slice = std::slice::from_raw_parts(other_ptr, other_len as usize);
-
-            self_slice == other_slice
+        // Compare pointers first (fast check)
+        if self.inner == other.inner {
+            return true;
         }
+
+        // Compare lengths (fast check)
+        let self_len = self.len();
+        let other_len = other.len();
+
+        if self_len != other_len {
+            return false;
+        }
+
+        // If lengths are equal, compare UTF-16 data directly
+        if self_len == 0 {
+            return true; // Both empty strings
+        }
+        // Compare UTF-16 data byte by byte
+        let self_slice = Self::get_ustring_slice(&self.inner, self_len);
+        let other_slice = Self::get_ustring_slice(&other.inner, other_len);
+
+        self_slice == other_slice
     }
 }
 
@@ -225,15 +235,10 @@ impl std::fmt::Display for OUString {
             return Ok(());
         }
 
-        unsafe {
-            let ptr = rtl_uString_getStr(self.inner.as_ptr());
-            let len = rtl_uString_getLength(self.inner.as_ptr()) as usize;
-
-            // Convert from UTF-16 to UTF-8
-            let utf16_slice = std::slice::from_raw_parts(ptr, len);
-            let string = String::from_utf16_lossy(utf16_slice);
-            write!(f, "{string}")
-        }
+        // Convert from UTF-16 to UTF-8
+        let utf16_slice = Self::get_ustring_slice(&self.inner, self.len());
+        let string = String::from_utf16_lossy(utf16_slice);
+        write!(f, "{string}")
     }
 }
 
