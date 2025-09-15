@@ -199,7 +199,8 @@ properties:
           users:
             - name: ubuntu
               # ubuntu
-              password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+              passwd: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+              lock_passwd: false
               groups: [user, adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev]
               shell: /bin/bash
 
