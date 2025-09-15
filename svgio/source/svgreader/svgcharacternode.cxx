@@ -118,6 +118,7 @@ namespace svgio::svgreader
 
             const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
             bool bItalic(FontStyle::italic == rSvgStyleAttributes.getFontStyle() || FontStyle::oblique == rSvgStyleAttributes.getFontStyle());
+            bool bRTL(FontDirection::RTL == rSvgStyleAttributes.getFontDirection());
 
             return drawinglayer::attribute::FontAttribute(
                 aFontFamily,
@@ -128,7 +129,7 @@ namespace svgio::svgreader
                 bItalic,
                 false/*bMonospaced*/,
                 false/*bOutline*/,
-                false/*bRTL*/,
+                bRTL,
                 false/*bBiDiStrong*/);
         }
 
