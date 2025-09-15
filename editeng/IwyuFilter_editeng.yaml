@@ -23,12 +23,6 @@ excludelist:
     editeng/source/items/CustomPropertyField.cxx:
     # Actually used
     - com/sun/star/document/XDocumentProperties.hpp
-    editeng/source/items/frmitems.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
-    editeng/source/items/textitem.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     editeng/source/misc/SvXMLAutoCorrectExport.cxx:
     # Actually used
     - com/sun/star/xml/sax/XDocumentHandler.hpp

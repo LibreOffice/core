@@ -88,9 +88,6 @@ excludelist:
     desktop/source/deployment/registry/help/dp_help.cxx:
     # Actually used
     - com/sun/star/util/XMacroExpander.hpp
-    desktop/source/splash/splash.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     desktop/source/lib/lokandroid.cxx:
     # Needed for osl_getThreadTextEncoding
     - osl/thread.hxx

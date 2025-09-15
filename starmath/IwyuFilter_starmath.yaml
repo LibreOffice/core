@@ -46,6 +46,3 @@ excludelist:
     - register.hxx
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    starmath/source/mathml/mathmlexport.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx

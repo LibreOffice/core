@@ -243,9 +243,6 @@ excludelist:
     sd/source/ui/sidebar/PanelFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XUIElementFactory.hpp
-    sd/source/ui/sidebar/PageMarginUtils.hxx:
-    # Needed for std::abs
-    - cmath
     sd/source/ui/slideshow/slideshowimpl.hxx:
     # base class has to be a complete type
     - com/sun/star/presentation/XShapeEventListener.hpp
@@ -444,8 +441,6 @@ excludelist:
     sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
     # Needed for instantiation of function template specialization
     - Window.hxx
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sd/source/ui/slidesorter/cache/SlsRequestQueue.cxx:
     # Needed for  OSL_DEBUG_LEVEL >=2
     - sal/log.hxx

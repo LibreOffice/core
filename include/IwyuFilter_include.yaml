@@ -190,9 +190,6 @@ excludelist:
     include/comphelper/servicehelper.hxx:
     # Needed for macro
     - rtl/instance.hxx
-    include/comphelper/stl_types.hxx:
-    # Needed for std::equal
-    - algorithm
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp

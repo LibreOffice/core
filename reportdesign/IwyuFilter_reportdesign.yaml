@@ -15,9 +15,6 @@ excludelist:
     reportdesign/source/filter/xml/dbloader2.cxx:
     # Needed for template parameter
     - com/sun/star/embed/XStorage.hpp
-    reportdesign/source/filter/xml/xmlControlProperty.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     reportdesign/source/ui/inspection/metadata.cxx:
     # Actually used
     - com/sun/star/inspection/XPropertyHandler.hpp

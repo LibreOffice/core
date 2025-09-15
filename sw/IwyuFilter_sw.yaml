@@ -497,9 +497,6 @@ excludelist:
     sw/source/core/draw/drawdoc.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sw/source/uibase/sidebar/PageMarginUtils.hxx:
-    # Needed for std::abs
-    - cmath
     sw/source/core/crsr/paminit.cxx:
     # Needed for linker visibility of extern functions
     - cshtyp.hxx
@@ -781,9 +778,6 @@ excludelist:
     # Needed for defines in swslots.hxx
     - cmdid.h
     - globals.hrc
-    sw/source/ui/dialog/wordcountdialog.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sw/source/ui/fldui/fldedt.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -869,17 +863,12 @@ excludelist:
     # Actually used
     - com/sun/star/table/BorderLine2.hpp
     - com/sun/star/lang/Locale.hpp
-    sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sw/source/writerfilter/dmapper/GraphicImport.cxx:
     # Actually used
     - com/sun/star/drawing/XShape.hpp
     - com/sun/star/graphic/XGraphic.hpp
     - com/sun/star/lang/XMultiServiceFactory.hpp
     - com/sun/star/uno/XComponentContext.hpp
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sw/source/writerfilter/dmapper/NumberingManager.cxx:
     # Actually used
     - com/sun/star/lang/XMultiServiceFactory.hpp

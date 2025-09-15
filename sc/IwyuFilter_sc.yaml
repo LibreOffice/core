@@ -797,8 +797,6 @@ excludelist:
     sc/source/filter/lotus/op.cxx:
     # Needed to avoid loplugin:unreffun error
     - op.h
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sc/source/filter/html/htmlpars.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -1030,9 +1028,6 @@ excludelist:
     sc/source/ui/miscdlgs/solveroptions.cxx:
     # Needed for template
     - com/sun/star/sheet/XSolver.hpp
-    sc/source/ui/StatisticsDialogs/RandomNumberGeneratorDialog.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sc/source/ui/StatisticsDialogs/TableFillingAndNavigationTools.cxx:
     # Needed for implicit dtor
     - editeng/editobj.hxx
@@ -1072,9 +1067,6 @@ excludelist:
     sc/source/ui/vba/vbahyperlink.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sc/source/ui/vba/vbaformat.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     sc/source/ui/vba/vbainterior.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp

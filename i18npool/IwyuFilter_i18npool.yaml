@@ -94,9 +94,6 @@ excludelist:
     - config_folders.h
     - osl/file.h
     - rtl/bootstrap.hxx
-    i18npool/source/calendar/calendar_gregorian.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     i18npool/source/collator/collator_unicode.cxx:
     # Config options are used in #ifdef
     - config_locales.h

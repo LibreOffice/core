@@ -16,6 +16,3 @@ excludelist:
     drawinglayer/source/processor2d/vclhelperbufferdevice.cxx:
     # Needed for direct member access
     - basegfx/matrix/b2dhommatrix.hxx
-    drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx:
-    # Needed for rtl::math::sin
-    - rtl/math.hxx

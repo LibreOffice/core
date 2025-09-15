@@ -92,9 +92,6 @@ excludelist:
     toolkit/source/controls/animatedimages.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySetInfo.hpp
-    toolkit/source/awt/vclxwindow.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     toolkit/source/hatchwindow/hatchwindow.cxx:
     # Actually used
     - com/sun/star/embed/XHatchWindowController.hpp

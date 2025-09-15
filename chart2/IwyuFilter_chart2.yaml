@@ -327,8 +327,6 @@ excludelist:
     # Actually used
     - com/sun/star/awt/Size.hpp
     - com/sun/star/chart2/RelativeSize.hpp
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/tools/RelativeSizeHelper.cxx:
     # Actually used
     - com/sun/star/awt/Size.hpp
@@ -358,9 +356,6 @@ excludelist:
     - com/sun/star/chart2/XScaling.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XServiceName.hpp
-    chart2/source/view/axes/VAxisProperties.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/view/axes/VPolarAngleAxis.cxx:
     # Needed for implicit dtor
     - Axis.hxx
@@ -463,9 +458,6 @@ excludelist:
     chart2/source/controller/accessibility/AccessibleChartView.cxx:
     # Actually used
     - com/sun/star/view/XSelectionSupplier.hpp
-    chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/controller/chartapiwrapper/DiagramWrapper.cxx:
     # Needed for complex variable type
     - com/sun/star/util/XRefreshable.hpp
@@ -505,18 +497,12 @@ excludelist:
     # Needed for implicit dtor
     - ChartTypeTemplate.hxx
     - LabeledDataSequence.hxx
-    chart2/source/controller/itemsetwrapper/TextLabelItemConverter.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/controller/itemsetwrapper/ItemConverter.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
     chart2/source/controller/itemsetwrapper/LegendItemConverter.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
-    chart2/source/controller/itemsetwrapper/TitleItemConverter.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/controller/itemsetwrapper/RegressionCurveItemConverter.cxx:
     # Needed for implicit dtor
     - RegressionCurveModel.hxx
@@ -533,11 +519,7 @@ excludelist:
     chart2/source/controller/itemsetwrapper/DataPointItemConverter.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     chart2/source/controller/itemsetwrapper/AxisItemConverter.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     # Needed for implicit dtor
     - ChartType.hxx
     - Diagram.hxx

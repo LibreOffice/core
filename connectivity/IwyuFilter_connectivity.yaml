@@ -12,9 +12,6 @@ excludelist:
     # Actually used
     - com/sun/star/sdbc/XRowSet.hpp
     - com/sun/star/sdbc/XConnection.hpp
-    connectivity/source/commontools/dbconversion.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     connectivity/source/commontools/dbexception.cxx:
     # Actually used
     - com/sun/star/sdb/SQLErrorEvent.hpp
@@ -51,9 +48,6 @@ excludelist:
     connectivity/source/drivers/file/FCatalog.cxx:
     # Actually used
     - com/sun/star/sdbc/XRow.hpp
-    connectivity/source/drivers/file/FNumericFunctions.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     connectivity/source/drivers/hsqldb/HStorageAccess.cxx:
     # Needed for HSQLDB_DBG
     - accesslog.hxx

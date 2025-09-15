@@ -141,9 +141,6 @@ excludelist:
     oox/source/ole/vbacontrol.cxx:
     # Actually used
      - com/sun/star/uno/XComponentContext.hpp
-    oox/source/ppt/comments.cxx:
-    # Needed for rtl::math::round
-     - rtl/math.hxx
     oox/source/ppt/pptshape.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
@@ -160,9 +157,6 @@ excludelist:
     oox/source/shape/ShapeFilterBase.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    oox/qa/unit/shape.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     oox/source/shape/ShapeContextHandler.cxx:
     # Actually used
     - com/sun/star/xml/dom/XDocument.hpp

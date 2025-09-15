@@ -78,6 +78,3 @@ excludelist:
     extensions/source/propctrlr/xsdvalidationpropertyhandler.cxx:
     # Actually used
     - com/sun/star/inspection/XObjectInspectorUI.hpp
-    extensions/source/scanner/grid.cxx:
-    # Needed for rtl::math::expm1
-    - rtl/math.hxx
