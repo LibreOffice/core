@@ -76,6 +76,20 @@ public:
         };
     };
 
+    xmlDocUniquePtr parseLayout() const
+    {
+        SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+        CPPUNIT_ASSERT(pModel);
+        SfxObjectShell* pShell = pModel->GetObjectShell();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+        MetafileXmlDump dumper;
+
+        xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        return pXmlDoc;
+    }
+
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
 };
@@ -1015,7 +1029,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
         return;
     UsePdfium aGuard;
 
-    loadFromFile(u"sample.pdf");
+    loadFromFile(u"pdf/sample.pdf");
 
     setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
     setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
@@ -1029,6 +1043,25 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
     CPPUNIT_ASSERT(pObjGroup);
     // Should have exploded to 7 shapes, would be just 1 if not exploded
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(7), pObjGroup->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/textheight1.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
+    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXml = parseLayout();
+    sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
+    // was 3092 before
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3055, y, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
