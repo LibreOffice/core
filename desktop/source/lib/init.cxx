@@ -47,6 +47,7 @@
 #endif
 
 #ifdef EMSCRIPTEN
+#include <initjsunoscripting.hxx>
 #include <osl/detail/emscripten-bootstrap.h>
 #endif
 
