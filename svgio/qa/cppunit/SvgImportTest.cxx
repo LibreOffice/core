@@ -2115,6 +2115,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149880)
             "/primitive2D/transform/mask/unhandled/mask/transform/transform/bitmap", 28);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testRTLtext)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/RTLtext.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", u"داستان SVG 1.1 SE طولا ني است.");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "rtl", u"true");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCssClassRedefinition)
 {
     // Tests for svg css class redefinition behavior
