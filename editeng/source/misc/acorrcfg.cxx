@@ -421,8 +421,9 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         u"Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"_ustr,     //46
         u"Format/Option/SetDOIAttribute"_ustr,                                //47
         u"Format/ByInput/ApplyBulletsAfterSpace"_ustr,                        //48
+        u"Format/Option/ReplaceStyle"_ustr,                                   //49
     };
-    const int nCount = 49;
+    const int nCount = 50;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -511,7 +512,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                 case  27: rSwFlags.bSetNumRule = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ApplyNumbering/Enable",
                 case  28: rSwFlags.bSetBorder = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ChangeToBorders",
                 case  29: rSwFlags.bCreateTable = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ChangeToTable",
-                case  30: rSwFlags.bReplaceStyles =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ReplaceStyle",
+                case  30: rSwFlags.bReplaceStylesByInput =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ReplaceStyle",
                 case  31: rSwFlags.bAFormatByInpDelSpacesAtSttEnd =  *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/DelSpacesAtStartEnd",
                 case  32: rSwFlags.bAFormatByInpDelSpacesBetweenLines = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/DelSpacesBetween",
                 case  33: rSwFlags.bAutoCompleteWords = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Completion/Enable",
@@ -574,6 +575,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                 break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
                 case   47: rSwFlags.bSetDOIAttr = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/SetDOIAttribute",
                 case 48 : rSwFlags.bSetNumRuleAfterSpace = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ApplyNumberingAfterSpace",
+                case 49 : rSwFlags.bReplaceStyles = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/ReplaceStyle",
             }
         }
     }
@@ -647,7 +649,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/Enable"
          css::uno::Any(rSwFlags.bSetBorder), // "Format/ByInput/ChangeToBorders"
          css::uno::Any(rSwFlags.bCreateTable), // "Format/ByInput/ChangeToTable"
-         css::uno::Any(rSwFlags.bReplaceStyles),
+         css::uno::Any(rSwFlags.bReplaceStylesByInput),
             // "Format/ByInput/ReplaceStyle"
          css::uno::Any(rSwFlags.bAFormatByInpDelSpacesAtSttEnd),
             // "Format/ByInput/DelSpacesAtStartEnd"
@@ -679,6 +681,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"
          css::uno::Any(rSwFlags.bSetDOIAttr),
          css::uno::Any(rSwFlags.bSetNumRuleAfterSpace), // "Format/ByInput/ApplyNumberingAfterSpace"
+         css::uno::Any(rSwFlags.bReplaceStyles), // "Format/Option/ReplaceStyle"
         });
             // "Format/Option/SetDOIAttribute"
 }

@@ -116,6 +116,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bSetBorder : 1;
     bool bCreateTable : 1;
     bool bReplaceStyles : 1;
+    bool bReplaceStylesByInput : 1;
 
     bool bWithRedlining : 1;
 

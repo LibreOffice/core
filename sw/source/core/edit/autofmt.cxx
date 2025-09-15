@@ -2312,7 +2312,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
     if( m_aFlags.bSetNumRule && !m_aFlags.bAFormatByInput )
         m_aFlags.bSetNumRule = false;
 
-    bool bReplaceStyles = !m_aFlags.bAFormatByInput || m_aFlags.bReplaceStyles;
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    bool bReplaceStyles = m_aFlags.bAFormatByInput ? m_aFlags.bReplaceStylesByInput : m_aFlags.bReplaceStyles;
 
     const SwTextFrame * pNextFrame = nullptr;
     bool bNxtEmpty = false;
@@ -2444,7 +2445,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 }
 
                 const OUString& rStr = m_pCurTextFrame->GetText();
-                SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
                 SvxSwAutoFormatFlags& rFlags = pACorr->GetSwFlags();
                 if (rFlags.bChgEnumNum && (rStr == "- " || rStr == "* "))
                 {
@@ -2662,7 +2662,10 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                 else if( bReplaceStyles )
                     eStat = nLevel ? TST_IDENT : TST_NEG_IDENT;
                 else
+                {
                     eStat = READ_NEXT_PARA;
+                    BuildText();
+                }
             }
             break;
 
@@ -2929,6 +2932,7 @@ void SwEditShell::SetAutoFormatFlags(SvxSwAutoFormatFlags const * pFlags)
     pEditFlags->bSetBorder      = pFlags->bSetBorder;
     pEditFlags->bCreateTable    = pFlags->bCreateTable;
     pEditFlags->bReplaceStyles  = pFlags->bReplaceStyles;
+    pEditFlags->bReplaceStylesByInput = pFlags->bReplaceStylesByInput;
     pEditFlags->bAFormatByInpDelSpacesAtSttEnd =
                                     pFlags->bAFormatByInpDelSpacesAtSttEnd;
     pEditFlags->bAFormatByInpDelSpacesBetweenLines =
