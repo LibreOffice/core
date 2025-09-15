@@ -2141,6 +2141,40 @@ Bitmap Bitmap::Modify(const basegfx::BColorModifierStack& rBColorModifierStack) 
     return aChangedBitmap;
 }
 
+/** Get the average color of the entire image.
+    i.e. like scaling it down to a 1x1 pixel image.
+*/
+Color Bitmap::GetAverageColor() const
+{
+    BitmapScopedReadAccess xContent(*this);
+    assert(xContent);
+    if(!xContent)
+        return Color();
+
+    double fRed = 0;
+    double fGreen = 0;
+    double fBlue = 0;
+    double fAlpha = 0;
+    int nCnt = 0;
+    for(tools::Long y(0), nHeight(xContent->Height()); y < nHeight; y++)
+    {
+        Scanline pScanline = xContent->GetScanline( y );
+        for(tools::Long x(0), nWidth(xContent->Width()); x < nWidth; x++)
+        {
+            const BitmapColor aCol(xContent->GetPixelFromData(pScanline, x));
+            fRed += aCol.GetRed();
+            fGreen += aCol.GetGreen();
+            fBlue += aCol.GetBlue();
+            fAlpha += aCol.GetAlpha();
+            nCnt++;
+        }
+    }
+    return Color(ColorAlpha, static_cast<sal_uInt8>(fAlpha / nCnt),
+                   static_cast<sal_uInt8>(fRed / nCnt),
+                   static_cast<sal_uInt8>(fGreen / nCnt),
+                   static_cast<sal_uInt8>(fBlue / nCnt));
+}
+
 void Bitmap::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 {
     pOutDev->DrawBitmapEx( rDestPt, *this );

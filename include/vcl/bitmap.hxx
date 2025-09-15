@@ -687,6 +687,11 @@ public:
     [[nodiscard]]
     Bitmap            Modify( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
+    /** Get the average color of the entire image.
+        i.e. like scaling it down to a 1x1 pixel image.
+    */
+    Color             GetAverageColor() const;
+
     [[nodiscard]]
     static Bitmap     AutoScaleBitmap( Bitmap const & rBitmap, const tools::Long aStandardSize );
 

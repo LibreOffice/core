@@ -2482,7 +2482,43 @@ void CairoPixelProcessor2D::processFillGraphicPrimitive2D(
     // tdf#167831 check for output size, may have zero discrete dimension in X and/or Y
     if (0 == nDestWidth || 0 == nDestHeight)
     {
-        // it has and is thus invisible
+        // In which case, maybe we are zoomed out far enough to make the fill bitmap less than one pixel by one pixel,
+        // and so we need to fill with a color that is an average of the bitmap's color.
+        basegfx::BColor aFillColor = aPreparedBitmap.GetAverageColor().getBColor();
+        bool bTemporaryGrayColorModifier(false);
+        const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
+        if (aDrawModeFlags & DrawModeFlags::GrayBitmap)
+        {
+            bTemporaryGrayColorModifier = true;
+            const basegfx::BColorModifierSharedPtr aBColorModifier(
+                std::make_shared<basegfx::BColorModifier_gray>());
+            maBColorModifierStack.push(aBColorModifier);
+        }
+
+        if (maBColorModifierStack.count())
+        {
+            // apply ColorModifier to Bitmap data
+            aFillColor = maBColorModifierStack.getModifiedColor(aFillColor);
+
+            if (bTemporaryGrayColorModifier)
+                // cleanup temporary BColorModifier
+                maBColorModifierStack.pop();
+        }
+
+        // draw geometry in single color using prepared ReplacementColor
+
+        // use unit geometry as fallback object geometry. Do *not*
+        // transform, the below used method will use the already
+        // correctly initialized local ViewInformation
+        basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+
+        // what we still need to apply is the object transform from the
+        // local primitive, that is not part of DisplayInfo yet
+        aPolygon.transform(rFillGraphicPrimitive2D.getTransformation());
+
+        // draw directly, done
+        paintPolyPolygonRGBA(basegfx::B2DPolyPolygon(aPolygon), aFillColor,
+                             rFillGraphicPrimitive2D.getTransparency());
         return;
     }
 
