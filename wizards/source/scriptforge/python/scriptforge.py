@@ -1640,14 +1640,14 @@ class SFScriptForge:
         def RemoveAll(self):
             return self.ExecMethod(self.vbMethod, 'RemoveAll')
 
-        def StoreValue(self, value, variablename):
+        def StoreValue(self, variablename, value):
             if isinstance(value, SFServices):
-                return self.ExecMethod(self.vbMethod + self.flgObject, 'StoreValue',
-                                       value.objectreference, variablename)
+                return self.ExecMethod((self.vbMethod + self.flgObject, 1), 'StoreValue',
+                                       variablename, value.objectreference)
             if isinstance(value, datetime.datetime):
                 value = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
-                return self.ExecMethod(self.vbMethod + self.flgDateArg, 'StoreValue', value, variablename)
-            return self.ExecMethod(self.vbMethod, 'StoreValue', value, variablename)
+                return self.ExecMethod(self.vbMethod + self.flgDateArg, 'StoreValue', variablename, value)
+            return self.ExecMethod(self.vbMethod, 'StoreValue', variablename, value)
 
     # #########################################################################
     # SF_String CLASS

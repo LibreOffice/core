@@ -2085,13 +2085,15 @@ class SFScriptForge:
             ...
 
         def StoreValue(self,
+                       variablename: str,
                        value: Any | datetime.datetime | UNO | tuple[int | float | str | bool, ...],
-                       variablename: str
                        ) -> bool:
             """
                 Store in the shared and persistent storage area the given value. Later retrieval will be done thanks
                 to the given variable name. If the given name already exists, its value is replaced without warning.
                     Args
+                        ``variablename``: the case-sensitive name to retrieve ``value`` when needed.
+
                         ``value``: the value to be stored.
                             The supported variable types are:
                                 * Scalar or tuple combining:
@@ -2103,8 +2105,6 @@ class SFScriptForge:
                                 * datetime.datetime
                                 * UNO object
                                 * ScriptForge class instance
-
-                        ``variablename``: the case-sensitive name to retrieve ``value`` when needed.
                     Returns
                         ``True`` when successful
                 """

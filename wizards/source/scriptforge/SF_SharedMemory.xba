@@ -188,10 +188,10 @@ Public Function ReadValue(Optional ByVal VariableName As Variant) As Variant
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
 &apos;&apos;&apos;		doc = CreateScriptService(&quot;Document&quot;, ThisComponent)
-&apos;&apos;&apos;		memory.StoreValue(doc, &quot;ActualDoc&quot;)
+&apos;&apos;&apos;		memory.StoreValue(&quot;ActualDoc&quot;, doc)
 &apos;&apos;&apos;		...		&apos;	The script might be stopped
 &apos;&apos;&apos;		doc2 = memory.ReadValue(&quot;ActualDoc&quot;)
-&apos;&apos;&apos;		If doc2.IsAlive Then	&apos;	Check that the document has not be closed by the user
+&apos;&apos;&apos;		If doc2.IsAlive Then	&apos;	Check that the document has not been closed by the user
 &apos;&apos;&apos;			...
 
 Dim vRead As Variant			&apos;	Return value
@@ -229,7 +229,7 @@ Public Function Remove(Optional ByVal VariableName As Variant) As Boolean
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		VariableName: the case-sensitive name to remove.
 &apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A scalar or an array of scalars.
+&apos;&apos;&apos;		True when successful.
 &apos;&apos;&apos;		If VariableName does not exist, an error is generated.
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
@@ -334,13 +334,14 @@ Catch:
 End Function	&apos;	ScriptForge.SF_SharedMemory.SetProperty
 
 REM -----------------------------------------------------------------------------
-Public Function StoreValue(Optional ByVal Value As Variant _
-								, Optional ByVal VariableName As Variant _
+Public Function StoreValue(Optional ByVal VariableName As Variant _
+								, Optional ByVal Value As Variant _
 								) As Boolean
 &apos;&apos;&apos;	Store in the shared and persistent storage area the given value.
 &apos;&apos;&apos;	Later retrieval will be done thanks to the given variable name.
 &apos;&apos;&apos;	If the given name already exists, its value is replaced without warning.
 &apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		VariableName: the case-sensitive name to retrieve the Value when needed.
 &apos;&apos;&apos;		Value: the value to be stored.
 &apos;&apos;&apos;			The supported variable types are:
 &apos;&apos;&apos;			* Scalar or 1D-array/tuple combining :
@@ -353,30 +354,29 @@ Public Function StoreValue(Optional ByVal Value As Variant _
 &apos;&apos;&apos;			* Date or datetime.datetime
 &apos;&apos;&apos;			* UNO object
 &apos;&apos;&apos;			* ScriptForge class instance
-&apos;&apos;&apos;		VariableName: the case-sensitive name to retrieve the Value when needed.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		memory = CreateScriptService(&quot;SharedMemory&quot;)
 &apos;&apos;&apos;		doc = CreateScriptService(&quot;Document&quot;, ThisComponent)
-&apos;&apos;&apos;		memory.StoreValue(doc, &quot;ActualDoc&quot;)
+&apos;&apos;&apos;		memory.StoreValue(&quot;ActualDoc&quot;, doc)
 
 Dim bStore As Boolean			&apos;	Return value
 Dim vGlobal As Variant			&apos;	A stored value
 Dim i As Long
 
 Const cstThisSub = &quot;SharedMemory.StoreValue&quot;
-Const cstSubArgs = &quot;Value, VariableName&quot;
+Const cstSubArgs = &quot;VariableName, Value&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	bStore = False
 
 Check:
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING) Then GoTo Catch
 		If IsArray(Value) Then
 			If Not SF_Utils._ValidateArray(Value, &quot;Value&quot;, 1) Then GoTo Catch
 		End If
-		If Not SF_Utils._Validate(VariableName, &quot;VariableName&quot;, V_STRING) Then GoTo Catch
 	End If
 
 Try:
