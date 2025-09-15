@@ -40,7 +40,67 @@ using namespace sdr::table;
 
 void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
 {
-    HtmlExport::ExportPage(pOutliner, pPage, rHtml);
+    if (!pPage || !pOutliner)
+    {
+        return;
+    }
+
+    // page title
+    OUString sTitleText(HtmlExport::CreateTextForTitle(pOutliner, pPage));
+
+    rHtml.append("<h1>" + sTitleText + "</h1>\r\n");
+
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
+    {
+        PresObjKind eKind = pPage->GetPresObjKind(pObject.get());
+
+        switch (eKind)
+        {
+            case PresObjKind::NONE:
+            {
+                if (pObject->GetObjIdentifier() == SdrObjKind::Group)
+                {
+                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject.get());
+                    HtmlExport::WriteObjectGroup(rHtml, pObjectGroup, pOutliner, false);
+                }
+                else if (pObject->GetObjIdentifier() == SdrObjKind::Table)
+                {
+                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
+                    HtmlExport::WriteTable(rHtml, pTableObject, pOutliner);
+                }
+                else
+                {
+                    if (pObject->GetOutlinerParaObject())
+                    {
+                        HtmlExport::WriteOutlinerParagraph(rHtml, pOutliner,
+                                                           pObject->GetOutlinerParaObject(), false);
+                    }
+                }
+            }
+            break;
+
+            case PresObjKind::Table:
+            {
+                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
+                HtmlExport::WriteTable(rHtml, pTableObject, pOutliner);
+            }
+            break;
+
+            case PresObjKind::Text:
+            case PresObjKind::Outline:
+            {
+                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject.get());
+                if (pTextObject->IsEmptyPresObj())
+                    continue;
+                HtmlExport::WriteOutlinerParagraph(rHtml, pOutliner,
+                                                   pTextObject->GetOutlinerParaObject(), true);
+            }
+            break;
+
+            default:
+                break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

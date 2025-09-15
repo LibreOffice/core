@@ -31,12 +31,15 @@
 #include <vector>
 
 namespace sd { class DrawDocShell; }
+namespace sdr::table { class SdrTableObj; };
 
 class SfxProgress;
 class SdPage;
 class SdrOutliner;
 class HtmlState;
 class SdDrawDocument;
+class SdrObjGroup;
+class OutlinerParaObject;
 
 /// this class exports an Impress Document as a HTML Presentation.
 class HtmlExport final
@@ -72,7 +75,14 @@ class HtmlExport final
                SdDrawDocument& rExpDoc,
                sd::DrawDocShell* pDocShell);
 
-    static void ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml);
+    static OUString CreateTextForTitle(SdrOutliner* pOutliner, SdPage* pPage);
+    static void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup,
+                                 SdrOutliner* pOutliner, bool bHeadLine);
+    static void WriteTable(OUStringBuffer& aStr, sdr::table::SdrTableObj const * pTableObject,
+                           SdrOutliner* pOutliner);
+    static void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
+                                       OutlinerParaObject const * pOutlinerParagraphObject,
+                                       bool bHeadLine);
 
     ~HtmlExport();
 };

@@ -414,116 +414,6 @@ OUString ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara )
     return aStr.makeStringAndClear();
 }
 
-void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
-                                        OutlinerParaObject const * pOutlinerParagraphObject,
-                                        bool bHeadLine)
-{
-    if (pOutlinerParagraphObject == nullptr)
-        return;
-
-    pOutliner->SetText(*pOutlinerParagraphObject);
-
-    sal_Int32 nCount = pOutliner->GetParagraphCount();
-
-
-    sal_Int16 nCurrentDepth = -1;
-
-    for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
-    {
-        Paragraph* pParagraph = pOutliner->GetParagraph(nIndex);
-        if(pParagraph == nullptr)
-            continue;
-
-        const sal_Int16 nDepth = static_cast<sal_uInt16>(pOutliner->GetDepth(nIndex));
-        OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex);
-
-        if (aParaText.isEmpty())
-            continue;
-
-        if (nDepth < 0)
-        {
-            OUString aTag = bHeadLine ? u"h2"_ustr : u"p"_ustr;
-            lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
-
-            aStr.append(aParaText);
-            aStr.append("</" + aTag + ">\r\n");
-        }
-        else
-        {
-            while(nCurrentDepth < nDepth)
-            {
-                aStr.append("<ul>\r\n");
-                nCurrentDepth++;
-            }
-            while(nCurrentDepth > nDepth)
-            {
-                aStr.append("</ul>\r\n");
-                nCurrentDepth--;
-            }
-            lclAppendStyle(aStr, u"li", getParagraphStyle(pOutliner, nIndex));
-            aStr.append(aParaText);
-            aStr.append("</li>\r\n");
-        }
-    }
-    while(nCurrentDepth >= 0)
-    {
-        aStr.append("</ul>\r\n");
-        nCurrentDepth--;
-    }
-    pOutliner->Clear();
-}
-
-void WriteTable(OUStringBuffer& aStr, SdrTableObj const * pTableObject, SdrOutliner* pOutliner)
-{
-    CellPos aStart, aEnd;
-
-    aStart = SdrTableObj::getFirstCell();
-    aEnd = pTableObject->getLastCell();
-
-    sal_Int32 nColCount = pTableObject->getColumnCount();
-    aStr.append("<table>\r\n");
-    for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
-    {
-        aStr.append("  <tr>\r\n");
-        for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
-        {
-            aStr.append("    <td>\r\n");
-            sal_Int32 nCellIndex = nRow * nColCount + nCol;
-            SdrText* pText = pTableObject->getText(nCellIndex);
-
-            if (pText == nullptr)
-                continue;
-            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), false);
-            aStr.append("    </td>\r\n");
-        }
-        aStr.append("  </tr>\r\n");
-    }
-    aStr.append("</table>\r\n");
-}
-
-void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup, SdrOutliner* pOutliner,
-                                  bool bHeadLine)
-{
-    SdrObjListIter aGroupIterator(pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
-    while (aGroupIterator.IsMore())
-    {
-        SdrObject* pCurrentObject = aGroupIterator.Next();
-        if (pCurrentObject->GetObjIdentifier() == SdrObjKind::Group)
-        {
-            SdrObjGroup* pCurrentGroupObject = static_cast<SdrObjGroup*>(pCurrentObject);
-            WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, bHeadLine);
-        }
-        else
-        {
-            OutlinerParaObject* pOutlinerParagraphObject = pCurrentObject->GetOutlinerParaObject();
-            if (pOutlinerParagraphObject != nullptr)
-            {
-                WriteOutlinerParagraph(aStr, pOutliner, pOutlinerParagraphObject, bHeadLine);
-            }
-        }
-    }
-}
-
 // get SdrTextObject with layout text of this page
 SdrTextObj* GetLayoutTextObject(SdrPage const * pPage)
 {
@@ -539,29 +429,6 @@ SdrTextObj* GetLayoutTextObject(SdrPage const * pPage)
         }
     }
     return pResult;
-}
-
-
-/** creates an outliner text for the title objects of a page
- */
-OUString CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage )
-{
-    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Title));
-    if(!pTO)
-        pTO = GetLayoutTextObject(pPage);
-
-    if (pTO && !pTO->IsEmptyPresObj())
-    {
-        OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
-        if(pOPO && pOutliner->GetParagraphCount() != 0)
-        {
-            pOutliner->Clear();
-            pOutliner->SetText(*pOPO);
-            return ParagraphToHTMLString(pOutliner, 0);
-        }
-    }
-
-    return OUString();
 }
 
 // creates an outliner text for a page
@@ -581,18 +448,18 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
                 if (pObject->GetObjIdentifier() == SdrObjKind::Group)
                 {
                     SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject.get());
-                    WriteObjectGroup(aStr, pObjectGroup, pOutliner, false);
+                    HtmlExport::WriteObjectGroup(aStr, pObjectGroup, pOutliner, false);
                 }
                 else if (pObject->GetObjIdentifier() == SdrObjKind::Table)
                 {
                     SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
-                    WriteTable(aStr, pTableObject, pOutliner);
+                    HtmlExport::WriteTable(aStr, pTableObject, pOutliner);
                 }
                 else
                 {
                     if (pObject->GetOutlinerParaObject())
                     {
-                        WriteOutlinerParagraph(aStr, pOutliner, pObject->GetOutlinerParaObject(), false);
+                        HtmlExport::WriteOutlinerParagraph(aStr, pOutliner, pObject->GetOutlinerParaObject(), false);
                     }
                 }
             }
@@ -601,7 +468,7 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
             case PresObjKind::Table:
             {
                 SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
-                WriteTable(aStr, pTableObject, pOutliner);
+                HtmlExport::WriteTable(aStr, pTableObject, pOutliner);
             }
             break;
 
@@ -611,7 +478,7 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
                 SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject.get());
                 if (pTextObject->IsEmptyPresObj())
                     continue;
-                WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), bHeadLine);
+                HtmlExport::WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), bHeadLine);
             }
             break;
 
@@ -674,6 +541,138 @@ void HtmlExport::Init()
     maDocFileName = maIndex;
 }
 
+/** creates an outliner text for the title objects of a page
+ */
+OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage )
+{
+    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Title));
+    if(!pTO)
+        pTO = GetLayoutTextObject(pPage);
+
+    if (pTO && !pTO->IsEmptyPresObj())
+    {
+        OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+        if(pOPO && pOutliner->GetParagraphCount() != 0)
+        {
+            pOutliner->Clear();
+            pOutliner->SetText(*pOPO);
+            return ParagraphToHTMLString(pOutliner, 0);
+        }
+    }
+
+    return OUString();
+}
+
+void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup, SdrOutliner* pOutliner,
+                                  bool bHeadLine)
+{
+    SdrObjListIter aGroupIterator(pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
+    while (aGroupIterator.IsMore())
+    {
+        SdrObject* pCurrentObject = aGroupIterator.Next();
+        if (pCurrentObject->GetObjIdentifier() == SdrObjKind::Group)
+        {
+            SdrObjGroup* pCurrentGroupObject = static_cast<SdrObjGroup*>(pCurrentObject);
+            WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, bHeadLine);
+        }
+        else
+        {
+            OutlinerParaObject* pOutlinerParagraphObject = pCurrentObject->GetOutlinerParaObject();
+            if (pOutlinerParagraphObject != nullptr)
+            {
+                WriteOutlinerParagraph(aStr, pOutliner, pOutlinerParagraphObject, bHeadLine);
+            }
+        }
+    }
+}
+
+void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj const * pTableObject, SdrOutliner* pOutliner)
+{
+    CellPos aStart, aEnd;
+
+    aStart = SdrTableObj::getFirstCell();
+    aEnd = pTableObject->getLastCell();
+
+    sal_Int32 nColCount = pTableObject->getColumnCount();
+    aStr.append("<table>\r\n");
+    for (sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++)
+    {
+        aStr.append("  <tr>\r\n");
+        for (sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++)
+        {
+            aStr.append("    <td>\r\n");
+            sal_Int32 nCellIndex = nRow * nColCount + nCol;
+            SdrText* pText = pTableObject->getText(nCellIndex);
+
+            if (pText == nullptr)
+                continue;
+            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), false);
+            aStr.append("    </td>\r\n");
+        }
+        aStr.append("  </tr>\r\n");
+    }
+    aStr.append("</table>\r\n");
+}
+
+void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
+                                        OutlinerParaObject const * pOutlinerParagraphObject,
+                                        bool bHeadLine)
+{
+    if (pOutlinerParagraphObject == nullptr)
+        return;
+
+    pOutliner->SetText(*pOutlinerParagraphObject);
+
+    sal_Int32 nCount = pOutliner->GetParagraphCount();
+
+
+    sal_Int16 nCurrentDepth = -1;
+
+    for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+    {
+        Paragraph* pParagraph = pOutliner->GetParagraph(nIndex);
+        if(pParagraph == nullptr)
+            continue;
+
+        const sal_Int16 nDepth = static_cast<sal_uInt16>(pOutliner->GetDepth(nIndex));
+        OUString aParaText = ParagraphToHTMLString(pOutliner, nIndex);
+
+        if (aParaText.isEmpty())
+            continue;
+
+        if (nDepth < 0)
+        {
+            OUString aTag = bHeadLine ? u"h2"_ustr : u"p"_ustr;
+            lclAppendStyle(aStr, aTag, getParagraphStyle(pOutliner, nIndex));
+
+            aStr.append(aParaText);
+            aStr.append("</" + aTag + ">\r\n");
+        }
+        else
+        {
+            while(nCurrentDepth < nDepth)
+            {
+                aStr.append("<ul>\r\n");
+                nCurrentDepth++;
+            }
+            while(nCurrentDepth > nDepth)
+            {
+                aStr.append("</ul>\r\n");
+                nCurrentDepth--;
+            }
+            lclAppendStyle(aStr, u"li", getParagraphStyle(pOutliner, nIndex));
+            aStr.append(aParaText);
+            aStr.append("</li>\r\n");
+        }
+    }
+    while(nCurrentDepth >= 0)
+    {
+        aStr.append("</ul>\r\n");
+        nCurrentDepth--;
+    }
+    pOutliner->Clear();
+}
+
 void HtmlExport::ExportSingleDocument()
 {
     SdrOutliner* pOutliner = mrDoc.GetInternalOutliner();
@@ -718,22 +717,6 @@ void HtmlExport::ExportSingleDocument()
 
     pOutliner->Clear();
     ResetProgress();
-}
-
-void HtmlExport::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
-{
-    if (!pPage || !pOutliner)
-    {
-        return;
-    }
-
-    // page title
-    OUString sTitleText(CreateTextForTitle(pOutliner, pPage));
-
-    rHtml.append("<h1>" + sTitleText + "</h1>\r\n");
-
-    // write outline text
-    rHtml.append(CreateTextForPage(pOutliner, pPage, true));
 }
 
 void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
