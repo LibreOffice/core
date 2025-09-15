@@ -426,7 +426,9 @@ void OutEscapedChars(SwMDWriter& rWrt, std::u16string_view chars)
             case CH_TXT_TRACKED_DUMMY_CHAR:
                 break;
 
-                // TODO: line breaks
+            case '\n':
+                rWrt.Strm().WriteUnicodeOrByteText(u"  " SAL_NEWLINE_STRING);
+                break;
 
             case '\\':
             case '`':
