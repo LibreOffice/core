@@ -118,6 +118,3 @@ excludelist:
     - certerrors.h
     # Needed for macros used by certerrors.h
     - nss.h
-    xmlsecurity/qa/unit/signing/signing.cxx:
-    # Don't replace URE header with impl. detail
-    - osl/thread.hxx

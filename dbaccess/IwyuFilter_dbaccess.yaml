@@ -105,9 +105,6 @@ excludelist:
     dbaccess/source/ui/dlg/UserAdmin.cxx:
     # Needed for template
     - com/sun/star/sdbc/XDriver.hpp
-    dbaccess/source/ui/dlg/dbfindex.cxx:
-    # Keep for osl_getThreadTextEncoding
-    - osl/thread.hxx
     dbaccess/source/ui/dlg/odbcconfig.cxx:
     # Needed for HAVE_ODBC_ADMINISTRATION on WIN32
     - config_folders.h

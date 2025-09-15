@@ -853,9 +853,6 @@ excludelist:
     sw/qa/extras/rtfexport/rtfexport4.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
-    sw/qa/extras/txtexport/txtexport.cxx:
-    # No .hxx -> .h replacement in URE headers
-    - osl/thread.hxx
     sw/source/writerfilter/dmapper/BorderHandler.cxx:
     # Needed for method parameter type
     - tools/color.hxx

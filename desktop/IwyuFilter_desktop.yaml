@@ -4,9 +4,6 @@ excludelist:
     desktop/inc/lib/init.hxx:
     # Complete type is needed
     - boost/property_tree/ptree.hpp
-    desktop/source/offacc/acceptor.hxx:
-    # Don't propose hxx -> h change in URE libs
-    - osl/thread.hxx
     desktop/qa/desktop_lib/test_desktop_lib.cxx:
     # Actually used
     - rtl/math.hxx
@@ -29,9 +26,6 @@ excludelist:
     desktop/source/app/crashreport.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
-    desktop/source/app/dispatchwatcher.cxx:
-    # Don't propose hxx -> h change in URE libs
-    - osl/thread.hxx
     desktop/source/app/sofficemain.cxx:
     # Might be needed on WIN32
     - prewin.h
@@ -88,9 +82,3 @@ excludelist:
     desktop/source/deployment/registry/help/dp_help.cxx:
     # Actually used
     - com/sun/star/util/XMacroExpander.hpp
-    desktop/source/lib/lokandroid.cxx:
-    # Needed for osl_getThreadTextEncoding
-    - osl/thread.hxx
-    desktop/source/deployment/misc/dp_misc.cxx:
-    # Needed for osl_getThreadTextEncoding
-    - osl/thread.hxx

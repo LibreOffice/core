@@ -719,9 +719,6 @@ excludelist:
     sc/source/core/tool/addincol.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
-    sc/source/core/tool/autoform.cxx:
-    # Don't propose hxx -> h in URE headers
-    - osl/thread.hxx
     sc/source/core/tool/cellkeytranslator.cxx:
     # Needed for localized keywords
     - cellkeywords.inl
@@ -856,8 +853,6 @@ excludelist:
     - tokenarray.hxx
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
-    # Don't propose hxx -> h in URE headers
-    - osl/thread.hxx
     sc/source/filter/orcus/xmlcontext.cxx:
     # Needed for implicit dtor
     - tokenarray.hxx

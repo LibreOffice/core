@@ -94,12 +94,13 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
     if include == "boost/functional/hash.hpp" and "boost/container_hash/extensions.hpp" in toAdd:
         return True
 
-    # Avoid .hxx to .h proposals in basic css/uno/* API
+    # Avoid .hxx to .h proposals in basic css/uno/* and basic URE API
     unoapi = {
         "com/sun/star/uno/Any.hxx": "com/sun/star/uno/Any.h",
         "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
         "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
-        "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h"
+        "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h",
+        "osl/thread.hxx": "osl/thread.h"
     }
     for k, v in unoapi.items():
         if include == k and v in toAdd:

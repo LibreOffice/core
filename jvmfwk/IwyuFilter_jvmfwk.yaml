@@ -6,12 +6,6 @@ excludelist:
     - config_folders.h
     # Don't replace with URE impl. detail
     - rtl/byteseq.hxx
-    jvmfwk/source/framework.cxx:
-    # Don't replace with URE impl. detail
-    - osl/thread.hxx
-    jvmfwk/source/fwkbase.cxx:
-    # Don't replace with URE impl. detail
-    - osl/thread.hxx
     jvmfwk/source/fwkutil.cxx:
     # Needed on WIN32
     - sal/log.hxx
@@ -22,8 +16,6 @@ excludelist:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
     - string_view
-    # Don't replace with URE impl. detail
-    - osl/thread.hxx
     # Don't replace with bits/types, needed for sig_atomic_t
     - signal.h
     jvmfwk/plugins/sunmajor/pluginlib/util.cxx:

@@ -16,8 +16,6 @@ excludelist:
     cppuhelper/source/bootstrap.cxx:
     # Needed on win32
     - o3tl/char16_t2wchar_t.hxx
-    # Don't replace hxx -> h in URE API
-    - osl/thread.hxx
     cppuhelper/source/defaultbootstrap.cxx:
     # Needed for template specialization
     - com/sun/star/lang/XSingleComponentFactory.hpp
