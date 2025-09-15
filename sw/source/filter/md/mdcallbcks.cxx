@@ -187,7 +187,15 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
                 pINetFormat = dynamic_cast<const SwFormatINetFormat*>(pTopItem);
             }
 
-            parser->InsertImage(aURL, aTitle, pINetFormat);
+            MDImage& rImg = parser->m_aImg;
+            rImg.url = std::move(aURL);
+            rImg.title = std::move(aTitle);
+
+            if (pINetFormat)
+            {
+                rImg.link = pINetFormat->GetValue();
+            }
+
             parser->m_bInsideImage = true;
             break;
         }
@@ -232,6 +240,7 @@ int SwMarkdownParser::leave_span_callback(MD_SPANTYPE type, void* /*detail*/, vo
     switch (type)
     {
         case MD_SPAN_IMG:
+            parser->InsertCurImage();
             parser->m_bInsideImage = false;
             break;
         case MD_SPAN_EM:
@@ -263,11 +272,13 @@ int SwMarkdownParser::text_callback(MD_TEXTTYPE type, const MD_CHAR* text, MD_SI
         case MD_TEXT_CODE:
         case MD_TEXT_NORMAL:
         {
+            OUString aText = OStringToOUString({ text, size }, RTL_TEXTENCODING_UTF8);
+
             if (!parser->m_bInsideImage)
-            {
-                OUString aText = OStringToOUString({ text, size }, RTL_TEXTENCODING_UTF8);
                 parser->InsertText(aText);
-            }
+            else
+                parser->m_aImg.altText = std::move(aText);
+
             break;
         }
         case MD_TEXT_BR:
