@@ -41,7 +41,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss.windows.patch \
         external/nss/nss.nowerror.patch \
         external/nss/nss.utf8bom.patch.1) \
-    external/nss/0001-Bug-1983399-lib-softtoken-sdb.c-sftkdbti.h-Align-sft.patch.1 \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
