@@ -4381,6 +4381,14 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="ReplaceStyle" oor:type="xs:boolean" oor:nillable="false">
+            <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Apply styles -->
+            <info>
+              <desc>Specifies whether styles are automatically assigned.</desc>
+              <label>Apply styles</label>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="CombineParagraphs" oor:type="xs:boolean" oor:nillable="false">
             <!-- OldPath: Writer/AutoFormat/Options -->
             <!-- OldLocation: Soffice.cfg -->

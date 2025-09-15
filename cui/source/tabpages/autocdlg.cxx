@@ -485,9 +485,12 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bCreateTable != bCheck;
     pOpt->bCreateTable = bCheck;
 
-    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND) == TRISTATE_TRUE;
+    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
+    bCheck = m_xCheckLB->get_toggle(REPLACE_STYLES, CBCOL_SECOND) == TRISTATE_TRUE;
+    bModified |= pOpt->bReplaceStylesByInput != bCheck;
+    pOpt->bReplaceStylesByInput = bCheck;
 
     bCheck = m_xCheckLB->get_toggle(REPLACE_DASHES, CBCOL_FIRST) == TRISTATE_TRUE;
     bModified |= pOpt->bChgToEnEmDash != bCheck;
@@ -558,7 +561,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     CreateEntry(sNum.replaceFirst("%1", sBulletChar), CBCOL_SECOND);
     CreateEntry(sBorder,            CBCOL_SECOND);
     CreateEntry(sTable,             CBCOL_SECOND);
-    CreateEntry(sReplaceTemplates,  CBCOL_SECOND);
+    CreateEntry(sReplaceTemplates,  CBCOL_BOTH);
     CreateEntry(sDeleteEmptyPara,   CBCOL_FIRST );
     CreateEntry(sUserStyle,         CBCOL_FIRST );
     CreateEntry(sBullet.replaceFirst("%1", sByInputBulletChar), CBCOL_FIRST);
@@ -585,7 +588,8 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_toggle(APPLY_NUMBERING, pOpt->bSetNumRule ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(INSERT_BORDER, pOpt->bSetBorder ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(CREATE_TABLE, pOpt->bCreateTable ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
-    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
+    m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStylesByInput ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(DEL_EMPTY_NODE, pOpt->bDelEmptyNode ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(REPLACE_USER_COLL, pOpt->bChgUserColl ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);
     m_xCheckLB->set_toggle(REPLACE_BULLETS, pOpt->bChgEnumNum ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_FIRST);

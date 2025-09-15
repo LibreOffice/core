@@ -40,6 +40,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAFormatByInpDelSpacesBetweenLines = true;
 
     bReplaceStyles =
+    bReplaceStylesByInput =
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
