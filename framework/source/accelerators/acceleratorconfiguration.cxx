@@ -918,7 +918,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         if ( sGlobalModules == CFG_ENTRY_GLOBAL )
         {
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
-            if ( !sKey.isEmpty() && !sPath.isEmpty() )
+            if ( !sKey.isEmpty() )
                 reloadChanged(sPrimarySecondary, sGlobalModules, OUString(), sKey);
         }
         else if ( sGlobalModules == CFG_ENTRY_MODULES )
@@ -926,7 +926,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
             OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
-            if ( !sKey.isEmpty() && !sPath.isEmpty() )
+            if ( !sKey.isEmpty() )
             {
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
             }
@@ -1247,7 +1247,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
         OUString sLocale = impl_ts_getLocale();
         xContainer->getByName(sKey)    >>= xKey;
         xKey->getByName(CFG_PROP_COMMAND)  >>= xCommand;
-        xCommand->getByName(sLocale)       >>= sCommand;
+        if (xCommand->hasByName(sLocale))
+            xCommand->getByName(sLocale) >>= sCommand;
     }
 
     if ( sPrimarySecondary == CFG_ENTRY_PRIMARY )
