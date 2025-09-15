@@ -212,7 +212,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor( GetBackgroundColor() );
     tools::Rectangle aEllipseRect = maRect;
     aEllipseRect.shrink(DIAL_OUTER_WIDTH);
-    DrawEllipse( aEllipseRect );
+    DrawPie(aEllipseRect, aEllipseRect.TopLeft(), aEllipseRect.TopLeft());
 }
 
 DialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
