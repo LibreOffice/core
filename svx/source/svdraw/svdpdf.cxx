@@ -182,20 +182,21 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     mdPageHeightPts = dPageHeight;
 
     Size aPageSize(convertPointToMm100(dPageWidth), convertPointToMm100(dPageHeight));
+    Size aScaleRectSize = maScaleRect.GetSize();
 
     if (aPageSize.Width() && aPageSize.Height() && (!maScaleRect.IsEmpty()))
     {
         maOfs = maScaleRect.TopLeft();
 
-        if (aPageSize.Width() != (maScaleRect.GetWidth() - 1))
+        if (aPageSize.Width() != aScaleRectSize.Width())
         {
-            mfScaleX = static_cast<double>(maScaleRect.GetWidth() - 1)
+            mfScaleX = static_cast<double>(aScaleRectSize.Width())
                        / static_cast<double>(aPageSize.Width());
         }
 
-        if (aPageSize.Height() != (maScaleRect.GetHeight() - 1))
+        if (aPageSize.Height() != aScaleRectSize.Height())
         {
-            mfScaleY = static_cast<double>(maScaleRect.GetHeight() - 1)
+            mfScaleY = static_cast<double>(aScaleRectSize.Height())
                        / static_cast<double>(aPageSize.Height());
         }
     }
@@ -205,15 +206,15 @@ void ImpSdrPdfImport::SetupPageScale(const double dPageWidth, const double dPage
     maScaleX = Fraction(1, 1);
     maScaleY = Fraction(1, 1);
 
-    if (aPageSize.Width() != (maScaleRect.GetWidth() - 1))
+    if (aPageSize.Width() != aScaleRectSize.Width())
     {
-        maScaleX = Fraction(maScaleRect.GetWidth() - 1, aPageSize.Width());
+        maScaleX = Fraction(aScaleRectSize.Width(), aPageSize.Width());
         mbSize = true;
     }
 
-    if (aPageSize.Height() != (maScaleRect.GetHeight() - 1))
+    if (aPageSize.Height() != aScaleRectSize.Height())
     {
-        maScaleY = Fraction(maScaleRect.GetHeight() - 1, aPageSize.Height());
+        maScaleY = Fraction(aScaleRectSize.Height(), aPageSize.Height());
         mbSize = true;
     }
 }
