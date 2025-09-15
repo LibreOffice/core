@@ -566,6 +566,28 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testNewlineMdExport)
+{
+    // Given a document with a line break:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->InsertLineBreak();
+    pWrtShell->Insert(u"B"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    std::string aActual = TempFileToString();
+    std::string aExpected("A  " SAL_NEWLINE_STRING "B" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A  \nB
+    // - Actual  : A\nB
+    // i.e. the line break was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
