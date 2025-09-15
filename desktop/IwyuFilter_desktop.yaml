@@ -20,6 +20,8 @@ excludelist:
     desktop/source/app/appinit.cxx:
     # Needed on IOS
     - rtl/bootstrap.hxx
+    # Needed for EMSCRIPTEN build
+    - initjsunoscripting.hxx
     desktop/source/app/cmdlineargs.cxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx
