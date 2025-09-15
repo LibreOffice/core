@@ -92,8 +92,6 @@ void VclDrawModeTest::testDrawModeLineColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::BlackText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::WhiteText, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::GrayText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
@@ -148,8 +146,6 @@ void VclDrawModeTest::testDrawModeFillColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::BlackText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::WhiteText, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::GrayText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
@@ -188,8 +184,6 @@ void VclDrawModeTest::testDrawModeHatchColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::BlackText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::WhiteText, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::GrayText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
@@ -205,8 +199,6 @@ void VclDrawModeTest::testDrawModeTextColor()
 
     CPPUNIT_ASSERT_EQUAL(
         COL_BLACK, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::BlackText, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        COL_WHITE, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::WhiteText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         Color(cLum, cLum, cLum),
         vcl::drawmode::GetTextColor(aColor, DrawModeFlags::GrayText, aStyleSettings));
@@ -255,19 +247,6 @@ void VclDrawModeTest::testDrawModeFontColor()
     aTestFont = vcl::drawmode::GetFont(aFont, DrawModeFlags::BlackText | DrawModeFlags::BlackFill,
                                        aStyleSettings);
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, aTestFont.GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_RED, aTestFont.GetFillColor());
-
-    // white text and fill
-    aFont.SetTransparent(false);
-    aTestFont = vcl::drawmode::GetFont(aFont, DrawModeFlags::WhiteText | DrawModeFlags::WhiteFill,
-                                       aStyleSettings);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aTestFont.GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aTestFont.GetFillColor());
-
-    aFont.SetTransparent(true);
-    aTestFont = vcl::drawmode::GetFont(aFont, DrawModeFlags::WhiteText | DrawModeFlags::WhiteFill,
-                                       aStyleSettings);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aTestFont.GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_RED, aTestFont.GetFillColor());
 
     // gray text and fill

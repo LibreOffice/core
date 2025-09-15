@@ -1553,8 +1553,7 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
 {
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     if (!(nOriginalDrawMode
-          & (DrawModeFlags::BlackText | DrawModeFlags::GrayText | DrawModeFlags::WhiteText
-             | DrawModeFlags::SettingsText)))
+          & (DrawModeFlags::BlackText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText)))
         return;
 
     DrawModeFlags nAdaptedDrawMode(nOriginalDrawMode);
@@ -1575,15 +1574,6 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
     else
     {
         nAdaptedDrawMode &= ~DrawModeFlags::GrayFill;
-    }
-
-    if (nOriginalDrawMode & DrawModeFlags::WhiteText)
-    {
-        nAdaptedDrawMode |= DrawModeFlags::WhiteFill;
-    }
-    else
-    {
-        nAdaptedDrawMode &= ~DrawModeFlags::WhiteFill;
     }
 
     if (nOriginalDrawMode & DrawModeFlags::SettingsText)

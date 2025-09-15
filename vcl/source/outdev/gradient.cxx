@@ -56,7 +56,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     if (!rPolyPoly.Count() || !rPolyPoly[0].GetSize())
         return;
 
-    if ( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
+    if ( mnDrawMode & ( DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) )
     {
         Color aColor = GetSingleColorGradientFill();
 
@@ -593,11 +593,9 @@ Color OutputDevice::GetSingleColorGradientFill()
     Color aColor;
 
     // we should never call on this function if any of these aren't set!
-    assert( mnDrawMode & ( DrawModeFlags::BlackGradient | DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) );
+    assert( mnDrawMode & ( DrawModeFlags::WhiteGradient | DrawModeFlags::SettingsGradient) );
 
-    if ( mnDrawMode & DrawModeFlags::BlackGradient )
-        aColor = COL_BLACK;
-    else if ( mnDrawMode & DrawModeFlags::WhiteGradient )
+    if ( mnDrawMode & DrawModeFlags::WhiteGradient )
         aColor = COL_WHITE;
     else if ( mnDrawMode & DrawModeFlags::SettingsGradient )
     {

@@ -3326,8 +3326,7 @@ void CairoPixelProcessor2D::processFillGradientPrimitive2D(
         return;
     }
 
-    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::BlackGradient
-                                            | DrawModeFlags::WhiteGradient
+    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::WhiteGradient
                                             | DrawModeFlags::SettingsGradient);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
     if (aDrawModeFlags & SIMPLE_GRADIENT)
@@ -3887,8 +3886,7 @@ bool CairoPixelProcessor2D::handleSvgGradientHelper(
     primitive2d::SvgGradientEntryVector::const_reference aEntry(
         rCandidate.getGradientEntries().back());
 
-    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::BlackGradient
-                                            | DrawModeFlags::WhiteGradient
+    constexpr DrawModeFlags SIMPLE_GRADIENT(DrawModeFlags::WhiteGradient
                                             | DrawModeFlags::SettingsGradient);
     if (getViewInformation2D().getDrawModeFlags() & SIMPLE_GRADIENT)
     {
@@ -4272,8 +4270,8 @@ basegfx::BColor CairoPixelProcessor2D::getFillColor(const basegfx::BColor& rColo
 
 basegfx::BColor CairoPixelProcessor2D::getTextColor(const basegfx::BColor& rColor) const
 {
-    constexpr DrawModeFlags TEXT(DrawModeFlags::BlackText | DrawModeFlags::WhiteText
-                                 | DrawModeFlags::GrayText | DrawModeFlags::SettingsText);
+    constexpr DrawModeFlags TEXT(DrawModeFlags::BlackText | DrawModeFlags::GrayText
+                                 | DrawModeFlags::SettingsText);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
 
     if (!(aDrawModeFlags & TEXT))
@@ -4281,9 +4279,6 @@ basegfx::BColor CairoPixelProcessor2D::getTextColor(const basegfx::BColor& rColo
 
     if (aDrawModeFlags & DrawModeFlags::BlackText)
         return basegfx::BColor(0, 0, 0);
-
-    if (aDrawModeFlags & DrawModeFlags::WhiteText)
-        return basegfx::BColor(1, 1, 1);
 
     if (aDrawModeFlags & DrawModeFlags::GrayText)
     {
@@ -4300,16 +4295,12 @@ basegfx::BColor CairoPixelProcessor2D::getTextColor(const basegfx::BColor& rColo
 
 basegfx::BColor CairoPixelProcessor2D::getGradientColor(const basegfx::BColor& rColor) const
 {
-    constexpr DrawModeFlags GRADIENT(DrawModeFlags::BlackGradient | DrawModeFlags::GrayGradient
-                                     | DrawModeFlags::WhiteGradient
+    constexpr DrawModeFlags GRADIENT(DrawModeFlags::GrayGradient | DrawModeFlags::WhiteGradient
                                      | DrawModeFlags::SettingsGradient);
     const DrawModeFlags aDrawModeFlags(getViewInformation2D().getDrawModeFlags());
 
     if (!(aDrawModeFlags & GRADIENT))
         return rColor;
-
-    if (aDrawModeFlags & DrawModeFlags::BlackGradient)
-        return basegfx::BColor(0, 0, 0);
 
     if (aDrawModeFlags & DrawModeFlags::WhiteGradient)
         return basegfx::BColor(1, 1, 1);

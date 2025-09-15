@@ -1856,39 +1856,6 @@ static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
     return nIndex;
 }
 
-CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_drawmode)
-{
-    ScopedVclPtrInstance<VirtualDevice> pVDev;
-    GDIMetaFile aMtf;
-    aMtf.Record(pVDev.get());
-
-    pVDev->SetOutputSizePixel(Size(100, 100));
-    pVDev->SetDrawMode(DrawModeFlags::BlackGradient);
-
-    tools::Rectangle aRect(Point(10, 10), Size(40, 40));
-    pVDev->DrawGradient(aRect, Gradient());
-    MetaAction* pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a push action (drawmode is black gradient)",
-                                 MetaActionType::PUSH, pAction->GetType());
-    MetaPushAction* pPushAction = dynamic_cast<MetaPushAction*>(pAction);
-    vcl::PushFlags eFlags = vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Push flags wrong (drawmode is black gradient)", eFlags,
-                                 pPushAction->GetFlags());
-
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a line color action (drawmode is black gradient)",
-                                 MetaActionType::LINECOLOR, pAction->GetType());
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 2);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action (drawmode is black gradient)",
-                                 MetaActionType::FILLCOLOR, pAction->GetType());
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 3);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action (drawmode is black gradient)",
-                                 MetaActionType::POLYPOLYGON, pAction->GetType());
-    pAction = aMtf.GetAction(INITIAL_SETUP_ACTION_COUNT + 4);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a pop action (drawmode is black gradient)",
-                                 MetaActionType::POP, pAction->GetType());
-}
-
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGradient_rect_linear)
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;

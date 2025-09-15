@@ -141,16 +141,11 @@ Color GetTextColor(Color const& rColor, DrawModeFlags nDrawMode,
     Color aColor(rColor);
 
     if (nDrawMode
-        & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText
-           | DrawModeFlags::SettingsText))
+        & (DrawModeFlags::BlackText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText))
     {
         if (nDrawMode & DrawModeFlags::BlackText)
         {
             aColor = COL_BLACK;
-        }
-        else if (nDrawMode & DrawModeFlags::WhiteText)
-        {
-            aColor = COL_WHITE;
         }
         else if (nDrawMode & DrawModeFlags::GrayText)
         {
@@ -175,19 +170,15 @@ vcl::Font GetFont(vcl::Font const& rFont, DrawModeFlags nDrawMode,
     vcl::Font aFont(rFont);
 
     if (nDrawMode
-        & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText
-           | DrawModeFlags::SettingsText | DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill
-           | DrawModeFlags::GrayFill | DrawModeFlags::NoFill | DrawModeFlags::SettingsFill))
+        & (DrawModeFlags::BlackText | DrawModeFlags::GrayText | DrawModeFlags::SettingsText
+           | DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill
+           | DrawModeFlags::NoFill | DrawModeFlags::SettingsFill))
     {
         Color aTextColor(aFont.GetColor());
 
         if (nDrawMode & DrawModeFlags::BlackText)
         {
             aTextColor = COL_BLACK;
-        }
-        else if (nDrawMode & DrawModeFlags::WhiteText)
-        {
-            aTextColor = COL_WHITE;
         }
         else if (nDrawMode & DrawModeFlags::GrayText)
         {
