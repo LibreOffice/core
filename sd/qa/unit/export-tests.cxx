@@ -18,10 +18,12 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
+#include <osl/process.h>
 #include <unotools/saveopt.hxx>
 
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
 #include <rtl/ustring.hxx>
 
@@ -54,6 +56,25 @@ public:
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
+
+    struct UsePdfium
+    {
+        // We need to enable PDFium import (and make sure to disable after the test)
+        bool bResetEnvVar = false;
+        UsePdfium()
+        {
+            if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+            {
+                bResetEnvVar = true;
+                osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
+            }
+        }
+        ~UsePdfium()
+        {
+            if (bResetEnvVar)
+                osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
+        };
+    };
 
 protected:
     uno::Reference<awt::XBitmap> getBitmapFromTable(OUString const& rName);
@@ -985,6 +1006,29 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedPdf)
     uno::Reference<graphic::XGraphic> xGraphic;
     xShape->getPropertyValue(u"ReplacementGraphic"_ustr) >>= xGraphic;
     CPPUNIT_ASSERT(xGraphic.is());
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdf)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"sample.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
+    saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
+
+    const SdrPage* pPage = GetPage(1);
+
+    const SdrObject* pObj = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObj);
+    const SdrObjGroup* pObjGroup = dynamic_cast<const SdrObjGroup*>(pObj);
+    CPPUNIT_ASSERT(pObjGroup);
+    // Should have exploded to 7 shapes, would be just 1 if not exploded
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(7), pObjGroup->GetObjCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
