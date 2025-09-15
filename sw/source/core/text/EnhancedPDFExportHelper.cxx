@@ -1446,21 +1446,23 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwSection* pSection =
                         static_cast<const SwSectionFrame*>(pFrame)->GetSection();
 
-                // open all parent sections, so that the SEs of sections
-                // are nested in the same way as their SwSectionNodes
-                std::vector<SwSection const*> parents;
-                // iterate only *direct* parents - do not leave table cell!
-                for (SwSectionNode const* pSectionNode{pSection->GetFormat()
-                        ->GetSectionNode()->StartOfSectionNode()->GetSectionNode()};
-                    pSectionNode != nullptr;
-                    pSectionNode = pSectionNode->StartOfSectionNode()->GetSectionNode())
+                if (SwSectionNode const* pFormatSectionNode = pSection->GetFormat()->GetSectionNode())
                 {
-                    parents.push_back(&pSectionNode->GetSection());
-                }
-                for (auto it = parents.rbegin(); it != parents.rend(); ++it)
-                {
-                    // key is the SwSection - see lcl_GetKeyFromFrame()
-                    OpenTagImpl(*it);
+                    // open all parent sections, so that the SEs of sections
+                    // are nested in the same way as their SwSectionNodes
+                    std::vector<SwSection const*> parents;
+                    // iterate only *direct* parents - do not leave table cell!
+                    for (SwSectionNode const* pSectionNode{pFormatSectionNode->StartOfSectionNode()->GetSectionNode()};
+                        pSectionNode != nullptr;
+                        pSectionNode = pSectionNode->StartOfSectionNode()->GetSectionNode())
+                    {
+                        parents.push_back(&pSectionNode->GetSection());
+                    }
+                    for (auto it = parents.rbegin(); it != parents.rend(); ++it)
+                    {
+                        // key is the SwSection - see lcl_GetKeyFromFrame()
+                        OpenTagImpl(*it);
+                    }
                 }
 
                 FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
