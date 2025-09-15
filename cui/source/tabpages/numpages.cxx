@@ -28,6 +28,8 @@
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/nbdtmgfact.hxx>
+#include <svx/nbdtmg.hxx>
 #include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>
@@ -234,6 +236,14 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
         NumSelectHdl_Impl(m_xExamplesVS.get());
         bPreset = true;
     }
+    else if (pActNum)
+    {
+        svx::sidebar::NBOTypeMgrBase* pChoices
+            = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance(svx::sidebar::NBOType::Numbering);
+        if (pChoices)
+            m_xExamplesVS->SelectItem(pChoices->GetNBOIndexForNumRule(*pActNum, nActNumLvl));
+    }
+
     bPreset |= bIsPreset;
 
     bModified = false;
@@ -383,6 +393,19 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
         NumSelectHdl_Impl(m_xExamplesVS.get());
         bPreset = true;
     }
+    else if (pActNum)
+    {
+        svx::sidebar::NBOTypeMgrBase* pChoices
+            = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance(svx::sidebar::NBOType::Bullets);
+        if (pChoices)
+        {
+            const sal_uInt16 nLevel = svx::sidebar::NBOTypeMgrBase::IsSingleLevel(nActNumLvl);
+            SvxNumberFormat aFmt(pActNum->GetLevel(nLevel));
+            if (aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+                m_xExamplesVS->SelectItem(pChoices->GetNBOIndexForNumRule(*pActNum, nActNumLvl));
+        }
+    }
+
     bPreset |= bIsPreset;
     bModified = false;
 }
@@ -657,6 +680,13 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
         m_xExamplesVS->SelectItem(1);
         NumSelectHdl_Impl(m_xExamplesVS.get());
         bPreset = true;
+    }
+    else if (pActNum)
+    {
+        svx::sidebar::NBOTypeMgrBase* pChoices
+            = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance(svx::sidebar::NBOType::Outline);
+        if (pChoices)
+            m_xExamplesVS->SelectItem(pChoices->GetNBOIndexForNumRule(*pActNum, nActNumLvl));
     }
     bPreset |= bIsPreset;
     bModified = false;
