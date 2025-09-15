@@ -202,6 +202,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/filter/ppt/propread \
 	sd/source/filter/grf/sdgrffilter \
 	sd/source/filter/html/htmlex \
+	sd/source/filter/html/a11yex \
 	sd/source/filter/html/sdhtmlfilter \
 	sd/source/filter/pdf/sdpdffilter \
 	sd/source/filter/sdfilter \

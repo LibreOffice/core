@@ -17,29 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/docfile.hxx>
-#include <sfx2/frame.hxx>
-#include <sfx2/sfxsids.hrc>
+#include <sal/log.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/svdograf.hxx>
+#include <tools/debug.hxx>
+
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <Outliner.hxx>
+#include <sdpage.hxx>
 
 #include "htmlex.hxx"
 #include <sdhtmlfilter.hxx>
 
-SdHTMLFilter::SdHTMLFilter(SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell)
-    : SdFilter(rMedium, rDocShell)
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::document;
+
+using namespace sdr::table;
+
+void SdHTMLFilter::ExportPage(SdrOutliner* pOutliner, SdPage* pPage, OUStringBuffer& rHtml)
 {
-}
-
-SdHTMLFilter::~SdHTMLFilter() {}
-
-bool SdHTMLFilter::Export()
-{
-    mrMedium.Close();
-    mrMedium.Commit();
-
-    HtmlExport aExport(mrMedium.GetName(), mrDocument, &mrDocShell);
-
-    return true;
+    HtmlExport::ExportPage(pOutliner, pPage, rHtml);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
