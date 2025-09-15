@@ -14,6 +14,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
@@ -388,15 +389,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
+    Resetter resetter([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(false, pBatch);
+        officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Writer::AutoFunction::Format::ByInput::ReplaceStyle::set(true, pBatch);
+    officecfg::Office::Writer::AutoFunction::Format::Option::ReplaceStyle::set(true, pBatch);
+    pBatch->commit();
+
     createSwDoc();
     SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    corr.GetSwFlags().bReplaceStyles = true;
-    SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
-    comphelper::ScopeGuard const g([=]() { SwEditShell::SetAutoFormatFlags(&flags); });
-    flags.bReplaceStyles = true;
-    SwEditShell::SetAutoFormatFlags(&flags);
-
     pWrtShell->Insert(u"test"_ustr);
     const sal_Unicode cIns = ':';
     pWrtShell->AutoCorrect(corr, cIns);
