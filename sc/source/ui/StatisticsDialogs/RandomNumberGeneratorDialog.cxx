@@ -469,6 +469,9 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, weld::ComboB
         case DIST_CHI_SQUARED:
         {
             mxParameter1Text->set_label(ScResId(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
+            // tdf#165846 - ensure degrees of freedom (nu value) is greater than 0
+            mxParameter1Value->set_min(1);
+            mxParameter1Value->set_value(PRECISION);
 
             mxParameter2Text->hide();
             mxParameter2Value->hide();
