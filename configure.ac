@@ -5939,7 +5939,7 @@ AC_SUBST(ENABLE_RUST_UNO)
 if test "$WITH_YRS" = "yes" -o "$ENABLE_RUST_UNO" = "TRUE"; then
     AC_PATH_PROG([CARGO], [cargo])
     if test -z "${CARGO}"; then
-        AC_MSG_ERROR([install cargo to build rust components or use --disable-yrs/--disable-rust-uno])
+        AC_MSG_ERROR([install cargo to build rust components or use --without-yrs/--disable-rust-uno])
     fi
 fi
 
