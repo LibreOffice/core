@@ -115,6 +115,13 @@ namespace svgio::svgreader
             lighter,
         };
 
+        enum class FontDirection
+        {
+            notset,
+            LTR,
+            RTL,
+        };
+
         FontWeight getBolder(FontWeight aSource);
         FontWeight getLighter(FontWeight aSource);
         ::FontWeight getVclFontWeight(FontWeight aSource);
@@ -209,6 +216,7 @@ namespace svgio::svgreader
             FontStretch                 maFontStretch;
             FontStyle                   maFontStyle;
             FontWeight                  maFontWeight;
+            FontDirection               maFontDirection;
             TextAlign                   maTextAlign;
             TextDecoration              maTextDecoration;
             TextAnchor                  maTextAnchor;
@@ -415,6 +423,10 @@ namespace svgio::svgreader
             /// FontWeight content
             FontWeight getFontWeight() const;
             void setFontWeight(const FontWeight aFontWeight) { maFontWeight = aFontWeight; }
+
+            /// FontDirection content
+            FontDirection getFontDirection() const;
+            void setFontDirection(const FontDirection aFontDirection) { maFontDirection = aFontDirection; }
 
             /// TextAlign content
             TextAlign getTextAlign() const;

@@ -1391,6 +1391,7 @@ namespace svgio::svgreader
             maFontStretch(FontStretch::notset),
             maFontStyle(FontStyle::notset),
             maFontWeight(FontWeight::notset),
+            maFontDirection(FontDirection::notset),
             maTextAlign(TextAlign::notset),
             maTextDecoration(TextDecoration::notset),
             maTextAnchor(TextAnchor::notset),
@@ -1401,7 +1402,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(34, 0),
+            maResolvingParent(35, 0),
             mbStrokeDasharraySet(false),
             mbUseFillFromContextFill(false),
             mbUseFillFromContextStroke(false),
@@ -1840,6 +1841,17 @@ namespace svgio::svgreader
                 }
                 case SVGToken::Direction:
                 {
+                    if(!aContent.isEmpty())
+                    {
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"ltr"))
+                        {
+                            setFontDirection(FontDirection::LTR);
+                        }
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"rtl"))
+                        {
+                            setFontDirection(FontDirection::RTL);
+                        }
+                    }
                     break;
                 }
                 case SVGToken::LetterSpacing:
@@ -2934,6 +2946,27 @@ namespace svgio::svgreader
 
             // default is FontWeight::N400 (FontWeight::normal)
             return FontWeight::N400;
+        }
+
+        FontDirection SvgStyleAttributes::getFontDirection() const
+        {
+            if(maFontDirection != FontDirection::notset)
+            {
+                return maFontDirection;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[34] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[34];
+                auto ret = pSvgStyleAttributes->getFontDirection();
+                --maResolvingParent[34];
+
+                return ret;
+            }
+
+            // default is LTR
+            return FontDirection::LTR;
         }
 
         TextAlign SvgStyleAttributes::getTextAlign() const
