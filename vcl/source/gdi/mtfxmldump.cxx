@@ -226,6 +226,19 @@ OUString convertFontWeightToString(FontWeight eFontWeight)
     return OUString();
 }
 
+OUString convertFontItalicToString(FontItalic eFontItalic)
+{
+    switch (eFontItalic)
+    {
+        case ITALIC_DONTKNOW:  return u"unknown"_ustr;
+        case ITALIC_OBLIQUE:   return u"oblique"_ustr;
+        case ITALIC_NORMAL:    return u"normal"_ustr;
+        case ITALIC_NONE:      return u"none"_ustr;
+        case FontItalic_FORCE_EQUAL_SIZE: return u"equalsize"_ustr;
+    }
+    return OUString();
+}
+
 OUString convertFontStrikeoutToString(FontStrikeout eFontStrikeout)
 {
     switch (eFontStrikeout)
@@ -1332,6 +1345,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("height", aFont.GetFontSize().Height());
                 rWriter.attribute("orientation", aFont.GetOrientation().get());
                 rWriter.attribute("weight", convertFontWeightToString(aFont.GetWeightMaybeAskConfig()));
+                rWriter.attribute("italic", convertFontItalicToString(aFont.GetItalicMaybeAskConfig()));
                 rWriter.attribute("vertical", aFont.IsVertical() ? "true" : "false");
                 rWriter.attribute("emphasis", aFont.GetEmphasisMark() != FontEmphasisMark::NONE ? "true" : "false");
                 rWriter.attribute("shadow", aFont.IsShadow() ? "true" : "false");
