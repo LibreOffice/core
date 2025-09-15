@@ -30,12 +30,12 @@ class GraphCtrl;
 
 class GraphCtrlUserCall final : public SdrObjUserCall
 {
-    GraphCtrl& rWin;
+    GraphCtrl& m_rWin;
 
 public:
 
     GraphCtrlUserCall(GraphCtrl& rGraphWin)
-        : rWin(rGraphWin)
+        : m_rWin(rGraphWin)
     {}
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const tools::Rectangle& rOldBoundRect) override;

@@ -37,17 +37,17 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
     {
         case SdrUserCallType::MoveOnly:
         case SdrUserCallType::Resize:
-            rWin.SdrObjChanged( rObj );
+            m_rWin.SdrObjChanged( rObj );
         break;
 
         case SdrUserCallType::Inserted:
-            rWin.SdrObjCreated( rObj );
+            m_rWin.SdrObjCreated( rObj );
         break;
 
         default:
         break;
     }
-    rWin.QueueIdleUpdate();
+    m_rWin.QueueIdleUpdate();
 }
 
 GraphCtrl::GraphCtrl(weld::Dialog* pDialog)
