@@ -707,7 +707,7 @@ bool checkFormula(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const OU
 }
 
 void applyFormulaToCell(ScViewFunc& rViewFunc, SCCOL nCol, SCROW nRow, SCTAB nTab, OUString const& rString,
-                        const EditTextObject* pData, std::shared_ptr<ScDocShellModificator> xModificator,
+                        const EditTextObject* pData, const std::shared_ptr<ScDocShellModificator>& rModificator,
                         ScMarkData const& rMark, bool bMatrixExpand, bool bRecord, bool& rbNumFmtChanged)
 {
     ScDocument& rDoc = rViewFunc.GetViewData().GetDocument();
@@ -727,7 +727,7 @@ void applyFormulaToCell(ScViewFunc& rViewFunc, SCCOL nCol, SCROW nRow, SCTAB nTa
     OUString aFormula(rString);
 
     FormulaProcessingContext context_instance{
-        std::move(xPosPtr), std::move(xCompPtr),    xModificator, nullptr,
+        std::move(xPosPtr), std::move(xCompPtr),    rModificator, nullptr,
         nullptr,            std::move(xTextObject), rMark,        rViewFunc,
         OUString(),         aFormula,               rString,                 nCol,
         nRow,               nTab,                   bMatrixExpand,           rbNumFmtChanged,
