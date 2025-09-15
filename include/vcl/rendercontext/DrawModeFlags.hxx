@@ -28,7 +28,6 @@ enum class DrawModeFlags : sal_uInt32
     BlackLine = 0x00000001,
     BlackFill = 0x00000002,
     BlackText = 0x00000004,
-    BlackBitmap = 0x00000008,
     BlackGradient = 0x00000010,
     GrayLine = 0x00000020,
     GrayFill = 0x00000040,
@@ -39,7 +38,6 @@ enum class DrawModeFlags : sal_uInt32
     WhiteLine = 0x00000800,
     WhiteFill = 0x00001000,
     WhiteText = 0x00002000,
-    WhiteBitmap = 0x00004000,
     WhiteGradient = 0x00008000,
     SettingsLine = 0x00010000,
     SettingsFill = 0x00020000,
@@ -50,7 +48,7 @@ enum class DrawModeFlags : sal_uInt32
 };
 namespace o3tl
 {
-template <> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x3fffff>
+template <> struct typed_flags<DrawModeFlags> : is_typed_flags<DrawModeFlags, 0x3fbff7>
 {
 };
 }

@@ -366,7 +366,7 @@ void OutputDevice::DrawTransformedBitmapEx(
     Bitmap bitmap = rBitmap;
 
     const bool bInvert(RasterOp::Invert == meRasterOp);
-    const bool bBitmapChangedColor(mnDrawMode & (DrawModeFlags::BlackBitmap | DrawModeFlags::WhiteBitmap | DrawModeFlags::GrayBitmap ));
+    const bool bBitmapChangedColor(mnDrawMode & DrawModeFlags::GrayBitmap);
     const bool bTryDirectPaint(!bInvert && !bBitmapChangedColor && !bMetafile);
     // tdf#130768 CAUTION(!) using GetViewTransformation() is *not* enough here, it may
     // be that mnOutOffX/mnOutOffY is used - see AOO bug 75163, mentioned at

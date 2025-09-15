@@ -98,10 +98,6 @@ void VclDrawModeTest::testDrawModeLineColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::BlackBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::WhiteBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetLineColor(aColor, DrawModeFlags::GrayBitmap, aStyleSettings));
 }
 
@@ -158,10 +154,6 @@ void VclDrawModeTest::testDrawModeFillColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::BlackBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::WhiteBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetFillColor(aColor, DrawModeFlags::GrayBitmap, aStyleSettings));
 }
 
@@ -202,10 +194,6 @@ void VclDrawModeTest::testDrawModeHatchColor()
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::SettingsText, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::BlackBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::WhiteBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetHatchColor(aColor, DrawModeFlags::GrayBitmap, aStyleSettings));
 }
 
@@ -245,10 +233,6 @@ void VclDrawModeTest::testDrawModeTextColor()
         aColor, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::GrayFill, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::SettingsFill, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::BlackBitmap, aStyleSettings));
-    CPPUNIT_ASSERT_EQUAL(
-        aColor, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::WhiteBitmap, aStyleSettings));
     CPPUNIT_ASSERT_EQUAL(
         aColor, vcl::drawmode::GetTextColor(aColor, DrawModeFlags::GrayBitmap, aStyleSettings));
 }
