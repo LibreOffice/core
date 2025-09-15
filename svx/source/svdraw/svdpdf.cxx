@@ -781,28 +781,39 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     InsertTextObject(aRect.TopLeft(), aRect.GetSize(), sText);
 }
 
-void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, const OUString& rStr)
+void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& /*rSize*/,
+                                       const OUString& rStr)
 {
-    // calc text box size, add 5% to make it fit safely
-
     FontMetric aFontMetric(mpVD->GetFontMetric());
     vcl::Font aFont(mpVD->GetFont());
     assert(aFont.GetAlignment() == ALIGN_BASELINE);
 
+    /* Get our text bounds of this text, which is nominally relative to a 0
+       left margin, so we know where the inked rect begins relative to the
+       start of the text area, and we can adjust the pdf rectangle by that so
+       the SdrRectObj text will get rendered at the same x position.
+
+       Similarly find the relative vertical distance from the inked bounds
+       to the baseline and adjust the pdf rect so the SdrRectObj will render
+       the text at the same y position.
+    */
     tools::Rectangle aOurRect;
     (void)mpVD->GetTextBoundRect(aOurRect, rStr);
 
-    auto nDiff = aFontMetric.GetDescent() - aOurRect.Bottom();
-    Point aPos(rPos.X(), rPos.Y() + nDiff);
+    auto nXDiff = aOurRect.Left();
+    auto nYDiff = aFontMetric.GetDescent() - aOurRect.Bottom();
 
-    Size aBoundsSize(rSize.Width(), -aFontMetric.GetLineHeight());
+    Point aPos(rPos.X() - nXDiff, rPos.Y() + nYDiff);
+    // As per ImpEditEngine::CalcParaWidth the width of the text box has to be 1 unit wider than the text
+    auto nTextWidth = mpVD->GetTextWidth(rStr) + 1;
+    Size aSize(nTextWidth, -aFontMetric.GetLineHeight());
 
-    Point aPosition(basegfx::fround<tools::Long>(aPos.X() * mfScaleX + maOfs.X()),
-                    basegfx::fround<tools::Long>(aPos.Y() * mfScaleY + maOfs.Y()));
-    Size aSize(basegfx::fround<tools::Long>(aBoundsSize.Width() * mfScaleX),
-               basegfx::fround<tools::Long>(aBoundsSize.Height() * mfScaleY));
+    Point aSdrPos(basegfx::fround<tools::Long>(aPos.X() * mfScaleX + maOfs.X()),
+                  basegfx::fround<tools::Long>(aPos.Y() * mfScaleY + maOfs.Y()));
+    Size aSdrSize(basegfx::fround<tools::Long>(aSize.Width() * mfScaleX),
+                  basegfx::fround<tools::Long>(aSize.Height() * mfScaleY));
 
-    tools::Rectangle aTextRect(aPosition, aSize);
+    tools::Rectangle aTextRect(aSdrPos, aSdrSize);
     rtl::Reference<SdrRectObj> pText = new SdrRectObj(*mpModel, SdrObjKind::Text, aTextRect);
 
     pText->SetMergedItem(makeSdrTextUpperDistItem(0));
@@ -810,17 +821,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     pText->SetMergedItem(makeSdrTextRightDistItem(0));
     pText->SetMergedItem(makeSdrTextLeftDistItem(0));
 
-    if (aFont.GetAverageFontWidth())
-    {
-        pText->ClearMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH);
-        pText->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
-        // don't let the margins eat the space needed for the text
-        pText->SetMergedItem(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_ALLLINES));
-    }
-    else
-    {
-        pText->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
-    }
+    pText->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
 
     pText->SetLayer(mnLayer);
     pText->NbcSetText(rStr);
@@ -836,7 +837,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
     }
     Degree100 nAngle = to<Degree100>(aFont.GetOrientation());
     if (nAngle)
-        pText->SdrAttrObj::NbcRotate(aPosition, nAngle);
+        pText->SdrAttrObj::NbcRotate(aSdrPos, nAngle);
     InsertObj(pText.get(), false);
 }
 

@@ -1057,9 +1057,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfTextPos)
     saveAndReload(u"OpenDocument Drawing Flat XML"_ustr);
 
     xmlDocUniquePtr pXml = parseLayout();
+    sal_Int32 x = getXPath(pXml, "//textarray[1]", "x").toInt32();
+    // was 2028 originally
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2003, x, 0);
     sal_Int32 y = getXPath(pXml, "//textarray[1]", "y").toInt32();
-    // was 3092 before
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3055, y, 0);
+    // was 3092 originally
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3063, y, 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
