@@ -1194,6 +1194,9 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
 
 void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySecondary, std::u16string_view sGlobalModules, const OUString& sModule, const OUString& sKey )
 {
+    if ( sGlobalModules != m_sGlobalOrModules )
+        return;
+
     css::uno::Reference< css::container::XNameAccess > xAccess;
     css::uno::Reference< css::container::XNameContainer > xContainer;
 
@@ -1202,6 +1205,9 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
     else
     {
+        if ( sModule != m_sModuleCFG )
+            return;
+
         css::uno::Reference< css::container::XNameAccess > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(sModule) )
