@@ -56,6 +56,7 @@ inline constexpr TabData RID_TAB_CONDITION{ NC_("RID_TAB_CONDITION", "Condition"
 inline constexpr TabData RID_TAB_HEADER{ NC_("RID_TAB_HEADER", "Header"), u"insertheader.png"_ustr };
 inline constexpr TabData RID_TAB_FOOTER{ NC_("RID_TAB_FOOTER", "Footer"), u"insertfooter.png"_ustr };
 inline constexpr TabData RID_TAB_PAGE{ NC_("RID_TAB_PAGE", "Page"), u"attributepagesize.png"_ustr }; // also Draw/Impress
+inline constexpr TabData RID_TAB_SLIDE{ NC_("RID_TAB_SLIDE", "Slide"), u"attributepagesize.png"_ustr }; // also Draw/Impress
 inline constexpr TabData RID_TAB_COLUMNS{ NC_("RID_TAB_COLUMNS", "Columns"), u"pagecolumntype.png"_ustr };
 inline constexpr TabData RID_TAB_FOOTNOTES{ NC_("RID_TAB_FOOTNOTES", "Footnote"), u"footnotedialog.png"_ustr };
 inline constexpr TabData RID_TAB_ENDNOTES{ NC_("RID_TAB_ENDNOTES", "Endnote"), u"insertendnote.png"_ustr };

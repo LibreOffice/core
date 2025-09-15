@@ -57,8 +57,12 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_PAGE.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);
+    if (mbIsImpressDoc)
+        AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_SLIDE.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_SLIDE.sIconName);
+    else
+        AddTabPage(u"RID_SVXPAGE_PAGE"_ustr, TabResId(RID_TAB_PAGE.aLabel),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);
     if (bAreaPage)
     { // I have to add the page before I remove it !
         AddTabPage(u"RID_SVXPAGE_AREA"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
@@ -67,12 +71,6 @@ SdPageDlg::SdPageDlg(SfxObjectShell const* pDocSh, weld::Window* pParent, const 
         AddTabPage(u"RID_SVXPAGE_TRANSPARENCE"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
                    RID_L + RID_TAB_TRANSPARENCE.sIconName);
-    }
-
-    if (mbIsImpressDoc)
-    {
-        set_title(SdResId(STR_SLIDE_SETUP_TITLE));
-        m_xTabCtrl->set_tab_label_text(u"RID_SVXPAGE_PAGE"_ustr, SdResId(STR_SLIDE_NAME));
     }
 }
 
