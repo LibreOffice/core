@@ -74,6 +74,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile, const weld::W
         u"cui/ui/fontfragment.ui"_ustr,
         u"cui/ui/gallerytitledialog.ui"_ustr,
         u"cui/ui/graphictestdlg.ui"_ustr,
+        u"cui/ui/hyperlinkmarkdialog.ui"_ustr,
         u"cui/ui/imageviewer.ui"_ustr,
         u"cui/ui/insertrowcolumn.ui"_ustr,
         u"cui/ui/javaclasspathdialog.ui"_ustr,
