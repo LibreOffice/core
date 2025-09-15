@@ -442,7 +442,7 @@ void SwMarkdownParser::EndNumberedBulletList()
     }
 }
 
-void SwMarkdownParser::StartNumberedBulletListItem()
+void SwMarkdownParser::StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail)
 {
     sal_uInt8 nLevel = GetNumInfo().GetLevel();
     sal_uInt16 nStart = GetNumInfo().GetNodeStartValue(nLevel);
@@ -465,6 +465,13 @@ void SwMarkdownParser::StartNumberedBulletListItem()
     if (GetNumInfo().GetNumRule())
     {
         aNumRuleName = GetNumInfo().GetNumRule()->GetName();
+
+        if (aDetail.is_task)
+        {
+            bool bChecked = (aDetail.task_mark == 'x' || aDetail.task_mark == 'X') ? true : false;
+            pTextNode->InsertText((bChecked ? Checkmark : Crossmark) + u" "_ustr,
+                                  SwContentIndex(pTextNode, 0));
+        }
     }
     else
     {

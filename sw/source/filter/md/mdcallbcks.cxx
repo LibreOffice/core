@@ -54,7 +54,7 @@ int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void
             parser->StartNumberedBulletList(type);
             break;
         case MD_BLOCK_LI:
-            parser->StartNumberedBulletListItem();
+            parser->StartNumberedBulletListItem(*static_cast<MD_BLOCK_LI_DETAIL*>(detail));
             break;
         case MD_BLOCK_HR:
             parser->AddHR();
