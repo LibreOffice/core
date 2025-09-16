@@ -150,6 +150,9 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label1"/>
+                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CTL_POSRECT-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|CTL_POSRECT">Click a base point in the grid, and then enter the amount that you want to shift the object relative to the base point that you selected in the Position Y and Position X boxes. The base points correspond to the selection handles on an object.</property>
@@ -164,20 +167,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FT_POSREFERENCE">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="possizetabpage|FT_POSREFERENCE">_Base point:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">CTL_POSRECT</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -198,6 +187,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="CTL_POSRECT"/>
+            </accessibility>
           </object>
         </child>
       </object>
@@ -403,6 +395,9 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label2"/>
+                            </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="CTL_SIZERECT-atkobject">
                                 <property name="AtkObject::accessible-description" translatable="yes" context="possizetabpage|extended_tip|CTL_SIZERECT">Click a base point in the grid, and then enter the new size dimensions for the selected object in the Width and Height boxes.</property>
@@ -417,20 +412,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="FT_SIZEREFERENCE">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="possizetabpage|FT_SIZEREFERENCE">Base _point:</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">CTL_SIZERECT</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -451,6 +432,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="CTL_SIZERECT"/>
+            </accessibility>
           </object>
         </child>
       </object>
