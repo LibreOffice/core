@@ -269,6 +269,8 @@ public:
     void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
     SwFlyDrawContact* GetOrCreateContact();
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 //The DrawFrame-Format

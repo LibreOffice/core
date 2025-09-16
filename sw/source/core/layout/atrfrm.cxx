@@ -3052,6 +3052,20 @@ SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
     return m_pContact.get();
 }
 
+void SwFlyFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFlyFrameFormat"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("title"),
+                                      BAD_CAST(msTitle.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("desc"),
+                                      BAD_CAST(msDesc.toUtf8().getStr()));
+
+    sw::SpzFrameFormat::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 /// Creates the Frames if the format describes a paragraph-bound frame.
 /// MA: 1994-02-14: creates the Frames also for frames anchored at page.
 void SwFlyFrameFormat::MakeFrames()
