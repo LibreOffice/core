@@ -236,6 +236,8 @@ namespace svgio::svgreader
                 // get TextAlign
                 TextAlign aTextAlign(rSvgStyleAttributes.getTextAlign());
 
+                bool bRTL(FontDirection::RTL == rSvgStyleAttributes.getFontDirection());
+
                 // map TextAnchor to TextAlign, there seems not to be a difference
                 if(TextAnchor::notset != rSvgStyleAttributes.getTextAnchor())
                 {
@@ -243,7 +245,10 @@ namespace svgio::svgreader
                     {
                         case TextAnchor::start:
                         {
-                            aTextAlign = TextAlign::left;
+                            if (bRTL)
+                                aTextAlign = TextAlign::right;
+                            else
+                                aTextAlign = TextAlign::left;
                             break;
                         }
                         case TextAnchor::middle:
@@ -253,7 +258,10 @@ namespace svgio::svgreader
                         }
                         case TextAnchor::end:
                         {
-                            aTextAlign = TextAlign::right;
+                            if (bRTL)
+                                aTextAlign = TextAlign::left;
+                            else
+                                aTextAlign = TextAlign::right;
                             break;
                         }
                         default:
