@@ -62,6 +62,7 @@
 #include <strings.hrc>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/vclenum.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 constexpr OUString COMMAND_CLOSE = u"close"_ustr;
@@ -816,7 +817,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText ) const
         // xMsgBox->setCaptionText( msCancelTitle );
         xMsgBox->setMessageText( rWarningText );
         nRet = xMsgBox->execute();
-        if ( nRet == 2 ) // RET_YES == 2
+        if (nRet == RET_YES)
             bRet = true;
         mbShowsMessageBox = false;
     }
@@ -886,7 +887,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
         mbShowsMessageBox = true;
         xMsgBox->setMessageText( rWarningText );
         nRet = xMsgBox->execute();
-        if ( nRet == 2 ) // RET_YES == 2
+        if (nRet == RET_YES)
             bRet = true;
 
         mbShowsMessageBox = false;
