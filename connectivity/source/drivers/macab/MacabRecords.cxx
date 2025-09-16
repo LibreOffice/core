@@ -29,7 +29,7 @@
 #include "macabutilities.hxx"
 
 #include <premac.h>
-#include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 #include <com/sun/star/util/DateTime.hpp>
@@ -995,7 +995,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 OUString newPropertyName;
 
                 /* Unfortunately, the only way to get both keys and values out
-                 * of a dictionary in Carbon is to get them all at once, so we
+                 * of a dictionary in CoreFoundation is to get them all at once, so we
                  * do that.
                  */
                 CFStringRef *dictKeys;
@@ -1033,7 +1033,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                  * is a label and a value. All labels are strings
                  * (kABStringProperty), and all values have the same type
                  * (which is the type of the multivalue minus 255, or as
-                 * Carbon's list of property types has it, minus 0x100.
+                 * AddressBook's list of property types has it, minus 0x100.
                  * We just get the correct type, then go through each element
                  * and get the label and value and print them in a list.
                  */
