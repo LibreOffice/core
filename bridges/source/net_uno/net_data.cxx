@@ -53,6 +53,7 @@ IntPtr alloc_net_string(const OUString& str)
     sal_Int32 len = str.getLength();
 
     void* dst = std::malloc((len + 1) * sizeof(sal_Unicode));
+    assert(dst);
     std::memcpy(dst, src, len * sizeof(sal_Unicode));
     static_cast<sal_Unicode*>(dst)[len] = u'\0';
 
@@ -62,6 +63,7 @@ IntPtr alloc_net_string(const OUString& str)
 uno_Sequence* alloc_uno_sequence(sal_Int32 nElements, sal_Int32 nElementSize, void* data)
 {
     void* mem = std::malloc(SAL_SEQUENCE_HEADER_SIZE + nElements * nElementSize);
+    assert(mem);
 
     uno_Sequence* seq = static_cast<uno_Sequence*>(mem);
     seq->nRefCount = 1;
@@ -155,6 +157,7 @@ void marshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReferen
                     else
                     {
                         IntPtr mem = std::malloc(size);
+                        assert(mem);
                         std::memcpy(mem, pUnoAny->pData, size);
                         std::free(ppNetAny->data);
                         ppNetAny->data = mem;
@@ -220,6 +223,7 @@ void marshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReferen
                 case typelib_TypeClass_ENUM:
                 {
                     ppNetSeq->data = std::malloc(nNetElemSize * ppNetSeq->length);
+                    assert(ppNetSeq->data);
                     std::memcpy(ppNetSeq->data, pUnoSeq->elements, nNetElemSize * ppNetSeq->length);
                     break;
                 }
@@ -486,6 +490,7 @@ void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionRefer
                         else
                         {
                             void* mem = std::malloc(size);
+                            assert(mem);
                             std::memcpy(mem, pNetAny->data, size);
                             pUnoAny->pData = mem;
                             std::free(pNetAny->data);
