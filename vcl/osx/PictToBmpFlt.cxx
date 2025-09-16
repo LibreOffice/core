@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <premac.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
-
 #include <string.h>
 
 #include "PictToBmpFlt.hxx"
