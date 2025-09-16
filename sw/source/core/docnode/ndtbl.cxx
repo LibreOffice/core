@@ -219,6 +219,37 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
     return rBoxFormatArr[nId];
 }
 
+static void lcl_transferTableBreaks(const SwTableBox& rParentCell, const SwTableNode& rDestTableNd,
+                             SwFrameFormat& rDestFormat)
+{
+    // only if this is the first paragraph of the cell
+    if (rDestTableNd.StartOfSectionIndex() + 1 != rDestTableNd.GetIndex())
+        return;
+
+    if (!rParentCell.GetSttNd())
+        return;
+
+    const SwTable& rParentTable = rParentCell.GetSttNd()->FindTableNode()->GetTable();
+    // only if this is in the first cell in the table
+    if (rParentCell.FindPreviousBox(rParentTable, &rParentCell))
+        return;
+
+    SwFrameFormat& rSourceFormat = *rParentTable.GetFrameFormat();
+    const SfxPoolItem *pItem;
+    const SfxItemSet& rSet = rSourceFormat.GetAttrSet();
+    if (SfxItemState::SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
+    {
+        rDestFormat.SetFormatAttr(*pItem);
+        // rSourceFormat.ResetFormatAttr(RES_PAGEDESC); // TODO: not transferred back on table delete
+    }
+
+    if (SfxItemState::SET == rSet.GetItemState(RES_BREAK, false, &pItem))
+    {
+        rDestFormat.SetFormatAttr(*pItem);
+        // rSourceFormat.ResetFormatAttr(RES_BREAK);
+    }
+}
+
 SwTableNode* SwDoc::IsIdxInTable( const SwNodeIndex& rIdx ) { return IsInTable(rIdx.GetNode()); }
 
 SwTableNode* SwDoc::IsInTable(const SwNode& rIdx)
@@ -453,7 +484,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     // Move the hard PageDesc/PageBreak Attributes if needed
     SwContentNode* pNextNd = GetNodes()[ pTableNd->EndOfSectionIndex()+1 ]
                             ->GetContentNode();
-    if( pNextNd && pNextNd->HasSwAttrSet() )
+    const SwTableBox* pParentTableCell = pTableNd->GetTableBox();
+    if (pParentTableCell) // table-in-table
+        lcl_transferTableBreaks(/*from*/ *pParentTableCell, /*to*/ *pTableNd, *pTableFormat);
+    else if (pNextNd && pNextNd->HasSwAttrSet())
     {
         const SfxItemSet* pNdSet = pNextNd->GetpSwAttrSet();
         if( const SwFormatPageDesc* pItem = pNdSet->GetItemIfSet( RES_PAGEDESC, false ) )
@@ -1042,6 +1076,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     if( rRange.aStart >= rRange.aEnd )
         return nullptr;
 
+    const SwTableBox* pParentTableCell = rRange.aStart.GetNode().GetTableBox();
+
     SwTableNode * pTableNd = new SwTableNode( rRange.aStart.GetNode() );
     new SwEndNode( rRange.aEnd.GetNode(), *pTableNd );
 
@@ -1087,6 +1123,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
             }
         }
+
+        if (pParentTableCell && pTableFormat && 0 == nLines)
+            lcl_transferTableBreaks(/*from*/ *pParentTableCell, /*to*/ *pTableNd, *pTableFormat);
 
         lcl_RemoveBreaks(*pTextNd, (0 == nLines) ? pTableFormat : nullptr);
 

@@ -20,7 +20,9 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <tools/datetime.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -663,6 +665,14 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf155011)
 {
     createSwWebDoc("tdf155011.html");
     // Must not crash / fail asserts
+
+    // tdf#145689: don't lose page style when inserting table-in-table
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"HTML"_ustr, getProperty<OUString>(xCursor, u"PageStyleName"_ustr));
 }
 
 } // end of anonymous namespace
