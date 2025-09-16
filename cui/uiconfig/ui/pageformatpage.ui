@@ -18,7 +18,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=1 -->
+          <!-- n-columns=3 n-rows=1 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -251,6 +251,21 @@
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="checkResizeAllPages">
+                <property name="label" translatable="yes" context="pageformatpage|checkResizeAllPages">Resize all pages</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="active">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -591,7 +606,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <style>
-                      <!-- tdf#161662 try and shrink this height to min and then use the size-group to bring it back up to that height -->
                       <class name="novertpad"/>
                     </style>
                   </object>
@@ -799,13 +813,6 @@ Do you still want to apply these settings?</property>
       <widget name="grid6"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="ignore-hidden">True</property>
-    <widgets>
-      <widget name="grid4"/>
-      <widget name="grid7"/>
-    </widgets>
-  </object>
   <object class="GtkSizeGroup" id="sizegroupLabel1">
     <widgets>
       <widget name="labelFormat"/>
@@ -836,5 +843,8 @@ Do you still want to apply these settings?</property>
       <widget name="comboLayoutFormat"/>
       <widget name="comboRegisterStyle"/>
     </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore-hidden">True</property>
   </object>
 </interface>

@@ -1121,8 +1121,10 @@ class XFillGradientItem;
 #define SID_ATTR_TEXT_UPPERDIST                         ( SID_SVX_START + 1255 )
 #define SID_ATTR_TEXT_LOWERDIST                         ( SID_SVX_START + 1256 )
 
+#define SID_ATTR_RESIZE_ALL_PAGES                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1257 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1256 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1257 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

@@ -409,6 +409,8 @@ private:
     bool mbEmbedFontScriptAsian : 1;
     bool mbEmbedFontScriptComplex : 1;
 
+    bool mbResizeAllPages = true;
+
     sal_Int32 mnImagePreferredDPI;
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
@@ -520,10 +522,41 @@ public:
         tools::Long nUpper = 0,
         tools::Long nLower = 0) override;
 
-    // Adapt PageSize for all Pages of PageKind ePageKind. Also
-    // set Borders to left/right/upper/lower, ScaleAll, Orientation,
+    bool ShouldResizeAllPages() const { return mbResizeAllPages; }
+    void SetResizeAllPages(bool bValue) { mbResizeAllPages = bValue; }
+
+    // Allows to have pages with different sizes in a document
+    void ResizeCurrentPage(
+        SdPage* pPage,
+        const Size& rNewSize,
+        PageKind ePageKind,
+        SdUndoGroup* pUndoGroup = nullptr,
+        tools::Long nLeft = 0,
+        tools::Long nRight = 0,
+        tools::Long nUpper = 0,
+        tools::Long nLower = 0,
+        bool bScaleAll = false,
+        Orientation eOrientation = Orientation::Landscape,
+        sal_uInt16 nPaperBin = 0,
+        bool bBackgroundFullSize = false);
+
+    // Set Borders to left/right/upper/lower, ScaleAll, Orientation,
     // PaperBin and BackgroundFullSize. Create Undo-Actions when
     // a SdUndoGroup is given (then used from the View probably)
+    void AdaptPageSize(
+        SdPage* pPage,
+        const Size& rNewSize,
+        SdUndoGroup* pUndoGroup = nullptr,
+        tools::Long nLeft = 0,
+        tools::Long nRight = 0,
+        tools::Long nUpper = 0,
+        tools::Long nLower = 0,
+        bool bScaleAll = false,
+        Orientation eOrientation = Orientation::Landscape,
+        sal_uInt16 nPaperBin = 0,
+        bool bBackgroundFullSize = false);
+
+    // Adapt PageSize for all Pages of PageKind ePageKind.
     void AdaptPageSizeForAllPages(
         const Size& rNewSize,
         PageKind ePageKind,

@@ -34,6 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
@@ -74,6 +75,7 @@
 #include <titledockwin.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
+#include <unomodel.hxx>
 
 using namespace com::sun::star;
 
@@ -1032,6 +1034,41 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage, bool bAllowChangeFocus,
             /**********************************************************************
             * PAGEMODE
             **********************************************************************/
+
+            SdrPageView* pPV = mpDrawView->GetSdrPageView();
+            SdPage* pCurrentPage = pPV ? dynamic_cast<SdPage*>(pPV->GetPage()) : nullptr;
+
+            if (pCurrentPage)
+            {
+                Size aCurrentPageSize = pCurrentPage->GetSize();
+                const ::tools::Long nCurrentWidth = aCurrentPageSize.Width();
+                const ::tools::Long nCurrentHeight = aCurrentPageSize.Height();
+
+                SdPage* pNewPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
+                Size aNewPageSize = pNewPage->GetSize();
+                const ::tools::Long nNewWidth = aNewPageSize.Width();
+                const ::tools::Long nNewHeight = aNewPageSize.Height();
+
+                if ((nCurrentWidth != nNewWidth || nCurrentHeight != nNewHeight) && bAllowChangeFocus)
+                {
+                    Point aPageOrg(nNewWidth, nNewHeight / 2);
+                    Size aViewSize(nNewWidth * 3, nNewHeight * 2);
+
+                    GetDoc()->SetMaxObjSize(aViewSize);
+
+                    InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
+
+                    // pNewPage->SetBackgroundFullSize(true);
+
+                    UpdateScrollBars();
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        SdXImpressDocument* pDoc = GetDoc()->getUnoModel();
+                        SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
+                    }
+                }
+            }
             GetDoc()->SetSelected(mpActualPage, true);
 
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();

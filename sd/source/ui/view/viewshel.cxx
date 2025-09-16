@@ -210,6 +210,21 @@ ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory = std::make_shared<ViewShellObjectBarFactory>(*this);
     GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+
+    // Compare size of all pages to set SdDrawDocument's mbResizeAllPages after document load
+    // instead of setting it true unconditionally.
+    sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(PageKind::Standard);
+    if (nPageCnt > 0)
+    {
+        Size aSize1 = GetDoc()->GetSdPage(0, PageKind::Standard)->GetSize();
+
+        for (sal_uInt16 i = 1; i < nPageCnt; i++)
+        {
+            Size aSize2 = GetDoc()->GetSdPage(i, PageKind::Standard)->GetSize();
+            if (aSize1 != aSize2)
+                GetDoc()->SetResizeAllPages(false);
+        }
+    }
 }
 
 ViewShell::~ViewShell()
