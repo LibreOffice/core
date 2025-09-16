@@ -4,14 +4,9 @@ excludelist:
     jvmfwk/inc/fwkutil.hxx:
     # Needed on MACOSX
     - config_folders.h
-    # Don't replace with URE impl. detail
-    - rtl/byteseq.hxx
     jvmfwk/source/fwkutil.cxx:
     # Needed on WIN32
     - sal/log.hxx
-    jvmfwk/plugins/sunmajor/javaenvsetup/javaldx.cxx:
-    # Don't replace with URE impl. detail
-    - rtl/byteseq.hxx
     jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx

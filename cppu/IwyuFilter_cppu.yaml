@@ -25,7 +25,5 @@ excludelist:
     # FIXME removing this makes linking fail in binaryurp
     - uno/current_context.h
     cppu/source/threadpool/threadident.cxx:
-    # Don't replace hxx -> h in URE API
-    - rtl/byteseq.hxx
     # FIXME removing this makes linking fail in binaryurp
     - uno/threadpool.h
