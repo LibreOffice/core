@@ -1655,6 +1655,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf168355)
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     const SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     const SwPageFrame* pPageFrm = static_cast<const SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPageFrm);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pPageFrm->GetVirtPageNum());
     pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pPageFrm->GetVirtPageNum());
