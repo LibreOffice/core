@@ -3295,6 +3295,8 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath,
                                                 const char* pFilter)
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
