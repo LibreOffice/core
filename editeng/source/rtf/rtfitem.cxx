@@ -318,12 +318,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if (const TypedWhichId<SvxLRSpaceItem> wid = aPardMap[SID_ATTR_LRSPACE])
                 {
                     SvxLRSpaceItem aLR(pSet->Get(wid));
-                    sal_uInt16 nSz = 0;
+                    sal_Int16 nSz = 0;
                     if( -1 != nTokenValue )
                     {
                         if( IsCalcValue() )
                             CalcValue();
-                        nSz = sal_uInt16(nTokenValue);
+                        nSz = sal_Int16(nTokenValue);
                     }
                     aLR.SetTextFirstLineOffset(SvxIndentValue::twips(nSz));
                     pSet->Put( aLR );
@@ -335,12 +335,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if (const TypedWhichId<SvxLRSpaceItem> wid = aPardMap[SID_ATTR_LRSPACE])
                 {
                     SvxLRSpaceItem aLR(pSet->Get(wid));
-                    sal_uInt16 nSz = 0;
+                    sal_Int16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
                         if( IsCalcValue() )
                             CalcValue();
-                        nSz = sal_uInt16(nTokenValue);
+                        nSz = sal_Int16(nTokenValue);
                     }
                     aLR.SetTextLeft(SvxIndentValue::twips(nSz));
                     pSet->Put( aLR );
@@ -352,12 +352,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if (const TypedWhichId<SvxLRSpaceItem> wid = aPardMap[SID_ATTR_LRSPACE])
                 {
                     SvxLRSpaceItem aLR(pSet->Get(wid));
-                    sal_uInt16 nSz = 0;
+                    sal_Int16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
                         if( IsCalcValue() )
                             CalcValue();
-                        nSz = sal_uInt16(nTokenValue);
+                        nSz = sal_Int16(nTokenValue);
                     }
                     aLR.SetRight(SvxIndentValue::twips(nSz));
                     pSet->Put( aLR );
