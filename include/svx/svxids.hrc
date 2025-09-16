@@ -1074,9 +1074,10 @@ class XFillGradientItem;
 
 #define SID_ATTR_POSTIT_HTML                            TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 1215 )
 
-// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1215 + 1 )
+#define SID_ATTR_RESIZE_ALL_PAGES                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1216 )
 
+// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1216 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

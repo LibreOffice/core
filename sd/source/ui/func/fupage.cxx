@@ -206,7 +206,8 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
                         SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
                         SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED,
                         SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG,
-                        SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE>>(mpDoc->GetPool());
+                        SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE,
+                        SID_ATTR_RESIZE_ALL_PAGES, SID_ATTR_RESIZE_ALL_PAGES>>(mpDoc->GetPool());
     // Keep it sorted
     aNewAttr->MergeRange(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE),
                          mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
@@ -230,6 +231,10 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     aPageItem.SetLandscape( mpPage->GetOrientation() == Orientation::Landscape );
     aPageItem.SetNumType( mpDoc->GetPageNumType() );
     aNewAttr->Put( aPageItem );
+
+    bool bResizeAllPages = mpDoc->ShouldResizeAllPages();
+    SfxBoolItem aResize( SID_ATTR_RESIZE_ALL_PAGES, bResizeAllPages );
+    aNewAttr->Put( aResize );
 
     // size
     maSize = mpPage->GetSize();
@@ -489,7 +494,6 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if (!pArgs || !mpDrawViewShell) {
         return;
     }
-
     // Set new page-attributes
     PageKind ePageKind = mpDrawViewShell->GetPageKind();
     const SfxPoolItem*  pPoolItem;
@@ -513,6 +517,12 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = true;
 
         mpDrawViewShell->ResetActualPage();
+    }
+
+    if ( pArgs->GetItemState(SID_ATTR_RESIZE_ALL_PAGES, true, &pPoolItem) == SfxItemState::SET)
+    {
+        SdDrawDocument* pDrawDoc = mpDrawViewShell->GetDoc();
+        pDrawDoc->SetResizeAllPages(static_cast<const SfxBoolItem*>(pPoolItem)->GetValue());
     }
 
     if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, true, &pPoolItem) == SfxItemState::SET )
