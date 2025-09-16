@@ -5123,8 +5123,9 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     SolarMutexGuard aGuard;
 
     const StringMap aMap(jsdialog::jsonToStringMap(pArguments));
+    auto aIdIter = aMap.find(u"id"_ustr);
 
-    if (aMap.find(u"id"_ustr) == aMap.end() || aMap.at(u"id"_ustr).isEmpty())
+    if (aIdIter == aMap.end() || aIdIter->second.isEmpty())
     {
         SAL_WARN("lok", "sendDialogEvent: no widget id set");
         assert(false);
@@ -5135,7 +5136,7 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
     try
     {
-        const OUString sControlId = aMap.at(u"id"_ustr);
+        const OUString sControlId = aIdIter->second;
         OUString sWindowId = OUString::number(nWindowId);
         const OUString sCurrentShellId = OUString::number(nCurrentShellId);
 
@@ -7516,7 +7517,7 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     }
 
     // Sanity check
-    if (aMap.find(u"type"_ustr) == aMap.end() || aMap.find(u"cmd"_ustr) == aMap.end())
+    if (!aMap.contains(u"type"_ustr) || !aMap.contains(u"cmd"_ustr))
     {
         SetLastExceptionMsg(u"Wrong arguments for sendFormFieldEvent!"_ustr);
         return;
@@ -7597,7 +7598,7 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     }
 
     // Sanity check
-    if (aMap.find(u"type"_ustr) == aMap.end())
+    if (!aMap.contains(u"type"_ustr))
     {
         SetLastExceptionMsg(u"Missing 'type' argument for sendContentControlEvent"_ustr);
         return;
