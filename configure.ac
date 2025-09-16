@@ -6906,10 +6906,10 @@ TAB=`printf '\t'`
 AC_MSG_CHECKING([the GNU Make version])
 _make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-if test "$_make_longver" -ge "040000"; then
+if test "$_make_longver" -ge "040200"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-    AC_MSG_ERROR([failed ($GNUMAKE version >= 4.0 needed)])
+    AC_MSG_ERROR([failed ($GNUMAKE version >= 4.2 needed)])
 fi
 
 _make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
