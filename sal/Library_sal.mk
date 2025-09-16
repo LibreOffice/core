@@ -79,7 +79,6 @@ $(eval $(call gb_Library_add_libs,sal,\
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,sal,\
-	Carbon \
 	CoreFoundation \
 	Foundation \
 	$(if $(ENABLE_MACOSX_SANDBOX),Security) \

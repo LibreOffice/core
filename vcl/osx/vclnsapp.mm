@@ -40,7 +40,6 @@
 
 #include <premac.h>
 #include <objc/objc-runtime.h>
-#import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
 #include <postmac.h>
 

@@ -26,9 +26,6 @@
 #include "DragActionConversion.hxx"
 #include "DragSource.hxx"
 #include <rtl/ustring.h>
-#include <premac.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
 #include <osx/salframe.h>
 #include <osx/salframeview.h>
 #include <cppuhelper/supportsservice.hxx>

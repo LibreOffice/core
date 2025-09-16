@@ -173,8 +173,11 @@
 
 #ifdef MACOSX
 #define TimeValue CFTimeValue      // Do not conflict with TimeValue in sal/inc/osl/time.h
-#include <Carbon/Carbon.h>
 #undef TimeValue
+#   include <premac.h>
+#   include <CoreFoundation/CoreFoundation.h>
+#   include <postmac.h>
+#   include <signal.h>
 #   include <dlfcn.h>
 #   include <pthread.h>
 #   include <sys/file.h>
