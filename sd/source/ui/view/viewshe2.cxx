@@ -536,19 +536,41 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     }
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
 
-    // use Model-based method at SdDrawDocument
-    GetDoc()->AdaptPageSizeForAllPages(
-        rNewSize,
-        ePageKind,
-        pUndoGroup.get(),
-        nLeft,
-        nRight,
-        nUpper,
-        nLower,
-        bScaleAll,
-        eOrientation,
-        nPaperBin,
-        bBackgroundFullSize);
+    SdDrawDocument* pDrawDoc = GetDoc();
+
+    if (pDrawDoc->ShouldResizeAllPages())
+        // use Model-based method at SdDrawDocument
+        pDrawDoc->AdaptPageSizeForAllPages(
+            rNewSize,
+            ePageKind,
+            pUndoGroup.get(),
+            nLeft,
+            nRight,
+            nUpper,
+            nLower,
+            bScaleAll,
+            eOrientation,
+            nPaperBin,
+            bBackgroundFullSize);
+
+    else
+    {
+        SdPage* pCurrentPage = getCurrentPage();
+        pDrawDoc->ResizeCurrentPage(
+            pCurrentPage,
+            rNewSize,
+            ePageKind,
+            pUndoGroup.get(),
+            nLeft,
+            nRight,
+            nUpper,
+            nLower,
+            bScaleAll,
+            eOrientation,
+            nPaperBin,
+            bBackgroundFullSize
+        );
+    }
 
     // adjust handout page to new format of the standard page
     if(0 != nPageCnt && ((ePageKind == PageKind::Standard) || (ePageKind == PageKind::Handout)))
