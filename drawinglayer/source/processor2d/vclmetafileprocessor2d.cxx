@@ -2707,11 +2707,11 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
         basegfx::fround(aDiscreteRange.getHeight()), nMaximumQuadraticPixels));
 
     // add to target metafile (will create MetaFloatTransparentAction)
-    mpOutputDevice->DrawBitmapEx(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),
-                                       basegfx::fround<tools::Long>(aLogicRange.getMinY())),
-                                 Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
-                                      basegfx::fround<tools::Long>(aLogicRange.getHeight())),
-                                 aBitmap);
+    mpOutputDevice->DrawBitmap(Point(basegfx::fround<tools::Long>(aLogicRange.getMinX()),
+                                     basegfx::fround<tools::Long>(aLogicRange.getMinY())),
+                               Size(basegfx::fround<tools::Long>(aLogicRange.getWidth()),
+                                    basegfx::fround<tools::Long>(aLogicRange.getHeight())),
+                               aBitmap);
 }
 
 void VclMetafileProcessor2D::processStructureTagPrimitive2D(

@@ -55,7 +55,7 @@ public:
     {
         rRenderContext.SetBackground(Theme::GetColor(Theme::Color_DeckTitleBarBackground));
         rRenderContext.Erase();
-        rRenderContext.DrawBitmapEx(Point(0, 0), maGrip);
+        rRenderContext.DrawBitmap(Point(0, 0), maGrip);
     }
 };
 

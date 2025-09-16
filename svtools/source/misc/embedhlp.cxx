@@ -785,7 +785,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
             nWidth = nW;
         }
 
-        pOut->DrawBitmapEx(aP, Size( nWidth, nHeight ), aBmp);
+        pOut->DrawBitmap(aP, Size( nWidth, nHeight ), aBmp);
     }
 
     pOut->IntersectClipRegion( rRect );

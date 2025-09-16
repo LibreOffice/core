@@ -4404,7 +4404,7 @@ public:
                 break;
             case OUTDEV_PRINTER:
             case OUTDEV_PDF:
-                rOutput.DrawBitmapEx(rPos, xOutput->GetBitmap(Point(), aSize));
+                rOutput.DrawBitmap(rPos, xOutput->GetBitmap(Point(), aSize));
                 break;
         }
 
@@ -4839,7 +4839,7 @@ namespace
     {
         ScopedVclPtr<VirtualDevice> pVDevice(VclPtr<VirtualDevice>::Create());
         pVDevice->SetOutputSizePixel(rBitmap.GetSizePixel());
-        pVDevice->DrawBitmapEx(Point(0,0), rBitmap);
+        pVDevice->DrawBitmap(Point(0,0), rBitmap);
         return getPixbuf(*pVDevice);
     }
 

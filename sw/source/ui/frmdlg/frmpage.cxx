@@ -2830,7 +2830,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         if (m_bVert)
             nMirrorFlags |= BmpMirrorFlags::Horizontal;
         aTmpBmp.Mirror(nMirrorFlags);
-        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, aTmpBmp);
+        rRenderContext.DrawBitmap(aPntPos, aPntSz, aTmpBmp);
     }
     else if (m_bGraphic)  //draw unmirrored preview graphic
     {
@@ -2838,7 +2838,7 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     }
     else    //draw unmirrored stock sample image
     {
-        rRenderContext.DrawBitmapEx(aPntPos, aPntSz, m_aBmp);
+        rRenderContext.DrawBitmap(aPntPos, aPntSz, m_aBmp);
     }
 }
 

@@ -1447,8 +1447,8 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
             break;
         case OUTDEV_PRINTER:
         case OUTDEV_PDF:
-            rOutput.DrawBitmapEx(rRenderLogicPos, aRenderLogicSize,
-                                 xOutput->GetBitmap(Point(), aTempLogicSize));
+            rOutput.DrawBitmap(rRenderLogicPos, aRenderLogicSize,
+                               xOutput->GetBitmap(Point(), aTempLogicSize));
             break;
     }
 

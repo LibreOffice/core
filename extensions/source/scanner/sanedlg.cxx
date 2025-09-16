@@ -944,7 +944,7 @@ void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     // check for sane values
-    rRenderContext.DrawBitmapEx(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
+    rRenderContext.DrawBitmap(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
 
     DrawDrag(rRenderContext);
 }

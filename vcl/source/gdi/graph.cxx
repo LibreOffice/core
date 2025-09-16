@@ -65,7 +65,7 @@ void ImplDrawDefault(OutputDevice& rOutDev, const OUString* pText,
 
         if( aSize.Height() > aBitmapSize.Height() && aSize.Width() > aBitmapSize.Width() )
         {
-            rOutDev.DrawBitmapEx( aPoint, *pBitmap );
+            rOutDev.DrawBitmap( aPoint, *pBitmap );
             aPoint.AdjustX(aBitmapSize.Width() + 2*nPixel );
             aSize.AdjustWidth( -(aBitmapSize.Width() + 2*nPixel) );
         }

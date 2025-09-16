@@ -302,7 +302,7 @@ namespace drawinglayer::primitive2d
                     {
                         case Disposal::Not:
                         {
-                            maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
+                            maVirtualDevice->DrawBitmap(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
 
                             if (!rAnimationFrame.maBitmap.HasAlpha())
                             {
@@ -315,7 +315,7 @@ namespace drawinglayer::primitive2d
                             {
                                 AlphaMask aAlphaMask = rAnimationFrame.maBitmap.CreateAlphaMask();
                                 Bitmap aExpandVisibilityMask(aAlphaMask.GetBitmap(), aAlphaMask);
-                                maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
+                                maVirtualDeviceMask->DrawBitmap(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
                             break;
@@ -325,7 +325,7 @@ namespace drawinglayer::primitive2d
                             // #i70772# react on no mask, for primitives, too.
 
                             maVirtualDeviceMask->Erase();
-                            maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
+                            maVirtualDevice->DrawBitmap(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
 
                             if (!rAnimationFrame.maBitmap.HasAlpha())
                             {
@@ -338,16 +338,16 @@ namespace drawinglayer::primitive2d
                             {
                                 const AlphaMask aMask(rAnimationFrame.maBitmap.CreateAlphaMask());
                                 Bitmap aExpandVisibilityMask(aMask.GetBitmap(), aMask);
-                                maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
+                                maVirtualDeviceMask->DrawBitmap(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             }
 
                             break;
                         }
                         case Disposal::Previous:
                         {
-                            maVirtualDevice->DrawBitmapEx(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
+                            maVirtualDevice->DrawBitmap(rAnimationFrame.maPositionPixel, rAnimationFrame.maBitmap);
                             Bitmap aExpandVisibilityMask(rAnimationFrame.maBitmap.CreateAlphaMask().GetBitmap(), rAnimationFrame.maBitmap.CreateAlphaMask());
-                            maVirtualDeviceMask->DrawBitmapEx(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
+                            maVirtualDeviceMask->DrawBitmap(rAnimationFrame.maPositionPixel, aExpandVisibilityMask);
                             break;
                         }
                     }

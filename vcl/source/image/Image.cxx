@@ -167,7 +167,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         }
     }
 
-    pOutDev->DrawBitmapEx(rPos, aOutSize, aRenderBmp);
+    pOutDev->DrawBitmap(rPos, aOutSize, aRenderBmp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

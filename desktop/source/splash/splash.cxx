@@ -559,7 +559,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     // in case of native controls we need to draw directly to the window
     if (pSpl->_bNativeProgress && rRenderContext.IsNativeControlSupported(ControlType::IntroProgress, ControlPart::Entire))
     {
-        rRenderContext.DrawBitmapEx(Point(), pSpl->_aIntroBmp);
+        rRenderContext.DrawBitmap(Point(), pSpl->_aIntroBmp);
 
         ImplControlValue aValue( pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax);
         tools::Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight));
@@ -583,7 +583,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     // non native drawing
     // draw bitmap
-    _vdev->DrawBitmapEx(Point(), pSpl->_aIntroBmp);
+    _vdev->DrawBitmap(Point(), pSpl->_aIntroBmp);
 
     if (pSpl->_bPaintProgress) {
         // draw progress...

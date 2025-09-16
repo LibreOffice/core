@@ -415,7 +415,7 @@ void SvxFillToolBoxControl::Update()
                             ScopedVclPtrInstance< VirtualDevice > pVD;
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
-                            pVD->DrawBitmapEx(Point(), aBmp);
+                            pVD->DrawBitmap(Point(), aBmp);
                             mpLbFillAttr->append(u""_ustr, xGradientList->Get(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }
@@ -478,7 +478,7 @@ void SvxFillToolBoxControl::Update()
                             ScopedVclPtrInstance< VirtualDevice > pVD;
                             const Size aBmpSize(aBmp.GetSizePixel());
                             pVD->SetOutputSizePixel(aBmpSize, false);
-                            pVD->DrawBitmapEx(Point(), aBmp);
+                            pVD->DrawBitmap(Point(), aBmp);
                             mpLbFillAttr->append(u""_ustr, xHatchList->GetHatch(0)->GetName(), *pVD);
                             mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                         }

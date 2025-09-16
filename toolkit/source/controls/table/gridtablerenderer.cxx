@@ -281,13 +281,13 @@ namespace svt::table
             if ( nDrawTextFlags & DrawTextFlags::Right )
             {
                 // text is right aligned => draw the sort indicator at the left hand side
-                rRenderContext.DrawBitmapEx(Point(_rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY),
+                rRenderContext.DrawBitmap(Point(_rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY),
                                             aIndicatorBitmap);
             }
             else
             {
                 // text is left-aligned or centered => draw the sort indicator at the right hand side
-                rRenderContext.DrawBitmapEx(Point(_rArea.Right() - nSortIndicatorPaddingX - aBitmapSize.Width(), nSortIndicatorPaddingY),
+                rRenderContext.DrawBitmap(Point(_rArea.Right() - nSortIndicatorPaddingX - aBitmapSize.Width(), nSortIndicatorPaddingY),
                                             aIndicatorBitmap);
             }
         }

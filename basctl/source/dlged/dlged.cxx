@@ -1159,7 +1159,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     aPosOffs.AdjustX(Print::nLeftMargin );
     aPosOffs.AdjustY(Print::nTopMargin );
 
-    pPrinter->DrawBitmapEx( aPosOffs, aOutputSz, aDlg );
+    pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
 
     pPrinter->SetMapMode( aOldMap );
     pPrinter->SetFont( aOldFont );

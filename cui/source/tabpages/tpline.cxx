@@ -1422,7 +1422,7 @@ void SvxLineTabPage::PopulateMenus()
 
                 }
                 pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
-                pVD->DrawBitmapEx(Point(), aBitmap);
+                pVD->DrawBitmap(Point(), aBitmap);
                 m_xGalleryMenu->append(pInfo->sItemId, *pUIName, *pVD);
             }
             else
@@ -1505,7 +1505,7 @@ void SvxLineTabPage::PopulateMenus()
                 aBitmap.Scale(nScale, nScale);
             }
             pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr, *pVD);
         }
         pPage->RemoveObject(0);

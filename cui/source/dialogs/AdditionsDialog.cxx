@@ -262,7 +262,7 @@ void LoadImage(std::u16string_view rPreviewFile, const AdditionsItem& rCurrentIt
     //white background since images come with a white border
     xVirDev->SetBackground(Wallpaper(COL_WHITE));
     xVirDev->Erase();
-    xVirDev->DrawBitmapEx(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
+    xVirDev->DrawBitmap(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
     rCurrentItem.m_xImageScreenshot->set_image(xVirDev.get());
     xVirDev.disposeAndClear();
 }

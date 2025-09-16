@@ -973,7 +973,7 @@ namespace vclcanvas
                                               &nCol );
 
                             Bitmap aOutputBmp( aContentBmp.CreateColorBitmap(), aAlpha );
-                            rOutDev.DrawBitmapEx( aPolygonDeviceRect.TopLeft(),
+                            rOutDev.DrawBitmap( aPolygonDeviceRect.TopLeft(),
                                                   aOutputBmp );
                         }
                         else

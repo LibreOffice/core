@@ -355,7 +355,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
                 ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
                 pVirDev->SetOutputSizePixel(aBitmap.GetSizePixel());
                 BitmapFilter::Filter(aBitmap, BitmapShadowFilter(aShadowColor));
-                pVirDev->DrawBitmapEx(Point(), aBitmap);
+                pVirDev->DrawBitmap(Point(), aBitmap);
                 aGraphicObject.SetGraphic(Graphic(pVirDev->GetBitmap(Point(0,0), aBitmap.GetSizePixel())));
             }
 

@@ -58,7 +58,7 @@ class GridWindow : public weld::CustomWidgetController
         void draw(vcl::RenderContext& rRenderContext, const Bitmap& rBitmap)
         {
             const Point aOffset(rRenderContext.PixelToLogic(Point(mnOffX, mnOffY)));
-            rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmap);
+            rRenderContext.DrawBitmap(maPos - aOffset, rBitmap);
         }
 
         bool isHit(OutputDevice const & rWin, const Point& rPos)

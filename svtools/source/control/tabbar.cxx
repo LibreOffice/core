@@ -157,7 +157,7 @@ public:
             Point aPosition = maRect.TopLeft();
             aPosition.AdjustX(2);
             aPosition.AdjustY((maRect.getOpenHeight() - aBitmap.GetSizePixel().Height()) / 2);
-            mrRenderContext.DrawBitmapEx(aPosition, aBitmap);
+            mrRenderContext.DrawBitmap(aPosition, aBitmap);
         }
     }
 

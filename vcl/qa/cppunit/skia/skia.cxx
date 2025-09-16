@@ -136,7 +136,7 @@ void SkiaTest::testDrawShaders()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(15, 15)));
     device->Erase();
 
-    device->DrawBitmapEx(Point(5, 5), Bitmap(bitmap, alpha));
+    device->DrawBitmap(Point(5, 5), Bitmap(bitmap, alpha));
     //savePNG("/tmp/a2.png", device);
     Color resultRed(COL_RED.GetRed() * 3 / 4 + 64, 64, 64); // 3/4 red, 1/4 white
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
@@ -175,8 +175,8 @@ void SkiaTest::testDrawShaders()
         access.FillRect(tools::Rectangle(Point(20, 40), Size(10, 10)));
     }
     // Using alpha will still lead to shaders being used.
-    deviceLarge->DrawBitmapEx(Point(50, 50), Size(60, 60), Point(20, 20), Size(30, 30),
-                              Bitmap(bitmapLarge, alphaLarge));
+    deviceLarge->DrawBitmap(Point(50, 50), Size(60, 60), Point(20, 20), Size(30, 30),
+                            Bitmap(bitmapLarge, alphaLarge));
     //savePNG("/tmp/a4.png", deviceLarge);
     Color resultBlue(64, 64, COL_BLUE.GetBlue() * 3 / 4 + 64); // 3/4 blue, 1/4 white
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, deviceLarge->GetPixel(Point(40, 40)));

@@ -615,7 +615,7 @@ namespace vclcanvas
             {
                 // optimized case: identity matrix, or only
                 // translational components.
-                mpOutDevProvider->getOutDev().DrawBitmapEx( vcl::unotools::pointFromB2DPoint( aOutputPos ),
+                mpOutDevProvider->getOutDev().DrawBitmap( vcl::unotools::pointFromB2DPoint( aOutputPos ),
                                                     aBmp );
 
                 // Returning a cache object is not useful, the XBitmap

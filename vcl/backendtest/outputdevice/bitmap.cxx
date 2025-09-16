@@ -85,7 +85,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap(vcl::PixelFormat aBitmapFormat,bo
     Point aPoint((maVDRectangle.GetWidth()  / 2.0) - (aBitmapSize.Width() / 2.0),
                  (maVDRectangle.GetHeight() / 2.0) - (aBitmapSize.Height() / 2.0));
 
-    mpVirtualDevice->DrawBitmapEx(aPoint, aBitmap);
+    mpVirtualDevice->DrawBitmap(aPoint, aBitmap);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
@@ -115,7 +115,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitm
 
     Point aPoint(alignToCenter(maVDRectangle, tools::Rectangle(Point(), aBitmapSize)).TopLeft());
 
-    mpVirtualDevice->DrawBitmapEx(aPoint, Bitmap(aBitmap, aAlpha));
+    mpVirtualDevice->DrawBitmap(aPoint, Bitmap(aBitmap, aAlpha));
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
@@ -170,7 +170,7 @@ Bitmap OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
 
     Point aPoint(alignToCenter(maVDRectangle, tools::Rectangle(Point(), aBitmapSize)).TopLeft());
 
-    mpVirtualDevice->DrawBitmapEx(aPoint, Bitmap(aBitmap, aAlpha));
+    mpVirtualDevice->DrawBitmap(aPoint, Bitmap(aBitmap, aAlpha));
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }

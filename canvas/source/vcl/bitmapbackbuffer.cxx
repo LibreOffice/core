@@ -134,7 +134,7 @@ namespace vclcanvas
             mpVDev->EnableMapMode( false );
             mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             const Point aEmptyPoint;
-            mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
+            mpVDev->DrawBitmap( aEmptyPoint, *maBitmap );
         }
 
         // canvas queried the VDev, and will possibly paint into

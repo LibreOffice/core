@@ -446,7 +446,7 @@ VclPtr<VirtualDevice> LayoutMenu::GetVirtualDevice(Image pImage)
         aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
     const Size aSize(aPreviewBitmap.GetSizePixel());
     pVDev->SetOutputSizePixel(aSize);
-    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+    pVDev->DrawBitmap(aNull, aPreviewBitmap);
 
     return pVDev;
 }

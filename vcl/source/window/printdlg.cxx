@@ -180,7 +180,7 @@ void PrintDialog::PrintPreviewWindow::Paint(vcl::RenderContext& rRenderContext, 
         // currently not sure when using just ::DrawBitmap with
         // a defined size or ::DrawOutDev
         aPreviewBitmap.Scale(maPreviewSize, BmpScaleFlag::BestQuality);
-        rRenderContext.DrawBitmapEx(aOffset, aPreviewBitmap);
+        rRenderContext.DrawBitmap(aOffset, aPreviewBitmap);
     }
 
     tools::Rectangle aFrameRect(aOffset + Point(-1, -1), Size(maPreviewSize.Width() + 2, maPreviewSize.Height() + 2));

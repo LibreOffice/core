@@ -1706,7 +1706,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
                 if (!aBlendFrame.IsEmpty())
                 {
-                    rRenderContext.DrawBitmapEx(aPtImg, aBlendFrame);
+                    rRenderContext.DrawBitmap(aPtImg, aBlendFrame);
                 }
             }
         }
@@ -2724,7 +2724,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
 
             if(!aBlendFrame.IsEmpty())
             {
-                rRenderContext.DrawBitmapEx(aPtImg, aBlendFrame);
+                rRenderContext.DrawBitmap(aPtImg, aBlendFrame);
             }
         }
     }

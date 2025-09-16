@@ -76,7 +76,7 @@ void XOBitmap::Bitmap2Array()
         m_pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
 
     pVDev->SetOutputSizePixel( aBitmap.GetSizePixel() );
-    pVDev->DrawBitmapEx( Point(), aBitmap );
+    pVDev->DrawBitmap( Point(), aBitmap );
     m_aPixelColor = m_aBckgrColor = pVDev->GetPixel( Point() );
 
     // create array and determine foreground and background color

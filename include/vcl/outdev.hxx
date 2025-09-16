@@ -1317,26 +1317,6 @@ public:
                                     const Bitmap& rBitmap,
                                     MetaActionType nAction );
 
-    // draw bitmap (potentially with alpha)
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Bitmap& rBitmap );
-
-
-    // draw bitmap (potentially with alpha)
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const Bitmap& rBitmapEx );
-
-    // draw bitmap (potentially with alpha)
-    void                        DrawBitmapEx(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const Point& rSrcPtPixel,
-                                    const Size& rSrcSizePixel,
-                                    const Bitmap& rBitmap);
-
     // draw bitmap with alpha information
     SAL_DLLPRIVATE void         DrawAlphaBitmap(
                                     const Point& rDestPt,

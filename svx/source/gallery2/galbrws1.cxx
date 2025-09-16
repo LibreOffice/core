@@ -1138,7 +1138,7 @@ void GalleryBrowser::UpdateRows(bool bVisibleOnly)
                 GalleryIconView::drawTransparenceBackground(*xDev, aPos, aBitmapSizePixel);
             }
 
-            xDev->DrawBitmapEx(aPos, aBitmap);
+            xDev->DrawBitmap(aPos, aBitmap);
         }
 
         mxListView->set_text(rEntry, sItemTextTitle);

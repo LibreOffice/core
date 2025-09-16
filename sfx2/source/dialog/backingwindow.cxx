@@ -141,7 +141,7 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
     {
-        rRenderContext.DrawBitmapEx(Point(0, 0), maBrandImage);
+        rRenderContext.DrawBitmap(Point(0, 0), maBrandImage);
     }
 };
 

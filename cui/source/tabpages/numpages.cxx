@@ -2082,7 +2082,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, 
                 aBitmap.Scale(nScale, nScale);
             }
             pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
-            pVD->DrawBitmapEx(Point(), aBitmap);
+            pVD->DrawBitmap(Point(), aBitmap);
             m_xGalleryMenu->append(sItemId, sGrfName, *pVD);
         }
         else

@@ -1542,7 +1542,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     aMtf.WindStart();
     aMtf.Play(*pMaskedDevice);
     Bitmap aBmpEx( pMaskedDevice->GetBitmap( Point( 0, 0 ), aPaintRect.GetSize() ) );
-    i_pTargetOutDev->DrawBitmapEx( i_rPos, aBmpEx );
+    i_pTargetOutDev->DrawBitmap( i_rPos, aBmpEx );
     // get rid of virtual device now so they don't pile up during recursive calls
     pMaskedDevice.disposeAndClear();
 

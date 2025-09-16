@@ -1016,7 +1016,7 @@ void OS2METReader::ReadBitBlt()
     while (pB!=nullptr && pB->nID!=nID) pB=pB->pSucc;
     if (pB!=nullptr) {
         SetRasterOp(aAttr.ePatMix);
-        pVirDev->DrawBitmapEx(aP1,aSize,pB->aBitmap);
+        pVirDev->DrawBitmap(aP1,aSize,pB->aBitmap);
     }
 }
 

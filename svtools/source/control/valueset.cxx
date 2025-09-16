@@ -1502,7 +1502,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
 
         if (!aBlendFrame.IsEmpty())
         {
-            maVirDev->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
+            maVirDev->DrawBitmap(aRect.TopLeft(), aBlendFrame);
         }
     }
 }

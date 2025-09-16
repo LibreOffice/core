@@ -1402,7 +1402,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags )
     pDev->SetLineColor();
 
     if ( aWallpaper.IsBitmap() )
-        pDev->DrawBitmapEx( aPos, aSize, aWallpaper.GetBitmap() );
+        pDev->DrawBitmap( aPos, aSize, aWallpaper.GetBitmap() );
     else
     {
         pDev->SetFillColor( aWallpaper.GetColor() );

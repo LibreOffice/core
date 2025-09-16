@@ -1082,7 +1082,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
         if ( aWavylinebmp.ImplGetSalBitmap() != nullptr )
         {
             Size _size( nEndX - nStartX, aWavylinebmp.GetSizePixel().Height() );
-            DrawBitmapEx(Point( rStartPos.X(), rStartPos.Y() ), PixelToLogic( _size ), Point(), _size, aWavylinebmp);
+            DrawBitmap(Point( rStartPos.X(), rStartPos.Y() ), PixelToLogic( _size ), Point(), _size, aWavylinebmp);
         }
         return;
     }

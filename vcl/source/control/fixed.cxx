@@ -696,11 +696,11 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& r
     if ( !maBitmap.IsEmpty() )
     {
         if ( GetStyle() & WB_SCALE )
-            pDev->DrawBitmapEx( rPos, rSize, maBitmap );
+            pDev->DrawBitmap( rPos, rSize, maBitmap );
         else
         {
             Point aPos = lcl_CalcPos( GetStyle(), rPos, maBitmap.GetSizePixel(), rSize );
-            pDev->DrawBitmapEx( aPos, maBitmap );
+            pDev->DrawBitmap( aPos, maBitmap );
         }
     }
 }

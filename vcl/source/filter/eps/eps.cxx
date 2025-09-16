@@ -377,7 +377,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pAMTF.reset( new GDIMetaFile );
         ScopedVclPtrInstance< VirtualDevice > pTmpVDev;
         pAMTF->Record( pTmpVDev );
-        pTmpVDev->DrawBitmapEx( Point(), aBmp );
+        pTmpVDev->DrawBitmap( Point(), aBmp );
         pAMTF->Stop();
         pAMTF->SetPrefSize( aBmp.GetSizePixel() );
         pMTF = pAMTF.get();
