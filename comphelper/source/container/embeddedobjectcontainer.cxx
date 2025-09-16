@@ -361,7 +361,8 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject(
             const uno::Sequence < sal_Int8 >& rClassId,
-            const uno::Sequence < beans::PropertyValue >& rArgs, OUString& rNewName, OUString const* pBaseURL )
+            OUString& rNewName,
+            std::optional<OUString> oDefaultParentBaseURL )
 {
     if ( rNewName.isEmpty() )
         rNewName = CreateUniqueObjectName();
@@ -374,17 +375,16 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
-        const size_t nExtraArgs = pBaseURL ? 2 : 1;
-        uno::Sequence< beans::PropertyValue > aObjDescr( rArgs.getLength() + nExtraArgs );
+        const size_t nArgs = oDefaultParentBaseURL.has_value() ? 2 : 1;
+        uno::Sequence< beans::PropertyValue > aObjDescr( nArgs );
         auto pObjDescr = aObjDescr.getArray();
         pObjDescr[0].Name = "Parent";
         pObjDescr[0].Value <<= pImpl->m_xModel.get();
-        if (pBaseURL)
+        if (oDefaultParentBaseURL.has_value())
         {
             pObjDescr[1].Name = "DefaultParentBaseURL";
-            pObjDescr[1].Value <<= *pBaseURL;
+            pObjDescr[1].Value <<= *oDefaultParentBaseURL;
         }
-        std::copy( rArgs.begin(), rArgs.end(), pObjDescr + nExtraArgs );
         xObj.set( xFactory->createInstanceInitNew(
                     rClassId, OUString(), pImpl->mxStorage, rNewName,
                     aObjDescr ), uno::UNO_QUERY );
@@ -400,11 +400,6 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     }
 
     return xObj;
-}
-
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject( const uno::Sequence < sal_Int8 >& rClassId, OUString& rNewName, OUString const* pBaseURL )
-{
-    return CreateEmbeddedObject( rClassId, uno::Sequence < beans::PropertyValue >(), rNewName, pBaseURL );
 }
 
 void EmbeddedObjectContainer::AddEmbeddedObject(

@@ -25,6 +25,7 @@
 
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XEmbeddedObject; }
@@ -106,13 +107,7 @@ public:
     css::uno::Reference < css::embed::XEmbeddedObject > CreateEmbeddedObject(
                         const css::uno::Sequence < sal_Int8 >& rClassId,
                         OUString& rNewName,
-                        OUString const* pBaseURL = nullptr );
-
-    css::uno::Reference < css::embed::XEmbeddedObject > CreateEmbeddedObject(
-                        const css::uno::Sequence < sal_Int8 >& rClassId,
-                        const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
-                        OUString& rNewName,
-                        OUString const* pBaseURL = nullptr );
+                        std::optional<OUString> oDefaultParentBaseURL = std::nullopt );
 
     // insert an embedded object into the container - objects persistent representation will be added to the storage
     bool            InsertEmbeddedObject(

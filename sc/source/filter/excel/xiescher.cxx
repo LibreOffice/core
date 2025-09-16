@@ -1766,7 +1766,7 @@ rtl::Reference<SdrObject> XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rD
         OUString aEmbObjName;
         OUString sBaseURL(GetRoot().GetMedium().GetBaseURL());
         Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
-                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName, &sBaseURL );
+                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName, sBaseURL );
 
         if (!xEmbObj)
             return xSdrObj;

@@ -2882,7 +2882,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
 
                 OUString sDocumentBaseURL = pDoc->GetPersist()->getDocumentBaseURL();
                 xIPObj = pCnt->CreateEmbeddedObject(aClassName.GetByteSequence(), aName,
-                                                    &sDocumentBaseURL);
+                                                    sDocumentBaseURL);
             }
             if ( xIPObj.is() )
             {

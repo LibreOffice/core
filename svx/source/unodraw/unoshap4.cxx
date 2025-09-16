@@ -390,13 +390,10 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     if( SvxShape::getPropertyValue( UNO_NAME_OLE2_PERSISTNAME ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
-    uno::Sequence<beans::PropertyValue> objArgs( comphelper::InitPropertySequence({
-            { "DefaultParentBaseURL", Any(pPersist->getDocumentBaseURL()) }
-        }));
     //TODO/LATER: how to cope with creation failure?!
     uno::Reference<embed::XEmbeddedObject> xObj(
         pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject(
-            aClassName.GetByteSequence(), objArgs, aPersistName));
+            aClassName.GetByteSequence(), aPersistName, pPersist->getDocumentBaseURL()));
     if( xObj.is() )
     {
         tools::Rectangle aRect = pOle2Obj->GetLogicRect();
