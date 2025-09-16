@@ -43,7 +43,7 @@ void Bridge::call_net_func(IntPtr pNetI, const typelib_TypeDescription* pMethodT
         {
             if (param.bOut)
                 map_net_value_to_uno(pArgs[i], &pArgsRetExc[i], param.pTypeRef,
-                                     param.bIn && param.bOut, true);
+                                     param.bIn && param.bOut);
         }
         catch (...)
         {
@@ -63,13 +63,13 @@ void Bridge::call_net_func(IntPtr pNetI, const typelib_TypeDescription* pMethodT
     if (error)
     {
         map_net_value_to_uno(*pExc, &pArgsRetExc[nParams + 1],
-                             cppu::UnoType<css::uno::Any>::get().getTypeLibType(), false, true);
+                             cppu::UnoType<css::uno::Any>::get().getTypeLibType(), false);
     }
     else
     {
         if (pReturnTDRef && pReturnTDRef->eTypeClass != typelib_TypeClass_VOID)
         {
-            map_net_value_to_uno(pRet, &pArgsRetExc[nParams], pReturnTDRef, false, true);
+            map_net_value_to_uno(pRet, &pArgsRetExc[nParams], pReturnTDRef, false);
         }
 
         *pExc = nullptr;
@@ -150,7 +150,7 @@ bool Bridge::call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* 
             try
             {
                 // in, in/out params
-                map_net_value_to_uno(uno_args[i], &pArgs[i], type, false, true);
+                map_net_value_to_uno(uno_args[i], &pArgs[i], type, false);
             }
             catch (...)
             {

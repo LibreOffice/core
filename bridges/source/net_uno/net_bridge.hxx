@@ -44,8 +44,7 @@ struct Bridge
     void map_uno_to_net_value(void* pUnoData, Value* pValue,
                               typelib_TypeDescriptionReference* pTDRef);
     void map_net_value_to_uno(void* pUnoData, Value* pValue,
-                              typelib_TypeDescriptionReference* pTDRef, bool destructObject,
-                              bool assignObject);
+                              typelib_TypeDescriptionReference* pTDRef, bool destructObject);
 
     bool call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* pMethodTD,
                        typelib_TypeDescriptionReference* pReturnTDRef, int nParams,
