@@ -1,7 +1,9 @@
 <svg
-  viewBox="0 0 600 72"
+  width="600 px" height="600 px"
   xmlns="http://www.w3.org/2000/svg"
   direction="rtl"
   font-family="DejaVu Sans">
-  <text x="300" y="50" text-anchor="middle">داستان SVG 1.1 SE طولا ني است.</text>
+  <text x="300" y="50" text-anchor="start">داستان SVG 1.1 SE طولا ني است.</text>
+  <text x="300" y="100" text-anchor="middle">داستان SVG 1.2 SE طولا ني است.</text>
+  <text x="300" y="150" text-anchor="end">داستان SVG 1.3 SE طولا ني است.</text>
 </svg>

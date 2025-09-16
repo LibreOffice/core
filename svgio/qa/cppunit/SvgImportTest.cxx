@@ -2132,6 +2132,18 @@ CPPUNIT_TEST_FIXTURE(Test, testRTLtext)
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", u"داستان SVG 1.1 SE طولا ني است.");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "rtl", u"true");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "x", u"57");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "y", u"50");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", u"داستان SVG 1.2 SE طولا ني است.");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "rtl", u"true");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "x", u"179");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", u"100");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", u"داستان SVG 1.3 SE طولا ني است.");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "rtl", u"true");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "x", u"300");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "y", u"150");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCssClassRedefinition)
