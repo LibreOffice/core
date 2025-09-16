@@ -1317,15 +1317,6 @@ public:
                                     const Bitmap& rBitmap,
                                     MetaActionType nAction );
 
-    // draw bitmap with alpha information
-    SAL_DLLPRIVATE void         DrawAlphaBitmap(
-                                    const Point& rDestPt,
-                                    const Size& rDestSize,
-                                    const Point& rSrcPtPixel,
-                                    const Size& rSrcSizePixel,
-                                    const Bitmap& rBitmap,
-                                    MetaActionType nAction );
-
     /** @overload
         virtual void DrawImage(
                         const Point& rPos,
@@ -1416,6 +1407,13 @@ protected:
                                     double &fMaximumArea);
 
 private:
+    SAL_DLLPRIVATE void         DrawAlphaBitmap(
+                                    const Point& rDestPt,
+                                    const Size& rDestSize,
+                                    const Point& rSrcPtPixel,
+                                    const Size& rSrcSizePixel,
+                                    const Bitmap& rBitmap,
+                                    MetaActionType nAction );
 
     SAL_DLLPRIVATE void         DrawDeviceAlphaBitmap(
                                     const Bitmap& rBmp,
