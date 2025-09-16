@@ -23,7 +23,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <premac.h>
-#include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 #include <connectivity/dbconversion.hxx>
@@ -182,7 +182,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
 
     CFComparisonResult result;
 
-    /* Carbon has a unique compare function for each data type: */
+    /* CoreFoundation has a unique compare function for each data type: */
     switch(_field1->type)
     {
         case kABStringProperty:

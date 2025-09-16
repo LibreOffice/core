@@ -29,7 +29,7 @@
 
 #include <time.h>
 #include <premac.h>
-#include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <AddressBook/ABAddressBookC.h>
 #include <postmac.h>
 
@@ -78,7 +78,7 @@ namespace connectivity::macab
 
     inline css::util::DateTime CFDateToDateTime(const CFDateRef _cfDate)
     {
-            /* Carbon can give us the time since 2001 of any CFDateRef,
+            /* CoreFoundation can give us the time since 2001 of any CFDateRef,
              * and it also stores the time since 1970 as a constant,
              * basically allowing us to get the unixtime of any
              * CFDateRef. From there, it is just a matter of choosing what
