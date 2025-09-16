@@ -4664,7 +4664,7 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         if (pOutliner)
                         {
                             SdHTMLFilter::ExportPage(pOutliner, pPage, aHtml);
-                            aJsonWriter.put("ally", aHtml.makeStringAndClear());
+                            aJsonWriter.put("a11y", aHtml.makeStringAndClear());
                             pOutliner->Clear();
                         }
                     }
