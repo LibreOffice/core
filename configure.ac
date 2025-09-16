@@ -11603,7 +11603,7 @@ fi
 dnl ===================================================================
 dnl Orcus
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.20 >= 0.20.2])
+libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.21 >= 0.21.0])
 
 dnl FIXME by renaming SYSTEM_LIBORCUS to SYSTEM_ORCUS in the build system world
 SYSTEM_LIBORCUS=$SYSTEM_ORCUS

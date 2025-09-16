@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/libtool.patch.0 \
-	external/liborcus/orcus-xml-finalize.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
