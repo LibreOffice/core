@@ -1818,6 +1818,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
         assertXPath(pXmlDoc, "/root/page", 2);
         assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
         assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
@@ -1827,6 +1828,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
         // the problem was that the 3rd paragraph didn't move to page 1
         assertXPath(pXmlDoc, "/root/page", 1);
         assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
@@ -1836,6 +1838,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
         assertXPath(pXmlDoc, "/root/page", 2);
         assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
         assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
     }
 }
 
@@ -1855,6 +1858,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
                     u"724"_ustr);
+        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
@@ -1864,6 +1868,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
         // the problem was that this did not shrink
         assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
                     u"448"_ustr);
+        discardDumpedLayout();
     }
 
     dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
@@ -1872,6 +1877,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
                     u"724"_ustr);
+        discardDumpedLayout();
     }
 }
 
@@ -2107,6 +2113,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
                     "portion", u"Text following inner section"_ustr);
         assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
                     u"Text following outer section"_ustr);
+        discardDumpedLayout();
     }
 
     xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
@@ -2125,6 +2132,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
         assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/infos/bounds", "height", u"0"_ustr);
         assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout", "portion",
                     u"Text following outer section"_ustr);
+        discardDumpedLayout();
     }
 
     xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
@@ -2163,6 +2171,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
                     "portion", u"Text following inner section"_ustr);
         assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
                     u"Text following outer section"_ustr);
+        discardDumpedLayout();
     }
 
     xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
@@ -2188,6 +2197,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
                     "portion", u"Text following inner section"_ustr);
         assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
                     u"Text following outer section"_ustr);
+        discardDumpedLayout();
     }
 
     xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
@@ -2226,6 +2236,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWith
                     "portion", u"Text following inner section"_ustr);
         assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
                     u"Text following outer section"_ustr);
+        discardDumpedLayout();
     }
 }
 
