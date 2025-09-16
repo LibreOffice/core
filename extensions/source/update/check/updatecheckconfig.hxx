@@ -178,12 +178,13 @@ private:
 
 /// @throws css::uno::RuntimeException
 template <typename T>
-T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const char * pszName )
+T getValue(const css::uno::Sequence<css::beans::NamedValue>& rNamedValues,
+           std::u16string_view sName)
 {
     for( css::beans::NamedValue const & nv : rNamedValues )
     {
         // Unfortunately gcc-3.3 does not like Any.get<T>();
-        if( nv.Name.equalsAscii( pszName ) )
+        if (nv.Name == sName)
         {
             T value = T();
             if( ! (nv.Value >>= value) )

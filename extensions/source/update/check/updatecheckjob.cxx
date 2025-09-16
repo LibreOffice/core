@@ -195,17 +195,17 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
         }
     }
 
-    uno::Sequence<beans::NamedValue> aConfig =
-        getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
+    uno::Sequence<beans::NamedValue> aConfig
+        = getValue<uno::Sequence<beans::NamedValue>>(namedValues, u"JobConfig");
 
     /* Determine the way we got invoked here -
      * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
      */
 
-    uno::Sequence<beans::NamedValue> aEnvironment =
-        getValue< uno::Sequence<beans::NamedValue> > (namedValues, "Environment");
+    uno::Sequence<beans::NamedValue> aEnvironment
+        = getValue<uno::Sequence<beans::NamedValue>>(namedValues, u"Environment");
 
-    OUString aEventName = getValue< OUString > (aEnvironment, "EventName");
+    OUString aEventName = getValue<OUString>(aEnvironment, u"EventName");
 
     auto thread = std::make_unique<InitUpdateCheckJobThread >(
         m_xContext, aConfig,
@@ -222,9 +222,9 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp )
 {
     try {
-        uno::Sequence< uno::Sequence< OUString > > aList =
-            getValue< uno::Sequence< uno::Sequence< OUString > > > ( rListProp, "updateList" );
-        bool bPrepareOnly = getValue< bool > ( rListProp, "prepareOnly" );
+        uno::Sequence<uno::Sequence<OUString>> aList
+            = getValue<uno::Sequence<uno::Sequence<OUString>>>(rListProp, u"updateList");
+        bool bPrepareOnly = getValue<bool>(rListProp, u"prepareOnly");
 
         // we will first store any new found updates and then check, if there are any
         // pending updates.
