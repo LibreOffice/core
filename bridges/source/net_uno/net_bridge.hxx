@@ -42,7 +42,7 @@ struct Bridge
     void release();
 
     void map_uno_to_net_value(void* pUnoData, Value* pValue,
-                              typelib_TypeDescriptionReference* pTDRef, bool destructValue);
+                              typelib_TypeDescriptionReference* pTDRef);
     void map_net_value_to_uno(void* pUnoData, Value* pValue,
                               typelib_TypeDescriptionReference* pTDRef, bool destructObject,
                               bool assignObject);

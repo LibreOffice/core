@@ -26,7 +26,7 @@ void Bridge::call_net_func(IntPtr pNetI, const typelib_TypeDescription* pMethodT
         const typelib_MethodParameter& param = pParams[i];
         if (param.bIn)
         {
-            map_uno_to_net_value(pArgs[i], &pArgsRetExc[i], param.pTypeRef, false);
+            map_uno_to_net_value(pArgs[i], &pArgsRetExc[i], param.pTypeRef);
         }
     }
 
@@ -186,7 +186,7 @@ bool Bridge::call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* 
             {
                 try
                 {
-                    map_uno_to_net_value(uno_args[i], &pArgs[i], param.pTypeRef, false);
+                    map_uno_to_net_value(uno_args[i], &pArgs[i], param.pTypeRef);
                 }
                 catch (...)
                 {
@@ -216,7 +216,7 @@ bool Bridge::call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* 
             // Convert uno return value
             try
             {
-                map_uno_to_net_value(uno_ret, pRet, pReturnTDRef, false);
+                map_uno_to_net_value(uno_ret, pRet, pReturnTDRef);
                 uno_type_destructData(uno_ret, pReturnTDRef, nullptr);
             }
             catch (...)
@@ -240,8 +240,7 @@ bool Bridge::call_uno_func(uno_Interface* pUnoI, const typelib_TypeDescription* 
             }
         }
 
-        map_uno_to_net_value(uno_exc, pExc, cppu::UnoType<css::uno::Any>::get().getTypeLibType(),
-                             false);
+        map_uno_to_net_value(uno_exc, pExc, cppu::UnoType<css::uno::Any>::get().getTypeLibType());
 
         return false;
     }

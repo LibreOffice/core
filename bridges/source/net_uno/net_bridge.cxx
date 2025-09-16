@@ -61,7 +61,7 @@ void SAL_CALL Mapping_uno2net(uno_Mapping* mapping, void** ppOut, void* pIn,
     if (pIn)
     {
         Value interfaceValue;
-        bridge->map_uno_to_net_value(&pIn, &interfaceValue, pTD->aBase.pWeakRef, false);
+        bridge->map_uno_to_net_value(&pIn, &interfaceValue, pTD->aBase.pWeakRef);
         *ppOut = interfaceValue.interfaceData;
     }
 }
