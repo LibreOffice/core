@@ -9385,6 +9385,18 @@ public:
         // the unwanted tab into invisibility via the 'overflow' class themed by global CreateStyleProvider
         GtkStyleContext *pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(m_pOverFlowNotebook));
         gtk_style_context_add_class(pNotebookContext, "overflow");
+
+        // tdf#165474 ensure all tabs are visible
+        if (gtk_notebook_get_tab_pos(pNotebook) != GTK_POS_TOP)
+        {
+            pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(pNotebook));
+            GtkCssProvider* pProvider = gtk_css_provider_new();
+            static const gchar data[] = "notebook > header > tabs > tab { padding-top: 1; "
+                                        "padding-bottom: 1; margin-top: 0; margin-bottom: 0;}";
+            css_provider_load_from_data(pProvider, data, -1);
+            gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
     }
 
     virtual int get_current_page() const override
