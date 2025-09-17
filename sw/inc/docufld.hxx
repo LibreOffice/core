@@ -184,6 +184,8 @@ public:
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
 
+/// Insert -> Field -> More fields -> Document -> Author -> Name on the UI.  This expands to the
+/// name of the current user, first author would be an SwDocInfoField.
 class SwAuthorField final : public SwField
 {
     OUString m_aContent;
