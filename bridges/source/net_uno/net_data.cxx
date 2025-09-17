@@ -78,6 +78,9 @@ uno_Sequence* alloc_uno_sequence(sal_Int32 nElements, sal_Int32 nElementSize, vo
 void marshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReference* pTDRef,
                   Bridge& bridge)
 {
+    assert(pUnoData);
+    assert(pNetData);
+
     switch (pTDRef->eTypeClass)
     {
         case typelib_TypeClass_BOOLEAN:
@@ -369,6 +372,9 @@ void marshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReferen
 void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReference* pTDRef,
                     bool bDestructObject, Bridge& bridge)
 {
+    assert(pUnoData);
+    assert(pNetData);
+
     switch (pTDRef->eTypeClass)
     {
         case typelib_TypeClass_BOOLEAN:
@@ -390,7 +396,7 @@ void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionRefer
             rtl_uString** ppUnoStr = static_cast<rtl_uString**>(pUnoData);
             IntPtr pNetStr = *static_cast<IntPtr*>(pNetData);
 
-            if (bDestructObject && ppUnoStr)
+            if (bDestructObject && *ppUnoStr)
                 rtl_uString_release(*ppUnoStr);
 
             *ppUnoStr = nullptr;
@@ -408,7 +414,7 @@ void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionRefer
                 = static_cast<typelib_TypeDescriptionReference**>(pUnoData);
             IntPtr pNetType = *static_cast<IntPtr*>(pNetData);
 
-            if (bDestructObject && ppUnoType)
+            if (bDestructObject && *ppUnoType)
                 typelib_typedescriptionreference_release(*ppUnoType);
 
             *ppUnoType = map_net_type_to_uno(OUString(static_cast<String>(pNetType)));
@@ -421,7 +427,7 @@ void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionRefer
             uno_Any* pUnoAny = static_cast<uno_Any*>(pUnoData);
             Value::Any* pNetAny = static_cast<Value::Any*>(pNetData);
 
-            if (bDestructObject && pUnoData)
+            if (bDestructObject)
                 uno_any_destruct(pUnoAny, nullptr);
 
             typelib_TypeDescriptionReference* pValueTDRef
@@ -539,7 +545,7 @@ void unmarshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionRefer
             Value::Sequence* pNetSeq = static_cast<Value::Sequence*>(pNetData);
 
             TypeDescHolder type(pTDRef);
-            if (bDestructObject && ppUnoSeq)
+            if (bDestructObject && *ppUnoSeq)
                 uno_destructData(ppUnoSeq, type.get(), nullptr);
 
             typelib_TypeDescriptionReference* pElemTDRef
