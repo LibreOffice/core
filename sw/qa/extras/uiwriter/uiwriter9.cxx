@@ -59,6 +59,8 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
+#include <dbmgr.hxx>
+#include <mmconfigitem.hxx>
 #include <svx/svxids.hrc>
 #include <pagefrm.hxx>
 #include <svx/svdview.hxx>
@@ -349,6 +351,228 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPasteTableInMiddleOfParagraph)
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(OUString("AB"),
                          pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport)
+{
+    // this uses biblio.odb
+    createSwDoc("database-display-hidden-section.fodt");
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<text::XTextSection> xSection(xSections->getByIndex(0), uno::UNO_QUERY);
+
+    // apparently without a record it evaluates to hidden?
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    // somehow a timer that constructs toolbars isn't run in unit tests -
+    // it would query state of .uno:MailMergeEmailDocuments which as a side
+    // effect (!) calls this:
+    getSwDocShell()->GetView()->EnsureMailMergeConfigItem();
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "English ");
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "English ");
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    uno::Sequence<css::beans::PropertyValue> args{
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
+    };
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    // fetch again in case it was deleted and undo
+    xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+
+    int nObjectsHidden;
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+        nObjectsHidden = pPdfPage->getObjectCount();
+    }
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "Deutsch ");
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    // fetch again in case it was deleted and undo
+    xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
+    // the problem was that PDF export hid the section
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+        // there must be more objects on the page now (currently goes 2->3)
+        CPPUNIT_ASSERT_LESS(pPdfPage->getObjectCount(), nObjectsHidden);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenSectionPDFExport2)
+{
+    // this uses biblio.odb
+    createSwDoc("database-display-hidden-section2.fodt");
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<text::XTextSection> xSection(xSections->getByIndex(0), uno::UNO_QUERY);
+
+    // apparently without a record it evaluates to hidden?
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsVisible"));
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    // somehow a timer that constructs toolbars isn't run in unit tests -
+    // it would query state of .uno:MailMergeEmailDocuments which as a side
+    // effect (!) calls this:
+    auto pMMConfig = getSwDocShell()->GetView()->EnsureMailMergeConfigItem();
+
+    // ... but the file has wrong DB name so we first have to fix it
+    // in the same way as SwChangeDBDlg
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetDBManager()->RegisterConnection("Bibliography");
+    SwDBData data;
+    data.sDataSource = "Bibliography";
+    data.sCommand = "biblio";
+    pWrtShell->ChgDBData(data);
+    // this would be called via a SwXTextView listener
+    pMMConfig->updateCurrentDBDataFromDocument();
+    pWrtShell->ChangeDBFields({ u"Bibliography2ÿbiblioÿ0"_ustr }, u"Bibliographyÿbiblioÿ0"_ustr);
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "English ");
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "English ");
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    uno::Sequence<css::beans::PropertyValue> args{
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
+    };
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    // fetch again in case it was deleted and undo
+    xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+
+    int nObjectsHidden;
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+        nObjectsHidden = pPdfPage->getObjectCount();
+    }
+
+    dispatchCommand(mxComponent, u".uno:MailMergeNextEntry"_ustr, {});
+    getParagraph(1, "Deutsch ");
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    // fetch again in case it was deleted and undo
+    xSection.set(xSections->getByIndex(0), uno::UNO_QUERY);
+    // the problem was that PDF export hid the section
+    CPPUNIT_ASSERT(getProperty<bool>(xSection, "IsCurrentlyVisible"));
+
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+        // there must be more objects on the page now (currently goes 2->3)
+        CPPUNIT_ASSERT_LESS(pPdfPage->getObjectCount(), nObjectsHidden);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenTextFieldPDFExport)
+{
+    createSwDoc("set-variable-hidden-text.fodt");
+
+    getParagraph(1, "2");
+    getParagraph(2, "Expected");
+
+    uno::Sequence<css::beans::PropertyValue> args{
+        comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
+        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
+    };
+    dispatchCommand(mxComponent, u".uno:ExportDirectToPDF"_ustr, args);
+
+    getParagraph(1, "2");
+    // the problem was that this changed to Wrong
+    getParagraph(2, "Expected");
+
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (pPDFium)
+    {
+        SvFileStream aPDFFile(maTempFile.GetURL(), StreamMode::READ);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(aPDFFile);
+
+        std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+            = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize(), OString());
+        CPPUNIT_ASSERT(pPdfDocument);
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+        CPPUNIT_ASSERT(pPdfPage);
+        std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+        CPPUNIT_ASSERT(pPdfTextPage);
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+        OUString sText = pPageObject->getText(pPdfTextPage);
+        // the problem was that this changed to Wrong
+        CPPUNIT_ASSERT_EQUAL(u"Expected"_ustr, sText);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)
