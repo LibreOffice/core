@@ -37,14 +37,14 @@ struct MDImage
 {
     OUString url;
     OUString title;
-    OUString altText;
+    OUString desc;
     OUString link;
 
     void Reset()
     {
         url.clear();
         title.clear();
-        altText.clear();
+        desc.clear();
         link.clear();
     }
 };

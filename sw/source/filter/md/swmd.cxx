@@ -669,14 +669,11 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     SwFlyFrameFormat* pFlyFormat = m_xDoc->getIDocumentContentOperations().InsertGraphic(
         *m_pPam, sGrfNm, OUString(), &aGraphic, &aFlySet, nullptr, nullptr);
 
-    SwGrfNode* pGrfNd = m_xDoc->GetNodes()[pFlyFormat->GetContent().GetContentIdx()->GetIndex() + 1]
-                            ->GetGrfNode();
-
-    if (!rImg.title.isEmpty())
-        pFlyFormat->SetFormatName(UIName(rImg.title));
-
-    if (pGrfNd && !rImg.altText.isEmpty())
-        pGrfNd->SetTitle(rImg.altText);
+    if (pFlyFormat)
+    {
+        pFlyFormat->SetObjTitle(rImg.title);
+        pFlyFormat->SetObjDescription(rImg.desc);
+    }
 
     m_bNoParSpace = true;
 }
