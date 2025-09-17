@@ -237,7 +237,7 @@ void UpdateHandler::setProgress( sal_Int32 nPercent )
         osl::MutexGuard aGuard( maMutex );
 
         mnPercent = nPercent;
-        setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( nPercent ) );
+        m_pProgressBar->SetValue(nPercent);
         m_pPercentEdit->SetText(substVariables(msPercent));
     }
 }
@@ -548,7 +548,7 @@ void UpdateHandler::updateState( UpdateState eState )
             m_pStatusEdit->SetText(substVariables(msDownloading));
             m_pPercentEdit->SetText(substVariables(msPercent));
             m_pDescriptionEdit->SetText(substVariables(msDownloadWarning));
-            setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( mnPercent ) );
+            m_pProgressBar->SetValue(mnPercent );
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_DOWNLOAD_PAUSED:
@@ -557,7 +557,7 @@ void UpdateHandler::updateState( UpdateState eState )
             m_pStatusEdit->SetText(substVariables(msDownloadPause));
             m_pPercentEdit->SetText(substVariables(msPercent));
             m_pDescriptionEdit->SetText(substVariables(msDownloadWarning));
-            setControlProperty( CTRL_PROGRESS, u"ProgressValue"_ustr, uno::Any( mnPercent ) );
+            m_pProgressBar->SetValue(mnPercent);
             focusControl( CLOSE_BUTTON );
             break;
         case UPDATESTATE_ERROR_DOWNLOADING:
@@ -681,28 +681,6 @@ void UpdateHandler::startThrobber( bool bStart )
     if (xWindow.is() )
         xWindow->setVisible( bStart );
 }
-
-
-void UpdateHandler::setControlProperty( const OUString &rCtrlName,
-                                        const OUString &rPropName,
-                                        const uno::Any &rPropValue )
-{
-    if ( !mxUpdDlg.is() ) return;
-
-    uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
-    uno::Reference< awt::XControl > xControl( xContainer->getControl( rCtrlName ), uno::UNO_SET_THROW );
-    uno::Reference< awt::XControlModel > xControlModel( xControl->getModel(), uno::UNO_SET_THROW );
-    uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
-
-    try {
-        xPropSet->setPropertyValue( rPropName, rPropValue );
-    }
-    catch( const beans::UnknownPropertyException& )
-    {
-        TOOLS_WARN_EXCEPTION( "extensions.update", "UpdateHandler::setControlProperty" );
-    }
-}
-
 
 void UpdateHandler::showControl( const OUString &rCtrlName, bool bShow )
 {
@@ -1256,6 +1234,7 @@ void UpdateHandler::createDialog()
     m_pStatusEdit = getWindow(TEXT_STATUS);
     m_pDescriptionEdit = getWindow(TEXT_DESCRIPTION);
     m_pPercentEdit = getWindow(TEXT_PERCENT);
+    m_pProgressBar = dynamic_cast<ProgressBar*>(getWindow(CTRL_PROGRESS));
 }
 
 vcl::Window* UpdateHandler::getWindow(const OUString& rControlName)
