@@ -272,6 +272,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
     CPPUNIT_ASSERT_EQUAL(aShapeBefore.getOpenHeight() + 1000, aShapeAfter.getOpenHeight());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf168318)
+{
+    SwXTextDocument* pXTextDocument = createDoc("tdf168318.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    SdrHdlList handleList(nullptr);
+    pObject->AddToHdlList(handleList);
+    // Make sure the rectangle has 8 handles: at each corner and at the center of each edge.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(8), handleList.GetHdlCount());
+    // Take the bottom center one.
+    SdrHdl* pHdl = handleList.GetHdl(6);
+    CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
+    tools::Rectangle aShapeBefore = pObject->GetSnapRect();
+    // Resize.
+    pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
+    pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
+    tools::Rectangle aShapeAfter = pObject->GetSnapRect();
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(aShapeBefore.getOpenWidth() < aShapeAfter.getOpenWidth());
+    CPPUNIT_ASSERT(aShapeBefore.getOpenHeight() < aShapeAfter.getOpenHeight());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResetSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
