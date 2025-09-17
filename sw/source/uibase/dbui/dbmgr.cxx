@@ -356,29 +356,44 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, tools::Long nAbsPos)
     bool bRet = false;
     try
     {
-        if(pParam->aSelection.hasElements())
-        {
-            if(pParam->aSelection.getLength() <= nAbsPos)
-            {
-                pParam->bEndOfDB = true;
-                bRet = false;
-            }
-            else
-            {
-                pParam->nSelectionIndex = nAbsPos;
-                sal_Int32 nPos = 0;
-                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
-                pParam->bEndOfDB = !pParam->xResultSet->absolute( nPos );
-                bRet = !pParam->bEndOfDB;
-            }
-        }
-        else if(pParam->bScrollable)
+        if(pParam->bScrollable)
         {
             bRet = pParam->xResultSet->absolute( nAbsPos );
         }
         else
         {
             OSL_FAIL("no absolute positioning available");
+        }
+    }
+    catch(const uno::Exception&)
+    {
+    }
+    return bRet;
+}
+
+static bool lcl_MoveSelectionOrAbsolute(SwDSParam *const pParam, tools::Long const nAbsPos)
+{
+    bool bRet = false;
+    try
+    {
+        if (pParam->aSelection.hasElements())
+        {
+            if (pParam->aSelection.getLength() <= nAbsPos)
+            {
+                pParam->bEndOfDB = true;
+            }
+            else
+            {
+                pParam->nSelectionIndex = nAbsPos;
+                sal_Int32 nPos = 0;
+                pParam->aSelection.getConstArray()[ pParam->nSelectionIndex ] >>= nPos;
+                pParam->bEndOfDB = !pParam->xResultSet->absolute(nPos);
+            }
+            bRet = !pParam->bEndOfDB;
+        }
+        else
+        {
+            bRet = lcl_MoveAbsolute(pParam, nAbsPos);
         }
     }
     catch(const uno::Exception&)
@@ -483,33 +498,13 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         return false;
     }
 
+    SwDSParam *const pTemp{FindDSData(aData, true)};
+    assert(pTemp && pTemp != m_pImpl->pMergeData.get());
     m_pImpl->pMergeData.reset(new SwDSParam(aData, xResSet, aSelection));
-    SwDSParam*  pTemp = FindDSData(aData, false);
-    if(pTemp)
-        *pTemp = *m_pImpl->pMergeData;
-    else
-    {
-        // calls from the calculator may have added a connection with an invalid commandtype
-        //"real" data base connections added here have to re-use the already available
-        //DSData and set the correct CommandType
-        aData.nCommandType = -1;
-        pTemp = FindDSData(aData, false);
-        if(pTemp)
-            *pTemp = *m_pImpl->pMergeData;
-        else
-        {
-            m_DataSourceParams.push_back(std::make_unique<SwDSParam>(*m_pImpl->pMergeData));
-            try
-            {
-                uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
-                if(xComponent.is())
-                    xComponent->addEventListener(m_pImpl->m_xDisposeListener);
-            }
-            catch(const uno::Exception&)
-            {
-            }
-        }
-    }
+    // assign state with selection to existing entry in m_DataSourceParams
+    // so later SwCalc can find correct record
+    *pTemp = *m_pImpl->pMergeData;
+
     if(!m_pImpl->pMergeData->xConnection.is())
         m_pImpl->pMergeData->xConnection = xConnection;
     // add an XEventListener
@@ -2310,7 +2305,7 @@ bool SwDBManager::ToRecordId(sal_Int32 nSet)
     bool bRet = false;
     sal_Int32 nAbsPos = nSet;
     assert(nAbsPos >= 0);
-    bRet = lcl_MoveAbsolute(m_pImpl->pMergeData.get(), nAbsPos);
+    bRet = lcl_MoveSelectionOrAbsolute(m_pImpl->pMergeData.get(), nAbsPos);
     m_pImpl->pMergeData->bEndOfDB = !bRet;
     return bRet;
 }
