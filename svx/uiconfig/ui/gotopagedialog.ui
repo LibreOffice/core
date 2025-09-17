@@ -81,6 +81,11 @@
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes" context="gotopagedialog|page_count">of $1</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="page_count-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
