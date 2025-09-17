@@ -1011,6 +1011,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             # The natstepfilter file allows to skip specific functions when stepping into in debugging
             natstepfilter_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.natstepfilter')
             f.write('\t\t%(natstepfilter)s = %(natstepfilter)s\n' % {'natstepfilter': natstepfilter_path})
+            # The ruleset file defines the rules checked when --enable-msvc-analyze is used
+            ruleset_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/LibreOffice.ruleset')
+            f.write('\t\t%(ruleset)s = %(ruleset)s\n' % {'ruleset': ruleset_path})
             f.write('\tEndProjectSection\n')
             f.write('EndProject\n')
             # Folders to group tests/libraries/executables
