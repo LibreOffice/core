@@ -321,6 +321,7 @@ XMLFile::XMLFile( OString _sFileName ) // the file name, empty if created from m
     m_aNodes_localize.emplace( "caption"_ostr , true );
     m_aNodes_localize.emplace( "title"_ostr , true );
     m_aNodes_localize.emplace( "link"_ostr , true );
+    m_aNodes_localize.emplace( "description"_ostr , true );
 }
 
 void XMLFile::Extract()
