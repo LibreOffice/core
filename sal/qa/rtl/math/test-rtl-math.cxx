@@ -234,6 +234,12 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(23), end);
         CPPUNIT_ASSERT_EQUAL(fValAfter, res);
+
+        // Minimal subnormal value, as documented for Basic
+        res = rtl::math::stringToDouble("4.94065645841247E-324", '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(21), end);
+        CPPUNIT_ASSERT_EQUAL(0x1p-1074, res);
     }
 
     void test_stringToDouble_bad() {
