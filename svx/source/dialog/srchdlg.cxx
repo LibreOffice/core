@@ -311,6 +311,8 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     {
         m_xCloseBtn->hide();
         m_xHelpBtn->hide();
+        m_xSearchLB->set_entry_text(u""_ustr);
+        m_xReplaceLB->set_entry_text(u""_ustr);
         m_xSearchLB->grab_focus();
     }
 
@@ -990,25 +992,29 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         bool bSetSearch = !( nModifyFlag & ModifyFlags::Search );
         bool bSetReplace = !( nModifyFlag & ModifyFlags::Replace );
 
-        if ( !(pSearchItem->GetSearchString().isEmpty()) && bSetSearch )
-            m_xSearchLB->set_entry_text( pSearchItem->GetSearchString() );
-        else if (!aSearchStrings.empty())
+        if (!comphelper::LibreOfficeKit::isActive())
         {
-            bool bAttributes =
-                ( ( pSearchList && pSearchList->Count() ) ||
-                  ( pReplaceList && pReplaceList->Count() ) );
+            if ( !(pSearchItem->GetSearchString().isEmpty()) && bSetSearch )
+                m_xSearchLB->set_entry_text( pSearchItem->GetSearchString() );
+            else if (!aSearchStrings.empty())
+            {
+                bool bAttributes =
+                    ( ( pSearchList && pSearchList->Count() ) ||
+                    ( pReplaceList && pReplaceList->Count() ) );
 
-            if ( bSetSearch && !bAttributes )
-                m_xSearchLB->set_entry_text(aSearchStrings[0]);
+                if ( bSetSearch && !bAttributes )
+                    m_xSearchLB->set_entry_text(aSearchStrings[0]);
 
-            OUString aReplaceTxt = pSearchItem->GetReplaceString();
+                OUString aReplaceTxt = pSearchItem->GetReplaceString();
 
-            if (!aReplaceStrings.empty())
-                aReplaceTxt = aReplaceStrings[0];
+                if (!aReplaceStrings.empty())
+                    aReplaceTxt = aReplaceStrings[0];
 
-            if ( bSetReplace && !bAttributes )
-                m_xReplaceLB->set_entry_text( aReplaceTxt );
+                if ( bSetReplace && !bAttributes )
+                    m_xReplaceLB->set_entry_text( aReplaceTxt );
+            }
         }
+
         m_xSearchLB->show();
 
         if ( bConstruct )
