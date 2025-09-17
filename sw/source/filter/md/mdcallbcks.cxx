@@ -277,7 +277,7 @@ int SwMarkdownParser::text_callback(MD_TEXTTYPE type, const MD_CHAR* text, MD_SI
             if (!parser->m_bInsideImage)
                 parser->InsertText(aText);
             else
-                parser->m_aImg.altText = std::move(aText);
+                parser->m_aImg.desc = std::move(aText);
 
             break;
         }
