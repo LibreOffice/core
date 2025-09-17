@@ -150,6 +150,7 @@ public:
     void testGetPartPageRectangles();
     void testSearchCalc();
     void testPropertySettingOnFormulaBar();
+    void testSearchTermReset();
     void testFormulaBarAcceptButton();
     void testSearchAllNotificationsCalc();
     void testPaintTile();
@@ -229,6 +230,7 @@ public:
     CPPUNIT_TEST(testGetPartPageRectangles);
     CPPUNIT_TEST(testSearchCalc);
     CPPUNIT_TEST(testPropertySettingOnFormulaBar);
+    CPPUNIT_TEST(testSearchTermReset);
     CPPUNIT_TEST(testFormulaBarAcceptButton);
     CPPUNIT_TEST(testSearchAllNotificationsCalc);
     CPPUNIT_TEST(testPaintTile);
@@ -2268,6 +2270,8 @@ public:
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
+    std::string m_searchTerm;
+    int m_findReplaceDialogId;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2345,11 +2349,42 @@ public:
             ++m_nColorPaletteCallbackCount;
         }
         break;
+        case LOK_CALLBACK_WINDOW:
+        {
+            m_JSONDialog.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_JSONDialog);
+
+            if (m_JSONDialog.find("title") != m_JSONDialog.not_found() && m_JSONDialog.get_child("title").get_value<std::string>() == "Find and Replace")
+            {
+                m_findReplaceDialogId = std::atoi(m_JSONDialog.get_child("id").get_value<std::string>().c_str());
+                // Set search term to something random and make sure it is read from incoming JSON (LOK_CALLBACK_JSDIALOG).
+                m_searchTerm = "something random";
+            }
+        }
+        break;
         case LOK_CALLBACK_JSDIALOG:
         {
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_JSONDialog);
+
+            if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found() && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "dialog")
+            {
+                if (m_JSONDialog.find("data") != m_JSONDialog.not_found())
+                {
+                    if (m_JSONDialog.get_child("data").find("control_id") != m_JSONDialog.get_child("data").not_found())
+                    {
+                        if (m_JSONDialog.get_child("data").get_child("control_id").get_value<std::string>() == "searchterm")
+                        {
+                            if (m_JSONDialog.get_child("data").find("text") != m_JSONDialog.get_child("data").not_found())
+                            {
+                                m_searchTerm = m_JSONDialog.get_child("data").get_child("text").get_value<std::string>();
+                            }
+                        }
+                    }
+                }
+            }
         }
         break;
         case LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED:
@@ -3177,6 +3212,41 @@ void DesktopLOKTest::testPropertySettingOnFormulaBar()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(false, aView.m_stateBold); // This line doesn't pass without the fix in this commit.
+}
+
+void DesktopLOKTest::testSearchTermReset()
+{
+    LibLibreOffice_Impl aOffice;
+    LibLODocument_Impl* pDocument = loadDoc("empty.ods");
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Send "something" as current search string (searchterm).
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"searchterm\", \"cmd\": \"change\", \"data\": \"something\", \"type\": \"combobox\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Press search button.
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"search\", \"cmd\": \"click\", \"data\": \"undefined\", \"type\": \"pushbutton\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Close the dialog.
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_findReplaceDialogId, "{\"id\":\"__DIALOG__\", \"cmd\": \"close\", \"data\": \"null\", \"type\": \"dialog\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Reopen search dialog.
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:SearchDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // We should have got the "searchterm" again. It should be empty. Below line doesn't pass without the changes in this commit.
+    CPPUNIT_ASSERT_EQUAL(std::string(""), aView.m_searchTerm);
 }
 
 void DesktopLOKTest::testFormulaBarAcceptButton()
