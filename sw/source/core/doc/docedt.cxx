@@ -384,21 +384,21 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
                 /* The MarkNode */
                 pTextNd = aIdx.GetNode().GetTextNode();
-                if (pTextNd->HasSwAttrSet())
+                const SfxItemSet* pSet = pTextNd->GetpSwAttrSet();
+                if (pSet)
                 {
-                    if( SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState( RES_BREAK, false) )
+                    if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false))
                         pTextNd->ResetAttr( RES_BREAK );
-                    if( pTextNd->HasSwAttrSet() &&
-                        SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState( RES_PAGEDESC, false ) )
+                    if (SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false))
                         pTextNd->ResetAttr( RES_PAGEDESC );
                 }
 
                 /* The PointNode */
-                if( pOldTextNd->HasSwAttrSet() )
+                pSet = pOldTextNd->GetpSwAttrSet();
+                if (pSet)
                 {
                     const SfxPoolItem* pItem;
                     SfxItemSet aSet( rDoc.GetAttrPool(), aBreakSetRange );
-                    const SfxItemSet* pSet = pOldTextNd->GetpSwAttrSet();
                     if( SfxItemState::SET == pSet->GetItemState( RES_BREAK,
                         false, &pItem ) )
                         aSet.Put( *pItem );
