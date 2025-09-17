@@ -735,6 +735,71 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168351)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168448)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf168448.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first two text array actions (associated to the first text line)
+    bool bFirstArray = true;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+
+        // check letter spacing in the first line (in the first text array)
+        if (bFirstArray && pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 25 characters on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(25), pDXArray.size());
+
+            // Assert we are using the expected position for the
+            // last character of the first word with enlarged letter-spacing
+            // This was 750, now 786, according to the enabled maximum letter spacing
+            CPPUNIT_ASSERT_GREATER(sal_Int32(770), sal_Int32(pDXArray[4]));
+
+            // Assert we are using the expected position for the
+            // first character of the second word with enlarged letter-spacing
+            // This was 881, now 877, according to the enabled maximum letter spacing
+            CPPUNIT_ASSERT_LESS(sal_Int32(880), sal_Int32(pDXArray[5]));
+
+            bFirstArray = false;
+            continue;
+        }
+
+        // check hyphen position of the first line (in the second text array)
+        if (!bFirstArray && pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 1 character, the hyphen of the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pDXArray.size());
+
+            // This was 3662 (at enabled letter spacing for the hyphenated line),
+            // now 4149, according to the fixed hyphen position
+            auto nX = pTextArrayAction->GetPoint().X();
+            CPPUNIT_ASSERT_GREATER(sal_Int32(4100), sal_Int32(nX));
+
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164499)
 {
     createSwDoc("tdf164499.docx");

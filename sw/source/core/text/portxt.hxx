@@ -27,7 +27,7 @@ class SwTextPortion : public SwLinePortion
 {
     void BreakCut( SwTextFormatInfo &rInf, const SwTextGuess &rGuess );
     void BreakUnderflow( SwTextFormatInfo &rInf );
-    void SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBreakPos,
+    void SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGuess,
             const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces );
     bool Format_( SwTextFormatInfo &rInf );
 

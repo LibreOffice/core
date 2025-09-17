@@ -19,6 +19,8 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <editeng/unolingu.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <breakit.hxx>
 #include <hintids.hxx>
@@ -341,23 +343,45 @@ sal_uInt16 SwTextPortion::GetMaxComp(const SwTextFormatInfo& rInf) const
                : 0;
 }
 
-void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBreakPos,
+void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, SwTextGuess const &rGuess,
                 const sal_Int32 nSpaces, const sal_Int16 nWidthOf10Spaces )
 {
     // TODO allow letter spacing and glyph scaling in single word lines, too
     if ( nSpaces == 0 )
         return;
 
+    // adjust hyphen: remove hyphen width from the line width, because
+    // hyphen mark and optional text of the alternative hyphenation will
+    // be in an extra portion
+    sal_Int16 nHyphenWidth = 0;
+    if( rGuess.HyphWord().is() && rGuess.BreakPos() > rInf.GetLineStart()
+            && ( rGuess.BreakPos() > rInf.GetIdx() ||
+               ( rInf.GetLast() && ! rInf.GetLast()->IsFlyPortion() ) ) )
+    {
+        // TODO support custom hyphen mark, also in SwHyphPortion/CreateHyphen()
+        static constexpr OUString STR_HYPHEN = u"-"_ustr;
+        const uno::Reference<  com::sun::star::linguistic2::XHyphenatedWord >&  xHyphWord = rGuess.HyphWord();
+        // first case: hyphenated word has alternative spelling
+        if ( xHyphWord->isAlternativeSpelling() )
+        {
+            SvxAlternativeSpelling aAltSpell = SvxGetAltSpelling( xHyphWord );
+            OUString aAltText = aAltSpell.aReplacement;
+            nHyphenWidth = rInf.GetTextSize(aAltText + STR_HYPHEN).Width();
+        }
+        else
+            nHyphenWidth = rInf.GetTextSize(STR_HYPHEN).Width();
+    }
+
     SvxAdjustItem aAdjustItem =
         rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
     // width of a single expanded space without letter spacing and glyph scaling
-    float fSpaceNormal =
-        (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpaces * nWidthOf10Spaces/10.0)) / nSpaces;
+    float fSpaceNormal = ( rInf.GetLineWidth() - nHyphenWidth -
+                    (rInf.GetBreakWidth() - nSpaces * nWidthOf10Spaces/10.0) ) / nSpaces;
     // the part to be removed: the previous width minus the maximum allowed space width
     float fExpansionOverMax =
         fSpaceNormal - nWidthOf10Spaces / 10.0 * aAdjustItem.GetPropWordSpacingMaximum() / 100.0;
     ExtraSpaceSize( fExpansionOverMax > 0 ? fExpansionOverMax : 0 );
-    int nLetterCount = sal_Int32(nBreakPos) - sal_Int32(rInf.GetIdx());
+    int nLetterCount = sal_Int32(rGuess.BreakPos()) - sal_Int32(rInf.GetIdx());
     // letter spacing/character to be added or subtracted to get the desired word spacing
     float fLetterSpacingForDesiredWordSpacing =
         nLetterCount > 0 ? (((fSpaceNormal - nWidthOf10Spaces/10.0) * nSpaces) / nLetterCount) : 0;
@@ -383,7 +407,8 @@ void SwTextPortion::SetSpacing( SwTextFormatInfo &rInf, const TextFrameIndex nBr
     // apply it only after applying maximum letter spacing
     // TODO: change this after variable font support
     if ( aAdjustItem.GetPropScaleWidthMaximum() != 100 )
-        SetScaleWidth( 100.0 * rInf.GetLineWidth() / (rInf.GetBreakWidth() + GetLetterSpacing()) );
+        SetScaleWidth( 100.0 * ( rInf.GetLineWidth() - nHyphenWidth ) /
+                                         ( rInf.GetBreakWidth() + GetLetterSpacing() ) );
     if ( GetScaleWidth() > aAdjustItem.GetPropScaleWidthMaximum() )
         SetScaleWidth( aAdjustItem.GetPropScaleWidthMaximum() );
     // space used by glyph scaling to adjust word spacing
@@ -488,10 +513,9 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         pGuess->BreakPos() > rInf.GetLineStart();
 
             // calculate available word spacing for letter spacing, and for the word spacing indicator
-            // for non-hyphenated single portion lines
-            // TODO: enable letter spacing for multiportion, also for hyphenated lines
-            if ( !bOrigHyphenated && rInf.GetLineStart() == rInf.GetIdx() )
-                SetSpacing(rInf, pGuess->BreakPos(), nRealSpaces, nSpaceWidth);
+            // for single portion lines, TODO: enable letter spacing for multiportion
+            if ( rInf.GetLineStart() == rInf.GetIdx() )
+                SetSpacing(rInf, *pGuess, nRealSpaces, nSpaceWidth);
 
             // calculate line breaking with desired word spacing, also
             // if the desired word spacing is 100%, but there is a greater
@@ -505,9 +529,9 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                 if ( aAdjustItem.GetPropLetterSpacingMinimum() < 0 || rInf.GetBreakWidth() <= rInf.GetLineWidth() )
                 {
                     fSpaceNormal = (rInf.GetLineWidth() - (rInf.GetBreakWidth() - nSpacesInLine2 * nSpaceWidth/10.0))/nSpacesInLine2;
-                    // TODO: enable letter spacing for multiportion, also for hyphenated lines
-                    if ( !bOrigHyphenated && rInf.GetLineStart() == rInf.GetIdx() )
-                        SetSpacing(rInf, pGuess->BreakPos(), nSpacesInLine2, nSpaceWidth);
+                    // TODO: enable letter spacing for multiportion
+                    if ( rInf.GetLineStart() == rInf.GetIdx() )
+                        SetSpacing(rInf, *pGuess, nSpacesInLine2, nSpaceWidth);
                 }
             }
 
@@ -576,7 +600,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                         if ( z1 >= z0 || bIsPortion )
                         {
                             pGuess = std::move(pGuess2);
-                            SetSpacing(rInf, pGuess->BreakPos(), nSpacesInLineShrink, nSpaceWidth);
+                            SetSpacing(rInf, *pGuess, nSpacesInLineShrink, nSpaceWidth);
                             bFull = bFull2;
                         }
                     }

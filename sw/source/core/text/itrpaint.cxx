@@ -427,7 +427,17 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
             else
+            {
+                // adjust the hyphen at custom spacing
+                if ( pPor->InHyphGrp() && ( m_pCurr->GetFirstPortion()->GetLetterSpacing() > 0 ||
+                            m_pCurr->GetFirstPortion()->GetScaleWidthSpacing() > 0 ) )
+                {
+                    GetInfo().X( GetInfo().X() +
+                            m_pCurr->GetFirstPortion()->GetLetterSpacing() +
+                            m_pCurr->GetFirstPortion()->GetScaleWidthSpacing() );
+                }
                 pPor->Paint( GetInfo() );
+            }
         }
 
         // lazy open LBody and paragraph tag after num portions have been painted to Lbl
