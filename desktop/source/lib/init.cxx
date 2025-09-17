@@ -3818,10 +3818,16 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
                 pdfVer = 2;
             else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-3b"))
                 pdfVer = 3;
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-4"))
+                pdfVer = 4;
             else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-1.5"))
                 pdfVer = 15;
             else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-1.6"))
                 pdfVer = 16;
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-1.7"))
+                pdfVer = 17;
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-2.0"))
+                pdfVer = 20;
             else
             {
                 SetLastExceptionMsg(u"wrong PDF version"_ustr);
