@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <unotools/resmgr.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/window.hxx>
 
 #include "actionlistener.hxx"
 
@@ -77,6 +78,11 @@ class UpdateHandler : public cppu::WeakImplHelper< css::awt::XActionListener,
 private:
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::awt::XDialog >              mxUpdDlg;
+
+    VclPtr<vcl::Window> m_pStatusEdit;
+    VclPtr<vcl::Window> m_pDescriptionEdit;
+    VclPtr<vcl::Window> m_pPercentEdit;
+
     css::uno::Reference< css::task::XInteractionHandler > mxInteractionHdl;
     rtl::Reference< IActionListener >                     mxActionListener;
 
@@ -127,6 +133,7 @@ private:
     OUString           msBubbleTitles[ UPDATESTATES_COUNT ];
 
     void                    createDialog();
+    vcl::Window*            getWindow(const OUString& rControlName);
     void                    updateState( UpdateState eNewState );
     void                    startThrobber( bool bStart = true );
     void                    setControlProperty( const OUString &rCtrlName,
