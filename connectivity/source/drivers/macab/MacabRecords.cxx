@@ -92,7 +92,7 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_he
  */
 MacabRecords::MacabRecords(const MacabRecords *_copy)
     : recordsSize(_copy->recordsSize), currentRecord(0), recordType(kABPersonRecordType),
-      header(nullptr), records(new MacabRecord *[recordsSize]), addressBook(_copy->addressBook),
+      header(nullptr), records(new MacabRecord *[recordsSize]()), addressBook(_copy->addressBook),
       m_sName(_copy->m_sName)
 {
     /* Variables constructed... */
