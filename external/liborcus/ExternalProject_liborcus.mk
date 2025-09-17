@@ -38,7 +38,7 @@ ifneq ($(SYSTEM_ZLIB),)
 liborcus_LIBS+=-lz
 endif
 ifneq ($(SYSTEM_BOOST),)
-liborcus_LIBS+=$(BOOST_SYSTEM_LIB) $(BOOST_IOSTREAMS_LIB) $(BOOST_FILESYSTEM_LIB)
+liborcus_LIBS+=$(BOOST_IOSTREAMS_LIB) $(BOOST_FILESYSTEM_LIB)
 else
 liborcus_LIBS+=-L$(gb_StaticLibrary_WORKDIR) -lboost_iostreams -lboost_filesystem
 endif

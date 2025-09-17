@@ -63,10 +63,6 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
 		LDFLAGS="$LDFLAGS $BOOST_LDFLAGS"
 		export LDFLAGS
 
-		LIBS_SAVED=$LIBS
-		LIBS="$LIBS $BOOST_SYSTEM_LIB"
-		export LIBS
-
         AC_CACHE_CHECK(whether the Boost::Filesystem library is available,
 					   ax_cv_boost_filesystem,
         [AC_LANG_PUSH([C++])
@@ -113,6 +109,5 @@ AC_DEFUN([AX_BOOST_FILESYSTEM],
 
 		CPPFLAGS="$CPPFLAGS_SAVED"
 		LDFLAGS="$LDFLAGS_SAVED"
-		LIBS="$LIBS_SAVED"
 	fi
 ])

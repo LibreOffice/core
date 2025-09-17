@@ -3404,7 +3404,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 $(if $(SYSTEM_BOOST), \
 	$(call gb_LinkTarget_add_ldflags,$(1),$(BOOST_LDFLAGS)) \
-	$(call gb_LinkTarget_add_libs,$(1),$(BOOST_SYSTEM_LIB)) \
 )
 
 endef
