@@ -64,6 +64,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/toolkit/fixed.hxx>
 #include <vcl/vclenum.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -75,6 +76,9 @@ constexpr OUString CTRL_PROGRESS = u"progress"_ustr;
 constexpr OUString TEXT_STATUS = u"text_status"_ustr;
 constexpr OUString TEXT_PERCENT = u"text_percent"_ustr;
 constexpr OUString TEXT_DESCRIPTION = u"text_description"_ustr;
+
+const OUString FIXEDLINE_STATUS = u"fixedLineStatus"_ustr;
+const OUString FIXEDLINE_DESCRIPTION = u"fixedTextDescription"_ustr;
 
 constexpr OUStringLiteral FIXED_LINE_MODEL = u"com.sun.star.awt.UnoControlFixedLineModel";
 constexpr OUString FIXED_TEXT_MODEL = u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
@@ -1008,7 +1012,7 @@ void UpdateHandler::createDialog()
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps { { u"Label"_ustr, uno::Any( msStatusFL ) } };
 
-        insertControlModel( xControlModel, FIXED_TEXT_MODEL, u"fixedLineStatus"_ustr,
+        insertControlModel( xControlModel, FIXED_TEXT_MODEL, FIXEDLINE_STATUS,
                             awt::Rectangle( DIALOG_BORDER+1, DIALOG_BORDER, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
@@ -1105,7 +1109,7 @@ void UpdateHandler::createDialog()
     {   // Label (FixedText) <description>
         uno::Sequence< beans::NamedValue > aProps { { u"Label"_ustr, uno::Any( msDescription ) } };
 
-        insertControlModel( xControlModel, FIXED_TEXT_MODEL, u"fixedTextDescription"_ustr,
+        insertControlModel( xControlModel, FIXED_TEXT_MODEL, FIXEDLINE_DESCRIPTION,
                             awt::Rectangle( DIALOG_BORDER+1, LABEL_Y_POS, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
@@ -1235,6 +1239,14 @@ void UpdateHandler::createDialog()
     m_pDescriptionEdit = getWindow(TEXT_DESCRIPTION);
     m_pPercentEdit = getWindow(TEXT_PERCENT);
     m_pProgressBar = dynamic_cast<ProgressBar*>(getWindow(CTRL_PROGRESS));
+
+    FixedText* pStatusLabel = dynamic_cast<FixedText*>(getWindow(FIXEDLINE_STATUS));
+    assert(pStatusLabel);
+    pStatusLabel->set_mnemonic_widget(m_pStatusEdit);
+
+    FixedText* pDescriptionLabel = dynamic_cast<FixedText*>(getWindow(FIXEDLINE_DESCRIPTION));
+    assert(pDescriptionLabel);
+    pDescriptionLabel->set_mnemonic_widget(m_pDescriptionEdit);
 }
 
 vcl::Window* UpdateHandler::getWindow(const OUString& rControlName)
