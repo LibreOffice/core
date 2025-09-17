@@ -321,6 +321,21 @@ void MacabRecords::bootstrap_requiredProperties()
         kABAddressProperty, kABPhoneProperty, kABEmailProperty};
 }
 
+bool shouldSkipProperty(CFStringRef propertyName)
+{
+    /* Skip Note property to help prevent the following exception:
+     *
+     * CoreData: error: Unhandled error occurred during faulting: Error Domain=NSCocoaErrorDomain Code=134092 "(null)"
+     *
+     * which occurs because we do not have an entitlement to access contact notes.
+     * See https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.contacts.notes
+     * for more details.
+     */
+    if (CFStringCompare(propertyName, CFSTR("Note"), 0) == kCFCompareEqualTo)
+        return true;
+
+    return false;
+}
 
 /* Create the header for a given record type and a given array of records.
  * Because the array of records and the record type are given, if you want
@@ -457,6 +472,9 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         for(sal_Int32 j = 0; j < numNonRequiredProperties; j++)
         {
             property = nonRequiredProperties[j];
+            if (shouldSkipProperty(property))
+                continue;
+
             headerDataForProperty = createHeaderForProperty(record,property,_recordType,false);
             if(headerDataForProperty != nullptr)
             {
@@ -853,11 +871,15 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
     for(i = 0; i < numProperties; i++)
     {
         propertyName = static_cast<CFStringRef>(CFArrayGetValueAtIndex(recordProperties, i));
+        if (shouldSkipProperty(propertyName))
+            continue;
+
         localizedPropertyName = ABCopyLocalizedPropertyOrLabel(propertyName);
         propertyNameString = CFStringToOUString(localizedPropertyName);
         CFRelease(localizedPropertyName);
 
         /* Get the property's value */
+
         propertyValue = ABRecordCopyValue(_abrecord,propertyName);
         if(propertyValue != nullptr)
         {
