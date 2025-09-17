@@ -9,18 +9,23 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/scheduler.hxx>
 
+#include <cmdid.h>
 #include <scriptinfo.hxx>
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
@@ -131,6 +136,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf72727)
     assertXPathContent(pXmlDoc, "(//textarray)[1]/text", u"1");
     assertXPathContent(pXmlDoc, "(//textarray)[2]/text", u"2");
     assertXPathContent(pXmlDoc, "(//textarray)[3]/text", u"3");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf92714_TOC_pageBreak)
+{
+    // Given a document with a ToC that also defines the page style
+    createSwDoc("tdf92714_TOC_pageBreak.odt");
+
+    // When deleting the ToC
+    SwView* pView = getSwDocShell()->GetView();
+    SfxDispatcher& rDispatcher = *pView->GetViewFrame().GetDispatcher();
+    rDispatcher.Execute(FN_REMOVE_CUR_TOX);
+
+    saveAndReload(u"writer8"_ustr);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+    // The page style should not be lost
+    CPPUNIT_ASSERT_EQUAL(u"OrangePage"_ustr, getProperty<OUString>(xCursor, u"PageStyleName"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf130969)

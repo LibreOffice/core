@@ -623,6 +623,72 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
                 }
             }
         }
+        else
+        {
+            // need to transfer potential TOX page breaks to following node
+            const SfxPoolItem* pPageDesc = nullptr;
+            const SfxPoolItem* pBreak = nullptr;
+            SwNodeIndex aSearchIdx(*pMyNode, 1); // the node after the TOX SectionNode
+            SwNodeIndex aEndSearchIdx(*pMyNode->EndOfSectionNode());
+
+            // did the TOC contain a page break?
+            while (aSearchIdx < aEndSearchIdx)
+            {
+                const SwNode& rNode = aSearchIdx.GetNode();
+                if (rNode.IsTextNode())
+                {
+                    const SfxItemSet* pSet = rNode.GetTextNode()->GetpSwAttrSet();
+                    if (pSet)
+                    {
+                        pBreak = pSet->GetItemIfSet(RES_BREAK, false);
+                        pPageDesc = pSet->GetItemIfSet(RES_PAGEDESC, false);
+                        if (pBreak || pPageDesc)
+                            break;
+                    }
+                }
+                ++aSearchIdx;
+            }
+            if (pBreak || pPageDesc)
+            {
+                // Apply the page break to the next node
+                aSearchIdx = aEndSearchIdx; // EndNode of TOX
+                aEndSearchIdx = *aSearchPam.GetPointNode().EndOfSectionNode(); // EndNode of Cursor
+                while (aSearchIdx < aEndSearchIdx)
+                {
+                    ++aSearchIdx;
+                    SwNode& rNode = aSearchIdx.GetNode();
+                    if (rNode.IsTextNode())
+                    {
+                        SwTextNode& rTextNode = *rNode.GetTextNode();
+                        // skip if destination node already defines its own page breaks
+                        if (rTextNode.GetSwAttrSet().GetBreak().GetBreak() != SvxBreak::NONE)
+                            break;
+                        if (rTextNode.GetSwAttrSet().GetPageDesc().GetPageDesc())
+                            break;
+
+                        if (pPageDesc)
+                            rTextNode.SetAttr(*pPageDesc);
+                        if (pBreak)
+                            rTextNode.SetAttr(*pBreak);
+                        break;
+                    }
+                    else if (rNode.IsTableNode())
+                    {
+                        SwFrameFormat* pTable = rNode.GetTableNode()->GetTable().GetFrameFormat();
+                        if (!pTable || pTable->GetBreak().GetBreak() != SvxBreak::NONE)
+                            break;
+                        if (pTable->GetPageDesc().GetPageDesc())
+                            break;
+
+                        if (pPageDesc)
+                            pTable->SetFormatAttr(*pPageDesc);
+                        if (pBreak)
+                            pTable->SetFormatAttr(*pBreak);
+                        break;
+                    }
+                }
+            }
+        }
 
         DelSectionFormat( const_cast<SwSectionFormat *>(pFormat), bDelNodes );
 
