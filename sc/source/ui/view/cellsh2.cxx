@@ -901,10 +901,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     // cell range picker
                     vcl::Window* pWin = GetViewData().GetActiveWin();
                     weld::Window* pParentWin = pWin ? pWin->GetFrameWeld() : nullptr;
-                    auto xDlg
-                        = std::make_shared<ScValidationDlg>(pParentWin, &aArgSet, pTabViewShell);
-
-                    auto aRegisterThatDlgExists
+                    auto xDlg = std::make_shared<ScValidationDlg>(pParentWin, &aArgSet, pTabViewShell);
+                    std::shared_ptr<ScValidationRegisteredDlg> pRegisterThatDlgExists
                         = std::make_shared<ScValidationRegisteredDlg>(pParentWin, xDlg);
 
                     struct lcl_auxData
@@ -923,11 +921,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScValidErrorStyle eErrStyle;
                         OUString aErrTitle;
                         OUString aErrText;
+                        std::shared_ptr<ScValidationRegisteredDlg> aRegisterThatDlgExists;
                     };
 
-                    std::shared_ptr<lcl_auxData> pAuxData = std::make_shared<lcl_auxData>(lcl_auxData{
-                        aCursorPos, eMode, eOper, aExpr1, aExpr2, bBlank, nListType, bShowHelp,
-                        aHelpTitle, aHelpText, bShowError, eErrStyle, aErrTitle, aErrText});
+                    std::shared_ptr<lcl_auxData> pAuxData = std::make_shared<lcl_auxData>(
+                        lcl_auxData{ aCursorPos, eMode, eOper, aExpr1, aExpr2, bBlank, nListType,
+                                     bShowHelp, aHelpTitle, aHelpText, bShowError, eErrStyle,
+                                     aErrTitle, aErrText, pRegisterThatDlgExists });
+
                     SfxTabDialogController::runAsync(
                         xDlg,
                         [&rDoc, pAuxData, nSlotId, xDlg, pTabViewShell](sal_Int32 nResult)
