@@ -378,15 +378,14 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                     // Check for the dreaded rounded to 15 digits max value
                     // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
                     // everywhere, accept with or without plus sign in exponent.
-                    const char* b = buf;
-                    if (b[0] == '-')
-                        ++b;
-                    if (((pCharParseEnd - b == 21) || (pCharParseEnd - b == 20))
-                        && !strncmp(b, "1.79769313486232", 16) && (b[16] == 'e' || b[16] == 'E')
-                        && (((pCharParseEnd - b == 21) && !strncmp(b + 17, "+308", 4))
-                            || ((pCharParseEnd - b == 20) && !strncmp(b + 17, "308", 3))))
+                    std::string_view num_view(buf, pCharParseEnd - buf);
+                    if (num_view == "1.79769313486232E308")
                     {
-                        fVal = (buf < b) ? -DBL_MAX : DBL_MAX;
+                        fVal = DBL_MAX;
+                    }
+                    else if (num_view == "-1.79769313486232E308")
+                    {
+                        fVal = -DBL_MAX;
                     }
                     else
                     {

@@ -240,6 +240,16 @@ public:
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(21), end);
         CPPUNIT_ASSERT_EQUAL(0x1p-1074, res);
+
+        res = rtl::math::stringToDouble("1.79769313486232E+308", '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(21), end);
+        CPPUNIT_ASSERT_EQUAL(DBL_MAX, res);
+
+        res = rtl::math::stringToDouble("-1.79769313486232e308", '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(21), end);
+        CPPUNIT_ASSERT_EQUAL(-DBL_MAX, res);
     }
 
     void test_stringToDouble_bad() {
