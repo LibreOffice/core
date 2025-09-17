@@ -1086,20 +1086,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SfxViewShell::Current()->SetStoringHelper(xHelper);
 
                 QueryHiddenInformation(bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving);
-                SfxPoolItemHolder aItem;
-                if (SID_DIRECTEXPORTDOCASPDF == nId)
-                    aItem = GetSlotState(SID_MAIL_PREPAREEXPORT);
-                const SfxBoolItem* pItem(dynamic_cast<const SfxBoolItem*>(aItem.getItem()));
-
-                // Fetch value from the pool item early, because GUIStoreModel() can free the pool
-                // item as part of spinning the main loop if a dialog is opened.
-                const bool bMailPrepareExport(nullptr != pItem && pItem->GetValue());
-                if (bMailPrepareExport)
-                {
-                    SfxRequest aRequest(SID_MAIL_PREPAREEXPORT, SfxCallMode::SYNCHRON, GetPool());
-                    aRequest.AppendItem(SfxBoolItem(FN_NOUPDATE, true));
-                    ExecuteSlot(aRequest);
-                }
 
                 xHelper->GUIStoreModel( GetModel(),
                                        pSlot->GetUnoName(),
@@ -1107,12 +1093,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                        bPreselectPassword,
                                        GetDocumentSignatureState(),
                                        bIsAsync );
-
-                if (bMailPrepareExport)
-                {
-                    SfxRequest aRequest(SID_MAIL_EXPORT_FINISHED, SfxCallMode::SYNCHRON, GetPool());
-                    ExecuteSlot(aRequest);
-                }
 
                 // merge aDispatchArgs to the request
                 SfxAllItemSet aResultParams( GetPool() );
