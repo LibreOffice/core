@@ -1303,7 +1303,11 @@ namespace //local functions originally from docfmt.cxx
             SfxItemSetFixed<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
                         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>  aSet( rDoc.GetAttrPool() );
             SwTextNode * pNode = rRg.Start()->GetNode().GetTextNode();
-            pNode->GetParaAttr( aSet, rRg.Start()->GetContentIndex() + 1, rRg.End()->GetContentIndex() );
+            // bGetFromChrFormat would be true by default and we want no expansion of the character
+            // style to direct formatting for redline purposes.
+            pNode->GetParaAttr(aSet, rRg.Start()->GetContentIndex() + 1,
+                               rRg.End()->GetContentIndex(), /*bOnlyTextAttr=*/false,
+                               /*bGetFromChrFormat=*/false);
 
             aSet.ClearItem( RES_TXTATR_REFMARK );
             aSet.ClearItem( RES_TXTATR_TOXMARK );
@@ -1311,6 +1315,7 @@ namespace //local functions originally from docfmt.cxx
             aSet.ClearItem( RES_TXTATR_INETFMT );
             aSet.ClearItem( RES_TXTATR_META );
             aSet.ClearItem( RES_TXTATR_METAFIELD );
+            aSet.ClearItem(RES_CHRATR_RSID);
 
             // After GetParaAttr aSet can contain invalid/dontcare items (true == IsInvalidItem,
             // DONTCARE == SfxItemState), e.g. RES_TXTATR_CHARFMT and (a copy of) this
