@@ -119,6 +119,7 @@ namespace svgio::svgreader
             const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
             bool bItalic(FontStyle::italic == rSvgStyleAttributes.getFontStyle() || FontStyle::oblique == rSvgStyleAttributes.getFontStyle());
             bool bRTL(FontDirection::RTL == rSvgStyleAttributes.getFontDirection());
+            bool bUnicodeBidi(UnicodeBidi::bidi_override == rSvgStyleAttributes.getUnicodeBidi());
 
             return drawinglayer::attribute::FontAttribute(
                 aFontFamily,
@@ -130,7 +131,7 @@ namespace svgio::svgreader
                 false/*bMonospaced*/,
                 false/*bOutline*/,
                 bRTL,
-                false/*bBiDiStrong*/);
+                bUnicodeBidi);
         }
 
         rtl::Reference<BasePrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(

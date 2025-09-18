@@ -1,0 +1,9 @@
+<svg
+  width="600 px" height="600 px"
+  xmlns="http://www.w3.org/2000/svg"
+  font-family="DejaVu Sans">
+  <text x="0" y="50">Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew</text>
+  <text x="0" y="100" unicode-bidi="bidi-override">Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew</text>
+  <text x="0" y="150" unicode-bidi="bidi-override" direction="rtl" text-anchor="end">Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew</text>
+  <text x="0" y="200" direction="rtl" text-anchor="end">Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew</text>
+</svg>
