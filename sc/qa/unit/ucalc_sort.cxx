@@ -2254,7 +2254,7 @@ CPPUNIT_TEST_FIXTURE(TestSort, testLanguageDependentNaturalSort)
     aSortParam.nRow1 = 0;
     aSortParam.nRow2 = 6;
     aSortParam.bHasHeader = true;
-    aSortParam.bNaturalSort = true; // needs to be adapted when mode 'integer' is implemented
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::DOUBLE;
     aSortParam.bInplace = false;
     aSortParam.nDestTab = 0;
     aSortParam.nDestCol = 2;
@@ -2278,6 +2278,100 @@ CPPUNIT_TEST_FIXTURE(TestSort, testLanguageDependentNaturalSort)
     for (SCROW nRow = 0; nRow <= 6; nRow++)
     {
         CPPUNIT_ASSERT_EQUAL(aExpected[nRow], m_pDoc->GetString(ScAddress(2, nRow, 0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestSort, testSortEmbeddedNumberTypes)
+{
+    // LibreOffice 26.2 introduces a new type INTEGER for sorting with numbers embedded in text. It
+    // is a natural sort in principle. But decimal separators are treated as normal characters. Thus
+    // even it would be a valid decimal number for the current local, integer part and fractional
+    // part are treated as separate integer values.
+    // The previous "natural sort" is type DOUBLE now. The previous non natural sort is type
+    // ALPHA_NUMERIC now.
+
+    // Force the system locale to "en-US" for to have a dot as well defined decimal separator
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString(u"en-US"_ustr);
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    // Generate test data
+    m_pDoc->InsertTab(0, u"NaturalSortTest"_ustr);
+    m_pDoc->SetString(ScAddress(0,0,0),u"Item"_ustr); // ScAddress(col, row, tab)
+    m_pDoc->SetString(ScAddress(0,1,0),u"K2.5"_ustr);
+    m_pDoc->SetString(ScAddress(0,2,0),u"K2.501"_ustr);
+    m_pDoc->SetString(ScAddress(0,3,0),u"K10"_ustr);
+    m_pDoc->SetString(ScAddress(0,4,0),u"K1.104"_ustr);
+    m_pDoc->SetString(ScAddress(0,5,0),u"K1.2"_ustr);
+    m_pDoc->SetString(ScAddress(0,6,0),u"K2.40"_ustr);
+    m_pDoc->SetAnonymousDBData(
+        0, std::unique_ptr<ScDBData>(new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 0, 6)));
+
+    // Create sort parameters
+    ScSortParam aSortParam;
+    aSortParam.nCol1 = 0;
+    aSortParam.nCol2 = 0;
+    aSortParam.nRow1 = 0;
+    aSortParam.nRow2 = 6;
+    aSortParam.bHasHeader = true;
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::INTEGER;
+    aSortParam.bInplace = false;
+    aSortParam.nDestTab = 0;
+    aSortParam.nDestCol = 2;
+    aSortParam.nDestRow = 0;
+    // no aSortParam.aCollatorLocale. If no local is set, the global local is used, here en_US
+    aSortParam.maKeyState[0].bDoSort = true;
+    aSortParam.maKeyState[0].nField = 0;
+    aSortParam.maKeyState[0].bAscending = true;
+    aSortParam.maKeyState[0].aColorSortMode = ScColorSortMode::None;
+
+    // Actually sort
+    ScDBDocFunc aFunc(*m_xDocShell);
+    bool bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Verify sort result: Item | K1.2 | K1.104 | K2.5 | K2.40 | K2.501 | K10
+    const std::array<OUString, 7> aExpectedInt
+        = { u"Item"_ustr, u"K1.2"_ustr, u"K1.104"_ustr, u"K2.5"_ustr,
+            u"K2.40"_ustr, u"K2.501"_ustr, u"K10"_ustr };
+    for (SCROW nRow = 0; nRow <= 6; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedInt[nRow], m_pDoc->GetString(ScAddress(2, nRow, 0)));
+    }
+
+    // Make sure that type ScSortNumberBehavior::DOUBLE works as well
+    // It sorts according the values of the decimal numbers.
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::DOUBLE;
+    bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    const std::array<OUString, 7> aExpectedDbl
+        = { u"Item"_ustr, u"K1.104"_ustr, u"K1.2"_ustr, u"K2.40"_ustr,
+            u"K2.5"_ustr, u"K2.501"_ustr, u"K10"_ustr };
+    for (SCROW nRow = 0; nRow <= 6; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedDbl[nRow], m_pDoc->GetString(ScAddress(2, nRow, 0)));
+    }
+
+    // And same for type ScSortNumberBehavior::ALPHA_NUMERIC
+    // It treats digits and decimal separator of the numbers as normal characters.
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
+    bSorted = aFunc.Sort(0, aSortParam, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    const std::array<OUString, 7> aExpectedAlpha
+        = { u"Item"_ustr, u"K1.104"_ustr, u"K1.2"_ustr, u"K10"_ustr,
+            u"K2.40"_ustr, u"K2.5"_ustr, u"K2.501"_ustr };
+    for (SCROW nRow = 0; nRow <= 6; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedAlpha[nRow], m_pDoc->GetString(ScAddress(2, nRow, 0)));
     }
 
     m_pDoc->DeleteTab(0);

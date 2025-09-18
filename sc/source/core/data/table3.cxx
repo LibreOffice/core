@@ -100,11 +100,15 @@ using namespace ::com::sun::star::i18n;
     Number converted from the middle number string
     If no number was found, fNum is unchanged.
 
+    @param bInteger
+    If value is true, any decimal separator is treated as ordinary character. Use value true
+    in case of ScSortNumberBehavior::INTEGER.
+
     @return Returns TRUE if a numeral element is found in a given string, or
     FALSE if no numeral element is found.
 */
 static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag, OUString &sPrefix,
-                        OUString &sSuffix, double &fNum)
+                        OUString &sSuffix, double &fNum, const bool &bInteger = false)
 {
     // Get prefix element, search for any digit and stop.
     sal_Int32 nPos = 0;
@@ -132,6 +136,23 @@ static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag,
         SAL_WARN("sc.core","naturalsort::SplitString - digit found but no number parsed, pos " <<
                 nPos << " : " << sWhole);
         return false;
+    }
+
+    if (bInteger)
+    {
+        // ScSortNumberBehavior::INTEGER treats decimal separators as ordinary character. If we have
+        // a separator in the string number part, we need to recalculate value and start of sSuffix.
+        const OUString sNumber = sWhole.copy(nPos, aPRNum.EndPos - nPos);
+        if (sNumber.indexOf(sUser.toChar(), 0) >=0)
+        {
+            ParseResult aPRNumInt = aCharClass.parsePredefinedToken(
+                KParseType::ANY_NUMBER, sNumber.getToken(0, sUser.toChar()), 0,
+                KParseTokens::ANY_NUMBER, u""_ustr, KParseTokens::ANY_NUMBER, sUser);
+            sPrefix = sWhole.copy(0, nPos);
+            fNum = aPRNumInt.Value;
+            sSuffix = sWhole.copy(nPos + aPRNumInt.EndPos);
+            return true;
+        }
     }
 
     sPrefix = sWhole.copy( 0, nPos );
@@ -165,20 +186,24 @@ static bool SplitString(const OUString &sWhole, const LanguageTag& rLanguageTag,
     @param pCW
     Pointer to collator wrapper for normal string comparison
 
+    @param bInteger
+    Use value true in case of ScSortNumberBehavior::INTEGER.
+
     @return Returns 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
     sInput2 is greater.
 */
 static short Compare(const OUString &sInput1, const OUString &sInput2,
                      const LanguageTag& rLanguageTag, const bool bCaseSens,
-                     const ScUserListData* pData, const CollatorWrapper *pCW)
+                     const ScUserListData* pData, const CollatorWrapper *pCW,
+                     const bool& bInteger = false)
 {
     OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;
 
     do
     {
         double nNum1, nNum2;
-        bool bNumFound1 = SplitString( sStr1, rLanguageTag, sPre1, sSuf1, nNum1 );
-        bool bNumFound2 = SplitString( sStr2, rLanguageTag, sPre2, sSuf2, nNum2 );
+        bool bNumFound1 = SplitString( sStr1, rLanguageTag, sPre1, sSuf1, nNum1, bInteger);
+        bool bNumFound2 = SplitString( sStr2, rLanguageTag, sPre2, sSuf2, nNum2, bInteger);
 
         short nPreRes; // Prefix comparison result
         if ( pData )
@@ -226,7 +251,7 @@ static short Compare(const OUString &sInput1, const OUString &sInput2,
     return 0;
 }
 
-}
+} // namespace naturalsort
 
 // Assume that we can handle 512MB, which with a ~100 bytes
 // ScSortInfoArray::Cell element for 500MB are about 5 million cells plus
@@ -1502,34 +1527,45 @@ short ScTable::CompareCell(
                     aStr2 = GetString(nCell2Col, nCell2Row);
 
                 bool bUserDef     = aSortParam.bUserDef;        // custom sort order
-                bool bNaturalSort = aSortParam.bNaturalSort;    // natural sort
                 bool bCaseSens    = aSortParam.bCaseSens;       // case sensitivity
                 LanguageTag aSortLanguageTag(aSortParam.aCollatorLocale);
 
                 ScUserList& rList = ScGlobal::GetUserList();
                 if (bUserDef && rList.size() > aSortParam.nUserIndex)
                 {
+                    // ToDo: ScUserListData uses internally always ScGlobal. A comparison using the
+                    // sort locale would require an extended version of ScUserListData. So for now in
+                    // case of bUserDef the sort locale is not evaluated.
                     const ScUserListData& rData = rList[aSortParam.nUserIndex];
-
-                    if ( bNaturalSort )
-                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
-                                                    &rData, pSortCollator);
-                    else
+                    if (aSortParam.eSortNumberBehavior == ScSortNumberBehavior::ALPHA_NUMERIC)
                     {
                         if ( bCaseSens )
                             nRes = sal::static_int_cast<short>( rData.Compare(aStr1, aStr2) );
                         else
                             nRes = sal::static_int_cast<short>( rData.ICompare(aStr1, aStr2) );
                     }
-
+                    else if (aSortParam.eSortNumberBehavior == ScSortNumberBehavior::DOUBLE)
+                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
+                                                    &rData, pSortCollator);
+                    else // ScSortNumberBehavior::INTEGER
+                    {
+                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
+                                                    &rData, pSortCollator, true /*bInteger*/);
+                    }
                 }
                 if (!bUserDef)
                 {
-                    if ( bNaturalSort )
+                    if (aSortParam.eSortNumberBehavior == ScSortNumberBehavior::ALPHA_NUMERIC)
+                        nRes = sal::static_int_cast<short>(
+                            pSortCollator->compareString(aStr1, aStr2));
+                    else if (aSortParam.eSortNumberBehavior == ScSortNumberBehavior::DOUBLE)
                         nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
-                                                    nullptr, pSortCollator );
-                    else
-                        nRes = static_cast<short>( pSortCollator->compareString( aStr1, aStr2 ) );
+                                                    nullptr, pSortCollator);
+                    else // ScSortNumberBehavior::INTEGER
+                    {
+                        nRes = naturalsort::Compare(aStr1, aStr2, aSortLanguageTag, bCaseSens,
+                                                    nullptr, pSortCollator, true /*bInteger*/);
+                    }
                 }
             }
             else if ( bStr1 )               // String <-> Number or Error

@@ -410,7 +410,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aSortParam.bHasHeader       = bHasHeader;
                         aSortParam.bByRow           = true;
                         aSortParam.bCaseSens        = false;
-                        aSortParam.bNaturalSort     = false;
+                        aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
                         aSortParam.aDataAreaExtras.mbCellNotes = false;
                         aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
                         aSortParam.aDataAreaExtras.mbCellFormats = true;
@@ -464,7 +464,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             if ( const SfxBoolItem* pItem = pArgs->GetItemIfSet( SID_SORT_CASESENS ) )
                                 aSortParam.bCaseSens = pItem->GetValue();
                             if ( const SfxBoolItem* pItem = pArgs->GetItemIfSet( SID_SORT_NATURALSORT ) )
-                                aSortParam.bNaturalSort = pItem->GetValue();
+                            {
+                                // For to keep old macros working. Its value will be overwritten by
+                                // SID_SORT_NUMBERBEHAVIOR if that one is set.
+                                sal_Int32 nVal = pItem->GetValue() ? 1 : 0;
+                                aSortParam.eSortNumberBehavior = static_cast<ScSortNumberBehavior>(nVal);
+                            }
                             if ( const SfxBoolItem* pItem = pArgs->GetItemIfSet( SID_SORT_INCCOMMENTS ) )
                                 aSortParam.aDataAreaExtras.mbCellNotes = pItem->GetValue();
                             if ( const SfxBoolItem* pItem = pArgs->GetItemIfSet( SID_SORT_INCIMAGES ) )
@@ -478,7 +483,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if ( nUserIndex )
                                     aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-based
                             }
-
+                            if (const SfxInt32Item* pItem = pArgs->GetItemIfSet( SID_SORT_NUMBERBEHAVIOR))
+                            {
+                                sal_Int32 nVal = pItem->GetValue();
+                                if (nVal < 0 || nVal >2)
+                                    nVal = 0; // invalid value, use default
+                                aSortParam.eSortNumberBehavior = static_cast<ScSortNumberBehavior>(nVal);
+                            }
                             SCCOLROW nField0 = 0;
                             const SfxPoolItem* pItem = nullptr;
                             if ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
@@ -554,8 +565,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                                 rOutParam.bHasHeader ) );
                                             aRequest.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
                                                 rOutParam.bCaseSens ) );
-                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
-                                                        rOutParam.bNaturalSort ) );
                                             aRequest.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
                                                         rOutParam.aDataAreaExtras.mbCellNotes ) );
                                             aRequest.AppendItem( SfxBoolItem( SID_SORT_INCIMAGES,

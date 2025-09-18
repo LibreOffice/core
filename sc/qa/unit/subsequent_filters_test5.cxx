@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     ScDBData* pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5); // tab, col1, row1, col2, row2
     ScSortParam aSortParam; // that is a struct
     pDBData->GetSortParam(aSortParam);
-    aSortParam.bNaturalSort = true;
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::DOUBLE;
 
     // The output range and the ScDBData are only updated, when you actual sort using the new
     // parameters.
@@ -248,10 +248,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     pDoc = getScDoc();
     pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);
     pDBData->GetSortParam(aSortParam);
-    CPPUNIT_ASSERT(aSortParam.bNaturalSort);
+    CPPUNIT_ASSERT_EQUAL(ScSortNumberBehavior::DOUBLE, aSortParam.eSortNumberBehavior);
 
     // disable natural sorted
-    aSortParam.bNaturalSort = false;
+    aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
     pDocSh = getScDocShell();
     ScDBDocFunc aFunc2(*pDocSh);
     bSorted = aFunc2.Sort(0, aSortParam, true, true, true);
@@ -273,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     pDoc = getScDoc();
     pDBData = pDoc->GetDBAtArea(0, 0, 0, 0, 5);
     pDBData->GetSortParam(aSortParam);
-    CPPUNIT_ASSERT(!aSortParam.bNaturalSort);
+    CPPUNIT_ASSERT_EQUAL(ScSortNumberBehavior::ALPHA_NUMERIC, aSortParam.eSortNumberBehavior);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf168589)

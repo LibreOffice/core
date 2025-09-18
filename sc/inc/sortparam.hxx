@@ -25,6 +25,7 @@
 
 #include "address.hxx"
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/sheet/SortNumberBehavior.hpp>
 #include "scdllapi.h"
 #include "celltextattr.hxx"
 #include "cellvalue.hxx"
@@ -114,6 +115,17 @@ struct ScDataAreaExtras
     }
 };
 
+/** Specifies how numbers embedded in text are treated in text
+    comparisons. The values correspond to the ODF attribute
+    table:embedded-number-behavior (19.628, part 3 ODF 1.4).
+*/
+enum class ScSortNumberBehavior : sal_Int32
+{
+    ALPHA_NUMERIC = css::sheet::SortNumberBehavior::ALPHA_NUMERIC, // 0
+    DOUBLE = css::sheet::SortNumberBehavior::DOUBLE, // 1
+    INTEGER  = css::sheet::SortNumberBehavior::INTEGER, // 2
+};
+
 struct SC_DLLPUBLIC ScSortParam
 {
     SCCOL       nCol1;
@@ -126,7 +138,7 @@ struct SC_DLLPUBLIC ScSortParam
     bool        bHasHeader;
     bool        bByRow;
     bool        bCaseSens;
-    bool        bNaturalSort;
+    ScSortNumberBehavior eSortNumberBehavior;
     bool        bUserDef;
     bool        bInplace;
     SCTAB       nDestTab;

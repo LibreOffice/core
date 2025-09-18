@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_url_for_data_file, select_pos
+from uitest.uihelper.common import get_url_for_data_file, select_pos, get_state_as_dict
 
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -27,8 +27,12 @@ class tdf99627(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
+                if (get_state_as_dict(xNatural)["Selected"]) == "false":
+                    xNatural.executeAction("CLICK", tuple())
+                xNumberBehaviorDouble = xDialog.getChild("doublenaturalsortrb")
+                if (get_state_as_dict(xNumberBehaviorDouble)["Checked"]) == "false":
+                    xNumberBehaviorDouble.executeAction("CLICK", tuple())
                 xdown = xDialog.getChild("down")
-                xNatural.executeAction("CLICK", tuple())
                 select_pos(xTabs, "0")
                 xdown.executeAction("CLICK", tuple())
             #Verify

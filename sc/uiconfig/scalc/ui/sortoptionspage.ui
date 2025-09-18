@@ -63,17 +63,64 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="naturalsort">
-                <property name="label" translatable="yes" context="sortoptionspage|naturalsort">Enable natural sort</property>
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="naturalsort-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|naturalsort">Natural sort is a sort algorithm that sorts string-prefixed numbers based on the value of the numerical element in each sorted number, instead of the traditional way of sorting them as ordinary strings.</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkCheckButton" id="naturalsort">
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort">Recognize numbers within strings</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort">For numbers embedded in text, sorting uses their values instead of their sequence of digit characters. Example: A1, A2, A10 instead of A1, A10, A2</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="doublenaturalsortrb">
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Use decimal numbers as a whole</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|doublenaturalsortrb">Decimal numbers are detected. Example: A1.14, A1.2, A2.5, A10 (with dot as separator)</property>
+                    <property name="margin-start">20</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="integernaturalsortrb">
+                    <property name="label" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Split in integer and fractions</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-text" translatable="yes" context="sortoptionspage|naturalsort|integernaturalsortrb">Decimal separator is treated as ordinary character. Example: A1.2, A1.14, A2.5, A10</property>
+                    <property name="margin-start">20</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">doublenaturalsortrb</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -266,7 +313,6 @@
                     <property name="has-entry">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry">
-                        <property name="truncate-multiline">True</property>
                         <property name="can-focus">False</property>
                       </object>
                     </child>

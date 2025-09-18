@@ -29,9 +29,12 @@ class tdf99208(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
-                xFormats = xDialog.getChild("formats")
                 if (get_state_as_dict(xNatural)["Selected"]) == "false":
                     xNatural.executeAction("CLICK", tuple())
+                xNumberBehaviorDouble = xDialog.getChild("doublenaturalsortrb")
+                if (get_state_as_dict(xNumberBehaviorDouble)["Checked"]) == "false":
+                    xNumberBehaviorDouble.executeAction("CLICK", tuple())
+                xFormats = xDialog.getChild("formats")
                 if (get_state_as_dict(xFormats)["Selected"]) == "false":
                     xFormats.executeAction("CLICK", tuple())
                 select_pos(xTabs, "0")

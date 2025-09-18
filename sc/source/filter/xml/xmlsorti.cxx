@@ -158,9 +158,10 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     pSortDescriptor[6].Name = SC_UNONAME_SORTFLD;
     pSortDescriptor[6].Value <<= aSortFields;
     pSortDescriptor[7].Name = SC_UNONAME_NUMBERBEHAVIOR;
-    // value 'integer' is not yet implemented. Map it to 'double'.
-    if (msEmbeddedNumberBehavior.equals(u"double"_ustr) || msEmbeddedNumberBehavior.equals(u"integer"_ustr))
+    if (msEmbeddedNumberBehavior.equals(u"double"_ustr))
         pSortDescriptor[7].Value <<= sheet::SortNumberBehavior::DOUBLE;
+    else if (msEmbeddedNumberBehavior.equals(u"integer"_ustr))
+        pSortDescriptor[7].Value <<= sheet::SortNumberBehavior::INTEGER;
     else
         pSortDescriptor[7].Value <<= sheet::SortNumberBehavior::ALPHA_NUMERIC;
     if (!maLanguageTagODF.isEmpty())

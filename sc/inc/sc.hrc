@@ -644,6 +644,7 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_SORT_NATURALSORT    TypedWhichId<SfxBoolItem>(SC_PARAM_START+5)
 #define SID_SORT_INCCOMMENTS    TypedWhichId<SfxBoolItem>(SC_PARAM_START+6)
 #define SID_SORT_INCIMAGES      TypedWhichId<SfxBoolItem>(SC_PARAM_START+7)
+#define SID_SORT_NUMBERBEHAVIOR TypedWhichId<SfxInt32Item>(SC_PARAM_START+8)
 
 // Sidebar -------------------------------------------------------------
 

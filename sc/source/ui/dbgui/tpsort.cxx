@@ -513,6 +513,8 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , m_xLbAlgorithm(m_xBuilder->weld_combo_box(u"algorithmlb"_ustr))
     , m_xBtnIncComments(m_xBuilder->weld_check_button(u"includenotes"_ustr))
     , m_xBtnIncImages(m_xBuilder->weld_check_button(u"includeimages"_ustr))
+    , m_xRBDoubleNaturalSort(m_xBuilder->weld_radio_button(u"doublenaturalsortrb"_ustr))
+    , m_xRBIntegerNaturalSort(m_xBuilder->weld_radio_button(u"integernaturalsortrb"_ustr))
 {
     m_xLbSortUser->set_size_request(m_xLbSortUser->get_approximate_digit_width() * 50, -1);
     m_xLbSortUser->set_accessible_description(ScResId(STR_A11Y_DESC_SORTUSER));
@@ -533,6 +535,7 @@ void ScTabPageSortOptions::Init()
     m_xLbOutPos->connect_changed( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
     m_xBtnCopyResult->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
     m_xBtnSortUser->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
+    m_xBtnNaturalSort->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
     m_xLbLanguage->connect_changed( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
@@ -594,7 +597,6 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
     m_xBtnCase->set_active( aSortData.bCaseSens );
     m_xBtnFormats->set_active( aSortData.aDataAreaExtras.mbCellFormats );
-    m_xBtnNaturalSort->set_active( aSortData.bNaturalSort );
     m_xBtnIncComments->set_active( aSortData.aDataAreaExtras.mbCellNotes );
     m_xBtnIncImages->set_active( aSortData.aDataAreaExtras.mbCellDrawObjects );
 
@@ -632,6 +634,30 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
         m_xEdOutPos->set_sensitive(false);
         m_xEdOutPos->set_text( OUString() );
     }
+
+    m_xBtnNaturalSort->set_sensitive(true);
+    if (aSortData.eSortNumberBehavior == ScSortNumberBehavior::ALPHA_NUMERIC)
+    {
+        m_xBtnNaturalSort->set_active(false);
+        m_xRBDoubleNaturalSort->set_sensitive(false);
+        m_xRBIntegerNaturalSort->set_sensitive(false);
+    }
+    else
+    {
+        m_xBtnNaturalSort->set_active(true);
+        m_xRBDoubleNaturalSort->set_sensitive(true);
+        m_xRBIntegerNaturalSort->set_sensitive(true);
+        if (aSortData.eSortNumberBehavior == ScSortNumberBehavior::DOUBLE)
+        {
+            m_xRBDoubleNaturalSort->set_active(true);
+            m_xRBIntegerNaturalSort->set_active(false);
+        }
+        else
+        {
+            m_xRBDoubleNaturalSort->set_active(false);
+            m_xRBIntegerNaturalSort->set_active(true);
+        }
+    }
 }
 
 bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
@@ -646,7 +672,6 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
             aNewSortData = pSortItem->GetSortData();
     }
     aNewSortData.bCaseSens       = m_xBtnCase->get_active();
-    aNewSortData.bNaturalSort    = m_xBtnNaturalSort->get_active();
     aNewSortData.aDataAreaExtras.mbCellNotes = m_xBtnIncComments->get_active();
     aNewSortData.aDataAreaExtras.mbCellDrawObjects = m_xBtnIncImages->get_active();
     aNewSortData.aDataAreaExtras.mbCellFormats = m_xBtnFormats->get_active();
@@ -674,6 +699,12 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
             sAlg = aAlgos[nSel];
     }
     aNewSortData.aCollatorAlgorithm = sAlg;
+
+    if (m_xBtnNaturalSort->get_active())
+        aNewSortData.eSortNumberBehavior = m_xRBDoubleNaturalSort->get_active()
+            ? ScSortNumberBehavior::DOUBLE : ScSortNumberBehavior::INTEGER;
+    else
+        aNewSortData.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
 
     rArgSet->Put( ScSortItem( SCITEM_SORTDATA, pViewData, &aNewSortData ) );
 
@@ -785,6 +816,11 @@ IMPL_LINK( ScTabPageSortOptions, EnableHdl, weld::Toggleable&, rButton, void )
         }
         else
             m_xLbSortUser->set_sensitive(false);
+    }
+    else if (&rButton == m_xBtnNaturalSort.get())
+    {
+        m_xRBDoubleNaturalSort->set_sensitive(rButton.get_active());
+        m_xRBIntegerNaturalSort->set_sensitive(rButton.get_active());
     }
 }
 

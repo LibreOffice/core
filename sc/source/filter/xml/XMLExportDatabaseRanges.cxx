@@ -85,10 +85,13 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
     if (aParam.bCaseSens)
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
-    if (aParam.bNaturalSort)
+    if (aParam.eSortNumberBehavior != ScSortNumberBehavior::ALPHA_NUMERIC
+        && mrExport.getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
     {
-        if (mrExport.getSaneDefaultVersion() >= SvtSaveOptions::ODFSVER_012)
+        if (aParam.eSortNumberBehavior == ScSortNumberBehavior::DOUBLE)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EMBEDDED_NUMBER_BEHAVIOR, XML_DOUBLE);
+        else
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EMBEDDED_NUMBER_BEHAVIOR, XML_INTEGER);
     }
 
     mrExport.AddLanguageTagAttributes( XML_NAMESPACE_TABLE, XML_NAMESPACE_TABLE, aParam.aCollatorLocale, false);

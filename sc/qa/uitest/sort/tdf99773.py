@@ -36,6 +36,9 @@ class tdf99773(UITestCase):
                 xNatural = xDialog.getChild("naturalsort")
                 if (get_state_as_dict(xNatural)["Selected"]) == "false":
                     xNatural.executeAction("CLICK", tuple())
+                xNumberBehaviorDouble = xDialog.getChild("doublenaturalsortrb")
+                if (get_state_as_dict(xNumberBehaviorDouble)["Checked"]) == "false":
+                    xNumberBehaviorDouble.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A 2")
             self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "A 5")

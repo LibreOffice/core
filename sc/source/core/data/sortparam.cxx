@@ -38,7 +38,7 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
         aDataAreaExtras(r.aDataAreaExtras),
         nUserIndex(r.nUserIndex),
         bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bNaturalSort(r.bNaturalSort),
+        eSortNumberBehavior(r.eSortNumberBehavior),
         bUserDef(r.bUserDef),
         bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
@@ -63,7 +63,8 @@ void ScSortParam::Clear()
     nCompatHeader = 2;
     nDestTab = 0;
     nUserIndex = 0;
-    bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
+    bHasHeader=bCaseSens=bUserDef = false;
+    eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
     bByRow = bInplace = true;
     aCollatorLocale = css::lang::Locale();
     aCollatorAlgorithm.clear();
@@ -89,7 +90,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     bHasHeader      = r.bHasHeader;
     bByRow          = r.bByRow;
     bCaseSens       = r.bCaseSens;
-    bNaturalSort    = r.bNaturalSort;
+    eSortNumberBehavior = r.eSortNumberBehavior;
     bUserDef        = r.bUserDef;
     bInplace        = r.bInplace;
     nDestTab        = r.nDestTab;
@@ -133,7 +134,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (bHasHeader      == rOther.bHasHeader)
         && (bByRow          == rOther.bByRow)
         && (bCaseSens       == rOther.bCaseSens)
-        && (bNaturalSort    == rOther.bNaturalSort)
+        && (eSortNumberBehavior == rOther.eSortNumberBehavior)
         && (bUserDef        == rOther.bUserDef)
         && (nUserIndex      == rOther.nUserIndex)
         && (bInplace        == rOther.bInplace)
@@ -163,7 +164,8 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         nSourceTab(0),
         aDataAreaExtras(rOld.aDataAreaExtras),
         nUserIndex(rSub.nUserIndex),
-        bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
+        bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),
+        eSortNumberBehavior(rOld.eSortNumberBehavior),
         bUserDef(rSub.bUserDef),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0),
@@ -212,7 +214,7 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nSourceTab(rParam.nTab),
         nUserIndex(0),
         bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
-        bNaturalSort(false),
+        eSortNumberBehavior(ScSortNumberBehavior::ALPHA_NUMERIC),
 //TODO: what about Locale and Algorithm?
         bUserDef(false),
         bInplace(true),

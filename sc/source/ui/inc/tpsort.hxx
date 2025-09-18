@@ -140,6 +140,8 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbAlgorithm;
     std::unique_ptr<weld::CheckButton> m_xBtnIncComments;
     std::unique_ptr<weld::CheckButton> m_xBtnIncImages;
+    std::unique_ptr<weld::RadioButton> m_xRBDoubleNaturalSort;
+    std::unique_ptr<weld::RadioButton> m_xRBIntegerNaturalSort;
 
 private:
     void Init                   ();

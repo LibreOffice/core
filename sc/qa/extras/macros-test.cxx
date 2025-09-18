@@ -1004,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf161948NaturalSortAPI)
     // The source has "K3", "K10", "K104", "K23", "K2" in Range A2:A6 and label in A1.
     // The result goes to range C1:C6.
 
-    // Enable natural sorting and sort. Examine cell C2
+    // Enable natural sorting "double" and sort. Examine cell C2
     executeMacro(u"vnd.sun.star.script:Standard.SortTest.EnableNaturalSort"
                  "?language=Basic&location=document"_ustr);
     OUString sCellContent = pDoc->GetString(2, 1, 0);
@@ -1032,6 +1032,41 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf81003_DateCellToVbaUDF)
     ScDocument* pDoc = getScDoc();
     // Check value of B1. The serial date for 2025-08-29 is 45898.
     CPPUNIT_ASSERT_EQUAL(45898.0, pDoc->GetValue(1, 0, 0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf161948NaturalSortDispatcher)
+{
+    // Since LibreOffice 26.2 the feature natural sort is available in the API. Prior to that,
+    // natural sort by macro was only possible by using the dispatcher.
+    // Here we test with a Basic macro, that the old way still works.
+    createScDoc("tdf161948_NaturalSort_OldWay.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // The source has "ID", "K3", "K10", "K104", "K23", "K2" in Range A1:A6.
+
+    // The macro enables natural sorting via parameter NaturalSort=true of SID_SORT.
+    executeMacro(u"vnd.sun.star.script:Standard.SortTest.Dispatcher_NaturalSort"
+                 "?language=Basic&location=document"_ustr);
+
+    // Verify sort result. Sorting via dispatcher is always 'inplace' thus results are in A1:A6.
+    const std::array<OUString, 6> aExpectedNaturalSort
+        = { u"ID"_ustr, u"K2"_ustr, u"K3"_ustr, u"K10"_ustr, u"K23"_ustr, u"K104"_ustr };
+    for (SCROW nRow = 0; nRow <= 5; nRow++) // ScAddress(col, row, tab)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedNaturalSort[nRow], pDoc->GetString(ScAddress(0, nRow, 0)));
+    }
+
+    // Same test for alpha-numeric sort, that is NaturalSort=false.
+    executeMacro(u"vnd.sun.star.script:Standard.SortTest.Dispatcher_AlphaNumeric"
+                 "?language=Basic&location=document"_ustr);
+
+    // Verify sort result
+    const std::array<OUString, 6> aExpectedAlphaNumeric
+        = { u"ID"_ustr, u"K10"_ustr, u"K104"_ustr, u"K2"_ustr, u"K23"_ustr, u"K3"_ustr };
+    for (SCROW nRow = 0; nRow <= 5; nRow++)
+    {
+        CPPUNIT_ASSERT_EQUAL(aExpectedAlphaNumeric[nRow], pDoc->GetString(ScAddress(0, nRow, 0)));
+    }
 }
 
 ScMacrosTest::ScMacrosTest()

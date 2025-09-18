@@ -700,7 +700,7 @@ public:
         aSortParam.bHasHeader = bHasHeader;
         aSortParam.bByRow = true;
         aSortParam.bCaseSens = false;
-        aSortParam.bNaturalSort = false;
+        aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
         aSortParam.aDataAreaExtras.mbCellNotes = false;
         aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
         aSortParam.aDataAreaExtras.mbCellFormats = true;
@@ -1201,7 +1201,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             aSortParam.bHasHeader = bHasHeader;
             aSortParam.bByRow = true;
             aSortParam.bCaseSens = false;
-            aSortParam.bNaturalSort = false;
+            aSortParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
             aSortParam.aDataAreaExtras.mbCellNotes = false;
             aSortParam.aDataAreaExtras.mbCellDrawObjects = true;
             aSortParam.aDataAreaExtras.mbCellFormats = true;

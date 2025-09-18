@@ -11,10 +11,8 @@ module com {  module sun {  module star {  module sheet {
 
 /** Describes how numbers inside text are handled in text comparisons.
 
-    The constants correspond to the ODF attribute
-    table:embedded-number-behavior (19.628, part 3 ODF 1.4).
-    That has values 'alpha-numeric', 'double' and 'integer'.
-    Value 'integer' is not yet implemented.
+    <p>The constants correspond to the ODF attribute
+    table:embedded-number-behavior (19.628, part 3 ODF 1.4).</p>
 
     @since LibreOffice 26.2
  */
@@ -22,18 +20,27 @@ published constants SortNumberBehavior
 {
     /** Digits inside text are compared alphanumerically.
 
-        "K10" < "K2" < "K3", for example.
+        <p>"K10" &lt; "K2" &lt; "K3", for example.</p>
       */
     const long ALPHA_NUMERIC = 0;
 
-    /** Comparison of text uses natural sort.
+    /** Comparison of text uses natural sort with decimal numbers.
 
-        "K2" < "K3" < "K10", for example. The number parts inside the text
-        may be decimal numbers. Which character is considered a decimal
-        separator, depends on the language of the text.
-        Read ODF standard for details.
+        <p>Example: "K2" &lt; "K3" &lt; "K10".<br/>
+        The number parts inside the text may be decimal numbers.
+        Which character is considered a decimal separator, depends on
+        the locale. Read ODF standard for details.<br/>
+        Example with dot as decimal separator: "K2.40" &lt; "K2.5"</p>
       */
     const long DOUBLE = 1;
+
+    /** Comparison of text uses natural sort with integer numbers.
+
+        <p>Any decimal separator is treated as ordinary character.
+        A fractional part is handled as separate number.<br/>
+        Example: "K2.5" &lt; "K2.40", because 5 &lt; 40.</p>
+      */
+    const long INTEGER = 2;
 };
 
 }; }; }; };

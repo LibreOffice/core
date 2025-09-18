@@ -320,14 +320,14 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
 
     pArray[9].Name = SC_UNONAME_NUMBERBEHAVIOR;
-    pArray[9].Value <<= rParam.bNaturalSort ? SortNumberBehavior::DOUBLE
-                            : SortNumberBehavior::ALPHA_NUMERIC;
+    pArray[9].Value <<= static_cast<sal_Int32>(rParam.eSortNumberBehavior);
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
     sal_Int32 nSortSize = static_cast<sal_Int32>(rParam.GetSortKeyCount());
-    rParam.bNaturalSort = false; // default if optional SC_UNONAME_NUMBERBEHAVIOR does not exist
+    // default if optional SC_UNONAME_NUMBERBEHAVIOR does not exist
+    rParam.eSortNumberBehavior = ScSortNumberBehavior::ALPHA_NUMERIC;
 
     for (const beans::PropertyValue& rProp : rSeq)
     {
@@ -445,9 +445,11 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName == SC_UNONAME_NUMBERBEHAVIOR)
         {
-            sal_Int32 nVal = SortNumberBehavior::ALPHA_NUMERIC;
+            sal_Int32 nVal = css::sheet::SortNumberBehavior::ALPHA_NUMERIC;
             if (rProp.Value >>= nVal)
-                rParam.bNaturalSort = nVal == SortNumberBehavior::DOUBLE;
+            {
+                rParam.eSortNumberBehavior = static_cast<ScSortNumberBehavior>(nVal <= 0 || nVal > 2 ? 0 : nVal);
+            }
         }
     }
 }
