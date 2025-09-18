@@ -1949,6 +1949,59 @@ OUString convertSfntName( const NameRecord& rNameRecord )
     return aValue;
 }
 
+OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const LanguageTag& rPrefLang)
+{
+    OUString aResult;
+
+    std::vector<NameRecord> aNameRecords;
+    GetTTNameRecords(pTTFont, aNameRecords);
+    if( !aNameRecords.empty() )
+    {
+        LanguageType eLang = rPrefLang.getLanguageType();
+        int nLastMatch = -1;
+        for( size_t i = 0; i < aNameRecords.size(); i++ )
+        {
+            if( aNameRecords[i].nameID != nameId || aNameRecords[i].sptr.empty() )
+                continue;
+            int nMatch = -1;
+            if( aNameRecords[i].platformID == 0 ) // Unicode
+                nMatch = 4000;
+            else if( aNameRecords[i].platformID == 3 )
+            {
+                // this bases on the LanguageType actually being a Win LCID
+                if (aNameRecords[i].languageID == eLang)
+                    nMatch = 8000;
+                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
+                    nMatch = 2000;
+                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH ||
+                         aNameRecords[i].languageID == LANGUAGE_ENGLISH_UK )
+                    nMatch = 1500;
+                else
+                    nMatch = 1000;
+            }
+            else if (aNameRecords[i].platformID == 1)
+            {
+                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(aNameRecords[i].languageID));
+                LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
+                if (aApple == rPrefLang)
+                    nMatch = 8000;
+                else if (aAppleId == AppleLanguageId::ENGLISH)
+                    nMatch = 2000;
+                else
+                    nMatch = 1000;
+            }
+            OUString aName = convertSfntName( aNameRecords[i] );
+            if (!(aName.isEmpty()) && nMatch >= nLastMatch)
+            {
+                nLastMatch = nMatch;
+                aResult = aName;
+            }
+        }
+    }
+
+    return aResult;
+}
+
 } // namespace vcl
 
 int TestFontSubset(const void* data, sal_uInt32 size)

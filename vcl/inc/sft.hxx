@@ -56,6 +56,7 @@
 
 #include "font/TTFStructure.hxx"
 
+class LanguageTag;
 class SvStream;
 
 namespace vcl
@@ -608,6 +609,8 @@ void GetTTGlobalFontInfo(AbstractTrueTypeFont *ttf, TTGlobalFontInfo *info);
  * @ingroup sft
  */
 bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle);
+
+OUString analyzeSfntName(const TrueTypeFont* pTTFont, sal_uInt16 nameId, const LanguageTag& rPrefLang);
 
 /*- private definitions */
 
