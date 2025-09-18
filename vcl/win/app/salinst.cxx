@@ -773,10 +773,28 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
     return false;
 }
 
+LRESULT WinSalInstance::SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) const
+{
+    std::optional<SolarMutexReleaser> oReleaser;
+    if (!IsMainThread())
+        oReleaser.emplace();
+    return SendMessageW(hWnd, Msg, wParam, lParam);
+}
+
+LRESULT WinSalInstance::SendWndMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    return GetSalData()->mpInstance->SendWndMessage_impl(hWnd, Msg, wParam, lParam);
+}
+
+LRESULT WinSalInstance::SendComWndMessage(UINT Msg, WPARAM wParam, LPARAM lParam) const
+{
+    return SendWndMessage_impl(mhComWnd, Msg, wParam, lParam);
+}
+
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, SalFrameStyleFlags nSalFrameStyle )
 {
     // to switch to Main-Thread
-    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(pSystemParentData->hWnd) )));
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendComWndMessage( SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(pSystemParentData->hWnd) )));
 }
 
 SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSalFrameStyle )
@@ -787,13 +805,13 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nSa
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = nullptr;
-    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(hWndParent) )));
+    return reinterpret_cast<SalFrame*>(static_cast<sal_IntPtr>(SendComWndMessage( SAL_MSG_CREATEFRAME, static_cast<WPARAM>(nSalFrameStyle), reinterpret_cast<LPARAM>(hWndParent) )));
 }
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
     OpenGLContext::prepareForYield();
-    SendMessageW( mhComWnd, SAL_MSG_DESTROYFRAME, 0, reinterpret_cast<LPARAM>(pFrame) );
+    SendComWndMessage(SAL_MSG_DESTROYFRAME, 0, reinterpret_cast<LPARAM>(pFrame));
 }
 
 SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
@@ -801,12 +819,12 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          bool /*bShow*/ )
 {
     // to switch to Main-Thread
-    return reinterpret_cast<SalObject*>(static_cast<sal_IntPtr>(SendMessageW( mhComWnd, SAL_MSG_CREATEOBJECT, 0, reinterpret_cast<LPARAM>(static_cast<WinSalFrame*>(pParent)) )));
+    return reinterpret_cast<SalObject*>(static_cast<sal_IntPtr>(SendComWndMessage( SAL_MSG_CREATEOBJECT, 0, reinterpret_cast<LPARAM>(static_cast<WinSalFrame*>(pParent)) )));
 }
 
 void WinSalInstance::DestroyObject( SalObject* pObject )
 {
-    SendMessageW( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, reinterpret_cast<LPARAM>(pObject) );
+    SendComWndMessage(SAL_MSG_DESTROYOBJECT, 0, reinterpret_cast<LPARAM>(pObject));
 }
 
 OUString WinSalInstance::GetConnectionIdentifier()
