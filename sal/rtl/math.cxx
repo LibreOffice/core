@@ -212,7 +212,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
         else if (('I' == p[0]) && ('N' == p[1]) && ('F' == p[2]))
         {
             p += 3;
-            fVal = HUGE_VAL;
+            fVal = std::numeric_limits<double>::infinity();
             eStatus = rtl_math_ConversionStatus_OutOfRange;
             bDone = true;
         }
@@ -300,9 +300,8 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
             {
                 CharT c = *p;
                 if (!rtl::isAsciiDigit(c))
-                {
                     break;
-                }
+
                 buf.insert(c, p);
             }
         }
@@ -335,7 +334,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
             {
                 // "1.#INF", "+1.#INF", "-1.#INF"
                 p += 4;
-                fVal = HUGE_VAL;
+                fVal = std::numeric_limits<double>::infinity();
                 eStatus = rtl_math_ConversionStatus_OutOfRange;
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
@@ -351,9 +350,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
 
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
-                {
                     ++p;
-                }
                 bDone = true;
             }
         }
@@ -392,16 +389,13 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
         }
     }
 
-    if (bSign)
-        fVal = -fVal;
-
     if (pStatus)
         *pStatus = eStatus;
 
     if (pParsedEnd)
         *pParsedEnd = p == p0 ? pBegin : p;
 
-    return fVal;
+    return bSign ? -fVal : fVal;
 }
 }
 
