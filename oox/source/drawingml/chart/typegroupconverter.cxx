@@ -625,7 +625,7 @@ void TypeGroupConverter::moveDataToSeries(DataSourceCxModel::DataMap& raDataMap)
         // should only happen for chartex
         for (auto const& elem : mrModel.maSeries) {
             // This ID must be present in the map
-            assert(raDataMap.find(elem->mnDataId) != raDataMap.end());
+            assert(raDataMap.contains(elem->mnDataId));
             elem->maSources = *(raDataMap[elem->mnDataId]);
         }
     }
