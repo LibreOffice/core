@@ -250,12 +250,8 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                 ++pos;
             }
         };
-        Buf_t buf(pEnd - p + (bSign ? 2 : 1));
+        Buf_t buf(pEnd - p + 1);
 
-        if (bSign)
-        {
-            buf.insert('-', p); // yes, this may be the same pointer as for the next mapping
-        }
         // Put first zero to buffer for strings like "-0"
         if (p != pEnd && *p == '0')
         {
@@ -381,10 +377,6 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                     {
                         fVal = DBL_MAX;
                     }
-                    else if (num_view == "-1.79769313486232E308")
-                    {
-                        fVal = -DBL_MAX;
-                    }
                     else
                     {
                         eStatus = rtl_math_ConversionStatus_OutOfRange;
@@ -397,7 +389,6 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                 // else it's subnormal: allow it
             }
             p = buf.map[pCharParseEnd - buf.string];
-            bSign = false;
         }
     }
 
