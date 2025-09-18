@@ -79,6 +79,15 @@ public:
 
     virtual css::uno::Reference<css::uno::XInterface> ImplCreateDragSource(const SystemEnvData*) override;
     virtual css::uno::Reference<css::uno::XInterface> ImplCreateDropTarget(const SystemEnvData*) override;
+
+    // Sends a message to a window, making sure to unlock solar mutex if necessary
+    static LRESULT SendWndMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+    // Sends a message to mhComWnd, making sure to unlock solar mutex if necessary
+    LRESULT SendComWndMessage(UINT Msg, WPARAM wParam, LPARAM lParam) const;
+
+private:
+    // Sends a message to a window, making sure to unlock solar mutex if necessary
+    LRESULT SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) const;
 };
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
