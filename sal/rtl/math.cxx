@@ -403,11 +403,6 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
         }
     }
 
-    // overflow also if more than DBL_MAX_10_EXP digits without decimal
-    // separator, or 0. and more than DBL_MIN_10_EXP digits, ...
-    if (std::isinf(fVal))
-        eStatus = rtl_math_ConversionStatus_OutOfRange;
-
     if (bSign)
         fVal = -fVal;
 
