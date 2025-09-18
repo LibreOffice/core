@@ -1126,10 +1126,13 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
             if ( !bSelect && !bAccept && !m_bOnlyFormatedRedlines )
             {
                 SwRedlineTable::size_type nPosition = GetRedlinePos(rEntry);
-                const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
+                if (nPosition != SwRedlineTable::npos)
+                {
+                    const SwRangeRedline& rRedln = pSh->GetRedline(nPosition);
 
-                if( RedlineType::Format == rRedln.GetType() )
-                    bIsNotFormatted = false;
+                    if (RedlineType::Format == rRedln.GetType())
+                        bIsNotFormatted = false;
+                }
             }
 
             if (!pData->bDisabled && bIsNotFormatted)
