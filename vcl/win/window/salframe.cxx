@@ -958,7 +958,7 @@ WinSalFrame::~WinSalFrame()
         if (hDC)
         {
             mpThreadGraphics->setHDC(nullptr);
-            SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
+            pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC,
                 reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
         }
         delete mpThreadGraphics;
@@ -1012,7 +1012,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
     // WM_ERASEBACKGROUND message
     if ( !pSalData->mpInstance->IsMainThread() )
     {
-        HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
+        HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
                                     SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(mhWnd), 0 )));
         if ( !hDC )
             return nullptr;
@@ -1049,7 +1049,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
         HDC hDC = mpThreadGraphics->getHDC();
         assert(hDC);
         mpThreadGraphics->setHDC(nullptr);
-        SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
+        pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC,
             reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
     }
     mbGraphicsAcquired = false;
@@ -1068,7 +1068,7 @@ void WinSalFrame::SetTitle( const OUString& rTitle )
 {
     static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
-    SetWindowTextW( mhWnd, o3tl::toW(rTitle.getStr()) );
+    WinSalInstance::SendWndMessage(mhWnd, WM_SETTEXT, 0, reinterpret_cast<LPARAM>(rTitle.getStr()));
 }
 
 void WinSalFrame::SetIcon( sal_uInt16 nIcon )
@@ -1087,8 +1087,8 @@ void WinSalFrame::SetIcon( sal_uInt16 nIcon )
     SAL_WARN_IF( !hIcon , "vcl",   "WinSalFrame::SetIcon(): Could not load large icon !" );
     SAL_WARN_IF( !hSmIcon , "vcl", "WinSalFrame::SetIcon(): Could not load small icon !" );
 
-    SendMessageW( mhWnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIcon) );
-    SendMessageW( mhWnd, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(hSmIcon) );
+    WinSalInstance::SendWndMessage(mhWnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(hIcon));
+    WinSalInstance::SendWndMessage(mhWnd, WM_SETICON, ICON_SMALL, reinterpret_cast<LPARAM>(hSmIcon));
 }
 
 void WinSalFrame::SetMenu( SalMenu* pSalMenu )
@@ -1495,7 +1495,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
             hBrush = static_cast<HBRUSH>(GetCurrentObject( hDC, OBJ_BRUSH ));
 
             mpThreadGraphics->setHDC(nullptr);
-            SendMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_RELEASEDC,
+            pSalData->mpInstance->SendComWndMessage(SAL_MSG_RELEASEDC,
                 reinterpret_cast<WPARAM>(mhWnd), reinterpret_cast<LPARAM>(hDC) );
 
             bHadThreadGraphics = true;
@@ -1514,7 +1514,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = reinterpret_cast<HWND>(static_cast<sal_IntPtr>(SendMessageW( pSalData->mpInstance->mhComWnd,
+    HWND hWnd = reinterpret_cast<HWND>(static_cast<sal_IntPtr>(pSalData->mpInstance->SendComWndMessage(
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         reinterpret_cast<WPARAM>(hWndParent), reinterpret_cast<LPARAM>(mhWnd) )));
 
@@ -1526,7 +1526,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     {
         mpThreadGraphics->setHWND( hWnd );
         HDC hDC = reinterpret_cast<HDC>(static_cast<sal_IntPtr>(
-                    SendMessageW( pSalData->mpInstance->mhComWnd,
+                    pSalData->mpInstance->SendComWndMessage(
                         SAL_MSG_GETCACHEDDC, reinterpret_cast<WPARAM>(hWnd), 0 )));
         if ( hDC )
         {
@@ -1561,7 +1561,7 @@ void WinSalFrame::ImplSetParentFrame( HWND hNewParentWnd, bool bAsChild )
     systemChildren.clear();
 
     // Now destroy original HWND in the thread where it was created.
-    SendMessageW( GetSalData()->mpInstance->mhComWnd,
+    pSalData->mpInstance->SendComWndMessage(
                      SAL_MSG_DESTROYHWND, WPARAM(0), reinterpret_cast<LPARAM>(hWndOld));
 }
 
@@ -2163,7 +2163,7 @@ void WinSalFrame::CaptureMouse( bool bCapture )
         nMsg = SAL_MSG_CAPTUREMOUSE;
     else
         nMsg = SAL_MSG_RELEASEMOUSE;
-    SendMessageW( mhWnd, nMsg, 0, 0 );
+    WinSalInstance::SendWndMessage(mhWnd, nMsg, 0, 0);
 }
 
 void WinSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
@@ -2253,7 +2253,7 @@ static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pCont
 void WinSalFrame::SetInputContext( SalInputContext* pContext )
 {
     // Must be called in the main thread!
-    SendMessageW( mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, reinterpret_cast<LPARAM>(pContext) );
+    WinSalInstance::SendWndMessage(mhWnd, SAL_MSG_SETINPUTCONTEXT, 0, reinterpret_cast<LPARAM>(pContext));
 }
 
 static void ImplSalFrameEndExtTextInput( HWND hWnd, EndExtTextInputFlags nFlags )
@@ -2275,7 +2275,7 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, EndExtTextInputFlags nFlags 
 void WinSalFrame::EndExtTextInput( EndExtTextInputFlags nFlags )
 {
     // Must be called in the main thread!
-    SendMessageW( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, static_cast<WPARAM>(nFlags), 0 );
+    WinSalInstance::SendWndMessage(mhWnd, SAL_MSG_ENDEXTTEXTINPUT, static_cast<WPARAM>(nFlags), 0);
 }
 
 static void ImplGetKeyNameText(UINT lParam, OUStringBuffer& rBuf, const char* pReplace)
@@ -3300,7 +3300,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             SalData* pSalData = GetSalData();
             // Test for MouseLeave
             if ( pSalData->mhWantLeaveMsg && (pSalData->mhWantLeaveMsg != hWnd) )
-                SendMessageW( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, GetMessagePos() );
+                WinSalInstance::SendWndMessage(pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, GetMessagePos());
 
             pSalData->mhWantLeaveMsg = hWnd;
             aMouseEvt.mnButton = 0;
@@ -5697,7 +5697,7 @@ void SalTestMouseLeave()
         cachedPoint = aPt;
 
         if ( pSalData->mhWantLeaveMsg != WindowFromPoint( aPt ) )
-            SendMessageW( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, MAKELPARAM( aPt.x, aPt.y ) );
+            WinSalInstance::SendWndMessage(pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, MAKELPARAM(aPt.x, aPt.y));
     }
 }
 
@@ -5722,7 +5722,7 @@ static bool ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     if ( hWheelWnd && (hWheelWnd != hWnd) &&
          (hWheelWnd != ::GetFocus()) && IsWindowEnabled( hWheelWnd ) )
     {
-        rResult = SendMessageW( hWheelWnd, nMsg, wParam, lParam );
+        rResult = WinSalInstance::SendWndMessage(hWheelWnd, nMsg, wParam, lParam);
         return false;
     }
 

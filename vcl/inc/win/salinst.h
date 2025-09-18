@@ -87,6 +87,15 @@ public:
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
+
+    // Sends a message to a window, making sure to unlock solar mutex if necessary
+    static LRESULT SendWndMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+    // Sends a message to mhComWnd, making sure to unlock solar mutex if necessary
+    LRESULT SendComWndMessage(UINT Msg, WPARAM wParam, LPARAM lParam) const;
+
+private:
+    // Sends a message to a window, making sure to unlock solar mutex if necessary
+    LRESULT SendWndMessage_impl(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) const;
 };
 
 SalFrame* ImplSalCreateFrame( WinSalInstance* pInst, HWND hWndParent, SalFrameStyleFlags nSalFrameStyle );
