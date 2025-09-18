@@ -537,6 +537,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969B)
     CPPUNIT_ASSERT(!pWrtShell->GetCurField(true));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
+{
+    createSwDoc("section-table-section.fodt");
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
+                                           { "FilterData", uno::Any(aFilterData) },
+                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
 {
     // The document contains a shape which has a text with a line break. When copying the text to
