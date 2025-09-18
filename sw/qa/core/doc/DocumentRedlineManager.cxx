@@ -11,6 +11,7 @@
 
 #include <editeng/wghtitem.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 #include <docsh.hxx>
@@ -19,6 +20,7 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <strings.hrc>
+#include <fchrfmt.hxx>
 
 namespace
 {
@@ -127,6 +129,48 @@ CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatSelf)
     // - Actual  : 2
     // i.e. a delete was created instead of removing the insert.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRecordOldCharStyle)
+{
+    // Given a document with one char style applied + redline record on:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"x"_ustr);
+    pWrtShell->SelAll();
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"Style"_ustr, uno::Any(u"Emphasis"_ustr)),
+        comphelper::makePropertyValue(u"FamilyName"_ustr, uno::Any(u"CharacterStyles"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
+    pDocShell->SetChangeRecording(true);
+
+    // When changing to a second char style:
+    aPropertyValues = {
+        comphelper::makePropertyValue(u"Style"_ustr, uno::Any(u"Strong Emphasis"_ustr)),
+        comphelper::makePropertyValue(u"FamilyName"_ustr, uno::Any(u"CharacterStyles"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
+
+    // Then make sure the redline refers to the old char style and just to that:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+    const SwRangeRedline& rRedline = *rRedlines[0];
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedline.GetType());
+    auto pExtraData = dynamic_cast<const SwRedlineExtraData_FormatColl*>(rRedline.GetExtraData());
+    CPPUNIT_ASSERT(pExtraData);
+    std::shared_ptr<SfxItemSet> pRedlineSet = pExtraData->GetItemSet();
+    CPPUNIT_ASSERT(pRedlineSet);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 5
+    // i.e. more than just the char style change was recorded, which was unexpected.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pRedlineSet->Count());
+    const SwFormatCharFormat& rOldCharFormat = pRedlineSet->Get(RES_TXTATR_CHARFMT);
+    CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, rOldCharFormat.GetCharFormat()->GetName().toString());
 }
 }
 
