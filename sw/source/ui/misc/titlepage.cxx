@@ -300,6 +300,9 @@ IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, weld::Button&, void)
             // Add one more page as a content page to follow the new title pages.
             rWrtShell.InsertPageBreak();
         }
+
+        rWrtShell.DoSpecialInsert(); // Alt-Enter: if needed, inserts empty para before table/TOC
+
         for (sal_uInt16 nI = 0; nI < nNumTitlePages; ++nI)
             rWrtShell.InsertPageBreak();
         // In order to be able to access these new pages, the layout needs to be recalculated first.

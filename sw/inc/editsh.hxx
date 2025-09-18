@@ -911,10 +911,10 @@ public:
 
     /** Special insert: Insert a new text node just before or after a section or
      table, if the cursor is positioned at the start/end of said
-     section/table. The purpose of the method is to allow users to inert text
-     at certain 'impossible' position, e.g. before a table at the document
-     start or between to sections. */
-    void DoSpecialInsert();
+     section/table. The purpose of the method is to allow users to insert text
+     at certain 'impossible' positions, e.g. before a table at the document
+     start or between two sections. */
+    SW_DLLPUBLIC void DoSpecialInsert();
     bool CanSpecialInsert() const;
 
     /// Optimizing UI.
