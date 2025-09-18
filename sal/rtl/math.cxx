@@ -220,35 +220,46 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
 
     if (!bDone) // do not recognize e.g. NaN1.23
     {
-        std::unique_ptr<char[]> bufInHeap;
-        std::unique_ptr<const CharT* []> bufInHeapMap;
-        constexpr int bufOnStackSize = 256;
-        char bufOnStack[bufOnStackSize];
-        const CharT* bufOnStackMap[bufOnStackSize];
-        char* buf = bufOnStack;
-        const CharT** bufmap = bufOnStackMap;
-        int bufpos = 0;
-        const size_t bufsize = pEnd - p + (bSign ? 2 : 1);
-        if (bufsize > bufOnStackSize)
+        // Stores a normalized number string for final conversion, plus a map from each position
+        // in the normalized string to the corresponding position in the original string
+        struct Buf_t
         {
-            bufInHeap = std::make_unique<char[]>(bufsize);
-            bufInHeapMap = std::make_unique<const CharT* []>(bufsize);
-            buf = bufInHeap.get();
-            bufmap = bufInHeapMap.get();
-        }
+            std::unique_ptr<char[]> stringInHeap;
+            std::unique_ptr<const CharT* []> mapInHeap;
+            char stringOnStack[256];
+            const CharT* mapOnStack[256];
+            char* string = stringOnStack;
+            const CharT** map = mapOnStack;
+            size_t pos = 0;
+            // [-loplugin:unusedmember] false positive
+            Buf_t(size_t bufsize)
+            {
+                if (bufsize > 256)
+                {
+                    stringInHeap = std::make_unique<char[]>(bufsize);
+                    mapInHeap = std::make_unique<const CharT* []>(bufsize);
+                    string = stringInHeap.get();
+                    map = mapInHeap.get();
+                }
+            }
+            // [-loplugin:unusedmember] false positive
+            void insert(char c, const CharT* ptr)
+            {
+                string[pos] = c;
+                map[pos] = ptr;
+                ++pos;
+            }
+        };
+        Buf_t buf(pEnd - p + (bSign ? 2 : 1));
 
         if (bSign)
         {
-            buf[0] = '-';
-            bufmap[0] = p; // yes, this may be the same pointer as for the next mapping
-            bufpos = 1;
+            buf.insert('-', p); // yes, this may be the same pointer as for the next mapping
         }
         // Put first zero to buffer for strings like "-0"
         if (p != pEnd && *p == '0')
         {
-            buf[bufpos] = '0';
-            bufmap[bufpos] = p;
-            ++bufpos;
+            buf.insert('0', p);
             ++p;
         }
         // Leading zeros and group separators between digits may be safely
@@ -269,9 +280,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
             CharT c = *p;
             if (rtl::isAsciiDigit(c))
             {
-                buf[bufpos] = static_cast<char>(c);
-                bufmap[bufpos] = p;
-                ++bufpos;
+                buf.insert(c, p);
             }
             else if (c != cGroupSeparator)
             {
@@ -288,9 +297,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
         // fraction part of mantissa
         if (p != pEnd && *p == cDecSeparator)
         {
-            buf[bufpos] = '.';
-            bufmap[bufpos] = p;
-            ++bufpos;
+            buf.insert('.', p);
             ++p;
 
             for (; p != pEnd; ++p)
@@ -300,24 +307,18 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                 {
                     break;
                 }
-                buf[bufpos] = static_cast<char>(c);
-                bufmap[bufpos] = p;
-                ++bufpos;
+                buf.insert(c, p);
             }
         }
 
         // Exponent
         if (p != p0 && p != pEnd && (*p == 'E' || *p == 'e'))
         {
-            buf[bufpos] = 'E';
-            bufmap[bufpos] = p;
-            ++bufpos;
+            buf.insert('E', p);
             ++p;
             if (p != pEnd && *p == '-')
             {
-                buf[bufpos] = '-';
-                bufmap[bufpos] = p;
-                ++bufpos;
+                buf.insert('-', p);
                 ++p;
             }
             else if (p != pEnd && *p == '+')
@@ -329,9 +330,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                 if (!rtl::isAsciiDigit(c))
                     break;
 
-                buf[bufpos] = static_cast<char>(c);
-                bufmap[bufpos] = p;
-                ++bufpos;
+                buf.insert(c, p);
             }
         }
         else if (p - p0 == 2 && p != pEnd && p[0] == '#' && p[-1] == cDecSeparator && p[-2] == '1')
@@ -365,11 +364,10 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
 
         if (!bDone)
         {
-            buf[bufpos] = '\0';
-            bufmap[bufpos] = p;
+            buf.insert('\0', p);
             char* pCharParseEnd;
             errno = 0;
-            fVal = strtod_nolocale(buf, &pCharParseEnd);
+            fVal = strtod_nolocale(buf.string, &pCharParseEnd);
             if (errno == ERANGE)
             {
                 // This happens with overflow and underflow (including subnormals!)
@@ -378,7 +376,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                     // Check for the dreaded rounded to 15 digits max value
                     // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
                     // everywhere, accept with or without plus sign in exponent.
-                    std::string_view num_view(buf, pCharParseEnd);
+                    std::string_view num_view(buf.string, pCharParseEnd);
                     if (num_view == "1.79769313486232E308")
                     {
                         fVal = DBL_MAX;
@@ -398,7 +396,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                 }
                 // else it's subnormal: allow it
             }
-            p = bufmap[pCharParseEnd - buf];
+            p = buf.map[pCharParseEnd - buf.string];
             bSign = false;
         }
     }
