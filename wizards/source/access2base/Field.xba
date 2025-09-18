@@ -689,10 +689,9 @@ Dim oParent As Object
 							Column.updateLong(pvValue)		&apos;	No proper type conversion for HYPER data type
 						Case .FLOAT
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-							If Abs(pvValue) &lt; 3.402823E38 And Abs(pvValue) &gt; 1.401298E-45 Then Column.updateFloat(CSng(pvValue)) Else Goto trace_Error_Value
+							Column.updateFloat(CSng(pvValue))
 						Case .REAL, .DOUBLE
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-							&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
 							Column.updateDouble(CDbl(pvValue))
 						Case .NUMERIC, .DECIMAL
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
