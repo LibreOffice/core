@@ -95,7 +95,10 @@ void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
         rBuffer.append( '-' );
         nValue = -nValue;
     }
-    sal_Int32 nFactor = 1, nDiv = nLog10Divisor;
+
+    sal_Int32 nFactor = 1;
+    sal_Int32 nDiv = nLog10Divisor;
+
     while( nDiv-- )
         nFactor *= 10;
 
