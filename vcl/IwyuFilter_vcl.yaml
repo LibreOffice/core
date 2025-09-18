@@ -43,10 +43,6 @@ excludelist:
     vcl/source/app/svmain.cxx:
     # Needed on WIN32
     - desktop/exithelper.h
-    vcl/source/components/factory.cxx:
-    # Actually these are used
-    - com/sun/star/lang/XMultiServiceFactory.hpp
-    - com/sun/star/lang/XSingleServiceFactory.hpp
     vcl/source/filter/FilterConfigItem.cxx:
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
