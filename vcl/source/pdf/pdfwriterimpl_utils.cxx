@@ -78,9 +78,11 @@ void appendDestinationName( std::u16string_view rString, OStringBuffer& rBuffer 
         }
         else
         {
-            sal_Int8 aValueHigh = sal_Int8(aChar >> 8);
-            if(aValueHigh > 0)
-                COSWriter::appendHex(aValueHigh, rBuffer);
+            const sal_Int8 nValueHigh = sal_Int8(aChar >> 8);
+
+            if (nValueHigh > 0)
+                COSWriter::appendHex(nValueHigh, rBuffer);
+
             COSWriter::appendHex(static_cast<sal_Int8>(aChar & 255 ), rBuffer);
         }
     }
