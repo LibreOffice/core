@@ -1404,6 +1404,11 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         {
             anim::convertTarget(sTmp, aTemp);
             mrWriter.put("targetElement", sTmp.makeStringAndClear());
+            SdrObject* pObject = getTargetObject(aTemp);
+            if (pObject)
+            {
+                mrWriter.put("title", pObject->GetTitle());
+            }
         }
         nTemp = xAnimate->getSubItem();
         if (nTemp)
