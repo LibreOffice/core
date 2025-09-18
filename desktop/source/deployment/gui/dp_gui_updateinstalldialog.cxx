@@ -604,7 +604,7 @@ void UpdateCommandEnv::handle(
 {
     css::uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == css::uno::TypeClass_EXCEPTION );
-    SAL_INFO("desktop.deployment", "[dp_gui_cmdenv.cxx] incoming request:\n"
+    SAL_INFO("desktop.deployment", "incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 
     css::deployment::VersionException verExc;

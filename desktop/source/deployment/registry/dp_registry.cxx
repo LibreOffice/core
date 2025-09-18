@@ -361,7 +361,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // dump tables:
     {
         t_registryset allBackends;
-        SAL_INFO("desktop.deployment", u"> [dp_registry.cxx] media-type detection:\n\n"_ustr );
+        SAL_INFO("desktop.deployment", u"media-type detection:\n\n"_ustr );
         for (auto const& elem : that->m_filter2mediaType)
         {
             const Reference<deployment::XPackageRegistry> xBackend(
@@ -375,7 +375,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                         ->getImplementationName()
                 + "\n");
         }
-        SAL_INFO("desktop.deployment", u"> [dp_registry.cxx] ambiguous backends:\n\n"_ustr );
+        SAL_INFO("desktop.deployment", u"ambiguous backends:\n\n"_ustr );
         for (auto const& ambiguousBackend : that->m_ambiguousBackends)
         {
             OUStringBuffer buf;

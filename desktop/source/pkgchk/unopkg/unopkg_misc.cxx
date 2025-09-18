@@ -104,7 +104,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
-        SAL_INFO("desktop.deployment", __FILE__ ": identified option \'\'"
+        SAL_INFO("desktop.deployment", "identified option \'\'"
             + OUStringChar( option_info->m_short_option ) + "\n");
         return true;
     }
@@ -112,7 +112,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
             arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
-        SAL_INFO("desktop.deployment", __FILE__ ": identified option \'"
+        SAL_INFO("desktop.deployment", "identified option \'"
             + OUString::createFromAscii(option_info->m_name) + "\'\n");
         return true;
     }
@@ -144,7 +144,7 @@ bool readArgument(
         {
             assert(pValue != nullptr);
             osl_getCommandArg( *pIndex, &pValue->pData );
-            SAL_INFO("desktop.deployment", __FILE__ ": argument value: "
+            SAL_INFO("desktop.deployment", "argument value: "
                 + *pValue + "\n");
             ++(*pIndex);
             return true;
