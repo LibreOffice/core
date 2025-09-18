@@ -93,8 +93,8 @@ private:
     Sequence<sal_Int8> m_Sequence;
     sal_Int8* mp_Sequence;
 
-    sal_Int32 nLastLineFeedPos; // is negative after writing a sequence
-    sal_uInt32 nCurrentPos;
+    sal_Int64 nLastLineFeedPos; // is negative after writing a sequence
+    sal_uInt64 nCurrentPos;
     bool m_bStartElementFinished;
 
     std::vector<ReplacementPair> m_Replacements;
@@ -106,11 +106,11 @@ private:
     // so the sequence has to write out and reset rPos to 0
     // writes sequence only on overflow, sequence could be full on the end (rPos == SEQUENCESIZE)
     /// @throws SAXException
-    void AddBytes(sal_Int8* pTarget, sal_uInt32& rPos, const sal_Int8* pBytes,
+    void AddBytes(sal_Int8* pTarget, sal_uInt64& rPos, const sal_Int8* pBytes,
                   sal_uInt32 nBytesCount);
     /// @throws SAXException
     bool convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen, bool bDoNormalization,
-                      bool bNormalizeWhitespace, sal_Int8* pTarget, sal_uInt32& rPos);
+                      bool bNormalizeWhitespace, sal_Int8* pTarget, sal_uInt64& rPos);
     /// @throws SAXException
     void FinishStartElement();
 
@@ -145,7 +145,7 @@ public:
     bool writeString(const OUString& rWriteOutString, bool bDoNormalization,
                      bool bNormalizeWhitespace);
 
-    sal_uInt32 GetLastColumnCount() const noexcept
+    sal_uInt64 GetLastColumnCount() const noexcept
     {
         return static_cast<sal_uInt32>(nCurrentPos - nLastLineFeedPos);
     }
@@ -237,7 +237,7 @@ sal_uInt32 SaxWriterHelper::writeSequence()
     return 0;
 }
 
-void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt32& rPos, const sal_Int8* pBytes,
+void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt64& rPos, const sal_Int8* pBytes,
                                sal_uInt32 nBytesCount)
 {
     OSL_ENSURE((rPos + nBytesCount) > SEQUENCESIZE, "wrong use of AddBytesMethod");
@@ -279,7 +279,7 @@ void SaxWriterHelper::setCustomEntityNames(
  */
 bool SaxWriterHelper::convertToXML(const sal_Unicode* pStr, sal_Int32 nStrLen,
                                    bool bDoNormalization, bool bNormalizeWhitespace,
-                                   sal_Int8* pTarget, sal_uInt32& rPos)
+                                   sal_Int8* pTarget, sal_uInt64& rPos)
 {
     bool bRet(true);
     sal_uInt32 nSurrogate = 0;
