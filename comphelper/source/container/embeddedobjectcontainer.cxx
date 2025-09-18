@@ -66,7 +66,7 @@ struct EmbedImpl
     // to speed up lookup by Reference
     std::unordered_map<uno::Reference<embed::XEmbeddedObject>, OUString> maObjectToNameMap;
     uno::Reference < embed::XStorage > mxStorage;
-    EmbeddedObjectContainer* mpTempObjectContainer;
+    std::unique_ptr<EmbeddedObjectContainer> mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
     uno::WeakReference < uno::XInterface > m_xModel;
 
@@ -193,8 +193,6 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
 
     if ( pImpl->mbOwnsStorage )
         pImpl->mxStorage->dispose();
-
-    delete pImpl->mpTempObjectContainer;
 }
 
 void EmbeddedObjectContainer::CloseEmbeddedObjects()
@@ -918,7 +916,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject(
 
             if ( !pImpl->mpTempObjectContainer )
             {
-                pImpl->mpTempObjectContainer = new EmbeddedObjectContainer();
+                pImpl->mpTempObjectContainer = std::make_unique<EmbeddedObjectContainer>();
                 try
                 {
                     // TODO/LATER: in future probably the temporary container will have two storages ( of two formats )
