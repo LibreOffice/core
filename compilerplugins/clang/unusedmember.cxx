@@ -209,6 +209,8 @@ public:
                     }
                 }
             }
+            if (suppressWarningAt(d->getLocation()))
+                return true;
             report(DiagnosticsEngine::Warning, "unused class member", d->getLocation())
                 << d->getSourceRange();
         }
@@ -375,6 +377,8 @@ public:
                     continue;
                 }
             }
+            if (suppressWarningAt(d->getLocation()))
+                continue;
             report(DiagnosticsEngine::Warning, "unused class member", d->getLocation())
                 << d->getSourceRange();
         }
