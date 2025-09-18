@@ -18,6 +18,8 @@
 #include <orcus_utils.hxx>
 
 #include <orcus/format_detection.hpp>
+#include <orcus/orcus_json.hpp>
+#include <orcus/orcus_xml.hpp>
 
 namespace com::sun::star::uno
 {
@@ -69,29 +71,49 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
     if (bAborted)
         return OUString();
 
+    OUString aType; // type to test against
+    aMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME] >>= aType;
+    if (aType.isEmpty())
+        return OUString();
+
+    static const std::unordered_map<OUString, orcus::format_t> aMap = {
+        { "Gnumeric XML", orcus::format_t::gnumeric },
+        { "calc_MS_Excel_2003_XML", orcus::format_t::xls_xml },
+        { "Apache Parquet", orcus::format_t::parquet },
+        { "generic_XML", orcus::format_t::xml },
+        { "generic_JSON", orcus::format_t::json },
+    };
+
+    orcus::format_t eFormat{};
+
+    if (auto it = aMap.find(aType); it != aMap.end())
+        eFormat = it->second;
+    else
+        return OUString();
+
     css::uno::Reference<css::io::XInputStream> xInputStream(
         aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], css::uno::UNO_QUERY);
 
     CopiedTempStream aTemp(xInputStream);
     auto aContent = toFileContent(aTemp.getFileName());
-    orcus::format_t eFormat = orcus::detect(aContent.str());
+    bool bValid = orcus::detect(aContent.str(), eFormat);
+    if (!bValid)
+        return OUString();
 
     switch (eFormat)
     {
-        case orcus::format_t::gnumeric:
-            return u"Gnumeric XML"_ustr;
-        case orcus::format_t::xls_xml:
-            return u"calc_MS_Excel_2003_XML"_ustr;
-        case orcus::format_t::parquet:
-            return u"Apache Parquet"_ustr;
-        case orcus::format_t::xml:
-            return u"generic_XML"_ustr;
         case orcus::format_t::json:
-            return u"generic_JSON"_ustr;
+            // make sure this JSON doc has at least one linkable range
+            bValid = orcus::orcus_json::has_range(aContent.str());
+            break;
+        case orcus::format_t::xml:
+            // make sure this XML doc has at least one linkable range
+            bValid = orcus::orcus_xml::has_range(aContent.str());
+            break;
         default:;
     }
 
-    return OUString();
+    return bValid ? aType : OUString();
 }
 }
 
