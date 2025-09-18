@@ -106,6 +106,12 @@ static void do_fatal_error(const char* msg)
     do_fatal_error(msg);    \
 }
 
+// silence some annoying warnings in the generated code, that we can do nothing about.
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+#pragma GCC diagnostic ignored "-Wunreachable-code"
+#pragma clang diagnostic ignored "-Wunreachable-code"
+
 %}
 
 %s SQL
