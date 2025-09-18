@@ -333,10 +333,13 @@ void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextL
 
     if (getFontAttribute().getRTL())
     {
-        vcl::text::ComplexTextLayoutFlags nRTLLayoutMode(
-            rTextLayouter.getLayoutMode() & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong);
+        vcl::text::ComplexTextLayoutFlags nRTLLayoutMode(rTextLayouter.getLayoutMode());
         nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiRtl
                           | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+        if (getFontAttribute().getBiDiStrong())
+            nRTLLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        else
+            nRTLLayoutMode = nRTLLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
         rTextLayouter.setLayoutMode(nRTLLayoutMode);
     }
     else
@@ -344,7 +347,10 @@ void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextL
         // tdf#101686: This is LTR text, but the output device may have RTL state.
         vcl::text::ComplexTextLayoutFlags nLTRLayoutMode(rTextLayouter.getLayoutMode());
         nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiRtl;
-        nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        if (getFontAttribute().getBiDiStrong())
+            nLTRLayoutMode |= vcl::text::ComplexTextLayoutFlags::BiDiStrong;
+        else
+            nLTRLayoutMode = nLTRLayoutMode & ~vcl::text::ComplexTextLayoutFlags::BiDiStrong;
         rTextLayouter.setLayoutMode(nLTRLayoutMode);
     }
 }

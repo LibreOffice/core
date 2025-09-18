@@ -122,6 +122,13 @@ namespace svgio::svgreader
             RTL,
         };
 
+        enum class UnicodeBidi
+        {
+            notset,
+            normal,
+            bidi_override,
+        };
+
         FontWeight getBolder(FontWeight aSource);
         FontWeight getLighter(FontWeight aSource);
         ::FontWeight getVclFontWeight(FontWeight aSource);
@@ -217,6 +224,7 @@ namespace svgio::svgreader
             FontStyle                   maFontStyle;
             FontWeight                  maFontWeight;
             FontDirection               maFontDirection;
+            UnicodeBidi                 maUnicodeBidi;
             TextAlign                   maTextAlign;
             TextDecoration              maTextDecoration;
             TextAnchor                  maTextAnchor;
@@ -427,6 +435,10 @@ namespace svgio::svgreader
             /// FontDirection content
             FontDirection getFontDirection() const;
             void setFontDirection(const FontDirection aFontDirection) { maFontDirection = aFontDirection; }
+
+            /// UnicodeBidi content
+            UnicodeBidi getUnicodeBidi() const;
+            void setUnicodeBidi(const UnicodeBidi aUnicodeBidi) { maUnicodeBidi = aUnicodeBidi; }
 
             /// TextAlign content
             TextAlign getTextAlign() const;

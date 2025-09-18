@@ -1392,6 +1392,7 @@ namespace svgio::svgreader
             maFontStyle(FontStyle::notset),
             maFontWeight(FontWeight::notset),
             maFontDirection(FontDirection::notset),
+            maUnicodeBidi(UnicodeBidi::notset),
             maTextAlign(TextAlign::notset),
             maTextDecoration(TextDecoration::notset),
             maTextAnchor(TextAnchor::notset),
@@ -1402,7 +1403,7 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(35, 0),
+            maResolvingParent(36, 0),
             mbStrokeDasharraySet(false),
             mbUseFillFromContextFill(false),
             mbUseFillFromContextStroke(false),
@@ -1887,6 +1888,17 @@ namespace svgio::svgreader
                 }
                 case SVGToken::UnicodeBidi:
                 {
+                    if(!aContent.isEmpty())
+                    {
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"normal"))
+                        {
+                            setUnicodeBidi(UnicodeBidi::normal);
+                        }
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"bidi-override"))
+                        {
+                            setUnicodeBidi(UnicodeBidi::bidi_override);
+                        }
+                    }
                     break;
                 }
                 case SVGToken::WordSpacing:
@@ -2967,6 +2979,27 @@ namespace svgio::svgreader
 
             // default is LTR
             return FontDirection::LTR;
+        }
+
+        UnicodeBidi SvgStyleAttributes::getUnicodeBidi() const
+        {
+            if(maUnicodeBidi != UnicodeBidi::notset)
+            {
+                return maUnicodeBidi;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[35] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[35];
+                auto ret = pSvgStyleAttributes->getUnicodeBidi();
+                --maResolvingParent[35];
+
+                return ret;
+            }
+
+            // default is normal
+            return UnicodeBidi::normal;
         }
 
         TextAlign SvgStyleAttributes::getTextAlign() const

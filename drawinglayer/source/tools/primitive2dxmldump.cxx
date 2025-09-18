@@ -943,6 +943,11 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     rWriter.attribute("rtl", std::u16string_view{ u"true" });
                 }
 
+                if (aFontAttribute.getBiDiStrong())
+                {
+                    rWriter.attribute("bidi", std::u16string_view{ u"true" });
+                }
+
                 const std::vector<double> aDx = rTextSimplePortionPrimitive2D.getDXArray();
                 if (aDx.size())
                 {

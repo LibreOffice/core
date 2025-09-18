@@ -2146,6 +2146,27 @@ CPPUNIT_TEST_FIXTURE(Test, testRTLtext)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "y", u"150");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testBiDitext)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/BiDitext.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]", "text", u"Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew");
+    assertXPathNoAttribute(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]", "rtl");
+    assertXPathNoAttribute(pDocument, "/primitive2D/transform/mask/textsimpleportion[1]", "bidi");
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]", "text", u"Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew");
+    assertXPathNoAttribute(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]", "rtl");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[2]", "bidi", u"true");
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]", "text", u"Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]", "rtl", u"true");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[3]", "bidi", u"true");
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]", "text", u"Text אני יכול לאכול זכוכית וזה לא מזיק לי is in Hebrew");
+    assertXPath(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]", "rtl", u"true");
+    assertXPathNoAttribute(pDocument, "/primitive2D/transform/mask/textsimpleportion[4]", "bidi");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCssClassRedefinition)
 {
     // Tests for svg css class redefinition behavior
