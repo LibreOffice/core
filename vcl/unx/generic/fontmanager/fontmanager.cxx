@@ -301,56 +301,7 @@ namespace {
 
 OUString analyzeSfntFamilyName(void const * pTTFont)
 {
-    OUString aFamily;
-
-    std::vector<NameRecord> aNameRecords;
-    GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), aNameRecords );
-    if( !aNameRecords.empty() )
-    {
-        LanguageTag aUILang(SvtSysLocaleOptions().GetRealUILanguageTag());
-        LanguageType eLang = aUILang.getLanguageType();
-        int nLastMatch = -1;
-        for( size_t i = 0; i < aNameRecords.size(); i++ )
-        {
-            if( aNameRecords[i].nameID != 1 || aNameRecords[i].sptr.empty() )
-                continue;
-            int nMatch = -1;
-            if( aNameRecords[i].platformID == 0 ) // Unicode
-                nMatch = 4000;
-            else if( aNameRecords[i].platformID == 3 )
-            {
-                // this bases on the LanguageType actually being a Win LCID
-                if (aNameRecords[i].languageID == eLang)
-                    nMatch = 8000;
-                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
-                    nMatch = 2000;
-                else if( aNameRecords[i].languageID == LANGUAGE_ENGLISH ||
-                         aNameRecords[i].languageID == LANGUAGE_ENGLISH_UK )
-                    nMatch = 1500;
-                else
-                    nMatch = 1000;
-            }
-            else if (aNameRecords[i].platformID == 1)
-            {
-                AppleLanguageId aAppleId = static_cast<AppleLanguageId>(static_cast<sal_uInt16>(aNameRecords[i].languageID));
-                LanguageTag aApple(makeLanguageTagFromAppleLanguageId(aAppleId));
-                if (aApple == aUILang)
-                    nMatch = 8000;
-                else if (aAppleId == AppleLanguageId::ENGLISH)
-                    nMatch = 2000;
-                else
-                    nMatch = 1000;
-            }
-            OUString aName = convertSfntName( aNameRecords[i] );
-            if (!(aName.isEmpty()) && nMatch >= nLastMatch)
-            {
-                nLastMatch = nMatch;
-                aFamily = aName;
-            }
-        }
-    }
-
-    return aFamily;
+    return analyzeSfntName(static_cast<TrueTypeFont const *>(pTTFont), 1, SvtSysLocaleOptions().GetRealUILanguageTag());
 }
 
 }
