@@ -82,6 +82,7 @@ public:
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 
 class SvxBulletPickTabPage final : public SfxTabPage

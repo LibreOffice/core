@@ -282,6 +282,9 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
+void SvxSingleNumPickTabPage::PageCreated(const SfxAllItemSet& /*aSet*/)
+{}
+
 IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(!pActNum)
