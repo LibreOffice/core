@@ -80,7 +80,7 @@ private:
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
     void writeDataDescriptor( const ZipEntry &rEntry );
-    void writeExtraFields( const ZipEntry& rEntry );
+    void writeExtraFields(const ZipEntry& rEntry, bool isLOCWithDD);
 
     // ScheduledThread handling helpers
     void consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputEntryInThread> pCandidate);
