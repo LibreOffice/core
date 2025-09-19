@@ -387,9 +387,75 @@ void SvpSalFrame::EndExtTextInput( EndExtTextInputFlags )
 {
 }
 
-OUString SvpSalFrame::GetKeyName( sal_uInt16 )
+OUString SvpSalFrame::GetKeyName(sal_uInt16 nKeyCode)
 {
-    return OUString();
+    // Skip key combinations with any modifiers that we don’t support
+    if ((nKeyCode & KEY_MODIFIERS_MASK & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2)) != 0)
+        return OUString();
+
+    OUStringBuffer aResult;
+
+    if ((nKeyCode & KEY_MOD1) != 0)
+        aResult.append("Ctrl+");
+    if ((nKeyCode & KEY_MOD2) != 0)
+        aResult.append("Alt+");
+    if ((nKeyCode & KEY_SHIFT) != 0)
+        aResult.append("Shift+");
+
+    static const struct
+    {
+        sal_uInt16 code;
+        const char* name;
+    } keyMap[] = {
+        { KEY_DOWN, "Down" },
+        { KEY_UP, "Up" },
+        { KEY_LEFT, "Left" },
+        { KEY_RIGHT, "Right" },
+        { KEY_HOME, "Home" },
+        { KEY_END, "End" },
+        { KEY_PAGEUP, "PgUp" },
+        { KEY_PAGEDOWN, "PgDown" },
+        { KEY_RETURN, "Ret" },
+        { KEY_ESCAPE, "Esc" },
+        { KEY_TAB, "Tab" },
+        { KEY_BACKSPACE, "BkSpace" },
+        { KEY_SPACE, "Space" },
+        { KEY_DELETE, "Del" },
+        { KEY_ADD, "+" },
+        { KEY_SUBTRACT, "-" },
+        { KEY_DIVIDE, "/" },
+        { KEY_MULTIPLY, "*" },
+        { KEY_POINT, "." },
+        { KEY_COMMA, "," },
+        { KEY_LESS, "<" },
+        { KEY_GREATER, ">" },
+        { KEY_EQUAL, "=" },
+        { KEY_TILDE, "~" },
+        { KEY_BRACKETLEFT, "[" },
+        { KEY_BRACKETRIGHT, "]" },
+        { KEY_SEMICOLON, ";" },
+        { KEY_QUOTERIGHT, "'" },
+        { KEY_RIGHTCURLYBRACKET, "}" },
+        { KEY_NUMBERSIGN, "#" },
+        { KEY_COLON, ":" },
+    };
+
+    sal_uInt16 nUnmodifiedCode = (nKeyCode & KEY_CODE_MASK);
+
+    if (nUnmodifiedCode >= KEY_A && nUnmodifiedCode <= KEY_Z)
+        aResult.append(char('A' + nUnmodifiedCode - KEY_A));
+    else if (nUnmodifiedCode >= KEY_F1 && nUnmodifiedCode <= KEY_F26)
+        aResult.append(OUStringChar('F') + OUString::number(nUnmodifiedCode - KEY_F1 + 1));
+    else if (nUnmodifiedCode >= KEY_0 && nUnmodifiedCode <= KEY_9)
+        aResult.append(char('0' + nUnmodifiedCode - KEY_0));
+    else if (auto it = std::find_if(keyMap, keyMap + std::size(keyMap),
+                                    [=](const auto& p) { return p.code == nUnmodifiedCode; });
+             it != keyMap + std::size(keyMap))
+        aResult.appendAscii(it->name);
+    else
+        return OUString();
+
+    return aResult.makeStringAndClear();
 }
 
 bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, vcl::KeyCode& )
