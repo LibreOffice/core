@@ -296,9 +296,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
     SwFlyFrameFormat* pFlyFormat
         = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
                               /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
-    SwNodeOffset nContentOffset = pFlyFormat->GetContent().GetContentIdx()->GetIndex();
-    SwGrfNode* pGrfNode = pDoc->GetNodes()[nContentOffset + 1]->GetGrfNode();
-    pGrfNode->SetTitle(u"mytitle"_ustr);
+    pFlyFormat->SetObjDescription(u"mydesc"_ustr);
     pWrtShell->Insert(u" B"_ustr);
 
     // When saving that to markdown:
@@ -306,9 +304,9 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingImage)
 
     // Then make sure the image is exported:
     std::string aActual = TempFileToString();
-    std::string aExpected("A ![mytitle](./test.png) B" SAL_NEWLINE_STRING);
+    std::string aExpected("A ![mydesc](./test.png) B" SAL_NEWLINE_STRING);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: A ![mytitle](./test.png) B
+    // - Expected: A ![mydesc](./test.png) B
     // - Actual  : A  B
     // i.e. the image was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -545,9 +543,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
     SwFlyFrameFormat* pFlyFormat
         = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
                               /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
-    SwNodeOffset nContentOffset = pFlyFormat->GetContent().GetContentIdx()->GetIndex();
-    SwGrfNode* pGrfNode = pDoc->GetNodes()[nContentOffset + 1]->GetGrfNode();
-    pGrfNode->SetTitle(u"mytitle"_ustr);
+    pFlyFormat->SetObjDescription(u"mydesc"_ustr);
     SwFormatURL aFormatURL;
     aFormatURL.SetURL(u"https://x.com"_ustr, /*bServerMap=*/false);
     pFlyFormat->SetFormatAttr(aFormatURL);
@@ -558,10 +554,10 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLinkMdExport)
 
     // Then make sure the image is exported and the link is not lost:
     std::string aActual = TempFileToString();
-    std::string aExpected("A [![mytitle](./test.png)](https://x.com) B" SAL_NEWLINE_STRING);
+    std::string aExpected("A [![mydesc](./test.png)](https://x.com) B" SAL_NEWLINE_STRING);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: A [![mytitle](./test.png)](https://x.com) B
-    // - Actual  : A ![mytitle](./test.png) B
+    // - Expected: A [![mydesc](./test.png)](https://x.com) B
+    // - Actual  : A ![mydesc](./test.png) B
     // i.e. the image link was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
@@ -585,6 +581,41 @@ CPPUNIT_TEST_FIXTURE(Test, testNewlineMdExport)
     // - Expected: A  \nB
     // - Actual  : A\nB
     // i.e. the line break was lost.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testImageDescTitleExport)
+{
+    // Given a document with an inline, linked image + desc/title on it:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A "_ustr);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
+    aFrameSet.Put(aAnchor);
+    Graphic aGraphic;
+    OUString aGraphicURL(u"./test.png"_ustr);
+    IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    SwFlyFrameFormat* pFlyFormat
+        = rIDCO.InsertGraphic(*pCursor, aGraphicURL, OUString(), &aGraphic, &aFrameSet,
+                              /*pGrfAttrSet=*/nullptr, /*SwFrameFormat=*/nullptr);
+    pFlyFormat->SetObjDescription(u"mydesc"_ustr);
+    pFlyFormat->SetObjTitle(u"mytitle"_ustr);
+    pWrtShell->Insert(u" B"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the image is exported and the desc/title is not lost:
+    std::string aActual = TempFileToString();
+    std::string aExpected("A ![mydesc](./test.png \"mytitle\") B" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A ![mydesc](./test.png "mytitle") B
+    // - Actual  : A ![mytitle](./test.png) B
+    // i.e. the title was exported as a description; the description was lost.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
