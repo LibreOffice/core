@@ -148,7 +148,14 @@ static OUString SfxGetSpecialCharsForEdit(weld::Widget* pParent, const vcl::Font
         PFunc_getSpecialCharsForEdit pfunc = nullptr;
 #ifndef DISABLE_DYNLOADING
         osl::Module aMod;
-        aMod.loadRelative(&thisModule, SVLIBRARY("cui"));
+        aMod.loadRelative(
+            &thisModule,
+#if ENABLE_MERGELIBS
+            SVLIBRARY("merged")
+#else
+            SVLIBRARY("cui")
+#endif
+            );
 
         // get symbol
         pfunc = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol("GetSpecialCharsForEdit"));
