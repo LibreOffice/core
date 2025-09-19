@@ -48,6 +48,26 @@ struct TableColumnAttributes
     std::optional<OUString> maTotalsFunction = std::nullopt;
 };
 
+// xmlColumnPr attributes
+struct XmlColumnPrModel
+{
+    sal_uInt32          mnMapId;
+    OUString            msXpath;
+    OUString            msXmlDataType;
+    bool                mbDenormalized;
+
+    explicit            XmlColumnPrModel();
+};
+
+struct TableColumnModel
+{
+    typedef std::unique_ptr<XmlColumnPrModel> XmlColumnPrModelPtr;
+    XmlColumnPrModelPtr mxXmlColumnPr; // Special settings for XML Column Properties.
+    XmlColumnPrModel&   createXmlColumnPr();
+
+    explicit            TableColumnModel();
+};
+
 /** Container base class to provide selected access for ScDBData. */
 class ScDBDataContainerBase
 {
@@ -99,6 +119,7 @@ private:
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
     ::std::vector< TableColumnAttributes > maTableColumnAttributes; ///< attributes of table columns
+    ::std::vector< TableColumnModel > maTableColumnModel;
     bool            mbTableColumnNamesDirty;
     SCSIZE          nFilteredRowCount;
 
@@ -155,6 +176,11 @@ public:
     SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
     SC_DLLPUBLIC void SetTableColumnAttributes( ::std::vector< TableColumnAttributes >&& rAttributes );
     SC_DLLPUBLIC const ::std::vector< TableColumnAttributes >& GetTableColumnAttributes() const { return maTableColumnAttributes; }
+    SC_DLLPUBLIC void SetTableColumnModel( TableColumnModel& rModel )
+    {
+        maTableColumnModel.push_back(std::move(rModel));
+    }
+    SC_DLLPUBLIC const ::std::vector< TableColumnModel >& GetTableColumnModel() const { return maTableColumnModel; }
     bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 
     /** Refresh/update the column names with the header row's cell contents. */
