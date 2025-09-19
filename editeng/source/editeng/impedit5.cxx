@@ -1338,9 +1338,14 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
 
 bool ImpEditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
-    return EditEngine::IsPrintable( rKeyEvent.GetCharCode() ) &&
-        ( KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) &&
-        ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) );
+    // tdf#168375 return false if both KEY_MOD1 and KEY_MOD2 are pressed
+    // Previously this function returned false only if one of these
+    // modifiers is pressed. At least on macOS, pressing Command-Option
+    // with a character is not a simple character so return false if
+    // both modifiers are pressed.
+    sal_uInt16 nNonShiftModifiers = rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT;
+    nNonShiftModifiers &= ( KEY_MOD1 | KEY_MOD2 );
+    return !nNonShiftModifiers && EditEngine::IsPrintable( rKeyEvent.GetCharCode() );
 }
 
 void ImpEditEngine::SetControlWord( EEControlBits nWord )
