@@ -3974,9 +3974,9 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-ControlCodes1">
+                                      <object class="GtkToolButton" id="Home-ParaLeftToRight1">
                                         <property name="visible">True</property>
-                                        <property name="action-name">.uno:ControlCodes</property>
+                                        <property name="action-name">.uno:ParaLeftToRight</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -3997,9 +3997,9 @@
                                     <property name="toolbar-style">icons</property>
                                     <property name="show-arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-ParaLeftToRight1">
+                                      <object class="GtkToolButton" id="Home-ParaRightToLeft1">
                                         <property name="visible">True</property>
-                                        <property name="action-name">.uno:ParaLeftToRight</property>
+                                        <property name="action-name">.uno:ParaRightToLeft</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4109,9 +4109,9 @@
                                     <property name="toolbar-style">icons</property>
                                     <property name="show-arrow">False</property>
                                     <child>
-                                      <object class="GtkToolButton" id="Home-ParaRightToLeft1">
+                                      <object class="GtkToolButton" id="Home-ControlCodes1">
                                         <property name="visible">True</property>
-                                        <property name="action-name">.uno:ParaRightToLeft</property>
+                                        <property name="action-name">.uno:ControlCodes</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
