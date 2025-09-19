@@ -9,18 +9,43 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,cairo))
 
-$(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
-
-$(eval $(call gb_ExternalProject_use_externals,cairo,\
-    fontconfig \
-	freetype \
-	libpng \
-	zlib \
-))
-
 $(eval $(call gb_ExternalProject_register_targets,cairo,\
 	build \
 ))
+
+$(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
+
+$(eval $(call gb_ExternalProject_use_externals,cairo,\
+	fontconfig \
+	freetype \
+	libpng \
+	meson \
+	zlib \
+))
+
+# We cannot use environment vars inside the meson cross-build file,
+# so we're going to have to generate one on-the-fly.
+# mungle variables into python list format
+python_listify = '$(subst $(WHITESPACE),'$(COMMA)',$(strip $(1)))'
+cross_c = $(call python_listify,$(gb_CC))
+cross_cxx = $(call python_listify,$(gb_CXX))
+cross_ld := $(call python_listify,$(subst -fuse-ld=,,$(USE_LD)))
+
+define gb_cairo_cross_compile
+[binaries]
+c = [$(cross_c)]
+cpp = [$(cross_cxx)]
+c_ld = [$(cross_ld)]
+cpp_ld = [$(cross_ld)]
+ar = '$(AR)'
+strip = '$(STRIP)'
+# TODO: this is pretty ugly...
+[host_machine]
+system = '$(if $(filter WNT,$(OS)),windows,$(if $(filter MACOSX,$(OS)),darwin,$(if $(filter ANDROID,$(OS)),android,linux)))'
+cpu_family = '$(subst X86_64,x86_64,$(RTL_ARCH))'
+cpu = '$(if $(filter x86,$(RTL_ARCH)),i686,$(if $(filter X86_64,$(RTL_ARCH)),x86_64,$(if $(filter AARCH64,$(RTL_ARCH)),aarch64,armv7)))'
+endian = '$(ENDIANNESS)'
+endef
 
 # Including -rtlib=compiler-rt in pixman_LIBS is a BAD HACK:  At least when compiling with Clang
 # -fsanitize=undefined on Linux x86-64, the generated code references __muloti4, which is an
@@ -42,43 +67,45 @@ $(eval $(call gb_ExternalProject_register_targets,cairo,\
 # cairo's configure.  And pixman_LIBS happens to offer that.  (The -Wc is necessary so that libtool
 # does not throw away the -rtlib=compiler-rt which it does not understand.)
 
+# We control how cairo handles its subprojects/dependencies by adding entries to PKG_CONFIG_PATH .
+# Meson will look in those locations for *.pc files, which contains FLAGS and LIBS entries.
+
+# We set PKG_CONFIG_TOP_BUILD_DIR= in order to work around some pkg-config weirdness, which otherwise
+# will make meson crash.
+
 $(call gb_ExternalProject_get_state_target,cairo,build) :
 	$(call gb_Trace_StartRange,cairo,EXTERNAL)
+	$(file >$(gb_UnpackedTarball_workdir)/cairo/cross-file.txt,$(gb_cairo_cross_compile))
 	$(call gb_ExternalProject_run,build,\
-	$(gb_RUN_CONFIGURE) ./configure \
-		$(if $(debug),STRIP=" ") \
-		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(ZLIB_CFLAGS) $(gb_VISIBILITY_FLAGS)") \
-		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -DCAIRO_NO_MUTEX $(ZLIB_CFLAGS) -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS)" ) \
+		PYTHONWARNINGS= \
+		PKG_CONFIG_TOP_BUILD_DIR= \
+		$(if $(filter ANDROID iOS,$(OS)),CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)") \
+		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -DCAIRO_NO_MUTEX -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS)" ) \
+		PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$(gb_UnpackedTarball_workdir)/pixman/builddir/meson-uninstalled" \
+		$(if $(SYSTEM_FREETYPE),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/freetype/instdir/lib/pkgconfig") \
+		$(if $(SYSTEM_FONTCONFIG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/fontconfig") \
+		$(comment # on android we use system provided libz, but there is no .pc file, so create one for cairo) \
+		$(if $(filter ANDROID,$(OS)), \
+			$(shell mkdir $(gb_UnpackedTarball_workdir)/cairo/missing-system-pc) \
+			$(file >$(gb_UnpackedTarball_workdir)/cairo/missing-system-pc/zlib.pc,$(call gb_pkgconfig_file,zlib,1.2.8,$(ZLIB_CFLAGS),$(ZLIB_LIBS))) \
+			PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/cairo/missing-system-pc" \
+		) \
+		$(if $(SYSTEM_ZLIB),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/zlib") \
+		$(if $(SYSTEM_LIBPNG),,PKG_CONFIG_PATH="$$PKG_CONFIG_PATH:$(gb_UnpackedTarball_workdir)/libpng") \
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
-		$(if $(filter-out EMSCRIPTEN ANDROID iOS,$(OS)), \
-			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,cairo) $(ZLIB_CFLAGS)" \
-			LDFLAGS="$(call gb_ExternalProject_get_link_flags,cairo)" \
-			) \
-		$(if $(filter MACOSX ANDROID iOS,$(OS)),PKG_CONFIG=./dummy_pkg_config) \
-		LIBS="$(ZLIB_LIBS)" \
-		$(if $(filter -fsanitize=%,$(LDFLAGS)),LDFLAGS="$(LDFLAGS) -fuse-ld=bfd") \
-		pixman_CFLAGS="-I$(gb_UnpackedTarball_workdir)/pixman/pixman -pthread" \
-		pixman_LIBS="-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1 \
-			$(if $(filter LINUX,$(OS)),-Wl$(COMMA)-z$(COMMA)origin \
-					-Wl$(COMMA)-rpath$(COMMA)\\\$$\$$ORIGIN) \
-			$(if $(filter -fsanitize=%,$(CC)), \
-			    $(if $(filter LINUX-X86_64-TRUE,$(OS)-$(CPUNAME)-$(COM_IS_CLANG)), \
-			        -Wc$(COMMA)-rtlib=compiler-rt))" \
-		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
-		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
-		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(gb_UnpackedTarball_workdir)/freetype/include") \
-		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(gb_UnpackedTarball_workdir)/fontconfig") \
-		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-		$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
-		$(if $(filter iOS,$(OS)),--enable-quartz --enable-quartz-font) \
-		--disable-valgrind \
-		$(if $(filter iOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
-		--disable-svg --enable-gtk-doc=no --enable-test-surfaces=no \
-		$(gb_CONFIGURE_PLATFORMS) \
-		$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no ax_cv_c_float_words_bigendian=no)) \
-		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-	&& cd src && $(MAKE) \
+		$(MESON) setup --wrap-mode nofallback builddir \
+			$(if $(debug),-Dstrip=false,-Dstrip=true) \
+			$(if $(filter -fsanitize=%,$(CC)),-Db_lundef=false) \
+			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-Ddefault_library=static,-Ddefault_library=shared) \
+			$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),-Dxlib=disabled -Dxcb=disabled,$(if $(filter TRUE,$(DISABLE_GUI)),-Dxlib=disabled -Dxcb=disabled,-Dxlib=enabled -Dxcb=enabled)) \
+			$(if $(filter iOS,$(OS)),-Dquartz=enabled) \
+			$(if $(filter iOS,$(OS)),-Dfreetype=disabled,-Dfreetype=enabled -Dfontconfig=enabled) \
+			-Dgtk_doc=false -Dtests=disabled \
+			$(if $(CROSS_COMPILING),--cross-file cross-file.txt) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
+		$(MESON) compile -C builddir \
+			$(if $(verbose),--verbose) \
 	)
 	$(call gb_Trace_EndRange,cairo,EXTERNAL)
 

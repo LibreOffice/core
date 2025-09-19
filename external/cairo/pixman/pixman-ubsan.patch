@@ -38,18 +38,15 @@ diff -ru pixman-0.42.2.orig/pixman/pixman-fast-path.c pixman-0.42.2/pixman/pixma
  
  	px = (x & 0xffff) >> x_phase_shift;
  	py = (y & 0xffff) >> y_phase_shift;
-@@ -2837,9 +2837,9 @@
+@@ -2836,7 +2836,7 @@
+ 	sgtot = CLIP (sgtot, 0, 0xff);
  	sbtot = CLIP (sbtot, 0, 0xff);
  
- #ifdef WORDS_BIGENDIAN
--	buffer[k] = (satot << 0) | (srtot << 8) | (sgtot << 16) | (sbtot << 24);
-+	buffer[k] = (satot << 0) | (srtot << 8) | (sgtot << 16) | ((uint32_t)sbtot << 24);
- #else
 -	buffer[k] = (satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
 +	buffer[k] = ((uint32_t)satot << 24) | (srtot << 16) | (sgtot << 8) | (sbtot << 0);
- #endif
  
      next:
+ 	vx += ux;
 diff -ru pixman-0.42.2.orig/pixman/pixman-sse2.c pixman-0.42.2/pixman/pixman-sse2.c
 --- misc/pixman-0.42.2/pixman/pixman-sse2.c	2022-02-02 05:51:25.000000000 +0900
 +++ misc/build/pixman-0.42.2/pixman/pixman-sse2.c   2022-11-28 22:11:19.276969466 +0900

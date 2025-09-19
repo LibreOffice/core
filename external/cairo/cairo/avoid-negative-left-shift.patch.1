@@ -1,0 +1,14 @@
+Only in cairo: builddir
+Only in cairo: build.log
+diff -ur cairo.org/src/cairo-fixed-private.h cairo/src/cairo-fixed-private.h
+--- cairo.org/src/cairo-fixed-private.h	2025-01-30 11:47:24.708589118 +0200
++++ cairo/src/cairo-fixed-private.h	2025-01-30 11:48:36.632864262 +0200
+@@ -265,7 +265,7 @@
+     } else if ((f >> CAIRO_FIXED_FRAC_BITS) > INT16_MAX) {
+ 	x = INT32_MAX;
+     } else {
+-	x = f << (16 - CAIRO_FIXED_FRAC_BITS);
++	x = (cairo_fixed_t)((unsigned)f << (16 - CAIRO_FIXED_FRAC_BITS));
+     }
+ 
+     return x;

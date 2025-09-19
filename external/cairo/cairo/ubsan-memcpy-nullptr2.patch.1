@@ -1,0 +1,15 @@
+diff -ur cairo.org/src/cairo-gstate.c cairo/src/cairo-gstate.c
+--- cairo.org/src/cairo-gstate.c	2025-01-30 12:53:23.553726623 +0200
++++ cairo/src/cairo-gstate.c	2025-01-30 12:54:05.543062183 +0200
+@@ -2302,8 +2302,9 @@
+ 		if (!drop || KEEP_GLYPH (transformed_glyphs[j]))
+ 		    j++;
+ 	    }
+-	    memcpy (transformed_clusters, clusters,
+-		    num_clusters * sizeof (cairo_text_cluster_t));
++        if (num_clusters != 0)
++            memcpy (transformed_clusters, clusters,
++                num_clusters * sizeof (cairo_text_cluster_t));
+ 	} else {
+ 	    const cairo_glyph_t *cur_glyph;
+ 

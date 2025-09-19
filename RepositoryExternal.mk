@@ -1214,14 +1214,16 @@ $(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/cairo \
 	-I$(gb_UnpackedTarball_workdir)/cairo/src \
+	-I$(gb_UnpackedTarball_workdir)/cairo/builddir/src \
 	-I$(gb_UnpackedTarball_workdir)/pixman/pixman \
+	-I$(gb_UnpackedTarball_workdir)/pixman/builddir/pixman \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(if $(filter EMSCRIPTEN,$(OS)), \
-		$(gb_UnpackedTarball_workdir)/cairo/src/.libs/libcairo.a \
+		$(gb_UnpackedTarball_workdir)/cairo/builddir/src/libcairo-lo.a \
 		$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs/libpixman-1.a, \
-		-L$(gb_UnpackedTarball_workdir)/cairo/src/.libs -lcairo \
+		-L$(gb_UnpackedTarball_workdir)/cairo/builddir/src -lcairo-lo \
 		-L$(gb_UnpackedTarball_workdir)/pixman/pixman/.libs -lpixman-1) \
 )
 

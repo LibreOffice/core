@@ -1,7 +1,7 @@
 diff -ru cairo-1.17.4.orig/src/cairo.h cairo-1.17.4/src/cairo.h
 --- misc/cairo-1.17.4.orig/src/cairo.h	2021-08-29 19:43:26.976435721 +0100
 +++ misc/build/cairo-1.17.4/src/cairo.h	2021-08-29 19:47:41.373919330 +0100
-@@ -407,6 +407,8 @@
+@@ -420,6 +420,8 @@
   * @CAIRO_FORMAT_RGB30: like RGB24 but with 10bpc. (Since 1.12)
   * @CAIRO_FORMAT_RGB96F: 3 floats, R, G, B. (Since 1.17.2)
   * @CAIRO_FORMAT_RGBA128F: 4 floats, R, G, B, A. (Since 1.17.2)
@@ -10,7 +10,7 @@ diff -ru cairo-1.17.4.orig/src/cairo.h cairo-1.17.4/src/cairo.h
   *
   * #cairo_format_t is used to identify the memory format of
   * image data.
-@@ -424,9 +426,16 @@
+@@ -437,10 +439,18 @@
      CAIRO_FORMAT_RGB16_565 = 4,
      CAIRO_FORMAT_RGB30     = 5,
      CAIRO_FORMAT_RGB96F    = 6,
@@ -19,15 +19,17 @@ diff -ru cairo-1.17.4.orig/src/cairo.h cairo-1.17.4/src/cairo.h
 +    CAIRO_FORMAT_RGB24_888 = 8
  } cairo_format_t;
  
-+/**
+ /**
 + * Need this until CAIRO_FORMAT_RGB24_888 is in some official release.
 + * Otherwise we can't reliably check if this is available or we should
 + * convert from 24-bit RGB to 32-bit RGB before passing to Cairo.
 + **/
 +#define HAVE_CAIRO_FORMAT_RGB24_888
- 
- /**
-  * cairo_write_func_t:
++
++/**
+  * cairo_dither_t:
+  * @CAIRO_DITHER_NONE: No dithering.
+  * @CAIRO_DITHER_DEFAULT: Default choice at cairo compile time. Currently NONE.
 diff -ru cairo-1.17.4.orig/src/cairo-image-source.c cairo-1.17.4/src/cairo-image-source.c
 --- misc/cairo-1.17.4.orig/src/cairo-image-source.c	2021-08-29 19:43:26.979435585 +0100
 +++ misc/build/cairo-1.17.4/src/cairo-image-source.c	2021-08-29 19:43:47.501506559 +0100
@@ -54,24 +56,23 @@ diff -ru cairo-1.17.4.orig/src/cairo-image-source.c cairo-1.17.4/src/cairo-image
 diff -ru cairo-1.17.4.orig/src/cairo-image-surface.c cairo-1.17.4/src/cairo-image-surface.c
 --- misc/cairo-1.17.4.orig/src/cairo-image-surface.c	2021-08-29 19:43:26.982435449 +0100
 +++ misc/build/cairo-1.17.4/src/cairo-image-surface.c	2021-08-29 19:43:47.501506559 +0100
-@@ -109,13 +109,15 @@
+@@ -109,12 +109,14 @@
  	return CAIRO_FORMAT_A1;
      case PIXMAN_r5g6b5:
  	return CAIRO_FORMAT_RGB16_565;
-+	case PIXMAN_r8g8b8:
++    case PIXMAN_r8g8b8:
 +	return CAIRO_FORMAT_RGB24_888;
- #if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,22,0)
      case PIXMAN_r8g8b8a8: case PIXMAN_r8g8b8x8:
- #endif
- #if PIXMAN_VERSION >= PIXMAN_VERSION_ENCODE(0,27,2)
      case PIXMAN_a8r8g8b8_sRGB:
+ #if HAS_PIXMAN_r8g8b8_sRGB
+     case PIXMAN_r8g8b8_sRGB:
  #endif
 -    case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8: case PIXMAN_r8g8b8:
-+	case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8:
++    case PIXMAN_a8b8g8r8: case PIXMAN_x8b8g8r8:
      case PIXMAN_b8g8r8:   case PIXMAN_b5g6r5:
      case PIXMAN_a1r5g5b5: case PIXMAN_x1r5g5b5: case PIXMAN_a1b5g5r5:
      case PIXMAN_x1b5g5r5: case PIXMAN_a4r4g4b4: case PIXMAN_x4r4g4b4:
-@@ -332,6 +334,9 @@
+@@ -347,6 +349,9 @@
      case CAIRO_FORMAT_RGBA128F:
  	ret = PIXMAN_rgba_float;
  	break;
@@ -81,7 +82,7 @@ diff -ru cairo-1.17.4.orig/src/cairo-image-surface.c cairo-1.17.4/src/cairo-imag
      case CAIRO_FORMAT_ARGB32:
      case CAIRO_FORMAT_INVALID:
      default:
-@@ -736,6 +741,8 @@
+@@ -743,6 +748,8 @@
      case CAIRO_FORMAT_RGB30:
      case CAIRO_FORMAT_RGB24:
  	return 32;

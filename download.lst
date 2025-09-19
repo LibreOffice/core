@@ -39,9 +39,9 @@ BZIP2_TARBALL := bzip2-1.0.8.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CAIRO_SHA256SUM := 4eebc4c2bad0402bc3f501db184417094657d111fb6c06f076a82ea191fe1faf
-CAIRO_VERSION_MICRO := 6
-CAIRO_TARBALL := cairo-1.17.$(CAIRO_VERSION_MICRO).tar.xz
+CAIRO_SHA256SUM := 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
+CAIRO_VERSION_MICRO := 4
+CAIRO_TARBALL := cairo-1.18.$(CAIRO_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -569,8 +569,8 @@ PDFIUM_TARBALL := pdfium-7012.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PIXMAN_SHA256SUM := ea1480efada2fd948bc75366f7c349e1c96d3297d09a3fe62626e38e234a625e
-PIXMAN_TARBALL := pixman-0.42.2.tar.gz
+PIXMAN_SHA256SUM := a098c33924754ad43f981b740f6d576c70f9ed1006e12221b1845431ebce1239
+PIXMAN_TARBALL := pixman-0.46.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

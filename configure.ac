@@ -11679,63 +11679,8 @@ else
         AC_MSG_ERROR([--without-system-graphite must be used when --without-system-harfbuzz is used])
     fi
     # harfbuzz is now built using meson
-    AC_ARG_VAR(MESON, [point to a specific meson to use instead of autodetecting])
-    if test -z "$MESON"; then
-        if test -z "$PYTHON_FOR_BUILD"; then
-            # we also want to call meson with internal python and use internal meson
-            BUILD_TYPE="$BUILD_TYPE MESON"
-            MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
-        else
-            # autodetect, prefer meson.py / standalone version that can more likely be run
-            # by different python runtimes
-            AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/opt/bin:$PATH])
-            if test -z "$MESON"; then
-                AC_MSG_WARN([meson not found, using internal copy])
-                BUILD_TYPE="$BUILD_TYPE MESON"
-                MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
-            else
-                PathFormat "$MESON"
-                MESON="$formatted_path"
-                AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
-                if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
-                    # Xcode 26 and higher need a newer version of meson so use
-                    # the internal meson if the external meson's version is
-                    # too old
-                    if test $_os = Darwin -a $MACOSX_SDK_VERSION -ge 260000; then
-                        _meson_minver=1.8.3
-                        _meson_minmajmin=`echo $_meson_minver | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                        _meson_version=`$PYTHON_FOR_BUILD $MESON --version 2>/dev/null`
-                        _meson_majmin=`echo $_meson_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                        if test "$_meson_majmin" -lt "$_meson_minmajmin"; then
-                            AC_MSG_WARN([meson "$_meson_version" is too old, using internal copy])
-                            BUILD_TYPE="$BUILD_TYPE MESON"
-                            MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
-                        else
-                            AC_MSG_RESULT([yes])
-                        fi
-                    else
-                        AC_MSG_RESULT([yes])
-                    fi
-                else
-                    AC_MSG_RESULT([no])
-                    AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
-                fi
-            fi
-        fi
-        MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
-    fi
-    AC_CHECK_PROG(NINJA,ninja,ninja)
-    if test -z "$MESON" -o -z "$NINJA"; then
-        AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
-    fi
+    need_meson="yes"
 fi
-if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
-    x_NINJA=[\#]
-else
-    x_NINJA=
-fi
-AC_SUBST(x_NINJA)
-AC_SUBST(NINJA)
 
 if test "$USING_X11" = TRUE; then
     AC_PATH_X
@@ -14701,6 +14646,8 @@ if test "$test_cairo" = "yes"; then
     else
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE CAIRO"
+        # harfbuzz is now built using meson
+        need_meson="yes"
     fi
 
     if test "$enable_cairo_canvas" != no; then
@@ -14713,6 +14660,75 @@ AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
 AC_SUBST(ENABLE_CAIRO_CANVAS)
 AC_SUBST(SYSTEM_CAIRO)
+
+dnl ===================================================================
+dnl Check for meson
+dnl ===================================================================
+if test "$need_meson" = "yes"; then
+    AC_ARG_VAR(MESON, [point to a specific meson to use instead of autodetecting])
+    if test -z "$MESON"; then
+        if test -z "$PYTHON_FOR_BUILD"; then
+            # we also want to call meson with internal python and use internal meson
+            BUILD_TYPE="$BUILD_TYPE MESON"
+            MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+        else
+            # autodetect, prefer meson.py / standalone version that can more likely be run
+            # by different python runtimes
+            AC_PATH_PROGS(MESON,[meson.py meson],,[$LODE_HOME/opt/bin:$PATH])
+            if test -z "$MESON"; then
+                AC_MSG_WARN([meson not found, using internal copy])
+                BUILD_TYPE="$BUILD_TYPE MESON"
+                MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+            else
+                PathFormat "$MESON"
+                MESON="$formatted_path"
+                AC_MSG_CHECKING([whether meson can be run with "$PYTHON_FOR_BUILD $MESON"])
+                if ($PYTHON_FOR_BUILD $MESON --version >/dev/null) ; then
+                    _meson_minver=0.61.5
+                    if test "$test_cairo" = "yes" -a "$SYSTEM_CAIRO" != "TRUE"; then
+                        _meson_minver=1.3.0
+                    fi
+                    # Xcode 26 and higher need a newer version of meson so use
+                    # the internal meson if the external meson's version is
+                    # too old
+                    if test $_os = Darwin; then
+                        if $MACOSX_SDK_VERSION -ge 260000; then
+                          _meson_minver=1.8.3
+                        fi
+                    fi
+                    _meson_minmajmin=`echo $_meson_minver | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                    _meson_version=`$PYTHON_FOR_BUILD $MESON --version 2>/dev/null`
+                    _meson_majmin=`echo $_meson_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                    if test "$_meson_majmin" -lt "$_meson_minmajmin"; then
+                        AC_MSG_WARN([meson "$_meson_version" is too old, using internal copy])
+                        BUILD_TYPE="$BUILD_TYPE MESON"
+                        MESON='$(gb_UnpackedTarball_workdir)/meson/meson.py'
+                    else
+                        AC_MSG_RESULT([yes])
+                        AC_MSG_CHECKING([min version of meson required])
+                        AC_MSG_RESULT([$meson_minver])
+                    fi
+                else
+                    AC_MSG_RESULT([no])
+                    AC_MSG_ERROR([meson incompatible with the specified python. Try using a different python runtime or a plain release of meson by adding PYTHON=/other/python.version and/or MESON=/path/to/meson.py to autogen.input])
+                fi
+            fi
+        fi
+        MESON='$(call gb_ExternalExecutable_get_command,python) '"$MESON"
+    fi
+    AC_CHECK_PROG(NINJA,ninja,ninja)
+    if test -z "$MESON" -o -z "$NINJA"; then
+        AC_MSG_ERROR([you need to have meson and ninja in order to build harfbuzz])
+    fi
+fi
+
+if test -z "$NINJA" || test "$NINJA" = 'assumed to be available from Visual Studio'; then
+    x_NINJA=[\#]
+else
+    x_NINJA=
+fi
+AC_SUBST(x_NINJA)
+AC_SUBST(NINJA)
 
 dnl ===================================================================
 dnl Test whether to use avahi
