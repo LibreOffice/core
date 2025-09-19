@@ -62,11 +62,11 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
 
 $(eval $(call gb_JunitTest_add_classes,framework_complex,\
     complex.dispatches.checkdispatchapi \
+    complex.accelerators.AcceleratorsConfigurationTest \
 ))
 # these were disabled in the old build system too, please check
 # carefully before reenabling
 #	complex.ModuleManager.CheckXModuleManager \
-    complex.accelerators.AcceleratorsConfigurationTest \
     complex.api_internal.CheckAPI \
     complex.broken_document.LoadDocument \
     complex.desktop.DesktopTerminate \
