@@ -1,0 +1,3 @@
+External package containing afdko from [https://github.com/adobe-type-tools/afdko].
+
+This is used to convert and merge Type 1 fonts to otf.

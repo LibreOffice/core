@@ -117,6 +117,20 @@
                     "dest-filename": "@PDFIUM_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@AFDKO_TARBALL@",
+                    "sha256": "@AFDKO_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@AFDKO_TARBALL@"
+                },
+                {
+                    "url": "https://dev-www.libreoffice.org/src/@ANTLR4CPPRUNTIME_TARBALL@",
+                    "sha256": "@ANTLR4CPPRUNTIME_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@ANTLR4CPPRUNTIME_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/src/@XMLSEC_TARBALL@",
                     "sha256": "@XMLSEC_SHA256SUM@",
                     "type": "file",

@@ -1,0 +1,107 @@
+--- afdko/c/mergefonts/source/mergeFonts.c	2025-09-23 10:51:19.857082828 +0100
++++ afdko/c/mergefonts/source/mergeFonts.c	2025-09-23 10:51:40.645895437 +0100
+@@ -1200,7 +1200,7 @@
+     }
+ }
+ 
+-static void readCIDFontInfo(txCtx h, char *filePath) {
++void readCIDFontInfo(txCtx h, char *filePath) {
+     int lineno;
+     FILE *fp;
+     MergeInfo *mergeInfo = (MergeInfo *)h->appSpecificInfo;
+@@ -1677,7 +1677,7 @@
+ 
+ /* Process merging multi-file set. Return index of last used arg. */
+ /* Currently implemented only for mode_cff */
+-static int doMergeFileSet(txCtx h, int argc, char *argv[], int i) {
++int doMergeFileSet(txCtx h, int argc, char *argv[], int i) {
+     sourceCtx srcCtx;
+     int fileIndex = 0;
+     int fileCount = 0;
+@@ -2609,10 +2609,34 @@
+     }
+ }
+ 
++void mergeFontsFree(txCtx h);
++
+ /* Initialize context. */
+-static void txNew(txCtx h, char *progname) {
++txCtx mergeFontsNew(char *progname) {
+     ctlMemoryCallbacks cb;
+-    MergeInfo *mergeInfo = (MergeInfo *)h->appSpecificInfo;
++    txCtx h;
++    MergeInfo *mergeInfo;
++
++    /* Allocate program context */
++    h = malloc(sizeof(struct txCtx_));
++    if (h == NULL) {
++        fprintf(stderr, "%s: out of memory\n", progname);
++        return NULL;
++    }
++    memset(h, 0, sizeof(struct txCtx_));
++
++    h->app = APP_MERGEFONTS;
++    h->appSpecificInfo = malloc(sizeof(MergeInfo));
++    if (h == NULL) {
++        fprintf(stderr, "%s: out of memory\n", progname);
++	free(h);
++        return NULL;
++    }
++    memset(h->appSpecificInfo, 0, sizeof(MergeInfo));
++
++    h->appSpecificFree = mergeFontsFree;
++
++    mergeInfo = (MergeInfo *)h->appSpecificInfo;
+ 
+     h->progname = progname;
+     h->flags = 0;
+@@ -2690,10 +2714,12 @@
+ 
+     /* Clear the SEEN_MODE bit after setting the default mode */
+     h->flags = 0;
++
++    return h;
+ }
+ 
+ /* Free context. */
+-static void txFree(txCtx h) {
++void mergeFontsFree(txCtx h) {
+     long i;
+ 
+     memFree(h, h->script.buf);
+@@ -2770,25 +2796,11 @@
+     --argc;
+     ++argv;
+ 
+-    /* Allocate program context */
+-    h = malloc(sizeof(struct txCtx_));
+-    if (h == NULL) {
+-        fprintf(stderr, "%s: out of memory\n", progname);
+-        return EXIT_FAILURE;
+-    }
+-    memset(h, 0, sizeof(struct txCtx_));
+-
+-    h->app = APP_MERGEFONTS;
+-    h->appSpecificInfo = malloc(sizeof(MergeInfo));
++    h = mergeFontsNew(progname);
+     if (h == NULL) {
+         fprintf(stderr, "%s: out of memory\n", progname);
+         exit(1);
+     }
+-    memset(h->appSpecificInfo, 0, sizeof(MergeInfo));
+-
+-    h->appSpecificFree = txFree;
+-
+-    txNew(h, progname);
+ 
+     if (argc > 1 && getOptionIndex(argv[argc - 2]) == opt_s) {
+         /* Option list ends with script option */
+@@ -2810,7 +2822,7 @@
+         fprintf(stderr, "mem_manage() called %ld times in this run.\n",
+                 h->failmem.iCall);
+     }
+-    txFree(h);
++    mergeFontsFree(h);
+ 
+     return 0;
+ }

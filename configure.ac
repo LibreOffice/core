@@ -12825,6 +12825,12 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
     else
         AC_MSG_RESULT([internal])
     fi
+
+    # Only used by the pdf import code that uses pdfium
+    # which doesn't currently have --with-system support
+    if test "$ENABLE_PDFIMPORT" = "TRUE"; then
+        BUILD_TYPE="$BUILD_TYPE AFDKO"
+    fi
 fi
 AC_SUBST(SYSTEM_OPENJPEG2)
 AC_SUBST(SYSTEM_ABSEIL)

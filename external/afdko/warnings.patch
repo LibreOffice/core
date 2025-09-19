@@ -1,0 +1,20 @@
+--- afdko/c/shared/include/tx_shared.h
++++ afdko/c/shared/include/tx_shared.h
+@@ -35,7 +35,7 @@
+ #include <stdlib.h>
+ #include <stdbool.h>
+ 
+-#if PLAT_MAC
++#ifdef PLAT_MAC
+ #include <console.h>
+ #include <file_io.h>
+ #endif /* PLAT_MAC */
+@@ -48,7 +48,7 @@
+ #include <sys/stat.h>
+ #include <limits.h>
+ 
+-#if _WIN32
++#ifdef _WIN32
+ #include <fcntl.h>
+ #include <io.h>
+ #define stat _stat
