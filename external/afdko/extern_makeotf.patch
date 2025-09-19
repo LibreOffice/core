@@ -1,0 +1,302 @@
+--- afdko/c/makeotf/source/c_main.c
++++ afdko/c/makeotf/source/c_main.c
+@@ -269,6 +269,7 @@
+     exit(0);
+ }
+ 
++#if 0
+ extern char *sep();
+ 
+ /* Copy directory path with overflow checking */
+@@ -744,6 +745,7 @@
+ 
+     convert.fontDone = 1;
+ }
++#endif
+ 
+ /*Used to parse the parameter string passed in by python
+  * start is the start index and is updated to the beginning of the next substring
+@@ -822,6 +824,7 @@
+     }
+ }
+ 
++#if 0
+ /* Main program */
+ int c_main(int argc, char *argv[]) {
+     dnaCtx mainDnaCtx = NULL;
+@@ -874,3 +877,4 @@
+ 
+     return 0;
+ }
++#endif
+--- afdko/c/makeotf/source/cb.c	2025-09-23 13:18:57.919265608 +0100
++++ afdko/c/makeotf/source/cb.c	2025-09-23 13:20:13.039352315 +0100
+@@ -267,14 +267,14 @@
+         /* Full block */
+         *count = fileReadN(&h->ps.file, BUFSIZ, h->ps.buf);
+         if (*count != BUFSIZ) {
+-            fileError(&h->ps.file);
++            fileHandleError(&h->ps.file);
+         }
+         h->ps.left -= BUFSIZ;
+     } else if (h->ps.left > 0) {
+         /* Partial block */
+         *count = fileReadN(&h->ps.file, h->ps.left, h->ps.buf);
+         if (*count != h->ps.left) {
+-            fileError(&h->ps.file);
++            fileHandleError(&h->ps.file);
+         }
+         h->ps.left = 0;
+     } else {
+@@ -531,7 +531,7 @@
+     cbCtx h = ctx;
+     h->tmp.file.name = "tmpfile";
+     if ((h->tmp.file.fp = tmpfile()) == NULL) {
+-        fileError(&h->tmp.file);
++        fileHandleError(&h->tmp.file);
+     }
+ }
+ 
+@@ -636,7 +636,7 @@
+     File *file = &h->fcdb.files.array[fileid];
+     fileSeek(file, offset, SEEK_SET);
+     if (fileReadN(file, length, buf) != length)
+-        fileError(file);
++        fileHandleError(file);
+ }
+ 
+ // [fcdb callback] Report database parsing warning.
+--- afdko/c/makeotf/source/file.c	2025-09-23 13:18:57.919265608 +0100
++++ afdko/c/makeotf/source/file.c	2025-09-23 13:20:04.148358137 +0100
+@@ -23,7 +23,7 @@
+ #endif /* SUNOS */
+ 
+ /* Print file error message and quit */
+-void fileError(File *f) {
++void fileHandleError(File *f) {
+     cbFatal(f->h, "file error <%s> [%s]", strerror(errno), f->name);
+ }
+ 
+@@ -33,7 +33,7 @@
+     f->name = filename;
+     f->fp = fopen(filename, mode);
+     if (f->fp == NULL) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+ }
+ 
+@@ -52,7 +52,7 @@
+ int fileReadN(File *f, size_t count, void *ptr) {
+     size_t n = fread(ptr, 1, count, f->fp);
+     if (n == 0 && ferror(f->fp)) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+     return n;
+ }
+@@ -61,7 +61,7 @@
+ int fileWriteN(File *f, size_t count, void *ptr) {
+     size_t n = fwrite(ptr, 1, count, f->fp);
+     if (n != count) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+     return n;
+ }
+@@ -88,7 +88,7 @@
+ /* Seek on file */
+ void fileSeek(File *f, long offset, int wherefrom) {
+     if (fseek(f->fp, offset, wherefrom) != 0) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+ }
+ 
+@@ -96,7 +96,7 @@
+ long fileTell(File *f) {
+     long posn = ftell(f->fp);
+     if (posn == -1) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+     return posn;
+ }
+@@ -104,7 +104,7 @@
+ /* Check for errors and close file */
+ void fileClose(File *f) {
+     if (ferror(f->fp)) {
+-        fileError(f);
++        fileHandleError(f);
+     }
+     fclose(f->fp);
+ }
+--- afdko/c/makeotf/source/file.h	2025-09-23 13:18:57.919265608 +0100
++++ afdko/c/makeotf/source/file.h	2025-09-23 13:20:01.042950337 +0100
+@@ -29,6 +29,6 @@
+ void fileSeek(File *file, long offset, int wherefrom);
+ long fileTell(File *file);
+ void fileClose(File *file);
+-void fileError(File *file);
++void fileHandleError(File *file);
+ 
+ #endif /* MAKEOTF_FILE_H */
+--- afdko/c/makeotf/lib/hotconv/common.h
++++ afdko/c/makeotf/lib/hotconv/common.h
+@@ -14,7 +14,7 @@
+-#include "hotconv.h"
++#include "../../include/hotconv.h"
+ #include "dynarr.h"
+ #include "txops.h"
+-#include "cffread.h"
++#include "../../include/cffread.h"
+-#include "typecomp.h"
++#include "../../include/typecomp.h"
+ #include "ctutil.h"
+ 
+--- afdko/c/makeotf/source/package.h
++++ afdko/c/makeotf/source/package.h
+@@ -7,7 +7,7 @@
+ #define MAKEOTF_PACKAGE_SPECS_H
+ 
+ #define TYPECOMP "typecomp.h"
+-#define HOTCONV "hotconv.h"
++#define HOTCONV "../include/hotconv.h"
+ #define DYNARR "dynarr.h"
+ 
+ #endif /* MAKEOTF_PACKAGE_SPECS_H */
+--- afdko/c/makeotf/include/cffread.h
++++ afdko/c/makeotf/include/cffread.h
+@@ -144,7 +144,7 @@
+    to cffFontInfo data structure the function returns. This data structure is
+    described below. */
+ 
+-#include "txops.h"
++#include "../resource/txops.h"
+ 
+ typedef unsigned short cffSID; /* String identifier */
+ typedef short cffFWord;        /* Font metric in em-relative units */
+--- afdko/c/makeotf/lib/typecomp/common.h
++++ afdko/c/makeotf/lib/typecomp/common.h
+@@ -7,7 +7,7 @@
+ #define COMMON_H
+ 
+ #include "dynarr.h"
+-#include "typecomp.h"
++#include "../../include/typecomp.h"
+ #include "stdint.h"
+ 
+ /* Types */
+--- afdko/c/makeotf/lib/typecomp/t13.h
++++ afdko/c/makeotf/lib/typecomp/t13.h
+@@ -13,7 +13,7 @@
+ #include "common.h"
+ #include "cs.h"
+ 
+-#include "pstoken.h"
++#include "../../include/pstoken.h"
+ 
+ void t13New(tcCtx g);
+ void t13Free(tcCtx g);
+--- afdko/c/makeotf/lib/hotconv/map.c
++++ afdko/c/makeotf/lib/hotconv/map.c
+@@ -21,7 +21,7 @@
+ #include <stdarg.h>
+ #include <limits.h>
+ 
+-#include "pstoken.h"
++#include "../../include/pstoken.h"
+ 
+ #define SET_BIT_ARR(a, b) (a[(b) / 32] |= 1UL << (b) % 32)
+ #define TEST_BIT_ARR(a, b) (a[(b) / 32] & 1UL << (b) % 32)
+--- afdko/c/makeotf/lib/pstoken/pstoken.c
++++ afdko/c/makeotf/lib/pstoken/pstoken.c
+@@ -7,7 +7,7 @@
+  */
+ 
+ #include <stdint.h>
+-#include "pstoken.h"
++#include "../../include/pstoken.h"
+ 
+ #include <stdarg.h>
+ #include <stdlib.h>
+--- afdko/c/makeotf/lib/hotconv/cmap.c
++++ afdko/c/makeotf/lib/hotconv/cmap.c
+@@ -8,7 +8,7 @@
+ #include <stdlib.h>
+ #include <limits.h>
+ 
+-#include "hotconv.h"
++#include "../../include/hotconv.h"
+ #include "cmap.h"
+ #include "hotmap.h"
+ #include "feat.h"
+--- afdko/c/makeotf/lib/cffread/cffread.c
++++ afdko/c/makeotf/lib/cffread/cffread.c
+@@ -11,8 +11,8 @@
+ #include <limits.h>
+ #include <math.h>
+ #include <stdio.h>
+-#include "cffread.h"
+-#include "dictops.h"
++#include "../../include/cffread.h"
++#include "../../resource/dictops.h"
+ 
+ /* Define to supply Microsoft-specific function calling info, e.g. __cdecl */
+ #ifndef CDECL
+--- afdko/c/makeotf/lib/typecomp/recode.c
++++ afdko/c/makeotf/lib/typecomp/recode.c
+@@ -8,7 +8,7 @@
+ #include "parse.h"
+ #include "subr.h"
+ 
+-#include "txops.h"
++#include "../../resource/txops.h"
+ 
+ #include <limits.h>
+ #include <stdio.h>
+@@ -248,7 +248,7 @@
+ 
+ #include <math.h>
+ 
+-#include "cffread.h"
++#include "../../include/cffread.h"
+ 
+ /* Degrees to radians multiplying constant */
+ #define DEG_2_RAD (3.141592653589793 / 180)
+
+--- afdko/c/makeotf/lib/typecomp/parse.c
++++ afdko/c/makeotf/lib/typecomp/parse.c
+@@ -15,8 +15,8 @@
+ #include "t13.h"
+ #include "recode.h"
+ 
+-#include "txops.h"
+-#include "pstoken.h"
++#include "../../resource/txops.h"
++#include "../../include/pstoken.h"
+ 
+ #include <stdarg.h>
+ #include <stdio.h>
+--- afdko/c/makeotf/lib/typecomp/dict.h
++++ afdko/c/makeotf/lib/typecomp/dict.h
+@@ -11,7 +11,7 @@
+ #define DICT_H
+ 
+ #include "common.h"
+-#include "dictops.h"
++#include "../../resource/dictops.h"
+ 
+ /* Tokenized dictionary data */
+ typedef dnaDCL(char, DICT);
+--- afdko/c/makeotf/source/cbpriv.c
++++ afdko/c/makeotf/source/cbpriv.c
+@@ -5,7 +5,7 @@
+ #include <stdio.h>
+ #include <stdarg.h>
+ 
+-#include "hotconv.h"
++#include "../include/hotconv.h"
+ #include "cb.h"
+ 
+ extern void myfatal(void *ctx);

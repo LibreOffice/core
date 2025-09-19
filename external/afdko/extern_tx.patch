@@ -1,0 +1,85 @@
+--- afdko/c/tx/source/tx.c
++++ afdko/c/tx/source/tx.c
+@@ -127,7 +127,7 @@
+ /* ---------------------------- cffread Library ---------------------------- */
+ 
+ /* Read font with cffread library. */
+-static void cfrReadFont(txCtx h, long origin, int ttcIndex) {
++void cfrReadFont(txCtx h, long origin, int ttcIndex) {
+     float *uv;
+     if (h->cfr.ctx == NULL) {
+         h->cfr.ctx = cfrNew(&h->cb.mem, &h->cb.stm, CFR_CHECK_ARGS);
+@@ -1403,9 +1403,24 @@
+     }
+ }
+ 
++void txFree(txCtx h);
++
+ /* Initialize context. */
+-static void txNew(txCtx h, char *progname) {
++txCtx txNew(char *progname) {
+     ctlMemoryCallbacks cb;
++    txCtx h;
++
++    /* Allocate program context */
++    h = malloc(sizeof(struct txCtx_));
++    if (h == NULL) {
++        fprintf(stderr, "%s: out of memory\n", progname);
++        return NULL;
++    }
++    memset(h, 0, sizeof(struct txCtx_));
++
++    h->app = APP_TX;
++    h->appSpecificInfo = NULL; /* unused in tx.c, used in rotateFont.c & mergeFonts.c */
++    h->appSpecificFree = txFree;
+ 
+     h->progname = progname;
+     h->flags = 0;
+@@ -1480,10 +1495,12 @@
+ 
+     /* Clear the SEEN_MODE bit after setting the default mode */
+     h->flags = 0;
++
++    return h;
+ }
+ 
+ /* Free context. */
+-static void txFree(txCtx h) {
++void txFree(txCtx h) {
+     long i;
+ 
+     memFree(h, h->script.buf);
+@@ -1539,6 +1556,7 @@
+     free(h);
+ }
+ 
++#if 0
+ /* Main program. */
+ int CTL_CDECL main(int argc, char *argv[]) {
+     txCtx h;
+@@ -1564,19 +1582,11 @@
+     --argc;
+     ++argv;
+ 
+-    /* Allocate program context */
+-    h = malloc(sizeof(struct txCtx_));
++    h = txNew(progname);
+     if (h == NULL) {
+         fprintf(stderr, "%s: out of memory\n", progname);
+         return EXIT_FAILURE;
+     }
+-    memset(h, 0, sizeof(struct txCtx_));
+-
+-    h->app = APP_TX;
+-    h->appSpecificInfo = NULL; /* unused in tx.c, used in rotateFont.c & mergeFonts.c */
+-    h->appSpecificFree = txFree;
+-
+-    txNew(h, progname);
+ 
+     if (argc > 1 && getOptionIndex(argv[argc - 2]) == opt_s) {
+         /* Option list ends with script option */
+@@ -1602,3 +1612,4 @@
+ 
+     return 0;
+ }
++#endif

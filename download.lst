@@ -569,6 +569,16 @@ PDFIUM_TARBALL := pdfium-7188.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+AFDKO_SHA256SUM := e1a31e871e83dd022635b852297c433c8e9c9d9d4f0c0f634e8d55dde28ad930
+AFDKO_TARBALL := afdko-4.0.2.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
+ANTLR4CPPRUNTIME_SHA256SUM := 0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4
+ANTLR4CPPRUNTIME_TARBALL := antlr4-cpp-runtime-4.13.2-source.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 PIXMAN_SHA256SUM := a098c33924754ad43f981b740f6d576c70f9ed1006e12221b1845431ebce1239
 PIXMAN_TARBALL := pixman-0.46.4.tar.xz
 # three static lines

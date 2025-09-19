@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,external))
 $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,XMLSEC,xmlsec) \
 	$(call gb_Helper_optional,ABW,libabw) \
+	$(call gb_Helper_optional,AFDKO,afdko) \
 	$(call gb_Helper_optional,ARGON2,argon2) \
 	$(call gb_Helper_optional,BOOST,boost) \
 	$(call gb_Helper_optional,BOX2D,box2d) \
