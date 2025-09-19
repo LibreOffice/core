@@ -234,6 +234,10 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 
     OUString sPageId(msRememberedPageId);
 
+    if (comphelper::LibreOfficeKit::isActive()) {
+        sPageId = "internet";
+    }
+
     if (eProtocolTyp == INetProtocol::Http || eProtocolTyp == INetProtocol::Https || eProtocolTyp == INetProtocol::Ftp) {
         sPageId = "internet";
     } else if (eProtocolTyp == INetProtocol::Mailto) {
