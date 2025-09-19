@@ -118,6 +118,19 @@ public:
 
     EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
     ~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE;
+
+    // write text dump
+    static bool tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl);
+    // write Type 1 font
+    static bool tx_t1(const OUString& srcFontUrl, const OUString& destFontUrl);
+    // merge fonts together (can also be used to convert a name keyed font to a cid keyed font)
+    // each font in fonts is glyphaliasfile, mergefontfile
+    static bool mergefonts(const OUString& cidFontInfoUrl, const OUString& destFileUrl,
+                           const std::vector<std::pair<OUString, OUString>>& fonts);
+    // write OTF font, features is optional
+    static bool makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
+                        const OUString& fontMenuNameDBUrl, const OUString& charMapUrl,
+                        const OUString& featuresUrl);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
