@@ -543,9 +543,6 @@ excludelist:
     # Actually used
     - com/sun/star/text/TextMarkupDescriptor.hpp
     - com/sun/star/text/XTextRange.hpp
-    sw/source/core/unocore/unotbl.cxx:
-    # No .hxx -> .h replacement in URE headers
-    - cppuhelper/interfacecontainer.hxx
     sw/source/core/unocore/unoredline.cxx:
     # Needed for template
     - com/sun/star/text/XTextSection.hpp

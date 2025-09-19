@@ -8,6 +8,3 @@ excludelist:
     # Don't replace with impl. detail
     - osl/socket.hxx
     - osl/pipe.hxx
-    io/source/stm/opump.cxx:
-    # Don't replace with URE API impl. detail
-    - cppuhelper/interfacecontainer.hxx

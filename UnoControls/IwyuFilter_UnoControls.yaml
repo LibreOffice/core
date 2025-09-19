@@ -1,12 +1,6 @@
 ---
 assumeFilename: UnoControls/source/base/basecontrol.cxx
 excludelist:
-    UnoControls/inc/multiplexer.hxx:
-    # Don't propose hxx -> h change in URE libs
-    - cppuhelper/interfacecontainer.hxx
-    UnoControls/source/inc/OConnectionPointContainerHelper.hxx:
-    # Don't propose hxx -> h change in URE libs
-    - cppuhelper/interfacecontainer.hxx
     UnoControls/source/controls/framecontrol.cxx:
     # Needed for use in cppu::UnoType template
     - com/sun/star/awt/XControlContainer.hpp
