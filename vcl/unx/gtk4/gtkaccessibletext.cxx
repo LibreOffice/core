@@ -270,6 +270,48 @@ static gboolean lo_accessible_text_get_offset(GtkAccessibleText* self,
 }
 #endif
 
+#if GTK_CHECK_VERSION(4, 21, 0)
+static gboolean lo_accessible_text_set_caret_position(GtkAccessibleText* self, unsigned int offset)
+{
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return false;
+
+    if (offset > o3tl::make_unsigned(xText->getCharacterCount()))
+    {
+        SAL_WARN("vcl.gtk",
+                 "lo_accessible_text_set_caret_position called with invalid offset: " << offset);
+        return false;
+    }
+
+    xText->setCaretPosition(offset);
+    return true;
+}
+
+static gboolean lo_accessible_text_set_selection(GtkAccessibleText* self, gsize i,
+                                                 GtkAccessibleTextRange* range)
+{
+    if (i != 0)
+        return false;
+
+    css::uno::Reference<css::accessibility::XAccessibleText> xText = getXText(self);
+    if (!xText.is())
+        return false;
+
+    const gsize nEndIndex = range->start + range->length;
+    const sal_Int32 nTextLength = xText->getCharacterCount();
+    if (range->start > o3tl::make_unsigned(nTextLength)
+        || nEndIndex > o3tl::make_unsigned(nTextLength))
+    {
+        SAL_WARN("vcl.qt", "lo_accessible_text_set_selection called with invalid index.");
+        return false;
+    }
+
+    xText->setSelection(range->start, nEndIndex);
+    return true;
+}
+#endif
+
 void lo_accessible_text_init(gpointer iface_, gpointer)
 {
     auto const iface = static_cast<GtkAccessibleTextInterface*>(iface_);
@@ -282,6 +324,10 @@ void lo_accessible_text_init(gpointer iface_, gpointer)
 #if GTK_CHECK_VERSION(4, 15, 0)
     iface->get_extents = lo_accessible_text_get_extents;
     iface->get_offset = lo_accessible_text_get_offset;
+#endif
+#if GTK_CHECK_VERSION(4, 21, 0)
+    iface->set_caret_position = lo_accessible_text_set_caret_position;
+    iface->set_selection = lo_accessible_text_set_selection;
 #endif
 }
 
