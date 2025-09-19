@@ -64,7 +64,12 @@ void ZipOutputStream::setEntry(ZipEntry& rEntry)
     if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
         rEntry.nCrc == -1)
     {
-        rEntry.nSize = rEntry.nCompressedSize = 0;
+        if (rEntry.nSize == -1)
+        {
+            assert(false); // how to get here
+            rEntry.nSize = 0;
+        }
+        rEntry.nCompressedSize = 0;
         rEntry.nFlag |= 8;
     }
 }
@@ -251,7 +256,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
 
     if (bWrite64Header)
     {
-        writeExtraFields( rEntry );
+        writeExtraFields(rEntry, false);
     }
 }
 
@@ -276,13 +281,13 @@ void ZipOutputStream::writeDataDescriptor(const ZipEntry& rEntry)
     }
 }
 
-void ZipOutputStream::writeExtraFields(const ZipEntry& rEntry)
+void ZipOutputStream::writeExtraFields(const ZipEntry& rEntry, bool const isLOCWithDD)
 {
     //Could contain more fields, now we only save Zip64 extended information
     m_aChucker.WriteInt16( 1 );  //id of Zip64 extended information extra field
     m_aChucker.WriteInt16( 28 ); //data size of this field = 3*8+4 byte
-    m_aChucker.WriteUInt64( rEntry.nSize );
-    m_aChucker.WriteUInt64( rEntry.nCompressedSize );
+    m_aChucker.WriteUInt64(isLOCWithDD ? 0 : rEntry.nSize);
+    m_aChucker.WriteUInt64(isLOCWithDD ? 0 : rEntry.nCompressedSize);
     m_aChucker.WriteUInt64( rEntry.nOffset );
     m_aChucker.WriteInt32( 0 );  //Number of the disk on which this file starts
 }
@@ -311,6 +316,9 @@ void ZipOutputStream::writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt
         m_aChucker.WriteInt16( rEntry.nMethod );
 
     bool bWrite64Header = false;
+    // getTruncated must always be called to init bWrite64Header!
+    auto const nTruncCompressedSize{getTruncated(rEntry.nCompressedSize, &bWrite64Header)};
+    auto const nTruncSize{getTruncated(rEntry.nSize, &bWrite64Header)};
 
     m_aChucker.WriteUInt32( rEntry.nTime );
     if ((rEntry.nFlag & 8) == 8 )
@@ -322,8 +330,8 @@ void ZipOutputStream::writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt
     else
     {
         m_aChucker.WriteUInt32( rEntry.nCrc );
-        m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
-        m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
+        m_aChucker.WriteUInt32(nTruncCompressedSize);
+        m_aChucker.WriteUInt32(nTruncSize);
     }
     m_aChucker.WriteInt16( nNameLength );
     m_aChucker.WriteInt16( bWrite64Header ? 32 : 0 );
@@ -335,7 +343,7 @@ void ZipOutputStream::writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt
 
     if (bWrite64Header)
     {
-        writeExtraFields(rEntry);
+        writeExtraFields(rEntry, (rEntry.nFlag & 8));
     }
 }
 

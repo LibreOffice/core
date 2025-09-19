@@ -510,7 +510,15 @@ bool ZipPackageStream::saveChild(
         bUseNonSeekableAccess = ( xStream.is() && !xSeek.is() );
     }
 
-    if ( !bUseNonSeekableAccess )
+    if (bUseNonSeekableAccess)
+    {
+        // this should work for XUnbufferedStream/OInputCompStream at least
+        if (pTempEntry->nSize == -1)
+        {   // this is needed in writeLOC to detect Zip64
+            pTempEntry->nSize = xStream->available();
+        }
+    }
+    else
     {
         xStream = getRawData();
 
@@ -538,6 +546,11 @@ bool ZipPackageStream::saveChild(
                 {
                     // this is the correct original size
                     m_nOwnStreamOrigSize = xSeek->getLength();
+                }
+
+                if (pTempEntry->nSize == -1)
+                {   // this is needed in writeLOC to detect Zip64
+                    pTempEntry->nSize = xSeek->getLength();
                 }
 
                 xSeek->seek ( 0 );
@@ -741,7 +754,7 @@ bool ZipPackageStream::saveChild(
         {
             pTempEntry->nMethod = DEFLATED;
             pTempEntry->nCrc = -1;
-            pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
+            pTempEntry->nCompressedSize = -1;
         }
 
         uno::Reference< io::XSeekable > xSeek(xStream, uno::UNO_QUERY);
