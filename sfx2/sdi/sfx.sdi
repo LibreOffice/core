@@ -2797,6 +2797,25 @@ SfxVoidItem NewWindow SID_NEWWINDOW
 ]
 
 
+SfxVoidItem ObjectBrowser SID_BASICIDE_OBJECT_BROWSER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Macro;
+]
+
+
 SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
 ()
 [

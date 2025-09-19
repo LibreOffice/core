@@ -1200,8 +1200,9 @@ SbxItemType DialogWindow::GetSbxType () const
 // DialogWindowLayout
 
 
-DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
+DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectBrowser& rObjectBrowser_, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
+    rObjectBrowser(rObjectBrowser_),
     rObjectCatalog(rObjectCatalog_),
     pPropertyBrowser(nullptr)
 {
@@ -1260,6 +1261,10 @@ void DialogWindowLayout::UpdatePropertyBrowser ()
 void DialogWindowLayout::Activating (BaseWindow& rChild)
 {
     assert(dynamic_cast<DialogWindow*>(&rChild));
+    rObjectBrowser.Show();
+    rObjectBrowser.SetLayoutWindow(this);
+    rObjectBrowser.RefreshUI();
+
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
     rObjectCatalog.Show();
@@ -1271,6 +1276,7 @@ void DialogWindowLayout::Activating (BaseWindow& rChild)
 void DialogWindowLayout::Deactivating ()
 {
     Layout::Deactivating();
+    rObjectBrowser.Hide();
     rObjectCatalog.Hide();
     if (pPropertyBrowser)
         pPropertyBrowser->Hide();
@@ -1310,6 +1316,7 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
 
 void DialogWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const nHeight)
 {
+    AddToLeft(&rObjectBrowser, Size(nWidth * 0.25, nHeight * 0.35));
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.25, nHeight * 0.35));
     if (pPropertyBrowser)
         AddPropertyBrowser();

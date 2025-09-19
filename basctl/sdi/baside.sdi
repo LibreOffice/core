@@ -242,6 +242,12 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_BASICIDE_OBJECT_BROWSER
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
     SID_BASICIDE_OBJCAT
     [
         ExecMethod  = ExecuteGlobal;

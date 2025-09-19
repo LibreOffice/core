@@ -170,6 +170,7 @@ Shell::Shell( SfxViewFrame& rFrame_, SfxViewShell* /* pOldShell */ ) :
     aHScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame().GetWindow(), true) ),
     aVScrollBar( VclPtr<ScrollAdaptor>::Create(&GetViewFrame().GetWindow(), false) ),
     pLayout(nullptr),
+    aObjectBrowser(VclPtr<ObjectBrowser>::Create(*this, &GetViewFrame().GetWindow())),
     aObjectCatalog(VclPtr<ObjectCatalog>::Create(&GetViewFrame().GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
@@ -214,6 +215,11 @@ void Shell::Init()
     InitTabBar();
     InitZoomLevel();
 
+    // Initialize the visibility of the Object Browser
+    bool bObjBrowserVisible = ::officecfg::Office::BasicIDE::EditorSettings::ObjectBrowser::get();
+    if (!bObjBrowserVisible)
+        aObjectBrowser->Show(bObjBrowserVisible);
+
     // Initialize the visibility of the Object Catalog
     bool bObjCatVisible = ::officecfg::Office::BasicIDE::EditorSettings::ObjectCatalog::get();
     if (!bObjCatVisible)
@@ -248,6 +254,7 @@ Shell::~Shell()
     SetWindow( nullptr );
     SetCurWindow( nullptr );
 
+    aObjectBrowser.disposeAndClear();
     aObjectCatalog.disposeAndClear();
     aVScrollBar.disposeAndClear();
     aHScrollBar.disposeAndClear();
@@ -529,6 +536,10 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if (rHint.GetId() == SfxHintId::Dying)
     {
         EndListening( rBC, true /* log off all */ );
+
+        if (aObjectBrowser)
+            aObjectBrowser->RefreshUI(/*bForceKeepUno=*/true);
+
         aObjectCatalog->UpdateEntries();
     }
 
@@ -862,6 +873,7 @@ void Shell::InvalidateBasicIDESlots()
     pBindings->Invalidate( SID_SIGNATURE );
     pBindings->Invalidate( SID_BASICIDE_CHOOSEMACRO );
     pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+    pBindings->Invalidate( SID_BASICIDE_OBJECT_BROWSER );
     pBindings->Invalidate( SID_BASICIDE_OBJCAT );
     pBindings->Invalidate( SID_BASICSTOP );
     pBindings->Invalidate( SID_BASICRUN );
@@ -981,6 +993,14 @@ void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, const OUS
 
     m_pCurLocalizationMgr = std::make_shared<LocalizationMgr>(this, rDocument, aLibName, xStringResourceManager);
     m_pCurLocalizationMgr->handleTranslationbar();
+}
+
+void Shell::UpdateObjectBrowser()
+{
+    if (aObjectBrowser)
+    {
+        aObjectBrowser->RefreshUI();
+    }
 }
 
 } // namespace basctl

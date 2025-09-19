@@ -165,7 +165,7 @@ VclPtr<ModulWindow> Shell::CreateBasWin( const ScriptDocument& rDocument, const 
             {
                 // new module window
                 if (!pModulLayout)
-                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame().GetWindow(), *aObjectCatalog));
+                    pModulLayout.reset(VclPtr<ModulWindowLayout>::Create(&GetViewFrame().GetWindow(), *aObjectBrowser, *aObjectCatalog));
                 pWin = VclPtr<ModulWindow>::Create(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }

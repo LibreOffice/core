@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="basctl">
+  <requires lib="gtk+" version="3.20"/><!--actual version="3.24"-->
+  <object class="GtkTreeStore" id="LeftTreeStore">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="RightMembersStore">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+    <object class="GtkBox" id="ObjectBrowser">
+    <property name="name">ObjectBrowser</property>
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <!-- Search Bar Container -->
+    <child>
+      <object class="GtkBox" id="SearchBoxContainer">
+        <property name="name">SearchBoxContainer</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <!-- Search Entry -->
+        <child>
+          <object class="GtkEntry" id="FilterBox">
+            <property name="name">FilterBox</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="placeholder-text" translatable="yes" context="objectbrowser|FilterBox">Search objects and members...</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <!-- Clear Button -->
+        <child>
+          <object class="GtkButton" id="ClearSearchButton">
+            <property name="label" translatable="yes" context="objectbrowser|ClearSearchButton">✕</property>
+            <property name="name">ClearSearchButton</property>
+            <property name="visible">False</property> <!-- Initially hidden -->
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes" context="objectbrowser|ClearSearchButton">Clear Search</property>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <!-- Controls Row -->
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">6</property>
+        <!-- Label -->
+        <child>
+          <object class="GtkLabel" id="ScopeSelectorLabel">
+            <property name="name">ScopeSelectorLabel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="objectbrowser|ScopeSelectorLabel">Scope:</property>
+            <accessibility>
+              <relation type="label-for" target="ScopeSelector"/>
+            </accessibility>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <!-- ComboBox -->
+        <child>
+          <object class="GtkComboBoxText" id="ScopeSelector">
+            <property name="name">ScopeSelector</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <accessibility>
+              <relation type="labelled-by" target="ScopeSelectorLabel"/>
+            </accessibility>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <!-- Spacer to push buttons to the right -->
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <!-- Back Button -->
+        <child>
+          <object class="GtkButton" id="BackButton">
+            <property name="label" translatable="yes" context="objectbrowser|BackButton">◀</property>
+            <property name="name">BackButton</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes" context="objectbrowser|BackButtonTip">Back in Navigation History</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <!-- Forward Button -->
+        <child>
+          <object class="GtkButton" id="ForwardButton">
+            <property name="label" translatable="yes" context="objectbrowser|ForwardButton">▶</property>
+            <property name="name">ForwardButton</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes" context="objectbrowser|ForwardButtonTip">Forward in Navigation History</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <!-- Main Content Area -->
+    <child>
+      <object class="GtkPaned" id="MainVerticalSplitter">
+        <property name="name">MainVerticalSplitter</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="vexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="position">400</property>
+        <property name="position-set">True</property>
+        <child>
+          <object class="GtkPaned" id="MainHorizontalSplitter">
+            <property name="name">MainHorizontalSplitter</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="position">320</property>
+            <property name="position-set">True</property>
+            <child>
+              <object class="GtkBox" id="LeftPaneContainer">
+                <property name="name">LeftPaneContainer</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="LeftPaneLabel">
+                    <property name="name">LeftPaneLabel</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="objectbrowser|LeftPaneLabel">Objects</property>
+                    <accessibility>
+                      <relation type="label-for" target="LeftTreeView"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="LeftScroller">
+                    <property name="name">LeftTreeWindow</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="LeftTreeView">
+                        <property name="name">LeftTreeView</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="model">LeftTreeStore</property>
+                        <property name="headers-visible">False</property>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="LeftTreeColumn">
+                            <property name="title" translatable="yes" context="ObjectBrowserPanel">Objects</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="LeftTreeCellRenderer"/>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="LeftPaneLabel"/>
+                        </accessibility>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="RightPaneContainer">
+                <property name="name">RightPaneContainer</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="RightPaneHeaderLabel">
+                    <property name="name">RightPaneHeaderLabel</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes" context="objectbrowser|RightPaneHeaderLabel">Members</property>
+                    <accessibility>
+                      <relation type="label-for" target="RightMembersView"/>
+                    </accessibility>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="RightScroller">
+                    <property name="name">RightMembersWindow</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTreeView" id="RightMembersView">
+                        <property name="name">RightMembersView</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="model">RightMembersStore</property>
+                        <property name="headers-visible">False</property>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="RightTreeColumn">
+                            <property name="title" translatable="yes" context="ObjectBrowserMembers">Members</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="RightTreeCellRenderer"/>
+                            </child>
+                          </object>
+                        </child>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="RightPaneHeaderLabel"/>
+                        </accessibility>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">True</property>
+            <property name="shrink">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="DetailPaneContainer">
+            <property name="name">DetailPaneContainer</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="DetailPaneLabel">
+                <property name="name">DetailPaneLabel</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes" context="objectbrowser|DetailPaneLabel">Details</property>
+                <accessibility>
+                  <relation type="label-for" target="DetailPane"/>
+                </accessibility>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="DetailScroller">
+                <property name="height-request">100</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView" id="DetailPane">
+                    <property name="name">DetailPane</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="wrap-mode">word</property>
+                    <property name="cursor-visible">False</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="DetailPaneLabel"/>
+                    </accessibility>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="resize">False</property>
+            <property name="shrink">True</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <!-- Status Bar -->
+    <child>
+      <object class="GtkStatusbar" id="StatusBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkLabel" id="StatusLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="objectbrowser|StatusLabel">Ready</property>
+            <property name="halign">start</property>
+            <property name="hexpand">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+  </object>
+</interface>
+

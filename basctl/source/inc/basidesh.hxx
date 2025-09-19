@@ -20,6 +20,7 @@
 
 #include "doceventnotifier.hxx"
 #include <basctl/sbxitem.hxx>
+#include "objectbrowser.hxx"
 #include "ObjectCatalog.hxx"
 
 #include <sfx2/viewsh.hxx>
@@ -85,7 +86,8 @@ private:
     VclPtr<ModulWindowLayout>   pModulLayout;
     VclPtr<DialogWindowLayout>  pDialogLayout;
     VclPtr<Layout>              pLayout;    // the active layout window
-    // common object catalog window
+    // common object browser & catalog window
+    VclPtr<ObjectBrowser>       aObjectBrowser;
     VclPtr<ObjectCatalog>       aObjectCatalog;
 
     bool    m_bAppBasicModified;
@@ -216,6 +218,8 @@ public:
 
     virtual css::uno::Reference< css::frame::XModel >
                         GetCurrentDocument() const override;
+
+    void UpdateObjectBrowser();
 
     void UpdateObjectCatalog () { aObjectCatalog->UpdateEntries(); }
 

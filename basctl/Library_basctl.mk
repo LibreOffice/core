@@ -108,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,basctl,\
 	basctl/source/basicide/BasicColorConfig \
 	basctl/source/basicide/ColorSchemeDialog \
 	basctl/source/basicide/objectbrowser \
+	basctl/source/basicide/objectbrowsersearch \
 	basctl/source/basicide/ObjectCatalog \
 	basctl/source/basicide/sbxitem \
 	basctl/source/basicide/scriptdocument \

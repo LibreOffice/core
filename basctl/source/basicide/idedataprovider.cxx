@@ -8,12 +8,20 @@
  */
 
 #include <idedataprovider.hxx>
+#include <vcl/svapp.hxx>
 
 namespace basctl
 {
 IdeDataProvider::IdeDataProvider() {}
 
 IdeDataProvider::~IdeDataProvider() = default;
+
+void IdeDataProvider::AsyncInitialize(const Link<void*, void>& rFinishCallback)
+{
+    Application::PostUserEvent(rFinishCallback);
+}
+
+bool IdeDataProvider::IsInitialized() const { return m_bInitialized; }
 
 } // namespace basctl
 

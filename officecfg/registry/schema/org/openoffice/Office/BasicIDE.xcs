@@ -192,6 +192,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ObjectBrowser" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Sets the visibility of the Object Browser window.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="ObjectCatalog" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Sets the visibility of the Object Catalog window.</desc>

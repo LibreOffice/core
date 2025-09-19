@@ -51,6 +51,7 @@ namespace com::sun::star::beans { class XMultiPropertySet; }
 namespace basctl
 {
 
+class ObjectBrowser;
 class ObjectCatalog;
 class CodeCompleteWindow;
 class ModulWindowLayout;
@@ -406,9 +407,12 @@ public:
 class ModulWindowLayout: public Layout
 {
 public:
-    ModulWindowLayout (vcl::Window* pParent, ObjectCatalog&);
+    ModulWindowLayout (vcl::Window* pParent, ObjectBrowser&, ObjectCatalog&);
     virtual ~ModulWindowLayout() override;
     virtual void dispose() override;
+
+    ModulWindowLayout(const ModulWindowLayout&) = delete;
+    ModulWindowLayout& operator=(const ModulWindowLayout&) = delete;
 public:
     // Layout:
     virtual void Activating (BaseWindow&) override;
@@ -440,6 +444,7 @@ private:
     // dockable windows
     VclPtr<WatchWindow> aWatchWindow;
     VclPtr<StackWindow> aStackWindow;
+    ObjectBrowser& rObjectBrowser;
     ObjectCatalog& rObjectCatalog;
     // Active color scheme ID
     OUString m_sColorSchemeId;

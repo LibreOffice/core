@@ -260,6 +260,9 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
         rDocument.setDocumentModified();
     }
 
+    if (pShell)
+        pShell->UpdateObjectBrowser();
+
     // tdf#130161 in all cases call UpdateObjectCatalog
     if (pShell)
         pShell->UpdateObjectCatalog();

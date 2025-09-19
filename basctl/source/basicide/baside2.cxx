@@ -22,6 +22,7 @@
 #include <basobj.hxx>
 #include <basidesh.hxx>
 #include "brkdlg.hxx"
+#include "idetimer.hxx"
 #include <iderdll.hxx>
 #include <iderid.hxx>
 #include "moduldlg.hxx"
@@ -1464,11 +1465,12 @@ void ModulWindow::SetEditorColorScheme(const OUString& rColorScheme)
         rEditWindow.UpdateSyntaxHighlighting();
 }
 
-ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
+ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectBrowser& rObjectBrowser_, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(nullptr),
     aWatchWindow(VclPtr<WatchWindow>::Create(this)),
     aStackWindow(VclPtr<StackWindow>::Create(this)),
+    rObjectBrowser(rObjectBrowser_),
     rObjectCatalog(rObjectCatalog_)
 {
     // Get active color scheme from the registry
@@ -1516,6 +1518,10 @@ void ModulWindowLayout::Activating (BaseWindow& rChild)
     pChild = &static_cast<ModulWindow&>(rChild);
     aWatchWindow->Show();
     aStackWindow->Show();
+    IdeTimer aTimer(u"Shell::BASIDE2::ModulWindowLayout::Activating::ShowObjectBrowser\n"_ustr);
+    rObjectBrowser.Show();
+    rObjectBrowser.SetLayoutWindow(this);
+    rObjectBrowser.RefreshUI();
     rObjectCatalog.Show();
     rObjectCatalog.SetLayoutWindow(this);
     rObjectCatalog.UpdateEntries();
@@ -1530,6 +1536,7 @@ void ModulWindowLayout::Deactivating ()
     Layout::Deactivating();
     aWatchWindow->Hide();
     aStackWindow->Hide();
+    rObjectBrowser.Hide();
     rObjectCatalog.Hide();
     pChild = nullptr;
 }
@@ -1572,7 +1579,8 @@ void ModulWindowLayout::ShowStackWindow(bool bVisible)
 
 void ModulWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const nHeight)
 {
-    AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
+    AddToLeft(&rObjectBrowser, Size(nWidth * 0.25, nHeight * 0.375));
+    AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.375));
     AddToBottom(aWatchWindow.get(), Size(nWidth * 0.67, nHeight * 0.25));
     AddToBottom(aStackWindow.get(), Size(nWidth * 0.33, nHeight * 0.25));
 }

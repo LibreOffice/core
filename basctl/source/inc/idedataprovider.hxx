@@ -9,8 +9,10 @@
 
 #pragma once
 
-#include <memory>
 #include <basctl/idecodecompletiontypes.hxx>
+
+#include <memory>
+#include <tools/link.hxx>
 
 namespace basctl
 {
@@ -18,6 +20,8 @@ class IdeDataProviderInterface
 {
 public:
     virtual ~IdeDataProviderInterface() = default;
+    virtual void AsyncInitialize(const Link<void*, void>& rFinishCallback) = 0;
+    virtual bool IsInitialized() const = 0;
 };
 
 class IdeDataProvider : public IdeDataProviderInterface
@@ -25,6 +29,11 @@ class IdeDataProvider : public IdeDataProviderInterface
 public:
     IdeDataProvider();
     ~IdeDataProvider() override;
+    void AsyncInitialize(const Link<void*, void>& rFinishCallback) override;
+    bool IsInitialized() const override;
+
+private:
+    bool m_bInitialized = false;
 };
 
 } // namespace basctl

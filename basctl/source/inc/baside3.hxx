@@ -36,6 +36,7 @@ class DlgEdPage;
 class DlgEdView;
 
 class DialogWindowLayout;
+class ObjectBrowser;
 class ObjectCatalog;
 
 bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const OUString& rLibName);
@@ -112,9 +113,12 @@ public:
 class DialogWindowLayout : public Layout
 {
 public:
-    DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
+    DialogWindowLayout (vcl::Window* pParent, ObjectBrowser&, ObjectCatalog&);
     virtual ~DialogWindowLayout() override;
     virtual void dispose() override;
+
+    DialogWindowLayout(const DialogWindowLayout&) = delete;
+    DialogWindowLayout& operator=(const DialogWindowLayout&) = delete;
 public:
     void ShowPropertyBrowser ();
     void UpdatePropertyBrowser ();
@@ -132,7 +136,8 @@ protected:
 
 private:
     // dockable windows:
-    // object catalog (owned by Shell)
+    // object browser & catalog (owned by Shell)
+    ObjectBrowser& rObjectBrowser;
     ObjectCatalog& rObjectCatalog;
     // property browser (created by this, deleted by toolkit)
     VclPtr<PropBrw> pPropertyBrowser;

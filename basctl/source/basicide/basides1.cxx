@@ -422,6 +422,23 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         }
         break;
 
+        case SID_BASICIDE_OBJECT_BROWSER:
+        {
+            bool bIsNowVisible = !aObjectBrowser->IsVisible();
+            aObjectBrowser->Show(bIsNowVisible);
+
+            if (pLayout)
+                pLayout->ArrangeWindows();
+
+            if (SfxBindings* pBindings = GetBindingsPtr())
+                pBindings->Invalidate(SID_BASICIDE_OBJECT_BROWSER);
+
+            auto pChanges = comphelper::ConfigurationChanges::create();
+            officecfg::Office::BasicIDE::EditorSettings::ObjectBrowser::set(bIsNowVisible, pChanges);
+            pChanges->commit();
+        }
+        break;
+
         case SID_BASICIDE_OBJCAT:
         {
             // Toggle the visibility of the object catalog
@@ -956,6 +973,15 @@ void Shell::GetState(SfxItemSet &rSet)
             {
                 if ( StarBASIC::IsRunning() )
                     rSet.DisableItem( nWh );
+            }
+            break;
+
+            case SID_BASICIDE_OBJECT_BROWSER:
+            {
+                if (pLayout)
+                    rSet.Put(SfxBoolItem(nWh, aObjectBrowser->IsVisible()));
+                else
+                    rSet.Put(SfxVisibilityItem(nWh, false));
             }
             break;
 
