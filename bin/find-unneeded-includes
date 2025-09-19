@@ -104,6 +104,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         "rtl/byteseq.hxx": "rtl/byteseq.h",
         "typelib/typedescription.hxx": "typelib/typedescription.h",
         "cppuhelper/interfacecontainer.hxx": "cppuhelper/interfacecontainer.h",
+        "osl/file.hxx": "osl/file.h",
         "osl/module.hxx": "osl/module.h",
         "osl/thread.hxx": "osl/thread.h"
     }

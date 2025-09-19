@@ -14,8 +14,6 @@ excludelist:
     - com/sun/star/container/XIndexAccess.hpp
     - cppuhelper/weakref.hxx
     pyuno/source/loader/pyuno_loader.cxx:
-    # Don't replace with URE impl. detail
-    - osl/file.hxx
     # Needed for direct member access
     - com/sun/star/uno/XComponentContext.hpp
     # Needed on WIN32
