@@ -26,8 +26,14 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 #include <comphelper/random.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/stream.hxx>
@@ -40,10 +46,14 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+
 #include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <set>
 #include <string_view>
+#include <sot/formats.hxx>
+#include <vcl/transfer.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
 
@@ -142,6 +152,9 @@ private:
     // Handler for click on save
     DECL_LINK(saveButtonHandler, weld::Button&, void);
 
+    // Handler for click on copy
+    DECL_LINK(copyButtonHandler, weld::Button&, void);
+
     // helper methods
     weld::ScreenShotEntry* CheckHit(const basegfx::B2IPoint& rPosition);
     void PaintScreenShotEntry(
@@ -178,6 +191,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxPicture;
     std::unique_ptr<weld::TextView> mxText;
     std::unique_ptr<weld::Button> mxSave;
+    std::unique_ptr<weld::Button> mxCopy;
 
     // save as text
     OUString                    maSaveAsText;
@@ -190,6 +204,39 @@ public:
     bool MouseMove(const MouseEvent& rMouseEvent);
     bool MouseButtonUp();
 };
+namespace
+{
+class BitmapTransferable : public TransferableHelper
+{
+private:
+    Bitmap maBitmap;
+
+protected:
+    // Add supported formats for the Bitmap
+    virtual void AddSupportedFormats() override
+    {
+        AddFormat(SotClipboardFormatId::BITMAP);
+    }
+    // Provide the Bitmap data for the requested DataFlavor
+    virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor, const OUString& ) override
+    {
+        if (SotExchange::GetFormat(rFlavor) == SotClipboardFormatId::BITMAP)
+        {
+            SetBitmap(maBitmap, rFlavor);
+            return true;
+        }
+        return false;
+    }
+
+public:
+    // Constructor to initialize the Bitmap
+    explicit BitmapTransferable(const Bitmap& rBitmap)
+        : maBitmap(rBitmap)
+    {
+    }
+};
+}
+
 
 OUString ScreenshotAnnotationDlg_Impl::maLastFolderURL = OUString();
 
@@ -221,6 +268,9 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     assert(mxText);
     mxSave = rParentBuilder.weld_button(u"save"_ustr);
     assert(mxSave);
+    mxCopy = rParentBuilder.weld_button(u"copy"_ustr);
+    assert(mxCopy);
+
 
     // set screenshot image at DrawingArea, resize, set event listener
     if (mxPicture)
@@ -237,7 +287,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
         mxVirtualBufferDevice->SetFillColor(COL_TRANSPARENT);
 
         // initially set image for picture control
-        mxVirtualBufferDevice->DrawBitmapEx(Point(0, 0), maDimmedDialogBitmap);
+        mxVirtualBufferDevice->DrawBitmap(Point(0, 0), maDimmedDialogBitmap);
 
         // set size for picture control, this will re-layout so that
         // the picture control shows the whole dialog
@@ -264,11 +314,40 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     {
         mxSave->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, saveButtonHandler));
     }
+    if(mxCopy)
+    {
+        mxCopy->connect_clicked(LINK(this, ScreenshotAnnotationDlg_Impl, copyButtonHandler));
+    }
 }
 
 ScreenshotAnnotationDlg_Impl::~ScreenshotAnnotationDlg_Impl()
 {
     mxVirtualBufferDevice.disposeAndClear();
+}
+
+IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, copyButtonHandler, weld::Button&, void)
+{
+    // Repaint the buffer to get the latest Bitmap
+    RepaintToBuffer();
+
+    // Extract the Bitmap
+    const Bitmap aTargetBitmap(
+        mxVirtualBufferDevice->GetBitmap(
+            Point(0, 0),
+            mxVirtualBufferDevice->GetOutputSizePixel()));
+
+    // Create a BitmapTransferable
+    rtl::Reference<TransferableHelper> xClipCntnr = new BitmapTransferable(aTargetBitmap);
+    // Get the system clipboard
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        css::datatransfer::clipboard::SystemClipboard::create(
+            comphelper::getProcessComponentContext());
+
+    if (xClipboard.is())
+    {
+        // Copy the BitmapTransferable to the clipboard
+        xClipboard->setContents(xClipCntnr, nullptr);
+    }
 }
 
 IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, void)
@@ -433,7 +512,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         return;
 
     // reset with original screenshot bitmap
-    mxVirtualBufferDevice->DrawBitmapEx(
+    mxVirtualBufferDevice->DrawBitmap(
         Point(0, 0),
         bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
 
