@@ -2205,7 +2205,12 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
             nBreakPos = nMaxBreakPos;
             // I18N nextCharacters !
             if ( nBreakPos <= rLine.GetStart() )
-                nBreakPos = rLine.GetStart() + 1;  // Otherwise infinite loop!
+            {
+                // Move to next character, otherwise infinite loop!
+                nBreakPos = rLine.GetStart();
+                // Use iterateCodePoints to avoid splitting surrogate-pairs
+                pNode->GetString().iterateCodePoints(&nBreakPos, 1);
+            }
         }
     }
 
