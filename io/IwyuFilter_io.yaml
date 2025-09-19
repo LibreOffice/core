@@ -5,5 +5,3 @@ excludelist:
     # Base class needs full type
     - com/sun/star/connection/XConnection.hpp
     - com/sun/star/connection/XConnectionBroadcaster.hpp
-    # Don't replace with impl. detail
-    - osl/pipe.hxx

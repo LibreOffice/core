@@ -106,6 +106,8 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         "cppuhelper/interfacecontainer.hxx": "cppuhelper/interfacecontainer.h",
         "osl/file.hxx": "osl/file.h",
         "osl/module.hxx": "osl/module.h",
+        "osl/pipe.hxx": "osl/pipe.h",
+        "osl/pipe.hxx": "osl/pipe_decl.hxx",
         "osl/socket.hxx": "osl/socket.h",
         "osl/socket.hxx": "osl/socket_decl.hxx",
         "osl/thread.hxx": "osl/thread.h"
