@@ -61,11 +61,14 @@ struct SwMDImageInfo
 {
     OUString aURL;
     OUString aTitle;
+    OUString aDescription;
     OUString aLink;
 
-    SwMDImageInfo(const OUString& rURL, const OUString& rTitle, const OUString& rLink)
+    SwMDImageInfo(const OUString& rURL, const OUString& rTitle, const OUString& rDescription,
+                  const OUString& rLink)
         : aURL(rURL)
         , aTitle(rTitle)
+        , aDescription(rDescription)
         , aLink(rLink)
     {
     }
@@ -76,9 +79,13 @@ struct SwMDImageInfo
             return true;
         if (rOther.aURL < aURL)
             return false;
-        if (aLink < rOther.aLink)
+        if (aTitle < rOther.aTitle)
             return true;
-        if (rOther.aLink < aLink)
+        if (rOther.aTitle < aTitle)
+            return false;
+        if (aDescription < rOther.aDescription)
+            return true;
+        if (rOther.aDescription < aDescription)
             return false;
         return aLink < rOther.aLink;
     }
@@ -196,7 +203,8 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
         {
             // Inline image.
             const SwFormatFlyCnt& rFormatFlyCnt = rItem.StaticWhichCast(RES_TXTATR_FLYCNT);
-            const SwFrameFormat& rFrameFormat = *rFormatFlyCnt.GetFrameFormat();
+            const auto& rFrameFormat
+                = static_cast<const SwFlyFrameFormat&>(*rFormatFlyCnt.GetFrameFormat());
             const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
             SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
             SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
@@ -215,14 +223,15 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
             {
                 aGraphicURL = URIHelper::simpleNormalizedMakeRelative(rBaseURL, aGraphicURL);
             }
-            OUString aTitle = pGrfNode->GetTitle();
+            OUString aTitle = rFrameFormat.GetObjTitle();
+            OUString aDescription = rFrameFormat.GetObjDescription();
             OUString aLink;
             if (rFrameFormat.GetAttrSet().HasItem(RES_URL))
             {
                 const SwFormatURL& rLink = rFrameFormat.GetURL();
                 aLink = rLink.GetURL();
             }
-            rChange.aImages.emplace(aGraphicURL, aTitle, aLink);
+            rChange.aImages.emplace(aGraphicURL, aTitle, aDescription, aLink);
             break;
         }
     }
@@ -389,9 +398,17 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
         }
 
         rWrt.Strm().WriteUnicodeOrByteText(u"![");
-        OutEscapedChars(rWrt, rImageInfo.aTitle);
+        OutEscapedChars(rWrt, rImageInfo.aDescription);
         rWrt.Strm().WriteUnicodeOrByteText(u"](");
         rWrt.Strm().WriteUnicodeOrByteText(rImageInfo.aURL);
+
+        if (!rImageInfo.aTitle.isEmpty())
+        {
+            rWrt.Strm().WriteUnicodeOrByteText(u" \"");
+            OutEscapedChars(rWrt, rImageInfo.aTitle);
+            rWrt.Strm().WriteUnicodeOrByteText(u"\"");
+        }
+
         rWrt.Strm().WriteUnicodeOrByteText(u")");
 
         if (!rImageInfo.aLink.isEmpty())
