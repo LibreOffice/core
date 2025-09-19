@@ -20,6 +20,7 @@
 #include <svdpdf.hxx>
 
 #include <tools/UnitConversion.hxx>
+#include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 

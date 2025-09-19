@@ -323,6 +323,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/formpdfexport \
     vcl/source/gdi/cvtgrf \
     vcl/source/gdi/embeddedfontsmanager \
+    vcl/source/gdi/embeddedfontsafdko \
     vcl/source/gdi/FileDefinitionWidgetDraw \
     vcl/source/gdi/WidgetDefinitionReader \
     vcl/source/gdi/WidgetDefinition \
@@ -722,6 +723,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
         freetype \
     ) \
     $(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
+    $(if $(filter AFDKO,$(BUILD_TYPE)),afdko libxml2) \
 ))
 
 $(eval $(call gb_Library_add_libs,vcl,\
