@@ -24,7 +24,6 @@ import com.sun.star.configuration.theDefaultProvider;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.ui.XAcceleratorConfiguration;
@@ -56,8 +55,6 @@ public class AcceleratorsConfigurationTest
     private XMultiServiceFactory m_xSmgr = null;
     /** the accelerator configuration for testing. */
     private XAcceleratorConfiguration m_xGlobalAccelCfg = null;
-    private XAcceleratorConfiguration m_xModuleAccelCfg = null;
-    private XAcceleratorConfiguration m_xDocumentAccelCfg = null;
     /** XCS/XCU based accelerator configuration. */
     private XNameAccess m_xPrimaryKeys = null;
     private XNameAccess m_xSecondaryKeys = null;
@@ -75,8 +72,6 @@ public class AcceleratorsConfigurationTest
         m_xSmgr = getMSF();
 
         m_xGlobalAccelCfg = UnoRuntime.queryInterface(XAcceleratorConfiguration.class, m_xSmgr.createInstance("com.sun.star.ui.GlobalAcceleratorConfiguration"));
-        m_xModuleAccelCfg = UnoRuntime.queryInterface(XAcceleratorConfiguration.class, m_xSmgr.createInstance("com.sun.star.ui.ModuleAcceleratorConfiguration"));
-        m_xDocumentAccelCfg = UnoRuntime.queryInterface(XAcceleratorConfiguration.class, m_xSmgr.createInstance("com.sun.star.ui.DocumentAcceleratorConfiguration"));
 
         String sConfigPath = "org.openoffice.Office.Accelerators";
         boolean bReadOnly = false;
@@ -96,8 +91,6 @@ public class AcceleratorsConfigurationTest
             throws java.lang.Exception
     {
         m_xGlobalAccelCfg = null;
-        m_xModuleAccelCfg = null;
-        m_xDocumentAccelCfg = null;
         m_xSmgr = null;
     }
 
@@ -164,16 +157,10 @@ public class AcceleratorsConfigurationTest
         {
             System.out.println("\n---- check accelerator configuration depending module: " + sModules[i] + " ----");
 
-            PropertyValue[] aProp = new PropertyValue[2];
-            aProp[0] = new PropertyValue();
-            aProp[0].Name = "ModuleIdentifier";
-            aProp[0].Value = sModules[i];
-            aProp[1] = new PropertyValue();
-            aProp[1].Name = "Locale";
-            aProp[1].Value = "en-US";
-
-            XInitialization xInit = UnoRuntime.queryInterface(XInitialization.class, m_xModuleAccelCfg);
-            xInit.initialize(aProp); // to fill cache
+            XAcceleratorConfiguration xModuleAccelCfg
+                = UnoRuntime.queryInterface(XAcceleratorConfiguration.class,
+                                            m_xSmgr.createInstanceWithArguments("com.sun.star.ui.ModuleAcceleratorConfiguration",
+                                                                                new String[] { sModules[i] }));
 
             XNameAccess xPrimaryModules = UnoRuntime.queryInterface(XNameAccess.class, m_xPrimaryKeys.getByName("Modules"));
             XNameAccess xSecondaryModules = UnoRuntime.queryInterface(XNameAccess.class, m_xSecondaryKeys.getByName("Modules"));
@@ -211,7 +198,7 @@ public class AcceleratorsConfigurationTest
                             "A_MOD1"
                         };
             }
-            impl_checkGetKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, sKeys);
+            impl_checkGetKeyCommands(xModuleAccelCfg, xPrimaryAccess, sKeys);
 
 
             String[] sCommands;
@@ -259,7 +246,7 @@ public class AcceleratorsConfigurationTest
                             ".uno:test"
                         };
             }
-            impl_checkSetKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys, sCommands);
+            impl_checkSetKeyCommands(xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys, sCommands);
 
 
             if (sModules[i].equals("com.sun.star.presentation.PresentationDocument"))
@@ -290,7 +277,7 @@ public class AcceleratorsConfigurationTest
                             "C_MOD1"
                         };
             }
-            impl_checkRemoveKeyCommands(m_xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys);
+            impl_checkRemoveKeyCommands(xModuleAccelCfg, xPrimaryAccess, xSecondaryAccess, sKeys);
 
 
             String[] sCommandList;
@@ -322,7 +309,7 @@ public class AcceleratorsConfigurationTest
                             ".uno:Cut"
                         };
             }
-            impl_checkGetPreferredKeyEventsForCommandList(m_xModuleAccelCfg, xPrimaryAccess, sCommandList);
+            impl_checkGetPreferredKeyEventsForCommandList(xModuleAccelCfg, xPrimaryAccess, sCommandList);
         }
     }
 
@@ -569,19 +556,15 @@ public class AcceleratorsConfigurationTest
 
         XStorage xUIConfig = xRootStorage.openStorageElement("Configurations2", com.sun.star.embed.ElementModes.READ);
 
-        PropertyValue aProp = new PropertyValue();
-        aProp.Name = "DocumentRoot";
-        aProp.Value = xUIConfig;
-        Object[] lArgs = new Object[1];
-        lArgs[0] = aProp;
-
-        XInitialization xInit = UnoRuntime.queryInterface(XInitialization.class, m_xDocumentAccelCfg);
-        xInit.initialize(lArgs);
+        XAcceleratorConfiguration xDocumentAccelCfg
+            = UnoRuntime.queryInterface(XAcceleratorConfiguration.class,
+                                        m_xSmgr.createInstanceWithArguments("com.sun.star.ui.DocumentAcceleratorConfiguration",
+                                                                            new Object[] { xUIConfig }));
 
         // TODO: throws css::container::NoSuchElementException
         try
         {
-            String test = m_xDocumentAccelCfg.getCommandByKeyEvent(convertShortcut2AWTKey("F2"));
+            String test = xDocumentAccelCfg.getCommandByKeyEvent(convertShortcut2AWTKey("F2"));
             System.out.println(test);
         }
         catch(com.sun.star.container.NoSuchElementException e)
