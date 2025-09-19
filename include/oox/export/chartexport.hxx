@@ -70,7 +70,8 @@ namespace core {
 }}
 
 namespace model {
-    struct FontOrStyleRef;
+    struct StyleRef;
+    struct FontRef;
     struct StyleEntry;
 }
 
@@ -296,8 +297,10 @@ private:
     // Functions for style file output
     void outputStyleEntry(::sax_fastparser::FSHelperPtr pFS,
             sal_Int32 nElTokenId, model::StyleEntry& aEntry);
-    void outputFontOrStyleRef(::sax_fastparser::FSHelperPtr pFS,
-            sal_Int32 nElTokenId, const model::FontOrStyleRef& aColor);
+    void outputStyleRef(::sax_fastparser::FSHelperPtr pFS,
+            sal_Int32 nElTokenId, const model::StyleRef& aColor);
+    void outputFontRef(::sax_fastparser::FSHelperPtr pFS,
+            sal_Int32 nElTokenId, const model::FontRef& aColor);
 
 public:
 

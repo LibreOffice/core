@@ -5973,11 +5973,30 @@ OUString ChartExport::getNumberFormatCode(sal_Int32 nKey) const
     return aCode;
 }
 
-// Create cs:CT_FontReference or cs:CT_StyleReference
-void ChartExport::outputFontOrStyleRef(FSHelperPtr pFS, sal_Int32 nElTokenId, const
-        model::FontOrStyleRef& aColor)
+// Create cs:CT_StyleReference
+void ChartExport::outputStyleRef(FSHelperPtr pFS, sal_Int32 nElTokenId,
+        const model::StyleRef& aColor)
 {
-    pFS->startElement(FSNS(XML_cs, nElTokenId), XML_idx, OUString::number(aColor.mnIdx));
+    pFS->startElement(FSNS(XML_cs, nElTokenId), XML_idx,
+            OUString::number(aColor.mnIdx));
+
+    ThemeExport aTE(mpFB, GetDocumentType(), pFS);
+    aTE.writeComplexColor(aColor.maComplexColor);
+
+    // Get the string for the StyleColorVal
+    OUString sV = aColor.getColorValStr();
+    if (!sV.isEmpty()) {
+        pFS->singleElement(FSNS(XML_cs, XML_styleClr), XML_val, sV);
+    }
+
+    pFS->endElement(FSNS(XML_cs, nElTokenId));
+}
+
+// Create cs:CT_FontReference
+void ChartExport::outputFontRef(FSHelperPtr pFS, sal_Int32 nElTokenId,
+        const model::FontRef& aColor)
+{
+    pFS->startElement(FSNS(XML_cs, nElTokenId), XML_idx, aColor.getFontCollectionStr());
 
     ThemeExport aTE(mpFB, GetDocumentType(), pFS);
     aTE.writeComplexColor(aColor.maComplexColor);
@@ -5997,15 +6016,15 @@ void ChartExport::outputStyleEntry(FSHelperPtr pFS, sal_Int32 nElTokenId, model:
     // Just default values for now
     pFS->startElement(FSNS(XML_cs, nElTokenId));
 
-    outputFontOrStyleRef(pFS, FSNS(XML_cs, XML_lnRef), *(aEntry.mxLnClr));
+    outputStyleRef(pFS, FSNS(XML_cs, XML_lnRef), *(aEntry.mxLnClr));
 
     pFS->startElement(FSNS(XML_cs, XML_lineWidthScale));
     pFS->write(aEntry.mfLineWidthScale);
     pFS->endElement(FSNS(XML_cs, XML_lineWidthScale));
 
-    outputFontOrStyleRef(pFS, FSNS(XML_cs, XML_fillRef), *(aEntry.mxFillClr));
-    outputFontOrStyleRef(pFS, FSNS(XML_cs, XML_effectRef), *(aEntry.mxEffectClr));
-    outputFontOrStyleRef(pFS, FSNS(XML_cs, XML_fontRef), *(aEntry.mxFontClr));
+    outputStyleRef(pFS, FSNS(XML_cs, XML_fillRef), *(aEntry.mxFillClr));
+    outputStyleRef(pFS, FSNS(XML_cs, XML_effectRef), *(aEntry.mxEffectClr));
+    outputFontRef(pFS, FSNS(XML_cs, XML_fontRef), *(aEntry.mxFontClr));
 
     if (aEntry.mxShapePr) {
         exportShapeProps(aEntry.mxShapePr->getShapeProperties().makePropertySet(), XML_cs);

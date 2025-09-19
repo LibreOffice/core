@@ -28,8 +28,8 @@ namespace oox::drawingml::chart
 // model for both.
 struct StyleEntryModel
 {
-    typedef ModelRef<model::FontOrStyleRef> StyleRef; // "idx" is ST_StyleMatrixColumnIndex
-    typedef ModelRef<model::FontOrStyleRef> FontRef; // "idx" is ST_FontCollectionIndex
+    typedef ModelRef<model::StyleRef> StyleRef; // "idx" is ST_StyleMatrixColumnIndex
+    typedef ModelRef<model::FontRef> FontRef; // "idx" is ST_FontCollectionIndex
     typedef ModelRef<TextCharacterProperties> TextCharacterPropsRef;
     typedef ModelRef<TextBodyProperties> TextBodyPropsRef;
     typedef ModelRef<Shape> ShapeRef;
