@@ -28,7 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedText : public Control
+class VCL_DLLPUBLIC FixedText : public Control
 {
 private:
     sal_Int32 m_nMaxWidthChars;

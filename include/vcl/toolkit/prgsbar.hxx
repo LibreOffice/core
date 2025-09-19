@@ -50,7 +50,7 @@
  ************************************************************************/
 
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ProgressBar final : public vcl::Window
+class VCL_DLLPUBLIC ProgressBar final : public vcl::Window
 {
 public:
     enum class BarStyle
