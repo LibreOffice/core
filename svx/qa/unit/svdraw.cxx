@@ -64,10 +64,13 @@ public:
     }
 
     void setUp() override;
+
+#if ENABLE_PDFIMPORT
     uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
     {
         return mxSecurityContext;
     }
+#endif
 
 protected:
     SdrPage* getFirstDrawPageWithAssert();
