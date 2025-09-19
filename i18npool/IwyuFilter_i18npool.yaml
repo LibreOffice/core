@@ -51,8 +51,6 @@ excludelist:
     # Base class needs complete type
     - com/sun/star/i18n/XLocaleData5.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    # Don't propose hxx -> h change in URE libs
-    - osl/module.hxx
     i18npool/inc/numberformatcode.hxx:
     # Base class needs complete type
     - com/sun/star/i18n/XNumberFormatCode.hpp
@@ -65,9 +63,6 @@ excludelist:
     # Base class needs complete type
     - com/sun/star/i18n/XExtendedTextConversion.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    i18npool/inc/textToPronounce_zh.hxx:
-    # Don't propose hxx -> h change in URE libs
-    - osl/module.hxx
     i18npool/inc/transliterationImpl.hxx:
     # Base class needs complete type
     - com/sun/star/i18n/XExtendedTransliteration.hpp

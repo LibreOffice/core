@@ -16,5 +16,3 @@ excludelist:
     jvmfwk/plugins/sunmajor/pluginlib/util.cxx:
     # Needed on MACOSX
     - config_folders.h
-    # Don't replace with URE impl. detail
-    - osl/module.hxx
