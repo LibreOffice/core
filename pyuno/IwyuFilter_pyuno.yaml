@@ -23,8 +23,6 @@ excludelist:
     pyuno/source/module/pyuno_module.cxx:
     # Needed on MACOSX
     - config_folders.h
-    # Don't replace with URE impl. detail
-    - rtl/bootstrap.hxx
     pyuno/source/module/pyuno_runtime.cxx:
     # Needed on MACOSX
     - config_folders.h

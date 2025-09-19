@@ -100,6 +100,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
         "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
         "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
         "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h",
+        "rtl/bootstrap.hxx": "rtl/bootstrap.h",
         "rtl/byteseq.hxx": "rtl/byteseq.h",
         "cppuhelper/interfacecontainer.hxx": "cppuhelper/interfacecontainer.h",
         "osl/thread.hxx": "osl/thread.h"
