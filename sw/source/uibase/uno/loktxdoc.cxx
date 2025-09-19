@@ -25,6 +25,7 @@
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/json_writer.hxx>
@@ -51,7 +52,9 @@
 #include <pagefrm.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -956,6 +959,7 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
     if (!filterArguments.empty() && !filterArguments.starts_with(u","))
         return; // not a correct filter
     sal_Int16 nContextLen = 200;
+    bool bPageNumbers = false;
     for (size_t paramPos = 1; paramPos < filterArguments.size();)
     {
         std::u16string_view param = o3tl::getToken(filterArguments, u',', paramPos);
@@ -968,11 +972,25 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
             if (!value.empty())
                 nContextLen = o3tl::toInt32(value);
         }
+        else if (token == u"startPageNumber")
+        {
+            bPageNumbers = value == u"true";
+        }
         // else unknown filter argument (maybe from a newer API?) - ignore
     }
 
     SwDoc& rDoc = *pDocShell->GetDoc();
     const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+    uno::Reference<text::XTextCursor> xTextViewCursor;
+    uno::Reference<text::XPageCursor> xTextPageCursor;
+    if (bPageNumbers)
+    {
+        if (auto xSupplier = pDocShell->GetController().query<text::XTextViewCursorSupplier>())
+        {
+            xTextViewCursor.set(xSupplier->getViewCursor());
+            xTextPageCursor.set(xTextViewCursor, uno::UNO_QUERY);
+        }
+    }
 
     for (size_t i = 0; i < rTable.size(); ++i)
     {
@@ -1001,6 +1019,18 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
             {
                 auto xCursor = xStart->getText()->createTextCursorByRange(xStart);
                 xCursor->goLeft(nContextLen, /*bExpand*/ true);
+                if (xTextPageCursor)
+                {
+                    try
+                    {
+                        xTextViewCursor->gotoRange(xStart, false);
+                        rJsonWriter.put("startPageNumber", xTextPageCursor->getPage());
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION("sw.ui");
+                    }
+                }
                 rJsonWriter.put("textBefore", xCursor->getString());
             }
             if (xEnd)
