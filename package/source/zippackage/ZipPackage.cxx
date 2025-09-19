@@ -1178,13 +1178,14 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
     pEntry->sPath = "META-INF/manifest.xml";
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
-    pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     xWriter->writeManifestSequence ( pBuffer,  comphelper::containerToSequence(aManList) );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
+    pEntry->nSize = nBufferLength;
 
     // the manifest.xml is never encrypted - so pass an empty reference
     ZipOutputStream::setEntry(*pEntry);
@@ -1204,7 +1205,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     pEntry->sPath = "[Content_Types].xml";
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
-    pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nCompressedSize = -1;
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Add default entries, the count must be updated manually when appending.
@@ -1245,6 +1246,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );
+    pEntry->nSize = nBufferLength;
 
     // there is no encryption in this format currently
     ZipOutputStream::setEntry(*pEntry);
