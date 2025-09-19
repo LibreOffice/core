@@ -13,6 +13,11 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
+  external/libvisio/libvisio/0001-tdf-168475-libvisio-part1.patch \
+  external/libvisio/libvisio/0002-Related-tdf-168475-libvisio-part2.patch \
+))
+
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libvisio))
 
 # vim: set noet sw=4 ts=4:

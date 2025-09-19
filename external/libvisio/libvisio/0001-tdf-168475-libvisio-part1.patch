@@ -1,0 +1,655 @@
+diff --git src/lib/VDXParser.cpp src/lib/VDXParser.cpp
+index e15e365..387e81f 100644
+--- src/lib/VDXParser.cpp
++++ src/lib/VDXParser.cpp
+@@ -49,8 +49,10 @@ bool libvisio::VDXParser::parseMain()
+       return false;
+ 
+     VSDStyles styles = stylesCollector.getStyleSheets();
++    const boost::optional<unsigned> varColInd = stylesCollector.getvariationColorIndex();
++    const boost::optional<unsigned> varStyInd = stylesCollector.getvariationStyleIndex();
+ 
+-    VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils);
++    VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils, varColInd, varStyInd);
+     m_collector = &contentCollector;
+     m_input->seek(0, librevenge::RVNG_SEEK_SET);
+     if (!processXmlDocument(m_input))
+@@ -459,7 +461,7 @@ void libvisio::VDXParser::readFillAndShadow(xmlTextReaderPtr reader)
+       VSD_DEBUG_MSG(("Found stencil fill\n"));
+     }
+     m_shape.m_fillStyle.override(VSDOptionalFillStyle(fillColourFG, fillColourBG, fillPattern, fillFGTransparency, fillBGTransparency,
+-                                                      shadowColourFG, shadowPattern, shadowOffsetX, shadowOffsetY, -1, -1, 1));
++                                                      shadowColourFG, shadowPattern, shadowOffsetX, shadowOffsetY, -1, -1, 1, 0, 0));
+   }
+ }
+ 
+@@ -734,6 +736,8 @@ void libvisio::VDXParser::readPageProps(xmlTextReaderPtr reader)
+   double shadowOffsetY = 0.0;
+   double pageScale = 1.0;
+   double drawingScale = 1.0;
++  boost::optional<unsigned> variationColorIndex;
++  boost::optional<unsigned> variationStyleIndex;
+ 
+   auto level = (unsigned)getElementDepth(reader);
+   int ret = 1;
+@@ -774,6 +778,14 @@ void libvisio::VDXParser::readPageProps(xmlTextReaderPtr reader)
+       if (XML_READER_TYPE_ELEMENT == tokenType)
+         ret = readDoubleData(drawingScale, reader);
+       break;
++    case XML_VARIATIONCOLORINDEX:
++      if (XML_READER_TYPE_ELEMENT == tokenType)
++        ret = readUnsignedData(variationColorIndex, reader);
++      break;
++    case XML_VARIATIONSTYLEINDEX:
++      if (XML_READER_TYPE_ELEMENT == tokenType)
++        ret = readUnsignedData(variationStyleIndex, reader);
++      break;
+     default:
+       break;
+     }
+@@ -788,7 +800,7 @@ void libvisio::VDXParser::readPageProps(xmlTextReaderPtr reader)
+   else if (m_isPageStarted)
+   {
+     double scale = drawingScale > 0 || drawingScale < 0 ? pageScale/drawingScale : 1.0;
+-    m_collector->collectPageProps(0, level, pageWidth, pageHeight, shadowOffsetX, shadowOffsetY, scale, 0);
++    m_collector->collectPageProps(0, level, pageWidth, pageHeight, shadowOffsetX, shadowOffsetY, scale, 0, variationColorIndex, variationStyleIndex);
+   }
+ }
+ 
+diff --git src/lib/VSD5Parser.cpp src/lib/VSD5Parser.cpp
+index e651d0d..99cff6b 100644
+--- src/lib/VSD5Parser.cpp
++++ src/lib/VSD5Parser.cpp
+@@ -357,7 +357,7 @@ void libvisio::VSD5Parser::readFillAndShadow(librevenge::RVNGInputStream *input)
+     }
+     m_shape.m_fillStyle.override(VSDOptionalFillStyle(colourFG, colourBG, fillPattern, 0.0,
+                                                       0.0, shfgc, shadowPattern, shadowOffsetX,
+-                                                      shadowOffsetY, -1, -1, -1));
++                                                      shadowOffsetY, -1, -1, -1, 0, 0));
+   }
+ }
+ 
+diff --git src/lib/VSD6Parser.cpp src/lib/VSD6Parser.cpp
+index 9f915d5..c714c08 100644
+--- src/lib/VSD6Parser.cpp
++++ src/lib/VSD6Parser.cpp
+@@ -306,7 +306,7 @@ void libvisio::VSD6Parser::readFillAndShadow(librevenge::RVNGInputStream *input)
+     }
+     m_shape.m_fillStyle.override(VSDOptionalFillStyle(colourFG, colourBG, fillPattern, fillFGTransparency,
+                                                       fillBGTransparency, shadowFG, shadowPattern,
+-                                                      shadowOffsetX, shadowOffsetY, -1, -1, -1));
++                                                      shadowOffsetX, shadowOffsetY, -1, -1, -1, 0, 0));
+   }
+ }
+ 
+diff --git src/lib/VSDCollector.h src/lib/VSDCollector.h
+index 5d4b62f..096d5fa 100644
+--- src/lib/VSDCollector.h
++++ src/lib/VSDCollector.h
+@@ -60,9 +60,10 @@ public:
+   virtual void collectTxtXForm(unsigned level, const XForm &txtxform) = 0;
+   virtual void collectShapesOrder(unsigned id, unsigned level, const std::vector<unsigned> &shapeIds) = 0;
+   virtual void collectForeignDataType(unsigned level, unsigned foreignType, unsigned foreignFormat, double offsetX, double offsetY, double width, double height) = 0;
+-  virtual void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale, unsigned char drawingScaleUnit) = 0;
++  virtual void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale,
++                                unsigned char drawingScaleUnit, const boost::optional<unsigned> variationColorIndex, const boost::optional<unsigned> variationStyleIndex) = 0;
+   virtual void collectPage(unsigned id, unsigned level, unsigned backgroundPageID, bool isBackgroundPage, const VSDName &pageName) = 0;
+-  virtual void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle) = 0;
++  virtual void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle, const VSDName &aShapeType) = 0;
+   virtual void collectSplineStart(unsigned id, unsigned level, double x, double y, double secondKnot, double firstKnot, double lastKnot, unsigned degree) = 0;
+   virtual void collectSplineKnot(unsigned id, unsigned level, double x, double y, double knot) = 0;
+   virtual void collectSplineEnd() = 0;
+diff --git src/lib/VSDContentCollector.cpp src/lib/VSDContentCollector.cpp
+index 90ae6df..d347d4d 100644
+--- src/lib/VSDContentCollector.cpp
++++ src/lib/VSDContentCollector.cpp
+@@ -120,14 +120,15 @@ libvisio::VSDContentCollector::VSDContentCollector(
+   std::vector<std::map<unsigned, XForm> > &groupXFormsSequence,
+   std::vector<std::map<unsigned, unsigned> > &groupMembershipsSequence,
+   std::vector<std::list<unsigned> > &documentPageShapeOrders,
+-  VSDStyles &styles, VSDStencils &stencils
++  VSDStyles &styles, VSDStencils &stencils, const boost::optional<unsigned> &varColInd,
++  const boost::optional<unsigned> &varStyInd
+ ) :
+   m_painter(painter), m_isPageStarted(false), m_pageWidth(0.0), m_pageHeight(0.0),
+   m_shadowOffsetX(0.0), m_shadowOffsetY(0.0),
+   m_scale(1.0), m_defaultDrawingUnit(0),
+   m_x(0.0), m_y(0.0), m_originalX(0.0), m_originalY(0.0), m_xform(), m_txtxform(), m_misc(),
+   m_currentFillGeometry(), m_currentLineGeometry(), m_groupXForms(groupXFormsSequence.empty() ? nullptr : &groupXFormsSequence[0]),
+-  m_currentForeignData(), m_currentOLEData(), m_currentForeignProps(), m_currentShapeId(0), m_foreignType((unsigned)-1),
++  m_currentForeignData(), m_currentOLEData(), m_currentForeignProps(), m_currentShapeId(0), m_parentShapeId(0), m_foreignType((unsigned)-1),
+   m_foreignFormat(0), m_foreignOffsetX(0.0), m_foreignOffsetY(0.0), m_foreignWidth(0.0), m_foreignHeight(0.0),
+   m_noLine(false), m_noFill(false), m_noShow(false), m_fonts(),
+   m_currentLevel(0), m_isShapeStarted(false),
+@@ -139,11 +140,12 @@ libvisio::VSDContentCollector::VSDContentCollector(
+   m_currentText(), m_names(), m_stencilNames(), m_fields(), m_stencilFields(), m_fieldIndex(0),
+   m_charFormats(), m_paraFormats(), m_lineStyle(), m_fillStyle(), m_textBlockStyle(),
+   m_defaultCharStyle(), m_defaultParaStyle(), m_currentStyleSheet(0), m_styles(styles),
++  m_variationColorIndex(varColInd), m_variationStyleIndex(varStyInd),
+   m_stencils(stencils), m_stencilShape(nullptr), m_isStencilStarted(false), m_currentGeometryCount(0),
+   m_backgroundPageID(MINUS_ONE), m_currentPageID(0), m_currentPage(), m_pages(), m_layerList(),
+   m_splineControlPoints(), m_splineKnotVector(), m_splineX(0.0), m_splineY(0.0),
+   m_splineLastKnot(0.0), m_splineDegree(0), m_splineLevel(0), m_currentShapeLevel(0),
+-  m_isBackgroundPage(false), m_currentLayerList(), m_currentLayerMem(), m_tabSets(), m_documentTheme(nullptr)
++  m_isBackgroundPage(false), m_currentLayerList(), m_currentLayerMem(), m_tabSets(), m_documentTheme(nullptr), m_currentShapeType()
+ {
+ }
+ 
+@@ -1693,7 +1695,8 @@ void libvisio::VSDContentCollector::collectFillAndShadow(unsigned level, const b
+ {
+   _handleLevelChange(level);
+   m_fillStyle.override(VSDOptionalFillStyle(colourFG, colourBG, fillPattern, fillFGTransparency, fillBGTransparency, shfgc,
+-                                            shadowPattern, shadowOffsetX, shadowOffsetY, qsFillColour, qsShadowColour, qsFillMatrix), m_documentTheme);
++                                            shadowPattern, shadowOffsetX, shadowOffsetY, qsFillColour, qsShadowColour, qsFillMatrix,
++                                            m_variationColorIndex, m_variationStyleIndex), !_isDefaultShapeFormat() ? m_documentTheme : nullptr);
+ }
+ 
+ void libvisio::VSDContentCollector::collectFillAndShadow(unsigned level, const boost::optional<Colour> &colourFG, const boost::optional<Colour> &colourBG,
+@@ -2564,7 +2567,8 @@ void libvisio::VSDContentCollector::collectForeignDataType(unsigned level, unsig
+ }
+ 
+ void libvisio::VSDContentCollector::collectPageProps(unsigned /* id */, unsigned level, double pageWidth, double pageHeight,
+-                                                     double shadowOffsetX, double shadowOffsetY, double scale, unsigned char drawingScaleUnit)
++                                                     double shadowOffsetX, double shadowOffsetY, double scale, unsigned char drawingScaleUnit,
++                                                     const boost::optional<unsigned> variationColorIndex, const boost::optional<unsigned> variationStyleIndex)
+ {
+   _handleLevelChange(level);
+   m_pageWidth = pageWidth;
+@@ -2573,6 +2577,8 @@ void libvisio::VSDContentCollector::collectPageProps(unsigned /* id */, unsigned
+   m_shadowOffsetX = shadowOffsetX;
+   m_shadowOffsetY = shadowOffsetY;
+   m_defaultDrawingUnit = drawingScaleUnit;
++  m_variationColorIndex = variationColorIndex;
++  m_variationStyleIndex = variationStyleIndex;
+ 
+   m_currentPage.m_pageWidth = m_scale*m_pageWidth;
+   m_currentPage.m_pageHeight = m_scale*m_pageHeight;
+@@ -2588,7 +2594,7 @@ void libvisio::VSDContentCollector::collectPage(unsigned /* id */, unsigned leve
+   m_isBackgroundPage = isBackgroundPage;
+ }
+ 
+-void libvisio::VSDContentCollector::collectShape(unsigned id, unsigned level, unsigned /*parent*/, unsigned masterPage, unsigned masterShape, unsigned lineStyleId, unsigned fillStyleId, unsigned textStyleId)
++void libvisio::VSDContentCollector::collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyleId, unsigned fillStyleId, unsigned textStyleId, const VSDName &aShapeType)
+ {
+   _handleLevelChange(level);
+   m_currentShapeLevel = level;
+@@ -2618,7 +2624,12 @@ void libvisio::VSDContentCollector::collectShape(unsigned id, unsigned level, un
+   m_charFormats.clear();
+   m_paraFormats.clear();
+ 
++  m_currentShapeType.clear();
++  if (aShapeType.m_data.size())
++    _convertDataToString(m_currentShapeType, aShapeType.m_data, aShapeType.m_format);
++
+   m_currentShapeId = id;
++  m_parentShapeId = parent;
+   m_pageOutputDrawing[m_currentShapeId] = VSDOutputElementList();
+   m_pageOutputText[m_currentShapeId] = VSDOutputElementList();
+   m_shapeOutputDrawing = &m_pageOutputDrawing[m_currentShapeId];
+@@ -2678,10 +2689,11 @@ void libvisio::VSDContentCollector::collectShape(unsigned id, unsigned level, un
+ 
+     m_lineStyle.override(m_stencilShape->m_lineStyle, m_documentTheme);
+ 
++    bool bDefault = _isDefaultShapeFormat();
+     if (m_stencilShape->m_fillStyleId != MINUS_ONE)
+-      m_fillStyle.override(m_styles.getOptionalFillStyle(m_stencilShape->m_fillStyleId), m_documentTheme);
++      m_fillStyle.override(m_styles.getOptionalFillStyle(m_stencilShape->m_fillStyleId), !bDefault ? m_documentTheme : nullptr);
+ 
+-    m_fillStyle.override(m_stencilShape->m_fillStyle, m_documentTheme);
++    m_fillStyle.override(m_stencilShape->m_fillStyle, !bDefault ? m_documentTheme : nullptr);
+ 
+     if (m_stencilShape->m_textStyleId != MINUS_ONE)
+     {
+@@ -2898,7 +2910,7 @@ void libvisio::VSDContentCollector::collectFillStyle(unsigned /* level */, const
+                                                      const boost::optional<long> &qsShadowColour, const boost::optional<long> &qsFillMatrix)
+ {
+   VSDOptionalFillStyle fillStyle(colourFG, colourBG, fillPattern, fillFGTransparency, fillBGTransparency, shfgc, shadowPattern,
+-                                 shadowOffsetX, shadowOffsetY, qsFillColour, qsShadowColour, qsFillMatrix);
++                                 shadowOffsetX, shadowOffsetY, qsFillColour, qsShadowColour, qsFillMatrix, m_variationColorIndex, m_variationStyleIndex);
+   m_styles.addFillStyle(m_currentStyleSheet, fillStyle);
+ 
+ }
+@@ -3579,6 +3591,23 @@ void libvisio::VSDContentCollector::_handleLevelChange(unsigned level)
+   m_currentLevel = level;
+ }
+ 
++bool libvisio::VSDContentCollector::_isDefaultShapeFormat()
++{
++  bool bDefault = false;
++  if (m_groupMemberships != m_groupMembershipsSequence.end())
++  {
++    auto iter = m_groupMemberships->find(m_currentShapeId);
++    if (iter != m_groupMemberships->end() && m_parentShapeId == iter->second && (iter == m_groupMemberships->begin() || m_parentShapeId != std::prev(iter)->second))
++    {
++      std::string aValue(m_currentShapeType.cstr());
++      std::size_t found = aValue.find("End Event");
++      if (found != std::string::npos)
++        bDefault = true;
++    }
++  }
++  return bDefault;
++}
++
+ void libvisio::VSDContentCollector::collectMetaData(const librevenge::RVNGPropertyList &metaData)
+ {
+   m_pages.setMetaData(metaData);
+diff --git src/lib/VSDContentCollector.h src/lib/VSDContentCollector.h
+index fab81ad..943ed64 100644
+--- src/lib/VSDContentCollector.h
++++ src/lib/VSDContentCollector.h
+@@ -36,7 +36,8 @@ public:
+     std::vector<std::map<unsigned, XForm> > &groupXFormsSequence,
+     std::vector<std::map<unsigned, unsigned> > &groupMembershipsSequence,
+     std::vector<std::list<unsigned> > &documentPageShapeOrders,
+-    VSDStyles &styles, VSDStencils &stencils
++    VSDStyles &styles, VSDStencils &stencils, const boost::optional<unsigned> &varColInd,
++    const boost::optional<unsigned> &varStyInd
+   );
+ 
+   void collectDocumentTheme(const VSDXTheme *theme) override;
+@@ -77,9 +78,10 @@ public:
+   void collectTxtXForm(unsigned level, const XForm &txtxform) override;
+   void collectShapesOrder(unsigned id, unsigned level, const std::vector<unsigned> &shapeIds) override;
+   void collectForeignDataType(unsigned level, unsigned foreignType, unsigned foreignFormat, double offsetX, double offsetY, double width, double height) override;
+-  void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale, unsigned char drawingScaleUnit) override;
++  void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale,
++                        unsigned char drawingScaleUnit, const boost::optional<unsigned> variationColorIndex, const boost::optional<unsigned> variationStyleIndex) override;
+   void collectPage(unsigned id, unsigned level, unsigned backgroundPageID, bool isBackgroundPage, const VSDName &pageName) override;
+-  void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle) override;
++  void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle, const VSDName &aShapeType) override;
+   void collectSplineStart(unsigned id, unsigned level, double x, double y, double secondKnot, double firstKnot, double lastKnot, unsigned degree) override;
+   void collectSplineKnot(unsigned id, unsigned level, double x, double y, double knot) override;
+   void collectSplineEnd() override;
+@@ -197,6 +199,7 @@ private:
+   void _flushCurrentPage();
+ 
+   void _handleLevelChange(unsigned level);
++  bool _isDefaultShapeFormat();
+ 
+   void _handleForeignData(const librevenge::RVNGBinaryData &data);
+ 
+@@ -253,6 +256,7 @@ private:
+   librevenge::RVNGBinaryData m_currentOLEData;
+   librevenge::RVNGPropertyList m_currentForeignProps;
+   unsigned m_currentShapeId;
++  unsigned m_parentShapeId;
+   unsigned m_foreignType;
+   unsigned m_foreignFormat;
+   double m_foreignOffsetX;
+@@ -296,6 +300,9 @@ private:
+   unsigned m_currentStyleSheet;
+   VSDStyles m_styles;
+ 
++  boost::optional<unsigned> m_variationColorIndex;
++  boost::optional<unsigned> m_variationStyleIndex;
++
+   VSDStencils m_stencils;
+   const VSDShape *m_stencilShape;
+   bool m_isStencilStarted;
+@@ -323,6 +330,7 @@ private:
+   std::vector<VSDTabSet> m_tabSets;
+ 
+   const VSDXTheme *m_documentTheme;
++  librevenge::RVNGString m_currentShapeType;
+ };
+ 
+ } // namespace libvisio
+diff --git src/lib/VSDParser.cpp src/lib/VSDParser.cpp
+index 0f75fba..399d4b1 100644
+--- src/lib/VSDParser.cpp
++++ src/lib/VSDParser.cpp
+@@ -136,8 +136,10 @@ bool libvisio::VSDParser::parseMain()
+   _handleLevelChange(0);
+ 
+   VSDStyles styles = stylesCollector.getStyleSheets();
++  const boost::optional<unsigned> varColInd = stylesCollector.getvariationColorIndex();
++  const boost::optional<unsigned> varStyInd = stylesCollector.getvariationStyleIndex();
+ 
+-  VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils);
++  VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils, varColInd, varStyInd);
+   m_collector = &contentCollector;
+   if (m_container)
+     parseMetaData();
+@@ -637,7 +639,7 @@ void libvisio::VSDParser::_flushShape()
+   if (!m_isShapeStarted)
+     return;
+ 
+-  m_collector->collectShape(m_shape.m_shapeId, m_currentShapeLevel, m_shape.m_parent, m_shape.m_masterPage, m_shape.m_masterShape, m_shape.m_lineStyleId, m_shape.m_fillStyleId, m_shape.m_textStyleId);
++  m_collector->collectShape(m_shape.m_shapeId, m_currentShapeLevel, m_shape.m_parent, m_shape.m_masterPage, m_shape.m_masterShape, m_shape.m_lineStyleId, m_shape.m_fillStyleId, m_shape.m_textStyleId, m_shape.m_aName);
+ 
+   m_collector->collectShapesOrder(0, m_currentShapeLevel+2, m_shape.m_shapeList.getShapesOrder());
+ 
+@@ -1271,7 +1273,7 @@ void libvisio::VSDParser::readPageProps(librevenge::RVNGInputStream *input)
+     m_currentStencil->m_shadowOffsetX = m_shadowOffsetX;
+     m_currentStencil->m_shadowOffsetY = m_shadowOffsetY;
+   }
+-  m_collector->collectPageProps(m_header.id, m_header.level, pageWidth, pageHeight, m_shadowOffsetX, m_shadowOffsetY, scale, drawingScaleUnit);
++  m_collector->collectPageProps(m_header.id, m_header.level, pageWidth, pageHeight, m_shadowOffsetX, m_shadowOffsetY, scale, drawingScaleUnit, 0, 0);
+ }
+ 
+ void libvisio::VSDParser::readShape(librevenge::RVNGInputStream *input)
+@@ -2139,7 +2141,7 @@ void libvisio::VSDParser::readFillAndShadow(librevenge::RVNGInputStream *input)
+     }
+     m_shape.m_fillStyle.override(VSDOptionalFillStyle(colourFG, colourBG, fillPattern, fillFGTransparency,
+                                                       fillBGTransparency, shadowFG, shadowPattern,
+-                                                      shadowOffsetX, shadowOffsetY, -1, -1, -1));
++                                                      shadowOffsetX, shadowOffsetY, -1, -1, -1, 0, 0));
+   }
+ }
+ 
+diff --git src/lib/VSDStencils.cpp src/lib/VSDStencils.cpp
+index 73af5ed..33e2d59 100644
+--- src/lib/VSDStencils.cpp
++++ src/lib/VSDStencils.cpp
+@@ -17,7 +17,7 @@ libvisio::VSDShape::VSDShape()
+     m_textStyleId(MINUS_ONE), m_lineStyle(), m_fillStyle(), m_textBlockStyle(), m_charStyle(),
+     m_charList(), m_paraStyle(), m_paraList(), m_tabSets(), m_text(), m_names(),
+     m_textFormat(libvisio::VSD_TEXT_UTF16), m_nurbsData(), m_polylineData(), m_xform(), m_txtxform(),
+-    m_xform1d(), m_misc(), m_layerMem()
++    m_xform1d(), m_misc(), m_layerMem(), m_aName()
+ {
+ }
+ 
+@@ -32,7 +32,7 @@ libvisio::VSDShape::VSDShape(const libvisio::VSDShape &shape)
+     m_textFormat(shape.m_textFormat), m_nurbsData(shape.m_nurbsData), m_polylineData(shape.m_polylineData),
+     m_xform(shape.m_xform), m_txtxform(shape.m_txtxform ? new XForm(*(shape.m_txtxform)) : nullptr),
+     m_xform1d(shape.m_xform1d ? new XForm1D(*(shape.m_xform1d)) : nullptr), m_misc(shape.m_misc),
+-    m_layerMem(shape.m_layerMem)
++    m_layerMem(shape.m_layerMem), m_aName(shape.m_aName)
+ {
+ }
+ 
+@@ -74,6 +74,7 @@ libvisio::VSDShape &libvisio::VSDShape::operator=(const libvisio::VSDShape &shap
+     m_xform1d.reset(shape.m_xform1d ? new XForm1D(*shape.m_xform1d) : nullptr);
+     m_misc = shape.m_misc;
+     m_layerMem = shape.m_layerMem;
++    m_aName = shape.m_aName;
+   }
+   return *this;
+ }
+@@ -110,6 +111,7 @@ void libvisio::VSDShape::clear()
+   m_textFormat = libvisio::VSD_TEXT_UTF16;
+   m_misc = VSDMisc();
+   m_layerMem = VSDName();
++  m_aName = VSDName();
+ }
+ 
+ libvisio::VSDStencil::VSDStencil()
+diff --git src/lib/VSDStencils.h src/lib/VSDStencils.h
+index 964a933..48f1ae2 100644
+--- src/lib/VSDStencils.h
++++ src/lib/VSDStencils.h
+@@ -57,6 +57,7 @@ public:
+   std::unique_ptr<XForm1D> m_xform1d;
+   VSDMisc m_misc;
+   VSDName m_layerMem;
++  VSDName m_aName;
+ };
+ 
+ class VSDStencil
+diff --git src/lib/VSDStyles.h src/lib/VSDStyles.h
+index ba13805..8318c6e 100644
+--- src/lib/VSDStyles.h
++++ src/lib/VSDStyles.h
+@@ -105,16 +105,18 @@ struct VSDOptionalFillStyle
+   VSDOptionalFillStyle() :
+     fgColour(), bgColour(), pattern(), fgTransparency(), bgTransparency(), shadowFgColour(),
+     shadowPattern(), shadowOffsetX(), shadowOffsetY(), qsFillColour(), qsShadowColour(),
+-    qsFillMatrix() {}
++    qsFillMatrix(), variationColorIndex(), variationStyleIndex() {}
+   VSDOptionalFillStyle(const boost::optional<Colour> &fgc, const boost::optional<Colour> &bgc,
+                        const boost::optional<unsigned char> &p, const boost::optional<double> &fga,
+                        const boost::optional<double> &bga, const boost::optional<Colour> &sfgc,
+                        const boost::optional<unsigned char> &shp, const boost::optional<double> &shX,
+                        const boost::optional<double> &shY, const boost::optional<long> &qsFc,
+-                       const boost::optional<long> &qsSc, const boost::optional<long> &qsFm) :
++                       const boost::optional<long> &qsSc, const boost::optional<long> &qsFm,
++                       const boost::optional<unsigned> &vCIn, const boost::optional<unsigned> &vSIn) :
+     fgColour(fgc), bgColour(bgc), pattern(p), fgTransparency(fga), bgTransparency(bga),
+     shadowFgColour(sfgc), shadowPattern(shp), shadowOffsetX(shX), shadowOffsetY(shY),
+-    qsFillColour(qsFc), qsShadowColour(qsSc), qsFillMatrix(qsFm) {}
++    qsFillColour(qsFc), qsShadowColour(qsSc), qsFillMatrix(qsFm), variationColorIndex(vCIn),
++    variationStyleIndex(vSIn) {}
+   VSDOptionalFillStyle(const VSDOptionalFillStyle &style) = default;
+   ~VSDOptionalFillStyle() {}
+   VSDOptionalFillStyle &operator=(const VSDOptionalFillStyle &style) = default;
+@@ -132,6 +134,8 @@ struct VSDOptionalFillStyle
+     ASSIGN_OPTIONAL(style.fgColour, fgColour);
+     ASSIGN_OPTIONAL(style.bgColour, bgColour);
+     ASSIGN_OPTIONAL(style.shadowFgColour, shadowFgColour);
++    ASSIGN_OPTIONAL(style.variationColorIndex, variationColorIndex);
++    ASSIGN_OPTIONAL(style.variationStyleIndex, variationStyleIndex);
+   }
+ 
+   boost::optional<Colour> fgColour;
+@@ -146,6 +150,8 @@ struct VSDOptionalFillStyle
+   boost::optional<long> qsFillColour;
+   boost::optional<long> qsShadowColour;
+   boost::optional<long> qsFillMatrix;
++  boost::optional<unsigned> variationColorIndex;
++  boost::optional<unsigned> variationStyleIndex;
+ };
+ 
+ struct VSDFillStyle
+@@ -153,13 +159,15 @@ struct VSDFillStyle
+   VSDFillStyle()
+     : fgColour(), bgColour(0xff, 0xff, 0xff, 0), pattern(0), fgTransparency(0),
+       bgTransparency(0), shadowFgColour(),  shadowPattern(0), shadowOffsetX(0),
+-      shadowOffsetY(0), qsFillColour(-1), qsShadowColour(-1), qsFillMatrix(-1) {}
++      shadowOffsetY(0), qsFillColour(100), qsShadowColour(100), qsFillMatrix(-1),
++      variationColorIndex(0), variationStyleIndex(0) {}
+   VSDFillStyle(const Colour &fgc, const Colour &bgc, unsigned char p,
+                double fga, double bga, const Colour &sfgc, unsigned char shp,
+-               double shX, double shY, long qsFc, long qsSc, long qsFm)
++               double shX, double shY, long qsFc, long qsSc, long qsFm, unsigned vCIn, unsigned vSIn)
+     : fgColour(fgc), bgColour(bgc), pattern(p), fgTransparency(fga), bgTransparency(bga),
+       shadowFgColour(sfgc), shadowPattern(shp), shadowOffsetX(shX), shadowOffsetY(shY),
+-      qsFillColour(qsFc), qsShadowColour(qsSc), qsFillMatrix(qsFm) {}
++      qsFillColour(qsFc), qsShadowColour(qsSc), qsFillMatrix(qsFm), variationColorIndex(vCIn),
++      variationStyleIndex(vSIn) {}
+   VSDFillStyle(const VSDFillStyle &style) = default;
+   ~VSDFillStyle() {}
+   VSDFillStyle &operator=(const VSDFillStyle &style) = default;
+@@ -175,13 +183,15 @@ struct VSDFillStyle
+     ASSIGN_OPTIONAL(style.qsFillColour, qsFillColour);
+     ASSIGN_OPTIONAL(style.qsShadowColour, qsShadowColour);
+     ASSIGN_OPTIONAL(style.qsFillMatrix, qsFillMatrix);
++    ASSIGN_OPTIONAL(style.variationColorIndex, variationColorIndex);
++    ASSIGN_OPTIONAL(style.variationStyleIndex, variationStyleIndex);
+     if (theme)
+     {
+       // Quick Style Colour 100 is special. It is the default,
+       // and it is not saved explicitely in the VSDX file.
+-      ASSIGN_OPTIONAL(theme->getThemeColour(style.qsFillColour.value_or(100)), fgColour);
+-      ASSIGN_OPTIONAL(theme->getThemeColour(style.qsFillColour.value_or(100)), bgColour);
+-      ASSIGN_OPTIONAL(theme->getThemeColour(style.qsShadowColour.value_or(100)), shadowFgColour);
++      ASSIGN_OPTIONAL(theme->getThemeColour(qsFillColour, variationColorIndex), fgColour);
++      ASSIGN_OPTIONAL(theme->getThemeColour(qsFillColour, variationColorIndex), bgColour);
++      ASSIGN_OPTIONAL(theme->getThemeColour(qsShadowColour, variationColorIndex), shadowFgColour);
+       if (!!style.qsFillMatrix && style.qsFillMatrix.get() >= 0)
+         ASSIGN_OPTIONAL(theme->getFillStyleColour(style.qsFillMatrix.get()), fgColour);
+     }
+@@ -202,6 +212,8 @@ struct VSDFillStyle
+   long qsFillColour;
+   long qsShadowColour;
+   long qsFillMatrix;
++  unsigned variationColorIndex;
++  unsigned variationStyleIndex;
+ };
+ 
+ struct VSDOptionalCharStyle
+diff --git src/lib/VSDStylesCollector.cpp src/lib/VSDStylesCollector.cpp
+index 16c723a..e0bff9e 100644
+--- src/lib/VSDStylesCollector.cpp
++++ src/lib/VSDStylesCollector.cpp
+@@ -24,6 +24,7 @@ libvisio::VSDStylesCollector::VSDStylesCollector(
+   m_groupMembershipsSequence(groupMembershipsSequence),
+   m_pageShapeOrder(), m_documentPageShapeOrders(documentPageShapeOrders),
+   m_groupShapeOrder(), m_shapeList(), m_currentStyleSheet(0), m_styles(),
++  m_variationColorIndex(), m_variationStyleIndex(),
+   m_currentShapeLevel(0)
+ {
+   m_groupXFormsSequence.clear();
+@@ -223,9 +224,12 @@ void libvisio::VSDStylesCollector::collectForeignDataType(unsigned level, unsign
+ 
+ void libvisio::VSDStylesCollector::collectPageProps(unsigned /* id */, unsigned level, double /* pageWidth */, double /* pageHeight */,
+                                                     double /* shadowOffsetX */, double /* shadowOffsetY */, double /* scale */,
+-                                                    unsigned char /* drawingScaleUnit */)
++                                                    unsigned char /* drawingScaleUnit */, const boost::optional<unsigned> variationColorIndex,
++                                                    const boost::optional<unsigned> variationStyleIndex)
+ {
+   _handleLevelChange(level);
++  m_variationColorIndex = variationColorIndex;
++  m_variationStyleIndex = variationStyleIndex;
+ }
+ 
+ void libvisio::VSDStylesCollector::collectPage(unsigned /* id */, unsigned level, unsigned /* backgroundPageID */, bool /* isBackgroundPage */, const VSDName & /* pageName */)
+@@ -234,7 +238,7 @@ void libvisio::VSDStylesCollector::collectPage(unsigned /* id */, unsigned level
+ }
+ 
+ void libvisio::VSDStylesCollector::collectShape(unsigned id, unsigned level, unsigned parent, unsigned /*masterPage*/, unsigned /*masterShape*/,
+-                                                unsigned /* lineStyle */, unsigned /* fillStyle */, unsigned /* textStyle */)
++                                                unsigned /* lineStyle */, unsigned /* fillStyle */, unsigned /* textStyle */, const VSDName & /*aShapeType*/)
+ {
+   _handleLevelChange(level);
+   m_currentShapeLevel = level;
+diff --git src/lib/VSDStylesCollector.h src/lib/VSDStylesCollector.h
+index 2c838af..cb747cb 100644
+--- src/lib/VSDStylesCollector.h
++++ src/lib/VSDStylesCollector.h
+@@ -71,9 +71,10 @@ public:
+   void collectTxtXForm(unsigned level, const XForm &txtxform) override;
+   void collectShapesOrder(unsigned id, unsigned level, const std::vector<unsigned> &shapeIds) override;
+   void collectForeignDataType(unsigned level, unsigned foreignType, unsigned foreignFormat, double offsetX, double offsetY, double width, double height) override;
+-  void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale, unsigned char drawingScaleUnit) override;
++  void collectPageProps(unsigned id, unsigned level, double pageWidth, double pageHeight, double shadowOffsetX, double shadowOffsetY, double scale,
++                        unsigned char drawingScaleUnit, const boost::optional<unsigned> variationColorIndex, const boost::optional<unsigned> variationStyleIndex) override;
+   void collectPage(unsigned id, unsigned level, unsigned backgroundPageID, bool isBackgroundPage, const VSDName &pageName) override;
+-  void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle) override;
++  void collectShape(unsigned id, unsigned level, unsigned parent, unsigned masterPage, unsigned masterShape, unsigned lineStyle, unsigned fillStyle, unsigned textStyle, const VSDName &aShapeType) override;
+   void collectSplineStart(unsigned id, unsigned level, double x, double y, double secondKnot, double firstKnot, double lastKnot, unsigned degree) override;
+   void collectSplineKnot(unsigned id, unsigned level, double x, double y, double knot) override;
+   void collectSplineEnd() override;
+@@ -176,7 +177,8 @@ public:
+   {
+     return m_styles;
+   }
+-
++  const boost::optional<unsigned>& getvariationColorIndex() const { return m_variationColorIndex; }
++  const boost::optional<unsigned>& getvariationStyleIndex() const { return m_variationStyleIndex; }
+ 
+ private:
+   VSDStylesCollector(const VSDStylesCollector &);
+@@ -204,6 +206,9 @@ private:
+   unsigned m_currentStyleSheet;
+   VSDStyles m_styles;
+ 
++  boost::optional<unsigned> m_variationColorIndex;
++  boost::optional<unsigned> m_variationStyleIndex;
++
+   unsigned m_currentShapeLevel;
+ };
+ 
+diff --git src/lib/VSDXMLParserBase.cpp src/lib/VSDXMLParserBase.cpp
+index 8dadd5f..e9be09f 100644
+--- src/lib/VSDXMLParserBase.cpp
++++ src/lib/VSDXMLParserBase.cpp
+@@ -939,6 +939,8 @@ void libvisio::VSDXMLParserBase::readShape(xmlTextReaderPtr reader)
+   const shared_ptr<xmlChar> fillStyleString(xmlTextReaderGetAttribute(reader, BAD_CAST("FillStyle")), xmlFree);
+   const shared_ptr<xmlChar> textStyleString(xmlTextReaderGetAttribute(reader, BAD_CAST("TextStyle")), xmlFree);
+ 
++  shared_ptr<xmlChar> pShapeName(xmlTextReaderGetAttribute(reader, BAD_CAST("NameU")), xmlFree);
++
+   unsigned id = idString ? (unsigned)xmlStringToLong(idString) : MINUS_ONE;
+   unsigned masterPage = masterPageString ? (unsigned)xmlStringToLong(masterPageString) : MINUS_ONE;
+   unsigned masterShape = masterShapeString ? (unsigned)xmlStringToLong(masterShapeString) : MINUS_ONE;
+@@ -994,6 +996,17 @@ void libvisio::VSDXMLParserBase::readShape(xmlTextReaderPtr reader)
+   m_shape.m_masterPage = masterPage;
+   m_shape.m_masterShape = masterShape;
+   m_shape.m_shapeId = id;
++  if (pShapeName.get())
++  {
++      m_shape.m_aName = VSDName(
++          librevenge::RVNGBinaryData(pShapeName.get(), xmlStrlen(pShapeName.get())),
++                     VSD_TEXT_UTF8);
++  }
++  else if (MINUS_ONE != m_shape.m_parent && !m_shapeStack.top().m_aName.empty())
++  {
++      m_shape.m_aName = m_shapeStack.top().m_aName;
++  }
++
+ }
+ 
+ void libvisio::VSDXMLParserBase::initColours()
+@@ -1747,7 +1760,9 @@ void libvisio::VSDXMLParserBase::_flushShape()
+   if (!m_isShapeStarted)
+     return;
+ 
+-  m_collector->collectShape(m_shape.m_shapeId, m_currentShapeLevel, m_shape.m_parent, m_shape.m_masterPage, m_shape.m_masterShape, m_shape.m_lineStyleId, m_shape.m_fillStyleId, m_shape.m_textStyleId);
++  m_collector->collectShape(m_shape.m_shapeId, m_currentShapeLevel, m_shape.m_parent,
++                            m_shape.m_masterPage, m_shape.m_masterShape, m_shape.m_lineStyleId,
++                            m_shape.m_fillStyleId, m_shape.m_textStyleId, m_shape.m_aName);
+ 
+   m_collector->collectShapesOrder(0, m_currentShapeLevel+2, m_shape.m_shapeList.getShapesOrder());
+ 
+diff --git src/lib/VSDXParser.cpp src/lib/VSDXParser.cpp
+index 6b94181..1afc440 100644
+--- src/lib/VSDXParser.cpp
++++ src/lib/VSDXParser.cpp
+@@ -89,8 +89,10 @@ bool libvisio::VSDXParser::parseMain() try
+     return false;
+ 
+   VSDStyles styles = stylesCollector.getStyleSheets();
++  const boost::optional<unsigned> varColInd = stylesCollector.getvariationColorIndex();
++  const boost::optional<unsigned> varStyInd = stylesCollector.getvariationStyleIndex();
+ 
+-  VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils);
++  VSDContentCollector contentCollector(m_painter, groupXFormsSequence, groupMembershipsSequence, documentPageShapeOrders, styles, m_stencils, varColInd, varStyInd);
+   m_collector = &contentCollector;
+   parseMetaData(m_input, rootRels);
+ 
+@@ -610,6 +612,8 @@ void libvisio::VSDXParser::readPageSheetProperties(xmlTextReaderPtr reader)
+   double shadowOffsetY = 0.0;
+   double pageScale = 1.0;
+   double drawingScale = 1.0;
++  boost::optional<unsigned> variationColorIndex;
++  boost::optional<unsigned> variationStyleIndex;
+ 
+   auto level = (unsigned)getElementDepth(reader);
+   int ret = 1;
+@@ -650,6 +654,14 @@ void libvisio::VSDXParser::readPageSheetProperties(xmlTextReaderPtr reader)
+       if (XML_READER_TYPE_ELEMENT == tokenType)
+         ret = readDoubleData(drawingScale, reader);
+       break;
++    case XML_VARIATIONCOLORINDEX:
++      if (XML_READER_TYPE_ELEMENT == tokenType)
++        ret = readUnsignedData(variationColorIndex, reader);
++      break;
++    case XML_VARIATIONSTYLEINDEX:
++      if (XML_READER_TYPE_ELEMENT == tokenType)
++        ret = readUnsignedData(variationStyleIndex, reader);
++      break;
+     case XML_LAYER:
+       if (XML_READER_TYPE_ELEMENT == tokenType)
+         readLayer(reader);
+@@ -668,7 +680,7 @@ void libvisio::VSDXParser::readPageSheetProperties(xmlTextReaderPtr reader)
+   else if (m_isPageStarted)
+   {
+     double scale = drawingScale > 0 || drawingScale < 0 ? pageScale/drawingScale : 1.0;
+-    m_collector->collectPageProps(0, level, pageWidth, pageHeight, shadowOffsetX, shadowOffsetY, scale, 0);
++    m_collector->collectPageProps(0, level, pageWidth, pageHeight, shadowOffsetX, shadowOffsetY, scale, 0, variationColorIndex, variationStyleIndex);
+   }
+ }
+ 
+@@ -934,7 +946,7 @@ void libvisio::VSDXParser::readStyleProperties(xmlTextReaderPtr reader)
+                                                       qsLineColour, qsLineMatrix));
+     m_shape.m_fillStyle.override(VSDOptionalFillStyle(fillColourFG, fillColourBG, fillPattern, fillFGTransparency, fillBGTransparency,
+                                                       shadowColourFG, shadowPattern, shadowOffsetX, shadowOffsetY,
+-                                                      qsFillColour, qsShadowColour, qsFillMatrix));
++                                                      qsFillColour, qsShadowColour, qsFillMatrix, 0, 0));
+     m_shape.m_textBlockStyle.override(VSDOptionalTextBlockStyle(leftMargin, rightMargin, topMargin, bottomMargin, verticalAlign,
+                                                                 isTextBkgndFilled, textBkgndColour, defaultTabStop, textDirection));
+   }
+-- 
+2.50.1.windows.1
+
