@@ -921,6 +921,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Delete “Donec”"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        CPPUNIT_ASSERT(bool(change.find("startPageNumber") == change.not_found()));
         auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" egestas. "));
@@ -942,6 +943,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Attributes changed"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        CPPUNIT_ASSERT(bool(change.find("startPageNumber") == change.not_found()));
         auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" arcu, nec "));
@@ -963,6 +965,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT_EQUAL("Mike"s, change.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL("Insert “ Sapienti sat.”"s, change.get<std::string>("description"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("comment"));
+        CPPUNIT_ASSERT(bool(change.find("startPageNumber") == change.not_found()));
         auto text_before = change.get<std::string>("textBefore");
         CPPUNIT_ASSERT_EQUAL(size_t(200), text_before.size());
         CPPUNIT_ASSERT(text_before.ends_with(" est orci."));
@@ -974,12 +977,12 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
 
     CPPUNIT_ASSERT(bool(it == docStructure.end()));
 
-    // 2. Test contextLen filter argument
+    // 2. Test contextLen and startPageNumber filter arguments
     {
         // extract
         tools::JsonWriter aJsonWriter;
-        std::string_view aCommand(
-            ".uno:ExtractDocumentStructure?filter=trackchanges,foo:bar, contextLen: 15,,");
+        std::string_view aCommand(".uno:ExtractDocumentStructure?filter=trackchanges,foo:bar, "
+                                  "contextLen: 15, startPageNumber :true ,,");
         getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
 
         std::stringstream aStream(std::string(aJsonWriter.finishAndGetAsOString()));
@@ -996,6 +999,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.0"s, name);
+        CPPUNIT_ASSERT_EQUAL("2"s, change.get<std::string>("startPageNumber"));
         CPPUNIT_ASSERT_EQUAL("ursus egestas. "s, change.get<std::string>("textBefore"));
         CPPUNIT_ASSERT_EQUAL(" blandit auctor"s, change.get<std::string>("textAfter"));
         ++it;
@@ -1006,6 +1010,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.1"s, name);
+        CPPUNIT_ASSERT_EQUAL("2"s, change.get<std::string>("startPageNumber"));
         CPPUNIT_ASSERT_EQUAL("ctor arcu, nec "s, change.get<std::string>("textBefore"));
         CPPUNIT_ASSERT_EQUAL(" eros molestie "s, change.get<std::string>("textAfter"));
         ++it;
@@ -1016,6 +1021,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractRedlines)
         CPPUNIT_ASSERT(it != docStructure.end());
         const auto & [ name, change ] = *it;
         CPPUNIT_ASSERT_EQUAL("TrackChanges.ByIndex.2"s, name);
+        CPPUNIT_ASSERT_EQUAL("2"s, change.get<std::string>("startPageNumber"));
         CPPUNIT_ASSERT_EQUAL("esque est orci."s, change.get<std::string>("textBefore"));
         CPPUNIT_ASSERT_EQUAL(""s, change.get<std::string>("textAfter"));
         ++it;

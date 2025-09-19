@@ -2,6 +2,9 @@
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
  <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:break-before="page"/>
+  </style:style>
   <style:style style:name="T1" style:family="text">
    <style:text-properties fo:font-weight="bold"/>
   </style:style>
@@ -34,7 +37,8 @@
      </text:insertion>
     </text:changed-region>
    </text:tracked-changes>
-   <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. <text:change-start text:change-id="ct2412392131792"/>Donec<text:change-end text:change-id="ct2412392131792"/> blandit auctor arcu, nec <text:change-start text:change-id="ct2412428113776"/><text:span text:style-name="T1">pellentesque</text:span><text:change-end text:change-id="ct2412428113776"/> eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.<text:change-start text:change-id="ct2412428117232"/> Sapienti sat.<text:change-end text:change-id="ct2412428117232"/></text:p>
+   <text:p/>
+   <text:p text:style-name="P1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. Curabitur dignissim sapien quis cursus egestas. <text:change-start text:change-id="ct2412392131792"/>Donec<text:change-end text:change-id="ct2412392131792"/> blandit auctor arcu, nec <text:change-start text:change-id="ct2412428113776"/><text:span text:style-name="T1">pellentesque</text:span><text:change-end text:change-id="ct2412428113776"/> eros molestie eget. In consectetur aliquam hendrerit. Sed cursus mauris vitae ligula pellentesque, non pellentesque urna aliquet. Fusce placerat mauris enim, nec rutrum purus semper vel. Praesent tincidunt neque eu pellentesque pharetra. Fusce pellentesque est orci.<text:change-start text:change-id="ct2412428117232"/> Sapienti sat.<text:change-end text:change-id="ct2412428117232"/></text:p>
   </office:text>
  </office:body>
 </office:document>
