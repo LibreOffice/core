@@ -35,7 +35,7 @@
 
 #include "strtmpl.hxx"
 
-#include <dtoa.h>
+#include <fast_float/fast_float.h>
 
 constexpr int minExp = -323, maxExp = 308;
 constexpr double n10s[] = {
@@ -358,34 +358,24 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
         if (!bDone)
         {
             buf.insert('\0', p);
-            char* pCharParseEnd;
-            errno = 0;
-            fVal = strtod_nolocale(buf.string, &pCharParseEnd);
-            if (errno == ERANGE)
+            const auto fmt(fast_float::chars_format::general | fast_float::chars_format::no_infnan);
+            auto result = fast_float::from_chars(buf.string, buf.string + buf.pos, fVal, fmt);
+            if (result.ec == std::errc::result_out_of_range)
             {
-                // This happens with overflow and underflow (including subnormals!)
-                if (std::isinf(fVal))
+                // Check for the dreaded rounded to 15 digits max value
+                // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
+                // everywhere, accept with or without plus sign in exponent.
+                std::string_view num_view(buf.string, result.ptr);
+                if (num_view == "1.79769313486232E308")
                 {
-                    // Check for the dreaded rounded to 15 digits max value
-                    // 1.79769313486232e+308 for 1.7976931348623157e+308 we wrote
-                    // everywhere, accept with or without plus sign in exponent.
-                    std::string_view num_view(buf.string, pCharParseEnd);
-                    if (num_view == "1.79769313486232E308")
-                    {
-                        fVal = DBL_MAX;
-                    }
-                    else
-                    {
-                        eStatus = rtl_math_ConversionStatus_OutOfRange;
-                    }
+                    fVal = DBL_MAX;
                 }
-                else if (fVal == 0)
+                else
                 {
                     eStatus = rtl_math_ConversionStatus_OutOfRange;
                 }
-                // else it's subnormal: allow it
             }
-            p = buf.map[pCharParseEnd - buf.string];
+            p = buf.map[result.ptr - buf.string];
         }
     }
 

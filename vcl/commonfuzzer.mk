@@ -16,7 +16,6 @@ fuzzer_externals = \
     boost_filesystem \
     boost_iostreams \
     curl \
-    dtoa \
     harfbuzz \
     graphite \
     cairo \

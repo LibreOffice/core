@@ -18,7 +18,7 @@
  */
 
 #include <cstdlib>
-#include <dtoa.h>
+#include <fast_float/fast_float.h>
 #include <float.h>
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
@@ -174,9 +174,11 @@ double ImpSvNumberInputScan::StringToDouble( std::u16string_view aStr, bool bFor
         else
             break;
     }
-    *p = '\0';
 
-    return strtod_nolocale(buf, nullptr);
+    double result = 0;
+    (void)fast_float::from_chars(
+        buf, p, result, fast_float::chars_format::general | fast_float::chars_format::no_infnan);
+    return result;
 }
 
 namespace {

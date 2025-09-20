@@ -23,7 +23,7 @@ $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
     $(if $(filter LINUX MACOSX ANDROID iOS %BSD SOLARIS HAIKU,$(OS)), \
         curl) \
-    dtoa \
+    fast_float \
     icu_headers \
     icui18n \
     icuuc \

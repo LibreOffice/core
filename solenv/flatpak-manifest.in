@@ -789,11 +789,11 @@
                     "dest-filename": "@DRAGONBOX_TARBALL@"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/@DTOA_TARBALL@",
-                    "sha256": "@DTOA_SHA256SUM@",
+                    "url": "https://dev-www.libreoffice.org/src/@FAST_FLOAT_TARBALL@",
+                    "sha256": "@FAST_FLOAT_SHA256SUM@",
                     "type": "file",
                     "dest": "external/tarballs",
-                    "dest-filename": "@DTOA_TARBALL@"
+                    "dest-filename": "@FAST_FLOAT_TARBALL@"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/@BOX2D_TARBALL@",

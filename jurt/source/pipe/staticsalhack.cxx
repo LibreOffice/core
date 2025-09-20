@@ -97,9 +97,4 @@ void sal_detail_log(sal_detail_LogLevel, char const*, char const*, char const*, 
 
 unsigned char sal_detail_log_report(sal_detail_LogLevel, char const*) { std::abort(); }
 
-#pragma clang diagnostic ignored "-Weverything"
-extern "C" {
-#include <src/dtoa.c> // workdir/UnpackedTarball/dtoa/src/dtoa.c
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
