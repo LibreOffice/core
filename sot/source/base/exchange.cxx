@@ -219,7 +219,7 @@ tDataFlavorList& InitFormats_Impl()
 
 SotClipboardFormatId FormatIdOfDynamicFormat(size_t i)
 {
-    assert(i <= InitFormats_Impl().size());
+    assert(i < InitFormats_Impl().size());
     return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
 }
 
@@ -227,6 +227,13 @@ size_t PosOfDynamicFormat(SotClipboardFormatId nFormat)
 {
     assert(nFormat > SotClipboardFormatId::USER_END);
     return static_cast<size_t>(nFormat) - static_cast<size_t>(SotClipboardFormatId::USER_END) - 1;
+}
+
+SotClipboardFormatId AddDynamicFormat(const css::datatransfer::DataFlavor& rFlavor)
+{
+    tDataFlavorList& rL = InitFormats_Impl();
+    rL.push_back(rFlavor);
+    return FormatIdOfDynamicFormat(rL.size() - 1);
 }
 
 SotClipboardFormatId GetFormatIdFromMimeType_impl(std::u16string_view rMimeType,
@@ -289,14 +296,7 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
             return FormatIdOfDynamicFormat(i);
     }
 
-    DataFlavor aNewFlavor;
-    aNewFlavor.MimeType = rName;
-    aNewFlavor.HumanPresentableName = rName;
-    aNewFlavor.DataType = cppu::UnoType<OUString>::get();
-
-    rL.push_back( std::move(aNewFlavor) );
-
-    return FormatIdOfDynamicFormat(rL.size() - 1);
+    return AddDynamicFormat({ rName, rName, cppu::UnoType<OUString>::get() });
 }
 
 SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
@@ -304,15 +304,7 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
     SotClipboardFormatId nRet = GetFormatIdFromMimeType(rMimeType);
 
     if( nRet == SotClipboardFormatId::NONE )
-    {
-        tDataFlavorList& rL = InitFormats_Impl();
-        nRet = FormatIdOfDynamicFormat(rL.size());
-        DataFlavor aNewFlavor;
-        aNewFlavor.MimeType = rMimeType;
-        aNewFlavor.HumanPresentableName = rMimeType;
-        aNewFlavor.DataType = cppu::UnoType<OUString>::get();
-        rL.emplace_back(aNewFlavor);
-    }
+        nRet = AddDynamicFormat({ rMimeType, rMimeType, cppu::UnoType<OUString>::get() });
 
     return nRet;
 }
@@ -325,11 +317,7 @@ SotClipboardFormatId SotExchange::RegisterFormat( const DataFlavor& rFlavor )
     SotClipboardFormatId nRet = GetFormat( rFlavor );
 
     if( nRet == SotClipboardFormatId::NONE )
-    {
-        tDataFlavorList& rL = InitFormats_Impl();
-        nRet = FormatIdOfDynamicFormat(rL.size());
-        rL.emplace_back( rFlavor );
-    }
+        nRet = AddDynamicFormat(rFlavor);
 
     return nRet;
 }
