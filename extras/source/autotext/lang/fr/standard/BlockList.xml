@@ -4,7 +4,7 @@
   <block-list:block block-list:abbreviated-name="C" block-list:package-name="C" block-list:name="Commande" block-list:unformatted-text="true"/>
   <block-list:block block-list:abbreviated-name="CDOS" block-list:package-name="CDOS" block-list:name="Candidature : rejet, mais conserver le dossier" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="CINVI" block-list:package-name="CINVI" block-list:name="Candidature : Invitation à un entretien" block-list:unformatted-text="false"/>
-  <block-list:block block-list:abbreviated-name="CLET" block-list:package-name="CLET" block-list:name="Candidature : Lettre d&apos;accompagnement" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CLET" block-list:package-name="CLET" block-list:name="Candidature : Lettre d'accompagnement" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="CNON" block-list:package-name="CNON" block-list:name="Candidature : rejet" block-list:unformatted-text="false"/>
   <block-list:block block-list:abbreviated-name="COP" block-list:package-name="COP" block-list:name="Mention de copyright" block-list:unformatted-text="true"/>
   <block-list:block block-list:abbreviated-name="CREC" block-list:package-name="CREC" block-list:name="Candidature : Accusé de réception" block-list:unformatted-text="false"/>
