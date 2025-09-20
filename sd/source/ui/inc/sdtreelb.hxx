@@ -418,11 +418,6 @@ public:
         static SotClipboardFormatId GetListBoxDropFormatId();
 
     private:
-        /** Temporary drop flavor id that is used internally in the
-            navigator.
-        */
-        static SotClipboardFormatId mnListBoxDropFormatId;
-
         INetBookmark const      maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType const   meDragType;

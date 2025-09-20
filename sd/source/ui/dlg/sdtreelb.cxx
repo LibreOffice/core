@@ -76,8 +76,6 @@ sd::DrawViewShell* lcl_getDrawViewShell(const SdDrawDocument* pDoc)
 
 }
 
-SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::mnListBoxDropFormatId = static_cast<SotClipboardFormatId>(SAL_MAX_UINT32);
-
 SdPageObjsTLV::SdPageObjsTransferable::SdPageObjsTransferable(
         INetBookmark aBookmark,
     ::sd::DrawDocShell& rDocShell,
@@ -129,9 +127,9 @@ SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::ge
 
 SotClipboardFormatId SdPageObjsTLV::SdPageObjsTransferable::GetListBoxDropFormatId()
 {
-    if (mnListBoxDropFormatId == static_cast<SotClipboardFormatId>(SAL_MAX_UINT32))
-        mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(u"application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""_ustr);
-    return mnListBoxDropFormatId;
+    // Temporary flavor id that is used internally in the navigator
+    static const SotClipboardFormatId id = SotExchange::RegisterFormatMimeType(u"application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""_ustr);
+    return id;
 }
 
 /**
