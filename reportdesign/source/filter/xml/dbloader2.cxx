@@ -64,7 +64,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< css::beans::PropertyValue
                 {
                     OUString sMediaType;
                     xProp->getPropertyValue(u"MediaType"_ustr) >>= sMediaType;
-                    if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
+                    if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT )
                         return u"StarBaseReport"_ustr;
                     ::comphelper::disposeComponent(xProp);
                 }

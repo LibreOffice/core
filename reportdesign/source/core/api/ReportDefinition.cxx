@@ -516,7 +516,7 @@ struct OReportDefinitionImpl
     ,m_aModifyListeners(_aMutex)
     ,m_aLegacyEventListeners(_aMutex)
     ,m_aDocEventListeners(_aMutex)
-    ,m_sMimeType(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII)
+    ,m_sMimeType(MIMETYPE_OASIS_OPENDOCUMENT_TEXT)
     ,m_sIdentifier(SERVICE_REPORTDEFINITION)
     // default visual area is 8 x 7 cm
     ,m_aVisualAreaSize( 8000, 7000 )
@@ -609,7 +609,7 @@ void OReportDefinition::init()
             OUString sMediaType;
             xStorProps->getPropertyValue(u"MediaType"_ustr) >>= sMediaType;
             if ( sMediaType.isEmpty() )
-                xStorProps->setPropertyValue(u"MediaType"_ustr,uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII));
+                xStorProps->setPropertyValue(u"MediaType"_ustr,uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT));
         }
         m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , getXWeak() );
     }
@@ -1301,8 +1301,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static constexpr OUString sPropName = u"MediaType"_ustr;
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) );
+        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
+            xProp->setPropertyValue( sPropName, uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
     }
 
     /** property map for export info set */
@@ -1899,7 +1899,7 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype )
 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  )
 {
-    return { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII, MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII };
+    return { MIMETYPE_OASIS_OPENDOCUMENT_TEXT, MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET };
 }
 
 // css::XUnoTunnel

@@ -374,11 +374,11 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
     {
         case SID_RPT_TEXTDOCUMENT:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = (m_xReportDefinition.is() && m_xReportDefinition->getMimeType() == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII);
+            aReturn.bChecked = (m_xReportDefinition.is() && m_xReportDefinition->getMimeType() == MIMETYPE_OASIS_OPENDOCUMENT_TEXT);
             break;
         case SID_RPT_SPREADSHEET:
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = (m_xReportDefinition.is() && m_xReportDefinition->getMimeType() == MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII);
+            aReturn.bChecked = (m_xReportDefinition.is() && m_xReportDefinition->getMimeType() == MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET);
             break;
         case SID_REPORTHEADER_WITHOUT_UNDO:
         case SID_REPORTFOOTER_WITHOUT_UNDO:
@@ -978,11 +978,11 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
     {
         case SID_RPT_TEXTDOCUMENT:
             if ( m_xReportDefinition.is() )
-                m_xReportDefinition->setMimeType( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII );
+                m_xReportDefinition->setMimeType( MIMETYPE_OASIS_OPENDOCUMENT_TEXT );
             break;
         case SID_RPT_SPREADSHEET:
             if (m_xReportDefinition.is() )
-                m_xReportDefinition->setMimeType( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII );
+                m_xReportDefinition->setMimeType( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET );
             break;
         case SID_REPORTHEADER_WITHOUT_UNDO:
         case SID_REPORTFOOTER_WITHOUT_UNDO:

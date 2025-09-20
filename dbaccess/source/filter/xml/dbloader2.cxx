@@ -130,7 +130,7 @@ OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::Prope
         {
             OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
-            if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII || sMediaType == MIMETYPE_VND_SUN_XML_BASE_ASCII )
+            if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE || sMediaType == MIMETYPE_VND_SUN_XML_BASE )
             {
                 if ( bStreamFromDescr && !sURL.startsWith( "private:stream" ) )
                 {

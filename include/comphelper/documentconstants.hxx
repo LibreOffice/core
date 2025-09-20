@@ -23,43 +23,43 @@
 #include <rtl/ustring.hxx>
 
 // formats of SO6/7
-inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_ASCII = u"application/vnd.sun.xml.writer"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII = u"application/vnd.sun.xml.writer.web"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII = u"application/vnd.sun.xml.writer.global"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_DRAW_ASCII = u"application/vnd.sun.xml.draw"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_IMPRESS_ASCII = u"application/vnd.sun.xml.impress"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_CALC_ASCII = u"application/vnd.sun.xml.calc"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_CHART_ASCII = u"application/vnd.sun.xml.chart"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_MATH_ASCII = u"application/vnd.sun.xml.math"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_BASE_ASCII = u"application/vnd.sun.xml.base"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER = u"application/vnd.sun.xml.writer"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_WEB = u"application/vnd.sun.xml.writer.web"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_GLOBAL = u"application/vnd.sun.xml.writer.global"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_DRAW = u"application/vnd.sun.xml.draw"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_IMPRESS = u"application/vnd.sun.xml.impress"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_CALC = u"application/vnd.sun.xml.calc"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_CHART = u"application/vnd.sun.xml.chart"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_MATH = u"application/vnd.sun.xml.math"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_BASE = u"application/vnd.sun.xml.base"_ustr;
 
 // template formats of SO6/7
-inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII = u"application/vnd.sun.xml.writer.template"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII = u"application/vnd.sun.xml.draw.template"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII = u"application/vnd.sun.xml.impress.template"_ustr;
-inline constexpr OUString MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII = u"application/vnd.sun.xml.calc.template"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE = u"application/vnd.sun.xml.writer.template"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE = u"application/vnd.sun.xml.draw.template"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE = u"application/vnd.sun.xml.impress.template"_ustr;
+inline constexpr OUString MIMETYPE_VND_SUN_XML_CALC_TEMPLATE = u"application/vnd.sun.xml.calc.template"_ustr;
 
 // formats of SO8
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII = u"application/vnd.oasis.opendocument.text"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII = u"application/vnd.oasis.opendocument.text-web"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII = u"application/vnd.oasis.opendocument.text-master"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII = u"application/vnd.oasis.opendocument.graphics"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII = u"application/vnd.oasis.opendocument.presentation"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII = u"application/vnd.oasis.opendocument.spreadsheet"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII = u"application/vnd.oasis.opendocument.chart"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII = u"application/vnd.oasis.opendocument.formula"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII = u"application/vnd.oasis.opendocument.base"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII = u"application/vnd.sun.xml.report"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII = u"application/vnd.sun.xml.report.chart"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT = u"application/vnd.oasis.opendocument.text"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB = u"application/vnd.oasis.opendocument.text-web"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL = u"application/vnd.oasis.opendocument.text-master"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DRAWING = u"application/vnd.oasis.opendocument.graphics"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION = u"application/vnd.oasis.opendocument.presentation"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET = u"application/vnd.oasis.opendocument.spreadsheet"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_CHART = u"application/vnd.oasis.opendocument.chart"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_FORMULA = u"application/vnd.oasis.opendocument.formula"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DATABASE = u"application/vnd.oasis.opendocument.base"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_REPORT = u"application/vnd.sun.xml.report"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART = u"application/vnd.sun.xml.report.chart"_ustr;
 
 // template formats of SO8
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.text-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.text-master-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.graphics-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.presentation-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.spreadsheet-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.chart-template"_ustr;
-inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII = u"application/vnd.oasis.opendocument.formula-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE = u"application/vnd.oasis.opendocument.text-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE = u"application/vnd.oasis.opendocument.text-master-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE = u"application/vnd.oasis.opendocument.graphics-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE = u"application/vnd.oasis.opendocument.presentation-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE = u"application/vnd.oasis.opendocument.spreadsheet-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE = u"application/vnd.oasis.opendocument.chart-template"_ustr;
+inline constexpr OUString MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE = u"application/vnd.oasis.opendocument.formula-template"_ustr;
 
 
 // ODF versions

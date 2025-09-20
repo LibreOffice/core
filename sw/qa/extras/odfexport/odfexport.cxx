@@ -968,7 +968,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
 
         uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xStorProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType);
-        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII));
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_FORMULA));
     }
     // checking second object (chart)
     {
@@ -982,7 +982,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
 
         uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xStorProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType);
-        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII));
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART));
     }
     // checking third object (chart)
     {
@@ -996,7 +996,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
 
         uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xStorProps->getPropertyValue(u"MediaType"_ustr) >>= aMediaType);
-        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII));
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART));
     }
 }
 

@@ -171,10 +171,10 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                 //  first if necessary).
                 //  These strings are used to find impress templates in the tree of
                 //  template files.  Should probably be determined dynamically.
-                if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII)
-                    ||  (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII)
+                if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
+                    ||  (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION)
                     ||  (sContentType == "application/vnd.stardivision.impress")
-                    ||  (sContentType == MIMETYPE_VND_SUN_XML_IMPRESS_ASCII)
+                    ||  (sContentType == MIMETYPE_VND_SUN_XML_IMPRESS)
                         // The following id comes from the bugdoc in #i2764#.
                     ||  (sContentType == "Impress 2.0"))
                 {
