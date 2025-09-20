@@ -192,11 +192,8 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     {
         pData->GetArea( nStartTab, nStartCol,nStartRow, nEndCol,nEndRow );
     }
-    else if ( eMode == SC_DB_OLD )
-    {
-        pData = nullptr;                           // nothing found
-    }
-    else
+    // tdf #168478 - use the previously found range rather than returning an empty one
+    else if ( eMode != SC_DB_OLD )
     {
         if ( !bSelected )
         {                                       // continuous range
