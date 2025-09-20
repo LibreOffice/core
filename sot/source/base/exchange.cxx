@@ -27,6 +27,7 @@
 #include <comphelper/classids.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <comphelper/documentconstants.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <memory>
 #include <vector>
@@ -208,13 +209,43 @@ const DataFlavorRepresentation* FormatArray_Impl()
 };
 
     typedef std::vector<css::datatransfer::DataFlavor> tDataFlavorList;
-}
 
-static tDataFlavorList& InitFormats_Impl()
+tDataFlavorList& InitFormats_Impl()
 {
     static tools::DeleteOnDeinit<tDataFlavorList> gImplData;
 
     return *gImplData.get();
+}
+
+SotClipboardFormatId GetFormatIdFromMimeType_impl(std::u16string_view rMimeType,
+                                                  bool allowMoreParams)
+{
+    const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
+    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
+        if( rMimeType == pFormatArray_Impl[ static_cast<int>(i) ].pMimeType )
+            return i;
+
+    // BM: the chart format 105 ("StarChartDocument 5.0") was written
+    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
+    // The registry only contains the entry for the 42 format id.
+    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
+        if (std::u16string_view rest;
+            o3tl::starts_with(rMimeType, pFormatArray_Impl[static_cast<int>(i)].pMimeType, &rest)
+            && (rest.empty() || (allowMoreParams && rest.starts_with(';'))))
+            return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
+                     ? SotClipboardFormatId::STARCHART_50
+                     : i );
+
+    // then in the dynamic list
+    tDataFlavorList& rL = InitFormats_Impl();
+    for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
+    {
+        if( rMimeType == rL[ i ].MimeType )
+            return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
+    }
+
+    return SotClipboardFormatId::NONE;
+}
 }
 
 /*************************************************************************
@@ -386,31 +417,7 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 
 SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( std::u16string_view rMimeType )
 {
-    const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType == pFormatArray_Impl[ static_cast<int>(i) ].pMimeType )
-            return i;
-
-    // BM: the chart format 105 ("StarChartDocument 5.0") was written
-    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
-    // The registry only contains the entry for the 42 format id.
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType == pFormatArray_Impl[ static_cast<int>(i) ].pMimeType )
-            return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
-                     ? SotClipboardFormatId::STARCHART_50
-                     : i );
-
-    // then in the dynamic list
-    tDataFlavorList& rL = InitFormats_Impl();
-
-    for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
-    {
-        auto const& rFlavor = rL[ i ];
-        if( rMimeType == rFlavor.MimeType )
-            return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
-    }
-
-    return SotClipboardFormatId::NONE;
+    return GetFormatIdFromMimeType_impl(rMimeType, false);
 }
 
 /*************************************************************************
@@ -421,36 +428,7 @@ SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( std::u16string_view r
 *************************************************************************/
 SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
-    // test the default first - name
-    const OUString& rMimeType = rFlavor.MimeType;
-
-    const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
-            return i;
-
-    // BM: the chart format 105 ("StarChartDocument 5.0") was written
-    // only into 5.1 chart documents - in 5.0 and 5.2 it was 42 ("StarChart 5.0")
-    // The registry only contains the entry for the 42 format id.
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-    {
-        if (std::u16string_view rest;
-            rMimeType.startsWith(pFormatArray_Impl[static_cast<int>(i)].pMimeType, &rest)
-            && (rest.empty() || rest.starts_with(';')))
-            return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
-                     ? SotClipboardFormatId::STARCHART_50
-                     : i );
-    }
-
-    // then in the dynamic list
-    tDataFlavorList& rL = InitFormats_Impl();
-    for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
-    {
-        if( rMimeType == rL[ i ].MimeType )
-            return static_cast<SotClipboardFormatId>(i + static_cast<int>(SotClipboardFormatId::USER_END) + 1);
-    }
-
-    return SotClipboardFormatId::NONE;
+    return GetFormatIdFromMimeType_impl(rFlavor.MimeType, true);
 }
 
 /*************************************************************************
