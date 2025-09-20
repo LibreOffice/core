@@ -73,7 +73,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool /*bGetSynchron*/ )
 {
-    SotClipboardFormatId nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
+    SotClipboardFormatId nFmt = SotExchange::GetFormatIdFromMimeType(rMimeType);
     switch( nType )
     {
     case SvFileObjectType::Text:
