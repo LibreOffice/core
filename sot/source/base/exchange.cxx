@@ -434,11 +434,9 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
     // The registry only contains the entry for the 42 format id.
     for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
     {
-        const OUString& pFormatMimeType = pFormatArray_Impl[ static_cast<int>(i) ].pMimeType;
-        const sal_Int32 nFormatMimeTypeLen = pFormatMimeType.getLength();
-        if( rMimeType.match( pFormatMimeType ) &&
-            ( rMimeType.getLength() == nFormatMimeTypeLen ||
-              rMimeType[ nFormatMimeTypeLen ] == ';' ) )
+        if (std::u16string_view rest;
+            rMimeType.startsWith(pFormatArray_Impl[static_cast<int>(i)].pMimeType, &rest)
+            && (rest.empty() || rest.starts_with(';')))
             return ( (i == SotClipboardFormatId::STARCHARTDOCUMENT_50)
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
