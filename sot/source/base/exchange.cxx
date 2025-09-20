@@ -301,33 +301,20 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
 
 SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
 {
-    const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl();
-    // test the default first - name
-    for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
-        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
-            return i;
+    SotClipboardFormatId nRet = GetFormatIdFromMimeType(rMimeType);
 
-    for( SotClipboardFormatId i = SotClipboardFormatId::RTF; i <= SotClipboardFormatId::USER_END;  ++i )
-        if( rMimeType.equals( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
-            return i;
-
-    // then in the dynamic list
-    tDataFlavorList& rL = InitFormats_Impl();
-    for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
+    if( nRet == SotClipboardFormatId::NONE )
     {
-        auto const& rFlavor = rL[ i ];
-        if( rMimeType == rFlavor.MimeType )
-            return FormatIdOfDynamicFormat(i);
+        tDataFlavorList& rL = InitFormats_Impl();
+        nRet = FormatIdOfDynamicFormat(rL.size());
+        DataFlavor aNewFlavor;
+        aNewFlavor.MimeType = rMimeType;
+        aNewFlavor.HumanPresentableName = rMimeType;
+        aNewFlavor.DataType = cppu::UnoType<OUString>::get();
+        rL.emplace_back(aNewFlavor);
     }
 
-    DataFlavor aNewFlavor;
-    aNewFlavor.MimeType = rMimeType;
-    aNewFlavor.HumanPresentableName = rMimeType;
-    aNewFlavor.DataType = cppu::UnoType<OUString>::get();
-
-    rL.push_back( std::move(aNewFlavor) );
-
-    return FormatIdOfDynamicFormat(rL.size() - 1);
+    return nRet;
 }
 
 /*************************************************************************
