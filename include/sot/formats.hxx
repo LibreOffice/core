@@ -26,6 +26,8 @@
 // Do NOT change the order of these values as the implementation depends on them!
 enum class SotClipboardFormatId : sal_uInt32
 {
+    NONE                   = 0,
+
 // standard formats for that Copy/Paste methods exist
     STRING                 = 1,
     BITMAP                 = 2,
@@ -33,11 +35,12 @@ enum class SotClipboardFormatId : sal_uInt32
     PRIVATE                = 4,
     SIMPLE_FILE            = 5,
     FILE_LIST              = 6,
+
+// the SW module essentially creates its own ID's and this is one of them
+    ONLY_USED_IN_SW        = 8,
+
 // further formats (only via CopyData/PasteData)
     RTF                    = 10,
-
-    NONE                   = 0,
-    ONLY_USED_IN_SW        = 8, // the SW module essentially creates its own ID's and this is one of them
     DRAWING                = 11,
     SVXB                   = 12,
     SVIM                   = 13,
