@@ -377,7 +377,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     const SfxBoolItem* pIgnoreComments = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
                     if (pIgnoreComments)
                         bIgnoreComments = pIgnoreComments->GetValue();
-                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable);
+                    SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable, true);
 
                     if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
                         rSh.EnterSelFrameMode();
