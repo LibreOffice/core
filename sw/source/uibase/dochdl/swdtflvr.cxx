@@ -28,8 +28,6 @@
 
 #include <officecfg/Office/Writer.hxx>
 
-#include <svtools/svtresid.hxx>
-#include <svtools/strings.hrc>
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
@@ -45,8 +43,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
@@ -135,7 +131,6 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
-#include <svx/GenericDropDownFieldDialog.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -1470,7 +1465,7 @@ static sal_Int32 lcl_getLevel(OUString& sText, sal_Int32 nIdx)
     return nRet;
 }
 
-bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
+bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable, bool bUseDetection)
 {
     SwPasteContext aPasteContext(rSh);
 
@@ -1702,7 +1697,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
             SwTransferable::PasteData( rData, rSh, nAction, nActionFlags, nFormat,
-                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable);
+                                        nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext, ePasteTable, bUseDetection);
 }
 
 bool SwTransferable::PasteData( const TransferableDataHelper& rData,
@@ -1714,7 +1709,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
                             bool bPasteSelection, RndStdIds nAnchorType,
                             bool bIgnoreComments,
                             SwPasteContext* pContext,
-                            PasteTableType ePasteTable )
+                            PasteTableType ePasteTable, bool bUseDetection )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
@@ -1878,7 +1873,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
             case SotClipboardFormatId::STRING:
             case SotClipboardFormatId::MARKDOWN:
                 bRet = SwTransferable::PasteFileContent( rData, rSh,
-                                                            nFormat, bMsg, bIgnoreComments );
+                                                            nFormat, bMsg, bIgnoreComments, bUseDetection );
                 break;
 
             case SotClipboardFormatId::NETSCAPE_BOOKMARK:
@@ -2183,7 +2178,7 @@ bool CanSkipInvalidateNumRules(const SwPosition& rInsertPosition)
 }
 
 bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
-                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
+                                    SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments, bool bUseDetection )
 {
     TranslateId pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
@@ -2203,30 +2198,8 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
 
             if( rData.GetString( nFormat, sData ) )
             {
-                OUString aSelection;
-                std::vector<OUString> aFormats;
-                aFormats.push_back(SvtResId(STR_FORMAT_STRING));
 
-                if(comphelper::IsMarkdownData(sData)) //markdown
-                {
-                    aFormats.push_back(SvtResId(STR_FORMAT_ID_MARKDOWN));
-                }
-
-                if(aFormats.size() > 1)
-                {
-                    GenericDropDownFieldDialog aDialog(GetActiveView()->GetFrameWeld(),
-                                                       SvxResId(RID_SVXSTR_PASTE_AS_DIALOG_TITLE),
-                                                       aFormats);
-                    short nRet = aDialog.run();
-                    if( nRet == RET_OK)
-                    {
-                        aSelection = aDialog.GetSelectedItem();
-                    }
-                    else if(nRet == RET_CANCEL)
-                        return false;
-                }
-
-                if(aSelection == SvtResId(STR_FORMAT_ID_MARKDOWN))
+                if(bUseDetection && comphelper::IsMarkdownData(sData)) //markdown
                 {
                     OString aData = OUStringToOString(sData, RTL_TEXTENCODING_UTF8);
 
