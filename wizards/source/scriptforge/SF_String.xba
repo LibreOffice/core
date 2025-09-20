@@ -2281,7 +2281,7 @@ Public Function SplitNotQuoted(Optional ByRef InputStr As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		InputStr: the input string
 &apos;&apos;&apos;			Might contain quoted substrings:
-&apos;&apos;&apos;				The quoting character must be the double quote (&quot;)
+&apos;&apos;&apos;				The quoting character must be the double quote [&quot;] (default) or the single quote [&apos;]
 &apos;&apos;&apos;				To preserve a quoting character inside the quoted substring, use (\) or (&quot;) as escape character
 &apos;&apos;&apos;					=&gt; [str\&quot;i&quot;&quot;ng]  means [str&quot;i&quot;ng]
 &apos;&apos;&apos;		Delimiter: A string of one or more characters that is used to delimit the input string
@@ -2303,7 +2303,6 @@ Dim vEnd As Variant						&apos;	Array of end positions of quoted strings
 Dim lInStr As Long						&apos;	InStr() on input string
 Dim lInStrPrev As Long					&apos;	Previous value of lInputStr
 Dim lBound As Long						&apos;	UBound of vStart and vEnd
-Dim lMin As Long						&apos;	Lower bound to consider when searching vStart and vEnd
 Dim oCharacterClass As Object			&apos;	com.sun.star.i18n.CharacterClassification
 Dim oLocale As Object					&apos;	com.sun.star.lang.Locale
 Dim oParse As Object					&apos;	com.sun.star.i18n.ParseResult
@@ -2366,22 +2365,20 @@ Try:
 			vSplit = Split(InputStr, Delimiter, Occurrences)
 		Else
 			&apos;	Split chunk by chunk
-			lMin = 0
 			lInStrPrev = 0
 			lInStr = InStr(1, InputStr, Delimiter, 0)
 			Do While lInStr &gt; 0
 				If Occurrences &gt; 0 And Occurrences = UBound(vSplit) - 1 Then Exit Do
 				bSplit = False
 				&apos;	Ignore found Delimiter if in quoted string
-				For i = lMin To lBound
+				For i = 0 To lBound
 					If lInStr &lt; vStart(i) Then
 						bSplit = True
 						Exit For
 					ElseIf lInStr &gt; vStart(i) And lInStr &lt; vEnd (i) Then
 						Exit For
 					Else
-						lMin = i + 1
-						If i = lBound Then bSplit = True Else bSplit = ( lInStr &lt; vStart(lMin) )
+						If i = lBound Then bSplit = True Else bSplit = ( lInStr &lt; vStart(i + 1) )
 					End If
 				Next i
 				&apos;	Build next chunk and store in split array
