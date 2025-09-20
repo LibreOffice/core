@@ -249,9 +249,6 @@ SotClipboardFormatId GetFormatIdFromMimeType_impl(std::u16string_view rMimeType,
 }
 
 /*************************************************************************
-|*
-|*    SotExchange::RegisterFormatName()
-|*
 |*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
@@ -322,9 +319,6 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
 }
 
 /*************************************************************************
-|*
-|*    SotExchange::RegisterFormatName()
-|*
 |*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::RegisterFormat( const DataFlavor& rFlavor )
@@ -340,12 +334,6 @@ SotClipboardFormatId SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 
     return nRet;
 }
-
-/*************************************************************************
-|*
-|*    SotExchange::GetFormatDataFlavor()
-|*
-*************************************************************************/
 
 bool SotExchange::GetFormatDataFlavor( SotClipboardFormatId nFormat, DataFlavor& rFlavor )
 {
@@ -383,12 +371,6 @@ bool SotExchange::GetFormatDataFlavor( SotClipboardFormatId nFormat, DataFlavor&
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*    SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
-|*
-*************************************************************************/
-
 OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
 {
     OUString sMimeType;
@@ -409,21 +391,12 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
     return sMimeType;
 }
 
-/*************************************************************************
-|*
-|*    SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
-|*
-*************************************************************************/
-
 SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( std::u16string_view rMimeType )
 {
     return GetFormatIdFromMimeType_impl(rMimeType, false);
 }
 
 /*************************************************************************
-|*
-|*    SotExchange::GetFormatName()
-|*
 |*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
@@ -432,9 +405,6 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
 }
 
 /*************************************************************************
-|*
-|*    SotExchange::GetFormatName()
-|*
 |*    Description       CLIP.SDW
 *************************************************************************/
 OUString SotExchange::GetFormatName( SotClipboardFormatId nFormat )
