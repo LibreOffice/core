@@ -2660,6 +2660,11 @@ AC_ARG_WITH(system-dragonbox,
         [Use dragonbox already on system.]),,
     [with_system_dragonbox="$with_system_headers"])
 
+AC_ARG_WITH(system-fast-float,
+    AS_HELP_STRING([--with-system-fast-float],
+        [Use fast_float already on system.]),,
+    [with_system_fast_float="$with_system_headers"])
+
 AC_ARG_WITH(system-frozen,
     AS_HELP_STRING([--with-system-frozen],
         [Use frozen already on system.]),,
@@ -6209,6 +6214,7 @@ if test "$cross_compiling" = "yes"; then
         DYNLOADING
         EPOXY
         EXPAT
+        FAST_FLOAT
         FROZEN
         GLM
         GRAPHITE
@@ -11212,6 +11218,29 @@ else
 fi
 AC_SUBST([SYSTEM_DRAGONBOX])
 AC_SUBST([DRAGONBOX_CFLAGS])
+
+dnl ===================================================================
+dnl Check for system fast_float
+dnl ===================================================================
+AC_MSG_CHECKING([which fast_float to use])
+if test "$with_system_fast_float" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_FAST_FLOAT=TRUE
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    FAST_FLOAT_CFLAGS=-I/usr/include
+    CPPFLAGS="$CPPFLAGS $FAST_FLOAT_CFLAGS"
+    AC_CHECK_HEADER([fast_float/fast_float.h], [],
+       [AC_MSG_ERROR([fast_float/fast_float.h not found. install fast_float])], [])
+    AC_LANG_POP([C++])
+    CPPFLAGS=$save_CPPFLAGS
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE FAST_FLOAT"
+    SYSTEM_FAST_FLOAT=
+fi
+AC_SUBST([SYSTEM_FAST_FLOAT])
+AC_SUBST([FAST_FLOAT_CFLAGS])
 
 dnl ===================================================================
 dnl Check for system frozen

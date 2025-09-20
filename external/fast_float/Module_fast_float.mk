@@ -7,8 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-module_directory:=$(dir $(realpath $(firstword $(MAKEFILE_LIST))))
+$(eval $(call gb_Module_Module,fast_float))
 
-include $(module_directory)/../../solenv/gbuild/partial_build.mk
+$(eval $(call gb_Module_add_targets,fast_float,\
+    UnpackedTarball_fast_float \
+))
 
 # vim: set noet sw=4 ts=4:

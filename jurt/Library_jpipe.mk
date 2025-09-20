@@ -46,11 +46,6 @@ $(eval $(call gb_Library_add_cobjects,jpipe, \
     jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection \
 ))
 
-# see external/dtoa/StaticLibrary_dtoa.mk
-$(eval $(call gb_Library_add_defs,jpipe,\
-    $(if $(filter little,$(ENDIANNESS)),-DIEEE_8087,-DIEEE_MC68k)\
-))
-
 $(eval $(call gb_Library_add_exception_objects,jpipe, \
     jurt/source/pipe/staticsalhack \
 ))
@@ -67,8 +62,6 @@ $(eval $(call gb_Library_set_include,jpipe, \
     -I$(SRCDIR)/sal/osl/unx \
     -I$(SRCDIR)/sal/rtl \
     -I$(SRCDIR)/sal/textenc \
-    -I$(gb_UnpackedTarball_workdir)/dtoa \
-    -I$(gb_UnpackedTarball_workdir)/dtoa/include \
 ))
 
 $(eval $(call gb_Library_use_externals,jpipe, \
@@ -82,7 +75,6 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,jpipe, \
 ))
 endif
 
-$(call gb_Library_get_linktarget_target,jpipe): $(call gb_UnpackedTarball_get_target,dtoa)
 $(call gb_Library_get_linktarget_target,jpipe): gb_CC := $(filter-out -fsanitize%,$(gb_CC))
 $(call gb_Library_get_linktarget_target,jpipe): gb_CXX := $(filter-out -fsanitize%,$(gb_CXX))
 
