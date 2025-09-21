@@ -67,6 +67,7 @@ $(eval $(call gb_Library_set_include,jpipe, \
 $(eval $(call gb_Library_use_externals,jpipe, \
     boost_headers \
     dragonbox \
+    fast_float \
 ))
 
 ifeq ($(OS),MACOSX)
