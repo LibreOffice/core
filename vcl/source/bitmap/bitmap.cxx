@@ -2169,6 +2169,10 @@ Color Bitmap::GetAverageColor() const
             nCnt++;
         }
     }
+
+    if(!nCnt)
+        return Color();
+
     return Color(ColorAlpha, static_cast<sal_uInt8>(fAlpha / nCnt),
                    static_cast<sal_uInt8>(fRed / nCnt),
                    static_cast<sal_uInt8>(fGreen / nCnt),
