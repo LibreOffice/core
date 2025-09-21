@@ -241,6 +241,7 @@ double stringToDouble(CharT const* pBegin, CharT const* pEnd, CharT cDecSeparato
                     string = stringInHeap.get();
                     map = mapInHeap.get();
                 }
+                // coverity[uninit_member] - mapOnStack contents intentionally not initialized
             }
             // [-loplugin:unusedmember] false positive
             void insert(char c, const CharT* ptr)
