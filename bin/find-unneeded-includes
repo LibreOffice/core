@@ -571,6 +571,8 @@ def main(argv):
                         'Use only for debugging this script!')
     parser.add_argument('--fwdecl', action='store_true',
                     help='Suggest removal of obsolete forward declarations')
+    parser.add_argument('--sanitycheck', action='store_true',
+                    help='Sanity check of IwyuFilter_foo.yaml of a module')
 
     args = parser.parse_args()
 
@@ -613,25 +615,27 @@ def main(argv):
         print("No files found to check!")
         sys.exit(-2)
 
-    moduleName = sorted(list_of_files)[0].split("/")[0]
-    rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
-    moduleRules = {}
-    if os.path.exists(rulePath):
-        moduleRules = yaml.full_load(open(rulePath))
-    if "excludelist" in moduleRules.keys():
-        excludelistRules = moduleRules["excludelist"]
-        for pathname in excludelistRules.keys():
-            file = pathlib.Path(pathname)
-            if not file.exists():
-                print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
-            # If the file mentioned in the IwyuFilter file exists,
-            # check that the excluded files / forward declarations are still present
-            # to avoid stale exclusion rules lingering forever
-            else:
-                for exclusion in excludelistRules[pathname]:
-                    p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
-                    if p.returncode == 1 :
-                        print("WARNING:", exclusion, "is not present anymore in", file)
+    if args.sanitycheck:
+        moduleName = sorted(list_of_files)[0].split("/")[0]
+        rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
+        moduleRules = {}
+        if os.path.exists(rulePath):
+            moduleRules = yaml.full_load(open(rulePath))
+        if "excludelist" in moduleRules.keys():
+            excludelistRules = moduleRules["excludelist"]
+            for pathname in excludelistRules.keys():
+                file = pathlib.Path(pathname)
+                if not file.exists():
+                    print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
+                # If the file mentioned in the IwyuFilter file exists,
+                # check that the excluded files / forward declarations are still present
+                # to avoid stale exclusion rules lingering forever
+                else:
+                    for exclusion in excludelistRules[pathname]:
+                        p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
+                        if p.returncode == 1 :
+                            print("WARNING:", exclusion, "is not present anymore in", file)
+        sys.exit(0)
 
     tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl)
 
