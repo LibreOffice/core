@@ -5680,11 +5680,20 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
             {
                 assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 SwOutlineContent* pOutlineContent = static_cast<SwOutlineContent*>(pUserData);
-                SwOutlineNodes::size_type nOutlinePos = pOutlineContent->GetOutlinePos();
-                const OUString& rOutlineName = pOutlineContent->GetName();
+
+                sEntry = pOutlineContent->GetName();
+
                 const SwNodes& rNodes = m_pActiveShell->GetDoc()->GetNodes();
                 const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
-                SwNode* pStartNode = rOutlineNodes[nOutlinePos];
+
+                SwNode* pStartNode = rOutlineNodes[pOutlineContent->GetOutlinePos()];
+
+                // Don't show additional info in the tooltip if the outline is in footnote/endnote.
+                const SwFrame* pFrame
+                        = pStartNode->GetContentNode()->getLayoutFrame(m_pActiveShell->GetLayout());
+                if (!pFrame || pFrame->IsInFootnote())
+                    break;
+
                 SwNode* pEndNode = &rNodes.GetEndOfContent();
 
                 // tdf#163646 - Show in the tooltip for heading entries in Writer Navigator the
@@ -5708,9 +5717,33 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 SwPaM aPaM(*pStartNode, *pEndNode);
                 SwDocStat aDocStat;
                 SwDoc::CountWords(aPaM, aDocStat);
-                sEntry = rOutlineName + "\n" + SwResId(FLD_STAT_WORD) + ": "
-                         + OUString::number(aDocStat.nWord) + "\n" + SwResId(FLD_STAT_CHAR) + ": "
-                         + OUString::number(aDocStat.nChar);
+                sEntry += "\n" + SwResId(FLD_STAT_WORD) + ": " + OUString::number(aDocStat.nWord)
+                        + "\n" + SwResId(FLD_STAT_CHAR) + ": " + OUString::number(aDocStat.nChar);
+
+                // tdf#166048 - Show pages from/to in the Navigator's heading tooltip
+                if (pEndNode != pStartNode)
+                {
+                    SwNodeIndex aIdx(*pEndNode, -1);
+                    while (aIdx.GetNode().GetEndNode())
+                        --aIdx;
+                    pEndNode = &aIdx.GetNode();
+                }
+                aPaM.GetPoint()->Assign(
+                            *pEndNode, pEndNode->IsTextNode() ? pEndNode->GetTextNode()->Len() : 0);
+
+                auto nFirstPage = aPaM.GetPageNum(false);
+                if (nFirstPage != 0)
+                {
+                    auto nLastPage = aPaM.GetPageNum();
+                    sEntry += "\n" + SwResId(STR_PAGES, nLastPage ? nLastPage - nFirstPage + 1 : 1);
+                    if (nLastPage != 0 && nFirstPage < nLastPage)
+                    {
+                        sEntry = sEntry.replaceFirst("%1", OUString::number(nFirstPage));
+                        sEntry = sEntry.replaceFirst("%2", OUString::number(nLastPage));
+                    }
+                    else
+                        sEntry = sEntry.replaceFirst("%1", OUString::number(nFirstPage));
+                }
             }
             break;
             case ContentTypeId::GRAPHIC:

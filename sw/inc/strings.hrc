@@ -1573,6 +1573,8 @@
 #define STR_QUERY_CLOSE_TEXT NC_("STR_QUERY_CLOSE_TEXT", "The current index entry was modified.")
 #define STR_QUERY_CLOSE_QUESTION NC_("STR_QUERY_CLOSE_QUESTION", "Do you want to save changes?")
 
+#define STR_PAGES NNC_("STR_PAGES", "Page: %1", "Pages: %1-%2")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
