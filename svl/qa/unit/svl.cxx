@@ -1374,6 +1374,17 @@ void Test::testIsNumberFormatSpecific()
 
         checkSpecificNumberFormats( aFormatter, aIO, "[de-AT] date January month names");
     }
+
+    {
+        // Test date and time elements
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+
+        std::vector<FormatInputOutput> aIO = {
+            { "2025-09-21 13:14:15.16", true, "2025-09-21 13:14:15.160", 0 },
+        };
+
+        checkSpecificNumberFormats(aFormatter, aIO, "[en-US] datetime");
+    }
 }
 
 void Test::testUserDefinedNumberFormats()
