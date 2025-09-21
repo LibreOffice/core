@@ -882,8 +882,10 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
 
 void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
 {
-    if(  mbUpdatingControls )
+    if (mbUpdatingControls || mbInApplyToPages)
         return;
+
+    mbInApplyToPages = true;
 
     vcl::Window *pFocusWindow = Application::GetFocusWindow();
 
@@ -906,6 +908,8 @@ void SlideTransitionPane::applyToSelectedPages(bool bPreview = true)
 
     if (pFocusWindow)
         pFocusWindow->GrabFocus();
+
+    mbInApplyToPages = false;
 }
 
 void SlideTransitionPane::playCurrentEffect()
