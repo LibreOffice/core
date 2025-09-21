@@ -190,14 +190,6 @@ private:
 
     void InitText();                            // Init of months and days of week
 
-    // Convert string to double.
-    // Only simple unsigned floating point values without any error detection,
-    // decimal separator has to be '.'
-    // If bForceFraction==true the string is taken to be the fractional part
-    // of 0.1234 without the leading 0. (thus being just "1234").
-    static double StringToDouble( std::u16string_view aStr,
-                                  bool bForceFraction = false );
-
     // Next number/string symbol
     static bool NextNumberStringSymbol( const sal_Unicode*& pStr,
                                         OUString& rSymbol );
