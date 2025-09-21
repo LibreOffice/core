@@ -177,7 +177,7 @@ double ImpSvNumberInputScan::StringToDouble( std::u16string_view aStr, bool bFor
 
     double result = 0;
     (void)fast_float::from_chars(
-        buf, p, result, fast_float::chars_format::general | fast_float::chars_format::no_infnan);
+        buf, p, result, fast_float::chars_format::fixed | fast_float::chars_format::no_infnan);
     return result;
 }
 
