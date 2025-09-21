@@ -624,6 +624,14 @@ def main(argv):
             file = pathlib.Path(pathname)
             if not file.exists():
                 print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
+            # If the file mentioned in the IwyuFilter file exists,
+            # check that the excluded files / forward declarations are still present
+            # to avoid stale exclusion rules lingering forever
+            else:
+                for exclusion in excludelistRules[pathname]:
+                    p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
+                    if p.returncode == 1 :
+                        print("WARNING:", exclusion, "is not present anymore in", file)
 
     tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl)
 

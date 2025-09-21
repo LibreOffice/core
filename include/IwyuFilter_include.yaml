@@ -117,7 +117,6 @@ excludelist:
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
     include/comphelper/OAccessible.hxx:
     # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
     include/comphelper/accessibleselectionhelper.hxx:
@@ -187,9 +186,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/io/XInputStream.hpp
     - com/sun/star/io/XSeekable.hpp
-    include/comphelper/servicehelper.hxx:
-    # Needed for macro
-    - rtl/instance.hxx
     include/comphelper/unique_disposing_ptr.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -212,13 +208,8 @@ excludelist:
     include/o3tl/char16_t2wchar_t.hxx:
     # Needed on WIN32
     - string_view
-    include/o3tl/deleter.hxx:
-    # Needed for __COVERITY__
-    - com/sun/star/uno/Exception.hpp
-    - sal/log.hxx
     include/o3tl/intcmp.hxx:
     # Needed for C++20 mode
-    - type_traits
     - utility
     include/o3tl/make_shared.hxx:
     # Needed for __COVERITY__
@@ -238,9 +229,6 @@ excludelist:
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
-    include/package/Inflater.hxx:
-    # Needed in --fwdecl mode
-    - struct z_stream_s
     include/package/Deflater.hxx:
     # Needed in --fwdecl mode
     - struct z_stream_s
@@ -271,9 +259,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
     - com/sun/star/document/XEventsSupplier.hpp
-    include/unotools/fontcfg.hxx:
-    # Needed for a sal_uLong enum
-    - tools/solar.h
     include/unotools/progresshandlerwrap.hxx:
     # base class has to be a complete type
     - com/sun/star/ucb/XProgressHandler.hpp
@@ -299,7 +284,6 @@ excludelist:
     - tools/link.hxx
     include/svl/style.hxx:
     # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/style/XStyle.hpp
     include/vcl/FilterConfigItem.hxx:
     # Needed on Windows with --disable-pch
@@ -311,9 +295,6 @@ excludelist:
     include/vcl/decoview.hxx:
     # Full definition needed for VclPtr
     - vcl/outdev.hxx
-    include/vcl/event.hxx:
-    # Needed for enum type 
-    - vcl/window.hxx
     include/vcl/imap.hxx:
     # Needed for implicit dtor
     - vcl/imapobj.hxx
@@ -329,14 +310,10 @@ excludelist:
     - com/sun/star/datatransfer/XTransferable2.hpp
     - com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp
     - com/sun/star/datatransfer/dnd/XDragSourceListener.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/frame/XTerminateListener.hpp
     - com/sun/star/datatransfer/dnd/XDragGestureListener.hpp
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
-    include/vcl/weld.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XServiceInfo.hpp
     include/toolkit/awt/vclxwindow.hxx:
     # base class has to be a complete type
     - toolkit/awt/vclxdevice.hxx
@@ -345,7 +322,6 @@ excludelist:
     - com/sun/star/awt/XLayoutConstrains.hpp
     - com/sun/star/awt/XView.hpp
     - com/sun/star/beans/XPropertySetInfo.hpp
-    - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/awt/XDockableWindow.hpp
     - com/sun/star/awt/XStyleSettingsSupplier.hpp
     include/toolkit/awt/vclxwindows.hxx:
@@ -372,7 +348,6 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/io/XPersistObject.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XCloneable.hpp
     include/toolkit/controls/unocontrols.hxx:
     # base class has to be a complete type
@@ -387,7 +362,6 @@ excludelist:
     - com/sun/star/awt/XItemList.hpp
     include/toolkit/helper/macros.hxx:
     # Needed for macros
-    - comphelper/servicehelper.hxx
     - comphelper/diagnose_ex.hxx
     include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
     # base class has to be a complete type
@@ -396,7 +370,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XNameContainer.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     include/xmloff/xmlictxt.hxx:
     # base class has to be a complete type
     - com/sun/star/xml/sax/XFastContextHandler.hpp
@@ -407,7 +380,6 @@ excludelist:
     - com/sun/star/document/XExporter.hpp
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     include/xmloff/xmlmetae.hxx:
     # base class has to be a complete type
     - com/sun/star/xml/sax/XDocumentHandler.hpp
@@ -417,7 +389,6 @@ excludelist:
     - com/sun/star/document/XImporter.hpp
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
     include/xmloff/XMLTextMasterPageContext.hxx:
@@ -600,14 +571,12 @@ excludelist:
     - com/sun/star/document/XDocumentPropertiesSupplier.hpp
     - com/sun/star/document/XCmisDocument.hpp
     - com/sun/star/rdf/XDocumentMetadataAccess.hpp
-    - com/sun/star/document/XDocumentRecovery.hpp
     - com/sun/star/document/XUndoManagerSupplier.hpp
     - com/sun/star/document/XDocumentEventBroadcaster.hpp
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/document/XEventsSupplier.hpp
     - com/sun/star/document/XEmbeddedScripts.hpp
     - com/sun/star/document/XScriptInvocationContext.hpp
-    - com/sun/star/frame/XModel2.hpp
     - com/sun/star/util/XModifiable2.hpp
     - com/sun/star/view/XPrintable.hpp
     - com/sun/star/view/XPrintJobBroadcaster.hpp
@@ -666,16 +635,11 @@ excludelist:
     - class SfxViewFactory
     include/editeng/AccessibleContextBase.hxx:
     # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleContext.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     include/editeng/AccessibleEditableTextPara.hxx:
     # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleComponent.hpp
-    - com/sun/star/accessibility/XAccessibleContext.hpp
     - com/sun/star/accessibility/XAccessibleEditableText.hpp
-    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
     - com/sun/star/accessibility/XAccessible.hpp
     - com/sun/star/accessibility/XAccessibleHypertext.hpp
     - com/sun/star/accessibility/XAccessibleMultiLineText.hpp
@@ -733,7 +697,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XIndexReplace.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/ucb/XAnyCompare.hpp
     - com/sun/star/util/XCloneable.hpp
     include/editeng/unotext.hxx:
@@ -854,7 +817,6 @@ excludelist:
     - com/sun/star/drawing/ShadeMode.hpp
     - com/sun/star/drawing/Position3D.hpp
     - com/sun/star/drawing/NormalsKind.hpp
-    - com/sun/star/drawing/TextureKind.hpp
     - com/sun/star/drawing/TextureMode.hpp
     - com/sun/star/drawing/TextureProjectionMode.hpp
     - com/sun/star/drawing/PolyPolygonShape3D.hpp
@@ -863,7 +825,6 @@ excludelist:
     - com/sun/star/drawing/CameraGeometry.hpp
     - com/sun/star/text/WritingMode.hpp
     - com/sun/star/graphic/XGraphic.hpp
-    - com/sun/star/drawing/QRCode.hpp
     - com/sun/star/text/XTextColumns.hpp
     - com/sun/star/drawing/BarCode.hpp
     - editeng/unoprnms.hxx
@@ -871,9 +832,6 @@ excludelist:
     include/svx/xdef.hxx:
     # Needed for macro defines
     - svl/typedwhich.hxx
-    include/svx/svdtext.hxx:
-    # TODO too many replacements would be needed
-    - tools/weakbase.hxx
     include/comphelper/crashzone.hxx:
     # Needed for sig_atomic_t
     - csignal
