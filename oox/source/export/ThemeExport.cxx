@@ -39,10 +39,10 @@ void writeRelativeRectangle(sax_fastparser::FSHelperPtr pFS, sal_Int32 nToken,
 
 ThemeExport::ThemeExport(oox::core::XmlFilterBase* pFilterBase,
                          oox::drawingml::DocumentType eDocumentType,
-                         sax_fastparser::FSHelperPtr pFS)
+                         sax_fastparser::FSHelperPtr xFS)
     : mpFilterBase(pFilterBase)
     , meDocumentType(eDocumentType)
-    , mpFS(pFS)
+    , mpFS(std::move(xFS))
 {
 }
 

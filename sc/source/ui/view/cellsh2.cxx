@@ -928,7 +928,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     vcl::Window* pWin = GetViewData().GetActiveWin();
                     weld::Window* pParentWin = pWin ? pWin->GetFrameWeld() : nullptr;
                     auto xDlg = std::make_shared<ScValidationDlg>(pParentWin, &aArgSet, pTabViewShell);
-                    std::shared_ptr<ScValidationRegisteredDlg> pRegisterThatDlgExists
+                    std::shared_ptr<ScValidationRegisteredDlg> xRegisterThatDlgExists
                         = std::make_shared<ScValidationRegisteredDlg>(pParentWin, xDlg);
 
                     struct lcl_auxData
@@ -954,7 +954,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     std::shared_ptr<lcl_auxData> xAuxData = std::make_shared<lcl_auxData>(
                         lcl_auxData{ aCursorPos, eMode, eOper, aExpr1, aExpr2, bBlank, nListType,
                                      bShowHelp, aHelpTitle, aHelpText, bShowError, eErrStyle,
-                                     aErrTitle, aErrText, bCaseSensitive, pRegisterThatDlgExists });
+                                     aErrTitle, aErrText, bCaseSensitive,
+                                     std::move(xRegisterThatDlgExists) });
 
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
                     rReq.Ignore(); // the 'old' request is not relevant any more
