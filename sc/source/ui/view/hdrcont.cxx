@@ -321,7 +321,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     if ( nLineEnd * nLayoutSign >= nInitScrPos * nLayoutSign )
     {
         Color aFaceColor(rStyleSettings.GetFaceColor());
-        if (pTabView->GetViewData().GetSheetViewID() >= 0)
+        if (pTabView && pTabView->GetViewData().GetSheetViewID() >= 0)
             aFaceColor.Merge(COL_LIGHTBLUE, 220);
         if (bDark)
             aFaceColor.IncreaseLuminance(20);
