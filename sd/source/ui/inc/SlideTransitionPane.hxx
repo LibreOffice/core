@@ -145,6 +145,8 @@ private:
     mutable OUString maCurrentSoundFile;
 
     Timer maLateInitTimer;
+
+    bool mbInApplyToPages = false;
 };
 
 } //  namespace sd
