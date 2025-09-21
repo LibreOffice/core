@@ -30,6 +30,7 @@ $(eval $(call gb_Library_set_include,pdfium,\
     -I$(gb_UnpackedTarball_workdir)/pdfium/third_party \
     -I$(gb_UnpackedTarball_workdir)/pdfium/third_party/agg23 \
     $(if $(filter TRUE,$(SYSTEM_ABSEIL)),$(ABSEIL_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/abseil-cpp) \
+    $(if $(filter TRUE,$(SYSTEM_FAST_FLOAT)),$(FAST_FLOAT_CFLAGS),-I$(gb_UnpackedTarball_workdir)/pdfium/third_party/fast_float) \
     $(if $(filter TRUE,$(SYSTEM_OPENJPEG2)),$(OPENJPEG2_CFLAGS)) \
     $$(INCLUDE) \
 ))
@@ -53,6 +54,11 @@ endif
 ifeq ($(SYSTEM_ABSEIL),TRUE)
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DUSE_SYSTEM_ABSEIL \
+))
+endif
+ifeq ($(SYSTEM_FAST_FLOAT),TRUE)
+$(eval $(call gb_Library_add_defs,pdfium,\
+    -DUSE_SYSTEM_FAST_FLOAT \
 ))
 endif
 

@@ -1,0 +1,30 @@
+diff -urN pdfium/core/fxcrt/fx_extension.cpp pdfium.new/core/fxcrt/fx_extension.cpp
+--- core/fxcrt/fx_extension.cpp	2025-02-10 19:49:22.000000000 +0100
++++ core/fxcrt/fx_extension.cpp	2025-09-21 11:53:43.310869830 +0200
+@@ -16,7 +16,11 @@
+ #include "core/fxcrt/fx_system.h"
+ #include "core/fxcrt/utf16.h"
+ #include "core/fxcrt/widestring.h"
++#ifdef USE_SYSTEM_FAST_FLOAT
++#include <fast_float/fast_float.h>
++#else
+ #include "third_party/fast_float/src/include/fast_float/fast_float.h"
++#endif
+ 
+ namespace {
+ 
+diff -urN pdfium/core/fxcrt/fx_string.cpp pdfium.new/core/fxcrt/fx_string.cpp
+--- core/fxcrt/fx_string.cpp	2025-02-10 19:49:22.000000000 +0100
++++ core/fxcrt/fx_string.cpp	2025-09-21 11:53:03.382500482 +0200
+@@ -20,7 +20,11 @@
+ #include "core/fxcrt/span.h"
+ #include "core/fxcrt/utf16.h"
+ #include "core/fxcrt/widestring.h"
++#ifdef USE_SYSTEM_FAST_FLOAT
++#include <fast_float/fast_float.h>
++#else
+ #include "third_party/fast_float/src/include/fast_float/fast_float.h"
++#endif
+ 
+ #if !defined(WCHAR_T_IS_16_BIT) && !defined(WCHAR_T_IS_32_BIT)
+ #error "Unknown wchar_t size"
