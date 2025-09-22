@@ -19,6 +19,8 @@
 
 #include <libxml/xmlwriter.h>
 #include <hintids.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/numformat.hxx>
 #include <editeng/tstpitem.hxx>
@@ -28,7 +30,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
-#include <svx/DocumentColorHelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
@@ -2056,11 +2057,31 @@ void SwDBData::dumpAsXml(xmlTextWriterPtr pWriter) const
 std::set<Color> SwDoc::GetDocColors()
 {
     std::set<Color> aDocColors;
-    SwAttrPool& rPool = GetAttrPool();
 
-    svx::DocumentColorHelper::queryColors<SvxColorItem>(RES_CHRATR_COLOR, &rPool, aDocColors);
-    svx::DocumentColorHelper::queryColors<SvxBrushItem>(RES_CHRATR_HIGHLIGHT, &rPool, aDocColors);
-    svx::DocumentColorHelper::queryColors<SvxBrushItem>(RES_CHRATR_BACKGROUND, &rPool, aDocColors);
+    ForEachCharacterColorItem(
+            [&aDocColors] (const SvxColorItem& rColorItem) -> bool
+            {
+                Color aColor(rColorItem.GetValue());
+                if (COL_AUTO != aColor)
+                    aDocColors.insert(aColor);
+                return true;
+            });
+    ForEachCharacterHighlightBrushItem(
+            [&aDocColors] (const SvxBrushItem& rColorItem) -> bool
+            {
+                Color aColor(rColorItem.GetColor());
+                if (COL_AUTO != aColor)
+                    aDocColors.insert(aColor);
+                return true;
+            });
+    ForEachCharacterBackgroundBrushItem(
+            [&aDocColors] (const SvxBrushItem& rColorItem) -> bool
+            {
+                Color aColor(rColorItem.GetColor());
+                if (COL_AUTO != aColor)
+                    aDocColors.insert(aColor);
+                return true;
+            });
 
     return aDocColors;
 }
