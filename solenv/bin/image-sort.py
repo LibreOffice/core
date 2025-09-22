@@ -125,7 +125,7 @@ parser.add_argument('control_file', metavar='image-sort.lst',
 # where the uiconfigs live
 parser.add_argument('base_path', metavar='directory',
                     help='path to the UIConfigs directory')
-parser.add_argument('output', metavar='output file', type=argparse.FileType('w'),
+parser.add_argument('output', metavar='output file',
                     nargs='?', default=None, help='optionally write to this output file')
 parser.add_argument("-q", "--quiet", action="store_true",
                     help="don't print status messages to stdout")
@@ -133,9 +133,10 @@ parser.add_argument("-q", "--quiet", action="store_true",
 args = parser.parse_args()
 
 if args.output is not None:
+    output = open(args.output, mode = 'w')
     close_output = True
 else:
-    args.output = sys.stdout
+    output = sys.stdout
     close_output = False
 
 with open(args.control_file) as cf:
@@ -143,13 +144,13 @@ with open(args.control_file) as cf:
 
 for icon in global_list:
     if not icon.startswith('sc_'):
-        args.output.write(icon + "\n")
+        output.write(icon + "\n")
 
 for icon in global_list:
     if icon.startswith('sc_'):
-        args.output.write(icon + "\n")
+        output.write(icon + "\n")
 
 if close_output:
-    args.output.close()
+    output.close()
 
 # dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
