@@ -385,7 +385,7 @@ constexpr ExtensionMap aImpressExtensionMap[] =
 
 constexpr ExtensionMap aDrawExtensionMap[] =
 {
-    { "fodg",  u"draw_ODG_FlatXML"_ustr },
+    { "fodg",  u"OpenDocument Drawing Flat XML"_ustr },
     { "html",  u"draw_html_Export"_ustr },
     { "odg",   u"draw8"_ustr },
     { "pdf",   u"draw_pdf_Export"_ustr },
