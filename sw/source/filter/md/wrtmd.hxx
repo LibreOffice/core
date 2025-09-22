@@ -33,6 +33,7 @@
 struct SwMDCellInfo
 {
     bool bCellStart = false;
+    bool bCellEnd = false;
     bool bRowStart = false;
     bool bRowEnd = false;
     bool bFirstRowEnd = false;

@@ -619,6 +619,66 @@ CPPUNIT_TEST_FIXTURE(Test, testImageDescTitleExport)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMultiParaTableMdExport)
+{
+    // Given a document that has a table, 3 paragraphs in the A1 cell:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
+                                             /*nRowsToRepeat=*/0);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/3, /*nCols=*/3);
+    pWrtShell->Insert(u"Z"_ustr);
+    pWrtShell->SttPara();
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->Insert(u"A1 first"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"A1 second"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"A1 third"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C1"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C2"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A3"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B3"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"C3"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure the A1 cell still only has inlines:
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        "A" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "| A1 first A1 second A1 third | B1 | C1 |" SAL_NEWLINE_STRING
+        "| - | - | - |" SAL_NEWLINE_STRING
+        "| A2 | B2 | C2 |" SAL_NEWLINE_STRING
+        "| A3 | B3 | C3 |" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "Z" SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: A1 first A1 second A1 third
+    // - Actual  : A1 first\nA1 second\n\nA1 third\n
+    // i.e. multiple paragraphs were not merged into a single paragraph to form just a list of
+    // inline blocks, as required by the spec.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
