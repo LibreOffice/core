@@ -12,6 +12,7 @@
 
 #include <comphelper/random.hxx>
 #include <assert.h>
+#include <stdlib.h>
 #include <time.h>
 #include <mutex>
 #include <random>
