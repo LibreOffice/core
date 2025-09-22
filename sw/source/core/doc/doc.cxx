@@ -1448,10 +1448,16 @@ void SwDoc::ForEachCharacterUnderlineItem( const std::function<bool(const SvxUnd
     ForEachCharacterItem(this, RES_CHRATR_UNDERLINE, rFunc);
 }
 
-/// Iterate over all SvxBrushItem, if the function returns false, iteration is stopped
-void SwDoc::ForEachCharacterBrushItem( const std::function<bool(const SvxBrushItem&)>& rFunc ) const
+/// Iterate over all RES_CHRATR_BACKGROUND SvxBrushItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterBackgroundBrushItem( const std::function<bool(const SvxBrushItem&)>& rFunc ) const
 {
     ForEachCharacterItem(this, RES_CHRATR_BACKGROUND, rFunc);
+}
+
+/// Iterate over all RES_CHRATR_HIGHLIGHT SvxBrushItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterHighlightBrushItem( const std::function<bool(const SvxBrushItem&)>& rFunc ) const
+{
+    ForEachCharacterItem(this, RES_CHRATR_HIGHLIGHT, rFunc);
 }
 
 /// Iterate over all RES_TXTATR_UNKNOWN_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
