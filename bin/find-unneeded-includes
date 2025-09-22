@@ -631,10 +631,13 @@ def main(argv):
                 # check that the excluded files / forward declarations are still present
                 # to avoid stale exclusion rules lingering forever
                 else:
-                    for exclusion in excludelistRules[pathname]:
-                        p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
-                        if p.returncode == 1 :
-                            print("WARNING:", exclusion, "is not present anymore in", file)
+                    try:
+                        for exclusion in excludelistRules[pathname]:
+                            p = subprocess.run(["git", "grep", "-q", "-e", "#include <"+exclusion, "-e", exclusion, file])
+                            if p.returncode == 1 :
+                                print("WARNING:", exclusion, "is not present anymore in", file)
+                    except TypeError:
+                        print("WARNING: no exclusions are defined for:", file)
         sys.exit(0)
 
     tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl)
