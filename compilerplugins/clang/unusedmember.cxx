@@ -200,7 +200,7 @@ public:
                 }
             }
             if (suppressWarningAt(d->getLocation()))
-                return true;
+                continue;
             report(DiagnosticsEngine::Warning, "unused class member", d->getLocation())
                 << d->getSourceRange();
         }
