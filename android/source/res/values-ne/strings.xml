@@ -5,12 +5,12 @@
     <string name="app_vendor">यो संस्करण $VENDOR द्वारा प्रदान गरिएको हो।</string>
     <string name="readonly_file">यो फाइल हेर्न-मात्र-मिल्ने छ।</string>
     <string name="about_notice">सूचना देखाउनुहोस्</string>
-    <string name="new_textdocument">नयाँ पाठ कागजात</string>
+    <string name="new_textdocument">नयाँ टेक्स्ट कागजात</string>
     <string name="new_presentation">नयाँ प्रस्तुति</string>
     <string name="new_spreadsheet">नयाँ स्प्रेडसिट</string>
     <string name="new_drawing">नयाँ ड्रइङ</string>
     <string name="select_file_to_open">खोल्नको लागि फाइल रोज्नुहोस्</string>
-    <string name="file_icon_desc">फाइलआइकन</string>
+    <string name="file_icon_desc">"फाइलको  आइकन"</string>
     <string name="title_recents">हालका फाइलहरू</string>
     <string name="pref_category_general">सामान्य</string>
     <string name="pref_experimental_editing">प्रयोगात्मक मोड</string>
@@ -21,4 +21,15 @@
     <string name="about_license">इजाजतपत्र देखाउनुहोस्</string>
     <string name="title_browser">सबै फाइलहरू</string>
     <string name="create_file">नयाँ फाइल बनाउनुहोस</string>
+    <string name="about_privacy_policy">गोपनीयता नीति</string>
+    <string name="pref_experimental_editing_summary">प्रयोगात्मक सम्पादन मोड सक्रिय गर्नुहोस् । आफ्नो जोखिममा प्रयोग गर्नुहोस्।</string>
+    <string name="action_search">खोज्नुहोस्</string>
+    <string name="search_find_next">अर्को खोज्नुहोस्</string>
+    <string name="search_find_previous">अघिल्लो खोज्नुहोस्</string>
+    <string name="pref_developer_mode_summary">"एप भित्र UNO आदेशहरू पठाउन सक्ने Developer  मोड सक्षम गर्नुहोस्। आफ्नै जोखिममा प्रयोग गर्नुहोस्।"</string>
+    <string name="action_about">बारेमा</string>
+    <string name="action_parts">भागहरु</string>
+    <string name="action_settings">सेटिङहरू</string>
+    <string name="action_fromat">ढाँचा सक्रिय गर्नुहोस्</string>
+    <string name="action_keyboard">किबोर्ड देखाउनुहोस्</string>
 </resources>
