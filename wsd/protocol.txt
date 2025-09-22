@@ -470,12 +470,13 @@ getslide hash=<slideHash> part=<slidePart> width=<canvasWidth> height=<canvasHei
 
     <devicePixelRatio>: The device pixel ratio, typically window.devicePixelRatio, which adjusts the rendering quality for HiDPI displays.
 
-resetaccesstoken <token=<accessToken>>
+resetaccesstoken <token=<accessToken>> [<expiryEpoch>]
 
     This command ensures that the client uses the updated access token for further requests.
     Resets the access token for authentication or session management.
 
     - <token>: The new access token that replaces the previous one.
+    - <expiryEpoch>: The time from Unix/Javascript epoch when the access token will expire. Optional. 0 means unknown/missing.
 
 renamefile <filename=<newFilename>>
 

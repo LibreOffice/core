@@ -51,6 +51,8 @@
 #include <Poco/URI.h>
 
 #include <cctype>
+#include <chrono>
+#include <cstdint>
 #include <ios>
 #include <map>
 #include <memory>
@@ -1349,14 +1351,20 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #endif
     else if (tokens.equals(0, "resetaccesstoken"))
     {
-        if (tokens.size() != 2)
+        if (tokens.size() <= 1 || tokens.size() > 3)
         {
             LOG_ERR("Bad syntax for: " << tokens[0]);
-            sendTextFrameAndLogError("error: cmd=resetaccesstoken kind=syntax");
+            sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
             return false;
         }
 
-        _auth.resetAccessToken(tokens[1]);
+        // Get the access_token_ttl, if provided. 0 means unknown/missing.
+        const auto expiryEpoch = std::chrono::milliseconds(
+            (tokens.size() == 3) ? NumUtil::u64FromString(tokens[2], 0) : 0);
+
+        LOG_DBG("Resetting access token for " << getName() << " with expiry at " << expiryEpoch
+                                              << ": " << tokens[1]);
+        _auth.resetAccessToken(tokens[1], expiryEpoch);
         return true;
     }
 #if !MOBILEAPP && !WASMAPP

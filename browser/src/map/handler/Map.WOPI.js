@@ -596,7 +596,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			this._postViewsMessage('Get_Views_Resp');
 		}
 		else if (msg.MessageId === 'Reset_Access_Token') {
-			app.socket.sendMessage('resetaccesstoken ' + msg.Values.token);
+			var ttl = msg.Values && msg.Values.ttl ? msg.Values['ttl'] : '0';
+			app.socket.sendMessage('resetaccesstoken ' + msg.Values.token + ' ' + ttl);
 		}
 		else if (msg.MessageId === 'Action_Save') {
 			var dontTerminateEdit = msg.Values && msg.Values['DontTerminateEdit'];

@@ -293,9 +293,9 @@
         post({'MessageId': messageId, 'Values': values});
       }
 
-      function reset_access_token(accesstoken) {
+      function reset_access_token(accesstoken, ttl) {
         post({'MessageId': 'Reset_Access_Token',
-              'Values': { 'token': accesstoken, }
+              'Values': { 'token': accesstoken, 'ttl': ttl }
             });
       }
 
@@ -597,9 +597,14 @@
 
         <form class="vbox framed">
           <h3>New Access-Token</h3>
+          <label for="new-access-token"><b>Access Token:</b></label>
           <textarea name="new-access-token" id="new-access-token" value="" rows="1" cols="30">123456789AA</textarea>
+          <label for="new-access-token-ttl"><b>Access Token TTL (millis since epoch when the token will expire):</b></label>
+          <textarea name="new-access-token-ttl" id="new-access-token-ttl" value="" rows="1" cols="30"></textarea>
           <div>
-            <button onclick="reset_access_token(document.getElementById('new-access-token').value); return false;">Reset Access-Token</button>
+            <button
+              onclick="reset_access_token(document.getElementById('new-access-token').value, document.getElementById('new-access-token-ttl').value); return false;">Reset
+              Access-Token</button>
           </div>
 
           <h3>User State</h3>

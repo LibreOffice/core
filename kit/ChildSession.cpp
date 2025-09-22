@@ -19,7 +19,6 @@
 #include "ChildSession.hpp"
 
 #include <common/Anonymizer.hpp>
-#include <common/Authorization.hpp>
 #include <common/Clipboard.hpp>
 #include <common/CommandControl.hpp>
 #include <common/ConfigUtil.hpp>
