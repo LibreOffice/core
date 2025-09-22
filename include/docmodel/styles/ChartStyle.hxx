@@ -60,7 +60,7 @@ struct FontOrStyleRef
         // of course is also a string, but is considered special). So we
         // need to try to convert the input string to an integer, and handle
         // it as an int if we can. OUString provides toInt(), but it returns
-        // 0 in the case of failure, which is eminently unhelpful, sinze 0
+        // 0 in the case of failure, which is eminently unhelpful, since 0
         // is a perfectly acceptable value. So convert it to a
         // std::basic_string, which has stoi(), which throws if it can't do
         // the conversion.
