@@ -321,7 +321,7 @@ void MacabRecords::bootstrap_requiredProperties()
         kABAddressProperty, kABPhoneProperty, kABEmailProperty};
 }
 
-bool shouldSkipProperty(CFStringRef propertyName)
+static bool shouldSkipProperty(CFStringRef propertyName)
 {
     /* Skip Note property to help prevent the following exception:
      *
