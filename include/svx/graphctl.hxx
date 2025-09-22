@@ -130,18 +130,18 @@ public:
 
 class GraphCtrlView final : public SdrView
 {
-    GraphCtrl& rGraphCtrl;
+    GraphCtrl& m_rGraphCtrl;
 
     virtual void MarkListHasChanged() override
     {
         SdrView::MarkListHasChanged();
-        rGraphCtrl.MarkListHasChanged();
+        m_rGraphCtrl.MarkListHasChanged();
     }
 
 public:
     GraphCtrlView(SdrModel& rSdrModel, GraphCtrl* pWindow)
         : SdrView(rSdrModel, &pWindow->GetDrawingArea()->get_ref_device())
-        , rGraphCtrl(*pWindow)
+        , m_rGraphCtrl(*pWindow)
     {
     }
 

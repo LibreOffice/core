@@ -783,10 +783,10 @@ namespace
 
 rtl::Reference<sdr::overlay::OverlayManager> GraphCtrlView::CreateOverlayManager(OutputDevice& rDevice) const
 {
-    assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
+    assert(&rDevice == &m_rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
     {
-        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager(new WeldOverlayManager(rGraphCtrl, rDevice));
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager(new WeldOverlayManager(m_rGraphCtrl, rDevice));
         InitOverlayManager(xOverlayManager);
         return xOverlayManager;
     }
@@ -795,10 +795,10 @@ rtl::Reference<sdr::overlay::OverlayManager> GraphCtrlView::CreateOverlayManager
 
 void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
 {
-    assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
+    assert(&rDevice == &m_rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
     {
-        rGraphCtrl.Invalidate();
+        m_rGraphCtrl.Invalidate();
         return;
     }
     SdrView::InvalidateOneWin(rDevice);
@@ -806,10 +806,10 @@ void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice)
 
 void GraphCtrlView::InvalidateOneWin(OutputDevice& rDevice, const tools::Rectangle& rArea)
 {
-    assert(&rDevice == &rGraphCtrl.GetDrawingArea()->get_ref_device());
+    assert(&rDevice == &m_rGraphCtrl.GetDrawingArea()->get_ref_device());
     if (rDevice.GetOutDevType() == OUTDEV_VIRDEV)
     {
-        rGraphCtrl.Invalidate(rArea);
+        m_rGraphCtrl.Invalidate(rArea);
         return;
     }
     SdrView::InvalidateOneWin(rDevice, rArea);
