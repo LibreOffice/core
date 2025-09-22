@@ -14,7 +14,7 @@
 #include <iostream>
 #include <set>
 
-RustProducer::RustProducer(const OString& outputDir, bool verbose, bool dryRun,
+RustProducer::RustProducer(std::string_view outputDir, bool verbose, bool dryRun,
                            const rtl::Reference<TypeManager>& typeManager)
     : m_outputDir(outputDir)
     , m_verbose(verbose)
@@ -35,8 +35,17 @@ void RustProducer::produceEnum(std::string_view name,
 
     file.openFile();
 
+    generateEnumDefinition(file, name, entity);
+    generateEnumImplementation(file, name);
+    generateEnumExternDeclarations(file, name);
+
+    file.closeFile();
+}
+
+void RustProducer::generateEnumDefinition(RustFile& file, std::string_view name,
+                                          const rtl::Reference<unoidl::EnumTypeEntity>& entity)
+{
     OString typeName(splitName(name)); // Simple name for Rust enum
-    OString externFunctionPrefix = getRustTypeName(name); // Full name for extern "C" functions
 
     file.beginLine()
         .append("/// Opaque Rust enum wrapper for ")
@@ -79,6 +88,12 @@ void RustProducer::produceEnum(std::string_view name,
     }
 
     file.endBlock();
+}
+
+void RustProducer::generateEnumImplementation(RustFile& file, std::string_view name)
+{
+    OString typeName(splitName(name)); // Simple name for Rust enum
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Add conversion functions using extern "C" bridge
     file.beginLine()
@@ -117,6 +132,12 @@ void RustProducer::produceEnum(std::string_view name,
         .append("}")
         .endLine()
         .endBlock();
+}
+
+void RustProducer::generateEnumExternDeclarations(RustFile& file, std::string_view name)
+{
+    OString typeName(splitName(name)); // Simple name for Rust enum
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Extern "C" declarations
     file.beginLine()
@@ -143,8 +164,6 @@ void RustProducer::produceEnum(std::string_view name,
         .beginLine()
         .append("}")
         .endLine();
-
-    file.closeFile();
 }
 
 void RustProducer::produceStruct(std::string_view name,
@@ -159,8 +178,19 @@ void RustProducer::produceStruct(std::string_view name,
 
     file.openFile();
 
+    generateStructDefinition(file, name, entity);
+    generateStructImplementation(file, name, entity);
+    generateStructDropTrait(file, name, entity);
+    generateStructExternDeclarations(file, name, entity);
+
+    file.closeFile();
+}
+
+void RustProducer::generateStructDefinition(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::PlainStructTypeEntity>& /* entity */)
+{
     OString typeName(splitName(name)); // Simple name for Rust struct
-    OString externFunctionPrefix = getRustTypeName(name); // Full name for extern "C" functions
 
     file.beginLine()
         .append("/// Opaque Rust struct wrapper for ")
@@ -181,6 +211,14 @@ void RustProducer::produceStruct(std::string_view name,
         .append("ptr: *mut c_void,")
         .endLine()
         .endBlock();
+}
+
+void RustProducer::generateStructImplementation(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
+{
+    OString typeName(splitName(name)); // Simple name for Rust struct
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Implementation with opaque field accessors
     file.beginLine()
@@ -192,6 +230,15 @@ void RustProducer::produceStruct(std::string_view name,
         .endLine()
         .beginBlock();
 
+    generateStructConstructor(file, externFunctionPrefix);
+    generateStructFromPtr(file, externFunctionPrefix);
+    generateStructAccessors(file, entity, externFunctionPrefix);
+
+    file.endBlock();
+}
+
+void RustProducer::generateStructConstructor(RustFile& file, std::string_view externFunctionPrefix)
+{
     // Constructor
     file.beginLine()
         .append("pub fn new() -> Option<Self> {")
@@ -222,7 +269,10 @@ void RustProducer::produceStruct(std::string_view name,
         .beginLine()
         .append("}")
         .endLine();
+}
 
+void RustProducer::generateStructFromPtr(RustFile& file, std::string_view externFunctionPrefix)
+{
     // from_ptr method for creating wrapper from existing pointer with C++ type casting
     file.beginLine()
         .append("")
@@ -253,56 +303,76 @@ void RustProducer::produceStruct(std::string_view name,
         .endLine()
         .endBlock()
         .endBlock();
+}
 
-    // Opaque field accessors
+void RustProducer::generateStructAccessors(
+    RustFile& file, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
+    std::string_view externFunctionPrefix)
+{
+    // Generate getters and setters for all struct members
     for (const auto& member : entity->getDirectMembers())
     {
         OString memberName = u2b(member.name); // Use original case, not snake_case
 
-        // Getter
-        file.beginLine()
-            .append("")
-            .endLine()
-            .beginLine()
-            .append("pub fn get_")
-            .append(memberName)
-            .append("(&self) -> *mut c_void {")
-            .endLine()
-            .extraIndent()
-            .beginLine()
-            .append("unsafe { ")
-            .append(externFunctionPrefix)
-            .append("_get_")
-            .append(memberName)
-            .append("(self.ptr) }")
-            .endLine()
-            .beginLine()
-            .append("}")
-            .endLine();
-
-        // Setter
-        file.beginLine()
-            .append("")
-            .endLine()
-            .beginLine()
-            .append("pub fn set_")
-            .append(memberName)
-            .append("(&mut self, value: *mut c_void) {")
-            .endLine()
-            .extraIndent()
-            .beginLine()
-            .append("unsafe { ")
-            .append(externFunctionPrefix)
-            .append("_set_")
-            .append(memberName)
-            .append("(self.ptr, value) }")
-            .endLine()
-            .beginLine()
-            .append("}")
-            .endLine();
+        generateStructMemberGetter(file, memberName, externFunctionPrefix);
+        generateStructMemberSetter(file, memberName, externFunctionPrefix);
     }
+}
 
-    file.endBlock();
+void RustProducer::generateStructMemberGetter(RustFile& file, std::string_view memberName,
+                                              std::string_view externFunctionPrefix)
+{
+    file.beginLine()
+        .append("")
+        .endLine()
+        .beginLine()
+        .append("pub fn get_")
+        .append(memberName)
+        .append("(&self) -> *mut c_void {")
+        .endLine()
+        .extraIndent()
+        .beginLine()
+        .append("unsafe { ")
+        .append(externFunctionPrefix)
+        .append("_get_")
+        .append(memberName)
+        .append("(self.ptr) }")
+        .endLine()
+        .beginLine()
+        .append("}")
+        .endLine();
+}
+
+void RustProducer::generateStructMemberSetter(RustFile& file, std::string_view memberName,
+                                              std::string_view externFunctionPrefix)
+{
+    file.beginLine()
+        .append("")
+        .endLine()
+        .beginLine()
+        .append("pub fn set_")
+        .append(memberName)
+        .append("(&mut self, value: *mut c_void) {")
+        .endLine()
+        .extraIndent()
+        .beginLine()
+        .append("unsafe { ")
+        .append(externFunctionPrefix)
+        .append("_set_")
+        .append(memberName)
+        .append("(self.ptr, value) }")
+        .endLine()
+        .beginLine()
+        .append("}")
+        .endLine();
+}
+
+void RustProducer::generateStructDropTrait(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::PlainStructTypeEntity>& /* entity */)
+{
+    OString typeName(splitName(name)); // Simple name for Rust struct
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Drop implementation
     file.beginLine()
@@ -333,6 +403,13 @@ void RustProducer::produceStruct(std::string_view name,
         .append("}")
         .endLine()
         .endBlock();
+}
+
+void RustProducer::generateStructExternDeclarations(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::PlainStructTypeEntity>& entity)
+{
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Extern "C" declarations for opaque operations
     file.beginLine()
@@ -341,8 +418,18 @@ void RustProducer::produceStruct(std::string_view name,
         .beginLine()
         .append("unsafe extern \"C\" {")
         .endLine()
-        .extraIndent()
-        .beginLine()
+        .extraIndent();
+
+    generateStructBasicExternDeclarations(file, externFunctionPrefix);
+    generateStructMemberExternDeclarations(file, entity, externFunctionPrefix);
+
+    file.beginLine().append("}").endLine();
+}
+
+void RustProducer::generateStructBasicExternDeclarations(RustFile& file,
+                                                         std::string_view externFunctionPrefix)
+{
+    file.beginLine()
         .append("fn ")
         .append(externFunctionPrefix)
         .append("_constructor() -> *mut c_void;")
@@ -357,7 +444,12 @@ void RustProducer::produceStruct(std::string_view name,
         .append(externFunctionPrefix)
         .append("_from_ptr(ptr: *mut c_void) -> *mut c_void;")
         .endLine();
+}
 
+void RustProducer::generateStructMemberExternDeclarations(
+    RustFile& file, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
+    std::string_view externFunctionPrefix)
+{
     for (const auto& member : entity->getDirectMembers())
     {
         OString memberName = u2b(member.name); // Use original case, not snake_case
@@ -376,10 +468,6 @@ void RustProducer::produceStruct(std::string_view name,
             .append("(ptr: *mut c_void, value: *mut c_void);")
             .endLine();
     }
-
-    file.beginLine().append("}").endLine();
-
-    file.closeFile();
 }
 
 void RustProducer::produceInterface(std::string_view name,
@@ -394,9 +482,20 @@ void RustProducer::produceInterface(std::string_view name,
 
     file.openFile();
 
-    OString typeName(splitName(name)); // Simple name for Rust interface
-    OString externFunctionPrefix = getRustTypeName(name); // Full name for extern "C" functions
+    generateInterfaceWrapper(file, name, entity);
+    generateInterfaceExternDeclarations(file, name, entity);
 
+    file.closeFile();
+}
+
+void RustProducer::generateInterfaceWrapper(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+{
+    OString typeName(splitName(name)); // Simple name for Rust interface
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
+
+    // Generate struct header and documentation
     file.beginLine()
         .append("/// Opaque Rust interface wrapper for ")
         .append(name)
@@ -417,7 +516,20 @@ void RustProducer::produceInterface(std::string_view name,
         .endLine()
         .endBlock();
 
-    // Implementation block
+    // Generate implementation block with constructor, methods, etc.
+    generateInterfaceImplementation(file, typeName, externFunctionPrefix, entity);
+
+    // Generate Drop trait implementation
+    generateInterfaceDropTrait(file, typeName, externFunctionPrefix);
+
+    // Generate thread safety markers
+    generateInterfaceThreadSafety(file, typeName);
+}
+
+void RustProducer::generateInterfaceImplementation(
+    RustFile& file, std::string_view typeName, std::string_view externFunctionPrefix,
+    const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+{
     file.beginLine()
         .append("")
         .endLine()
@@ -427,7 +539,27 @@ void RustProducer::produceInterface(std::string_view name,
         .endLine()
         .beginBlock();
 
-    // Constructor
+    // Generate constructor
+    generateInterfaceConstructor(file, externFunctionPrefix);
+
+    // Generate from_ptr method
+    generateInterfaceFromPtr(file, externFunctionPrefix);
+
+    // Generate as_ptr method
+    generateInterfaceAsPtr(file);
+
+    // Generate validity check if no conflicting method
+    generateInterfaceValidityCheck(file, externFunctionPrefix, entity);
+
+    // Generate method wrappers
+    generateInterfaceMethodWrappers(file, externFunctionPrefix, entity);
+
+    file.endBlock();
+}
+
+void RustProducer::generateInterfaceConstructor(RustFile& file,
+                                                std::string_view externFunctionPrefix)
+{
     file.beginLine()
         .append("pub fn new() -> Option<Self> {")
         .endLine()
@@ -457,8 +589,10 @@ void RustProducer::produceInterface(std::string_view name,
         .beginLine()
         .append("}")
         .endLine();
+}
 
-    // from_ptr method for creating wrapper from existing pointer with C++ type casting
+void RustProducer::generateInterfaceFromPtr(RustFile& file, std::string_view externFunctionPrefix)
+{
     file.beginLine()
         .append("")
         .endLine()
@@ -488,8 +622,10 @@ void RustProducer::produceInterface(std::string_view name,
         .endLine()
         .endBlock()
         .endBlock();
+}
 
-    // as_ptr method for getting the raw pointer
+void RustProducer::generateInterfaceAsPtr(RustFile& file)
+{
     file.beginLine()
         .append("")
         .endLine()
@@ -501,8 +637,13 @@ void RustProducer::produceInterface(std::string_view name,
         .append("self.ptr")
         .endLine()
         .endBlock();
+}
 
-    // Validity check - only add if there's no conflicting isValid method
+void RustProducer::generateInterfaceValidityCheck(
+    RustFile& file, std::string_view externFunctionPrefix,
+    const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+{
+    // Check if there's already an isValid method to avoid conflicts
     bool hasIsValidMethod = false;
     for (const auto& method : entity->getDirectMethods())
     {
@@ -531,8 +672,13 @@ void RustProducer::produceInterface(std::string_view name,
             .append("}")
             .endLine();
     }
+}
 
-    // Method wrappers - all methods return opaque pointers
+void RustProducer::generateInterfaceMethodWrappers(
+    RustFile& file, std::string_view externFunctionPrefix,
+    const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+{
+    // Generate method wrappers - all methods return opaque pointers
     for (const auto& method : entity->getDirectMethods())
     {
         OString rustMethodName = getRustFunctionName(u2b(method.name));
@@ -671,112 +817,12 @@ void RustProducer::produceInterface(std::string_view name,
                 else
                 {
                     // Check for typedef resolution first
-                    OString resolvedType = resolveTypedef(method.returnType);
-                    if (resolvedType != rustType)
+                    OString resolvedType(resolveTypedef(method.returnType));
+                    // It's a typedef - handle based on resolved type
+                    if (!generateTypeCastReturn(file, resolvedType))
                     {
-                        // It's a typedef - handle based on resolved type
-                        if (resolvedType == "boolean")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u8) }").endLine();
-                        }
-                        else if (resolvedType == "byte")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i8) }").endLine();
-                        }
-                        else if (resolvedType == "short")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i16) }").endLine();
-                        }
-                        else if (resolvedType == "unsigned short")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
-                        }
-                        else if (resolvedType == "long")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i32) }").endLine();
-                        }
-                        else if (resolvedType == "unsigned long")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u32) }").endLine();
-                        }
-                        else if (resolvedType == "hyper")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i64) }").endLine();
-                        }
-                        else if (resolvedType == "unsigned hyper")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u64) }").endLine();
-                        }
-                        else if (resolvedType == "float")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const f32) }").endLine();
-                        }
-                        else if (resolvedType == "double")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const f64) }").endLine();
-                        }
-                        else if (resolvedType == "char")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
-                        }
-                        else
-                        {
-                            // Typedef resolves to other types - return raw pointer
-                            file.beginLine().append("ptr").endLine();
-                        }
-                    }
-                    else
-                    {
-                        // Not a typedef - check for primitive types that need dereferencing
-                        if (rustType == "boolean")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u8) }").endLine();
-                        }
-                        else if (rustType == "byte")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i8) }").endLine();
-                        }
-                        else if (rustType == "short")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i16) }").endLine();
-                        }
-                        else if (rustType == "unsigned short")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
-                        }
-                        else if (rustType == "long")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i32) }").endLine();
-                        }
-                        else if (rustType == "unsigned long")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u32) }").endLine();
-                        }
-                        else if (rustType == "hyper")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const i64) }").endLine();
-                        }
-                        else if (rustType == "unsigned hyper")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u64) }").endLine();
-                        }
-                        else if (rustType == "float")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const f32) }").endLine();
-                        }
-                        else if (rustType == "double")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const f64) }").endLine();
-                        }
-                        else if (rustType == "char")
-                        {
-                            file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
-                        }
-                        else
-                        {
-                            // For other types (sequences, templates, etc), return the raw pointer
-                            file.beginLine().append("ptr").endLine();
-                        }
+                        // Typedef resolves to non-primitive types - return raw pointer
+                        file.beginLine().append("ptr").endLine();
                     }
                 }
             }
@@ -784,10 +830,11 @@ void RustProducer::produceInterface(std::string_view name,
 
         file.beginLine().append("}").endLine();
     }
+}
 
-    file.endBlock();
-
-    // Drop implementation for automatic cleanup
+void RustProducer::generateInterfaceDropTrait(RustFile& file, std::string_view typeName,
+                                              std::string_view externFunctionPrefix)
+{
     file.beginLine()
         .append("")
         .endLine()
@@ -816,7 +863,10 @@ void RustProducer::produceInterface(std::string_view name,
         .append("}")
         .endLine()
         .endBlock();
+}
 
+void RustProducer::generateInterfaceThreadSafety(RustFile& file, std::string_view typeName)
+{
     // Thread safety markers
     file.beginLine()
         .append("")
@@ -831,6 +881,13 @@ void RustProducer::produceInterface(std::string_view name,
         .append(typeName)
         .append(" {}")
         .endLine();
+}
+
+void RustProducer::generateInterfaceExternDeclarations(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::InterfaceTypeEntity>& entity)
+{
+    OString externFunctionPrefix(getRustTypeName(name));
 
     // Extern "C" declarations - connects to C-side bridge
     file.beginLine()
@@ -855,6 +912,17 @@ void RustProducer::produceInterface(std::string_view name,
         .append(externFunctionPrefix)
         .append("_from_ptr(ptr: *mut c_void) -> *mut c_void;")
         .endLine();
+
+    // Check if there's already an isValid method to avoid conflicts
+    bool hasIsValidMethod = false;
+    for (const auto& method : entity->getDirectMethods())
+    {
+        if (u2b(method.name).equalsIgnoreAsciiCase("isValid"))
+        {
+            hasIsValidMethod = true;
+            break;
+        }
+    }
 
     // Only declare _is_valid if we don't have a conflicting isValid method
     if (!hasIsValidMethod)
@@ -895,8 +963,6 @@ void RustProducer::produceInterface(std::string_view name,
     }
 
     file.beginLine().append("}").endLine();
-
-    file.closeFile();
 }
 
 void RustProducer::produceService(
@@ -911,19 +977,18 @@ void RustProducer::produceService(
 
     file.openFile();
 
+    generateServiceDefinition(file, name, entity);
+    generateServiceImplementation(file, name, entity);
+    generateServiceExternDeclarations(file, name, entity);
+
+    file.closeFile();
+}
+
+void RustProducer::generateServiceDefinition(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& /* entity */)
+{
     OString serviceName(splitName(name)); // Simple name for Rust service
-    OString externFunctionPrefix = getRustTypeName(name); // Full name for extern "C" functions
-    OUString interfaceType = entity->getBase();
-
-    // Generate proper module path for the interface
-    OString interfaceTypeStr = u2b(interfaceType);
-    std::string_view interfaceTypeName = splitName(interfaceTypeStr);
-
-    // Convert interface type to full module path
-    OString path = interfaceTypeStr;
-    path = path.replaceAll("."_ostr, "::"_ostr);
-    OString interfaceModulePath
-        = "crate::generated::rustmaker::"_ostr + path + "::" + interfaceTypeName;
 
     file.beginLine()
         .append("/// Opaque Rust service wrapper for ")
@@ -942,6 +1007,13 @@ void RustProducer::produceService(
         .append(serviceName)
         .append(";")
         .endLine();
+}
+
+void RustProducer::generateServiceImplementation(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity)
+{
+    OString serviceName(splitName(name)); // Simple name for Rust service
 
     // Implementation block
     file.beginLine()
@@ -952,6 +1024,21 @@ void RustProducer::produceService(
         .append(serviceName)
         .endLine()
         .beginBlock();
+
+    generateServiceCreateMethod(file, name, entity);
+
+    file.endBlock();
+}
+
+void RustProducer::generateServiceCreateMethod(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity)
+{
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
+    OUString interfaceType = entity->getBase();
+
+    // Generate proper module path for the interface
+    OString interfaceModulePath = generateServiceInterfaceModulePath(interfaceType);
 
     // Service creation method
     file.beginLine()
@@ -987,8 +1074,25 @@ void RustProducer::produceService(
         .endLine()
         .endBlock()
         .endBlock();
+}
 
-    file.endBlock();
+OString RustProducer::generateServiceInterfaceModulePath(const OUString& interfaceType)
+{
+    // Generate proper module path for the interface
+    OString interfaceTypeStr = u2b(interfaceType);
+    std::string_view interfaceTypeName = splitName(interfaceTypeStr);
+
+    // Convert interface type to full module path
+    OString path = interfaceTypeStr;
+    path = path.replaceAll("."_ostr, "::"_ostr);
+    return "crate::generated::rustmaker::"_ostr + path + "::" + interfaceTypeName;
+}
+
+void RustProducer::generateServiceExternDeclarations(
+    RustFile& file, std::string_view name,
+    const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& /* entity */)
+{
+    OString externFunctionPrefix(getRustTypeName(name)); // Full name for extern "C" functions
 
     // Extern "C" declarations
     file.beginLine()
@@ -1004,8 +1108,68 @@ void RustProducer::produceService(
         .append("_create(context: *mut c_void) -> *mut c_void;")
         .endLine()
         .endBlock();
+}
 
-    file.closeFile();
+bool RustProducer::generateTypeCastReturn(RustFile& file, std::string_view resolvedType) const
+{
+    if (resolvedType == "boolean")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const u8) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "byte")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const i8) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "short")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const i16) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "unsigned short")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "long")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const i32) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "unsigned long")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const u32) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "hyper")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const i64) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "unsigned hyper")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const u64) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "float")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const f32) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "double")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const f64) }").endLine();
+        return true;
+    }
+    else if (resolvedType == "char")
+    {
+        file.beginLine().append("unsafe { *(ptr as *const u16) }").endLine();
+        return true;
+    }
+
+    // Return false if no type casting was generated (not a primitive type)
+    return false;
 }
 
 // Helper functions
@@ -1110,7 +1274,7 @@ OString RustProducer::getRustWrapperTypeName(std::u16string_view unoType) const
         }
 
         // First resolve typedefs
-        OString resolvedType = resolveTypedef(unoType);
+        OString resolvedType(resolveTypedef(unoType));
         if (resolvedType != rustType)
         {
             // It's a typedef - recursively get wrapper type for resolved type
@@ -1184,27 +1348,6 @@ OString RustProducer::getRustReturnType(std::u16string_view unoType) const
 
     // For primitive and other types, use the existing logic
     return getRustWrapperTypeName(unoType);
-}
-
-OString RustProducer::getRustFFIReturnType(std::u16string_view unoType) const
-{
-    // Handle void returns
-    if (unoType == u"void")
-    {
-        return "()"_ostr;
-    }
-
-    // For interfaces, structs, enums - return their opaque handle typedef
-    if (isUnoInterface(unoType) || isUnoStruct(unoType) || isUnoEnum(unoType))
-    {
-        // Convert UNO type name to typedef handle name
-        // com.sun.star.lang.XMain -> com__sun__star__lang__XMainHandle
-        OString functionPrefix = getRustTypeName(std::string(unoType.begin(), unoType.end()));
-        return functionPrefix + "Handle";
-    }
-
-    // For other types (primitives, sequences, etc) - use void*
-    return "*mut c_void"_ostr;
 }
 
 bool RustProducer::isUnoInterface(std::u16string_view typeName) const

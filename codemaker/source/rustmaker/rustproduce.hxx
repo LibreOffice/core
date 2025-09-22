@@ -37,7 +37,7 @@ public:
      * @param dryRun Don't actually write files
      * @param typeManager UNO type manager for accessing type information
      */
-    RustProducer(const OString& outputDir, bool verbose, bool dryRun,
+    RustProducer(std::string_view outputDir, bool verbose, bool dryRun,
                  const rtl::Reference<TypeManager>& typeManager);
 
     /**
@@ -80,13 +80,83 @@ private:
     static OString getRustTypeName(std::string_view unoName);
     OString getRustWrapperTypeName(std::u16string_view unoType) const;
     OString getRustReturnType(std::u16string_view unoType) const;
-    OString getRustFFIReturnType(std::u16string_view unoType) const;
     OString resolveTypedef(std::u16string_view unoType) const;
 
     // Type classification helpers
     bool isUnoInterface(std::u16string_view typeName) const;
     bool isUnoStruct(std::u16string_view typeName) const;
     bool isUnoEnum(std::u16string_view typeName) const;
+
+    // Enum generation helpers (following CppProducer pattern)
+    void generateEnumDefinition(class RustFile& file, std::string_view name,
+                                const rtl::Reference<unoidl::EnumTypeEntity>& entity);
+    void generateEnumImplementation(class RustFile& file, std::string_view name);
+    void generateEnumExternDeclarations(class RustFile& file, std::string_view name);
+
+    // Struct generation helpers (following CppProducer pattern)
+    void generateStructDefinition(class RustFile& file, std::string_view name,
+                                  const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
+    void generateStructImplementation(class RustFile& file, std::string_view name,
+                                      const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
+    void generateStructConstructor(class RustFile& file, std::string_view externFunctionPrefix);
+    void generateStructFromPtr(class RustFile& file, std::string_view externFunctionPrefix);
+    void generateStructAccessors(class RustFile& file,
+                                 const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
+                                 std::string_view externFunctionPrefix);
+    void generateStructMemberGetter(class RustFile& file, std::string_view memberName,
+                                    std::string_view externFunctionPrefix);
+    void generateStructMemberSetter(class RustFile& file, std::string_view memberName,
+                                    std::string_view externFunctionPrefix);
+    void generateStructDropTrait(class RustFile& file, std::string_view name,
+                                 const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
+    void
+    generateStructExternDeclarations(class RustFile& file, std::string_view name,
+                                     const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
+    void generateStructBasicExternDeclarations(class RustFile& file,
+                                               std::string_view externFunctionPrefix);
+    void generateStructMemberExternDeclarations(
+        class RustFile& file, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
+        std::string_view externFunctionPrefix);
+
+    // Interface generation helpers (following CppProducer pattern)
+    void generateInterfaceWrapper(class RustFile& file, std::string_view name,
+                                  const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+    void
+    generateInterfaceExternDeclarations(class RustFile& file, std::string_view name,
+                                        const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+
+    void generateInterfaceImplementation(class RustFile& file, std::string_view typeName,
+                                         std::string_view externFunctionPrefix,
+                                         const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+    void generateInterfaceConstructor(class RustFile& file, std::string_view externFunctionPrefix);
+    void generateInterfaceFromPtr(class RustFile& file, std::string_view externFunctionPrefix);
+    void generateInterfaceAsPtr(class RustFile& file);
+    void generateInterfaceValidityCheck(class RustFile& file, std::string_view externFunctionPrefix,
+                                        const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+    void generateInterfaceMethodWrappers(class RustFile& file,
+                                         std::string_view externFunctionPrefix,
+                                         const rtl::Reference<unoidl::InterfaceTypeEntity>& entity);
+    void generateInterfaceDropTrait(class RustFile& file, std::string_view typeName,
+                                    std::string_view externFunctionPrefix);
+    void generateInterfaceThreadSafety(class RustFile& file, std::string_view typeName);
+
+    // Service generation helpers (following CppProducer pattern)
+    void generateServiceDefinition(
+        class RustFile& file, std::string_view name,
+        const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity);
+    void generateServiceImplementation(
+        class RustFile& file, std::string_view name,
+        const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity);
+    void generateServiceCreateMethod(
+        class RustFile& file, std::string_view name,
+        const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity);
+    OString generateServiceInterfaceModulePath(const OUString& interfaceType);
+    void generateServiceExternDeclarations(
+        class RustFile& file, std::string_view name,
+        const rtl::Reference<unoidl::SingleInterfaceBasedServiceEntity>& entity);
+
+    // Type casting helpers
+    bool generateTypeCastReturn(class RustFile& file, std::string_view resolvedType) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
