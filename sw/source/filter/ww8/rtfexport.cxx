@@ -1369,7 +1369,7 @@ void RtfExport::OutColorTable()
         {
             InsColor(pBackground->GetColor());
         }
-        m_rDoc.ForEachCharacterBrushItem([this](const SvxBrushItem& rBrush) -> bool {
+        m_rDoc.ForEachCharacterBackgroundBrushItem([this](const SvxBrushItem& rBrush) -> bool {
             InsColor(rBrush.GetColor());
             return true;
         });
