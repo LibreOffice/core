@@ -491,8 +491,10 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
 {
     std::optional<SwMDCellInfo> oCellInfo;
     std::stack<SwMDTableInfo>& rTableInfos = rWrt.GetTableInfos();
+    bool bInTable = false;
     if (!rTableInfos.empty())
     {
+        bInTable = true;
         SwMDTableInfo& aTableInfo = rTableInfos.top();
         auto it = aTableInfo.aCellInfos.find(rNode.GetIndex());
         if (it != aTableInfo.aCellInfos.end())
@@ -518,7 +520,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
     if (!rNodeText.isEmpty())
     {
         // Paragraphs separate by empty lines
-        if (!bFirst && !oCellInfo)
+        if (!bFirst && !bInTable)
             rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
 
         const SwFormatColl* pFormatColl = rNode.GetFormatColl();
@@ -743,7 +745,13 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         }
     }
 
-    if (!oCellInfo || bRowEnd)
+    bool bCellEnd = oCellInfo && oCellInfo->bCellEnd;
+    if (bInTable && !bCellEnd)
+    {
+        // Separator is a space between two in-table-cell paragraphs.
+        rWrt.Strm().WriteUnicodeOrByteText(u" ");
+    }
+    else if (!bInTable || bRowEnd)
     {
         rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
     }
@@ -786,9 +794,10 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
             {
                 rStartInfo.bRowStart = true;
             }
+            SwMDCellInfo& rEndInfo = aTableInfo.aCellInfos[pEnd->GetIndex() - 1];
+            rEndInfo.bCellEnd = true;
             if (nBox == pLine->GetTabBoxes().size() - 1)
             {
-                SwMDCellInfo& rEndInfo = aTableInfo.aCellInfos[pEnd->GetIndex() - 1];
                 rEndInfo.bRowEnd = true;
                 if (nLine == 0)
                 {
