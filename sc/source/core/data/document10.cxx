@@ -22,13 +22,14 @@
 
 #include <refupdatecontext.hxx>
 #include <sal/log.hxx>
-#include <svx/DocumentColorHelper.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>
 #include <docsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
 #include <SheetViewManager.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -185,13 +186,28 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
     pTab->CopyCellValuesFrom(rTopPos.Col(), rTopPos.Row(), rSrc);
 }
 
+static Color getColorFromItem(const SvxColorItem* pItem) { return pItem->GetValue(); }
+static Color getColorFromItem(const SvxBrushItem* pItem) { return pItem->GetColor(); }
+
+template <class T>
+static void queryColors(const sal_uInt16 nAttrib, const SfxItemPool* pPool, std::set<Color>& rOutput)
+{
+    for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(nAttrib))
+    {
+        auto pColorItem = static_cast<const T*>(pItem);
+        Color aColor(getColorFromItem(pColorItem));
+        if (COL_AUTO != aColor)
+            rOutput.insert(aColor);
+    }
+}
+
 std::set<Color> ScDocument::GetDocColors()
 {
     std::set<Color> aDocColors;
     ScDocumentPool *pPool = GetPool();
 
-    svx::DocumentColorHelper::queryColors<SvxBrushItem>(ATTR_BACKGROUND, pPool, aDocColors);
-    svx::DocumentColorHelper::queryColors<SvxColorItem>(ATTR_FONT_COLOR, pPool, aDocColors);
+    queryColors<SvxBrushItem>(ATTR_BACKGROUND, pPool, aDocColors);
+    queryColors<SvxColorItem>(ATTR_FONT_COLOR, pPool, aDocColors);
 
     return aDocColors;
 }
