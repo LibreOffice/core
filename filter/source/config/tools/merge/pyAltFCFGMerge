@@ -9,7 +9,7 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, os.path, codecs
+import sys, os.path
 
 CFGFILE             = os.environ["SRCDIR"] + "/filter/source/config/tools/merge/FCFGMerge.cfg"
 
@@ -543,7 +543,7 @@ class Merger:
             return
         printOut("package contains " + str(nItemCount) + " items")
 
-        aPackage = codecs.open(sPackage, 'w', "utf-8")
+        aPackage = open(sPackage, 'w', encoding = "utf-8")
         printOut("write temp package \"" + sPackage)
         aPackage.write(sBuffer)
         aPackage.close()
@@ -568,7 +568,7 @@ class Merger:
         for sFragment in lFragments:
             sFragPath = os.path.join(aDir, sFragment + "." + sExtXcu)
             try:
-                aFragmentFile = codecs.open(sFragPath, "r", "utf-8")
+                aFragmentFile = open(sFragPath, encoding = "utf-8")
             except:
                 # handle simple files only and check for existence!
                 raise Exception("fragment \"" + sFragPath + "\" does not exists.")
