@@ -6766,7 +6766,7 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 case ocDiv:
                 case ocMul:
                     {
-                        if (!pTok->IsInForceArray())
+                    if (!pTok->IsInForceArray() || nRootParam > 1)
                             break;
                         FormulaToken* pLHS = *(ppTok - 1);
                         FormulaToken* pRHS = *(ppTok - 2);
