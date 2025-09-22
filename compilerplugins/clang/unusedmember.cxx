@@ -128,6 +128,13 @@ public:
             {
                 continue;
             }
+            // Members of classes defined at block scope in a function template seem to not be
+            // marked as referenced, so filter them out here:
+            auto const d1 = cast_or_null<FunctionDecl>(d->getParentFunctionOrMethod());
+            if (d1 != nullptr && d1->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate)
+            {
+                continue;
+            }
             if (d->hasAttr<UnusedAttr>())
             {
                 continue;

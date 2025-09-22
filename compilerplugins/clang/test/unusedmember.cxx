@@ -250,6 +250,21 @@ template <typename T> void f1() { (void)offsetof(T, i); }
 void f() { f1<S<void>>(); }
 }
 
+namespace TemplatedBlockScope
+{
+template <typename T> void f()
+{
+    T t;
+    struct S
+    {
+        S() {}
+        void f() {}
+    };
+    S s;
+    s.f();
+}
+}
+
 int main()
 {
     (void)&Enum::f;
