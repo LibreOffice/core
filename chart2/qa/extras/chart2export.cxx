@@ -1409,6 +1409,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStyleImportExport)
     assertXPath(pXmlDoc, "/cs:chartStyle");
     assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle");
     assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle/a:defRPr", "sz", std::u16string_view(u"777"));
+    assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle/cs:fillRef", "idx", std::u16string_view(u"7"));
+    assertXPath(pXmlDoc, "/cs:chartStyle/cs:axisTitle/cs:fontRef", "idx", std::u16string_view(u"major"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -14,6 +14,8 @@
 #include <docmodel/color/ComplexColor.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/helper/propertymap.hxx>
+#include <comphelper/string.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 #include <variant>
 
@@ -59,35 +61,19 @@ struct FontOrStyleRef
         // The attribute here can be an integer, a string, or "auto" (which
         // of course is also a string, but is considered special). So we
         // need to try to convert the input string to an integer, and handle
-        // it as an int if we can. OUString provides toInt(), but it returns
-        // 0 in the case of failure, which is eminently unhelpful, since 0
-        // is a perfectly acceptable value. So convert it to a
-        // std::basic_string, which has stoi(), which throws if it can't do
-        // the conversion.
-        //
-        // Unfortunately OUString characters are sal_Unicode which can be
-        // uint16_t, and while there's string::stoi() and wstring::stoi(),
-        // there's no basic_string<uint16_t>::stoi(). So we use wstring and
-        // construct character by character.
+        // it as an int if we can.
         if (str)
         {
             StyleColorVal v;
 
             const sal_Unicode* pRawStr = str->getStr();
-            std::wstring sBStr;
-            sBStr.reserve(str->getLength());
-            for (const sal_Unicode* pS = pRawStr; pS < pRawStr + str->getLength(); ++pS)
-            {
-                sBStr.push_back(*pS);
-            }
 
-            sal_uInt32 nIntVal = 0;
-            try
+            if (comphelper::string::isdigitAsciiString(pRawStr))
             {
-                nIntVal = stoi(sBStr);
+                sal_uInt32 nIntVal = str->toUInt32();
                 v = nIntVal;
             }
-            catch (std::invalid_argument&)
+            else
             {
                 // Not an integer, so see if it's the fixed enum
                 if (*str == "auto")
@@ -118,25 +104,25 @@ struct StyleRef : public FontOrStyleRef
 
 struct FontRef : public FontOrStyleRef
 {
-    enum FontCollectionIndex
+    enum class FontCollectionIndex
     {
         MAJOR,
         MINOR,
         NONE
     };
 
-    FontCollectionIndex meIdx = MINOR; // required
+    FontCollectionIndex meIdx = FontCollectionIndex::MINOR; // required
 
     // Get the string value of the font collection index
     const char* getFontCollectionStr() const
     {
         switch (meIdx)
         {
-            case MINOR:
+            case FontCollectionIndex::MINOR:
                 return "minor";
-            case MAJOR:
+            case FontCollectionIndex::MAJOR:
                 return "major";
-            case NONE:
+            case FontCollectionIndex::NONE:
                 return "none";
             default:
                 assert(false);
@@ -149,15 +135,15 @@ struct FontRef : public FontOrStyleRef
     {
         if (sIdx == std::u16string_view(u"major"))
         {
-            meIdx = MAJOR;
+            meIdx = FontCollectionIndex::MAJOR;
         }
         else if (sIdx == std::u16string_view(u"minor"))
         {
-            meIdx = MINOR;
+            meIdx = FontCollectionIndex::MINOR;
         }
         else if (sIdx == std::u16string_view(u"none"))
         {
-            meIdx = NONE;
+            meIdx = FontCollectionIndex::NONE;
         }
     }
 };
