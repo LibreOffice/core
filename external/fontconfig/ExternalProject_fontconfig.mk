@@ -32,6 +32,8 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		$(if $(filter EMSCRIPTEN,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)") \
 		$(gb_RUN_CONFIGURE) ./configure \
+			--includedir=${WORKDIR}/UnpackedTarball/fontconfig \
+			--libdir=${WORKDIR}/UnpackedTarball/fontconfig/src/.libs \
 			--disable-silent-rules \
 			--with-pic \
 			$(if $(filter ANDROID,$(OS)),--with-arch=arm) \
