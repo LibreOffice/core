@@ -1021,9 +1021,13 @@ void ScUndoPaste::DoChange(bool bUndo)
     }
 
     sal_uInt16 nExtFlags = 0;
+
     pDocShell->UpdatePaintExt(nExtFlags, maBlockRanges.Combine());
 
-    rDoc.ForgetNoteCaptions(maBlockRanges, false);
+    // tdf#167042 - cell comments texts should not be deleted but
+    // the note text should be remembered in maNoteData to be able
+    // to later reconstruct a caption from it.
+    rDoc.ForgetNoteCaptions(maBlockRanges, true);
     aMarkData.MarkToMulti();
     rDoc.DeleteSelection(nUndoFlags, aMarkData, false); // no broadcasting here
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
