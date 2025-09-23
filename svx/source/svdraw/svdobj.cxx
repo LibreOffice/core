@@ -337,6 +337,7 @@ void impRemoveIncarnatedSdrObjectToSdrModel(SdrObject& rSdrObject, SdrModel& rSd
 SdrObject::SdrObject(SdrModel& rSdrModel)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
+    , m_bOutRectangleSet(false)
     , m_pUserCall(nullptr)
     , mpImpl(new Impl)
     , mpParentOfSdrObject(nullptr)
@@ -372,6 +373,7 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
 SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
+    , m_bOutRectangleSet(false)
     , m_pUserCall(nullptr)
     , mpImpl(new Impl)
     , mpParentOfSdrObject(nullptr)
@@ -952,13 +954,12 @@ void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
 // GetCurrentBoundRect().
 const tools::Rectangle& SdrObject::GetCurrentBoundRect() const
 {
-    auto const& rRectangle = getOutRectangle();
-    if (rRectangle.IsEmpty())
+    if (!isOutRectangleSet())
     {
         const_cast< SdrObject* >(this)->RecalcBoundRect();
     }
 
-    return rRectangle;
+    return getOutRectangle();
 }
 
 // To have a possibility to get the last calculated BoundRect e.g for producing
@@ -988,22 +989,27 @@ void SdrObject::RecalcBoundRect()
     GetViewContact().getViewIndependentPrimitive2DContainer(xPrimitives);
 
     if (xPrimitives.empty())
+    {
+        setOutRectangle(tools::Rectangle());
         return;
+    }
 
     // use neutral ViewInformation and get the range of the primitives
     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
     const basegfx::B2DRange aRange(xPrimitives.getB2DRange(aViewInformation2D));
 
-    if (!aRange.isEmpty())
+    if (aRange.isEmpty())
     {
-        tools::Rectangle aNewRectangle(
-            tools::Long(floor(aRange.getMinX())),
-            tools::Long(floor(aRange.getMinY())),
-            tools::Long(ceil(aRange.getMaxX())),
-            tools::Long(ceil(aRange.getMaxY())));
-        setOutRectangle(aNewRectangle);
+        setOutRectangle(tools::Rectangle());
         return;
     }
+
+    tools::Rectangle aNewRectangle(
+        tools::Long(floor(aRange.getMinX())),
+        tools::Long(floor(aRange.getMinY())),
+        tools::Long(ceil(aRange.getMaxX())),
+        tools::Long(ceil(aRange.getMaxY())));
+    setOutRectangle(aNewRectangle);
 }
 
 void SdrObject::BroadcastObjectChange() const
@@ -3216,16 +3222,19 @@ const tools::Rectangle& SdrObject::getOutRectangle() const
 void SdrObject::setOutRectangleConst(tools::Rectangle const& rRectangle) const
 {
     m_aOutRect = rRectangle;
+    m_bOutRectangleSet = true;
 }
 
 void SdrObject::setOutRectangle(tools::Rectangle const& rRectangle)
 {
     m_aOutRect = rRectangle;
+    m_bOutRectangleSet = true;
 }
 
 void SdrObject::resetOutRectangle()
 {
     m_aOutRect = tools::Rectangle();
+    m_bOutRectangleSet = false;
 }
 
 void SdrObject::moveOutRectangle(sal_Int32 nXDelta, sal_Int32 nYDelta)
