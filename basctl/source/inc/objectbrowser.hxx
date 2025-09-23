@@ -15,12 +15,9 @@
 
 #include <basctl/idecodecompletiontypes.hxx>
 
-#include <atomic>
 #include <memory>
-#include <set>
 #include <vector>
 
-#include <vcl/status.hxx>
 #include <vcl/weld.hxx>
 
 namespace basctl
@@ -28,7 +25,6 @@ namespace basctl
 class Shell;
 class IdeDataProviderInterface;
 class ObjectBrowserSearch;
-class ObjectBrowserNavigation;
 
 enum class ObjectBrowserInitState
 {
@@ -45,12 +41,13 @@ public:
     ObjectBrowser(Shell& rShell, vcl::Window* pParent);
     ~ObjectBrowser() override;
 
-    virtual void dispose() override;
+    void dispose() override;
     virtual bool Close() override;
 
     void Show(bool bVisible = true);
     void RefreshUI(bool bForceKeepUno = false);
 
+    // DocumentEventListener stubs
     void onDocumentCreated(const ScriptDocument& _rDocument) override;
     void onDocumentOpened(const ScriptDocument& _rDocument) override;
     void onDocumentSave(const ScriptDocument& _rDocument) override;
@@ -61,6 +58,7 @@ public:
     void onDocumentTitleChanged(const ScriptDocument& _rDocument) override;
     void onDocumentModeChanged(const ScriptDocument& _rDocument) override;
 
+    // Accessors for the Search Handler
     weld::Entry* GetFilterBox() { return m_pFilterBox.get(); }
     weld::Button* GetClearSearchButton() { return m_xClearSearchButton.get(); }
 
@@ -70,6 +68,7 @@ private:
     // Core tree management methods
     static void ClearTreeView(weld::TreeView& rTree,
                               std::vector<std::shared_ptr<basctl::IdeSymbolInfo>>& rStore);
+    void PopulateLeftTree();
     void ShowLoadingState();
 
     // Core References
@@ -95,7 +94,7 @@ private:
     std::unique_ptr<weld::Button> m_xForwardButton;
     std::unique_ptr<weld::Button> m_xClearSearchButton;
 
-    // Data Storage
+    // Data Storage for TreeViews
     std::vector<std::shared_ptr<basctl::IdeSymbolInfo>> m_aLeftTreeSymbolStore;
     std::vector<std::shared_ptr<basctl::IdeSymbolInfo>> m_aRightTreeSymbolStore;
     std::map<OUString, size_t> m_aNextChunk; // For lazy-loading nodes
@@ -106,8 +105,7 @@ private:
     // Event Handling
     std::unique_ptr<basctl::DocumentEventNotifier> m_pDocNotifier;
 
-    // Event Handlers
-    DECL_STATIC_LINK(ObjectBrowser, OnDataProviderInitialized, void*, void);
+    // UI Event Handlers
     DECL_STATIC_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, void);
     DECL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, void);
     DECL_STATIC_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, bool);

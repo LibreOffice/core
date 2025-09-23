@@ -169,6 +169,8 @@ struct IdeSymbolInfo
 using SymbolInfoList = std::vector<std::shared_ptr<IdeSymbolInfo>>;
 using ParamInfoList = std::vector<IdeParamInfo>;
 
+OUString CreateRootIdentifier(IdeSymbolKind eKind, std::u16string_view sOptionalPayload = u"");
+
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

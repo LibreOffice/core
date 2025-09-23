@@ -11,15 +11,16 @@
 #include <objectbrowser.hxx>
 #include <objectbrowsersearch.hxx>
 #include <idedataprovider.hxx>
+#include "idetimer.hxx"
 #include <iderid.hxx>
 #include <strings.hrc>
 
-#include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <sal/log.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
@@ -29,14 +30,13 @@ ObjectBrowser::ObjectBrowser(Shell& rShell, vcl::Window* pParent)
     , m_pShell(&rShell)
     , m_pDataProvider(std::make_unique<IdeDataProvider>())
     , m_bDisposed(false)
+    , m_eInitState(ObjectBrowserInitState::NotInitialized)
     , m_bUIInitialized(false)
     , m_pDocNotifier(std::make_unique<DocumentEventNotifier>(*this))
 {
     SetText(IDEResId(RID_STR_OBJECT_BROWSER));
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
     EnableInput(true, true);
-
-    Initialize();
 }
 
 ObjectBrowser::~ObjectBrowser() { disposeOnce(); }
@@ -103,6 +103,7 @@ void ObjectBrowser::dispose()
     {
         return;
     }
+    m_bDisposed = true;
 
     m_eInitState = ObjectBrowserInitState::Disposed;
 
@@ -154,38 +155,63 @@ void ObjectBrowser::dispose()
 bool ObjectBrowser::Close()
 {
     Show(false);
-
-    SfxBindings& rBindings = m_pShell->GetViewFrame().GetBindings();
-    rBindings.Invalidate(SID_BASICIDE_OBJECT_BROWSER);
-
+    m_pShell->GetViewFrame().GetBindings().Invalidate(SID_BASICIDE_OBJECT_BROWSER);
     return false;
 }
 
 void ObjectBrowser::Show(bool bVisible)
 {
     DockingWindow::Show(bVisible);
+    if (!bVisible)
+        return;
 
-    if (bVisible)
+    if (m_eInitState == ObjectBrowserInitState::NotInitialized)
     {
-        if (m_eInitState == ObjectBrowserInitState::NotInitialized)
-        {
-            Initialize();
-        }
+        Initialize();
+    }
 
-        if (!m_pDataProvider->IsInitialized())
+    if (m_pDataProvider && !m_pDataProvider->IsInitialized())
+    {
+        ShowLoadingState();
         {
-            ShowLoadingState();
-            m_pDataProvider->AsyncInitialize(LINK(this, ObjectBrowser, OnDataProviderInitialized));
+            weld::WaitObject aWait(GetFrameWeld());
+            m_pDataProvider->Initialize();
         }
+        RefreshUI();
     }
 }
 
 void ObjectBrowser::RefreshUI(bool /*bForceKeepUno*/)
 {
-    if (!m_pDataProvider->IsInitialized())
+    if (m_pDataProvider && m_pDataProvider->IsInitialized())
+    {
+        PopulateLeftTree();
+        if (m_xStatusLabel)
+            m_xStatusLabel->set_label(u"Ready"_ustr);
+    }
+    else
     {
         ShowLoadingState();
     }
+}
+
+void ObjectBrowser::PopulateLeftTree()
+{
+    if (!m_xLeftTreeView)
+        return;
+
+    m_xLeftTreeView->freeze();
+    ClearTreeView(*m_xLeftTreeView, m_aLeftTreeSymbolStore);
+
+    SymbolInfoList aTopLevelNodes = m_pDataProvider->GetTopLevelNodes();
+    for (const auto& pNode : aTopLevelNodes)
+    {
+        m_aLeftTreeSymbolStore.push_back(pNode);
+        m_xLeftTreeView->insert(nullptr, -1, &pNode->sName, nullptr, nullptr, nullptr, true,
+                                nullptr);
+    }
+
+    m_xLeftTreeView->thaw();
 }
 
 void ObjectBrowser::ShowLoadingState()
@@ -194,8 +220,17 @@ void ObjectBrowser::ShowLoadingState()
     {
         m_xLeftTreeView->freeze();
         ClearTreeView(*m_xLeftTreeView, m_aLeftTreeSymbolStore);
+
+        auto pLoadingNode = std::make_shared<IdeSymbolInfo>(u"[Initializing...]",
+                                                            IdeSymbolKind::PLACEHOLDER, u"");
+
+        m_aLeftTreeSymbolStore.push_back(pLoadingNode);
+        m_xLeftTreeView->insert(nullptr, -1, &pLoadingNode->sName, nullptr, nullptr, nullptr, false,
+                                nullptr);
         m_xLeftTreeView->thaw();
     }
+    if (m_xStatusLabel)
+        m_xStatusLabel->set_label(u"Initializing Object Browser..."_ustr);
 }
 
 void ObjectBrowser::ClearTreeView(weld::TreeView& rTree,
@@ -215,7 +250,6 @@ void ObjectBrowser::onDocumentClosed(const ScriptDocument&) { /* STUB */}
 void ObjectBrowser::onDocumentTitleChanged(const ScriptDocument&) { /* STUB */}
 void ObjectBrowser::onDocumentModeChanged(const ScriptDocument&) { /* STUB */}
 
-IMPL_STATIC_LINK(ObjectBrowser, OnDataProviderInitialized, void*, /*p*/, void) { /* STUB */}
 IMPL_STATIC_LINK(ObjectBrowser, OnLeftTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
 IMPL_STATIC_LINK(ObjectBrowser, OnRightTreeSelect, weld::TreeView&, /*rTree*/, void) { /* STUB */}
 IMPL_STATIC_LINK(ObjectBrowser, OnNodeExpand, const weld::TreeIter&, /*rParentIter*/, bool)

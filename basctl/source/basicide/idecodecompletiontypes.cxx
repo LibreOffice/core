@@ -8,6 +8,7 @@
  */
 
 #include <basctl/idecodecompletiontypes.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace basctl
 {
@@ -48,6 +49,31 @@ void IdeSymbolInfo::AddMember(std::shared_ptr<IdeSymbolInfo> pMember)
         return;
 
     mapMembers.insert_or_assign(pMember->sName, std::move(pMember));
+}
+
+OUString CreateRootIdentifier(IdeSymbolKind eKind, std::u16string_view sOptionalPayload)
+{
+    OUStringBuffer sId(u"root:");
+
+    switch (eKind)
+    {
+        case IdeSymbolKind::ROOT_UNO_APIS:
+            sId.append(u"uno_apis");
+            break;
+        case IdeSymbolKind::ROOT_APPLICATION_LIBS:
+            sId.append(u"app_macros");
+            break;
+        case IdeSymbolKind::ROOT_DOCUMENT_LIBS:
+            sId.append(OUString::Concat(u"doc:") + sOptionalPayload);
+            break;
+        case IdeSymbolKind::ROOT_BASIC_BUILTINS:
+            sId.append(u"builtins");
+            break;
+        default:
+            sId.append(u"unknown");
+            break;
+    }
+    return sId.makeStringAndClear();
 }
 
 } // namespace basctl

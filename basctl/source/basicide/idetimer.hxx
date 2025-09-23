@@ -23,6 +23,7 @@ class IdeTimer
 public:
     explicit IdeTimer(const rtl::OUString& operationName);
     ~IdeTimer();
+    sal_Int64 getElapsedTimeMs() const;
 
 private:
     IdeTimer(const IdeTimer&) = delete;

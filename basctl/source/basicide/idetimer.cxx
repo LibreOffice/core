@@ -37,6 +37,17 @@ IdeTimer::~IdeTimer()
                                    << "' took " << fElapsedSeconds << " seconds.");
 }
 
+sal_Int64 IdeTimer::getElapsedTimeMs() const
+{
+    TimeValue aEnd;
+    osl_getSystemTime(&aEnd);
+
+    sal_Int64 nSeconds = static_cast<sal_Int64>(aEnd.Seconds) - m_aStart.Seconds;
+    sal_Int64 nNanos = static_cast<sal_Int64>(aEnd.Nanosec) - m_aStart.Nanosec;
+
+    return (nSeconds * 1000) + (nNanos / 1000000);
+}
+
 } // namespace basctl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
