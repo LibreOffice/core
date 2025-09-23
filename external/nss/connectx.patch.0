@@ -1,0 +1,11 @@
+--- nspr/pr/src/pthreads/ptio.c
++++ nspr/pr/src/pthreads/ptio.c
+@@ -1989,7 +1989,7 @@
+                              PRIntn flags, const PRNetAddr* addr,
+                              PRIntervalTime timeout) {
+ #    if defined(LINUX) || HAS_CONNECTX
+-  PRInt32 syserrno, bytes = -1;
++  PRInt32 syserrno; ssize_t bytes = -1;
+   PRBool fNeedContinue = PR_FALSE;
+   pt_SockLen addr_len;
+   const PRNetAddr* addrp = addr;
