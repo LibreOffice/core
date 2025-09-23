@@ -2827,6 +2827,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    Scheduler::ProcessEventsToIdle();
+
+    OString aPresentInfo = pXImpressDocument->getPresentationInfo(true);
+
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(aPresentInfo)));
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5),  aTree.get_child("slides").size());
+
+    // Slide Index 0
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 0);
+        CPPUNIT_ASSERT_EQUAL(0, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
+
+        CPPUNIT_ASSERT(rChild.get_child("a11y").get_value<std::string>().length() > 0);
+        CPPUNIT_ASSERT(rChild.get_child("transitionLabel").get_value<std::string>().length() > 0);
+    }
+}
+
 namespace
 {
 std::string GetSlideHash(SdXImpressDocument* pDoc, sal_Int32 nSlideNumber)
