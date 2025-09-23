@@ -202,7 +202,6 @@ $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(c
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/turtledemo
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
-	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/venv
 	# Then the binary libraries
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so
