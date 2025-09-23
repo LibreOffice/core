@@ -7585,7 +7585,7 @@ void DomainMapper_Impl::handleToc
                 sal_Int32 nLevelCount = aMap.count( nLevel );
                 if( nLevelCount  )
                 {
-                    TOCStyleMap::iterator aTOCStyleIter = aMap.find( nLevel );
+                    TOCStyleMap::iterator aTOCStyleIter = aMap.lower_bound( nLevel );
 
                     uno::Sequence< OUString> aStyles( nLevelCount );
                     for ( auto& rStyle : asNonConstRange(aStyles) )
