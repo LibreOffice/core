@@ -186,6 +186,16 @@ inline const SwContentFrame *SwSectionFrame::FindLastContent() const
     return const_cast<SwSectionFrame*>(this)->FindLastContent();
 }
 
+namespace sw {
+
+/** GetPrev() but ignore dead empty SectionFrames
+    @param bSectPrev    if true, and pFrame is first child of section frame,
+                        get section frame's prev
+ */
+SwFrame* PrevSkipDead(SwFrame* pFrame, bool bSectPrv);
+
+} // namespace sw
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

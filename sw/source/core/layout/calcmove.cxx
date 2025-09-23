@@ -521,8 +521,10 @@ void SwFrame::PrepareCursor()
     Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);
 }
 
+namespace sw {
+
 // Here we return GetPrev(); however we will ignore empty SectionFrames
-static SwFrame* lcl_Prev( SwFrame* pFrame, bool bSectPrv = true )
+SwFrame* PrevSkipDead(SwFrame *const pFrame, bool const bSectPrv)
 {
     SwFrame* pRet = pFrame->GetPrev();
     if( !pRet && pFrame->GetUpper() && pFrame->GetUpper()->IsSctFrame() &&
@@ -534,12 +536,14 @@ static SwFrame* lcl_Prev( SwFrame* pFrame, bool bSectPrv = true )
     return pRet;
 }
 
+} // namespace sw
+
 static SwFrame* lcl_NotHiddenPrev( SwFrame* pFrame )
 {
     SwFrame *pRet = pFrame;
     do
     {
-        pRet = lcl_Prev( pRet );
+        pRet = ::sw::PrevSkipDead(pRet, true);
     } while ( pRet && pRet->IsHiddenNow() );
     return pRet;
 }
@@ -551,7 +555,7 @@ void SwFrame::MakePos()
 
     setFrameAreaPositionValid(true);
     bool bUseUpper = false;
-    SwFrame* pPrv = lcl_Prev( this );
+    SwFrame* pPrv = ::sw::PrevSkipDead(this, true);
     if ( pPrv &&
          ( !pPrv->IsContentFrame() ||
            ( static_cast<SwContentFrame*>(pPrv)->GetFollow() != this ) )
@@ -574,7 +578,7 @@ void SwFrame::MakePos()
         }
     }
 
-    pPrv = lcl_Prev( this, false );
+    pPrv = ::sw::PrevSkipDead(this, false);
     const SwFrameType nMyType = GetType();
     SwRectFnSet aRectFnSet((IsCellFrame() && GetUpper() ? GetUpper() : this));
     if ( !bUseUpper && pPrv )
@@ -637,7 +641,7 @@ void SwFrame::MakePos()
         {
             GetUpper()->Calc(getRootFrame()->GetCurrShell()->GetOut());
         }
-        pPrv = lcl_Prev( this, false );
+        pPrv = ::sw::PrevSkipDead(this, false);
         if ( !bUseUpper && pPrv )
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1386,7 +1390,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Also move a paragraph forward, which is the first one inside a table cell.
         if ( bMoveFwdByObjPos &&
              FindPageFrame()->GetPhyPageNum() < nToPageNum &&
-             ( lcl_Prev( this ) ||
+             ( ::sw::PrevSkipDead(this, true) ||
                GetUpper()->IsCellFrame() ||
                ( GetUpper()->IsSctFrame() &&
                  GetUpper()->GetUpper()->IsCellFrame() ) ) &&
@@ -1399,14 +1403,14 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     // If a Follow sits next to its Master and doesn't fit, we know it can
     // be moved right now.
-    if ( lcl_Prev( this ) && static_cast<SwTextFrame*>(this)->IsFollow() && IsMoveable() )
+    if (::sw::PrevSkipDead(this, true) && static_cast<SwTextFrame*>(this)->IsFollow() && IsMoveable())
     {
         bMovedFwd = true;
         // If follow frame is in table, its master will be the last in the
         // current table cell. Thus, invalidate the printing area of the master.
         if ( IsInTab() )
         {
-            lcl_Prev( this )->InvalidatePrt();
+            ::sw::PrevSkipDead(this, true)->InvalidatePrt();
         }
         MoveFwd( bMakePage, false );
     }
@@ -1618,7 +1622,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         auto const pTemp(GetIndPrev());
         auto const bTemp(pTemp && pTemp->isFrameAreaSizeValid()
                                && pTemp->isFramePrintAreaValid());
-        if ( !lcl_Prev( this ) &&
+        if ( !::sw::PrevSkipDead(this, true) &&
              !bMovedFwd &&
              ( bMoveable || ( bFly && !bTab ) ) &&
              ( !bFootnote || !GetUpper()->FindFootnoteFrame()->GetPrev() )

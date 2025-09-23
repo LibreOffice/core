@@ -417,7 +417,7 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         if (bInserted)
         {
             pSect->Init();
-            aRectFnSet.MakePos( *pSect, pSect->GetUpper(), pSect->GetPrev(), true);
+            aRectFnSet.MakePos(*pSect, pSect->GetUpper(), ::sw::PrevSkipDead(pSect, false), true);
         }
         if( !static_cast<SwLayoutFrame*>(pParent)->Lower() )
         {
@@ -560,6 +560,7 @@ SwSectionFrame* SwSectionFrame::SplitSect( SwFrame* pFrameStartAfter, SwFrame* p
     pNew->InsertBehind( pFramePutAfter->GetUpper(), pFramePutAfter );
     pNew->Init();
     SwRectFnSet aRectFnSet(this);
+    assert(!pFramePutAfter->IsSctFrame() || static_cast<SwSectionFrame*>(pFramePutAfter)->GetSection()); // it's not dead
     aRectFnSet.MakePos( *pNew, nullptr, pFramePutAfter, true );
     // OD 25.03.2003 #108339# - restore content:
     // determine layout frame for restoring content after the initialization
@@ -815,7 +816,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if( GetUpper() )
             {
                 SwRectFnSet aRectFnSet(GetUpper());
-                aRectFnSet.MakePos( *this, GetUpper(), GetPrev(), false );
+                aRectFnSet.MakePos(*this, GetUpper(), ::sw::PrevSkipDead(this, false), false);
             }
 
             if (getFrameArea().Height() == 0)
@@ -1252,11 +1253,12 @@ void SwSectionFrame::SimpleFormat()
         return;
     LockJoin();
     SwRectFnSet aRectFnSet(this);
-    if( GetPrev() || GetUpper() )
+    SwFrame *const pPrev{::sw::PrevSkipDead(this, false)};
+    if (pPrev || GetUpper())
     {
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
-        aRectFnSet.MakePos( *this, GetUpper(), GetPrev(), false );
+        aRectFnSet.MakePos(*this, GetUpper(), pPrev, false);
         setFrameAreaPositionValid(true);
     }
     SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
@@ -2188,7 +2190,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
         pNew->InsertBefore( pLayLeaf, nullptr );
         pNew->Init();
         SwRectFnSet aRectFnSet(pNew);
-        aRectFnSet.MakePos( *pNew, pLayLeaf, pNew->GetPrev(), true );
+        aRectFnSet.MakePos(*pNew, pLayLeaf, ::sw::PrevSkipDead(pNew, false), true);
 
         pLayLeaf = FirstLeaf( pNew );
         if( !pNew->Lower() )    // Format single column sections
