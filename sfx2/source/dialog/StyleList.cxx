@@ -438,8 +438,13 @@ void StyleList::UpdateFamily()
     m_bTreeDrag = true;
     if (m_pStyleSheetPool)
     {
-        UpdateStyles(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList);
-        FillTreeBox(GetActualFamily());
+        if (!m_xTreeBox->get_visible())
+            UpdateStyles(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList);
+        else
+        {
+            UpdateStyles(StyleFlags::UpdateFamily);
+            FillTreeBox(GetActualFamily());
+        }
     }
 
     InvalidateBindings();
@@ -1930,8 +1935,12 @@ void StyleList::Update()
         }
 
         m_nAppFilter = pItem->GetValue();
-        UpdateStyles(StyleFlags::UpdateFamilyList);
-        FillTreeBox(GetActualFamily());
+        if (!m_xTreeBox->get_visible())
+        {
+            UpdateStyles(StyleFlags::UpdateFamilyList);
+        }
+        else
+            FillTreeBox(GetActualFamily());
     }
     else
     {
@@ -1943,8 +1952,10 @@ void StyleList::Update()
             && m_nAppFilter != pItem->GetValue())
         {
             m_nAppFilter = pItem->GetValue();
-            UpdateStyles(StyleFlags::UpdateFamilyList);
-            FillTreeBox(GetActualFamily());
+            if (!m_xTreeBox->get_visible())
+                UpdateStyles(StyleFlags::UpdateFamilyList);
+            else
+                FillTreeBox(GetActualFamily());
         }
         else
         {
