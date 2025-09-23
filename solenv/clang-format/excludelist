@@ -5718,7 +5718,6 @@ include/svx/ruler.hxx
 include/svx/rulritem.hxx
 include/svx/scene3d.hxx
 include/svx/sdangitm.hxx
-include/svx/sdasitm.hxx
 include/svx/sdgcpitm.hxx
 include/svx/sdggaitm.hxx
 include/svx/sdgluitm.hxx

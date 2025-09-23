@@ -28,77 +28,91 @@
 #include <svx/svxdllapi.h>
 #include <unordered_map>
 
-namespace com::sun::star::uno { class Any; }
+namespace com::sun::star::uno
+{
+class Any;
+}
 
 class SVXCORE_DLLPUBLIC SdrCustomShapeGeometryItem final : public SfxPoolItem
 {
 public:
-    typedef std::pair < const OUString, const OUString > PropertyPair;
+    typedef std::pair<const OUString, const OUString> PropertyPair;
 
 private:
     struct PropertyPairHash
     {
-        inline size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
+        inline size_t operator()(const SdrCustomShapeGeometryItem::PropertyPair&) const;
     };
-    typedef std::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
+    typedef std::unordered_map<PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
     typedef std::unordered_map<OUString, sal_Int32> PropertyHashMap;
 
-    PropertyHashMap     m_aPropHashMap;
+    PropertyHashMap m_aPropHashMap;
     PropertyPairHashMap m_aPropPairHashMap;
 
-    css::uno::Sequence< css::beans::PropertyValue > m_aPropSeq;
+    css::uno::Sequence<css::beans::PropertyValue> m_aPropSeq;
 
     // For fast comparisons keep a hash of the content, computed on demand
     // (unusable state is if anyToHash() returns no hash).
-    enum HashState { Unknown, Valid, Unusable };
+    enum HashState
+    {
+        Unknown,
+        Valid,
+        Unusable
+    };
     mutable HashState m_aHashState = HashState::Unknown;
     mutable size_t m_aHash = 0xdeadbeef;
 
-    SAL_DLLPRIVATE void SetPropSeq( const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq );
+    SAL_DLLPRIVATE void SetPropSeq(const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq);
     inline void UpdateHash() const;
     inline void InvalidateHash();
 
-    public:
+public:
+    SAL_DLLPRIVATE SdrCustomShapeGeometryItem();
+    DECLARE_ITEM_TYPE_FUNCTION(SdrCustomShapeGeometryItem)
+    SdrCustomShapeGeometryItem(const css::uno::Sequence<css::beans::PropertyValue>&);
+    virtual ~SdrCustomShapeGeometryItem() override;
 
-            SAL_DLLPRIVATE SdrCustomShapeGeometryItem();
-            DECLARE_ITEM_TYPE_FUNCTION(SdrCustomShapeGeometryItem)
-            SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
-            virtual ~SdrCustomShapeGeometryItem() override;
+    SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem const&) = default;
+    SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem&&) = default;
+    SdrCustomShapeGeometryItem& operator=(SdrCustomShapeGeometryItem const&)
+        = delete; // due to SfxPoolItem
+    SdrCustomShapeGeometryItem& operator=(SdrCustomShapeGeometryItem&&)
+        = delete; // due to SfxPoolItem
 
-            SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem const &) = default;
-            SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem &&) = default;
-            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = delete; // due to SfxPoolItem
-            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = delete; // due to SfxPoolItem
+    SAL_DLLPRIVATE virtual bool operator==(const SfxPoolItem&) const override;
 
-            SAL_DLLPRIVATE virtual bool                operator==( const SfxPoolItem& ) const override;
+    SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
+                                                MapUnit eCoreMetric, MapUnit ePresentationMetric,
+                                                OUString& rText, const IntlWrapper&) const override;
 
-            SAL_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,
-                                         MapUnit eCoreMetric, MapUnit ePresentationMetric,
-                                         OUString &rText, const IntlWrapper&) const override;
+    SAL_DLLPRIVATE virtual SdrCustomShapeGeometryItem* Clone(SfxItemPool* pPool
+                                                             = nullptr) const override;
 
-            SAL_DLLPRIVATE virtual SdrCustomShapeGeometryItem* Clone( SfxItemPool* pPool = nullptr ) const override;
+    SAL_DLLPRIVATE virtual bool QueryValue(css::uno::Any& rVal,
+                                           sal_uInt8 nMemberId = 0) const override;
+    SAL_DLLPRIVATE virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
-            SAL_DLLPRIVATE virtual bool                QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-            SAL_DLLPRIVATE virtual bool                PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    css::uno::Any* GetPropertyValueByName(const OUString& rPropName);
+    const css::uno::Any* GetPropertyValueByName(const OUString& rPropName) const;
+    css::uno::Any* GetPropertyValueByName(const OUString& rPropName, const OUString& rPropName2);
+    const css::uno::Any* GetPropertyValueByName(const OUString& rPropName,
+                                                const OUString& rPropName2) const;
 
-            css::uno::Any* GetPropertyValueByName( const OUString& rPropName );
-            const css::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
-            css::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
-            const css::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 ) const;
+    void SetPropertyValue(const css::beans::PropertyValue& rPropVal);
+    void SetPropertyValue(const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal);
 
-            void SetPropertyValue( const css::beans::PropertyValue& rPropVal );
-            void SetPropertyValue( const OUString& rSequenceName, const css::beans::PropertyValue& rPropVal );
-
-            void ClearPropertyValue( const OUString& rPropertyName );
+    void ClearPropertyValue(const OUString& rPropertyName);
 };
 
-inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
-    return SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto );
+inline SdrOnOffItem makeSdrTextWordWrapItem(bool bAuto)
+{
+    return SdrOnOffItem(SDRATTR_TEXT_WORDWRAP, bAuto);
 }
 
 // some useful inline methods
 
-size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
+size_t SdrCustomShapeGeometryItem::PropertyPairHash::
+operator()(const SdrCustomShapeGeometryItem::PropertyPair& r1) const
 {
     size_t hash = 17;
     hash = hash * 37 + r1.first.hashCode();
