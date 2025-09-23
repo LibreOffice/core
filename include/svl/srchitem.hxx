@@ -86,6 +86,7 @@ class SVL_DLLPUBLIC SvxSearchItem final :
     // Start search at this point (absolute twips).
     sal_Int32       m_nStartPointX;
     sal_Int32       m_nStartPointY;
+    bool            m_bInitialFocusOnReplace;
 
     virtual void    ImplCommit() override;
 
@@ -169,6 +170,8 @@ public:
 
             SvxSearchApp    GetAppFlag() const { return m_nAppFlag; }
             void            SetAppFlag(SvxSearchApp nNewAppFlag) { m_nAppFlag = nNewAppFlag; }
+            bool            GetInitialFocusOnReplace() const { return m_bInitialFocusOnReplace; }
+            void            SetInitialFocusOnReplace(bool bVal) { m_bInitialFocusOnReplace = bVal; }
 
     inline  bool            IsLevenshtein() const;
             void            SetLevenshtein( bool bVal );

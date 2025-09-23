@@ -394,6 +394,8 @@ public:
 
     virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
 
+    DECL_LINK(SearchDialogHdl, SfxRequest&, void);
+
 protected:
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );
