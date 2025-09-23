@@ -25,6 +25,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+#if !defined(MACOSX) && !defined(_WIN32) //FIXME
 class RptBasicTest : public ReportDesignTestBase
 {
 public:
@@ -33,7 +34,6 @@ public:
                               Reference<XConnection>& xActiveConnection);
 };
 
-#if !defined(MACOSX) && !defined(_WIN32) //FIXME
 CPPUNIT_TEST_FIXTURE(RptBasicTest, roundTripTest)
 {
     // Test loading and saving an already prepared Report
@@ -57,7 +57,6 @@ CPPUNIT_TEST_FIXTURE(RptBasicTest, roundTripTest)
     testLoadingAndSaving(u"writer8"_ustr, aReportNames[0], xComponentLoader, xActiveConnection);
     testLoadingAndSaving(u"calc8"_ustr, aReportNames[1], xComponentLoader, xActiveConnection);
 }
-#endif
 
 void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
                                         Reference<frame::XComponentLoader>& xComponentLoader,
@@ -78,6 +77,7 @@ void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUStr
     Reference<util::XCloseable> xCloseable(xComponent, UNO_QUERY_THROW);
     xCloseable->close(true);
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
