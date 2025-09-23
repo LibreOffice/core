@@ -807,6 +807,33 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIdleLayoutShape)
     // i.e. the priority was TaskPriority::REPAINT instead of TaskPriority::DEFAULT_IDLE.
     CPPUNIT_ASSERT_GREATER(TaskPriority::REPAINT, rDrawIdle.GetPriority());
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIdleLayoutPageDelete)
+{
+    // Given a document with 2 pages, cursor is after the page break:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"x"_ustr);
+    pWrtShell->InsertPageBreak();
+    SwRootFrame* pLayout = pWrtShell->GetLayout();
+    sal_uInt16 nLastPage = pLayout->GetLastPage()->GetPhyPageNum();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2), nLastPage);
+
+    // When deleting the page break, mutating the page count:
+    pWrtShell->DelLeft();
+
+    // Then make sure the bindings (status bar, etc) is updated with an idle VCL task:
+    nLastPage = pLayout->GetLastPage()->GetPhyPageNum();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), nLastPage);
+    SfxViewFrame& rFrame = pWrtShell->GetView().GetViewFrame();
+    Timer& rBindingsTimer = rFrame.GetBindings().GetTimer();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 4
+    // - Actual  : 2
+    // i.e. the priority was TaskPriority::HIGH_IDLE instead of TaskPriority::DEFAULT_IDLE.
+    CPPUNIT_ASSERT_GREATER(TaskPriority::REPAINT, rBindingsTimer.GetPriority());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

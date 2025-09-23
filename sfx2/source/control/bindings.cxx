@@ -146,10 +146,9 @@ SfxBindings::SfxBindings()
     pImpl->pSubBindings = nullptr;
     pImpl->nOwnRegLevel = nRegLevel;
 
-    pImpl->aAutoTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     // all caches are valid (no pending invalidate-job)
     // create the list of caches
-    pImpl->aAutoTimer.SetPriority(TaskPriority::HIGH_IDLE);
+    pImpl->aAutoTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
     pImpl->aAutoTimer.SetInvokeHandler( LINK(this, SfxBindings, NextJob) );
 }
 
