@@ -137,6 +137,43 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testNestedSectionOverlap)
+{
+    createSwDoc("nested-sections.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    SwTwips nOuterSection1Bottom
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[1]/infos/bounds", "bottom").toInt32();
+    SwTwips nInnerSection1Top
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[2]/infos/bounds", "top").toInt32();
+    SwTwips nInnerSection1Bottom
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[2]/infos/bounds", "bottom").toInt32();
+    SwTwips nOuterSection2Top
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[3]/infos/bounds", "top").toInt32();
+
+    SwTwips nOuterSection1TextBottom
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt[13]/infos/bounds", "bottom")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL(nOuterSection1Bottom, nOuterSection1TextBottom);
+
+    SwTwips nInnerSection1TextTop
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[1]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nInnerSection1Top, nInnerSection1TextTop);
+    SwTwips nInnerSection1TextBottom
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[2]/txt[2]/infos/bounds", "bottom")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL(nInnerSection1Bottom, nInnerSection1TextBottom);
+
+    SwTwips nOuterSection2TextTop
+        = getXPath(pXmlDoc, "/root/page[1]/body/section[3]/txt[1]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nOuterSection2Top, nOuterSection2TextTop);
+
+    // the problem was that the outer section 2 was positioned above inner 1
+    CPPUNIT_ASSERT_EQUAL(nOuterSection1Bottom + 1, nInnerSection1Top);
+    CPPUNIT_ASSERT_EQUAL(nInnerSection1Bottom + 1, nOuterSection2Top);
+}
+
 auto getXPathIntAttributeValue(xmlXPathContextPtr pXmlXpathCtx, char const* const pXPath)
     -> sal_Int32
 {
