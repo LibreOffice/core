@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 
 #include <memory>
+#include <optional>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
@@ -56,7 +57,7 @@ private:
     std::unique_ptr<sdr::animation::PrimitiveAnimation> mpPrimitiveAnimation;
 
     // possible on-demand calculated GridOffset for non-linear ViewToDevice transformation (calc)
-    basegfx::B2DVector                              maGridOffset;
+    mutable std::optional<basegfx::B2DVector>       moGridOffset;
 
     // used to detect ActionChanged() during primitive construction
     int                                             mnActionChangedCount;

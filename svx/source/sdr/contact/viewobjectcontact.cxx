@@ -154,7 +154,6 @@ namespace sdr::contact {
 ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact& rViewContact)
 :   mrObjectContact(rObjectContact),
     mrViewContact(rViewContact),
-    maGridOffset(0.0, 0.0),
     mnActionChangedCount(0),
     mbLazyInvalidate(false)
 {
@@ -588,49 +587,49 @@ void ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplay
 // (->View) that has then all needed information
 const basegfx::B2DVector& ViewObjectContact::getGridOffset() const
 {
-    if (GetObjectContact().supportsGridOffsets())
-    {
-        if (fabs(maGridOffset.getX()) > 1000.0)
-        {
-            // Huge offsets are a hint for error -> usually the conditions for
-            // calculation have changed. E.g. - I saw errors with +/-5740, that
-            // was in the environment of massive external UNO API using LO as
-            // target.
-            // If conditions for this calculation change, it is usually required to call
-            // - ViewObjectContact::resetGridOffset(), or
-            // - ObjectContact::resetAllGridOffsets() or
-            // - ScDrawView::resetGridOffsetsForAllSdrPageViews()
-            // as it is done e.g. when zoom changes (see ScDrawView::RecalcScale()).
-            // Theoretically these resets have to be done for any precondition
-            // changed that is used in the calculation of that value (see
-            // ScDrawView::calculateGridOffsetForSdrObject).
-            // This is not complete and would be hard to do so.
-            // Since it is just a buffered value and re-calculation is not
-            // expensive (linear O(n)) we can just reset suspicious values here.
-            // Hopefully - when that non-linear ViewTransformation problem for
-            // the calc-view gets solved one day - all this can be removed
-            // again. For now, let's just reset here and force re-calculation.
-            // Add a SAL_WARN to inform about this.
-            SAL_WARN("svx", "Suspicious GridOffset value resetted (!)");
-            const_cast<ViewObjectContact*>(this)->maGridOffset.setX(0.0);
-            const_cast<ViewObjectContact*>(this)->maGridOffset.setY(0.0);
-        }
+    static const basegfx::B2DVector EMPTY(0.0, 0.0);
+    if (!GetObjectContact().supportsGridOffsets())
+        return EMPTY;
 
-        if(0.0 == maGridOffset.getX() && 0.0 == maGridOffset.getY() && GetObjectContact().supportsGridOffsets())
-        {
-            // create on-demand
-            GetObjectContact().calculateGridOffsetForViewObjectContact(const_cast<ViewObjectContact*>(this)->maGridOffset, *this);
-        }
+    if (moGridOffset.has_value() && fabs(moGridOffset->getX()) > 1000.0)
+    {
+        // Huge offsets are a hint for error -> usually the conditions for
+        // calculation have changed. E.g. - I saw errors with +/-5740, that
+        // was in the environment of massive external UNO API using LO as
+        // target.
+        // If conditions for this calculation change, it is usually required to call
+        // - ViewObjectContact::resetGridOffset(), or
+        // - ObjectContact::resetAllGridOffsets() or
+        // - ScDrawView::resetGridOffsetsForAllSdrPageViews()
+        // as it is done e.g. when zoom changes (see ScDrawView::RecalcScale()).
+        // Theoretically these resets have to be done for any precondition
+        // changed that is used in the calculation of that value (see
+        // ScDrawView::calculateGridOffsetForSdrObject).
+        // This is not complete and would be hard to do so.
+        // Since it is just a buffered value and re-calculation is not
+        // expensive (linear O(n)) we can just reset suspicious values here.
+        // Hopefully - when that non-linear ViewTransformation problem for
+        // the calc-view gets solved one day - all this can be removed
+        // again. For now, let's just reset here and force re-calculation.
+        // Add a SAL_WARN to inform about this.
+        SAL_WARN("svx", "Suspicious GridOffset value resetted (!)");
+        moGridOffset.reset();
     }
 
-    return maGridOffset;
+    if(!moGridOffset)
+    {
+        // create on-demand
+        moGridOffset.emplace();
+        GetObjectContact().calculateGridOffsetForViewObjectContact(*moGridOffset, *this);
+    }
+
+    return *moGridOffset;
 }
 
 void ViewObjectContact::resetGridOffset()
 {
     // reset buffered GridOffset itself
-    maGridOffset.setX(0.0);
-    maGridOffset.setY(0.0);
+    moGridOffset.reset();
 
     // also reset sequence to get a re-calculation when GridOffset changes
     mxPrimitive2DSequence.clear();
