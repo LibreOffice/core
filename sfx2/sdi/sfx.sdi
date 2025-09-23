@@ -4015,6 +4015,7 @@ SfxBoolItem FocusToFindbar SID_SEARCH
 
 
 SfxBoolItem SearchDialog SID_SEARCH_DLG
+(SfxBoolItem InitialFocusReplace SID_SEARCH_DLG)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,

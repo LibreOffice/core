@@ -123,7 +123,7 @@ friend class SvxSearchDialogWrapper;
 friend class SvxJSearchOptionsDialog;
 
 public:
-    SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
+    SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind, bool bInitialFocusOnReplace = false );
     virtual ~SvxSearchDialog() override;
 
     virtual void    ChildWinDispose() override;
@@ -152,6 +152,7 @@ private:
     bool            bWriter;
     bool            bSearch;
     bool            bFormat;
+    bool            m_bInitialFocusOnReplace;
     bool            bReplaceBackwards;
     SearchOptionFlags  nOptions;
     bool            bSet;

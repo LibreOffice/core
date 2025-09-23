@@ -104,6 +104,8 @@
 #include <SlideSorterViewShell.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
+#include <svl/srchitem.hxx>
+#include <svx/srchdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -797,6 +799,40 @@ void DrawViewShell::FuDeleteSelectedObjects()
 
     if (!bConsumed)
         mpDrawView->DeleteMarked();
+}
+
+IMPL_LINK(DrawViewShell, SearchDialogHdl, SfxRequest&, rReq, void)
+{
+    // Get the parameter from the request
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    bool bInitialFocusOnReplace = false;
+
+    if (pArgs)
+    {
+        const SfxBoolItem* pBoolItem = pArgs->GetItemIfSet(SID_SEARCH_DLG, false);
+        if (pBoolItem)
+            bInitialFocusOnReplace = pBoolItem->GetValue();
+    }
+
+    // Get existing search item to preserve settings
+    std::unique_ptr<SvxSearchItem> pSearchItem;
+    std::unique_ptr<SvxSearchItem> pExistingItem;
+    if (GetViewFrame()->GetBindings().QueryState(SID_SEARCH_ITEM, pExistingItem) >= SfxItemState::DEFAULT && pExistingItem)
+    {
+        pSearchItem.reset(pExistingItem->Clone());
+    }
+    else
+    {
+        pSearchItem = std::make_unique<SvxSearchItem>(SID_SEARCH_ITEM);
+    }
+
+    // Only set the focus parameter, preserving all other settings
+    pSearchItem->SetInitialFocusOnReplace(bInitialFocusOnReplace);
+
+    // Execute the search dialog with the configured item
+    const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
+    GetViewFrame()->GetBindings().GetDispatcher()->Execute(SID_SEARCH_ITEM, SfxCallMode::SYNCHRON, ppArgs);
+    GetViewFrame()->ToggleChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
 void DrawViewShell::FuSupport(SfxRequest& rReq)

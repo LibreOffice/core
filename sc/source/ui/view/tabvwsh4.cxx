@@ -89,6 +89,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/dispatch.hxx>
+#include <svl/srchitem.hxx>
+#include <svx/srchdlg.hxx>
 
 using namespace com::sun::star;
 using namespace sfx2::sidebar;
@@ -342,6 +345,40 @@ void ScTabViewShell::UpdateOleZoom()
                             Fraction( aWinHMM.Height(),aObjSize.Height() ) );
         }
     }
+}
+
+IMPL_LINK(ScTabViewShell, SearchDialogHdl, SfxRequest&, rReq, void)
+{
+    // Get the parameter from the request
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    bool bInitialFocusOnReplace = false;
+
+    if (pArgs)
+    {
+        const SfxBoolItem* pBoolItem = pArgs->GetItemIfSet(SID_SEARCH_DLG, false);
+        if (pBoolItem)
+            bInitialFocusOnReplace = pBoolItem->GetValue();
+    }
+
+    // Get existing search item to preserve settings
+    std::unique_ptr<SvxSearchItem> pSearchItem;
+    std::unique_ptr<SvxSearchItem> pExistingItem;
+    if (GetViewData().GetBindings().QueryState(SID_SEARCH_ITEM, pExistingItem) >= SfxItemState::DEFAULT && pExistingItem)
+    {
+        pSearchItem.reset(pExistingItem->Clone());
+    }
+    else
+    {
+        pSearchItem = std::make_unique<SvxSearchItem>(SID_SEARCH_ITEM);
+    }
+
+    // Only set the focus parameter, preserving all other settings
+    pSearchItem->SetInitialFocusOnReplace(bInitialFocusOnReplace);
+
+    // Execute the search dialog with the configured item
+    const SfxPoolItem* ppArgs[] = { pSearchItem.get(), nullptr };
+    GetViewData().GetDispatcher().Execute(SID_SEARCH_ITEM, SfxCallMode::SYNCHRON, ppArgs);
+    GetViewFrame().ToggleChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
 void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize, bool inplaceEditModeChange )

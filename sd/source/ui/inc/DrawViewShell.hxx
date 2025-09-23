@@ -391,6 +391,8 @@ public:
     const css::uno::Reference<css::presentation::XSlideShow> & getXSlideShowInstance();
     void destroyXSlideShowInstance();
 
+    DECL_LINK(SearchDialogHdl, SfxRequest&, void);
+
 protected:
                     DECL_DLLPRIVATE_LINK( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_DLLPRIVATE_LINK( TabSplitHdl, TabBar *, void );

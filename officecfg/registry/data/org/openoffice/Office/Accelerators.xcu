@@ -143,7 +143,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
       <node oor:name="H_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog</value>
+          <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog?InitialFocusReplace:bool=true</value>
         </prop>
       </node>
       <node oor:name="G_MOD1" oor:op="replace">
@@ -463,7 +463,7 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         <node oor:name="H_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SearchDialog?InitialFocusReplace:bool=true</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">

@@ -53,6 +53,7 @@
 #include <SwRewriter.hxx>
 
 #include <PostItMgr.hxx>
+#include <sfx2/dispatch.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -474,6 +475,32 @@ void SwView::ExecSearch(SfxRequest& rReq)
             SAL_WARN_IF( nSlot, "sw", "nSlot: " << nSlot << " wrong Dispatcher (viewsrch.cxx)" );
             return;
     }
+}
+
+IMPL_LINK(SwView, SearchDialogHdl, SfxRequest&, rReq, void)
+{
+    // Get the parameter from the request
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    bool bInitialFocusOnReplace = false;
+
+    if (pArgs)
+    {
+        const SfxBoolItem* pBoolItem = pArgs->GetItemIfSet(SID_SEARCH_DLG, false);
+        if (pBoolItem)
+            bInitialFocusOnReplace = pBoolItem->GetValue();
+    }
+
+    if (!s_pSrchItem)
+        s_pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
+
+    s_pSrchItem->SetInitialFocusOnReplace(bInitialFocusOnReplace);
+
+    // Execute the search item to pass it to the dialog
+    const SfxPoolItem* ppArgs[] = { s_pSrchItem, nullptr };
+    GetDispatcher().Execute(SID_SEARCH_ITEM, SfxCallMode::SYNCHRON, ppArgs);
+
+    // Open the dialog
+    GetViewFrame().ToggleChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
 bool SwView::SearchAndWrap(bool bApi)

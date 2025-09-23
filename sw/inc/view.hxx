@@ -364,6 +364,7 @@ public: // #i123922# Needs to be called from a 2nd place now as a helper method
     sal_Int32 m_nNaviExpandedStatus = -1;
     void            SetFormShell( FmFormShell* pSh )    { m_pFormShell = pSh; }
     virtual void    SelectShell();
+    DECL_LINK(SearchDialogHdl, SfxRequest&, void);
 
 protected:
 

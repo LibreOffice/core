@@ -692,6 +692,11 @@ interface BaseTextEditView
 
     /* search and replace */
 
+    SID_SEARCH_DLG
+    [
+        ExecMethod = SearchDialogHdl ;
+        StateMethod = StateSearch ;
+    ]
     SID_SEARCH_ITEM // status()
     [
         ExecMethod = ExecSearch ;

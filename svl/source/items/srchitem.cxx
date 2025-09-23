@@ -115,7 +115,8 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     m_bContent        ( false ),
     m_bAsianOptions   ( false ),
     m_nStartPointX(0),
-    m_nStartPointY(0)
+    m_nStartPointY(0),
+    m_bInitialFocusOnReplace(false)
 {
     EnableNotification( lcl_GetNotifyNames() );
 
@@ -210,7 +211,8 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     m_bContent        ( rItem.m_bContent ),
     m_bAsianOptions   ( rItem.m_bAsianOptions ),
     m_nStartPointX(rItem.m_nStartPointX),
-    m_nStartPointY(rItem.m_nStartPointY)
+    m_nStartPointY(rItem.m_nStartPointY),
+    m_bInitialFocusOnReplace(rItem.m_bInitialFocusOnReplace)
 {
     EnableNotification( lcl_GetNotifyNames() );
 }

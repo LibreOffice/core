@@ -483,6 +483,8 @@ public:
 
     void SetInsertWizardUndoMark();
 
+    DECL_LINK(SearchDialogHdl, SfxRequest&, void);
+
 private:
     void ExecuteMoveTable( SfxRequest& rReq );
     void DoMoveTableFromDialog( SfxRequest& rReq, const VclPtr<AbstractScMoveTableDlg>& pDlg );

@@ -192,6 +192,7 @@ interface TableEditView
 
 
     // search/replace
+    SID_SEARCH_DLG      [ ExecMethod = SearchDialogHdl; StateMethod = GetState; ]
     FID_SEARCH_NOW      [ ExecMethod = ExecSearch; StateMethod = NoState;  ]
     SID_SEARCH_ITEM     [ ExecMethod = ExecSearch;  StateMethod = GetState; ]
     SID_SEARCH_OPTIONS  [ ExecMethod = NoExec;      StateMethod = GetState; ]

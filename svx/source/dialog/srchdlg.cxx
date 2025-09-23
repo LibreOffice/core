@@ -239,7 +239,7 @@ void SearchAttrItemList::Remove(size_t nPos)
     SrchAttrInfoList::erase( begin() + nPos, begin() + nPos + nLen );
 }
 
-SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
+SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind, bool bInitialFocusOnReplace)
     : SfxModelessDialogController(&rBind, pChildWin, pParent,
                                   IsMobile() ? u"svx/ui/findreplacedialog-mobile.ui"_ustr : u"svx/ui/findreplacedialog.ui"_ustr,
                                   u"FindReplaceDialog"_ustr)
@@ -248,6 +248,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , bWriter(false)
     , bSearch(true)
     , bFormat(false)
+    , m_bInitialFocusOnReplace(bInitialFocusOnReplace)
     , bReplaceBackwards(false)
     , nOptions(SearchOptionFlags::ALL)
     , bSet(false)
@@ -311,6 +312,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     {
         m_xCloseBtn->hide();
         m_xHelpBtn->hide();
+        bSearch = !m_bInitialFocusOnReplace;
         m_xSearchLB->set_entry_text(u""_ustr);
         m_xReplaceLB->set_entry_text(u""_ustr);
         m_xSearchLB->grab_focus();
@@ -348,7 +350,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     m_xReplaceTmplLB->set_size_request(nTermWidth, -1);
 
     Construct_Impl();
-    SetReplaceCtrlsVisible(false);
+    SetReplaceCtrlsVisible(m_bInitialFocusOnReplace);
 }
 
 IMPL_LINK_NOARG(SvxSearchDialog, PresentTimeoutHdl_Impl, Timer*, void)
@@ -973,9 +975,11 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         }
         m_xSearchTmplLB->show();
 
-        if ( bConstruct )
+        if ( bConstruct ) {
             // Grab focus only after creating
+            bSearch = !m_bInitialFocusOnReplace;
             m_xSearchTmplLB->grab_focus();
+        }
         m_xReplaceTmplLB->show();
         m_xSearchLB->hide();
         m_xReplaceLB->hide();
@@ -1017,9 +1021,11 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
         m_xSearchLB->show();
 
-        if ( bConstruct )
+        if ( bConstruct ) {
             // Grab focus only after creating
+            bSearch = !m_bInitialFocusOnReplace;
             m_xSearchLB->grab_focus();
+        }
         m_xReplaceLB->show();
         m_xSearchTmplLB->hide();
         m_xReplaceTmplLB->hide();
@@ -1036,7 +1042,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         bDisableSearch = m_xSearchLB->get_active_text().isEmpty() &&
             m_xSearchAttrText->get_label().isEmpty();
     }
-    FocusHdl_Impl(*m_xSearchLB);
+    FocusHdl_Impl(bSearch ? *m_xSearchLB : *m_xReplaceLB);
 
     if ( bDisableSearch )
     {
@@ -2366,8 +2372,16 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo const * pInfo )
     : SfxChildWindow( _pParent, nId )
-    , dialog(std::make_shared<SvxSearchDialog>(_pParent->GetFrameWeld(), this, *pBindings))
 {
+    bool bInitialFocusOnReplace = false;
+    std::unique_ptr<SvxSearchItem> pItem;
+    if (pBindings->QueryState(SID_SEARCH_ITEM, pItem) >= SfxItemState::DEFAULT && pItem)
+    {
+        bInitialFocusOnReplace = pItem->GetInitialFocusOnReplace();
+    }
+
+    dialog = std::make_shared<SvxSearchDialog>(_pParent->GetFrameWeld(), this, *pBindings, bInitialFocusOnReplace);
+
     SetController(dialog);
     dialog->Initialize( pInfo );
 
