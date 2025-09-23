@@ -22,6 +22,7 @@ endif
 
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/bin/python.exe,PCbuild/$(python_arch_subdir)python$(if $(MSVC_USE_DEBUG_RUNTIME),_d).exe))
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll,PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll))
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,PCbuild/$(python_arch_subdir)sqlite3$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll))
 ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR).dll,PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
 endif
@@ -36,6 +37,7 @@ python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_overlapped$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_queue$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_socket$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_sqlite3$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ssl$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_uuid$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_zoneinfo$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -117,6 +119,7 @@ python3_EXTENSION_MODULES= \
 	Modules/_sha2.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_sha3.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/_socket.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	Modules/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	Modules/spwd.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	$(if $(ENABLE_OPENSSL), \
 		Modules/_ssl.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -173,7 +176,7 @@ endif
 
 
 # packages not shipped:
-# dbm, sqlite3 - need some database stuff
+# dbm - need some database stuff
 # curses - need curses to build the C module
 # idlelib, tkinter, turtledemo - need Tk to build the C module
 # test - probably unnecessary? was explicitly removed #i116738#
@@ -1724,6 +1727,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
 	Lib/site-packages/README.txt \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/sqlite3,\
+	Lib/sqlite3/__init__.py \
+	Lib/sqlite3/__main__.py \
+	Lib/sqlite3/dbapi2.py \
+	Lib/sqlite3/dump.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/tomllib,\

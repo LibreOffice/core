@@ -14,6 +14,7 @@ $(eval $(call gb_ExternalProject_use_externals,python3,\
 	expat \
 	$(if $(filter WNT LINUX,$(OS)),libffi) \
 	openssl \
+	$(if $(ENABLE_SQLITE3),sqlite3) \
 	zlib \
 ))
 
@@ -42,6 +43,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \
 			/p:opensslOutDir=$(gb_UnpackedTarball_workdir)/openssl \
 			/p:zlibDir=$(gb_UnpackedTarball_workdir)/zlib \
+			/p:sqlite3Dir=$(gb_UnpackedTarball_workdir)/sqlite3 \
 			/p:libffiOutDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(gb_UnpackedTarball_workdir)/libffi/$(HOST_PLATFORM)/include \
 			/maxcpucount \
@@ -112,6 +114,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 			$(if $(SYSTEM_BZIP2),,-I$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-I$(gb_UnpackedTarball_workdir)/expat/lib) \
+			$(if $(SYSTEM_SQLITE3),,-I$(gb_UnpackedTarball_workdir)/sqlite3) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
@@ -121,6 +124,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_BZIP2),,-L$(gb_UnpackedTarball_workdir)/bzip2) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_SQLITE3),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(gb_LTOFLAGS) \
 			)" \
@@ -203,7 +207,6 @@ $(call gb_ExternalProject_get_state_target,python3,executables) : $(call gb_Exte
 $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(call gb_ExternalProject_get_state_target,python3,build)
 	$(call gb_Output_announce,python3 - remove the stuff we don't need to ship,build,CUS,5)
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/dbm
-	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/sqlite3
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/curses
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/idlelib
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/tkinter
@@ -211,7 +214,6 @@ $(call gb_ExternalProject_get_state_target,python3,removeunnecessarystuff) : $(c
 	rm -r $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/test
 	# Then the binary libraries
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_dbm.$(python3_EXTENSION_MODULE_SUFFIX).so
-	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_sqlite3.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_curses_panel.$(python3_EXTENSION_MODULE_SUFFIX).so
 	rm $(python3_fw_prefix)/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/lib-dynload/_test*.$(python3_EXTENSION_MODULE_SUFFIX).so
