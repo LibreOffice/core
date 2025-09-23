@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testDoubleArgument)
     CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().GetCode());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_continuation_in_comment_after_new_line)
 {
     MacroSnippet aMacro(u"Function extentComment() As Integer\n"
                         "  ' _\n"
@@ -45,7 +45,8 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_compatible)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture,
+                     testTdf149157_continuation_in_comment_after_new_line_compatible)
 {
     MacroSnippet aMacro(u"Option Compatible\n"
                         "Function extentComment() As Integer\n"
@@ -59,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_compatible)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_vba)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_continuation_in_comment_after_new_line_vba)
 {
     MacroSnippet aMacro(u"Option VBASupport 1\n"
                         "Function extentComment() As Integer\n"
@@ -73,7 +74,8 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157_vba)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture,
+                     testTdf149402_continuation_in_comment_ending_with_whitespace)
 {
     MacroSnippet aMacro(u"Function extentComment() As Integer\n"
                         "  ' _ \n"
@@ -86,7 +88,8 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_compatible)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture,
+                     testTdf149402_continuation_in_comment_ending_with_whitespace_compatible)
 {
     MacroSnippet aMacro(u"Option Compatible\n"
                         "Function extentComment() As Integer\n"
@@ -100,7 +103,8 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_compatible)
     CPPUNIT_ASSERT(!aMacro.HasError());
 }
 
-CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149402_vba)
+CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture,
+                     testTdf149402_continuation_in_comment_ending_with_whitespace_vba)
 {
     MacroSnippet aMacro(u"Option VBASupport 1\n"
                         "Function extentComment() As Integer\n"
