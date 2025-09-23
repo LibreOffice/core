@@ -177,7 +177,6 @@ endif
 # curses - need curses to build the C module
 # idlelib, tkinter, turtledemo - need Tk to build the C module
 # test - probably unnecessary? was explicitly removed #i116738#
-# venv - why would we need virtual environments
 #
 # Call generateExternalPackage.py to update the lists below
 #
@@ -1865,6 +1864,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/urllib/request.py \
 	Lib/urllib/response.py \
 	Lib/urllib/robotparser.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/venv,\
+	Lib/venv/__init__.py \
+	Lib/venv/__main__.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/wsgiref,\
