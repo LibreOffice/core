@@ -3992,6 +3992,47 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
     CPPUNIT_ASSERT_EQUAL(tools::Long(20), aView.m_aTextSelectionResult.m_aRefPoint.getX());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
+{
+    ScModelObj* pModelObj = createDoc("tdf167042.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    ViewCallback aView1;
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue("ToPoint", OUString("$A$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    Point aPoint = aView1.m_aCellCursorBounds.Center();
+    aPropertyValues = { comphelper::makePropertyValue("ToPoint", OUString("$B$1")) };
+    dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
+    // Check that we have the comment on A1
+    CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
+    ScPostIt* pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, pNote->GetText());
+    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, false) };
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
+                              MOUSE_LEFT, 0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aPoint.getX(), aPoint.getY(), 1,
+                              MOUSE_LEFT, 0);
+    // Check that FormatPaintbrush worked
+    vcl::Font aFont;
+    pDoc->GetPattern(0, 0, 0)->fillFontOnly(aFont);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold A1", WEIGHT_BOLD,
+                                 aFont.GetWeight());
+    // Check that we still have the comment on A1 after FormatPaintbrush
+    pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, pNote->GetText());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    // Check that we still have the comment on A1 after Undo
+    pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    // Without the fix in place, this test would have failed with
+    // - Expected : test1
+    // - Actual :
+    CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, pNote->GetText());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
