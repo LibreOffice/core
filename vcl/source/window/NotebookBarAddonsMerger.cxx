@@ -29,6 +29,14 @@
 #include <IPrioritable.hxx>
 #include <OptionalBox.hxx>
 
+// #tdf146101: For getting the app context
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <comphelper/processfactory.hxx>
+#include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
+
 const char STYLE_TEXT[] = "Text";
 const char STYLE_ICON[] = "Icon";
 
@@ -39,6 +47,14 @@ const char MERGE_NOTEBOOKBAR_TARGET[] = "Target";
 const char MERGE_NOTEBOOKBAR_CONTROLTYPE[] = "ControlType";
 const char MERGE_NOTEBOOKBAR_WIDTH[] = "Width";
 const char MERGE_NOTEBOOKBAR_STYLE[] = "Style";
+
+// Get the current app context
+static OUString getCurrentDocumentContext(const css::uno::Reference<css::frame::XFrame>& xFrame)
+{
+    css::uno::Reference<css::frame::XModuleManager> xModuleManager
+        = css::frame::ModuleManager::create(comphelper::getProcessComponentContext());
+    return xModuleManager->identify(xFrame); // e.g. "com.sun.star.text.TextDocument"
+}
 
 static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
                                     AddonNotebookBarItem& aAddonNotebookBarItem)
@@ -112,6 +128,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
     tools::ULong nIter = 0;
     sal_uInt16 nPriorityIdx = aImageVec.size();
+
     for (const auto& aExtension : aNotebookBarAddonsItem.aAddonValues)
     {
         for (const auto& pExtension : aExtension)
@@ -130,7 +147,30 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
 
             AddonNotebookBarItem aAddonNotebookBarItem;
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
-
+            // #tdf146101: Filter context
+            if (!aAddonNotebookBarItem.sContext.isEmpty())
+            {
+                OUString currentContext = getCurrentDocumentContext(m_xFrame);
+                bool bMatch = false;
+                std::u16string_view contextView = aAddonNotebookBarItem.sContext;
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    // might be multiple contexts, separated by comma
+                    std::u16string_view ctx
+                        = o3tl::trim(o3tl::getToken(contextView, 0, ',', nIndex));
+                    if (ctx == currentContext)
+                    {
+                        bMatch = true;
+                        break;
+                    }
+                } while (nIndex != -1);
+                if (!bMatch)
+                {
+                    nIter++; // or icons would be wrong
+                    continue;
+                }
+            }
             CreateNotebookBarToolBox(pNotebookbarToolBox, m_xFrame, aAddonNotebookBarItem,
                                      aImageVec, nIter);
             nIter++;
@@ -139,6 +179,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
 }
 
 void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUString& sItemIdName,
+                                const css::uno::Reference<css::frame::XFrame>& m_xFrame,
                                 NotebookBarAddonsItem& aNotebookBarAddonsItem)
 {
     std::vector<Image> aImageVec = aNotebookBarAddonsItem.aImageValues;
@@ -153,6 +194,31 @@ void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUStr
             const css::uno::Sequence<css::beans::PropertyValue>& pExtension = aExtension[nSecIdx];
 
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
+
+            // #tdf146101: Filter context
+            if (!aAddonNotebookBarItem.sContext.isEmpty())
+            {
+                OUString currentContext = getCurrentDocumentContext(m_xFrame);
+                bool bMatch = false;
+                std::u16string_view contextView = aAddonNotebookBarItem.sContext;
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    // might be multiple contexts, separated by comma
+                    std::u16string_view ctx
+                        = o3tl::trim(o3tl::getToken(contextView, 0, ',', nIndex));
+                    if (ctx == currentContext)
+                    {
+                        bMatch = true;
+                        break;
+                    }
+                } while (nIndex != -1);
+                if (!bMatch)
+                {
+                    nIter++; // or icons would be wrong
+                    continue;
+                }
+            }
 
             pPopupMenu->InsertItem(nItemId, aAddonNotebookBarItem.sLabel, nBits, sItemIdName);
             pPopupMenu->SetItemCommand(nItemId, aAddonNotebookBarItem.sCommandURL);

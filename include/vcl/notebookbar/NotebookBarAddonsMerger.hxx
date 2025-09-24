@@ -54,6 +54,7 @@ void MergeNotebookBarAddons(vcl::Window* pParent, const VclBuilder::customMakeWi
                             const NotebookBarAddonsItem& aNotebookBarAddonsItem,
                             VclBuilder::stringmap& rVec);
 void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUString& sItemIdName,
+                                const css::uno::Reference<css::frame::XFrame>& rFrame,
                                 NotebookBarAddonsItem& aNotebookBarAddonsItem);
 };
 
