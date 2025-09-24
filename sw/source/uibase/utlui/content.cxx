@@ -5685,8 +5685,8 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
                 const SwNodes& rNodes = m_pActiveShell->GetDoc()->GetNodes();
                 const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
-
-                SwNode* pStartNode = rOutlineNodes[pOutlineContent->GetOutlinePos()];
+                SwOutlineNodes::size_type nStartPos = pOutlineContent->GetOutlinePos();
+                SwNode* pStartNode = rOutlineNodes[nStartPos];
 
                 // Don't show additional info in the tooltip if the outline is in footnote/endnote.
                 const SwFrame* pFrame
@@ -5699,20 +5699,16 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 // tdf#163646 - Show in the tooltip for heading entries in Writer Navigator the
                 // outline word and character count of the heading including the outline word and
                 // character count of all sub headings
-                int nEntryDepth = m_xTreeView->get_iter_depth(rEntry);
-                std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator(&rEntry);
-                int nIterDepth;
-                while (m_xTreeView->iter_next(*xIter)
-                       && (nIterDepth = m_xTreeView->get_iter_depth(*xIter)))
+                SwOutlineNodes::size_type nEndPos = nStartPos;
+                auto nStartNodeOutlineLevel = pStartNode->GetTextNode()->GetAttrOutlineLevel();
+                for (++nEndPos; nEndPos < rOutlineNodes.size(); ++nEndPos)
                 {
-                    if (nIterDepth <= nEntryDepth)
-                    {
-                        pOutlineContent
-                            = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xIter));
-                        pEndNode = rOutlineNodes[pOutlineContent->GetOutlinePos()];
+                    pEndNode = rOutlineNodes[nEndPos];
+                    if (pEndNode->GetTextNode()->GetAttrOutlineLevel() <= nStartNodeOutlineLevel)
                         break;
-                    }
                 }
+                if (nEndPos == rOutlineNodes.size())
+                    pEndNode = &rNodes.GetEndOfContent();
 
                 SwPaM aPaM(*pStartNode, *pEndNode);
                 SwDocStat aDocStat;
