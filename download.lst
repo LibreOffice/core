@@ -435,8 +435,8 @@ LIBGPGERROR_TARBALL := libgpg-error-1.55.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBLANGTAG_SHA256SUM := 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
-LIBLANGTAG_TARBALL := liblangtag-0.6.7.tar.bz2
+LIBLANGTAG_SHA256SUM := a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2
+LIBLANGTAG_TARBALL := liblangtag-0.6.8.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
