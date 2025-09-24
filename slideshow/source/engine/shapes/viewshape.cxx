@@ -41,15 +41,18 @@
 
 #include "viewshape.hxx"
 #include "basegfx/point/b2dpoint.hxx"
-#include "canvas_inc/cairo_canvasbitmap.hxx"
-#include "canvas_inc/cairo_canvascustomsprite.hxx"
-#include "canvas_inc/cairo_spritecanvas.hxx"
 #include "com/sun/star/uno/Reference.h"
 #include "drawinglayer/geometry/viewinformation2d.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
 #include "sal/types.h"
 #include "vcl/outdev.hxx"
+#include "canvas_inc/cairo_canvasbitmap.hxx"
+#include "canvas_inc/cairo_canvascustomsprite.hxx"
+#include "canvas_inc/cairo_spritecanvas.hxx"
+#include "cairo/cairo_canvasbitmap.hxx"
+#include "cairo/cairo_canvascustomsprite.hxx"
+#include "cairo/cairo_spritecanvas.hxx"
 #include "vcl_canvas/customsprite.hxx"
 #include "vcl_canvas/spritecanvas.hxx"
 #include <basegfx/utils/canvastools.hxx>
@@ -914,10 +917,10 @@ namespace slideshow::internal
                     return true;
                 if (!bIsVisible)
                     return true;
-                /* uno::Reference<css::lang::XServiceInfo> xInfo(
-                    mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY); */
+                uno::Reference<css::lang::XServiceInfo> xInfo(
+                    mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY);
                 cairo::SurfaceSharedPtr pSurface;
-                /* if (!xInfo.is() || xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
+                if (!xInfo.is() || xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
                 {
                     // return render( mpViewLayer->getCanvas(),
                                    // rMtf,
@@ -932,9 +935,11 @@ namespace slideshow::internal
                 if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
                 {
                     // SpriteCanvas
-                    cairocanvas::SpriteCanvas* pSpriteCanvas
-                        = static_cast<cairocanvas::SpriteCanvas*>(
-                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract
+                        = mpViewLayer->getSpriteCanvas();
+                    std::shared_ptr<::vcl_cairocanvas::SpriteCanvas> pSpriteCanvas
+                        = std::static_pointer_cast<::vcl_cairocanvas::SpriteCanvas>(
+                            pSpriteCanvasAbstract);
                     pSurface = pSpriteCanvas->getSurface();
                 }
                 else if (xInfo->getImplementationName().indexOf("CanvasCustomSprite") != -1)
@@ -952,12 +957,7 @@ namespace slideshow::internal
                         = static_cast<cairocanvas::CanvasBitmap*>(
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
                     pSurface = pCanvasBitmap->getSurface();
-                } */
-                vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
-                std::shared_ptr<::vcl_cairocanvas::SpriteCanvas> pSpriteCanvas
-                    = std::static_pointer_cast<::vcl_cairocanvas::SpriteCanvas>(
-                        pSpriteCanvasAbstract);
-                pSurface = pSpriteCanvas->getSurface();
+                }
                 drawinglayer::geometry::ViewInformation2D aViewInormation;
                 aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
                 basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());

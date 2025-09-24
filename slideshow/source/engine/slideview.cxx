@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "sal/log.hxx"
 #include "vcl_canvas/spritecanvas.hxx"
 #include "slideshowviewimpl.hxx"
 #include <comphelper/diagnose_ex.hxx>
@@ -842,8 +843,15 @@ bool SlideView::updateScreen() const
     ENSURE_OR_RETURN_FALSE( mpCanvas,
                        "SlideView::updateScreen(): Disposed" );
 
-    return getSpriteCanvas()->updateScreen(false);
-    // return mpCanvas->updateScreen( false );
+    if (auto ptr = getSpriteCanvas())
+    {
+        return ptr->updateScreen(false);
+    }
+    else
+    {
+        return true;
+        // return mpCanvas->updateScreen(false);
+    }
 }
 
 bool SlideView::paintScreen() const
@@ -853,8 +861,15 @@ bool SlideView::paintScreen() const
     ENSURE_OR_RETURN_FALSE( mpCanvas,
                        "SlideView::paintScreen(): Disposed" );
 
-    return getSpriteCanvas()->updateScreen(true);
-    // return mpCanvas->updateScreen( true );
+    if (auto ptr = getSpriteCanvas())
+    {
+        return ptr->updateScreen(true);
+    }
+    else
+    {
+        return true;
+        // return mpCanvas->updateScreen(true);
+    }
 }
 
 void SlideView::clear() const
@@ -880,7 +895,7 @@ void SlideView::clearAll() const
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    getSpriteCanvas()->clear();
+    // getSpriteCanvas()->clear();
     OSL_ENSURE( mxView.is() && mpCanvas,
                 "SlideView::clear(): Disposed" );
     if( !mxView.is() || !mpCanvas )
@@ -928,9 +943,12 @@ cppcanvas::CanvasSharedPtr SlideView::getCanvas() const
 
 vcl_canvas::SpriteCanvasSharedPtr SlideView::getSpriteCanvas() const
 {
-    rtl::Reference< sd::SlideShowView > pImpl = static_cast< sd::SlideShowView* >( mxView.get() );
-    return pImpl->getSpriteCanvas();
-    // return vcl_canvas::SpriteCanvasSharedPtr();
+    rtl::Reference< sd::SlideShowView > pImpl = dynamic_cast< sd::SlideShowView* >( mxView.get() );
+    if(!pImpl)
+    {
+        return nullptr;
+    }
+    return pImpl->getSpriteCanvas();;
 }
 
 cppcanvas::CustomSpriteSharedPtr SlideView::createSprite(

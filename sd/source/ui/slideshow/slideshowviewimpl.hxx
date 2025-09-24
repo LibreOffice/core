@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "sal/types.h"
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -98,7 +99,7 @@ typedef comphelper::WeakComponentImplHelper< css::presentation::XSlideShowView,
                                             css::awt::XMouseListener,
                                             css::awt::XMouseMotionListener > SlideShowView_Base;
 
-class SlideShowView final : public SlideShowView_Base
+class SAL_DLLPUBLIC_EXPORT SlideShowView final : public SlideShowView_Base
 {
 public:
     SlideShowView( ShowWindow&     rOutputWindow,

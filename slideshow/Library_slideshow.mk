@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     editeng \
     sal \
     salhelper \
+	sd \
     svl \
     svt \
     svxcore \

@@ -183,12 +183,26 @@ namespace slideshow::internal
                 TOOLS_WARN_EXCEPTION( "slideshow", "" );
                 return false;
             }
+            uno::Reference<css::lang::XServiceInfo> xInfo(
+                mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY);
             cairo::SurfaceSharedPtr pSurface;
-            vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract
-                = mpViewLayer->getSpriteCanvas();
-            std::shared_ptr<::vcl_cairocanvas::SpriteCanvas> pSpriteCanvas
-                = std::static_pointer_cast<::vcl_cairocanvas::SpriteCanvas>(pSpriteCanvasAbstract);
-            pSurface = pSpriteCanvas->getSurface();
+            if (!xInfo.is())
+            {
+                return true;
+            }
+            else if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
+            {
+                vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract
+                    = mpViewLayer->getSpriteCanvas();
+                std::shared_ptr<::vcl_cairocanvas::SpriteCanvas> pSpriteCanvas
+                    = std::static_pointer_cast<::vcl_cairocanvas::SpriteCanvas>(
+                        pSpriteCanvasAbstract);
+                pSurface = pSpriteCanvas->getSurface();
+            }
+            else
+            {
+                return true;
+            }
             basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
             drawinglayer::geometry::ViewInformation2D aViewInormation;
             aViewInormation.setViewTransformation(aMatrix);
