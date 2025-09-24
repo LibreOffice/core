@@ -119,6 +119,8 @@ public:
     EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
     ~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE;
 
+    static OUString fileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);
+
     // write text dump
     static bool tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl);
     // write Type 1 font
