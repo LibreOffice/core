@@ -386,6 +386,8 @@ public:
     void setSprm(Id nId, Id nValue);
     /// If we got tokens indicating we're in a frame.
     bool hasProperties() const;
+
+    bool operator==(const RTFFrame&) const = default;
 };
 
 /// State of the parser, which gets saved / restored when changing groups.
