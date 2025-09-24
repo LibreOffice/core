@@ -18,6 +18,8 @@
   <object class="GtkGrid" id="OptCalculatePage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
     <property name="border-width">6</property>
     <property name="row-spacing">12</property>
     <property name="column-spacing">24</property>
@@ -335,7 +337,6 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">1</property>
-        <property name="width">2</property>
       </packing>
     </child>
     <child>
@@ -743,6 +744,53 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame" id="OptOpenCLPage">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="margin-start">12</property>
+            <property name="margin-top">6</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkCheckButton" id="allowopencl">
+                <property name="label" translatable="yes" context="optcalculatepage|allowopencl">Allow use of OpenCL</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="openclframe">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="optcalculatepage|openclframe">OpenCL Options</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
   </object>

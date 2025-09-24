@@ -28,9 +28,13 @@
 #include <docoptio.hxx>
 #include <sc.hrc>
 #include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svtools/restartdialog.hxx>
 
 #include <tpcalc.hxx>
+#if HAVE_FEATURE_OPENCL
+#include <opencl/openclwrapper.hxx>
+#endif
 
 ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, u"modules/scalc/ui/optcalculatepage.ui"_ustr, u"OptCalculatePage"_ustr, &rCoreAttrs)
@@ -49,6 +53,11 @@ ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController*
     , m_xBtnDateSc10(m_xBuilder->weld_radio_button(u"datesc10"_ustr))
     , m_xBtnDate1904(m_xBuilder->weld_radio_button(u"date1904"_ustr))
     , m_xDateImg(m_xBuilder->weld_widget(u"lockdate"_ustr))
+#if HAVE_FEATURE_OPENCL
+    , maConfig(OpenCLConfig::get())
+    , m_xAllowOpenCL(m_xBuilder->weld_check_button(u"allowopencl"_ustr))
+#endif
+    , m_xOpenCLFrame(m_xBuilder->weld_frame(u"OptOpenCLPage"_ustr))
     , m_xBtnCase(m_xBuilder->weld_check_button(u"case"_ustr))
     , m_xBtnCaseImg(m_xBuilder->weld_widget(u"lockcase"_ustr))
     , m_xBtnCalc(m_xBuilder->weld_check_button(u"calc"_ustr))
@@ -70,6 +79,7 @@ ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController*
     , m_xBtnThreadImg(m_xBuilder->weld_widget(u"lockthreadingenabled"_ustr))
 {
     Init();
+    InitOpenCL();
     SetExchangeSupport();
 
     const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
@@ -88,6 +98,16 @@ void ScTpCalcOptions::Init()
     m_xBtnDateSc10->connect_toggled( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_xBtnDate1904->connect_toggled( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
     m_xBtnThread->connect_toggled( LINK( this, ScTpCalcOptions, CheckClickHdl ) );
+}
+
+void ScTpCalcOptions::InitOpenCL()
+{
+#if HAVE_FEATURE_OPENCL
+    m_xAllowOpenCL->set_active(maConfig.mbUseOpenCL);
+    m_xAllowOpenCL->set_sensitive(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly()
+                                  && openclwrapper::GPUEnv::isOpenCLEnabled());
+#endif
+    m_xOpenCLFrame->set_visible(HAVE_FEATURE_OPENCL);
 }
 
 std::unique_ptr<SfxTabPage> ScTpCalcOptions::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
@@ -243,13 +263,20 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
     m_xBtnThread->set_active( officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get() );
 
     CheckClickHdl(*m_xBtnIterate);
+
+#if HAVE_FEATURE_OPENCL
+    maConfig = OpenCLConfig::get();
+    m_xAllowOpenCL->set_active(maConfig.mbUseOpenCL);
+    m_xAllowOpenCL->save_state();
+#endif
 }
 
 OUString ScTpCalcOptions::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[]
-        = { u"label5"_ustr, u"label1"_ustr, u"precft"_ustr, u"label2"_ustr, u"stepsft"_ustr, u"minchangeft"_ustr, u"label4"_ustr, u"label3"_ustr };
+    OUString labels[] = { u"label5"_ustr, u"label1"_ustr,  u"precft"_ustr,
+                          u"label2"_ustr, u"stepsft"_ustr, u"minchangeft"_ustr,
+                          u"label4"_ustr, u"label3"_ustr,  u"openclframe"_ustr };
 
     for (const auto& label : labels)
     {
@@ -295,25 +322,46 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
     else
         pLocalOptions->SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
 
+    bool bRestartRequired = false;
     bool bShouldEnableThreading = m_xBtnThread->get_active();
     if (bShouldEnableThreading != officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         std::shared_ptr<comphelper::ConfigurationChanges> xBatch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::set(bShouldEnableThreading, xBatch);
         xBatch->commit();
+        bRestartRequired = true;
+    }
+
+#if HAVE_FEATURE_OPENCL
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+
+    if (m_xAllowOpenCL->get_state_changed_from_saved())
+        maConfig.mbUseOpenCL = m_xAllowOpenCL->get_active();
+
+    if (maConfig != OpenCLConfig::get())
+    {
+        maConfig.set();
+        bRestartRequired = true;
+        batch->commit();
+    }
+#endif
+
+    if (bRestartRequired)
+    {
         SolarMutexGuard aGuard;
-        if (svtools::executeRestartDialog(
-                     comphelper::getProcessComponentContext(), GetFrameWeld(),
-                     svtools::RESTART_REASON_CALCULATION))
+        if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr,
+                                          svtools::RESTART_REASON_CALCULATION))
             GetDialogController()->response(RET_OK);
     }
+
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs->Put( ScTpCalcItem( SID_SCDOCOPTIONS, *pLocalOptions ) );
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
