@@ -53,9 +53,6 @@
 #include "optjava.hxx"
 #include "optjsearch.hxx"
 #include <optlingu.hxx>
-#if HAVE_FEATURE_OPENCL
-#include "optopencl.hxx"
-#endif
 #include <optpath.hxx>
 #include "optsave.hxx"
 #include "optupdt.hxx"
@@ -272,9 +269,6 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
         case RID_SVXPAGE_LANGTOOL_OPTIONS:          fnCreate = &OptLanguageToolTabPage::Create ; break;
         case RID_SVXPAGE_DEEPL_OPTIONS:             fnCreate = &OptDeeplTabPage::Create ; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
-#if HAVE_FEATURE_OPENCL
-        case RID_SVXPAGE_OPENCL:                    fnCreate = &SvxOpenCLTabPage::Create ; break;
-#endif
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
 #if HAVE_FEATURE_SCRIPTING

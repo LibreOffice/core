@@ -2355,8 +2355,6 @@ cui/source/options/optjava.hxx
 cui/source/options/optjsearch.cxx
 cui/source/options/optjsearch.hxx
 cui/source/options/optlingu.cxx
-cui/source/options/optopencl.cxx
-cui/source/options/optopencl.hxx
 cui/source/options/optpath.cxx
 cui/source/options/optsave.cxx
 cui/source/options/optsave.hxx

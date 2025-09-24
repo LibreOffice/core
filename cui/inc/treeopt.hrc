@@ -44,7 +44,6 @@ const std::pair<TranslateId, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
     { NC_("SID_GENERAL_OPTIONS_RES", "Advanced"), RID_SVXPAGE_OPTIONS_JAVA  },
     { NC_("SID_GENERAL_OPTIONS_RES", "Basic IDE"), RID_SVXPAGE_BASICIDE_OPTIONS  },
     { NC_("SID_GENERAL_OPTIONS_RES", "Online Update"), RID_SVXPAGE_ONLINEUPDATE  },
-    { NC_("SID_GENERAL_OPTIONS_RES", "OpenCL"), RID_SVXPAGE_OPENCL  }
 };
 
 const std::pair<TranslateId, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
