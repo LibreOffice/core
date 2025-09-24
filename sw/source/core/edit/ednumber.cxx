@@ -815,7 +815,7 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
     }
     else
     {
-        SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));
+        SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *pCursor->GetPoint()));
         GetDoc()->SetNumRuleStart(pos, bFlag);
     }
 
