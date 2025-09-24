@@ -3011,7 +3011,7 @@ void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const
 
     if(rClass == "NotebookBarAddonsMenuMergePoint")
     {
-        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, *m_pNotebookBarAddonsItem);
+        NotebookBarAddonsMerger::MergeNotebookBarMenuAddons(pParent, nNewId, rID, m_xFrame, *m_pNotebookBarAddonsItem);
         m_pVclParserState->m_nLastMenuItemId = pParent->GetItemCount();
     }
     else if (rClass == "GtkMenuItem")
