@@ -624,6 +624,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf165564)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168533)
+{
+    // Given an RTF with frame definitions, followed by braces with \pard inside, and then \par
+    // inside and outside the braces:
+    createSwDoc("tdf168533-pard-in-frame.rtf");
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    // 1. {\pard Outside frame 1\par}
+    // \par sees the \pard, which reset frame properties, and so the paragraph is outside any frame
+    CPPUNIT_ASSERT_EQUAL(u"Frame 1"_ustr, getShape(1).queryThrow<text::XText>()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Outside frame 1"_ustr, getParagraph(1)->getString());
+
+    // 2. {\pard Still frame 2}\par
+    // \pard has reset the frame properties; but it goes out of scope with the closing brace, and
+    // \par sees the parent-in-stack state's frame properties, so the text is kept in frame
+    // Without the fix, it failed with
+    // - Expected: Frame 2
+    // Still frame 2
+    // - Actual  : Frame 2
+    CPPUNIT_ASSERT_EQUAL(u"Frame 2" SAL_NEWLINE_STRING "Still frame 2"_ustr,
+                         getShape(2).queryThrow<text::XText>()->getString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

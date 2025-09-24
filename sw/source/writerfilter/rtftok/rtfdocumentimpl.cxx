@@ -3779,6 +3779,9 @@ RTFError RTFDocumentImpl::popState()
 
     afterPopState(aState);
 
+    if (!m_aStates.empty() && aState.getFrame() != m_aStates.top().getFrame())
+        m_bNeedPap = true;
+
     if (aState.getCurrentBuffer() == &m_aSuperBuffer)
     {
         OSL_ASSERT(!m_aStates.empty() && m_aStates.top().getCurrentBuffer() == nullptr);
