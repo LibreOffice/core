@@ -372,9 +372,6 @@ excludelist:
     sc/qa/unit/ucalc_sort.cxx:
     # Needed for namespace shortcuts
     - helper/debughelper.hxx
-    sc/qa/unit/functions_test.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     sc/qa/unit/screenshots/screenshots.cxx:
     # Needed for template
     - sfx2/sfxdlg.hxx

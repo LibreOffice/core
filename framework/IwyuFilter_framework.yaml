@@ -1,12 +1,6 @@
 ---
 assumeFilename: framework/source/services/autorecovery.cxx
 excludelist:
-    framework/inc/statusbarconfiguration.hxx:
-    # Needed for css shortcut
-    - sal/types.h
-    framework/inc/toolboxconfiguration.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     framework/source/dispatch/closedispatcher.cxx:
     # Needed on MAC
     - com/sun/star/beans/XFastPropertySet.hpp

@@ -47,9 +47,6 @@ excludelist:
     # the unstable API needs C99's bool
     - stdbool.h
     - stdint.h
-    include/sfx2/toolbarids.hxx:
-    # needed for enum definition
-    - sal/types.h
     include/cppuhelper/compbase1.hxx:
     # Needed for template functions
     - cppuhelper/implbase1.hxx
@@ -240,9 +237,6 @@ excludelist:
     - com/sun/star/lang/IllegalArgumentException.hpp
     - com/sun/star/uno/RuntimeException.hpp
     - rtl/ustring.hxx
-    include/tools/fldunit.hxx:
-    # Needed for enum type
-    - sal/types.h
     include/tools/long.hxx:
     # Needed on _WIN64
     - sal/types.h
@@ -712,12 +706,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
-    include/formula/paramclass.hxx:
-    # Needed for enum type
-    - sal/types.h
-    include/formula/opcode.hxx:
-    # Needed for enum type
-    - sal/types.h
     include/formula/tokenarray.hxx:
     # Needed to avoid linking errors on WIN
     - formula/ExternalReferenceHelper.hxx

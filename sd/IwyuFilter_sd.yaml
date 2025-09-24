@@ -106,9 +106,6 @@ excludelist:
     # Needed on MACOSX
     - svl/intitem.hxx
     - app.hrc
-    sd/source/ui/framework/configuration/ConfigurationTracer.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     sd/source/ui/framework/configuration/GenericConfigurationChangeRequest.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
@@ -201,12 +198,6 @@ excludelist:
     sd/source/ui/inc/framework/ConfigurationController.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
-    sd/source/ui/inc/framework/DrawModule.hxx:
-    # Needed for css shortcut
-    - sal/types.h
-    sd/source/ui/inc/framework/ImpressModule.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     sd/source/ui/inc/framework/ModuleController.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XInitialization.hpp
@@ -214,9 +205,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/drawing/framework/AbstractPane.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-    sd/source/ui/inc/framework/PresentationModule.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     sd/source/ui/inc/framework/ViewShellWrapper.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XWindowListener.hpp

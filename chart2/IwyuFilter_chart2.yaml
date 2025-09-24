@@ -676,27 +676,6 @@ excludelist:
     - WrappedPropertySet.hxx
     - com/sun/star/lang/XComponent.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedSplineProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
-    chart2/source/controller/chartapiwrapper/WrappedStockProperties.hxx:
-    # Needed for css namespace shortcut
-    - sal/types.h
     chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.cxx:
     # Needed for implicit dtor
     - RegressionCurveModel.hxx

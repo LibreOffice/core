@@ -1,9 +1,6 @@
 ---
 assumeFilename: stoc/source/javavm/javavm.cxx
 excludelist:
-    stoc/source/implementationregistration/mergekeys.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     stoc/source/javavm/interact.hxx:
     # Base class needs complete type
     -  com/sun/star/task/XInteractionRequest.hpp

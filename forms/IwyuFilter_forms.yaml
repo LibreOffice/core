@@ -7,9 +7,6 @@ excludelist:
     forms/inc/strings.hrc:
     # Needed for TranslateId macro
     - unotools/resmgr.hxx
-    forms/source/xforms/unohelper.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     forms/source/xforms/datatypes.hxx:
     # Needed for macro defines
     - com/sun/star/beans/PropertyAttribute.hpp

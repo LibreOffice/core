@@ -1,15 +1,6 @@
 ---
 assumeFilename: xmloff/source/core/xmlexp.cxx
 excludelist:
-    xmloff/inc/DomExport.hxx:
-    # Needed for css shortcut
-    - sal/types.h
-    xmloff/inc/XMLImageMapExport.hxx:
-    # Needed for css shortcut
-    - sal/types.h
-    xmloff/inc/XMLTextColumnsExport.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     xmloff/source/forms/logging.hxx:
     # Used after #ifdef TIMELOG
     - stack
@@ -18,9 +9,6 @@ excludelist:
     xmloff/source/forms/propertyexport.hxx:
     # Used after #ifdef in non-DBG_UTIL builds
     - xmloff/xmlexp.hxx
-    xmloff/source/xforms/XFormsModelExport.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     xmloff/source/chart/SchXMLCalculationSettingsContext.cxx:
     # Complete type is needed
     - com/sun/star/frame/XModel.hpp

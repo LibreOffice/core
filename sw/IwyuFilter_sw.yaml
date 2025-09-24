@@ -47,8 +47,6 @@ excludelist:
     sw/inc/swtypes.hxx:
     # Needed for macro #define
     - com/sun/star/i18n/CollatorOptions.hpp
-    sw/inc/IDocumentLinksAdministration.hxx:
-    - sal/types.h
     sw/inc/pagedesc.hxx:
     - boost/multi_index/identity.hpp
     sw/inc/rdfhelper.hxx:
@@ -76,9 +74,6 @@ excludelist:
     # inline dtor, complete type is needed
     - com/sun/star/linguistic2/XSpellAlternatives.hpp
     - com/sun/star/linguistic2/XSpellChecker1.hpp
-    sw/inc/SwGetPoolIdFromName.hxx:
-    # Needed for enum type
-    - sal/types.h
     sw/inc/unocoll.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XEnumerationAccess.hpp
@@ -301,9 +296,6 @@ excludelist:
     - com/sun/star/beans/XPropertySet.hpp
     - com/sun/star/beans/XPropertyState.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    sw/source/core/inc/swthreadjoiner.hxx:
-    # Needed for css shortcut
-    - sal/types.h
     sw/source/core/inc/unobookmark.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XUnoTunnel.hpp
