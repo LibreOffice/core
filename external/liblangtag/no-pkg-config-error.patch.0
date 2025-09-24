@@ -1,0 +1,16 @@
+The 0.6.8 configure was generated with a newer pkg.m4 that fails when
+pkg-config is missing; LIBXML2_CFLAGS/LIBXML2_LIBS are passed in anyway,
+so go on without it like 0.6.7 did
+
+--- configure
++++ configure
+@@ -19209,9 +19209,6 @@
+ 		PKG_CONFIG=""
+ 	fi
+ fi
+-if test -z "$PKG_CONFIG"; then
+-	as_fn_error $? "pkg-config not found" "$LINENO" 5
+-fi
+ 
+ pkg_failed=no
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libxml-2.0 >= $LIBXML2_REQUIRED" >&5
