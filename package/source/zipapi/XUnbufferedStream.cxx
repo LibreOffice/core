@@ -67,7 +67,8 @@ XUnbufferedStream::XUnbufferedStream(
 {
     mnZipCurrent = maEntry.nOffset;
     sal_Int64 nSize; // data size in the zip file
-    assert(maEntry.nMethod != STORED || maEntry.nCompressedSize == maEntry.nSize);
+    // this can actually happen in recovery
+    assert(bRecoveryMode || maEntry.nMethod != STORED || maEntry.nCompressedSize == maEntry.nSize);
     if ( mbRawStream )
     {
         mnZipSize = maEntry.nCompressedSize;
