@@ -679,6 +679,58 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiParaTableMdExport)
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
+{
+    // Given a document with a nested table:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
+                                             /*nRowsToRepeat=*/0);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->SttPara();
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->Insert(u"A1 before"_ustr);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->Insert(u"A1 after"_ustr);
+    pWrtShell->SttPara();
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->Insert(u"A1 inner"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B1 inner"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A2 inner"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B2 inner"_ustr);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B1 outer"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"A2 outer"_ustr);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert(u"B2 outer"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure that the inner table is exported as flat paragraphs:
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        SAL_NEWLINE_STRING
+        "| A1 before A1 inner B1 inner A2 inner B2 inner A1 after | B1 outer |" SAL_NEWLINE_STRING
+        "| - | - |" SAL_NEWLINE_STRING
+        "| A2 outer | B2 outer |" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        // clang-format on
+    );
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: | A1 before A1 inner B1 inner A2 inner B2 inner A1 after |
+    // - Actual  : | A1 before \n| A1 inner | B1 inner |\n| - | - |\n| A2 inner | B2 inner |\nA1 after |
+    // i.e. the outer table cell had block elements, while it is only allowed to have inlines.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

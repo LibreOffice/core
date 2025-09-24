@@ -485,7 +485,8 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
         }
     }
 
-    if (oCellInfo && oCellInfo->bCellStart)
+    bool bInNestedTable = rTableInfos.size() > 1;
+    if (oCellInfo && oCellInfo->bCellStart && !bInNestedTable)
     {
         // Cell start, separate by " | " from the previous cell, see
         // <https://github.github.com/gfm/#tables-extension->.
@@ -695,7 +696,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
     }
 
     bool bRowEnd = oCellInfo && oCellInfo->bRowEnd;
-    if (bRowEnd)
+    if (bRowEnd && !bInNestedTable)
     {
         // Cell ends are implicit, but row end has its own marker.
         rWrt.Strm().WriteUnicodeOrByteText(u" |");
@@ -727,7 +728,7 @@ void OutMarkdown_SwTextNode(SwMDWriter& rWrt, const SwTextNode& rNode, bool bFir
     }
 
     bool bCellEnd = oCellInfo && oCellInfo->bCellEnd;
-    if (bInTable && !bCellEnd)
+    if (bInTable && (!bCellEnd || bInNestedTable))
     {
         // Separator is a space between two in-table-cell paragraphs.
         rWrt.Strm().WriteUnicodeOrByteText(u" ");
@@ -792,8 +793,11 @@ void OutMarkdown_SwTableNode(SwMDWriter& rWrt, const SwTableNode& rTableNode)
     aTableInfo.pEndNode = rTableNode.EndOfSectionNode();
     rWrt.GetTableInfos().push(aTableInfo);
 
-    // Separator between the table and the previous content.
-    rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+    if (rWrt.GetTableInfos().size() == 1)
+    {
+        // Separator between the table and the previous content.
+        rWrt.Strm().WriteUnicodeOrByteText(u"" SAL_NEWLINE_STRING);
+    }
 }
 }
 
