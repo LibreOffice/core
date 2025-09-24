@@ -525,7 +525,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
 
 CPPUNIT_TEST_FIXTURE(Test, testSectionBreakAfterSection)
 {
-    // Given a document that is modeled with a Writer section, followed by a paragraph with a new
+    // Given a document that is modelled with a Writer section, followed by a paragraph with a new
     // page style ("section break"):
     createSwDoc("section-break-after-section.rtf");
 
