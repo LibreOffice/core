@@ -232,11 +232,6 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
-        <node oor:name="WriterScriptIndicator">
-          <prop oor:name="Color">
-            <value xsi:nil="true"/>
-          </prop>
-        </node>
         <node oor:name="WriterSectionBoundaries">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -723,11 +718,6 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
-        <node oor:name="WriterScriptIndicator">
-          <prop oor:name="Color">
-            <value xsi:nil="true"/>
-          </prop>
-        </node>
         <node oor:name="WriterSectionBoundaries">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -1210,11 +1200,6 @@
           <prop oor:name="IsVisible">
             <value>true</value>
           </prop>
-          <prop oor:name="Color">
-            <value xsi:nil="true"/>
-          </prop>
-        </node>
-        <node oor:name="WriterScriptIndicator">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>

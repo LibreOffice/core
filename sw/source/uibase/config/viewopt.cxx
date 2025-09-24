@@ -60,7 +60,6 @@ SwViewColors::SwViewColors() :
     m_aSectionBoundColor(COL_LIGHTGRAY),
     m_aPageBreakColor(COL_BLUE),
     m_aNonPrintingCharacterColor(Color(0x268bd2)),
-    m_aScriptIndicatorColor(COL_GREEN),
     m_aShadowColor(COL_GRAY),
     m_aHeaderFooterMarkColor(COL_BLUE),
     m_nAppearanceFlags(ViewOptFlags::NONE)
@@ -123,8 +122,6 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
 
     aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
     m_aHeaderFooterMarkColor = aValue.nColor;
-
-    m_aScriptIndicatorColor = rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor;
 }
 
 bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
@@ -203,7 +200,7 @@ SwTwips SwViewOption::GetPostItsWidth(const OutputDevice* pOut)
     return pOut->GetTextWidth(u"  "_ustr);
 }
 
-void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript ) const
+void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool bIsScript )
 {
     if( !(pOut && bIsScript) )
         return;
@@ -217,7 +214,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
     const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
     const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
     const SwRect aRect( aTopLeft, aBotRight );
-    DrawRect( pOut, aRect,  m_aColorConfig.m_aScriptIndicatorColor );
+    DrawRect( pOut, aRect,  COL_GREEN );
     pOut->SetLineColor( aOldLineColor );
 }
 

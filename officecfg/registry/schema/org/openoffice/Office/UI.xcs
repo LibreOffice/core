@@ -232,16 +232,6 @@
           </info>
         </prop>
       </group>
-      <group oor:name="WriterScriptIndicator">
-        <info>
-          <desc>Specifies the settings for script indicators in Writer.</desc>
-        </info>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color for the script indicators in Writer.</desc>
-          </info>
-        </prop>
-      </group>
       <group oor:name="WriterSectionBoundaries">
         <info>
           <desc>Specifies the settings for section boundaries in Writer.</desc>

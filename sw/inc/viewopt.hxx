@@ -238,7 +238,6 @@ struct SwViewColors
             && m_aSectionBoundColor == rOther.m_aSectionBoundColor
             && m_aPageBreakColor == rOther.m_aPageBreakColor
             && m_aNonPrintingCharacterColor == rOther.m_aNonPrintingCharacterColor
-            && m_aScriptIndicatorColor == rOther.m_aScriptIndicatorColor
             && m_aShadowColor == rOther.m_aShadowColor
             && m_aHeaderFooterMarkColor == rOther.m_aHeaderFooterMarkColor
             && m_nAppearanceFlags == rOther.m_nAppearanceFlags;
@@ -259,7 +258,6 @@ struct SwViewColors
     Color m_aSectionBoundColor;
     Color m_aPageBreakColor;
     Color m_aNonPrintingCharacterColor;
-    Color m_aScriptIndicatorColor;
     Color m_aShadowColor;
     Color m_aHeaderFooterMarkColor;
     ViewOptFlags m_nAppearanceFlags;
@@ -461,8 +459,8 @@ public:
     void SetResolvedPostIts( bool b )
     { SetUIOption(b, ViewOptFlags2::ResolvedPostits); }
 
-    void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                              bool bIsScript ) const;
+    static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
+                              bool bIsScript );
     static SwTwips GetPostItsWidth(const OutputDevice* pOut);
 
     //show/hide tooltips on tracked changes

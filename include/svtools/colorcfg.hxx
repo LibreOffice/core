@@ -46,7 +46,6 @@ enum ColorConfigEntry : int
     WRITERFIELDSHADINGS ,
     WRITERIDXSHADINGS         ,
     WRITERDIRECTCURSOR        , // unused
-    WRITERSCRIPTINDICATOR,
     WRITERSECTIONBOUNDARIES,
     WRITERHEADERFOOTERMARK,
     WRITERPAGEBREAKS,
@@ -157,7 +156,6 @@ namespace {
         { std::u16string_view(u"WriterFieldShadings"), true },
         { std::u16string_view(u"WriterIdxShadings"), true },
         { std::u16string_view(u"WriterDirectCursor"), true },
-        { std::u16string_view(u"WriterScriptIndicator"), false },
         { std::u16string_view(u"WriterSectionBoundaries"), false },
         { std::u16string_view(u"WriterHeaderFooterMark"), false },
         { std::u16string_view(u"WriterPageBreaks"), false },

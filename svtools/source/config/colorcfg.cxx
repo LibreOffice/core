@@ -540,7 +540,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_LIGHTGRAY,    COL_LIGHTGRAY   }, // WRITERFIELDSHADING
         { COL_LIGHTGRAY,    Color(0x1C1C1C) }, // WRITERIDXSHADINGS
         { COL_BLACK,        COL_BLACK       }, // WRITERDIRECTCURSOR
-        { COL_GREEN,        Color(0x1E6A39) }, // WRITERSCRIPTINDICATOR
         { COL_LIGHTGRAY,    Color(0x808080) }, // WRITERSECTIONBOUNDARIES
         { Color(0x0369a3),  Color(0xB4C7DC) }, // WRITERHEADERFOOTERMARK
         { COL_BLUE,         Color(0x729FCF) }, // WRITERPAGEBREAKS

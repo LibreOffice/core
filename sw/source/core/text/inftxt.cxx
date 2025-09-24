@@ -1203,7 +1203,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     if ( GetTextFrame()->IsVertical() )
         GetTextFrame()->SwitchHorizontalToVertical( aTmpRect );
 
-    GetOpt().PaintPostIts(m_pOut, aTmpRect, bScript);
+    SwViewOption::PaintPostIts(m_pOut, aTmpRect, bScript);
 
 }
 

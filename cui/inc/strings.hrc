@@ -475,7 +475,6 @@
 #define REG_WRITERFIELDSHADINGS             NC_("REG_WRITERFIELDSHADINGS", "Field shadings")
 #define REG_WRITERIDXSHADINGS               NC_("REG_WRITERIDXSHADINGS", "Index and table shadings")
 #define REG_WRITERDIRECTCURSOR              NC_("REG_WRITERDIRECTCURSOR", "Direct cursor")
-#define REG_WRITERSCRIPTINDICATOR           NC_("REG_WRITERSCRIPTINDICATOR", "Script indicator")
 #define REG_WRITERSECTIONBOUNDARIES         NC_("REG_WRITERSECTIONBOUNDARIES", "Section boundaries")
 #define REG_WRITERHEADERFOOTERMARK          NC_("REG_WRITERHEADERFOOTERMARK", "Header and footer delimiter")
 #define REG_WRITERPAGEBREAKS                NC_("REG_WRITERPAGEBREAKS", "Page and column breaks")
