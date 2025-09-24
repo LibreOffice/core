@@ -502,7 +502,9 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         // tdf#168251 minimum glyph scaling allows more text in the line
         // TODO don't be greedy, allow only an extra word or word part
         const sal_Int16 nScaleWidthMinimum = aAdjustItem.GetPropScaleWidthMinimum();
-        if ( nScaleWidthMinimum < 100 )
+        if ( nScaleWidthMinimum < 100 &&
+                    // tdf#168528 avoid freezing
+                    m_nCutPos < TextFrameIndex(rInf.GetText().getLength()) )
         {
             SwTwips nExtraSpace = nLineWidth / (nScaleWidthMinimum / 100.0) - nLineWidth;
             nLineWidth += nExtraSpace;
@@ -512,7 +514,10 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
         // tdf#167648 minimum letter spacing allows more text in the line
         // TODO don't be greedy, allow only an extra word or word part
-        if ( const sal_Int16 nLetterSpacingMinimum = aAdjustItem.GetPropLetterSpacingMinimum() )
+        const sal_Int16 nLetterSpacingMinimum = aAdjustItem.GetPropLetterSpacingMinimum();
+        if ( nLetterSpacingMinimum &&
+                    // tdf#168528 avoid freezing
+                    m_nCutPos < TextFrameIndex(rInf.GetText().getLength()) )
         {
             SwTwips nExtraSpace = sal_Int32(m_nCutPos - rInf.GetIdx()) *
                                      nSpaceWidth / 10.0 * nLetterSpacingMinimum / 100.0;

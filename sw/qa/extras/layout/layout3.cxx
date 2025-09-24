@@ -837,6 +837,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168448)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf168528)
+{
+    //just care it doesn't freeze
+    // embedded font subset created with:
+    // hb-subset SourceSerif4Variable-Roman.ttf  -u '20,3a,61,64,65,66,67,68,6c,6d,6e,6f,72,73,74,75,79'  -o subset.ttf
+    createSwDoc("tdf168528.odt");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf164499)
 {
     createSwDoc("tdf164499.docx");

@@ -1265,6 +1265,9 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
         }
         if (rPattern.maTargetName == "Linux Libertine G" && rPattern.maSearchName == "Linux Libertine O")
             return;
+        // tdf#168528 allow testing with embedded subset
+        if (rPattern.maTargetName == "Source Serif 4 Variable" && rPattern.maSearchName == "DejaVu Serif")
+            return;
         SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
                               "' try: " << rPattern.maSearchName << " instead");
         std::cerr << "terminating test due to missing font: " << rPattern.maTargetName << std::endl;
