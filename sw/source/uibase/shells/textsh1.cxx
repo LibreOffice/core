@@ -1873,7 +1873,29 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             if ( pRule )
             {
+                rWrtSh.StartUndo(SwUndoId::INSATTR);
+
+                // When merging with a different list, also helpfully remove any restart-numbering
+                if (!rReq.IsAPI()) // no need to be "helpful" like this for a macro
+                {
+                    for(SwPaM& rPaM : rWrtSh.GetCursor()->GetRingContainer())
+                    {
+                        // check each selected paragraph separately
+                        const SwNodeIndex nEnd = rPaM.End()->nNode;
+                        for (SwNodeIndex nPara = rPaM.Start()->nNode; nPara <= nEnd; ++nPara)
+                        {
+                            SwPaM aPaM(nPara);
+                            if (!rWrtSh.IsNumRuleStart(&aPaM))
+                                continue;
+                            // Only remove restart-numbering if the rule is actually going to change
+                            if (SwDoc::GetNumRuleAtPos(*aPaM.Start(), rWrtSh.GetLayout()) != pRule)
+                                rWrtSh.SetNumRuleStart(false, &aPaM);
+                        }
+                    }
+                }
+
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
+                rWrtSh.EndUndo(SwUndoId::INSATTR);
             }
         }
         break;

@@ -70,6 +70,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf167760_numberedPara)
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf113213_addToList)
+{
+    // given a document with two separate numbering lists
+    createSwDoc("tdf113213_addToList.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // Select the second list
+    pWrtShell->EndOfSection();
+    pWrtShell->Up(/*bSelect=*/true);
+    // "Add to list": join the second list to the previous one
+    dispatchCommand(mxComponent, u".uno:ContinueNumbering"_ustr, {});
+    // The "restart numbering" property should be helpfully removed when joining to another list
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(getParagraph(6), "ListLabelString"));
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(getParagraph(6), "ListLabelString"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf108791)
 {
     auto getPostItMgr = [](SwDocShell* pDocShell) {
