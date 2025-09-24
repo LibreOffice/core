@@ -304,7 +304,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         SolarMutexGuard aGuard;
         if (svtools::executeRestartDialog(
                      comphelper::getProcessComponentContext(), GetFrameWeld(),
-                     svtools::RESTART_REASON_THREADING))
+                     svtools::RESTART_REASON_CALCULATION))
             GetDialogController()->response(RET_OK);
     }
     if ( *pLocalOptions != *pOldOptions )

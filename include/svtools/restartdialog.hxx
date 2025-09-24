@@ -56,12 +56,9 @@ enum RestartReason {
     // For the Skia changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_SKIA,
-    // For the OpenCL changes to take effect,
+    // For the Calculation settings changes to take effect,
     // %PRODUCTNAME must be restarted:
-    RESTART_REASON_OPENCL,
-    // For the multi-threaded calculation changes to take effect,
-    // %PRODUCTNAME must be restarted:
-    RESTART_REASON_THREADING,
+    RESTART_REASON_CALCULATION,
     // To apply changes, %PRODUCTNAME,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_UI_CHANGE,
