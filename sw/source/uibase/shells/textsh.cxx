@@ -896,7 +896,9 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest& rReq )
         {
             if (bSentenceCase)
             {
-                OUString aSelection = rSh.GetSelText().trim();
+                OUString aSelection;
+                rSh.GetSelectedText(aSelection);
+                aSelection = aSelection.trim();
                 if (aSelection.getLength() <= 2 || (aSelection.indexOf(' ') < 0 && aSelection.indexOf('\t') < 0))
                     transFlags = m_aRotateCase.getNextMode();
             }
