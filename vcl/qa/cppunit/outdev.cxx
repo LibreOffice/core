@@ -16,6 +16,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
@@ -247,6 +248,37 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
         const BitmapColor aColor = pReadAccess->GetColor(0, 0);
         CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), aColor);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapExScale)
+{
+    // Given a 100x100 bitmap:
+    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    Bitmap aBitmap(Size(100, 100), vcl::PixelFormat::N24_BPP);
+    basegfx::B2DVector aScale(20, 80);
+    basegfx::B2DVector aTranslate(80, 0);
+    double fRotate = M_PI / 2;
+    double fShearX = 0;
+    basegfx::B2DHomMatrix aMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+        aScale, fShearX, fRotate, aTranslate);
+    GDIMetaFile aMtf;
+    aMtf.Record(pVDev.get());
+
+    // When drawing that with a transform:
+    pVDev->DrawTransformedBitmapEx(aMatrix, aBitmap);
+
+    // Then make sure the bitmap recorded in the metafile doesn't get a scaled down width:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMtf.GetActionSize());
+    MetaAction* pAction = aMtf.GetAction(0);
+    CPPUNIT_ASSERT_EQUAL(MetaActionType::BMPEXSCALE, pAction->GetType());
+    auto pBitmapAction = static_cast<MetaBmpExScaleAction*>(pAction);
+    const Bitmap& rBitmapEx = pBitmapAction->GetBitmap();
+    Size aTransformedSize = rBitmapEx.GetSizePixel();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater or equal than: 100
+    // - Actual  : 80
+    // i.e. an unwanted scaling down lead to blurry presentation output.
+    CPPUNIT_ASSERT_GREATEREQUAL(static_cast<tools::Long>(100), aTransformedSize.getWidth());
 }
 
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawTransformedBitmapEx)

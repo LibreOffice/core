@@ -494,6 +494,17 @@ void OutputDevice::DrawTransformedBitmapEx(
     basegfx::B2DVector aFullScale, aFullTranslate;
     double fFullRotate, fFullShearX;
     aFullTransform.decompose(aFullScale, aFullTranslate, fFullRotate, fFullShearX);
+    if (aFullScale.getX() > 0 && aFullScale.getY() > 0
+        && aOriginalSizePixel.getWidth() > aFullScale.getX()
+        && aOriginalSizePixel.getHeight() > aFullScale.getY())
+    {
+        // aFullTransform would downscale the bitmap: avoid this, so the recorded metafile can be
+        // better upscaled later.
+        basegfx::B2DHomMatrix aTransform = basegfx::utils::createScaleB2DHomMatrix(
+                aOriginalSizePixel.getWidth() / aFullScale.getX(),
+                aOriginalSizePixel.getHeight() / aFullScale.getY());
+        aFullTransform *= aTransform;
+    }
 
     double fSourceRatio = 1.0;
     if (aOriginalSizePixel.getHeight() != 0)
