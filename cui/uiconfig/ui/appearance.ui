@@ -502,7 +502,6 @@
                 <property name="receives-default">False</property>
                 <property name="margin-start">6</property>
                 <property name="draw-indicator">True</property>
-                <property name="label" translatable="no"></property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="showindocumentchkbtn-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|showindocumentchkbtn">Immediately display the color choice in the document.</property>
