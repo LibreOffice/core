@@ -373,6 +373,11 @@ namespace slideshow::internal
                                         rSpriteSizePixel,
                                         nPrio ); */
                 vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract = mpViewLayer->getSpriteCanvas();
+                if(!pSpriteCanvasAbstract)
+                {
+                    // PresenterSlideShowView uses vclcanvas
+                    return true;
+                }
                 auto xSpriteSizePixel = ::basegfx::unotools::size2DFromB2DSize(rSpriteSizePixel);
                 mpCustomSprite = pSpriteCanvasAbstract->createCustomSprite(xSpriteSizePixel);
             }
