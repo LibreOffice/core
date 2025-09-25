@@ -1229,7 +1229,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
 
         SvFileStream Features(FeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
         Features.WriteLine("languagesystem DFLT dflt;");
-        Features.WriteLine("feature dlig {");
+        Features.WriteLine("feature liga {");
         for (const auto& ligature : ligatureGlyphToChars)
         {
             sal_Int32 nLigatureGlyph = ligature.first;
@@ -1244,7 +1244,7 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
             ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
             Features.WriteLine(ligatureLine);
         }
-        Features.WriteLine("} dlig;");
+        Features.WriteLine("} liga;");
         Features.Close();
 
         bFeatures = true;
@@ -1370,7 +1370,7 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
     {
         SvFileStream Features(mergedFeaturesUrl, StreamMode::READWRITE | StreamMode::TRUNC);
         Features.WriteLine("languagesystem DFLT dflt;");
-        Features.WriteLine("feature dlig {");
+        Features.WriteLine("feature liga {");
         for (const auto& ligature : ligatureGlyphToChars)
         {
             sal_Int32 nLigatureGlyph = ligature.first;
@@ -1385,7 +1385,7 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
             ligatureLine += " by \\" + OString::number(nLigatureGlyph) + ";";
             Features.WriteLine(ligatureLine);
         }
-        Features.WriteLine("} dlig;");
+        Features.WriteLine("} liga;");
         Features.Close();
     }
 
@@ -1498,10 +1498,7 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     aFnt.SetFontSize(aFontSize);
 
     if (!sFontName.isEmpty())
-    {
-        //TODO: any way to know if we need to force discretionally ligatures
-        aFnt.SetFamilyName(sFontName + ":dlig");
-    }
+        aFnt.SetFamilyName(sFontName);
 
     const int italicAngle = pPageObject->getFontAngle();
     aFnt.SetItalic(italicAngle == 0 ? ITALIC_NONE
