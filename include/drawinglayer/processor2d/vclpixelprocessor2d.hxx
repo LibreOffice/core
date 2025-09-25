@@ -48,7 +48,7 @@ namespace drawinglayer::processor2d
     all fed primitives to a VCL Window. It is the currently used renderer
     for all VCL editing output from the DrawingLayer.
  */
-class VclPixelProcessor2D final : public VclProcessor2D
+class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) VclPixelProcessor2D final : public VclProcessor2D
 {
     AntialiasingFlags m_nOrigAntiAliasing;
 

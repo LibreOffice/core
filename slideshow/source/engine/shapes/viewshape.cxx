@@ -40,12 +40,15 @@
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include "viewshape.hxx"
+#include "PresenterCanvas.hxx"
 #include "basegfx/point/b2dpoint.hxx"
 #include "com/sun/star/uno/Reference.h"
 #include "drawinglayer/geometry/viewinformation2d.hxx"
 #include "drawinglayer/primitive2d/Primitive2DContainer.hxx"
 #include "drawinglayer/processor2d/cairopixelprocessor2d.hxx"
+#include "drawinglayer/processor2d/vclpixelprocessor2d.hxx"
 #include "sal/types.h"
+#include "vcl/canvasbitmap.hxx"
 #include "vcl/outdev.hxx"
 #include "canvas_inc/cairo_canvasbitmap.hxx"
 #include "canvas_inc/cairo_canvascustomsprite.hxx"
@@ -53,6 +56,7 @@
 #include "cairo/cairo_canvasbitmap.hxx"
 #include "cairo/cairo_canvascustomsprite.hxx"
 #include "cairo/cairo_spritecanvas.hxx"
+#include "vcl/spritecanvas.hxx"
 #include "vcl_canvas/customsprite.hxx"
 #include "vcl_canvas/spritecanvas.hxx"
 #include <basegfx/utils/canvastools.hxx>
@@ -875,8 +879,11 @@ namespace slideshow::internal
 
         void ViewShape::leaveAnimationMode()
         {
-            mpCustomSprite->hide();
-            mpCustomSprite.reset();
+            if (mpCustomSprite)
+            {
+                mpCustomSprite->hide();
+                mpCustomSprite.reset();
+            }
             mbAnimationMode = false;
             mbForceUpdate   = true;
         }
@@ -922,22 +929,71 @@ namespace slideshow::internal
                     return true;
                 if (!bIsVisible)
                     return true;
+
+                drawinglayer::geometry::ViewInformation2D aViewInormation;
+                aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
+                basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
+                // Original Position of center of shape wrt origin
+                basegfx::B2DPoint aOrigCenterPos(rArgs.maOrigBounds.getCenter());
+                aOrigCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Current Position of center of shape wrt origin
+                basegfx::B2DPoint aCurrCenterPos(rArgs.maBounds.getCenter());
+                aCurrCenterPos *= mpViewLayer->getSpriteTransformation();
+                // Bring the shape to the current Position
+                aMatrix.translate(-aOrigCenterPos + aCurrCenterPos);
+                aViewInormation.setViewTransformation(aMatrix);
+
                 uno::Reference<css::lang::XServiceInfo> xInfo(
                     mpViewLayer->getCanvas()->getUNOCanvas(), uno::UNO_QUERY);
                 cairo::SurfaceSharedPtr pSurface;
-                if (!xInfo.is() || xInfo->getImplementationName().indexOf("VCLCanvas") != -1)
+
+                if (!xInfo.is())
                 {
-                    // return render( mpViewLayer->getCanvas(),
-                                   // rMtf,
-                                   // rArgs.maBounds,
-                                   // rArgs.maUpdateBounds,
-                                   // nUpdateFlags,
-                                   // rArgs.mrAttr,
-                                   // rArgs.mrSubsets,
-                                   // bIsVisible );
                     return true;
                 }
-                if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
+                if (xInfo->getImplementationName().indexOf("VCLCanvas.CanvasBitmap") != -1)
+                {
+                    /* return render( mpViewLayer->getCanvas(),
+                                   rMtf,
+                                   rArgs.maBounds,
+                                   rArgs.maUpdateBounds,
+                                   nUpdateFlags,
+                                   rArgs.mrAttr,
+                                   rArgs.mrSubsets,
+                                   bIsVisible ); */
+                    vclcanvas::CanvasBitmap* pCanvasBitmap
+                        = static_cast<vclcanvas::CanvasBitmap*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    OutputDevice& rOutDev = pCanvasBitmap->getOutDev();
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    aProcessor.process(rContainer);
+                    return true;
+                }
+                else if(xInfo->getImplementationName().indexOf("SpriteCanvas.VCL") != -1)
+                {
+                    vclcanvas::SpriteCanvas* pSpriteCanvas = static_cast<vclcanvas::SpriteCanvas*>(
+                        mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    OutputDevice& rOutDev = *pSpriteCanvas->getOutDev();
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    aProcessor.process(rContainer);
+                    return true;
+                }
+                else if(xInfo->getImplementationName().indexOf("PresenterCanvas") != -1)
+                {
+                    sd::presenter::PresenterCanvas* pPresentationCanvas
+                        = static_cast<sd::presenter::PresenterCanvas*>(
+                            mpViewLayer->getCanvas()->getUNOCanvas().get());
+                    vclcanvas::SpriteCanvas* pSpriteCanvas = static_cast<vclcanvas::SpriteCanvas*>(
+                        pPresentationCanvas->mxUpdateCanvas.get());
+                    OutputDevice& rOutDev = *pSpriteCanvas->getOutDev();
+                    auto aOffset = pPresentationCanvas->GetOffset();
+                    aMatrix.translate(::basegfx::B2DPoint(aOffset.X, aOffset.Y));
+                    aViewInormation.setViewTransformation(aMatrix);
+                    drawinglayer::processor2d::VclPixelProcessor2D aProcessor(aViewInormation, rOutDev);
+                    aProcessor.process(rContainer);
+                    return true;
+                }
+                else if (xInfo->getImplementationName().indexOf("SpriteCanvas") != -1)
                 {
                     // SpriteCanvas
                     vcl_canvas::SpriteCanvasSharedPtr pSpriteCanvasAbstract
@@ -963,18 +1019,6 @@ namespace slideshow::internal
                             mpViewLayer->getCanvas()->getUNOCanvas().get());
                     pSurface = pCanvasBitmap->getSurface();
                 }
-                drawinglayer::geometry::ViewInformation2D aViewInormation;
-                aViewInormation.setViewTime(rArgs.mnElapsedTime*1000);
-                basegfx::B2DHomMatrix aMatrix(mpViewLayer->getTransformation());
-                // Original Position of center of shape wrt origin
-                basegfx::B2DPoint aOrigCenterPos(rArgs.maOrigBounds.getCenter());
-                aOrigCenterPos *= mpViewLayer->getSpriteTransformation();
-                // Current Position of center of shape wrt origin
-                basegfx::B2DPoint aCurrCenterPos(rArgs.maBounds.getCenter());
-                aCurrCenterPos *= mpViewLayer->getSpriteTransformation();
-                // Bring the shape to the current Position
-                aMatrix.translate(-aOrigCenterPos + aCurrCenterPos);
-                aViewInormation.setViewTransformation(aMatrix);
                 drawinglayer::processor2d::CairoPixelProcessor2D aProcessor(
                     aViewInormation, pSurface->getCairoSurface().get());
                 aProcessor.process(rContainer);

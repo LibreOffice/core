@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "com/sun/star/lang/XServiceInfo.hdl"
+#include "cppuhelper/supportsservice.hxx"
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -36,7 +38,8 @@ namespace sd::presenter {
 typedef comphelper::WeakComponentImplHelper <
     css::rendering::XSpriteCanvas,
     css::rendering::XBitmap,
-    css::awt::XWindowListener
+    css::awt::XWindowListener,
+    css::lang::XServiceInfo
 > PresenterCanvasInterfaceBase;
 
 /** Wrapper around a shared canvas that forwards most of its methods to the
@@ -95,6 +98,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
+    css::awt::Point GetOffset() { return maOffset; }
 
     /** Merge the given view state with the view state that translates the
         (virtual) child canvas to the shared canvas.
@@ -112,6 +116,21 @@ public:
     css::uno::Reference<css::rendering::XPolyPolygon2D> UpdateSpriteClip (
         const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxOriginalClip,
         const css::geometry::RealPoint2D& rLocation);
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName(  ) override
+    {
+        return u"PresenterCanvas"_ustr;
+    }
+
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
+    {
+        return cppu::supportsService( this, ServiceName );
+    }
+
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
+    {
+        return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
+    }
 
     // XCanvas
 
@@ -275,9 +294,8 @@ public:
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
         const css::geometry::RealSize2D& rNewSize,
         sal_Bool bFast) override;
-
-private:
     css::uno::Reference<css::rendering::XSpriteCanvas> mxUpdateCanvas;
+private:
     css::uno::Reference<css::awt::XWindow> mxUpdateWindow;
     css::uno::Reference<css::rendering::XCanvas> mxSharedCanvas;
     css::uno::Reference<css::awt::XWindow> mxSharedWindow;

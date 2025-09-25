@@ -105,6 +105,11 @@ namespace vclcanvas
         //     3rd the pixmap depth
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
+        BitmapBackBufferSharedPtr const & getBackBuffer() const { return maCanvasHelper.getBackBuffer(); }
+        OutputDevice& getOutDev()
+        {
+            return getBackBuffer()->getOutDev();
+        }
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

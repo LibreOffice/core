@@ -95,6 +95,7 @@ namespace vclcanvas
 
         /// @internal
         BitmapEx getBitmap() const;
+        const BitmapBackBufferSharedPtr& getBackBuffer() const { return mpBackBuffer; }
 
     private:
 

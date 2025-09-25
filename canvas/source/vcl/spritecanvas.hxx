@@ -109,6 +109,10 @@ namespace vclcanvas
                             css::uno::XComponentContext >& rxContext );
 
         void initialize();
+        OutputDevice* getOutDev()
+        {
+            return &getBackBuffer()->getOutDev();
+        }
 
         /// For resource tracking
         virtual ~SpriteCanvas() override;

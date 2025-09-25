@@ -849,8 +849,7 @@ bool SlideView::updateScreen() const
     }
     else
     {
-        return true;
-        // return mpCanvas->updateScreen(false);
+        return mpCanvas->updateScreen(false);
     }
 }
 
@@ -867,8 +866,7 @@ bool SlideView::paintScreen() const
     }
     else
     {
-        return true;
-        // return mpCanvas->updateScreen(true);
+        return mpCanvas->updateScreen(true);
     }
 }
 

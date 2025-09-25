@@ -20,7 +20,7 @@
 #include <cmath>
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
-#include "vclpixelprocessor2d.hxx"
+#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
