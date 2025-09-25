@@ -445,6 +445,9 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                                     basegfx::fround<tools::Long>(aPointY));
             }
 
+            // tdf#168371 set letter spacing so that VCL knows it has to disable ligatures
+            aFont.SetFixKerning(rTextCandidate.getLetterSpacing());
+
             // tdf#152990 set the font after the MapMode is (potentially) set so canvas uses the desired
             // font size
             mpOutputDevice->SetFont(aFont);
