@@ -22,4 +22,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,zlib, \
     external/zlib/missinginclude.patch \
 ))
 
+# cannot use post_action since $(file ..) would be run when the recipe is parsed, i.e. would always
+# happen before the tarball is unpacked
+$(gb_UnpackedTarball_workdir)/zlib/zlib-uninstalled.pc: $(call gb_UnpackedTarball_get_target,zlib)
+	$(file >$@,$(call gb_pkgconfig_file,zlib,1.3.1,$(ZLIB_CFLAGS),$(ZLIB_LIBS)))
+
 # vim: set noet sw=4 ts=4:

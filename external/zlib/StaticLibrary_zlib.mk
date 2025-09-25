@@ -30,6 +30,8 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zlib,\
 	UnpackedTarball/zlib/zutil \
 ))
 
+$(call gb_StaticLibrary_get_target,zlib): $(gb_UnpackedTarball_workdir)/zlib/zlib-uninstalled.pc
+
 ifeq ($(ENABLE_DEBUG),TRUE)
 $(eval $(call gb_StaticLibrary_add_cflags,zlib,-DZLIB_DEBUG))
 endif
