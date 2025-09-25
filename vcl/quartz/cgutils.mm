@@ -102,7 +102,7 @@ bool DefaultMTLDeviceIsSupported()
         return false;
     }
 
-    SAL_WARN("vcl.skia", "Default MTLDevice is \"" << [pMetalDevice.name UTF8String] << "\"");
+    SAL_INFO("vcl.skia", "Default MTLDevice is \"" << [pMetalDevice.name UTF8String] << "\"");
 
     bool bRet = true;
 
