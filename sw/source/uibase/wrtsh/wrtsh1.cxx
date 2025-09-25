@@ -1394,6 +1394,10 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
 
             SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
 
+            // if the outline level is not set in style then it is set in direct formatting
+            if (!pTextNode->GetTextColl()->GetAttrOutlineLevel())
+                pNd->SetAttrOutlineLevel(pTextNode->GetAttrOutlineLevel());
+
             (void) rOutlineNodes.Seek_Entry(pNd, &nPos);
             pThis->GotoOutline(nPos);
 
