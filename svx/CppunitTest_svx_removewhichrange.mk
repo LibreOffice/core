@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_removewhichrange, \
 
 $(eval $(call gb_CppunitTest_use_externals,svx_removewhichrange, \
     boost_headers \
+    icuuc \
     libxml2 \
 ))
 
