@@ -572,6 +572,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf122014)
     CPPUNIT_ASSERT_GREATER(nX1 + 100, nX2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf167202_footnote)
+{
+    createSwDoc("tdf167202_footnote.docx");
+    SwDocShell* pShell = getSwDocShell();
+    CPPUNIT_ASSERT(pShell);
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check if footnote is there.
+    assertXPathContent(pXmlDoc, "(//textarray)[7]/text", u"FOOTNOTE #1");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // equality assertion failed
+    // - Expected: 10
+    // - Actual  : 11
+    // - In <>, XPath '//textarray' number of nodes is incorrect
+    // i.e. if there are 11 textarray node, it means there is an extra numbering in the footnote.
+    assertXPath(pXmlDoc, "//textarray", 10);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf134659)
 {
     createSwDoc("tdf134659.docx");

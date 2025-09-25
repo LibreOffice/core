@@ -49,6 +49,7 @@
 #include <EnhancedPDFExportHelper.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 
 #define REDLINE_DISTANCE 567/4
@@ -325,6 +326,19 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
+
+    // Do not show line numbering in footnote.
+    // if compatibility options are enabled.
+    if (IsInFootnote())
+    {
+        const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
+        const bool bCompatMso13 = rIDSA.get(DocumentSettingId::TAB_OVER_SPACING); // MSO 2013+
+        const bool bCompatMso10 = rIDSA.get(DocumentSettingId::TAB_OVER_MARGIN); // <= MSO 2010
+
+        if (bCompatMso13 || bCompatMso10)
+            bLineNum = false;
+    }
+
     sal_Int16 eHor = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos());
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     bool bWordSpacingIndicator = officecfg::Office::Writer::Content::Display::ShowWordSpacingIndicator::get()
