@@ -564,6 +564,7 @@ namespace
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,
                 aTextFillColor,
+                rInfo.mrFont.GetFixKerning(),
 
                 // attributes for TextDecoratedPortionPrimitive2D
                 aBOverlineColor,
@@ -592,7 +593,8 @@ namespace
                 rFontAttribute,
                 rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
                 aBFontColor,
-                aTextFillColor);
+                aTextFillColor,
+                rInfo.mrFont.GetFixKerning());
         }
 
         return pNewPrimitive;
