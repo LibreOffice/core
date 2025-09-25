@@ -15,4 +15,9 @@ $(eval $(call gb_UnpackedTarball_add_files,libpng,.,\
 	external/libpng/configs/pnglibconf.h \
 ))
 
+# cannot use post_action since $(file ..) would be run when the recipe is parsed, i.e. would always
+# happen before the tarball is unpacked
+$(gb_UnpackedTarball_workdir)/libpng/libpng-uninstalled.pc: $(call gb_UnpackedTarball_get_target,libpng)
+	$(file >$@,$(call gb_pkgconfig_file,libpng,1.6.50,$(LIBPNG_CFLAGS),$(LIBPNG_LIBS)))
+
 # vim: set noet sw=4 ts=4:

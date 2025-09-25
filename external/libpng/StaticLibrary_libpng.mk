@@ -69,4 +69,6 @@ endif
 endif
 endif
 
+$(call gb_StaticLibrary_get_target,libpng): $(gb_UnpackedTarball_workdir)/libpng/libpng-uninstalled.pc
+
 # vim: set noet sw=4 ts=4:
