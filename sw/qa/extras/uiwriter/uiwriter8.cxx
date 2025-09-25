@@ -3145,6 +3145,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCrashOutlineFoldingPressingReturn)
+{
+    createSwDoc("tdf166713.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // switch on "Outline Folding" mode
+    dispatchCommand(mxComponent, u".uno:ShowOutlineContentVisibilityButton"_ustr, {});
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton());
+
+    // Without the fix in place, this test would have crashed here
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // switch off "Outline Folding" mode
+    dispatchCommand(mxComponent, u".uno:ShowOutlineContentVisibilityButton"_ustr, {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowOutlineContentVisibilityButton());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
 {
     // Given a document with a first paragraph having a manually set page break with page style
