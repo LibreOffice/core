@@ -230,8 +230,8 @@ void ScDPFieldButton::drawPopupButton()
     mpOutDev->SetLineColor();
     mpOutDev->DrawRect(tools::Rectangle(aPos, aSize));
 
-    const double nVDist = aSize.Height() / 4;
-    const double nHDist = aSize.Width() / 10;
+    const double nVDist = aSize.Height() / 4.0;
+    const double nHDist = aSize.Width() / 10.0;
     const double fZoom = static_cast<double>(maZoomY);
 
     aBackgroundColor = mbPopupPressed      ? mrStyle.GetButtonTextColor()
