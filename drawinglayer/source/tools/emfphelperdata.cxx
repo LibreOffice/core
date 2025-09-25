@@ -1705,6 +1705,7 @@ namespace emfplushelper
                                             locale,
                                             color.getBColor(), // Font Color
                                             COL_TRANSPARENT,   // Fill Color
+                                            0,
                                             color.getBColor(), // OverlineColor
                                             color.getBColor(), // TextlineColor
                                             drawinglayer::primitive2d::TEXT_LINE_NONE,
@@ -2219,6 +2220,7 @@ namespace emfplushelper
                                                     Application::GetSettings().GetLanguageTag().getLocale(),
                                                     color.getBColor(),
                                                     COL_TRANSPARENT,
+                                                    0,
                                                     color.getBColor(),
                                                     color.getBColor(),
                                                     drawinglayer::primitive2d::TEXT_LINE_NONE,

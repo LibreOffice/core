@@ -413,6 +413,7 @@ namespace svgio::svgreader
                     std::move(aLocale),
                     aFill,
                     COL_TRANSPARENT,
+                    0,
 
                     // extra props for decorated
                     aDecoColor,

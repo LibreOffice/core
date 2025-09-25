@@ -1125,6 +1125,7 @@ namespace wmfemfhelper
                     aLocale,
                     aFontColor,
                     aFillColor,
+                    rFont.GetFixKerning(),
 
                     // attributes for TextDecoratedPortionPrimitive2D
                     rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,
@@ -1152,7 +1153,9 @@ namespace wmfemfhelper
                     std::move(rKashidaArray),
                     std::move(aFontAttribute),
                     std::move(aLocale),
-                    aFontColor);
+                    aFontColor,
+                    aFillColor,
+                    rFont.GetFixKerning());
             }
         }
 

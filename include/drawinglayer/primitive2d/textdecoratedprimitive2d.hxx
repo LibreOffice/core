@@ -89,6 +89,7 @@ namespace drawinglayer::primitive2d
                 const css::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
                 const Color& rFillColor,
+                short nLetterSpacing,
 
                 /// local parameters
                 const basegfx::BColor& rOverlineColor,

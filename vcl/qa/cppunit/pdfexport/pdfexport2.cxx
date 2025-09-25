@@ -4181,9 +4181,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf145873)
     int nPageObjectCount = pPdfPage->getObjectCount();
 
     // tdf#145873: Without the fix #1 in place, this test would have failed with
-    // - Expected: 66
+    // - Expected: 107
     // - Actual  : 3
-    CPPUNIT_ASSERT_EQUAL(66, nPageObjectCount);
+    CPPUNIT_ASSERT_EQUAL(107, nPageObjectCount);
 
     auto pObject = pPdfPage->getObject(4);
     CPPUNIT_ASSERT_MESSAGE("no object", pObject != nullptr);
