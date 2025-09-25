@@ -148,6 +148,7 @@ namespace drawinglayer::primitive2d
                         mrSource.getLocale(),
                         mrSource.getFontColor(),
                         mrSource.getTextFillColor(),
+                        mrSource.getLetterSpacing(),
 
                         pTextDecoratedPortionPrimitive2D->getOverlineColor(),
                         pTextDecoratedPortionPrimitive2D->getTextlineColor(),
@@ -178,7 +179,9 @@ namespace drawinglayer::primitive2d
                         std::move(aNewKashidaArray),
                         mrSource.getFontAttribute(),
                         mrSource.getLocale(),
-                        mrSource.getFontColor()));
+                        mrSource.getFontColor(),
+                        mrSource.getTextFillColor(),
+                        mrSource.getLetterSpacing()));
             }
         }
 
