@@ -233,28 +233,20 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
             {
                 OUString aEngine;
                 xSet->getPropertyValue(u"CustomShapeEngine"_ustr) >>= aEngine;
-                if ( aEngine.isEmpty() )
+                if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
                 {
-                    aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
-                }
-                const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
-                if ( !aEngine.isEmpty() )
-                {
-                    uno::Sequence< beans::PropertyValue > aPropValues{
-                        comphelper::makePropertyValue(u"CustomShape"_ustr, xShape),
-                        comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)
-                    };
-                    uno::Sequence< uno::Any > aArgument = { uno::Any(aPropValues) };
+                    uno::Sequence< uno::Any > aArguments {
+                        uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
+                        uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
                     uno::Reference< uno::XInterface > xInterface(
-                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext) );
-                    if ( xInterface.is() )
-                    {
-                        uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(
-                            uno::Reference< drawing::XCustomShapeEngine >( xInterface, uno::UNO_QUERY ) );
-                        if ( xCustomShapeEngine.is() )
-                            xCustomShapeReplacement = xCustomShapeEngine->render();
-                    }
+                        xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.drawing.EnhancedCustomShapeEngine", aArguments, xContext) );
+                    assert( xInterface && "should never fail" );
+                    uno::Reference< drawing::XCustomShapeEngine > xCustomShapeEngine(
+                        uno::Reference< drawing::XCustomShapeEngine >( xInterface, uno::UNO_QUERY ) );
+                    assert(xCustomShapeEngine && "should never fail");
+                    xCustomShapeReplacement = xCustomShapeEngine->render();
                 }
             }
         }

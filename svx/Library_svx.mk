@@ -121,10 +121,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/charmapacc \
     svx/source/accessibility/svxpixelctlaccessiblecontext \
     svx/source/accessibility/svxrectctaccessiblecontext \
-    svx/source/customshapes/EnhancedCustomShape3d \
-    svx/source/customshapes/EnhancedCustomShapeEngine \
-    svx/source/customshapes/EnhancedCustomShapeFontWork \
-    svx/source/customshapes/EnhancedCustomShapeHandle \
     svx/source/dialog/GenericCheckDialog \
     svx/source/dialog/GenericDropDownFieldDialog \
     svx/source/dialog/_bmpmask \

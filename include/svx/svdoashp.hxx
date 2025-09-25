@@ -24,7 +24,7 @@
 #include <svx/svdhdl.hxx>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -36,6 +36,7 @@ namespace sdr
         class CustomShapeProperties;
     }
 }
+class EnhancedCustomShapeEngine;
 
 class SdrAShapeObjGeoData final : public SdrTextObjGeoData
 {
@@ -90,12 +91,12 @@ public:
 
     css::uno::Reference< css::drawing::XShape > mXRenderedCustomShape;
 
-    mutable css::uno::Reference< css::drawing::XCustomShapeEngine > mxCustomShapeEngine;
+    mutable rtl::Reference< EnhancedCustomShapeEngine  > mxCustomShapeEngine;
 
     // #i37011# render geometry shadow
     rtl::Reference<SdrObject> mpLastShadowGeometry;
 
-    css::uno::Reference< css::drawing::XCustomShapeEngine > const & GetCustomShapeEngine() const;
+    rtl::Reference< EnhancedCustomShapeEngine > const & GetCustomShapeEngine() const;
 
     std::vector< SdrCustomShapeInteraction > GetInteractionHandles() const; // needed in unit test
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );

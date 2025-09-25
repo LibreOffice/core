@@ -28,6 +28,7 @@
 #include <svx/svdoashp.hxx>
 
 #include <svx/strings.hrc>
+#include <com/sun/star/drawing/XShape.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

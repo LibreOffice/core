@@ -381,7 +381,6 @@ core_constructor_list = [
     "com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_SmartTagMenuController_get_implementation",
     "com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation",
-    "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
     "com_sun_star_drawing_SvxShapeCollection_get_implementation",
     "com_sun_star_svx_FontHeightToolBoxController_get_implementation",
     "org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation",
@@ -397,6 +396,7 @@ core_constructor_list = [
     "com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StyleToolBoxControl_get_implementation",
     "com_sun_star_comp_svx_StylesPreviewToolBoxControl_get_implementation",
+    "com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation",
 # toolkit/util/tk.component
     "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
     "stardiv_Toolkit_StdTabController_get_implementation",

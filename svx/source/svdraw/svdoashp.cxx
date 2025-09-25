@@ -87,6 +87,7 @@
 #include <o3tl/string_view.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 #include <editeng/frmdiritem.hxx>
+#include <EnhancedCustomShapeEngine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -369,7 +370,7 @@ static rtl::Reference<SdrObject> ImpCreateShadowObjectClone(const SdrObject& rOr
 }
 
 
-uno::Reference<drawing::XCustomShapeEngine> const & SdrObjCustomShape::GetCustomShapeEngine() const
+rtl::Reference<EnhancedCustomShapeEngine> const & SdrObjCustomShape::GetCustomShapeEngine() const
 {
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
@@ -378,27 +379,10 @@ uno::Reference<drawing::XCustomShapeEngine> const & SdrObjCustomShape::GetCustom
     if ( !aXShape )
         return mxCustomShapeEngine;
 
-    const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
-
     OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
-    static constexpr OUStringLiteral sEnhancedCustomShapeEngine = u"com.sun.star.drawing.EnhancedCustomShapeEngine";
-    if ( aEngine.isEmpty() )
-        aEngine = sEnhancedCustomShapeEngine;
-
+    if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
     {
-        static constexpr OUString sCustomShape = u"CustomShape"_ustr;
-        uno::Sequence<beans::PropertyValue> aPropValues{ comphelper::makePropertyValue(sCustomShape,
-                                                                             aXShape) };
-        uno::Sequence<uno::Any> aArgument{ uno::Any(aPropValues) };
-        try
-        {
-            uno::Reference<uno::XInterface> xInterface(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aEngine, aArgument, xContext));
-            if (xInterface.is())
-                mxCustomShapeEngine.set(xInterface, uno::UNO_QUERY);
-        }
-        catch (const loader::CannotActivateFactoryException&)
-        {
-        }
+        mxCustomShapeEngine = new EnhancedCustomShapeEngine(aXShape);
     }
 
     return mxCustomShapeEngine;

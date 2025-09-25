@@ -97,4 +97,8 @@
     constructor="com_sun_star_comp_svx_TextColumns_get_implementation">
     <service name="com.sun.star.text.TextColumns"/>
   </implementation>
+  <implementation name="com.sun.star.drawing.EnhancedCustomShapeEngine"
+      constructor="com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation">
+    <service name="com.sun.star.drawing.CustomShapeEngine"/>
+  </implementation>
 </component>

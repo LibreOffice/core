@@ -25,11 +25,6 @@ module com {  module sun {  module star {  module drawing {
  */
 service CustomShapeEngine
 {
-    /** initializing the CustomShapeEngine
-
-     */
-    interface ::com::sun::star::lang::XInitialization;
-
     interface com::sun::star::drawing::XCustomShapeEngine;
 };
 

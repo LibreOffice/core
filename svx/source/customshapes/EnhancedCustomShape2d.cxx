@@ -44,6 +44,7 @@
 #include <svx/xhatch.hxx>
 #include <svx/sdshitm.hxx>
 #include <comphelper/configuration.hxx>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>

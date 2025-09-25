@@ -485,6 +485,10 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtabptrn \
     svx/source/xoutdev/XPropertyEntry \
     svx/source/xoutdev/xtablend \
+    svx/source/customshapes/EnhancedCustomShape3d \
+    svx/source/customshapes/EnhancedCustomShapeEngine \
+    svx/source/customshapes/EnhancedCustomShapeFontWork \
+    svx/source/customshapes/EnhancedCustomShapeHandle \
 ))
 
 $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))

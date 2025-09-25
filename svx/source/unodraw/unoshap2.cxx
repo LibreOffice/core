@@ -64,7 +64,7 @@
 #include <sal/log.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/stream.hxx>
-
+#include <EnhancedCustomShapeEngine.hxx>
 
 #include <memory>
 
