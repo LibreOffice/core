@@ -136,6 +136,9 @@ private:
     /// #i96669# internal: add simple range buffering for this primitive
     basegfx::B2DRange maB2DRange;
 
+    /// Letter spacing
+    short mnLetterSpacing;
+
 protected:
     /// local decomposition.
     virtual Primitive2DReference
@@ -155,7 +158,8 @@ public:
                                  std::vector<sal_Bool>&& rKashidaArray,
                                  attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
                                  const basegfx::BColor& rFontColor,
-                                 const Color& rTextFillColor = COL_TRANSPARENT);
+                                 const Color& rTextFillColor = COL_TRANSPARENT,
+                                 short nLetterSpacing = 0);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
         the necessary VCL outline extractions, scaling adaptations and other stuff.
@@ -174,6 +178,7 @@ public:
     const css::lang::Locale& getLocale() const { return maLocale; }
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
+    short getLetterSpacing() const { return mnLetterSpacing; }
 
     /// helpers for determining various decoration states
     virtual bool hasTextRelief() const;

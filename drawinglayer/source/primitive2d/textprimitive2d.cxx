@@ -206,7 +206,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     basegfx::B2DHomMatrix rNewTransform, OUString rText, sal_Int32 nTextPosition,
     sal_Int32 nTextLength, std::vector<double>&& rDXArray, std::vector<sal_Bool>&& rKashidaArray,
     attribute::FontAttribute aFontAttribute, css::lang::Locale aLocale,
-    const basegfx::BColor& rFontColor, const Color& rTextFillColor)
+    const basegfx::BColor& rFontColor, const Color& rTextFillColor, short nLetterSpacing)
     : maTextTransform(std::move(rNewTransform))
     , maText(std::move(rText))
     , mnTextPosition(nTextPosition)
@@ -217,6 +217,7 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     , maLocale(std::move(aLocale))
     , maFontColor(rFontColor)
     , maTextFillColor(rTextFillColor)
+    , mnLetterSpacing(nLetterSpacing)
 {
 #if OSL_DEBUG_LEVEL > 0
     const sal_Int32 aStringLength(getText().getLength());
