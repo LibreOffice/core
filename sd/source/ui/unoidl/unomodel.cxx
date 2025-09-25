@@ -4669,7 +4669,11 @@ OString SdXImpressDocument::getPresentationInfo() const
                         for (size_t nNote = 0; nNote < pNotesPage->GetObjCount(); nNote++)
                         {
                             pItObj = pNotesPage->GetObj(nNote);
-                            if (pItObj && pItObj->GetObjIdentifier() == SdrObjKind::Text)
+
+                            if (pItObj &&
+                                (pItObj->GetObjIdentifier() == SdrObjKind::Text
+                                 || pItObj->GetObjIdentifier() == SdrObjKind::TitleText
+                                 || pItObj->GetObjIdentifier() == SdrObjKind::OutlineText))
                             {
                                 pNotes = pItObj;
                                 break;
