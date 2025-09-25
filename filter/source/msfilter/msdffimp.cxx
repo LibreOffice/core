@@ -601,8 +601,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 
                             case SdrObjKind::CustomShape :
                             {
-                                const SfxPoolItem& aCustomShape =  static_cast<SdrObjCustomShape*>(pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                                SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(aCustomShape) );
+                                const SdrCustomShapeGeometryItem& rInitialGeometryItem = static_cast<SdrObjCustomShape*>(pO)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+                                SdrCustomShapeGeometryItem aGeometryItem( rInitialGeometryItem );
                                 static constexpr OUString sPath( u"Path"_ustr );
                                 sal_Int16 nGluePointType = EnhancedCustomShapeGluePointType::SEGMENTS;
                                 css::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, u"GluePointType"_ustr );
