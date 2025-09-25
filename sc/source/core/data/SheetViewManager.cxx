@@ -72,6 +72,14 @@ SheetViewID SheetViewManager::getNextSheetView(SheetViewID nID)
 
     return DefaultSheetViewID;
 }
+
+void SheetViewManager::unsyncAllSheetViews()
+{
+    for (auto const& pSheetView : maViews)
+    {
+        pSheetView->unsync();
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

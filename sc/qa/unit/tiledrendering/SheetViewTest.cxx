@@ -260,6 +260,152 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), pDocument->GetTableCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultViewChanged)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Setup views
+    // View 1
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // View 2
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+
+    // View 3
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView3;
+    ScTabViewShell* pTabView3 = aView3.getTabViewShell();
+
+    // Create a new sheet view for view 1
+    SfxLokHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a new sheet view for view 3
+    SfxLokHelper::setView(aView3.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check AutoFilter values for each view
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView1->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView1->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
+
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 4));
+
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView3->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView3->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView3->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView3->GetCurrentString(0, 4));
+
+    // Switch to View2
+    SfxLokHelper::setView(aView2.getViewID());
+    Scheduler::ProcessEventsToIdle();
+
+    // Sheet view must be present
+    auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+
+    auto pSheetView1 = pSheetViewManager->get(0);
+    CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
+    auto pSheetView2 = pSheetViewManager->get(1);
+    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
+
+    // Sort, which will unsync sheet views
+    pTabView2->SetCursor(0, 0);
+    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
+    CPPUNIT_ASSERT_EQUAL(false, pSheetView2->isSynced());
+}
+
+CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetViewChanged)
+{
+    // Create two views, and leave the second one current.
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    ScDocument* pDocument = pModelObj->GetDocument();
+
+    // Setup views
+    // View 1
+    ScTestViewCallback aView1;
+    ScTabViewShell* pTabView1 = aView1.getTabViewShell();
+
+    // View 2
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView2;
+    ScTabViewShell* pTabView2 = aView2.getTabViewShell();
+
+    // View 3
+    SfxLokHelper::createView();
+    Scheduler::ProcessEventsToIdle();
+    ScTestViewCallback aView3;
+    ScTabViewShell* pTabView3 = aView3.getTabViewShell();
+
+    // Create a new sheet view for view 1
+    SfxLokHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Create a new sheet view for view 3
+    SfxLokHelper::setView(aView3.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:NewSheetView"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Check AutoFilter values for each view
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView1->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView1->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView1->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView1->GetCurrentString(0, 4));
+
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView2->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView2->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView2->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView2->GetCurrentString(0, 4));
+
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pTabView3->GetCurrentString(0, 1));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pTabView3->GetCurrentString(0, 2));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pTabView3->GetCurrentString(0, 3));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pTabView3->GetCurrentString(0, 4));
+
+    // Sheet view must be present
+    auto pSheetViewManager = pDocument->GetSheetViewManager(SCTAB(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pSheetViewManager->getSheetViews().size());
+
+    auto pSheetView1 = pSheetViewManager->get(0);
+    CPPUNIT_ASSERT_EQUAL(true, pSheetView1->isSynced());
+
+    auto pSheetView2 = pSheetViewManager->get(1);
+    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
+
+    // Sort, which will unsync sheet views
+    SfxLokHelper::setView(aView1.getViewID());
+    Scheduler::ProcessEventsToIdle();
+    pTabView1->SetCursor(0, 0);
+    dispatchCommand(mxComponent, u".uno:SortDescending"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(false, pSheetView1->isSynced());
+    CPPUNIT_ASSERT_EQUAL(true, pSheetView2->isSynced());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
