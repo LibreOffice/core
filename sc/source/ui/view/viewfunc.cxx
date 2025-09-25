@@ -78,6 +78,7 @@
 #include <stringutil.hxx>
 #include <SparklineList.hxx>
 #include <SheetViewManager.hxx>
+#include <SheetViewOperationsTester.hxx>
 
 #include <memory>
 
@@ -132,6 +133,12 @@ ScViewFunc::ScViewFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell
 
 ScViewFunc::~ScViewFunc()
 {
+}
+
+bool ScViewFunc::CheckSheetViewProtection(sc::Operation eOperation)
+{
+    sc::SheetViewOperationsTester aSheetViewTester(&GetViewData());
+    return aSheetViewTester.check(eOperation);
 }
 
 namespace {
@@ -783,6 +790,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDocFunc &rFunc = GetViewData().GetDocFunc();
     std::shared_ptr<ScDocShellModificator> xModificator = std::make_shared<ScDocShellModificator>(*pDocSh);
 
+    if (!CheckSheetViewProtection(sc::Operation::EnterData))
+        return;
+
     ScEditableTester aTester = ScEditableTester::CreateAndTestSelectedBlock(rDoc, nCol, nRow, nCol, nRow, aMark);
     if (!aTester.IsEditable())
     {
@@ -892,6 +902,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     bool bRecord = rDoc.IsUndoEnabled();
 
     ScDocShellModificator aModificator( *pDocSh );
+
+    if (!CheckSheetViewProtection(sc::Operation::EnterData))
+        return;
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, nCol, nRow, nCol, nRow);
     if (aTester.IsEditable())

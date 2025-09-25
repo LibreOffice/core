@@ -39,6 +39,10 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace svx {
     class ODataAccessDescriptor;
 }
+namespace sc
+{
+    enum class Operation;
+}
 
 class ScDBDocFunc
 {
@@ -46,6 +50,7 @@ friend class ScDBFunc;
 
 private:
     ScDocShell&     rDocShell;
+    static bool CheckSheetViewProtection(sc::Operation eOperation);
 
 public:
                     ScDBDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}

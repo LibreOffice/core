@@ -48,6 +48,7 @@ class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
 class ScRangeName;
+class ScViewData;
 
 enum class TransliterationFlags;
 enum class CreateNameFlags;
@@ -57,6 +58,7 @@ namespace sc
     class SparklineAttributes;
     class SparklineGroup;
     class Sparkline;
+    enum class Operation;
 }
 namespace tools
 {
@@ -66,6 +68,7 @@ namespace tools
 class ScDocFunc
 {
     ScDocShell&     rDocShell;
+    static bool CheckSheetViewProtection(sc::Operation eOperation);
 
 protected:
     bool            AdjustRowHeight( const ScRange& rRange, bool bPaint, bool bApi );

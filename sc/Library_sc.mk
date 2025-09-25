@@ -458,6 +458,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/docshell/pagedata \
     sc/source/ui/docshell/pntlock \
     sc/source/ui/docshell/servobj \
+    sc/source/ui/docshell/SheetViewOperationsTester \
     sc/source/ui/docshell/sizedev \
     sc/source/ui/docshell/tablink \
     sc/source/ui/drawfunc/chartsh \

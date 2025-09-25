@@ -11,6 +11,7 @@
 #include "SheetViewTypes.hxx"
 #include "SheetView.hxx"
 #include "types.hxx"
+#include "scdllapi.h"
 
 #include <o3tl/safeint.hxx>
 #include <vector>
@@ -21,7 +22,7 @@ class ScTable;
 namespace sc
 {
 /** Manager and the holder of the sheet views for a sheet. */
-class SheetViewManager
+class SC_DLLPUBLIC SheetViewManager
 {
 private:
     std::vector<std::shared_ptr<SheetView>> maViews;
@@ -51,6 +52,8 @@ public:
 
     /** Calculate the next sheet view ID from the current ID. */
     SheetViewID getNextSheetView(SheetViewID nID);
+
+    void unsyncAllSheetViews();
 };
 }
 
