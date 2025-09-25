@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -97,6 +98,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
     CPPUNIT_ASSERT(!xObject.is());
 }
 
+#if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
 {
     // Explicitly disable Word->Writer mapping for this test.
@@ -128,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
     // so silently still loading the data into Writer would be bad.
     CPPUNIT_ASSERT(!xObject.is());
 }
-
+#endif
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

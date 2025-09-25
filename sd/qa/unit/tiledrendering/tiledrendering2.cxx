@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_poppler.h>
 #include <sdtiledrenderingtest.hxx>
 
 #include <sfx2/sidebar/Sidebar.hxx>
@@ -45,6 +46,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
+#if ENABLE_PDFIMPORT
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
 {
     // Given a PDF to be signed:
@@ -111,6 +113,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     // Signature line is not selected after finishing signing:
     CPPUNIT_ASSERT(!pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
 {

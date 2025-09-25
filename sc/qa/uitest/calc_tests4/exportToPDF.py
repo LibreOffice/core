@@ -21,6 +21,10 @@ class exportToPDF(UITestCase):
 
     def test_checkDefaultValues(self):
 
+        # test does not work with --disable-pdfimport config option
+        if os.getenv('ENABLE_PDFIMPORT') != 'TRUE':
+            return
+
         with TemporaryDirectory() as tempdir:
             xFilePath = os.path.join(tempdir, 'exportToPDFFromCalc-tmp.pdf')
 
