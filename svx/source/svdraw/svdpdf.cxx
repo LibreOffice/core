@@ -73,6 +73,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
+#include <unicode/normalizer2.h>
 
 using namespace com::sun::star;
 
@@ -1062,6 +1063,40 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     return true;
 }
 
+static OString decomposeLegacyUnicodeLigature(UChar32 cUnicode)
+{
+    UErrorCode eCode(U_ZERO_ERROR);
+
+    // Put in any legacy unicode ligature decompositions, which we detect as U_DT_COMPAT and
+    // a multi-character decomposition.
+    UDecompositionType decompType = static_cast<UDecompositionType>(
+        u_getIntPropertyValue(cUnicode, UCHAR_DECOMPOSITION_TYPE));
+    if (decompType == UDecompositionType::U_DT_COMPAT)
+    {
+        const icu::Normalizer2* pInstance = icu::Normalizer2::getNFKDInstance(eCode);
+
+        if (pInstance && eCode == U_ZERO_ERROR)
+        {
+            icu::UnicodeString sDecomposed;
+            pInstance->getRawDecomposition(cUnicode, sDecomposed);
+            if (sDecomposed.length() > 1)
+            {
+                OStringBuffer aBuffer;
+                for (int32_t i = 0, nLen = sDecomposed.length(); i < nLen; ++i)
+                {
+                    OString sCodePoint = OString::number(sDecomposed[i], 16);
+                    for (sal_Int32 j = sCodePoint.getLength(); j < 4; ++j)
+                        aBuffer.append('0');
+                    aBuffer.append(sCodePoint);
+                }
+                return aBuffer.toString();
+            }
+        }
+    }
+
+    return OString();
+}
+
 const char cmapprefix[] = "%!PS-Adobe-3.0 Resource-CMap\n"
                           "/WMode 0 def\n"
                           "\n"
@@ -1134,6 +1169,8 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
             sal_Int32 nEnd = charline.indexOf('>', 1);
             assert(charline[nEnd] == '>');
             sal_Int32 nGlyphIndex = o3tl::toInt32(charline.subView(1, nEnd - 1), 16);
+            if (bNameKeyed)
+                nGlyphIndex = nameIndexToGlyph[nGlyphIndex];
             OString sChars(o3tl::trim(charline.subView(nEnd + 1)));
             assert(sChars[0] == '<' && sChars[sChars.getLength() - 1] == '>');
             OString sContents = sChars.copy(1, sChars.getLength() - 2);
@@ -1141,8 +1178,13 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
             sal_Int32 nCharsPerCode = sContents.getLength() / 4;
             if (nCharsPerCode > 1)
                 ligatureGlyphToChars[nGlyphIndex] = sContents;
-            if (bNameKeyed)
-                nGlyphIndex = nameIndexToGlyph[nGlyphIndex];
+            else
+            {
+                OString sLegacy
+                    = decomposeLegacyUnicodeLigature(static_cast<UChar32>(sContents.toUInt32(16)));
+                if (!sLegacy.isEmpty())
+                    ligatureGlyphToChars[nGlyphIndex] = sLegacy;
+            }
             OString cidcharline = sChars + " " + OString::number(nGlyphIndex);
             glyphs.push_back(nGlyphIndex);
             rSubSetInfo.aComponents.back().glyphToChars[nGlyphIndex] = sContents;
@@ -1292,6 +1334,13 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
                 sal_Int32 nCharsPerCode = sCharContents.getLength() / 4;
                 if (nCharsPerCode > 1)
                     ligatureGlyphToChars[glyph] = sCharContents;
+                else
+                {
+                    OString sLegacy = decomposeLegacyUnicodeLigature(
+                        static_cast<UChar32>(sCharContents.toUInt32(16)));
+                    if (!sLegacy.isEmpty())
+                        ligatureGlyphToChars[glyph] = sLegacy;
+                }
 
                 charsToGlyph[entry.second] = glyph;
                 mergedCMap.WriteLine(cidcharline);
