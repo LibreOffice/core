@@ -232,6 +232,10 @@ void RustProducer::generateStructImplementation(
 
     generateStructConstructor(file, externFunctionPrefix);
     generateStructFromPtr(file, externFunctionPrefix);
+
+    // Generate as_ptr method
+    generateStructAsPtr(file);
+
     generateStructAccessors(file, entity, externFunctionPrefix);
 
     file.endBlock();
@@ -305,6 +309,21 @@ void RustProducer::generateStructFromPtr(RustFile& file, std::string_view extern
         .endBlock();
 }
 
+void RustProducer::generateStructAsPtr(RustFile& file)
+{
+    file.beginLine()
+        .append("")
+        .endLine()
+        .beginLine()
+        .append("pub fn as_ptr(&self) -> *mut c_void")
+        .endLine()
+        .beginBlock()
+        .beginLine()
+        .append("self.ptr")
+        .endLine()
+        .endBlock();
+}
+
 void RustProducer::generateStructAccessors(
     RustFile& file, const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
     std::string_view externFunctionPrefix)
@@ -313,58 +332,139 @@ void RustProducer::generateStructAccessors(
     for (const auto& member : entity->getDirectMembers())
     {
         OString memberName = u2b(member.name); // Use original case, not snake_case
+        std::u16string_view memberType = member.type;
 
-        generateStructMemberGetter(file, memberName, externFunctionPrefix);
-        generateStructMemberSetter(file, memberName, externFunctionPrefix);
+        generateStructMemberGetter(file, memberName, memberType, externFunctionPrefix);
+        generateStructMemberSetter(file, memberName, memberType, externFunctionPrefix);
     }
 }
 
 void RustProducer::generateStructMemberGetter(RustFile& file, std::string_view memberName,
+                                              std::u16string_view memberType,
                                               std::string_view externFunctionPrefix)
 {
+    OString returnType = getRustStructGetterReturnType(memberType);
+
     file.beginLine()
         .append("")
         .endLine()
         .beginLine()
         .append("pub fn get_")
         .append(memberName)
-        .append("(&self) -> *mut c_void {")
+        .append("(&self) -> ")
+        .append(returnType)
+        .append(" {")
         .endLine()
         .extraIndent()
-        .beginLine()
-        .append("unsafe { ")
-        .append(externFunctionPrefix)
-        .append("_get_")
-        .append(memberName)
-        .append("(self.ptr) }")
-        .endLine()
-        .beginLine()
-        .append("}")
-        .endLine();
+        .beginLine();
+
+    // Handle conversion based on type
+    if (memberType == u"string")
+    {
+        // String type - convert from FFI to high-level type
+        file.append("unsafe { crate::core::OUString::from_raw(")
+            .append(externFunctionPrefix)
+            .append("_get_")
+            .append(memberName)
+            .append("(self.ptr)) }");
+    }
+    else if (memberType == u"any")
+    {
+        // Any type - convert from FFI to high-level type
+        file.append("unsafe { crate::core::Any::from_raw(std::ptr::read(")
+            .append(externFunctionPrefix)
+            .append("_get_")
+            .append(memberName)
+            .append("(self.ptr) as *const crate::ffi::uno_any::uno_Any)) }");
+    }
+    else if (memberType == u"boolean" || memberType == u"byte" || memberType == u"short"
+             || memberType == u"unsigned short" || memberType == u"long"
+             || memberType == u"unsigned long" || memberType == u"hyper"
+             || memberType == u"unsigned hyper" || memberType == u"float"
+             || memberType == u"double")
+    {
+        // Primitive types - dereference the pointer returned from FFI
+        file.append("unsafe { *")
+            .append(externFunctionPrefix)
+            .append("_get_")
+            .append(memberName)
+            .append("(self.ptr) }");
+    }
+    else
+    {
+        // Other types - return raw pointer
+        file.append("unsafe { ")
+            .append(externFunctionPrefix)
+            .append("_get_")
+            .append(memberName)
+            .append("(self.ptr) }");
+    }
+
+    file.endLine().beginLine().append("}").endLine();
 }
 
 void RustProducer::generateStructMemberSetter(RustFile& file, std::string_view memberName,
+                                              std::u16string_view memberType,
                                               std::string_view externFunctionPrefix)
 {
+    OString parameterType = getRustStructSetterParameterType(memberType);
+
     file.beginLine()
         .append("")
         .endLine()
         .beginLine()
         .append("pub fn set_")
         .append(memberName)
-        .append("(&mut self, value: *mut c_void) {")
+        .append("(&mut self, value: ")
+        .append(parameterType)
+        .append(") {")
         .endLine()
         .extraIndent()
-        .beginLine()
-        .append("unsafe { ")
-        .append(externFunctionPrefix)
-        .append("_set_")
-        .append(memberName)
-        .append("(self.ptr, value) }")
-        .endLine()
-        .beginLine()
-        .append("}")
-        .endLine();
+        .beginLine();
+
+    // Handle conversion based on type
+    if (memberType == u"string")
+    {
+        // String type - convert from high-level to FFI type
+        file.append("unsafe { ")
+            .append(externFunctionPrefix)
+            .append("_set_")
+            .append(memberName)
+            .append("(self.ptr, value.as_ptr()) }");
+    }
+    else if (memberType == u"any")
+    {
+        // Any type - convert from high-level to FFI type
+        file.append("unsafe { ")
+            .append(externFunctionPrefix)
+            .append("_set_")
+            .append(memberName)
+            .append("(self.ptr, value.as_ptr()) }");
+    }
+    else if (memberType == u"boolean" || memberType == u"byte" || memberType == u"short"
+             || memberType == u"unsigned short" || memberType == u"long"
+             || memberType == u"unsigned long" || memberType == u"hyper"
+             || memberType == u"unsigned hyper" || memberType == u"float"
+             || memberType == u"double")
+    {
+        // Primitive types - pass by value directly
+        file.append("unsafe { ")
+            .append(externFunctionPrefix)
+            .append("_set_")
+            .append(memberName)
+            .append("(self.ptr, value) }");
+    }
+    else
+    {
+        // Other types - pass raw pointer through
+        file.append("unsafe { ")
+            .append(externFunctionPrefix)
+            .append("_set_")
+            .append(memberName)
+            .append("(self.ptr, value) }");
+    }
+
+    file.endLine().beginLine().append("}").endLine();
 }
 
 void RustProducer::generateStructDropTrait(
@@ -453,19 +553,26 @@ void RustProducer::generateStructMemberExternDeclarations(
     for (const auto& member : entity->getDirectMembers())
     {
         OString memberName = u2b(member.name); // Use original case, not snake_case
+        OString getterReturnType = getRustStructExternGetterReturnType(member.type);
+        OString setterParamType = getRustStructExternSetterParameterType(member.type);
+
         file.beginLine()
             .append("fn ")
             .append(externFunctionPrefix)
             .append("_get_")
             .append(memberName)
-            .append("(ptr: *mut c_void) -> *mut c_void;")
+            .append("(ptr: *mut c_void) -> ")
+            .append(getterReturnType)
+            .append(";")
             .endLine()
             .beginLine()
             .append("fn ")
             .append(externFunctionPrefix)
             .append("_set_")
             .append(memberName)
-            .append("(ptr: *mut c_void, value: *mut c_void);")
+            .append("(ptr: *mut c_void, value: ")
+            .append(setterParamType)
+            .append(");")
             .endLine();
     }
 }
@@ -691,10 +798,13 @@ void RustProducer::generateInterfaceMethodWrappers(
             .append(rustMethodName)
             .append("(&self");
 
-        // All parameters are opaque void pointers
+        // Parameters with typed support for primitives
         for (const auto& param : method.parameters)
         {
-            file.append(", ").append(param.name).append(": *mut c_void");
+            file.append(", ")
+                .append(param.name)
+                .append(": ")
+                .append(getRustParameterType(param.type, param.direction));
         }
 
         file.append(") -> ")
@@ -716,7 +826,8 @@ void RustProducer::generateInterfaceMethodWrappers(
 
             for (const auto& param : method.parameters)
             {
-                file.append(", ").append(param.name);
+                file.append(", ").append(
+                    convertRustParameterForFFICall(param.type, u2b(param.name), param.direction));
             }
 
             file.append(") };").endLine();
@@ -733,7 +844,8 @@ void RustProducer::generateInterfaceMethodWrappers(
 
             for (const auto& param : method.parameters)
             {
-                file.append(", ").append(param.name);
+                file.append(", ").append(
+                    convertRustParameterForFFICall(param.type, u2b(param.name), param.direction));
             }
 
             file.append(") };").endLine();
@@ -945,7 +1057,10 @@ void RustProducer::generateInterfaceExternDeclarations(
 
         for (const auto& param : method.parameters)
         {
-            file.append(", ").append(param.name).append(": *mut c_void");
+            file.append(", ")
+                .append(param.name)
+                .append(": ")
+                .append(getRustExternParameterType(param.type, param.direction));
         }
 
         file.append(") -> ");
@@ -1350,6 +1465,246 @@ OString RustProducer::getRustReturnType(std::u16string_view unoType) const
     return getRustWrapperTypeName(unoType);
 }
 
+OString RustProducer::getRustParameterType(
+    std::u16string_view unoType,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const
+{
+    // Handle string types with typed parameters (high-level Rust API)
+    if (unoType == u"string")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input string: take high-level OUString in public API
+            return "crate::core::OUString"_ostr;
+        }
+        else
+        {
+            // Input/output string: still use raw pointer for output parameters
+            return "*mut *mut crate::ffi::rtl_string::rtl_uString"_ostr;
+        }
+    }
+
+    // Handle any types with typed parameters (high-level Rust API)
+    if (unoType == u"any")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input any: take high-level Any in public API
+            return "crate::core::Any"_ostr;
+        }
+        else
+        {
+            // Input/output any: still use raw pointer for output parameters
+            return "*mut *mut crate::ffi::uno_any::uno_Any"_ostr;
+        }
+    }
+
+    // Handle struct types with typed parameters (high-level Rust API)
+    if (isUnoStruct(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input struct: take high-level generated struct in public API
+            OString rustType = u2b(unoType);
+            if (rustType.indexOf('.') != -1)
+            {
+                // Convert dots to :: for module path
+                OString modulePath = rustType.replaceAll("."_ostr, "::"_ostr);
+
+                // Extract simple type name
+                sal_Int32 lastDot = rustType.lastIndexOf('.');
+                if (lastDot != -1)
+                {
+                    OString simpleName = rustType.copy(lastDot + 1);
+                    return "crate::generated::rustmaker::" + modulePath + "::" + simpleName;
+                }
+            }
+            // Fallback for simple struct names without namespace
+            return "crate::generated::rustmaker::" + rustType;
+        }
+        else
+        {
+            // Input/output struct: still use raw pointer for output parameters
+            return "*mut c_void"_ostr;
+        }
+    }
+
+    // Handle interface types with typed parameters (high-level Rust API)
+    if (isUnoInterface(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input interface: take high-level generated interface in public API
+            OString rustType = u2b(unoType);
+            if (rustType.indexOf('.') != -1)
+            {
+                // Convert dots to :: for module path
+                OString modulePath = rustType.replaceAll("."_ostr, "::"_ostr);
+
+                // Extract simple type name
+                sal_Int32 lastDot = rustType.lastIndexOf('.');
+                if (lastDot != -1)
+                {
+                    OString simpleName = rustType.copy(lastDot + 1);
+                    return "crate::generated::rustmaker::" + modulePath + "::" + simpleName;
+                }
+            }
+            // Fallback for simple interface names without namespace
+            return "crate::generated::rustmaker::" + rustType;
+        }
+        else
+        {
+            // Input/output interface: still use raw pointer for output parameters
+            return "*mut c_void"_ostr;
+        }
+    }
+
+    // Only use typed parameters for basic primitive types (matching CppProducer approach)
+    // This ensures we don't break existing logic for complex types
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        // Get the Rust primitive type
+        OString rustPrimitiveType = getRustWrapperTypeName(unoType);
+        if (!rustPrimitiveType.isEmpty())
+        {
+            bool isInputOnly
+                = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+            if (isInputOnly)
+            {
+                // Input parameters: pass by value (u8 for boolean, i32 for long, etc.)
+                return rustPrimitiveType;
+            }
+            else
+            {
+                // Input/output parameters: pass by mutable pointer (*mut u8, *mut i32, etc.)
+                return "*mut " + rustPrimitiveType;
+            }
+        }
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    // This maintains compatibility with existing null-checking and casting logic
+    return "*mut c_void"_ostr;
+}
+
+OString RustProducer::getRustExternParameterType(
+    std::u16string_view unoType,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const
+{
+    // Handle string types with C-compatible FFI parameters (different from high-level API)
+    if (unoType == u"string")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input string: pass as C-compatible pointer for FFI
+            return "*const crate::ffi::rtl_string::rtl_uString"_ostr;
+        }
+        else
+        {
+            // Input/output string: pass as mutable pointer for output parameters
+            return "*mut *mut crate::ffi::rtl_string::rtl_uString"_ostr;
+        }
+    }
+
+    // Handle any types with C-compatible FFI parameters (different from high-level API)
+    if (unoType == u"any")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input any: pass as C-compatible pointer for FFI
+            return "*const crate::ffi::uno_any::uno_Any"_ostr;
+        }
+        else
+        {
+            // Input/output any: pass as mutable pointer for output parameters
+            return "*mut *mut crate::ffi::uno_any::uno_Any"_ostr;
+        }
+    }
+
+    // Handle struct types with C-compatible FFI parameters (different from high-level API)
+    if (isUnoStruct(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input struct: pass as C-compatible pointer for FFI (void* for now, can be refined later)
+            return "*mut c_void"_ostr;
+        }
+        else
+        {
+            // Input/output struct: still use raw pointer for output parameters
+            return "*mut c_void"_ostr;
+        }
+    }
+
+    // Handle interface types with C-compatible FFI parameters (different from high-level API)
+    if (isUnoInterface(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input interface: pass as C-compatible pointer for FFI (void* for interfaces)
+            return "*mut c_void"_ostr;
+        }
+        else
+        {
+            // Input/output interface: still use raw pointer for output parameters
+            return "*mut c_void"_ostr;
+        }
+    }
+
+    // Handle enums - revert to void* to avoid nullptr comparison issues
+    if (isUnoEnum(unoType))
+    {
+        return "*mut c_void"_ostr;
+    }
+
+    // For primitive types, use the same logic as high-level API (primitives are the same)
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        // Get the Rust primitive type
+        OString rustPrimitiveType = getRustWrapperTypeName(unoType);
+        if (!rustPrimitiveType.isEmpty())
+        {
+            bool isInputOnly
+                = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+            if (isInputOnly)
+            {
+                // Input parameters: pass by value (u8 for boolean, i32 for long, etc.)
+                return rustPrimitiveType;
+            }
+            else
+            {
+                // Input/output parameters: pass by mutable pointer (*mut u8, *mut i32, etc.)
+                return "*mut " + rustPrimitiveType;
+            }
+        }
+    }
+
+    // For all other types (typedefs, structs, interfaces, sequences), use void*
+    return "*mut c_void"_ostr;
+}
+
 bool RustProducer::isUnoInterface(std::u16string_view typeName) const
 {
     rtl::Reference<unoidl::Entity> entity;
@@ -1372,6 +1727,209 @@ bool RustProducer::isUnoEnum(std::u16string_view typeName) const
     rtl::Reference<unoidl::MapCursor> cursor;
     codemaker::UnoType::Sort sort = m_typeManager->getSort(OUString(typeName), &entity, &cursor);
     return sort == codemaker::UnoType::Sort::Enum;
+}
+
+OString RustProducer::convertRustParameterForFFICall(
+    std::u16string_view unoType, std::string_view paramName,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const
+{
+    // Handle string types with automatic conversion
+    if (unoType == u"string")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input string: convert OUString to rtl_uString* using .as_ptr()
+            return OString(paramName) + ".as_ptr()";
+        }
+        else
+        {
+            // Input/output string: pass through as pointer (already proper type)
+            return OString(paramName);
+        }
+    }
+
+    // Handle any types with automatic conversion
+    if (unoType == u"any")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input any: convert Any to uno_Any* using .as_ptr()
+            return OString(paramName) + ".as_ptr()";
+        }
+        else
+        {
+            // Input/output any: pass through as pointer (already proper type)
+            return OString(paramName);
+        }
+    }
+
+    // Handle struct types with automatic conversion
+    if (isUnoStruct(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input struct: convert generated struct to void* using .as_ptr()
+            return OString(paramName) + ".as_ptr()";
+        }
+        else
+        {
+            // Input/output struct: pass through as pointer (already proper type)
+            return OString(paramName);
+        }
+    }
+
+    // Handle interface types with automatic conversion
+    if (isUnoInterface(unoType))
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input interface: convert generated interface to void* using .as_ptr()
+            return OString(paramName) + ".as_ptr()";
+        }
+        else
+        {
+            // Input/output interface: pass through as pointer (already proper type)
+            return OString(paramName);
+        }
+    }
+
+    // Handle primitive types - pass through directly (no conversion needed)
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        // Primitive types already match FFI expectations - pass through directly
+        return OString(paramName);
+    }
+
+    // For all other types, pass through without conversion (fallback)
+    return OString(paramName);
+}
+
+OString RustProducer::getRustStructGetterReturnType(std::u16string_view unoType) const
+{
+    // Struct getters return the actual type (for direct access, not modification)
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "crate::core::OUString"_ostr; // Return high-level string type
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "crate::core::Any"_ostr; // Return high-level Any type
+    }
+
+    // Handle primitive types - return the Rust primitive directly
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        return getRustWrapperTypeName(unoType); // Return native Rust type (u8, i32, f64, etc.)
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    return "*mut c_void"_ostr;
+}
+
+OString RustProducer::getRustStructSetterParameterType(std::u16string_view unoType) const
+{
+    // Struct setters take the value to set
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "crate::core::OUString"_ostr; // Take high-level string type
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "crate::core::Any"_ostr; // Take high-level Any type
+    }
+
+    // Handle primitive types - take by value for direct assignment
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        return getRustWrapperTypeName(unoType); // Take native Rust type (u8, i32, f64, etc.)
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    return "*mut c_void"_ostr;
+}
+
+OString RustProducer::getRustStructExternGetterReturnType(std::u16string_view unoType) const
+{
+    // Struct extern getter return types (FFI-compatible)
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "*mut crate::ffi::rtl_string::rtl_uString"_ostr; // Return mutable pointer for from_raw compatibility
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "*const crate::ffi::uno_any::uno_Any"_ostr; // Return C-compatible Any pointer
+    }
+
+    // Handle primitive types - return pointer to primitive for FFI
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        return "*const " + getRustWrapperTypeName(unoType); // Return pointer to primitive type
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    return "*mut c_void"_ostr;
+}
+
+OString RustProducer::getRustStructExternSetterParameterType(std::u16string_view unoType) const
+{
+    // Struct extern setter parameter types (FFI-compatible)
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "*const crate::ffi::rtl_string::rtl_uString"_ostr; // Take const pointer for setter input (this is fine)
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "*const crate::ffi::uno_any::uno_Any"_ostr; // Take C-compatible Any pointer
+    }
+
+    // Handle primitive types - take by value for FFI (matches C++ side)
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        return getRustWrapperTypeName(
+            unoType); // Take primitive type by value (matches C++ approach)
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    return "*mut c_void"_ostr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

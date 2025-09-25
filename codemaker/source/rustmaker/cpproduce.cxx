@@ -618,7 +618,9 @@ void CppProducer::generateStructHeader(std::string_view name,
             .append(")")
             .endLine()
             .beginLine()
-            .append("SAL_DLLPUBLIC_EXPORT void* ")
+            .append("SAL_DLLPUBLIC_EXPORT ")
+            .append(getStructGetterReturnType(member.type))
+            .append(" ")
             .append(functionPrefix)
             .append("_get_")
             .append(member.name)
@@ -641,7 +643,9 @@ void CppProducer::generateStructHeader(std::string_view name,
             .append(member.name)
             .append("(")
             .append(handleTypeName)
-            .append(" handle, void* value);")
+            .append(" handle, ")
+            .append(getStructSetterParameterType(member.type))
+            .append(" value);")
             .endLine();
     }
     file.endBlock().append("// extern \"C\"").endLine();
@@ -963,7 +967,9 @@ void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view 
 {
     // Generate getter implementation
     file.beginLine()
-        .append("SAL_DLLPUBLIC_EXPORT void* ")
+        .append("SAL_DLLPUBLIC_EXPORT ")
+        .append(getStructGetterReturnType(member.type))
+        .append(" ")
         .append(functionPrefix)
         .append("_get_")
         .append(member.name)
@@ -978,12 +984,35 @@ void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view 
         .append(className)
         .append("*>(handle);")
         .endLine()
-        .beginLine()
-        .append("return &(obj->")
-        .append(member.name)
-        .append(");")
-        .endLine()
-        .endBlock();
+        .beginLine();
+
+    // Handle return value conversion based on type
+    if (member.type == u"string")
+    {
+        // For string types, return pointer to the OUString object
+        file.append("return &(obj->").append(member.name).append(");");
+    }
+    else if (member.type == u"any")
+    {
+        // For any types, return pointer to the Any
+        file.append("return &(obj->").append(member.name).append(");");
+    }
+    else if (member.type == u"boolean" || member.type == u"byte" || member.type == u"short"
+             || member.type == u"unsigned short" || member.type == u"long"
+             || member.type == u"unsigned long" || member.type == u"hyper"
+             || member.type == u"unsigned hyper" || member.type == u"float"
+             || member.type == u"double")
+    {
+        // For primitive types, return pointer to the member for direct access
+        file.append("return &(obj->").append(member.name).append(");");
+    }
+    else
+    {
+        // For other types, return pointer to member
+        file.append("return &(obj->").append(member.name).append(");");
+    }
+
+    file.endLine().endBlock();
 
     // Generate setter implementation
     file.beginLine()
@@ -993,7 +1022,9 @@ void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view 
         .append(member.name)
         .append("(")
         .append(handleTypeName)
-        .append(" handle, void* value)")
+        .append(" handle, ")
+        .append(getStructSetterParameterType(member.type))
+        .append(" value)")
         .endLine()
         .beginBlock()
         .beginLine()
@@ -1006,31 +1037,46 @@ void CppProducer::generateStructMemberAccessors(CppFile& file, std::string_view 
         .append("obj->")
         .append(member.name);
 
-    // Check if this is a UNO interface type by checking the UNO type string
+    // Handle assignment based on parameter type
     OUString unoType = member.type;
-    SAL_INFO("codemaker", "Struct member " << member.name << " UNO type: " << unoType);
 
-    // UNO interface types start with "com.sun.star" and end with an interface name (typically starting with "X")
-    // Examples: "com.sun.star.uno.XInterface", "com.sun.star.text.XText"
-    bool isInterfaceType = (unoType.startsWith("com.sun.star.") && (unoType.lastIndexOf('.') != -1)
-                            && (unoType.subView(unoType.lastIndexOf('.') + 1).starts_with('X')));
-
-    if (isInterfaceType)
+    // Check if we're using typed primitive parameters (passed by value)
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
     {
-        SAL_INFO("codemaker", "Detected UNO interface type, using pointer assignment");
-        // For interface types, assign the pointer directly without dereferencing
-        // The C++ struct expects Reference<Interface>, but we assign the raw interface pointer
-        file.append(" = reinterpret_cast<")
-            .append(convertUnoTypeToCpp(unoType))
-            .append("*>(value);");
+        // For primitive types with typed parameters, assign directly (no dereferencing)
+        file.append(" = value;");
+    }
+    else if (unoType == u"string")
+    {
+        // For string types, dereference the pointer to OUString
+        file.append(" = *reinterpret_cast<const OUString*>(value);");
+    }
+    else if (unoType == u"any")
+    {
+        // For any types with typed parameters, dereference the uno_Any*
+        file.append(" = *reinterpret_cast<const Any*>(value);");
     }
     else
     {
-        SAL_INFO("codemaker", "Non-interface type, using dereferenced assignment");
-        // For non-interface types, dereference the pointer as before
-        file.append(" = *reinterpret_cast<const ")
-            .append(convertUnoTypeToCpp(unoType))
-            .append("*>(value);");
+        // For other types (interfaces, structs, enums), use original logic with void*
+        // Check if this is a UNO interface type using proper TypeManager classification
+        if (isUnoInterface(unoType))
+        {
+            // For interface types, assign the pointer directly without dereferencing
+            file.append(" = reinterpret_cast<")
+                .append(convertUnoTypeToCpp(unoType))
+                .append("*>(value);");
+        }
+        else
+        {
+            // For non-interface types, dereference the pointer
+            file.append(" = *reinterpret_cast<const ")
+                .append(convertUnoTypeToCpp(unoType))
+                .append("*>(value);");
+        }
     }
     file.endLine().endBlock().beginLine().append("").endLine();
 }
@@ -1435,10 +1481,13 @@ void CppProducer::generateInterfaceHeader(std::string_view name,
             .append(handleTypeName)
             .append(" handle");
 
-        // Add parameters
+        // Add typed parameters instead of void*
         for (const auto& param : method.parameters)
         {
-            file.append(", void* ").append(param.name);
+            file.append(", ")
+                .append(getTypedParameterType(param.type, param.direction))
+                .append(" ")
+                .append(param.name);
         }
 
         file.append(");");
@@ -1677,10 +1726,13 @@ void CppProducer::generateSingleInterfaceMethod(CppFile& file, std::string_view 
         .append(handleTypeName)
         .append(" handle");
 
-    // Add parameters
+    // Add typed parameters instead of void*
     for (const auto& param : method.parameters)
     {
-        file.append(", void* ").append(param.name);
+        file.append(", ")
+            .append(getTypedParameterType(param.type, param.direction))
+            .append(" ")
+            .append(param.name);
     }
 
     file.append(")").endLine().beginBlock();
@@ -1850,70 +1902,62 @@ void CppProducer::generateActualMethodCall(CppFile& file,
         {
             if (isInputOnly)
             {
-                // Input parameter: convert rtl_uString* to OUString object
-                file.append("OUString(static_cast<rtl_uString*>(").append(param.name).append("))");
+                // Input parameter: direct rtl_uString* to OUString conversion (no casting needed)
+                file.append("OUString(").append(param.name).append(")");
             }
             else
             {
-                // Output parameter: needs OUString reference for binding
-                file.append("*reinterpret_cast<OUString*>(").append(param.name).append(")");
+                // Output parameter: rtl_uString** needs dereferencing to OUString reference
+                file.append("*reinterpret_cast<OUString*>(*").append(param.name).append(")");
             }
         }
         else if (paramType == u"any")
         {
             if (isInputOnly)
+            {
+                // Input parameter: dereference uno_Any* to get Any& (Any inherits from uno_Any)
                 file.append("*reinterpret_cast<const Any*>(").append(param.name).append(")");
+            }
             else
-                file.append("*reinterpret_cast<Any*>(").append(param.name).append(")");
+            {
+                // Output parameter: uno_Any** needs dereferencing to Any reference
+                file.append("*reinterpret_cast<Any*>(*").append(param.name).append(")");
+            }
         }
-        else if (paramType == u"boolean")
+        // Handle all primitive types with typed parameter support
+        else if (paramType == u"boolean" || paramType == u"byte" || paramType == u"short"
+                 || paramType == u"unsigned short" || paramType == u"long"
+                 || paramType == u"unsigned long" || paramType == u"hyper"
+                 || paramType == u"unsigned hyper" || paramType == u"float"
+                 || paramType == u"double")
         {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const sal_Bool*>(").append(param.name).append(")");
+            // Check if this primitive type is using typed parameters
+            OString primitiveType = mapUnoPrimitiveToSal(resolveTypedef(paramType));
+            if (!primitiveType.isEmpty())
+            {
+                // Typed parameter approach - direct value for input, dereference pointer for input/output
+                if (isInputOnly)
+                    file.append(param.name); // Direct value (sal_Bool, sal_Int32, double, etc.)
+                else
+                    file.append("*").append(
+                        param.name); // Dereference pointer (sal_Bool*, sal_Int32*, double*, etc.)
+            }
             else
-                file.append("*reinterpret_cast<sal_Bool*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"byte")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const sal_Int8*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<sal_Int8*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"short")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const sal_Int16*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<sal_Int16*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"long")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const sal_Int32*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<sal_Int32*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"hyper")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const sal_Int64*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<sal_Int64*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"float")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const float*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<float*>(").append(param.name).append(")");
-        }
-        else if (paramType == u"double")
-        {
-            if (isInputOnly)
-                file.append("*reinterpret_cast<const double*>(").append(param.name).append(")");
-            else
-                file.append("*reinterpret_cast<double*>(").append(param.name).append(")");
+            {
+                // Fallback to void* approach (shouldn't happen for primitives, but just in case)
+                if (isInputOnly)
+                    file.append("*reinterpret_cast<const ")
+                        .append(primitiveType)
+                        .append("*>(")
+                        .append(param.name)
+                        .append(")");
+                else
+                    file.append("*reinterpret_cast<")
+                        .append(primitiveType)
+                        .append("*>(")
+                        .append(param.name)
+                        .append(")");
+            }
         }
         else if (paramType == u"type")
         {
@@ -2263,6 +2307,142 @@ OString CppProducer::getCppTypeName(std::u16string_view unoType) const
     }
     else
         return "void*"_ostr; // Default to void* for unknown types
+}
+
+OString CppProducer::getTypedParameterType(
+    std::u16string_view unoType,
+    unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const
+{
+    // Handle string types with typed parameters
+    if (unoType == u"string")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input string: pass as rtl_uString* (no const to avoid casting)
+            return "rtl_uString*"_ostr;
+        }
+        else
+        {
+            // Input/output string: pass as rtl_uString** (modifiable)
+            return "rtl_uString**"_ostr;
+        }
+    }
+
+    // Handle any types with typed parameters
+    if (unoType == u"any")
+    {
+        bool isInputOnly
+            = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+        if (isInputOnly)
+        {
+            // Input any: pass as uno_Any* (no const to avoid casting)
+            return "uno_Any*"_ostr;
+        }
+        else
+        {
+            // Input/output any: pass as uno_Any** (modifiable)
+            return "uno_Any**"_ostr;
+        }
+    }
+
+    // Only use typed parameters for basic primitive types (not typedefs)
+    // This ensures we don't break existing null-checking logic for complex types
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        OString primitiveType = mapUnoPrimitiveToSal(unoType);
+        if (!primitiveType.isEmpty())
+        {
+            bool isInputOnly
+                = (direction == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN);
+            if (isInputOnly)
+            {
+                // Input parameters: pass by value (sal_Bool, sal_Int32, etc.)
+                return primitiveType;
+            }
+            else
+            {
+                // Input/output parameters: pass by pointer (sal_Bool*, sal_Int32*, etc.)
+                return primitiveType + "*";
+            }
+        }
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    // This maintains compatibility with existing null-checking and casting logic
+    return "void*"_ostr;
+}
+
+OString CppProducer::getStructGetterReturnType(std::u16string_view unoType) const
+{
+    // Struct getters return a pointer to the member data (like output parameters)
+    // Use the same logic as getTypedParameterType with direction = OUT
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "void*"_ostr; // Return pointer to string for compatibility
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "uno_Any*"_ostr; // Return pointer to Any for direct access
+    }
+
+    // Handle primitive types
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        OString primitiveType = mapUnoPrimitiveToSal(unoType);
+        if (!primitiveType.isEmpty())
+        {
+            return primitiveType + "*"; // Return pointer to primitive type
+        }
+    }
+
+    // For all other types (typedefs, structs, enums, interfaces, sequences), use void*
+    return "void*"_ostr;
+}
+
+OString CppProducer::getStructSetterParameterType(std::u16string_view unoType) const
+{
+    // Struct setters take the value to set (like input parameters)
+    // Use the same logic as getTypedParameterType with direction = IN
+
+    // Handle string types
+    if (unoType == u"string")
+    {
+        return "rtl_uString*"_ostr; // Take string pointer for compatibility
+    }
+
+    // Handle any types
+    if (unoType == u"any")
+    {
+        return "uno_Any*"_ostr; // Take Any pointer directly
+    }
+
+    // Handle primitive types
+    if (unoType == u"boolean" || unoType == u"byte" || unoType == u"short"
+        || unoType == u"unsigned short" || unoType == u"long" || unoType == u"unsigned long"
+        || unoType == u"hyper" || unoType == u"unsigned hyper" || unoType == u"float"
+        || unoType == u"double")
+    {
+        OString primitiveType = mapUnoPrimitiveToSal(unoType);
+        if (!primitiveType.isEmpty())
+        {
+            return primitiveType; // Take primitive type by value
+        }
+    }
+
+    // For all other types
+    return "void*"_ostr;
 }
 
 OString CppProducer::convertBasicType(const OString& typeName)

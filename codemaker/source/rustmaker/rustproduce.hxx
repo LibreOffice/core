@@ -80,6 +80,22 @@ private:
     static OString getRustTypeName(std::string_view unoName);
     OString getRustWrapperTypeName(std::u16string_view unoType) const;
     OString getRustReturnType(std::u16string_view unoType) const;
+    OString
+    getRustParameterType(std::u16string_view unoType,
+                         unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const;
+    OString getRustExternParameterType(
+        std::u16string_view unoType,
+        unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const;
+
+    // Struct getter/setter type functions
+    OString getRustStructGetterReturnType(std::u16string_view unoType) const;
+    OString getRustStructSetterParameterType(std::u16string_view unoType) const;
+    OString getRustStructExternGetterReturnType(std::u16string_view unoType) const;
+    OString getRustStructExternSetterParameterType(std::u16string_view unoType) const;
+
+    OString convertRustParameterForFFICall(
+        std::u16string_view unoType, std::string_view paramName,
+        unoidl::InterfaceTypeEntity::Method::Parameter::Direction direction) const;
     OString resolveTypedef(std::u16string_view unoType) const;
 
     // Type classification helpers
@@ -100,12 +116,15 @@ private:
                                       const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
     void generateStructConstructor(class RustFile& file, std::string_view externFunctionPrefix);
     void generateStructFromPtr(class RustFile& file, std::string_view externFunctionPrefix);
+    void generateStructAsPtr(class RustFile& file);
     void generateStructAccessors(class RustFile& file,
                                  const rtl::Reference<unoidl::PlainStructTypeEntity>& entity,
                                  std::string_view externFunctionPrefix);
     void generateStructMemberGetter(class RustFile& file, std::string_view memberName,
+                                    std::u16string_view memberType,
                                     std::string_view externFunctionPrefix);
     void generateStructMemberSetter(class RustFile& file, std::string_view memberName,
+                                    std::u16string_view memberType,
                                     std::string_view externFunctionPrefix);
     void generateStructDropTrait(class RustFile& file, std::string_view name,
                                  const rtl::Reference<unoidl::PlainStructTypeEntity>& entity);
