@@ -104,6 +104,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests$(1),\
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     svx/util/svxcore \
+    svx/util/svx \
     svgio/svgio \
     toolkit/util/tk \
     ucb/source/core/ucb1 \

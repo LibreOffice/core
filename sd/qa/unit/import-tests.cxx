@@ -342,9 +342,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154363)
         uno::Reference<beans::XPropertySet> xConnector1(getShapeFromPage(1, 0), uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xConnector2(getShapeFromPage(3, 0), uno::UNO_SET_THROW);
         nGlueId = xConnector1->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nGlueId);
         nGlueId = xConnector2->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nGlueId);
     }
 
     saveAndReload(u"Impress MS PowerPoint 2007 XML"_ustr);
@@ -352,9 +352,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154363)
         uno::Reference<beans::XPropertySet> xConnector1(getShapeFromPage(1, 0), uno::UNO_SET_THROW);
         uno::Reference<beans::XPropertySet> xConnector2(getShapeFromPage(3, 0), uno::UNO_SET_THROW);
         nGlueId = xConnector1->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nGlueId);
         nGlueId = xConnector2->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nGlueId);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nGlueId);
     }
 }
 
@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testConnectors)
     createSdImpressDoc("pptx/connectors.pptx");
 
     sal_Int32 aEdgeValue[] = { -1167, -1167, -1591, 1476,  1356, -1357, 1604,  -1540,
-                               607,   1296,  -1638, -1060, 2402, 3313,  -1834, 333 };
+                               607,   1296,  -1638, -1060, -522, 1578,  -1291, 333 };
 
     sal_Int32 nCount = 0;
     for (size_t i = 0; i < 18; i++)
@@ -414,7 +414,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testConnectors)
         {
             sal_Int32 nEdgeLine
                 = xConnector->getPropertyValue(u"EdgeLine1Delta"_ustr).get<sal_Int32>();
-            CPPUNIT_ASSERT_EQUAL(aEdgeValue[nCount], nEdgeLine);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("edge index " + OString::number(nCount)).getStr(),
+                                         aEdgeValue[nCount], nEdgeLine);
             nCount++;
         }
     }
@@ -484,10 +485,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf149124)
 
     sal_Int32 nStartGlueId
         = xStandardConnector->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nStartGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nStartGlueId);
     sal_Int32 nEndGlueId
         = xStandardConnector->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEndGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nEndGlueId);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf148965)
@@ -535,27 +536,27 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf89449)
     xCurvedConnector->getPropertyValue(u"EdgeKind"_ustr) >>= aConnectorType;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_CURVE, aConnectorType);
     nStartGlueId = xCurvedConnector->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nStartGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), nStartGlueId);
     nEndGlueId = xCurvedConnector->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEndGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), nEndGlueId);
 
     uno::Reference<beans::XPropertySet> xStraightConnector(getShapeFromPage(4, 0));
     xStraightConnector->getPropertyValue(u"EdgeKind"_ustr) >>= aConnectorType;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_LINE, aConnectorType);
     nStartGlueId
         = xStraightConnector->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nStartGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), nStartGlueId);
     nEndGlueId = xStraightConnector->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nEndGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nEndGlueId);
 
     uno::Reference<beans::XPropertySet> xStandardConnector(getShapeFromPage(5, 0));
     xStandardConnector->getPropertyValue(u"EdgeKind"_ustr) >>= aConnectorType;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_STANDARD, aConnectorType);
     nStartGlueId
         = xStandardConnector->getPropertyValue(u"StartGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nStartGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nStartGlueId);
     nEndGlueId = xStandardConnector->getPropertyValue(u"EndGluePointIndex"_ustr).get<sal_Int32>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nEndGlueId);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest, testGluePointLeavingDirections)

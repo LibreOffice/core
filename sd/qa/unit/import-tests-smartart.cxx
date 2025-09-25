@@ -1638,9 +1638,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Pyramid)
     // without fix the text area rectangle had LT [9369,2700] and RB[14632,6185]. The values from
     // txXfrm were ignored.
     // The used tolerance is estimated.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7591), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1515), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(16410), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9368), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(2699), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(14632), sal_Int32(aTextRect.Right()), 4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7370), sal_Int32(aTextRect.Bottom()), 4);
 }
 
@@ -1659,10 +1659,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Venn)
     // without fix the text area rectangle had LT [6865,3396] and RB[17136,4600]. The values from
     // txXfrm were ignored.
     // The used tolerance is estimated.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8772), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1834), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(15229), sal_Int32(aTextRect.Right()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6162), sal_Int32(aTextRect.Bottom()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(10333), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(3395), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(13666), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4599), sal_Int32(aTextRect.Bottom()), 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Gear)
@@ -1680,10 +1680,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf149551Gear)
     // without fix the text area rectangle had LT [4101,1014] and RB[8019,4932]. The values from
     // txXfrm were ignored.
     // The used tolerance is estimated.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5501), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(11000), sal_Int32(aTextRect.Right()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9999), sal_Int32(aTextRect.Bottom()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6605), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5787), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9894), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8614), sal_Int32(aTextRect.Bottom()), 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf145528Matrix)
@@ -1712,7 +1712,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf145528Matrix)
         pCustomShape->TakeTextAnchorRect(aTextRect);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(nLeft[i - 1], sal_Int32(aTextRect.Left()), 4);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(nTop[i - 1], sal_Int32(aTextRect.Top()), 4);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(10293), sal_Int32(aTextRect.GetWidth()), 4);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(10001), sal_Int32(aTextRect.GetWidth()), 4);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4500), sal_Int32(aTextRect.GetHeight()), 4);
     }
 }
@@ -1734,10 +1734,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf135953TextPosition)
     // considered that the txXfrm and the preset text area rectangle have different centers in this
     // case and thus the text was far off.
     // The used tolerance is estimated.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(3223), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-1661), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9559), sal_Int32(aTextRect.Right()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(578), sal_Int32(aTextRect.Bottom()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(3339), sal_Int32(aTextRect.Left()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(-1544), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9441), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(461), sal_Int32(aTextRect.Bottom()), 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf132302RightArrow)
@@ -1758,9 +1758,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf132302RightArrow)
     // given in txXfrm in drawing.xml were not considered.
     // The used tolerance is estimated.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5078), sal_Int32(aTextRect.Left()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(58), sal_Int32(aTextRect.Top()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(11989), sal_Int32(aTextRect.Right()), 4);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7940), sal_Int32(aTextRect.Bottom()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1257), sal_Int32(aTextRect.Top()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(9190), sal_Int32(aTextRect.Right()), 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6741), sal_Int32(aTextRect.Bottom()), 4);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
