@@ -27,19 +27,19 @@ class HyperlinkDialog(UITestCase):
                 self.assertEqual(get_state_as_dict(xtab)["PageCount"], "4")
 
                 select_pos(xtab, "0")
-                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Internet")
+                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitle"], "~Internet")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "0")
 
                 select_pos(xtab, "1")
-                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Mail")
+                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitle"], "~Mail")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "1")
 
                 select_pos(xtab, "2")
-                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~Document")
+                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitle"], "~Document")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "2")
 
                 select_pos(xtab, "3")
-                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitel"], "~New Document")
+                self.assertEqual(get_state_as_dict(xtab)["CurrPageTitle"], "~New Document")
                 self.assertEqual(get_state_as_dict(xtab)["CurrPagePos"], "3")
 
 

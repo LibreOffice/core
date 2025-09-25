@@ -1649,7 +1649,7 @@ StringMap VerticalTabControlUIObject::get_state()
     aMap[u"PageCount"_ustr] = OUString::number(mxTabControl->GetPageCount());
 
     OUString nPageId = mxTabControl->GetCurPageId();
-    aMap[u"CurrPageTitel"_ustr] = mxTabControl->GetPageText(nPageId);
+    aMap[u"CurrPageTitle"_ustr] = mxTabControl->GetPageText(nPageId);
     aMap[u"CurrPagePos"_ustr] = OUString::number(mxTabControl->GetPagePos(nPageId));
 
     return aMap;
