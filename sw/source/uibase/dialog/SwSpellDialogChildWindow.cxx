@@ -132,6 +132,46 @@ static void lcl_LeaveDrawText(SwWrtShell& rSh)
     }
 }
 
+static void lcl_updateSpellStateCursorPos(SpellState& rSpellState, const SwWrtShell& rWrtShell)
+{
+    rSpellState.m_eSelMode = rWrtShell.GetView().GetShellMode();
+    rSpellState.m_pPointNode = nullptr;
+    rSpellState.m_pMarkNode = nullptr;
+    rSpellState.m_nPointPos = 0;
+    rSpellState.m_nMarkPos = 0;
+    rSpellState.m_pOutliner = nullptr;
+
+    switch(rSpellState.m_eSelMode)
+    {
+        case ShellMode::Text:
+        case ShellMode::ListText:
+        case ShellMode::TableText:
+        case ShellMode::TableListText:
+        {
+            // store a node pointer and a pam-position to be able to check on next GetFocus();
+            const SwPaM& rCursor = *rWrtShell.GetCursor();
+            rSpellState.m_pPointNode = &rCursor.GetPointNode();
+            rSpellState.m_pMarkNode = &rCursor.GetMarkNode();
+            rSpellState.m_nPointPos = rCursor.GetPoint()->GetContentIndex();
+            rSpellState.m_nMarkPos = rCursor.GetMark()->GetContentIndex();
+
+        }
+        break;
+        case ShellMode::DrawText:
+        {
+            const SdrView& rSdrView = *rWrtShell.GetDrawView();
+            const SdrOutliner* pOutliner = rSdrView.GetTextEditOutliner();
+            rSpellState.m_pOutliner = pOutliner;
+            const OutlinerView* pOLV = rSdrView.GetTextEditOutlinerView();
+            OSL_ENSURE(pOutliner && pOLV, "no Outliner/OutlinerView in SwSpellDialogChildWindow::LoseFocus()");
+            if (pOLV)
+                rSpellState.m_aESelection = pOLV->GetSelection();
+        }
+        break;
+        default:;// prevent warning
+    }
+}
+
 SwSpellDialogChildWindow::SwSpellDialogChildWindow (
             vcl::Window* _pParent,
             sal_uInt16 nId,
@@ -391,13 +431,14 @@ The code below would only be part of the solution.
                     }
                     m_pSpellState->m_xStartRange = nullptr;
                     LockFocusNotification( false );
-                    // take care that the now valid selection is stored
-                    LoseFocus();
                 }
                 else
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
+
+        lcl_updateSpellStateCursorPos(*m_pSpellState, *pWrtShell);
+
         if( aRet.empty() && bCloseMessage )
         {
             LockFocusNotification( true );
@@ -411,8 +452,6 @@ The code below would only be part of the solution.
                                                   sInfo ) );
             xBox->run();
             LockFocusNotification( false );
-            // take care that the now valid selection is stored
-            LoseFocus();
             xSpellController->getDialog()->grab_focus();
         }
     }
@@ -571,44 +610,7 @@ void SwSpellDialogChildWindow::LoseFocus()
         return;
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(pWrtShell)
-    {
-        m_pSpellState->m_eSelMode = pWrtShell->GetView().GetShellMode();
-        m_pSpellState->m_pPointNode = m_pSpellState->m_pMarkNode = nullptr;
-        m_pSpellState->m_nPointPos = m_pSpellState->m_nMarkPos = 0;
-        m_pSpellState->m_pOutliner = nullptr;
-
-        switch(m_pSpellState->m_eSelMode)
-        {
-            case ShellMode::Text:
-            case ShellMode::ListText:
-            case ShellMode::TableText:
-            case ShellMode::TableListText:
-            {
-                // store a node pointer and a pam-position to be able to check on next GetFocus();
-                SwPaM* pCursor = pWrtShell->GetCursor();
-                m_pSpellState->m_pPointNode = &pCursor->GetPointNode();
-                m_pSpellState->m_pMarkNode = &pCursor->GetMarkNode();
-                m_pSpellState->m_nPointPos = pCursor->GetPoint()->GetContentIndex();
-                m_pSpellState->m_nMarkPos = pCursor->GetMark()->GetContentIndex();
-
-            }
-            break;
-            case ShellMode::DrawText:
-            {
-                SdrView*     pSdrView = pWrtShell->GetDrawView();
-                SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
-                m_pSpellState->m_pOutliner = pOutliner;
-                OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-                OSL_ENSURE(pOutliner && pOLV, "no Outliner/OutlinerView in SwSpellDialogChildWindow::LoseFocus()");
-                if(pOLV)
-                {
-                    m_pSpellState->m_aESelection = pOLV->GetSelection();
-                }
-            }
-            break;
-            default:;// prevent warning
-        }
-    }
+        lcl_updateSpellStateCursorPos(*m_pSpellState, *pWrtShell);
     else
         m_pSpellState->m_eSelMode = ShellMode::Object;
 }
