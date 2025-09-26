@@ -22,6 +22,11 @@ Sub verify_testFormat
     TestUtil.AssertEqual(Format(d, "YYYY-MM-DD"), "2024-09-16", "Format(d, ""YYYY-MM-DD"")")
     TestUtil.AssertEqual(Format("2024-09-16 05:03:30 PM", "hh-mm-ss"), "17-03-30", "Format(""2024-09-16 05:03:30 PM"", ""hh-mm-ss"")")
 
+    TestUtil.AssertEqual(Format(""), "", "Format("""")")
+    TestUtil.AssertEqual(Format(" "), " ", "Format("" "")")
+    TestUtil.AssertEqual(Format(" 00 "), "0", "Format("" 00 "")")
+    TestUtil.AssertEqual(Format(CDate("2025-09-26")), "09/26/2025", "Format(CDate(""2025-09-26""))")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testFormat", Err, Error$, Erl)
