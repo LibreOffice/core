@@ -418,9 +418,9 @@ public:
     OUString getFontName() override;
     OUString getBaseFontName() override;
     int getFontAngle() override;
-    PFDiumFont getFont() override;
-    bool getFontData(PFDiumFont font, std::vector<uint8_t>& rData) override;
-    bool getFontToUnicode(PFDiumFont font, std::vector<uint8_t>& rData) override;
+    PDFiumFont getFont() override;
+    bool getFontData(PDFiumFont font, std::vector<uint8_t>& rData) override;
+    bool getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData) override;
     bool getFontProperties(FontWeight& weight) override;
     PDFTextRenderMode getTextRenderMode() override;
     Color getFillColor() override;
@@ -1181,9 +1181,9 @@ int PDFiumPageObjectImpl::getFontAngle()
     return nFontAngle;
 }
 
-PFDiumFont PDFiumPageObjectImpl::getFont() { return FPDFTextObj_GetFont(mpPageObject); }
+PDFiumFont PDFiumPageObjectImpl::getFont() { return FPDFTextObj_GetFont(mpPageObject); }
 
-bool PDFiumPageObjectImpl::getFontData(PFDiumFont font, std::vector<uint8_t>& rData)
+bool PDFiumPageObjectImpl::getFontData(PDFiumFont font, std::vector<uint8_t>& rData)
 {
     FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
     size_t buflen(0);
@@ -1199,7 +1199,7 @@ bool PDFiumPageObjectImpl::getFontData(PFDiumFont font, std::vector<uint8_t>& rD
     return bOk;
 }
 
-bool PDFiumPageObjectImpl::getFontToUnicode(PFDiumFont font, std::vector<uint8_t>& rData)
+bool PDFiumPageObjectImpl::getFontToUnicode(PDFiumFont font, std::vector<uint8_t>& rData)
 {
     FPDF_FONT pFontObject = static_cast<FPDF_FONT>(font);
 
@@ -1224,7 +1224,7 @@ bool PDFiumPageObjectImpl::getFontProperties(FontWeight& weight)
     // So pull the font data and analyze it directly. Though the font might not
     // have an OS/2 table so we may end up eventually inferring the weight from
     // the style name.
-    PFDiumFont font = getFont();
+    PDFiumFont font = getFont();
     if (!font)
         return false;
     std::vector<uint8_t> aData;

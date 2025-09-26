@@ -221,7 +221,7 @@ void ImpSdrPdfImport::CollectFonts()
             const vcl::pdf::PDFPageObjectType ePageObjectType = pPageObject->getType();
             if (ePageObjectType != vcl::pdf::PDFPageObjectType::Text)
                 continue;
-            vcl::pdf::PFDiumFont font = pPageObject->getFont();
+            vcl::pdf::PDFiumFont font = pPageObject->getFont();
             if (!font)
                 continue;
 
