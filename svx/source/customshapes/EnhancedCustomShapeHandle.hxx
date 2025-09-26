@@ -25,6 +25,9 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #include <com/sun/star/awt/Point.hpp>
+#include <rtl/ref.hxx>
+
+class SdrObjCustomShape;
 
 class EnhancedCustomShapeHandle : public cppu::WeakImplHelper
 <
@@ -33,11 +36,11 @@ class EnhancedCustomShapeHandle : public cppu::WeakImplHelper
 >
 {
     sal_uInt32                                  mnIndex;
-    css::uno::Reference< css::drawing::XShape > mxCustomShape;
+    rtl::Reference< SdrObjCustomShape >         mxCustomShape;
 
 public:
 
-            EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape > xCustomShape, sal_uInt32 nIndex );
+            EnhancedCustomShapeHandle( rtl::Reference< SdrObjCustomShape > xCustomShape, sal_uInt32 nIndex );
     virtual ~EnhancedCustomShapeHandle() override;
 
     // XInterface

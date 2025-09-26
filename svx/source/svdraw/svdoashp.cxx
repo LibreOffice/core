@@ -375,14 +375,10 @@ rtl::Reference<EnhancedCustomShapeEngine> const & SdrObjCustomShape::GetCustomSh
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    uno::Reference<drawing::XShape> aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
-    if ( !aXShape )
-        return mxCustomShapeEngine;
-
     OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
     if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine")
     {
-        mxCustomShapeEngine = new EnhancedCustomShapeEngine(aXShape);
+        mxCustomShapeEngine = new EnhancedCustomShapeEngine(*const_cast<SdrObjCustomShape*>(this));
     }
 
     return mxCustomShapeEngine;

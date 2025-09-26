@@ -26,7 +26,9 @@
 class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
     : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::drawing::XCustomShapeEngine>
 {
-    css::uno::Reference<css::drawing::XShape> mxShape;
+    /// Cannot use a rtl::Reference here because EnhancedCustomShapeEngine is owned by
+    /// SdrObjCustomShape, so this is basically a parent pointer.
+    SdrObjCustomShape* mpCustomShape;
     bool mbForceGroupWithText;
 
     static rtl::Reference<SdrObject> ImplForceGroupWithText(SdrObjCustomShape& rSdrObjCustomShape,
@@ -34,7 +36,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
 
 public:
     EnhancedCustomShapeEngine(const css::uno::Sequence<css::uno::Any>& aArguments);
-    EnhancedCustomShapeEngine(const css::uno::Reference<css::drawing::XShape>& xShape);
+    EnhancedCustomShapeEngine(SdrObjCustomShape& rShape);
 
     // XInterface
     virtual void SAL_CALL acquire() noexcept override;

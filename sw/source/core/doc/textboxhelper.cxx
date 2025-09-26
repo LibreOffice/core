@@ -74,6 +74,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     if (pShape->GetOtherTextBoxFormats() && pShape->GetOtherTextBoxFormats()->GetTextBox(pObject))
         return;
 
+    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape());
     // Store the current text content of the shape
     OUString sCopyableText;
 
@@ -81,7 +82,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     {
         if (pObject)
         {
-            uno::Reference<text::XText> xSrcCnt(pObject->getWeakUnoShape().get(), uno::UNO_QUERY);
+            uno::Reference<text::XText> xSrcCnt(xShape, uno::UNO_QUERY);
             auto xCur = xSrcCnt->createTextCursor();
             xCur->gotoStart(false);
             xCur->gotoEnd(true);
@@ -94,8 +95,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
         = SwXTextFrame::CreateXTextFrame(pShape->GetDoc(), nullptr);
 
     uno::Reference<text::XTextRange> xAnchor;
-    uno::Reference<text::XTextContent> xAnchorProvider(pObject->getWeakUnoShape().get(),
-                                                       uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xAnchorProvider(xShape, uno::UNO_QUERY);
     assert(xAnchorProvider.is());
     if (xAnchorProvider.is())
         xAnchor = xAnchorProvider->getAnchor();
@@ -175,7 +175,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     DoTextBoxZOrderCorrection(pShape, pObject);
 
     // Also initialize the properties, which are not constant, but inherited from the shape's ones.
-    uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
     syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(xShape->getSize()), pObject);
 
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
