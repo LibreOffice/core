@@ -127,6 +127,8 @@
 #include <formatcontentcontrol.hxx>
 #include <textcontentcontrol.hxx>
 
+#include <UndoAttribute.hxx>
+
 using namespace sw::mark;
 using namespace com::sun::star;
 namespace {
@@ -1409,6 +1411,11 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
                 pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(*pNd));
                 pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFormatColl>
                                                         (SwPaM(*pNd), pNd->GetTextColl(), true, true));
+                if (!pNd->GetTextColl()->GetAttrOutlineLevel())
+                    pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttr>(
+                        SwPaM(*pNd),
+                        SfxUInt16Item(RES_PARATR_OUTLINELEVEL, pNd->GetAttrOutlineLevel()),
+                        SetAttrMode::DEFAULT));
             }
 
             pThis->SetModified();
