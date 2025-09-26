@@ -1731,6 +1731,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf168528)
+{
+    //just care it doesn't freeze
+    // embedded font subset created with:
+    // hb-subset SourceSerif4Variable-Roman.ttf  -u '20,3a,61,64,65,66,67,68,6c,6d,6e,6f,72,73,74,75,79'  -o subset.ttf
+    createSwDoc("tdf168528.odt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
