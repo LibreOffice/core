@@ -458,6 +458,11 @@ public:
             sal_Int32 nXmlNamespace, bool bIsFontworkShape,
             sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight);
 
+    /// Writes one list level inside the list styles container.
+    void WriteLstStyle(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+                       bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                       const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
+                       sal_Int32 nElement);
     /** Populates the lstStyle with the shape's text run and paragraph properties */
     void WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
                        bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,

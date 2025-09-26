@@ -1432,6 +1432,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163803_ImageFill)
     assertXPath(pXmlDoc, "//p:pic/p:spPr/a:solidFill");
     assertXPath(pXmlDoc, "//p:pic/p:spPr/a:solidFill/a:srgbClr", "val", u"000000");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testPPTXExportOutlinerListStyle)
+{
+    // Given a slide with an outliner shape and a matching master slide with its own outliner shape:
+    loadFromFile(u"outliner-list-style.odp");
+
+    // When saving to PPTX:
+    save(u"Impress Office Open XML"_ustr);
+
+    // Then make sure that the list style of the outliner shape on the master page is written:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr", 1);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp[2]/p:txBody/a:lstStyle/a:lvl2pPr' number of nodes is incorrect
+    // i.e. only the first list level was written, the UI couldn't format a new 2nd level paragraph
+    // correctly.
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl2pPr", 1);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl3pPr", 1);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl4pPr", 1);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl5pPr", 1);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl6pPr", 1);
+    assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl7pPr", 1);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

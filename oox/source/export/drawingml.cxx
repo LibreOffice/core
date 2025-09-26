@@ -138,6 +138,7 @@
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
+#include <svx/svdpage.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -3649,15 +3650,31 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     WriteParagraphTabStops( rXPropSet );
 
     // do not end element for lstStyles since, defRPr should be stacked inside it
-    if( nElement != XML_lvl1pPr )
+    bool bLstStyle = false;
+    switch (nElement)
+    {
+        case XML_lvl1pPr:
+        case XML_lvl2pPr:
+        case XML_lvl3pPr:
+        case XML_lvl4pPr:
+        case XML_lvl5pPr:
+        case XML_lvl6pPr:
+        case XML_lvl7pPr:
+        case XML_lvl8pPr:
+        case XML_lvl9pPr:
+            bLstStyle = true;
+            break;
+    }
+    if( !bLstStyle )
         mpFS->endElementNS( XML_a, nElement );
 
     return true;
 }
 
-void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+void DrawingML::WriteLstStyle(const css::uno::Reference<css::text::XTextContent>& rParagraph,
                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
+                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
+                               sal_Int32 nElement)
 {
     Reference<XEnumerationAccess> xAccess(rParagraph, UNO_QUERY);
     if (!xAccess.is())
@@ -3684,14 +3701,110 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
         if (xFirstRunPropSetInfo->hasPropertyByName(u"CharHeight"_ustr))
             fFirstCharHeight = xFirstRunPropSet->getPropertyValue(u"CharHeight"_ustr).get<float>();
 
-        mpFS->startElementNS(XML_a, XML_lstStyle);
-        if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_lvl1pPr) )
-            mpFS->startElementNS(XML_a, XML_lvl1pPr);
+        if( !WriteParagraphProperties(rParagraph, fFirstCharHeight, nElement) )
+            mpFS->startElementNS(XML_a, nElement);
         WriteRunProperties(xFirstRunPropSet, false, XML_defRPr, true, rbOverridingCharHeight,
                            rnCharHeight, GetScriptType(rRun->getString()), rXShapePropSet);
-        mpFS->endElementNS(XML_a, XML_lvl1pPr);
-        mpFS->endElementNS(XML_a, XML_lstStyle);
+        mpFS->endElementNS(XML_a, nElement);
     }
+}
+
+namespace
+{
+/// In case xShapeProps is an outliner shape, return a paragraph enumeration describing the outline
+/// text format.
+uno::Reference<container::XEnumeration> GetOutlinerTextFormatParaEnum(const uno::Reference<beans::XPropertySet>& xShapeProps)
+{
+    SdrObject* pShape = SdrObject::getSdrObjectFromXShape(xShapeProps);
+    if (pShape->GetObjIdentifier() != SdrObjKind::OutlineText)
+    {
+        // Not an outliner shape.
+        return {};
+    }
+
+    SdrPage* pPage = pShape->getSdrPageFromSdrObject();
+    if (pPage->TRG_HasMasterPage())
+    {
+        // Not a master page, the matching master page contains the shape that provides the outline
+        // text format.
+        SdrPage& rMasterPage = pPage->TRG_GetMasterPage();
+        for (const rtl::Reference<SdrObject>& pObject : rMasterPage)
+        {
+            if (pObject->GetObjIdentifier() == SdrObjKind::OutlineText)
+            {
+                pShape = pObject.get();
+                break;
+            }
+        }
+    }
+
+    uno::Reference<text::XTextRange> xOutliner(pShape->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xOutliner->getText(), uno::UNO_QUERY);
+    return xText->createEnumeration();
+}
+}
+
+void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+                               bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
+                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
+{
+    mpFS->startElementNS(XML_a, XML_lstStyle);
+
+    uno::Reference<container::XEnumeration> xMasterParagraphEnum = GetOutlinerTextFormatParaEnum(rXShapePropSet);
+    if (xMasterParagraphEnum.is())
+    {
+        // Outliner shape, write the outline text format as multiple list levels, each with its
+        // paragraph properties.
+        sal_Int32 nLevel = 0;
+        while (xMasterParagraphEnum->hasMoreElements())
+        {
+            uno::Reference<css::text::XTextContent> xParagraph(xMasterParagraphEnum->nextElement(), uno::UNO_QUERY);
+            sal_Int32 nElement = 0;
+            switch (nLevel)
+            {
+                case 0:
+                    nElement = XML_lvl1pPr;
+                    break;
+                case 1:
+                    nElement = XML_lvl2pPr;
+                    break;
+                case 2:
+                    nElement = XML_lvl3pPr;
+                    break;
+                case 3:
+                    nElement = XML_lvl4pPr;
+                    break;
+                case 4:
+                    nElement = XML_lvl5pPr;
+                    break;
+                case 5:
+                    nElement = XML_lvl6pPr;
+                    break;
+                case 6:
+                    nElement = XML_lvl7pPr;
+                    break;
+                case 7:
+                    nElement = XML_lvl8pPr;
+                    break;
+                case 8:
+                    nElement = XML_lvl9pPr;
+                    break;
+            }
+            if (!nElement)
+            {
+                break;
+            }
+
+            WriteLstStyle(xParagraph, rbOverridingCharHeight, rnCharHeight, rXShapePropSet, nElement);
+            ++nLevel;
+        }
+    }
+    else
+    {
+        WriteLstStyle(rParagraph, rbOverridingCharHeight, rnCharHeight, rXShapePropSet, XML_lvl1pPr);
+    }
+
+    mpFS->endElementNS(XML_a, XML_lstStyle);
 }
 
 void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
