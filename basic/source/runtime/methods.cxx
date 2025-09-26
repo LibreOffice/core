@@ -1353,12 +1353,21 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
     else
     {
         OUString aStr;
-        OUString aStrNew(u""_ustr);
+        OUString aStrNew;
         SbxVariableRef pArg = rPar.Get(1);
-        pArg->Format( aStr );
+        const SbxDataType argType = pArg->GetType();
+        if (argType == SbxSTRING)
+        {
+            // From Help: "If a string is passed as argument, it is returned without any changes"
+            aStr = pArg->GetOUString();
+        }
+        else
+        {
+            pArg->Format(aStr);
+        }
 
         // Numbers start with a space
-        if (pArg->GetType() != SbxBOOL && pArg->IsNumericRTL())
+        if (argType != SbxBOOL && argType != SbxSTRING && pArg->IsNumericRTL())
         {
             // replace commas by points so that it's symmetric to Val!
             aStr = aStr.replaceFirst( ",", "." );
@@ -1394,7 +1403,9 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
             }
             else
             {
-                aStrNew = " " + aStr;
+                if (!aStr.startsWith("-"))
+                    aStrNew = " ";
+                aStrNew += aStr;
             }
         }
         else
