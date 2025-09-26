@@ -577,25 +577,26 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
     // to use the localtime notation only
     // according to a recommendation in XMP Specification (Jan 2004, page 75)
     // the Acrobat way seems the right approach
-    aCreationMetaDateString.append(char('0' + ((aDT.Year / 1000) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Year / 100) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Year / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Year) % 10)));
-    aCreationMetaDateString.append("-");
-    aCreationMetaDateString.append(char('0' + ((aDT.Month / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Month) % 10)));
-    aCreationMetaDateString.append("-");
-    aCreationMetaDateString.append(char('0' + ((aDT.Day / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Day) % 10)));
-    aCreationMetaDateString.append("T");
-    aCreationMetaDateString.append(char('0' + ((aDT.Hours / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Hours) % 10)));
-    aCreationMetaDateString.append(":");
-    aCreationMetaDateString.append(char('0' + ((aDT.Minutes / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Minutes) % 10)));
-    aCreationMetaDateString.append(":");
-    aCreationMetaDateString.append(char('0' + ((aDT.Seconds / 10) % 10)));
-    aCreationMetaDateString.append(char('0' + ((aDT.Seconds) % 10)));
+    aCreationMetaDateString.append(
+        OStringChar(char('0' + ((aDT.Year / 1000) % 10)))
+        + OStringChar(char('0' + ((aDT.Year / 100) % 10)))
+        + OStringChar(char('0' + ((aDT.Year / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Year) % 10)))
+        + OStringChar('-')
+        + OStringChar(char('0' + ((aDT.Month / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Month) % 10)))
+        + OStringChar('-')
+        + OStringChar(char('0' + ((aDT.Day / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Day) % 10)))
+        + OStringChar('T')
+        + OStringChar(char('0' + ((aDT.Hours / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Hours) % 10)))
+        + OStringChar(':')
+        + OStringChar(char('0' + ((aDT.Minutes / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Minutes) % 10)))
+        + OStringChar(':')
+        + OStringChar(char('0' + ((aDT.Seconds / 10) % 10)))
+        + OStringChar(char('0' + ((aDT.Seconds) % 10))));
 
     sal_uInt32 nDelta = 0;
     if (aGMT.Seconds > aTVal.Seconds)
@@ -614,11 +615,11 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
     }
     if (nDelta)
     {
-        aCreationMetaDateString.append(char('0' + ((nDelta / 36000) % 10)));
-        aCreationMetaDateString.append(char('0' + ((nDelta / 3600) % 10)));
-        aCreationMetaDateString.append(":");
-        aCreationMetaDateString.append(char('0' + ((nDelta / 600) % 6)));
-        aCreationMetaDateString.append(char('0' + ((nDelta / 60) % 10)));
+        aCreationMetaDateString.append(OStringChar(char('0' + ((nDelta / 36000) % 10)))
+                                       + OStringChar(char('0' + ((nDelta / 3600) % 10)))
+                                       + OStringChar(':')
+                                       + OStringChar(char('0' + ((nDelta / 600) % 6)))
+                                       + OStringChar(char('0' + ((nDelta / 60) % 10))));
     }
     aID.append(i_rCString1.getStr(), i_rCString1.getLength());
 
