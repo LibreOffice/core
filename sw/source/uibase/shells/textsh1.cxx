@@ -1192,6 +1192,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_FORMAT_RESET:
         {
+            // Assure the folded outline button does not remain after resetting
+            // RES_PARATTR_OUTLINELEVEL and that folded outline content that becomes unfolded due to
+            // RES_PARATR_GRABBAG "OutlineContentVisibleAttr" being reset is shown for outlines set by
+            // a style.
+            MakeAllOutlineContentTemporarilyVisible a(rWrtSh.GetDoc());
+
             // #i78856, reset all attributes but not the language attributes
             // (for this build an array of all relevant attributes and
             // remove the languages from that)
