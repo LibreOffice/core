@@ -541,10 +541,9 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAl
     rtl::Reference<EnhancedCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
-        drawing::PolyPolygonBezierCoords aBezierCoords = xCustomShapeEngine->getLineGeometry();
+        aRetval = xCustomShapeEngine->getB2DLineGeometry();
         try
         {
-            aRetval = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon( aBezierCoords );
             if ( !bBezierAllowed && aRetval.areControlPointsUsed())
             {
                 aRetval = basegfx::utils::adaptiveSubdivideByAngle(aRetval);

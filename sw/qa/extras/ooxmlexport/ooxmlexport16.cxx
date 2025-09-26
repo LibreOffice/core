@@ -125,9 +125,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1461),
                                      getProperty<sal_Int32>(getShape(1), u"LeftMargin"_ustr), 2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1302),
-                                     getProperty<sal_Int32>(getShape(1), u"RightMargin"_ustr), 1);
+                                     getProperty<sal_Int32>(getShape(1), u"RightMargin"_ustr), 2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1522),
-                                     getProperty<sal_Int32>(getShape(1), u"TopMargin"_ustr), 1);
+                                     getProperty<sal_Int32>(getShape(1), u"TopMargin"_ustr), 2);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1296),
                                      getProperty<sal_Int32>(getShape(1), u"BottomMargin"_ustr), 1);
     };

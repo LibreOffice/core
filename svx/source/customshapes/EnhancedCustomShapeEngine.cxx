@@ -335,83 +335,88 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
 
 drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
 {
+    basegfx::B2DPolyPolygon aPolyPolygon = getB2DLineGeometry();
+    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
+                                                          aPolyPolygonBezierCoords );
+    return aPolyPolygonBezierCoords;
+}
+
+basegfx::B2DPolyPolygon EnhancedCustomShapeEngine::getB2DLineGeometry() const
+{
     SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(mxShape);
     if (!pSdrObj)
-        return drawing::PolyPolygonBezierCoords();
+        return basegfx::B2DPolyPolygon();
 
     // the only two subclasses of SdrObject we see here are SdrObjCustomShape and SwDrawVirtObj
     SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(pSdrObj);
     if (!pSdrObjCustomShape)
-        return drawing::PolyPolygonBezierCoords();
-
-    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
+        return basegfx::B2DPolyPolygon();
 
     EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
     rtl::Reference<SdrObject> pObj = aCustomShape2d.CreateLineGeometry();
 
-    if ( pObj )
+    if ( !pObj )
+        return basegfx::B2DPolyPolygon();
+
+    tools::Rectangle aRect(pSdrObjCustomShape->GetSnapRect());
+    bool bFlipV = aCustomShape2d.IsFlipVert();
+    bool bFlipH = aCustomShape2d.IsFlipHorz();
+    const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
+
+    if ( rGeoStat.m_nShearAngle )
     {
-        tools::Rectangle aRect(pSdrObjCustomShape->GetSnapRect());
-        bool bFlipV = aCustomShape2d.IsFlipVert();
-        bool bFlipH = aCustomShape2d.IsFlipHorz();
-        const GeoStat& rGeoStat(pSdrObjCustomShape->GetGeoStat());
-
-        if ( rGeoStat.m_nShearAngle )
+        Degree100 nShearAngle = rGeoStat.m_nShearAngle;
+        double nTan = rGeoStat.mfTanShearAngle;
+        if (bFlipV != bFlipH)
         {
-            Degree100 nShearAngle = rGeoStat.m_nShearAngle;
-            double nTan = rGeoStat.mfTanShearAngle;
-            if (bFlipV != bFlipH)
-            {
-                nShearAngle = -nShearAngle;
-                nTan = -nTan;
-            }
-            pObj->Shear( aRect.Center(), nShearAngle, nTan, false);
+            nShearAngle = -nShearAngle;
+            nTan = -nTan;
         }
-        Degree100 nRotateAngle = aCustomShape2d.GetRotateAngle();
-        if( nRotateAngle )
-            pObj->NbcRotate( aRect.Center(), nRotateAngle );
-        if ( bFlipH )
-        {
-            Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
-            Point aBottom( aTop.X(), aTop.Y() + 1000 );
-            pObj->NbcMirror( aTop, aBottom );
-        }
-        if ( bFlipV )
-        {
-            Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
-            Point aRight( aLeft.X() + 1000, aLeft.Y() );
-            pObj->NbcMirror( aLeft, aRight );
-        }
-
-        basegfx::B2DPolyPolygon aPolyPolygon;
-        SdrObjListIter aIter( *pObj, SdrIterMode::DeepWithGroups );
-
-        while ( aIter.IsMore() )
-        {
-            basegfx::B2DPolyPolygon aPP;
-            const SdrObject* pNext = aIter.Next();
-
-            if ( auto pPathObj = dynamic_cast<const SdrPathObj*>(pNext) )
-            {
-                aPP = pPathObj->GetPathPoly();
-            }
-            else
-            {
-                rtl::Reference<SdrObject> pNewObj = pNext->ConvertToPolyObj( false, false );
-                SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj.get() );
-                if ( pPath )
-                    aPP = pPath->GetPathPoly();
-            }
-
-            if ( aPP.count() )
-                aPolyPolygon.append(aPP);
-        }
-        pObj.clear();
-        basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
-                                                              aPolyPolygonBezierCoords );
+        pObj->Shear( aRect.Center(), nShearAngle, nTan, false);
+    }
+    Degree100 nRotateAngle = aCustomShape2d.GetRotateAngle();
+    if( nRotateAngle )
+        pObj->NbcRotate( aRect.Center(), nRotateAngle );
+    if ( bFlipH )
+    {
+        Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
+        Point aBottom( aTop.X(), aTop.Y() + 1000 );
+        pObj->NbcMirror( aTop, aBottom );
+    }
+    if ( bFlipV )
+    {
+        Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
+        Point aRight( aLeft.X() + 1000, aLeft.Y() );
+        pObj->NbcMirror( aLeft, aRight );
     }
 
-    return aPolyPolygonBezierCoords;
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    SdrObjListIter aIter( *pObj, SdrIterMode::DeepWithGroups );
+
+    while ( aIter.IsMore() )
+    {
+        basegfx::B2DPolyPolygon aPP;
+        const SdrObject* pNext = aIter.Next();
+
+        if ( auto pPathObj = dynamic_cast<const SdrPathObj*>(pNext) )
+        {
+            aPP = pPathObj->GetPathPoly();
+        }
+        else
+        {
+            rtl::Reference<SdrObject> pNewObj = pNext->ConvertToPolyObj( false, false );
+            SdrPathObj* pPath = dynamic_cast<SdrPathObj*>( pNewObj.get() );
+            if ( pPath )
+                aPP = pPath->GetPathPoly();
+        }
+
+        if ( aPP.count() )
+            aPolyPolygon.append(aPP);
+    }
+    pObj.clear();
+
+    return aPolyPolygon;
 }
 
 Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()

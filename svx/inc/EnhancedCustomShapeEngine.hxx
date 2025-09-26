@@ -51,6 +51,8 @@ public:
     virtual css::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry() override;
     virtual css::uno::Sequence<css::uno::Reference<css::drawing::XCustomShapeHandle>>
         SAL_CALL getInteraction() override;
+
+    basegfx::B2DPolyPolygon getB2DLineGeometry() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
