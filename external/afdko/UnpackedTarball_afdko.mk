@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,afdko,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,afdko, \
     external/afdko/extern_tx.patch \
+    external/afdko/extern_tx_shared.patch \
     external/afdko/extern_mergefonts.patch \
     external/afdko/extern_makeotf.patch \
     external/afdko/warnings.patch \

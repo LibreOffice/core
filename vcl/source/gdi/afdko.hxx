@@ -15,10 +15,11 @@
 
 #pragma once
 
-extern "C" {
 #include <tx_shared.h>
 #include <hotconv.h>
 #include <cb.h>
+
+extern "C" {
 extern txCtx txNew(char* progname);
 extern void txFree(txCtx h);
 extern void cfrReadFont(txCtx h, long origin, int ttcIndex);
