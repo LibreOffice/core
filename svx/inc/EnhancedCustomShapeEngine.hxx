@@ -29,8 +29,8 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
     css::uno::Reference<css::drawing::XShape> mxShape;
     bool mbForceGroupWithText;
 
-    rtl::Reference<SdrObject> ImplForceGroupWithText(const SdrObjCustomShape& rSdrObjCustomShape,
-                                                     SdrObject* pRenderedShape);
+    static rtl::Reference<SdrObject> ImplForceGroupWithText(SdrObjCustomShape& rSdrObjCustomShape,
+                                                            SdrObject* pRenderedShape);
 
 public:
     EnhancedCustomShapeEngine(const css::uno::Sequence<css::uno::Any>& aArguments);

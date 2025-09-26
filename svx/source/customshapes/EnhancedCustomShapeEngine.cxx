@@ -105,7 +105,7 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
 
 // XCustomShapeEngine
 rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
-    const SdrObjCustomShape& rSdrObjCustomShape,
+    SdrObjCustomShape& rSdrObjCustomShape,
     SdrObject* pRenderedShape1)
 {
     rtl::Reference<SdrObject> pRenderedShape = pRenderedShape1;
@@ -161,13 +161,8 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
 
             // get the text bounds and set at text object
             tools::Rectangle aTextBounds(rSdrObjCustomShape.GetSnapRect());
-            auto pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(SdrObject::getSdrObjectFromXShape(mxShape));
-
-            if(pSdrObjCustomShape)
-            {
-                EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
-                aTextBounds = aCustomShape2d.GetTextRect();
-            }
+            EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+            aTextBounds = aCustomShape2d.GetTextRect();
 
             pTextObj->SetSnapRect( aTextBounds );
 
