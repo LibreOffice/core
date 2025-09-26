@@ -54,6 +54,7 @@ public:
 
     tools::Rectangle getTextBounds2() const;
     basegfx::B2DPolyPolygon getB2DLineGeometry() const;
+    rtl::Reference<SdrObject> render2() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

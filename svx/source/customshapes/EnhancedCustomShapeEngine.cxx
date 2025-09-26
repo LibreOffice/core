@@ -211,14 +211,23 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
 
 Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 {
+    rtl::Reference<SdrObject> pSdrObj = render2();
+    if (!pSdrObj)
+        return {};
+    return SvxDrawPage::CreateShapeByTypeAndInventor( pSdrObj->GetObjIdentifier(),
+        pSdrObj->GetObjInventor(), pSdrObj.get() );
+}
+
+rtl::Reference<SdrObject> EnhancedCustomShapeEngine::render2() const
+{
     SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(mxShape);
     if (!pSdrObj)
-        return Reference< drawing::XShape >();
+        return rtl::Reference< SdrObject >();
 
     // the only two subclasses of SdrObject we see here are SdrObjCustomShape and SwDrawVirtObj
     SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(pSdrObj);
     if (!pSdrObjCustomShape)
-        return Reference< drawing::XShape >();
+        return rtl::Reference< SdrObject >();
 
     // retrieving the TextPath property to check if feature is enabled
     const SdrCustomShapeGeometryItem& rGeometryItem(pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
@@ -301,10 +310,8 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         return nullptr;
 
     aCustomShape2d.ApplyGluePoints(xRenderedShape.get());
-    rtl::Reference< SvxShape > xShape = SvxDrawPage::CreateShapeByTypeAndInventor( xRenderedShape->GetObjIdentifier(),
-        xRenderedShape->GetObjInventor(), xRenderedShape.get() );
 
-    return xShape;
+    return xRenderedShape;
 }
 
 awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()

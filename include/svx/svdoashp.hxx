@@ -89,7 +89,7 @@ public:
     // to allow sdr::properties::CustomShapeProperties access
     friend class sdr::properties::CustomShapeProperties;
 
-    css::uno::Reference< css::drawing::XShape > mXRenderedCustomShape;
+    mutable rtl::Reference<SdrObject> mXRenderedCustomShape;
 
     mutable rtl::Reference< EnhancedCustomShapeEngine  > mxCustomShapeEngine;
 

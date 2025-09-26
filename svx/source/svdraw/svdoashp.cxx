@@ -394,12 +394,9 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
     {
         rtl::Reference<EnhancedCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
         if ( xCustomShapeEngine.is() )
-            const_cast<SdrObjCustomShape*>(this)->mXRenderedCustomShape = xCustomShapeEngine->render();
+            mXRenderedCustomShape = xCustomShapeEngine->render2();
     }
-    SdrObject* pRenderedCustomShape = mXRenderedCustomShape.is()
-                ? SdrObject::getSdrObjectFromXShape( mXRenderedCustomShape )
-                : nullptr;
-    return pRenderedCustomShape;
+    return mXRenderedCustomShape.get();
 }
 
 // #i37011# Shadow geometry creation
@@ -1328,15 +1325,11 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     if ( !mXRenderedCustomShape.is() )
         return;
 
-    const SdrObject* pRenderedCustomShape = SdrObject::getSdrObjectFromXShape( mXRenderedCustomShape );
-    if ( !pRenderedCustomShape )
-        return;
-
     // #i37262#
     // Iterate self over the contained objects, since there are combinations of
     // polygon and curve objects. In that case, aInfo.bCanConvToPath and
     // aInfo.bCanConvToPoly would be false. What is needed here is an or, not an and.
-    SdrObjListIter aIterator(*pRenderedCustomShape);
+    SdrObjListIter aIterator(*mXRenderedCustomShape);
     while(aIterator.IsMore())
     {
         SdrObject* pCandidate = aIterator.Next();
@@ -1483,14 +1476,10 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
     SdrTextObj::NbcMove( rSiz );
     if ( mXRenderedCustomShape.is() )
     {
-        SdrObject* pRenderedCustomShape = SdrObject::getSdrObjectFromXShape(mXRenderedCustomShape);
-        if ( pRenderedCustomShape )
-        {
-            // #i97149# the visualisation shape needs to be informed
-            // about change, too
-            pRenderedCustomShape->ActionChanged();
-            pRenderedCustomShape->NbcMove( rSiz );
-        }
+        // #i97149# the visualisation shape needs to be informed
+        // about change, too
+        mXRenderedCustomShape->ActionChanged();
+        mXRenderedCustomShape->NbcMove( rSiz );
     }
 
     // #i37011# adapt geometry shadow
@@ -2827,7 +2816,6 @@ rtl::Reference<SdrObject> SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bo
 {
     // #i37011#
     rtl::Reference<SdrObject> pRetval;
-    SdrObject* pRenderedCustomShape = nullptr;
 
     if ( !mXRenderedCustomShape.is() )
     {
@@ -2835,11 +2823,7 @@ rtl::Reference<SdrObject> SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bo
         GetSdrObjectFromCustomShape();
     }
 
-    if ( mXRenderedCustomShape.is() )
-    {
-        pRenderedCustomShape = SdrObject::getSdrObjectFromXShape(mXRenderedCustomShape);
-    }
-
+    SdrObject* pRenderedCustomShape = mXRenderedCustomShape.get();
     if ( pRenderedCustomShape )
     {
         // Clone to same SdrModel
