@@ -100,6 +100,11 @@ short SbiStringPool::Add(double n, SbxDataType t)
             size = snprintf(buf, sizeof(buf), "%.16g", n) + 1;
             buf[size++] = '@';
             break;
+        case SbxDATE:
+            // tdf#168569 - support date values in string pool
+            size = snprintf(buf, sizeof(buf), "%.16g", n) + 1;
+            buf[size++] = 'd'; // Not in GetSuffixType
+            break;
         default: assert(false); break; // should not happen
     }
 
