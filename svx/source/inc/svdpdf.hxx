@@ -77,7 +77,7 @@ class ImpSdrPdfImport final
 {
     std::vector<rtl::Reference<SdrObject>> maTmpList;
 
-    std::map<vcl::pdf::PFDiumFont, OfficeFontInfo> maImportedFonts;
+    std::map<vcl::pdf::PDFiumFont, OfficeFontInfo> maImportedFonts;
     std::map<OUString, SubSetInfo> maDifferentSubsetsForFont;
     // map of PostScriptName->Merged Font File for that font
     std::map<OUString, EmbeddedFontInfo> maEmbeddedFonts;
