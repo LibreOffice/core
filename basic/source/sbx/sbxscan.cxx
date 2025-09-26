@@ -443,7 +443,10 @@ std::optional<double> StrToNumberIntl(const OUString& s,
                                       std::shared_ptr<SvNumberFormatter>& rpFormatter)
 {
     double ret;
-    if (SbxValue::ScanNumIntnl(s, ret) == ERRCODE_NONE)
+    sal_Int32 nLen = 0;
+    bool bHasNumber = false;
+    if (ImpScan(s, ret, o3tl::temporary(SbxDataType()), &nLen, &bHasNumber, true) == ERRCODE_NONE
+        && bHasNumber && nLen == s.getLength())
         return ret;
 
     // We couldn't detect a Basic-formatted number (including type characters & specific exponents).
@@ -550,6 +553,11 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     if (eType == SbxNULL)
     {
         rRes = SbxBasicFormater::BasicFormatNull(pFmt ? *pFmt : std::u16string_view{});
+        return;
+    }
+    if (eType == SbxDATE && !pFmt)
+    {
+        rRes = GetOUString();
         return;
     }
 
