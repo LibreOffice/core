@@ -123,7 +123,7 @@ IMPL_LINK_NOARG(ChangeRequestQueueProcessor, ProcessEvent, void*, void)
 
 void ChangeRequestQueueProcessor::ProcessOneEvent()
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    osl::ClearableMutexGuard aGuard(maMutex);
 
     SAL_INFO("sd.fwk", __func__ << ": ProcessOneEvent");
 
@@ -155,7 +155,12 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
         ConfigurationTracer::TraceConfiguration (
             mxConfiguration, "updating to configuration");
 #endif
-        mpConfigurationUpdater->RequestUpdate(mxConfiguration);
+        // RequestUpdate may eventually call a code that needs to lock a solar mutex, owned by
+        // another thread, that waits for maMutex; release it here, to avoid deadlocks
+        auto pConfigurationUpdater = mpConfigurationUpdater;
+        auto xConfiguration = mxConfiguration;
+        aGuard.clear();
+        pConfigurationUpdater->RequestUpdate(xConfiguration);
     }
 }
 
