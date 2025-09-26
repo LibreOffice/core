@@ -542,13 +542,13 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
     }
 }
 
-void SwSpellDialogChildWindow::GetFocus()
+void SwSpellDialogChildWindow::GetFocus(bool bForceResume)
 {
     if(m_pSpellState->m_bLockFocus)
         return;
-    bool bInvalidate = false;
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
-    if(pWrtShell && !m_pSpellState->m_bInitialCall)
+    bool bInvalidate = bForceResume || !pWrtShell || m_pSpellState->m_bInitialCall;
+    if (!bInvalidate)
     {
         ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
         if(eSelMode != m_pSpellState->m_eSelMode)
@@ -593,10 +593,7 @@ void SwSpellDialogChildWindow::GetFocus()
             }
         }
     }
-    else
-    {
-        bInvalidate = true;
-    }
+
     if(bInvalidate)
         InvalidateSpellDialog();
 }

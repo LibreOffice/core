@@ -988,7 +988,7 @@ void SpellDialog::ToplevelFocusChanged()
     if (m_xDialog->has_toplevel_focus())
     {
         //notify the child window of the focus change
-        rParent.GetFocus();
+        rParent.GetFocus(/*ForceResume=*/m_bResumeClearsChangeAllDict);
     }
     else
     {

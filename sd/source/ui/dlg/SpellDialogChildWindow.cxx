@@ -83,8 +83,11 @@ void SpellDialogChildWindow::ApplyChangedSentence (
     }
 }
 
-void SpellDialogChildWindow::GetFocus()
+void SpellDialogChildWindow::GetFocus(bool bForceResume)
 {
+    if (bForceResume)
+        InvalidateSpellDialog();
+
     // In order to detect a cursor movement we could compare the
     // currently selected text shape with the one that was selected
     // when LoseFocus() was called the last time.

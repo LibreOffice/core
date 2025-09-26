@@ -58,7 +58,7 @@ private:
         spelling dialog back into the document.
     */
     virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck) override;
-    virtual void GetFocus() override;
+    void GetFocus(bool bForceResume) override;
     virtual void LoseFocus() override;
 
     /** This outliner is used to do the main work of iterating over a

@@ -44,7 +44,7 @@ class SwSpellDialogChildWindow final
     virtual bool HasGrammarChecking() override;
     virtual bool IsGrammarChecking() override;
     virtual void SetGrammarChecking(bool bOn) override;
-    virtual void GetFocus() override;
+    void GetFocus(bool bForceResume) override;
     virtual void LoseFocus() override;
 
 public:

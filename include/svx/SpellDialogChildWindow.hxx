@@ -99,10 +99,10 @@ protected:
         a "Resume" button that initiates a reinitialization.
      */
     void InvalidateSpellDialog();
-    /** Notifies the ChildWindow about the get focus event. The ChildWindow should no check if
+    /** Notifies the ChildWindow about the get focus event. The ChildWindow should now check if
         the spelling dialog should be set to the 'Resume' state by calling InvalidateSpellDialog()
      */
-    virtual void GetFocus() = 0;
+    virtual void GetFocus(bool bForceResume) = 0;
     /** Notifies the ChildWindow about the lose focus event. The ChildWindow should use it to save
         the current selection/state.
      */

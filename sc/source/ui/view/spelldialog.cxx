@@ -101,11 +101,11 @@ void ScSpellDialogChildWindow::ApplyChangedSentence( const svx::SpellPortions& r
         }
 }
 
-void ScSpellDialogChildWindow::GetFocus()
+void ScSpellDialogChildWindow::GetFocus(bool bForceResume)
 {
     SolarMutexGuard aGuard;
 
-    if( IsSelectionChanged() )
+    if (bForceResume || IsSelectionChanged())
     {
         Reset();
         InvalidateSpellDialog();
