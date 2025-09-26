@@ -300,3 +300,26 @@
  #include "cb.h"
  
  extern void myfatal(void *ctx);
+--- afdko/c/makeotf/source/cb.h
++++ afdko/c/makeotf/source/cb.h
+@@ -8,6 +8,11 @@
+ 
+ #include <stddef.h>
+ #include "dynarr.h"
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+ typedef struct cbCtx_ *cbCtx;
+ 
+ /* Define to supply Microsoft-specific function calling info, e.g. __cdecl */
+@@ -80,4 +85,8 @@
+ #define OTHERFLAGS_VERBOSE (1 << 15)
+ #define OTHERFLAGS_FINAL_NAMES (1 << 16)
+ 
++#ifdef __cplusplus
++}
++#endif
++
+ #endif /* CB_H */
