@@ -25,6 +25,7 @@
 #include <drwlayer.hxx>
 #include <fuconcustomshape.hxx>
 #include <fuconuno.hxx>
+#include <postit.hxx>
 #include <tabvwsh.hxx>
 #include <userdat.hxx>
 
@@ -68,6 +69,17 @@ static SdrObject* lcl_getSdrObjectbyName(ScDocument& rDoc, std::u16string_view r
     const SdrPage* pPage = pDrawLayer->GetPage(0);
     SdrObject* pObj = pPage->GetObjByName(rName);
     return pObj;
+}
+
+static void lcl_SelectObjectByName(ScTabViewShell& rViewShell, std::u16string_view rObjName)
+{
+    bool bFound = rViewShell.SelectObject(rObjName);
+    CPPUNIT_ASSERT_MESSAGE(
+        OString(OUStringToOString(rObjName, RTL_TEXTENCODING_UTF8) + " not found.").getStr(),
+        bFound);
+
+    CPPUNIT_ASSERT(rViewShell.GetViewData().GetScDrawView()->GetMarkedObjectList().GetMarkCount()
+                   != 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf144242_OpenBezier_noSwapWH)
@@ -1330,6 +1342,44 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160329_sortWithHiddenRows)
     aPos = pObj->GetSnapRect().TopLeft();
     // The position was (2600|2499) without fix.
     CPPUNIT_ASSERT_POINT_EQUAL_WITH_TOLERANCE(Point(2600, 4399), aPos, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf140866)
+{
+    // Load a document, which has a comment in cell $sheet2.$A$1, and a custom shape in cell
+    // $sheet2.$B$11. When the shape from $sheet2.$B$11 was copied and pasted to $sheet2.$D$9,
+    // the anchor position of comment is changed and after saved to ods the comment was gone.
+    createScDoc("ods/tdf140866.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Check that we have the comment on A1
+    ScPostIt* pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
+
+    goToCell(u"$Sheet2.$B$11"_ustr);
+    lcl_SelectObjectByName(*getViewShell(), u"Shape 1");
+
+    // Copy and paste
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"$Sheet2.$D$9"_ustr);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Check that we still have the comment on A1
+    pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
+
+    // Save, reload
+    saveAndReload(u"calc8"_ustr);
+    pDoc = getScDoc();
+    // Check that we still have the comment on A1 after save&reload
+    pNote = pDoc->GetNote(ScAddress(0, 0, 0));
+    // Without the fix in place the comment was gone and test would have failed with:
+    // assertion failed
+    // - Expression : pNote
+    CPPUNIT_ASSERT(pNote);
+    CPPUNIT_ASSERT_EQUAL(u"Test 1"_ustr, pNote->GetText());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
