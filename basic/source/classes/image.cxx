@@ -615,6 +615,7 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
     rEnums->Insert(pObject, rEnums->Count());
 }
 
+// See also: SbiRuntime::StepLOADNC
 // Note: IDs start with 1
 OUString SbiImage::GetString( sal_uInt32 nId, SbxDataType *eType ) const
 {
@@ -654,6 +655,8 @@ OUString SbiImage::GetString( sal_uInt32 nId, SbxDataType *eType ) const
                         case '@': *eType = SbxCURRENCY; break;
                         // tdf#142460 - properly handle boolean values in string pool
                         case 'b': *eType = SbxBOOL; break;
+                        // tdf#168569 - support date values in string pool
+                        case 'd': *eType = SbxDATE; break; // Not in GetSuffixType
                     }
                 }
             }

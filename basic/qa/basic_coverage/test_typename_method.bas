@@ -43,6 +43,8 @@ Function doUnitTest ' TypeName()
     assert( TypeName(myUDF) = "Object"  , "TypeName(myUDF) is not ""Object""" )
     assert( TypeName(var)   = "Empty"   , "TypeName(var) is not ""Empty""" )
 
+    assert( TypeName(#2025-09-26#) = "Date" , "TypeName(#2025-09-26#) is not ""Date""" )
+
     assert( TypeName(int_)      = "Integer" , "TypeName(int_) is not ""Integer""" )
     assert( TypeName(long_)     = "Long"    , "TypeName(long_) is not ""Long""" )
     assert( TypeName(single_)   = "Single"  , "TypeName(single_) is not ""Single""" )

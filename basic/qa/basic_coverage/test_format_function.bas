@@ -26,6 +26,7 @@ Sub verify_testFormat
     TestUtil.AssertEqual(Format(" "), " ", "Format("" "")")
     TestUtil.AssertEqual(Format(" 00 "), "0", "Format("" 00 "")")
     TestUtil.AssertEqual(Format(CDate("2025-09-26")), "09/26/2025", "Format(CDate(""2025-09-26""))")
+    TestUtil.AssertEqual(Format(#2025-09-26#), "09/26/2025", "Format(#2025-09-26#)")
 
     Exit Sub
 errorHandler:

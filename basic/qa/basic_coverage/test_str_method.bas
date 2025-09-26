@@ -32,6 +32,7 @@ Sub verify_testStr
 
     ' Dates are converted into locale-dependent strings (test uses en-US)
     TestUtil.AssertEqualStrict(Str(CDate("2025-09-26")), "09/26/2025", "Str(CDate(""2025-09-26""))")
+    TestUtil.AssertEqualStrict(Str(#2025-09-26#), "09/26/2025", "Str(#2025-09-26#)")
 
     TestUtil.AssertEqualStrict(Str(true), "True", "Str(true)")
 

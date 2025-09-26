@@ -648,7 +648,7 @@ bool SbiScanner::NextSym()
                 GenError( ERRCODE_BASIC_CONVERSION );
 
             bNumber = true;
-            eScanType = SbxDOUBLE;
+            eScanType = SbxDATE;
         }
         else
         {
