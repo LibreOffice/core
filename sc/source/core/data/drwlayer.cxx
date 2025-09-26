@@ -2693,7 +2693,9 @@ bool ScDrawLayer::IsCellAnchored( const SdrObject& rObj )
 {
     // Cell anchored object always has a user data, to store the anchor cell
     // info. If it doesn't then it's page-anchored.
-    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != nullptr;
+    // tdf#140866: Caption objects anchor position are handled differently.
+    return GetFirstUserDataOfType(&rObj, SC_UD_OBJDATA) != nullptr
+           && rObj.GetObjIdentifier() != SdrObjKind::Caption;
 }
 
 bool ScDrawLayer::IsResizeWithCell( const SdrObject& rObj )
