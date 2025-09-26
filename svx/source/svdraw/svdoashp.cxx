@@ -526,10 +526,10 @@ bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
     rtl::Reference<EnhancedCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
-        awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
-        if ( aR.Width > 1 && aR.Height > 1 )
+        tools::Rectangle aR( xCustomShapeEngine->getTextBounds2() );
+        if ( aR.GetWidth() > 1 && aR.GetHeight() > 1 )
         {
-            rTextBound = tools::Rectangle( Point( aR.X, aR.Y ), Size( aR.Width, aR.Height ) );
+            rTextBound = aR;
             bRet = true;
         }
     }

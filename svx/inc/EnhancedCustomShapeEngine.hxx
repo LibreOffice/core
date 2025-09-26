@@ -52,6 +52,7 @@ public:
     virtual css::uno::Sequence<css::uno::Reference<css::drawing::XCustomShapeHandle>>
         SAL_CALL getInteraction() override;
 
+    tools::Rectangle getTextBounds2() const;
     basegfx::B2DPolyPolygon getB2DLineGeometry() const;
 };
 

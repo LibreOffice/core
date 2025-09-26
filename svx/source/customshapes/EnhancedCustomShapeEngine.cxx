@@ -333,6 +333,25 @@ awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
     return aTextRect;
 }
 
+tools::Rectangle EnhancedCustomShapeEngine::getTextBounds2() const
+{
+    SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape(mxShape);
+    if (!pSdrObj)
+        return tools::Rectangle();
+
+    // the only two subclasses of SdrObject we see here are SdrObjCustomShape and SwDrawVirtObj
+    SdrObjCustomShape* pSdrObjCustomShape = dynamic_cast< SdrObjCustomShape* >(pSdrObj);
+    if (!pSdrObjCustomShape)
+        return tools::Rectangle();
+
+    uno::Reference< document::XActionLockable > xLockable( mxShape, uno::UNO_QUERY );
+    if(!xLockable.is() || xLockable->isActionLocked())
+        return tools::Rectangle();
+
+    EnhancedCustomShape2d aCustomShape2d(*pSdrObjCustomShape);
+    return aCustomShape2d.GetTextRect();
+}
+
 drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
 {
     basegfx::B2DPolyPolygon aPolyPolygon = getB2DLineGeometry();
