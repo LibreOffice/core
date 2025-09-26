@@ -21,7 +21,7 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
-
+#include <officecfg/Office/Common.hxx>
 //#                                                                      #
 //# Childwindow-Wrapper-Class                                            #
 //#                                                                      #
@@ -35,6 +35,13 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     mpDlg( nullptr )
 
 {
+    // dirty hack to always show vertical tabs on the hyperlink dialog
+    const bool bVert = officecfg::Office::Common::Misc::UseVerticalNotebookbar::get();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(true, xChanges);
+    xChanges->commit();
+
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     mpDlg = pFact->CreateSvxHpLinkDlg(this, pBindings, _pParent->GetFrameWeld());
     SetController( mpDlg->GetController() );
@@ -61,6 +68,9 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
         }
     }
     SetHideNotDelete( true );
+
+    officecfg::Office::Common::Misc::UseVerticalNotebookbar::set(bVert, xChanges);
+    xChanges->commit();
 }
 
 SfxChildWinInfo SvxHlinkDlgWrapper::GetInfo() const
