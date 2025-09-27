@@ -216,11 +216,13 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
             inRemove = True
             continue
 
-        if checknamespaces:
-            match = re.match("The full include-list for " + fileName, line)
-            if match:
-                inFull = True
-                continue
+        # Process the full include list to check for
+        # - obsolete namespace declarations in --ns mode
+        # - obsolete exclusions in the yaml file
+        match = re.match("The full include-list for " + fileName, line)
+        if match:
+            inFull = True
+            continue
 
         if inAdd:
             match = re.match('#include ([^ ]+)', line)
@@ -257,6 +259,19 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                     continue
 
         if inFull:
+            # Check if a formerly excluded header is now considered
+            # as necessary for the full include list,
+            # thereby making the IWYU exclusion unnecessary
+            # This can happen if a newer IWYU no longer gives a false warning
+            match = re.match("#include\\s+[\"<]([^\">]+)[\">]", line)
+            if match and "excludelist" in moduleRules.keys():
+                include = match.group(1)
+                excludelistRules = moduleRules["excludelist"]
+                realFileName = os.path.relpath(fileName, os.getcwd())
+                if realFileName in excludelistRules.keys():
+                    if include in excludelistRules[realFileName]:
+                        print("WARNING:", include, "excluded header can be removed from exclusion list of file:", realFileName)
+
             if checknamespaces:
                 # match for all possible URE/UNO namespaces, created with:
                 # find udkapi/com/sun/star/ -type d | sort| xargs basename -a | tr '\012' '|'

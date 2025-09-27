@@ -155,10 +155,6 @@ excludelist:
     include/comphelper/MasterPropertySetInfo.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySetInfo.hpp
-    include/comphelper/namedvaluecollection.hxx:
-    # Needed for template class
-    - com/sun/star/beans/PropertyValue.hpp
-    - com/sun/star/beans/NamedValue.hpp
     include/comphelper/numberedcollection.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XUntitledNumbers.hpp
@@ -196,7 +192,6 @@ excludelist:
     include/basegfx/numeric/ftools.hxx:
     # MSVC does not compile when this is removed
     - math.h
-    - cmath
     include/basegfx/utils/unopolypolygon.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -205,9 +200,6 @@ excludelist:
     include/o3tl/char16_t2wchar_t.hxx:
     # Needed on WIN32
     - string_view
-    include/o3tl/intcmp.hxx:
-    # Needed for C++20 mode
-    - utility
     include/o3tl/make_shared.hxx:
     # Needed for __COVERITY__
     - o3tl/deleter.hxx
@@ -216,9 +208,6 @@ excludelist:
     - algorithm
     include/o3tl/unreachable.hxx:
     # Needed for C++23 mode
-    - utility
-    include/o3tl/vector_pool.hxx:
-    # Needed for std::move
     - utility
     include/o3tl/vector_utils.hxx:
     # Needed for std::copy_if
@@ -273,9 +262,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/util/XNumberFormatsSupplier.hpp
-    include/svl/urihelper.hxx:
-    # base class has to be a complete type
-    - tools/link.hxx
     include/svl/style.hxx:
     # base class has to be a complete type
     - com/sun/star/style/XStyle.hpp
@@ -286,19 +272,10 @@ excludelist:
     # Needed for macro #define
     - vcl/builder.hxx
     - vcl/vclptr.hxx
-    include/vcl/decoview.hxx:
-    # Full definition needed for VclPtr
-    - vcl/outdev.hxx
-    include/vcl/imap.hxx:
-    # Needed for implicit dtor
-    - vcl/imapobj.hxx
     include/vcl/keycodes.hxx:
     # Needed for macros
     - com/sun/star/awt/Key.hpp
     - com/sun/star/awt/KeyGroup.hpp
-    include/vcl/mtfxmldump.hxx:
-    # Full definition needed for o3tl::enumarray
-    - vcl/metaactiontypes.hxx
     include/vcl/transfer.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/XTransferable2.hpp
@@ -310,7 +287,6 @@ excludelist:
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
     include/toolkit/awt/vclxwindow.hxx:
     # base class has to be a complete type
-    - toolkit/awt/vclxdevice.hxx
     - com/sun/star/awt/XWindow2.hpp
     - com/sun/star/awt/XVclWindowPeer.hpp
     - com/sun/star/awt/XLayoutConstrains.hpp
@@ -413,7 +389,6 @@ excludelist:
     include/svtools/popupwindowcontroller.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
-    - svtools/toolboxcontroller.hxx
     include/svtools/sfxecode.hxx:
     # Needed for macro defines
     - class ErrCode
@@ -423,8 +398,6 @@ excludelist:
     - com/sun/star/frame/XToolbarController.hpp
     - com/sun/star/util/XUpdatable.hpp
     - com/sun/star/lang/XInitialization.hpp
-    # Complete type is needed for DispatchInfo struct
-    - com/sun/star/beans/PropertyValue.hpp
     include/svtools/unoevent.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNameReplace.hpp
@@ -529,24 +502,15 @@ excludelist:
     include/drawinglayer/primitive3d/baseprimitive3d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive3D.hpp
-    include/sfx2/charwin.hxx:
-    # Needed for implicit dtor
-    - vcl/virdev.hxx
     include/sfx2/dinfdlg.hxx:
     # Needed for implicit dtor
     - com/sun/star/document/CmisProperty.hpp
-    include/sfx2/docfile.hxx:
-    # Full type needed for template
-    - tools/link.hxx
     include/sfx2/docstoragemodifylistener.hxx:
     # base class has to be a complete type
     - com/sun/star/util/XModifyListener.hpp
     include/sfx2/DocumentMetadataAccess.hxx:
     # base class has to be a complete type
     - com/sun/star/rdf/XDocumentMetadataAccess.hpp
-    include/sfx2/mieclip.hxx:
-    # Needed for implicit dtor
-    - tools/stream.hxx
     include/sfx2/sfxbasecontroller.hxx:
     # base class has to be a complete type
     - com/sun/star/frame/XController2.hpp
@@ -648,7 +612,6 @@ excludelist:
     - comphelper/errcode.hxx
     include/editeng/eeitem.hxx:
     # Needed for macro defines
-    - svl/typedwhich.hxx
     - class SfxBoolItem
     - class SfxGrabBagItem
     - class SfxInt16Item
@@ -706,9 +669,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sheet/XFormulaOpCodeMapper.hpp
-    include/formula/tokenarray.hxx:
-    # Needed to avoid linking errors on WIN
-    - formula/ExternalReferenceHelper.hxx
     include/svx/AccessibleControlShape.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyChangeListener.hpp
@@ -740,7 +700,6 @@ excludelist:
     - com/sun/star/util/XModeSelector.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/view/XSelectionSupplier.hpp
-    - toolkit/awt/vclxwindow.hxx
     include/svx/fmsrcimp.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertyChangeListener.hpp
@@ -750,12 +709,6 @@ excludelist:
     include/svx/ifaceids.hxx:
     # Keep for macro define
     - sfx2/shell.hxx
-    include/svx/measctrl.hxx:
-    # Needed for template class
-    - svx/svdobj.hxx
-    include/svx/svddef.hxx:
-    # Used in macro definition
-    - svl/typedwhich.hxx
     include/svx/svxerr.hxx:
     # Used in macro definition
     - comphelper/errcode.hxx
@@ -817,12 +770,6 @@ excludelist:
     - com/sun/star/drawing/BarCode.hpp
     - editeng/unoprnms.hxx
     - svx/svddef.hxx
-    include/svx/xdef.hxx:
-    # Needed for macro defines
-    - svl/typedwhich.hxx
-    include/comphelper/crashzone.hxx:
-    # Needed for sig_atomic_t
-    - csignal
     include/comphelper/parallelsort.hxx:
     # Needed when PARALLELSORT_ENABLEPZ is defined
     - chrono
