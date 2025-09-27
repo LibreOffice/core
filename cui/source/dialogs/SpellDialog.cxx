@@ -1746,6 +1746,11 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     pSpellDialog->m_xAutoCorrPB->set_sensitive(bRet);
     pSpellDialog->m_xAddToDictMB->set_sensitive(bRet);
     pSpellDialog->m_xAddToDictPB->set_sensitive(bRet);
+    if (!bRet)
+    {
+        pSpellDialog->m_xChangePB->set_sensitive(bRet);
+        pSpellDialog->m_xChangeAllPB->set_sensitive(bRet);
+    }
     return bRet;
 }
 
