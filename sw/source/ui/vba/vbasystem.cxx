@@ -108,7 +108,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
                 RegCloseKey( hKey );
                 // https://msdn.microsoft.com/en-us/ms724911 mentions that
                 // "the string may not have been stored with the proper terminating null characters"
-                szBuffer[std::min(size_t(cbData / sizeof(szBuffer[0])), SAL_N_ELEMENTS(szBuffer)-1)] = 0;
+                szBuffer[std::min(static_cast<size_t>(cbData) / sizeof(DWORD), std::size(szBuffer)-1)] = 0;
                 sValue = o3tl::toU(szBuffer);
             }
         }

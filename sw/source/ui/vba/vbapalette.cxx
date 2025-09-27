@@ -60,7 +60,7 @@ public:
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() override
     {
-        return SAL_N_ELEMENTS(ColorTable);
+        return std::ssize(ColorTable);
     }
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override

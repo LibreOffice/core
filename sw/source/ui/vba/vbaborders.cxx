@@ -251,7 +251,7 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
-        return SAL_N_ELEMENTS( supportedIndexTable );
+        return std::ssize( supportedIndexTable );
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
