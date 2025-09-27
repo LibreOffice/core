@@ -20,6 +20,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
+#include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <svx/svxdllapi.h>
 
@@ -49,12 +50,9 @@ public:
 
     // XCustomShapeEngine
     virtual css::uno::Reference<css::drawing::XShape> SAL_CALL render() override;
-    virtual css::awt::Rectangle SAL_CALL getTextBounds() override;
-    virtual css::drawing::PolyPolygonBezierCoords SAL_CALL getLineGeometry() override;
-    virtual css::uno::Sequence<css::uno::Reference<css::drawing::XCustomShapeHandle>>
-        SAL_CALL getInteraction() override;
 
-    tools::Rectangle getTextBounds2() const;
+    std::vector<css::uno::Reference<css::drawing::XCustomShapeHandle>> getInteraction();
+    tools::Rectangle getTextBounds() const;
     basegfx::B2DPolyPolygon getB2DLineGeometry() const;
     rtl::Reference<SdrObject> render2() const;
 };

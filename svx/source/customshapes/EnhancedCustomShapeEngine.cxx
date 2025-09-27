@@ -314,27 +314,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::render2() const
     return xRenderedShape;
 }
 
-awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds()
-{
-    if (!mpCustomShape)
-        return awt::Rectangle();
-
-    awt::Rectangle aTextRect;
-    uno::Reference< document::XActionLockable > xLockable( mpCustomShape->getUnoShape(), uno::UNO_QUERY );
-    if(xLockable.is() && !xLockable->isActionLocked())
-    {
-        EnhancedCustomShape2d aCustomShape2d(*mpCustomShape);
-        tools::Rectangle aRect( aCustomShape2d.GetTextRect() );
-        aTextRect.X = aRect.Left();
-        aTextRect.Y = aRect.Top();
-        aTextRect.Width = aRect.GetWidth();
-        aTextRect.Height = aRect.GetHeight();
-    }
-
-    return aTextRect;
-}
-
-tools::Rectangle EnhancedCustomShapeEngine::getTextBounds2() const
+tools::Rectangle EnhancedCustomShapeEngine::getTextBounds() const
 {
     if (!mpCustomShape)
         return tools::Rectangle();
@@ -345,15 +325,6 @@ tools::Rectangle EnhancedCustomShapeEngine::getTextBounds2() const
 
     EnhancedCustomShape2d aCustomShape2d(*mpCustomShape);
     return aCustomShape2d.GetTextRect();
-}
-
-drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeometry()
-{
-    basegfx::B2DPolyPolygon aPolyPolygon = getB2DLineGeometry();
-    drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords;
-    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords( aPolyPolygon,
-                                                          aPolyPolygonBezierCoords );
-    return aPolyPolygonBezierCoords;
 }
 
 basegfx::B2DPolyPolygon EnhancedCustomShapeEngine::getB2DLineGeometry() const
@@ -427,7 +398,7 @@ basegfx::B2DPolyPolygon EnhancedCustomShapeEngine::getB2DLineGeometry() const
     return aPolyPolygon;
 }
 
-Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShapeEngine::getInteraction()
+std::vector< Reference< drawing::XCustomShapeHandle > > EnhancedCustomShapeEngine::getInteraction()
 {
     if (!mpCustomShape)
         return {};
@@ -435,12 +406,12 @@ Sequence< Reference< drawing::XCustomShapeHandle > > SAL_CALL EnhancedCustomShap
     EnhancedCustomShape2d aCustomShape2d(*mpCustomShape);
     sal_uInt32 nHdlCount = aCustomShape2d.GetHdlCount();
 
-    Sequence< Reference< drawing::XCustomShapeHandle > > aSeq( nHdlCount );
-    auto aSeqRange = asNonConstRange(aSeq);
+    std::vector< Reference< drawing::XCustomShapeHandle > > aVec;
+    aVec.reserve( nHdlCount );
 
     for ( sal_uInt32 i = 0; i < nHdlCount; i++ )
-        aSeqRange[ i ] = new EnhancedCustomShapeHandle( mpCustomShape, i );
-    return aSeq;
+        aVec.push_back(new EnhancedCustomShapeHandle( mpCustomShape, i ));
+    return aVec;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

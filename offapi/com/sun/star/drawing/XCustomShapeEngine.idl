@@ -25,30 +25,12 @@
  */
 interface XCustomShapeEngine: com::sun::star::uno::XInterface
 {
-
     /**
         @returns
             the shape that is representing the CustomShape
      */
     com::sun::star::drawing::XShape render();
-
-    /**
-        @returns the text bound of the shape
-    */
-    com::sun::star::awt::Rectangle getTextBounds();
-
-    /**
-        @returns the line geometry of the object
-    */
-    com::sun::star::drawing::PolyPolygonBezierCoords getLineGeometry();
-
-    /**
-        @returns
-            a collection of interaction handles
-     */
-    sequence<com::sun::star::drawing::XCustomShapeHandle> getInteraction();
-
- };
+};
 
 
 }; }; }; };

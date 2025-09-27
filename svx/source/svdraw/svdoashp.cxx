@@ -519,7 +519,7 @@ bool SdrObjCustomShape::GetTextBounds( tools::Rectangle& rTextBound ) const
     rtl::Reference<EnhancedCustomShapeEngine> xCustomShapeEngine( GetCustomShapeEngine() );
     if ( xCustomShapeEngine.is() )
     {
-        tools::Rectangle aR( xCustomShapeEngine->getTextBounds2() );
+        tools::Rectangle aR( xCustomShapeEngine->getTextBounds() );
         if ( aR.GetWidth() > 1 && aR.GetHeight() > 1 )
         {
             rTextBound = aR;
@@ -558,8 +558,8 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
         if ( !xCustomShapeEngine.is() )
             return aRet;
 
-        uno::Sequence<uno::Reference<drawing::XCustomShapeHandle>> xInteractionHandles( xCustomShapeEngine->getInteraction() );
-        for ( int i = 0; i < xInteractionHandles.getLength(); i++ )
+        std::vector<uno::Reference<drawing::XCustomShapeHandle>> xInteractionHandles( xCustomShapeEngine->getInteraction() );
+        for ( size_t i = 0; i < xInteractionHandles.size(); i++ )
         {
             SdrCustomShapeInteraction aSdrCustomShapeInteraction;
             aSdrCustomShapeInteraction.xInteraction = xInteractionHandles[ i ];
