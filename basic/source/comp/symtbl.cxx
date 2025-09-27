@@ -64,9 +64,7 @@ short SbiStringPool::Add( const OUString& rVal )
 
 short SbiStringPool::Add(double n, SbxDataType t)
 {
-    size_t size = 0;
-    const size_t aBufLength = 40;
-    char buf[aBufLength]{};
+    static constexpr OUStringChar null('\0');
 
     // tdf#143707 - add the type character after the null termination of the string in order to
     // keep compatibility. After the type character has been added, the buffer contains the value
@@ -75,41 +73,26 @@ short SbiStringPool::Add(double n, SbxDataType t)
     {
         // tdf#142460 - properly handle boolean values in string pool
         case SbxBOOL:
-            size = snprintf(buf, sizeof(buf), "%d", static_cast<short>(n)) + 1;
-            buf[size++] = 'b';
-            break;
+            return Add(OUString::number(static_cast<short>(n)) + null + "b");
         // tdf#131296 - store numeric value including its type character
         // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
         case SbxINTEGER:
-            size = snprintf(buf, sizeof(buf), "%d", static_cast<short>(n)) + 1;
-            buf[size++] = '%';
-            break;
+            return Add(OUString::number(static_cast<short>(n)) + null + "%");
         case SbxLONG:
-            size = snprintf(buf, sizeof(buf), "%" SAL_PRIdINT32, static_cast<sal_Int32>(n)) + 1;
-            buf[size++] = '&';
-            break;
+            return Add(OUString::number(static_cast<sal_Int32>(n)) + null + "&");
         case SbxSINGLE:
-            size = snprintf(buf, sizeof(buf), "%.6g", static_cast<float>(n)) + 1;
-            buf[size++] = '!';
-            break;
+            return Add(OUString::number(static_cast<float>(n)) + null + "!");
         case SbxDOUBLE:
-            size = snprintf(buf, sizeof(buf), "%.16g", n) + 1;
-            buf[size++] = '#';
-            break;
+            return Add(OUString::number(n) + null + "#");
         case SbxCURRENCY:
-            size = snprintf(buf, sizeof(buf), "%.16g", n) + 1;
-            buf[size++] = '@';
-            break;
+            return Add(OUString::number(n) + null + "@");
         case SbxDATE:
             // tdf#168569 - support date values in string pool
-            size = snprintf(buf, sizeof(buf), "%.16g", n) + 1;
-            buf[size++] = 'd'; // Not in GetSuffixType
-            break;
+            return Add(OUString::number(n) + null + "d"); // Not in GetSuffixType
         default: assert(false); break; // should not happen
     }
 
-    // tdf#143707 - add the content of the buffer to the string pool including its calculated length
-    return Add(OUString::fromUtf8(std::string_view(buf, size)));
+    return -1;
 }
 
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) :
