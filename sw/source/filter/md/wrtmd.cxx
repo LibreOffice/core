@@ -47,6 +47,7 @@
 #include <charatr.hxx>
 #include <fmtcntnt.hxx>
 #include <ndgrf.hxx>
+#include <ndole.hxx>
 #include <fmturl.hxx>
 #include "wrtmd.hxx"
 
@@ -207,17 +208,27 @@ void ApplyItem(SwMDWriter& rWrt, FormattingStatus& rChange, const SfxPoolItem& r
                 = static_cast<const SwFlyFrameFormat&>(*rFormatFlyCnt.GetFrameFormat());
             const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
             SwNodeOffset nStart = rFlyContent.GetContentIdx()->GetIndex() + 1;
-            SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
-            Graphic aGraphic = pGrfNode->GetGraphic();
-            if (!pGrfNode->IsLinkedFile())
+            Graphic aGraphic;
+            OUString aGraphicURL;
+            if (rWrt.m_pDoc->GetNodes()[nStart]->GetNodeType() == SwNodeType::Grf)
             {
-                // Not linked, ignore for now.
-                break;
+                SwGrfNode* pGrfNode = rWrt.m_pDoc->GetNodes()[nStart]->GetGrfNode();
+                aGraphic = pGrfNode->GetGraphic();
+                if (!pGrfNode->IsLinkedFile())
+                {
+                    // Not linked, ignore for now.
+                    break;
+                }
+                pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
+            }
+            else
+            {
+                SwOLENode* pOLENode = rWrt.m_pDoc->GetNodes()[nStart]->GetOLENode();
+                assert(pOLENode->GetGraphic());
+                aGraphic = *pOLENode->GetGraphic();
+                // TODO fill aGraphicURL with the right info
             }
 
-            // Try to extract a relative URL and a title.
-            OUString aGraphicURL;
-            pGrfNode->GetFileFilterNms(&aGraphicURL, /*pFilterNm=*/nullptr);
             const OUString& rBaseURL = rWrt.GetBaseURL();
             if (!rBaseURL.isEmpty())
             {
