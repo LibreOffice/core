@@ -461,7 +461,6 @@ The code below would only be part of the solution.
 void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck)
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
-    OSL_ENSURE(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
     if(!pWrtShell || m_pSpellState->m_bInitialCall)
         return;
 
