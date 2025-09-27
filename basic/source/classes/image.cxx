@@ -619,53 +619,53 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 }
 
 // Note: IDs start with 1
-OUString SbiImage::GetString( sal_uInt32 nId, SbxDataType *eType ) const
+OUString SbiImage::GetString(sal_uInt32 nId, SbxDataType* peType) const
 {
-    if( nId && nId <= mvStringOffsets.size() )
+    if (nId < 1 || nId > mvStringOffsets.size())
     {
-        sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
-        sal_Unicode* pStr = pStrings.get() + nOff;
+        if (peType)
+            *peType = SbxEMPTY;
+        return {};
+    }
 
-        sal_uInt32 nNextOff = (nId < mvStringOffsets.size()) ? mvStringOffsets[ nId ] : nStringSize;
-        sal_uInt32 nLen = nNextOff - nOff - 1;
-        // #i42467: Special treatment for vbNullChar
-        if (*pStr == 0)
+    sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
+    sal_Unicode* pStr = pStrings.get() + nOff;
+
+    sal_uInt32 nNextOff = (nId < mvStringOffsets.size()) ? mvStringOffsets[ nId ] : nStringSize;
+    sal_uInt32 nLen = nNextOff - nOff - 1;
+    OUString aOUStr(pStr);
+    // #i42467: Special treatment for vbNullChar
+    if (aOUStr.isEmpty() && nLen == 1)
+    {
+        if (peType)
+            *peType = SbxSTRING;
+        return OUString(u'\0');
+    }
+
+    // tdf#143707 - check if the data type character was added after the string termination
+    // symbol. It was added in basic/source/comp/symtbl.cxx.
+    if (peType)
+    {
+        *peType = SbxSTRING;
+        if (o3tl::make_unsigned(aOUStr.getLength()) < nLen)
         {
-            if( nLen == 1 )
+            const sal_Unicode pTypeChar = *(pStr + aOUStr.getLength() + 1);
+            switch (pTypeChar)
             {
-                return OUString( u'\0');
+                // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
+                case '%': *peType = SbxINTEGER; break;
+                case '&': *peType = SbxLONG; break;
+                case '!': *peType = SbxSINGLE; break;
+                case '#': *peType = SbxDOUBLE; break;
+                case '@': *peType = SbxCURRENCY; break;
+                // tdf#142460 - properly handle boolean values in string pool
+                case 'b': *peType = SbxBOOL; break; // Not in GetSuffixType
+                // tdf#168569 - support date values in string pool
+                case 'd': *peType = SbxDATE; break; // Not in GetSuffixType
             }
-        }
-        else
-        {
-            // tdf#143707 - check if the data type character was added after the string termination
-            // symbol. It was added in basic/source/comp/symtbl.cxx.
-            OUString aOUStr(pStr);
-            if (eType != nullptr)
-            {
-                *eType = SbxSTRING;
-                if (o3tl::make_unsigned(aOUStr.getLength()) < nLen)
-                {
-                    const sal_Unicode pTypeChar = *(pStrings.get() + nOff + aOUStr.getLength() + 1);
-                    switch (pTypeChar)
-                    {
-                        // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
-                        case '%': *eType = SbxINTEGER; break;
-                        case '&': *eType = SbxLONG; break;
-                        case '!': *eType = SbxSINGLE; break;
-                        case '#': *eType = SbxDOUBLE; break;
-                        case '@': *eType = SbxCURRENCY; break;
-                        // tdf#142460 - properly handle boolean values in string pool
-                        case 'b': *eType = SbxBOOL; break;
-                        // tdf#168569 - support date values in string pool
-                        case 'd': *eType = SbxDATE; break; // Not in GetSuffixType
-                    }
-                }
-            }
-            return aOUStr;
         }
     }
-    return OUString();
+    return aOUStr;
 }
 
 const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
