@@ -483,8 +483,8 @@ std::optional<double> GetNumberIntl(const SbxValue& val, OUString& rStrVal,
         case SbxUINT:
         case SbxSINGLE:
         case SbxDOUBLE:
-        case SbxDATE:
             return val.GetDouble();
+        case SbxDATE:
         case SbxBOOL:
             if (extendedNumberDetection)
                 return val.GetDouble();
@@ -553,11 +553,6 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     if (eType == SbxNULL)
     {
         rRes = SbxBasicFormater::BasicFormatNull(pFmt ? *pFmt : std::u16string_view{});
-        return;
-    }
-    if (eType == SbxDATE && !pFmt)
-    {
-        rRes = GetOUString();
         return;
     }
 
