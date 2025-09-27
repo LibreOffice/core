@@ -185,19 +185,19 @@
       <style:text-properties fo:color="#000000" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Blue_20_Cyan" style:display-name="Filled Blue Cyan" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Filled_20_Blue_20_Cyan"/>
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled_20_Blue_20_Cyan"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Cyan_20_Red" style:display-name="Filled Cyan Red" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Filled_20_Cyan_20_Red"/>
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled_20_Cyan_20_Red"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Red_20_Orange" style:display-name="Filled Red Orange" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Filled_20_Red_20_Orange"/>
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled_20_Red_20_Orange"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Filled_20_Orange_20_Yellow" style:display-name="Filled Orange Yellow" style:family="graphic" style:parent-style-name="Filled">
-      <style:graphic-properties draw:fill-gradient-name="Filled_20_Orange_20_Yellow"/>
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Filled_20_Orange_20_Yellow"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Outlined" style:family="graphic" style:parent-style-name="Shapes">
