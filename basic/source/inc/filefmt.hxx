@@ -44,7 +44,7 @@
 //                       version number bump for backward compatibility; relies on
 //                       new integer type suffix 'b')
 //             tdf#168569: support date values in string pool (no version number bump
-//                       for backward compatibility; relies on new integer type suffix 'd')
+//                       for backward compatibility; relies on new type suffix 'd')
 //
 
 #define B_IMG_VERSION_12 0x00000012
