@@ -466,7 +466,7 @@ def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, fin
                 if p.returncode == 1:
                     print("Running the IWYU process returned error code:\n" + invocation)
             if retcode == -1 and not checknamespaces and not removefwdd:
-                print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
+                print("WARNING: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
                 if not removefwdd:
                     print("ERROR: The following command found unused includes:\n" + invocation)
