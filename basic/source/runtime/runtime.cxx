@@ -2810,7 +2810,7 @@ void SbiRuntime::StepERROR()
 }
 
 // loading a numeric constant (+ID)
-// See also: SbiImage::GetString
+
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
     // tdf#143707 - check if the data type character was added after the string termination symbol
@@ -2842,8 +2842,6 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             case '@': eType = SbxCURRENCY; break;
             // tdf#142460 - properly handle boolean values in string pool
             case 'b': eType = SbxBOOL; break;
-            // tdf#168569 - support date values in string pool
-            case 'd': eType = SbxDATE; break; // Not in GetSuffixType
         }
     }
     // tdf#143707 - if the data type character is different from the default value, it was added

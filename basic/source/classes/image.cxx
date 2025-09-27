@@ -618,7 +618,6 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
     rEnums->Insert(pObject, rEnums->Count());
 }
 
-// See also: SbiRuntime::StepLOADNC
 // Note: IDs start with 1
 OUString SbiImage::GetString( sal_uInt32 nId, SbxDataType *eType ) const
 {
