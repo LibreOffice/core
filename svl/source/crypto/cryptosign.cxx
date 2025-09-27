@@ -1079,7 +1079,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         src.messageImprint.hashAlgorithm.algorithm.data = nullptr;
         src.messageImprint.hashAlgorithm.parameters.data = nullptr;
-        SECOID_SetAlgorithmID(nullptr, &src.messageImprint.hashAlgorithm, SEC_OID_SHA256, nullptr);
+        SECOID_SetAlgorithmID(arena, &src.messageImprint.hashAlgorithm, SEC_OID_SHA256, nullptr);
         src.messageImprint.hashedMessage = ts_digest;
 
         src.reqPolicy.type = siBuffer;
@@ -1215,7 +1215,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         response_item.data = reinterpret_cast<unsigned char*>(const_cast<char*>(response_buffer.getStr()));
         response_item.len = response_buffer.getLength();
 
-        if (SEC_ASN1DecodeItem(nullptr, &response, TimeStampResp_Template, &response_item) != SECSuccess)
+        if (SEC_ASN1DecodeItem(arena, &response, TimeStampResp_Template, &response_item) != SECSuccess)
         {
             SAL_WARN("svl.crypto", "SEC_ASN1DecodeItem failed");
             return false;
