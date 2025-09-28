@@ -1211,13 +1211,12 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
     if ( !IsUpperLetter(rCC.getCharacterType(rTxt, nSttPos+1)) )
         return false;
 
-    OUStringBuffer aConverted;
-    aConverted.append( rCC.uppercase(OUString(rTxt[nSttPos])) );
-    aConverted.append( rCC.lowercase(OUString(rTxt[nSttPos+1])) );
-
     // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
     if (FindInWordStartExceptList(eLang, rTxt.copy(nSttPos, nEndPos - nSttPos)))
         return false;
+
+    OUStringBuffer aConverted(rCC.uppercase(rTxt, nSttPos, 1)
+                              + rCC.lowercase(rTxt, nSttPos + 1, 1));
 
     for( sal_Int32 i = nSttPos+2; i < nEndPos; ++i )
     {
@@ -1227,7 +1226,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.append( rCC.lowercase(OUString(rTxt[i])) );
+            aConverted.append( rCC.lowercase(rTxt, i, 1) );
         else
             // This is not an alphabetic letter.  Leave it as-is.
             aConverted.append( rTxt[i] );
@@ -1992,8 +1991,7 @@ bool SvxAutoCorrect::PutText( const css::uno::Reference < css::embed::XStorage >
 
 OUString EncryptBlockName_Imp(std::u16string_view rName)
 {
-    OUStringBuffer aName;
-    aName.append('#').append(rName);
+    OUStringBuffer aName(OUStringChar('#') + rName);
     for (size_t nLen = rName.size(), nPos = 1; nPos < nLen; ++nPos)
     {
         if (lcl_IsInArr( u"!/:.\\", aName[nPos]))
@@ -3279,7 +3277,7 @@ SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
                         if (nTmp < static_cast<sal_Int32>(nSttWdPos)) {
                             break; // word delimiter found
                         }
-                        buf.append(rTxt.substr(nFndPos, nSttWdPos - nFndPos)).append(pFnd->GetLong());
+                        buf.append(rTxt.substr(nFndPos, nSttWdPos - nFndPos) + pFnd->GetLong());
                         nFndPos = nSttWdPos + sTmp.getLength();
                     }
                 } while (nSttWdPos != std::u16string_view::npos);

@@ -59,9 +59,6 @@ public:
         // there is an ifdef here, but my check is not working, not sure why
         if (fn == SRCDIR "/pyuno/source/module/pyuno_runtime.cxx")
             return false;
-        // TODO the += depends on the result of the preceding assign, so can't merge
-        if (fn == SRCDIR "/editeng/source/misc/svxacorr.cxx")
-            return false;
         // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
         if (fn == SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx")
             return false;
