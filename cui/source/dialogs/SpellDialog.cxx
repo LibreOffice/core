@@ -1750,6 +1750,9 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
     {
         pSpellDialog->m_xChangePB->set_sensitive(bRet);
         pSpellDialog->m_xChangeAllPB->set_sensitive(bRet);
+
+        pSpellDialog->m_xSentenceED->ResetUndo();
+        pSpellDialog->m_xUndoPB->set_sensitive(false);
     }
     return bRet;
 }
