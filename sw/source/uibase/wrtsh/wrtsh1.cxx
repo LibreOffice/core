@@ -2643,6 +2643,8 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
 // make content visible or not visible only if needed
 void SwWrtShell::InvalidateOutlineContentVisibility()
 {
+    StartAction();
+
     GetView().GetEditWin().GetFrameControlsManager().HideControls(FrameControlType::Outline);
 
     const SwOutlineNodes& rOutlineNds = GetNodes().GetOutLineNds();
@@ -2655,6 +2657,8 @@ void SwWrtShell::InvalidateOutlineContentVisibility()
         else if (bIsOutlineContentVisible && !bOutlineContentVisibleAttr)
             MakeOutlineContentVisible(nPos, false);
     }
+
+    EndAction();
 }
 
 void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
@@ -2680,9 +2684,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
             }
         }
 
-        StartAction();
         InvalidateOutlineContentVisibility();
-        EndAction();
 
         // restore outline content visible attribute for folded outline nodes
         for (SwNode* pNd: aFoldedOutlineNodeArray)
@@ -2696,9 +2698,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
         // node if it is not visible after InvalidateOutlineContentVisiblity below.
         SwOutlineNodes::size_type nPos = GetOutlinePos();
 
-        StartAction();
         InvalidateOutlineContentVisibility();
-        EndAction();
 
         // If needed, find a visible outline node to place the cursor.
         if (nPos != SwOutlineNodes::npos && !IsOutlineContentVisible(nPos))
