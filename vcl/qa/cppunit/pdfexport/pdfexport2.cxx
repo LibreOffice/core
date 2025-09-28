@@ -231,9 +231,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124272)
     aZCodec.Decompress(rObjectStream, aUncompressed);
     CPPUNIT_ASSERT(aZCodec.EndCompression());
 
-    OString aBitmap("Q q 299.899 782.189 m\n"
-                    "55.2 435.889 l 299.899 435.889 l 299.899 782.189 l\n"
-                    "h"_ostr);
+    OString aBitmap("Q q 299.9 782.19 m\n"
+                    "55.2 435.89 l 299.9 435.89 l 299.9 782.19 l h"_ostr);
 
     auto pStart = static_cast<const char*>(aUncompressed.GetData());
     const char* pEnd = pStart + aUncompressed.GetSize();

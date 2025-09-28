@@ -386,43 +386,7 @@ void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
 // appends a double. PDF does not accept exponential format, only fixed point
 void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 10 )
 {
-    bool bNeg = false;
-    if( fValue < 0.0 )
-    {
-        bNeg = true;
-        fValue=-fValue;
-    }
-
-    sal_Int64 nInt = static_cast<sal_Int64>(fValue);
-    fValue -= static_cast<double>(nInt);
-    // optimizing hardware may lead to a value of 1.0 after the subtraction
-    if( rtl::math::approxEqual(fValue, 1.0) || log10( 1.0-fValue ) <= -nPrecision )
-    {
-        nInt++;
-        fValue = 0.0;
-    }
-    sal_Int64 nFrac = 0;
-    if( fValue )
-    {
-        fValue *= pow( 10.0, static_cast<double>(nPrecision) );
-        nFrac = static_cast<sal_Int64>(fValue);
-    }
-    if( bNeg && ( nInt || nFrac ) )
-        rBuffer.append( '-' );
-    rBuffer.append( nInt );
-    if( !nFrac )
-        return;
-
-    int i;
-    rBuffer.append( '.' );
-    sal_Int64 nBound = static_cast<sal_Int64>(pow( 10.0, nPrecision - 1.0 )+0.5);
-    for ( i = 0; ( i < nPrecision ) && nFrac; i++ )
-    {
-        sal_Int64 nNumb = nFrac / nBound;
-        nFrac -= nNumb * nBound;
-        rBuffer.append( nNumb );
-        nBound /= 10;
-    }
+    rtl::math::doubleToStringBuffer(rBuffer, fValue, rtl_math_StringFormat_F, nPrecision, '.', true);
 }
 
 void appendColor( const Color& rColor, OStringBuffer& rBuffer, bool bConvertToGrey )
