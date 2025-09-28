@@ -451,7 +451,7 @@ public:
     bool AddWordStartException( const OUString& rNew, LanguageType eLang);
 
     // Search through the Languages for the entry
-    bool FindInWordStartExceptList( LanguageType eLang, const OUString& sWord );
+    bool FindInWordStartExceptList( LanguageType eLang, std::u16string_view sWord );
     bool FindInCplSttExceptList( LanguageType eLang, const OUString& sWord,
                                     bool bAbbreviation = false);
 

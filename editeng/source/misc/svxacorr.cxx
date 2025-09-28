@@ -997,7 +997,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     }
 
     // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
-    if (FindInWordStartExceptList(eLang, OUString(pWordStt, pDelim - pWordStt)))
+    if (FindInWordStartExceptList(eLang, std::u16string_view(pWordStt, pDelim)))
         return;
 
     if( bAtStart )  // at the beginning of a paragraph?
@@ -1212,7 +1212,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const OUString& rT
         return false;
 
     // No replacement for words in TWo INitial CApitals or sMALL iNITIAL list
-    if (FindInWordStartExceptList(eLang, rTxt.copy(nSttPos, nEndPos - nSttPos)))
+    if (FindInWordStartExceptList(eLang, rTxt.subView(nSttPos, nEndPos - nSttPos)))
         return false;
 
     OUStringBuffer aConverted(rCC.uppercase(rTxt, nSttPos, 1)
@@ -2111,8 +2111,7 @@ bool SvxAutoCorrect::SearchWordsNext(
     return pWordList->SearchWordsNext( rTxt, rStt, nEndPos, rStatus );
 }
 
-bool SvxAutoCorrect::FindInWordStartExceptList( LanguageType eLang,
-                                             const OUString& sWord )
+bool SvxAutoCorrect::FindInWordStartExceptList(LanguageType eLang, std::u16string_view sWord)
 {
     LanguageTag aLanguageTag( eLang);
 
