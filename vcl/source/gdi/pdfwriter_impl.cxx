@@ -1248,12 +1248,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     }
 
     // write header
-    OStringBuffer aBuffer( 20 );
-    aBuffer.append( "%PDF-" );
-    aBuffer.append(getPDFVersionStr(m_aContext.Version));
-    // append something binary as comment (suggested in PDF Reference)
-    aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
-    if( !writeBuffer( aBuffer ) )
+    if (!writeBuffer(Concat2View(OString::Concat("%PDF-") + getPDFVersionStr(m_aContext.Version)
+                             + "\n%\303\244\303\274\303\266\303\237\n")))
     {
         m_aFile.close();
         m_bOpen = false;
@@ -1872,10 +1868,10 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     }
     auto const WriteAttrs = [&](char const*const pName, OStringBuffer & rBuf)
     {
-        aRet.append(" <</O");
-        aRet.append(pName);
-        aRet.append(rBuf);
-        aRet.append(">>");
+        aRet.append(OString::Concat(" <</O")
+            + pName
+            + rBuf
+            + ">>");
     };
     if( !aLayout.isEmpty() )
     {
@@ -3433,11 +3429,10 @@ bool PDFWriterImpl::emitScreenAnnotations()
             SvMemoryStream aMemoryStream;
             aMemoryStream.WriteStream(aFileStream);
 
-            aLine.append(rScreen.m_nTempFileObject);
-            aLine.append(" 0 obj\n");
-            aLine.append("<< /Type /EmbeddedFile /Length ");
-            aLine.append(static_cast<sal_Int64>(aMemoryStream.GetSize()));
-            aLine.append(" >>\nstream\n");
+            aLine.append(OString::number(rScreen.m_nTempFileObject)
+                + " 0 obj\n<< /Type /EmbeddedFile /Length "
+                + OString::number(static_cast<sal_Int64>(aMemoryStream.GetSize()))
+                + " >>\nstream\n");
             if (!writeBuffer(aLine))
                 return false;
             aLine.setLength(0);
@@ -3485,9 +3480,9 @@ bool PDFWriterImpl::emitScreenAnnotations()
             {   // ISO 14289-1:2014, Clause: 7.11
                 aLine.append("/UF (<embedded file>) ");
             }
-            aLine.append("/EF << /F ");
-            aLine.append(rScreen.m_nTempFileObject);
-            aLine.append(" 0 R >>");
+            aLine.append("/EF << /F "
+                + OString::number(rScreen.m_nTempFileObject)
+                + " 0 R >>");
         }
         else
         {
