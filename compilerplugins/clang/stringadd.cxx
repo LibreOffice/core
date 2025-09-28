@@ -56,9 +56,6 @@ public:
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/OStringBuffer/"))
             return false;
-        // there is an ifdef here, but my check is not working, not sure why
-        if (fn == SRCDIR "/pyuno/source/module/pyuno_runtime.cxx")
-            return false;
         // TODO this file has a boatload of buffer appends' and I don't feel like fixing them all now
         if (fn == SRCDIR "/vcl/source/gdi/pdfwriter_impl.cxx")
             return false;

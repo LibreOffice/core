@@ -191,8 +191,7 @@ static PyRef importUnoModule( )
         // Who knows, a future Python might print something better.
         PyRef str( PyObject_Str( excTraceback.get() ), SAL_NO_ACQUIRE );
 
-        OUStringBuffer buf;
-        buf.append( "python object raised an unknown exception (" );
+        OUStringBuffer buf("python object raised an unknown exception (");
         PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
         buf.appendAscii( PyUnicode_AsUTF8( valueRep.get())).append( ", traceback follows\n" );
         buf.appendAscii( PyUnicode_AsUTF8( str.get() ) );
@@ -254,8 +253,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         if (osl_getProcessInfo(
             nullptr , osl_Process_IDENTIFIER , &data ) == osl_Process_E_None)
         {
-            o += ".";
-            o += OString::number(data.Ident);
+            o += "." + OString::number(data.Ident);
         }
 
         *ppFile = fopen( o.getStr() , "w" );
@@ -606,15 +604,13 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
 static OUString
 lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
 {
-    OUStringBuffer buf;
-    buf.append("Couldn't convert ");
+    OUStringBuffer buf("Couldn't convert ");
     PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
     buf.appendAscii( PyUnicode_AsUTF8(reprString.get()) );
     buf.append(" to a UNO type");
     if (pWrapped)
     {
-        buf.append("; caught exception: ");
-        buf.append(*pWrapped);
+        buf.append("; caught exception: " + *pWrapped);
     }
     return buf.makeStringAndClear();
 }
@@ -943,8 +939,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         buf.append( ", traceback follows\n" );
         if( !str.isEmpty() )
         {
-            buf.append( str );
-            buf.append( "\n" );
+            buf.append(str + "\n");
         }
         else
         {
