@@ -1102,12 +1102,16 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 case TILES_NORMAL:
                     aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
+                    if (aColor.IsDark())
+                        aColor.IncreaseLuminance(30);
+                    else
+                        aColor.DecreaseLuminance(30);
                     break;
                 case TILES_DISABLED:
                     aColor = Application::GetSettings().GetStyleSettings().GetInactiveTabColor();
                     break;
                 case TILES_SELECTED:
-                    aColor = Application::GetSettings().GetStyleSettings().GetAccentColor();
+                    aColor = Application::GetSettings().GetStyleSettings().GetActiveTabColor();
                     break;
                 case TILES_HOT:
                     aColor = Application::GetSettings().GetStyleSettings().GetMenuBarRolloverColor();
