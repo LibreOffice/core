@@ -750,6 +750,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157988)
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf167973_CaseRotateCaseWithBullets)
+{
+    createSwDoc();
+
+    dispatchCommand(mxComponent, u".uno:DefaultBullet"_ustr, {});
+
+    emulateTyping(u"First line");
+
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    emulateTyping(u"Second line");
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"First Line"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second Line"_ustr, getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: First line
+    // - Actual  : FIRST LINE
+    CPPUNIT_ASSERT_EQUAL(u"First line"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second line"_ustr, getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"FIRST LINE"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"SECOND LINE"_ustr, getParagraph(2)->getString());
+
+    dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"first line"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"second line"_ustr, getParagraph(2)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157667)
 {
     createSwDoc("tdf130088.docx");
