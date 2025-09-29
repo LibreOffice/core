@@ -1310,119 +1310,116 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
 }
 
 // tdf#141634
-static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
+static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell* pThis)
 {
     SwTextNode* pTextNode = pThis->GetCursor()->GetPointNode().GetTextNode();
-    if (pTextNode && pTextNode->IsOutline())
+    const SwNodes& rNodes = pThis->GetNodes();
+    const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
+    SwOutlineNodes::size_type nPos;
+
+    if (!pTextNode || pTextNode->GetAttrOutlineContentVisible()
+        || !rOutlineNodes.Seek_Entry(pTextNode, &nPos))
+        return false;
+
+    SwNode* pSttNd = rOutlineNodes[nPos];
+
+    // determine end node of folded outline content
+    SwNode* pEndNd = &rNodes.GetEndOfContent();
+    if (rOutlineNodes.size() > nPos + 1)
+        pEndNd = rOutlineNodes[nPos + 1];
+
+    if (pThis->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
     {
-        if (!pTextNode->GetAttrOutlineContentVisible())
+        // get the next outline node after the folded outline content (iPos)
+        // it is the next outline node with the same level or less
+        int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
+        SwOutlineNodes::size_type iPos = nPos;
+        while (++iPos < rOutlineNodes.size()
+               && rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel)
+            ;
+
+        // get the correct end node
+        // the outline node may be in frames, headers, footers special section of doc model
+        SwNode* pStartOfSectionNodeSttNd = pSttNd->StartOfSectionNode();
+        while (pStartOfSectionNodeSttNd->StartOfSectionNode()
+               != pStartOfSectionNodeSttNd->StartOfSectionNode()->StartOfSectionNode())
         {
-            const SwNodes& rNodes = pThis->GetNodes();
-            const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
-            SwOutlineNodes::size_type nPos;
-            (void) rOutlineNodes.Seek_Entry(pTextNode, &nPos);
+            pStartOfSectionNodeSttNd = pStartOfSectionNodeSttNd->StartOfSectionNode();
+        }
+        pEndNd = pStartOfSectionNodeSttNd->EndOfSectionNode();
 
-            SwNode* pSttNd = rOutlineNodes[nPos];
-
-            // determine end node of folded outline content
-            SwNode* pEndNd = &rNodes.GetEndOfContent();
-            if (rOutlineNodes.size() > nPos + 1)
-                pEndNd = rOutlineNodes[nPos + 1];
-
-            if (pThis->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
+        if (iPos < rOutlineNodes.size())
+        {
+            SwNode* pStartOfSectionNode = rOutlineNodes[iPos]->StartOfSectionNode();
+            while (pStartOfSectionNode->StartOfSectionNode()
+                   != pStartOfSectionNode->StartOfSectionNode()->StartOfSectionNode())
             {
-                // get the next outline node after the folded outline content (iPos)
-                // it is the next outline node with the same level or less
-                int nLevel = pSttNd->GetTextNode()->GetAttrOutlineLevel();
-                SwOutlineNodes::size_type iPos = nPos;
-                while (++iPos < rOutlineNodes.size() &&
-                       rOutlineNodes[iPos]->GetTextNode()->GetAttrOutlineLevel() > nLevel);
-
-                // get the correct end node
-                // the outline node may be in frames, headers, footers special section of doc model
-                SwNode* pStartOfSectionNodeSttNd = pSttNd->StartOfSectionNode();
-                while (pStartOfSectionNodeSttNd->StartOfSectionNode()
-                       != pStartOfSectionNodeSttNd->StartOfSectionNode()->StartOfSectionNode())
-                {
-                    pStartOfSectionNodeSttNd = pStartOfSectionNodeSttNd->StartOfSectionNode();
-                }
-                pEndNd = pStartOfSectionNodeSttNd->EndOfSectionNode();
-
-                if (iPos < rOutlineNodes.size())
-                {
-                    SwNode* pStartOfSectionNode = rOutlineNodes[iPos]->StartOfSectionNode();
-                    while (pStartOfSectionNode->StartOfSectionNode()
-                           != pStartOfSectionNode->StartOfSectionNode()->StartOfSectionNode())
-                    {
-                        pStartOfSectionNode = pStartOfSectionNode->StartOfSectionNode();
-                    }
-                    if (pStartOfSectionNodeSttNd == pStartOfSectionNode)
-                        pEndNd = rOutlineNodes[iPos];
-                }
+                pStartOfSectionNode = pStartOfSectionNode->StartOfSectionNode();
             }
-
-            // table, text box, header, footer
-            if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
-            {
-                // insert before section end node
-                if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex())
-                {
-                    SwNodeIndex aIdx(*pSttNd->EndOfSectionNode());
-                    while (aIdx.GetNode().IsEndNode())
-                        --aIdx;
-                    ++aIdx;
-                    pEndNd = &aIdx.GetNode();
-                }
-            }
-            // if pSttNd isn't in table but pEndNd is then insert after table
-            else if (pEndNd->GetTableBox())
-            {
-                pEndNd = pEndNd->FindTableNode();
-                SwNodeIndex aIdx(*pEndNd, -1);
-                // account for nested tables
-                while (aIdx.GetNode().GetTableBox())
-                {
-                    pEndNd = aIdx.GetNode().FindTableNode();
-                    aIdx.Assign(*pEndNd, -1);
-                }
-                aIdx.Assign(*pEndNd->EndOfSectionNode(), +1);
-                pEndNd = &aIdx.GetNode();
-            }
-            // end node determined
-
-            // now insert the new outline node
-            SwDoc* pDoc = pThis->GetDoc();
-
-            // insert at end of tablebox doesn't work correct without
-            MakeAllOutlineContentTemporarilyVisible a(pDoc);
-
-            SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
-
-            // if the outline level is not set in style then it is set in direct formatting
-            if (!pTextNode->GetTextColl()->GetAttrOutlineLevel())
-                pNd->SetAttrOutlineLevel(pTextNode->GetAttrOutlineLevel());
-
-            (void) rOutlineNodes.Seek_Entry(pNd, &nPos);
-            pThis->GotoOutline(nPos);
-
-            if (pDoc->GetIDocumentUndoRedo().DoesUndo())
-            {
-                pDoc->GetIDocumentUndoRedo().ClearRedo();
-                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(*pNd));
-                pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoFormatColl>
-                                                        (SwPaM(*pNd), pNd->GetTextColl(), true, true));
-                if (!pNd->GetTextColl()->GetAttrOutlineLevel())
-                    pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttr>(
-                        SwPaM(*pNd),
-                        SfxUInt16Item(RES_PARATR_OUTLINELEVEL, pNd->GetAttrOutlineLevel()),
-                        SetAttrMode::DEFAULT));
-            }
-
-            pThis->SetModified();
-            return true;
+            if (pStartOfSectionNodeSttNd == pStartOfSectionNode)
+                pEndNd = rOutlineNodes[iPos];
         }
     }
-    return false;
+
+    // table, text box, header, footer
+    if (pSttNd->GetTableBox() || pSttNd->GetIndex() < rNodes.GetEndOfExtras().GetIndex())
+    {
+        // insert before section end node
+        if (pSttNd->EndOfSectionIndex() < pEndNd->GetIndex())
+        {
+            SwNodeIndex aIdx(*pSttNd->EndOfSectionNode());
+            while (aIdx.GetNode().IsEndNode())
+                --aIdx;
+            ++aIdx;
+            pEndNd = &aIdx.GetNode();
+        }
+    }
+    // if pSttNd isn't in table but pEndNd is then insert after table
+    else if (pEndNd->GetTableBox())
+    {
+        pEndNd = pEndNd->FindTableNode();
+        SwNodeIndex aIdx(*pEndNd, -1);
+        // account for nested tables
+        while (aIdx.GetNode().GetTableBox())
+        {
+            pEndNd = aIdx.GetNode().FindTableNode();
+            aIdx.Assign(*pEndNd, -1);
+        }
+        aIdx.Assign(*pEndNd->EndOfSectionNode(), +1);
+        pEndNd = &aIdx.GetNode();
+    }
+    // end node determined
+
+    // now insert the new outline node
+    SwDoc* pDoc = pThis->GetDoc();
+
+    // insert at end of tablebox doesn't work correct without
+    MakeAllOutlineContentTemporarilyVisible a(pDoc);
+
+    SwTextNode* pNd = pDoc->GetNodes().MakeTextNode(*pEndNd, pTextNode->GetTextColl(), true);
+
+    // if the outline level is not set in style then it is set in direct formatting
+    if (!pTextNode->GetTextColl()->GetAttrOutlineLevel())
+        pNd->SetAttrOutlineLevel(pTextNode->GetAttrOutlineLevel());
+
+    (void)rOutlineNodes.Seek_Entry(pNd, &nPos);
+    pThis->GotoOutline(nPos);
+
+    if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        pDoc->GetIDocumentUndoRedo().ClearRedo();
+        pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsert>(*pNd));
+        pDoc->GetIDocumentUndoRedo().AppendUndo(
+            std::make_unique<SwUndoFormatColl>(SwPaM(*pNd), pNd->GetTextColl(), true, true));
+        if (!pTextNode->GetTextColl()->GetAttrOutlineLevel())
+            pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoAttr>(
+                SwPaM(*pNd),
+                SfxUInt16Item(RES_PARATR_OUTLINELEVEL, pTextNode->GetAttrOutlineLevel()),
+                SetAttrMode::DEFAULT));
+    }
+
+    pThis->SetModified();
+    return true;
 }
 
 // SplitNode; also, because
