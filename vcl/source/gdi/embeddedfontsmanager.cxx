@@ -111,7 +111,7 @@ void clearDir( const OUString& path )
 // The file may or not may not exist yet, and will be cleaned up automatically as appropriate.
 // Use activateFonts() to actually enable usage of the font.
 // static
-OUString EmbeddedFontsManager::fileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix)
+OUString EmbeddedFontsManager::getFileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix)
 {
     OUString filename = OUString::Concat(name) + suffix;
 
@@ -168,7 +168,7 @@ bool writeFontBytesToFile(osl::File& file, const void* data, sal_uInt64 size)
 // @param name name of the font file
 OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_view name)
 {
-    OUString url = EmbeddedFontsManager::fileUrlForTemporaryFont(name, u".ttf");
+    OUString url = EmbeddedFontsManager::getFileUrlForTemporaryFont(name, u".ttf");
     std::optional<osl::File> file(url);
     auto rc = file->open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write);
 
@@ -195,7 +195,7 @@ OUString writeFontBytesToFile(const std::vector<char>& bytes, std::u16string_vie
                 }
             }
         }
-        url = EmbeddedFontsManager::fileUrlForTemporaryFont(Concat2View(name + OUString::number(counter++)), u".ttf");
+        url = EmbeddedFontsManager::getFileUrlForTemporaryFont(Concat2View(name + OUString::number(counter++)), u".ttf");
         file.emplace(url);
         rc = file->open(osl_File_OpenFlag_Create | osl_File_OpenFlag_Write);
     }
