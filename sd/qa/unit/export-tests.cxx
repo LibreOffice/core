@@ -1111,6 +1111,34 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfFont)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testExplodedPdfHindi)
+{
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPdfium)
+        return;
+    UsePdfium aGuard;
+
+    loadFromFile(u"pdf/BasicHindi.pdf");
+
+    setFilterOptions("{\"DecomposePDF\":{\"type\":\"boolean\",\"value\":\"true\"}}");
+    setImportFilterName(u"OpenDocument Drawing Flat XML"_ustr);
+    save(u"OpenDocument Drawing Flat XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    // Check that the English text in here is correct at least
+
+    // ensure the expected content
+    assertXPathContent(pXmlDoc,
+                       "/office:document/office:body/office:drawing/draw:page/draw:g/draw:frame[3]/"
+                       "draw:text-box/text:p[@text:style-name='P4'][1]",
+                       u"FIRST-YEAR HINDI COURSE");
+
+    // ensure the expected font name
+    assertXPath(pXmlDoc, "/office:document/office:automatic-styles/style:style[@style:name='P4']/"
+                         "style:text-properties[@fo:font-family='AcademyEngravedLetPlain']");
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testEmbeddedText)
 {
     createSdDrawDoc("objectwithtext.fodg");
