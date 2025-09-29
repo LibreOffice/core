@@ -956,8 +956,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
 void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
                                  FontStrikeout eStrikeout,
                                  FontLineStyle eUnderline,
-                                 FontLineStyle eOverline,
-                                 bool bUnderlineAbove )
+                                 FontLineStyle eOverline )
 {
     assert(!is_double_buffered_window());
 
@@ -987,7 +986,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
     Point aPos = ImplLogicToDevicePixel( rPos );
     double fWidth = ImplLogicWidthToDeviceSubPixel(nWidth);
     aPos += Point( mnTextOffX, mnTextOffY );
-    ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+    ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, fWidth, eStrikeout, eUnderline, eOverline, /*bUnderlineAbove*/false );
 }
 
 void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth, tools::Long nWaveHeight)

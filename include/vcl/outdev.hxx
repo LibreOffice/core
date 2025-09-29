@@ -883,8 +883,7 @@ public:
     void                        DrawTextLine( const Point& rPos, tools::Long nWidth,
                                               FontStrikeout eStrikeout,
                                               FontLineStyle eUnderline,
-                                              FontLineStyle eOverline,
-                                              bool bUnderlineAbove = false );
+                                              FontLineStyle eOverline );
 
     SAL_DLLPRIVATE void         ImplDrawTextLine( tools::Long nBaseX, tools::Long nX, tools::Long nY, double nWidth,
                                                   double nLayoutWidth, FontStrikeout eStrikeout,
