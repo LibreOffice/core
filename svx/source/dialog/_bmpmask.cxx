@@ -375,8 +375,8 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     , m_xCbxTrans(m_xBuilder->weld_check_button(u"cbx5"_ustr))
     , m_xLbColorTrans(new ColorListBox(m_xBuilder->weld_menu_button(u"color5"_ustr), [this]{ return GetFrameWeld(); }))
     , m_xData(new MaskData(this, *pBindinx))
-    , aPipetteColor(COL_WHITE)
-    , aSelItem(*this, *pBindinx)
+    , m_aPipetteColor(COL_WHITE)
+    , m_aSelItem(*this, *pBindinx)
 {
     SetText(SvxResId(RID_SVXDLG_BMPMASK_STR_TITLE));
 
@@ -415,28 +415,28 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_xQSet1->SetColCount();
     m_xQSet1->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 1";
-    m_xQSet1->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet1->InsertItem( 1, m_aPipetteColor, sColorPaletteN);
     m_xQSet1->SelectItem( 1 );
 
     m_xQSet2->SetStyle( m_xQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_xQSet2->SetColCount();
     m_xQSet2->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 2";
-    m_xQSet2->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet2->InsertItem( 1, m_aPipetteColor, sColorPaletteN);
     m_xQSet2->SelectItem( 0 );
 
     m_xQSet3->SetStyle( m_xQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_xQSet3->SetColCount();
     m_xQSet3->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 3";
-    m_xQSet3->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet3->InsertItem( 1, m_aPipetteColor, sColorPaletteN);
     m_xQSet3->SelectItem( 0 );
 
     m_xQSet4->SetStyle( m_xQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
     m_xQSet4->SetColCount();
     m_xQSet4->SetLineCount( 1 );
     sColorPaletteN = sColorPalette + " 4";
-    m_xQSet4->InsertItem( 1, aPipetteColor, sColorPaletteN);
+    m_xQSet4->InsertItem( 1, m_aPipetteColor, sColorPaletteN);
     m_xQSet4->SelectItem( 0 );
 
     m_xQSet1->Show();
@@ -479,7 +479,7 @@ void SvxBmpMask::dispose()
     m_xLbColor4.reset();
     m_xCbxTrans.reset();
     m_xLbColorTrans.reset();
-    aSelItem.dispose();
+    m_aSelItem.dispose();
     SfxDockingWindow::dispose();
 }
 
@@ -511,8 +511,8 @@ bool SvxBmpMask::Close()
 
 void SvxBmpMask::SetColor( const Color& rColor )
 {
-    aPipetteColor = rColor;
-    m_xCtlPipette->SetColor( aPipetteColor );
+    m_aPipetteColor = rColor;
+    m_xCtlPipette->SetColor( m_aPipetteColor );
 }
 
 void SvxBmpMask::PipetteClicked()
@@ -521,28 +521,28 @@ void SvxBmpMask::PipetteClicked()
     {
         m_xCbx1->set_active(true);
         m_xData->CbxHdl(*m_xCbx1);
-        m_xQSet1->SetItemColor( 1, aPipetteColor );
+        m_xQSet1->SetItemColor( 1, m_aPipetteColor );
         m_xQSet1->SetFormat();
     }
     else if( m_xQSet2->GetSelectedItemId() == 1 )
     {
         m_xCbx2->set_active(true);
         m_xData->CbxHdl(*m_xCbx2);
-        m_xQSet2->SetItemColor( 1, aPipetteColor );
+        m_xQSet2->SetItemColor( 1, m_aPipetteColor );
         m_xQSet2->SetFormat();
     }
     else if( m_xQSet3->GetSelectedItemId() == 1 )
     {
         m_xCbx3->set_active(true);
         m_xData->CbxHdl(*m_xCbx3);
-        m_xQSet3->SetItemColor( 1, aPipetteColor );
+        m_xQSet3->SetItemColor( 1, m_aPipetteColor );
         m_xQSet3->SetFormat();
     }
     else if( m_xQSet4->GetSelectedItemId() == 1 )
     {
         m_xCbx4->set_active(true);
         m_xData->CbxHdl(*m_xCbx4);
-        m_xQSet4->SetItemColor( 1, aPipetteColor );
+        m_xQSet4->SetItemColor( 1, m_aPipetteColor );
         m_xQSet4->SetFormat();
     }
 

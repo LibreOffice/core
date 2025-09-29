@@ -123,8 +123,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxBmpMask final : public SfxDockingWindow
 
     std::unique_ptr<MaskData> m_xData;
 
-    Color               aPipetteColor;
-    SvxBmpMaskSelectItem aSelItem;
+    Color               m_aPipetteColor;
+    SvxBmpMaskSelectItem m_aSelItem;
 
     virtual bool        Close() override;
 
