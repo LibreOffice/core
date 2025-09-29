@@ -457,7 +457,7 @@ void DrawController::fireChangeLayer( const css::uno::Reference< css::drawing::X
     {
         sal_Int32 nHandle = PROPERTY_ACTIVE_LAYER;
 
-        Any aNewValue ( *xNewLayer);
+        Any aNewValue (xNewLayer);
 
         Any aOldValue ;
 
