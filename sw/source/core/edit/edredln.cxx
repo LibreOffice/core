@@ -85,11 +85,11 @@ static void lcl_InvalidateAll( SwViewShell* pSh )
     }
 }
 
-bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
+bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos, bool bDirect )
 {
     CurrShell aCurr( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( nPos, true, true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( nPos, true, true, bDirect );
     if( !nPos && !::IsExtraData( *GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -172,11 +172,11 @@ void SwEditShell::ReinstateRedline(SwRedlineTable::size_type nPos)
     EndAllAction();
 }
 
-bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
+bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos, bool bDirect )
 {
     CurrShell aCurr( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( nPos, true, true );
+    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( nPos, true, true, bDirect );
     if( !nPos && !::IsExtraData( *GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
