@@ -57,16 +57,26 @@ public:
 };
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testExportFormula)
+{
+    createSwDoc("tdf168572.odt");
+
+    // Without the fix in place, this test would have crashed here
+    save(mpFilter);
+
+    std::string aActual = TempFileToString();
+    std::string aExpected("![]()" SAL_NEWLINE_STRING);
+
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
 {
     createSwDoc("basic-elements.fodt");
 
     save(mpFilter);
-    SvFileStream fileStream(maTempFile.GetURL(), StreamMode::READ);
-    std::vector<char> buffer(fileStream.remainingSize());
-    fileStream.ReadBytes(buffer.data(), buffer.size());
-    std::string_view md_content(buffer.data(), buffer.size());
-    std::string_view expected(
+    std::string aActual = TempFileToString();
+    std::string aExpected(
         // clang-format off
         "# Heading 1" SAL_NEWLINE_STRING
         SAL_NEWLINE_STRING
@@ -93,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportingBasicElements)
         // clang-format on
     );
 
-    CPPUNIT_ASSERT_EQUAL(expected, md_content);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHeading)
