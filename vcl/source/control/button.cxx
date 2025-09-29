@@ -919,8 +919,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice *pDev, SystemTextColorFl
     sal_Int32 nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
     if( nImageSep < 1 )
         nImageSep = 1;
-    if ( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
-         mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
+    if ( mnDDStyle == PushButtonDropdownStyle::MenuButton )
     {
         tools::Long nSeparatorX = 0;
         tools::Rectangle aSymbolRect = aInRect;
@@ -1069,12 +1068,6 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     bool bRollOver = (IsMouseOver() && aInRect.Contains(GetPointerPosPixel()));
     if (bRollOver)
         nButtonStyle |= DrawButtonFlags::Highlight;
-    bool bDrawMenuSep = mnDDStyle == PushButtonDropdownStyle::SplitMenuButton;
-    if (GetStyle() & WB_FLATBUTTON)
-    {
-        if (!bRollOver && !HasFocus())
-            bDrawMenuSep = false;
-    }
     // tdf#123175 if there is a custom control bg set, draw the button without outsourcing to the NWF
     bNativeOK = !IsControlBackground() && rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire);
     if (bNativeOK)
@@ -1147,7 +1140,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent(&rRenderContext, SystemTextColorFlags::NONE,
-                                  aInRect, bDrawMenuSep, nButtonStyle);
+                                  aInRect, /*bDrawMenuSep*/false, nButtonStyle);
 
         if (HasFocus())
             ShowFocus(ImplGetFocusRect());
@@ -1172,7 +1165,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     }
 
     // draw content
-    ImplDrawPushButtonContent(&rRenderContext, SystemTextColorFlags::NONE, aInRect, bDrawMenuSep, nButtonStyle);
+    ImplDrawPushButtonContent(&rRenderContext, SystemTextColorFlags::NONE, aInRect, /*bDrawMenuSep*/false, nButtonStyle);
 
     if (HasFocus())
     {
@@ -1706,8 +1699,7 @@ Size PushButton::CalcMinimumSize() const
     }
     else if ( Button::HasImage() )
         aSize = GetModeImage().GetSizePixel();
-    if( mnDDStyle == PushButtonDropdownStyle::MenuButton ||
-        mnDDStyle == PushButtonDropdownStyle::SplitMenuButton )
+    if( mnDDStyle == PushButtonDropdownStyle::MenuButton )
     {
         tools::Long nSymbolSize = GetTextHeight() / 2 + 1;
         aSize.AdjustWidth(2*nSymbolSize );

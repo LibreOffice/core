@@ -114,7 +114,6 @@ enum class PushButtonDropdownStyle
 {
     NONE            = 0x0000,
     MenuButton      = 0x0002, //visual down arrow
-    SplitMenuButton = 0x0003, //visual down arrow and separator line
 };
 
 class VCL_DLLPUBLIC PushButton : public Button
