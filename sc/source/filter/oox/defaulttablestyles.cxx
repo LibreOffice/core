@@ -68,6 +68,8 @@ void DefaultOOXMLTableStyles::importBorderElement(oox::xls::BorderRef xBorder,
         case BorderElementStyle::DOUBLE:
             nBorderStyle = oox::XML_double;
             break;
+        default:
+            nBorderStyle = oox::XML_none;
     }
 
     oox::xls::XlsColor& rColor = maColors[rBorderElement.nColorId];

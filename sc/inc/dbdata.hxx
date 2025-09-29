@@ -121,7 +121,7 @@ protected:
 };
 
 
-struct SAL_DLLPUBLIC ScTableStyleParam
+struct SAL_DLLPUBLIC_RTTI ScTableStyleParam
 {
     OUString maStyleName;
     bool mbRowStripes;
@@ -129,8 +129,8 @@ struct SAL_DLLPUBLIC ScTableStyleParam
     bool mbFirstColumn;
     bool mbLastColumn;
 
-    ScTableStyleParam();
-    ScTableStyleParam(const ScTableStyleParam& rParam) = default;
+    SC_DLLPUBLIC ScTableStyleParam();
+    SC_DLLPUBLIC ScTableStyleParam(const ScTableStyleParam& rParam) = default;
 
     bool operator== (const ScTableStyleParam& rData) const;
 };
@@ -308,8 +308,8 @@ public:
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 
-    void SetTableStyleInfo(const ScTableStyleParam& rParams);
-    const ScTableStyleParam* GetTableStyleInfo() const;
+    SC_DLLPUBLIC void SetTableStyleInfo(const ScTableStyleParam& rParams);
+    SC_DLLPUBLIC const ScTableStyleParam* GetTableStyleInfo() const;
 
 private:
 
