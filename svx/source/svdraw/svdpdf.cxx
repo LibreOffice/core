@@ -1057,37 +1057,39 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     }
     SAL_INFO("sd.filter", "details are: " << version << Notice << FullName << FamilyName << Weight
                                           << srcFontType << FontName);
+
+    // Always create cidFontInfo, we will need it if we need to merge fonts
+    OString AdobeCopyright, Trademark;
+    sal_Int32 nSplit = !Notice.isEmpty() ? Notice.lastIndexOf('.', Notice.getLength() - 1) : -1;
+    if (nSplit != -1)
+    {
+        AdobeCopyright = Notice.copy(0, nSplit + 1);
+        Trademark = Notice.copy(nSplit + 1);
+    }
+    else
+        AdobeCopyright = Notice;
+    SvFileStream cidFontInfo(cidFontInfoUrl, StreamMode::READWRITE | StreamMode::TRUNC);
+    cidFontInfo.WriteLine(Concat2View("FontName\t(" + FontName + ")"));
+    cidFontInfo.WriteLine(Concat2View("FullName\t(" + FullName + ")"));
+    OString OutputFamilyName = FamilyName;
+    if (!isSimpleFamilyName(Weight))
+        OutputFamilyName = OutputFamilyName + " " + Weight;
+    cidFontInfo.WriteLine(Concat2View("FamilyName\t(" + OutputFamilyName + ")"));
+    cidFontInfo.WriteLine(Concat2View("version\t\t(" + version + ")"));
+    cidFontInfo.WriteLine("Registry\t(Adobe)");
+    cidFontInfo.WriteLine("Ordering\t(Identity)");
+    cidFontInfo.WriteLine("Supplement\t0");
+    cidFontInfo.WriteLine("XUID\t\t[1 11 9273828]");
+    cidFontInfo.WriteLine("FSType\t\t4");
+    cidFontInfo.WriteLine(Concat2View("AdobeCopyright\t(" + AdobeCopyright + ")"));
+    cidFontInfo.WriteLine(Concat2View("Trademark\t(" + Trademark + ")"));
+    cidFontInfo.Close();
+
     bNameKeyed = srcFontType.endsWith("(name-keyed)");
 
     if (bNameKeyed)
     {
-        OString AdobeCopyright, Trademark;
-        sal_Int32 nSplit = Notice.lastIndexOf('.', Notice.getLength() - 1);
-        if (nSplit != -1)
-        {
-            AdobeCopyright = Notice.copy(0, nSplit + 1);
-            Trademark = Notice.copy(nSplit + 1);
-        }
-        else
-            AdobeCopyright = Notice;
-        SAL_WARN("sd.filter", "convert to cid keyed");
-        SvFileStream cidFontInfo(cidFontInfoUrl, StreamMode::READWRITE | StreamMode::TRUNC);
-        cidFontInfo.WriteLine(Concat2View("FontName\t(" + FontName + ")"));
-        cidFontInfo.WriteLine(Concat2View("FullName\t(" + FullName + ")"));
-        OString OutputFamilyName = FamilyName;
-        if (!isSimpleFamilyName(Weight))
-            OutputFamilyName = OutputFamilyName + " " + Weight;
-        cidFontInfo.WriteLine(Concat2View("FamilyName\t(" + OutputFamilyName + ")"));
-        cidFontInfo.WriteLine(Concat2View("version\t\t(" + version + ")"));
-        cidFontInfo.WriteLine("Registry\t(Adobe)");
-        cidFontInfo.WriteLine("Ordering\t(Identity)");
-        cidFontInfo.WriteLine("Supplement\t0");
-        cidFontInfo.WriteLine("XUID\t\t[1 11 9273828]");
-        cidFontInfo.WriteLine("FSType\t\t4");
-        cidFontInfo.WriteLine(Concat2View("AdobeCopyright\t(" + AdobeCopyright + ")"));
-        cidFontInfo.WriteLine(Concat2View("Trademark\t(" + Trademark + ")"));
-        cidFontInfo.Close();
-
+        SAL_INFO("sd.filter", "convert to cid keyed");
         SvFileStream nameToCIDMap(nameToCIDMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
         nameToCIDMap.WriteLine(Concat2View("mergefonts " + FontName + " 0"));
         for (const auto& glyph : glyphIndexToName)
