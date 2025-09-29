@@ -2066,28 +2066,32 @@ SvxAutoCorrect::SearchWordsInList(
             return pRet;
         }
     }
-
-    // If it still could not be found here, then keep on searching
-    LanguageType eLang = aLanguageTag.getLanguageType();
-    // the primary language for example EN
-    aLanguageTag.reset(aLanguageTag.getLanguage());
-    LanguageType nTmpKey = aLanguageTag.getLanguageType(false);
-    if (nTmpKey != eLang && nTmpKey != LANGUAGE_UNDETERMINED &&
-                (m_aLangTable.find(aLanguageTag) != m_aLangTable.end() ||
-                 CreateLanguageFile(aLanguageTag, false)))
+    else
     {
-        //the language is available - so bring it on
-        const auto iter = m_aLangTable.find(aLanguageTag);
-        assert(iter != m_aLangTable.end());
-        SvxAutoCorrectLanguageLists& rList = iter->second;
-        auto pRet = lcl_SearchWordsInList( &rList, rTxt, rStt, nEndPos );
-        if( pRet )
+        // If the specific language's list wasn't found, keep on searching
+        LanguageType eLang = aLanguageTag.getLanguageType();
+        // the primary language for example EN
+        aLanguageTag.reset(aLanguageTag.getLanguage());
+        LanguageType nTmpKey = aLanguageTag.getLanguageType(false);
+        if (nTmpKey != eLang && nTmpKey != LANGUAGE_UNDETERMINED
+            && (m_aLangTable.find(aLanguageTag) != m_aLangTable.end()
+                || CreateLanguageFile(aLanguageTag, false)))
         {
-            rLang = aLanguageTag;
-            return pRet;
+            //the language is available - so bring it on
+            const auto iter = m_aLangTable.find(aLanguageTag);
+            assert(iter != m_aLangTable.end());
+            SvxAutoCorrectLanguageLists& rList = iter->second;
+            auto pRet = lcl_SearchWordsInList(&rList, rTxt, rStt, nEndPos);
+            if (pRet)
+            {
+                rLang = aLanguageTag;
+                return pRet;
+            }
         }
     }
 
+    // This is the [All] entry in AutoCorrect Options' replacement language list, used with all
+    // languages, so don't skip when language-specific list didn't contain the text:
     if (m_aLangTable.find(aLanguageTag.reset(LANGUAGE_UNDETERMINED)) != m_aLangTable.end() ||
             CreateLanguageFile(aLanguageTag, false))
     {
