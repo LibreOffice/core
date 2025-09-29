@@ -34,6 +34,10 @@
 #include "com/sun/star/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+#include <type_traits>
+#endif
+
 namespace com
 {
 namespace sun
@@ -78,6 +82,12 @@ public:
         @param value value of the Any
     */
     template <typename T>
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+        // Disallow things like
+        // Reference<XInterface> x(...);
+        // Any a(*x);
+        requires (!std::is_base_of_v<XInterface, T>)
+#endif
     explicit inline Any( T const & value );
     /// Ctor support for C++ bool.
     explicit inline Any( bool value );

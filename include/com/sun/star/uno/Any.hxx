@@ -63,6 +63,12 @@ inline Any::Any()
 
 
 template <typename T>
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+    // Disallow things like
+    // Reference<XInterface> x(...);
+    // Any a(*x);
+    requires(!std::is_base_of_v<XInterface, T>)
+#endif
 inline Any::Any( T const & value )
 {
     ::uno_type_any_construct(
