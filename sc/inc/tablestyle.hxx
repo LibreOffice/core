@@ -207,6 +207,11 @@ public:
 class SC_DLLPUBLIC ScTableStyles
 {
 private:
+    ScTableStyles(ScTableStyles const&) = delete;
+    ScTableStyles(ScTableStyles&&) = delete;
+    void operator=(ScTableStyles const&) = delete;
+    void operator=(ScTableStyles&&) = delete;
+
     std::unordered_map<OUString, std::unique_ptr<ScTableStyle>> maTableStyles;
 
 public:
