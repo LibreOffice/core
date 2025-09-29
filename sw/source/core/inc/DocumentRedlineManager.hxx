@@ -104,7 +104,8 @@ public:
     virtual void SetRedlineMove(/*[in]*/bool bFlag) override;
 
     virtual bool AcceptRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ bool bRange = false) override;
+                               /*[in]*/ bool bRange = false,
+                               bool bDirect = false) override;
 
     virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
                                /*[in]*/ sal_Int8 nDepth = 0) override;
@@ -112,7 +113,8 @@ public:
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam) override;
 
     virtual bool RejectRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ bool bRange = false) override;
+                               /*[in]*/ bool bRange = false,
+                               bool bDirect = false) override;
 
     virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
                                /*[in]*/ sal_Int8 nDepth = 0) override;
@@ -164,10 +166,12 @@ private:
 
     bool RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
                             SwRedlineTable::size_type& nPosStart,
-                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete);
+                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete,
+                            bool bDirect);
     bool AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
                             SwRedlineTable::size_type& nPosStart,
-                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete);
+                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete,
+                            bool bDirect);
     bool AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
     bool RejectMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
     void PreAppendInsertRedline(AppendRedlineContext& rCtx);

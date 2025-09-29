@@ -1017,6 +1017,27 @@ namespace
         return true;
     }
 
+    /// Given a redline that has an other underlying redline, drop the redline on top.
+    /// Used to accept a format on top of insert/delete, no changes to the text node string.
+    bool lcl_AcceptOuterFormat(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos)
+    {
+        SwRangeRedline* pRedl = rArr[rPos];
+        return pRedl->PopData();
+    }
+
+    /// Given a redline that has an other underlying redline, drop the redline on top & restore the
+    /// old doc model. Used to reject a format on top of insert/delete.
+    bool lcl_RejectOuterFormat(SwRedlineTable& rArr, SwRedlineTable::size_type& rPos)
+    {
+        SwRangeRedline* pRedl = rArr[rPos];
+        SwDoc& rDoc = pRedl->GetDoc();
+        SwPaM aPam(*(pRedl->Start()), *(pRedl->End()));
+        rDoc.ResetAttrs(aPam);
+        if (pRedl->GetExtraData())
+            pRedl->GetExtraData()->Reject(*pRedl);
+        return pRedl->PopData();
+    }
+
     /// Given a redline that has two types and the underlying type is
     /// delete, reject the redline based on that underlying type. Used
     /// to accept a delete-then-format, i.e. this does change the text
@@ -3342,7 +3363,7 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
 bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
                                                 SwRedlineTable::size_type& nPosStart,
                                                 SwRedlineTable::size_type& nPosEnd,
-                                                bool bCallDelete)
+                                                bool bCallDelete, bool bDirect)
 {
     bool bRet = false;
 
@@ -3386,7 +3407,13 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
-            if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
+            if (bHierarchicalFormat && bDirect
+                && (pTmp->GetType(1) == RedlineType::Insert
+                    || pTmp->GetType(1) == RedlineType::Delete))
+            {
+                bRet |= lcl_AcceptOuterFormat(maRedlineTable, nRdlIdx);
+            }
+            else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // This combination of 2 redline types prefers accepting the inner one first.
                 bRet |= lcl_DeleteInnerRedline(maRedlineTable, nRdlIdx, 1);
@@ -3426,7 +3453,7 @@ bool DocumentRedlineManager::AcceptRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData))
+        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData) && !bDirect)
         {
             // The aOrigData has 2 types and for these types we want the underlying type to be
             // combined with the type of the surrounding redlines, so accept pTmp, too.
@@ -3475,7 +3502,7 @@ bool DocumentRedlineManager::AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCall
 }
 
 bool DocumentRedlineManager::AcceptRedline(SwRedlineTable::size_type nPos, bool bCallDelete,
-                                           bool bRange)
+                                           bool bRange, bool bDirect)
 {
     bool bRet = false;
 
@@ -3520,7 +3547,7 @@ bool DocumentRedlineManager::AcceptRedline(SwRedlineTable::size_type nPos, bool 
 
                 // Accept redlines between pPamStart-pPamEnd.
                 // but only those that can be combined with the selected.
-                bRet |= AcceptRedlineRange(nPos, nPosStart, nPosEnd, bCallDelete);
+                bRet |= AcceptRedlineRange(nPos, nPosStart, nPosEnd, bCallDelete, bDirect);
             }
         }
         else do {
@@ -3661,7 +3688,7 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
 bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
                                                 SwRedlineTable::size_type& nPosStart,
                                                 SwRedlineTable::size_type& nPosEnd,
-                                                bool bCallDelete)
+                                                bool bCallDelete, bool bDirect)
 {
     bool bRet = false;
 
@@ -3709,7 +3736,13 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             nPamEndNI = pTmp->Start()->GetNodeIndex();
             nPamEndCI = pTmp->Start()->GetContentIndex();
 
-            if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
+            if (bHierarchicalFormat && bDirect
+                && (pTmp->GetType(1) == RedlineType::Insert
+                    || pTmp->GetType(1) == RedlineType::Delete))
+            {
+                    bRet |= lcl_RejectOuterFormat(maRedlineTable, nRdlIdx);
+            }
+            else if (bHierarchicalFormat && pTmp->GetType(1) == RedlineType::Insert)
             {
                 // Accept the format itself and then reject the insert by deleting the range.
                 SwPaM aPam(*pTmp->Start(), *pTmp->End());
@@ -3779,7 +3812,7 @@ bool DocumentRedlineManager::RejectRedlineRange(SwRedlineTable::size_type nPosOr
             }
             nRdlIdx++; //we will decrease it in the loop anyway.
         }
-        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData))
+        else if (CanReverseCombineTypesForAcceptReject(*pTmp, aOrigData) && !bDirect)
         {
             // The aOrigData has 2 types and for these types we want the underlying type to be
             // combined with the type of the surrounding redlines, so reject pTmp, too.
@@ -3834,7 +3867,8 @@ bool DocumentRedlineManager::RejectMovedRedlines(sal_uInt32 nMovedID, bool bCall
 }
 
 bool DocumentRedlineManager::RejectRedline(SwRedlineTable::size_type nPos,
-                                           bool bCallDelete, bool bRange)
+                                           bool bCallDelete, bool bRange,
+                                           bool bDirect)
 {
     bool bRet = false;
 
@@ -3879,7 +3913,7 @@ bool DocumentRedlineManager::RejectRedline(SwRedlineTable::size_type nPos,
                 // Reject items between pPamStart-pPamEnd
                 // but only those that can be combined with the selected.
 
-                bRet |= RejectRedlineRange(nPos, nPosStart, nPosEnd, bCallDelete);
+                bRet |= RejectRedlineRange(nPos, nPosStart, nPosEnd, bCallDelete, bDirect);
             }
         }
         else do {

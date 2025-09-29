@@ -1143,7 +1143,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     else
         rTreeView.all_foreach(lambda);
 
-    bool (SwEditShell::*FnAccRej)( SwRedlineTable::size_type ) = &SwEditShell::AcceptRedline;
+    bool (SwEditShell::*FnAccRej)( SwRedlineTable::size_type, bool ) = &SwEditShell::AcceptRedline;
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 
@@ -1190,7 +1190,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     {
         SwRedlineTable::size_type nPosition = GetRedlinePos( *rRedLine );
         if( nPosition != SwRedlineTable::npos )
-            (pSh->*FnAccRej)( nPosition );
+            (pSh->*FnAccRej)( nPosition, /*bDirect=*/true );
 
         // handle redlines of table rows, stored as children of the item associated
         // to the deleted/inserted table row(s)
@@ -1205,7 +1205,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
                 {
                     nPosition = GetRedlinePos( *xChild );
                     if( nPosition != SwRedlineTable::npos )
-                        (pSh->*FnAccRej)( nPosition );
+                        (pSh->*FnAccRej)( nPosition, /*bDirect=*/true );
                 }
                 while ( rTreeView.iter_next_sibling(*xChild) );
             }
