@@ -189,6 +189,17 @@ bool writeFontFile(const OUString& fileUrl, const std::vector<uint8_t>& rFontDat
 
     return true;
 }
+
+OUString guessFontName(const OUString& postScriptName)
+{
+    OUString sFontName;
+    sal_Int32 lastDash = postScriptName.lastIndexOf('-');
+    if (lastDash == -1)
+        sFontName = postScriptName;
+    else
+        sFontName = postScriptName.copy(0, lastDash);
+    return sFontName;
+}
 }
 
 // Possibly there is some alternative route to query pdfium for all fonts without
@@ -228,9 +239,16 @@ void ImpSdrPdfImport::CollectFonts()
             auto itImportedFont = maImportedFonts.find(font);
             if (itImportedFont == maImportedFonts.end())
             {
-                OUString sFontName = pPageObject->getFontName();
-
                 OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
+
+                OUString sFontName = pPageObject->getFontName();
+                if (sFontName.isEmpty())
+                {
+                    sFontName = guessFontName(sPostScriptName);
+                    SAL_WARN("sd.filter",
+                             "missing font name, attempt to reconstruct from postscriptname as: "
+                                 << sFontName);
+                }
 
                 SubSetInfo* pSubSetInfo;
 
@@ -905,6 +923,33 @@ static bool isSimpleFamilyName(std::string_view Weight)
            || Weight == "BoldItalic";
 }
 
+static void rewriteBrokenFontName(std::string_view brokenName, std::string_view fixedName,
+                                  const OUString& pfaCIDUrl)
+{
+    OUString oldCIDUrl = pfaCIDUrl + ".broken";
+    if (osl::File::move(pfaCIDUrl, oldCIDUrl) != osl::File::E_None)
+    {
+        SAL_WARN("sd.filter", "unable to move file");
+        return;
+    }
+
+    const OString sBrokenLine = "/FontName /"_ostr + brokenName + " def"_ostr;
+    const OString sFixedLine = "/FontName /"_ostr + fixedName + " def"_ostr;
+
+    SvFileStream input(oldCIDUrl, StreamMode::READ);
+    SvFileStream output(pfaCIDUrl, StreamMode::WRITE | StreamMode::TRUNC);
+    OString sLine;
+    while (input.ReadLine(sLine))
+    {
+        if (sLine == sBrokenLine)
+        {
+            output.WriteLine(sFixedLine);
+            continue;
+        }
+        output.WriteLine(sLine);
+    }
+}
+
 // https://ccjktype.fonts.adobe.com/2011/12/leveraging-afdko-part-1.html
 // https://ccjktype.fonts.adobe.com/2012/01/leveraging-afdko-part-2.html
 // https://ccjktype.fonts.adobe.com/2012/01/leveraging-afdko-part-3.html
@@ -939,6 +984,7 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
         return false;
     }
     SAL_INFO("sd.filter", "dump success");
+    bool bBrokenFontName(false);
     SvFileStream info(infoUrl, StreamMode::READ);
     OStringBuffer glyphBuffer;
     OString sLine;
@@ -958,8 +1004,10 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
             continue;
         if (extractEntry(sLine, "FontName", FontName))
         {
-            SAL_WARN_IF(FontName != postScriptName.toUtf8(), "sd.filter",
-                        "expected that these match");
+            bBrokenFontName = FontName != postScriptName.toUtf8();
+            SAL_WARN_IF(bBrokenFontName, "sd.filter",
+                        "expected that FontName of <" << FontName << "> matches PostScriptName of <"
+                                                      << postScriptName << ">");
             continue;
         }
         if (sLine.startsWith("glyph["))
@@ -1068,6 +1116,9 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
             return false;
         }
     }
+
+    if (bBrokenFontName)
+        rewriteBrokenFontName(FontName, postScriptName.toUtf8(), pfaCIDUrl);
 
     return true;
 }
