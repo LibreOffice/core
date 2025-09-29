@@ -41,11 +41,6 @@ namespace drawinglayer::processor3d
             geometry::ViewInformation3D                     maViewInformation3D;
 
         protected:
-            /*  callback method to allow the implementations to react on changes
-                to the current ViewInformation2D if needed
-             */
-            virtual void onViewInformation3DChanged() {}
-
             /*  as tooling, the process() implementation takes over API handling and calls this
                 virtual render method when the primitive implementation is BasePrimitive3D-based.
                 Default implementation does nothing

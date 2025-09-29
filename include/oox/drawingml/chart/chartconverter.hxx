@@ -102,7 +102,6 @@ class OOX_DLLPUBLIC ChartStyleConverter
 {
 public:
     explicit    ChartStyleConverter() = default;
-    virtual     ~ChartStyleConverter() = default;
 
     /** Converts the passed ChartStyleModel to the passed chart2 XChartStyle.
 

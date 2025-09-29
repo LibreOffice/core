@@ -65,9 +65,6 @@ namespace drawinglayer::processor3d
             {
                 // set if changed
                 maViewInformation3D = rNew;
-
-                // allow reaction on change
-                onViewInformation3DChanged();
             }
         }
 } // end of namespace
