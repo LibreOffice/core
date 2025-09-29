@@ -883,10 +883,14 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem co
         if (bLastInGroup)
             tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
-        tools::Rectangle aCtrlRegion( pItem->maRect );
-        aCtrlRegion.AdjustBottom(TabPaneValue::m_nOverlap);
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
-                                                     aCtrlRegion, nState, tiValue, OUString() );
+        tools::Rectangle aCtrlRegion(pItem->maRect);
+        // overlap the bottom line to visually merge tabitem and tabpane
+        if (nState & ControlState::SELECTED)
+            aCtrlRegion.AdjustBottom(TabPaneValue::m_nOverlap);
+
+        bNativeOK
+            = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
+                                               aCtrlRegion, nState, tiValue, OUString());
     }
 
     if (!bNativeOK)
