@@ -20,8 +20,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
-#include <unotxdoc.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/ITiledRenderable.hxx>
 #include <tools/helpers.hxx>
 
 using namespace ::com::sun::star;
@@ -157,8 +157,8 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     loadFromFile(u"commentsInMargin.odt");
     if (comphelper::LibreOfficeKit::isActive())
     {
-        SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        vcl::ITiledRenderable* pTiledDoc = dynamic_cast<vcl::ITiledRenderable*>(mxComponent.get());
+        pTiledDoc->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     }
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(

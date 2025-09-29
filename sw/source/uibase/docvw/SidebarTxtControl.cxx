@@ -212,6 +212,7 @@ void SidebarTextControl::DrawForPage(OutputDevice* pDev, const Point& rPt)
 
     if (OutlinerView* pOutlinerView = mrSidebarWin.GetOutlinerView())
     {
+        pOutlinerView->GetOutliner()->SetPaperSize(aSize);
         pOutlinerView->GetOutliner()->Draw(*pDev, tools::Rectangle(rPt, aSize));
     }
 
