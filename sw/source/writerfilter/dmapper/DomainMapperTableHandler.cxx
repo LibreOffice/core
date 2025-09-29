@@ -599,8 +599,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
         // the default behavior when DOCX doesn't define "compatibilityMode" option is to add the cell spacing
+        // but not for RTF
 
-        if (0 < nMode && nMode <= 14 && rInfo.nNestLevel == 1)
+        if (m_rDMapper_Impl.IsOOXMLImport() && (nMode < 0 || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
             const sal_Int32 nAdjustedMargin = nLeftMargin - rInfo.nLeftBorderDistance;
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );

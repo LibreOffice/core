@@ -892,6 +892,15 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeRotated)
                 u"36.05pt,300.55pt");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf168598, "tdf168598.docx")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+
+    // Without the fix in place this would be -302
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-501),
+                         getProperty<sal_Int32>(xTable, "LeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
