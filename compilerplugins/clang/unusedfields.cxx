@@ -317,6 +317,9 @@ bool UnusedFields::isSomeKindOfZero(const Expr* arg)
     if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
         return false;
     }
+    // this will trigger an assert inside clang
+    if (arg->isValueDependent())
+        return false;
     if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(arg)) {
         return cxxConstructExpr->getConstructor()->isDefaultConstructor();
     }
