@@ -192,7 +192,8 @@ public:
     virtual void SetRedlineMove(/*[in]*/bool bFlag) = 0;
 
     virtual bool AcceptRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
-                               /*[in]*/ bool bRange = false)
+                               /*[in]*/ bool bRange = false,
+                               bool bDirect = false)
         = 0;
 
     virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
@@ -202,7 +203,8 @@ public:
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam ) = 0;
 
     virtual bool RejectRedline(/*[in]*/ SwRedlineTable::size_type nPos,
-                               /*[in]*/ bool bCallDelete, /*[in]*/ bool bRange = false)
+                               /*[in]*/ bool bCallDelete, /*[in]*/ bool bRange = false,
+                               bool bDirect = false)
         = 0;
 
     virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,

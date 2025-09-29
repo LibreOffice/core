@@ -21,6 +21,7 @@
 #include <swmodule.hxx>
 #include <strings.hrc>
 #include <fchrfmt.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -171,6 +172,131 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRecordOldCharStyle)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pRedlineSet->Count());
     const SwFormatCharFormat& rOldCharFormat = pRedlineSet->Get(RES_TXTATR_CHARFMT);
     CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr, rOldCharFormat.GetCharFormat()->GetName().toString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDelThenFormatDirect)
+{
+    // Given a document with a delete redline, part of it has a format redline on top:
+    createSwDoc("del-then-format.docx");
+
+    // When "directly" accepting the delete-then-format redline:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->AcceptRedline(1, /*bDirect=*/true);
+
+    // Then make sure that the format gets accepted, and the delete redline is kept:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    {
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : 0
+        // i.e. when ignoring the "direct" parameter, the delete redline was accepted instead of the
+        // format one.
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+
+        // After first char inside the redline: bold.
+        pWrtShell->SttEndDoc(/*bStt=*/true);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+        SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pDoc->GetAttrPool());
+        pWrtShell->GetCurAttr(aSet);
+        const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
+        CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetValue());
+    }
+
+    // And given a reset state:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+
+    // When "directly" rejecting the delete-then-format redline:
+    pWrtShell->RejectRedline(1, /*bDirect=*/true);
+
+    // Then make sure that the format gets rejected and the delete redline is kept:
+    {
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1 (delete)
+        // - Actual  : 2 (format)
+        // i.e. the delete redline was rejected and format remained, not the other way around.
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+
+        // After first char inside the redline: not bold anymore.
+        pWrtShell->SttEndDoc(/*bStt=*/true);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+        SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pDoc->GetAttrPool());
+        pWrtShell->GetCurAttr(aSet);
+        const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
+        CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, rWeightItem.GetValue());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsThenFormatDirect)
+{
+    // Given a document with an insert redline, part of it has a format redline on top:
+    createSwDoc("ins-then-format.docx");
+
+    // When "directly" accepting the insert-then-format redline:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->AcceptRedline(1, /*bDirect=*/true);
+
+    // Then make sure that the format gets accepted, and the insert redline is kept:
+    SwDoc* pDoc = pDocShell->GetDoc();
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    SwRedlineTable& rRedlines = rIDRA.GetRedlineTable();
+    {
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 1
+        // - Actual  : 3
+        // i.e. the accept didn't do anything in direct mode.
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+
+        // After first char inside the redline: bold.
+        pWrtShell->SttEndDoc(/*bStt=*/true);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+        SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pDoc->GetAttrPool());
+        pWrtShell->GetCurAttr(aSet);
+        const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
+        CPPUNIT_ASSERT_EQUAL(WEIGHT_BOLD, rWeightItem.GetValue());
+    }
+
+    // And given a reset state:
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rRedlines.size());
+
+    // When "directly" rejecting the insert-then-format redline:
+    pWrtShell->RejectRedline(1, /*bDirect=*/true);
+
+    // Then make sure that the format gets rejected and the insert redline is kept:
+    {
+        SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: AAABBBCCC
+        // - Actual  : AAACCC
+        // i.e. the insert was rejected, not the format.
+        CPPUNIT_ASSERT_EQUAL(u"AAABBBCCC"_ustr, pTextNode->GetText());
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rRedlines.size());
+        const SwRedlineData& rRedlineData = rRedlines[0]->GetRedlineData(0);
+        CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlineData.GetType());
+        CPPUNIT_ASSERT(!rRedlineData.Next());
+
+        // After first char inside the redline: not bold anymore.
+        pWrtShell->SttEndDoc(/*bStt=*/true);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+        SfxItemSetFixed<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT> aSet(pDoc->GetAttrPool());
+        pWrtShell->GetCurAttr(aSet);
+        const SvxWeightItem& rWeightItem = aSet.Get(RES_CHRATR_WEIGHT);
+        CPPUNIT_ASSERT_EQUAL(WEIGHT_NORMAL, rWeightItem.GetValue());
+    }
 }
 }
 
