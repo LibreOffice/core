@@ -254,7 +254,7 @@ void ImpSdrPdfImport::CollectFonts()
                 bool bTTF = EmbeddedFontsManager::analyzeTTF(aFontData.data(), aFontData.size(),
                                                              eFontWeight);
                 SAL_INFO_IF(!bTTF, "sd.filter", "not ttf/otf, converting");
-                OUString fileUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(
+                OUString fileUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(
                     sFontFileName, bTTF ? u".ttf" : u".t1");
                 if (!writeFontFile(fileUrl, aFontData))
                     SAL_WARN("sd.filter", "ttf not written");
@@ -1377,7 +1377,7 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
         Features.Close();
     }
 
-    OUString otfUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(postScriptName, u".otf");
+    OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(postScriptName, u".otf");
     OUString features = !ligatureGlyphToChars.empty() ? mergedFeaturesUrl : OUString();
     if (EmbeddedFontsManager::makeotf(mergedFontUrl, otfUrl, FontMenuNameDBUrl, mergedCMapUrl,
                                       features))
@@ -1427,13 +1427,13 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     if (rSubSetInfo.aComponents.size() > 1)
     {
         OUString mergedFontUrl
-            = EmbeddedFontsManager::fileUrlForTemporaryFont(postScriptName, u".merged.pfa.cid");
+            = EmbeddedFontsManager::getFileUrlForTemporaryFont(postScriptName, u".merged.pfa.cid");
         return mergeFontSubsets(mergedFontUrl, FontMenuNameDBUrl, postScriptName, longFontName,
                                 Weight, rSubSetInfo);
     }
 
     // Otherwise not merged font, just a single subset
-    OUString otfUrl = EmbeddedFontsManager::fileUrlForTemporaryFont(fontFileName, u".otf");
+    OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(fontFileName, u".otf");
     OUString features = bFeatures ? FeaturesUrl : OUString();
     if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, CMapUrl, features))
         return { longFontName, otfUrl, toOfficeWeight(Weight) };

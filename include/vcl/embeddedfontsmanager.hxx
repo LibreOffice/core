@@ -61,7 +61,7 @@ public:
         bool bSubsetted = false);
 
     /**
-      fileUrl needs to be created via fileUrlForTemporaryFont
+      fileUrl needs to be created via getFileUrlForTemporaryFont
     */
     bool addEmbeddedFont( const OUString& fileUrl, const OUString& fontName, bool sufficientFontRights );
 
@@ -92,7 +92,7 @@ public:
     static bool analyzeTTF(const void* data, tools::Long size, FontWeight& weight);
 
     /**
-      Removes all temporary fonts in the path used by fileUrlForTemporaryFont().
+      Removes all temporary fonts in the path used by getFileUrlForTemporaryFont().
       @internal
     */
     static void clearTemporaryFontFiles();
@@ -124,7 +124,7 @@ public:
     EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
     ~EmbeddedFontsManager() COVERITY_NOEXCEPT_FALSE;
 
-    static OUString fileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);
+    static OUString getFileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);
 
     // write text dump
     static bool tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl);
