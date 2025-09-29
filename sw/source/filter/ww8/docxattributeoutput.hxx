@@ -1082,8 +1082,6 @@ private:
     bool m_bParaBeforeAutoSpacing,m_bParaAfterAutoSpacing;
     // store hardcoded value which was set during import.
     sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
-    // flag inline heading
-    bool m_bParaInlineHeading;
 
     SdtBlockHelper m_aParagraphSdt;
     SdtBlockHelper m_aRunSdt;

@@ -32,7 +32,6 @@ public:
 /** Options to change how the traverser is traversing the tree, what is included and what not */
 struct TraverserOptions
 {
-    bool mbPages = true;
     bool mbMasterPages = false;
 };
 

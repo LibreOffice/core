@@ -20,8 +20,7 @@ void ModelTraverser::traverse()
     if (!m_pDocument)
         return;
 
-    if (m_aTraverserOptions.mbPages)
-        traversePages();
+    traversePages();
 
     if (m_aTraverserOptions.mbMasterPages)
         traverseMasterPages();

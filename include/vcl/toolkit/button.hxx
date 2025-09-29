@@ -184,7 +184,6 @@ public:
 
 protected:
     PushButtonDropdownStyle mnDDStyle;
-    bool            mbIsActive;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );

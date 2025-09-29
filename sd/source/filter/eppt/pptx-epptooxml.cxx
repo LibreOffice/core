@@ -683,7 +683,7 @@ std::unordered_set<OUString> PowerPointExport::getUsedFontList()
         return aReturnSet;
 
     auto pCollector = std::make_shared<FontNameCollector>(aReturnSet, mbEmbedLatinScript, mbEmbedAsianScript, mbEmbedComplexScript);
-    sd::ModelTraverser aModelTraverser(pDocument, { .mbPages = true, .mbMasterPages = true });
+    sd::ModelTraverser aModelTraverser(pDocument, { .mbMasterPages = true });
     aModelTraverser.addNodeHandler(pCollector);
     aModelTraverser.traverse();
 

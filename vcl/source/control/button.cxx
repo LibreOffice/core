@@ -654,7 +654,6 @@ void PushButton::ImplInitPushButtonData()
     meSymbol        = SymbolType::DONTKNOW;
     meState         = TRISTATE_FALSE;
     mnDDStyle       = PushButtonDropdownStyle::NONE;
-    mbIsActive    = false;
     mbPressed       = false;
     mbIsAction      = false;
 }
@@ -980,7 +979,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     // adjust style if button should be rendered 'pressed'
-    if (mbPressed || mbIsActive)
+    if (mbPressed)
         nButtonStyle |= DrawButtonFlags::Pressed;
 
     if (GetStyle() & WB_FLATBUTTON)
@@ -1036,7 +1035,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 ImplControlValue aControlValue;
                 ControlState nState = ControlState::NONE;
 
-                if (mbPressed || mbIsActive)
+                if (mbPressed)
                     nState |= ControlState::PRESSED;
                 if (GetButtonState() & DrawButtonFlags::Pressed)
                     nState |= ControlState::PRESSED;
@@ -1049,12 +1048,6 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
                 if (IsMouseOver() && aInRect.Contains(GetPointerPosPixel()))
                     nState |= ControlState::ROLLOVER;
-
-                if ( IsMouseOver() && aInRect.Contains(GetPointerPosPixel()) && mbIsActive)
-                {
-                    nState |= ControlState::ROLLOVER;
-                    nButtonStyle &= ~DrawButtonFlags::Pressed;
-                }
 
                 bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, ControlPart::ButtonDown, aInRect, nState,
                                                              aControlValue, OUString());
@@ -1078,7 +1071,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         tools::Rectangle aCtrlRegion(aInRect);
         ControlState nState = ControlState::NONE;
 
-        if (mbPressed || IsChecked() || mbIsActive)
+        if (mbPressed || IsChecked())
         {
             nState |= ControlState::PRESSED;
             nButtonStyle |= DrawButtonFlags::Pressed;
@@ -1092,16 +1085,10 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (Window::IsEnabled())
             nState |= ControlState::ENABLED;
 
-        if (bRollOver || mbIsActive)
+        if (bRollOver)
         {
             nButtonStyle |= DrawButtonFlags::Highlight;
             nState |= ControlState::ROLLOVER;
-        }
-
-        if (mbIsActive && bRollOver)
-        {
-            nState &= ~ControlState::PRESSED;
-            nButtonStyle &= ~DrawButtonFlags::Pressed;
         }
 
         if (GetStyle() & WB_FLATBUTTON)
