@@ -50,6 +50,9 @@ static bool convertTx(txCtx h)
             case src_CFF:
                 cfrReadFont(h, rec.offset, rec.iTTC);
                 break;
+            case src_TrueType:
+                ttrReadFont(h, rec.offset, rec.iTTC);
+                break;
             default:
                 SAL_WARN("vcl.fonts", "unhandled font type: " << h->src.type);
                 break;
