@@ -764,7 +764,7 @@ std::pair<bool, bool> SettingsTable::GetCompatSettingHasAndValue( std::u16string
     return std::pair<bool, bool>(bHas, bRet);
 }
 
-//Keep this function in-sync with the one in sw/.../docxattributeoutput.cxx
+//Keep this function in-sync with the one in sw/.../docxexport.cxx
 sal_Int32 SettingsTable::GetWordCompatibilityMode()
 {
     if ( m_nWordCompatibilityMode != -1 )
