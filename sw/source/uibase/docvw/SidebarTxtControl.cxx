@@ -462,14 +462,16 @@ bool SidebarTextControl::Command( const CommandEvent& rCEvt )
     {
         if (IsMouseCaptured())
             ReleaseMouse();
+
+        bool bUsedSpellPopup = false;
         if ( !mrSidebarWin.IsReadOnlyOrProtected() &&
              pEditView &&
              pEditView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
             Link<SpellCallbackInfo&,void> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
-            pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(), aLink);
+            bUsedSpellPopup = pEditView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(), aLink);
         }
-        else
+        if (!bUsedSpellPopup)
         {
             Point aPos;
             if (rCEvt.IsMouseEvent())

@@ -659,6 +659,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                         if ( pOutlinerView )
                         {
+                            bool bUsedSpellPopup = false;
                             if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                 ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                             {
@@ -677,11 +678,11 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 // first release the mouse.
                                 GetActiveWindow()->ReleaseMouse();
                                 LockInput();
-                                pOutlinerView->ExecuteSpellPopup(aPos, aLink);
+                                bUsedSpellPopup = pOutlinerView->ExecuteSpellPopup(aPos, aLink);
                                 pOutlinerView->GetEditView().Invalidate();
                                 UnlockInput();
                             }
-                            else
+                            if (!bUsedSpellPopup)
                             {
                                 if( (pObj->GetObjInventor() == SdrInventor::Default) && (pObj->GetObjIdentifier() == SdrObjKind::Table) )
                                 {

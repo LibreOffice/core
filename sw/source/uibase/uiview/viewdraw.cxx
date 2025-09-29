@@ -765,9 +765,8 @@ bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
 
     if (pOLV->IsWrongSpelledWordAtPos( aPos ))
     {
-        bRet = true;
         Link<SpellCallbackInfo&,void> aLink = LINK(this, SwView, OnlineSpellCallback);
-        pOLV->ExecuteSpellPopup(aPos, aLink);
+        bRet = pOLV->ExecuteSpellPopup(aPos, aLink);
     }
     return bRet;
 }

@@ -1064,6 +1064,9 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
 
 bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)
 {
+    if (IsSelectionAtPoint(rPosPixel))
+        return false;
+
     OutputDevice& rDevice = getImpl().GetOutputDevice();
     Point aPos(rDevice.PixelToLogic(rPosPixel));
     aPos = getImpl().GetDocPos( aPos );

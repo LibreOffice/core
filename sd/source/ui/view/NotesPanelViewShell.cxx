@@ -1468,16 +1468,17 @@ void NotesPanelViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         OutlinerView* pOLV = mpNotesPanelView->GetOutlinerView();
         Point aPos(rCEvt.GetMousePosPixel());
 
+        bool bUsedSpellPopup = false;
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
         {
             // Popup for Online-Spelling now handled by DrawDocShell
             Link<SpellCallbackInfo&, void> aLink
                 = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
-            pOLV->ExecuteSpellPopup(aPos, aLink);
+            bUsedSpellPopup = pOLV->ExecuteSpellPopup(aPos, aLink);
             pOLV->GetEditView().Invalidate();
         }
-        else
+        if (!bUsedSpellPopup)
         {
             GetViewFrame()->GetDispatcher()->ExecutePopup(u"drawtext"_ustr);
         }
