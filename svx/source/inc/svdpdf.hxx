@@ -44,21 +44,32 @@ class SdrPage;
 class SdrObject;
 class SvdProgressInfo;
 
+// Fonts are typically saved in pdf files as multiple subsets.
+// This describes a single font subset:
 struct FontSubSet
 {
+    // The location of a file containing the dumped info about the font
     OUString cidFontInfoUrl;
+    // The location of a 'mergefile' derived from glyphToChars/charsToGlyph
+    // that indicates what positions the glyphs of this font should go in
+    // a final font merged from multiple subsets
     OUString toMergedMapUrl;
+    // The location of the extracted font, converted to a cid font.
     OUString pfaCIDUrl;
+    // What glyphs are in the subset and what characters those represent.
     std::map<sal_Int32, OString> glyphToChars;
     std::map<OString, sal_Int32> charsToGlyph;
     int nGlyphCount;
 };
 
+// The collection of all font subsets in the document.
 struct SubSetInfo
 {
     std::vector<FontSubSet> aComponents;
 };
 
+// Describes a final, possibly merged from multiple input fontsubsets,
+// font of a given name and fontweight available as fontfile
 struct EmbeddedFontInfo
 {
     OUString sFontName;
@@ -66,6 +77,8 @@ struct EmbeddedFontInfo
     FontWeight eFontWeight;
 };
 
+// A description of such a final font as LibreOffice sees it
+// e.g. "Name SemiBold"
 struct OfficeFontInfo
 {
     OUString sFontName;
