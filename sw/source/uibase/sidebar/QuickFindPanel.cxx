@@ -123,6 +123,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
         = m_xBuilder->weld_widget(u"box"_ustr)->get_preferred_size().getWidth() + (6 * 2) + 6;
     m_xContainer->set_size_request(m_nMinimumPanelWidth, 1);
 
+    m_xSearchFindEntry->connect_focus_in(LINK(this, QuickFindPanel, SearchFindEntryFocusInHandler));
     m_xSearchFindEntry->connect_activate(
         LINK(this, QuickFindPanel, SearchFindEntryActivateHandler));
     m_xSearchFindEntry->connect_changed(LINK(this, QuickFindPanel, SearchFindEntryChangedHandler));
@@ -199,6 +200,12 @@ QuickFindPanel::~QuickFindPanel()
 {
     m_xSearchFindEntry.reset();
     m_xSearchFindsList.reset();
+}
+
+IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryFocusInHandler, weld::Widget&, void)
+{
+    if (m_xSearchFindEntry->get_text().getLength())
+        m_xSearchFindEntry->select_region(0, m_xSearchFindEntry->get_text().getLength());
 }
 
 IMPL_LINK_NOARG(QuickFindPanel, SearchFindEntryChangedHandler, weld::Entry&, void)

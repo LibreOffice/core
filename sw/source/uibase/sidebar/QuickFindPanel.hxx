@@ -72,6 +72,7 @@ private:
     sal_uInt16 m_nLEVShorter = 2;
     sal_uInt16 m_nLEVLonger = 2;
 
+    DECL_LINK(SearchFindEntryFocusInHandler, weld::Widget&, void);
     DECL_LINK(SearchFindEntryActivateHandler, weld::Entry&, bool);
     DECL_LINK(SearchFindEntryChangedHandler, weld::Entry&, void);
     DECL_LINK(SearchFindsListCustomGetSizeHandler, weld::TreeView::get_size_args, Size);
