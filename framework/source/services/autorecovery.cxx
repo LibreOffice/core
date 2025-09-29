@@ -2062,10 +2062,16 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
             // DO IT!
             try
             {
-                osl::File::remove(rInfo.OldTempURL);
-                osl::File::remove(rInfo.NewTempURL);
-                rInfo.OldTempURL.clear();
-                rInfo.NewTempURL.clear();
+                if (!rInfo.OldTempURL.isEmpty())
+                {
+                    osl::File::remove(rInfo.OldTempURL);
+                    rInfo.OldTempURL.clear();
+                }
+                if (!rInfo.NewTempURL.isEmpty())
+                {
+                    osl::File::remove(rInfo.NewTempURL);
+                    rInfo.NewTempURL.clear();
+                }
 
                 xModify->removeByName(sID);
             }
