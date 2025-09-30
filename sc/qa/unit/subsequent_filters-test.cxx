@@ -251,6 +251,7 @@ public:
     void testAutoheight2Rows();
     void testXLSDefColWidth();
     void testPreviewMissingObjLink();
+    void testTdf168589();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -393,6 +394,7 @@ public:
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
     CPPUNIT_TEST(testPreviewMissingObjLink);
+    CPPUNIT_TEST(testTdf168589);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4340,6 +4342,16 @@ void ScFiltersTest::testPreviewMissingObjLink()
 
     const Graphic* pGraphic = pOleObj->GetGraphic();
     CPPUNIT_ASSERT_MESSAGE("the ole object links to a missing file, but we should retain its preview", pGraphic);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf168589()
+{
+    // Open xls document with Subtotal function
+    ScDocShellRef xDocSh = loadDoc("tdf168589.", FORMAT_XLS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ASSERT_DOUBLES_EQUAL(6.0, rDoc.GetValue(4, 5, 0));
 
     xDocSh->DoClose();
 }
