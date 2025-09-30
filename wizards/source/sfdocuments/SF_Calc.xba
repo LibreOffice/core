@@ -5374,7 +5374,12 @@ Try:
 	Set oController = _Component.CurrentController
 	Set oXRange = _ParseAddress(psRange).XCellRange
 	&apos;	Grab the window location on the screen
-	Set oLocation = oController.ComponentWindow.AccessibleContext.LocationOnScreen
+	Select Case ScriptForge.SF_Platform._GetProductName(True)	&apos;	Get a sortable release number
+		Case &lt;= 25.8
+			Set oLocation = oController.ComponentWindow.AccessibleContext.LocationOnScreen
+		Case Else
+			Set oLocation = oController.ComponentWindow.getProperty(&quot;XAccessible&quot;).LocationOnScreen
+	End Select
 
 	With oRect
 		.X = oXRange.Position.X
