@@ -6880,17 +6880,21 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
             if (pTok->GetType() == svDoubleRef)
             {
                 ScComplexRefData* pRefData = pTok->GetDoubleRef();
-                // no need to set pRefData->SetTrimToData(true); because we already trim here
+                // do no set pRefData->SetTrimToData(true); because we need to trim here if possible
                 ScRange rRange = pRefData->toAbs(rDoc, aPos);
                 SCCOL nTempStartCol = rRange.aStart.Col();
                 SCROW nTempStartRow = rRange.aStart.Row();
                 SCCOL nTempEndCol = rRange.aEnd.Col();
                 SCROW nTempEndRow = rRange.aEnd.Row();
                 rDoc.ShrinkToDataArea(rRange.aStart.Tab(), nTempStartCol, nTempStartRow, nTempEndCol, nTempEndRow);
-                rRange.aStart.Set(nTempStartCol, nTempStartRow, rRange.aStart.Tab());
-                rRange.aEnd.Set(nTempEndCol, nTempEndRow, rRange.aEnd.Tab());
-                rRange.PutInOrder();
-                pRefData->SetRange(rDoc.GetSheetLimits(), rRange, aPos);
+                // check if range is still valid
+                if (nTempStartRow <= nTempEndRow && nTempStartCol <= nTempEndCol)
+                {
+                    rRange.aStart.Set(nTempStartCol, nTempStartRow, rRange.aStart.Tab());
+                    rRange.aEnd.Set(nTempEndCol, nTempEndRow, rRange.aEnd.Tab());
+                    if (rRange.IsValid())
+                        pRefData->SetRange(rDoc.GetSheetLimits(), rRange, aPos);
+                }
             }
             --ppTok;
         }
