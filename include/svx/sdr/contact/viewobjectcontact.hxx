@@ -97,6 +97,7 @@ public:
 
     // get the object size range
     const basegfx::B2DRange& getObjectRange() const;
+    bool hasCachedObjectRange() const { return !maObjectRange.isEmpty(); }
 
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();

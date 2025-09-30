@@ -120,20 +120,25 @@ bool ViewObjectContactPrimitiveHit(
     bool bTextOnly,
     drawinglayer::primitive2d::Primitive2DContainer* pHitContainer)
 {
-    basegfx::B2DRange aObjectRange(rVOC.getObjectRange());
-
-    if(aObjectRange.isEmpty())
-        return false;
-
-    // first do a rough B2DRange based HitTest; do not forget to
-    // include the HitTolerance if given
-    if(rLogicHitTolerance.getX() > 0 || rLogicHitTolerance.getY() > 0)
+    // Only use the range if we already have it, computing the range can be more expensive
+    // than running the HitTestProcessor.
+    if (rVOC.hasCachedObjectRange())
     {
-        aObjectRange.grow(rLogicHitTolerance);
-    }
+        basegfx::B2DRange aObjectRange(rVOC.getObjectRange());
 
-    if(!aObjectRange.isInside(rHitPosition))
-        return false;
+        if(aObjectRange.isEmpty())
+            return false;
+
+        // first do a rough B2DRange based HitTest; do not forget to
+        // include the HitTolerance if given
+        if(rLogicHitTolerance.getX() > 0 || rLogicHitTolerance.getY() > 0)
+        {
+            aObjectRange.grow(rLogicHitTolerance);
+        }
+
+        if(!aObjectRange.isInside(rHitPosition))
+            return false;
+    }
 
     // get primitive sequence
     sdr::contact::DisplayInfo aDisplayInfo;

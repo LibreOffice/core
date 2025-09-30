@@ -517,9 +517,7 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
         // check for animated stuff
         const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
-        // always update object range when PrimitiveSequence changes
-        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-        const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
+        const_cast< ViewObjectContact* >(this)->maObjectRange.reset();
     }
 
     // return current Primitive2DContainer
