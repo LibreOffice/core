@@ -1183,6 +1183,14 @@ static bool toPfaCID(SubSetInfo& rSubSetInfo, const OUString& fileUrl,
     return true;
 }
 
+static void appendFourByteHex(OStringBuffer& rBuffer, sal_uInt32 nNumber)
+{
+    OString sCodePoint = OString::number(nNumber, 16);
+    for (sal_Int32 j = sCodePoint.getLength(); j < 4; ++j)
+        rBuffer.append('0');
+    rBuffer.append(sCodePoint);
+}
+
 static OString decomposeLegacyUnicodeLigature(UChar32 cUnicode)
 {
     UErrorCode eCode(U_ZERO_ERROR);
@@ -1203,12 +1211,7 @@ static OString decomposeLegacyUnicodeLigature(UChar32 cUnicode)
             {
                 OStringBuffer aBuffer;
                 for (int32_t i = 0, nLen = sDecomposed.length(); i < nLen; ++i)
-                {
-                    OString sCodePoint = OString::number(sDecomposed[i], 16);
-                    for (sal_Int32 j = sCodePoint.getLength(); j < 4; ++j)
-                        aBuffer.append('0');
-                    aBuffer.append(sCodePoint);
-                }
+                    appendFourByteHex(aBuffer, sDecomposed[i]);
                 return aBuffer.toString();
             }
         }
@@ -1253,22 +1256,30 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
 
     SvMemoryStream aInCMap(const_cast<uint8_t*>(toUnicodeData.data()), toUnicodeData.size(),
                            StreamMode::READ);
+
+    std::vector<OString> bfcharlines;
+    std::vector<OString> bfcharranges;
+
     OString sLine;
     while (aInCMap.ReadLine(sLine))
     {
         if (sLine.endsWith("beginbfchar"))
-            break;
-    }
-
-    std::vector<OString> bfcharlines;
-
-    if (sLine.endsWith("beginbfchar"))
-    {
-        while (aInCMap.ReadLine(sLine))
         {
-            if (sLine.endsWith("endbfchar"))
-                break;
-            bfcharlines.push_back(sLine);
+            while (aInCMap.ReadLine(sLine))
+            {
+                if (sLine.endsWith("endbfchar"))
+                    break;
+                bfcharlines.push_back(sLine);
+            }
+        }
+        else if (sLine.endsWith("beginbfrange"))
+        {
+            while (aInCMap.ReadLine(sLine))
+            {
+                if (sLine.endsWith("endbfrange"))
+                    break;
+                bfcharranges.push_back(sLine);
+            }
         }
     }
 
@@ -1278,6 +1289,51 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
 
     std::map<sal_Int32, OString> ligatureGlyphToChars;
     std::vector<sal_Int32> glyphs;
+
+    if (!bfcharranges.empty())
+    {
+        assert(!bNameKeyed);
+        OString beginline = OString::number(bfcharranges.size()) + " begincidrange";
+        CMap.WriteLine(beginline);
+        for (const auto& charrange : bfcharranges)
+        {
+            assert(charrange[0] == '<');
+            sal_Int32 nEnd = charrange.indexOf('>', 1);
+            assert(charrange[nEnd] == '>');
+            sal_Int32 nGlyphRangeStart = o3tl::toInt32(charrange.subView(1, nEnd - 1), 16);
+
+            OString remainder(o3tl::trim(charrange.subView(nEnd + 1)));
+            assert(remainder[0] == '<');
+            nEnd = remainder.indexOf('>', 1);
+            assert(remainder[nEnd] == '>');
+            sal_Int32 nGlyphRangeEnd = o3tl::toInt32(remainder.subView(1, nEnd - 1), 16);
+
+            sal_Int32 nGlyphRangeLen = nGlyphRangeEnd - nGlyphRangeStart;
+
+            assert(nGlyphRangeLen > 0);
+
+            OString sChars(o3tl::trim(remainder.subView(nEnd + 1)));
+            assert(sChars[0] == '<' && sChars[sChars.getLength() - 1] == '>');
+            OString sContents = sChars.copy(1, sChars.getLength() - 2);
+            //TODO, it might be that there are cases of ligatures here too in
+            //which case I presume that it can only be with a range of a single
+            //glyph(?). If that's how it works, then we could push the entry
+            //instead into bfcharlines.
+            assert(sContents.getLength() == 4);
+            sal_Int32 nCharRangeStart = o3tl::toInt32(sContents, 16);
+            OStringBuffer aBuffer("<");
+            appendFourByteHex(aBuffer, nCharRangeStart);
+            aBuffer.append("> <");
+            sal_Int32 nCharRangeEnd = nCharRangeStart + nGlyphRangeLen;
+            appendFourByteHex(aBuffer, nCharRangeEnd);
+            aBuffer.append("> "_ostr + OString::number(nGlyphRangeStart));
+            OString cidrangeline = aBuffer.toString();
+            rSubSetInfo.aComponents.back().glyphRangesToChars[nGlyphRangeStart]
+                = Range(nCharRangeStart, nCharRangeEnd);
+            CMap.WriteLine(cidrangeline);
+        }
+        CMap.WriteLine("endcidrange");
+    }
 
     if (!bfcharlines.empty())
     {
@@ -1424,12 +1480,59 @@ static EmbeddedFontInfo mergeFontSubsets(const OUString& mergedFontUrl,
 
     mergedCMap.WriteBytes(cmapprefix, std::size(cmapprefix) - 1);
 
-    sal_Int32 cidcharcount(0);
+    sal_Int32 cidcharcount(0), cidrangecount(0);
+    bool differentcidranges(false);
     for (const auto& component : rSubSetInfo.aComponents)
         cidcharcount += component.glyphToChars.size();
 
+    for (size_t i = 0, size = rSubSetInfo.aComponents.size(); i < size; ++i)
+    {
+        const auto& component = rSubSetInfo.aComponents[i];
+        if (i == 0)
+        {
+            cidrangecount += component.glyphRangesToChars.size();
+            continue;
+        }
+
+        if (component.glyphRangesToChars != rSubSetInfo.aComponents[i - 1].glyphRangesToChars)
+        {
+            cidrangecount += component.glyphRangesToChars.size();
+            differentcidranges = true;
+        }
+    }
+
+    assert(!differentcidranges && "TODO: deal with this when an example arises");
+    if (differentcidranges)
+        return EmbeddedFontInfo();
+
     std::map<sal_Int32, OString> ligatureGlyphToChars;
     std::map<OString, sal_Int32> charsToGlyph;
+
+    if (cidrangecount)
+    {
+        OString beginline = OString::number(cidrangecount) + " begincidrange";
+        mergedCMap.WriteLine(beginline);
+
+        const auto& component = rSubSetInfo.aComponents[0];
+        for (const auto& entry : component.glyphRangesToChars)
+        {
+            sal_Int32 glyphrangebegin = entry.first;
+            sal_Int32 charrangebegin = entry.second.Min();
+            sal_Int32 charrangeend = entry.second.Max();
+
+            OStringBuffer aBuffer("<");
+            appendFourByteHex(aBuffer, charrangebegin);
+            aBuffer.append("> <");
+            appendFourByteHex(aBuffer, charrangeend);
+            aBuffer.append("> "_ostr + OString::number(glyphrangebegin));
+            OString cidrangeline = aBuffer.toString();
+
+            mergedCMap.WriteLine(cidrangeline);
+        }
+
+        // glyphoffset += component.nGlyphCount;
+        mergedCMap.WriteLine("endcidrange");
+    }
 
     if (cidcharcount)
     {

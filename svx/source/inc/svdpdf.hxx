@@ -60,6 +60,8 @@ struct FontSubSet
     // What glyphs are in the subset and what characters those represent.
     std::map<sal_Int32, OString> glyphToChars;
     std::map<OString, sal_Int32> charsToGlyph;
+    // What glyphs ranges are in the subset
+    std::map<sal_Int32, Range> glyphRangesToChars;
     int nGlyphCount;
 };
 
