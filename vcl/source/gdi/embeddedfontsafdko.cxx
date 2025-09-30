@@ -208,8 +208,14 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
         || osl::FileBase::E_None
                != osl::FileBase::getSystemPathFromFileURL(destFileUrl, destFilePath)
         || osl::FileBase::E_None
-               != osl::FileBase::getSystemPathFromFileURL(fontMenuNameDBUrl, fontMenuNameDBPath)
-        || osl::FileBase::E_None
+               != osl::FileBase::getSystemPathFromFileURL(fontMenuNameDBUrl, fontMenuNameDBPath))
+    {
+        SAL_WARN("vcl.fonts", "path failure");
+        return false;
+    }
+
+    if (!charMapUrl.isEmpty()
+        && osl::FileBase::E_None
                != osl::FileBase::getSystemPathFromFileURL(charMapUrl, charMapPath))
     {
         SAL_WARN("vcl.fonts", "path failure");
@@ -231,17 +237,24 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
                         const_cast<char*>(""), const_cast<char*>(""), mainDnaCtx);
 
     OString fontMenuNameDBPathA(fontMenuNameDBPath.toUtf8());
-    cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
-
     OString srcFontPathA(srcFontPath.toUtf8());
     OString destFilePathA(destFilePath.toUtf8());
     OString charMapPathA(charMapPath.toUtf8());
     OString featuresPathA(featuresPath.toUtf8());
+
+    SAL_INFO(
+        "vcl.fonts", "makeotf -mf "
+                         << fontMenuNameDBPathA << " -f " << srcFontPathA << " -o " << destFilePathA
+                         << (!charMapPathA.isEmpty() ? " -ch "_ostr + charMapPathA : OString())
+                         << (!featuresPathA.isEmpty() ? " -ff "_ostr + featuresPathA : OString()));
+
+    cbFCDBRead(cbctx, const_cast<char*>(fontMenuNameDBPathA.getStr()));
+
     cbConvert(cbctx, HOT_NO_OLD_OPS, nullptr, const_cast<char*>(srcFontPathA.getStr()),
               const_cast<char*>(destFilePathA.getStr()),
               !featuresPathA.isEmpty() ? const_cast<char*>(featuresPathA.getStr()) : nullptr,
-              const_cast<char*>(charMapPathA.getStr()), nullptr, nullptr, nullptr, 0, 0, 0, 0, 0,
-              -1, -1, 0, nullptr);
+              !charMapPathA.isEmpty() ? const_cast<char*>(charMapPathA.getStr()) : nullptr, nullptr,
+              nullptr, nullptr, 0, 0, 0, 0, 0, -1, -1, 0, nullptr);
 
     return true;
 }

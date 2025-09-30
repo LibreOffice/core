@@ -242,6 +242,7 @@ void ImpSdrPdfImport::CollectFonts()
                 OUString sPostScriptName = GetPostScriptName(pPageObject->getBaseFontName());
 
                 OUString sFontName = pPageObject->getFontName();
+
                 if (sFontName.isEmpty())
                 {
                     sFontName = guessFontName(sPostScriptName);
@@ -1470,7 +1471,7 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     // Build CMap from pdfium toUnicodeData, etc.
     OUString CMapUrl = fileUrl + u".CMap";
     OUString FeaturesUrl = fileUrl + u".Features";
-    bool bFeatures = false;
+    bool bFeatures = false, bCMap = true;
     if (!toUnicodeData.empty())
     {
         buildCMapAndFeatures(CMapUrl, FeaturesUrl, FontName, toUnicodeData, bNameKeyed,
@@ -1479,6 +1480,7 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     else
     {
         SAL_WARN("sd.filter", "There is no CMap, pdfium is missing unicodedata");
+        bCMap = false;
     }
 
     // Create FontMenuName
@@ -1497,7 +1499,8 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     // Otherwise not merged font, just a single subset
     OUString otfUrl = EmbeddedFontsManager::getFileUrlForTemporaryFont(fontFileName, u".otf");
     OUString features = bFeatures ? FeaturesUrl : OUString();
-    if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, CMapUrl, features))
+    OUString cmap = bCMap ? CMapUrl : OUString();
+    if (EmbeddedFontsManager::makeotf(pfaCIDUrl, otfUrl, FontMenuNameDBUrl, cmap, features))
         return { longFontName, otfUrl, toOfficeWeight(Weight) };
     SAL_WARN("sd.filter", "conversion failed");
     return EmbeddedFontInfo();
