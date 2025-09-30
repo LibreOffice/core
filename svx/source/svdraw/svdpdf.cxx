@@ -1321,7 +1321,8 @@ static void buildCMapAndFeatures(const OUString& CMapUrl, const OUString& Featur
     const OUString& toMergedMapUrl = rSubSetInfo.aComponents.back().toMergedMapUrl;
     SvFileStream toMergedMap(toMergedMapUrl, StreamMode::READWRITE | StreamMode::TRUNC);
     toMergedMap.WriteLine(Concat2View("mergefonts "_ostr + FontName + " 0"_ostr));
-    toMergedMap.WriteLine("0\t0");
+    if (rSubSetInfo.aComponents.size() == 1)
+        toMergedMap.WriteLine("0\t0");
     for (size_t i = 0; i < glyphs.size(); ++i)
     {
         OString sMapLine = OString::number(i + mergeOffset) + "\t" + OString::number(glyphs[i]);
