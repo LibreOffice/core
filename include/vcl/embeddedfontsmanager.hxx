@@ -13,6 +13,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <config_features.h>
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/long.hxx>
@@ -126,6 +127,7 @@ public:
 
     static OUString getFileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);
 
+#if HAVE_FEATURE_PDFIMPORT
     // write text dump
     static bool tx_dump(const OUString& srcFontUrl, const OUString& destFileUrl);
     // write Type 1 font
@@ -138,6 +140,7 @@ public:
     static bool makeotf(const OUString& srcFontUrl, const OUString& destFileUrl,
                         const OUString& fontMenuNameDBUrl, const OUString& charMapUrl,
                         const OUString& featuresUrl);
+#endif
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
