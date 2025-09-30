@@ -26,6 +26,7 @@
 #include <itabenum.hxx>
 #include <ndtxt.hxx>
 #include <fmturl.hxx>
+#include <textcontentcontrol.hxx>
 
 namespace
 {
@@ -728,6 +729,81 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedTableMdExport)
     // - Expected: | A1 before A1 inner B1 inner A2 inner B2 inner A1 after |
     // - Actual  : | A1 before \n| A1 inner | B1 inner |\n| - | - |\n| A2 inner | B2 inner |\nA1 after |
     // i.e. the outer table cell had block elements, while it is only allowed to have inlines.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdImport)
+{
+    // Given a document with 2 task list items:
+    setImportFilterName("Markdown");
+
+    // When importing that document from markdown:
+    createSwDoc("task-list-items.md");
+
+    // Then make sure we have two checkbox content controls, first is checked, second is not:
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    {
+        SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+        // Without the accompanying fix in place, this test would have failed, the task list item
+        // was imported as a static checkbox character.
+        CPPUNIT_ASSERT(pTextContentControl);
+        const SwFormatContentControl& rFormatContentControl
+            = pTextContentControl->GetContentControl();
+        const std::shared_ptr<SwContentControl>& pContentControl
+            = rFormatContentControl.GetContentControl();
+        CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, pContentControl->GetType());
+        CPPUNIT_ASSERT(pContentControl->GetChecked());
+    }
+    pWrtShell->Down(/*bSelect=*/false, 1);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    {
+        SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+        CPPUNIT_ASSERT(pTextContentControl);
+        const SwFormatContentControl& rFormatContentControl
+            = pTextContentControl->GetContentControl();
+        const std::shared_ptr<SwContentControl>& pContentControl
+            = rFormatContentControl.GetContentControl();
+        CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, pContentControl->GetType());
+        CPPUNIT_ASSERT(!pContentControl->GetChecked());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTastListItemsMdExport)
+{
+    // Given a document with two content control checkboxes, first is checked, second is unchecked:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
+    {
+        SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();
+        const SwFormatContentControl& rFormatContentControl
+            = pTextContentControl->GetContentControl();
+        const std::shared_ptr<SwContentControl>& pContentControl
+            = rFormatContentControl.GetContentControl();
+        pContentControl->SetChecked(true);
+    }
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert(u" foo"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert(u" bar"_ustr);
+
+    // When saving that to markdown:
+    save(mpFilter);
+
+    // Then make sure that the task list item markup is used:
+    std::string aActual = TempFileToString();
+    std::string aExpected("[x] foo" SAL_NEWLINE_STRING SAL_NEWLINE_STRING
+                          "[ ] bar" SAL_NEWLINE_STRING);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: [x] foo\n\n[ ] bar
+    // - Actual  : ☐ foo\n\n☐ bar
+    // i.e. checkboxes were not written using the task list item markup.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

@@ -43,10 +43,12 @@
 #include <unotools/securityoptions.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <comphelper/random.hxx>
 #include <ndgrf.hxx>
 #include <fmtcntnt.hxx>
 #include <swtypes.hxx>
 #include <fmturl.hxx>
+#include <formatcontentcontrol.hxx>
 
 #include "swmd.hxx"
 
@@ -468,9 +470,33 @@ void SwMarkdownParser::StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail)
 
         if (aDetail.is_task)
         {
+            // Map the task list item to a Writer checkbox content control.
             bool bChecked = (aDetail.task_mark == 'x' || aDetail.task_mark == 'X') ? true : false;
-            pTextNode->InsertText((bChecked ? Checkmark : Crossmark) + u" "_ustr,
-                                  SwContentIndex(pTextNode, 0));
+            auto pContentControl = std::make_shared<SwContentControl>(nullptr);
+            sal_Int32 nId = comphelper::rng::uniform_uint_distribution(
+                1, std::numeric_limits<sal_Int32>::max());
+            SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
+            pContentControl->SetId(nId);
+            pContentControl->SetCheckbox(true);
+            pContentControl->SetCheckedState(SwContentControl::CHECKED_STATE);
+            pContentControl->SetUncheckedState(SwContentControl::UNCHECKED_STATE);
+            pContentControl->SetChecked(bChecked);
+            OUString aPlaceholder;
+            if (bChecked)
+            {
+                aPlaceholder = SwContentControl::CHECKED_STATE;
+            }
+            else
+            {
+                aPlaceholder = SwContentControl::UNCHECKED_STATE;
+            }
+            pTextNode->InsertText(aPlaceholder, SwContentIndex(pTextNode, pTextNode->Len()));
+            SwPosition aStart(*m_pPam->GetPoint());
+            aStart.nContent -= aPlaceholder.getLength();
+            SwPosition aEnd(*m_pPam->GetPoint());
+            SwPaM aPaM(aStart, aEnd);
+            m_xDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aContentControl);
+            pTextNode->InsertText(u" "_ustr, SwContentIndex(pTextNode, pTextNode->Len()));
         }
     }
     else

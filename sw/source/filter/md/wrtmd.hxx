@@ -62,6 +62,9 @@ public:
     const std::map<int, int>& GetListLevelPrefixSizes() const { return m_aListLevelPrefixSizes; }
     std::stack<SwMDTableInfo>& GetTableInfos() { return m_aTableInfos; }
 
+    void SetTaskListItems(int nTaskListItems) { m_nTaskListItems = nTaskListItems; }
+    int GetTaskListItems() const { return m_nTaskListItems; }
+
 protected:
     ErrCode WriteStream() override;
 
@@ -73,6 +76,8 @@ private:
     /// List level -> prefix size map, e.g. "1. " size is 3.
     std::map<int, int> m_aListLevelPrefixSizes;
     std::stack<SwMDTableInfo> m_aTableInfos;
+    /// Number of currently open task list items.
+    int m_nTaskListItems = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

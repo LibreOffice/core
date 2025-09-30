@@ -55,9 +55,6 @@ constexpr tools::Long MD_MAX_IMAGE_HEIGHT_IN_TWIPS = 5000;
 constexpr tools::Long MD_MIN_IMAGE_WIDTH_IN_TWIPS = 500;
 constexpr tools::Long MD_MIN_IMAGE_HEIGHT_IN_TWIPS = 500;
 
-constexpr OUString Checkmark = u"\x2705"_ustr;
-constexpr OUString Crossmark = u"\x274C"_ustr;
-
 constexpr frozen::unordered_map<MD_ALIGN, SvxAdjust, 4> adjustMap
     = { { MD_ALIGN_DEFAULT, SvxAdjust::Left },
         { MD_ALIGN_LEFT, SvxAdjust::Left },

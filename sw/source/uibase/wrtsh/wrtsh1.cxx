@@ -1173,10 +1173,8 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
         case SwContentControlType::CHECKBOX:
         {
             pContentControl->SetCheckbox(true);
-            // Ballot Box with X
-            pContentControl->SetCheckedState(u"\u2612"_ustr);
-            // Ballot Box
-            pContentControl->SetUncheckedState(u"\u2610"_ustr);
+            pContentControl->SetCheckedState(SwContentControl::CHECKED_STATE);
+            pContentControl->SetUncheckedState(SwContentControl::UNCHECKED_STATE);
             aPlaceholder = u"\u2610"_ustr;
             break;
         }

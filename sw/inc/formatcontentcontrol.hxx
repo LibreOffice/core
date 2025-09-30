@@ -398,6 +398,11 @@ public:
     const OUString& GetMultiLine() const { return m_aMultiLine; }
 
     SwContentControlType GetType() const;
+
+    // Ballot Box with X
+    static constexpr OUString CHECKED_STATE = u"\u2612"_ustr;
+    // Ballot Box
+    static constexpr OUString UNCHECKED_STATE = u"\u2610"_ustr;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
