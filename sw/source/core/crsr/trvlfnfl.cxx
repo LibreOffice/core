@@ -45,8 +45,9 @@ bool SwCursorShell::CallCursorShellFN( FNCursorShell fnCursor )
 bool SwCursorShell::CallCursorFN( FNCursor fnCursor )
 {
     // for footnote anchor<->text recency
-    if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
-        pWrtSh->addCurrentPosition();
+    if (!IsViewLocked())
+        if (SwWrtShell* pWrtSh = dynamic_cast<SwWrtShell*>(this))
+            pWrtSh->addCurrentPosition();
 
     SwCallLink aLk( *this ); // watch Cursor-Moves
     SwCursor* pCursor = getShellCursor( true );
