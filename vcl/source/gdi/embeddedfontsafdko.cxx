@@ -13,6 +13,12 @@
  * This license is available at: http://opensource.org/licenses/Apache-2.0.
  */
 
+#include <sal/config.h>
+
+#include <config_features.h>
+
+#if HAVE_FEATURE_PDFIMPORT
+
 #include <vcl/embeddedfontsmanager.hxx>
 #include <osl/file.hxx>
 #include "afdko.hxx"
@@ -236,5 +242,7 @@ bool EmbeddedFontsManager::makeotf(const OUString& srcFontUrl, const OUString& d
 
     return true;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

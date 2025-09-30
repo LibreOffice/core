@@ -19,6 +19,7 @@
 
 #include <svdpdf.hxx>
 
+#include <config_features.h>
 #include <tools/UnitConversion.hxx>
 #include <vcl/embeddedfontsmanager.hxx>
 #include <vcl/graph.hxx>
@@ -116,7 +117,9 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 
     mnPageCount = mpPdfDocument->getPageCount();
 
+#if HAVE_FEATURE_PDFIMPORT
     CollectFonts();
+#endif
 
     // Same as SdModule
     mpVD = VclPtr<VirtualDevice>::Create();
@@ -136,6 +139,8 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
 }
 
 ImpSdrPdfImport::~ImpSdrPdfImport() = default;
+
+#if HAVE_FEATURE_PDFIMPORT
 
 namespace
 {
@@ -300,6 +305,8 @@ void ImpSdrPdfImport::CollectFonts()
         }
     }
 }
+
+#endif
 
 void ImpSdrPdfImport::DoObjects(SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport,
                                 int nPageIndex)
@@ -878,6 +885,8 @@ void ImpSdrPdfImport::ImportForm(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     maCurrentMatrix = aOldMatrix;
 }
 
+#if HAVE_FEATURE_PDFIMPORT
+
 static bool extractEntry(std::string_view line, std::string_view key, OString& ret)
 {
     std::string_view result;
@@ -1394,6 +1403,8 @@ EmbeddedFontInfo ImpSdrPdfImport::convertToOTF(SubSetInfo& rSubSetInfo, const OU
     SAL_WARN("sd.filter", "conversion failed");
     return EmbeddedFontInfo();
 }
+
+#endif
 
 void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                  std::unique_ptr<vcl::pdf::PDFiumTextPage> const& pTextPage,
