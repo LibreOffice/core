@@ -276,6 +276,15 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf161948_NaturalSortSaveLoad)
     CPPUNIT_ASSERT(!aSortParam.bNaturalSort);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf168589)
+{
+    // Open xls document with Subtotal function
+    createScDoc("xls/tdf168589.xls");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ASSERT_DOUBLES_EQUAL(6.0, pDoc->GetValue(4, 5, 0));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
